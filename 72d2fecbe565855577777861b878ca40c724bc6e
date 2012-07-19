@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAHqH///yo\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1591,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-07-19T22:58:52Z",
+      "side": 1,
+      "message": "In CdmaDataConnectionTracker newActivity this same line appears in else if (sent \u003d\u003d 0 \u0026\u0026 received \u003d\u003d 0) should that logic be here too?\n\nAlso, I\u0027d like to see if we can promote this data stall handling logic into DCT and out of GsmDCT and CdmaDCT, what do you think?",
+      "revId": "72d2fecbe565855577777861b878ca40c724bc6e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
