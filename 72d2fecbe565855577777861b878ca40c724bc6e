@@ -16,6 +16,24 @@
       "revId": "72d2fecbe565855577777861b878ca40c724bc6e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHs3///1M\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1591,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2012-07-20T00:59:42Z",
+      "side": 1,
+      "message": "We should be able to promote it up. Will take a look at that and get back to you.",
+      "parentUuid": "AAAHqH///yo\u003d",
+      "revId": "72d2fecbe565855577777861b878ca40c724bc6e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
