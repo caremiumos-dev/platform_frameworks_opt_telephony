@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAHvX///1s\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-07-24T23:42:23Z",
+      "side": 1,
+      "message": "Remove blank line between Bug: and Change-Id:.",
+      "revId": "01e59d343dac205d84642e40b7d464571962ac54",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
