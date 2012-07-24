@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAHvX///3s\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-07-24T23:19:50Z",
+      "side": 1,
+      "message": "Please add a \"Bug\"  line immediately above Change-Id.\n\nBug: 6872958\nChange-Id: 19e....",
+      "revId": "21e06a92c40aa9253d087799d034a23eea2a0890",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
