@@ -34,6 +34,24 @@
       "revId": "72d2fecbe565855577777861b878ca40c724bc6e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAH7X///MY\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1591,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2012-08-01T07:10:16Z",
+      "side": 1,
+      "message": "GsmDataConnectionTracker doesn\u0027t keep track of mSentSinceLastRecv. So there is no need to add the \u0027else if (sent \u003d\u003d 0 \u0026\u0026 received \u003d\u003d 0)\u0027.\n\nAlso am working on pulling up data stall handling into DCT as a separate change. As this change mainly brings in a new feature. But pulling up is more of a clean up change and I do not want this feature to be lost in the cleanup change.",
+      "parentUuid": "AAAHqH///yo\u003d",
+      "revId": "72d2fecbe565855577777861b878ca40c724bc6e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
