@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAH/H///Go\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaLteUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1003966
+      },
+      "writtenOn": "2012-08-03T01:08:11Z",
+      "side": 1,
+      "message": "Let\u0027s break this into multiple lines.\n\nint len \u003d ((data.length - 3) \u003c 32) ? (data.length - 3) : 32;\n\nSystem.arraycopy(data, 3, spnData, 0, len);\n\nPer http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-137265.html#331 , please make sure all code has proper parenthesis. See example above.\n\nPer http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-141388.html#682 , all binary operators should be separated from their operands by spaces. See example above.",
+      "revId": "f6f88f069fd29254324346bf21c960f2b08811d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
