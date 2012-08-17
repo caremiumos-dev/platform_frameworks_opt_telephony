@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAIf3///JA\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsMessage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-17T00:55:47Z",
+      "side": 1,
+      "message": "This should be indented more, for better readability.",
+      "revId": "485c35eb3c1a1cc869c9a82b4411fb7fca0392bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
