@@ -16,6 +16,24 @@
       "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAIkn///Ks\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2012-08-17T23:44:00Z",
+      "side": 1,
+      "message": "When RIL gets an indication from WMS in the Submit Report that the network is not ready, it returns failure indicating retry.\n\nThis is because the network not being ready is often a temporary condition.  This can happen when the network releases the call in order to setup an incoming voice call. \n\nThis fix has the effect of creating a delay.  Android will delay retrying the message for several seconds.  Currently the Android default delay is 2 second.\n\nHence, when the SMS cannot be sent because the network is not ready, there will be a delay of several seconds before the message is retried, the delay is configurable, and this should give enough time for incoming voice calls to be received",
+      "parentUuid": "AAAIk3///hk\u003d",
+      "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
