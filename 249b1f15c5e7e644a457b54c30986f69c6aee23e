@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAIkn///X8\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2012-08-17T22:42:17Z",
+      "side": 1,
+      "message": "Typo: firstRigthParenthesisIndex should be firstRightParenthesisIndex.",
+      "revId": "249b1f15c5e7e644a457b54c30986f69c6aee23e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
