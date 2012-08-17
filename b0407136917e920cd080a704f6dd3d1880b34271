@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAIk3///hk\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-17T22:13:02Z",
+      "side": 1,
+      "message": "Why does this need to be configurable?",
+      "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
