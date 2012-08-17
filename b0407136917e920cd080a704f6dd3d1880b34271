@@ -34,6 +34,24 @@
       "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAIlH///Xs\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000718
+      },
+      "writtenOn": "2012-08-17T23:53:28Z",
+      "side": 1,
+      "message": "Not sure I follow:  when/how is this configured?  At build time, or do you plan to change this dynamically at runtime (ie, via the RIL, depending on specific error conditions)?",
+      "parentUuid": "AAAIkn///Ks\u003d",
+      "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
