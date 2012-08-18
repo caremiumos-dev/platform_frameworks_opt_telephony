@@ -52,6 +52,24 @@
       "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAIkn///Hg\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2012-08-18T00:21:50Z",
+      "side": 1,
+      "message": "static final String PROPERTY_SMS_RETRY_DELAY \u003d \"persist.radio.sms_retry_delay\"\n\nfrom  https://android-review.googlesource.com/#/c/37643\n\nThis should be set at build time and NOT based on specific error condition.",
+      "parentUuid": "AAAIlH///Xs\u003d",
+      "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
