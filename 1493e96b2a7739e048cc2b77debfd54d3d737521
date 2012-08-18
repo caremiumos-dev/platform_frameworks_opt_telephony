@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAIkn///EQ\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSmsAddress.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2012-08-18T01:09:49Z",
+      "side": 1,
+      "message": "Is there a reason to pass \"7\" as the location for the ParseException? It\u0027s not really important, since the ParseException is immediately caught by the caller, which ignores the location, but it might be better to pass \"offset + OFFSET_TOA\" for the error offset, so the log message will include the correct byte offset.",
+      "revId": "1493e96b2a7739e048cc2b77debfd54d3d737521",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
