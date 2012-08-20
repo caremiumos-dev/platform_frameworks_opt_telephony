@@ -70,6 +70,24 @@
       "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAIrn///e8\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000718
+      },
+      "writtenOn": "2012-08-20T20:25:45Z",
+      "side": 1,
+      "message": "So.... why does this need to be configurable?  If 2000ms is too short, why not change SEND_RETRY_DELAY to something more reasonable?  Under what scenarios would we expect different values between different builds/products?",
+      "parentUuid": "AAAIkn///Hg\u003d",
+      "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
