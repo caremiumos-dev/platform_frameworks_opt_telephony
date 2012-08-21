@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAIxn///dE\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-21T20:04:17Z",
+      "side": 1,
+      "message": "This should be indented by 8 spaces, not 9.",
+      "revId": "c8c937518f116505d9d63a2bb9a94777968f6e04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
