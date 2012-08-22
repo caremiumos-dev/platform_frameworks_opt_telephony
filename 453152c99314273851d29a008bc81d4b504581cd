@@ -16,6 +16,24 @@
       "revId": "453152c99314273851d29a008bc81d4b504581cd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13///ZY\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1010938
+      },
+      "writtenOn": "2012-08-22T16:17:13Z",
+      "side": 1,
+      "message": "yes can be written like that as well.",
+      "parentUuid": "AAAI2H///ko\u003d",
+      "revId": "453152c99314273851d29a008bc81d4b504581cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
