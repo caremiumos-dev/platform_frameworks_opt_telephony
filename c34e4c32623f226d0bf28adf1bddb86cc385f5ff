@@ -16,6 +16,24 @@
       "revId": "c34e4c32623f226d0bf28adf1bddb86cc385f5ff",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI2X///Tw\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2012-08-22T20:29:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAIk3///kE\u003d",
+      "revId": "c34e4c32623f226d0bf28adf1bddb86cc385f5ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
