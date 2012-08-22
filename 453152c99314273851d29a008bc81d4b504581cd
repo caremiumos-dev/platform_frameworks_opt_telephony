@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI2H///ko\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-22T15:35:48Z",
+      "side": 1,
+      "message": "Could this be written (a !\u003d b) || (c !\u003d d) instead of !((a \u003d\u003d b) \u0026\u0026 (c \u003d\u003d d)) ?",
+      "revId": "453152c99314273851d29a008bc81d4b504581cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
