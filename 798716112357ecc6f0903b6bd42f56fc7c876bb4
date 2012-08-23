@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI13//+o0\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "Maybe reword as:\n\n  Max time value between concatenated SMS segments",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+ow\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "Rename to MAX_CONCATENATED_SEGMENT_TIME",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+o4\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "Remove comment.",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+ok\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "All comments should be complete sentences and have a space following the \"//\". Maybe reword as:\n\n  // When true the related concatenated data will be discarded.",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+o8\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "Remove unused code",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+os\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "As mentioned above comments should be complete sentences and have a space after \"//\" so maybe rewrite as:\n\n  // Discard duplicated PDU segments.",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+pE\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "Comment not necessary as the log stement is good enough.",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+og\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "This should be \"Log.w\" as its not really critical. And instead reword:\n\n  \"Discard duplicated ...\"",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+oY\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "Delete unused code.",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+oU\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "Delete comment.",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+oQ\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T04:06:40Z",
+      "side": 1,
+      "message": "Log.w and reword:\n\n  Log.w(TAG, \"Discard PDU\");",
+      "revId": "798716112357ecc6f0903b6bd42f56fc7c876bb4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
