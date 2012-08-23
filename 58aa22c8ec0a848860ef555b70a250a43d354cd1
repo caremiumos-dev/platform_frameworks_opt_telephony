@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI2X//+co\u003d",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-23T20:30:18Z",
+      "side": 1,
+      "message": "Style: please preserve the indentation",
+      "revId": "58aa22c8ec0a848860ef555b70a250a43d354cd1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI2X//+ck\u003d",
+        "filename": "src/java/android/telephony/SmsMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-23T20:30:18Z",
+      "side": 1,
+      "message": "Please indent this by 8 spaces",
+      "revId": "58aa22c8ec0a848860ef555b70a250a43d354cd1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI2X//+cc\u003d",
+        "filename": "src/java/android/telephony/SmsMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-23T20:30:18Z",
+      "side": 1,
+      "message": "Please add a space after \"if\"",
+      "revId": "58aa22c8ec0a848860ef555b70a250a43d354cd1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
