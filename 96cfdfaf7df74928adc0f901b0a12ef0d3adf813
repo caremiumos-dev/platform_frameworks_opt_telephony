@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI13//+i8\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T15:52:25Z",
+      "side": 1,
+      "message": "The wording here is poor, please work with your colleagues and try to improve.",
+      "revId": "96cfdfaf7df74928adc0f901b0a12ef0d3adf813",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+jc\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T15:52:25Z",
+      "side": 1,
+      "message": "Lets call this \"discard\", discarded is past tense but the usage is really future tense.",
+      "revId": "96cfdfaf7df74928adc0f901b0a12ef0d3adf813",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+jY\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T15:52:25Z",
+      "side": 1,
+      "message": "align with if below",
+      "revId": "96cfdfaf7df74928adc0f901b0a12ef0d3adf813",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+jU\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T15:52:25Z",
+      "side": 1,
+      "message": "shift to right so \"+\" is under \"T\" in TAG. If the line be becomes too long move \" from existing\" to previous line.",
+      "revId": "96cfdfaf7df74928adc0f901b0a12ef0d3adf813",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+jM\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T15:52:25Z",
+      "side": 1,
+      "message": "This is the \"true\" path so if a comment is necessary we should talk about it. I suggest just saying:\n\n  // There is a next segment, validate its not to old.",
+      "revId": "96cfdfaf7df74928adc0f901b0a12ef0d3adf813",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+jQ\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T15:52:25Z",
+      "side": 1,
+      "message": "Align properly.",
+      "revId": "96cfdfaf7df74928adc0f901b0a12ef0d3adf813",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+jI\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T15:52:25Z",
+      "side": 1,
+      "message": "If we delete a segment here, won\u0027t the cursorCount below be wrong?",
+      "revId": "96cfdfaf7df74928adc0f901b0a12ef0d3adf813",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
