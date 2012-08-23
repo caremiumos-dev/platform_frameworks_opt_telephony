@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI13//+tc\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T01:03:54Z",
+      "side": 1,
+      "message": "long line and do not use tabs, only spaces please.\n\nActually, this comment is probably unnecessary and its wording is more confusing then helpful. (I realize English is not your first language and even I, where English is my one and only language, make lots of mistakes, so please do not take offense).",
+      "revId": "aaa5e7bc570bee4a61a82a35f2b46b9370564a16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+tY\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T01:03:54Z",
+      "side": 1,
+      "message": "Remove all trailing white space, in the \"Preferences\" above be sure to check the \"Whitespace Errors\" box.",
+      "revId": "aaa5e7bc570bee4a61a82a35f2b46b9370564a16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+tU\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T01:03:54Z",
+      "side": 1,
+      "message": "Again no tabs and fix trailing ws on all of these lines.",
+      "revId": "aaa5e7bc570bee4a61a82a35f2b46b9370564a16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+tQ\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T01:03:54Z",
+      "side": 1,
+      "message": "delete these if not needed.",
+      "revId": "aaa5e7bc570bee4a61a82a35f2b46b9370564a16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+tM\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T01:03:54Z",
+      "side": 1,
+      "message": "long line and more tabs and trailing ws below.",
+      "revId": "aaa5e7bc570bee4a61a82a35f2b46b9370564a16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
