@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI2H//+nc\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-23T20:00:54Z",
+      "side": 1,
+      "message": "I\u0027m not sure if the 4 lines above are exactly in the canonical style, but they look unambiguously readable to me. No concern.",
+      "revId": "7e005b56e5c4bc2c09ddaceb4d9568423e05cb54",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
