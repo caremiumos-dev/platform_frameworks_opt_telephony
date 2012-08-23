@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAI13//+tE\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T01:18:10Z",
+      "side": 1,
+      "message": "Maybe \"Delete incomplete messages\".",
+      "revId": "aaa5e7bc570bee4a61a82a35f2b46b9370564a16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+sA\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T01:18:10Z",
+      "side": 1,
+      "message": "Please reformat with hard carriage returns at about 80 columns and maybe work with colleagues on the wording and please use some blank lines between the paragraphs.\n\nI assume you are implementing both methods, if so these first three sentences can be reworded to something simple like. Then followed by the two cases and then last paragraph should contain both the Signed-off-by and the Change-Id.\n\n\"There are two cases to handle.\"\n\n1. .....\n\n2. ....\n\nSigned-off-by: Kyun...\nChange-Id: I255....",
+      "revId": "aaa5e7bc570bee4a61a82a35f2b46b9370564a16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI13//+sc\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-23T01:18:10Z",
+      "side": 1,
+      "message": "This last sentence probably isn\u0027t necessary.",
+      "revId": "aaa5e7bc570bee4a61a82a35f2b46b9370564a16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI13//+tc\u003d",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 1
