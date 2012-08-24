@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI2H//93w\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-24T18:12:44Z",
+      "side": 1,
+      "message": "Trailing space.",
+      "revId": "211efe3838855405d7bc3ea676f42a1d730f4a70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
