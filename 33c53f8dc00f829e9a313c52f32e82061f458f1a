@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI13//9ac\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-24T23:44:20Z",
+      "side": 1,
+      "message": "I added some logging to the code to verify: \n\n   static private boolean isShortCodeUSSD(String dialString, GSMPhone phone) {\n        Log.w(LOG_TAG, \"isShortCodeUSSD: disString.length()\u003d\" + dialString.length() + \" dialString\u003d\" + dialString);\n        if (dialString !\u003d null \u0026\u0026 dialString.length() \u003c\u003d MAX_LENGTH_SHORT_CODE) {\n            if (phone.isInCall()) {\n                Log.w(LOG_TAG, \"isShortCodeUSSD: isInCall return true\");\n                return true;\n            }\n\n            if (dialString.length() !\u003d MAX_LENGTH_SHORT_CODE ||\n                    dialString.charAt(0) !\u003d \u00271\u0027) {\n                Log.w(LOG_TAG, \"isShortCodeUSSD: 1 character short code not a 1 return true\");\n                return true;\n            }\n        }\n        Log.w(LOG_TAG, \"isShortCodeUSSD: not a ShortCodeUSSD\");\n        return false;\n    }\n\n\nFirst, I only see this routine called when I dial a number which starts with a \u0027#\u0027 and\nI don\u0027t see it called after I\u0027ve established a call. So it seems that phone.isInCall will\nalways return false, could you tell me how to test this when phone.isInCall is true?\n\nAlso, as I said, I see it get called only when I try to establish a call starting with \u0027#.\nSo I tried \"#1\" and it returns true, is this what you expect or should the second if\nstatement contain \"dislString.charAt(1) !\u003d \u00271\u0027 ?\n\n 08-24 16:03:24.976   766   766 D GSM     : isTwoDigitShortCode\n 08-24 16:03:24.976   766   766 D GSM     : Two Digit Number Pattern -false\n 08-24 16:03:24.976   766   766 W GSM     : isShortCodeUSSD: disString.length()\u003d2 dialString\u003d#1\n 08-24 16:03:24.984   766   766 W GSM     : isShortCodeUSSD: 1 character short code not a 1 return true\n 08-24 16:03:24.984   766   766 D GSM     : dialing w/ mmi \u0027GsmMmiCode {State\u003dPENDING dialingNumber\u003d#1}\u0027...\n 08-24 16:03:24.984   766   766 D GSM     : isShortCode\n 08-24 16:03:24.984   766   766 D RILJ    : [0772]\u003e SEND_USSD #1",
+      "revId": "33c53f8dc00f829e9a313c52f32e82061f458f1a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
