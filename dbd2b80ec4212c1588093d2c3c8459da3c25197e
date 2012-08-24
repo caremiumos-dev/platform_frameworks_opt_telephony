@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI13//9uw\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/RuimSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-24T17:27:42Z",
+      "side": 1,
+      "message": "Looks to be identical to the code in SimSmsInterfaceManager. Should we promot this and others to the base class?",
+      "revId": "dbd2b80ec4212c1588093d2c3c8459da3c25197e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
