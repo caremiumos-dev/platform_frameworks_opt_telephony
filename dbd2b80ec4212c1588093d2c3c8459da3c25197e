@@ -16,6 +16,24 @@
       "revId": "dbd2b80ec4212c1588093d2c3c8459da3c25197e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI2X//9fo\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/RuimSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2012-08-24T21:53:27Z",
+      "side": 1,
+      "message": "Extracted common functions from Sim/RuimSmsInterfaceManager to their parent\nclass IccSmsInterfaceManager.  Please review patch 2.",
+      "parentUuid": "AAAI13//9uw\u003d",
+      "revId": "dbd2b80ec4212c1588093d2c3c8459da3c25197e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
