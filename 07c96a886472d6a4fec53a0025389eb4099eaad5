@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI13//9v0\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-24T17:20:47Z",
+      "side": 1,
+      "message": "No, I meant inside the if (tracker.mRetryCount \u003e 0) below and then you can print it all the time.",
+      "revId": "07c96a886472d6a4fec53a0025389eb4099eaad5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
