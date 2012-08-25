@@ -1,0 +1,310 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI63///+c\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "add a space after each comma",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///84\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1962,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "trailing space",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///+k\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1977,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "indent by 8 spaces",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///+U\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1985,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "4 spaces",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///+Y\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "indent by 8 spaces",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///8w\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "indent by 4 spaces",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///8s\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2003,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "indent by 4 spaces",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///+g\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2006,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "indent by 8 spaces",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///80\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "8 spaces",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///8w\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "misaligned",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///8o\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2036,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "spaces around \"+\"",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///8k\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "same",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///8s\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2038,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "same",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///8g\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2043,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "spaces around \"\u003d\"",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///8c\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "spaces around \"\u003d\" and \"-\"",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///8Y\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2047,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "spaces around \"\u003d\", after \",\"",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///8o\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2048,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "indent by 8 spaces",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///+Q\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2056,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-25T15:55:05Z",
+      "side": 1,
+      "message": "alignment",
+      "revId": "bb93b7d22c1e39d2caea68fa24818a4baa837ec9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
