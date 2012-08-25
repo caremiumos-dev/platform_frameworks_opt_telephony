@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI63///+M\u003d",
+        "filename": "src/java/com/android/internal/telephony/DataConnectionTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2012-08-25T15:57:14Z",
+      "side": 1,
+      "message": "Not sure if it is being used. But just to make sure I did not break anything, I did override this in GsmDCT and called it gsm.radioreset. We can remove it if you can confirm that it is not used. I am sure we dont use it for now.",
+      "parentUuid": "AAAI13//9qs\u003d",
+      "revId": "e0e4722638c284b12dec1bc928f0957e8c426725",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI13//9q4\u003d",
         "filename": "src/java/com/android/internal/telephony/cdma/CdmaDataConnectionTracker.java",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI63///+I\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaDataConnectionTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2012-08-25T15:57:14Z",
+      "side": 1,
+      "message": "Will do",
+      "parentUuid": "AAAI13//9q4\u003d",
+      "revId": "e0e4722638c284b12dec1bc928f0957e8c426725",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI13//9qk\u003d",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
         "patchSetId": 5
@@ -47,6 +83,24 @@
       "writtenOn": "2012-08-24T18:16:05Z",
       "side": 1,
       "message": "Remove, not used.",
+      "revId": "e0e4722638c284b12dec1bc928f0957e8c426725",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///+E\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2012-08-25T15:57:14Z",
+      "side": 1,
+      "message": "Depends on your response to my comments in DCT.",
+      "parentUuid": "AAAI13//9qk\u003d",
       "revId": "e0e4722638c284b12dec1bc928f0957e8c426725",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
