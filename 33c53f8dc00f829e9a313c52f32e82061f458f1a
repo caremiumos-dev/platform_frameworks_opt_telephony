@@ -16,6 +16,24 @@
       "revId": "33c53f8dc00f829e9a313c52f32e82061f458f1a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///z4\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1010938
+      },
+      "writtenOn": "2012-08-27T12:00:56Z",
+      "side": 1,
+      "message": "First, I only see this routine called when I dial a number which starts with a \u0027#\u0027 and I don\u0027t see it called after I\u0027ve established a call. So it seems that phone.isInCall will always return false, could you tell me how to test this when phone.isInCall is true?\n\n[ANSWER] When you are in a call, press add call button and type a 2 digit number and press call. In this case,control should return from isInCall check and the dialed number should be treated as USSD request.\n\n[General Comment] As per the 3GPP specification, if the user dials a 2 digit number which doesn\u0027t start with 1, then it has to be interpreted as an USSD request.\n\nFor eg:\n\nIf the user dial 62, then it has to be interpreted as USSD request.\n\nIf the user dials #1, then it has to be treated as USSD request.\n\nIf the user dial 12, then it should be treated as call request.",
+      "parentUuid": "AAAI13//9ac\u003d",
+      "revId": "33c53f8dc00f829e9a313c52f32e82061f458f1a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
