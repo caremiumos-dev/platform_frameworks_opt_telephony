@@ -797,6 +797,244 @@
       "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///iU\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/CDMALTEPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "ll",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///hM\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/CDMAPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///g8\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaConnection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "Should phone.getCurrentUiccState be getCurrentIccCardAppStatus?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///XI\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/RuimRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "doc reference please",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///Qs\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///QE\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "ll",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///PQ\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "Could be null?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///Os\u003d",
+        "filename": "src/java/com/android/internal/telephony/ims/IsimFileHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "@Override as appropriate",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///V0\u003d",
+        "filename": "src/java/com/android/internal/telephony/ims/IsimUiccRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "Lets move these log methods at the end of the file and add @Override\u0027s as appropriate everywhere on \"new code\".",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///VA\u003d",
+        "filename": "src/java/com/android/internal/telephony/ims/IsimUiccRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "Add @Override here and else where",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///V8\u003d",
+        "filename": "src/java/com/android/internal/telephony/ims/IsimUiccRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "No tabs",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///Uk\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "Use mLock style everywhere",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///TU\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "Needs synchronization",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///TM\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T21:58:22Z",
+      "side": 1,
+      "message": "Needs synchronization",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
