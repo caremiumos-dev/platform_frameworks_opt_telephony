@@ -1,0 +1,514 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI63///sk\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "Add java doc for the class explaining the purpose of this interface and how objects implementing it are retrieved.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///sg\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "Add java doc for each method.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///sY\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "Reformat:\n\n  /**\n   * This ...",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///sQ\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "fix long lines.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///rg\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "Why have this method, its confusing, lets got with getState only?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///q4\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "Are you suggesting this be removed from this class?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///rQ\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "Add @override for all methods implementing the interface. Also, I like them in the same order as the interface declaration and if it makes sense have them together. Maybe its easier to change IccCard order, pick your poison.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///qw\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardStatus.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "We have IccCardConstants.State and this, its confusing. Maybe call this RilCardState and call them RIL_CARDSTATE_ABSENT, ... Thus matching to ril.h?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///qM\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardStatus.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "RilCardState mRilCardState ?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///qI\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardStatus.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "setRilCardState?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///qE\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "long line.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///qA\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "mImsi (the others are wrong and should be changed someday.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///ps\u003d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2990,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "rename to appStatus",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///pk\u003d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2992,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "rename to cardStatus",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///nk\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "This calls looks to be used by different thread so is seems we have race conditions. I think need to add an mLock object to synchronize all the public methods.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///oY\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "long line",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///lA\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "As with UiccCard this implementation has race conditions, use mLock style synchronization on all public methods?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///ng\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "long line",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///mQ\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "needs to be \"synchronized\" (use mLock).",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///mU\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "Lets used an Object mLock instead of synchronized statements.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///m4\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "fix comment style here and else where:\n\n /**\n  * Notifies ...",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///lk\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "This is synchronized but the list can change because the add/remove is not synchronized. I believe u need to not have this synchronized and the callers should use mLock instead.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///nM\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "ll",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///lc\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "Callers should use mLock and this shouldn\u0027t be synchronized?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///nE\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "ll",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///lQ\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "Don\u0027t synchronize here, callers should do so?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///kg\u003d",
+        "filename": "src/java/com/android/internal/telephony/UsimFileHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "why have this?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///kc\u003d",
+        "filename": "src/java/com/android/internal/telephony/UsimFileHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "@Override",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///kQ\u003d",
+        "filename": "src/java/com/android/internal/telephony/UsimFileHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "This is thread safe but brittle",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///io\u003d",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-27T19:11:49Z",
+      "side": 1,
+      "message": "s/any/the first/",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
