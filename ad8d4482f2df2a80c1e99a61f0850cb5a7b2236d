@@ -1,0 +1,276 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI6X///wE\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "This should be indented by 8 spaces from the previous line",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///yU\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1961,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "8 spaces from previous line",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///wA\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1968,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "space after \"\u003d\"",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///2g\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "We don\u0027t usually use reversed conditionals, especially for anything that\u0027s not a \"\u003d\u003d\"",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///2Y\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1977,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "8 spaces from previous line",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///2U\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "8 spaces from previous line",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///v4\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "8 spaces",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///v8\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "trailing space",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///yE\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "missing space after \",\"",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///1o\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "At least, this is missing parentheses around the conditional.\n\nThere\u0027s probably a more readable way to write this:\n\n  if ((headerBits % 7) \u003e 0) headerSeptets++;\n\npossibly combined with the previous line:\n\n  headerSeptets \u003d (offset * 8 + 6) / 7;",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///1k\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "missing space after \",\"",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63///yA\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2038,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "space after \",\"",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///v0\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2039,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "space after \",\"",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///vw\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2047,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "Spaces around \"\u003d\"",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///vs\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2052,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "space after \",\"",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n///1g\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2056,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-27T16:02:49Z",
+      "side": 1,
+      "message": "spaces around \"+\"",
+      "revId": "ad8d4482f2df2a80c1e99a61f0850cb5a7b2236d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
