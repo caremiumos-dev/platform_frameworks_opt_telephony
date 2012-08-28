@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI63//+oM\u003d",
+        "filename": "src/java/com/android/internal/telephony/IntRangeManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2012-08-28T17:50:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///9Y\u003d",
+      "revId": "0030e1bef7ec05f8007316c3c121b0ed51d2a82e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI6X///7o\u003d",
         "filename": "src/java/com/android/internal/telephony/IntRangeManager.java",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI63//+oI\u003d",
+        "filename": "src/java/com/android/internal/telephony/IntRangeManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2012-08-28T17:50:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6X///7o\u003d",
+      "revId": "0030e1bef7ec05f8007316c3c121b0ed51d2a82e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI6n///7w\u003d",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/IntRangeManagerTest.java",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2012-08-25T16:39:07Z",
       "side": 1,
       "message": "100 columns",
+      "revId": "0030e1bef7ec05f8007316c3c121b0ed51d2a82e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//+oA\u003d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/IntRangeManagerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2012-08-28T17:50:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6n///7w\u003d",
       "revId": "0030e1bef7ec05f8007316c3c121b0ed51d2a82e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
