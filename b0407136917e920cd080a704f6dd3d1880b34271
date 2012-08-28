@@ -88,6 +88,24 @@
       "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//+og\u003d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2012-08-28T17:40:57Z",
+      "side": 1,
+      "message": "OEM requested that this delay value to be configurable, that is why it is implemented as such.  Also, this delay value may be dependent on underlying modem, hence it is better to have this as configurable.  Please approve the change.  Thanks.",
+      "parentUuid": "AAAIrn///e8\u003d",
+      "revId": "b0407136917e920cd080a704f6dd3d1880b34271",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
