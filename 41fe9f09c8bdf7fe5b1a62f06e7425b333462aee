@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI6n//+hM\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1943,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-29T15:27:46Z",
+      "side": 1,
+      "message": "Extra spaces should be removed",
+      "revId": "41fe9f09c8bdf7fe5b1a62f06e7425b333462aee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//+hI\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2012,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-08-29T15:27:46Z",
+      "side": 1,
+      "message": "extra spaces should be removed",
+      "revId": "41fe9f09c8bdf7fe5b1a62f06e7425b333462aee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
