@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//+K8\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///sk\u003d",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI63///sg\u003d",
         "filename": "src/java/com/android/internal/telephony/IccCard.java",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2012-08-27T19:11:49Z",
       "side": 1,
       "message": "Add java doc for each method.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//+LA\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///sg\u003d",
       "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -187,6 +223,24 @@
       "writtenOn": "2012-08-27T19:11:49Z",
       "side": 1,
       "message": "Add @override for all methods implementing the interface. Also, I like them in the same order as the interface declaration and if it makes sense have them together. Maybe its easier to change IccCard order, pick your poison.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//+Gw\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///rQ\u003d",
       "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -419,6 +473,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//+CY\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///nk\u003d",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI63///oY\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCard.java",
         "patchSetId": 4
@@ -471,6 +543,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//+B0\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///lA\u003d",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI63///ng\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
         "patchSetId": 4
@@ -482,6 +572,24 @@
       "writtenOn": "2012-08-27T19:11:49Z",
       "side": 1,
       "message": "long line",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//+CM\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///ng\u003d",
       "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -505,6 +613,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//+B8\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///mQ\u003d",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI63///mU\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
         "patchSetId": 4
@@ -516,6 +642,24 @@
       "writtenOn": "2012-08-27T19:11:49Z",
       "side": 1,
       "message": "Lets used an Object mLock instead of synchronized statements.",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//+B4\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///mU\u003d",
       "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -574,6 +718,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//+Bw\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///lk\u003d",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI63///nM\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
         "patchSetId": 4
@@ -626,6 +788,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//+Bs\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///lc\u003d",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI63///nE\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
         "patchSetId": 4
@@ -672,6 +852,24 @@
       "writtenOn": "2012-08-27T19:11:49Z",
       "side": 1,
       "message": "Don\u0027t synchronize here, callers should do so?",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//+Bo\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///lQ\u003d",
       "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -1168,6 +1366,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//+BA\u003d",
+        "filename": "src/java/com/android/internal/telephony/ims/IsimUiccRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///VA\u003d",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI63///V8\u003d",
         "filename": "src/java/com/android/internal/telephony/ims/IsimUiccRecords.java",
         "patchSetId": 4
@@ -1179,6 +1395,24 @@
       "writtenOn": "2012-08-27T21:58:22Z",
       "side": 1,
       "message": "No tabs",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//+A8\u003d",
+        "filename": "src/java/com/android/internal/telephony/ims/IsimUiccRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Oops. Done.",
+      "parentUuid": "AAAI63///V8\u003d",
       "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -1202,6 +1436,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//+Ak\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///Uk\u003d",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI63///TU\u003d",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 4
@@ -1219,6 +1471,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//+Ag\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///TU\u003d",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI63///TM\u003d",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 4
@@ -1230,6 +1500,24 @@
       "writtenOn": "2012-08-27T21:58:22Z",
       "side": 1,
       "message": "Needs synchronization",
+      "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//+Ac\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T23:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63///TM\u003d",
       "revId": "e5d36df75190cea73e3cd83681680d0847b1ccba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
