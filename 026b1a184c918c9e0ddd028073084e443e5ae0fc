@@ -16,6 +16,24 @@
       "revId": "026b1a184c918c9e0ddd028073084e443e5ae0fc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6X///Kw\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-29T18:57:54Z",
+      "side": 0,
+      "message": "We now have simultaneously multiple instances of IccRecords objects. Hence we can\u0027t allow all of them to start broadcasting the \"LOADED\" event. We broadcast the LOADED event only for the \"current\" app (which is decided based on the phone type).\nIccCardProxy handles all the broadcasting now.",
+      "parentUuid": "AAAI63///O0\u003d",
+      "revId": "026b1a184c918c9e0ddd028073084e443e5ae0fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
