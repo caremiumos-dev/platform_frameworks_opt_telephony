@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//9q0\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-30T18:04:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI13//9fU\u003d",
+      "revId": "21d2e6d8ee3b4b7cb893245003391dc1e3ceada2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI13//9f4\u003d",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2012-08-24T21:53:02Z",
       "side": 1,
       "message": "ws",
+      "revId": "21d2e6d8ee3b4b7cb893245003391dc1e3ceada2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//9qw\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-30T18:04:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI13//9f4\u003d",
       "revId": "21d2e6d8ee3b4b7cb893245003391dc1e3ceada2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//9qs\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-30T18:04:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI13//9e8\u003d",
+      "revId": "21d2e6d8ee3b4b7cb893245003391dc1e3ceada2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI13//9fQ\u003d",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//9qo\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-30T18:04:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI13//9fQ\u003d",
+      "revId": "21d2e6d8ee3b4b7cb893245003391dc1e3ceada2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI13//9fw\u003d",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
@@ -81,6 +153,24 @@
       "writtenOn": "2012-08-24T21:53:02Z",
       "side": 1,
       "message": "Beautiful!!! How do you get the fancy characters, are these standard ASCII characters?",
+      "revId": "21d2e6d8ee3b4b7cb893245003391dc1e3ceada2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//9qg\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-08-30T18:04:48Z",
+      "side": 1,
+      "message": "After discussion had to revert from these UTF8 characters to less appealing ASCII characters.",
+      "parentUuid": "AAAI13//9fw\u003d",
       "revId": "21d2e6d8ee3b4b7cb893245003391dc1e3ceada2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
