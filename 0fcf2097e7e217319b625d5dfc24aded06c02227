@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI63//8uM\u003d",
+        "filename": "src/java/com/android/internal/telephony/WspTypeDecoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-30T23:06:00Z",
+      "side": 1,
+      "message": "This look fine to me, but it has been in here since 2010-01-27:\n\n  sha1: c9790716f0c759d8bb197f4237a2901e5f561b5b\n  change-Id: I0eb3f9ac287aa7cb53312777c4be54b1939fa857",
+      "revId": "0fcf2097e7e217319b625d5dfc24aded06c02227",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
