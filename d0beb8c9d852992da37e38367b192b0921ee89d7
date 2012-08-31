@@ -1,0 +1,225 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI63//8rc\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "Add:\n\n * @Deprecated use UiccController.getUiccCard instead.",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//8rM\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "Add:\n\n  @Deprecated use UiccController.getUiccCard",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//8rI\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "Add mLock synchronization.",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//8rA\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "mReadyRegistrants isn\u0027t being used to notify anyone, maybe it can be deleted if not used?",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//86s\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "long line",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//84w\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "use mLock here",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//840\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "Use a mLock here.",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//844\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "Put this in onIccSwap so it can manage the locking if necessary.",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//84o\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "I\u0027d rather have the mLock in the individual methods rather than here.",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//82o\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "Add comment:\n\n  Notifies specified registrant, mLock not held.\n\nI\u0027d rather this info be in the name, the convention in Android it have a \"Locked\" suffix See ActivityThread#getDisplayMetricsLocked. But this name is already long and already has \"Locked\" in the name. So adding the comment is the next best thing.",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//82M\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "New comment as above.",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//82E\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/CDMAPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "Why is this call getCurrentUiccStateP (specifically what is the \"P\"? Seems that should be called getCurrentUiccAppState too?",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//8tU\u003d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-08-31T00:09:48Z",
+      "side": 1,
+      "message": "Please add some information that IccCard/IccCardProxy is a translation layer for the PhoneApp which is now deprecated.",
+      "revId": "d0beb8c9d852992da37e38367b192b0921ee89d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
