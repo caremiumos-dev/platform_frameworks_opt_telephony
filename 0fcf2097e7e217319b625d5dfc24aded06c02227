@@ -16,6 +16,24 @@
       "revId": "0fcf2097e7e217319b625d5dfc24aded06c02227",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI33//+1Q\u003d",
+        "filename": "src/java/com/android/internal/telephony/WspTypeDecoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2012-08-31T08:37:05Z",
+      "side": 1,
+      "message": "We have had that patch in our devices since 2010-11-19.",
+      "parentUuid": "AAAI63//8uM\u003d",
+      "revId": "0fcf2097e7e217319b625d5dfc24aded06c02227",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
