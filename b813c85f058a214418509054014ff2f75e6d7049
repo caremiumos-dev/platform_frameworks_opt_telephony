@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI6n//8Rc\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-01T06:17:29Z",
+      "side": 1,
+      "message": "I don\u0027t get it, this isn\u0027t being used. And if a caller wants to cleanup all then should call cleanUpAllConnections above?",
+      "revId": "b813c85f058a214418509054014ff2f75e6d7049",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
