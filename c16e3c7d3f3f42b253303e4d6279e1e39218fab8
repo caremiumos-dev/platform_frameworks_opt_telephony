@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//744\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-04T20:25:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6n//8R4\u003d",
+      "revId": "c16e3c7d3f3f42b253303e4d6279e1e39218fab8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI6n//8R0\u003d",
         "filename": "src/java/com/android/internal/telephony/PhoneBase.java",
         "patchSetId": 8
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//74s\u003d",
+        "filename": "src/java/com/android/internal/telephony/PhoneBase.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-04T20:25:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI63//7fA\u003d",
+      "revId": "c16e3c7d3f3f42b253303e4d6279e1e39218fab8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI6n//8Rw\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCard.java",
         "patchSetId": 8
@@ -65,6 +101,24 @@
       "writtenOn": "2012-09-01T06:12:20Z",
       "side": 1,
       "message": "The mLock above is not related to this onClickListener, it needs its own mLock",
+      "revId": "c16e3c7d3f3f42b253303e4d6279e1e39218fab8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//70s\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCard.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-04T20:25:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6n//8Rw\u003d",
       "revId": "c16e3c7d3f3f42b253303e4d6279e1e39218fab8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -88,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//73o\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-04T20:25:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6n//8Ro\u003d",
+      "revId": "c16e3c7d3f3f42b253303e4d6279e1e39218fab8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI6n//8Rk\u003d",
         "filename": "src/java/com/android/internal/telephony/cdma/CDMAPhone.java",
         "patchSetId": 8
@@ -99,6 +171,24 @@
       "writtenOn": "2012-09-01T06:12:20Z",
       "side": 1,
       "message": "I hope we can get rid of the trailing \"P\".",
+      "revId": "c16e3c7d3f3f42b253303e4d6279e1e39218fab8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//73c\u003d",
+        "filename": "src/java/com/android/internal/telephony/cdma/CDMAPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-04T20:25:30Z",
+      "side": 1,
+      "message": "Removed this function (and the one in PhoneBase)",
+      "parentUuid": "AAAI6n//8Rk\u003d",
       "revId": "c16e3c7d3f3f42b253303e4d6279e1e39218fab8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
