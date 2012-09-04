@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI63//7fA\u003d",
+        "filename": "src/java/com/android/internal/telephony/PhoneBase.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-04T18:45:06Z",
+      "side": 1,
+      "message": "So the \"P\" means \"protected\" and this method provides common code used by XxxPhone#getCurrentAppState(). This is somewhat obtuse. Lets see if we can remove this and XxxPhone#getCurrentUiccAppState and instead have objects desiring the app state use UiccCardApplicaiton#getState() directly.",
+      "parentUuid": "AAAI6n//8R0\u003d",
+      "revId": "c16e3c7d3f3f42b253303e4d6279e1e39218fab8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI6n//8Rw\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCard.java",
         "patchSetId": 8
