@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI63//6+E\u003d",
+        "filename": "src/java/com/android/internal/telephony/cat/ResponseData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-05T16:07:35Z",
+      "side": 1,
+      "message": "Can we add a spec reference that states big endian is the order?",
+      "revId": "3435e1dc55006652efed34fbba2e7ce9a2f3ce3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
