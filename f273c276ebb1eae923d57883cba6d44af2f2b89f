@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI63//694\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/SIMRecords.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1495,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-05T16:13:34Z",
+      "side": 1,
+      "message": "last parameter should be just data.length?",
+      "revId": "f273c276ebb1eae923d57883cba6d44af2f2b89f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//690\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/SIMRecords.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-05T16:13:34Z",
+      "side": 1,
+      "message": "dito",
+      "revId": "f273c276ebb1eae923d57883cba6d44af2f2b89f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI63//69w\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/SIMRecords.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-05T16:13:34Z",
+      "side": 1,
+      "message": "dito",
+      "revId": "f273c276ebb1eae923d57883cba6d44af2f2b89f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
