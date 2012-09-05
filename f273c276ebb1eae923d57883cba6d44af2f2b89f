@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//7S4\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/SIMRecords.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-05T18:28:04Z",
+      "side": 1,
+      "message": "These will get in once I rebase on top of original change that has these modifications:\nhttps://android-review.googlesource.com/#/c/39339/",
+      "parentUuid": "AAAI63//690\u003d",
+      "revId": "f273c276ebb1eae923d57883cba6d44af2f2b89f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI63//69w\u003d",
         "filename": "src/java/com/android/internal/telephony/gsm/SIMRecords.java",
         "patchSetId": 10
