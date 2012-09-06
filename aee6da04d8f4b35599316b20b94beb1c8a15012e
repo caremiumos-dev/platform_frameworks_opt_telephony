@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//6uU\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-06T16:42:11Z",
+      "side": 1,
+      "message": "Thanks. Done",
+      "parentUuid": "AAAI6n//6xw\u003d",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI6n//6xk\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
         "patchSetId": 12
@@ -30,6 +48,24 @@
       "writtenOn": "2012-09-06T09:57:51Z",
       "side": 1,
       "message": "/* REMOVE this method once mIccLockEnabled is not needed */\n private void queryPin1State() {",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//6vM\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-06T16:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6n//6xk\u003d",
       "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//6vI\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-06T16:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6n//6xg\u003d",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI6n//6xc\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
         "patchSetId": 12
@@ -64,6 +118,24 @@
       "writtenOn": "2012-09-06T09:57:51Z",
       "side": 1,
       "message": "Reword:\n  // Sanity check: we expect mPin1State to match mIccLockEnabled.\n  // When mPin1State is DISABLED mIccLockEanbled should be false.\n  // When mPin1State is ENABLED mIccLockEnabled should be true.\n  //\n  // Here we validate these assumptions to assist in identifying which ril/radio\u0027s\n  // have not correctly implemented GET_SIM_STATUS",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//6vE\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-06T16:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6n//6xc\u003d",
       "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//6vA\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-06T16:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6n//6xY\u003d",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI6n//6xU\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
         "patchSetId": 12
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI6n//6u8\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-06T16:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6n//6xU\u003d",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI6n//6xo\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
         "patchSetId": 12
@@ -115,6 +223,24 @@
       "writtenOn": "2012-09-06T09:57:51Z",
       "side": 1,
       "message": "/* STOPSHIP: Remove line above and all code associated with setting\n  mIccLockEanbled once all RIL correctly sends the pin1 state.",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//6u4\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-06T16:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI6n//6xo\u003d",
       "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
