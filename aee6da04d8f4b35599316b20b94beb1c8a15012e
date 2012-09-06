@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI6n//6xw\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-06T09:57:51Z",
+      "side": 1,
+      "message": "Minor grammatical changes:\n\nThe primary advantage of UiccController is that we can work with multiple uicc applications\nat the same time. And that is a requirement for modes like Cdma/Lte. The existing code supports\nCdma/Lte only partially and with guessing on modem side. However, some things modem can\nguess, while others - it can\u0027t.\n\nFor instance, when a user tries to edit the fdn list the current code will pass ef_id for fdn (0x6F3B).\nBut the modem will have no clue which fdn list the user wants to edit (csim or usim, both have path 7FFF),\nand it\u0027s impossible for modem to guess correctly all the time. All the modem can do is try to\nbe consistent and hope another device is doing same things. Imagine you bring your card from\nanother Cdma/Lte device to your new Cdma/Lte device: if this modem uses different fdn file, it\nwon\u0027t work as all existing entries won\u0027t be there.\n\nAnother example is when the modem\u0027s guess is wrong for files like csim/ef_li (7FFF 6F3A)\nversus usim/ef_adn (7FFF 6F3A). They have same ef_ids so Android really should pass aid\nof the app it wants to access. Without aids there is no way modem can know for sure which\nfile Android wants to read! However, in the current code even Android doesn\u0027t know which\naid it wants to read file from since CdmaLteRecords has only 1 aid.\n\nAll of these problems cause more and more hacks, both in the modem and in Android side.\nUiccController cleans up current code and provides framework to work with multiple Uicc\napplications at the same time.",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//6xk\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-06T09:57:51Z",
+      "side": 1,
+      "message": "/* REMOVE this method once mIccLockEnabled is not needed */\n private void queryPin1State() {",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//6xg\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-06T09:57:51Z",
+      "side": 1,
+      "message": "Delete:\n  * Interoperate ...\n\n Add:\n  * REMOVE this method once mIccLockEnabled is not needed.",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//6xc\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-06T09:57:51Z",
+      "side": 1,
+      "message": "Reword:\n  // Sanity check: we expect mPin1State to match mIccLockEnabled.\n  // When mPin1State is DISABLED mIccLockEanbled should be false.\n  // When mPin1State is ENABLED mIccLockEnabled should be true.\n  //\n  // Here we validate these assumptions to assist in identifying which ril/radio\u0027s\n  // have not correctly implemented GET_SIM_STATUS",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//6xY\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-06T09:57:51Z",
+      "side": 1,
+      "message": "Remove this comment",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//6xU\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-06T09:57:51Z",
+      "side": 1,
+      "message": "Remove this comment.",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI6n//6xo\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-06T09:57:51Z",
+      "side": 1,
+      "message": "/* STOPSHIP: Remove line above and all code associated with setting\n  mIccLockEanbled once all RIL correctly sends the pin1 state.",
+      "revId": "aee6da04d8f4b35599316b20b94beb1c8a15012e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
