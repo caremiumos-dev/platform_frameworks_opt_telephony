@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI9n///ao\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-07T17:09:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI9H///lk\u003d",
+      "revId": "934703254758810241e64633e62990e64940a520",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI9H///ls\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
         "patchSetId": 21
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAI9n///ak\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-07T17:09:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI9H///ls\u003d",
+      "revId": "934703254758810241e64633e62990e64940a520",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI9H///lo\u003d",
         "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
         "patchSetId": 21
@@ -47,6 +83,24 @@
       "writtenOn": "2012-09-07T16:36:07Z",
       "side": 1,
       "message": "Change to:\n  log(\"changeIccFdnPassword\");",
+      "revId": "934703254758810241e64633e62990e64940a520",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI9n///ag\u003d",
+        "filename": "src/java/com/android/internal/telephony/UiccCardApplication.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-07T17:09:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAI9H///lo\u003d",
       "revId": "934703254758810241e64633e62990e64940a520",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
