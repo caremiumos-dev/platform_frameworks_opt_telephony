@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI9n//9VE\u003d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2012-09-11T23:54:49Z",
+      "side": 1,
+      "message": "need to synchronize this code too",
+      "revId": "781355e010e3b2b2445be7486a6c73e9a1943a8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI9n//9VA\u003d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2107,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2012-09-11T23:54:49Z",
+      "side": 1,
+      "message": "need to sync on mPendingLock",
+      "revId": "781355e010e3b2b2445be7486a6c73e9a1943a8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
