@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAI9n//9GU\u003d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2012-09-12T16:13:18Z",
+      "side": 1,
+      "message": "this isn\u0027t going to work.  You have a window between the two sync blocks in which someone can acquire a wake lock and inc the pending count and then you will release it when it shouldn\u0027t be.\n\nThe safe/easy way is to using a single lock object.  There may be another safe way to do it using two locks.  I\u0027m not sure if the optimization of using two locks is worth it - take a look.",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
