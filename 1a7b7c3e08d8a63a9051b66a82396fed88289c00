@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAJCH////4\u003d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2012-09-13T02:31:56Z",
+      "side": 1,
+      "message": "Need not this change, as for TIME OUT, there is some problem in modem side that can not response RIL request any more. So FW need release RILJ wakelock immediately despite of race condition. You can find that mRequestMessagesWaiting also have no lock in this scenario.",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAI9n//9GU\u003d",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 2
@@ -30,6 +47,24 @@
       "writtenOn": "2012-09-13T01:33:22Z",
       "side": 1,
       "message": "Agree with your comments. I do not think we need change releaseWakeLockIfDone in this commit. As the change is for RILJ wake lock will never released when mRequestMessagesPending have race condition.\nFor releaseWakeLockIfDone, even in original logic, the RILJ wake lock will still be released some time. So I agree with you to remove this part of change. Thanks!",
+      "parentUuid": "AAAI9n//9GU\u003d",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAJCH////8\u003d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2012-09-13T02:31:56Z",
+      "side": 1,
+      "message": "Robert,\n\nI think releaseWakeLockIfDone will always be called in RIL.java. But it have precondition to release wake lock.\n\nThis is in main thread:\n    private void\n    acquireWakeLock() {\n        synchronized (mWakeLock) {\n            mWakeLock.acquire();\n            mRequestMessagesPending++;\n\n            mSender.removeMessages(EVENT_WAKE_LOCK_TIMEOUT);\n            Message msg \u003d mSender.obtainMessage(EVENT_WAKE_LOCK_TIMEOUT);\n            mSender.sendMessageDelayed(msg, mWakeLockTimeout);\n        }\n    }\nThis is in send thread\nclass RILSender extends Handler implements Runnable {\n....\nhandleMessage(Message msg) {\nswitch (msg.what) {\n                case EVENT_SEND:\n                ....\n                 if (mRequestMessagesPending \u003e 0)\n                            mRequestMessagesPending--;\n\nThe two threads have race condition because did not use lock to protect mRequestMessagesPending , so it may cause mRequestMessagesPending is always \u003e 0 and then mWakeLock can not be released\n    private void\n    releaseWakeLockIfDone() {\n        synchronized (mWakeLock) {\n            if (mWakeLock.isHeld() \u0026\u0026\n                (mRequestMessagesPending \u003d\u003d 0) \u0026\u0026\n                (mRequestMessagesWaiting \u003d\u003d 0)) {\n                mSender.removeMessages(EVENT_WAKE_LOCK_TIMEOUT);\n                mWakeLock.release();\n            }\n        }\n    }\n\nSo I think beside the change in releaseWakeLockIfDone and EVENT_WAKE_LOCK_TIMEOUT, all other changes are mandatory. Can you please let me know your point? Thanks!",
       "parentUuid": "AAAI9n//9GU\u003d",
       "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
