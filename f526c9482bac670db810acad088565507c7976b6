@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAJBH///cw\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccCardProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-09-13T22:21:14Z",
+      "side": 1,
+      "message": "Can we call updateExternalState instead?",
+      "revId": "f526c9482bac670db810acad088565507c7976b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
