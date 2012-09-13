@@ -16,6 +16,24 @@
       "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAI73///nc\u003d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2012-09-13T01:33:22Z",
+      "side": 1,
+      "message": "Agree with your comments. I do not think we need change releaseWakeLockIfDone in this commit. As the change is for RILJ wake lock will never released when mRequestMessagesPending have race condition.\nFor releaseWakeLockIfDone, even in original logic, the RILJ wake lock will still be released some time. So I agree with you to remove this part of change. Thanks!",
+      "parentUuid": "AAAI9n//9GU\u003d",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
