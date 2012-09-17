@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAJJX///pI\u003d",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-17T15:48:34Z",
+      "side": 1,
+      "message": "This comment is now wrong. Also, there is now no undefined value for MNC, should we say that MNC is undefined if MCC is zero?\n\nI wonder if we should be able to set MCC/MNC to undefined in the configuration, according the comment you can\u0027t so probably not, but seems a little strange?",
+      "revId": "f36ce4a3b1aa63f74b60ff313540ac0e71b12a3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAJJX///pM\u003d",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-17T15:48:34Z",
+      "side": 1,
+      "message": "How about:\n\n  if (mcc !\u003d 0) {\n    config.mcc \u003d mcc;\n    config.mnc \u003d (mnc \u003d\u003d 0) ? Configuration.MNC_ZERO : mnc;\n  }",
+      "revId": "f36ce4a3b1aa63f74b60ff313540ac0e71b12a3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
