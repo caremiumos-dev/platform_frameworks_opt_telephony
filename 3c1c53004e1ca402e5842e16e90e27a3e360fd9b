@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAJa3///CQ\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-09-26T19:39:45Z",
+      "side": 1,
+      "message": "Please add Bug line so it reads like this\n\n with the previously sent CMAS msg id 4097\n\n Bug: 7238888\n Change-Id: Id4...",
+      "revId": "3c1c53004e1ca402e5842e16e90e27a3e360fd9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
