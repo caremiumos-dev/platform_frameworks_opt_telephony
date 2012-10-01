@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAJuH//+7k\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-10-01T21:36:50Z",
+      "side": 1,
+      "message": "Yes the RIL_ is needed.\n\nSomething I\u0027ve wanted to do for a long time is add Rlog like we now have Slog so we don\u0027t need to special TAG\u0027s. I\u0027ve created a bug for this, hopefully in a future release.",
+      "parentUuid": "AAAJt3///lw\u003d",
+      "revId": "7b0701b000befe30a44ca5f7749b6fa0b635c72f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAJt3///lk\u003d",
         "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
         "patchSetId": 1
