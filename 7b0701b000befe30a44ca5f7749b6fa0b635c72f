@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAJt3///lw\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2012-10-01T13:48:55Z",
+      "side": 1,
+      "message": "Would the logs be redirected to adb main log if we do not add RIL  as a prefix to the log tag? To redirect these logs to radio log, the tag may have to have a RIL prefix.",
+      "revId": "7b0701b000befe30a44ca5f7749b6fa0b635c72f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAJt3///lk\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2012-10-01T13:48:55Z",
+      "side": 1,
+      "message": "Should this be\n\nmCi.iccIOForApp(COMMAND_GET_RESPONSE, IccConstants.EF_IMG, getEFPath(EF_IMG), recordNum, READ_RECORD_MODE_ABSOLUTE,                GET_RESPONSE_EF_IMG_SIZE_BYTES, null, null, mAid, response);",
+      "revId": "7b0701b000befe30a44ca5f7749b6fa0b635c72f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAJt3///lo\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2012-10-01T13:48:55Z",
+      "side": 1,
+      "message": "This should probably be  getEFPath(fileid) instead of  getEFPath(EF_IMG).\n\nPlease refer to TS 31.102, for displaying of Icon, under DF Telecom and DF Graphics , EF instance(s) (4FXX,transparent files) are present. The possible image file identifiers (EF instance) for EF img ( 4F20, linear fixed file) are : 4F01 ... 4F05.",
+      "revId": "7b0701b000befe30a44ca5f7749b6fa0b635c72f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
