@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAJ7n///+o\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1013627
+      },
+      "writtenOn": "2012-10-08T02:38:35Z",
+      "side": 1,
+      "message": "Transmission oriented commands(GET RESPONSE)\nThe provisions of ETSI TS 102 221 [1] clause 12 apply.\np1 is \u002700\u0027 and p2 is \u002700\u0027 too.",
+      "parentUuid": "AAAJt3///lk\u003d",
+      "revId": "7b0701b000befe30a44ca5f7749b6fa0b635c72f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAJt3///lo\u003d",
         "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
         "patchSetId": 1
