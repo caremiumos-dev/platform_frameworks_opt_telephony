@@ -86,6 +86,24 @@
       "revId": "7b0701b000befe30a44ca5f7749b6fa0b635c72f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAJ73///y8\u003d",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1013627
+      },
+      "writtenOn": "2012-10-08T04:31:24Z",
+      "side": 1,
+      "message": "But the path of all the image file identifiers is same with the EF_IMG (MF_SIM + DF_TELECOM + DF_GRAPHICS).\n\nif use getEFPath(fileid) instead of getEFPath(EF_IMG), it will return null not (MF_SIM + DF_TELECOM + DF_GRAPHICS).",
+      "parentUuid": "AAAJt3///lo\u003d",
+      "revId": "7b0701b000befe30a44ca5f7749b6fa0b635c72f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
