@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAKan///vM\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1016503
+      },
+      "writtenOn": "2012-10-17T12:31:45Z",
+      "side": 1,
+      "message": "spelling :)",
+      "revId": "f1603c1bf13e3e04019503e81315d7db0199371a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
