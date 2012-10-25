@@ -67,6 +67,23 @@
       "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAK63////8\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-10-25T22:35:48Z",
+      "side": 1,
+      "message": "fetchDunApn function in DCT seems to be doing exactly same thing (and is not removed as part of this change).\nThis needs to be cleared out.",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
