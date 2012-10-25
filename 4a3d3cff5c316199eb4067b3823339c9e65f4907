@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAK2X///8E\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-10-25T18:07:46Z",
+      "side": 1,
+      "message": "remove conflicts",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
