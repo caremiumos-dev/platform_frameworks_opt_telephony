@@ -16,6 +16,57 @@
       "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAK2X///3w\u003d",
+        "filename": "src/java/com/android/internal/telephony/ApnContext.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-10-25T19:09:52Z",
+      "side": 1,
+      "message": "getDataProfile ?",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAK2X///6g\u003d",
+        "filename": "src/java/com/android/internal/telephony/DataProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-10-25T19:09:52Z",
+      "side": 1,
+      "message": "convert to ints.",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAK2X///3U\u003d",
+        "filename": "src/java/com/android/internal/telephony/DataProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-10-25T19:09:52Z",
+      "side": 1,
+      "message": "Add dump() function and call it from parents object",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
