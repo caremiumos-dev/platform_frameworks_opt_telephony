@@ -16,6 +16,24 @@
       "revId": "8caece998cc01c0c6584081d6bda783de1d0da97",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAALRX//+vI\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1015528
+      },
+      "writtenOn": "2012-11-06T22:41:44Z",
+      "side": 1,
+      "message": "Agree. We need to update the comment.\n\nWe are not saying that \"\" is an invalid SPN. But if the SPN is an empty string then it would be better to fallback to PLMN.",
+      "parentUuid": "AAALRn///D8\u003d",
+      "revId": "8caece998cc01c0c6584081d6bda783de1d0da97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
