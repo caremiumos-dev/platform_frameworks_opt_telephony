@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAALRn///D8\u003d",
+        "filename": "src/java/com/android/internal/telephony/gsm/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1000718
+      },
+      "writtenOn": "2012-11-06T17:16:19Z",
+      "side": 1,
+      "message": "The idea here to detect the case where EFSPN has not been loaded yet.  Seems possible to have EFSPN loaded with empty SPN.  If we change the logic here, we should update the comment below.\n\nAlso, this change implies \"\" is not a valid SPN.  Perhaps \"\" is nonsensical, but is it actually invalid?",
+      "revId": "8caece998cc01c0c6584081d6bda783de1d0da97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
