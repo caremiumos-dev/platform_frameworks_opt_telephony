@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "Me5AwOgk",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-04T16:43:02Z",
+      "side": 1,
+      "message": "Add above this line.\n\nBug: 7612431\nChang-Id: ....",
+      "revId": "8008edc64928016ab94aa6d770de248b5d85dc93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "MezBCLl4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-04T16:43:02Z",
+      "side": 1,
+      "message": "Remove this",
+      "revId": "8008edc64928016ab94aa6d770de248b5d85dc93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Me5stu5k",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-04T16:43:02Z",
+      "side": 1,
+      "message": "What if already in MODE_IN_CALL?",
+      "revId": "8008edc64928016ab94aa6d770de248b5d85dc93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Me7sqf3w",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-04T16:43:02Z",
+      "side": 1,
+      "message": "What if we\u0027re already in MODE_RINGTONE, with the old code this would have not been invoked?",
+      "revId": "8008edc64928016ab94aa6d770de248b5d85dc93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
