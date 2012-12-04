@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "MhJ7KvZs",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1003259
+      },
+      "writtenOn": "2012-12-04T18:48:43Z",
+      "side": 1,
+      "message": "please don\u0027t do that. changing the audio mode has implication on routing and volume policy. You should not select in call mode while the phone is ringing.",
+      "parentUuid": "Me5stu5k",
+      "revId": "8008edc64928016ab94aa6d770de248b5d85dc93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "Me7sqf3w",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 1
