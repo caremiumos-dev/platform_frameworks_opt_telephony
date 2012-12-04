@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "MeqvWtRU",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-12-04T01:25:01Z",
+      "side": 1,
+      "message": "bring back space before mAid, please.",
+      "revId": "2dad97b341ff8ed3a91b30992b2d0827a0e0f694",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Meqvvld0",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-12-04T01:25:01Z",
+      "side": 1,
+      "message": "Why 7 spaces indentation?",
+      "revId": "2dad97b341ff8ed3a91b30992b2d0827a0e0f694",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "MemvFnVo",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-12-04T01:25:01Z",
+      "side": 1,
+      "message": "Be consistent, either start line with \"+\" sign, or leave + on previous line. But same way on all these lines.",
+      "revId": "2dad97b341ff8ed3a91b30992b2d0827a0e0f694",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "MeksqmTI",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-12-04T01:25:01Z",
+      "side": 1,
+      "message": "bring back space before mAid, please.",
+      "revId": "2dad97b341ff8ed3a91b30992b2d0827a0e0f694",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "MeosjsVk",
+        "filename": "src/java/com/android/internal/telephony/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-12-04T01:25:01Z",
+      "side": 1,
+      "message": "Either make every argument in its own line, or combine all of them in chunks. (I don\u0027t see reasong for lc.recordNum and READ_RECORDS_MODE... to have a line for each - they would both fit in 1 line)",
+      "revId": "2dad97b341ff8ed3a91b30992b2d0827a0e0f694",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
