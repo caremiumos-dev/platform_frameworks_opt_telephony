@@ -16,6 +16,24 @@
       "revId": "bb4a6c689bb83f73132e70a64d9fdb84ffab3cdc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "MkfcNWJ8",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1717,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2012-12-05T00:06:36Z",
+      "side": 1,
+      "message": "I agree with Wink\u0027s approach (which is used elsewhere to filter out PII from the radio log). Changing the value of RILJ_LOGV requires a recompile, so the USSD string will never be logged (in Wink\u0027s version) unless RILJ_LOGV is set to true and the framework is rebuilt and flashed to the device.",
+      "parentUuid": "MkXQGBmA",
+      "revId": "bb4a6c689bb83f73132e70a64d9fdb84ffab3cdc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
