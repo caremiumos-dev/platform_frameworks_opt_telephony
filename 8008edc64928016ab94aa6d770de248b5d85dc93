@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "MyXm6JxE",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-12-06T22:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "Me5AwOgk",
+      "revId": "8008edc64928016ab94aa6d770de248b5d85dc93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "MezBCLl4",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2012-12-04T16:43:02Z",
       "side": 1,
       "message": "Remove this",
+      "revId": "8008edc64928016ab94aa6d770de248b5d85dc93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "MyVm3YyU",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-12-06T22:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "MezBCLl4",
       "revId": "8008edc64928016ab94aa6d770de248b5d85dc93",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
