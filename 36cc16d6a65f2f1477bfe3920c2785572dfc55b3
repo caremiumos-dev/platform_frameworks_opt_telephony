@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "M10NngQ0",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-10T20:02:32Z",
+      "side": 1,
+      "message": "Use Rlog.d everywhere.",
+      "revId": "36cc16d6a65f2f1477bfe3920c2785572dfc55b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
