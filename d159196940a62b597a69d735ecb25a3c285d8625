@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "M12ODnac",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-10T19:58:56Z",
+      "side": 0,
+      "message": "For backwards compatibility with some devices using this internal file please keep a copy in com.android.internal.telephony.",
+      "revId": "d159196940a62b597a69d735ecb25a3c285d8625",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
