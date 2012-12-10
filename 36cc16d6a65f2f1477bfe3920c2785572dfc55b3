@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "M135wUP0",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1003259
+      },
+      "writtenOn": "2012-12-10T22:15:44Z",
+      "side": 1,
+      "message": "proposed change here to avoid sending IN_CALL mode twice:\nreplace L382 by:\n    int curAudioMode \u003d audioManager.getMode();\n    if (curAudioMode !\u003d AudioManager.MODE_RINGTONE) {",
+      "revId": "36cc16d6a65f2f1477bfe3920c2785572dfc55b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M1z5NKMI",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1003259
+      },
+      "writtenOn": "2012-12-10T22:15:44Z",
+      "side": 1,
+      "message": "replace L 394 by:\nif (mSpeedUpAudioForMtCall \u0026\u0026 (curAudioMode !\u003d AudioManager.MODE_IN_CALL)) {\n\nActually I don\u0027t understand why we need to set the audio mode here when mSpeedUpAudioForMtCall is true: it is already done by . Are there other cases where this is needed?",
+      "revId": "36cc16d6a65f2f1477bfe3920c2785572dfc55b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "M1UX65bE",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 5
@@ -13,6 +47,24 @@
       "writtenOn": "2012-12-10T21:26:55Z",
       "side": 1,
       "message": "there is a potential problem here with regard to audio focus.\nwhen in silent mode, we do not take the audio focus at line 386 above and as with this change the audio mode is already in call here we may fail to take it resulting in music not stopping playback.\nI need to test first to be sure.",
+      "revId": "36cc16d6a65f2f1477bfe3920c2785572dfc55b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M13798Cw",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1003259
+      },
+      "writtenOn": "2012-12-10T22:15:44Z",
+      "side": 1,
+      "message": "proposed fix:\nif (audioManager.getMode() !\u003d newAudioMode || mSpeedUpAudioForMtCall) {",
+      "parentUuid": "M1UX65bE",
       "revId": "36cc16d6a65f2f1477bfe3920c2785572dfc55b3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
