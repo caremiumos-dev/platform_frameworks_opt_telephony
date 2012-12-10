@@ -16,6 +16,24 @@
       "revId": "d159196940a62b597a69d735ecb25a3c285d8625",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M1UUy5fA",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-12-10T20:07:55Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "M12ODnac",
+      "revId": "d159196940a62b597a69d735ecb25a3c285d8625",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
