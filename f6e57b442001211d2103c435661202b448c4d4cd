@@ -16,6 +16,24 @@
       "revId": "f6e57b442001211d2103c435661202b448c4d4cd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M4bSJMX4",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1014573
+      },
+      "writtenOn": "2012-12-13T01:18:27Z",
+      "side": 1,
+      "message": "As you know, the flag is only set after first PS attach from boot.\nIf the network deny PS attach during first boot, UE should not send SETUP_DATA_CALL because this SIM card is not allowed to attach PS network. In this case, the flag will be maintained with \u0027false\u0027 not to send SETUP_DATA_CALL.\nAnd the success of first PS attach means that the network allows this SIM card to use PS network and can use cellular data connection.\nIf the PS attach will fail with 3(denied by network) after togglling airplane mode, framework will retry SETUP_DATA_CALL and will end the retry. \nSo, I think the flag does not need to be reset even if user toggle airplane mode.",
+      "parentUuid": "M1AP3K1Q",
+      "revId": "f6e57b442001211d2103c435661202b448c4d4cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
