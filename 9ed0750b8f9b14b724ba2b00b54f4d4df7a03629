@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "M1Ft6muU",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-17T22:19:03Z",
+      "side": 1,
+      "message": "Not necessary as caller already has validated its not null, and if we want to check for null it should be at the top of the method. Please remove the test for null.",
+      "revId": "9ed0750b8f9b14b724ba2b00b54f4d4df7a03629",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
