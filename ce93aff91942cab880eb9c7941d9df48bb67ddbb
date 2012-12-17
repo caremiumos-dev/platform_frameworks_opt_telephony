@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "M1FZG71E",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-17T22:54:30Z",
+      "side": 1,
+      "message": "Don\u0027t change to ELAPSED_REALTIME leave at ELAPSED_REALTIME_WAKEUP as we still want to check for data stalls while asleep as issues with connectivity still occur and we want to try to recover from these issues ASAP and not wait until the device wakes up.",
+      "revId": "ce93aff91942cab880eb9c7941d9df48bb67ddbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M1JYZd4Q",
+        "filename": "src/java/com/android/internal/telephony/DataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-17T22:54:30Z",
+      "side": 1,
+      "message": "Please keep this as ELAPSED_REALTIME_WAKEUP, we still want to check for stalls while asleep.",
+      "revId": "ce93aff91942cab880eb9c7941d9df48bb67ddbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
