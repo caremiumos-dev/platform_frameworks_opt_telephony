@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "M1NErCYE",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-18T00:30:53Z",
+      "side": 1,
+      "message": "Before returning we should call cursor.close().",
+      "revId": "b47ddf8d67d135033ffa9b2fbdf9501cb64c70ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M1JFQYQY",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-18T00:30:53Z",
+      "side": 1,
+      "message": "If discard is already true we don\u0027t need to do this check.",
+      "revId": "b47ddf8d67d135033ffa9b2fbdf9501cb64c70ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
