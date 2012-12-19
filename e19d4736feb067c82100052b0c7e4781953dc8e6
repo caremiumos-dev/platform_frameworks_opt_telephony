@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "NCzd.uNc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1010973
+      },
+      "writtenOn": "2012-12-19T16:52:54Z",
+      "side": 1,
+      "message": "This commit message isn\u0027t very useful. It should state what build error is fixed and preferably also which commit introduced the error in the first place.",
+      "revId": "e19d4736feb067c82100052b0c7e4781953dc8e6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NC5cZBN8",
+        "filename": "Android.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1010973
+      },
+      "writtenOn": "2012-12-19T16:52:54Z",
+      "side": 1,
+      "message": "You probably mean this:\n\n $(call all-Iaidl-files-under, src/java) \\\n $(call all-logtags-files-under, src/java)\n\nI\u0027d also recommend leaving off the \\ at the end of the last line to avoid problems if someone happens to place another (unrelated) line immediately after this assignment.",
+      "revId": "e19d4736feb067c82100052b0c7e4781953dc8e6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
