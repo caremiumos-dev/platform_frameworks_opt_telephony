@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "NFE4-c4w",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2012-12-19T17:51:21Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NFK7hNyI",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2012-12-19T17:51:21Z",
+      "side": 1,
+      "message": "sync with mWakeLock",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NFI7ee2Q",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2012-12-19T17:51:21Z",
+      "side": 1,
+      "message": "synch with mWakeLock",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAJBH///Tk\u003d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2012-12-19T17:51:21Z",
+      "side": 1,
+      "message": "pull alreadySubtracted out and check it first - don\u0027t need to enter the sync block at all most of the time.\n\nSync with mWakeLock",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAJCH////4\u003d",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 2
@@ -13,6 +81,41 @@
       "writtenOn": "2012-09-13T02:31:56Z",
       "side": 1,
       "message": "Need not this change, as for TIME OUT, there is some problem in modem side that can not response RIL request any more. So FW need release RILJ wakelock immediately despite of race condition. You can find that mRequestMessagesWaiting also have no lock in this scenario.",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAJBH///WE\u003d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2012-12-19T17:51:21Z",
+      "side": 1,
+      "message": "Don\u0027t need anything here as it\u0027s protected by mWakeLock sync block",
+      "parentUuid": "AAAJCH////4\u003d",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NFI63myY",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2099,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2012-12-19T17:51:21Z",
+      "side": 1,
+      "message": "revert - put this back in the mWakeLock sync block",
       "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -66,6 +169,23 @@
       "side": 1,
       "message": "Robert,\n\nI think releaseWakeLockIfDone will always be called in RIL.java. But it have precondition to release wake lock.\n\nThis is in main thread:\n    private void\n    acquireWakeLock() {\n        synchronized (mWakeLock) {\n            mWakeLock.acquire();\n            mRequestMessagesPending++;\n\n            mSender.removeMessages(EVENT_WAKE_LOCK_TIMEOUT);\n            Message msg \u003d mSender.obtainMessage(EVENT_WAKE_LOCK_TIMEOUT);\n            mSender.sendMessageDelayed(msg, mWakeLockTimeout);\n        }\n    }\nThis is in send thread\nclass RILSender extends Handler implements Runnable {\n....\nhandleMessage(Message msg) {\nswitch (msg.what) {\n                case EVENT_SEND:\n                ....\n                 if (mRequestMessagesPending \u003e 0)\n                            mRequestMessagesPending--;\n\nThe two threads have race condition because did not use lock to protect mRequestMessagesPending , so it may cause mRequestMessagesPending is always \u003e 0 and then mWakeLock can not be released\n    private void\n    releaseWakeLockIfDone() {\n        synchronized (mWakeLock) {\n            if (mWakeLock.isHeld() \u0026\u0026\n                (mRequestMessagesPending \u003d\u003d 0) \u0026\u0026\n                (mRequestMessagesWaiting \u003d\u003d 0)) {\n                mSender.removeMessages(EVENT_WAKE_LOCK_TIMEOUT);\n                mWakeLock.release();\n            }\n        }\n    }\n\nSo I think beside the change in releaseWakeLockIfDone and EVENT_WAKE_LOCK_TIMEOUT, all other changes are mandatory. Can you please let me know your point? Thanks!",
       "parentUuid": "AAAI9n//9GU\u003d",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NFG46L54",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2012-12-19T17:51:21Z",
+      "side": 1,
+      "message": "revert and put this back in mWakeLock sync block",
       "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
