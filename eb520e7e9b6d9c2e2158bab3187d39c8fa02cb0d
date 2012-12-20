@@ -34,6 +34,24 @@
       "revId": "eb520e7e9b6d9c2e2158bab3187d39c8fa02cb0d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NFCuqzm8",
+        "filename": "Android.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1003981
+      },
+      "writtenOn": "2012-12-20T17:39:08Z",
+      "side": 1,
+      "message": "As Magnus said, typo in call the functions.\nWink, is com/android/internal/telephony/uicc/AdnRecord.aidl really needed in \tLOCAL_SRC_FILES? it\u0027s not in your original change.",
+      "parentUuid": "NFmlcYks",
+      "revId": "eb520e7e9b6d9c2e2158bab3187d39c8fa02cb0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
