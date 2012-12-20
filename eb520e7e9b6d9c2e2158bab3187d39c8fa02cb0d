@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "NIqmChQc",
+        "filename": "Android.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1010973
+      },
+      "writtenOn": "2012-12-20T14:40:10Z",
+      "side": 1,
+      "message": "I\u0027d expect these two lines to evaluate to nothing. As I said in the previous comment:\n\n $(call all-Iaidl-files-under, src/java) \\\n $(call all-logtags-files-under, src/java)",
+      "revId": "eb520e7e9b6d9c2e2158bab3187d39c8fa02cb0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
