@@ -52,6 +52,24 @@
       "revId": "eb520e7e9b6d9c2e2158bab3187d39c8fa02cb0d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NFqw22AA",
+        "filename": "Android.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-20T18:51:26Z",
+      "side": 1,
+      "message": "AdnRecord  only contains a file comment and these two lines:\n\n package com.android.internal.telephony.uicc;\n parcelable AdnRecord;\n\nFrom a practical point of view it apparently isn\u0027t required, but I would have thought it should have been included and that I left it off by mistake. So my thought is that if its does no harm to add it then we should add it.",
+      "parentUuid": "NFCuqzm8",
+      "revId": "eb520e7e9b6d9c2e2158bab3187d39c8fa02cb0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
