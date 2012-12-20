@@ -16,6 +16,24 @@
       "revId": "eb520e7e9b6d9c2e2158bab3187d39c8fa02cb0d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NFmlcYks",
+        "filename": "Android.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-20T17:04:44Z",
+      "side": 1,
+      "message": "Why do you say that, I expect them to find 4 files\n\n $ find . -name \u0027*aidl\u0027 \n ./com/android/internal/telephony/ISms.aidl\n ./com/android/internal/telephony/IIccPhoneBook.aidl\n ./com/android/internal/telephony/uicc/AdnRecord.aidl\n\n $ find . -name \u0027*logtags\u0027 \n ./com/android/internal/telephony/EventLogTags.logtags",
+      "parentUuid": "NIqmChQc",
+      "revId": "eb520e7e9b6d9c2e2158bab3187d39c8fa02cb0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
