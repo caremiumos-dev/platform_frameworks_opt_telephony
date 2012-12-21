@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "NIFw1tUg",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2012-12-21T05:35:12Z",
+      "side": 1,
+      "message": "Lock mWakeLock is for mWakeLock operation.\nLock mPendingLock is for mRequestMessagesPending operation.\nLock mRequestsList is for mRequestMessagesWaiting operation.\nSuggest keep this lock.",
+      "parentUuid": "NFE4-c4w",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "NFK7hNyI",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 2
@@ -64,6 +82,24 @@
       "writtenOn": "2012-12-19T17:51:21Z",
       "side": 1,
       "message": "pull alreadySubtracted out and check it first - don\u0027t need to enter the sync block at all most of the time.\n\nSync with mWakeLock",
+      "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NIJwUna0",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2012-12-21T05:35:12Z",
+      "side": 1,
+      "message": "Separate from mWakeLock, in case dead lock.",
+      "parentUuid": "AAAJBH///Tk\u003d",
       "revId": "1a7b7c3e08d8a63a9051b66a82396fed88289c00",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
