@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "NFod4jro",
+        "filename": "Android.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2012-12-21T17:50:51Z",
+      "side": 1,
+      "message": "In my testing I have to have:\n\n  LOCAL_AIDL_INCLUDES :\u003d $(LOCAL_PATH)/src/java\n\nOtherwise I get a compile error:\n\n  frameworks/opt/telephony/src/java/com/android/internal/telephony/IIccPhoneBook.aidl:19: couldn\u0027t find import for class com.android.internal.telephony.uicc.AdnRecord\n\nThis is because AdnRecord.aidl is like \"header file\" and needs to be in the LOCAL_AIDL_INCLUDES list so IIccPhoneBook.aidl can find it (see: http://developer.android.com/guide/components/aidl.html).\nPlease add it back, or let me know how/why it works for you but not me.",
+      "revId": "5135ab834e4ed0c8323c9085d4de5e20d1ffa334",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
