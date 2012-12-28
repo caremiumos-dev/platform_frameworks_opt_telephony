@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "NYmDHcpY",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2012-12-28T18:21:38Z",
+      "side": 1,
+      "message": "This function has a lot of ctrl-c ctrl-v from function above (parseSmsDeliver).\nCan the code be restructured to avoid duplicating so much code?",
+      "revId": "b0ffedfb7d4806d0e9b606b69c44511b110c1b0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
