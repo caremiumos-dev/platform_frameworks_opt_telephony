@@ -16,6 +16,41 @@
       "revId": "b0ffedfb7d4806d0e9b606b69c44511b110c1b0e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NYGFi9-0",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-02T19:22:51Z",
+      "side": 1,
+      "message": "Bin, if you want to refactor fine, but as I see it its just enough different to not be worth the trouble. Bin your choice.",
+      "parentUuid": "NYmDHcpY",
+      "revId": "b0ffedfb7d4806d0e9b606b69c44511b110c1b0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NYKFzH98",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-02T19:22:51Z",
+      "side": 1,
+      "message": "Change to:\n\n  while (validityPeriodLenght-- \u003e 0) {\n     p.getByte();\n  }",
+      "revId": "b0ffedfb7d4806d0e9b606b69c44511b110c1b0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
