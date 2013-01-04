@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "NqRxLOa4",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1018290
+      },
+      "writtenOn": "2013-01-04T01:50:14Z",
+      "side": 1,
+      "message": "Wink,\n\nI prefer to leaving this function as it is. Thanks.",
+      "parentUuid": "NYGFi9-0",
+      "revId": "b0ffedfb7d4806d0e9b606b69c44511b110c1b0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "NYKFzH98",
         "filename": "src/java/com/android/internal/telephony/gsm/SmsMessage.java",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2013-01-02T19:22:51Z",
       "side": 1,
       "message": "Change to:\n\n  while (validityPeriodLenght-- \u003e 0) {\n     p.getByte();\n  }",
+      "revId": "b0ffedfb7d4806d0e9b606b69c44511b110c1b0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NqbxbLYE",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1018290
+      },
+      "writtenOn": "2013-01-04T01:50:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "NYKFzH98",
       "revId": "b0ffedfb7d4806d0e9b606b69c44511b110c1b0e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
