@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "N70dL3iU",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-01-07T23:56:06Z",
+      "side": 1,
+      "message": "Code style: \"\u003d\" should be separated by a space on both sides.",
+      "revId": "700e7df9a0ac480e688d37786c0c146d5d1e406d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
