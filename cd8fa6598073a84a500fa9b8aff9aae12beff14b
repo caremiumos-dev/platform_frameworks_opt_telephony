@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "N8neDPw4",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-09T20:10:59Z",
+      "side": 1,
+      "message": "Change this also to readUnsignedByte()",
+      "revId": "cd8fa6598073a84a500fa9b8aff9aae12beff14b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
