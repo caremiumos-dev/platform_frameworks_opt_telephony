@@ -16,6 +16,40 @@
       "revId": "7e005b56e5c4bc2c09ddaceb4d9568423e05cb54",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "N8RrZPPE",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-01-09T19:36:34Z",
+      "side": 1,
+      "message": "\"paramBits \u003e\u003d 0\" is always true: the range of subparamLen is 0 - 255, so paramBits will always be 0 - 2040.\n\nYou could remove the check completely, since the call to skip() will throw an exception if there aren\u0027t enough bits remaining, or you could change the check to \"if (paramBits \u003c\u003d inStream.available())\" so that the error logging will be more accurate if it fails.",
+      "revId": "7e005b56e5c4bc2c09ddaceb4d9568423e05cb54",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "N8RqD-Nk",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-01-09T19:36:34Z",
+      "side": 1,
+      "message": "\"had...\" should be \" had...\" (missing space).",
+      "revId": "7e005b56e5c4bc2c09ddaceb4d9568423e05cb54",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
