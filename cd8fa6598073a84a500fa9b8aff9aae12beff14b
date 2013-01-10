@@ -16,6 +16,24 @@
       "revId": "cd8fa6598073a84a500fa9b8aff9aae12beff14b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "N8lDboec",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1013785
+      },
+      "writtenOn": "2013-01-10T01:22:50Z",
+      "side": 1,
+      "message": "Thank you for your opinion.\r\nIn my opinion, because the \"length\" variable is declared as a \"byte\", this part does not need to be modified. \r\nWould you please consider again?",
+      "parentUuid": "N8neDPw4",
+      "revId": "cd8fa6598073a84a500fa9b8aff9aae12beff14b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
