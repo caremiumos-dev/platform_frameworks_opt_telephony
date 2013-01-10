@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "N8RPtp.Y",
+        "filename": "src/java/com/android/internal/telephony/cdma/sms/BearerData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1953,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-01-10T00:02:58Z",
+      "side": 1,
+      "message": "The canonical name of the charset is \"Shift_JIS\".",
+      "revId": "86defb91f6f281473da0e9362026bfa275952fde",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
