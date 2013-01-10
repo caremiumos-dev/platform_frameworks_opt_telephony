@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "N8stIv7E",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-10T23:28:01Z",
+      "side": 1,
+      "message": "Remove and change to:\n\n Bug: 7903480\n Change-Id: I15e12efd5f1691fae166f2e5bba77323766e5801",
+      "revId": "980064faf67b2bf7cd57893a4fb942f023491747",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "N8kuD79g",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-10T23:28:01Z",
+      "side": 1,
+      "message": "This is hiding GsmMmiCode#dialingNumber, lets rename this to siaDialingNumber so there is no confusion.",
+      "revId": "980064faf67b2bf7cd57893a4fb942f023491747",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "N8qtymwU",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-10T23:28:01Z",
+      "side": 1,
+      "message": "siaDialingNumber",
+      "revId": "980064faf67b2bf7cd57893a4fb942f023491747",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "N8gt55.4",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-10T23:28:01Z",
+      "side": 1,
+      "message": "I assume you want the \"sia\" value so I\u0027m suggesting this is siaDialingNumber.",
+      "revId": "980064faf67b2bf7cd57893a4fb942f023491747",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "N8stv3xk",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-10T23:28:01Z",
+      "side": 1,
+      "message": "siaDialingNumber",
+      "revId": "980064faf67b2bf7cd57893a4fb942f023491747",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
