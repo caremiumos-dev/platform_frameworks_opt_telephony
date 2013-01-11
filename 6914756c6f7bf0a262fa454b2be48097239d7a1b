@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "N8jbtLuc",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecordLoader.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-11T00:31:32Z",
+      "side": 1,
+      "message": "How about we simplify this and change the if/else to:\n\n  mFh.loadEFLinearFixed(ef, getEFPath(ef), recordNumber,\n           obtainMessage(EVENT_ADN_LOAD_DONE));\n\nWe can then also remove the \"old\" loadLoadLinearFixed .. routines/constructors without the path,\nthus simplifying both classes.",
+      "revId": "6914756c6f7bf0a262fa454b2be48097239d7a1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
