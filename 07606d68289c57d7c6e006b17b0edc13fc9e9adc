@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "Ocv8Wq6o",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-01-18T01:48:58Z",
+      "side": 1,
+      "message": "- Unnecessary cast from ArrayList\u003cSmsRawData\u003e to List\u003cSmsRawData\u003e can be removed.\n- extra space between mSms and \u0027\u003d\u0027 can be removed.",
+      "revId": "07606d68289c57d7c6e006b17b0edc13fc9e9adc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Ocp9q-w8",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-01-18T01:48:58Z",
+      "side": 1,
+      "message": "typo in string: \"smsm\" should be \"smsc\"",
+      "revId": "07606d68289c57d7c6e006b17b0edc13fc9e9adc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
