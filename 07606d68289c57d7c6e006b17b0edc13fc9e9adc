@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "Ob-kWz6o",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-01-18T03:19:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "Ocv8Wq6o",
+      "revId": "07606d68289c57d7c6e006b17b0edc13fc9e9adc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "Ocp9q-w8",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2013-01-18T01:48:58Z",
       "side": 1,
       "message": "typo in string: \"smsm\" should be \"smsc\"",
+      "revId": "07606d68289c57d7c6e006b17b0edc13fc9e9adc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Obxl3C-w",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-01-18T03:19:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "Ocp9q-w8",
       "revId": "07606d68289c57d7c6e006b17b0edc13fc9e9adc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
