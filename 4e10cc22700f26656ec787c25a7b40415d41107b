@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "OZasXiEo",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-01-18T00:45:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "OZRXl-y0",
+      "revId": "4e10cc22700f26656ec787c25a7b40415d41107b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "OZXXTo1k",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2013-01-17T22:15:14Z",
       "side": 1,
       "message": "Add above lets add abstract method:\n\n  protected void IccSsmInterfaceManager#writeSms(status, pdu,  smsc, response);",
+      "revId": "4e10cc22700f26656ec787c25a7b40415d41107b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "OZcsr9IM",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-01-18T00:45:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "OZXXTo1k",
       "revId": "4e10cc22700f26656ec787c25a7b40415d41107b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
