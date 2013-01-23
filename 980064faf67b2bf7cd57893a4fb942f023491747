@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "OvRkYLX4",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1015528
+      },
+      "writtenOn": "2013-01-23T19:16:51Z",
+      "side": 1,
+      "message": "Agree.",
+      "parentUuid": "N8kuD79g",
+      "revId": "980064faf67b2bf7cd57893a4fb942f023491747",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "N8qtymwU",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
         "patchSetId": 1
