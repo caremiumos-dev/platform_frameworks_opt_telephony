@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "OvL5ujYk",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-24T22:17:25Z",
+      "side": 1,
+      "message": "Should we be clearing fields here, like phone, adnCache ... (If so we\u0027ll need to protect the users of the fields.",
+      "revId": "98437235fc30d809992c32410f02d22cc89fac8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "OvF5IuS0",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-24T22:17:25Z",
+      "side": 1,
+      "message": "Although I can see how these help solve an NPE, is this masking some bigger problem or just a consequence of the SIM going away unexpectedly?\n\nAre there other fields that should be protected?",
+      "revId": "98437235fc30d809992c32410f02d22cc89fac8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
