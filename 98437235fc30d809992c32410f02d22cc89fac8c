@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "OxlyqvYc",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2013-01-25T19:06:14Z",
+      "side": 1,
+      "message": "Original code didn\u0027t have it, but we can add it. Either way when this happens whole CdmaPhone or GsmPhone is going away along with all its references including IccPhoneBookIfM. So I don\u0027t expect this to make any difference.",
+      "parentUuid": "OvL5ujYk",
+      "revId": "98437235fc30d809992c32410f02d22cc89fac8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "OvF5IuS0",
         "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2013-01-24T22:17:25Z",
       "side": 1,
       "message": "Although I can see how these help solve an NPE, is this masking some bigger problem or just a consequence of the SIM going away unexpectedly?\n\nAre there other fields that should be protected?",
+      "revId": "98437235fc30d809992c32410f02d22cc89fac8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "OxryVwUc",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2013-01-25T19:06:14Z",
+      "side": 1,
+      "message": "We take adnCache from IccRecords. IccRecords can go away any moment (if use yanks the card, for instance). This code here is specifically for such case. (see updateIccRecords that gets called from Phone)",
+      "parentUuid": "OvF5IuS0",
       "revId": "98437235fc30d809992c32410f02d22cc89fac8c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
