@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "PDhSiibE",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-30T23:14:51Z",
+      "side": 0,
+      "message": "Rather than deleting lets test for True",
+      "revId": "cd17a8e56bf5fa1af49d4447e65dc69e4741e7bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PDvSe7Ww",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-30T23:14:51Z",
+      "side": 0,
+      "message": "Change to assertTrue",
+      "revId": "cd17a8e56bf5fa1af49d4447e65dc69e4741e7bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PDhQhaQQ",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-01-30T23:14:51Z",
+      "side": 0,
+      "message": "This also needs to be assertTrue",
+      "revId": "cd17a8e56bf5fa1af49d4447e65dc69e4741e7bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
