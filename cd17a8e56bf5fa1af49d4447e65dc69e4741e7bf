@@ -50,6 +50,24 @@
       "revId": "cd17a8e56bf5fa1af49d4447e65dc69e4741e7bf",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PHGbFrmA",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1004424
+      },
+      "writtenOn": "2013-01-31T12:24:29Z",
+      "side": 0,
+      "message": "sure, it seems we had another patch internally that fixed this part, so I did not see it.",
+      "parentUuid": "PDhQhaQQ",
+      "revId": "cd17a8e56bf5fa1af49d4447e65dc69e4741e7bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
