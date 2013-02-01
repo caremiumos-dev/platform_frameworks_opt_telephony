@@ -16,6 +16,24 @@
       "revId": "9d5fd521db9f53b7dcc19bbb75f672e565debafc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PDdEuQ-4",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3838,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-02-01T22:19:53Z",
+      "side": 1,
+      "message": "For cdma, currently supported ID range is 0x1000 to 0x1004.  I see your concern if range is increased in future.  However, because currently supported IDs are limited, this would be a good start to enable OEM for cdma CMAS support.\n\nSee my change in https://android-review.googlesource.com/#/c/46887/\n\nmanager.enableCellBroadcastRange(\n                                SmsEnvelope.SERVICE_CATEGORY_CMAS_PRESIDENTIAL_LEVEL_ALERT, //0x1000\n                                SmsEnvelope.SERVICE_CATEGORY_CMAS_TEST_MESSAGE); //0x1004",
+      "parentUuid": "PDpLWkBU",
+      "revId": "9d5fd521db9f53b7dcc19bbb75f672e565debafc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
