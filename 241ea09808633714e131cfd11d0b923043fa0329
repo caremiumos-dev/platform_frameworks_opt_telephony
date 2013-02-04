@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "PTppmjUs",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-02-04T18:45:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "PDWfQzE4",
+      "revId": "241ea09808633714e131cfd11d0b923043fa0329",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "PDect-Jg",
         "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-02T00:39:39Z",
       "side": 1,
       "message": "No one seems to be calling this, can we just delete it as well as the TODO?",
+      "revId": "241ea09808633714e131cfd11d0b923043fa0329",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PTnotcUk",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-02-04T18:45:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "PDect-Jg",
       "revId": "241ea09808633714e131cfd11d0b923043fa0329",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "PTloyNak",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-02-04T18:45:04Z",
+      "side": 1,
+      "message": "right, it is not being used. however, if OEM wants to use this to query what is the current configuration set in modem, they can, so am leaving it.",
+      "parentUuid": "PDacnBLc",
+      "revId": "241ea09808633714e131cfd11d0b923043fa0329",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "PDYeAiZ0",
         "filename": "src/java/com/android/internal/telephony/cdma/CdmaSmsBroadcastConfigInfo.java",
         "patchSetId": 4
@@ -64,6 +118,24 @@
       "writtenOn": "2013-02-02T00:39:39Z",
       "side": 1,
       "message": "Needs to be AOSP license.",
+      "revId": "241ea09808633714e131cfd11d0b923043fa0329",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PTvrPwVA",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaSmsBroadcastConfigInfo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-02-04T18:45:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "PDYeAiZ0",
       "revId": "241ea09808633714e131cfd11d0b923043fa0329",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
