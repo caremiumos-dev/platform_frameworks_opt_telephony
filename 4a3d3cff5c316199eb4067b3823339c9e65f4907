@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "Pfke-8NA",
+        "filename": "src/java/com/android/internal/telephony/ApnContext.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-05T22:40:52Z",
+      "side": 1,
+      "message": "mWaitingDataProfiles ?",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAK2X///3w\u003d",
         "filename": "src/java/com/android/internal/telephony/ApnContext.java",
         "patchSetId": 1
@@ -30,6 +47,75 @@
       "writtenOn": "2012-10-25T19:09:52Z",
       "side": 1,
       "message": "getDataProfile ?",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Pf8bj5Ck",
+        "filename": "src/java/com/android/internal/telephony/ApnContext.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-05T22:40:52Z",
+      "side": 1,
+      "message": "I\u0027d say so",
+      "parentUuid": "AAAK2X///3w\u003d",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PhZ1fY9s",
+        "filename": "src/java/com/android/internal/telephony/ApnSetting.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-05T22:40:52Z",
+      "side": 1,
+      "message": "Should this be DataProfileGsm?",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Phb0SH1w",
+        "filename": "src/java/com/android/internal/telephony/ApnSetting.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-05T22:40:52Z",
+      "side": 1,
+      "message": "Did you mean to override \"hashCode()\" ?\n\nAlso if hashCode is overridden its usually a good idea that \"equals\" be overridden too.",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PhX0tt5Y",
+        "filename": "src/java/com/android/internal/telephony/DataProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-05T22:40:52Z",
+      "side": 1,
+      "message": "Fix copyright",
       "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -64,6 +150,57 @@
       "writtenOn": "2012-10-25T19:09:52Z",
       "side": 1,
       "message": "Add dump() function and call it from parents object",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Phf0Jx.w",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaDataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-05T22:40:52Z",
+      "side": 1,
+      "message": "This is deleted internally",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Phd0OC-M",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-05T22:40:52Z",
+      "side": 1,
+      "message": "This is deleted internally.",
+      "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Phd1l66w",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-05T22:40:52Z",
+      "side": 1,
+      "message": "ws",
       "revId": "4a3d3cff5c316199eb4067b3823339c9e65f4907",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
