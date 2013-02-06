@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "PhKfqCNA",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-06T18:43:13Z",
+      "side": 1,
+      "message": "Please make the Change-Id: the same for this and https://android-review.googlesource.com/#/c/51281/1. That way the autoverify will test both at the same time.",
+      "revId": "f92dbe5df479ac78b9adc9a519304bdeba813d41",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
