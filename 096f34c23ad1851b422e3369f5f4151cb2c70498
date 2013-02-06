@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "PhEf6JJ4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-06T18:44:40Z",
+      "side": 1,
+      "message": "Please make the Change-Id for this and https://android-review.googlesource.com/#/c/51282/ the same.",
+      "revId": "096f34c23ad1851b422e3369f5f4151cb2c70498",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
