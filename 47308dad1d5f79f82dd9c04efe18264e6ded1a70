@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "PpJ5OXZE",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-02-07T22:47:53Z",
+      "side": 1,
+      "message": "Our internal tree has a change which added a toString() method here, creating a merge conflict. The conflict is resolved by keeping both the gid1 line and the toString() method.",
+      "revId": "47308dad1d5f79f82dd9c04efe18264e6ded1a70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
