@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "PpH4YMYk",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2019,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-02-07T22:56:59Z",
+      "side": 1,
+      "message": "Please wrap long line (\u003e 100 chars).",
+      "revId": "220172ef83991085245d625550c3d70f5931e0a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PpB4VbVA",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2020,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-02-07T22:56:59Z",
+      "side": 1,
+      "message": "Please wrap long line (\u003e 100 chars).",
+      "revId": "220172ef83991085245d625550c3d70f5931e0a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PpD4SqWk",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-02-07T22:56:59Z",
+      "side": 1,
+      "message": "Please wrap long line (\u003e 100 chars).",
+      "revId": "220172ef83991085245d625550c3d70f5931e0a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PpOHvwEI",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2048,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-02-07T22:56:59Z",
+      "side": 1,
+      "message": "Please wrap long line (\u003e 100 chars).",
+      "revId": "220172ef83991085245d625550c3d70f5931e0a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PpAH1DBE",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2057,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-02-07T22:56:59Z",
+      "side": 1,
+      "message": "Please wrap long line (\u003e 100 chars).",
+      "revId": "220172ef83991085245d625550c3d70f5931e0a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PpKH5uA0",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2070,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-02-07T22:56:59Z",
+      "side": 1,
+      "message": "Please wrap long line (\u003e 100 chars).",
+      "revId": "220172ef83991085245d625550c3d70f5931e0a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
