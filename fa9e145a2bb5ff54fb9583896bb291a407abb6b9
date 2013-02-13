@@ -16,6 +16,24 @@
       "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "PzFNMWz8",
+        "filename": "src/java/com/android/internal/telephony/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-13T00:10:42Z",
+      "side": 1,
+      "message": "In the next batch of errors in ril.h we also have that shouldn\u0027t be retried and should be Loggable.\n\n  SIGNAL_LOST, RADIO_POWER_OFF, TETHERED_CALL_ACTIVE",
+      "parentUuid": "PzDOO-4c",
+      "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
