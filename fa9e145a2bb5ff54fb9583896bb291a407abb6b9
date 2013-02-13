@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "PzDOO-4c",
+        "filename": "src/java/com/android/internal/telephony/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-13T00:05:10Z",
+      "side": 1,
+      "message": "Seems we should add ONLY_IPV4_ALLOWED and ONLY_IPV6_ALLOWED too. Lets also add them to the isEventLoggable below.",
+      "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
