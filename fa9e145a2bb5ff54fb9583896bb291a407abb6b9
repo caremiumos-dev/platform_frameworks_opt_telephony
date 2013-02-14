@@ -52,6 +52,24 @@
       "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "P3wwz.-M",
+        "filename": "src/java/com/android/internal/telephony/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-14T01:38:56Z",
+      "side": 1,
+      "message": "Agreed but we shouldn\u0027t retry IPV4V6 so in that sense its permanent. Currently if a RIL returns this we\u0027ll never succeed because there is no explicit handling and we\u0027ll just retry forever in CDMA and have to wait a full retry cycle for GSM, not good.\n\nSo I think it should be a permanent error.",
+      "parentUuid": "P36n6mWg",
+      "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
