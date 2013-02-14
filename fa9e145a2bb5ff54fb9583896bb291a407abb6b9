@@ -70,6 +70,60 @@
       "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "P3W5Tft0",
+        "filename": "src/java/com/android/internal/telephony/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1016238
+      },
+      "writtenOn": "2013-02-14T19:09:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "PzDOO-4c",
+      "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "P3Y5Wuss",
+        "filename": "src/java/com/android/internal/telephony/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1016238
+      },
+      "writtenOn": "2013-02-14T19:09:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "PzFNMWz8",
+      "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "P3W5sHpE",
+        "filename": "src/java/com/android/internal/telephony/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1016238
+      },
+      "writtenOn": "2013-02-14T19:09:39Z",
+      "side": 1,
+      "message": "Good point. Updates in Patch 4. Thanks for the feedback Wink.",
+      "parentUuid": "P3wwz.-M",
+      "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
