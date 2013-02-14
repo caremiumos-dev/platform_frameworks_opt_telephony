@@ -34,6 +34,24 @@
       "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "P36n6mWg",
+        "filename": "src/java/com/android/internal/telephony/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1005304
+      },
+      "writtenOn": "2013-02-14T00:51:42Z",
+      "side": 1,
+      "message": "If the connection request was for a IPV4V6 and we get ONLY_IPV4_ALLOWED or ONLY_IPV6_ALLOWED, is that considered a permanent fail? There is an option of retrying with IPV4 and the connection may succeed. Thats the reason ONLY_IPVX_ALLOWED has been omitted here.",
+      "parentUuid": "PzDOO-4c",
+      "revId": "fa9e145a2bb5ff54fb9583896bb291a407abb6b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
