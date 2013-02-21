@@ -16,6 +16,24 @@
       "revId": "47308dad1d5f79f82dd9c04efe18264e6ded1a70",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "P5mYpbYo",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-02-21T09:52:37Z",
+      "side": 1,
+      "message": "resolved in my side. I verified on jb-mr2-dev-pdk branch.",
+      "parentUuid": "PpJ5OXZE",
+      "revId": "47308dad1d5f79f82dd9c04efe18264e6ded1a70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
