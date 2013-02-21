@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "P..2iAQI",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsMessage.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-21T17:03:13Z",
+      "side": 1,
+      "message": "This might be better using regex:\n\n format from##subject#body:  \"(.*)##(.*)#(.*)\"\n format from(subject)body: \"(.*)\\\\((.*)\\\\)(.*)\"\n format from[space]body: \"(\\\\S*)\\\\s*(.*)\"\n\nI tested them here: http://www.regexplanet.com/advanced/java/index.html",
+      "revId": "8051f36cd6478649c85407c755667fccb9abf71c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
