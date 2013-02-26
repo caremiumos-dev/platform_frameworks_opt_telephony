@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QOPsREJw",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-26T18:20:12Z",
+      "side": 1,
+      "message": "Create a singleton Random object and initialize this to it?",
+      "revId": "1aa266d188acc76ef5f80ecd516fa07a6888b98d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QOFv9vCw",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-26T18:20:12Z",
+      "side": 1,
+      "message": "Should have one Random() object instead of creating a new one each time?",
+      "revId": "1aa266d188acc76ef5f80ecd516fa07a6888b98d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QOh4Akgs",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-26T18:20:12Z",
+      "side": 1,
+      "message": "Lets have this next to the resetSerial above or move resetSerial down to here.",
+      "revId": "1aa266d188acc76ef5f80ecd516fa07a6888b98d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
