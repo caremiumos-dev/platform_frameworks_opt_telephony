@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QQRDrcp4",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-02-27T12:02:23Z",
+      "side": 1,
+      "message": "For separating mvno and normal apns, use findMvno(). In previous patch, I used two queries, one for MVNO, and the other for normal. Currently, I reduced number of queries (2 -\u003e 1).\n\nAs you know, MVNO has same MCC and MNC. We should get the mvno, and if it doesn\u0027t exist, we should get normal apn.\n\nTo simplify this issue, I used findMvno().",
+      "revId": "fe215ef6fdf379e7cdc55c80f9f285139cc32859",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
