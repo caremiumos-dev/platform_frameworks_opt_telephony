@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "QPgcOGK4",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-02-27T01:06:57Z",
+      "side": 1,
+      "message": "use Settings/ApnEditor.java.\nBut after changing mvno_match_data, I\u0027ll review, again.",
+      "parentUuid": "QVXNy2F8",
+      "revId": "2c941b36681b1c5fd867118d1d23eb0b9a3780d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "QVbNjoE0",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "QPicTFNc",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2048,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-02-27T01:06:57Z",
+      "side": 1,
+      "message": "OK, I\u0027ll try it.",
+      "parentUuid": "QVbNjoE0",
+      "revId": "2c941b36681b1c5fd867118d1d23eb0b9a3780d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "QVfNdKIg",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2013-02-27T00:52:36Z",
       "side": 1,
       "message": "this should generate some sort of error - the apn database is corrupt!",
+      "revId": "2c941b36681b1c5fd867118d1d23eb0b9a3780d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QPscHoI0",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2066,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-02-27T01:06:57Z",
+      "side": 1,
+      "message": "ok, I\u0027ll check it.",
+      "parentUuid": "QVfNdKIg",
       "revId": "2c941b36681b1c5fd867118d1d23eb0b9a3780d7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
