@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QVXNy2F8",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-02-27T00:52:36Z",
+      "side": 1,
+      "message": "what is this used for?",
+      "revId": "2c941b36681b1c5fd867118d1d23eb0b9a3780d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QVbNjoE0",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2048,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-02-27T00:52:36Z",
+      "side": 1,
+      "message": "I would integrate findMvno in with the existing createAllApnList.  Do a query based on mnc/mcc and then cycle through the cursor building the list of apns.  As soon as you get an apn that has an mvno_type and mvno_match_data that matches, I believe you want to throw out previous matches and then only accept apns with the same _type and _match_data.  This can be done in a single pass through the cursor list.",
+      "revId": "2c941b36681b1c5fd867118d1d23eb0b9a3780d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QVfNdKIg",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2066,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-02-27T00:52:36Z",
+      "side": 1,
+      "message": "this should generate some sort of error - the apn database is corrupt!",
+      "revId": "2c941b36681b1c5fd867118d1d23eb0b9a3780d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
