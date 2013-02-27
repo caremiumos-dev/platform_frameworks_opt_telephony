@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QPkfXMLU",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-02-27T06:02:01Z",
+      "side": 1,
+      "message": "Is it possible to keep 0 as initial serial? As we can use it to count how many requests have been sent out after RILD socked connected. Also this is called when RILD socket disconnected. Why we would mix old requests with new?  What problem did you meet ?",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QPgfhOI8",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-02-27T06:02:01Z",
+      "side": 1,
+      "message": "It is great that you decrease three locks (mWakelock, pending, mRequestList) to 1 lock(mRequestList). From code perspective, it is more simple. And I can not find current drain issue in current fix.\n\nWhile one lock may have thread efficiency issue.\neg, \nreceive thread is in findAndRemoveRequestFromList(),\nswitch to main thread acquireWakeLock, as mRequestList is held by receive thread, main thread will be blocked.\n\nActually there are two resources(mRequestList / mRequestMessagesOutstanding), as one lock protect one resource. Is it possible to keep two locks for the two resources?",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
