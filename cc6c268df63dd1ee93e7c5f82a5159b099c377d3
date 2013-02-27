@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QVQFoWvc",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-02-27T18:54:39Z",
+      "side": 1,
+      "message": "I would list this below MVNO_TYPE as the type dictates what the data means.  Also a comment might be good too, perhaps indicating the form of the data for the 3 types supported.",
+      "revId": "cc6c268df63dd1ee93e7c5f82a5159b099c377d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
