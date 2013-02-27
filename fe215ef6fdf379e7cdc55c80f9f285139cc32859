@@ -16,6 +16,24 @@
       "revId": "fe215ef6fdf379e7cdc55c80f9f285139cc32859",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QVQEM2n8",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-02-27T18:34:29Z",
+      "side": 1,
+      "message": "I think this can be simpler.  How about\nString mvnoType \u003d null;\nString mvnoMatchData \u003d null;\ndo {\n  String cursorMvnoType \u003d cursor.getString(MVNO_TYPE);\n  String cursorMvnoMatchData \u003d cursor.getString(MVNO_MATCH_DATA);\n  if (mvnoType !\u003d null) {\n    if (mvnoType.equals(cursorMvnoType) \u0026\u0026 \n        mvnoMatchData.equals(cursorMvnoMatchData)) {\n      result.add(makeApnSetting(cursor);\n    }\n  } else {\n    // no mvno match yet\n    if (mvnoMatches(r, cursorMvnoType, cursorMvnoMatchData))\n    {\n      // first match - toss out non-mvno data\n      result.clear();\n      mvnoType \u003d cursorMvnoType;\n      mvnoMatchData \u003d cursorMvnoMatchData;\n    }\n    result.add(makeApnSetting(cursor);\n  }\n}",
+      "parentUuid": "QQRDrcp4",
+      "revId": "fe215ef6fdf379e7cdc55c80f9f285139cc32859",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
