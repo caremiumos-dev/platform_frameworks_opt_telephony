@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QVXPNuIA",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-02-27T00:25:12Z",
+      "side": 1,
+      "message": "Seems we only need one extra column for MVNO_MATCH_DATA, not SPN, IMSI and GID match data.  How it\u0027s used is determined by MVNO_TYPE",
+      "revId": "d0c30f3e59b1a9be40a3744eaf04ddc258353619",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
