@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QXs3TIVA",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-02-28T16:46:35Z",
+      "side": 1,
+      "message": "Please make the Change-Id for this and the related change:\n  https://android-review.googlesource.com/#/c/43050/\n\nthe same. That way gerrit will handle them together and if you click on the change-id you\u0027ll see both changes.",
+      "revId": "ea31d5e19ebdabc356fe3eb9eadf438b6b62c5fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
