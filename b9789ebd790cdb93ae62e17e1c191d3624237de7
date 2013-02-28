@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QXrMCghQ",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-02-28T22:39:13Z",
+      "side": 1,
+      "message": "load the char once:\nchar c \u003d imsiDB.charAt(idx)\nif (c \u003d\u003d \u0027x\u0027 || c \u003d\u003d \u0027X\u0027 || c \u003d\u003d imsiSIM.charAt(idx)))",
+      "revId": "b9789ebd790cdb93ae62e17e1c191d3624237de7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QXtMJ-jg",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-02-28T22:39:13Z",
+      "side": 1,
+      "message": "put the \"return true\" on the inside:\nif (mvno_type.equalsIgnoreCase(\"spn\")) {\n    if (mvno_match_data !\u003d null \u0026\u0026\n       mvno_match_data.equalsIgnoreCase(\n               r.getServiceProviderName()) {\n          return true;\n    } else if ...",
+      "revId": "b9789ebd790cdb93ae62e17e1c191d3624237de7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QXnivSSY",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-02-28T22:39:13Z",
+      "side": 1,
+      "message": "Move the mIccRecords.get out of the do-while loop",
+      "revId": "b9789ebd790cdb93ae62e17e1c191d3624237de7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QXriYoQk",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-02-28T22:39:13Z",
+      "side": 1,
+      "message": "good catch.",
+      "revId": "b9789ebd790cdb93ae62e17e1c191d3624237de7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
