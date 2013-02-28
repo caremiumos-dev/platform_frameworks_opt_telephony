@@ -34,6 +34,24 @@
       "revId": "fe215ef6fdf379e7cdc55c80f9f285139cc32859",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QY-.qP6c",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-02-28T05:50:27Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "QVQEM2n8",
+      "revId": "fe215ef6fdf379e7cdc55c80f9f285139cc32859",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
