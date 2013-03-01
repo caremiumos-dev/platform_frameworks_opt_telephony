@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QjNZ8pDU",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccConstants.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2013-03-01T19:38:22Z",
+      "side": 1,
+      "message": "Is this really usim specific? If not - should this go to the section on line 23?",
+      "revId": "e65a1c360c302249c43479218d770f2cc6dc96f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QjLZxKFw",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2013-03-01T19:38:22Z",
+      "side": 1,
+      "message": "It looks like csim also has ef_gid1. Should this go to IccRecords and should RuimRecords also read this file?",
+      "revId": "e65a1c360c302249c43479218d770f2cc6dc96f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QjPZ3oE4",
+        "filename": "src/java/com/android/internal/telephony/uicc/UsimFileHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2013-03-01T19:38:22Z",
+      "side": 1,
+      "message": "Is this file available in 2g sim as well? If so, add this to the SimFileHandler as well, please.",
+      "revId": "e65a1c360c302249c43479218d770f2cc6dc96f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
