@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QklBMLPE",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-01T18:05:38Z",
+      "side": 1,
+      "message": "shouldn\u0027t you use the length of imsiDB?  If the DB requires the 9th digit exist or have a particular value but the imsSIM is only 8 digits long we should not match.",
+      "revId": "fe7758160cd0829bd2e48cdf14037338ce404e81",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QkhD-xFM",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-01T18:05:38Z",
+      "side": 1,
+      "message": "This block is no longer needed.",
+      "revId": "fe7758160cd0829bd2e48cdf14037338ce404e81",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QktA--DY",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-01T18:05:38Z",
+      "side": 1,
+      "message": "check for empty string isn\u0027t needed.",
+      "revId": "fe7758160cd0829bd2e48cdf14037338ce404e81",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QkrAbWN8",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-01T18:05:38Z",
+      "side": 1,
+      "message": "Do we need all this?\n\ngid1 \u003d r.getGid1();\nif (gid1 !\u003d null \u0026\u0026 gid1.equalsIgnoreCase(mvno_match_data)) {\n  return true;\n}\n\nshould be enough - I think the substring stuff adds alot of complication and is too lenient.",
+      "revId": "fe7758160cd0829bd2e48cdf14037338ce404e81",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
