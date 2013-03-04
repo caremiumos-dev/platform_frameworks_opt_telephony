@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "QqTlZbwo",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccConstants.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-03-04T07:58:57Z",
+      "side": 1,
+      "message": "This is 3gpp spec. so I\u0027ll move on above line as your comment",
+      "parentUuid": "QjNZ8pDU",
+      "revId": "e65a1c360c302249c43479218d770f2cc6dc96f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "QjLZxKFw",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "Qqdn088U",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-03-04T07:58:57Z",
+      "side": 1,
+      "message": "I\u0027ll move IccRecords. But for CSIM, I won\u0027t use it, now",
+      "parentUuid": "QjLZxKFw",
+      "revId": "e65a1c360c302249c43479218d770f2cc6dc96f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "QjPZ3oE4",
         "filename": "src/java/com/android/internal/telephony/uicc/UsimFileHandler.java",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2013-03-01T19:38:22Z",
       "side": 1,
       "message": "Is this file available in 2g sim as well? If so, add this to the SimFileHandler as well, please.",
+      "revId": "e65a1c360c302249c43479218d770f2cc6dc96f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QqdkbkzA",
+        "filename": "src/java/com/android/internal/telephony/uicc/UsimFileHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-03-04T07:58:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "QjPZ3oE4",
       "revId": "e65a1c360c302249c43479218d770f2cc6dc96f6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
