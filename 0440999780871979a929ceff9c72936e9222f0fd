@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "Qo6j4vwc",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-04T18:50:11Z",
+      "side": 1,
+      "message": "This will throw an exception if you do charAt beyond the length of imsiSIM.  I don\u0027t think that\u0027s what you want.\n\nProbably verify that imsiSIM length is at least as long as imsiDB length first.",
+      "revId": "0440999780871979a929ceff9c72936e9222f0fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
