@@ -16,6 +16,24 @@
       "revId": "0440999780871979a929ceff9c72936e9222f0fd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QwQH56go",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-03-05T01:02:33Z",
+      "side": 1,
+      "message": "To check this, I re-use empty-check of imsiSIM.",
+      "parentUuid": "Qo6j4vwc",
+      "revId": "0440999780871979a929ceff9c72936e9222f0fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
