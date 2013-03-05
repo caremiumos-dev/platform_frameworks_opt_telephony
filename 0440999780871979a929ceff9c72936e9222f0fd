@@ -34,6 +34,24 @@
       "revId": "0440999780871979a929ceff9c72936e9222f0fd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "QvKbnhjI",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-05T01:04:00Z",
+      "side": 1,
+      "message": "not empty, but if imsiSIM is X chars long, but imsiDB is X+1 chars long this will throw an exception.",
+      "parentUuid": "QwQH56go",
+      "revId": "0440999780871979a929ceff9c72936e9222f0fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
