@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "RJKGuGLs",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-07T23:27:05Z",
+      "side": 1,
+      "message": "The problem this is trying to fix is ensuring after a recovery we probably won\u0027t mis-interpret responses - that the serial numbers of the new commands will be substantially different from those in the old responses.  We could have the first generation start at 0 if you want - I don\u0027t think the recovery mechanism gets exercised very often.",
+      "parentUuid": "QPkfXMLU",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "QPgfhOI8",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-27T06:02:01Z",
       "side": 1,
       "message": "It is great that you decrease three locks (mWakelock, pending, mRequestList) to 1 lock(mRequestList). From code perspective, it is more simple. And I can not find current drain issue in current fix.\n\nWhile one lock may have thread efficiency issue.\neg, \nreceive thread is in findAndRemoveRequestFromList(),\nswitch to main thread acquireWakeLock, as mRequestList is held by receive thread, main thread will be blocked.\n\nActually there are two resources(mRequestList / mRequestMessagesOutstanding), as one lock protect one resource. Is it possible to keep two locks for the two resources?",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "RJAE0rE4",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-07T23:27:05Z",
+      "side": 1,
+      "message": "Both the sending thread and the response processing thread access the wakelock, the count and the list.  We could break it into two separate wakelocks and in most places it would be ok - though the timeout and clearRequestList code would need nested locks (not a good thing).  The question is does the potential performance increase warrant the potential deadlock (if somebody in the future grabs the locks in the wrong order).\n\nI can get greater perf increases just optimizing what we\u0027ve got.  Let me take another pass.",
+      "parentUuid": "QPgfhOI8",
       "revId": "8854b3511f551e2441344051939c79695b73aab2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
