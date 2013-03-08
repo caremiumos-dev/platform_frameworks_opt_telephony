@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "RReA2-O0",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-03-08T00:04:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "REZFPvGs",
+      "revId": "c106adba1b285a656e40470ef218d7369e7e6991",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "REdGDBEE",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "RRUBlMPY",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-03-08T00:04:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "REdGDBEE",
+      "revId": "c106adba1b285a656e40470ef218d7369e7e6991",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "RETHiUCY",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
         "patchSetId": 5
@@ -47,6 +83,24 @@
       "writtenOn": "2013-03-07T01:08:18Z",
       "side": 1,
       "message": "Missing whitespace around \"+\" for previous three lines.",
+      "revId": "c106adba1b285a656e40470ef218d7369e7e6991",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "RRQA6CNI",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1010410
+      },
+      "writtenOn": "2013-03-08T00:04:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "RETHiUCY",
       "revId": "c106adba1b285a656e40470ef218d7369e7e6991",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
