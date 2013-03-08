@@ -53,6 +53,7 @@ import android.net.ConnectivityManager;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.HwBinder;
@@ -1611,7 +1612,8 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             if (RILJ_LOGD) {
                 riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
                         + ",radioTechnology=" + radioTechnology + ",isRoaming="
-                        + isRoaming + ",allowRoaming=" + allowRoaming + "," + dataProfile);
+                        + isRoaming + ",allowRoaming=" + allowRoaming + ","
+                        + ("user".equals(Build.TYPE) ? "***" : dataProfile.toString()));
             }
 
             try {
