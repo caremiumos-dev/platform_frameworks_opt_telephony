@@ -1586,8 +1586,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> "
                 + requestToString(rr.mRequest) + " " + radioTechnology + " "
-                + profile + " " + apn + " " + user + " "
-                + password + " " + authType + " " + protocol);
+                + profile + " " + authType + " " + protocol);
 
         mMetrics.writeRilSetupDataCall(mPhoneId, rr.mSerial,
                 radioTechnology, profile, apn, authType, protocol);
