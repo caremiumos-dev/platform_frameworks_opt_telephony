@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.dataconnection;
 
+import android.os.Build;
 import android.telephony.ServiceState;
 import android.text.TextUtils;
 
@@ -118,8 +119,10 @@ public class DataProfile {
 
     @Override
     public String toString() {
-        return "DataProfile=" + profileId + "/" + apn + "/" + protocol + "/" + authType
-                + "/" + user + "/" + password + "/" + type + "/" + maxConnsTime
+        return "DataProfile=" + profileId
+                + "/" + ("user".equals(Build.TYPE) ? "***/***/***" :
+                        (apn + "/" + user + "/" + password))
+                + "/" + protocol + "/" + authType + "/" + type + "/" + maxConnsTime
                 + "/" + maxConns + "/" + waitTime + "/" + enabled + "/" + supportedApnTypesBitmap
                 + "/" + roamingProtocol + "/" + bearerBitmap + "/" + mtu + "/" + mvnoType + "/"
                 + mvnoMatchData + "/" + modemCognitive;
