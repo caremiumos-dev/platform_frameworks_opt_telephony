@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "RiNqOBXU",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-03-12T05:52:25Z",
+      "side": 1,
+      "message": "mMakeLockCount -\u003e mWakeLockCount",
+      "revId": "94cac3df44eedfeb40ab45e638d7ccbf86d5c154",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
