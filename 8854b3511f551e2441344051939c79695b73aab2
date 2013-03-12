@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "RiPpkKfw",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-03-12T05:52:39Z",
+      "side": 1,
+      "message": "We will resetSerial when RILD socket disconnected.\nIf RILD socked disconnected, clearRequestsList() will clear all requests when socked disconnected. When RILD socket connected again, new serial number will start from 0, while no old requests. So I think there will no mis-interpret case.\nCorrect me if  I am wrong.",
+      "parentUuid": "RJKGuGLs",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "QPgfhOI8",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 6
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Both the sending thread and the response processing thread access the wakelock, the count and the list.  We could break it into two separate wakelocks and in most places it would be ok - though the timeout and clearRequestList code would need nested locks (not a good thing).  The question is does the potential performance increase warrant the potential deadlock (if somebody in the future grabs the locks in the wrong order).\n\nI can get greater perf increases just optimizing what we\u0027ve got.  Let me take another pass.",
       "parentUuid": "QPgfhOI8",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "RiLrhESM",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-03-12T05:52:39Z",
+      "side": 1,
+      "message": "You are correct that there are three objects(the wakelock, the count and the list).\nI think we can separate them into two parts (the wakelock and the count) and (the list). As the count operation will always be with wakelock. \nIn main thread, we will not handle list. As we do not need to wait for the list lock, which receive/send thread hold. I think this is what we can optimize.\nWhile send/receive thread might hold both list lock and wakelock lock. This might be potential deadlock.\nSo we should ensure each thread do not hold one lock and waiting for another lock.",
+      "parentUuid": "RJAE0rE4",
       "revId": "8854b3511f551e2441344051939c79695b73aab2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
