@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "Rf3cDuMw",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-12T18:24:20Z",
+      "side": 1,
+      "message": "We would prefer to keep this.  It is possible for the RILD and radio code to pass the sequence number through into radio state as the request is being acted on - the RILD may notice the socket error and re-establish the connection and then the response comes back from the radio with the old sequence number and get\u0027s passed back through the newly-connected RILD.\n\nJust because your implementation may not do this, we can imagine other OEMs passing back obsolete responses that would match a newly-zero\u0027d RIL sequence number and confuse things.\n\nCouldn\u0027t you just remember the first sequence number your RILD connection received?  Then you know the number of requests you\u0027ve received.",
+      "parentUuid": "RiPpkKfw",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "QPgfhOI8",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 6
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "You are correct that there are three objects(the wakelock, the count and the list).\nI think we can separate them into two parts (the wakelock and the count) and (the list). As the count operation will always be with wakelock. \nIn main thread, we will not handle list. As we do not need to wait for the list lock, which receive/send thread hold. I think this is what we can optimize.\nWhile send/receive thread might hold both list lock and wakelock lock. This might be potential deadlock.\nSo we should ensure each thread do not hold one lock and waiting for another lock.",
       "parentUuid": "RJAE0rE4",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "Rf8wM44I",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-12T18:24:20Z",
+      "side": 1,
+      "message": "Which thread for you is the \"main thread\"?  The response listener, the handler or the random send callers?  I assume not the random callers: that\u0027s multiple threads.\n\nThe RILReceiver is accessing both the list (to match up responses with requests) and the wakelock/count.\n\nThe handler is adding to the list and in an error may need to decrement the wakelock count.  In a timeout it definitely needs to do both.\n\nThere are two places where we need to synchronously hold both list lock and wakelock/count lock:  Timeouts (due to debug output) and clearRequestList.  We can nest the locks in those two places so there\u0027s no deadlock, but it introduces the risk of future changes causing rare and hard-to-diagnose deadlocks.\n\nWe are not convinced that this channel is busy enough and has contention enough to warrant the risk of this optimization.  Do you have data on the amount of contention in this module?",
+      "parentUuid": "RiLrhESM",
       "revId": "8854b3511f551e2441344051939c79695b73aab2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
