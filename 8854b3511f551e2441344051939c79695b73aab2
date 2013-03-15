@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "RvNCycY4",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-15T21:02:42Z",
+      "side": 1,
+      "message": "If we assume the high rate of calls you suggest below (I think it\u0027s high as my LTE devices see only .093 req/sec while you\u0027re suggesting 5.7 req/sec), it would take 760 million seconds to get as far from the starting point as you would expect a random restart point to be in the random case.  That\u0027s 24 years.\n\nThe odds that the random number selected for the restart is near the number last used are 1 in 4 billion.\n\nHowever we see alot of restarts early in the boot cycle when there\u0027s significantly higher odds of an old request looking like a new.",
+      "parentUuid": "RocFxYqs",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "QPgfhOI8",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 6
@@ -174,6 +192,24 @@
       "side": 1,
       "message": "\"main thread\" mean Phone process main thread. The caller should be in Phone main thread.\n\nI think we do not need care about timeout and clearRequestList.\n\nTimeout: mean \"Haven\u0027t heard back from the last request.\", mean requester no request, also no response back.\nclearRequestList: when RILD socked disconnected, main thread will can not send to send thread. Also no response received in receive thread.\n\nAs I checked logs. There may be 1356 requests send out in 4 min.",
       "parentUuid": "Rf8wM44I",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "RvJDnGaI",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-03-15T21:02:42Z",
+      "side": 1,
+      "message": "6 requests a second is 100 times more than what we see.  I hope that\u0027s not your sustained load.\n\nEven at 6/s, is there contention?  There\u0027s plenty of CPU time to handle that without contention.  If you\u0027d had a single lock, would you have noticed?\n\nThe brittleness/frailty of nested locks is not worth the slight perf gain you might see.",
+      "parentUuid": "RoQHGao4",
       "revId": "8854b3511f551e2441344051939c79695b73aab2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
