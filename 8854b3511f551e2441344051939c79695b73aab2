@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "R1K7.Fyo",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-03-18T03:24:31Z",
+      "side": 1,
+      "message": "The cases is the most busy case as I saw. As network state change frequently.\n\nIf you insist on the random start number. Go ahead.",
+      "parentUuid": "RvNCycY4",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "QPgfhOI8",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 6
@@ -210,6 +228,24 @@
       "side": 1,
       "message": "6 requests a second is 100 times more than what we see.  I hope that\u0027s not your sustained load.\n\nEven at 6/s, is there contention?  There\u0027s plenty of CPU time to handle that without contention.  If you\u0027d had a single lock, would you have noticed?\n\nThe brittleness/frailty of nested locks is not worth the slight perf gain you might see.",
       "parentUuid": "RoQHGao4",
+      "revId": "8854b3511f551e2441344051939c79695b73aab2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "R1E7xc10",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-03-18T03:24:31Z",
+      "side": 1,
+      "message": "Main thread is used by both Phone App and Framework-Telephony. While send/receive thread are child threads for RIL communication. Do you think it is proper to block main thread due to send/receive thread lock ?\nThe performance impact may result in UI update. So suggest to double evaluate it. Thanks!",
+      "parentUuid": "RvJDnGaI",
       "revId": "8854b3511f551e2441344051939c79695b73aab2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
