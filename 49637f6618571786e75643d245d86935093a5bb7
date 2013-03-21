@@ -16,6 +16,24 @@
       "revId": "49637f6618571786e75643d245d86935093a5bb7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "SNszib8Q",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2013-03-21T19:03:58Z",
+      "side": 1,
+      "message": "Could you, please, clarify this: \"Seems \"round-about\" maybe we should have an init() call as part of the \"interace\"?\"\n\nI think same fix should be applied to RuimRecords.",
+      "parentUuid": "SNgz5V3g",
+      "revId": "49637f6618571786e75643d245d86935093a5bb7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
