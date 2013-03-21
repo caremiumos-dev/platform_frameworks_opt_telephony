@@ -34,6 +34,24 @@
       "revId": "49637f6618571786e75643d245d86935093a5bb7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "SU09ODYA",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-03-21T19:32:49Z",
+      "side": 1,
+      "message": "Since Ruim and Sim should both do the same thing maybe there should be an init() method? Maybe its an \"onInit()\" in the base class that can be overridden.\n\nBy round about, it seems funny to unregister/register to cause EVENT_APP_READY to happen.\n\nIt does make sense that we should fetch the records until they are ready. So when will EVENT_APP_READY occur, if we\u0027ve done an init/reset then it would seem we should be guaranteed to get an EVENT_APP_READY after this and shouldn\u0027t have to unreg/reg.",
+      "parentUuid": "SNszib8Q",
+      "revId": "49637f6618571786e75643d245d86935093a5bb7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
