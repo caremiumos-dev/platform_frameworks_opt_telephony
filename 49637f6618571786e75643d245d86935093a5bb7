@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "SNgz5V3g",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-03-21T18:57:06Z",
+      "side": 1,
+      "message": "Seems \"round-about\" maybe we should have an init() call as part of the \"interace\"?\n\nAlso what about RuimRecords, there I see we\u0027re also doing \"fetch\" but interesting we\u0027re not calling adnCache.reset. Should that be fixed?",
+      "revId": "49637f6618571786e75643d245d86935093a5bb7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
