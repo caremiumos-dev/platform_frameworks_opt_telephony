@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "Skw8rJfA",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-03-25T23:29:07Z",
+      "side": 1,
+      "message": "Lets add a comment on who and why this is invoked.",
+      "revId": "7c88fd329a3823a6b08ede15d09d28c1fb25f59d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
