@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "TRcDNwLE",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccConstants.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-04-10T21:43:57Z",
+      "side": 1,
+      "message": "Don\u0027t change copyright.",
+      "revId": "2b6c7531f6c104a1eb322cb378c618ae06ecf804",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "TRaDKNJU",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-04-10T21:43:57Z",
+      "side": 1,
+      "message": "Remove.",
+      "revId": "2b6c7531f6c104a1eb322cb378c618ae06ecf804",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
