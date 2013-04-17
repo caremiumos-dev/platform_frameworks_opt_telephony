@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "TbXWZ6Ck",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2073,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-04-17T07:53:32Z",
+      "side": 1,
+      "message": "Is it possible that mWakeLockCount decrease to 0, while mWakeLock is held?",
+      "revId": "0d22f4e5cfccb76ab52c0dfb2077065833c4e5f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "TfsS2fuU",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2139,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-04-17T07:53:32Z",
+      "side": 1,
+      "message": "When clearRequestList called, mWakeLock should have been released. While processResponse may have no wakelock to process the error response.",
+      "revId": "0d22f4e5cfccb76ab52c0dfb2077065833c4e5f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
