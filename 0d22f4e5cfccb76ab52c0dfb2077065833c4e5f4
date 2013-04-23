@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "T9sxg7.k",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2073,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-04-23T23:11:38Z",
+      "side": 1,
+      "message": "mWakeLockCount\u0027s value is only changed under the protection of synchronized (mWakeLock).  Is there more to you question?  Is there a problem here?",
+      "parentUuid": "TbXWZ6Ck",
+      "revId": "0d22f4e5cfccb76ab52c0dfb2077065833c4e5f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "TfsS2fuU",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 9
@@ -30,6 +48,24 @@
       "writtenOn": "2013-04-17T07:53:32Z",
       "side": 1,
       "message": "When clearRequestList called, mWakeLock should have been released. While processResponse may have no wakelock to process the error response.",
+      "revId": "0d22f4e5cfccb76ab52c0dfb2077065833c4e5f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "T9ozZh3g",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2139,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-04-23T23:11:38Z",
+      "side": 1,
+      "message": "When clearRequestList is called, we have fallen out of the main RilReceiver loop on an error - the socket is cleared and we\u0027ll loop around in the outer loop and attempt to re-establish a connection.  We\u0027re giving up on any outstanding requests.  For each request in the list, we will decrement once.\n\nIf, while we\u0027re doing this, somebody tries to send another ril request (send()), they will increment the wake count and then block waiting to synchronize on mRequestList.  Thus we could finish clearRequestList and *not* release mWakeLock.",
+      "parentUuid": "TfsS2fuU",
       "revId": "0d22f4e5cfccb76ab52c0dfb2077065833c4e5f4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
