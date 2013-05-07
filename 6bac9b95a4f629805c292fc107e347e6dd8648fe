@@ -16,6 +16,24 @@
       "revId": "6bac9b95a4f629805c292fc107e347e6dd8648fe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "UVbAfFn0",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsCbHeader.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1020994
+      },
+      "writtenOn": "2013-05-07T18:14:29Z",
+      "side": 1,
+      "message": "Ok.I agree to your comment. getCmasMessageClass() should return Severe but getCmasSeverity() should still return extreme. I will fix this \u0026 upload new patch",
+      "parentUuid": "UVTBF5n4",
+      "revId": "6bac9b95a4f629805c292fc107e347e6dd8648fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
