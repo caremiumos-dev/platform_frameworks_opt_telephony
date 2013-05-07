@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "UX.Pm8s8",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2073,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-05-07T07:46:44Z",
+      "side": 1,
+      "message": "I am not sure there is a case that mWakeLockCount decrease to 0, while mWakeLock is held. As this will lead into unreleased wakelock, if that case happened. Why not check if the wakelock is held or not to ensure this? Because we want to use this function to clear wakelock.",
+      "parentUuid": "T9sxg7.k",
+      "revId": "0d22f4e5cfccb76ab52c0dfb2077065833c4e5f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "TfsS2fuU",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 9
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "When clearRequestList is called, we have fallen out of the main RilReceiver loop on an error - the socket is cleared and we\u0027ll loop around in the outer loop and attempt to re-establish a connection.  We\u0027re giving up on any outstanding requests.  For each request in the list, we will decrement once.\n\nIf, while we\u0027re doing this, somebody tries to send another ril request (send()), they will increment the wake count and then block waiting to synchronize on mRequestList.  Thus we could finish clearRequestList and *not* release mWakeLock.",
       "parentUuid": "TfsS2fuU",
+      "revId": "0d22f4e5cfccb76ab52c0dfb2077065833c4e5f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "UX4MA3nk",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2139,
+      "author": {
+        "id": 1013953
+      },
+      "writtenOn": "2013-05-07T07:46:44Z",
+      "side": 1,
+      "message": "You are correct.",
+      "parentUuid": "T9ozZh3g",
       "revId": "0d22f4e5cfccb76ab52c0dfb2077065833c4e5f4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
