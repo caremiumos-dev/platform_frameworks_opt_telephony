@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "UVXBJLug",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2073,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-05-08T17:45:54Z",
+      "side": 1,
+      "message": "OK.  I understand your point.  I\u0027ll push up a new patch soon.",
+      "parentUuid": "UX.Pm8s8",
+      "revId": "0d22f4e5cfccb76ab52c0dfb2077065833c4e5f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "TfsS2fuU",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 9
