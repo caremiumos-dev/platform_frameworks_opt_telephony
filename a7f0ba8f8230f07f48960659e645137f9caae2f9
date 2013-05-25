@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "VDF9m5-8",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "Possible null pointer exception - null can be returned from getInstance",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "VDL81..A",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "I would change name isSLFileLoaded to mIsSLFileLoaded",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "VC9fWXBg",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "I would change name mUseEVDOecio to sUseEVDOecio",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "VDP9Ukwo",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "I would fix formatting in this constructor",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "VCjjcadk",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "Currently it\u0027s always false, so that check can be missleading, but it\u0027s ok if you plan to use it differently in \"future commits\".",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "VDB9gb94",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "In \"if\" above you check if splitLevel has enough elements, but now you parse it and don\u0027t care about possible NumberFormatException.",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "VC1e0jN8",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "Space missing before else",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "VDL9OG3M",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "Here, that:\nsignalLevel \u003d 0;\ndoes nothing.",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "VC5fg5OQ",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "If mAsuLevel is null here, it will lead to NullPointerException",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "VDN9R1xg",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "If mSigStrLevel is null here, it will lead to NullPointerException.\nThere is also double semicolon",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "VC3evkIs",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-05-25T14:20:23Z",
+      "side": 1,
+      "message": "If mEcSnrLevel is null here, it will lead to NullPointerException.",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
