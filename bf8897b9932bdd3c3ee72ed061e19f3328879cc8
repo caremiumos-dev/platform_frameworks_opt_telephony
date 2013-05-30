@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d4915a3_2193caa5",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-05-30T00:23:53Z",
+      "side": 1,
+      "message": "probably better to just use ApnSettings to parse this and read the mvnoData/Type from the class.",
+      "revId": "bf8897b9932bdd3c3ee72ed061e19f3328879cc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
