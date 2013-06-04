@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d879d2a_3d8207f7",
+        "filename": "src/java/com/android/internal/telephony/DataConnectionTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-06-04T16:07:46Z",
+      "side": 1,
+      "message": "this code shouldn\u0027t have to change.",
+      "revId": "93e1af4e0e3f74ddd7d535f48c3b2f945d1f4d1e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d879d2a_5d77bb4b",
+        "filename": "src/java/com/android/internal/telephony/DataConnectionTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-06-04T16:07:46Z",
+      "side": 1,
+      "message": "return a single ApnSetting",
+      "revId": "93e1af4e0e3f74ddd7d535f48c3b2f945d1f4d1e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d879d2a_7d7c7f2d",
+        "filename": "src/java/com/android/internal/telephony/DataConnectionTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-06-04T16:07:46Z",
+      "side": 1,
+      "message": "use mIccRecord to evaluate for mvno purposes.",
+      "revId": "93e1af4e0e3f74ddd7d535f48c3b2f945d1f4d1e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d879d2a_3d9f6749",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-06-04T16:07:46Z",
+      "side": 1,
+      "message": "this code shouldn\u0027t need to change.",
+      "revId": "93e1af4e0e3f74ddd7d535f48c3b2f945d1f4d1e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d879d2a_9d705352",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-06-04T16:07:46Z",
+      "side": 1,
+      "message": "This may need to be promoted to DataConnectionTracker for general use (at lease a base impl).",
+      "revId": "93e1af4e0e3f74ddd7d535f48c3b2f945d1f4d1e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d879d2a_fd8eaf22",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1695,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-06-04T16:07:46Z",
+      "side": 1,
+      "message": "I don\u0027t think we watch fetchDunApn to return a list.  You shouldn\u0027t have to change these functions.",
+      "revId": "93e1af4e0e3f74ddd7d535f48c3b2f945d1f4d1e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d879d2a_1d7d432c",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2217,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-06-04T16:07:46Z",
+      "side": 1,
+      "message": "you shouldn\u0027t have to change this function either.\n\nfetchDunApn should be able to determine which of the ApnSettings best suits us for mvno purposes and return a single ApnSetting.",
+      "revId": "93e1af4e0e3f74ddd7d535f48c3b2f945d1f4d1e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
