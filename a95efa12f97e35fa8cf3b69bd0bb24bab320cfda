@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d879d2a_1dc38334",
+        "filename": "src/java/com/android/internal/telephony/ApnSetting.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-06-04T16:28:51Z",
+      "side": 1,
+      "message": "What do you think about encapsulating the variable-length \"type\" field in something, perhaps \"\u003c\" \"\u003e\"?  For example \"\u003cdefault,mms,dun\u003e\".  Then we wouldn\u0027t have a variable number of fields and wouldn\u0027t need to advance the type past v3 in the future.",
+      "revId": "a95efa12f97e35fa8cf3b69bd0bb24bab320cfda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
