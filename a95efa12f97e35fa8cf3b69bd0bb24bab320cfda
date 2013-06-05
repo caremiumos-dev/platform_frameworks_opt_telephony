@@ -34,6 +34,23 @@
       "revId": "a95efa12f97e35fa8cf3b69bd0bb24bab320cfda",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7db419fc_62d4f2e7",
+        "filename": "src/java/com/android/internal/telephony/ApnSetting.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-06-05T20:33:07Z",
+      "side": 1,
+      "message": "mistake, use [ApnSettingV3]",
+      "revId": "a95efa12f97e35fa8cf3b69bd0bb24bab320cfda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
