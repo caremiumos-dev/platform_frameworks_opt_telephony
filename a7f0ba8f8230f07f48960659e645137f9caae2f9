@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "1d9cfd82_6d63c04a",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-06-06T20:54:56Z",
+      "side": 1,
+      "message": "I agree",
+      "parentUuid": "1d879d2a_26ebcfd8",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "VDP9Ukwo",
         "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
         "patchSetId": 1
@@ -100,6 +118,24 @@
       "side": 1,
       "message": "By \"fix formatting\", do you mean removing the space before the \"(\", or something else? The indentation looks correct. I would remove the unnecessary \"this.\" from the assignment lines below.",
       "parentUuid": "VDP9Ukwo",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d9cfd82_4d60fc3b",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1021920
+      },
+      "writtenOn": "2013-06-06T20:54:56Z",
+      "side": 1,
+      "message": "No, I would add extra indents before this.mAsuLevel, this.mSigStrLevel and this.mEcSnrLevel, since those lines are in \"if\" statements.",
+      "parentUuid": "1d879d2a_6666a700",
       "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
