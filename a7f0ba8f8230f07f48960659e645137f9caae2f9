@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "1d879d2a_26ebcfd8",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-06T20:45:29Z",
+      "side": 1,
+      "message": "Or \"sUseEvdoEcio\"? I tend to prefer the C# style rule where two-character acronyms are capitalized and 3+ character acronyms only have the first letter capitalized.",
+      "parentUuid": "VC9fWXBg",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "VDP9Ukwo",
         "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
         "patchSetId": 1
@@ -64,6 +82,24 @@
       "writtenOn": "2013-05-25T14:20:23Z",
       "side": 1,
       "message": "I would fix formatting in this constructor",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d879d2a_6666a700",
+        "filename": "src/java/com/android/internal/telephony/SignalLevelManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-06T20:45:29Z",
+      "side": 1,
+      "message": "By \"fix formatting\", do you mean removing the space before the \"(\", or something else? The indentation looks correct. I would remove the unnecessary \"this.\" from the assignment lines below.",
+      "parentUuid": "VDP9Ukwo",
       "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -183,6 +219,40 @@
       "writtenOn": "2013-05-25T14:20:23Z",
       "side": 1,
       "message": "If mEcSnrLevel is null here, it will lead to NullPointerException.",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d879d2a_4619a33a",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaLteServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-06T20:45:29Z",
+      "side": 1,
+      "message": "extraneous \"\\\" in comment.",
+      "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d879d2a_86139b1a",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-06T20:45:29Z",
+      "side": 1,
+      "message": "extraneous \"\\\" in comment.",
       "revId": "a7f0ba8f8230f07f48960659e645137f9caae2f9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
