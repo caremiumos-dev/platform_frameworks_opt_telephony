@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "7dfb39ce_64bd2a4f",
+        "filename": "src/java/com/android/internal/telephony/ApnSetting.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-06-07T22:48:35Z",
+      "side": 1,
+      "message": "Great - then we don\u0027t need V3.  We can tell what the fields are from the number of fields.\n\nJust extend V2 with optional mvno type and mvno data",
+      "parentUuid": "fd072998_c842afc6",
+      "revId": "a95efa12f97e35fa8cf3b69bd0bb24bab320cfda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7db419fc_62d4f2e7",
         "filename": "src/java/com/android/internal/telephony/ApnSetting.java",
         "patchSetId": 1
