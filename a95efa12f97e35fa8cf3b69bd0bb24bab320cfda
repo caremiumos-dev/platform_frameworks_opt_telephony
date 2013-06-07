@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fd072998_c842afc6",
+        "filename": "src/java/com/android/internal/telephony/ApnSetting.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-06-07T22:34:10Z",
+      "side": 1,
+      "message": "@Robert,\n\nI looked into the source. I think variable-length \"type\" field does not use from V2. Variable-lengths seems to depend on version.\n\nIn V2, type field used \"|\" as separator. So it\u0027s ok to me, currently.",
+      "parentUuid": "7db419fc_62abd262",
+      "revId": "a95efa12f97e35fa8cf3b69bd0bb24bab320cfda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7db419fc_62d4f2e7",
         "filename": "src/java/com/android/internal/telephony/ApnSetting.java",
         "patchSetId": 1
