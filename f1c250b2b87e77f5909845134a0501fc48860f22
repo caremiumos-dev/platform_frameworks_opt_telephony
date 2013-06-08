@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7dfb39ce_67e40c0b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ApnSettingTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-06-08T00:26:16Z",
+      "side": 1,
+      "message": "test fromString with MVNO data.",
+      "revId": "f1c250b2b87e77f5909845134a0501fc48860f22",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
