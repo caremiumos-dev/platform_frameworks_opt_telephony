@@ -16,6 +16,24 @@
       "revId": "235eeb001d089f845b55a07366ba9c982d13525b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca753907_26fd962a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1021463
+      },
+      "writtenOn": "2013-06-20T10:03:57Z",
+      "side": 1,
+      "message": "Wink,\n\nYeah, I originally considering the method you mentioned here,to keep code in the same layout.\n\nUnfortunatelly, the call forward processing(responseCallForward())  is using array, as a convention, and more comonents dependent on this array implementation, such as framework\u0027s GSMPhone, and app\u0027s Phone, they handle the call forward data as array too.\n\nIf we use list instead of array, this would cause more code changes in both framework and apk, which is not worthy to do that.\n\nI think use array here, to keep the least code change.\n\nWhat\u0027s your opinion?",
+      "parentUuid": "0ad591ff_2fc55560",
+      "revId": "235eeb001d089f845b55a07366ba9c982d13525b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
