@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ad591ff_0f697169",
+        "filename": "tests/telephonymockcmdtests/src/android/telephony/test/util/TelephonyTestUtil.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-20T15:51:13Z",
+      "side": 1,
+      "message": "missing \" \" before {.",
+      "revId": "f45bf72d90167cb26f97ba67b8da4ff4b103dd68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ad591ff_2f99d562",
+        "filename": "tests/telephonymockcmdtests/src/com/android/internal/telephony/FSubmitDeliverTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-20T15:51:13Z",
+      "side": 1,
+      "message": "comment should be \"waiting for a special state\"",
+      "revId": "f45bf72d90167cb26f97ba67b8da4ff4b103dd68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ad591ff_4f9e194c",
+        "filename": "tests/telephonymockcmdtests/src/com/android/internal/telephony/FSubmitDeliverTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-20T15:51:13Z",
+      "side": 1,
+      "message": "comment should be \"waiting for a RIL API to be called\"",
+      "revId": "f45bf72d90167cb26f97ba67b8da4ff4b103dd68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ad591ff_cfa9496d",
+        "filename": "tests/telephonymockcmdtests/src/com/android/internal/telephony/cdma/FCdmaPhoneCallTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-20T15:51:13Z",
+      "side": 1,
+      "message": "\"waiting for a special state\"",
+      "revId": "f45bf72d90167cb26f97ba67b8da4ff4b103dd68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ad591ff_efb60dc8",
+        "filename": "tests/telephonymockcmdtests/src/com/android/internal/telephony/cdma/FCdmaPhoneCallTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-20T15:51:13Z",
+      "side": 1,
+      "message": "\"waiting for the message only\"",
+      "revId": "f45bf72d90167cb26f97ba67b8da4ff4b103dd68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ad591ff_0fb411be",
+        "filename": "tests/telephonymockcmdtests/src/com/android/internal/telephony/cdma/FCdmaPhoneCallTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-20T15:51:13Z",
+      "side": 1,
+      "message": "\"Wait for the current thread...\"",
+      "revId": "f45bf72d90167cb26f97ba67b8da4ff4b103dd68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ad591ff_4fc53936",
+        "filename": "tests/telephonymockcmdtests/src/com/android/internal/telephony/cdma/FCdmaPhoneCallTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-20T15:51:13Z",
+      "side": 1,
+      "message": "\"Wait for the current thread...\"",
+      "revId": "f45bf72d90167cb26f97ba67b8da4ff4b103dd68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ad591ff_8fbf4198",
+        "filename": "tests/telephonymockcmdtests/src/com/android/internal/telephony/test/MockCommands.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-20T15:51:13Z",
+      "side": 1,
+      "message": "\"don\u0027t care which order\" or \"don\u0027t care about the order\" would sound a little more natural in English.",
+      "revId": "f45bf72d90167cb26f97ba67b8da4ff4b103dd68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ad591ff_afd325fd",
+        "filename": "tests/telephonymockcmdtests/src/com/android/internal/telephony/test/SimulatedCdmaCallState.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-20T15:51:13Z",
+      "side": 1,
+      "message": "extra \" \" before (.",
+      "revId": "f45bf72d90167cb26f97ba67b8da4ff4b103dd68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ad591ff_cfd069f3",
+        "filename": "tests/telephonymockcmdtests/src/com/android/internal/telephony/test/TelephonyTestExecutor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1003544
+      },
+      "writtenOn": "2013-06-20T15:51:13Z",
+      "side": 1,
+      "message": "Should be either \"Create and hold\" or \"Creates and holds\". The first form is a command (the subject \"you\" is implied) and the second is a statement about a third person (\"this thread\" is implied). Either form describes the same behavior, but the important thing to be grammatically correct is to use the same form for both verbs in the sentence.",
+      "revId": "f45bf72d90167cb26f97ba67b8da4ff4b103dd68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
