@@ -34,6 +34,24 @@
       "revId": "235eeb001d089f845b55a07366ba9c982d13525b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ad591ff_0f925147",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-06-20T13:36:26Z",
+      "side": 1,
+      "message": "This routine is purely for converting the output to a string and is used only for debugging so using an ArrayList will make no difference to external routines.",
+      "parentUuid": "ca753907_26fd962a",
+      "revId": "235eeb001d089f845b55a07366ba9c982d13525b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
