@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca753907_29d649ba",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1021463
+      },
+      "writtenOn": "2013-06-21T06:21:37Z",
+      "side": 1,
+      "message": "Hi, Wink\nThank you for your advise.\n\nNow, I let this change section be like {[...] [...] ...}\n\nI hope I can recover other inconsistency you hated, in next phase...",
+      "revId": "3c6c0d2d0b77f1ac35f4b43107d63bae0a9b34d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
