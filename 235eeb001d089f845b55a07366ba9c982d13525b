@@ -52,6 +52,24 @@
       "revId": "235eeb001d089f845b55a07366ba9c982d13525b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca753907_29f809b1",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1021463
+      },
+      "writtenOn": "2013-06-21T01:39:26Z",
+      "side": 1,
+      "message": "Wink,\n\nThank you for your comments.\n\nThe routine you suggested is link-list data structure, while ret data for RIL_REQUEST_QUERY_CALL_FORWARD_STATUS is linear array[]. I think we can\u0027t use ArrayList\u003c\u003e for this case.\n\nI do try a test here, but using ArrayList in the debugging section, like this:\n  ArrayList\u003cCallForwardInfo\u003e cfs \u003d(ArrayList\u003cCallForwardInfo\u003e) ret;\n  sb \u003d new StringBuilder(\"{\");\n  for(CallForwardInfo entry : list) {\n    sb.append(\"[\").append(entry).append(\"]\");\n  }\n  sb.append(\"}\");\n  s \u003d sb.toString();\n\n\nThis would cause run-time exception, as array[] can\u0027t convert to ArrayList\u003c\u003e:\nE/RILJ    (  556): Uncaught exception com.android.internal.telephony.CallForwardInfo[] cannot be cast to java.util.ArrayList.\n\nIf we want to ArrayList\u003c\u003e, we need re-structure CallForwardInfo in ArrayList\u003c\u003e instead of [].\n\nThis would cause more code change, as Framework/APK both treat this info as [], not ArrayList\u003c\u003e.\n\n\n\nThank you!",
+      "parentUuid": "0ad591ff_0f925147",
+      "revId": "235eeb001d089f845b55a07366ba9c982d13525b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
