@@ -16,6 +16,24 @@
       "revId": "ad49cfde72c101fc5f10295b0cf772f14d9008a7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c7fa942f_5e1835f4",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1017042
+      },
+      "writtenOn": "2013-06-28T16:40:15Z",
+      "side": 1,
+      "message": "Sure, that should be reasonable. I\u0027ll incorporate the log in the next patch set. But, sorry, i need you to wait for two days since it\u0027s already Saturday morning in Tokyo and I don\u0027t have development environment in my home.",
+      "parentUuid": "0a2cb179_112f6e92",
+      "revId": "ad49cfde72c101fc5f10295b0cf772f14d9008a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
