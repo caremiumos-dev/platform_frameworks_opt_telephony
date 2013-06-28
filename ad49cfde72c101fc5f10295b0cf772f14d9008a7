@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a2cb179_112f6e92",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-06-28T16:30:55Z",
+      "side": 1,
+      "message": "At a minimum lets do the \"full\" check and output a log entry if its incorrect. We may also consider creating an event informing companies when sims are bad.",
+      "revId": "ad49cfde72c101fc5f10295b0cf772f14d9008a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
