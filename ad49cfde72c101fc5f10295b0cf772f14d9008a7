@@ -34,6 +34,24 @@
       "revId": "ad49cfde72c101fc5f10295b0cf772f14d9008a7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "67480879_23f20a22",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1017042
+      },
+      "writtenOn": "2013-07-02T21:15:30Z",
+      "side": 1,
+      "message": "Updated patch set to do \"full\" check and print warning log if MSP does not comply with ETSI spec. Please see patch set 3.",
+      "parentUuid": "c7fa942f_5e1835f4",
+      "revId": "ad49cfde72c101fc5f10295b0cf772f14d9008a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
