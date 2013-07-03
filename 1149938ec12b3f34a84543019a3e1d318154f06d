@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47d144e1_12a72cb5",
+        "filename": "src/java/com/android/internal/telephony/ITelephonyService.aidl",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2013-07-03T17:27:50Z",
+      "side": 1,
+      "message": "Can we add some hooks in place to support multi SIM and IMS as discussed in the hangout?\n\nDo we expect that subscription information can be embedded in the Intent?",
+      "revId": "1149938ec12b3f34a84543019a3e1d318154f06d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "47d144e1_32acb094",
+        "filename": "src/java/com/android/internal/telephony/ITelephonyService.aidl",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2013-07-03T17:27:50Z",
+      "side": 1,
+      "message": "Do we need answerCall to indicate which call to answer. With DSDA, we can have multiple calls coming in and User has to decide which one he wants to answer.",
+      "revId": "1149938ec12b3f34a84543019a3e1d318154f06d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
