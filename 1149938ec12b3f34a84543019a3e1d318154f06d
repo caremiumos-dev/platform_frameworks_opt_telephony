@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "c7ad346a_06e85a00",
+        "filename": "src/java/com/android/internal/telephony/ITelephonyService.aidl",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1020138
+      },
+      "writtenOn": "2013-07-04T10:11:09Z",
+      "side": 1,
+      "message": "Actually I\u0027m not really sure why we use Intent as parameter here..  It\u0027s a bit strange.. We will change this to something else.\n\nI agree we need to support multisim.. I kind of like the suggestion below to have multiple instances.. one for each sim..Still needs some thinking on how to actually implement that though.\n\nAnd if we have multiple instances then I guess we should separate audio API\u0027s to a new interface? Because those API\u0027s are still only valid for the actual active call no matter if we support multi sim or not?",
+      "parentUuid": "2771b0c7_139de4a8",
+      "revId": "1149938ec12b3f34a84543019a3e1d318154f06d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47d144e1_32acb094",
         "filename": "src/java/com/android/internal/telephony/ITelephonyService.aidl",
         "patchSetId": 2
