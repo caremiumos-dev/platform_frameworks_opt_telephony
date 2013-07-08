@@ -87,6 +87,24 @@
       "revId": "1149938ec12b3f34a84543019a3e1d318154f06d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2771b0c7_91e990a3",
+        "filename": "src/java/com/android/internal/telephony/ITelephonyService.aidl",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1015328
+      },
+      "writtenOn": "2013-07-08T22:03:58Z",
+      "side": 1,
+      "message": "I think using a call-ID makes sense.  We can update this later to be a call-like object or answer can be a method of a call object.  But for now, a call ID would get us going.",
+      "parentUuid": "2771b0c7_d37f6c6a",
+      "revId": "1149938ec12b3f34a84543019a3e1d318154f06d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
