@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87b41cfd_bc0a212d",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2013-07-09T23:00:40Z",
+      "side": 1,
+      "message": "If you have a configuration called \"noAlphaUsrCnf\" which means display user confirmation when there is no Alpha, then you can change this line of code like this\n\n if (( cmd.mTextMsg.text \u003d\u003d null) \u0026\u0026 ( cmd.mHasAlphaId || noAlphaUsrCnf))\n\nto handle the requirement I stated above.",
+      "revId": "b9a018d32417d30cf67a1240206e8dbee8f11fce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27c53079_592203b2",
+        "filename": "src/java/com/android/internal/telephony/cat/ValueParser.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2013-07-09T23:00:40Z",
+      "side": 1,
+      "message": "To address this requirement \"Per 3GPP specification 102.223,\nif the alpha identifier is not provided by the UICC, the terminal MAY give information to the user\", can we do the code changes mentioned below?\n\nreturn  (noAlphaUsrCnf ? null : CatService.STK_DEFAULT );\n\nwhere noAlphaUsrCnf is the configuration which defines if we need to show user confirmation or not.",
+      "revId": "b9a018d32417d30cf67a1240206e8dbee8f11fce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
