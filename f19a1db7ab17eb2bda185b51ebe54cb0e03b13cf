@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27c53079_398cefec",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-07-10T00:55:09Z",
+      "side": 1,
+      "message": "Please don\u0027t use a system property.  Use a config.xml resource instead.",
+      "revId": "f19a1db7ab17eb2bda185b51ebe54cb0e03b13cf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27c53079_19892bdd",
+        "filename": "src/java/com/android/internal/telephony/cat/ValueParser.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-07-10T00:55:09Z",
+      "side": 1,
+      "message": "don\u0027t use a system property - that\u0027s a finite resource and poorly suited for this.  Use a config.xml resource instead.",
+      "revId": "f19a1db7ab17eb2bda185b51ebe54cb0e03b13cf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
