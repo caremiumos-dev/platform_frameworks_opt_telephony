@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "47e5c41a_b2f1201f",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000591
+      },
+      "writtenOn": "2013-07-10T02:47:22Z",
+      "side": 1,
+      "message": "I\u0027ll take it",
+      "parentUuid": "27c53079_398cefec",
+      "revId": "f19a1db7ab17eb2bda185b51ebe54cb0e03b13cf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27c53079_19892bdd",
         "filename": "src/java/com/android/internal/telephony/cat/ValueParser.java",
         "patchSetId": 3
