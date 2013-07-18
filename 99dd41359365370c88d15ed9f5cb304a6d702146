@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73d1afe1_d2968494",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-07-18T15:27:31Z",
+      "side": 1,
+      "message": "This conflicts with code internally where I renamed this to mSpn, so lets hold off until the next AOSP release which is coming soon. And then, lets do this in IccRecords#dispose where mSpn is defined.",
+      "revId": "99dd41359365370c88d15ed9f5cb304a6d702146",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
