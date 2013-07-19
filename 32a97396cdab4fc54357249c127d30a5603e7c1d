@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f342ff7b_bef2595a",
+        "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-07-19T17:00:12Z",
+      "side": 1,
+      "message": "Internally this is now:\n\n  if (DBG_PORT) {\n...\n  }\n\nAnd DBG_PORT is at the top of the class:\n\n public class GSMPhone extends PhoneBase {\n    // NOTE that LOG_TAG here is \"GSM\", which means that log messages\n    // from this file will go into the radio log rather than the main\n    // log.  (Use \"adb logcat -b radio\" to see them.)\n    static final String LOG_TAG \u003d \"GSMPhone\";\n    private static final boolean LOCAL_DEBUG \u003d true;\n    private static final boolean VDBG \u003d false; /* STOPSHIP if true */\n    private static final boolean DBG_PORT \u003d false; /* STOPSHIP if true */\n\nDoes this \"work\" for javac 7?",
+      "revId": "32a97396cdab4fc54357249c127d30a5603e7c1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
