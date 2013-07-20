@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5334ab06_c175c2cd",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1004511
+      },
+      "writtenOn": "2013-07-20T17:06:36Z",
+      "side": 1,
+      "message": "this TODO to be removed?",
+      "revId": "826523c49d73784e0356cef5fa6c38a5e782de3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
