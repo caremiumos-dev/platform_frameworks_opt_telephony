@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "138a339d_574707c6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTrackerBase.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-07-31T01:02:21Z",
+      "side": 1,
+      "message": "Lets make this abstract as this will never be called as there is only one child (DcTracker) and it overrides it. Someday we\u0027ll combine DcTracker and DcTrackerBase and this will go away.",
+      "revId": "3ec8cf6338a13628690c1ac5f816fc317a9539b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
