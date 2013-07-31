@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "138a339d_b76db301",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-07-31T01:19:30Z",
+      "side": 1,
+      "message": "At a minimum we should output a loge or maybe even throw an exception?",
+      "revId": "d2773bb24f7d5492fd4f118ccea65d654e379046",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
