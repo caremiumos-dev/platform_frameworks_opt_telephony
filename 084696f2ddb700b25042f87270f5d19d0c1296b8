@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33d01788_c23406f6",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-07-31T16:50:22Z",
+      "side": 1,
+      "message": "use mPhoneBase.setSystemProperty instead.  Don\u0027t import SystemProperties",
+      "revId": "084696f2ddb700b25042f87270f5d19d0c1296b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
