@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "587128c6_ff88371e",
+        "filename": "src/java/com/android/internal/telephony/IccCardApplicationStatus.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2013-08-05T16:45:43Z",
+      "side": 1,
+      "message": "Why are we using -1? It should be defined in AppState enum.",
+      "revId": "afad74d43bcc96b2c3a9b1e9a6907bf286e9ea84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "587128c6_5c485189",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 1
