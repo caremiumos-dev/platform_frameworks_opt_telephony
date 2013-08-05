@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "587128c6_3c579d2c",
+        "filename": "src/java/com/android/internal/telephony/IccCardApplicationStatus.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-08-05T15:42:02Z",
+      "side": 1,
+      "message": "Lets print the debug diagnostics here.",
+      "revId": "afad74d43bcc96b2c3a9b1e9a6907bf286e9ea84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "587128c6_5c485189",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3014,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-08-05T15:42:02Z",
+      "side": 1,
+      "message": "This is done in AppStateFromRILInt lets not print this here, if we need the diagnostics lets do it in AppStateFromRILInt. If we do that this file doesn\u0027t change.",
+      "revId": "afad74d43bcc96b2c3a9b1e9a6907bf286e9ea84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
