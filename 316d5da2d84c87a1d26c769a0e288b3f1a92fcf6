@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d8b5471_366d0072",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-08-26T21:20:56Z",
+      "side": 1,
+      "message": "this should be restructured.\n\nmNewSS.setRoaming((mGsmRoaming ||\n    mDataRoaming) \u0026\u0026 (inHomeCountry(mNewSS) \u0026\u0026\n    !sameNamedOperator(mNewSS) \u0026\u0026\n    !usingRoamingAgreementOperator(mNewSS)))\n\nCurrent code is checking mGsmRoaming too often and using two un-needed temp vars.  Note this restructuring goes into isRoamingBetweenOperators, which shouldn\u0027t even be called if roaming isn\u0027t possible.",
+      "revId": "316d5da2d84c87a1d26c769a0e288b3f1a92fcf6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d8b5471_f62a1848",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-08-26T21:20:56Z",
+      "side": 1,
+      "message": "this is a bad name.\n\nhow about currentMccEqualsSimMcc",
+      "revId": "316d5da2d84c87a1d26c769a0e288b3f1a92fcf6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d8b5471_b6d7b006",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-08-26T21:20:56Z",
+      "side": 1,
+      "message": "another bad function name.\n\nisOperatorConcideredNonRoaming",
+      "revId": "316d5da2d84c87a1d26c769a0e288b3f1a92fcf6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d8b5471_16bebcc5",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-08-26T21:20:56Z",
+      "side": 1,
+      "message": "A bad function name.\n\nWhere did the term \"NationalRoaming\" come from?  It seems like it is really a non-roaming agreement.  Please explain the origin of the term.",
+      "revId": "316d5da2d84c87a1d26c769a0e288b3f1a92fcf6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d8b5471_76daa830",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-08-26T21:20:56Z",
+      "side": 1,
+      "message": "do this in reverse.\n\nreturn nationalRoaming \u0026\u0026 isEqualsMcc \u0026\u0026 isEqualsMnc\n\nso the functions aren\u0027t called in the normal, non-nationalRoaming case.",
+      "revId": "316d5da2d84c87a1d26c769a0e288b3f1a92fcf6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
