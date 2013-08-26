@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "cd18f82e_b5e4c05c",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-08-26T23:36:59Z",
+      "side": 1,
+      "message": "http://en.wikipedia.org/wiki/Roaming\n\nNational roaming:\n\nThis type of roaming refers to the ability to move from one mobile operator to another in the same country. For example, a subscriber of T-Mobile USA who is allowed to roam on AT\u0026T Mobility\u0027s service would have national roaming rights. For commercial and license reasons, this type of roaming is not allowed unless under very specific circumstances and under regulatory scrutiny. This has often taken place when a new company is assigned a mobile telephony license, to create a more competitive market by allowing the new entrant to offer coverage comparable to that of established operators (by requiring the existing operators to allow roaming while the new entrant has time to build up its own network). In a country like India, where the number of regional operators is high and the country is divided into circles, this type of roaming is common[citation needed]. Following the merger of Orange UK and T-Mobile UK on 1 July 2010, national roaming has been possible between these two networks since 5 October 2010 at no additional cost pending the technical merging of the two networks.\n\nI agree with you. It\u0027s bad function name. I\u0027ll change it to  more reasonable name.",
+      "parentUuid": "2d8b5471_16bebcc5",
+      "revId": "316d5da2d84c87a1d26c769a0e288b3f1a92fcf6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d8b5471_76daa830",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
         "patchSetId": 2
