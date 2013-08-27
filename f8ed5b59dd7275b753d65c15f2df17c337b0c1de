@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "2dd0b487_5173c6a3",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1023901
+      },
+      "writtenOn": "2013-08-27T20:12:18Z",
+      "side": 1,
+      "message": "Hi, Robert, I\u0027m not sure how gerrit works (first time using it) but it looks like you didn\u0027t get a notification about my comment on the change. I think the code shouldn\u0027t be built around the assumption that MCCs are the same. I also believe this feature is called Equivalent Home PLMN. Please see my full comment.",
+      "parentUuid": "2dd0b487_2b2ce50f",
+      "revId": "f8ed5b59dd7275b753d65c15f2df17c337b0c1de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dd0b487_ee7bfb2f",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
         "patchSetId": 3
