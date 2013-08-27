@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0d585019_eff3e11d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-08-27T23:00:13Z",
+      "side": 1,
+      "message": "I mistake. \n\nthere is some problem.\nIf mDateRoaming \u003d\u003d true, it is always true. But regardless mDataRoaming, it should be false if mGsmRoaming \u0026\u0026 !isRoamingBetweenOperators(mGsmRoaming, mNewSS)) \u003d\u003d true.\n\nI\u0027ll change it again.",
+      "parentUuid": "2dd0b487_6e626bb4",
+      "revId": "f8ed5b59dd7275b753d65c15f2df17c337b0c1de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dd0b487_2b2ce50f",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
         "patchSetId": 3
@@ -71,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "0d585019_2ff6c90d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1302,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-08-27T23:00:13Z",
+      "side": 1,
+      "message": "OK.",
+      "parentUuid": "4d4ec857_915d1c25",
+      "revId": "f8ed5b59dd7275b753d65c15f2df17c337b0c1de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dd0b487_ee7bfb2f",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
         "patchSetId": 3
@@ -82,6 +118,24 @@
       "writtenOn": "2013-08-27T19:28:33Z",
       "side": 1,
       "message": "is this really needed?  Can\u0027t we just get the array and if it\u0027s empty or we don\u0027t find a match we return false?",
+      "revId": "f8ed5b59dd7275b753d65c15f2df17c337b0c1de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d585019_0ff905ff",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-08-27T23:00:13Z",
+      "side": 1,
+      "message": "I\u0027ll think more. and try to re-design.",
+      "parentUuid": "2dd0b487_ee7bfb2f",
       "revId": "f8ed5b59dd7275b753d65c15f2df17c337b0c1de",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
