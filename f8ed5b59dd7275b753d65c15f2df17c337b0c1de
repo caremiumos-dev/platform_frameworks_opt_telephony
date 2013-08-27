@@ -54,6 +54,23 @@
     },
     {
       "key": {
+        "uuid": "4d4ec857_915d1c25",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1302,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-08-27T21:53:45Z",
+      "side": 1,
+      "message": "Looking at supporting multiple mcc as your home country, perhaps rename isHomeCountry(ServiceState)\n\nProbably need to have an optional array set by mcc that lists other mcc\u0027s that are also \"home Country\"\n\nEG, Bermuda (350/310/338), Guam (310, 311), India (404, 405), etc",
+      "revId": "f8ed5b59dd7275b753d65c15f2df17c337b0c1de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dd0b487_ee7bfb2f",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
         "patchSetId": 3
