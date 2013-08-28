@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7210cd3e_ba12b1a3",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-08-28T16:59:25Z",
+      "side": 1,
+      "message": "comment that this can be used to match either mcc+mnc or just mcc.",
+      "revId": "6865223a13159e37ef7636f7bd5e57758dc0e27e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "320ad514_b897593d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-08-28T16:59:25Z",
+      "side": 1,
+      "message": "|| operatorNumber \u003d\u003d null",
+      "revId": "6865223a13159e37ef7636f7bd5e57758dc0e27e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
