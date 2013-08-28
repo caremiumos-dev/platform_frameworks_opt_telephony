@@ -16,6 +16,24 @@
       "revId": "4575adf41783554b5d75b800d818abb44b8aa556",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "72836dc5_e293c6a1",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-08-28T23:21:31Z",
+      "side": 1,
+      "message": "In according ETSI TS 102 223 6.4.27.2 OPEN CHANNEL related to packet data service bearer,\n\"• if the alpha identifier is provided by the UICC and is a null data object (i.e. length \u003d \u002700\u0027 and no value part),\nthis is an indication that the terminal should not give any information to the user or ask for user confirmation;\n• if the alpha identifier is not provided by the UICC, the terminal may give information to the user;\n• if the user does not reject the channel, the terminal shall then set up a channel;\"\n\nIn this condition, we does not need user confirmation and we should do next step. So, we need to set up a channel here when the command is OPEN CHANNEL. If we send Terminal Response, which value we should send to the UICC? If we send Terminal Response with OK value, it means that we are success to open a channel. And, If we send Terminal Response with Not OK value, it means that OPEN CHANNEL is rejected.",
+      "parentUuid": "32581541_5c5a7dfa",
+      "revId": "4575adf41783554b5d75b800d818abb44b8aa556",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
