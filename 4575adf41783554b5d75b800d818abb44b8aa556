@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32581541_5c5a7dfa",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-08-28T22:03:15Z",
+      "side": 1,
+      "message": "this appears to be outside the scope of this change - it\u0027s not showing user confirmation based on noAlphaUsrCnf, it appears to be setting up a data call.  If we need to do that, please create a separate bug and a separate change, don\u0027t bury it in a change regarding user confirmation.",
+      "revId": "4575adf41783554b5d75b800d818abb44b8aa556",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
