@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32649599_d7e34654",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-05T03:40:36Z",
+      "side": 1,
+      "message": "Remove, we\u0027re not checking this now.",
+      "revId": "6f73a3a9e6240f86af62c283547bf6c4320f9d62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32649599_3c1e4980",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-05T03:40:36Z",
+      "side": 1,
+      "message": "Remove hasActiveCall and hasHoldingCall are not used.\n\nAlthough we need to be cautious with this change a call to canDial was added to dial() in Nov 2010 to fix a bug where SipPhone crashed. See sha1 in frameworks/base:\n\n  4567847d461afac08a80518637a0e48eff3c5247\n\nWe may need to change SipPhone or ???",
+      "revId": "6f73a3a9e6240f86af62c283547bf6c4320f9d62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
