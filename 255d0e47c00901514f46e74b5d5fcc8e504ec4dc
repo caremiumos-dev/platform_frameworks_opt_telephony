@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32b7354e_539bd6b7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-05T18:13:29Z",
+      "side": 1,
+      "message": "Why change this?",
+      "revId": "255d0e47c00901514f46e74b5d5fcc8e504ec4dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32b7354e_93309ecf",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-05T18:13:29Z",
+      "side": 1,
+      "message": "Change to mDct.sendStopNetStatPoll(DctConstants.Activity.DORMANT);",
+      "revId": "255d0e47c00901514f46e74b5d5fcc8e504ec4dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2c91dea_c65d4220",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-05T18:13:29Z",
+      "side": 1,
+      "message": "Not sure what to do about this, if we really need to set it to not but not stopNetStatePoll then we need to implement sendSetActivity().",
+      "revId": "255d0e47c00901514f46e74b5d5fcc8e504ec4dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32b7354e_734a5a30",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-05T18:13:29Z",
+      "side": 1,
+      "message": "mDct.sendStartNetStatPoll(DctConstants.Activity.ACTIVE)?",
+      "revId": "255d0e47c00901514f46e74b5d5fcc8e504ec4dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "12bcf130_ef53013c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTrackerBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-05T18:13:29Z",
+      "side": 1,
+      "message": "Pass this as a parameter to CMD_NET_STAT_POLL",
+      "revId": "255d0e47c00901514f46e74b5d5fcc8e504ec4dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32b7354e_13acaecd",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTrackerBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-05T18:13:29Z",
+      "side": 1,
+      "message": "This and stop/startNetStatPoll are being called by two different threads, change this to be sendStartNetStatPoll(DctConstanst.Activity activity) and have it send CMD_NET_STAT_POLL with arg1 \u003d 1 for start 0 for stop and arg2 being the value for activity. Move this and stop\u0027s code into the handler.\n\nThen have all users call sendStartNetStatPoll/sendStopNetStatPoll",
+      "revId": "255d0e47c00901514f46e74b5d5fcc8e504ec4dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32b7354e_d3b98610",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTrackerBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-05T18:13:29Z",
+      "side": 1,
+      "message": "change to sendStopNetStatPoll() and send CMD_NET_STAT_POLL",
+      "revId": "255d0e47c00901514f46e74b5d5fcc8e504ec4dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "12bcf130_4f45ed6c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTrackerBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-05T18:13:29Z",
+      "side": 1,
+      "message": "Wrap this read/modify/write in synchronized.",
+      "revId": "255d0e47c00901514f46e74b5d5fcc8e504ec4dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
