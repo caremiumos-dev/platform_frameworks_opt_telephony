@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4715c92d_5984c3a0",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2013-09-06T21:40:48Z",
+      "side": 1,
+      "message": "What is the specific fileId valued passed here that you don\u0027t like?\nIt should be 4F01...4F05. getEFPath for these can be fixed instead of hacking it here.",
+      "revId": "4406a881f06ec97db0af7707d7e1b9897e04124e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4715c92d_99ba5b5d",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2013-09-06T21:40:48Z",
+      "side": 1,
+      "message": "In the order of preference here is how this could be fixed instead:\n1) Have caller provide path.\n2) let getEFPath figure out path based on actual values passed. (i.e. fix getEFPath)",
+      "revId": "4406a881f06ec97db0af7707d7e1b9897e04124e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4715c92d_f915d794",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1003902
+      },
+      "writtenOn": "2013-09-06T21:40:48Z",
+      "side": 1,
+      "message": "in case of EVENT_READ_IMG_DONE it would be LoadLinearFixedContext object and not Message.\nWouldn\u0027t it crash here?",
+      "revId": "4406a881f06ec97db0af7707d7e1b9897e04124e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
