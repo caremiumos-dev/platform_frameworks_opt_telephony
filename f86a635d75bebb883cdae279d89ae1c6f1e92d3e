@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f23cbda4_d7a316aa",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2013-09-06T05:57:03Z",
+      "side": 1,
+      "message": "Do we still need this old API if we always need to update CF number also?",
+      "revId": "f86a635d75bebb883cdae279d89ae1c6f1e92d3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
