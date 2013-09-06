@@ -16,6 +16,24 @@
       "revId": "f86a635d75bebb883cdae279d89ae1c6f1e92d3e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f28e7db0_deb6e5d0",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2013-09-06T06:57:18Z",
+      "side": 1,
+      "message": "I removed the old api.",
+      "parentUuid": "f23cbda4_d7a316aa",
+      "revId": "f86a635d75bebb883cdae279d89ae1c6f1e92d3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
