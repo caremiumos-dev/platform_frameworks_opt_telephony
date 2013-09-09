@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e796bd05_fe484163",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-09-09T18:18:41Z",
+      "side": 1,
+      "message": "I\u0027ll remove this line.",
+      "parentUuid": "c74e1982_65d006a0",
+      "revId": "3ad65025ed3c1d294b2b8eb76c1d1d56a340f8e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c74e1982_2589eeb8",
         "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2013-09-09T15:43:00Z",
       "side": 1,
       "message": "This is quite different from the code we had before and I\u0027m nervous, please provide the relevant specification.",
+      "revId": "3ad65025ed3c1d294b2b8eb76c1d1d56a340f8e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e796bd05_fe97e191",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-09-09T18:18:41Z",
+      "side": 1,
+      "message": "Previous patch has a problem which LoadLinearFixedContext was treated as Transparent object.(Alex Yakavenka commented it) For LoadLinearFixedContext is able to have multiple records. So, we should calculate the number of the records.",
+      "parentUuid": "c74e1982_2589eeb8",
       "revId": "3ad65025ed3c1d294b2b8eb76c1d1d56a340f8e7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
