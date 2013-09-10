@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27661513_6cd003a0",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2013-09-10T00:40:48Z",
+      "side": 1,
+      "message": "Do we need this line? I don\u0027t see recordNum being used in this case block.",
+      "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27661513_87253073",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2013-09-10T00:40:48Z",
+      "side": 1,
+      "message": "If I understand correctly, it seems like you are trying to read all the records of the EF_IMG file to get all the Image Instance descriptors, instead of the record number specified to loadEFImgLinearFixed() above.\n\nIf my understanding is correct, could you please explain why do we need to do this? \n\nMoreover, could you please check if this logic can be used to accurately determine the number of records?\n\nAs per TS 51.011, v4.15.0, section 10.6.1.1, the first byte of the EF_IMG file is the number of actual image instances. \n\nDoes this size:\nsize \u003d ((data[RESPONSE_DATA_FILE_SIZE_1] \u0026 0xff) \u003c\u003c 8)\t368\n\t\t\t+ (data[RESPONSE_DATA_FILE_SIZE_2] \u0026 0xff);\n\ninclude the first byte I refer to above? \n\nIf yes, then, it seems the above calculation would be incorrect.",
+      "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
