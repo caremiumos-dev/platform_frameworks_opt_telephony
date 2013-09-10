@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4734e906_a1623eab",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-09-10T20:05:10Z",
+      "side": 1,
+      "message": "Ok, I will do it.",
+      "parentUuid": "27529551_be9c210a",
+      "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27661513_6cd003a0",
         "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
         "patchSetId": 5
@@ -106,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "4734e906_01604aa2",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-09-10T20:05:10Z",
+      "side": 1,
+      "message": "As your opinion, we can get rid of this event instead of  changing these codes. And then, this event can be handled by EVENT_GET_RECORD_SIZE_DONE.",
+      "parentUuid": "27529551_3e349107",
+      "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27529551_41e3684e",
         "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
         "patchSetId": 5
@@ -117,6 +153,24 @@
       "writtenOn": "2013-09-10T19:01:23Z",
       "side": 1,
       "message": "If we support loading of all records, then it seems this entire case block now is the same as the one for: EVENT_GET_RECORD_SIZE_IMG_DONE? If you agree, could we please get rid of one?",
+      "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4734e906_e15c46f8",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-09-10T20:05:10Z",
+      "side": 1,
+      "message": "Yes, I agree.",
+      "parentUuid": "27529551_41e3684e",
       "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
