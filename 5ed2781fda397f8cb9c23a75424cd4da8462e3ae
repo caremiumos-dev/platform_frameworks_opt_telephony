@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e7addd69_06913aa1",
+        "filename": "src/java/com/android/internal/telephony/TelephonyCapabilities.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1021368
+      },
+      "writtenOn": "2013-09-10T05:51:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27661513_c7780880",
+      "revId": "5ed2781fda397f8cb9c23a75424cd4da8462e3ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27661513_67d57c37",
         "filename": "src/java/com/android/internal/telephony/TelephonyCapabilities.java",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2013-09-10T00:48:02Z",
       "side": 1,
       "message": "remove",
+      "revId": "5ed2781fda397f8cb9c23a75424cd4da8462e3ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7addd69_2696b69a",
+        "filename": "src/java/com/android/internal/telephony/TelephonyCapabilities.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1021368
+      },
+      "writtenOn": "2013-09-10T05:51:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27661513_67d57c37",
       "revId": "5ed2781fda397f8cb9c23a75424cd4da8462e3ae",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
