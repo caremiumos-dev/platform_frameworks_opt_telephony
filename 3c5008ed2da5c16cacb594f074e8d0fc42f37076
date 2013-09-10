@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "076bd1dd_3796d89a",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-09-10T01:47:00Z",
+      "side": 1,
+      "message": "EF IMG is a linear fixed file. isn\u0027t it?",
+      "revId": "3c5008ed2da5c16cacb594f074e8d0fc42f37076",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "076bd1dd_d79afcbc",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-09-10T01:47:00Z",
+      "side": 1,
+      "message": "It seems that the changes are supporting only one record of EF_IMG.",
+      "revId": "3c5008ed2da5c16cacb594f074e8d0fc42f37076",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
