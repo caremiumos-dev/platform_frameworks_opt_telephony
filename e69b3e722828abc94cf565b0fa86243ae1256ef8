@@ -33,6 +33,24 @@
       "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "076bd1dd_5787cc66",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-09-10T01:16:44Z",
+      "side": 1,
+      "message": "As per TS 51.011, v4.15.0, section 10.6.1.1, the first byte of the EF_IMG file is the number of actual image instances.\nIf I\u0027m understanding correctly, the first byte of the EF_IMG file is the number of the EF_IIDF. It is not the number of EF_IMG records.",
+      "parentUuid": "27661513_87253073",
+      "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
