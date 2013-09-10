@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "27529551_be9c210a",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2013-09-10T19:01:23Z",
+      "side": 1,
+      "message": "Could we please pick up the processException utility from \nhttps://android-review.googlesource.com/#/c/58835",
+      "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27661513_6cd003a0",
         "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
         "patchSetId": 5
@@ -48,6 +65,58 @@
       "side": 1,
       "message": "As per TS 51.011, v4.15.0, section 10.6.1.1, the first byte of the EF_IMG file is the number of actual image instances.\nIf I\u0027m understanding correctly, the first byte of the EF_IMG file is the number of the EF_IIDF. It is not the number of EF_IMG records.",
       "parentUuid": "27661513_87253073",
+      "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27529551_1ed42d0a",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2013-09-10T19:01:23Z",
+      "side": 1,
+      "message": "Hey Duho, \n\nFalse alarm. After further checking the format of the response and the spec, the size calculation looks correct.",
+      "parentUuid": "076bd1dd_5787cc66",
+      "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27529551_3e349107",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2013-09-10T19:01:23Z",
+      "side": 1,
+      "message": "Is there a use case for supporting loading of all the records? Currently, loadEFImgLinearFixed() specifies the recordNum and I don\u0027t see mLoadAll being set to true anywhere else for Image EFs.",
+      "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27529551_41e3684e",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2013-09-10T19:01:23Z",
+      "side": 1,
+      "message": "If we support loading of all records, then it seems this entire case block now is the same as the one for: EVENT_GET_RECORD_SIZE_IMG_DONE? If you agree, could we please get rid of one?",
       "revId": "e69b3e722828abc94cf565b0fa86243ae1256ef8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
