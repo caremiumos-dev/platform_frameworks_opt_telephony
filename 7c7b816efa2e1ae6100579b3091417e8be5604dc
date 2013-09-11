@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c768d904_2ada8368",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-11T00:49:14Z",
+      "side": 1,
+      "message": "Make the commit message match what we\u0027re doing.",
+      "revId": "7c7b816efa2e1ae6100579b3091417e8be5604dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
