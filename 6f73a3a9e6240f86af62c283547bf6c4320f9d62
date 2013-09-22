@@ -69,6 +69,24 @@
       "revId": "6f73a3a9e6240f86af62c283547bf6c4320f9d62",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a44cc3b3_5fd06f9d",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-09-22T23:17:51Z",
+      "side": 1,
+      "message": "It doesn\u0027t need to change Sip Phone.",
+      "parentUuid": "92f9c100_9b98cb62",
+      "revId": "6f73a3a9e6240f86af62c283547bf6c4320f9d62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
