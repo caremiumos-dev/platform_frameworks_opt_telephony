@@ -16,6 +16,23 @@
       "revId": "ac46ecfc063f92051138922616cd0e0fa740365a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e48cfb4a_835b8c58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-09-26T15:43:39Z",
+      "side": 1,
+      "message": "Need \"Bug: xxx\"",
+      "revId": "ac46ecfc063f92051138922616cd0e0fa740365a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
