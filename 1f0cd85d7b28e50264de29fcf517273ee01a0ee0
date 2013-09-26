@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e48cfb4a_aba5be98",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1020994
+      },
+      "writtenOn": "2013-09-26T20:56:02Z",
+      "side": 1,
+      "message": "will update",
+      "parentUuid": "04a82f8f_fba31aef",
+      "revId": "1f0cd85d7b28e50264de29fcf517273ee01a0ee0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e48cfb4a_55107b67",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "e48cfb4a_6bb596c2",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1020994
+      },
+      "writtenOn": "2013-09-26T20:56:02Z",
+      "side": 1,
+      "message": "this was added since CDMA doesn\u0027t support supplmentary services.",
+      "parentUuid": "e48cfb4a_55107b67",
+      "revId": "1f0cd85d7b28e50264de29fcf517273ee01a0ee0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e48cfb4a_b51eff76",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2013-09-26T16:01:55Z",
       "side": 1,
       "message": "Who\u0027s going to be using these?",
+      "revId": "1f0cd85d7b28e50264de29fcf517273ee01a0ee0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e48cfb4a_abce9e4c",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1020994
+      },
+      "writtenOn": "2013-09-26T20:56:02Z",
+      "side": 1,
+      "message": "This notification will be used on Phone. The notifications will be displayed as toast message to the user.\nCorresponding Phone change - https://android-review.googlesource.com/#/c/65739/",
+      "parentUuid": "e48cfb4a_b51eff76",
       "revId": "1f0cd85d7b28e50264de29fcf517273ee01a0ee0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
