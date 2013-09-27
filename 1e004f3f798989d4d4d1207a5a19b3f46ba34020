@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44214730_f9ac5736",
+        "filename": "src/java/com/android/internal/telephony/cat/CatCmdMessage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2013-09-27T17:23:41Z",
+      "side": 1,
+      "message": "Need to move setup_event_list handling into its own block. Not to be combined with PLI and Refresh",
+      "revId": "1e004f3f798989d4d4d1207a5a19b3f46ba34020",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
