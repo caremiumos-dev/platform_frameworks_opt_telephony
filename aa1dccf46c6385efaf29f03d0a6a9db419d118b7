@@ -16,6 +16,24 @@
       "revId": "aa1dccf46c6385efaf29f03d0a6a9db419d118b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61e71d95_2209ceb1",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2013-10-01T19:43:05Z",
+      "side": 1,
+      "message": "Yes that can be done.",
+      "parentUuid": "e425db90_890a5d35",
+      "revId": "aa1dccf46c6385efaf29f03d0a6a9db419d118b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
