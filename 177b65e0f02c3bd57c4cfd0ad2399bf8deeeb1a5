@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21660513_1ee16d15",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-10-02T17:27:22Z",
+      "side": 1,
+      "message": "it seems more general purpose to turn the list of call barring codes into a resource array and do the .equals call on that.  In the case of operators that don\u0027t support it at all, the array would be empty.\n\nIs there any potential for different carriers supporting different call-bar strings?",
+      "revId": "177b65e0f02c3bd57c4cfd0ad2399bf8deeeb1a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
