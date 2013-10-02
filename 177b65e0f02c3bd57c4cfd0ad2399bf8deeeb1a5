@@ -16,6 +16,24 @@
       "revId": "177b65e0f02c3bd57c4cfd0ad2399bf8deeeb1a5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21660513_127ddc6d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-10-02T23:57:37Z",
+      "side": 1,
+      "message": "Thanks for your review.\nI requested whether the other call barring codes are used and the indonesian team confirmed that they are not used at all. But I agree. I will change the codes as your mention.",
+      "parentUuid": "21660513_1ee16d15",
+      "revId": "177b65e0f02c3bd57c4cfd0ad2399bf8deeeb1a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
