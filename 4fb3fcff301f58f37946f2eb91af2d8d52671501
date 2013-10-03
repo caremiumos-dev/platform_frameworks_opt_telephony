@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21660513_f5136fac",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-10-03T19:32:58Z",
+      "side": 1,
+      "message": "How do we know there isn\u0027t a \"+\" already present, should we test for a leading \"+\"?",
+      "revId": "4fb3fcff301f58f37946f2eb91af2d8d52671501",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
