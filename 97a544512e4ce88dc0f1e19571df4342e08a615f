@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81625122_1696da39",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-10-04T16:42:12Z",
+      "side": 1,
+      "message": "see my comment on the matching change - if you make the array be the list of callBarringMMI match strings, then this gets simpler.\n\nif (sc !\u003d null) {\n    String[] barringMMI \u003d resource.getStringArray()\n    if (barringMMI !\u003d null) {\n        for (String match : barringMMI) {\n            if (sc.equals(match)) return true;\n        }\n    }\n}\nreturn false;",
+      "revId": "97a544512e4ce88dc0f1e19571df4342e08a615f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
