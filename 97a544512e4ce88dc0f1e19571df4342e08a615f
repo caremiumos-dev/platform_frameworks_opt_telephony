@@ -16,6 +16,24 @@
       "revId": "97a544512e4ce88dc0f1e19571df4342e08a615f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01dae132_bf4a775a",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2013-10-05T02:04:16Z",
+      "side": 1,
+      "message": "I just did not want to touch the well working codes.\nI see. I\u0027ll update again.",
+      "parentUuid": "81625122_1696da39",
+      "revId": "97a544512e4ce88dc0f1e19571df4342e08a615f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
