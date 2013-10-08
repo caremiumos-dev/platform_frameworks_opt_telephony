@@ -16,6 +16,24 @@
       "revId": "4fb3fcff301f58f37946f2eb91af2d8d52671501",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a1e2f518_2c85d3c9",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1019736
+      },
+      "writtenOn": "2013-10-08T19:29:18Z",
+      "side": 1,
+      "message": "will upload new patch set to address this comment.",
+      "parentUuid": "21660513_f5136fac",
+      "revId": "4fb3fcff301f58f37946f2eb91af2d8d52671501",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
