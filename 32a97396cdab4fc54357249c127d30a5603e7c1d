@@ -16,6 +16,24 @@
       "revId": "32a97396cdab4fc54357249c127d30a5603e7c1d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ed513c1f_e6519e0a",
+        "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1018065
+      },
+      "writtenOn": "2013-11-04T13:52:28Z",
+      "side": 1,
+      "message": "javac inline fields which are static and final so this modification does not solved the problem.\nThis problem was transferred to Oracle and it is fixed but not in javac 7u25.\nhttp://bugs.sun.com/view_bug.do?bug_id\u003d7199823 .\nYou can delete the keyword \"final\".",
+      "parentUuid": "f342ff7b_bef2595a",
+      "revId": "32a97396cdab4fc54357249c127d30a5603e7c1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
