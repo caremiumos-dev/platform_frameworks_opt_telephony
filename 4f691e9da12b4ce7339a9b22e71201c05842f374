@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "decee94a_6c1c9b50",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1003413
+      },
+      "writtenOn": "2013-11-06T00:02:14Z",
+      "side": 1,
+      "message": "This fix breaks operator name on Verizon.",
+      "revId": "4f691e9da12b4ce7339a9b22e71201c05842f374",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
