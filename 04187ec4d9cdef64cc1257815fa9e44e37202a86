@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bea77522_8eeb5b62",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1000718
+      },
+      "writtenOn": "2013-11-20T23:57:07Z",
+      "side": 1,
+      "message": "What if originatingAddress.address includes \"011\"?  We\u0027ve seen this on some devices.",
+      "revId": "04187ec4d9cdef64cc1257815fa9e44e37202a86",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
