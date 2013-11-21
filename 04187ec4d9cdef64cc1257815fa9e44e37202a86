@@ -16,6 +16,24 @@
       "revId": "04187ec4d9cdef64cc1257815fa9e44e37202a86",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fec64dd8_258d2ed7",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-11-21T22:36:46Z",
+      "side": 1,
+      "message": "011 should never be present if ton\u003d1 (TON_INTERNATIONAL_OR_IP) so adding the \"+\" is necessary. If 011 is then its a bug if ton\u003d1, for the Galaxy Nexus Verizon model we do see the 011 present but ton\u003d0 so the \"+\" will not be added.",
+      "parentUuid": "bea77522_8eeb5b62",
+      "revId": "04187ec4d9cdef64cc1257815fa9e44e37202a86",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
