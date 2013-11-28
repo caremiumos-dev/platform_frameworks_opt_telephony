@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3bafe99_9956e7ba",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1683,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2013-11-28T00:55:35Z",
+      "side": 1,
+      "message": "Please use an ETSI spec numbers every where as below if possible. If there is no ETSI spec the give the organization that is publising \"27.007\".",
+      "revId": "0ae58fc79802294bc4c79a58a2c3b05c81a5ea45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
