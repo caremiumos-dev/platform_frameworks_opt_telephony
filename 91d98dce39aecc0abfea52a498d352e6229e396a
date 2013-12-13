@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28c8ab74_f69500dc",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ApnSettingTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2013-12-13T20:11:31Z",
+      "side": 1,
+      "message": "since these are optional, also try a v2 test without mvnotype/data.",
+      "revId": "91d98dce39aecc0abfea52a498d352e6229e396a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
