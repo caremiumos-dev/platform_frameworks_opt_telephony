@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c8caaf90_132a2c93",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-12-16T00:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48b31ffa_978e84d4",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 0
+      },
+      "revId": "91e87193afcb9e6a1ac6b879ce882fa1ba436bab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8be2fc6_b35ab8dc",
         "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2013-12-13T20:13:45Z",
       "side": 1,
       "message": "if (a.length\u003c18 || a.length \u003d\u003d 19 || a.length\u003e20)\n\nI think \u003d\u003d 20 is ok, correct?\n\nWe also need to modify the tests to verify all this..",
+      "range": {
+        "startLine": 162,
+        "startChar": 35,
+        "endLine": 162,
+        "endChar": 41
+      },
+      "revId": "91e87193afcb9e6a1ac6b879ce882fa1ba436bab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e8e2131a_ac82e338",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2013-12-16T00:07:02Z",
+      "side": 1,
+      "message": "yes, you\u0027re right.",
+      "parentUuid": "c8be2fc6_b35ab8dc",
       "range": {
         "startLine": 162,
         "startChar": 35,
