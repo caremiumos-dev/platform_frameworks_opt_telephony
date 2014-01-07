@@ -161,9 +161,7 @@ public class RILRequest {
         StringBuilder sb = new StringBuilder(8);
         String sn;
 
-        long adjustedSerial = (((long) mSerial) - Integer.MIN_VALUE) % 10000;
-
-        sn = Long.toString(adjustedSerial);
+        sn = Integer.toString(mSerial);
 
         //sb.append("J[");
         sb.append('[');
