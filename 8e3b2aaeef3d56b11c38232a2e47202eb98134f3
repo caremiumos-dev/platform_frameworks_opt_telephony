@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4da89190_af4159c5",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1014423
+      },
+      "writtenOn": "2014-01-08T17:23:21Z",
+      "side": 1,
+      "message": "Seems like this code here is never needed as Settings dB should always return the preferred network mode. Can we just remove lines 106 to 108?",
+      "revId": "8e3b2aaeef3d56b11c38232a2e47202eb98134f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
