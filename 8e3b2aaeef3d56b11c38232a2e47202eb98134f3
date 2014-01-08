@@ -16,6 +16,24 @@
       "revId": "8e3b2aaeef3d56b11c38232a2e47202eb98134f3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d76fd12_8921fdba",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-01-08T18:08:54Z",
+      "side": 1,
+      "message": "This is specifically handling the case were the PREFERRED_NETWORK_MODE is not set and if not set what should the default be.\n\nAt this point, we should handle switching properly no matter the guess so I\u0027d agree with Naveen and we should need this at alll.\n\nSungmin, so on the face of it, it would seem if there is a bug then its in the switching or what we\u0027re being told to switch to. Not what the initial guess at the preferred node was.\n\nSo if this is still a problem, please file a bug or provide the Bug number in the commit message. As always provide full logs so we have as much info as possible.",
+      "parentUuid": "4da89190_af4159c5",
+      "revId": "8e3b2aaeef3d56b11c38232a2e47202eb98134f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
