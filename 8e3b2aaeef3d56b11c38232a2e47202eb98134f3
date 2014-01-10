@@ -34,6 +34,24 @@
       "revId": "8e3b2aaeef3d56b11c38232a2e47202eb98134f3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2dd99d6f_94f4ccb0",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1016953
+      },
+      "writtenOn": "2014-01-10T09:20:22Z",
+      "side": 1,
+      "message": "There is no bug until now.\nI made a patch when supporting CDMA LTE. \nAfter merging Naveen\u0027s patch on frameworks/base, it did not need any more.",
+      "parentUuid": "2d76fd12_8921fdba",
+      "revId": "8e3b2aaeef3d56b11c38232a2e47202eb98134f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
