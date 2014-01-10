@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdcac190_1f8226ee",
+        "filename": "src/java/com/android/internal/telephony/DriverCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1020283
+      },
+      "writtenOn": "2014-01-10T16:53:03Z",
+      "side": 1,
+      "message": "no diff with presentationFromClip ? or am I missing something",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 24
+      },
+      "revId": "3d9b24500cb4727fcbfefe8d007aec358a0fe713",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
