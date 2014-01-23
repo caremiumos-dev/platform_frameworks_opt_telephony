@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "925d4a62_59dc035a",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-01-23T04:40:48Z",
+      "side": 1,
+      "message": "Sprint card does not have 3GPP2 application. I thinks this change is not working properly.",
+      "range": {
+        "startLine": 144,
+        "startChar": 16,
+        "endLine": 144,
+        "endChar": 63
+      },
+      "revId": "ba33fc8511cbf7fe2b4c2c03267bf4dfd57debdb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "72529652_38b4a9ff",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-01-23T04:40:48Z",
+      "side": 1,
+      "message": "Sprint card does not have a 3GPP2 application, but setVoiceRadioTech() will set mCurrentAppType as UiccController.APP_FAM_3GPP2.(see above my comment)",
+      "range": {
+        "startLine": 167,
+        "startChar": 27,
+        "endLine": 167,
+        "endChar": 75
+      },
+      "revId": "ba33fc8511cbf7fe2b4c2c03267bf4dfd57debdb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
