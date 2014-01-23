@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72b456b0_d148b6a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-01-23T21:00:49Z",
+      "side": 1,
+      "message": "I like the refactoring, thanks. This is a fairly big change and with the refactoring it hard to quickly see which change did what. Which tests are suppressed and are they suppressed just for emulator or always?\n\nIt might be easier to move the refactoring to a separate change unless you can easily discriminate them from the other changes.",
+      "range": {
+        "startLine": 10,
+        "startChar": 18,
+        "endLine": 10,
+        "endChar": 38
+      },
+      "revId": "8d5ee72d664998e813f2929e0723cf077aaa9f82",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
