@@ -16,6 +16,40 @@
       "revId": "06c7768cb5c76a9c8b078f9b7315a409320a56c4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d26c224a_c3c596d1",
+        "filename": "src/java/com/android/internal/telephony/PhoneSubInfo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-01-29T18:57:13Z",
+      "side": 1,
+      "message": "remove commented code whole file.",
+      "revId": "06c7768cb5c76a9c8b078f9b7315a409320a56c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "52a672d4_ffe2df81",
+        "filename": "src/java/com/android/internal/telephony/PhoneSubInfoProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-01-29T18:57:13Z",
+      "side": 1,
+      "message": "remove commented code whole file.",
+      "revId": "06c7768cb5c76a9c8b078f9b7315a409320a56c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
