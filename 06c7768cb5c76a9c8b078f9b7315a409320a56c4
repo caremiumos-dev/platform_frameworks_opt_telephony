@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d26c224a_83cb9ee6",
+        "filename": "src/java/com/android/internal/telephony/MSimDefaultPhoneNotifier.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-01-29T18:56:05Z",
+      "side": 1,
+      "message": "This file needs to be revisited.",
+      "revId": "06c7768cb5c76a9c8b078f9b7315a409320a56c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
