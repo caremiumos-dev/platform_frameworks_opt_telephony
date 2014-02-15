@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f02758d_46e91290",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1004552
+      },
+      "writtenOn": "2014-02-15T18:39:24Z",
+      "side": 1,
+      "message": "check why all these are protected?",
+      "revId": "b0583dbeeb6dceecd4b4ac7b7ba5e5afd70af272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "effbfdcb_c4885e0f",
+        "filename": "src/java/com/android/internal/telephony/PhoneProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1004552
+      },
+      "writtenOn": "2014-02-15T18:39:24Z",
+      "side": 1,
+      "message": "why init is required separately now? this was introduced extends PhoneProxy and create MSimPhoneProxy.",
+      "revId": "b0583dbeeb6dceecd4b4ac7b7ba5e5afd70af272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cff8f9d4_03978eeb",
+        "filename": "src/java/com/android/internal/telephony/PhoneProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1004552
+      },
+      "writtenOn": "2014-02-15T18:39:24Z",
+      "side": 1,
+      "message": "check this why it is written as separate function,\nnow nothing should be there in derived class.",
+      "revId": "b0583dbeeb6dceecd4b4ac7b7ba5e5afd70af272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
