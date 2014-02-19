@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f8b8d70_9ae96a93",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T02:14:56Z",
+      "side": 1,
+      "message": "this can be removed.",
+      "revId": "c97258f1c3a6288a7f24094f3ace77a3acb47afc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef293d20_f120df2c",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T02:14:56Z",
+      "side": 1,
+      "message": "u can remove this code.",
+      "revId": "c97258f1c3a6288a7f24094f3ace77a3acb47afc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f8b8d70_ba01ce9a",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T02:14:56Z",
+      "side": 1,
+      "message": "you can remove this code.",
+      "revId": "c97258f1c3a6288a7f24094f3ace77a3acb47afc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f8b8d70_3af63e74",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T02:14:56Z",
+      "side": 1,
+      "message": "no need of changes here.",
+      "revId": "c97258f1c3a6288a7f24094f3ace77a3acb47afc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef293d20_7115afcb",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T02:14:56Z",
+      "side": 1,
+      "message": "no need of separate function.",
+      "revId": "c97258f1c3a6288a7f24094f3ace77a3acb47afc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf26394f_5f4f5ea7",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T02:14:56Z",
+      "side": 1,
+      "message": "this api can be removed for now.",
+      "revId": "c97258f1c3a6288a7f24094f3ace77a3acb47afc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf26394f_7f31fa1b",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T02:14:56Z",
+      "side": 1,
+      "message": "subscriptionManager missing?",
+      "revId": "c97258f1c3a6288a7f24094f3ace77a3acb47afc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
