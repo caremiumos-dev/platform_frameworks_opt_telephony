@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf26394f_52f3d582",
+        "filename": "src/java/com/android/internal/telephony/ImsSMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T08:03:01Z",
+      "side": 0,
+      "message": "this may not need to removed pls check.",
+      "revId": "89edee054acf2d7fee73f9c3ba7d5ab75d0b1245",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ff0510e_3d488fa1",
+        "filename": "src/java/com/android/internal/telephony/PhoneProxy.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T08:03:01Z",
+      "side": 0,
+      "message": "restore comments.",
+      "revId": "89edee054acf2d7fee73f9c3ba7d5ab75d0b1245",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
