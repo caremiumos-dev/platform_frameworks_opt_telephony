@@ -461,6 +461,167 @@
     },
     {
       "key": {
+        "uuid": "effcddee_7fadeb7a",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "this method can be removed as its not being used now",
+      "range": {
+        "startLine": 112,
+        "startChar": 61,
+        "endLine": 112,
+        "endChar": 62
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cff9d9ff_be02d525",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "this method can be removed",
+      "range": {
+        "startLine": 145,
+        "startChar": 24,
+        "endLine": 145,
+        "endChar": 26
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ff0510e_20e4e4c0",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "it can be privated method",
+      "range": {
+        "startLine": 438,
+        "startChar": 4,
+        "endLine": 438,
+        "endChar": 13
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ff0510e_e0d15ceb",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "no need for protected",
+      "range": {
+        "startLine": 450,
+        "startChar": 4,
+        "endLine": 450,
+        "endChar": 13
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cff9d9ff_7ef84dee",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "This method is can be deleted as new method of getInstance with slotid is introduced and this old method is no longer used",
+      "range": {
+        "startLine": 629,
+        "startChar": 42,
+        "endLine": 629,
+        "endChar": 43
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "effcddee_1fb027d7",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "It can be modified to just return sInstance for use by Stk app",
+      "range": {
+        "startLine": 682,
+        "startChar": 30,
+        "endLine": 682,
+        "endChar": 31
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cff9d9ff_3e17e566",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "no need for protected",
+      "range": {
+        "startLine": 856,
+        "startChar": 14,
+        "endLine": 856,
+        "endChar": 21
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cff9d9ff_3b625770",
         "filename": "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java",
         "patchSetId": 3
@@ -472,6 +633,52 @@
       "writtenOn": "2014-02-19T08:03:01Z",
       "side": 1,
       "message": "restore base class specifiers.",
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cff9d9ff_be2775ca",
+        "filename": "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "private",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 24
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cff9d9ff_9e2c39ae",
+        "filename": "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "private",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 13
+      },
       "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -512,6 +719,52 @@
     },
     {
       "key": {
+        "uuid": "cff9d9ff_5e0e314c",
+        "filename": "src/java/com/android/internal/telephony/cat/IconLoader.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "private",
+      "range": {
+        "startLine": 41,
+        "startChar": 14,
+        "endLine": 41,
+        "endChar": 28
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "effcddee_3f78834f",
+        "filename": "src/java/com/android/internal/telephony/cat/IconLoader.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "private",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 13
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cff9d9ff_7b6cdf5f",
         "filename": "src/java/com/android/internal/telephony/cat/IconLoader.java",
         "patchSetId": 3
@@ -540,6 +793,52 @@
       "writtenOn": "2014-02-19T08:03:01Z",
       "side": 1,
       "message": "specifiers to be modified.",
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ff0510e_80e178b3",
+        "filename": "src/java/com/android/internal/telephony/cat/RilMessageDecoder.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "no need for protected",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 13
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cff9d9ff_7e116d6e",
+        "filename": "src/java/com/android/internal/telephony/cat/RilMessageDecoder.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:08:47Z",
+      "side": 1,
+      "message": "it can be private",
+      "range": {
+        "startLine": 104,
+        "startChar": 14,
+        "endLine": 104,
+        "endChar": 31
+      },
       "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
