@@ -1038,6 +1038,75 @@
     },
     {
       "key": {
+        "uuid": "0ff0510e_001ba803",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1023675
+      },
+      "writtenOn": "2014-02-19T11:52:15Z",
+      "side": 1,
+      "message": "This should be Private.",
+      "range": {
+        "startLine": 893,
+        "startChar": 4,
+        "endLine": 893,
+        "endChar": 13
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ff0510e_201224e5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1023675
+      },
+      "writtenOn": "2014-02-19T11:52:15Z",
+      "side": 1,
+      "message": "This should be private",
+      "range": {
+        "startLine": 2426,
+        "startChar": 4,
+        "endLine": 2426,
+        "endChar": 13
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cff9d9ff_1e42e95a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2587,
+      "author": {
+        "id": 1023675
+      },
+      "writtenOn": "2014-02-19T11:52:15Z",
+      "side": 1,
+      "message": "Can this be made Private?",
+      "range": {
+        "startLine": 2587,
+        "startChar": 4,
+        "endLine": 2587,
+        "endChar": 13
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ff0510e_20eb441b",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTrackerBase.java",
         "patchSetId": 3
