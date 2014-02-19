@@ -240,6 +240,29 @@
     },
     {
       "key": {
+        "uuid": "0ff0510e_600c2cc3",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:27:25Z",
+      "side": 1,
+      "message": "make all private",
+      "range": {
+        "startLine": 65,
+        "startChar": 14,
+        "endLine": 65,
+        "endChar": 20
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf26394f_a8667fab",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 3
@@ -1060,6 +1083,52 @@
       "writtenOn": "2014-02-19T08:03:01Z",
       "side": 1,
       "message": "check all the specifiers.",
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ff0510e_a025943b",
+        "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:27:25Z",
+      "side": 1,
+      "message": "legacy constructors without subscription parameter can be deleted",
+      "range": {
+        "startLine": 183,
+        "startChar": 55,
+        "endLine": 183,
+        "endChar": 57
+      },
+      "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ff0510e_e01f9ceb",
+        "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-19T11:27:25Z",
+      "side": 1,
+      "message": "private",
+      "range": {
+        "startLine": 1468,
+        "startChar": 14,
+        "endLine": 1468,
+        "endChar": 33
+      },
       "revId": "1b42935ebf3bc283e67a283b17bdd0b699deef2e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
