@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ff0510e_00cd684b",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T10:46:22Z",
+      "side": 1,
+      "message": "Marks some todos for these.",
+      "revId": "214de2268a3bfbf1c2d78bab03d078c0b95c81c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cff9d9ff_9e071936",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-02-19T10:46:22Z",
+      "side": 1,
+      "message": "mark todo",
+      "revId": "214de2268a3bfbf1c2d78bab03d078c0b95c81c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
