@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f193130_44a49832",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-20T16:04:23Z",
+      "side": 1,
+      "message": "above two shouldn\u0027t be static, remove these variables altogether if not used",
+      "range": {
+        "startLine": 70,
+        "startChar": 19,
+        "endLine": 70,
+        "endChar": 38
+      },
+      "revId": "e058eec4970be1e0aaa111a5b474461b5a1ecb5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef15bdf4_83f6a871",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-20T16:04:23Z",
+      "side": 1,
+      "message": "shouldn\u0027t be static, as it shouldn\u0027t be shared among objects",
+      "range": {
+        "startLine": 75,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 11
+      },
+      "revId": "e058eec4970be1e0aaa111a5b474461b5a1ecb5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef15bdf4_23e4f4c0",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-20T16:04:23Z",
+      "side": 1,
+      "message": "remove protected, check for all in this file",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 13
+      },
+      "revId": "e058eec4970be1e0aaa111a5b474461b5a1ecb5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef15bdf4_a352c4a6",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1021718
+      },
+      "writtenOn": "2014-02-20T16:04:23Z",
+      "side": 1,
+      "message": "can the constructors \u0026 getInstance methods be retained in the same form?",
+      "range": {
+        "startLine": 178,
+        "startChar": 8,
+        "endLine": 178,
+        "endChar": 9
+      },
+      "revId": "e058eec4970be1e0aaa111a5b474461b5a1ecb5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
