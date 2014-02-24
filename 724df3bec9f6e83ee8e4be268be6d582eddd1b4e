@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "2f78b56e_8d5ee7d5",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-02-24T07:40:46Z",
+      "side": 1,
+      "message": "It should not be modified from \"private\" to \"protected\"",
+      "range": {
+        "startLine": 66,
+        "startChar": 12,
+        "endLine": 66,
+        "endChar": 13
+      },
+      "revId": "724df3bec9f6e83ee8e4be268be6d582eddd1b4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef469d41_a1856488",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-02-24T07:40:46Z",
+      "side": 1,
+      "message": "mActiveSub seems not have real usage in this file\nCould you help introduce its usage",
+      "range": {
+        "startLine": 110,
+        "startChar": 23,
+        "endLine": 110,
+        "endChar": 33
+      },
+      "revId": "724df3bec9f6e83ee8e4be268be6d582eddd1b4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef469d41_61a45c21",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-02-24T07:40:46Z",
+      "side": 1,
+      "message": "For Different Phones, CallManager should known which phone the event come from. current design will lost the flexibility because CallManager use the same event for registry. \nApp need to knonw this for some event.\nYou can check MTK\u0027s modification for this part.",
+      "range": {
+        "startLine": 112,
+        "startChar": 13,
+        "endLine": 112,
+        "endChar": 24
+      },
+      "revId": "724df3bec9f6e83ee8e4be268be6d582eddd1b4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0f3a11a9_2cb326e7",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-02-24T07:40:46Z",
+      "side": 1,
+      "message": "Because others case RINGING/IDLE also need current mode,\nsuggest to move this out off switch statement",
+      "range": {
+        "startLine": 553,
+        "startChar": 20,
+        "endLine": 553,
+        "endChar": 28
+      },
+      "revId": "724df3bec9f6e83ee8e4be268be6d582eddd1b4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f3a11a9_0cb4aafc",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
         "patchSetId": 10
