@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f3a11a9_0cb4aafc",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-02-24T06:07:29Z",
+      "side": 1,
+      "message": "The key of subscription should not be put in MSimConstants. It should be PhoneConstants.SUBSCRIPTION_KEY instead of MSimConstants.SUBSCRIPTION_KEY",
+      "range": {
+        "startLine": 482,
+        "startChar": 28,
+        "endLine": 482,
+        "endChar": 41
+      },
+      "revId": "724df3bec9f6e83ee8e4be268be6d582eddd1b4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
