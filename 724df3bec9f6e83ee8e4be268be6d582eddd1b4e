@@ -94,6 +94,29 @@
     },
     {
       "key": {
+        "uuid": "ef1f7d43_e4b3fa14",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-02-24T11:11:03Z",
+      "side": 1,
+      "message": "The logic \n        for (Phone phone : mPhones) {\n            if (phone.getSubscription() \u003d\u003d subscription) {\nshould be replaced by\n        getPhone(subscription) \nto prevent duplicated code segment\nand interfaces between without subscription and with subscription should have reuse or abstraction for common part,\nnot just duplicate a copy.\n\nP.S. not just for this function only, slimier issues happen on most new interface of this class",
+      "range": {
+        "startLine": 286,
+        "startChar": 8,
+        "endLine": 287,
+        "endChar": 58
+      },
+      "revId": "724df3bec9f6e83ee8e4be268be6d582eddd1b4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f3a11a9_2cb326e7",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 10
