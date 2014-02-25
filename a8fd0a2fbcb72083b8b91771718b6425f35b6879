@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c3ac1c3_cb734927",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2014-02-25T23:25:52Z",
+      "side": 1,
+      "message": "I am a bit unclear on the purpose of this state. When is a modem considered disabled? Do we need to indicate the presence of a disabled modem?",
+      "range": {
+        "startLine": 47,
+        "startChar": 20,
+        "endLine": 47,
+        "endChar": 44
+      },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c3ac1c3_6bb8dd59",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2014-02-25T23:25:52Z",
+      "side": 1,
+      "message": "Should we include the RATs from RIL_RadioTechnology in ril.h?",
+      "range": {
+        "startLine": 63,
+        "startChar": 20,
+        "endLine": 63,
+        "endChar": 36
+      },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
