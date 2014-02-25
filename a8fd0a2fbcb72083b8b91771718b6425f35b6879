@@ -2,6 +2,63 @@
   "comments": [
     {
       "key": {
+        "uuid": "3c2475a3_9f6ebfd1",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-25T23:36:25Z",
+      "side": 1,
+      "message": "Make java doc:\n\n  /**",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 2
+      },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c0f6924_e08d186d",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-25T23:36:25Z",
+      "side": 1,
+      "message": "What\u0027s your thinking about how this get updated as sims/modems come and go?\n\nHow about a first pass at modifying PhoneFactory to use this? I\u0027m real curious how we\u0027re going to map this info to what \"phone\u0027s\" to create.",
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c2475a3_7fb64308",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-25T23:36:25Z",
+      "side": 1,
+      "message": "Should all of these constants be public, they would need to be if used in other packages?",
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c3ac1c3_cb734927",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 1
@@ -42,6 +99,103 @@
         "endLine": 63,
         "endChar": 36
       },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c217195_db1b2b85",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-25T23:36:25Z",
+      "side": 1,
+      "message": "sp: standby",
+      "range": {
+        "startLine": 70,
+        "startChar": 17,
+        "endLine": 70,
+        "endChar": 25
+      },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c0f6924_405e042b",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-25T23:36:25Z",
+      "side": 1,
+      "message": "java doc /**",
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c0f6924_6057c81e",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-25T23:36:25Z",
+      "side": 1,
+      "message": "Add some doc for each of these.",
+      "range": {
+        "startLine": 104,
+        "startChar": 17,
+        "endLine": 104,
+        "endChar": 35
+      },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c0f6924_a06e00d1",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-25T23:36:25Z",
+      "side": 1,
+      "message": "For now accessors is fine, but if we need to expose this across process boundaries we\u0027ll probably want \"getAllXxx\" which would return a \"read-only\" collection.",
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c217195_5b571b1e",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-25T23:36:25Z",
+      "side": 1,
+      "message": "Maybe rename to getModemForSim?\n\nDo we need a getAllSimsForModem?",
       "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
