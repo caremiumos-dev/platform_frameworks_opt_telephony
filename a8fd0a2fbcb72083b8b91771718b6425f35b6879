@@ -82,6 +82,30 @@
     },
     {
       "key": {
+        "uuid": "7cf18d4f_c9736927",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-25T23:40:45Z",
+      "side": 1,
+      "message": "the scenario i could think about would be if you have several modems and you choose to enable/disable some at times for power use cases - you would not want to constantly update the database/cache, knowing you would re-enable disabled modem shortly after.... or such.  but if that is a crazy idea and we do not need it, it can be removed.",
+      "parentUuid": "9c3ac1c3_cb734927",
+      "range": {
+        "startLine": 47,
+        "startChar": 20,
+        "endLine": 47,
+        "endChar": 44
+      },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c3ac1c3_6bb8dd59",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 1
@@ -93,6 +117,30 @@
       "writtenOn": "2014-02-25T23:25:52Z",
       "side": 1,
       "message": "Should we include the RATs from RIL_RadioTechnology in ril.h?",
+      "range": {
+        "startLine": 63,
+        "startChar": 20,
+        "endLine": 63,
+        "endChar": 36
+      },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bce78593_8bcf95a1",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-25T23:40:45Z",
+      "side": 1,
+      "message": "agreed.  i could not find those exposed on java side though, so sort of \u0027made those up\u0027 for the sake of putting something.",
+      "parentUuid": "9c3ac1c3_6bb8dd59",
       "range": {
         "startLine": 63,
         "startChar": 20,
