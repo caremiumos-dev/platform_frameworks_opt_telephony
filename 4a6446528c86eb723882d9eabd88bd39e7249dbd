@@ -22,6 +22,24 @@
       "revId": "4a6446528c86eb723882d9eabd88bd39e7249dbd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5cf6894a_c8991e1d",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-02-26T16:19:45Z",
+      "side": 0,
+      "message": "Will revert it.",
+      "parentUuid": "ef469d41_81c4e8d4",
+      "revId": "4a6446528c86eb723882d9eabd88bd39e7249dbd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
