@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1cf89137_514c9660",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-26T16:30:42Z",
+      "side": 1,
+      "message": "lets move this test inside the test above, something like:\n\n   if ((dialString.length() \u003e\u003d 1) \u0026\u0026 (dialString.length() \u003c\u003d MAX_LENGTH_SHORT_CODE)) {\n       if ((dialString.charAt(0) !\u003d \u00271\u0027) || (dialString.charAt(dialString.length() - 1) \u003d\u003d END_OF_USSD_COMMAND) {\n                    return true;\n       }\n   }\n\nNot sure the test for \u003e\u003d 1 is absolutely necessary, but it logically possible that the dialString could be 0 length, so I added it to the exception case. But maybe we should test for it at the beginning of the method:\n\n   if ((dialString !\u003d null) \u0026\u0026 (dialString.length() \u003e\u003d 1)) {\n     ...\n   }",
+      "range": {
+        "startLine": 553,
+        "startChar": 20,
+        "endLine": 553,
+        "endChar": 49
+      },
+      "revId": "f5d7c7f1b80804f1f41ae0d7c0bba0fbaecb4aff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
