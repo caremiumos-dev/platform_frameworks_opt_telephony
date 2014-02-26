@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3c2475a3_ffd6d315",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-26T00:18:13Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "3c2475a3_9f6ebfd1",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 2
+      },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c0f6924_e08d186d",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "5c0f6924_8011bc3b",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-26T00:18:13Z",
+      "side": 1,
+      "message": "i was going to hook something up from a RIL UNSOL since the raw data should really come from the closest to the HW.  but feel free to suggest something else?\n\nyes - other thing was to figure out where to hook this up to be created initially.  PhoneFactory seems natural.",
+      "parentUuid": "5c0f6924_e08d186d",
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c2475a3_7fb64308",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 1
@@ -53,6 +95,24 @@
       "writtenOn": "2014-02-25T23:36:25Z",
       "side": 1,
       "message": "Should all of these constants be public, they would need to be if used in other packages?",
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c0f6924_6016a833",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-26T00:18:13Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "3c2475a3_7fb64308",
       "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -176,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "3c2475a3_dfd31724",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-26T00:18:13Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "1c217195_db1b2b85",
+      "range": {
+        "startLine": 70,
+        "startChar": 17,
+        "endLine": 70,
+        "endChar": 25
+      },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c0f6924_405e042b",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 1
@@ -187,6 +271,24 @@
       "writtenOn": "2014-02-25T23:36:25Z",
       "side": 1,
       "message": "java doc /**",
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c2475a3_bfe05be6",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-26T00:18:13Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "5c0f6924_405e042b",
       "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -216,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "3c2475a3_9fdd9f32",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-26T00:18:13Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "5c0f6924_6057c81e",
+      "range": {
+        "startLine": 104,
+        "startChar": 17,
+        "endLine": 104,
+        "endChar": 35
+      },
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c0f6924_a06e00d1",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 1
@@ -233,6 +359,24 @@
     },
     {
       "key": {
+        "uuid": "5c0f6924_401ba459",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-26T00:18:13Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "5c0f6924_a06e00d1",
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c217195_5b571b1e",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 1
@@ -244,6 +388,24 @@
       "writtenOn": "2014-02-25T23:36:25Z",
       "side": 1,
       "message": "Maybe rename to getModemForSim?\n\nDo we need a getAllSimsForModem?",
+      "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c2475a3_3f044be1",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-26T00:18:13Z",
+      "side": 1,
+      "message": "ok\n\nsure - can add the getAllSimsForModem\n\n\nat this point, i would expect the subscription controller (which i think may be the main user of this?) to tell me what is needed and this API will update to provide that.",
+      "parentUuid": "1c217195_5b571b1e",
       "revId": "a8fd0a2fbcb72083b8b91771718b6425f35b6879",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
