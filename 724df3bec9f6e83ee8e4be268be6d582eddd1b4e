@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "1cf89137_14d03705",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-02-27T00:41:44Z",
+      "side": 1,
+      "message": "For the case EVENT_MMI_COMPLETE,\nthe result is MMICode object and cannot get subId infomation.\nIn your solution, every object need to add interface to get subId information. Is it right?",
+      "parentUuid": "1cf89137_8e38b901",
+      "revId": "724df3bec9f6e83ee8e4be268be6d582eddd1b4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef1f7d43_8466c6fd",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 10
