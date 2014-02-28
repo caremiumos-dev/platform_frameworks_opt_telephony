@@ -130,6 +130,24 @@
     },
     {
       "key": {
+        "uuid": "3c52b523_ef4731db",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-28T20:12:24Z",
+      "side": 1,
+      "message": "As a \"RIL\" connnections are created tdc.addRil(cmdsIf) would be called and addRil would then call cmdsIf.registerForHardwareConfigChanged to get notified of changes instead of it being called in the constructor as you have it now.",
+      "parentUuid": "bce78593_69bfb6b2",
+      "revId": "b49706a7bb2e098866c11816ddabc8fdc9882050",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c5da930_d6108a6a",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 4
