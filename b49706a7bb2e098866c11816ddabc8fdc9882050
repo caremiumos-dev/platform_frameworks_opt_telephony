@@ -76,6 +76,24 @@
     },
     {
       "key": {
+        "uuid": "bc5ea529_cd959db2",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-28T18:45:36Z",
+      "side": 1,
+      "message": "okay ... yes, should be a singleton.  how would you suggest we go about that then?  we do need to get the data from the RILd itself since that is where the HW real time information will be coming from...",
+      "parentUuid": "3c52b523_e9a971a5",
+      "revId": "b49706a7bb2e098866c11816ddabc8fdc9882050",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c5da930_d6108a6a",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 4
