@@ -22,6 +22,30 @@
       "revId": "fc295cfca28c375d0d20cb2e7a0842c256b0a74e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bce78593_e9fe2619",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-28T21:59:45Z",
+      "side": 1,
+      "message": "yes - sorry i am too lazy to include \u0027import\u0027...  will do",
+      "parentUuid": "9c8801e4_c1c32224",
+      "range": {
+        "startLine": 176,
+        "startChar": 14,
+        "endLine": 176,
+        "endChar": 70
+      },
+      "revId": "fc295cfca28c375d0d20cb2e7a0842c256b0a74e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
