@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c58ad41_17ff3ed2",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-28T16:58:49Z",
+      "side": 1,
+      "message": "nit, usually javadoc comments are on there own line see: http://www.oracle.com/technetwork/java/javase/documentation/index-137868.html\n\n\n  /**\n    * ril ...\n    *",
+      "range": {
+        "startLine": 58,
+        "startChar": 3,
+        "endLine": 58,
+        "endChar": 6
+      },
+      "revId": "b49706a7bb2e098866c11816ddabc8fdc9882050",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c58ad41_9c28f5ae",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-28T16:58:49Z",
+      "side": 1,
+      "message": "These are defined in ServiceState.java:\n\n  https://android.googlesource.com/platform/frameworks/base/+/master/telephony/java/android/telephony/ServiceState.java",
+      "revId": "b49706a7bb2e098866c11816ddabc8fdc9882050",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c58ad41_f7ecaa36",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-28T16:58:49Z",
+      "side": 1,
+      "message": "A dumb question, but I would have expected that maxStandby would have some well know mathematical relationship between maxActiveVoiceCall and maxActiveDataCall? Can you point me to a \"doc\" that explains standby?",
+      "revId": "b49706a7bb2e098866c11816ddabc8fdc9882050",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c52b523_e9a971a5",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-28T16:58:49Z",
+      "side": 1,
+      "message": "Hmmm, a cmdsIf is associated with a \"modem\" connection and there will be  multiple connections which implies multiple TelephonyDevController\u0027s. Where as I thought this would be a \"singleton\" or I\u0027m missing something?",
+      "revId": "b49706a7bb2e098866c11816ddabc8fdc9882050",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c5da930_d6108a6a",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-02-28T16:58:49Z",
+      "side": 1,
+      "message": "Lets not return null, lets always return a list that can be empty. Also, we may want to return a \"copy\" so callers can\u0027t modify the data. Ditto below. Again, it may turn out not to be necessary so if its unused we can remove it or make it just package level if thats the only visibility needed.",
+      "revId": "b49706a7bb2e098866c11816ddabc8fdc9882050",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
