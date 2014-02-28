@@ -148,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "bc35c5d3_61aec06a",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-28T20:18:41Z",
+      "side": 1,
+      "message": "ok i see, i think i understand...  each RILd \u0027registers\u0027 itself to TDC...  i guess that is what i really meant to do originally!",
+      "parentUuid": "3c52b523_ef4731db",
+      "revId": "b49706a7bb2e098866c11816ddabc8fdc9882050",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c5da930_d6108a6a",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 4
