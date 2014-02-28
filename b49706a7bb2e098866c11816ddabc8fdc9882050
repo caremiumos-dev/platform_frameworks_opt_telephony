@@ -112,6 +112,24 @@
     },
     {
       "key": {
+        "uuid": "bce78593_69bfb6b2",
+        "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1025044
+      },
+      "writtenOn": "2014-02-28T20:02:35Z",
+      "side": 1,
+      "message": "yes, so the telephony-dev-controller is already a singleton in this scope...  maybe i should have said.\n\ni do not follow the comment on \u0027addRill(CommandsInterface cmdsIf)\u0027 ...  can you be more specific?",
+      "parentUuid": "7c58ad41_9d6eafd1",
+      "revId": "b49706a7bb2e098866c11816ddabc8fdc9882050",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c5da930_d6108a6a",
         "filename": "src/java/com/android/internal/telephony/TelephonyDevController.java",
         "patchSetId": 4
