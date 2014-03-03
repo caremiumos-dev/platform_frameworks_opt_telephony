@@ -39,6 +39,24 @@
       "revId": "9c44ac8e97182c073abdcdf571b4c1d0e85dc244",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c52b523_4185f1ab",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-03T16:56:44Z",
+      "side": 1,
+      "message": "In case of mulit sim/single sim the slotId to be obtained from SubscriptionManager, at this point SubscriptionManager is not yet enabled for single sim, that resulted in check over here.\n\nAgree this needs to be optimized.",
+      "parentUuid": "3c52b523_064caf5f",
+      "revId": "9c44ac8e97182c073abdcdf571b4c1d0e85dc244",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
