@@ -2,6 +2,328 @@
   "comments": [
     {
       "key": {
+        "uuid": "7c58ad41_208e7069",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "Suggest to define on PhoneConstants.java and consistent with other definitions.",
+      "range": {
+        "startLine": 1038,
+        "startChar": 47,
+        "endLine": 1038,
+        "endChar": 77
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c52b523_97cfaba1",
+        "filename": "src/java/com/android/internal/telephony/CardSubscriptionManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "What\u0027s the different with Subscription Manager? Is it the \"Subscription controller\"?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 915,
+        "endChar": 1
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c920913_736468f8",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "It should be private instead of protected.",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 13
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c920913_335ee02a",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "It should be defined on PhoneConstants.java",
+      "range": {
+        "startLine": 91,
+        "startChar": 24,
+        "endLine": 91,
+        "endChar": 54
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c920913_f3c2b873",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "Phone depends on SIM slot. But this part needs to discuss in one-roof.",
+      "range": {
+        "startLine": 92,
+        "startChar": 16,
+        "endLine": 92,
+        "endChar": 38
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c920913_b3a3d0c1",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "It should define on PhoneConstants.java",
+      "range": {
+        "startLine": 711,
+        "startChar": 24,
+        "endLine": 711,
+        "endChar": 54
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c58ad41_6020e880",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "Phone depeeds on the SIM slot. It could not get the subscription here.",
+      "range": {
+        "startLine": 712,
+        "startChar": 16,
+        "endLine": 712,
+        "endChar": 38
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c920913_f31e3877",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "does it \"Build time decision\" to make a default behavior on original SDK interface? (SmsManager.java)",
+      "range": {
+        "startLine": 396,
+        "startChar": 4,
+        "endLine": 412,
+        "endChar": 5
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c52b523_9738cbb3",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "Get via SIM slot making sense due to subscription will be changed while inserting a new SIM card.",
+      "range": {
+        "startLine": 73,
+        "startChar": 46,
+        "endLine": 73,
+        "endChar": 85
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c920913_930fac00",
+        "filename": "src/java/com/android/internal/telephony/WapPushOverSms.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "It should define on PhoneConstants.java",
+      "range": {
+        "startLine": 204,
+        "startChar": 36,
+        "endLine": 204,
+        "endChar": 66
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c58ad41_80ed1ce5",
+        "filename": "src/java/com/android/internal/telephony/WapPushOverSms.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "Phone depends on the SIM slot.",
+      "range": {
+        "startLine": 205,
+        "startChar": 28,
+        "endLine": 205,
+        "endChar": 64
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c920913_f3c87866",
+        "filename": "src/java/com/android/internal/telephony/WapPushOverSms.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "Same as Line 205",
+      "range": {
+        "startLine": 246,
+        "startChar": 56,
+        "endLine": 246,
+        "endChar": 92
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c920913_d3f454a1",
+        "filename": "src/java/com/android/internal/telephony/WapPushOverSms.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "It\u0027s better to define on PhoneConstants.java",
+      "range": {
+        "startLine": 246,
+        "startChar": 24,
+        "endLine": 246,
+        "endChar": 54
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c58ad41_8004fce2",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "Why it needs to be public?",
+      "range": {
+        "startLine": 1037,
+        "startChar": 4,
+        "endLine": 1037,
+        "endChar": 10
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c920913_c5dd6e31",
         "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
         "patchSetId": 12
@@ -13,6 +335,52 @@
       "writtenOn": "2014-03-03T17:05:40Z",
       "side": 1,
       "message": "Lots of duplicated code, but I assume we\u0027ll soon get rid of the  \"single sim\" mode and all constructors will have subscription, and the old constructors will be removed, correct?",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c52b523_17fe1b84",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmCellBroadcastHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "Dispatch the intent already handled by CellBroadcasthandler. This part does not need to override it.",
+      "range": {
+        "startLine": 249,
+        "startChar": 0,
+        "endLine": 275,
+        "endChar": 5
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c920913_13787c4c",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-03T19:35:11Z",
+      "side": 1,
+      "message": "Why it needs to get the UiccCardApplication from SubscriptionManager? Each instance of SmsDispatcher belongs to each Phone instance.",
+      "range": {
+        "startLine": 269,
+        "startChar": 8,
+        "endLine": 281,
+        "endChar": 20
+      },
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
