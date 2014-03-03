@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c920913_c5dd6e31",
+        "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-03-03T17:05:40Z",
+      "side": 1,
+      "message": "Lots of duplicated code, but I assume we\u0027ll soon get rid of the  \"single sim\" mode and all constructors will have subscription, and the old constructors will be removed, correct?",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
