@@ -66,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "7c66ed13_4c3dffee",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-04T15:34:14Z",
+      "side": 1,
+      "message": "This is specifically  added for DSDA target.\n\nmActiveSub holds the subscription id of a call which is currently on foreground(visible to user) and in conversation. \n\nFor now its not required will remove it.",
+      "parentUuid": "7c66ed13_5e3845b2",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c66ed13_9e457d34",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 12
@@ -112,6 +130,24 @@
     },
     {
       "key": {
+        "uuid": "1c7df19f_499bb160",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-04T15:34:14Z",
+      "side": 1,
+      "message": "Yes, In this case the subscription means the SimId(i.e logical phone id).",
+      "parentUuid": "7c66ed13_dec8d566",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc76f9c4_39c48750",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 12
@@ -129,6 +165,24 @@
         "endLine": 376,
         "endChar": 31
       },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_a9e045e6",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-04T15:34:14Z",
+      "side": 1,
+      "message": "Its mistakenly uploaded here, Its not required. Will remove it.",
+      "parentUuid": "dc76f9c4_39c48750",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -158,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "7c66ed13_0c2f07ba",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-04T15:34:14Z",
+      "side": 1,
+      "message": "This is not required, will remove it.",
+      "parentUuid": "dc76f9c4_d9c8f366",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c66ed13_5e228535",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 12
@@ -181,6 +253,24 @@
     },
     {
       "key": {
+        "uuid": "1c7df19f_690a2df3",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-04T15:34:14Z",
+      "side": 1,
+      "message": "Agreed. Will make the required changes.",
+      "parentUuid": "7c66ed13_5e228535",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c7df19f_3807a577",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 12
@@ -198,6 +288,24 @@
         "endLine": 850,
         "endChar": 32
       },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c66ed13_87de9081",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-04T15:34:14Z",
+      "side": 1,
+      "message": "This is overloaded method is same as above base method.  Since base method does not has any check for activePhone and HeldPhone, i feel its not required to add here as well.\n\nAlso, I see the caller(from PhoneUtils.java) who is calling canConference() is already checking for activeFgCall, activeBgCall and if both active calls exists then only request comes here, so i dont see the possibility of active phone and held phone becoming null.",
+      "parentUuid": "1c7df19f_3807a577",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -250,6 +358,24 @@
     },
     {
       "key": {
+        "uuid": "7c66ed13_8730d001",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-04T15:34:14Z",
+      "side": 1,
+      "message": "As per my understanding  canDial() its required at both places.\n\n1. CallManager.canDial() takes care of call states across all phones(Ex: if SIP phone has a ringing call dial() would not allowed on GSMPhone).\n\n2. Phone.canDail() takes care of call state(Ex: mPendingMO should be null to dial a new call) of its own phone.",
+      "parentUuid": "dc76f9c4_b9c97797",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c7df19f_58e1417e",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 12
@@ -273,6 +399,24 @@
     },
     {
       "key": {
+        "uuid": "7c66ed13_67001c20",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-04T15:34:14Z",
+      "side": 1,
+      "message": "I did not get it clearly,  this code belongs to dial() method the mentioned usecase does not belong here. Could you please clarify more on this.",
+      "parentUuid": "1c7df19f_58e1417e",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c7df19f_7bde7784",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 12
@@ -290,6 +434,24 @@
         "endLine": 991,
         "endChar": 36
       },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc76f9c4_e7150acb",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-04T15:34:14Z",
+      "side": 1,
+      "message": "In some cases there is a possibility of two phones having same subscription id, in such cases its required to traverse through all phones.\n\nExample is: We cannot assign separate subscription id for SIPPhone,  so SIPPhone will hold the subscription id of any available CS Phone(either subscription id_1  OR subscription id_2) Phone.",
+      "parentUuid": "1c7df19f_7bde7784",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
