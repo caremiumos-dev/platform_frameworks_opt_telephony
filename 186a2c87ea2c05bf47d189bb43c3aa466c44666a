@@ -22,6 +22,24 @@
       "revId": "186a2c87ea2c05bf47d189bb43c3aa466c44666a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c66ed13_a7d2b40e",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T16:48:20Z",
+      "side": 1,
+      "message": "Like MTK uses SIM concept across classes, subscription is used across all classes in QC solution.\n\nIt\u0027s a logical subscription that was thought earlier not actual card subscription.\n\nFrom yesterday\u0027s one-roof discussion it should be marked as Logical Phone id I believe.",
+      "parentUuid": "dc76f9c4_67b57ad1",
+      "revId": "186a2c87ea2c05bf47d189bb43c3aa466c44666a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
