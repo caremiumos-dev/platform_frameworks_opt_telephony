@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "dc76f9c4_16663a3f",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "We would modify this.",
+      "parentUuid": "7c58ad41_208e7069",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c52b523_97cfaba1",
         "filename": "src/java/com/android/internal/telephony/CardSubscriptionManager.java",
         "patchSetId": 12
@@ -71,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "dc76f9c4_d64a029d",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "Yes, it needs to be modified.",
+      "parentUuid": "5c920913_736468f8",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c920913_335ee02a",
         "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
         "patchSetId": 12
@@ -94,6 +130,24 @@
     },
     {
       "key": {
+        "uuid": "1c7df19f_980fd9bb",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "5c920913_335ee02a",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c920913_f3c2b873",
         "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
         "patchSetId": 12
@@ -111,6 +165,40 @@
         "endLine": 92,
         "endChar": 38
       },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc76f9c4_d631a21a",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "need to address todo.",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc76f9c4_7643ee83",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "remove protected.",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -163,6 +251,24 @@
     },
     {
       "key": {
+        "uuid": "7c66ed13_fe1b5984",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "If sub is activated, phone is associated with a subscription, it should be able to get, isn\u0027t it?",
+      "parentUuid": "7c58ad41_6020e880",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c920913_f31e3877",
         "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
         "patchSetId": 12
@@ -186,6 +292,24 @@
     },
     {
       "key": {
+        "uuid": "dc76f9c4_f9e92f24",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "Did not get the question here?\n\ngetSMSSubscription/getVoiceSubscription values would be stored in sqllite db, these would be updated as per user preference menu \"Multi SIM Settings\" where user can change between sub1 or sub2.\n\nThe voice/sms preferred values updated at runtime based on user selection.",
+      "parentUuid": "5c920913_f31e3877",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c52b523_9738cbb3",
         "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
         "patchSetId": 12
@@ -203,6 +327,24 @@
         "endLine": 73,
         "endChar": 85
       },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c66ed13_3ee8f120",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "This api is mapped  copyMessageToIcc(sub, ..) at SDK SMSManager level, do you suggest to modify this api to be slot based?",
+      "parentUuid": "3c52b523_9738cbb3",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -249,6 +391,24 @@
         "endLine": 205,
         "endChar": 64
       },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc76f9c4_5900631f",
+        "filename": "src/java/com/android/internal/telephony/WapPushOverSms.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "this code would get hit when sub is activated and phone is tied to a sub. So phone is tied to a sub.\n\nIf we have two subs from same card are activated for dsds, I expect the device to have two phone objects associated to each of the subscription.",
+      "parentUuid": "7c58ad41_80ed1ce5",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -324,6 +484,24 @@
     },
     {
       "key": {
+        "uuid": "dc76f9c4_990d9b55",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "yes need to be modified.",
+      "parentUuid": "7c58ad41_8004fce2",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c920913_c5dd6e31",
         "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
         "patchSetId": 12
@@ -335,6 +513,24 @@
       "writtenOn": "2014-03-03T17:05:40Z",
       "side": 1,
       "message": "Lots of duplicated code, but I assume we\u0027ll soon get rid of the  \"single sim\" mode and all constructors will have subscription, and the old constructors will be removed, correct?",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_3896c530",
+        "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "Yes, this should go off only one constructor should be there with subscription.",
+      "parentUuid": "5c920913_c5dd6e31",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -364,6 +560,24 @@
     },
     {
       "key": {
+        "uuid": "dc76f9c4_36d9f6bf",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmCellBroadcastHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "Agree, looks like this got missed when code is being moved to base files.",
+      "parentUuid": "3c52b523_17fe1b84",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c920913_13787c4c",
         "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
         "patchSetId": 12
@@ -381,6 +595,24 @@
         "endLine": 281,
         "endChar": 20
       },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_f844cdd8",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 1,
+      "message": "when we support concepts one card two subs,  this would require. This class needs to get exact application/sub it is operating.\n\nAt this point SubscriptionManager is not enabled for single SIM that resulted in isMultiSIM check over here.\n\nThat needs to be changed.",
+      "parentUuid": "5c920913_13787c4c",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false

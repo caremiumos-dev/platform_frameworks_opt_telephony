@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "dc76f9c4_368576ad",
+        "filename": "src/java/com/android/internal/telephony/cdma/CDMAPhone.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 0,
+      "message": "It seems accidentally removed. Will keep it back.",
+      "parentUuid": "3c52b523_21f55536",
+      "revId": "4a6446528c86eb723882d9eabd88bd39e7249dbd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c58ad41_dadae3ff",
         "filename": "src/java/com/android/internal/telephony/cdma/CDMAPhone.java",
         "patchSetId": 12
@@ -71,6 +89,24 @@
       "writtenOn": "2014-03-03T17:05:40Z",
       "side": 0,
       "message": "Why remove?",
+      "revId": "4a6446528c86eb723882d9eabd88bd39e7249dbd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c66ed13_9b54af3d",
+        "filename": "src/java/com/android/internal/telephony/cdma/CDMAPhone.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-04T02:14:35Z",
+      "side": 0,
+      "message": "It seems accidentally removed. Will keep it back.",
+      "parentUuid": "7c58ad41_dadae3ff",
       "revId": "4a6446528c86eb723882d9eabd88bd39e7249dbd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
