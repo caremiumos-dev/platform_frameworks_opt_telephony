@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "dc76f9c4_c7da4e00",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-04T15:17:13Z",
+      "side": 1,
+      "message": "Yes, in above case we need to add subId in MMICode object.\n\nAlong with the above event we also need modifications for few more events to pass the subId information.\n\nOne more Example is mCallWaitingRegistrants, it sends CdmaCallWaitingNotification object to Apps. \nThe Apps to know on which SIM this event received, we have to pass SubId in CdmaCallWaitingNotification  object.\n\nWill make the required changes for all required events.",
+      "parentUuid": "1cf89137_14d03705",
+      "revId": "724df3bec9f6e83ee8e4be268be6d582eddd1b4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef1f7d43_8466c6fd",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 10
