@@ -43,6 +43,167 @@
     },
     {
       "key": {
+        "uuid": "7c66ed13_5e3845b2",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T02:28:55Z",
+      "side": 1,
+      "message": "The variables is no use in this class\nPlease introduce this",
+      "range": {
+        "startLine": 109,
+        "startChar": 23,
+        "endLine": 109,
+        "endChar": 33
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c66ed13_9e457d34",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T02:28:55Z",
+      "side": 1,
+      "message": "Please introduce how to know which sim the event comes from.\nApp need to know that",
+      "range": {
+        "startLine": 170,
+        "startChar": 10,
+        "endLine": 170,
+        "endChar": 24
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c66ed13_dec8d566",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T02:28:55Z",
+      "side": 1,
+      "message": "We consider the arg of subscription should be subid. However, the subscription argument in interface look pretty much like SimId. Could you help to confirm this.",
+      "range": {
+        "startLine": 246,
+        "startChar": 31,
+        "endLine": 246,
+        "endChar": 43
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_3807a577",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T02:28:55Z",
+      "side": 1,
+      "message": "We suggest add \"heldPhone !\u003d null \u0026\u0026 activePhone !\u003d null\" check in canConference() method.",
+      "range": {
+        "startLine": 850,
+        "startChar": 19,
+        "endLine": 850,
+        "endChar": 32
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc76f9c4_99711bb2",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T02:28:55Z",
+      "side": 1,
+      "message": "for switchHoldingAndActive / acceptCall method, it may cause fail when do the first operation switchHoldingAndActive for one Phone. It will be get worst for multi-Sim case, so we suggest to divide into two step and do the second operation only when the first one is done.",
+      "range": {
+        "startLine": 909,
+        "startChar": 22,
+        "endLine": 909,
+        "endChar": 26
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc76f9c4_b9c97797",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T02:28:55Z",
+      "side": 1,
+      "message": "Because dial() in Phone will do the same check for this If need to do here, we should remove the same code in Phone. Or we can view it dialable in canDial() check and do it in Phone. there should not be the same operation in CallManager and Phone.",
+      "range": {
+        "startLine": 909,
+        "startChar": 4,
+        "endLine": 909,
+        "endChar": 10
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_58e1417e",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T02:28:55Z",
+      "side": 1,
+      "message": "For the case when 1A1H and accept new ringing call, use getActiveFgCall().hangup(); will resume bgcall after hangup operation. we give a new method hangupActiveCall() to fix that issue, Please also think about this for your new modification.",
+      "range": {
+        "startLine": 945,
+        "startChar": 20,
+        "endLine": 945,
+        "endChar": 56
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c52b523_97cfaba1",
         "filename": "src/java/com/android/internal/telephony/CardSubscriptionManager.java",
         "patchSetId": 12
