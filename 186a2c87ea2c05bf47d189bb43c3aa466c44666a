@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc76f9c4_67b57ad1",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T11:51:36Z",
+      "side": 1,
+      "message": "Creating Phone by variable \"i\" which should be subscription id, but why value of \"i\" is 0~numPhones? It seems it is not a real subscription concept.",
+      "range": {
+        "startLine": 163,
+        "startChar": 71,
+        "endLine": 163,
+        "endChar": 72
+      },
+      "revId": "186a2c87ea2c05bf47d189bb43c3aa466c44666a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
