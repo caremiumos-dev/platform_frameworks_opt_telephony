@@ -522,6 +522,24 @@
     },
     {
       "key": {
+        "uuid": "7c66ed13_6157ac47",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T06:20:58Z",
+      "side": 1,
+      "message": "Based on the conclusion today, # of phone \u003d MAX(MAX of standby, MAX of SIM slots). Phone could not get any subscription here.",
+      "parentUuid": "7c66ed13_fe1b5984",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c920913_f31e3877",
         "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
         "patchSetId": 12
@@ -563,6 +581,24 @@
     },
     {
       "key": {
+        "uuid": "7c66ed13_e14adc9c",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T06:20:58Z",
+      "side": 1,
+      "message": "Could you please show more detail about it? for what scenario? \nAs I know, the app should be able to show different sub to end user selection.",
+      "parentUuid": "dc76f9c4_f9e92f24",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c52b523_9738cbb3",
         "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
         "patchSetId": 12
@@ -598,6 +634,24 @@
       "side": 1,
       "message": "This api is mapped  copyMessageToIcc(sub, ..) at SDK SMSManager level, do you suggest to modify this api to be slot based?",
       "parentUuid": "3c52b523_9738cbb3",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c66ed13_a154e43c",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T06:20:58Z",
+      "side": 1,
+      "message": "It means it is query the phone via subscription. In today conclusion, one phone may contain many subscription. It needs to pass the slot or called logical phone id.",
+      "parentUuid": "7c66ed13_3ee8f120",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -662,6 +716,24 @@
       "side": 1,
       "message": "this code would get hit when sub is activated and phone is tied to a sub. So phone is tied to a sub.\n\nIf we have two subs from same card are activated for dsds, I expect the device to have two phone objects associated to each of the subscription.",
       "parentUuid": "7c58ad41_80ed1ce5",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc76f9c4_1c689979",
+        "filename": "src/java/com/android/internal/telephony/WapPushOverSms.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T06:20:58Z",
+      "side": 1,
+      "message": "Same as previous comment. The phone may contain lots of subscription not only one.",
+      "parentUuid": "dc76f9c4_5900631f",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -749,6 +821,24 @@
       "side": 1,
       "message": "yes need to be modified.",
       "parentUuid": "7c58ad41_8004fce2",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc76f9c4_dc61c194",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-04T06:20:58Z",
+      "side": 1,
+      "message": "For what reason?",
+      "parentUuid": "dc76f9c4_990d9b55",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
