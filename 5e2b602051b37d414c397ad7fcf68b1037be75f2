@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dc76f9c4_06327f1e",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1041926
+      },
+      "writtenOn": "2014-03-05T19:49:55Z",
+      "side": 1,
+      "message": "The issue here is both the two cases will call setExternalState function, which will set SIM status property to ABSENT as below:\nSystemProperties.set(PROPERTY_SIM_STATE, mExternalState.toString());\n\nAnd We have a Public API getSimState in TelephonyManager.java which will get the property directly to any upper Application which care about this status, and these application will have wrong behavior on CDMA NV only phone because these think no SIM card ready from this API. We did met this issue in application.\n\nTHX",
+      "parentUuid": "1c26d1b5_2d02ed66",
+      "revId": "5e2b602051b37d414c397ad7fcf68b1037be75f2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c26d1b5_ed1bc5cd",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2014-02-26T23:43:44Z",
       "side": 1,
       "message": "Same comment as line #215",
+      "range": {
+        "startLine": 225,
+        "startChar": 20,
+        "endLine": 225,
+        "endChar": 30
+      },
+      "revId": "5e2b602051b37d414c397ad7fcf68b1037be75f2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc76f9c4_46387700",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1041926
+      },
+      "writtenOn": "2014-03-05T19:49:55Z",
+      "side": 1,
+      "message": "Same case with my reply on line #215",
+      "parentUuid": "1c26d1b5_ed1bc5cd",
       "range": {
         "startLine": 225,
         "startChar": 20,
