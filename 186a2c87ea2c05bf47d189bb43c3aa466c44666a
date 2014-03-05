@@ -93,6 +93,24 @@
       "revId": "186a2c87ea2c05bf47d189bb43c3aa466c44666a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cae3566_ec1b9f84",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-05T07:17:20Z",
+      "side": 1,
+      "message": "Hi, Wink,\nit will be a problem on our solution. QC handles the DSDS data on modem side but MTK handles the DSDS data on the framework side. It is obviously that MTK has problem here. Like as attach/de-attache for different sim card. Suggest that QC could check the following link that MTK do.\nhttps://android-review.googlesource.com/#/c/80180/3/src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+      "parentUuid": "dc76f9c4_cbd25010",
+      "revId": "186a2c87ea2c05bf47d189bb43c3aa466c44666a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
