@@ -40,6 +40,24 @@
       "revId": "186a2c87ea2c05bf47d189bb43c3aa466c44666a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_14906def",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-05T00:30:27Z",
+      "side": 1,
+      "message": "As today\u0027s discussion, the number of phone depends on the TelephonyDevController. Different vendor may have different phone for their design. Hence, it should have dynamic approach to create the phone instance.",
+      "parentUuid": "7c66ed13_a7d2b40e",
+      "revId": "186a2c87ea2c05bf47d189bb43c3aa466c44666a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
