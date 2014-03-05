@@ -58,6 +58,23 @@
       "revId": "186a2c87ea2c05bf47d189bb43c3aa466c44666a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cae3566_e912b1e0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-05T05:59:55Z",
+      "side": 1,
+      "message": "In data framework, we don\u0027t see any code in terms of DSDS(e.g. switch data connection from SIM1 to SIM2). For instance, in MTK architecture, we have a DcSwitchManager, DcSwitchAsyncChannel, DcSwitchSate to do this kinda of things.\nIn Qualcomm\u0027s architecture, seems the switching stuff might be putted in RILD, but that would cause large porting effort for customer if they use different modem.\nTherefore we highly recommended that Qualcomm would reference MTK\u0027s architecture. Thanks.",
+      "revId": "186a2c87ea2c05bf47d189bb43c3aa466c44666a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
