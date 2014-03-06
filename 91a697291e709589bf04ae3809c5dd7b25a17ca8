@@ -206,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "dca43989_527daa91",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-06T11:49:58Z",
+      "side": 1,
+      "message": "May be once the initial bring up is over You may want to move this to SubscriptionManager. For now lets keep this way otherwise it needs to modified in multiple places.",
+      "parentUuid": "fca73d88_f9427b5a",
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dca43989_0ceb9b60",
         "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
         "patchSetId": 15
@@ -384,6 +402,24 @@
         "endLine": 446,
         "endChar": 76
       },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_8f5e9628",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-06T11:49:58Z",
+      "side": 1,
+      "message": "this can be removed.",
+      "parentUuid": "dca43989_77e8d8d3",
       "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
