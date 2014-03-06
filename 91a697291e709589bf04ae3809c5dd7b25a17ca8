@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c7df19f_184c1360",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T05:47:50Z",
+      "side": 1,
+      "message": "Subscription id should be long",
+      "range": {
+        "startLine": 109,
+        "startChar": 19,
+        "endLine": 109,
+        "endChar": 33
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
