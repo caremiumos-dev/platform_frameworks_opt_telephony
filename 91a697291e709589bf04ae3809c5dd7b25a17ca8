@@ -68,6 +68,29 @@
       "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fca73d88_3e8c7971",
+        "filename": "src/java/com/android/internal/telephony/cat/RilMessageDecoder.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T06:16:32Z",
+      "side": 1,
+      "message": "For multiple SIM case, could you add new parameter \"simId\" in this API to get corresponding RilMessageDecoder instance for CatService. You can refer to RilMessageDecoder.java of MTK\u0027s upstream.\npublic static synchronized RilMessageDecoder getInstance(Handler caller, IccFileHandler fh,\n            int simId)",
+      "range": {
+        "startLine": 54,
+        "startChar": 49,
+        "endLine": 54,
+        "endChar": 60
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
