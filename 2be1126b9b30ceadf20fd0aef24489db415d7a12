@@ -508,6 +508,24 @@
     },
     {
       "key": {
+        "uuid": "fca73d88_7973eb6d",
+        "filename": "src/java/android/telephony/SmsManager.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-06T14:51:33Z",
+      "side": 1,
+      "message": "It can be removed in future if it is not required by apps. Keeping it for now.",
+      "parentUuid": "3cae3566_5ab3857e",
+      "revId": "2be1126b9b30ceadf20fd0aef24489db415d7a12",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c7df19f_a38a9996",
         "filename": "src/java/android/telephony/SmsMessage.java",
         "patchSetId": 14
