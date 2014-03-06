@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "dca43989_0cbddb48",
+        "filename": "src/java/android/telephony/SmsManager.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-06T07:44:08Z",
+      "side": 1,
+      "message": "will modify this.",
+      "parentUuid": "dca43989_acda87fe",
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c7df19f_184c1360",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 15
@@ -42,6 +60,24 @@
         "endLine": 109,
         "endChar": 33
       },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fca73d88_7e00b196",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-06T07:44:08Z",
+      "side": 1,
+      "message": "will modify this.",
+      "parentUuid": "1c7df19f_184c1360",
       "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -94,6 +130,24 @@
     },
     {
       "key": {
+        "uuid": "fca73d88_3e0a39b7",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-06T07:44:08Z",
+      "side": 1,
+      "message": "Yes an apii,\n public static Phone[] getPhones() would be added.",
+      "parentUuid": "1c7df19f_387d4fc6",
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c7df19f_f8c4b7d6",
         "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
         "patchSetId": 15
@@ -111,6 +165,23 @@
         "endLine": 275,
         "endChar": 49
       },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dca43989_6cdfafa7",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-06T07:44:08Z",
+      "side": 1,
+      "message": "I think the apis setDefaultSub, getDefaultSub, setVoiceSub, getVoiceSub, getSMSSub, setSMSSub() should not be in this PhoneFactory class.\n\nIt is better these are moved to SubscriptionManager/Controller?",
       "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -295,6 +366,24 @@
         "endLine": 283,
         "endChar": 14
       },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_cc2b3c98",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-06T07:44:08Z",
+      "side": 1,
+      "message": "For now we type cast it, I expect SMSprefered sub to be queried from subscriptionController/Manager.\n\nAll preference voice/sms/data.",
+      "parentUuid": "fca73d88_1e965d39",
       "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
