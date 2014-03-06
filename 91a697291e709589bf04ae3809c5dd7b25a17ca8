@@ -22,6 +22,52 @@
       "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dca43989_ccc26374",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T06:00:41Z",
+      "side": 1,
+      "message": "It should be int slot for each phone each slot. But it should be renamed and need further discussion.",
+      "range": {
+        "startLine": 226,
+        "startChar": 33,
+        "endLine": 226,
+        "endChar": 49
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dca43989_6cd48f31",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T06:00:41Z",
+      "side": 1,
+      "message": "For multiple SIM case, please add a new API for STK app usage to get corresponding CatService instance.\n    public static AppInterface getInstance(int simId) {\n        return getInstance(null, null, null, simId);\n    }",
+      "range": {
+        "startLine": 589,
+        "startChar": 31,
+        "endLine": 589,
+        "endChar": 42
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
