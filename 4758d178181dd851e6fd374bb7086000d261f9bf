@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1c7df19f_f70ccac7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1041926
+      },
+      "writtenOn": "2014-03-06T00:49:50Z",
+      "side": 1,
+      "message": "This case is:\n1. If the preload apns-conf.xml does not include mvno_type\nitem for some carrier APN, during database create, the \nloadApns function in TelephonyProvider will follow below\ncode to initial mvno items:\n   if (row.containsKey(Telephony.Carriers.MVNO_TYPE) \u003d\u003d false) {\n       row.put(Telephony.Carriers.MVNO_TYPE, \"\");\n       }\n  if (row.containsKey(Telephony.Carriers.MVNO_MATCH_DATA) \u003d\u003d false) {\n       row.put(Telephony.Carriers.MVNO_MATCH_DATA, \"\");\n       }\n\n2. But the mvno_type and mvno_match_data can not be set as \"\" since it can not find key of Telephony.Carriers.MVNO_TYPE because it apns-conf.xml does not contain this key.\n\n3. Once we create APN list, it will read database with Id mvno_type, and it will return NULL. the Log is as below:\n\n\nProcess: com.android.phone \nFlags: 0xc8be4d \nPackage: com.android.stk v18 (4.3-232) \nPackage: com.android.providers.telephony v18 (4.3-232) \nPackage: com.android.phone v18 (4.3-232) \nBuild: motorola/falcon_retbr/falcon_umtsds:4.3/14.10.0Q3.X-14/232:userdebug/intcfg,test-keys \n\njava.lang.NullPointerException \nat com.android.internal.telephony.dataconnection.DcTracker.\u003cD-c\u003emvnoMatches(DcTracker.java:1089) \nat com.android.internal.telephony.dataconnection.DcTracker.createApnList(DcTracker.java:1164) \nat com.android.internal.telephony.dataconnection.DcTracker.createAllApnList(DcTracker.java:2327) \nat com.android.internal.telephony.dataconnection.DcTracker.onRecordsLoaded(DcTracker.java:1621) \nat com.android.internal.telephony.dataconnection.DcTracker.handleMessage(DcTracker.java:2604) \nat com.codeaurora.telephony.msim.MSimDcTracker.handleMessage(MSimDcTracker.java:137) \nat android.os.Handler.dispatchMessage(Handler.java:99) \nat android.os.Looper.loop(Looper.java:137) \nat android.app.ActivityThread.main(ActivityThread.java:5222) \nat java.lang.reflect.Method.invokeNative(Native Method) \nat java.lang.reflect.Method.invoke(Method.java:525) \nat com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:737) \nat com.android.internal.os.ZygoteInit.main(ZygoteInit.java:553) \nat dalvik.system.NativeStart.main(Native Method)",
+      "parentUuid": "3cfb9535_ef9f3bcf",
+      "revId": "4758d178181dd851e6fd374bb7086000d261f9bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1cf89137_ebc730d9",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
