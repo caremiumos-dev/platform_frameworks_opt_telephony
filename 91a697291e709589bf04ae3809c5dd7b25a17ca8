@@ -71,6 +71,213 @@
     },
     {
       "key": {
+        "uuid": "1c7df19f_f8c4b7d6",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T07:13:53Z",
+      "side": 1,
+      "message": "It should be long based",
+      "range": {
+        "startLine": 275,
+        "startChar": 46,
+        "endLine": 275,
+        "endChar": 49
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dca43989_0ceb9b60",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T07:13:53Z",
+      "side": 1,
+      "message": "It should be long based",
+      "range": {
+        "startLine": 299,
+        "startChar": 18,
+        "endLine": 299,
+        "endChar": 21
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dca43989_6ce6cf99",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T07:13:53Z",
+      "side": 1,
+      "message": "It should be long based",
+      "range": {
+        "startLine": 304,
+        "startChar": 18,
+        "endLine": 304,
+        "endChar": 21
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dca43989_8c730b28",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T07:13:53Z",
+      "side": 1,
+      "message": "It should be long based",
+      "range": {
+        "startLine": 376,
+        "startChar": 18,
+        "endLine": 376,
+        "endChar": 21
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fca73d88_bea629a0",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T07:13:53Z",
+      "side": 1,
+      "message": "It should be long based.",
+      "range": {
+        "startLine": 396,
+        "startChar": 18,
+        "endLine": 396,
+        "endChar": 21
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_588feba7",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T07:13:53Z",
+      "side": 1,
+      "message": "It should be long based",
+      "range": {
+        "startLine": 414,
+        "startChar": 44,
+        "endLine": 414,
+        "endChar": 47
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dca43989_ccf4a33c",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T07:13:53Z",
+      "side": 1,
+      "message": "It should be long based",
+      "range": {
+        "startLine": 420,
+        "startChar": 43,
+        "endLine": 420,
+        "endChar": 46
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_d8c77bd9",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T07:13:53Z",
+      "side": 1,
+      "message": "It should be long based",
+      "range": {
+        "startLine": 442,
+        "startChar": 42,
+        "endLine": 442,
+        "endChar": 45
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fca73d88_1e965d39",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T07:13:53Z",
+      "side": 1,
+      "message": "It should be long based.",
+      "range": {
+        "startLine": 283,
+        "startChar": 11,
+        "endLine": 283,
+        "endChar": 14
+      },
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dca43989_6cd48f31",
         "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
         "patchSetId": 15
