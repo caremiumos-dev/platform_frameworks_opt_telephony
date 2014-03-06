@@ -188,6 +188,24 @@
     },
     {
       "key": {
+        "uuid": "fca73d88_f9427b5a",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T09:05:47Z",
+      "side": 1,
+      "message": "Yes. I think it is a good idea to put all subscription related functions to SubscriptionManager.",
+      "parentUuid": "dca43989_6cdfafa7",
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dca43989_0ceb9b60",
         "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
         "patchSetId": 15
@@ -407,6 +425,24 @@
       "side": 1,
       "message": "For now we type cast it, I expect SMSprefered sub to be queried from subscriptionController/Manager.\n\nAll preference voice/sms/data.",
       "parentUuid": "fca73d88_1e965d39",
+      "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dca43989_376d808a",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T09:05:47Z",
+      "side": 1,
+      "message": "Agree with you. All subscription setting and getting functions move to subscriptionManager.",
+      "parentUuid": "1c7df19f_cc2b3c98",
       "revId": "91a697291e709589bf04ae3809c5dd7b25a17ca8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
