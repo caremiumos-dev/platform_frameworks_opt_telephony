@@ -148,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "dc76f9c4_26c0db69",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T01:21:16Z",
+      "side": 1,
+      "message": "By our conclusion, we need to decide all interfaces belong to  subscription based or Sim based.\nIf all interfaces in CallManager is Sim based, please help to rename to prevent from confusion",
+      "parentUuid": "1c7df19f_499bb160",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc76f9c4_39c48750",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 12
@@ -376,6 +394,48 @@
     },
     {
       "key": {
+        "uuid": "dc76f9c4_666333ee",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T01:21:16Z",
+      "side": 1,
+      "message": "Could you also response for this suggestion, thank you",
+      "parentUuid": "dc76f9c4_99711bb2",
+      "range": {
+        "startLine": 909,
+        "startChar": 22,
+        "endLine": 909,
+        "endChar": 26
+      },
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c7df19f_68ff7ed1",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T01:21:16Z",
+      "side": 1,
+      "message": "About the check, I mean that Phone will check  \n\nString newDialString \u003d PhoneNumberUtils.stripSeparators(dialString);\n\nif (handleInCallMmiCommands(newDialString)) {\n\n return null;\n\n}\n\nin  dial() methond\n\nand your CallManager will also do the same check dial():\n\nif (basePhone.handleInCallMmiCommands(newDialString)) {\n\n return null;\n\n}\n\nit look not like cross phones\u0027 check",
+      "parentUuid": "7c66ed13_8730d001",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c7df19f_58e1417e",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 12
@@ -417,6 +477,24 @@
     },
     {
       "key": {
+        "uuid": "3cae3566_6c8b2fc5",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T01:21:16Z",
+      "side": 1,
+      "message": "getActiveFgCall().hangup() will call Call.hangup \n\nand then call mOwner.hangup()\n\nand then call tracker.hangup (GsmCall call)\n\nBecause the call is active call, so it will go to the case\n\n\"else if (call \u003d\u003d mForegroundCall)\" and do \nhangupForegroundResumeBackground()\n\nso if the BGcall exist, it will resume and then dail action will cause error.",
+      "parentUuid": "7c66ed13_67001c20",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c7df19f_7bde7784",
         "filename": "src/java/com/android/internal/telephony/CallManager.java",
         "patchSetId": 12
@@ -452,6 +530,24 @@
       "side": 1,
       "message": "In some cases there is a possibility of two phones having same subscription id, in such cases its required to traverse through all phones.\n\nExample is: We cannot assign separate subscription id for SIPPhone,  so SIPPhone will hold the subscription id of any available CS Phone(either subscription id_1  OR subscription id_2) Phone.",
       "parentUuid": "1c7df19f_7bde7784",
+      "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cae3566_cc9263fa",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T01:21:16Z",
+      "side": 1,
+      "message": "Could you help to introduce the case more than one phone with the same subscription. it seems not the conclusion MTK know.\n\nBTW, it the case is possible, we think that the  getPhone(subscription) should return a list not a single phone instance, and others interfaces can use the list to do the following action",
+      "parentUuid": "dc76f9c4_e7150acb",
       "revId": "fbd4a362424b1a4880f4d2ecce68e507cab8ee5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
