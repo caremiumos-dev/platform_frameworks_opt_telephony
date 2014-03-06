@@ -84,6 +84,29 @@
     },
     {
       "key": {
+        "uuid": "1c7df19f_d8a9bb73",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-06T05:55:15Z",
+      "side": 0,
+      "message": "Sorry, I misunderstand for before/after modification in previous version. there should be \u0027final\u0027 modifier. Please help to add it back",
+      "range": {
+        "startLine": 84,
+        "startChar": 19,
+        "endLine": 84,
+        "endChar": 24
+      },
+      "revId": "4a6446528c86eb723882d9eabd88bd39e7249dbd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c52b523_21f55536",
         "filename": "src/java/com/android/internal/telephony/cdma/CDMAPhone.java",
         "patchSetId": 12
