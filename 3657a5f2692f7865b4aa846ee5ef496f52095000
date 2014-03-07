@@ -48,6 +48,24 @@
     },
     {
       "key": {
+        "uuid": "9c348108_60002720",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1744,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-07T09:09:56Z",
+      "side": 1,
+      "message": "yes it should be phoneId and we would change once N5 bring up over.",
+      "parentUuid": "fc4c9db4_a5bfe4dd",
+      "revId": "3657a5f2692f7865b4aa846ee5ef496f52095000",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c348108_2db1f86f",
         "filename": "src/java/com/android/internal/telephony/PhoneBase.java",
         "patchSetId": 18
