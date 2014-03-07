@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c398d00_0916b1a4",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2014-03-07T00:56:33Z",
+      "side": 1,
+      "message": "change to long.",
+      "range": {
+        "startLine": 348,
+        "startChar": 65,
+        "endLine": 348,
+        "endChar": 71
+      },
+      "revId": "88569fff56a514d8064163cba5c2d4bda20fbcb3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dca43989_9bd49632",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2014-03-07T00:56:33Z",
+      "side": 1,
+      "message": "Change to long",
+      "revId": "88569fff56a514d8064163cba5c2d4bda20fbcb3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
