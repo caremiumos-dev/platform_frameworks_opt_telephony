@@ -22,6 +22,144 @@
       "revId": "3657a5f2692f7865b4aa846ee5ef496f52095000",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc4c9db4_a5bfe4dd",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1744,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-07T08:27:27Z",
+      "side": 1,
+      "message": "This API should be public long getPhoneId(), since phone id might by sim id, sub id and etc.",
+      "range": {
+        "startLine": 1744,
+        "startChar": 15,
+        "endLine": 1744,
+        "endChar": 30
+      },
+      "revId": "3657a5f2692f7865b4aa846ee5ef496f52095000",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c348108_2db1f86f",
+        "filename": "src/java/com/android/internal/telephony/PhoneBase.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-07T08:27:27Z",
+      "side": 1,
+      "message": "int mSubscription should be long mPhoneId.",
+      "range": {
+        "startLine": 151,
+        "startChar": 18,
+        "endLine": 151,
+        "endChar": 31
+      },
+      "revId": "3657a5f2692f7865b4aa846ee5ef496f52095000",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c348108_cdca0ce4",
+        "filename": "src/java/com/android/internal/telephony/PhoneBase.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-07T08:27:27Z",
+      "side": 1,
+      "message": "Default value should not be DEFALUT_SUBSCRIPTION.",
+      "range": {
+        "startLine": 151,
+        "startChar": 34,
+        "endLine": 151,
+        "endChar": 54
+      },
+      "revId": "3657a5f2692f7865b4aa846ee5ef496f52095000",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c348108_ad8fc8a6",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-07T08:27:27Z",
+      "side": 1,
+      "message": "long phoneId",
+      "range": {
+        "startLine": 197,
+        "startChar": 41,
+        "endLine": 197,
+        "endChar": 53
+      },
+      "revId": "3657a5f2692f7865b4aa846ee5ef496f52095000",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bc586570_7a5e192b",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-07T08:27:27Z",
+      "side": 1,
+      "message": "long phoneId",
+      "range": {
+        "startLine": 206,
+        "startChar": 41,
+        "endLine": 206,
+        "endChar": 53
+      },
+      "revId": "3657a5f2692f7865b4aa846ee5ef496f52095000",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c348108_8d9484b8",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-07T08:27:27Z",
+      "side": 1,
+      "message": "getPhone(int subscrion)-\u003egetPhone(long phoneId)",
+      "range": {
+        "startLine": 226,
+        "startChar": 37,
+        "endLine": 226,
+        "endChar": 49
+      },
+      "revId": "3657a5f2692f7865b4aa846ee5ef496f52095000",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
