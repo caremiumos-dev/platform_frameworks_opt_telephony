@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc4c9db4_45cf00a2",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2283,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-07T08:02:17Z",
+      "side": 1,
+      "message": "We add a SUB_ID string for PendingMessages. It\u0027s necessary to record which SUB belongs to!",
+      "range": {
+        "startLine": 2283,
+        "startChar": 34,
+        "endLine": 2283,
+        "endChar": 49
+      },
+      "revId": "3657a5f2692f7865b4aa846ee5ef496f52095000",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
