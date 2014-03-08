@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc4c9db4_71f0fa46",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-08T15:36:01Z",
+      "side": 1,
+      "message": "needs a long due to the number of phone may depending on \"Number of subscription(QC design)\" or \"Number of slot(MTK design)\"\nIt needs type that contains this problem. I suggest to pass the long and it should be \nPhone getCdmaPhone(long phoneId)",
+      "range": {
+        "startLine": 203,
+        "startChar": 37,
+        "endLine": 203,
+        "endChar": 53
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c526d52_01f7b0fd",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-08T15:36:01Z",
+      "side": 1,
+      "message": "Rename subscription as phoneId for un-confused",
+      "range": {
+        "startLine": 212,
+        "startChar": 36,
+        "endLine": 212,
+        "endChar": 53
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bc586570_4e6ef38a",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-08T15:36:01Z",
+      "side": 1,
+      "message": "needs a long due to the number of phone may depending on \"Number of subscription(QC design)\" or \"Number of slot(MTK design)\"\nIt needs type that contains this problem. I suggest to pass the long and it should be \nPhone getPhone(long phoneId)",
+      "range": {
+        "startLine": 232,
+        "startChar": 33,
+        "endLine": 232,
+        "endChar": 49
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

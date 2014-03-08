@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dcf7d997_ce420329",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-08T15:36:01Z",
+      "side": 0,
+      "message": "I don\u0027t see any subscription manager/controller files in the new patch set. Are they missing to upload or just working on them?",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 71,
+        "endChar": 31
+      },
+      "revId": "4da6533a07330b600a4e235f16f8e97e4baadca0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
