@@ -22,6 +22,24 @@
       "revId": "4da6533a07330b600a4e235f16f8e97e4baadca0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cf1d5a2_91fade8c",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1004552
+      },
+      "writtenOn": "2014-03-08T16:10:26Z",
+      "side": 0,
+      "message": "SubscriptionManager/Controller files to be added from MTK.",
+      "parentUuid": "dcf7d997_ce420329",
+      "revId": "4da6533a07330b600a4e235f16f8e97e4baadca0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

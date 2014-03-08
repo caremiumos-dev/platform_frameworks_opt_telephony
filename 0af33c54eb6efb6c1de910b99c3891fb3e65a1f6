@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "dcf7d997_0e0feb01",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1004552
+      },
+      "writtenOn": "2014-03-08T16:10:26Z",
+      "side": 1,
+      "message": "getCdmaPhone should be with int id only, it may not be correcte to pass long to get phone object.\n\nAlso the array index does not support long integer.\n\nThe caller needs to make a call with getCdmaPhone( phone Id), Agree the api parameter here to be changed as PhoneId, we are going to change that.\n\nThe PhoneId to be obtained by caller by using SubscriptionManager.getPhoneId(long sub).",
+      "parentUuid": "fc4c9db4_71f0fa46",
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c526d52_01f7b0fd",
         "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
         "patchSetId": 2
@@ -48,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "3cf1d5a2_510996f8",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1004552
+      },
+      "writtenOn": "2014-03-08T16:10:26Z",
+      "side": 1,
+      "message": "We are  working in the background to move to PhoneId, For this api the input parameter would be int only.",
+      "parentUuid": "7c526d52_01f7b0fd",
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc586570_4e6ef38a",
         "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
         "patchSetId": 2
@@ -65,6 +101,24 @@
         "endLine": 232,
         "endChar": 49
       },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c2ba1c2_0c05372f",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1004552
+      },
+      "writtenOn": "2014-03-08T16:10:26Z",
+      "side": 1,
+      "message": "same as above.",
+      "parentUuid": "bc586570_4e6ef38a",
       "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
