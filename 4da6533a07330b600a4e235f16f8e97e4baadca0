@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dcf7d997_11270c45",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 2283,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-10T02:43:42Z",
+      "side": 1,
+      "message": "Can we add a String of PendingMessages for applications necessary propose. PendingMessage.SUB_ID  \u003d ”pending_sub_id”.",
+      "range": {
+        "startLine": 2283,
+        "startChar": 8,
+        "endLine": 2283,
+        "endChar": 49
+      },
+      "revId": "4da6533a07330b600a4e235f16f8e97e4baadca0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
