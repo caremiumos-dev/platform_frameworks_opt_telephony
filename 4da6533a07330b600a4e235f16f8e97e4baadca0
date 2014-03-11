@@ -22,6 +22,52 @@
       "revId": "4da6533a07330b600a4e235f16f8e97e4baadca0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc10b997_090fed01",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T19:02:16Z",
+      "side": 1,
+      "message": "This should be registered somewhere otherwise this case will not happen",
+      "range": {
+        "startLine": 626,
+        "startChar": 8,
+        "endLine": 626,
+        "endChar": 29
+      },
+      "revId": "4da6533a07330b600a4e235f16f8e97e4baadca0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcf7d997_037a14ff",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T19:02:16Z",
+      "side": 1,
+      "message": "It will always create a new CatService instance here! It should be deleted.",
+      "range": {
+        "startLine": 171,
+        "startChar": 12,
+        "endLine": 172,
+        "endChar": 45
+      },
+      "revId": "4da6533a07330b600a4e235f16f8e97e4baadca0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
