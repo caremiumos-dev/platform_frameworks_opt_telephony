@@ -536,6 +536,30 @@
       "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fce81dcd_f0f6e8ff",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T11:25:11Z",
+      "side": 1,
+      "message": "That is, subId might get null and cause null point exception when using subId[0] without error handling.",
+      "parentUuid": "dcf7d997_d9775ea5",
+      "range": {
+        "startLine": 475,
+        "startChar": 61,
+        "endLine": 475,
+        "endChar": 66
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
