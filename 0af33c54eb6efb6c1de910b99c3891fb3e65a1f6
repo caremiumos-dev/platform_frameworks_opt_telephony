@@ -2,6 +2,397 @@
   "comments": [
     {
       "key": {
+        "uuid": "dcf7d997_1ef70cfe",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "By previous discussion. it is for DSDA\nPlease help to remove it.",
+      "range": {
+        "startLine": 110,
+        "startChar": 24,
+        "endLine": 110,
+        "endChar": 34
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fce81dcd_62ebf25f",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "By previous discussion. it is for DSDA\nPlease help to remove it.",
+      "range": {
+        "startLine": 300,
+        "startChar": 16,
+        "endLine": 300,
+        "endChar": 37
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcf7d997_3e05a82f",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "By previous discussion. it is for DSDA\nPlease help to remove it.",
+      "range": {
+        "startLine": 306,
+        "startChar": 16,
+        "endLine": 306,
+        "endChar": 37
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c2ba1c2_c1447dd9",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "Because for specific subscription, we can find the mapping phone, \nwhy not just call phone.getServiceState().getState() to do the same thing",
+      "range": {
+        "startLine": 349,
+        "startChar": 15,
+        "endLine": 349,
+        "endChar": 49
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c2ba1c2_013fb535",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "Because the subscription will mapping one specific Phone, \nget Phone with specific subscription is meanless interface",
+      "range": {
+        "startLine": 393,
+        "startChar": 17,
+        "endLine": 393,
+        "endChar": 49
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c2ba1c2_619f9108",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "Because the subscription will mapping one specific Phone, \nget Phone with specific subscription is meanless interface",
+      "range": {
+        "startLine": 481,
+        "startChar": 17,
+        "endLine": 481,
+        "endChar": 46
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcf7d997_de13c474",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "Because the subscription will mapping one specific Phone, \nget Phone with specific subscription is meanless interface",
+      "range": {
+        "startLine": 496,
+        "startChar": 11,
+        "endLine": 496,
+        "endChar": 46
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c2ba1c2_41a40d57",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "Because the subscription will mapping one specific Phone, \nget Phone with specific subscription is meanless interface",
+      "range": {
+        "startLine": 511,
+        "startChar": 17,
+        "endLine": 511,
+        "endChar": 52
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fce81dcd_c2f1264a",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "Original inteface has Call object argument, \nit is no need to pass additional subscription due to active call will be only one",
+      "range": {
+        "startLine": 854,
+        "startChar": 19,
+        "endLine": 854,
+        "endChar": 65
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c2ba1c2_a157c993",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "for switchHoldingAndActive / acceptCall method, it may cause fail when do the first operation switchHoldingAndActive for one Phone. It will be get worst for multi-Sim case, so we suggest to divide into two step and do the second operation only when the first one is done.",
+      "range": {
+        "startLine": 914,
+        "startChar": 22,
+        "endLine": 914,
+        "endChar": 26
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fce81dcd_c21846d4",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "These statement is appear in many interface\nCould you help to introduce that usage\nthx",
+      "range": {
+        "startLine": 916,
+        "startChar": 7,
+        "endLine": 917,
+        "endChar": 69
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c2ba1c2_0168554c",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "Because dial() in Phone will do the same check for this \n\nString newDialString \u003d PhoneNumberUtils.stripSeparators(dialString);\nif (handleInCallMmiCommands(newDialString)) {\n return null;\n}\n\n\nIf need to do this action here, we should remove the same code in Phone. Or we can view it dialable in canDial() and then check and do it in Phone. there should not be the same operation in CallManager and Phone.",
+      "range": {
+        "startLine": 932,
+        "startChar": 12,
+        "endLine": 937,
+        "endChar": 13
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fce81dcd_428b56c4",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "getActiveFgCall().hangup() will call Call.hangup\nand then call mOwner.hangup()\nand then call tracker.hangup (GsmCall call)\nBecause the call is active call, so it will go to the case\n\"else if (call \u003d\u003d mForegroundCall)\" and do hangupForegroundResumeBackground()\nso if the BGcall exist, it will resume and then dail action will cause error.",
+      "range": {
+        "startLine": 951,
+        "startChar": 20,
+        "endLine": 951,
+        "endChar": 62
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c2ba1c2_4139ad54",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "Could you help to introduce the case more than one phone with the same subscription. it seems not the conclusion MTK know.\nBTW, it the case is possible, we think that the getPhone(subscription) should return a list not a single phone instance, and others interfaces can use the list to do the following action",
+      "range": {
+        "startLine": 999,
+        "startChar": 11,
+        "endLine": 999,
+        "endChar": 51
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fce81dcd_02fcee1e",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "Original inteface has Call object argument, \nit is no need to pass additional subscription due to active call will be only one",
+      "range": {
+        "startLine": 1064,
+        "startChar": 19,
+        "endLine": 1064,
+        "endChar": 64
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c2ba1c2_219d9909",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "By previous discussion. it is for DSDA\nPlease help to remove it.",
+      "range": {
+        "startLine": 1720,
+        "startChar": 16,
+        "endLine": 1720,
+        "endChar": 45
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcf7d997_5e2b5499",
+        "filename": "src/java/com/android/internal/telephony/CallManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T04:48:21Z",
+      "side": 1,
+      "message": "By previous discussion. it is for DSDA\nPlease help to remove it.",
+      "range": {
+        "startLine": 1724,
+        "startChar": 16,
+        "endLine": 1724,
+        "endChar": 47
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc4c9db4_71f0fa46",
         "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
         "patchSetId": 2
