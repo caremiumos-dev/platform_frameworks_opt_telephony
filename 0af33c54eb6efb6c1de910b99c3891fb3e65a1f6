@@ -513,6 +513,29 @@
       "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcf7d997_d9775ea5",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-11T10:47:05Z",
+      "side": 1,
+      "message": "Error handling is needed, NOT_READY broadcast might be earlier than subscription manager ready.",
+      "range": {
+        "startLine": 475,
+        "startChar": 61,
+        "endLine": 475,
+        "endChar": 66
+      },
+      "revId": "0af33c54eb6efb6c1de910b99c3891fb3e65a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
