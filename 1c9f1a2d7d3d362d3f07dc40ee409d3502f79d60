@@ -69,6 +69,24 @@
       "revId": "1c9f1a2d7d3d362d3f07dc40ee409d3502f79d60",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c2ba1c2_942bd798",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-03-12T18:11:55Z",
+      "side": 1,
+      "message": "Here I see functions in SubscriptionController are non-static, \n\nI think In SubscriptionManager.java we need to have getInstance() definitely.\nEven if all functions are static, it would be good to provide getInstance() function, this helps in handling class members if at all any.\n\nAt this point there are any class members so things work, when you had to introudce certain class member it would be aproblem, static methods can\u0027t access that.\n\nSubscriptionController having getInstance() is arguable one.\n\nframework can use  ISub.asInterface()/subscriptionManager  to access the functions.\n\nIf at all if we want to expose getInstance() I think we need to have looper checks inside SubscriptionContoller so that it is accessed from phone process only. (similar to PhoneFactory.java)",
+      "parentUuid": "fce81dcd_4e1375b3",
+      "revId": "1c9f1a2d7d3d362d3f07dc40ee409d3502f79d60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
