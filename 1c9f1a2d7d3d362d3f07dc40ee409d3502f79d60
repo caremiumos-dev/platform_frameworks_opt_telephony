@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9cb9e1da_cd9bfb5e",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-12T17:36:25Z",
+      "side": 1,
+      "message": "1. yes, already provide on this fils getPhoneId\n2. Now, the phoneId implementation is like the simId. Hence, there is a simple way to use long [] getSubId(int simId) right now. And you could use the first one to in your code",
+      "parentUuid": "9c2ba1c2_808a7596",
+      "revId": "1c9f1a2d7d3d362d3f07dc40ee409d3502f79d60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fce81dcd_6d303a01",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2014-03-12T04:05:53Z",
       "side": 1,
       "message": "Can we please introduce a new public method getInstance() to return the SubscriptionController instance?\n\nIf any other classes in framework layer want to access methods on this class, they can do it by calling getInstance().",
+      "revId": "1c9f1a2d7d3d362d3f07dc40ee409d3502f79d60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fce81dcd_4e1375b3",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2014-03-12T17:36:25Z",
+      "side": 1,
+      "message": "All function are static and no need to provide the getInstance at all. Should we?",
+      "parentUuid": "fce81dcd_6d303a01",
       "revId": "1c9f1a2d7d3d362d3f07dc40ee409d3502f79d60",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
