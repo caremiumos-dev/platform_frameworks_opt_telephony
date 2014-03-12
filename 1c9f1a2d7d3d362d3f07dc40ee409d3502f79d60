@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c2ba1c2_808a7596",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-12T04:05:53Z",
+      "side": 1,
+      "message": "Can we please introduce  two more new methods  to get the below details ?\n\n1. A method to get the phoneId by providing subscriptionId(like: int getPhoneId(long subId)).\n2. A method to get the SubscriptionId by providing phoneId(like: long getSubId(int phoneId)).",
+      "revId": "1c9f1a2d7d3d362d3f07dc40ee409d3502f79d60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fce81dcd_6d303a01",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2014-03-12T04:05:53Z",
+      "side": 1,
+      "message": "Can we please introduce a new public method getInstance() to return the SubscriptionController instance?\n\nIf any other classes in framework layer want to access methods on this class, they can do it by calling getInstance().",
+      "revId": "1c9f1a2d7d3d362d3f07dc40ee409d3502f79d60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
