@@ -34,6 +34,24 @@
       "revId": "9c06b6e945ca8f09ca567e497f3c241c06a6d3ea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcb1990e_c214d25f",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1021169
+      },
+      "writtenOn": "2014-03-18T04:16:04Z",
+      "side": 1,
+      "message": "Once StkApp receives the commands it sends msg to its handler for further handling. So none are blocking.\n\nI\u0027m not aware of any once replacing just StkApp, but not sure.\n\nIs it not fine if we just add document without renaming?",
+      "parentUuid": "dcdfd954_97b047d7",
+      "revId": "9c06b6e945ca8f09ca567e497f3c241c06a6d3ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
