@@ -16,6 +16,24 @@
       "revId": "9c06b6e945ca8f09ca567e497f3c241c06a6d3ea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcdfd954_97b047d7",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-03-18T01:41:15Z",
+      "side": 1,
+      "message": "Lets rename this command to CAT_CMD_FOREGROUND_ACTION document that its the commands must be completed in milliseconds and add the FLAG_RECEIVER_FOREGROUND as you\u0027ve done here.\n\nSo we also need to check that commands are process \"immediately\" and none are blocking. Its internal and used for communication only between CatService and the Application so renaming is \"legal\" although are you aware of anyone replacing just the StkApp?\n\n\nAnother option would be to use startActivity.",
+      "parentUuid": "dcf7d997_f92b3a60",
+      "revId": "9c06b6e945ca8f09ca567e497f3c241c06a6d3ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
