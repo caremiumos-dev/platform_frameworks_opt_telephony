@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19c5035d_a4ceecf6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-04-04T15:28:59Z",
+      "side": 1,
+      "message": "When Data RAT changes the new RAT retry connectable APN\u0027s",
+      "revId": "dc0783ec420311f3035b9f94e28e033073fbe286",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "39c80775_b0ed48a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-04-04T15:28:59Z",
+      "side": 1,
+      "message": "Please, change comment to be \u003c 80 columns.",
+      "revId": "dc0783ec420311f3035b9f94e28e033073fbe286",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
