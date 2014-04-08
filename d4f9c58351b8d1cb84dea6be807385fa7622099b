@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39d4872d_10533c35",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-04-08T21:19:08Z",
+      "side": 0,
+      "message": "So what if number is empty what is deleteIccRecordFromEf going to do, will it delete?",
+      "revId": "d4f9c58351b8d1cb84dea6be807385fa7622099b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
