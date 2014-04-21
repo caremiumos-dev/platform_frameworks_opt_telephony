@@ -16,6 +16,24 @@
       "revId": "ace63f55685147ff56cd2a7554dc53845c89dadc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "856c27f2_14ccec68",
+        "filename": "src/java/com/android/internal/telephony/sip/SipPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1005304
+      },
+      "writtenOn": "2014-04-21T20:48:42Z",
+      "side": 1,
+      "message": "We can take off the argument and leave the rest of the TODO. \n\nSince this was your original comment, can you pls complete it accordingly (since it has audio changes and we dont have all the audio tests in our group)?",
+      "parentUuid": "590dbbba_908a9a54",
+      "revId": "ace63f55685147ff56cd2a7554dc53845c89dadc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
