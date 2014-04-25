@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2581bb17_90a11599",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1025864
+      },
+      "writtenOn": "2014-04-25T19:27:00Z",
+      "side": 1,
+      "message": "After discussing more on this internally, even number filed is not supplied from UI/Telephony there would be default value FF that would be stored in the SIM for number field. So there is no spec violation per se.\n\nWe don\u0027t require this change. Will abandon the change.",
+      "revId": "07260a0d93922d9b540a081aa858c2665e803251",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
