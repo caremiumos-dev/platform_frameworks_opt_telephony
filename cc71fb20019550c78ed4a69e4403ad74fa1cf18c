@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "a593eb68_45f28ec0",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2014-04-25T17:20:17Z",
+      "side": 1,
+      "message": "It is not clear to me what is the exact problem that we are trying to solve.\n\nIn AOSP, on radio available, we query sim status. This could be a redundant query in the case where rild crashes and there is no SIM. However, even in the case of a redundant query the modem would be expected to return the actual card state. I would expect the card state to be the same before and after the crash, resulting in no change on the frameworks, but I could be wrong.\n\nAm I missing something?",
+      "revId": "cc71fb20019550c78ed4a69e4403ad74fa1cf18c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05767712_8633aa2f",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 4
