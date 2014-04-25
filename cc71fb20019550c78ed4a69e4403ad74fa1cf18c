@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c5fb7fcc_a40d620a",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1023068
+      },
+      "writtenOn": "2014-04-25T22:25:38Z",
+      "side": 1,
+      "message": "I looked at the logs (bugreport-2014-04-17-20-45-11) associated with the bug and I see that the modem is frequently reporting the card state from absent to error to absent.\n\nWe should probably investigate the cause for why the modem is doing that. \n\nEven if the modem does that, I think we could fix the problem of the annoying prompts by fixing the condition in UiccCard.java.\n\nCurrently it checks for the following:\n if (oldState !\u003d CardState.CARDSTATE_ABSENT \u0026\u0026\n          mCardState \u003d\u003d CardState.CARDSTATE_ABSENT) {\n    // prompt card removed\n \n  } else if (oldState \u003d\u003d CardState.CARDSTATE_ABSENT \u0026\u0026\n          mCardState !\u003d CardState.CARDSTATE_ABSENT) {\n     // prompt card inserted\n  }\n\n\nInstead we could use the transition from ABSENT to PRESENT to mean inserted and vice versa.",
+      "parentUuid": "a593eb68_45f28ec0",
+      "revId": "cc71fb20019550c78ed4a69e4403ad74fa1cf18c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05767712_8633aa2f",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 4
