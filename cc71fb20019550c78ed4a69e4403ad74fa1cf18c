@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05767712_8633aa2f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-04-25T15:54:10Z",
+      "side": 1,
+      "message": "Should we ignore this event if mFirstRadioAvailabeReceived \u003d\u003d false ?",
+      "range": {
+        "startLine": 178,
+        "startChar": 21,
+        "endLine": 178,
+        "endChar": 45
+      },
+      "revId": "cc71fb20019550c78ed4a69e4403ad74fa1cf18c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
