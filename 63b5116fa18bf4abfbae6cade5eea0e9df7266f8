@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65c57378_19200bb6",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1012468
+      },
+      "writtenOn": "2014-04-25T07:23:35Z",
+      "side": 1,
+      "message": "There was a suggestion from wink to try a different method by resetting the mSpn in the dispose() of IccRecords. We will upload a new patch.",
+      "range": {
+        "startLine": 233,
+        "startChar": 15,
+        "endLine": 233,
+        "endChar": 19
+      },
+      "revId": "63b5116fa18bf4abfbae6cade5eea0e9df7266f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
