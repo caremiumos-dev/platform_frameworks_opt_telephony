@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "4516afdd_3bd643fa",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-04-28T00:06:22Z",
+      "side": 1,
+      "message": "I expect to reduce the annoying \"SIM card added\" message when the modem crash occurred.\nThe modem will return the actual card state, but it\u0027s so fast when the mode is restarting.\nWhen the device powering up, it takes enough time to recognize the card because the android system takes time to initialize. However, the modem restarting time, it is not enough to recognize the SIM card or update the actual SIM state to the RIL layer. See below a snippet of \"SIM card added\" bugreports.\n\n  \u003c6\u003e[27567.073126] subsys-restart: subsystem_shutdown(): [e26ed000]: Shutting down modem\n  \u003c6\u003e[27567.206304] PM: suspend exit 2014-04-25 17:19:19.239031784 UTC\n  04-25 19:19:24.245  1268  1380 D RILJ    : [UNSL]\u003c UNSOL_RESPONSE_RADIO_STATE_CHANGED RADIO_OFF\n  04-25 19:19:24.245  1268  1268 D RILJ    : [6606]\u003e GET_SIM_STATUS\n  04-25 19:19:24.255  1268  1380 D RILJ    : [6606]\u003c GET_SIM_STATUS IccCardState {CARDSTATE_ABSENT,PINSTATE_UNKNOWN,num_apps\u003d0,gsm_id\u003d-1,cdma_id\u003d-1,ims_id\u003d-1}\n  04-25 19:19:24.285  1268  1268 D UiccCard: update: radioState\u003dRADIO_OFF mLastRadioState\u003dRADIO_ON\n  04-25 19:19:25.705  1268  1380 D RILJ    : [UNSL]\u003c UNSOL_RESPONSE_RADIO_STATE_CHANGED RADIO_ON\n  04-25 19:19:25.725  1268  1268 D RILJ    : [6615]\u003e GET_SIM_STATUS\n  04-25 19:19:25.745  1268  1380 D RILJ    : [6615]\u003c GET_SIM_STATUS IccCardState {CARDSTATE_ABSENT,PINSTATE_UNKNOWN,num_apps\u003d0,gsm_id\u003d-1,cdma_id\u003d-1,ims_id\u003d-1}\n  04-25 19:19:25.765  1268  1268 D UiccCard: update: radioState\u003dRADIO_ON mLastRadioState\u003dRADIO_OFF\n  04-25 19:19:25.835  1268  1380 D RILJ    : [UNSL]\u003c UNSOL_RESPONSE_SIM_STATUS_CHANGED\n  04-25 19:19:25.835  1268  1268 D RILJ    : [6624]\u003e GET_SIM_STATUS\n  04-25 19:19:25.835  1268  1380 D RILJ    : [6624]\u003c GET_SIM_STATUS IccCardState {CARDSTATE_PRESENT,PINSTATE_UNKNOWN,num_apps\u003d1,gsm_id\u003d0{APPTYPE_USIM,APPSTATE_SUBSCRIPTION_PERSO,PERSOSUBSTATE_UNKNOWN,pin1\u003dPINSTATE_ENABLED_VERIFIED,pin2\u003dPINSTATE_ENABLED_NOT_VERIFIED},cdma_id\u003d-1,ims_id\u003d-1}\n  04-25 19:19:25.835  1268  1268 D UiccCard: update: radioState\u003dRADIO_ON mLastRadioState\u003dRADIO_ON\n  04-25 19:19:25.835  1268  1268 D UiccCard: update: notify card added\n\nThe second \"GET_SIM_STATUS\" called by unsolicited radio event, RADIO_ON.\nWe could find that the card state is absent.\nAfter about 100 miliseconds, the modem reported something changed.",
+      "parentUuid": "c5fb7fcc_a40d620a",
+      "revId": "cc71fb20019550c78ed4a69e4403ad74fa1cf18c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05767712_8633aa2f",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 4
@@ -48,6 +66,30 @@
       "writtenOn": "2014-04-25T15:54:10Z",
       "side": 1,
       "message": "Should we ignore this event if mFirstRadioAvailabeReceived \u003d\u003d false ?",
+      "range": {
+        "startLine": 178,
+        "startChar": 21,
+        "endLine": 178,
+        "endChar": 45
+      },
+      "revId": "cc71fb20019550c78ed4a69e4403ad74fa1cf18c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4516afdd_7b059bdb",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-04-28T00:06:22Z",
+      "side": 1,
+      "message": "No. this event should not be ignored.\nThis event is issued by modem changing.\nI expect that forced updating does not occur after the radio state changing. We should process this event.",
+      "parentUuid": "05767712_8633aa2f",
       "range": {
         "startLine": 178,
         "startChar": 21,
