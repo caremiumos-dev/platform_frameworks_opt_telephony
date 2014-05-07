@@ -34,6 +34,24 @@
       "revId": "aa1dccf46c6385efaf29f03d0a6a9db419d118b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a346007_518b29c7",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-05-07T12:58:14Z",
+      "side": 1,
+      "message": "Seen from my experience, we could not 3rd digit of MNC from CSIM.\nwe need to check that it works properly before renaming getOperatorNumeric().",
+      "parentUuid": "61e71d95_2209ceb1",
+      "revId": "aa1dccf46c6385efaf29f03d0a6a9db419d118b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
