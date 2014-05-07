@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a346007_3b7c843f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1004248
+      },
+      "writtenOn": "2014-05-07T03:26:21Z",
+      "side": 1,
+      "message": "I think we need to send onConfigurationChange when SIM is attached/detached because MCC/MNC is used to choose proper resource on application side.",
+      "range": {
+        "startLine": 236,
+        "startChar": 25,
+        "endLine": 236,
+        "endChar": 31
+      },
+      "revId": "670e99e74a2daa6e01bf1de6182f6be7488287ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
