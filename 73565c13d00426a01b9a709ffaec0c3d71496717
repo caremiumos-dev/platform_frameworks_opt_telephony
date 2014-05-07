@@ -16,6 +16,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a346007_11b7e1c5",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-05-07T11:20:56Z",
+      "side": 1,
+      "message": "I think that it is not easy to decide whether we should add it or not.\nI don\u0027t want to be changed my configuration when I insert my family\u0027s SIM or pre-paid local SIM. ;) Of course, there will be something to be changed. But, we need to check whether those have already been performed or not when SIM is loading.\n\nCould you explain what I am missing?",
+      "parentUuid": "6a346007_7bb1ece5",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
