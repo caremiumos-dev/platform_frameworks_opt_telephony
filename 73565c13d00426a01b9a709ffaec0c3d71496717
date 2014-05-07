@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a346007_7bb1ece5",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1004248
+      },
+      "writtenOn": "2014-05-07T03:25:08Z",
+      "side": 1,
+      "message": "SIM is related to choose proper resource. See alternative resource which contains mcc/mnc identifier. Therefore I think we need to send onConfigurationChange at Hot SIM swap.\nI searched this related by the change-ID but I couldn\u0027t. Do you have it?",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
