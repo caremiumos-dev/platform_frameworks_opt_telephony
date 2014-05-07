@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a346007_9195b1ee",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-05-07T12:47:09Z",
+      "side": 1,
+      "message": "The mImsi from decodeImsi() does not support 3rd digit of MNC, doesn\u0027t it?\nSo, we need to change this code.",
+      "range": {
+        "startLine": 265,
+        "startChar": 8,
+        "endLine": 265,
+        "endChar": 77
+      },
+      "revId": "8b8d129d9975cdd7654387249ce94d57c96471ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
