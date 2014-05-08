@@ -34,6 +34,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8afd1475_86f61ab2",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-05-08T07:56:34Z",
+      "side": 1,
+      "message": "In my hotswap supported device, the some configuration is changing according the SIM card. \n\n\n  05-07 21:40:18.440 D/MccTable( 1013): updateMccMncConfiguration: mcc\u003d310, mnc\u003d120\n  05-07 21:40:18.440 D/MccTable( 1013): getLocaleFromMcc to en_us mcc\u003d310\n  05-07 21:40:18.440 D/MccTable( 1013): getLocaleForLanguageCountry: skipping already persisted\n  05-07 21:40:18.440 D/MccTable( 1013): getLocaleForLanguageCountry: X locale\u003dnull\n  05-07 21:40:18.440 D/MccTable( 1013): updateMccMncConfiguration updateConfig config\u003d{1.0 310mcc120mnc ?locale ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/?}\n  \n  05-07 21:40:43.140 D/RILJ    ( 1013): [UNSL]\u003c UNSOL_RESPONSE_SIM_STATUS_CHANGED\n  05-07 21:40:43.140 D/RILJ    ( 1013): [3758]\u003e GET_SIM_STATUS\n  05-07 21:40:43.140 D/RILJ    ( 1013): [3758]\u003c GET_SIM_STATUS IccCardState {CARDSTATE_ABSENT,PINSTATE_UNKNOWN,num_apps\u003d0,gsm_id\u003d-1,cdma_id\u003d-1,ims_id\u003d-1}\n  \n  05-07 21:40:57.949 D/RILJ    ( 1013): [UNSL]\u003c UNSOL_RESPONSE_SIM_STATUS_CHANGED\n  05-07 21:40:57.979 D/RILJ    ( 1013): [3803]\u003e GET_SIM_STATUS\n  05-07 21:40:57.989 D/RILJ    ( 1013): [3803]\u003c GET_SIM_STATUS IccCardState {CARDSTATE_PRESENT,PINSTATE_UNKNOWN,num_apps\u003d2,gsm_id\u003d0{APPTYPE_USIM,APPSTATE_DETECTED,pin1\u003dPINSTATE_UNKNOWN,pin2\u003dPINSTATE_UNKNOWN},cdma_id\u003d-1,ims_id\u003d-1}\n  05-07 21:41:01.949 D/SIMRecords( 1013): [SIMRecords] fetchSimRecords 0\n  05-07 21:41:01.949 D/RILJ    ( 1013): [3842]\u003e getIMSI: GET_IMSI aid: a0000000871002ffffffff8903020000\n  05-07 21:41:02.009 D/SIMRecords( 1013): [SIMRecords] IMSI: xxxxxxx\n  \n  05-07 21:41:02.939 D/MccTable( 1013): updateMccMncConfiguration: mcc\u003d310, mnc\u003d410\n  05-07 21:41:02.949 D/MccTable( 1013): getLocaleFromMcc to en_us mcc\u003d310\n  05-07 21:41:02.949 D/MccTable( 1013): getLocaleForLanguageCountry: skipping already persisted\n  05-07 21:41:02.949 D/MccTable( 1013): getLocaleForLanguageCountry: X locale\u003dnull\n  05-07 21:41:02.949 D/MccTable( 1013): updateMccMncConfiguration updateConfig config\u003d{1.0 310mcc410mnc ?locale ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/?}\n  \n\nIn my opinion, if we need to add something at this time, it should be explained more detail.",
+      "parentUuid": "6a346007_11b7e1c5",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
