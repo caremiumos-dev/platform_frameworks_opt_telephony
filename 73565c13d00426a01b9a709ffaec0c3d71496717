@@ -52,6 +52,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aa4d7811_3eb70574",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1004248
+      },
+      "writtenOn": "2014-05-12T04:46:11Z",
+      "side": 1,
+      "message": "We need to confirm not only the case to insert but also the case to eject.\n\nWhen SIM is ejected, onConfigurationChange is needed to invoke. And Mcc/Mnc\u003d0 is expected according to http://developer.android.com/reference/android/content/res/Configuration.html#mcc",
+      "parentUuid": "8afd1475_86f61ab2",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
