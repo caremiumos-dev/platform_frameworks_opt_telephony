@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa4d7811_24f2987c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-05-12T15:50:57Z",
+      "side": 1,
+      "message": "This is a little confusing to me, is this correct:\n\n\n\"EFiap, Efemail are Type 1 files that may contain as many records as the reference/master files (EFADN, EFADN1). Currently, mIapFileRecord and mEmailFileRecord use assignment and thus only save the content of the last record.\n\nThis change concatenates the records so the results are correct when there are multiple records.\"\n\n\nShould check if the number of records match the \"reference/master\" files?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 5
+      },
+      "revId": "42570a437a5aa276f09c8588daed97b14af3b2a6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
