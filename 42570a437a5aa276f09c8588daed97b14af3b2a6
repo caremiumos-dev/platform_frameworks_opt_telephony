@@ -22,6 +22,30 @@
       "revId": "42570a437a5aa276f09c8588daed97b14af3b2a6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aa26584d_597c633f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1010938
+      },
+      "writtenOn": "2014-05-13T10:57:43Z",
+      "side": 1,
+      "message": "As per 3GPP TS 31.102 section 4.4.2.1\tEFPBR (Phone Book Reference file), \nType 1 files: Files that contain as many records as the reference/master file (EFADN, EFADN1) and are linked on record number bases (Rec1 -\u003e Rec1). The master file record number is the reference.\nType 2 files:\tFiles that contain less entries than the master file and are linked via pointers in the index administration file (EFIAP).\n\nEFiap is a Type 1 file. EFemail can be a Type 1 or Type 2 file. With this patch, all EFiap and EFemail records are added to the list instead of only 1.\n\nNo need to check as the error cases had been already taken care by catching IndexOutOfBoundsException",
+      "parentUuid": "aa4d7811_24f2987c",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 5
+      },
+      "revId": "42570a437a5aa276f09c8588daed97b14af3b2a6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
