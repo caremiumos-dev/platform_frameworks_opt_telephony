@@ -70,6 +70,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea9db0d4_1c15e157",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-05-14T12:51:55Z",
+      "side": 1,
+      "message": "You mean that mcc/mnc should be reset when the card is removed? If it makes some problem, it  seems to be a problem regardless  supporting hot swap. Is there any reason that it is only happend when hot-swap supporting?\n\nAlso, I think that the point of the SIM hot swap is the processing the change of the SIM, not a removing. I don\u0027t think that they remove the card to reset the configuration or to protect their private information. They will remove the card to insert another card or to use it on other device. There are some settings which should be kept regardless the card removed. For example, the volume limitation in EU and the camera shutter sound in Korea. So, we should change it at the card insertion time if some configuration should be changed according to inserted card.",
+      "parentUuid": "aa4d7811_3eb70574",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
