@@ -46,6 +46,30 @@
       "revId": "42570a437a5aa276f09c8588daed97b14af3b2a6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a08b4da_da324516",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1010938
+      },
+      "writtenOn": "2014-05-14T07:38:50Z",
+      "side": 1,
+      "message": "eg:\nIf there are 2 EFadn files with 250records in each file, then there will be 2EFiap files with 250records in each file. With out the changes in this patch, 2nd files records will override the 1st files records stored in mIapFileRecord.\n\nSame applies to mEmailFileRecord if the EFemail is a Type 1 file.",
+      "parentUuid": "aa26584d_597c633f",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 5
+      },
+      "revId": "42570a437a5aa276f09c8588daed97b14af3b2a6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
