@@ -142,6 +142,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0a78446e_50e0f4a9",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-05-15T10:36:21Z",
+      "side": 1,
+      "message": "Thanks for your explain. I have a question.\nAs you mentioned, when customer ejects SIM, onConfigurationChanged is not called.\nIt means that the configuration_changed event is not occurred.\nSo, how can the Activity know that user ejects SIM and restart the activity?\nIf the customer ejects SIM and  he/she does not insert the card anymore until power off, is some activity killed and can not be restarted on non-hot-swap device?",
+      "parentUuid": "6a3700c4_a9f0fdb8",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
