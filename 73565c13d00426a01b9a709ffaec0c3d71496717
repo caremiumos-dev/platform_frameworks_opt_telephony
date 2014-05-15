@@ -88,6 +88,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca71cc8d_dd9c1f60",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1004248
+      },
+      "writtenOn": "2014-05-15T02:05:53Z",
+      "side": 1,
+      "message": "As you know, Android has a mechanism to choose proper resource for application. And the mechanism uses various device condition. And one of device condition is mcc/mnc.\n\nTherefore if the mnc/mcc is not reset when customer ejects sim, application is working in the previous condition.\n\nAnd mcc/mnc is decided to each operator.\nSome of application uses the mnc/mcc identifier to work for the condition.\n\nTherefore we need to keep system behavior in case of hot swap supported device.\n\nWhat do you think?\n\n\nRegarding example of camera shutter sound, basically it is better not to depend on mcc/mnc. Although AOSP vanilla code to use mnc/mcc to switch shutter sound, we should use hardcode if the requirement is strict.\n\nBecause after inserting another SIM, the device may not play shutter sound.\n\nAnd it is same on WiFi only device; such as WiFi Tablet.\nSo it\u0027s different topic of this.\n\nAgain, we need to keep behavior for application, I think.",
+      "parentUuid": "ea9db0d4_1c15e157",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
