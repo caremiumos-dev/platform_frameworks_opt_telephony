@@ -124,6 +124,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a3700c4_a9f0fdb8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1004248
+      },
+      "writtenOn": "2014-05-15T02:52:39Z",
+      "side": 1,
+      "message": "The onConfigurationChanged is general mechanism to notice condition change to application.\n\nAnd as you explain in this thread, when customer inserts SIM, onConfiguratiunChanged will be called. But when customer ejects SIM, it is not called.\n\nThat\u0027s problem.\n\nHandling onConfigurationChanged by application is used by application to avoid killing application.\n\nAs you may know, without handler of onConfigurationChanged, Android will kill the application and restart the activity with the resource choosing mechanism by the device condition.\n\nAnd with handler of onConfigurationChanged, application has responsibility to load proper resource, instead of restarting the activity to execute with proper resource.\n\nGetting back to the topic, if onConfigurationChanged with mnc/mcc\u003d0 is not invoked when SIM is ejected, application cannot load proper resource for no SIM condition. That\u0027s why I suggest to add some modification for your identified issue.\n\nPlease note that system will restart when SIM is ejected in case of no-hot-swap-device. And then there is no issue not to invoke onConfigurationChanged in current vanilla code. But this commit will introduce hot swap functionality, then we need to solve the gap.\n\nWhat do you think?",
+      "parentUuid": "0a78446e_6a697fc3",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
