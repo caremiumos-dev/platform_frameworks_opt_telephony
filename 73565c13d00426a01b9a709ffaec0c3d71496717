@@ -106,6 +106,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0a78446e_6a697fc3",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-05-15T02:40:33Z",
+      "side": 1,
+      "message": "I\u0027m little confused.\nWe need to keep behavior for application, so, we don\u0027t need to reset mcc/mnc when the card removed. So, I don\u0027t understand why we need to call onConfigurationChaned.",
+      "parentUuid": "ca71cc8d_dd9c1f60",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
