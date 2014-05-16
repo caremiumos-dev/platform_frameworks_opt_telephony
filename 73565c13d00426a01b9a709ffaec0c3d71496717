@@ -268,6 +268,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a4e2058_6e3efdd8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1004248
+      },
+      "writtenOn": "2014-05-16T07:42:15Z",
+      "side": 1,
+      "message": "No, No, you misunderstand what I explained.\n\nWhat I explained is expected behavior regarding hotswap supported environment.\n\nBehavior of restarting system is non-hotswap environment.\nOn hot swap environment by your commit, system will not restart.\nThen you must implement lack of piece which I explained to you. Otherwise, you must not enable hotswap functionality because your commit will violate Application\u0027s expectation.\n\nAnd I think you need to ask to Dianne Hackborn to understand expectation between application and system.",
+      "parentUuid": "6a4e2058_ced52956",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
