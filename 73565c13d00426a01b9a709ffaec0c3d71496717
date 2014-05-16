@@ -178,6 +178,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca71cc8d_c6e7e4f6",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-05-16T02:16:24Z",
+      "side": 1,
+      "message": "I assume that system will not be restarted.\nHot-swap supported device will just restart the card or the radio subsystem, not whole system.\nHot-swap means that something can be replacing without shutting down the system.\nI think that SIM hot-swap should be working like SIM Refresh caused by IMSI switching.\nSo, I added above condition for dismissing the dialog without calling pm.reboot().",
+      "parentUuid": "3ff1cc50_941e94f6",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
