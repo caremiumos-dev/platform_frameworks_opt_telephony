@@ -232,6 +232,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a4e2058_08f3a955",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1004248
+      },
+      "writtenOn": "2014-05-16T04:23:34Z",
+      "side": 1,
+      "message": "You may misunderstand...\n\nFrom application perspective, killing it without handling onConfigurationChanged is natural. And expectation of case to handle onConfigurationChanged is invoking onConfigurationChanged.\n\nThat\u0027s system\u0027s behavior to application.\nWhat you should do is NOT to invoke onConfigurationChanged directly. You need to add implementation to notice configuration change to system after mnc/mcc\u003d0.",
+      "parentUuid": "ca71cc8d_a9f47bf7",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
