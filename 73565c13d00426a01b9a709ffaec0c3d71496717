@@ -250,6 +250,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a4e2058_ced52956",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-05-16T07:30:48Z",
+      "side": 1,
+      "message": "In my understand...\n\nyou requested the application should know the MCC/MNC is changed caused of the card rejection.\n\nSo, I asked why it is needed to change because the application should be keeping their behaviour.\n\nYou answered that the activity will be killed for changing proper resource(mcc 0 mnc 0) without handling onConfigurationChanged.\n\nI explained that the system will not restart and that the mcc/mnc change is not notified.\n\nIt means that the resource is not changed. So, I think there is no problem regardless supporting hot-swap.\n\nHowever, you want that the mcc/mnc change is notified for the application to handle it and to keep their behavior.\n\n \nIs there what I misunderstand or missing?\n \n\nIt is better that the change of the card status is notified to applications for handling their own onConfigurationChanged.\n\nIt is good perspective.\n\nBut, I don\u0027t agree with you that we should change it.\n\nBecause the behavior of the card rejection is not changed regardless supporting hot-swap.\n\nThe applications are keeping their behavior without the change for the card rejection on non-hot-swap devices.\n\nOn hot-swap supported device, it will be working properly without change.\n\nOn the other hand, if we add the notification of the card rejection, the application will be able to need other action for supporting it.\n\n\n @Wink,\n\nCould we get a third opnion from other vendors what are they think about?",
+      "parentUuid": "6a4e2058_08f3a955",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
