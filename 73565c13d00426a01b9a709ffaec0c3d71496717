@@ -214,6 +214,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca71cc8d_a9f47bf7",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1021635
+      },
+      "writtenOn": "2014-05-16T04:11:36Z",
+      "side": 1,
+      "message": "For calling onConfigurationChanged, configuration_chaned should be issued. If we change it, system will kill the activity for changing configuration. Why we should change to issue configuration_change for killing the activity and then we also should add another code to avoid the killing the activity?\nAlready there is not issued configuration_chaned and the activity does not know the card ejection. Also, the activity is keeping their behavior.",
+      "parentUuid": "6a4e2058_88b15922",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
