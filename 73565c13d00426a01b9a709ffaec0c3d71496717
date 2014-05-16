@@ -160,6 +160,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ff1cc50_941e94f6",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1004248
+      },
+      "writtenOn": "2014-05-16T01:30:56Z",
+      "side": 1,
+      "message": "As I explained, hotswap is not supported by vanilla yet.\nAnd when SIM is ejected, system will restart.\nThen it\u0027s lack of implementation to support HotSwap.\nHence onConfigurationChanged with mcc/mnc is called by inserting SIM, onConfigurationChanged with mcc/mnc\u003d0 is needed to invoke on hotswap supported device to keep consistency for application.",
+      "parentUuid": "0a78446e_50e0f4a9",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
