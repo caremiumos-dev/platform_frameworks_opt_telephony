@@ -196,6 +196,24 @@
       "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a4e2058_88b15922",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1004248
+      },
+      "writtenOn": "2014-05-16T02:52:05Z",
+      "side": 1,
+      "message": "Yes, after supporting hotswap, keeping working without restart is expected behavior.\n\nTherefore onCofigurationChanged with mcc/mnc\u003d0 is needed to keep consistency.",
+      "parentUuid": "ca71cc8d_c6e7e4f6",
+      "revId": "73565c13d00426a01b9a709ffaec0c3d71496717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
