@@ -16,6 +16,24 @@
       "revId": "0e191a952c1e7fb83c39f464d8b80545d679d615",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf505ca5_d1a84eb0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1018623
+      },
+      "writtenOn": "2014-06-04T21:07:09Z",
+      "side": 1,
+      "message": "Basebandless targets are the devices that dont have modem support.",
+      "parentUuid": "3f162cdd_dba947b6",
+      "revId": "0e191a952c1e7fb83c39f464d8b80545d679d615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
