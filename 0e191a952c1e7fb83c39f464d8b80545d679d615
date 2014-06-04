@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f162cdd_dba947b6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2014-06-04T00:13:24Z",
+      "side": 1,
+      "message": "what is a \"basebandless target\"?",
+      "revId": "0e191a952c1e7fb83c39f464d8b80545d679d615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
