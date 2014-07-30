@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "763a93c6_babf3596",
+        "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1000718
+      },
+      "writtenOn": "2014-07-30T22:17:11Z",
+      "side": 1,
+      "message": "What exception is passed back on failure?  Can we map it to IccVmNotSupportedException, and let it flow through block above?",
+      "revId": "c739010fc249059bb745bf0ee2ec742576e6ab88",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
