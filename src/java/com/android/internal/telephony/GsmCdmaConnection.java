@@ -40,6 +40,9 @@ import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
 import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.telephony.Rlog;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * {@hide}
  */
@@ -137,6 +140,7 @@ public class GsmCdmaConnection extends Connection {
         mAddress = dc.number;
         setEmergencyCallInfo(mOwner);
 
+        mForwardedNumber = new ArrayList<String>(Arrays.asList(dc.forwardedNumber));
         mIsIncoming = dc.isMT;
         mCreateTime = System.currentTimeMillis();
         mCnapName = dc.name;
@@ -693,6 +697,14 @@ public class GsmCdmaConnection extends Connection {
             mAudioCodec = dc.audioQuality;
             mMetrics.writeAudioCodecGsmCdma(mOwner.getPhone().getPhoneId(), dc.audioQuality);
             mOwner.getPhone().getVoiceCallSessionStats().onAudioCodecChanged(this, dc.audioQuality);
+        }
+
+        ArrayList<String> forwardedNumber =
+                new ArrayList<String>(Arrays.asList(dc.forwardedNumber));
+        if (!equalsHandlesNulls(mForwardedNumber, forwardedNumber)) {
+            if (Phone.DEBUG_PHONE) log("update: mForwardedNumber, # changed!");
+            mForwardedNumber = forwardedNumber;
+            changed = true;
         }
 
         // A null cnapName should be the same as ""
