@@ -1110,6 +1110,12 @@ public class ImsPhoneConnection extends Connection implements
         }
     }
 
+    private void updateForwardedNumberFromExtras(Bundle extras) {
+        if (extras.containsKey(ImsCallProfile.EXTRA_FORWARDED_NUMBER)) {
+            mForwardedNumber = extras.getString(ImsCallProfile.EXTRA_FORWARDED_NUMBER, null);
+        }
+    }
+
     /**
      * Check for a change in call extras of {@link ImsCall}, and
      * update the {@link ImsPhoneConnection} accordingly.
@@ -1132,6 +1138,7 @@ public class ImsPhoneConnection extends Connection implements
         if (changed) {
             updateImsCallRatFromExtras(extras);
             updateEmergencyCallFromExtras(extras);
+            updateForwardedNumberFromExtras(extras);
             mExtras.clear();
             mExtras.putAll(extras);
             setConnectionExtras(mExtras);

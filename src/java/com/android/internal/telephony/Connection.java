@@ -27,6 +27,7 @@ import android.util.Log;
 
 import java.lang.Override;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -199,6 +200,8 @@ public abstract class Connection {
     protected boolean mNumberConverted = false;
     protected String mConvertedNumber;
 
+    protected String mForwardedNumber = null; //May be null. Incoming calls only.
+
     protected String mPostDialString;      // outgoing calls only
     protected int mNextPostDialChar;       // index into postDialString
 
@@ -277,6 +280,20 @@ public abstract class Connection {
 
     public String getAddress() {
         return mAddress;
+    }
+
+    /**
+     * Gets redirecting address (e.g. phone number) associated with connection.
+     *
+     * @return ArrayList of the forwarded number or null if unavailable
+     */
+    public ArrayList<String> getForwardedNumber() {
+        ArrayList<String> forwardedNumber = null;
+        if (mForwardedNumber != null) {
+            forwardedNumber = new ArrayList<String>(
+                    Arrays.asList(mForwardedNumber.split("\r\n")));
+        }
+        return forwardedNumber;
     }
 
     /**
