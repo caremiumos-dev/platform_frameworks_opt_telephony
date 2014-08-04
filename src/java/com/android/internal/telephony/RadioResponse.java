@@ -34,8 +34,8 @@ import android.hardware.radio.V1_0.RadioResponseInfo;
 import android.hardware.radio.V1_0.SendSmsResult;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
 import android.hardware.radio.V1_4.CarrierRestrictionsWithPriority;
-import android.hardware.radio.V1_4.IRadioResponse;
 import android.hardware.radio.V1_4.SimLockMultiSimPolicy;
+import android.hardware.radio.V1_5.IRadioResponse;
 import android.os.AsyncResult;
 import android.os.Message;
 import android.os.SystemClock;
@@ -198,6 +198,15 @@ public class RadioResponse extends IRadioResponse.Stub {
     public void getCurrentCallsResponse_1_2(RadioResponseInfo responseInfo,
                                         ArrayList<android.hardware.radio.V1_2.Call> calls) {
         responseCurrentCalls_1_2(responseInfo, calls);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param calls Current call list
+     */
+    public void getCurrentCallsResponse_1_5(RadioResponseInfo responseInfo,
+                                        ArrayList<android.hardware.radio.V1_5.Call> calls) {
+        responseCurrentCalls_1_5(responseInfo, calls);
     }
 
     /**
@@ -402,6 +411,13 @@ public class RadioResponse extends IRadioResponse.Stub {
     /**
      * @param responseInfo Response info struct containing response type, serial no. and error
      */
+    public void setRadioPowerResponse_1_5(RadioResponseInfo responseInfo) {
+        //nop
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
     public void sendDtmfResponse(RadioResponseInfo responseInfo) {
         responseVoid(responseInfo);
     }
@@ -442,6 +458,15 @@ public class RadioResponse extends IRadioResponse.Stub {
     public void setupDataCallResponse_1_4(RadioResponseInfo responseInfo,
             android.hardware.radio.V1_4.SetupDataCallResult setupDataCallResult) {
         responseSetupDataCall(responseInfo, setupDataCallResult);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param setupDataCallResult SetupDataCallResult defined in 1.5/types.hal
+     */
+    public void setupDataCallResponse_1_5(RadioResponseInfo responseInfo,
+            android.hardware.radio.V1_5.SetupDataCallResult setupDataCallResult) {
+        //nop
     }
 
     /**
@@ -623,6 +648,13 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void startNetworkScanResponse_1_4(RadioResponseInfo responseInfo) {
         responseScanStatus(responseInfo);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void startNetworkScanResponse_1_5(RadioResponseInfo responseInfo) {
+        //nop
     }
 
     /**
@@ -1138,6 +1170,13 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void setInitialAttachApnResponse_1_5(RadioResponseInfo responseInfo) {
+        // nop
+    }
+
+    /**
      *
      * @param responseInfo Response info struct containing response type, serial no. and error
      * @param isRegistered false = not registered, true = registered
@@ -1270,6 +1309,13 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void setDataProfileResponse(RadioResponseInfo responseInfo) {
         responseVoid(responseInfo);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void setDataProfileResponse_1_5(RadioResponseInfo responseInfo) {
+        // nop
     }
 
     /**
@@ -1433,6 +1479,13 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void setIndicationFilterResponse(RadioResponseInfo responseInfo) {
         responseVoid(responseInfo);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void setIndicationFilterResponse_1_5(RadioResponseInfo responseInfo) {
+        //nop
     }
 
     /**
@@ -1815,6 +1868,89 @@ public class RadioResponse extends IRadioResponse.Stub {
         }
     }
 
+    private void responseCurrentCalls_1_5(RadioResponseInfo responseInfo,
+                                      ArrayList<android.hardware.radio.V1_5.Call> calls) {
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr != null) {
+            int num = calls.size();
+            ArrayList<DriverCall> dcCalls = new ArrayList<DriverCall>(num);
+            DriverCall dc;
+
+            for (int i = 0; i < num; i++) {
+                dc = new DriverCall();
+                // TODO: change name of function stateFromCLCC() in DriverCall.java to name
+                // clarifying what is CLCC
+                dc.state = DriverCall.stateFromCLCC((int) (calls.get(i).base.base.state));
+                dc.index = calls.get(i).base.base.index;
+                dc.TOA = calls.get(i).base.base.toa;
+                dc.isMpty = calls.get(i).base.base.isMpty;
+                dc.isMT = calls.get(i).base.base.isMT;
+                dc.als = calls.get(i).base.base.als;
+                dc.isVoice = calls.get(i).base.base.isVoice;
+                dc.isVoicePrivacy = calls.get(i).base.base.isVoicePrivacy;
+                dc.number = calls.get(i).base.base.number;
+                dc.numberPresentation =
+                        DriverCall.presentationFromCLIP(
+                                (int) (calls.get(i).base.base.numberPresentation));
+                dc.name = calls.get(i).base.base.name;
+                dc.namePresentation =
+                        DriverCall.presentationFromCLIP(
+                                (int) (calls.get(i).base.base.namePresentation));
+                if (calls.get(i).base.base.uusInfo.size() == 1) {
+                    dc.uusInfo = new UUSInfo();
+                    dc.uusInfo.setType(calls.get(i).base.base.uusInfo.get(0).uusType);
+                    dc.uusInfo.setDcs(calls.get(i).base.base.uusInfo.get(0).uusDcs);
+                    if (!TextUtils.isEmpty(calls.get(i).base.base.uusInfo.get(0).uusData)) {
+                        byte[] userData = calls.get(i).base.base.uusInfo.get(0).uusData.getBytes();
+                        dc.uusInfo.setUserData(userData);
+                    } else {
+                        mRil.riljLog("responseCurrentCalls: uusInfo data is null or empty");
+                    }
+
+                    mRil.riljLogv(String.format("Incoming UUS : type=%d, dcs=%d, length=%d",
+                            dc.uusInfo.getType(), dc.uusInfo.getDcs(),
+                            dc.uusInfo.getUserData().length));
+                    mRil.riljLogv("Incoming UUS : data (hex): "
+                            + IccUtils.bytesToHexString(dc.uusInfo.getUserData()));
+                } else {
+                    mRil.riljLogv("Incoming UUS : NOT present!");
+                }
+
+                // Make sure there's a leading + on addresses with a TOA of 145
+                dc.number = PhoneNumberUtils.stringFromStringAndTOA(dc.number, dc.TOA);
+
+                dc.audioQuality = (int) (calls.get(i).base.audioQuality);
+
+                dc.forwardedNumber = calls.get(i).forwardedNumber;
+
+                dcCalls.add(dc);
+
+                if (dc.isVoicePrivacy) {
+                    mRil.mVoicePrivacyOnRegistrants.notifyRegistrants();
+                    mRil.riljLog("InCall VoicePrivacy is enabled");
+                } else {
+                    mRil.mVoicePrivacyOffRegistrants.notifyRegistrants();
+                    mRil.riljLog("InCall VoicePrivacy is disabled");
+                }
+            }
+
+            Collections.sort(dcCalls);
+
+            if ((num == 0) && mRil.mTestingEmergencyCall.getAndSet(false)) {
+                if (mRil.mEmergencyCallbackModeRegistrant != null) {
+                    mRil.riljLog("responseCurrentCalls: call ended, testing emergency call,"
+                            + " notify ECM Registrants");
+                    mRil.mEmergencyCallbackModeRegistrant.notifyRegistrant();
+                }
+            }
+
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, dcCalls);
+            }
+            mRil.processResponseDone(rr, responseInfo, dcCalls);
+        }
+    }
 
     private void responseVoid(RadioResponseInfo responseInfo) {
         RILRequest rr = mRil.processResponse(responseInfo);
@@ -2365,6 +2501,13 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void setSystemSelectionChannelsResponse_1_5(RadioResponseInfo responseInfo) {
+        //nop
+    }
+
+    /**
      * @param responseInfo Response info struct containing response type, serial no. and error.
      */
     public void enableUiccApplicationsResponse(RadioResponseInfo responseInfo) {
@@ -2385,5 +2528,14 @@ public class RadioResponse extends IRadioResponse.Stub {
             }
             mRil.processResponseDone(rr, responseInfo, enabled);
         }
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error
+     * @param barringInfos a vector of barring info for all barring service types
+     */
+    public void getBarringInfoResponse(RadioResponseInfo info,
+            ArrayList<android.hardware.radio.V1_5.BarringInfo> barringInfos) {
+        //nop
     }
 }
