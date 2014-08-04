@@ -16,6 +16,24 @@
       "revId": "c739010fc249059bb745bf0ee2ec742576e6ab88",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b676cbc3_53cb6432",
+        "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1046174
+      },
+      "writtenOn": "2014-08-04T00:20:14Z",
+      "side": 1,
+      "message": "the error message is \"get EF record size failed\" \nmeans, not support EF field. \n\nso can not include above block.",
+      "parentUuid": "763a93c6_babf3596",
+      "revId": "c739010fc249059bb745bf0ee2ec742576e6ab88",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
