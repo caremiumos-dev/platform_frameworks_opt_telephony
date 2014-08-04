@@ -128,6 +128,7 @@ public class GsmCdmaConnection extends Connection {
 
         mAddress = dc.number;
         mIsEmergencyCall = PhoneNumberUtils.isLocalEmergencyNumber(phone.getContext(), mAddress);
+        mForwardedNumber = dc.forwardedNumber;
         mIsIncoming = dc.isMT;
         mCreateTime = System.currentTimeMillis();
         mCnapName = dc.name;
@@ -656,6 +657,12 @@ public class GsmCdmaConnection extends Connection {
                         ? "high" : "standard"));
             }
             setAudioQuality(newAudioQuality);
+            changed = true;
+        }
+
+        if (!equalsHandlesNulls(mForwardedNumber, dc.forwardedNumber)) {
+            if (Phone.DEBUG_PHONE) log("update: mForwardedNumber, # changed!");
+            mForwardedNumber = dc.forwardedNumber;
             changed = true;
         }
 
