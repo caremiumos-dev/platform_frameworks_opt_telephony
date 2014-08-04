@@ -42,6 +42,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 import static org.junit.Assert.assertEquals;
@@ -337,5 +338,20 @@ public class ImsPhoneConnectionTest extends TelephonyTest {
         mImsCallProfile.setCallExtra(ImsCallProfile.EXTRA_OI, updateAddress);
         mConnectionUT.updateAddressDisplay(mImsCall);
         assertEquals(inputAddress, mConnectionUT.getAddress());
+    }
+
+    @Test
+    @SmallTest
+    public void testSetRedirectingAddress() {
+        mConnectionUT = new ImsPhoneConnection(mImsPhone, mImsCall, mImsCT, mForeGroundCall, false);
+        ArrayList<String> forwardedNumber = new ArrayList<String>();
+        forwardedNumber.add("11111");
+        forwardedNumber.add("22222");
+        forwardedNumber.add("33333");
+
+        assertEquals(mConnectionUT.getForwardedNumber(), null);
+        mBundle.putStringArrayList(ImsCallProfile.EXTRA_FORWARDED_NUMBER, forwardedNumber);
+        assertTrue(mConnectionUT.update(mImsCall, Call.State.ACTIVE));
+        assertEquals(forwardedNumber, mConnectionUT.getForwardedNumber());
     }
 }
