@@ -36,7 +36,7 @@ import android.hardware.radio.V1_0.SendSmsResult;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
 import android.hardware.radio.V1_4.CarrierRestrictionsWithPriority;
 import android.hardware.radio.V1_4.SimLockMultiSimPolicy;
-import android.hardware.radio.V1_5.IRadioResponse;
+import android.hardware.radio.V1_6.IRadioResponse;
 import android.os.AsyncResult;
 import android.os.Message;
 import android.os.SystemClock;
@@ -222,6 +222,16 @@ public class RadioResponse extends IRadioResponse.Stub {
     public void getCurrentCallsResponse_1_2(RadioResponseInfo responseInfo,
                                         ArrayList<android.hardware.radio.V1_2.Call> calls) {
         responseCurrentCalls_1_2(responseInfo, calls);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param calls Current call list
+     */
+    public void getCurrentCallsResponse_1_6(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            ArrayList<android.hardware.radio.V1_6.Call> calls) {
+        responseCurrentCalls_1_6(responseInfo, calls);
     }
 
     /**
@@ -2124,6 +2134,90 @@ public class RadioResponse extends IRadioResponse.Stub {
         }
     }
 
+    private void responseCurrentCalls_1_6(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            ArrayList<android.hardware.radio.V1_6.Call> calls) {
+        RILRequest rr = mRil.processResponse_1_6(responseInfo);
+
+        if (rr != null) {
+            int num = calls.size();
+            ArrayList<DriverCall> dcCalls = new ArrayList<DriverCall>(num);
+            DriverCall dc;
+
+            for (int i = 0; i < num; i++) {
+                dc = new DriverCall();
+                // TODO: change name of function stateFromCLCC() in DriverCall.java to name
+                // clarifying what is CLCC
+                dc.state = DriverCall.stateFromCLCC((int) (calls.get(i).base.base.state));
+                dc.index = calls.get(i).base.base.index;
+                dc.TOA = calls.get(i).base.base.toa;
+                dc.isMpty = calls.get(i).base.base.isMpty;
+                dc.isMT = calls.get(i).base.base.isMT;
+                dc.als = calls.get(i).base.base.als;
+                dc.isVoice = calls.get(i).base.base.isVoice;
+                dc.isVoicePrivacy = calls.get(i).base.base.isVoicePrivacy;
+                dc.number = calls.get(i).base.base.number;
+                dc.numberPresentation =
+                        DriverCall.presentationFromCLIP(
+                                (int) (calls.get(i).base.base.numberPresentation));
+                dc.name = calls.get(i).base.base.name;
+                dc.namePresentation =
+                        DriverCall.presentationFromCLIP(
+                                (int) (calls.get(i).base.base.namePresentation));
+                if (calls.get(i).base.base.uusInfo.size() == 1) {
+                    dc.uusInfo = new UUSInfo();
+                    dc.uusInfo.setType(calls.get(i).base.base.uusInfo.get(0).uusType);
+                    dc.uusInfo.setDcs(calls.get(i).base.base.uusInfo.get(0).uusDcs);
+                    if (!TextUtils.isEmpty(calls.get(i).base.base.uusInfo.get(0).uusData)) {
+                        byte[] userData = calls.get(i).base.base.uusInfo.get(0).uusData.getBytes();
+                        dc.uusInfo.setUserData(userData);
+                    } else {
+                        mRil.riljLog("responseCurrentCalls: uusInfo data is null or empty");
+                    }
+
+                    mRil.riljLogv(String.format("Incoming UUS : type=%d, dcs=%d, length=%d",
+                            dc.uusInfo.getType(), dc.uusInfo.getDcs(),
+                            dc.uusInfo.getUserData().length));
+                    mRil.riljLogv("Incoming UUS : data (hex): "
+                            + IccUtils.bytesToHexString(dc.uusInfo.getUserData()));
+                } else {
+                    mRil.riljLogv("Incoming UUS : NOT present!");
+                }
+
+                // Make sure there's a leading + on addresses with a TOA of 145
+                dc.number = PhoneNumberUtils.stringFromStringAndTOA(dc.number, dc.TOA);
+
+                dc.audioQuality = (int) (calls.get(i).base.audioQuality);
+
+                dc.forwardedNumber = calls.get(i).forwardedNumber;
+
+                dcCalls.add(dc);
+
+                if (dc.isVoicePrivacy) {
+                    mRil.mVoicePrivacyOnRegistrants.notifyRegistrants();
+                    mRil.riljLog("InCall VoicePrivacy is enabled");
+                } else {
+                    mRil.mVoicePrivacyOffRegistrants.notifyRegistrants();
+                    mRil.riljLog("InCall VoicePrivacy is disabled");
+                }
+            }
+
+            Collections.sort(dcCalls);
+
+            if ((num == 0) && mRil.mTestingEmergencyCall.getAndSet(false)) {
+                if (mRil.mEmergencyCallbackModeRegistrant != null) {
+                    mRil.riljLog("responseCurrentCalls: call ended, testing emergency call,"
+                            + " notify ECM Registrants");
+                    mRil.mEmergencyCallbackModeRegistrant.notifyRegistrant();
+                }
+            }
+
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, dcCalls);
+            }
+            mRil.processResponseDone_1_6(rr, responseInfo, dcCalls);
+        }
+    }
 
     private void responseVoid(RadioResponseInfo responseInfo) {
         RILRequest rr = mRil.processResponse(responseInfo);
@@ -2789,5 +2883,126 @@ public class RadioResponse extends IRadioResponse.Stub {
     public void sendCdmaSmsExpectMoreResponse(RadioResponseInfo responseInfo,
             SendSmsResult sms) {
         responseSms(responseInfo, sms);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param sms Response to sms sent as defined by SendSmsResult in types.hal
+     */
+    public void sendCdmaSmsExpectMoreResponse_1_6(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo, SendSmsResult sms) {
+        // nop
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param sms Response to sms sent as defined by SendSmsResult in types.hal
+     */
+    public void sendCdmaSmsResponse_1_6(android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            SendSmsResult sms) {
+        // nop
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param sms Response to sms sent as defined by SendSmsResult in types.hal
+     */
+    public void sendSMSExpectMoreResponse_1_6(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo, SendSmsResult sms) {
+        // nop
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param sms Response to sms sent as defined by SendSmsResult in types.hal
+     */
+    public void sendSmsResponse_1_6(android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            SendSmsResult sms) {
+        // nop
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param dataCallResultList Response to get data call list as defined by setupDataCallResult in
+     *                           1.6/types.hal
+     */
+    public void getDataCallListResponse_1_6(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            ArrayList<android.hardware.radio.V1_6.SetupDataCallResult> dataCallResultList) {
+        // nop
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param setupDataCallResult Response to data call setup as defined by setupDataCallResult in
+     *                            1.6/types.hal
+     */
+    public void setupDataCallResponse_1_6(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            android.hardware.radio.V1_6.SetupDataCallResult setupDataCallResult) {
+        // nop
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error.
+     */
+    public void setSimCardPowerResponse_1_6(android.hardware.radio.V1_6.RadioResponseInfo info) {
+        // nop
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error.
+     */
+    public void enableNrDualConnectivityResponse(
+            android.hardware.radio.V1_6.RadioResponseInfo info) {
+        // nop
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error.
+     * @param isEnabled Indicates whether NR dual connectivity is enabled or not, True if enabled
+     *        else false.
+     */
+    public void isNrDualConnectivityEnabledResponse(
+            android.hardware.radio.V1_6.RadioResponseInfo info, boolean isEnabled) {
+        // nop
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error.
+     * @param id The allocated id. On an error, this is set to -1
+     */
+    public void allocatePduSessionIdResponse(android.hardware.radio.V1_6.RadioResponseInfo info,
+            int id) {
+        // nop
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error.
+     */
+    public void releasePduSessionIdResponse(android.hardware.radio.V1_6.RadioResponseInfo info) {
+        // nop
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error.
+     */
+    public void beginHandoverResponse(android.hardware.radio.V1_6.RadioResponseInfo info) {
+        // nop
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error.
+     */
+    public void cancelHandoverResponse(android.hardware.radio.V1_6.RadioResponseInfo info) {
+        // nop
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error.
+     */
+    public void setAllowedNetworkTypeBitmapResponse(
+            android.hardware.radio.V1_6.RadioResponseInfo info) {
+        // nop
     }
 }

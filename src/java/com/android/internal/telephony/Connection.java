@@ -239,6 +239,8 @@ public abstract class Connection {
     protected boolean mNumberConverted = false;
     protected String mConvertedNumber;
 
+    protected ArrayList<String> mForwardedNumber = null; //May be null. Incoming calls only.
+
     protected String mPostDialString;      // outgoing calls only
     protected int mNextPostDialChar;       // index into postDialString
 
@@ -352,6 +354,15 @@ public abstract class Connection {
     // return whether connection is AdhocConference or not
     public boolean isAdhocConference() {
         return mIsAdhocConference;
+    }
+
+    /**
+     * Gets redirecting address (e.g. phone number) associated with connection.
+     *
+     * @return ArrayList of the forwarded number or null if unavailable
+     */
+    public ArrayList<String> getForwardedNumber() {
+        return mForwardedNumber;
     }
 
     /**
