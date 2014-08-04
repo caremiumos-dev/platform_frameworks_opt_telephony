@@ -66,6 +66,7 @@ public class DriverCall implements Comparable<DriverCall> {
     public State state;     // May be null if unavail
     public boolean isMpty;
     public String number;
+    public String forwardedNumber;     // May be null. Incoming calls only.
     public int TOA;
     public boolean isVoice;
     public boolean isVoicePrivacy;
