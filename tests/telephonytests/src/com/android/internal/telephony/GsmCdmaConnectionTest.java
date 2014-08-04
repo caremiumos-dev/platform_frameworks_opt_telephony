@@ -30,6 +30,9 @@ import android.test.suitebuilder.annotation.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -248,5 +251,23 @@ public class GsmCdmaConnectionTest extends TelephonyTest {
         mDC.number = "678";
         connection.update(mDC);
         assertEquals("12345", connection.getAddress());
+    }
+
+    @Test @SmallTest
+    public void testRedirectingAddressUpdate() {
+        String forwardedNumber = "11111";
+
+        connection = new GsmCdmaConnection(mPhone, "12345", mCT, null, false);
+        connection.setIsIncoming(true);
+        assertEquals(null, connection.getForwardedNumber());
+        mDC.state = DriverCall.State.ALERTING;
+        mDC.forwardedNumber = forwardedNumber;
+        connection.update(mDC);
+        assertEquals(new ArrayList<String>(Arrays.asList(forwardedNumber)),
+                connection.getForwardedNumber());
+
+        connection = new GsmCdmaConnection(mPhone, mDC, mCT, 0);
+        assertEquals(new ArrayList<String>(Arrays.asList(forwardedNumber)),
+                connection.getForwardedNumber());
     }
 }
