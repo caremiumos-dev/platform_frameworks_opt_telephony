@@ -34,6 +34,24 @@
       "revId": "c739010fc249059bb745bf0ee2ec742576e6ab88",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b6a40b88_ec563f90",
+        "filename": "src/java/com/android/internal/telephony/gsm/GSMPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1046174
+      },
+      "writtenOn": "2014-08-20T07:24:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b676cbc3_53cb6432",
+      "revId": "c739010fc249059bb745bf0ee2ec742576e6ab88",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
