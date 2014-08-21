@@ -1464,6 +1464,13 @@ public interface CommandsInterface {
     void setCarrierInfoForImsiEncryption(ImsiEncryptionInfo imsiEncryptionInfo,
                                          Message response);
 
+    /**
+     * Get ATR (Answer To Reset; as per ISO/IEC 7816-4) from SIM card
+     *
+     * @param result Callback message
+     */
+    public void getAtr(Message result);
+
     void invokeOemRilRequestStrings(String[] strings, Message response);
 
     /**
