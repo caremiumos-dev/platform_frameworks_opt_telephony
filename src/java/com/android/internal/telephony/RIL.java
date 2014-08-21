@@ -3624,6 +3624,25 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
+    public void getAtr(Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_SIM_QUERY_ATR, result,
+                    mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> iccGetAtr: " + requestToString(rr.mRequest));
+            }
+
+            try {
+                radioProxy.getAtr(rr.mSerial);
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "getAtrResponse", e);
+            }
+        }
+    }
+
+    @Override
     public void getIMEI(Message result) {
         throw new RuntimeException("getIMEI not expected to be called");
     }
@@ -4518,6 +4537,8 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_GET_ALLOWED_CARRIERS";
             case RIL_REQUEST_SET_SIM_CARD_POWER:
                 return "RIL_REQUEST_SET_SIM_CARD_POWER";
+            case RIL_REQUEST_SIM_QUERY_ATR:
+                return "RIL_REQUEST_SIM_QUERY_ATR";
             case RIL_REQUEST_SEND_DEVICE_STATE:
                 return "RIL_REQUEST_SEND_DEVICE_STATE";
             case RIL_REQUEST_SET_UNSOLICITED_RESPONSE_FILTER:
