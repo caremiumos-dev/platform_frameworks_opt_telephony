@@ -3824,6 +3824,35 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
+    public void getAtr(Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            android.hardware.radio.V1_1.IRadio radioProxy11 =
+                    android.hardware.radio.V1_1.IRadio.castFrom(radioProxy);
+            if (radioProxy11 == null) {
+                if (result != null) {
+                    AsyncResult.forMessage(result, null,
+                        CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                    result.sendToTarget();
+                }
+            } else {
+                RILRequest rr = obtainRequest(RIL_REQUEST_SIM_QUERY_ATR, result,
+                        mRILDefaultWorkSource);
+
+                if (RILJ_LOGD) {
+                    riljLog(rr.serialString() + "> iccGetAtr: " + requestToString(rr.mRequest));
+                }
+
+                try {
+                    radioProxy11.getAtr(rr.mSerial);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "getAtr", e);
+                }
+            }
+        }
+    }
+
+    @Override
     public void getIMEI(Message result) {
         throw new RuntimeException("getIMEI not expected to be called");
     }
@@ -4721,6 +4750,8 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_GET_ALLOWED_CARRIERS";
             case RIL_REQUEST_SET_SIM_CARD_POWER:
                 return "RIL_REQUEST_SET_SIM_CARD_POWER";
+            case RIL_REQUEST_SIM_QUERY_ATR:
+                return "RIL_REQUEST_SIM_QUERY_ATR";
             case RIL_REQUEST_SEND_DEVICE_STATE:
                 return "RIL_REQUEST_SEND_DEVICE_STATE";
             case RIL_REQUEST_SET_UNSOLICITED_RESPONSE_FILTER:

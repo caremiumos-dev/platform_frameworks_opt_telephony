@@ -186,6 +186,14 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     /**
      * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param atr String containing the ATR
+     */
+    public void getAtrResponse(RadioResponseInfo responseInfo, String atr) {
+        responseString(responseInfo, atr);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
      */
     public void hangupConnectionResponse(RadioResponseInfo responseInfo) {
         responseVoid(responseInfo);
