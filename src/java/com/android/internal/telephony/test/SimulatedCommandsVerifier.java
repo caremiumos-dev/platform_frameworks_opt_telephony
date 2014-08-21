@@ -1358,4 +1358,8 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     @Override
     public void setSimCardPower(boolean powerUp, Message result) {
     }
+
+    @Override
+    public void getAtr(Message response) {
+    }
 }

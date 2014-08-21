@@ -3938,6 +3938,19 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void getAtr(Message response) {
+        RILRequest rr = RILRequest.obtain(RIL_REQUEST_SIM_QUERY_ATR, response,
+                mRILDefaultWorkSource);
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> iccGetAtr: "
+                + requestToString(rr.mRequest));
+
+        send(rr);
+    }
+
     @Override
     public void setSimCardPower(boolean powerUp, Message result) {
         IRadio radioProxy = getRadioProxy(result);
@@ -5308,6 +5321,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         }
         return ret;
     }
+
 
     static ArrayList<HardwareConfig> convertHalHwConfigList(
             ArrayList<android.hardware.radio.V1_0.HardwareConfig> hwListRil,
