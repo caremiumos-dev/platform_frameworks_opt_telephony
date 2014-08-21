@@ -927,4 +927,8 @@ public abstract class BaseCommands implements CommandsInterface {
     public void unregisterForCarrierInfoForImsiEncryption(Handler h) {
         mCarrierInfoForImsiEncryptionRegistrants.remove(h);
     }
+
+    @Override
+    public void getAtr(Message response) {
+    }
 }

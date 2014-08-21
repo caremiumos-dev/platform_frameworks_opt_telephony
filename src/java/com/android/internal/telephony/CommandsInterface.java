@@ -1463,6 +1463,13 @@ public interface CommandsInterface {
                                          Message response);
 
     /**
+     * Get ATR (Answer To Reset; as per ISO/IEC 7816-4) from SIM card
+     *
+     * @param response callback message
+     */
+    public void getAtr(Message response);
+
+    /**
      * Send TERMINAL RESPONSE to the SIM, after processing a proactive command
      * sent by the SIM.
      *
