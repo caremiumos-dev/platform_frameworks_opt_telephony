@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90c0ef69_55363bf9",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2014-09-16T23:52:40Z",
+      "side": 1,
+      "message": "Where is this used?",
+      "revId": "29cd6fce1e19224f7a62126b64df8b2b201f7d66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
