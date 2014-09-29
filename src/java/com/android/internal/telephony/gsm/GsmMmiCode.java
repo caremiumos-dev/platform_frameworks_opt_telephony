@@ -22,6 +22,7 @@ import com.android.internal.telephony.*;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
+import com.android.internal.util.ArrayUtils;
 
 import android.os.*;
 import android.telephony.PhoneNumberUtils;
@@ -29,6 +30,7 @@ import android.text.SpannableStringBuilder;
 import android.text.BidiFormatter;
 import android.text.TextDirectionHeuristics;
 import android.text.TextUtils;
+import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
 
 import static com.android.internal.telephony.CommandsInterface.*;
@@ -207,16 +209,20 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             ret.mPwd = makeEmptyNull(m.group(MATCH_GROUP_PWD_CONFIRM));
             ret.mDialingNumber = makeEmptyNull(m.group(MATCH_GROUP_DIALING_NUMBER));
             ret.mCallbackReceiver = wrappedCallback;
-            // According to TS 22.030 6.5.2 "Structure of the MMI",
-            // the dialing number should not ending with #.
-            // The dialing number ending # is treated as unique USSD,
-            // eg, *400#16 digit number# to recharge the prepaid card
-            // in India operator(Mumbai MTNL)
+
             if(ret.mDialingNumber != null &&
                     ret.mDialingNumber.endsWith("#") &&
                     dialString.endsWith("#")){
+                // According to TS 22.030 6.5.2 "Structure of the MMI",
+                // the dialing number should not ending with #.
+                // The dialing number ending # is treated as unique USSD,
+                // eg, *400#16 digit number# to recharge the prepaid card
+                // in India operator(Mumbai MTNL)
                 ret = new GsmMmiCode(phone, app);
                 ret.mPoundString = dialString;
+            } else if (ret.isFacToDial()) {
+                // It checks whether it is FAC to dial as a normally call.
+                ret = null;
             }
         } else if (dialString.endsWith("#")) {
             // TS 22.030 sec 6.5.3.2
@@ -747,6 +753,23 @@ public final class GsmMmiCode extends Handler implements MmiCode {
         }
 
         return CommandsInterface.CLIR_DEFAULT;
+    }
+
+    private boolean isFacToDial() {
+        CarrierConfigManager configManager = (CarrierConfigManager)
+                mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle b = configManager.getConfigForSubId(mPhone.getSubId());
+        String[] dialFacList = b.getStringArray(CarrierConfigManager
+                .KEY_ENABLE_DIAL_FAC_STRING_ARRAY);
+
+        if (!ArrayUtils.isEmpty(dialFacList)) {
+            for (String fac : dialFacList) {
+                if (fac.equals(mSc)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     boolean isActivate() {
