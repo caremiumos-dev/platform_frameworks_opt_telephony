@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f02f6cb3_a207de84",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000718
+      },
+      "writtenOn": "2014-10-01T23:11:22Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be RIL_REQUEST_SEND_SMS_EXPECT_MORE?",
+      "range": {
+        "startLine": 1218,
+        "startChar": 36,
+        "endLine": 1218,
+        "endChar": 56
+      },
+      "revId": "f0c2ca55055d84cd707009e1d63efcb8804d467f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
