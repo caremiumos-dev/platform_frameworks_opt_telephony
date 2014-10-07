@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0b988d9_c23e78b0",
+        "filename": "src/java/com/android/internal/telephony/gsm/SmsCbConstants.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000718
+      },
+      "writtenOn": "2014-10-07T17:09:50Z",
+      "side": 1,
+      "message": "Minor nit: Don\u0027t use tab.",
+      "range": {
+        "startLine": 100,
+        "startChar": 77,
+        "endLine": 100,
+        "endChar": 78
+      },
+      "revId": "a94bb944b5a8ae004c6a9679644bbb4cd8e5afdc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
