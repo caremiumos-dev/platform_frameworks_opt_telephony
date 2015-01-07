@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2efb6987_6ca03baa",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1001401
+      },
+      "writtenOn": "2015-01-07T17:39:53Z",
+      "side": 1,
+      "message": "fix white space, use only spaces (no tabs) and no trailing white space.",
+      "revId": "b5f188454be60d965e4b12c0e7d3462228f793fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
