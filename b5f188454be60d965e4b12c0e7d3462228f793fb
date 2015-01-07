@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "0ef86589_d15e2434",
+        "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1000718
+      },
+      "writtenOn": "2015-01-07T19:32:29Z",
+      "side": 1,
+      "message": "Why not address the issue in PhoneNumberUtils.cdmaCheckAndProcessPlusCodeForSms instead?",
+      "revId": "b5f188454be60d965e4b12c0e7d3462228f793fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2efb6987_6ca03baa",
         "filename": "src/java/com/android/internal/telephony/cdma/SmsMessage.java",
         "patchSetId": 1
