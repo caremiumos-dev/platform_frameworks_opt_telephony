@@ -46,6 +46,30 @@
       "revId": "9980a164144c449fec19055b6e6079fed9c2177a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ba5b782_2cc77728",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2015-01-16T22:53:45Z",
+      "side": 1,
+      "message": "I misunderstood the purpose of this line\u0027s change.  It is more readable/understandable as getDefault, but I thought you were making a \"real\" change here..  thanks for the response.",
+      "parentUuid": "cbd63fdb_f40a9642",
+      "range": {
+        "startLine": 580,
+        "startChar": 35,
+        "endLine": 580,
+        "endChar": 45
+      },
+      "revId": "9980a164144c449fec19055b6e6079fed9c2177a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
