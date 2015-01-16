@@ -22,6 +22,30 @@
       "revId": "9980a164144c449fec19055b6e6079fed9c2177a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cbd63fdb_f40a9642",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2015-01-16T19:47:12Z",
+      "side": 1,
+      "message": "there\u0027s no difference, unless you\u0027re running very early on in the boot flow on the first ever boot of the device.",
+      "parentUuid": "4bab2f57_885217a8",
+      "range": {
+        "startLine": 580,
+        "startChar": 35,
+        "endLine": 580,
+        "endChar": 45
+      },
+      "revId": "9980a164144c449fec19055b6e6079fed9c2177a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
