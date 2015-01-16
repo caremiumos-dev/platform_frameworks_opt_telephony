@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bab2f57_885217a8",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2015-01-16T19:45:49Z",
+      "side": 1,
+      "message": "How is the getDefault locale different than the persisted locale?",
+      "range": {
+        "startLine": 580,
+        "startChar": 35,
+        "endLine": 580,
+        "endChar": 45
+      },
+      "revId": "9980a164144c449fec19055b6e6079fed9c2177a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
