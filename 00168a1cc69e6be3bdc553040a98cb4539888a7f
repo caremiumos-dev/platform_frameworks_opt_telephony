@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3f39619_21a7c887",
+        "filename": "src/java/com/android/internal/telephony/PhoneSubInfoController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1037953
+      },
+      "writtenOn": "2015-04-08T14:21:55Z",
+      "side": 1,
+      "message": "The PhoneSubInfoProxy instance will check for dump permission.",
+      "range": {
+        "startLine": 303,
+        "startChar": 29,
+        "endLine": 303,
+        "endChar": 30
+      },
+      "revId": "00168a1cc69e6be3bdc553040a98cb4539888a7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
