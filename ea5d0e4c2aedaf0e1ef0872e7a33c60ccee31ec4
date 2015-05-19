@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d179dd9_dbbdc74a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2015-05-19T17:04:53Z",
+      "side": 1,
+      "message": "please use git cherry-pick -X so that you get a (cherry-picked from ....) line in your commit message. Also, please make sure that appears before the Change-Id.",
+      "revId": "ea5d0e4c2aedaf0e1ef0872e7a33c60ccee31ec4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
