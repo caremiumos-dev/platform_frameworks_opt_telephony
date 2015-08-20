@@ -399,6 +399,14 @@ public class ServiceStateTracker extends Handler {
     private int mNewMaxDataCalls = 1;
     private int mReasonDataDenied = -1;
     private int mNewReasonDataDenied = -1;
+
+    /**
+     * The code of the rejection cause that is sent by network when the CS
+     * registration is rejected. It should be shown to the user as a notification.
+     */
+    private int mRejectCode;
+    private int mNewRejectCode;
+
     /**
      * GSM roaming status solely based on TS 27.007 7.2 CREG. Only used by
      * handlePollStateResult to store CREG roaming result.
@@ -430,9 +438,15 @@ public class ServiceStateTracker extends Handler {
     public static final int CS_DISABLED = 1004;           // Access Control enables all voice/sms service
     public static final int CS_NORMAL_ENABLED = 1005;     // Access Control blocks normal voice/sms service
     public static final int CS_EMERGENCY_ENABLED = 1006;  // Access Control blocks emergency call service
+    public static final int CS_REJECT_CAUSE_ENABLED = 2001;     // Notify MM rejection cause
+    public static final int CS_REJECT_CAUSE_DISABLED = 2002;    // Cancel MM rejection cause
+
     /** Notification id. */
     public static final int PS_NOTIFICATION = 888;  // Id to update and cancel PS restricted
     public static final int CS_NOTIFICATION = 999;  // Id to update and cancel CS restricted
+    public static final int CS_REJECT_CAUSE_NOTIFICATION = 111; // Id to update and cancel MM
+                                                                // rejection cause
+
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -1630,6 +1644,7 @@ public class ServiceStateTracker extends Handler {
                     int regState = ServiceState.RIL_REG_STATE_UNKNOWN;
                     int reasonRegStateDenied = -1;
                     int psc = -1;
+                    int rejectCode = 0;
                     if (states.length > 0) {
                         try {
                             regState = Integer.parseInt(states[0]);
@@ -1646,6 +1661,13 @@ public class ServiceStateTracker extends Handler {
                                     type = Integer.parseInt(states[3]);
                                 }
                             }
+                            if (states.length > 13 && states[13] != null) {
+                                if (regState
+                                        == ServiceState.RIL_REG_STATE_DENIED_EMERGENCY_CALL_ENABLED
+                                        || regState == ServiceState.RIL_REG_STATE_DENIED) {
+                                    rejectCode = Integer.parseInt(states[13]);
+                                }
+                            }
                             if (states.length > 14) {
                                 if (states[14] != null && states[14].length() > 0) {
                                     psc = (int)Long.parseLong(states[14], 16);
@@ -1659,6 +1681,7 @@ public class ServiceStateTracker extends Handler {
                     mGsmRoaming = regCodeIsRoaming(regState);
                     mNewSS.setVoiceRegState(regCodeToServiceState(regState));
                     mNewSS.setRilVoiceRadioTechnology(type);
+                    mNewRejectCode = rejectCode;
 
                     boolean isVoiceCapable = mPhone.getContext().getResources()
                             .getBoolean(com.android.internal.R.bool.config_voice_capable);
@@ -2625,6 +2648,8 @@ public class ServiceStateTracker extends Handler {
 
         boolean hasDataRoamingOff = mSS.getDataRoaming() && !mNewSS.getDataRoaming();
 
+        boolean hasRejectCauseChanged = mRejectCode != mNewRejectCode;
+
         TelephonyManager tm =
                 (TelephonyManager) mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -2672,6 +2697,7 @@ public class ServiceStateTracker extends Handler {
 
         mReasonDataDenied = mNewReasonDataDenied;
         mMaxDataCalls = mNewMaxDataCalls;
+        mRejectCode = mNewRejectCode;
 
         if (hasRilVoiceRadioTechnologyChanged) {
             updatePhoneObject();
@@ -2694,6 +2720,10 @@ public class ServiceStateTracker extends Handler {
                         mNitzUpdatedTime + " changing to false");
             }
             mNitzUpdatedTime = false;
+        }
+
+        if (hasRejectCauseChanged) {
+            setNotification(mRejectCode == 0 ? CS_REJECT_CAUSE_DISABLED : CS_REJECT_CAUSE_ENABLED);
         }
 
         if (hasChanged) {
@@ -4097,9 +4127,12 @@ public class ServiceStateTracker extends Handler {
     }
 
     /**
-     * Post a notification to NotificationManager for restricted state
+     * Post a notification to NotificationManager for restricted state and
+     * rejection cause for cs registration
      *
-     * @param notifyType is one state of PS/CS_*_ENABLE/DISABLE
+     * @param notifyType is one state of
+     *            PS/CS_*_ENABLE/DISABLE/
+     *            CS_REJECT_CAUSE_ENABLED/CS_REJECT_CAUSE_DISABLED
      */
     @VisibleForTesting
     public void setNotification(int notifyType) {
@@ -4119,6 +4152,7 @@ public class ServiceStateTracker extends Handler {
         CharSequence details = "";
         CharSequence title = context.getText(com.android.internal.R.string.RestrictedOnData);
         int notificationId = CS_NOTIFICATION;
+        int icon = com.android.internal.R.drawable.stat_sys_warning;
 
         switch (notifyType) {
             case PS_ENABLED:
@@ -4144,13 +4178,26 @@ public class ServiceStateTracker extends Handler {
             case CS_DISABLED:
                 // do nothing and cancel the notification later
                 break;
+            case CS_REJECT_CAUSE_ENABLED:
+                notificationId = CS_REJECT_CAUSE_NOTIFICATION;
+                icon = com.android.internal.R.drawable.stat_notify_mmcc_indication_icn;
+                title = Resources.getSystem().getString(selectResourceForRejectCode(mRejectCode));
+                details = null;
+                break;
+            case CS_REJECT_CAUSE_DISABLED:
+                notificationId = CS_REJECT_CAUSE_NOTIFICATION;
+                break;
         }
 
-        if (DBG) log("setNotification: put notification " + title + " / " +details);
+        if (DBG) {
+            log("setNotification, create notification, notifyType: " + notifyType
+                    + ", title: " + title + ", details: " + details);
+        }
+
         mNotification = new Notification.Builder(context)
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
-                .setSmallIcon(com.android.internal.R.drawable.stat_sys_warning)
+                .setSmallIcon(icon)
                 .setTicker(title)
                 .setColor(context.getResources().getColor(
                         com.android.internal.R.color.system_notification_accent_color))
@@ -4161,13 +4208,42 @@ public class ServiceStateTracker extends Handler {
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (notifyType == PS_DISABLED || notifyType == CS_DISABLED) {
+        if (notifyType == PS_DISABLED || notifyType == CS_DISABLED
+                || notifyType == CS_REJECT_CAUSE_DISABLED) {
             // cancel previous post notification
             notificationManager.cancel(notificationId);
         } else {
             // update restricted state notification
             notificationManager.notify(notificationId, mNotification);
         }
+    }
+
+    /**
+     * Selects the resource ID, which depends on the rejection cause that is sent by the network
+     * when CS registration is rejected.
+     *
+     * @param rejCode should be compatible with TS 24.008.
+     */
+    private int selectResourceForRejectCode(int rejCode) {
+        int rejResourceId = 0;
+        switch (rejCode) {
+            case 1:// Authentication reject
+                rejResourceId = com.android.internal.R.string.mmcc_authentication_reject;
+                break;
+            case 2:// IMSI unknown in HLR
+                rejResourceId = com.android.internal.R.string.mmcc_imsi_unknown_in_hlr;
+                break;
+            case 3:// Illegal MS
+                rejResourceId = com.android.internal.R.string.mmcc_illegal_ms;
+                break;
+            case 6:// Illegal ME
+                rejResourceId = com.android.internal.R.string.mmcc_illegal_me;
+                break;
+            default:
+                // The other codes are not defined or not required by operators till now.
+                break;
+        }
+        return rejResourceId;
     }
 
     private UiccCardApplication getUiccCardApplication() {
