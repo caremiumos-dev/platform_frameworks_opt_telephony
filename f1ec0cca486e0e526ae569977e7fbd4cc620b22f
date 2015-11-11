@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16ac2a06_16549904",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1563,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2015-11-11T20:02:17Z",
+      "side": 1,
+      "message": "lines are now too long.  I think you can drop the null check of onsl/onss.",
+      "range": {
+        "startLine": 1563,
+        "startChar": 0,
+        "endLine": 1563,
+        "endChar": 105
+      },
+      "revId": "f1ec0cca486e0e526ae569977e7fbd4cc620b22f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
