@@ -46,6 +46,30 @@
       "revId": "f1ec0cca486e0e526ae569977e7fbd4cc620b22f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5bfc0b2b_fee70142",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1563,
+      "author": {
+        "id": 1010077
+      },
+      "writtenOn": "2015-11-12T13:15:02Z",
+      "side": 1,
+      "message": "... and this way it will fail quicker then.",
+      "parentUuid": "db11db43_5d3f0f08",
+      "range": {
+        "startLine": 1563,
+        "startChar": 0,
+        "endLine": 1563,
+        "endChar": 105
+      },
+      "revId": "f1ec0cca486e0e526ae569977e7fbd4cc620b22f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
