@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b3453db_6fab4db3",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2015-11-12T19:25:09Z",
+      "side": 1,
+      "message": "This will only be true if we hit #1800. Shouldn\u0027t we also need to SetServiceProviderName(null) in #1772, #1742 as well? BTW, this only affect the debug message. You might want to add two \u0027else\u0027 block for debug messages after #1809 and #1810 instead of doing it here.",
+      "range": {
+        "startLine": 1812,
+        "startChar": 16,
+        "endLine": 1812,
+        "endChar": 55
+      },
+      "revId": "8ebc7d516cccb7f8a80db897ddd57e714bbbb2c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
