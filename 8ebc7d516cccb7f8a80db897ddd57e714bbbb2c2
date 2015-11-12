@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b6da7ea7_9cb8ac04",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1740,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2015-11-12T19:27:30Z",
+      "side": 1,
+      "message": "how about\nfinal String spn \u003d IccUtils.adnStringFieldToString(...);\nif (spn \u003d\u003d null || spn.length() \u003d\u003d 0) {\n    mSpnState \u003d READ_SPN_CPHS;\n} else {\n    setServiceProviderName(spn);\n    ...\n}\n\nIt seems silly to evaluate the string one, call the setter and then call a getter to fetch something we already had in scope..\n\nAlso don\u0027t need to call the setter if we know it\u0027s empty.",
+      "range": {
+        "startLine": 1740,
+        "startChar": 39,
+        "endLine": 1740,
+        "endChar": 61
+      },
+      "revId": "8ebc7d516cccb7f8a80db897ddd57e714bbbb2c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b3453db_6fab4db3",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 2
