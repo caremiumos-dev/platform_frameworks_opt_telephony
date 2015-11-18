@@ -22,6 +22,30 @@
       "revId": "4a9c49d3f511dcb3faa38f4a0ff823f1210f02e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb75bfb9_686547c6",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2015-11-18T18:28:37Z",
+      "side": 1,
+      "message": "and even that mSpn might have a chance to be an empty string. Maybe you should try Robert\u0027s suggestion.",
+      "parentUuid": "db847bce_93c24382",
+      "range": {
+        "startLine": 1811,
+        "startChar": 20,
+        "endLine": 1811,
+        "endChar": 38
+      },
+      "revId": "4a9c49d3f511dcb3faa38f4a0ff823f1210f02e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
