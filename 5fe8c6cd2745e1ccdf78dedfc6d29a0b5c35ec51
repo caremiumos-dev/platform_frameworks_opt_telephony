@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b8e83ee_f44dc0be",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 1010077
+      },
+      "writtenOn": "2015-11-20T15:33:43Z",
+      "side": 1,
+      "message": "Removed, since it is an overhead cause we are doing the setting anyway when we get to READ_SPN_CPHS state.",
+      "revId": "5fe8c6cd2745e1ccdf78dedfc6d29a0b5c35ec51",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "169a6aee_10bf541f",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1795,
+      "author": {
+        "id": 1010077
+      },
+      "writtenOn": "2015-11-20T15:33:43Z",
+      "side": 1,
+      "message": "Removed, since it is an overhead cause we are doing the setting anyway when we get to READ_SPN_SHORT_CPHS state.",
+      "revId": "5fe8c6cd2745e1ccdf78dedfc6d29a0b5c35ec51",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
