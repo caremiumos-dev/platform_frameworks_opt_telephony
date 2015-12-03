@@ -144,7 +144,8 @@ public class UiccPkcs15 extends Handler {
 
         public Pkcs15Selector(Message callBack) {
             mCallback = callBack;
-            mUiccCard.iccOpenLogicalChannel(PKCS15_AID,
+            byte p2 = 0x04;
+            mUiccCard.iccOpenLogicalChannel(PKCS15_AID, p2, /* supported P2 value */
                     obtainMessage(EVENT_OPEN_LOGICAL_CHANNEL_DONE));
         }
 

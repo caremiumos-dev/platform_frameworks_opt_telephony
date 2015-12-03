@@ -1237,7 +1237,7 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public void iccOpenLogicalChannel(String AID, Message response) {
+    public void iccOpenLogicalChannel(String AID, byte p2, Message response) {
 
     }
 
