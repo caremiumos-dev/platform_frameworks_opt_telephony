@@ -905,4 +905,8 @@ public abstract class BaseCommands implements CommandsInterface {
     public void unregisterForPcoData(Handler h) {
         mPcoDataRegistrants.remove(h);
     }
+
+    @Override
+    public void iccOpenLogicalChannel(String AID, int p2, Message response) {
+    }
 }
