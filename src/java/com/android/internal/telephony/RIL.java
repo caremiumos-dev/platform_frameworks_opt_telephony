@@ -4967,9 +4967,10 @@ public final class RIL extends BaseCommands implements CommandsInterface {
      * {@inheritDoc}
      */
     @Override
-    public void iccOpenLogicalChannel(String AID, Message response) {
+    public void iccOpenLogicalChannel(String AID, byte p2, Message response) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_SIM_OPEN_CHANNEL, response);
         rr.mParcel.writeString(AID);
+        rr.mParcel.writeByte(p2);
 
         if (RILJ_LOGD)
             riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));

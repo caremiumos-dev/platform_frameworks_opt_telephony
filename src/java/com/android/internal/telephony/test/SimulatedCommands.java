@@ -1874,8 +1874,8 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
-    public void iccOpenLogicalChannel(String AID, Message response) {
-        SimulatedCommandsVerifier.getInstance().iccOpenLogicalChannel(AID, response);
+    public void iccOpenLogicalChannel(String AID, byte p2, Message response) {
+        SimulatedCommandsVerifier.getInstance().iccOpenLogicalChannel(AID, p2, response);
         Object result = new int[]{mChannelId};
         resultSuccess(response, result);
     }
