@@ -1182,9 +1182,10 @@ public class ImsPhoneConnection extends Connection implements
 
     /**
      * Determines the {@link ImsPhoneConnection} audio quality based on the local and remote
-     * {@link ImsCallProfile}. Indicate a HD audio call if the local stream profile
-     * is AMR_WB, EVRC_WB, EVS_WB, EVS_SWB, EVS_FB and
-     * there is no remote restrict cause.
+     * {@link ImsCallProfile}. Indicate a HD audio call if the local stream profile is AMR_WB,
+     * EVRC_WB or EVS_WB and there is no remote restrict cause or indicate a HD audio plus call
+     * if the local stream profile is EVS_SWB or EVS_FB and there is no remote restrict cause.
+     * Otherwise, indicate a standard audio call.
      *
      * @param localCallProfile The local call profile.
      * @param remoteCallProfile The remote call profile.
@@ -1193,24 +1194,28 @@ public class ImsPhoneConnection extends Connection implements
     private int getAudioQualityFromCallProfile(
             ImsCallProfile localCallProfile, ImsCallProfile remoteCallProfile) {
         if (localCallProfile == null || remoteCallProfile == null
-                || localCallProfile.mMediaProfile == null) {
+                || localCallProfile.mMediaProfile == null
+                || remoteCallProfile.getRestrictCause()
+                        != ImsCallProfile.CALL_RESTRICT_CAUSE_NONE) {
             return AUDIO_QUALITY_STANDARD;
         }
 
-        final boolean isEvsCodecHighDef = (localCallProfile.mMediaProfile.mAudioQuality
-                        == ImsStreamMediaProfile.AUDIO_QUALITY_EVS_WB
-                || localCallProfile.mMediaProfile.mAudioQuality
-                        == ImsStreamMediaProfile.AUDIO_QUALITY_EVS_SWB
-                || localCallProfile.mMediaProfile.mAudioQuality
-                        == ImsStreamMediaProfile.AUDIO_QUALITY_EVS_FB);
+        int audioQuality = AUDIO_QUALITY_STANDARD;
+        switch (localCallProfile.mMediaProfile.mAudioQuality) {
+            case ImsStreamMediaProfile.AUDIO_QUALITY_EVS_SWB:
+            case ImsStreamMediaProfile.AUDIO_QUALITY_EVS_FB:
+                audioQuality = AUDIO_QUALITY_HIGH_DEFINITION_PLUS;
+                break;
+            case ImsStreamMediaProfile.AUDIO_QUALITY_EVS_WB:
+            case ImsStreamMediaProfile.AUDIO_QUALITY_EVRC_WB:
+            case ImsStreamMediaProfile.AUDIO_QUALITY_AMR_WB:
+                audioQuality =  AUDIO_QUALITY_HIGH_DEFINITION;
+                break;
+            default:
+                break;
+        }
 
-        final boolean isHighDef = (localCallProfile.mMediaProfile.mAudioQuality
-                        == ImsStreamMediaProfile.AUDIO_QUALITY_AMR_WB
-                || localCallProfile.mMediaProfile.mAudioQuality
-                        == ImsStreamMediaProfile.AUDIO_QUALITY_EVRC_WB
-                || isEvsCodecHighDef)
-                && remoteCallProfile.getRestrictCause() == ImsCallProfile.CALL_RESTRICT_CAUSE_NONE;
-        return isHighDef ? AUDIO_QUALITY_HIGH_DEFINITION : AUDIO_QUALITY_STANDARD;
+        return audioQuality;
     }
 
     /**

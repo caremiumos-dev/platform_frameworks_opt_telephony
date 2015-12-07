@@ -24,6 +24,7 @@ import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
 import android.telephony.ims.ImsCallProfile;
+import android.telephony.ims.ImsStreamMediaProfile;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -337,5 +338,43 @@ public class ImsPhoneConnectionTest extends TelephonyTest {
         mImsCallProfile.setCallExtra(ImsCallProfile.EXTRA_OI, updateAddress);
         mConnectionUT.updateAddressDisplay(mImsCall);
         assertEquals(inputAddress, mConnectionUT.getAddress());
+    }
+
+    /**
+     * Test updates to a HD+ audio quality with EVS_SWB and EVS_FB codec.
+     */
+    @Test
+    @SmallTest
+    public void testUpdateAudioQualityOnHighDefAudioPlus() {
+        mConnectionUT = new ImsPhoneConnection(mImsPhone, mImsCall, mImsCT, mForeGroundCall, false);
+        ImsCallProfile localCallProfile = new ImsCallProfile();
+        ImsStreamMediaProfile localMediaProfile = new ImsStreamMediaProfile();
+        ImsCallProfile remoteCallProfile = new ImsCallProfile();
+
+        // EVS codec operated in SWB.
+        localMediaProfile.mAudioQuality = ImsStreamMediaProfile.AUDIO_QUALITY_EVS_SWB;
+        localCallProfile.mMediaProfile = localMediaProfile;
+        try {
+            doReturn(localCallProfile).when(mImsCall).getLocalCallProfile();
+            doReturn(remoteCallProfile).when(mImsCall).getRemoteCallProfile();
+            mConnectionUT.updateMediaCapabilities(mImsCall);
+        } catch (Exception ex) {
+            Assert.fail("unexpected exception thrown" + ex.getMessage());
+        }
+        assertEquals(Connection.AUDIO_QUALITY_HIGH_DEFINITION_PLUS,
+                mConnectionUT.getAudioQuality());
+
+        // EVS codec operated in FB.
+        localMediaProfile.mAudioQuality = ImsStreamMediaProfile.AUDIO_QUALITY_EVS_FB;
+        localCallProfile.mMediaProfile = localMediaProfile;
+        try {
+            doReturn(localCallProfile).when(mImsCall).getLocalCallProfile();
+            doReturn(remoteCallProfile).when(mImsCall).getRemoteCallProfile();
+            mConnectionUT.updateMediaCapabilities(mImsCall);
+        } catch (Exception ex) {
+            Assert.fail("unexpected exception thrown" + ex.getMessage());
+        }
+        assertEquals(Connection.AUDIO_QUALITY_HIGH_DEFINITION_PLUS,
+                mConnectionUT.getAudioQuality());
     }
 }

@@ -165,6 +165,7 @@ public abstract class Connection {
 
     public static final int AUDIO_QUALITY_STANDARD = 1;
     public static final int AUDIO_QUALITY_HIGH_DEFINITION = 2;
+    public static final int AUDIO_QUALITY_HIGH_DEFINITION_PLUS = 3;
 
     /**
      * The telecom internal call ID associated with this connection.  Only to be used for debugging
