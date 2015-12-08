@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0d6b40a_201e4af0",
+        "filename": "src/java/com/google/android/mms/pdu/EncodedStringValue.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2015-12-08T11:39:08Z",
+      "side": 1,
+      "message": "Why not use try-with-resources instead ?",
+      "range": {
+        "startLine": 183,
+        "startChar": 16,
+        "endLine": 183,
+        "endChar": 52
+      },
+      "revId": "23f70be10b0e0008ed84906a438fbaf069bc47ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
