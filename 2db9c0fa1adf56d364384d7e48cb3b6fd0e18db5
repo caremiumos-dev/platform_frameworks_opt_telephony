@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "349a0eef_97b7d3f3",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2264,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-02-01T17:57:48Z",
+      "side": 1,
+      "message": "Should do the same for this as well.",
+      "range": {
+        "startLine": 2264,
+        "startChar": 32,
+        "endLine": 2264,
+        "endChar": 39
+      },
+      "revId": "2db9c0fa1adf56d364384d7e48cb3b6fd0e18db5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
