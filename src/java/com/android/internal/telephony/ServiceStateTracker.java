@@ -210,6 +210,7 @@ public class ServiceStateTracker extends Handler {
     protected static final int EVENT_ALL_DATA_DISCONNECTED             = 49;
     protected static final int EVENT_PHONE_TYPE_SWITCHED               = 50;
     protected static final int EVENT_RADIO_POWER_FROM_CARRIER          = 51;
+    protected static final int EVENT_SIM_LOCKED                        = 52;
 
     protected static final String TIMEZONE_PROPERTY = "persist.sys.timezone";
 
@@ -435,6 +436,10 @@ public class ServiceStateTracker extends Handler {
     /** Notification id. */
     public static final int PS_NOTIFICATION = 888;  // Id to update and cancel PS restricted
     public static final int CS_NOTIFICATION = 999;  // Id to update and cancel CS restricted
+
+    /** To identify whether EVENT_SIM_READY is received or not */
+    private boolean mIsSimReady = false;
+
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -954,9 +959,19 @@ public class ServiceStateTracker extends Handler {
                 // Reset the mPreviousSubId so we treat a SIM power bounce
                 // as a first boot.  See b/19194287
                 mOnSubscriptionsChangedListener.mPreviousSubId.set(-1);
+                mIsSimReady = true;
                 pollState();
                 // Signal strength polling stops when radio is off
                 queueNextSignalStrengthPoll();
+                break;
+
+            case EVENT_SIM_LOCKED:
+                if (mUiccApplcation != null
+                        && mUiccApplcation.getState() != AppState.APPSTATE_READY) {
+                    log("EVENT_SIM_LOCKED received");
+                    mIsSimReady = false;
+                    updateSpnDisplay();
+                }
                 break;
 
             case EVENT_RADIO_STATE_CHANGED:
@@ -2170,7 +2185,12 @@ public class ServiceStateTracker extends Handler {
             if (mSS.getVoiceRegState() == ServiceState.STATE_OUT_OF_SERVICE
                     || mSS.getVoiceRegState() == ServiceState.STATE_EMERGENCY_ONLY) {
                 showPlmn = true;
-                if (mEmergencyOnly) {
+
+                // Force display no service
+                final boolean forceDisplayNoService = mPhone.getContext().getResources().getBoolean(
+                        com.android.internal.R.bool.config_display_no_service_when_sim_unready)
+                                && !mIsSimReady;
+                if (mEmergencyOnly && !forceDisplayNoService) {
                     // No service but emergency call allowed
                     plmn = Resources.getSystem().
                             getText(com.android.internal.R.string.emergency_calls_only).toString();
@@ -2377,9 +2397,11 @@ public class ServiceStateTracker extends Handler {
         UiccCardApplication newUiccApplication = getUiccCardApplication();
 
         if (mUiccApplcation != newUiccApplication) {
+            mIsSimReady = false;
             if (mUiccApplcation != null) {
                 log("Removing stale icc objects.");
                 mUiccApplcation.unregisterForReady(this);
+                mUiccApplcation.unregisterForLocked(this);
                 if (mIccRecords != null) {
                     mIccRecords.unregisterForRecordsLoaded(this);
                 }
@@ -2392,6 +2414,7 @@ public class ServiceStateTracker extends Handler {
                 mIccRecords = mUiccApplcation.getIccRecords();
                 if (mPhone.isPhoneTypeGsm()) {
                     mUiccApplcation.registerForReady(this, EVENT_SIM_READY, null);
+                    mUiccApplcation.registerForLocked(this, EVENT_SIM_LOCKED, null);
                     if (mIccRecords != null) {
                         mIccRecords.registerForRecordsLoaded(this, EVENT_SIM_RECORDS_LOADED, null);
                     }
