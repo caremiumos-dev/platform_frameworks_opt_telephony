@@ -17,6 +17,7 @@
 package com.android.internal.telephony;
 
 import android.telephony.CellInfo;
+import android.telephony.ImsFeatureCapabilities;
 import android.telephony.VoLteServiceState;
 
 import java.util.List;
@@ -62,6 +63,11 @@ public interface PhoneNotifier {
     public void notifyVoiceActivationStateChanged(Phone sender, int activationState);
 
     public void notifyDataActivationStateChanged(Phone sender, int activationState);
+
+    public void notifyImsRegisteredChanged(Phone sender, boolean isRegistered);
+
+    public void notifyImsFeatureCapabilitiesChanged(Phone sender,
+            ImsFeatureCapabilities capabilities);
 
     public void notifyOemHookRawEventForSubscriber(int subId, byte[] rawData);
 }

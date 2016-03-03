@@ -1437,7 +1437,10 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     public void setImsRegistered(boolean value) {
-        mImsRegistered = value;
+        if (mImsRegistered != value) {
+            mImsRegistered = value;
+            notifyImsRegisteredChanged();
+        }
     }
 
     @Override
