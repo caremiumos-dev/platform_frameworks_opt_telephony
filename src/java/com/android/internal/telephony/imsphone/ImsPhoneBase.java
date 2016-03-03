@@ -26,6 +26,7 @@ import android.os.SystemProperties;
 import android.os.WorkSource;
 import android.telephony.CellInfo;
 import android.telephony.CellLocation;
+import android.telephony.ImsFeatureCapabilities;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -234,6 +235,13 @@ abstract class ImsPhoneBase extends Phone {
 
     void notifyServiceStateChanged(ServiceState ss) {
         super.notifyServiceStateChangedP(ss);
+    }
+
+    /**
+     * Notify registrants of a change of Ims feature capabilities.
+     */
+    protected void notifyImsFeatureCapabilitiesChanged(ImsFeatureCapabilities capabilities) {
+        mNotifier.notifyImsFeatureCapabilitiesChanged(this, capabilities);
     }
 
     @Override

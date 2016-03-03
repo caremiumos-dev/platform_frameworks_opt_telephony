@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.telephony.CellInfo;
+import android.telephony.ImsFeatureCapabilities;
 import android.telephony.PreciseCallState;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
@@ -283,6 +284,30 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         // FIXME: subID
         try {
             mRegistry.notifyVoLteServiceStateChanged(lteState);
+        } catch (RemoteException ex) {
+            // system process is dead
+        }
+    }
+
+    public void notifyImsRegisteredChanged(Phone sender, boolean isRegistered) {
+        int subId = sender.getSubId();
+        try {
+            if (mRegistry != null) {
+                mRegistry.notifyImsRegisteredChangedForSubscriber(subId, isRegistered);
+            }
+        } catch (RemoteException ex) {
+            // system process is dead
+        }
+    }
+
+    public void notifyImsFeatureCapabilitiesChanged(Phone sender,
+            ImsFeatureCapabilities capabilities) {
+        int subId = sender.getSubId();
+        try {
+            if (mRegistry != null) {
+                mRegistry.notifyImsFeatureCapabilitiesChangedForSubscriber(
+                        subId, capabilities);
+            }
         } catch (RemoteException ex) {
             // system process is dead
         }
