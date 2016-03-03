@@ -17,6 +17,7 @@
 package com.android.internal.telephony;
 
 import android.telephony.CellInfo;
+import android.telephony.ImsFeatureCapabilities;
 import android.telephony.VoLteServiceState;
 
 import java.util.List;
@@ -62,4 +63,21 @@ public interface PhoneNotifier {
     public void notifyVoiceActivationStateChanged(Phone sender, int activationState);
 
     public void notifyDataActivationStateChanged(Phone sender, int activationState);
+
+    /**
+     * Notifies that the IMS registration state has been changed.
+     *
+     * @param sender sender's phone object.
+     * @param isRegistered true is IMS registered and false is not IMS registered.
+     */
+    public void notifyImsRegisteredChanged(Phone sender, boolean isRegistered);
+
+    /**
+     * Notifies that the IMS feature capability has been changed.
+     *
+     * @param sender sender's phone object.
+     * @param capabilities current IMS feature capabilities.
+     */
+    public void notifyImsFeatureCapabilitiesChanged(Phone sender,
+            ImsFeatureCapabilities capabilities);
 }
