@@ -44,6 +44,7 @@ import android.telecom.TelecomManager;
 import android.telecom.VideoProfile;
 import android.telephony.CarrierConfigManager;
 import android.telephony.DisconnectCause;
+import android.telephony.ImsFeatureCapabilities;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.PreciseDisconnectCause;
 import android.telephony.Rlog;
@@ -127,7 +128,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             Rlog.isLoggable(VERBOSE_STATE_TAG, Log.VERBOSE);
 
     //Indices map to ImsConfig.FeatureConstants
-    private boolean[] mImsFeatureEnabled = {false, false, false, false, false, false};
+    private ImsFeatureCapabilities mImsFeatureCapabilities = new ImsFeatureCapabilities();
     private final String[] mImsFeatureStrings = {"VoLTE", "ViLTE", "VoWiFi", "ViWiFi",
             "UTLTE", "UTWiFi"};
 
@@ -3062,10 +3063,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         pw.println(" mPhone=" + mPhone);
         pw.println(" mDesiredMute=" + mDesiredMute);
         pw.println(" mState=" + mState);
-        for (int i = 0; i < mImsFeatureEnabled.length; i++) {
-            pw.println(" " + mImsFeatureStrings[i] + ": "
-                    + ((mImsFeatureEnabled[i]) ? "enabled" : "disabled"));
-        }
+        pw.println(mImsFeatureCapabilities);
         pw.println(" mDefaultDialerUid=" + mDefaultDialerUid.get());
         pw.println(" mVtDataUsageSnapshot=" + mVtDataUsageSnapshot);
         pw.println(" mVtDataUsageUidSnapshot=" + mVtDataUsageUidSnapshot);
@@ -3126,16 +3124,15 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     }
 
     public boolean isVolteEnabled() {
-        return mImsFeatureEnabled[ImsConfig.FeatureConstants.FEATURE_TYPE_VOICE_OVER_LTE];
+        return mImsFeatureCapabilities.isVolteEnabled();
     }
 
     public boolean isVowifiEnabled() {
-        return mImsFeatureEnabled[ImsConfig.FeatureConstants.FEATURE_TYPE_VOICE_OVER_WIFI];
+        return mImsFeatureCapabilities.isVowifiEnabled();
     }
 
     public boolean isVideoCallEnabled() {
-        return (mImsFeatureEnabled[ImsConfig.FeatureConstants.FEATURE_TYPE_VIDEO_OVER_LTE]
-                || mImsFeatureEnabled[ImsConfig.FeatureConstants.FEATURE_TYPE_VIDEO_OVER_WIFI]);
+        return mImsFeatureCapabilities.isVideoCallEnabled();
     }
 
     @Override
@@ -3178,8 +3175,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     }
 
     public boolean isUtEnabled() {
-        return (mImsFeatureEnabled[ImsConfig.FeatureConstants.FEATURE_TYPE_UT_OVER_LTE]
-            || mImsFeatureEnabled[ImsConfig.FeatureConstants.FEATURE_TYPE_UT_OVER_WIFI]);
+        return mImsFeatureCapabilities.isUtEnabled();
     }
 
     /**
@@ -3528,9 +3524,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     private void resetImsCapabilities() {
         log("Resetting Capabilities...");
-        for (int i = 0; i < mImsFeatureEnabled.length; i++) {
-            mImsFeatureEnabled[i] = false;
-        }
+        mImsFeatureCapabilities.setImsFeatureCapabilities(0);
     }
 
     /**
@@ -3558,33 +3552,19 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private void handleFeatureCapabilityChanged(int serviceClass,
             int[] enabledFeatures, int[] disabledFeatures) {
         if (serviceClass == ImsServiceClass.MMTEL) {
-            boolean tmpIsVideoCallEnabled = isVideoCallEnabled();
+            ImsFeatureCapabilities preImsFeatureCapabilities =
+                    new ImsFeatureCapabilities(mImsFeatureCapabilities);
             // Check enabledFeatures to determine capabilities. We ignore disabledFeatures.
-            StringBuilder sb;
-            if (DBG) {
-                sb = new StringBuilder(120);
-                sb.append("handleFeatureCapabilityChanged: ");
-            }
             for (int  i = ImsConfig.FeatureConstants.FEATURE_TYPE_VOICE_OVER_LTE;
                     i <= ImsConfig.FeatureConstants.FEATURE_TYPE_UT_OVER_WIFI &&
                             i < enabledFeatures.length; i++) {
                 if (enabledFeatures[i] == i) {
                     // If the feature is set to its own integer value it is enabled.
-                    if (DBG) {
-                        sb.append(mImsFeatureStrings[i]);
-                        sb.append(":true ");
-                    }
-
-                    mImsFeatureEnabled[i] = true;
+                    mImsFeatureCapabilities.updateFeatureState(i, true);
                 } else if (enabledFeatures[i]
                         == ImsConfig.FeatureConstants.FEATURE_TYPE_UNKNOWN) {
                     // FEATURE_TYPE_UNKNOWN indicates that a feature is disabled.
-                    if (DBG) {
-                        sb.append(mImsFeatureStrings[i]);
-                        sb.append(":false ");
-                    }
-
-                    mImsFeatureEnabled[i] = false;
+                    mImsFeatureCapabilities.updateFeatureState(i, false);
                 } else {
                     // Feature has unknown state; it is not its own value or -1.
                     if (DBG) {
@@ -3594,12 +3574,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 }
             }
             boolean isVideoEnabled = isVideoCallEnabled();
-            boolean isVideoEnabledStatechanged = tmpIsVideoCallEnabled != isVideoEnabled;
-            if (DBG) {
-                sb.append(" isVideoEnabledStateChanged=");
-                sb.append(isVideoEnabledStatechanged);
-            }
-
+            boolean isVideoEnabledStatechanged =
+                    preImsFeatureCapabilities.isVideoCallEnabled() != isVideoEnabled;
             if (isVideoEnabledStatechanged) {
                 log("handleFeatureCapabilityChanged - notifyForVideoCapabilityChanged=" +
                         isVideoEnabled);
@@ -3607,18 +3583,22 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             }
 
             if (DBG) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("handleFeatureCapabilityChanged: "
+                        + "preImsFeatureCapabilities=" + preImsFeatureCapabilities
+                        + ", mImsFeatureCapabilities=" + mImsFeatureCapabilities);
+                sb.append(" isVideoEnabledStateChanged=");
+                sb.append(isVideoEnabledStatechanged);
                 log(sb.toString());
             }
 
-            if (DBG) log("handleFeatureCapabilityChanged: isVolteEnabled=" + isVolteEnabled()
-                    + ", isVideoCallEnabled=" + isVideoCallEnabled()
-                    + ", isVowifiEnabled=" + isVowifiEnabled()
-                    + ", isUtEnabled=" + isUtEnabled());
+            if (!preImsFeatureCapabilities.equals(mImsFeatureCapabilities)) {
+                mPhone.onFeatureCapabilityChanged();
+                mPhone.notifyImsFeatureCapabilitiesChanged(mImsFeatureCapabilities);
+            }
 
-            mPhone.onFeatureCapabilityChanged();
-
-            mMetrics.writeOnImsCapabilities(
-                    mPhone.getPhoneId(), mImsFeatureEnabled);
+            mMetrics.writeOnImsCapabilities(mPhone.getPhoneId(),
+                    ImsFeatureCapabilities.convertToBoolArrary(mImsFeatureCapabilities));
         }
     }
 }
