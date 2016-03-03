@@ -23,12 +23,14 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.telephony.CellInfo;
+import android.telephony.ImsFeatureCapabilities;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.telephony.VoLteServiceState;
-import com.android.internal.telephony.IPhoneStateListener;
+
 import com.android.internal.telephony.IOnSubscriptionsChangedListener;
+import com.android.internal.telephony.IPhoneStateListener;
 import com.android.internal.telephony.ITelephonyRegistry;
 
 import java.util.ArrayList;
@@ -315,6 +317,17 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
     @Override
     public void notifyUserMobileDataStateChangedForPhoneId(int phoneId, int subId, boolean state) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void notifyImsRegisteredChangedForSubscriber(int subId, boolean isRegistered) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void notifyImsFeatureCapabilitiesChangedForSubscriber(int subId,
+            ImsFeatureCapabilities capabilities) {
         throw new RuntimeException("Not implemented");
     }
 }
