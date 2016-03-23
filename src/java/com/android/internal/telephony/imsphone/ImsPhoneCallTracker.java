@@ -1422,6 +1422,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
             case ImsReasonInfo.CODE_DATA_LIMIT_REACHED:
                 return DisconnectCause.DATA_LIMIT_REACHED;
+
+            case ImsReasonInfo.CODE_NORMAL_UNSPECIFIED:
+                return DisconnectCause.NORMAL_UNSPECIFIED;
+
             default:
         }
 
