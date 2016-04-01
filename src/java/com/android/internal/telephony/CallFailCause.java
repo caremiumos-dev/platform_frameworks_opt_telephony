@@ -28,29 +28,143 @@ package com.android.internal.telephony;
  *
  */
 public interface CallFailCause {
+    // The disconnect cause is not valid (Not received a disconnect cause)
+    public static final int NOT_VALID = -1;
+
     // Unassigned/Unobtainable number
     int UNOBTAINABLE_NUMBER = 1;
+
+    // No route to destination
+    public static final int NO_ROUTE_TO_DEST = 3;
+
+    // Channel unacceptable
+    public static final int CHANNEL_UNACCEPTABLE = 6;
 
     int OPERATOR_DETERMINED_BARRING = 8;
     int NORMAL_CLEARING     = 16;
     // Busy Tone
     int USER_BUSY           = 17;
 
-    // No Tone
+    // No user responding
+    public static final int NO_USER_RESPONDING = 18;
+
+    // User alerting, no answer
+    public static final int USER_ALERTING_NO_ANSWER = 19;
+
+    // Call rejected
+    public static final int CALL_REJECTED = 21;
+
+    // Number changed
     int NUMBER_CHANGED      = 22;
+
+    // Pre-emption
+    public static final int PRE_EMPTION = 25;
+
+    // Non selected user clearing
+    public static final int NON_SELECTED_USER_CLEARING = 26;
+
+    // Destination out of order
+    public static final int DESTINATION_OUT_OF_ORDER = 27;
+
+    // Invalid number format (incomplete number)
+    public static final int INVALID_NUMBER_FORMAT = 28;
+
+    // Facility rejected
+    public static final int FACILITY_REJECTED = 29;
+
     int STATUS_ENQUIRY      = 30;
     int NORMAL_UNSPECIFIED  = 31;
 
     // Congestion Tone
     int NO_CIRCUIT_AVAIL    = 34;
+
+    // Network out of order
+    public static final int NETWORK_OUT_OF_ORDER = 38;
+
     int TEMPORARY_FAILURE   = 41;
     int SWITCHING_CONGESTION    = 42;
+
+    // Access information discarded
+    public static final int ACCESS_INFORMATION_DISCARDED = 43;
+
     int CHANNEL_NOT_AVAIL   = 44;
+
+    // Resources unavailable, unspecified
+    public static final int RESOURCES_UNAVAILABLE_UNSPECIFIED = 47;
+
     int QOS_NOT_AVAIL       = 49;
+
+    // Requested facility not subscribed
+    public static final int REQUESTED_FACILITY_NOT_SUBSCRIBED = 50;
+
+    // Incoming calls barred within the CUG
+    public static final int INCOMING_CALL_BARRED_WITHIN_CUG = 55;
+
+    // Bearer capability not authorized
+    public static final int BEARER_CAPABILITY_NOT_AUTHORISED = 57;
+
     int BEARER_NOT_AVAIL    = 58;
+
+    // Service or option not available, unspecified
+    public static final int SERVICE_OR_OPTION_NOT_AVAILABLE = 63;
+
+    // Bearer service not implemented
+    public static final int BEARER_SERVICE_NOT_IMPLEMENTED = 65;
 
     // others
     int ACM_LIMIT_EXCEEDED = 68;
+
+    // Requested facility not implemented
+    public static final int REQUESTED_FACILITY_NOT_IMPLEMENTED = 69;
+
+    // Only restricted digital information bearer capability is available
+    public static final int ONLY_RESTRICTED_DIGITAL_INFO_BC_AVAILABLE = 70;
+
+    // Service or option not implemented, unspecified
+    public static final int SERVICE_OR_OPTION_NOT_IMPLEMENTED = 79;
+
+    // Invalid transaction identifier value
+    public static final int INVALID_TRANSACTION_ID_VALUE = 81;
+
+    // User not member of CUG
+    public static final int USER_NOT_MEMBER_OF_CUG = 87;
+
+    // Incompatible destination
+    public static final int INCOMPATIBLE_DESTINATION = 88;
+
+    // Invalid transit network selection
+    public static final int INVALID_TRANSIT_NETWORK_SELECTION = 91;
+
+    // Semantically incorrect message
+    public static final int SEMANTICALLY_INCORRECT_MESSAGE = 95;
+
+    // Invalid mandatory information
+    public static final int INVALID_MANDATORY_INFORMATION = 96;
+
+    // Message type non-existent or not implemented
+    public static final int MESSAGE_TYPE_NON_EXISTENT = 97;
+
+    // Message type not compatible with protocol state
+    public static final int MESSAGE_TYPE_NOT_COMPATIBLE_WITH_PROT_STATE = 98;
+
+    // Information element non-existent or not implemented
+    public static final int IE_NON_EXISTENT_OR_NOT_IMPLEMENTED = 99;
+
+    // Conditional IE error
+    public static final int CONDITIONAL_IE_ERROR = 100;
+
+    // Message not compatible with protocol state
+    public static final int MESSAGE_NOT_COMPATIBLE_WITH_PROTOCOL_STATE = 101;
+
+    // Recovery on timer expiry
+    public static final int RECOVERY_ON_TIMER_EXPIRY = 102;
+
+    // Protocol error, unspecified
+    public static final int PROTOCOL_ERROR_UNSPECIFIED = 111;
+
+    // Interworking, unspecified
+    public static final int INTERWORKING_UNSPECIFIED = 127;
+
     int CALL_BARRED        = 240;
     int FDN_BLOCKED        = 241;
     int IMEI_NOT_ACCEPTED  = 243;
