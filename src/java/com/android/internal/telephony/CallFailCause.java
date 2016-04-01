@@ -28,29 +28,63 @@ package com.android.internal.telephony;
  *
  */
 public interface CallFailCause {
+    // The disconnect cause is not valid (Not received a disconnect cause)
+    int NOT_VALID = -1;
+
     // Unassigned/Unobtainable number
     int UNOBTAINABLE_NUMBER = 1;
 
+    int NO_ROUTE_TO_DEST = 3;
+    int CHANNEL_UNACCEPTABLE = 6;
     int OPERATOR_DETERMINED_BARRING = 8;
     int NORMAL_CLEARING     = 16;
-    // Busy Tone
     int USER_BUSY           = 17;
-
-    // No Tone
+    int NO_USER_RESPONDING = 18;
+    int USER_ALERTING_NO_ANSWER = 19;
+    int CALL_REJECTED = 21;
     int NUMBER_CHANGED      = 22;
+    int PRE_EMPTION = 25;
+    int NON_SELECTED_USER_CLEARING = 26;
+    int DESTINATION_OUT_OF_ORDER = 27;
+
+    // Incomplete number
+    int INVALID_NUMBER_FORMAT = 28;
+
+    int FACILITY_REJECTED = 29;
     int STATUS_ENQUIRY      = 30;
     int NORMAL_UNSPECIFIED  = 31;
-
-    // Congestion Tone
     int NO_CIRCUIT_AVAIL    = 34;
+    int NETWORK_OUT_OF_ORDER = 38;
     int TEMPORARY_FAILURE   = 41;
     int SWITCHING_CONGESTION    = 42;
+    int ACCESS_INFORMATION_DISCARDED = 43;
     int CHANNEL_NOT_AVAIL   = 44;
+    int RESOURCES_UNAVAILABLE_UNSPECIFIED = 47;
     int QOS_NOT_AVAIL       = 49;
+    int REQUESTED_FACILITY_NOT_SUBSCRIBED = 50;
+    int INCOMING_CALL_BARRED_WITHIN_CUG = 55;
+    int BEARER_CAPABILITY_NOT_AUTHORISED = 57;
     int BEARER_NOT_AVAIL    = 58;
-
-    // others
+    int SERVICE_OR_OPTION_NOT_AVAILABLE = 63;
+    int BEARER_SERVICE_NOT_IMPLEMENTED = 65;
     int ACM_LIMIT_EXCEEDED = 68;
+    int REQUESTED_FACILITY_NOT_IMPLEMENTED = 69;
+    int ONLY_RESTRICTED_DIGITAL_INFO_BC_AVAILABLE = 70;
+    int SERVICE_OR_OPTION_NOT_IMPLEMENTED = 79;
+    int INVALID_TRANSACTION_ID_VALUE = 81;
+    int USER_NOT_MEMBER_OF_CUG = 87;
+    int INCOMPATIBLE_DESTINATION = 88;
+    int INVALID_TRANSIT_NETWORK_SELECTION = 91;
+    int SEMANTICALLY_INCORRECT_MESSAGE = 95;
+    int INVALID_MANDATORY_INFORMATION = 96;
+    int MESSAGE_TYPE_NON_EXISTENT = 97;
+    int MESSAGE_TYPE_NOT_COMPATIBLE_WITH_PROT_STATE = 98;
+    int IE_NON_EXISTENT_OR_NOT_IMPLEMENTED = 99;
+    int CONDITIONAL_IE_ERROR = 100;
+    int MESSAGE_NOT_COMPATIBLE_WITH_PROTOCOL_STATE = 101;
+    int RECOVERY_ON_TIMER_EXPIRY = 102;
+    int PROTOCOL_ERROR_UNSPECIFIED = 111;
+    int INTERWORKING_UNSPECIFIED = 127;
     int CALL_BARRED        = 240;
     int FDN_BLOCKED        = 241;
     int IMEI_NOT_ACCEPTED  = 243;
