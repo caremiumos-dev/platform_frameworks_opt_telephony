@@ -708,13 +708,18 @@ public class IccSmsInterfaceManager {
             return;
         }
 
-        mDispatchersController.sendMultipartText(destAddr,
-                                      scAddr,
-                                      (ArrayList<String>) parts,
-                                      (ArrayList<PendingIntent>) sentIntents,
-                                      (ArrayList<PendingIntent>) deliveryIntents,
-                                      null, callingPackage, persistMessageForNonDefaultSmsApp,
-                                      priority, expectMore, validityPeriod);
+        final long ident = Binder.clearCallingIdentity();
+        try {
+            mDispatchersController.sendMultipartText(destAddr,
+                                          scAddr,
+                                          (ArrayList<String>) parts,
+                                          (ArrayList<PendingIntent>) sentIntents,
+                                          (ArrayList<PendingIntent>) deliveryIntents,
+                                          null, callingPackage, persistMessageForNonDefaultSmsApp,
+                                          priority, expectMore, validityPeriod);
+        } finally {
+            Binder.restoreCallingIdentity(ident);
+        }
     }
 
     public int getPremiumSmsPermission(String packageName) {
