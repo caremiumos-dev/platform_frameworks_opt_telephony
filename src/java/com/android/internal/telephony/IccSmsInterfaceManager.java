@@ -708,13 +708,18 @@ public class IccSmsInterfaceManager {
             return;
         }
 
-        mDispatchersController.sendMultipartText(destAddr,
-                                      scAddr,
-                                      (ArrayList<String>) parts,
-                                      (ArrayList<PendingIntent>) sentIntents,
-                                      (ArrayList<PendingIntent>) deliveryIntents,
-                                      null, callingPackage, persistMessageForNonDefaultSmsApp,
-                                      priority, expectMore, validityPeriod);
+        final long ident = Binder.clearCallingIdentity();
+        try {
+            mDispatchersController.sendMultipartText(destAddr,
+                                          scAddr,
+                                          (ArrayList<String>) parts,
+                                          (ArrayList<PendingIntent>) sentIntents,
+                                          (ArrayList<PendingIntent>) deliveryIntents,
+                                          null, callingPackage, persistMessageForNonDefaultSmsApp,
+                                          priority, expectMore, validityPeriod);
+        } finally {
+            Binder.restoreCallingIdentity(ident);
+        }
     }
 
     public int getPremiumSmsPermission(String packageName) {
@@ -1184,18 +1189,23 @@ public class IccSmsInterfaceManager {
             return;
         }
 
-        mDispatchersController.sendMultipartText(
-                textAndAddress[1], // destAddress
-                scAddress,
-                parts,
-                (ArrayList<PendingIntent>) sentIntents,
-                (ArrayList<PendingIntent>) deliveryIntents,
-                messageUri,
-                callingPkg,
-                true  /* persistMessageForNonDefaultSmsApp */,
-                SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
-                false /* expectMore */,
-                SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
+        final long ident = Binder.clearCallingIdentity();
+        try {
+            mDispatchersController.sendMultipartText(
+                    textAndAddress[1], // destAddress
+                    scAddress,
+                    parts,
+                    (ArrayList<PendingIntent>) sentIntents,
+                    (ArrayList<PendingIntent>) deliveryIntents,
+                    messageUri,
+                    callingPkg,
+                    true  /* persistMessageForNonDefaultSmsApp */,
+                    SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
+                    false /* expectMore */,
+                    SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
+        } finally {
+            Binder.restoreCallingIdentity(ident);
+        }
     }
 
     private boolean isFailedOrDraft(ContentResolver resolver, Uri messageUri) {
