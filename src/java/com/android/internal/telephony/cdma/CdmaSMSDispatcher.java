@@ -17,7 +17,6 @@
 package com.android.internal.telephony.cdma;
 
 import android.os.Message;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
