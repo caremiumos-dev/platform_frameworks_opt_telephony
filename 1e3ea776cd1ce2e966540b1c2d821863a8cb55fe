@@ -34,6 +34,24 @@
       "revId": "1e3ea776cd1ce2e966540b1c2d821863a8cb55fe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "88656498_856c8a95",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-04-25T22:56:26Z",
+      "side": 1,
+      "message": "Yifan, can you add a boolean parameter forceUpdate to updateScreenState() and call that here?",
+      "parentUuid": "88656498_25503eda",
+      "revId": "1e3ea776cd1ce2e966540b1c2d821863a8cb55fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
