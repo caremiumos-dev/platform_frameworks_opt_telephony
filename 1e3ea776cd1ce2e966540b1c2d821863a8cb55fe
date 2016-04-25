@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88656498_65eab654",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2016-04-25T22:49:49Z",
+      "side": 1,
+      "message": "There\u0027s already a function onRadioAvailable() that purports to handle recovery after a process crash and already calls updateScreenState(). Is that a better place to do this?",
+      "revId": "1e3ea776cd1ce2e966540b1c2d821863a8cb55fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
