@@ -1620,6 +1620,7 @@ public class ServiceStateTracker extends Handler {
                     int regState = ServiceState.RIL_REG_STATE_UNKNOWN;
                     int reasonRegStateDenied = -1;
                     int psc = -1;
+                    int cssIndicator = 0;
                     if (states.length > 0) {
                         try {
                             regState = Integer.parseInt(states[0]);
@@ -1636,6 +1637,9 @@ public class ServiceStateTracker extends Handler {
                                     type = Integer.parseInt(states[3]);
                                 }
                             }
+                            if (states.length >= 8 && (states[7] != null)) {
+                                cssIndicator = Integer.parseInt(states[7]);
+                            }
                             if (states.length > 14) {
                                 if (states[14] != null && states[14].length() > 0) {
                                     psc = (int)Long.parseLong(states[14], 16);
@@ -1649,6 +1653,7 @@ public class ServiceStateTracker extends Handler {
                     mGsmRoaming = regCodeIsRoaming(regState);
                     mNewSS.setVoiceRegState(regCodeToServiceState(regState));
                     mNewSS.setRilVoiceRadioTechnology(type);
+                    mNewSS.setCssIndicator(cssIndicator);
 
                     boolean isVoiceCapable = mPhone.getContext().getResources()
                             .getBoolean(com.android.internal.R.bool.config_voice_capable);
@@ -2430,16 +2435,17 @@ public class ServiceStateTracker extends Handler {
      * that could support voice and data simultaneously.
      */
     public boolean isConcurrentVoiceAndDataAllowed() {
-        if (mPhone.isPhoneTypeGsm()) {
-            return (mSS.getRilVoiceRadioTechnology() >= ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
-        } else if (mPhone.isPhoneTypeCdma()) {
+        if (mSS.getCssIndicator() == 1) {
+            // Using the Conncurrent Service Supported flag for GSM and CdmaLte devices.
+            return true;
+        } else if (mPhone.isPhoneTypeGsm()) {
+            return (mSS.getRilDataRadioTechnology() >= ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
+        } else {
+            // Phone type is CDMA
             // Note: it needs to be confirmed which CDMA network types
             // can support voice and data calls concurrently.
             // For the time-being, the return value will be false.
             return false;
-        } else {
-            // Using the Conncurrent Service Supported flag for CdmaLte devices.
-            return mSS.getCssIndicator() == 1;
         }
     }
 
@@ -2614,6 +2620,8 @@ public class ServiceStateTracker extends Handler {
         boolean hasDataRoamingOn = !mSS.getDataRoaming() && mNewSS.getDataRoaming();
 
         boolean hasDataRoamingOff = mSS.getDataRoaming() && !mNewSS.getDataRoaming();
+
+        boolean hasCssIndicatorChanged = (mSS.getCssIndicator() != mNewSS.getCssIndicator());
 
         TelephonyManager tm =
                 (TelephonyManager) mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
@@ -2811,6 +2819,10 @@ public class ServiceStateTracker extends Handler {
 
         if (hasLocationChanged) {
             mPhone.notifyLocationChanged();
+        }
+
+        if (hasCssIndicatorChanged) {
+            mPhone.notifyDataConnection(Phone.REASON_CSS_INDICATOR_CHANGED);
         }
 
         if (!isGprsConsistent(mSS.getDataRegState(), mSS.getVoiceRegState())) {
