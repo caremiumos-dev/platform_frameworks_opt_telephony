@@ -1780,6 +1780,9 @@ public class ServiceStateTracker extends Handler {
                     mGsmRoaming = regCodeIsRoaming(registrationState);
                     mNewRejectCode = reasonForDenial;
 
+                    int cssIndicator = voiceRegStateResult.cssSupported ? 1 : 0;
+                    mNewSS.setCssIndicator(cssIndicator);
+
                     boolean isVoiceCapable = mPhone.getContext().getResources()
                             .getBoolean(com.android.internal.R.bool.config_voice_capable);
                     if (((registrationState
@@ -2460,16 +2463,17 @@ public class ServiceStateTracker extends Handler {
      * that could support voice and data simultaneously.
      */
     public boolean isConcurrentVoiceAndDataAllowed() {
-        if (mPhone.isPhoneTypeGsm()) {
-            return (mSS.getRilVoiceRadioTechnology() >= ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
-        } else if (mPhone.isPhoneTypeCdma()) {
+        if (mSS.getCssIndicator() == 1) {
+            // Using the Conncurrent Service Supported flag for GSM and CdmaLte devices.
+            return true;
+        } else if (mPhone.isPhoneTypeGsm()) {
+            return (mSS.getRilDataRadioTechnology() >= ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
+        } else {
+            // Phone type is CDMA
             // Note: it needs to be confirmed which CDMA network types
             // can support voice and data calls concurrently.
             // For the time-being, the return value will be false.
             return false;
-        } else {
-            // Using the Conncurrent Service Supported flag for CdmaLte devices.
-            return mSS.getCssIndicator() == 1;
         }
     }
 
@@ -2642,6 +2646,8 @@ public class ServiceStateTracker extends Handler {
 
         boolean hasRejectCauseChanged = mRejectCode != mNewRejectCode;
 
+        boolean hasCssIndicatorChanged = (mSS.getCssIndicator() != mNewSS.getCssIndicator());
+
         boolean has4gHandoff = false;
         boolean hasMultiApnSupport = false;
         boolean hasLostMultiApnSupport = false;
@@ -2687,7 +2693,8 @@ public class ServiceStateTracker extends Handler {
                     + " hasLocationChanged=" + hasLocationChanged
                     + " has4gHandoff = " + has4gHandoff
                     + " hasMultiApnSupport=" + hasMultiApnSupport
-                    + " hasLostMultiApnSupport=" + hasLostMultiApnSupport);
+                    + " hasLostMultiApnSupport=" + hasLostMultiApnSupport
+                    + " hasCssIndicatorChanged=" + hasCssIndicatorChanged);
         }
 
         // Add an event log when connection state changes
@@ -2722,6 +2729,11 @@ public class ServiceStateTracker extends Handler {
                             mNewSS.getRilVoiceRadioTechnology()) + " at cell " + cid);
                 }
             }
+
+            if (hasCssIndicatorChanged) {
+                mPhone.notifyDataConnection(Phone.REASON_CSS_INDICATOR_CHANGED);
+            }
+
             mReasonDataDenied = mNewReasonDataDenied;
             mMaxDataCalls = mNewMaxDataCalls;
             mRejectCode = mNewRejectCode;
