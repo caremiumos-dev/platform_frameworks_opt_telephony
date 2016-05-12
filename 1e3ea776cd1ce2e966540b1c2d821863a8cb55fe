@@ -70,6 +70,24 @@
       "revId": "1e3ea776cd1ce2e966540b1c2d821863a8cb55fe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "924d985c_f0a2d90d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-05-12T17:15:37Z",
+      "side": 1,
+      "message": "I agree, but updateScreenState() can have additional logic, for eg it checks mIsDevicePlugged as well. Will be good to keep that logic in one place. Btw, is the default state ON? What happens if the screen goes from OFF-\u003eON during modem reset? Is it okay to not send that update to modem?\n\nIf the default is ON, you can change the boolean to forceUpdateForOff (ideally it should be an enum but there\u0027s no use-case for forceUpdateForOn and forceUpdateForBoth)",
+      "parentUuid": "3753fe28_268456e6",
+      "revId": "1e3ea776cd1ce2e966540b1c2d821863a8cb55fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
