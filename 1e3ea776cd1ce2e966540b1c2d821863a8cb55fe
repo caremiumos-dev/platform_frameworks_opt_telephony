@@ -52,6 +52,24 @@
       "revId": "1e3ea776cd1ce2e966540b1c2d821863a8cb55fe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3753fe28_268456e6",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1099423
+      },
+      "writtenOn": "2016-05-12T07:58:57Z",
+      "side": 1,
+      "message": "Hi Amit,\n\nThanks for your reply. I understand what you mean. But I think calling updateScreenState(boolean forceUpdate#true) here is not very appropriate.\nFirstly, this problem only happens when modem resets and before RIL is reconnected user turns off the screen. The screen off message cannot be sent to modem because RIL is killed and not reconnected yet. Modem would keep reporting signal strength and this would increase power consumption. It is not necessary to send screen on to modem because after modem resets it would always report signal strength until receive RIL sends screen off.\nSecondly, if I add a parameter boolean forceUpdate to updateScreenState(), we need to modify three other calls on updateScreenState() to updateScreenState(false), it is not what we want.\nPlease tell me what do you think, thanks!",
+      "parentUuid": "88656498_856c8a95",
+      "revId": "1e3ea776cd1ce2e966540b1c2d821863a8cb55fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
