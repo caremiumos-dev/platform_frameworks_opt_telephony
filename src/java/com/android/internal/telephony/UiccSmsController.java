@@ -460,4 +460,19 @@ public class UiccSmsController extends ISmsImplBase {
     private @Nullable IccSmsInterfaceManager getIccSmsInterfaceManager(int subId) {
         return getPhone(subId).getIccSmsInterfaceManager();
     }
+
+    /**
+    * Get the capacity count of sms on Icc card.
+    **/
+    @Override
+    public int getSmsCapacityOnIccForSubscriber(int subId) {
+        IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
+
+        if (iccSmsIntMgr != null ) {
+            return iccSmsIntMgr.getSmsCapacityOnIcc();
+        } else {
+            Rlog.e(LOG_TAG, "iccSmsIntMgr is null for " + " subId: " + subId);
+            return -1;
+        }
+    }
 }
