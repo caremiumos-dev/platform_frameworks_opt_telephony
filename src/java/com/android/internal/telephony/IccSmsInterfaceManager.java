@@ -49,6 +49,7 @@ import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccConstants;
 import com.android.internal.telephony.uicc.IccFileHandler;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.util.HexDump;
 
 import java.io.FileDescriptor;
@@ -1370,5 +1371,19 @@ public class IccSmsInterfaceManager {
         pw.println("SMS dispatcher controller log:");
         mDispatchersController.dump(fd, pw, args);
         pw.flush();
+    }
+
+    public int getSmsCapacityOnIcc() {
+        int numberOnIcc = -1;
+
+        if (mPhone.getIccRecordsLoaded()) {
+            numberOnIcc = UiccController.getInstance().getUiccProfileForPhone(mPhone.getPhoneId())
+                    .getIccRecords().getSmsCapacityOnIcc();
+        } else {
+            log("getSmsCapacityOnIcc - aborting, no icc card present.");
+        }
+
+        log("getSmsCapacityOnIcc().numberOnIcc = " + numberOnIcc);
+        return numberOnIcc;
     }
 }
