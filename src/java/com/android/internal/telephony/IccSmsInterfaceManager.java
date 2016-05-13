@@ -48,7 +48,10 @@ import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccConstants;
 import com.android.internal.telephony.uicc.IccFileHandler;
+import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.util.HexDump;
 
 import java.io.FileDescriptor;
@@ -1198,6 +1201,31 @@ public class IccSmsInterfaceManager {
                 SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
     }
 
+    public int getSmsCapacityOnIcc() {
+        enforceReadPrivilegedPermission("getSmsCapacityOnIcc");
+        int numberOnIcc = -1;
+
+        if (mPhone.getIccRecordsLoaded()) {
+            final UiccProfile uiccProfile = UiccController.getInstance()
+                    .getUiccProfileForPhone(mPhone.getPhoneId());
+            IccRecords iccRecords = null;
+            if(uiccProfile != null) {
+                iccRecords = uiccProfile.getIccRecords();
+            }
+            if(uiccProfile != null && iccRecords != null) {
+                numberOnIcc = iccRecords.getSmsCapacityOnIcc();
+            } else {
+                log("UiccProfile = " + uiccProfile + 
+                    "IccRecords = " + iccRecords);
+            }
+        } else {
+            log("getSmsCapacityOnIcc - aborting, no icc card present.");
+        }
+
+        log("getSmsCapacityOnIcc().numberOnIcc = " + numberOnIcc);
+        return numberOnIcc;
+    }
+
     private boolean isFailedOrDraft(ContentResolver resolver, Uri messageUri) {
         // Clear the calling identity and query the database using the phone user id
         // Otherwise the AppOps check in TelephonyProvider would complain about mismatch
@@ -1356,6 +1384,11 @@ public class IccSmsInterfaceManager {
         }
 
         TelephonyPermissions.enforceCallingOrSelfCarrierPrivilege(mPhone.getSubId(), message);
+    }
+
+    private void enforceReadPrivilegedPermission(String message) {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE, message);
     }
 
     private String filterDestAddress(String destAddr) {
