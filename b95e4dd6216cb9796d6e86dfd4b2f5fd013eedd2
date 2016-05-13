@@ -45,6 +45,30 @@
       "revId": "b95e4dd6216cb9796d6e86dfd4b2f5fd013eedd2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "924d985c_595ca53a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3217,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-05-13T17:17:15Z",
+      "side": 1,
+      "message": "Also isn\u0027t it a problem if the screen is ON but you missed that update?\n\nPerhaps the boolean should just be to force the sending regardless of the state?  I think that could simplify the logic alot.",
+      "parentUuid": "924d985c_d905f56c",
+      "range": {
+        "startLine": 3217,
+        "startChar": 16,
+        "endLine": 3217,
+        "endChar": 70
+      },
+      "revId": "b95e4dd6216cb9796d6e86dfd4b2f5fd013eedd2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
