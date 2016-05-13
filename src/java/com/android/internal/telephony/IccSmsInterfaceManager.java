@@ -1369,4 +1369,17 @@ public class IccSmsInterfaceManager {
         mDispatchersController.dump(fd, pw, args);
         pw.flush();
     }
+
+    public int getSmsCapacityOnIcc() {
+        int numberOnIcc = -1;
+
+        if (mPhone.getIccRecordsLoaded()) {
+            numberOnIcc = mPhone.getIccCard().getIccRecords().getSmsCapacityOnIcc();
+        } else {
+            log("getSmsCapacityOnIcc - aborting, no icc card present.");
+        }
+
+        log("getSmsCapacityOnIcc().numberOnIcc = " + numberOnIcc);
+        return numberOnIcc;
+    }
 }
