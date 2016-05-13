@@ -39,6 +39,7 @@ import android.telephony.CellInfo;
 import android.telephony.PcoData;
 import android.telephony.SignalStrength;
 import android.telephony.SmsMessage;
+import android.text.TextUtils;
 
 import com.android.internal.telephony.TelephonyProto.SmsSession;
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
@@ -252,6 +253,9 @@ public class RadioIndication extends IRadioIndication.Stub {
         notification.index = suppSvcNotification.index;
         notification.type = suppSvcNotification.type;
         notification.number = suppSvcNotification.number;
+        if (!TextUtils.isEmpty(suppSvcNotification.history)) {
+            notification.history = suppSvcNotification.history.split("\r\n");
+        }
 
         if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_SUPP_SVC_NOTIFICATION, notification);
 
