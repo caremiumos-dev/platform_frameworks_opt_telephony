@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "924d985c_19005d59",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2263,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-05-13T16:58:57Z",
+      "side": 1,
+      "message": "This should be mRadioScreenState \u003d\u003d RADIO_SCREEN_OFF",
+      "range": {
+        "startLine": 2263,
+        "startChar": 67,
+        "endLine": 2263,
+        "endChar": 84
+      },
+      "revId": "b95e4dd6216cb9796d6e86dfd4b2f5fd013eedd2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "924d985c_d905f56c",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3217,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-05-13T16:58:57Z",
+      "side": 1,
+      "message": "You can get rid of this check. That\u0027s the point of adding the parameter to updateScreenState().",
+      "range": {
+        "startLine": 3217,
+        "startChar": 16,
+        "endLine": 3217,
+        "endChar": 70
+      },
+      "revId": "b95e4dd6216cb9796d6e86dfd4b2f5fd013eedd2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
