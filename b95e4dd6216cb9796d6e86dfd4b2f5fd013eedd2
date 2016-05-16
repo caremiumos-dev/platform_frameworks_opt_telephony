@@ -69,6 +69,30 @@
       "revId": "b95e4dd6216cb9796d6e86dfd4b2f5fd013eedd2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7767360f_98b59543",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3217,
+      "author": {
+        "id": 1099423
+      },
+      "writtenOn": "2016-05-16T06:31:29Z",
+      "side": 1,
+      "message": "Hi Robert,\n\nYes, it is possible missing screen ON update. But it is not a problem, because after modem reset it will start reporting signal strength by default. It will not wait for screen on State. Do you think I need to simplify the logic? Thanks.",
+      "parentUuid": "924d985c_595ca53a",
+      "range": {
+        "startLine": 3217,
+        "startChar": 16,
+        "endLine": 3217,
+        "endChar": 70
+      },
+      "revId": "b95e4dd6216cb9796d6e86dfd4b2f5fd013eedd2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
