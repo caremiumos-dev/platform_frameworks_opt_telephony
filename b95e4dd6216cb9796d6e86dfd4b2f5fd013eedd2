@@ -93,6 +93,30 @@
       "revId": "b95e4dd6216cb9796d6e86dfd4b2f5fd013eedd2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "924d985c_ed982add",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3217,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2016-05-16T08:04:38Z",
+      "side": 1,
+      "message": "By explicitly sending screen state regardless of on/off we would avoid making any assumptions about the modem behavior on reset/boot, which seems preferable to me.",
+      "parentUuid": "7767360f_98b59543",
+      "range": {
+        "startLine": 3217,
+        "startChar": 16,
+        "endLine": 3217,
+        "endChar": 70
+      },
+      "revId": "b95e4dd6216cb9796d6e86dfd4b2f5fd013eedd2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
