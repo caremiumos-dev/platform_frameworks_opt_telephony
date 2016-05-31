@@ -26,6 +26,9 @@ import android.content.IntentFilter;
 import android.net.NetworkCapabilities;
 import android.net.NetworkFactory;
 import android.net.NetworkRequest;
+import android.net.NetworkSpecifier;
+import android.net.MatchAllNetworkSpecifier;
+import android.net.StringNetworkSpecifier;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -148,7 +151,7 @@ public class PhoneSwitcher extends Handler {
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-        netCap.setNetworkSpecifier(NetworkCapabilities.MATCH_ALL_REQUESTS_NETWORK_SPECIFIER);
+        netCap.setNetworkSpecifier(new MatchAllNetworkSpecifier());
 
         NetworkFactory networkFactory = new PhoneSwitcherNetworkRequestListener(looper, context,
                 netCap, this);
@@ -368,14 +371,17 @@ public class PhoneSwitcher extends Handler {
     }
 
     private int phoneIdForRequest(NetworkRequest netRequest) {
-        String specifier = netRequest.networkCapabilities.getNetworkSpecifier();
+        NetworkSpecifier specifier = netRequest.networkCapabilities.getNetworkSpecifier();
         int subId;
 
-        if (TextUtils.isEmpty(specifier)) {
+        if (specifier == null) {
             subId = mDefaultDataSubscription;
+        } else if (specifier instanceof StringNetworkSpecifier) {
+            subId = Integer.parseInt(((StringNetworkSpecifier) specifier).specifier);
         } else {
-            subId = Integer.parseInt(specifier);
+            subId = INVALID_SUBSCRIPTION_ID;
         }
+
         int phoneId = INVALID_PHONE_INDEX;
         if (subId == INVALID_SUBSCRIPTION_ID) return phoneId;
 
