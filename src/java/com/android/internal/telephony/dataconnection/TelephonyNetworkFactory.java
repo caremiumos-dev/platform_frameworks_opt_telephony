@@ -22,6 +22,7 @@ import android.content.Context;
 import android.net.NetworkCapabilities;
 import android.net.NetworkFactory;
 import android.net.NetworkRequest;
+import android.net.StringNetworkSpecifier;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -119,7 +120,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-        nc.setNetworkSpecifier(String.valueOf(subscriptionId));
+        nc.setNetworkSpecifier(new StringNetworkSpecifier(String.valueOf(subscriptionId)));
         return nc;
     }
 
@@ -223,7 +224,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         NetworkRequest networkRequest = (NetworkRequest)msg.obj;
         boolean isApplicable = false;
         LocalLog localLog = null;
-        if (TextUtils.isEmpty(networkRequest.networkCapabilities.getNetworkSpecifier())) {
+        if (networkRequest.networkCapabilities.getNetworkSpecifier() == null) {
             // request only for the default network
             localLog = mDefaultRequests.get(networkRequest);
             if (localLog == null) {
@@ -263,7 +264,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         NetworkRequest networkRequest = (NetworkRequest)msg.obj;
         LocalLog localLog = null;
         boolean isApplicable = false;
-        if (TextUtils.isEmpty(networkRequest.networkCapabilities.getNetworkSpecifier())) {
+        if (networkRequest.networkCapabilities.getNetworkSpecifier() == null) {
             // request only for the default network
             localLog = mDefaultRequests.remove(networkRequest);
             isApplicable = (localLog != null) && mIsDefault;

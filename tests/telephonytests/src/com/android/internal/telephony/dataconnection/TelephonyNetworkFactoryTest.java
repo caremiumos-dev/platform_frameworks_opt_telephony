@@ -27,6 +27,12 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.test.filters.FlakyTest;
 import android.telephony.Rlog;
+import android.net.ConnectivityManager;
+import android.net.IConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
+import android.net.StringNetworkSpecifier;
+
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -112,7 +118,7 @@ public class TelephonyNetworkFactoryTest extends AndroidTestCase {
                 addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).
                 addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED).
                 addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
-        netCap.setNetworkSpecifier(Integer.toString(subId));
+        netCap.setNetworkSpecifier(new StringNetworkSpecifier(Integer.toString(subId)));
         return ts.connectivityServiceMock.requestNetwork(netCap, null, 0, new Binder(), -1);
     }
     private NetworkRequest makeSubSpecificMmsRequest(TestSetup ts, int subId) {
@@ -120,7 +126,7 @@ public class TelephonyNetworkFactoryTest extends AndroidTestCase {
                 addCapability(NetworkCapabilities.NET_CAPABILITY_MMS).
                 addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED).
                 addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
-        netCap.setNetworkSpecifier(Integer.toString(subId));
+        netCap.setNetworkSpecifier(new StringNetworkSpecifier(Integer.toString(subId)));
         return ts.connectivityServiceMock.requestNetwork(netCap, null, 0, new Binder(), -1);
     }
 
