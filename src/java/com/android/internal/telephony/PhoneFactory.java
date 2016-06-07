@@ -331,6 +331,7 @@ public class PhoneFactory {
         int networkType = android.provider.Settings.Global.getInt(context.getContentResolver(),
                 android.provider.Settings.Global.PREFERRED_NETWORK_MODE + phoneSubId,
                 RILConstants.PREFERRED_NETWORK_MODE);
+
         Rlog.d(LOG_TAG, "calculatePreferredNetworkType: phoneSubId = " + phoneSubId +
                 " networkType = " + networkType);
         return networkType;
