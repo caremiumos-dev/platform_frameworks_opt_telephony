@@ -36,6 +36,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.service.euicc.EuiccProfileInfo;
 import android.service.euicc.EuiccService;
 import android.service.euicc.GetEuiccProfileInfoListResult;
@@ -461,6 +462,27 @@ public class SubscriptionInfoUpdater extends Handler {
 
                 if (storedSubId != subId) {
                     int networkType = RILConstants.PREFERRED_NETWORK_MODE;
+
+                    // When known SIM inserted in another slot for which subId already
+                    // assigned, use the N/W mode which assigned to it.
+                    try {
+                        networkType = android.provider.Settings.Global.getInt(
+                                mContext.getContentResolver(),
+                                Settings.Global.PREFERRED_NETWORK_MODE + subId);
+                    } catch (SettingNotFoundException snfe) {
+                        logd("Settings Exception reading value at subid for "
+                                + "Settings.Global.PREFERRED_NETWORK_MODE");
+                        // Get previous network mode for this slot,
+                        // to be more relevant instead of default mode.
+                        try {
+                            networkType = TelephonyManager.getIntAtIndex(
+                                    mContext.getContentResolver(),
+                                    Settings.Global.PREFERRED_NETWORK_MODE, slotId);
+                        } catch (SettingNotFoundException retrySnfe) {
+                            Rlog.e(LOG_TAG, "Settings Exception Reading Value At Index for "
+                                    + "Settings.Global.PREFERRED_NETWORK_MODE");
+                        }
+                    }
 
                     // Set the modem network mode
                     mPhone[slotId].setPreferredNetworkType(networkType, null);
