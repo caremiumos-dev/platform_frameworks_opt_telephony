@@ -210,6 +210,7 @@ public abstract class Connection {
      * {@link com.android.internal.telephony.imsphone.ImsExternalConnection#getCallId()}).
      */
     private int mPulledDialogId;
+    public String mCodec; // MAY BE NULL!!!
 
     protected Connection(int phoneType) {
         mPhoneType = phoneType;

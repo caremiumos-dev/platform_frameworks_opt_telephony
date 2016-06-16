@@ -43,6 +43,7 @@ public class GsmCdmaConnection extends Connection {
     private static final String LOG_TAG = "GsmCdmaConnection";
     private static final boolean DBG = true;
     private static final boolean VDBG = false;
+    private boolean mGsmEnableHdAudioQuality;
 
     //***** Instance Variables
 
@@ -122,12 +123,15 @@ public class GsmCdmaConnection extends Connection {
         super(phone.getPhoneType());
         createWakeLock(phone.getContext());
         acquireWakeLock();
+        initConfig(phone);
 
         mOwner = ct;
         mHandler = new MyHandler(mOwner.getLooper());
 
         mAddress = dc.number;
         mIsEmergencyCall = PhoneNumberUtils.isLocalEmergencyNumber(phone.getContext(), mAddress);
+
+        mCodec = dc.codec;
         mIsIncoming = dc.isMT;
         mCreateTime = System.currentTimeMillis();
         mCnapName = dc.name;
@@ -141,6 +145,8 @@ public class GsmCdmaConnection extends Connection {
         mParent.attach(this, dc);
 
         fetchDtmfToneDelay(phone);
+
+        if (mGsmEnableHdAudioQuality) updateAudioQuality();
     }
 
     /** This is an MO call, created when dialing */
@@ -149,6 +155,7 @@ public class GsmCdmaConnection extends Connection {
         super(phone.getPhoneType());
         createWakeLock(phone.getContext());
         acquireWakeLock();
+        initConfig(phone);
 
         mOwner = ct;
         mHandler = new MyHandler(mOwner.getLooper());
@@ -216,6 +223,25 @@ public class GsmCdmaConnection extends Connection {
         parent.attachFake(this, GsmCdmaCall.State.WAITING);
     }
 
+    private void initConfig(GsmCdmaPhone phone) {
+        mGsmEnableHdAudioQuality = getBooleanCarrierConfig(phone.getContext(),
+                phone.getSubId(), CarrierConfigManager.KEY_ENABLE_HD_AUDIO_FOR_GSM_BOOL);
+    }
+
+    private static boolean getBooleanCarrierConfig(Context context, int subId, String key) {
+        CarrierConfigManager configManager = (CarrierConfigManager) context.getSystemService(
+                Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle b = null;
+        if (configManager != null) {
+            b = configManager.getConfigForSubId(subId);
+        }
+        if (b != null) {
+            return b.getBoolean(key);
+        } else {
+            // Return static default defined in CarrierConfigManager.
+            return CarrierConfigManager.getDefaultConfig().getBoolean(key);
+        }
+    }
 
     public void dispose() {
         clearPostDialListeners();
@@ -619,6 +645,13 @@ public class GsmCdmaConnection extends Connection {
             }
         }
 
+        if (!equalsHandlesNulls(mCodec, dc.codec) && mGsmEnableHdAudioQuality) {
+            if (Phone.DEBUG_PHONE) log("update: codec # changed!");
+            mCodec = dc.codec;
+            changed = true;
+            updateAudioQuality();
+        }
+
         // A null cnapName should be the same as ""
         if (TextUtils.isEmpty(dc.name)) {
             if (!TextUtils.isEmpty(mCnapName)) {
@@ -668,6 +701,18 @@ public class GsmCdmaConnection extends Connection {
         }
 
         return changed;
+    }
+
+    private void updateAudioQuality() {
+        int quality = Connection.AUDIO_QUALITY_STANDARD;
+        if (mCodec != null && mCodec.equals("Codec=AMR_WB") && mGsmEnableHdAudioQuality) {
+            quality = Connection.AUDIO_QUALITY_HIGH_DEFINITION;
+        }
+        if (Phone.DEBUG_PHONE) {
+            log("updating audio quality based on codec:  "
+                + (quality == Connection.AUDIO_QUALITY_HIGH_DEFINITION ? "high" : "standard"));
+        }
+        setAudioQuality(quality);
     }
 
     /**
