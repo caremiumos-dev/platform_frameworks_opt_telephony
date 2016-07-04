@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3dbbeaf3_d8c60d0b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2016-07-04T01:15:59Z",
+      "side": 1,
+      "message": "Please let us know the gerrit which includes this CarrierConfig implementation because this gerrit solely is not contributable due to lack of CarrierConfig part implementation. Must contribute this gerrit accompanied by the CarrierConfig part which this gerrit depends on.",
+      "range": {
+        "startLine": 871,
+        "startChar": 41,
+        "endLine": 871,
+        "endChar": 79
+      },
+      "revId": "4b9f47ef1387a4e4f64347bc4907acd6962e2907",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
