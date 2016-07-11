@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa979800_996b4ca0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-07-11T18:50:22Z",
+      "side": 1,
+      "message": "READY or PUK_REQUIRED? updateExternalState() sets the state to PUK_REQUIRED in this case.",
+      "range": {
+        "startLine": 10,
+        "startChar": 51,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "1f9e57a7e51ce51f4c55ff39efdc092009aa378b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
