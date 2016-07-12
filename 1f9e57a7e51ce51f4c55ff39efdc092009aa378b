@@ -22,6 +22,30 @@
       "revId": "1f9e57a7e51ce51f4c55ff39efdc092009aa378b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a80ec12_a7eb4aaa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2016-07-12T02:17:16Z",
+      "side": 1,
+      "message": "PUK_REQUIRED is correct. I have modified the commit message in new patch-set. Thank you.",
+      "parentUuid": "fa979800_996b4ca0",
+      "range": {
+        "startLine": 10,
+        "startChar": 51,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "1f9e57a7e51ce51f4c55ff39efdc092009aa378b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
