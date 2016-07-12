@@ -125,8 +125,13 @@ public class DcTracker extends Handler {
     private String mRequestedApnType = PhoneConstants.APN_TYPE_DEFAULT;
 
     // All data enabling/disabling related settings
-    private final DataEnabledSettings mDataEnabledSettings = new DataEnabledSettings();
+    private final DataEnabledSettings mDataEnabledSettings = new DataEnabledSettings(this);
+    private final RegistrantList mDataEnabledChangedRegistrants = new RegistrantList();
 
+    // The data on raoming enabled state registrations
+    private final RegistrantList mDataOnRoamingSettingsRegistrants = new RegistrantList();
+    // The network request is requested or released registrations
+    private final RegistrantList mNetworkRequestChangedRegistrants = new RegistrantList();
 
     /**
      * After detecting a potential connection problem, this is the max number
@@ -415,7 +420,7 @@ public class DcTracker extends Handler {
 
         mSettingsObserver.observe(
                 Settings.Global.getUriFor(Settings.Global.DATA_ROAMING + simSuffix),
-                DctConstants.EVENT_ROAMING_ON);
+                DctConstants.EVENT_DATA_ON_ROAMING_CHANGE);
         mSettingsObserver.observe(
                 Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONED),
                 DctConstants.EVENT_DEVICE_PROVISIONED_CHANGE);
@@ -962,6 +967,35 @@ public class DcTracker extends Handler {
         log("setActivity = " + activity);
         mActivity = activity;
         mPhone.notifyDataActivity();
+    }
+
+    /*
+     * Notify the network is requested or needed with specifed {@link #ApnContext}
+     *
+     * @param the {@link #ApnContext} received request or release network request
+     */
+    public void notifyNetworkRequestChanged(ApnContext apnCtx) {
+        mNetworkRequestChangedRegistrants.notifyResult(apnCtx);
+    }
+
+    /**
+     * Register for network requested or released event
+     *
+     * @param h the handler to receive the changed event
+     * @param what the event id when sending changed event
+     * @param obj the user object
+     */
+    public void registerForNetworkRequestChanged(Handler h, int what, Object obj) {
+        mNetworkRequestChangedRegistrants.addUnique(h, what, obj);
+    }
+
+    /**
+     * Unregister for network requested or released event
+     *
+     * @param h the handler to unregister
+     */
+    public void unregisterForNetworkRequestChanged(Handler h) {
+        mNetworkRequestChangedRegistrants.remove(h);
     }
 
     public void requestNetwork(NetworkRequest networkRequest, LocalLog log) {
@@ -2682,6 +2716,35 @@ public class DcTracker extends Handler {
         return retVal;
     }
 
+    /*
+     * Notify the roaming settings is changed event
+     *
+     * @param {@code true} means data on raoming settings is turned on, otherwise it is turned off.
+     */
+    private void notifyDataOnRoamingChanged(boolean enabled) {
+        mDataOnRoamingSettingsRegistrants.notifyResult(enabled ? Boolean.TRUE : Boolean.FALSE);
+    }
+
+    /**
+     * Register for data on roaming settings changed event
+     *
+     * @param h the handler to receive the changed event
+     * @param what the event id when sending changed event
+     * @param obj the user object
+     */
+    public void registerForDataOnRoamingChanged(Handler h, int what, Object obj) {
+        mDataOnRoamingSettingsRegistrants.addUnique(h, what, obj);
+    }
+
+    /**
+     * Unregister for data on roaming settings changed event
+     *
+     * @param h the handler to unregister
+     */
+    public void unregisterForDataOnRoamingChanged(Handler h) {
+        mDataOnRoamingSettingsRegistrants.remove(h);
+    }
+
     /**
      * Modify {@link android.provider.Settings.Global#DATA_ROAMING} value.
      */
@@ -2747,13 +2810,40 @@ public class DcTracker extends Handler {
         // place. Modem should choose the right protocol based on roaming condition.
         setDataProfilesAsNeeded();
 
-        if (!mDataEnabledSettings.isUserDataEnabled()) return;
+        boolean isAnyNonMeteredApnContextConnectable = isAnyNonMeteredApnContextConnectable();
+        if (DBG) log("onRoamingOff: isAnyNonMeteredApnContextConnectable="
+                + isAnyNonMeteredApnContextConnectable);
+
+        // Return when below conditions are met:
+        //  (1) User data setting is disabled
+        //  (2) No any connectable non-metered ApnContext
+        //
+        // E.g. With below conditions are met, should NOT return:
+        //  (1) Apn type 'mms' is is non-metered while device non-roaming
+        //      {@see CarrierConfigManager#KEY_CARRIER_METERED_APN_TYPES_STRINGS}
+        //  (2) Apn type 'mms' is is metered while device roaming
+        //      {@see CarrierConfigManager#KEY_CARRIER_METERED_ROAMING_APN_TYPES_STRINGS}
+        //  (3) User data settings is always disabled {@link #getDataEnabled}
+        //  (4) Upper layer {@link #requestNetwork} with {@link NetworkRequest} and
+        //      {@link NetworkCapabilities#NET_CAPABILITY_MMS}, but {@link #trySetupData} failed
+        //      due to data is NOT allowed(device is under roaming state)
+        //  (5) The roaming state of device is changed from roaming to non-roaming
+        // At this time, {@link ConnectivityManager#TYPE_MOBILE_MMS} ApnContext is connectable.
+        // That is, data is allowed now, {@link #setupDataOnConnectableApns} should be triggered.
+        if (!mDataEnabledSettings.isUserDataEnabled() && !isAnyNonMeteredApnContextConnectable) {
+            if (DBG) log("onRoamingOff: data not enabled by user"
+                    + " and no any non-metered ApnContext is connectable");
+            return;
+        }
 
         if (getDataOnRoamingEnabled() == false) {
             notifyOffApnsOfAvailability(Phone.REASON_ROAMING_OFF);
             setupDataOnConnectableApns(Phone.REASON_ROAMING_OFF);
         } else {
             notifyDataConnection(Phone.REASON_ROAMING_OFF);
+            if (isAnyNonMeteredApnContextConnectable) {
+                setupDataOnConnectableApns(Phone.REASON_ROAMING_OFF);
+            }
         }
     }
 
@@ -2765,8 +2855,29 @@ public class DcTracker extends Handler {
         // place. Modem should choose the right protocol based on roaming condition.
         setDataProfilesAsNeeded();
 
-        if (!mDataEnabledSettings.isUserDataEnabled()) {
-            if (DBG) log("data not enabled by user");
+        boolean isAnyNonMeteredApnContextConnectable = isAnyNonMeteredApnContextConnectable();
+        if (DBG) log("onRoamingOn: isAnyNonMeteredApnContextConnectable="
+                + isAnyNonMeteredApnContextConnectable);
+
+        // Return when below conditions are met:
+        //  (1) User data setting is disabled
+        //  (2) No any connectable non-metered ApnContext
+        //
+        // E.g. With below conditions are met, should NOT return:
+        //  (1) Apn type 'mms' is metered while device non-roaming
+        //      {@see CarrierConfigManager#KEY_CARRIER_METERED_APN_TYPES_STRINGS}
+        //  (2) Apn type 'mms' is non-metered while device roaming
+        //      {@see CarrierConfigManager#KEY_CARRIER_METERED_ROAMING_APN_TYPES_STRINGS}
+        //  (3) User data settings is always disabled {@link #getDataEnabled}
+        //  (4) Upper layer {@link #requestNetwork} with {@link NetworkRequest} and
+        //      {@link NetworkCapabilities#NET_CAPABILITY_MMS}, but {@link #trySetupData} failed
+        //      due to data is NOT allowed(device is under non-roaming state)
+        //  (5) The roaming state of device is changed from non-roaming to roaming
+        // At this time, {@link ConnectivityManager#TYPE_MOBILE_MMS} ApnContext is connectable.
+        // That is, data is allowed now, {@link #setupDataOnConnectableApns} should be triggered.
+        if (!mDataEnabledSettings.isUserDataEnabled() && !isAnyNonMeteredApnContextConnectable) {
+            if (DBG) log("onRoamingOn: data not enabled by user"
+                    + " and no any non-metered ApnContext is connectable");
             return;
         }
 
@@ -2784,6 +2895,9 @@ public class DcTracker extends Handler {
             if (DBG) log("onRoamingOn: Tear down data connection on roaming.");
             cleanUpAllConnections(true, Phone.REASON_ROAMING_ON);
             notifyOffApnsOfAvailability(Phone.REASON_ROAMING_ON);
+            if (isAnyNonMeteredApnContextConnectable) {
+                setupDataOnConnectableApns(Phone.REASON_ROAMING_ON);
+            }
         }
     }
 
@@ -4004,6 +4118,14 @@ public class DcTracker extends Handler {
             case DctConstants.EVENT_SET_CARRIER_DATA_ENABLED:
                 onSetCarrierDataEnabled((AsyncResult) msg.obj);
                 break;
+            case DctConstants.EVENT_DATA_ON_ROAMING_CHANGE:
+                notifyDataOnRoamingChanged(getDataOnRoamingEnabled());
+                onRoamingOn();
+                break;
+            case DctConstants.EVENT_NETWORK_CAPABILITIES_CHANGED:
+                log("EVENT_NETWORK_CAPABILITIES_CHANGED msg=" + msg);
+                onNetworkCapabilitiesChanged((AsyncResult) msg.obj);
+                break;
             default:
                 Rlog.e("DcTracker", "Unhandled event=" + msg);
                 break;
@@ -4135,12 +4257,50 @@ public class DcTracker extends Handler {
         mAllDataDisconnectedRegistrants.remove(h);
     }
 
-    public void registerForDataEnabledChanged(Handler h, int what, Object obj) {
-        mDataEnabledSettings.registerForDataEnabledChanged(h, what, obj);
+    /**
+     * Notify the data enable settings is changed with specified reason
+     *
+     * @param the reason why data enable settings is changed
+     */
+    /* package */ void notifyDataEnabledChanged(int reason) {
+        mDataEnabledChangedRegistrants.notifyResult(new Pair<>(
+                new Pair<>(isDataEnabled(true),
+                isDataEnabled(false)), reason));
     }
 
+    /**
+     * Register for data enable settings changed event
+     *
+     * @param h the handler to receive the changed event
+     * @param what the event id when sending changed event
+     * @param obj the user object
+     */
+    public void registerForDataEnabledChanged(Handler h, int what, Object obj) {
+        registerForDataEnabledChanged(h, what, obj, true);
+    }
+
+    /**
+     * Register for data enable settings changed event
+     *
+     * @param h the handler to receive the changed event
+     * @param what the event id when sending changed event
+     * @param obj the user object
+     * @param notifyNow {@code true} if caller needs to be notified immediately when registering
+     */
+    public void registerForDataEnabledChanged(Handler h, int what, Object obj, boolean notifyNow) {
+        mDataEnabledChangedRegistrants.addUnique(h, what, obj);
+        if (notifyNow) {
+            notifyDataEnabledChanged(DataEnabledSettings.REASON_REGISTERED);
+        }
+    }
+
+    /**
+     * Unregister for data enable settings changed event
+     *
+     * @param h the handler to unregister
+     */
     public void unregisterForDataEnabledChanged(Handler h) {
-        mDataEnabledSettings.unregisterForDataEnabledChanged(h);
+        mDataEnabledChangedRegistrants.remove(h);
     }
 
     private void onSetInternalDataEnabled(boolean enabled, Message onCompleteMsg) {
@@ -4850,4 +5010,34 @@ public class DcTracker extends Handler {
         }
     }
 
+    /**
+     * Called when EVENT_NETWORK_CAPABILITIES_CHANGED is received.
+     */
+    private void onNetworkCapabilitiesChanged(AsyncResult ar) {
+        ApnContext apnContext = getValidApnContext(ar, "onNetworkCapabilitiesChanged");
+        if (apnContext == null) return;
+        if(DBG) log("onNetworkCapabilitiesChanged: EVENT_NETWORK_CAPABILITIES_CHANGED:"
+                + " apnContext=" + apnContext);
+        apnContext.requestLog("onNetworkCapabilitiesChanged");
+        mPhone.notifyDataConnection(apnContext.getReason(), apnContext.getApnType());
+    }
+
+    /*
+     * Check whether there is any non-metered ApnContext is connectable
+     * Below conditions should be met:
+     *  (1) ApnContext is Enabled, that is telephony FWK receives specifed network request
+     *  (2) Current ApnContext is connectable
+     */
+    private boolean isAnyNonMeteredApnContextConnectable() {
+        for (ApnContext apnCtx : mApnContexts.values()) {
+            if (apnCtx.isConnectable() && !ApnSetting.isMeteredApnType(
+                    apnCtx.getApnType(), mPhone.getContext(),
+                    mPhone.getSubId(), mPhone.getServiceState().getDataRoaming())) {
+                if(DBG) log("isAnyNonMeteredApnContextConnectable: true");
+                return true;
+            }
+        }
+        if(DBG) log("isAnyNonMeteredApnContextConnectable: false");
+        return false;
+    }
 }

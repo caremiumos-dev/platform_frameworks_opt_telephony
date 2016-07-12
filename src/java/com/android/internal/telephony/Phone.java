@@ -3321,6 +3321,18 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mDcTracker.registerForDataEnabledChanged(h, what, obj);
     }
 
+    /**
+     * Fires on any change in data enable settings
+     *
+     * @param h the handler which is registering the data enable settings event
+     * @param what the integer of message when firing data enable settings is triggered to be sent
+     * @param obj the user object
+     * @param notifyNow {@code true} if caller needs to be notified immediately when registering
+     */
+    public void registerForDataEnabledChanged(Handler h, int what, Object obj, boolean notifyNow) {
+        mDcTracker.registerForDataEnabledChanged(h, what, obj, notifyNow);
+    }
+
     public void unregisterForDataEnabledChanged(Handler h) {
         mDcTracker.unregisterForDataEnabledChanged(h);
     }

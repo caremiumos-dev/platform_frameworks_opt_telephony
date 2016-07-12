@@ -58,6 +58,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -188,9 +189,11 @@ public class DataConnection extends StateMachine {
     static final int EVENT_BW_REFRESH_RESPONSE = BASE + 14;
     static final int EVENT_DATA_CONNECTION_VOICE_CALL_STARTED = BASE + 15;
     static final int EVENT_DATA_CONNECTION_VOICE_CALL_ENDED = BASE + 16;
+    static final int EVENT_DATA_ENABLED_CHANGED = BASE + 17;
+    static final int EVENT_DATA_ON_ROAMING_ENABLED_CHANGED = BASE + 18;
+    static final int EVENT_NETWORK_REQEUQST_CHANGED = BASE + 19;
 
-    private static final int CMD_TO_STRING_COUNT =
-            EVENT_DATA_CONNECTION_VOICE_CALL_ENDED - BASE + 1;
+    private static final int CMD_TO_STRING_COUNT = EVENT_NETWORK_REQEUQST_CHANGED - BASE + 1;
 
     private static String[] sCmdToString = new String[CMD_TO_STRING_COUNT];
     static {
@@ -214,6 +217,10 @@ public class DataConnection extends StateMachine {
                 "EVENT_DATA_CONNECTION_VOICE_CALL_STARTED";
         sCmdToString[EVENT_DATA_CONNECTION_VOICE_CALL_ENDED - BASE] =
                 "EVENT_DATA_CONNECTION_VOICE_CALL_ENDED";
+        sCmdToString[EVENT_DATA_ENABLED_CHANGED - BASE] = "EVENT_DATA_ENABLED_CHANGED";
+        sCmdToString[EVENT_DATA_ON_ROAMING_ENABLED_CHANGED - BASE] =
+                "EVENT_DATA_ON_ROAMING_ENABLED_CHANGED";
+        sCmdToString[EVENT_NETWORK_REQEUQST_CHANGED - BASE] = "EVENT_NETWORK_REQEUQST_CHANGED";
     }
     // Convert cmd to string or null if unknown
     static String cmdToString(int cmd) {
@@ -232,6 +239,7 @@ public class DataConnection extends StateMachine {
 
     /**
      * Create the connection object
+     * Must be called in the main thread of DcTracker, otherwise dead lock occurs
      *
      * @param phone the Phone
      * @param id the connection id
@@ -398,6 +406,9 @@ public class DataConnection extends StateMachine {
 
         mPhone = phone;
         mDct = dct;
+        // Should be called in main thread, otherwise might lead to dead lock
+        mIsDataEnabled = mDct.isDataEnabled(true);
+        mInternalDataEnabled = mDct.isDataEnabled(false);
         mDcTesterFailBringUpAll = failBringUpAll;
         mDcController = dcc;
         mId = id;
@@ -814,9 +825,10 @@ public class DataConnection extends StateMachine {
      * Indicates if when this connection was established we had a restricted/privileged
      * NetworkRequest and needed it to overcome data-enabled limitations.
      *
-     * This gets set once per connection setup and is based on conditions at that time.
-     * We could theoretically have dynamic capabilities but now is not a good time to
-     * experiement with that.
+     * This gets set when below events happens:
+     * (1) Per connection setup
+     * (2) {@link android.net.NetworkRequest} is requested or released
+     * And it is based on conditions at that time.
      *
      * This flag overrides the APN-based restriction capability, restricting the network
      * based on both having a NetworkRequest with restricted AND needing a restricted
@@ -825,10 +837,6 @@ public class DataConnection extends StateMachine {
      * if conditions require a restricted network to overcome user-disabled then it must
      * be restricted, otherwise it is unrestricted (or restricted based on APN type).
      *
-     * Because we're not supporting dynamic capabilities, if conditions change and we go from
-     * data-enabled to not or vice-versa we will need to tear down networks to deal with it
-     * at connection setup time with the new state.
-     *
      * This supports a privileged app bringing up a network without general apps having access
      * to it when the network is otherwise unavailable (hipri).  The first use case is
      * pre-paid SIM reprovisioning over internet, where the carrier insists on no traffic
@@ -836,28 +844,230 @@ public class DataConnection extends StateMachine {
      */
     private boolean mRestrictedNetworkOverride = false;
 
-    // Should be called once when the call goes active to examine the state of things and
-    // declare the restriction override for the life of the connection
-    private void setNetworkRestriction() {
-        mRestrictedNetworkOverride = false;
+    /*
+     * When a non-metered network is set up, the {@link Apnsetting} might contain metered
+     * apn type which is disallowed, and user can reach metered network unintentionally.
+     *
+     * E.g. With below conditions are met,
+     * {@link android.net.NetworkCapabilities#NET_CAPABILITY_INTERNET} should NOT be reached.
+     *  (1) Apn type 'mms' is non-metered while device non-roaming
+     *      Apn type 'default' is metered while device non-roaming
+     *      {@see CarrierConfigManager#KEY_CARRIER_METERED_APN_TYPES_STRINGS}
+     *  (2) Apn type 'mms' is metered while device roaming
+     *      {@see CarrierConfigManager#KEY_CARRIER_METERED_ROAMING_APN_TYPES_STRINGS}
+     *  (3) User data settings is always disabled {@link DcTracker#getDataEnabled}
+     *  (4) Upper layer {@link #requestNetwork} with {@link NetworkRequest} and
+     *      {@link android.net.NetworkCapabilities#NET_CAPABILITY_MMS}.
+     *      That is, user sends a mms.
+     * For some operators, mms and default apns are similar.
+     * So {@link DcTracker#dedupeApnSettings} merged them into one apn.
+     * Then set up data call with 'default, mms'.
+     *
+     * As a result, {@link android.net.NetworkCapabilities#NET_CAPABILITY_INTERNET} is notified to
+     * ConnectivityService.
+     * Then upperlayer can reach internt unintentionally while data settings is off.
+     * At this time, user should NOT allowed to surf internet.
+     *
+     * This field indicates the allowed apn types.
+     * With this field, DataConnection#makeNetworkCapabilities can calculate
+     * {@link android.net.NetworkCapabilities} correctly, and notify to ConnectivityService.
+     */
+    private String[] mAllowedApnTypes;
+    /*
+     * The reason why {@link #mRestrictedNetworkOverride} {@link #mAllowedApnTypes} are updated
+     */
+    private NcChangedReason mNcChangedReason;
+
+    /*
+     * Optional reasons for {@link android.net.NetworkCapabilities} changed event
+     */
+    private enum NcChangedReason {
+        REASON_DATA_INITED("dataInited"),
+        REASON_ROAMING_ON("roamingOn"),
+        REASON_ROAMING_OFF("roamingOff"),
+        REASON_INTERNAL_DATA_CHANGED("internalDataChanged"),
+        REASON_USER_DATA_CHANGED("userDataChanged"),
+        REASON_POLICY_DATA_CHANGED("policyDataChanged"),
+        REASON_CARRIER_DATA_CHANGED("carrierDataChanged"),
+        REASON_DATA_ON_ROAMING_ENABLED_CHANGED("dataOnRoamingChanged"),
+        REASON_APNCONTEXT_CHANGED("apnContextChanged"),
+        REASON_APNCONTEXT_NETWORK_REQUEST_CHANGED("apnContextNetworkrequestChanged"),
+        REASON_UNKNOWN("unknown");
+
+        public String mChangedReasonStr;
+
+        NcChangedReason(String changedStr) {
+            mChangedReasonStr = changedStr;
+        }
+
+        /**
+         * Gets the {@link #NcChangedReason} according to the data enable settings changed reason
+         *
+         * @param reason the reason of data enable settings changed
+         *
+         * @return the specified {@link #NcChangedReason} accordingly
+         */
+        public static NcChangedReason getReasonForDataEnableChanged(int reason) {
+            NcChangedReason ncChangedReason = REASON_UNKNOWN;
+            switch (reason) {
+                case DataEnabledSettings.REASON_INTERNAL_DATA_ENABLED:
+                    ncChangedReason = REASON_INTERNAL_DATA_CHANGED;
+                    break;
+                case DataEnabledSettings.REASON_USER_DATA_ENABLED:
+                    ncChangedReason = REASON_USER_DATA_CHANGED;
+                    break;
+                case DataEnabledSettings.REASON_POLICY_DATA_ENABLED:
+                    ncChangedReason = REASON_POLICY_DATA_CHANGED;
+                    break;
+                case DataEnabledSettings.REASON_DATA_ENABLED_BY_CARRIER:
+                    ncChangedReason = REASON_CARRIER_DATA_CHANGED;
+                    break;
+                default:
+                    break;
+            }
+            return ncChangedReason;
+        }
+
+        /* {@inheritDoc} */
+        @Override
+        public String toString() {
+            return mChangedReasonStr;
+        }
+    }
+
+    /*
+     * Indicates whether data is enabled, should always be same as
+     * {@link #DcTracker#isDataEnabled(true)}
+     */
+    private boolean mIsDataEnabled;
+
+    /*
+     * Indicates whether internal data is enabled, should always be same as
+     * {@link #DataEnabledSettings#isInternalDataEnabled()}
+     */
+    private boolean mInternalDataEnabled;
+
+    /*
+     * Refresh {@link android.net.NetworkCapabilities} due to specified reason.
+     * @param reason the reason why refreshing {@link android.net.NetworkCapabilities} is needed
+     *
+     * @return {@code true} if {@link android.net.NetworkCapabilities} is changed
+     */
+    private boolean refreshNetworkCapabilities(NcChangedReason reason) {
+        boolean changed = false;
+        if (updateNetworkRestrictionAndAllowedApnTypes(reason)) {
+            if (getCurrentState() == mActiveState && mNetworkAgent != null) {
+                mNetworkAgent.sendNetworkCapabilities(makeNetworkCapabilities());
+                changed = true;
+            }
+        }
+        if (DBG) log("refreshNetworkCapabilities: changed=" + changed + ", reason=" + reason);
+        if (changed) {
+            notifyAllWithEvent(null, DctConstants.EVENT_NETWORK_CAPABILITIES_CHANGED,
+                    null /* shoud NOT override reason of ApnContext*/);
+        }
+        return changed;
+    }
+
+    /*
+     * Update {@link #mRestrictedNetworkOverride} and {@link #mAllowedApnTypes} due to specified
+     * reason.
+     * @param reason the reason why update is needed
+     *
+     * @return {@code true} if any of above two fields are changed
+     */
+    private boolean updateNetworkRestrictionAndAllowedApnTypes(NcChangedReason reason) {
+        mNcChangedReason = reason;
+        boolean prevRestrictedNetworkOverride = mRestrictedNetworkOverride;
         // first, if we have no restricted requests, this override can stay FALSE:
         boolean noRestrictedRequests = true;
         for (ApnContext apnContext : mApnContexts.keySet()) {
-            noRestrictedRequests &= apnContext.hasNoRestrictedRequests(true /* exclude DUN */);
-        }
-        if (noRestrictedRequests) {
-            return;
-        }
-
-        // Do we need a restricted network to satisfy the request?
-        // Is this network metered?  If not, then don't add restricted
-        if (!mApnSetting.isMetered(mPhone.getContext(), mPhone.getSubId(),
-                mPhone.getServiceState().getDataRoaming())) {
-            return;
+            // Mark no restriced request if any of below condtions is met:
+            // (1) There is no any restricted network request
+            // (2) The requested restricted network is non-metered
+            noRestrictedRequests &= (apnContext.hasNoRestrictedRequests(true /* exclude DUN */)
+                    || !ApnSetting.isMeteredApnType(apnContext.getApnType(), mPhone.getContext(),
+                                mPhone.getSubId(), mPhone.getServiceState().getDataRoaming()));
         }
 
-        // Is data disabled?
-        mRestrictedNetworkOverride = (mDct.isDataEnabled(true) == false);
+        mRestrictedNetworkOverride = !noRestrictedRequests && !mIsDataEnabled;
+
+        String[] prevAllowedApnTypes = mAllowedApnTypes;
+        if (mApnSetting != null) {
+            mAllowedApnTypes = mRestrictedNetworkOverride
+                    ? mApnSetting.types
+                    : calcDataAllowedApnTypes(mApnSetting.types);
+        }
+        if (DBG) log("updateNetworkRestrictionAndAllowedApnTypes: "
+                + " prevRestrictedNetworkOverride=" + prevRestrictedNetworkOverride
+                + ", mRestrictedNetworkOverride=" + mRestrictedNetworkOverride
+                + ", prevAllowedApnTypes=" + apnTypesToString(prevAllowedApnTypes)
+                + ", mAllowedApnTypes=" + apnTypesToString(mAllowedApnTypes)
+                + ", reason=" + reason);
+
+        return prevRestrictedNetworkOverride != mRestrictedNetworkOverride
+                || !Arrays.equals(prevAllowedApnTypes, mAllowedApnTypes);
+    }
+
+    /*
+     * Calculates the allowed apn types for setup connection or network capability
+     *
+     * @param apnTypes the apn types to be calculated
+     *
+     * @return the allowed apn types
+     */
+    private String[] calcDataAllowedApnTypes(String[] apnTypes) {
+        ArrayList<String> list = new ArrayList<String>();
+        if (apnTypes != null && apnTypes.length > 0) {
+            for (String apnType : apnTypes) {
+                // If data connection was set up for non-metered apn type ONLY.
+                // The capability of metered apn type should be removed.
+                // Otherwise, device can reach metered network such as internet unintentionally.
+                if (isAllowedApnType(apnType)) {
+                    list.add(apnType);
+                }
+            }
+        }
+        return (String[]) list.toArray(new String[0]);
+    }
+
+    /*
+     * Check whether the specified apn type is allowed to be made for
+     * {@link android.net.NetworkCapabilities}
+     *
+     * @param apnType the apn Type to be checked
+     *
+     * @return {@code true} if the apn type is allowed, {@code false} otherwise.
+     */
+    private boolean isAllowedApnType(String apnType) {
+        return mIsDataEnabled /* DcTracker#isDataEnabled(true) */
+                        && (!mPhone.getServiceState().getDataRoaming()
+                                || mDct.getDataOnRoamingEnabled())
+                || mInternalDataEnabled /* DcTracker#isDataEnabled(false) */
+                        && !ApnSetting.isMeteredApnType(apnType, mPhone.getContext(),
+                                mPhone.getSubId(), mPhone.getServiceState().getDataRoaming());
+    }
+
+    /*
+     * Convert the apn types to string
+     *
+     * @param apnTypes the apn types to be converted
+     *
+     * @return the converted string
+     */
+    private String apnTypesToString(String[] apnTypes) {
+        StringBuilder sb = new StringBuilder();
+        if (apnTypes != null && apnTypes.length > 0) {
+            for (int i = 0; i < apnTypes.length; i++) {
+                sb.append(apnTypes[i]);
+                if (i < apnTypes.length - 1) {
+                    sb.append(" | ");
+                }
+            }
+        } else {
+            sb.append("[EMPTY APN TYPES]");
+        }
+        return sb.toString();
     }
 
     private NetworkCapabilities makeNetworkCapabilities() {
@@ -865,7 +1075,19 @@ public class DataConnection extends StateMachine {
         result.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
 
         if (mApnSetting != null) {
-            for (String type : mApnSetting.types) {
+            // (1) If mRestrictedNetworkOverride is true, which means current connection is
+            // brought up by privileged app and the network needed by privileged app is metered,
+            // keep using the full types of apnsetting, and mark
+            // {@link android.net.NetworkCapabilities} as restricted.
+            //
+            // (2) Otherwise, which means current connection is NOT brought up by privileged app
+            // or the network needed by privileged app is NOT metered.
+            // Using the calculated allowed apntypes and mark
+            // {@link android.net.NetworkCapabilities} as NOT restricted.
+            String[] allowedApnTypes = !mRestrictedNetworkOverride && mAllowedApnTypes != null
+                            ? mAllowedApnTypes
+                            : mApnSetting.types;
+            for (String type : allowedApnTypes) {
                 switch (type) {
                     case PhoneConstants.APN_TYPE_ALL: {
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
@@ -922,7 +1144,7 @@ public class DataConnection extends StateMachine {
 
             // If none of the APN types associated with this APN setting is metered,
             // then we apply NOT_METERED capability to the network.
-            if (!mApnSetting.isMetered(mPhone.getContext(), mPhone.getSubId(),
+            if (!mApnSetting.isMetered(mPhone.getContext(), mPhone.getSubId(), allowedApnTypes,
                     mPhone.getServiceState().getDataRoaming())) {
                 result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
                 mNetworkInfo.setMetered(false);
@@ -964,6 +1186,8 @@ public class DataConnection extends StateMachine {
         result.setLinkDownstreamBandwidthKbps(down);
 
         result.setNetworkSpecifier(Integer.toString(mPhone.getSubId()));
+
+        log("makeNetworkCapabilities: result=" + result);
 
         return result;
     }
@@ -1043,6 +1267,14 @@ public class DataConnection extends StateMachine {
             mPhone.getServiceStateTracker().registerForDataRoamingOff(getHandler(),
                     DataConnection.EVENT_DATA_CONNECTION_ROAM_OFF, null);
 
+            mDct.registerForDataEnabledChanged(getHandler(),
+                    DataConnection.EVENT_DATA_ENABLED_CHANGED, null,
+                    false /* notifyNow, must be false, otherwise causes deadlock*/);
+            mDct.registerForDataOnRoamingChanged(getHandler(),
+                    DataConnection.EVENT_DATA_ON_ROAMING_ENABLED_CHANGED, null);
+            mDct.registerForNetworkRequestChanged(getHandler(),
+                    DataConnection.EVENT_NETWORK_REQEUQST_CHANGED, null);
+
             // Add ourselves to the list of data connections
             mDcController.addDc(DataConnection.this);
         }
@@ -1055,6 +1287,10 @@ public class DataConnection extends StateMachine {
 
             mPhone.getServiceStateTracker().unregisterForDataRoamingOn(getHandler());
             mPhone.getServiceStateTracker().unregisterForDataRoamingOff(getHandler());
+
+            mDct.unregisterForDataEnabledChanged(getHandler());
+            mDct.unregisterForDataOnRoamingChanged(getHandler());
+            mDct.unregisterForNetworkRequestChanged(getHandler());
 
             // Remove ourselves from the DC lists
             mDcController.removeDc(DataConnection.this);
@@ -1185,7 +1421,7 @@ public class DataConnection extends StateMachine {
                         logAndAddLogRec(s);
                     }
                     break;
-                case EVENT_DATA_CONNECTION_DRS_OR_RAT_CHANGED:
+                case EVENT_DATA_CONNECTION_DRS_OR_RAT_CHANGED: {
                     AsyncResult ar = (AsyncResult)msg.obj;
                     Pair<Integer, Integer> drsRatPair = (Pair<Integer, Integer>)ar.result;
                     mDataRegState = drsRatPair.first;
@@ -1209,15 +1445,48 @@ public class DataConnection extends StateMachine {
                         mNetworkAgent.sendLinkProperties(mLinkProperties);
                     }
                     break;
+                }
 
                 case EVENT_DATA_CONNECTION_ROAM_ON:
                     mNetworkInfo.setRoaming(true);
+                    updateNetworkRestrictionAndAllowedApnTypes(NcChangedReason.REASON_ROAMING_ON);
                     break;
 
                 case EVENT_DATA_CONNECTION_ROAM_OFF:
                     mNetworkInfo.setRoaming(false);
+                    updateNetworkRestrictionAndAllowedApnTypes(NcChangedReason.REASON_ROAMING_OFF);
                     break;
-
+                case EVENT_DATA_ENABLED_CHANGED: {
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    if (ar != null && ar.result != null && ar.result instanceof Pair) {
+                        Pair<Pair<Boolean, Boolean>, Integer> p
+                                = (Pair<Pair<Boolean, Boolean>, Integer>) ar.result;
+                        if (mIsDataEnabled != p.first.first
+                                || mInternalDataEnabled != p.first.second) {
+                            mIsDataEnabled = p.first.first;
+                            mInternalDataEnabled = p.first.second;
+                            updateNetworkRestrictionAndAllowedApnTypes(
+                                    NcChangedReason.getReasonForDataEnableChanged(p.second));
+                        }
+                    }
+                    break;
+                }
+                case EVENT_DATA_ON_ROAMING_ENABLED_CHANGED: {
+                    updateNetworkRestrictionAndAllowedApnTypes(
+                            NcChangedReason.REASON_DATA_ON_ROAMING_ENABLED_CHANGED);
+                    break;
+                }
+                case EVENT_NETWORK_REQEUQST_CHANGED: {
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    if (ar != null && ar.result != null && ar.result instanceof ApnContext) {
+                        ApnContext apnCtx = (ApnContext) ar.result;
+                        if (mApnContexts.containsKey(apnCtx)) {
+                            updateNetworkRestrictionAndAllowedApnTypes(
+                                    NcChangedReason.REASON_APNCONTEXT_NETWORK_REQUEST_CHANGED);
+                        }
+                    }
+                    break;
+                }
                 default:
                     if (DBG) {
                         log("DcDefaultState: shouldn't happen but ignore msg.what="
@@ -1582,7 +1851,7 @@ public class DataConnection extends StateMachine {
             misc.subscriberId = mPhone.getSubscriberId();
 
             if (createNetworkAgent) {
-                setNetworkRestriction();
+                updateNetworkRestrictionAndAllowedApnTypes(NcChangedReason.REASON_DATA_INITED);
                 mNetworkAgent = new DcNetworkAgent(getHandler().getLooper(), mPhone.getContext(),
                         "DcNetworkAgent", mNetworkInfo, makeNetworkCapabilities(), mLinkProperties,
                         50, misc);
@@ -1624,6 +1893,7 @@ public class DataConnection extends StateMachine {
                     if (DBG) {
                         log("DcActiveState: EVENT_CONNECT cp=" + cp + " dc=" + DataConnection.this);
                     }
+                    refreshNetworkCapabilities(NcChangedReason.REASON_APNCONTEXT_CHANGED);
                     notifyConnectCompleted(cp, DcFailCause.NONE, false);
                     retVal = HANDLED;
                     break;
@@ -1649,6 +1919,7 @@ public class DataConnection extends StateMachine {
                             transitionTo(mDisconnectingState);
                         } else {
                             mApnContexts.remove(dp.mApnContext);
+                            refreshNetworkCapabilities(NcChangedReason.REASON_APNCONTEXT_CHANGED);
                             notifyDisconnectCompleted(dp, false);
                         }
                     } else {
@@ -1684,6 +1955,7 @@ public class DataConnection extends StateMachine {
                     break;
                 }
                 case EVENT_DATA_CONNECTION_ROAM_ON: {
+                    refreshNetworkCapabilities(NcChangedReason.REASON_ROAMING_ON);
                     mNetworkInfo.setRoaming(true);
                     if (mNetworkAgent != null) {
                         mNetworkAgent.sendNetworkInfo(mNetworkInfo);
@@ -1692,10 +1964,45 @@ public class DataConnection extends StateMachine {
                     break;
                 }
                 case EVENT_DATA_CONNECTION_ROAM_OFF: {
+                    refreshNetworkCapabilities(NcChangedReason.REASON_ROAMING_OFF);
                     mNetworkInfo.setRoaming(false);
                     if (mNetworkAgent != null) {
                         mNetworkAgent.sendNetworkInfo(mNetworkInfo);
                     }
+                    retVal = HANDLED;
+                    break;
+                }
+                case EVENT_DATA_ENABLED_CHANGED: {
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    if (ar.result instanceof Pair) {
+                        Pair<Pair<Boolean, Boolean>, Integer> p
+                                = (Pair<Pair<Boolean, Boolean>, Integer>) ar.result;
+                        if (mIsDataEnabled != p.first.first
+                                || mInternalDataEnabled != p.first.second) {
+                            mIsDataEnabled = p.first.first;
+                            mInternalDataEnabled = p.first.second;
+                            refreshNetworkCapabilities(
+                                    NcChangedReason.getReasonForDataEnableChanged(p.second));
+                        }
+                    }
+                    retVal = HANDLED;
+                    break;
+                }
+                case EVENT_NETWORK_REQEUQST_CHANGED: {
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    if (ar != null && ar.result != null && ar.result instanceof ApnContext) {
+                        ApnContext apnCtx = (ApnContext) ar.result;
+                        if (mApnContexts.containsKey(apnCtx)) {
+                            refreshNetworkCapabilities(
+                                    NcChangedReason.REASON_APNCONTEXT_NETWORK_REQUEST_CHANGED);
+                        }
+                    }
+                    retVal = HANDLED;
+                    break;
+                }
+                case EVENT_DATA_ON_ROAMING_ENABLED_CHANGED: {
+                    refreshNetworkCapabilities(
+                            NcChangedReason.REASON_DATA_ON_ROAMING_ENABLED_CHANGED);
                     retVal = HANDLED;
                     break;
                 }
@@ -2060,7 +2367,11 @@ public class DataConnection extends StateMachine {
                 + " mTag=" + mTag
                 + " mLinkProperties=" + mLinkProperties
                 + " linkCapabilities=" + makeNetworkCapabilities()
-                + " mRestrictedNetworkOverride=" + mRestrictedNetworkOverride;
+                + " mRestrictedNetworkOverride=" + mRestrictedNetworkOverride
+                + " mAllowedApnTypes=" + apnTypesToString(mAllowedApnTypes)
+                + " mNcChangedReason=" + mNcChangedReason
+                + " mIsDataEnabled=" + mIsDataEnabled
+                + " mInternalDataEnabled=" + mInternalDataEnabled;
     }
 
     @Override
@@ -2109,6 +2420,11 @@ public class DataConnection extends StateMachine {
         pw.flush();
         pw.println(" mDataRegState=" + mDataRegState);
         pw.println(" mRilRat=" + mRilRat);
+        pw.println(" mRestrictedNetworkOverride=" + mRestrictedNetworkOverride);
+        pw.println(" mAllowedApnTypes=" + apnTypesToString(mAllowedApnTypes));
+        pw.println(" mNcChangedReason=" + mNcChangedReason);
+        pw.println(" mIsDataEnabled=" + mIsDataEnabled);
+        pw.println(" mInternalDataEnabled=" + mInternalDataEnabled);
         pw.println(" mNetworkCapabilities=" + makeNetworkCapabilities());
         pw.println(" mCreateTime=" + TimeUtils.logTimeOfDay(mCreateTime));
         pw.println(" mLastFailTime=" + TimeUtils.logTimeOfDay(mLastFailTime));

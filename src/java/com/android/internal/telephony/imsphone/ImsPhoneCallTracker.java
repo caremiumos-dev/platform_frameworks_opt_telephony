@@ -2658,8 +2658,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             case EVENT_DATA_ENABLED_CHANGED:
                 ar = (AsyncResult) msg.obj;
                 if (ar.result instanceof Pair) {
-                    Pair<Boolean, Integer> p = (Pair<Boolean, Integer>) ar.result;
-                    onDataEnabledChanged(p.first, p.second);
+                    Pair<Pair<Boolean, Boolean>, Integer> p
+                            = (Pair<Pair<Boolean, Boolean>, Integer>) ar.result;
+                    onDataEnabledChanged(p.first.first, p.second);
                 }
                 break;
             case EVENT_GET_IMS_SERVICE:

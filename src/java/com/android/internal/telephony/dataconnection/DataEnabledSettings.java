@@ -38,6 +38,9 @@ public class DataEnabledSettings {
 
     public static final int REASON_DATA_ENABLED_BY_CARRIER = 4;
 
+    // The DCT that's we needed for notifying.
+    private DcTracker mDct = null;
+
     /**
      * responds to the setInternalDataEnabled call - used internally to turn off data.
      * For example during emergency calls
@@ -61,13 +64,22 @@ public class DataEnabledSettings {
      */
     private boolean mCarrierDataEnabled = true;
 
-    private final RegistrantList mDataEnabledChangedRegistrants = new RegistrantList();
+    /**
+     * Constructor function of {@link #DataEnabledSettings}
+     *
+     * @param dct The {@link #DcTracker} to be accessed
+     */
+    public DataEnabledSettings(DcTracker dct) {
+        mDct = dct;
+    }
 
     public synchronized void setInternalDataEnabled(boolean enabled) {
         boolean prevDataEnabled = isDataEnabled(true);
+        boolean prevInternalDataEnabled = isDataEnabled(false);
         mInternalDataEnabled = enabled;
-        if (prevDataEnabled != isDataEnabled(true)) {
-            notifyDataEnabledChanged(!prevDataEnabled, REASON_INTERNAL_DATA_ENABLED);
+        if (prevDataEnabled != isDataEnabled(true)
+                || prevInternalDataEnabled != isDataEnabled(false)) {
+            notifyDataEnabledChanged(REASON_INTERNAL_DATA_ENABLED);
         }
     }
     public synchronized boolean isInternalDataEnabled() {
@@ -78,7 +90,7 @@ public class DataEnabledSettings {
         boolean prevDataEnabled = isDataEnabled(true);
         mUserDataEnabled = enabled;
         if (prevDataEnabled != isDataEnabled(true)) {
-            notifyDataEnabledChanged(!prevDataEnabled, REASON_USER_DATA_ENABLED);
+            notifyDataEnabledChanged(REASON_USER_DATA_ENABLED);
         }
     }
     public synchronized boolean isUserDataEnabled() {
@@ -89,7 +101,7 @@ public class DataEnabledSettings {
         boolean prevDataEnabled = isDataEnabled(true);
         mPolicyDataEnabled = enabled;
         if (prevDataEnabled != isDataEnabled(true)) {
-            notifyDataEnabledChanged(!prevDataEnabled, REASON_POLICY_DATA_ENABLED);
+            notifyDataEnabledChanged(REASON_POLICY_DATA_ENABLED);
         }
     }
     public synchronized boolean isPolicyDataEnabled() {
@@ -100,7 +112,7 @@ public class DataEnabledSettings {
         boolean prevDataEnabled = isDataEnabled(true);
         mCarrierDataEnabled = enabled;
         if (prevDataEnabled != isDataEnabled(true)) {
-            notifyDataEnabledChanged(!prevDataEnabled, REASON_DATA_ENABLED_BY_CARRIER);
+            notifyDataEnabledChanged(REASON_DATA_ENABLED_BY_CARRIER);
         }
     }
     public synchronized boolean isCarrierDataEnabled() {
@@ -114,16 +126,12 @@ public class DataEnabledSettings {
                 && (!checkUserDataEnabled || mCarrierDataEnabled));
     }
 
-    private void notifyDataEnabledChanged(boolean enabled, int reason) {
-        mDataEnabledChangedRegistrants.notifyResult(new Pair<>(enabled, reason));
-    }
-
-    public void registerForDataEnabledChanged(Handler h, int what, Object obj) {
-        mDataEnabledChangedRegistrants.addUnique(h, what, obj);
-        notifyDataEnabledChanged(isDataEnabled(true), REASON_REGISTERED);
-    }
-
-    public void unregisterForDataEnabledChanged(Handler h) {
-        mDataEnabledChangedRegistrants.remove(h);
+    /*
+     * Notify to {@link #DcTracker} with specified reason
+     *
+     * @param the reason why data enable settings is changed
+     */
+    private void notifyDataEnabledChanged(int reason) {
+        mDct.notifyDataEnabledChanged(reason);
     }
 }

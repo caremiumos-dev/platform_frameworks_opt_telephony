@@ -458,17 +458,50 @@ public class ApnSetting {
         return false;
     }
 
-    public boolean isMetered(Context context, int subId, boolean isRoaming ) {
-        for (String type : types) {
-            // If one of the APN type is metered, then this APN setting is metered.
-            if (isMeteredApnType(type, context, subId, isRoaming)) {
-                if (DBG) Rlog.d(LOG_TAG, "Metered. APN = " + toString() +
-                        "isRoaming: " + isRoaming);
-                return true;
+    /**
+     * Checks whether any of the specifed apn types is metered
+     *
+     * @param context the context used to access carrier config
+     * @param subId the specifed subId for carrier config
+     * @param apnTypes the apn types to be checked
+     * @param isRoaming {@code true} means device is under roaming
+     *
+     * @return {@code true} means metered apn type is found
+     */
+    public static boolean isMetered(Context context, int subId, String[] apnTypes,
+            boolean isRoaming) {
+        boolean isMetered = false;
+        if (apnTypes != null && apnTypes.length > 0) {
+            for (String type : apnTypes) {
+                if (DBG) Rlog.d(LOG_TAG, "isMetered: subId=" + subId
+                        +", apnType=" + type + ", isRoaming=" + isRoaming);
+                // If one of the APN type is metered, then this APN setting is metered.
+                if (isMeteredApnType(type, context, subId, isRoaming)) {
+                    if (DBG) Rlog.d(LOG_TAG, "isMetered: Metered.");
+                    isMetered = true;
+                    break;
+                }
             }
         }
-        if (DBG) Rlog.d(LOG_TAG, "Not metered. APN = " + toString() + "isRoaming: " + isRoaming);
-        return false;
+        if (DBG) Rlog.d(LOG_TAG, "isMetered: Not metered.");
+        return isMetered;
+    }
+
+    /**
+     * Checks whether any of the apn types of current {@link #ApnSetting} is metered
+     *
+     * @param context the context used to access carrier config
+     * @param subId the specifed subId for carrier config
+     * @param isRoaming {@code true} means device is under roaming
+     *
+     * @return {@code true} means metered apn type is found
+     */
+    public boolean isMetered(Context context, int subId, boolean isRoaming) {
+        boolean metered = isMetered(context, subId, types, isRoaming);
+        if (DBG) Rlog.d(LOG_TAG, "isMetered: "
+                + (metered ? "Metered. APN = " : "Not metered. APN = ") + toString()
+                + ", isRoaming=" + isRoaming);
+        return metered;
     }
 
     // TODO - if we have this function we should also have hashCode.

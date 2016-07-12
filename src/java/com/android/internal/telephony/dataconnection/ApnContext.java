@@ -418,6 +418,7 @@ public class ApnContext {
             } else {
                 mLocalLogs.add(log);
                 mNetworkRequests.add(networkRequest);
+                mDcTracker.notifyNetworkRequestChanged(this);
                 mDcTracker.setEnabled(apnIdForApnName(mApnType), true);
             }
         }
@@ -437,6 +438,7 @@ public class ApnContext {
                 mNetworkRequests.remove(networkRequest);
                 log.log("ApnContext.releaseNetwork left with " + mNetworkRequests.size() +
                         " requests.");
+                mDcTracker.notifyNetworkRequestChanged(this);
                 if (mNetworkRequests.size() == 0) {
                     mDcTracker.setEnabled(apnIdForApnName(mApnType), false);
                 }
