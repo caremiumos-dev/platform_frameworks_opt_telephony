@@ -245,8 +245,16 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             }
 
             // Read the EFEmail file.
-            mFh.loadEFLinearFixedAll(emailEfid,
-                    obtainMessage(EVENT_EMAIL_LOAD_DONE));
+            String efPath = mFh.getEFPath(emailEfid);
+            String commonEFPath = mFh.getCommonIccPath(EF_PBR);
+            if (efPath.equals(commonEFPath)) {
+                mFh.loadEFLinearFixedPartUsingSearchRecord(emailEfid,
+                        obtainMessage(EVENT_EMAIL_LOAD_DONE));
+            } else {
+                mFh.loadEFLinearFixedAll(emailEfid,
+                        obatinMessage(EVENT_EMAIL_LOAD_DONE));
+            }
+
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
@@ -403,7 +411,13 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
     // Read Phonebook Index Admistration EF_IAP file
     private void readIapFileAndWait(int efid) {
-        mFh.loadEFLinearFixedAll(efid, obtainMessage(EVENT_IAP_LOAD_DONE));
+        String efPath = mFh.getEFPath(efid);
+        String commonEFPath = mFh.getCommonIccEFPath(EF_PBR);
+        if (efPath.equals(commonEFPath)) {
+            mFh.loadEFLinearFixedPartUsingSearchRecord(efid, obtainMessage(EVENT_IAP_LOAD_DONE));
+        } else {
+            mFh.loadEFLinearFixedAll(efid, obtainMessage(EVENT_IAP_LOAD_DONE));
+        }
         try {
             mLock.wait();
         } catch (InterruptedException e) {
