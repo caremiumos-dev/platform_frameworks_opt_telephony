@@ -157,13 +157,22 @@ public class IccPhoneBookInterfaceManager {
      * @param newPhoneNumber adn number ot be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param oldEmails adn email to be replaced
+     * @param newEmails adn email to be stored
+     * @param oldAnrs adn additional number to be replaced
+     * @param newAnrs adn additional number to be stored
+     * @param oldAass adn additional number alpha string to be replaced
+     * @param newAass adn additional number alpha string to be stored
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @return true for success
      */
     public boolean
     updateAdnRecordsInEfBySearch (int efid,
-            String oldTag, String oldPhoneNumber,
-            String newTag, String newPhoneNumber, String pin2) {
+            String oldTag, String oldPhoneNumber, String[] oldEmails,
+            String[] oldAnrs, String[] oldAass,
+            String newTag, String newPhoneNumber, String[] newEmails,
+            String[] newAnrs, String[] newAass,
+            String pin2) {
 
 
         if (mPhone.getContext().checkCallingOrSelfPermission(
@@ -174,10 +183,21 @@ public class IccPhoneBookInterfaceManager {
         }
 
 
-        if (DBG) logd("updateAdnRecordsInEfBySearch: efid=0x" +
-                Integer.toHexString(efid).toUpperCase() + " ("+ Rlog.pii(LOG_TAG, oldTag) + "," +
-                Rlog.pii(LOG_TAG, oldPhoneNumber) + ")" + "==>" + " ("+ Rlog.pii(LOG_TAG, newTag) +
-                "," + Rlog.pii(LOG_TAG, newPhoneNumber) + ")"+ " pin2=" + Rlog.pii(LOG_TAG, pin2));
+        if (DBG) {
+            logd("updateAdnRecordsInEfBySearch: efid=0x"
+                    + Integer.toHexString(efid).toUpperCase()
+                    + " (" + Rlog.pii(LOG_TAG, oldTag) + ","
+                    + Rlog.pii(LOG_TAG, oldPhoneNumber) + ","
+                    + Rlog.pii(LOG_TAG, oldEmails) + ","
+                    + Rlog.pii(LOG_TAG, oldAnrs) + ","
+                    + Rlog.pii(LOG_TAG, oldAass) + ")" + "==>"
+                    + " (" + Rlog.pii(LOG_TAG, newTag) + ","
+                    + Rlog.pii(LOG_TAG, newPhoneNumber) + ","
+                    + Rlog.pii(LOG_TAG, newEmails) + ","
+                    + Rlog.pii(LOG_TAG, newAnrs) + ","
+                    + Rlog.pii(LOG_TAG, newAass) + ")"
+                    + " pin2=" + Rlog.pii(LOG_TAG, pin2));
+        }
 
         efid = updateEfForIccType(efid);
 
@@ -185,8 +205,8 @@ public class IccPhoneBookInterfaceManager {
         Request updateRequest = new Request();
         synchronized (updateRequest) {
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, updateRequest);
-            AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
-            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
+            AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmails, oldAnrs, oldAass);
+            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber, newEmails, newAnrs, newAass);
             if (mAdnCache != null) {
                 mAdnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
                 waitForResult(updateRequest);
@@ -210,13 +230,17 @@ public class IccPhoneBookInterfaceManager {
      * @param newPhoneNumber adn number to be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param newEmails adn email to be stored
+     * @param newAnrs adn additional number to be stored
+     * @param newAass adn additional number alpha string to be stored
      * @param index is 1-based adn record index to be updated
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @return true for success
      */
     public boolean
     updateAdnRecordsInEfByIndex(int efid, String newTag,
-            String newPhoneNumber, int index, String pin2) {
+            String newPhoneNumber, String[] newEmails, String[] newAnrs, String[] newAass,
+            int index, String pin2) {
 
         if (mPhone.getContext().checkCallingOrSelfPermission(
                 android.Manifest.permission.WRITE_CONTACTS)
@@ -225,17 +249,23 @@ public class IccPhoneBookInterfaceManager {
                     "Requires android.permission.WRITE_CONTACTS permission");
         }
 
-        if (DBG) logd("updateAdnRecordsInEfByIndex: efid=0x" +
-                Integer.toHexString(efid).toUpperCase() + " Index=" + index + " ==> " + "(" +
-                Rlog.pii(LOG_TAG, newTag) + "," + Rlog.pii(LOG_TAG, newPhoneNumber) + ")" +
-                " pin2=" + Rlog.pii(LOG_TAG, pin2));
-
+        if (DBG) {
+            logd("updateAdnRecordsInEfByIndex: efid=0x"
+                    + Integer.toHexString(efid).toUpperCase()
+                    + " Index=" + index + " ==> " + "("
+                    + Rlog.pii(LOG_TAG, newTag) + ","
+                    + Rlog.pii(LOG_TAG, newPhoneNumber) + ","
+                    + Rlog.pii(LOG_TAG, newEmails) + ","
+                    + Rlog.pii(LOG_TAG, newAnrs) + ","
+                    + Rlog.pii(LOG_TAG, newAass) + ")"
+                    + " pin2=" + Rlog.pii(LOG_TAG, pin2));
+        }
 
         checkThread();
         Request updateRequest = new Request();
         synchronized (updateRequest) {
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, updateRequest);
-            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
+            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber, newEmails, newAnrs, newAass);
             if (mAdnCache != null) {
                 mAdnCache.updateAdnByIndex(efid, newAdn, index, pin2, response);
                 waitForResult(updateRequest);
