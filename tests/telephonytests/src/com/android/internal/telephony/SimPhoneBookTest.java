@@ -72,7 +72,8 @@ public class SimPhoneBookTest extends TestCase {
 
         // udpate by index
         boolean success = simPhoneBook.updateAdnRecordsInEfByIndex(IccConstants.EF_ADN,
-                firstAdn.getAlphaTag(), firstAdn.getNumber(), adnIndex, pin2);
+                firstAdn.getAlphaTag(), firstAdn.getNumber(), firstAdn.getEmails(),
+                adnIndex, pin2);
         adnRecordList = simPhoneBook.getAdnRecordsInEf(IccConstants.EF_ADN);
          AdnRecord tmpAdn = adnRecordList.get(listIndex);
         assertTrue(success);
@@ -80,8 +81,9 @@ public class SimPhoneBookTest extends TestCase {
 
         // replace by search
         success = simPhoneBook.updateAdnRecordsInEfBySearch(IccConstants.EF_ADN,
-                firstAdn.getAlphaTag(), firstAdn.getNumber(),
-                secondAdn.getAlphaTag(), secondAdn.getNumber(), pin2);
+                firstAdn.getAlphaTag(), firstAdn.getNumber(), firstAdn.getEmails(),
+                secondAdn.getAlphaTag(), secondAdn.getNumber(), secondAdn.getEmails(),
+                pin2);
         adnRecordList = simPhoneBook.getAdnRecordsInEf(IccConstants.EF_ADN);
         tmpAdn = adnRecordList.get(listIndex);
         assertTrue(success);
@@ -90,8 +92,9 @@ public class SimPhoneBookTest extends TestCase {
 
         // erase be search
         success = simPhoneBook.updateAdnRecordsInEfBySearch(IccConstants.EF_ADN,
-                secondAdn.getAlphaTag(), secondAdn.getNumber(),
-                emptyAdn.getAlphaTag(), emptyAdn.getNumber(), pin2);
+                secondAdn.getAlphaTag(), secondAdn.getNumber(), secondAdn.getEmails(),
+                emptyAdn.getAlphaTag(), emptyAdn.getNumber(), emptyAdn.getEmails(),
+                pin2);
         adnRecordList = simPhoneBook.getAdnRecordsInEf(IccConstants.EF_ADN);
         tmpAdn = adnRecordList.get(listIndex);
         assertTrue(success);
@@ -99,8 +102,8 @@ public class SimPhoneBookTest extends TestCase {
 
         // restore the orginial adn
         success = simPhoneBook.updateAdnRecordsInEfByIndex(IccConstants.EF_ADN,
-                originalAdn.getAlphaTag(), originalAdn.getNumber(), adnIndex,
-                pin2);
+                originalAdn.getAlphaTag(), originalAdn.getNumber(),
+                originalAdn.getEmails(), adnIndex, pin2);
         adnRecordList = simPhoneBook.getAdnRecordsInEf(IccConstants.EF_ADN);
         tmpAdn = adnRecordList.get(listIndex);
         assertTrue(success);
