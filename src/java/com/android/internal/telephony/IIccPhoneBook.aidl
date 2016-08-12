@@ -59,13 +59,21 @@ interface IIccPhoneBook {
      * @param newPhoneNumber adn number ot be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param oldEmails adn email to be replaced
+     * @param newEmails adn email to be stored
+     * @param oldAnrs adn additional number to be replaced
+     * @param newAnrs adn additional number to be stored
+     * @param oldAass adn additional number alpha string to be replaced
+     * @param newAass adn additional number alpha string to be stored
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @return true for success
      */
     @UnsupportedAppUsage
     boolean updateAdnRecordsInEfBySearch(int efid,
-            String oldTag, String oldPhoneNumber,
-            String newTag, String newPhoneNumber,
+            String oldTag, String oldPhoneNumber, in String[] oldEmails,
+            in String[] oldAnrs, in String[] oldAass,
+            String newTag, String newPhoneNumber, in String[] newEmails,
+            in String[] newAnrs, in String[] newAass,
             String pin2);
 
 
@@ -85,13 +93,21 @@ interface IIccPhoneBook {
      * @param newPhoneNumber adn number ot be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param oldEmails adn email to be replaced
+     * @param newEmails adn email to be stored
+     * @param oldAnrs adn additional number to be replaced
+     * @param newAnrs adn additional number to be stored
+     * @param oldAass adn additional number alpha string to be replaced
+     * @param newAass adn additional number alpha string to be stored
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @param subId user preferred subId
      * @return true for success
      */
     boolean updateAdnRecordsInEfBySearchForSubscriber(int subId, int efid,
-            String oldTag, String oldPhoneNumber,
-            String newTag, String newPhoneNumber,
+            String oldTag, String oldPhoneNumber, in String[] oldEmails,
+            in String[] oldAnrs, in String[] oldAass,
+            String newTag, String newPhoneNumber, in String[] newEmails,
+            in String[] newAnrs, in String[] newAass,
             String pin2);
     /**
      * Update an ADN-like EF record by record index
@@ -104,13 +120,16 @@ interface IIccPhoneBook {
      * @param newPhoneNumber adn number to be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param newEmails adn email to be stored
+     * @param newAnrs adn additional number to be stored
+     * @param newAass adn additional number alpha string to be stored
      * @param index is 1-based adn record index to be updated
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @return true for success
      */
     boolean updateAdnRecordsInEfByIndex(int efid, String newTag,
-            String newPhoneNumber, int index,
-            String pin2);
+            String newPhoneNumber, in String[] newEmails, in String[] newAnrs,
+            in String[] newAass, int index, String pin2);
 
     /**
      * Update an ADN-like EF record by record index
@@ -123,14 +142,17 @@ interface IIccPhoneBook {
      * @param newPhoneNumber adn number to be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param newEmails adn email to be stored
+     * @param newAnrs adn additional number to be stored
+     * @param newAass adn additional number alpha string to be stored
      * @param index is 1-based adn record index to be updated
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @param subId user preferred subId
      * @return true for success
      */
     boolean updateAdnRecordsInEfByIndexForSubscriber(int subId, int efid, String newTag,
-            String newPhoneNumber, int index,
-            String pin2);
+            String newPhoneNumber, in String[] newEmails, in String[] newAnrs,
+            in String[] newAass, int index, String pin2);
 
     /**
      * Get the max munber of records in efid
