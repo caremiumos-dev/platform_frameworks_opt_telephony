@@ -326,7 +326,13 @@ public class IccSmsInterfaceManager {
             }
 
             Message response = mHandler.obtainMessage(EVENT_LOAD_DONE);
-            fh.loadEFLinearFixedAll(IccConstants.EF_SMS, response);
+            String efPath = fh.getEFPath(efid);
+            String commonEFPath = fh.getCommonIccEFPath(EF_PBR);
+            if (efPath.equals(commonEFPath)) {
+                fh.loadEFLinearFixedPartUsingSearchRecord(EF_SMS, response);
+            } else {
+                fh.loadEFLinearFixedAll(IccConstants.EF_SMS, response);
+            }
 
             try {
                 mLock.wait();

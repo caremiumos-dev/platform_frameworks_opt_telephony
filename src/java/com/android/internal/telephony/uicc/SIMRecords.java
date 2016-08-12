@@ -1584,7 +1584,13 @@ public class SIMRecords extends IccRecords {
 
         // XXX should seek instead of examining them all
         if (false) { // XXX
-            mFh.loadEFLinearFixedAll(EF_SMS, obtainMessage(EVENT_GET_ALL_SMS_DONE));
+            String efPath = mFh.getEFPath(efid);
+            String commonEFPath = mFh.getCommonIccEFPath(EF_PBR);
+            if (efPath.equals(commonEFPath)) {
+                mFh.loadEFLinearFixedPartUsingSearchRecord(EF_SMS, obtainMessage(EVENT_GET_ALL_SMS_DONE));
+            } else {
+                mFh.loadEFLinearFixedAll(EF_SMS, obtainMessage(EVENT_GET_ALL_SMS_DONE));
+            }
             mRecordsToLoad++;
         }
 
