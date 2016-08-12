@@ -18,6 +18,7 @@ package com.android.internal.telephony.uicc;
 
 import android.annotation.UnsupportedAppUsage;
 import android.os.*;
+import android.util.Log;
 
 import com.android.internal.telephony.CommandsInterface;
 
@@ -50,6 +51,11 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     static protected final int TYPE_MF  = 1;
     static protected final int TYPE_DF  = 2;
     static protected final int TYPE_EF  = 4;
+
+    // from TS 102 221 V23 Table 11.12
+    static protected final int SERACH_RECORD_MODE_SIMPLE_SEARCH = 3;
+    static protected final int SERACH_RECORD_MODE_FORWARD_SEARCH = 4;
+    static protected final int SERACH_RECORD_MODE_BACKWARD_SEARCH = 5;
 
     // size of GET_RESPONSE for EF's
     static protected final int GET_RESPONSE_EF_SIZE_BYTES = 15;
@@ -96,6 +102,15 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     static protected final int EVENT_GET_RECORD_SIZE_IMG_DONE = 11;
     /** Finished retriveing record size of transparent file. */
     protected static final int EVENT_GET_EF_TRANSPARENT_SIZE_DONE = 12;
+
+    /** Finished retrieving size of records for linear-fixed EF; now load
+     * for using search record command
+     */
+    static protected final int EVENT_GET_RECORD_SIZE_DONE_FOR_SERACH_RECORD = 12;
+    /** Finished retrieving search record same with specific pattern*/
+    static protected final int EVENT_SEARCH_RECORD_DONE = 13;
+    /** Finished loading single record from a linear-fixed EF; post result. */
+    static protected final int EVENT_READ_RECORD_DONE_WITH_SEARCH = 14;
 
      // member variables
     @UnsupportedAppUsage
@@ -149,6 +164,24 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
             mLoadAll = true;
             mOnLoaded = onLoaded;
             mPath = null;
+        }
+
+        LoadLinearFixedContext(int efid, ArrayList<Integer> recordNums, String path,
+                Message onLoaded, boolean isNeedsearchrecord) {
+            mEfid = efid;
+
+            mLoadAll = false;
+            mLoadPart = true;
+            mRecordNums = new ArrayList<Integer>();
+            mCount = 0;
+            mOnLoaded = onLoaded;
+            mPath = path;
+            if (!isNeedsearchrecord) {
+                // below varibles should be set after receiving get_record_size_done
+                mRecordNum = recordNums.get(0);
+                mRecordNums.addAll(recordNums);
+                mCountLoadrecords = recordNums.size();
+            }
         }
     }
 
@@ -324,6 +357,23 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     }
 
     /**
+     * Load several records from a SIM Linear Fixed EF using Search record command
+     *
+     * @param fileid EF id
+     * @param onLoaded
+     *
+     * ((AsyncResult)(onLoaded.obj)).result is an ArrayList<byte[]>
+     *
+     */
+    public void loadEFLinearFixedPartUsingSearchRecord(int fileid, Message onLoaded) {
+        Message response = obtainMessage(EVENT_GET_RECORD_SIZE_DONE_FOR_SERACH_RECORD,
+                new LoadLinearFixedContext(fileid, null, getEFPath(fileid), onLoaded, true));
+
+        mCi.iccIOForApp(COMMAND_GET_RESPONSE, fileid, getEFPath(fileid), 0, 0,
+                GET_RESPONSE_EF_SIZE_BYTES, null, null, mAid, response);
+    }
+
+    /**
      * Load a SIM Transparent EF
      *
      * @param fileid EF id
@@ -484,6 +534,8 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
         int recordSize[];
         String path = null;
 
+        Log.d("IccFileHandler", " msg.what =" + msg.what);
+
         try {
             switch (msg.what) {
             case EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE:
@@ -539,6 +591,9 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                 size = getDataFileSize(data);
 
                 lc.mCountRecords = size / lc.mRecordSize;
+                // added to reduce reading record size operation.
+                lc.mOnLoaded.arg2 = ((lc.mRecordSize & 0xFF) << 16)
+                        + (lc.mCountRecords & 0xFFFF);
 
                 if (lc.mLoadAll) {
                     lc.results = new ArrayList<byte[]>(lc.mCountRecords);
@@ -553,6 +608,153 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                         lc.mRecordSize, null, null, mAid,
                         obtainMessage(EVENT_READ_RECORD_DONE, lc));
                 break;
+
+            case EVENT_GET_RECORD_SIZE_DONE_FOR_SERACH_RECORD:
+                ar = (AsyncResult) msg.obj;
+                lc = (LoadLinearFixedContext) ar.userObj;
+                result = (IccIoResult) ar.result;
+                response = lc.mOnLoaded;
+                if (processException(response, (AsyncResult) msg.obj)) {
+                    break;
+                }
+                data = result.payload;
+                path = lc.mPath;
+
+                if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
+                    throw new IccFileTypeMismatch();
+                }
+
+                if (EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
+                    throw new IccFileTypeMismatch();
+                }
+
+                lc.mRecordSize = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
+
+                size = getDataFileSize(data);
+
+                lc.mCountRecords = size / lc.mRecordSize;
+                // added to reduce reading record size operation.
+                lc.mOnLoaded.arg2 = ((lc.mRecordSize & 0xFF) << 16)
+                        + (lc.mCountRecords & 0xFFFF);
+
+                Log.d("IccFileHandler",
+                        "EVENT_GET_RECORD_SIZE_DONE_FOR_SERACH_RECORD, mCountRecords: "
+                        + lc.mCountRecords + ", lc.mRecordSize : " + lc.mRecordSize);
+
+                if (path == null) {
+                    path = getEFPath(lc.mEfid);
+                }
+                // Build for searching command
+                int startsearchingrecordnumber = 1;
+                byte[] pattern_data = new byte[lc.mRecordSize];
+
+                for (int i = 0; i < lc.mRecordSize; i++) {
+                    pattern_data[i] = (byte) 0xff;
+                }
+                mCi.iccIOForApp(COMMAND_SEEK, lc.mEfid, path,
+                        startsearchingrecordnumber,
+                        SERACH_RECORD_MODE_FORWARD_SEARCH,
+                        lc.mRecordSize, IccUtils.bytesToHexString(pattern_data), null, mAid,
+                        obtainMessage(EVENT_SEARCH_RECORD_DONE, lc));
+                break;
+
+            case EVENT_SEARCH_RECORD_DONE:
+                ar = (AsyncResult) msg.obj;
+                lc = (LoadLinearFixedContext) ar.userObj;
+                result = (IccIoResult) ar.result;
+                response = lc.mOnLoaded;
+
+                // we have to consider sepcification backward compatibility and icc compatibility
+                if (ar.exception != null) {
+                    // 1. Un case of not supporting in CP level
+                    // try one more with normal operation(EVENT_GET_RECORD_SIZE_DONE)
+                    if (result == null) {
+                        Log.d("IccFileHandler", "Not supporting in CP level");
+                        Message new_response = obtainMessage(EVENT_GET_RECORD_SIZE_DONE,
+                                new LoadLinearFixedContext(lc.mEfid, lc.mPath, lc.mOnLoaded));
+                        mCi.iccIOForApp(COMMAND_GET_RESPONSE, lc.mEfid, lc.mPath,
+                                0, 0, GET_RESPONSE_EF_SIZE_BYTES, null, null, mAid, new_response);
+                        break;
+                    } else {
+                        Log.d("IccFileHandler", "result.sw1: "
+                                + Integer.toHexString(result.sw1).toUpperCase()
+                                + ", result.sw2: " + Integer.toHexString(result.sw2).toUpperCase());
+                        if (!((result.sw1 == 0x90 && result.sw2 == 0x00)
+                                    || (result.sw1 == 0x62 && result.sw2 == 0x82))) {
+                            /** refer TS 102 221 V13 11.1.7
+                             * If no match is found, either status word '90 00' or
+                             * the warning status '62 82' shall be returned
+                             * NOTE: Releases earlier than Rel-13 allowed other status words.
+                             * Accoding to above specification, just will inform
+                             * the debug information in here and continue processing
+                             */
+                            Log.d("IccFileHandler",
+                                    "status is not normal, handler will use original way");
+                            Message new_response = obtainMessage(EVENT_GET_RECORD_SIZE_DONE,
+                                    new LoadLinearFixedContext(lc.mEfid, lc.mPath, lc.mOnLoaded));
+                            mCi.iccIOForApp(COMMAND_GET_RESPONSE, lc.mEfid, lc.mPath,
+                                    0, 0, GET_RESPONSE_EF_SIZE_BYTES, null, null,
+                                    mAid, new_response);
+                            break;
+                        }
+                    }
+                }
+
+                data = result.payload;
+                path = lc.mPath;
+
+                if (lc.mLoadAll) {
+                    lc.results = new ArrayList<byte[]>(lc.mCountRecords);
+                } else if (lc.mLoadPart) {
+                    lc.initLCResults(lc.mCountRecords);
+                }
+
+                if (path == null) {
+                    path = getEFPath(lc.mEfid);
+                }
+
+                if (result.payload != null && result.payload.length > 0) {
+                    if (result.payload.length == lc.mCountRecords) {
+                        // if all records are empty, sendResult without next operation
+                        Log.d("IccFileHandler", " All Empty record Length "
+                                + result.payload.length);
+                        sendResult(response, lc.results, null);
+                        break;
+                    } else {
+                        // There are several records which are matched
+                        Log.d("IccFileHandler", " Several Empty record Length "
+                                + result.payload.length);
+                        int payload_index = 0;
+                        int payload_record_num = (result.payload[payload_index++] & 0xff);
+                        for (int i = 1; i <= lc.mCountRecords; i++) {
+                            if (i == payload_record_num) {
+                                if (payload_index < result.payload.length) {
+                                    payload_record_num = (result.payload[payload_index++] & 0xff);
+                                }
+                                continue;
+                            }
+                            lc.mRecordNums.add(i);
+                        }
+                    }
+                } else {
+                    // all records are valid
+                    Log.d("IccFileHandler", " all records are valid ");
+                    for (int i = 1; i <= lc.mCountRecords; i++) {
+                        lc.mRecordNums.add(i);
+                    }
+                }
+
+                lc.mCountLoadrecords = lc.mRecordNums.size();
+                // first valid record
+                lc.mRecordNum = lc.mRecordNums.get(0);
+
+                mCi.iccIOForApp(COMMAND_READ_RECORD, lc.mEfid, path,
+                        lc.mRecordNum,
+                        READ_RECORD_MODE_ABSOLUTE,
+                        lc.mRecordSize, null, null, mAid,
+                        obtainMessage(EVENT_READ_RECORD_DONE, lc));
+                break;
+
             case EVENT_GET_BINARY_SIZE_DONE:
                 ar = (AsyncResult)msg.obj;
                 response = (Message) ar.userObj;

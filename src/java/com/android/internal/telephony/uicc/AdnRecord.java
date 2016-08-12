@@ -47,6 +47,10 @@ public class AdnRecord implements Parcelable {
     @UnsupportedAppUsage
     String[] mEmails;
     @UnsupportedAppUsage
+    String[] mAdditionalNumbers = null;
+    @UnsupportedAppUsage
+    String[] mAdditionalNumberAlphaString = null;
+    @UnsupportedAppUsage
     int mExtRecord = 0xff;
     @UnsupportedAppUsage
     int mEfid;                   // or 0 if none
@@ -129,13 +133,51 @@ public class AdnRecord implements Parcelable {
     }
 
     @UnsupportedAppUsage
+    public AdnRecord(String alphaTag, String number, String[] emails, String[] additionalNumbers) {
+        this(0, 0, alphaTag, number, emails, additionalNumbers);
+    }
+
+    @UnsupportedAppUsage
+    public AdnRecord(String alphaTag, String number, String[] emails, String[] additionalNumbers,
+            String[] additionalNumberAlphaString) {
+        this(0, 0, alphaTag, number, emails, additionalNumbers, additionalNumberAlphaString);
+    }
+
+    @UnsupportedAppUsage
     public AdnRecord (int efid, int recordNumber, String alphaTag, String number, String[] emails) {
         this.mEfid = efid;
         this.mRecordNumber = recordNumber;
         this.mAlphaTag = alphaTag;
         this.mNumber = number;
         this.mEmails = emails;
+        this.mAdditionalNumbers = null;
+        this.mAdditionalNumberAlphaString = null;
     }
+
+    @UnsupportedAppUsage
+    public AdnRecord(int efid, int recordNumber, String alphaTag, String number, String[] emails,
+            String[] additionalNumbers) {
+        this.mEfid = efid;
+        this.mRecordNumber = recordNumber;
+        this.mAlphaTag = alphaTag;
+        this.mNumber = number;
+        this.mEmails = emails;
+        this.mAdditionalNumbers = additionalNumbers;
+        this.mAdditionalNumberAlphaString = null;
+    }
+
+    @UnsupportedAppUsage
+    public AdnRecord(int efid, int recordNumber, String alphaTag, String number, String[] emails,
+            String[] additionalNumbers, String[] mAdditionalNumberAlphaString) {
+        this.mEfid = efid;
+        this.mRecordNumber = recordNumber;
+        this.mAlphaTag = alphaTag;
+        this.mNumber = number;
+        this.mEmails = emails;
+        this.mAdditionalNumbers = additionalNumbers;
+        this.mAdditionalNumberAlphaString = mAdditionalNumberAlphaString;
+    }
+
 
     @UnsupportedAppUsage
     public AdnRecord(int efid, int recordNumber, String alphaTag, String number) {
@@ -144,6 +186,8 @@ public class AdnRecord implements Parcelable {
         this.mAlphaTag = alphaTag;
         this.mNumber = number;
         this.mEmails = null;
+        this.mAdditionalNumbers = null;
+        this.mAdditionalNumberAlphaString = null;
     }
 
     //***** Instance Methods
@@ -177,6 +221,26 @@ public class AdnRecord implements Parcelable {
     @UnsupportedAppUsage
     public void setEmails(String[] emails) {
         this.mEmails = emails;
+    }
+
+    @UnsupportedAppUsage
+    public String[] getAdditionalNumbers() {
+        return mAdditionalNumbers;
+    }
+
+    @UnsupportedAppUsage
+    public String[] getAdditionalNumberAlphaString() {
+        return mAdditionalNumberAlphaString;
+    }
+
+    @UnsupportedAppUsage
+    public void setAdditionalNumbers(String[] additionalNumbers) {
+        this.mAdditionalNumbers = additionalNumbers;
+    }
+
+    @UnsupportedAppUsage
+    public void setAdditionalNumberAlphaString(String[] additionalNumbersAlphaString) {
+        this.mAdditionalNumberAlphaString = additionalNumbersAlphaString;
     }
 
     @Override
@@ -321,6 +385,19 @@ public class AdnRecord implements Parcelable {
         }
     }
 
+    /**
+     * added for updating Email record of Adn record.
+     */
+    public void updateAnrEmailArray(AdnRecord adn, int emailFileNum, int anrFileNum,
+            int aasFileNum) {
+        mEmails = updateAnrEmailArrayHelper(mEmails, adn.mEmails, emailFileNum);
+        mAdditionalNumbers = updateAnrEmailArrayHelper(mAdditionalNumbers,
+                    adn.mAdditionalNumbers, anrFileNum);
+        mAdditionalNumberAlphaString =
+                    updateAnrEmailArrayHelper(mAdditionalNumberAlphaString,
+                            adn.mAdditionalNumberAlphaString, aasFileNum);
+    }
+
     //***** Private Methods
 
     /**
@@ -366,5 +443,50 @@ public class AdnRecord implements Parcelable {
             mAlphaTag = "";
             mEmails = null;
         }
+    }
+
+    private String[] updateAnrEmailArrayHelper(String[] dest, String[] src, int fileCount) {
+        if (fileCount == 0) {
+            return null;
+        }
+
+        // delete insert scenario
+        if (dest == null || src == null) {
+            return dest;
+        }
+
+        String[] ref = new String[fileCount];
+        for (int i = 0; i < fileCount; i++) {
+            ref[i] = "";
+        }
+
+        // Find common elements and put in the ref
+        // To save SIM_IO
+        for (int i = 0; i < src.length; i++) {
+            if (TextUtils.isEmpty(src[i])) {
+                continue;
+            }
+            for (int j = 0; j < dest.length; j++) {
+                if (src[i].equals(dest[j])) {
+                    ref[i] = src[i];
+                    break;
+                }
+            }
+        }
+
+        // fill out none common element into the ""
+        for (int i = 0; i < dest.length; i++) {
+            if (Arrays.asList(ref).contains(dest[i])) {
+                continue;
+            } else {
+                for (int j = 0; j < ref.length; j++) {
+                    if (TextUtils.isEmpty(ref[j])) {
+                        ref[j] = dest[i];
+                        break;
+                    }
+                }
+            }
+        }
+        return ref;
     }
 }
