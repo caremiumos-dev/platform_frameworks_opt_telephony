@@ -112,9 +112,16 @@ public class AdnRecordLoader extends Handler {
          * specify the path as well, since, on some cards,
          * the fileid is not unique.
          */
-        mFh.loadEFLinearFixedAll(
-                ef, getEFPath(ef),
-                obtainMessage(EVENT_ADN_LOAD_ALL_DONE));
+        String efPath = mFh.getEFPath(ef);
+        String commonEFPath = mFh.getCommonIccEFPath(IccConstants.EF_PBR);
+        if (efPath.equals(commonEFPath) && ef != IccConstants.EF_PBR) {
+            mFh.loadEFLinearFixedPartUsingSearchRecord(ef,
+                    obatinMessage(EVENT_ADN_LOAD_ALL_DONE));
+        } else {
+            mFh.loadEFLinearFixedAll(
+                    ef, getEFPath(ef),
+                    obtainMessage(EVENT_ADN_LOAD_ALL_DONE));
+        }
     }
 
     /**
