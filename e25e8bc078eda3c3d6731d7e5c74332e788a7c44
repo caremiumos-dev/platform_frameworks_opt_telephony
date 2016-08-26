@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5b2fe10_2296eae4",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-08-26T20:39:26Z",
+      "side": 1,
+      "message": "Change this to null instead and add auth_rsp !\u003d null check in getIccSimChallengeResponse(). That function can return null if auth_rsp is null.",
+      "revId": "e25e8bc078eda3c3d6731d7e5c74332e788a7c44",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
