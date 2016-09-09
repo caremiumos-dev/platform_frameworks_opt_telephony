@@ -664,9 +664,11 @@ public class ServiceStateTracker extends Handler {
             mCellLoc = new GsmCellLocation();
             mNewCellLoc = new GsmCellLocation();
         } else {
-            if (mPhone.isPhoneTypeCdmaLte()) {
-                mPhone.registerForSimRecordsLoaded(this, EVENT_SIM_RECORDS_LOADED, null);
-            }
+            //clear GSM regsitrations first
+            mCi.unregisterForAvailable(this);
+            mCi.unSetOnRestrictedStateChanged(this);
+
+            mPhone.registerForSimRecordsLoaded(this, EVENT_SIM_RECORDS_LOADED, null);
             mCellLoc = new CdmaCellLocation();
             mNewCellLoc = new CdmaCellLocation();
             mCdmaSSM = CdmaSubscriptionSourceManager.getInstance(mPhone.getContext(), mCi, this,
@@ -4174,7 +4176,8 @@ public class ServiceStateTracker extends Handler {
     public void powerOffRadioSafely(DcTracker dcTracker) {
         synchronized (this) {
             if (!mPendingRadioPowerOffAfterDataOff) {
-                if (mPhone.isPhoneTypeGsm() || mPhone.isPhoneTypeCdmaLte()) {
+                if (mPhone.isPhoneTypeGsm() || mPhone.isPhoneTypeCdma()
+                        || mPhone.isPhoneTypeCdmaLte()) {
                     int dds = SubscriptionManager.getDefaultDataSubscriptionId();
                     // To minimize race conditions we call cleanUpAllConnections on
                     // both if else paths instead of before this isDisconnected test.
