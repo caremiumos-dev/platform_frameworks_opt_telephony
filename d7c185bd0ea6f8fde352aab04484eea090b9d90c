@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b712657_49890124",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4236,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2016-09-13T18:19:22Z",
+      "side": 1,
+      "message": "better to add a check if configLoader !\u003d null in case CARRIER_CONFIG_SERVICE is not available.",
+      "range": {
+        "startLine": 4236,
+        "startChar": 19,
+        "endLine": 4236,
+        "endChar": 67
+      },
+      "revId": "d7c185bd0ea6f8fde352aab04484eea090b9d90c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
