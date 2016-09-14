@@ -16,11 +16,11 @@
 
 package com.android.internal.telephony.dataconnection;
 
-import android.app.PendingIntent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkConfig;
 import android.net.NetworkRequest;
+import android.os.Bundle;
 import android.telephony.Rlog;
 import android.text.TextUtils;
 import android.util.LocalLog;
@@ -65,7 +65,7 @@ public class ApnContext {
 
     String mReason;
 
-    PendingIntent mReconnectAlarmIntent;
+    Bundle mReconnectParameter;
 
     /**
      * user/app requested connection on this APN
@@ -162,19 +162,18 @@ public class ApnContext {
     }
 
     /**
-     * Get the reconnect intent.
-     * @return The reconnect intent
+     * Get the data associated with the reconnected event.
      */
-    public synchronized PendingIntent getReconnectIntent() {
-        return mReconnectAlarmIntent;
+    public synchronized Bundle getReconnectedParameter() {
+        return mReconnectParameter;
     }
 
     /**
-     * Save the reconnect intent which can be used for cancelling later.
-     * @param intent The reconnect intent
+     * Save the data associated with the reconnected event which can be used for cancelling later.
+     * @param data The data associated with the reconnected event.
      */
-    public synchronized void setReconnectIntent(PendingIntent intent) {
-        mReconnectAlarmIntent = intent;
+    public synchronized void setReconnectedParameter(Bundle data) {
+        mReconnectParameter = data;
     }
 
     /**
