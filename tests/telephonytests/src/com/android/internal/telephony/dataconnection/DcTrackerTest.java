@@ -1212,4 +1212,18 @@ public class DcTrackerTest extends TelephonyTest {
         assertEquals(FAKE_APN4, mDct.getActiveApnString(PhoneConstants.APN_TYPE_DEFAULT));
         assertEquals(DctConstants.State.CONNECTED, mDct.getOverallState());
     }
+
+    @Test
+    public void testDataReconnect() {
+        int delayMs = 100;
+        initApns(PhoneConstants.APN_TYPE_DEFAULT, new String[]{PhoneConstants.APN_TYPE_ALL});
+        doReturn(DctConstants.State.FAILED).when(mApnContext).getState();
+        mDct.sendDelayEventForDataReconnect(delayMs, mApnContext);
+        waitForHandlerActionDelayed(mDct, 10, delayMs);
+
+        // verify data reconnected event happened
+        verify(mDcac).tearDown(mApnContext, "", null);
+        verify(mApnContext).setDataConnectionAc(null);
+        verify(mApnContext).setState(DctConstants.State.IDLE);
+    }
 }
