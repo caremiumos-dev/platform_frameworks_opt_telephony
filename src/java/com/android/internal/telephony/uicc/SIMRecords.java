@@ -212,7 +212,7 @@ public class SIMRecords extends IccRecords {
 
         mAdnCache = new AdnRecordCache(mFh);
 
-        mVmConfig = new VoiceMailConstants();
+        mVmConfig = new VoiceMailConstants(c);
         mSpnOverride = new SpnOverride();
 
         mRecordsRequested = false;  // No load request is made till SIM ready
@@ -384,6 +384,13 @@ public class SIMRecords extends IccRecords {
 
     @Override
     public String getVoiceMailNumber() {
+        if (mIsVoiceMailFixed) {
+            String operator = getOperatorNumeric();
+            if (!TextUtils.isEmpty(operator)) {
+                mVoiceMailNum = mVmConfig.getVoiceMailNumber(operator);
+            }
+        }
+
         return mVoiceMailNum;
     }
 
@@ -446,8 +453,14 @@ public class SIMRecords extends IccRecords {
     }
 
     @Override
-    public String getVoiceMailAlphaTag()
-    {
+    public String getVoiceMailAlphaTag() {
+        if (mIsVoiceMailFixed) {
+            String operator = getOperatorNumeric();
+            if (!TextUtils.isEmpty(operator)) {
+                mVoiceMailTag = mVmConfig.getVoiceMailTag(operator);
+            }
+        }
+
         return mVoiceMailTag;
     }
 

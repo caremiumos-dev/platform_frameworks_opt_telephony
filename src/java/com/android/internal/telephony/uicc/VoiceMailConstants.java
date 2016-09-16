@@ -16,11 +16,15 @@
 
 package com.android.internal.telephony.uicc;
 
+import android.content.Context;
+import android.content.res.XmlResourceParser;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Xml;
 import android.telephony.Rlog;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.io.FileReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,7 +40,8 @@ import com.android.internal.util.XmlUtils;
  */
 class VoiceMailConstants {
     private HashMap<String, String[]> CarrierVmMap;
-
+    private Context mContext;
+    private Locale mLocale;
 
     static final String LOG_TAG = "VoiceMailConstants";
     static final String PARTNER_VOICEMAIL_PATH ="etc/voicemail-conf.xml";
@@ -46,28 +51,43 @@ class VoiceMailConstants {
     static final int TAG = 2;
     static final int SIZE = 3;
 
-    VoiceMailConstants () {
-        CarrierVmMap = new HashMap<String, String[]>();
+    VoiceMailConstants(Context context) {
+        mContext = context;
         loadVoiceMail();
+
+        // The legacy XML file is more prioritized than the XML resource.
+        if (CarrierVmMap.size() == 0) {
+            loadVoiceMailFromResource();
+        }
     }
 
     boolean containsCarrier(String carrier) {
+        reloadIfNecessary();
         return CarrierVmMap.containsKey(carrier);
     }
 
     String getCarrierName(String carrier) {
+        reloadIfNecessary();
         String[] data = CarrierVmMap.get(carrier);
         return data[NAME];
     }
 
     String getVoiceMailNumber(String carrier) {
+        reloadIfNecessary();
         String[] data = CarrierVmMap.get(carrier);
         return data[NUMBER];
     }
 
     String getVoiceMailTag(String carrier) {
+        reloadIfNecessary();
         String[] data = CarrierVmMap.get(carrier);
         return data[TAG];
+    }
+
+    private void reloadIfNecessary() {
+        if (mLocale != null) {
+            loadVoiceMailFromResource();
+        }
     }
 
     private void loadVoiceMail() {
@@ -75,6 +95,7 @@ class VoiceMailConstants {
 
         final File vmFile = new File(Environment.getRootDirectory(),
                 PARTNER_VOICEMAIL_PATH);
+        CarrierVmMap = new HashMap<String, String[]>();
 
         try {
             vmReader = new FileReader(vmFile);
@@ -87,35 +108,67 @@ class VoiceMailConstants {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setInput(vmReader);
-
-            XmlUtils.beginDocument(parser, "voicemail");
-
-            while (true) {
-                XmlUtils.nextElement(parser);
-
-                String name = parser.getName();
-                if (!"voicemail".equals(name)) {
-                    break;
-                }
-
-                String[] data = new String[SIZE];
-                String numeric = parser.getAttributeValue(null, "numeric");
-                data[NAME]     = parser.getAttributeValue(null, "carrier");
-                data[NUMBER]   = parser.getAttributeValue(null, "vmnumber");
-                data[TAG]      = parser.getAttributeValue(null, "vmtag");
-
-                CarrierVmMap.put(numeric, data);
-            }
+            loadXmlSettings(parser);
         } catch (XmlPullParserException e) {
             Rlog.w(LOG_TAG, "Exception in Voicemail parser " + e);
         } catch (IOException e) {
             Rlog.w(LOG_TAG, "Exception in Voicemail parser " + e);
         } finally {
             try {
-                if (vmReader != null) {
-                    vmReader.close();
-                }
+                vmReader.close();
             } catch (IOException e) {}
+        }
+    }
+
+    private void loadXmlSettings(XmlPullParser parser) throws XmlPullParserException, IOException {
+        XmlUtils.beginDocument(parser, "voicemail");
+
+        while (true) {
+            XmlUtils.nextElement(parser);
+
+            String name = parser.getName();
+            if (!"voicemail".equals(name)) {
+                break;
+            }
+
+            String[] data = new String[SIZE];
+            String numeric = parser.getAttributeValue(null, "numeric");
+            data[NAME]     = parser.getAttributeValue(null, "carrier");
+            data[NUMBER]   = parser.getAttributeValue(null, "vmnumber");
+            data[TAG]      = parser.getAttributeValue(null, "vmtag");
+
+            if (Build.IS_DEBUGGABLE) {
+                Rlog.d(LOG_TAG, "[Voicemail] numeric = " + numeric + ", name = " + data[NAME]
+                        + ", number = " + data[NUMBER] + ", tag = " + data[TAG]);
+            }
+
+            CarrierVmMap.put(numeric, data);
+        }
+    }
+
+    private void loadVoiceMailFromResource() {
+        Locale currentLocale = mContext.getResources().getConfiguration().locale;
+        if (mLocale == currentLocale) {
+            return;
+        }
+
+        mLocale = currentLocale;
+        if (Build.IS_DEBUGGABLE) {
+            Rlog.d(LOG_TAG, "Attempt to parse the xml resource : locale = " + mLocale);
+        }
+
+        CarrierVmMap = new HashMap<String, String[]>();
+        XmlResourceParser parser = mContext.getResources().getXml(
+                com.android.internal.R.xml.voicemail_conf);
+
+        try {
+            loadXmlSettings(parser);
+        } catch (XmlPullParserException e) {
+            Rlog.w(LOG_TAG, "Exception in Voicemail parser " + e);
+        } catch (IOException e) {
+            Rlog.w(LOG_TAG, "Exception in Voicemail parser " + e);
+        } finally {
+            parser.close();
         }
     }
 }
