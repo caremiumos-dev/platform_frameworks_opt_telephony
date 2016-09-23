@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f076e782_64da94de",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-09-23T00:55:39Z",
+      "side": 1,
+      "message": "How about adding isAnyCsRestricted to RestrictedState.java?",
+      "range": {
+        "startLine": 3545,
+        "startChar": 0,
+        "endLine": 3545,
+        "endChar": 88
+      },
+      "revId": "6283c122065c957a28282da7fdc796e0cee7e100",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
