@@ -1941,7 +1941,10 @@ public class DcTracker extends Handler {
                     return false;
                 }
 
-                if (!apnContext.getApnType().equals(PhoneConstants.APN_TYPE_IMS)) {
+                // Should not start cleanUp if the setupData is for IMS APN
+                // or retry of same APN(State==SCANNING).
+                if (!apnContext.getApnType().equals(PhoneConstants.APN_TYPE_IMS)
+                        && (apnContext.getState() != DctConstants.State.SCANNING)) {
                     // Only lower priority calls left.  Disconnect them all in this single PDP case
                     // so that we can bring up the requested higher priority call (once we receive
                     // response for deactivate request for the calls we are about to disconnect
