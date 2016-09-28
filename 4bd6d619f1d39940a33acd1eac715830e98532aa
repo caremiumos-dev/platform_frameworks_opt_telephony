@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5a5a31c_1ef82c62",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccPkcs15.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2016-09-28T21:33:15Z",
+      "side": 1,
+      "message": "what is the data passed in? is that a nested TLV data structure?\n1) if you configured multiple certs for each tlvCondition\ntlvCert.parse(tlvCondition.getValue, true) will only append one cert (per condition) to mRules.\n2) is that a good configuration to allow multiple certs per condition, if yes, then the proper change would requires a nested while loop as well",
+      "range": {
+        "startLine": 313,
+        "startChar": 15,
+        "endLine": 314,
+        "endChar": 62
+      },
+      "revId": "4bd6d619f1d39940a33acd1eac715830e98532aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
