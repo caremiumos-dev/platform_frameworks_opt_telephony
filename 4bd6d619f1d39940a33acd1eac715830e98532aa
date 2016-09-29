@@ -46,6 +46,30 @@
       "revId": "4bd6d619f1d39940a33acd1eac715830e98532aa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c5a5a31c_972b5a30",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccPkcs15.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2016-09-29T17:22:16Z",
+      "side": 1,
+      "message": "exactly, configuration 1) is already supported.\ncode #314 mandates bad configurations of ACCF",
+      "parentUuid": "42f44941_ffafff94",
+      "range": {
+        "startLine": 313,
+        "startChar": 15,
+        "endLine": 314,
+        "endChar": 62
+      },
+      "revId": "4bd6d619f1d39940a33acd1eac715830e98532aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
