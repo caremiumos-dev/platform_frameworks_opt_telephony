@@ -22,6 +22,30 @@
       "revId": "4bd6d619f1d39940a33acd1eac715830e98532aa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "42f44941_ffafff94",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccPkcs15.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1115438
+      },
+      "writtenOn": "2016-09-29T13:41:25Z",
+      "side": 1,
+      "message": "Apologies for my incorrect understanding.\nMy curernt understanding is;\n\n1.) The present code supports multiple DeviceAppIDs already\n\nThree certification hashes are stored to mRules if ACCF contains the following data.\n\n  30 16 04 14 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11\n  30 16 04 14 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22\n  30 16 04 14 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33\n\n2.) AccessRule must not be in ACCF for Android Carrier Privileges\n\nThe following data is DeviceAppID + AccessRules.\n\n  30 35 04 14 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22\n  A0 1D A0 16 A1 14 04 08 80 F2 00 00 FF FF FF FF 04 08 80 CA 00 00 FF FF 00 00 A1 03 80 01 00\n\ntlvCert.parse(tlvCondition.getValue(), true) throws IllegalArgumentException\nbecause AccessRules remain after parsing DeviceAppID,\nso mRules.add() is never called in this case even if there is one correct DeviceAppID in ACCF.\n\nThese are the expected behaviors.\nI will abandon this if my understanding is correct.\nThanks for your review.",
+      "parentUuid": "c5a5a31c_1ef82c62",
+      "range": {
+        "startLine": 313,
+        "startChar": 15,
+        "endLine": 314,
+        "endChar": 62
+      },
+      "revId": "4bd6d619f1d39940a33acd1eac715830e98532aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
