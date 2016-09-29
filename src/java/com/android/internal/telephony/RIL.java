@@ -2923,9 +2923,10 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                     synchronized (mWakeLock) {
                         mClientWakelockTracker.stopTracking(rr.mClientId,
                                 rr.mRequest, rr.mSerial,
-                                (mWakeLockCount > 1) ? mWakeLockCount-- : 0);
+                                (mWakeLockCount > 1) ? mWakeLockCount - 1 : 0);
                         String clientId = getWorkSourceClientId(rr.mWorkSource);;
-                        if (!mClientWakelockTracker.isClientActive(clientId)) {
+                        if (!mClientWakelockTracker.isClientActive(clientId) &&
+                                (mActiveWakelockWorkSource != null)) {
                             mActiveWakelockWorkSource.remove(rr.mWorkSource);
                             if (mActiveWakelockWorkSource.size() == 0) {
                                 mActiveWakelockWorkSource = null;
@@ -2963,6 +2964,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                 mWakeLockCount = 0;
                 mWakeLock.release();
                 mClientWakelockTracker.stopTrackingAll();
+                mActiveWakelockWorkSource = null;
                 return true;
             }
         } else {
