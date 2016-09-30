@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "826561f7_665a4728",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2642,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2016-09-30T18:21:18Z",
+      "side": 1,
+      "message": "Maybe adding comment to explain why",
+      "range": {
+        "startLine": 2642,
+        "startChar": 12,
+        "endLine": 2642,
+        "endChar": 39
+      },
+      "revId": "7e4b9cd4df8ba943a784c95b0c5b34b2957ffbb8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
