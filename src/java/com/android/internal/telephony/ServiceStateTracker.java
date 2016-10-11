@@ -282,6 +282,7 @@ public class ServiceStateTracker extends Handler {
     private final LocalLog mAttachLog = new LocalLog(10);
     private final LocalLog mPhoneTypeLog = new LocalLog(10);
     private final LocalLog mRatLog = new LocalLog(20);
+    private final LocalLog mNitzLog = new LocalLog(15);
 
     private class SstSubscriptionsChangedListener extends OnSubscriptionsChangedListener {
         public final AtomicInteger mPreviousSubId =
@@ -2748,6 +2749,7 @@ public class ServiceStateTracker extends Handler {
                                     " with zone.getID=" + zone.getID() +
                                     " testOneUniqueOffsetPath=" + testOneUniqueOffsetPath);
                         }
+                        mNitzLog.log("pollStateDone: set time zone=" + zone.getID());
                         setAndBroadcastNetworkSetTimeZone(zone.getID());
                     } else {
                         if (DBG) {
@@ -3453,6 +3455,11 @@ public class ServiceStateTracker extends Handler {
             if (DBG) log("fixTimeZone: using getTimeZone(off, dst, time, iso)");
         }
 
+        final String tmpLog = "fixTimeZone zoneName=" + zoneName + " mZoneOffset=" + mZoneOffset +
+                " mZoneDst=" + mZoneDst + " iso-cc=" + isoCountryCode + " mNeedFixZoneAfterNitz=" +
+                mNeedFixZoneAfterNitz + " zone=" + (zone!=null ? zone.getID() : "NULL");
+        mNitzLog.log(tmpLog);
+
         mNeedFixZoneAfterNitz = false;
 
         if (zone != null) {
@@ -3905,12 +3912,16 @@ public class ServiceStateTracker extends Handler {
                 mZoneDst     = dst != 0;
                 mZoneTime    = c.getTimeInMillis();
             }
+
+            String tmpLog = "NITZ: tzOffset=" + tzOffset + " dst=" + dst + " zone=" +
+                    (zone!=null ? zone.getID() : "NULL") +
+                    " iso=" + iso + " mGotCountryCode=" + mGotCountryCode +
+                    " mNeedFixZoneAfterNitz=" + mNeedFixZoneAfterNitz +
+                    " getAutoTimeZone()=" + getAutoTimeZone();
             if (DBG) {
-                log("NITZ: tzOffset=" + tzOffset + " dst=" + dst + " zone=" +
-                        (zone!=null ? zone.getID() : "NULL") +
-                        " iso=" + iso + " mGotCountryCode=" + mGotCountryCode +
-                        " mNeedFixZoneAfterNitz=" + mNeedFixZoneAfterNitz);
+                log(tmpLog);
             }
+            mNitzLog.log(tmpLog);
 
             if (zone != null) {
                 if (getAutoTimeZone()) {
@@ -3955,13 +3966,15 @@ public class ServiceStateTracker extends Handler {
                     // Note: with range checks above, cast to int is safe
                     c.add(Calendar.MILLISECOND, (int)millisSinceNitzReceived);
 
+                    tmpLog = "NITZ: Setting time of day to " + c.getTime()
+                            + " NITZ receive delay(ms): " + millisSinceNitzReceived
+                            + " gained(ms): "
+                            + (c.getTimeInMillis() - System.currentTimeMillis())
+                            + " from " + nitz;
                     if (DBG) {
-                        log("NITZ: Setting time of day to " + c.getTime()
-                                + " NITZ receive delay(ms): " + millisSinceNitzReceived
-                                + " gained(ms): "
-                                + (c.getTimeInMillis() - System.currentTimeMillis())
-                                + " from " + nitz);
+                        log(tmpLog);
                     }
+                    mNitzLog.log(tmpLog);
                     if (mPhone.isPhoneTypeGsm()) {
                         setAndBroadcastNetworkSetTime(c.getTimeInMillis());
                         Rlog.i(LOG_TAG, "NITZ: after Setting time of day");
@@ -4083,6 +4096,8 @@ public class ServiceStateTracker extends Handler {
                     mSavedAtTime);
         }
         if (mSavedTime != 0 && mSavedAtTime != 0) {
+            mNitzLog.log("Reverting to NITZ time, set time= " + mSavedTime +
+                    (SystemClock.elapsedRealtime() - mSavedAtTime));
             setAndBroadcastNetworkSetTime(mSavedTime
                     + (SystemClock.elapsedRealtime() - mSavedAtTime));
         }
@@ -4092,7 +4107,9 @@ public class ServiceStateTracker extends Handler {
         if (Settings.Global.getInt(mCr, Settings.Global.AUTO_TIME_ZONE, 0) == 0) {
             return;
         }
-        if (DBG) log("Reverting to NITZ TimeZone: tz='" + mSavedTimeZone);
+        String tmpLog = "Reverting to NITZ TimeZone: tz='" + mSavedTimeZone;
+        if (DBG) log(tmpLog);
+        mNitzLog.log(tmpLog);
         if (mSavedTimeZone != null) {
             setAndBroadcastNetworkSetTimeZone(mSavedTimeZone);
         }
@@ -4754,6 +4771,11 @@ public class ServiceStateTracker extends Handler {
         ipw.println(" Rat Change Log:");
         ipw.increaseIndent();
         mRatLog.dump(fd, ipw, args);
+        ipw.decreaseIndent();
+
+        ipw.println(" NITZ Event Logs:");
+        ipw.increaseIndent();
+        mNitzLog.dump(fd, ipw, args);
         ipw.decreaseIndent();
     }
 
