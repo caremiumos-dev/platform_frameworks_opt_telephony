@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c04eb4e_f189a8b1",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 1030069
+      },
+      "writtenOn": "2016-10-17T20:34:27Z",
+      "side": 1,
+      "message": "Assuming this will break existing RIL vendor implementations.\n\nMaybe it would be safer to change the data type to mimic RIL_SMS_WriteArgs in the CDMA case too, and update RIL_CDMA_SMS_WriteArgs to include the char * pdu; instead.",
+      "revId": "1900c7ba3cc738ee277c6ee4250347c5854f303f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
