@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6e77223_522e74a9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2225,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-10-31T22:28:50Z",
+      "side": 1,
+      "message": "should this also check both?",
+      "range": {
+        "startLine": 2225,
+        "startChar": 30,
+        "endLine": 2225,
+        "endChar": 50
+      },
+      "revId": "5fab6c8c8457ec930f1181976c6410e0fdc4980b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6e77223_f243285f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2626,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-10-31T22:28:50Z",
+      "side": 1,
+      "message": "should this similarly check both?",
+      "range": {
+        "startLine": 2626,
+        "startChar": 71,
+        "endLine": 2626,
+        "endChar": 91
+      },
+      "revId": "5fab6c8c8457ec930f1181976c6410e0fdc4980b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6e77223_d248247e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2848,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-10-31T22:28:50Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2848,
+        "startChar": 71,
+        "endLine": 2848,
+        "endChar": 91
+      },
+      "revId": "5fab6c8c8457ec930f1181976c6410e0fdc4980b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6e77223_92429c58",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3071,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-10-31T22:28:50Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 3071,
+        "startChar": 37,
+        "endLine": 3071,
+        "endChar": 57
+      },
+      "revId": "5fab6c8c8457ec930f1181976c6410e0fdc4980b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6e77223_5255540b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3110,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-10-31T22:28:50Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 3110,
+        "startChar": 71,
+        "endLine": 3110,
+        "endChar": 91
+      },
+      "revId": "5fab6c8c8457ec930f1181976c6410e0fdc4980b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
