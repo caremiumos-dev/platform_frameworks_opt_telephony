@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bfd4b26_051931e8",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-03T22:19:13Z",
+      "side": 1,
+      "message": "Make the method abstract instead, like some of the other methods here.",
+      "range": {
+        "startLine": 331,
+        "startChar": 8,
+        "endLine": 331,
+        "endChar": 12
+      },
+      "revId": "7e313f6f4c7b6126367ec7f5955b47ed6aac388b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

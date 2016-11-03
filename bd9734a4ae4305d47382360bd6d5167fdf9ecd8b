@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bfd4b26_e5252524",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-03T22:19:13Z",
+      "side": 0,
+      "message": "Leave a generic description of the method here, if not SimRecords specific.",
+      "revId": "bd9734a4ae4305d47382360bd6d5167fdf9ecd8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
