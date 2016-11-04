@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b05834c_b39e0249",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-04T18:30:12Z",
+      "side": 1,
+      "message": "Based on the description of the change, shouldn\u0027t we make a change here to make sure useImsForUt is true in case of Ims over CDMA so that the request can go over ImsPhone?\n\nThe current change only makes sure that even if it is a CDMA phone we handle MMI over RIL if IMS is enabled. The request still isn\u0027t going over IMS, is it?",
+      "range": {
+        "startLine": 1087,
+        "startChar": 16,
+        "endLine": 1087,
+        "endChar": 27
+      },
+      "revId": "e523fee3e09dfe8cd559b5978fe1657faa783e5b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
