@@ -22,6 +22,30 @@
       "revId": "7e313f6f4c7b6126367ec7f5955b47ed6aac388b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4bfd4b26_08170808",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2016-11-04T02:17:10Z",
+      "side": 1,
+      "message": "If I make the method abstract then I have to put a dummy \"don\u0027t do this\" into the RUIM and IsimUiccRecords. Even though this shouldn\u0027t be posting a message back, is this possibly the code that\u0027s intended for RUIM (and the comment might be wrong)?",
+      "parentUuid": "4bfd4b26_051931e8",
+      "range": {
+        "startLine": 331,
+        "startChar": 8,
+        "endLine": 331,
+        "endChar": 12
+      },
+      "revId": "7e313f6f4c7b6126367ec7f5955b47ed6aac388b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
