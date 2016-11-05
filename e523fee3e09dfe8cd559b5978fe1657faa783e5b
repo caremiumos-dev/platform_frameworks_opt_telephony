@@ -22,6 +22,30 @@
       "revId": "e523fee3e09dfe8cd559b5978fe1657faa783e5b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8b05834c_3fcdb31c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1127148
+      },
+      "writtenOn": "2016-11-05T00:09:46Z",
+      "side": 1,
+      "message": "The current change is a reference for only the USSD over CDMA-IMS scenario (not UT/Supplementary Services). Since USSD is not supported over ImsPhone (ImsPhoneMmiCode) anyways, this change appears to be CS-only.\n\nThe change is an reference (using USSD as an example) on how all MMI codes - supplementary service (UT), and USSD - can be handled over CDMA-IMS scenarios. For the full CDMA-IMS functionality, more refactoring will be required in AOSP to route the MMI codes over ImsPhone -\u003e ImsPhoneMmiCode",
+      "parentUuid": "8b05834c_b39e0249",
+      "range": {
+        "startLine": 1087,
+        "startChar": 16,
+        "endLine": 1087,
+        "endChar": 27
+      },
+      "revId": "e523fee3e09dfe8cd559b5978fe1657faa783e5b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
