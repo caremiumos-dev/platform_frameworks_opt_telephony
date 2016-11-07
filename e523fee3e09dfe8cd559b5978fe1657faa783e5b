@@ -46,6 +46,30 @@
       "revId": "e523fee3e09dfe8cd559b5978fe1657faa783e5b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b78b3b0_ee19633a",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-07T03:36:26Z",
+      "side": 1,
+      "message": "Looking at the code it looks like support for ImsPhone -\u003e ImsPhoneMmiCode is present. Do you know why it doesn\u0027t work?\n\nIf that works, should USSD also follow that code path rather than this reference change?",
+      "parentUuid": "8b05834c_3fcdb31c",
+      "range": {
+        "startLine": 1087,
+        "startChar": 16,
+        "endLine": 1087,
+        "endChar": 27
+      },
+      "revId": "e523fee3e09dfe8cd559b5978fe1657faa783e5b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
