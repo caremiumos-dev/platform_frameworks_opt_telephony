@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b78b3b0_ce87c72d",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2058,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-07T03:26:30Z",
+      "side": 1,
+      "message": "Is this comment valid? I don\u0027t see this in GsmCdmaPhone.",
+      "range": {
+        "startLine": 2058,
+        "startChar": 19,
+        "endLine": 2058,
+        "endChar": 47
+      },
+      "revId": "1237b674a1a1e5faf4489e552ec3317422d11685",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
