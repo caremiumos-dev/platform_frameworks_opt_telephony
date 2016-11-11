@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0bc273c7_64d60a53",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_17a6b3fc",
+      "range": {
+        "startLine": 726,
+        "startChar": 20,
+        "endLine": 726,
+        "endChar": 41
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b89037a_17c3132a",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2016-11-10T01:22:31Z",
       "side": 1,
       "message": "we can keep it consistent with logging used at other places in the file using riljLog",
+      "range": {
+        "startLine": 727,
+        "startChar": 12,
+        "endLine": 727,
+        "endChar": 17
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0bc273c7_a4a002e2",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_17c3132a",
       "range": {
         "startLine": 727,
         "startChar": 12,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0bc273c7_c4f1bee9",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_bf9f8396",
+      "range": {
+        "startLine": 999,
+        "startChar": 20,
+        "endLine": 999,
+        "endChar": 37
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b89037a_25994460",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 5
@@ -82,6 +154,30 @@
       "writtenOn": "2016-11-10T01:22:31Z",
       "side": 1,
       "message": "This needs to be modified as we don\u0027t have any ril command as first param.",
+      "range": {
+        "startLine": 1002,
+        "startChar": 27,
+        "endLine": 1002,
+        "endChar": 39
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0bc273c7_24e7f22e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_25994460",
       "range": {
         "startLine": 1002,
         "startChar": 27,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "0bc273c7_e45dda00",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_850110b6",
+      "range": {
+        "startLine": 1019,
+        "startChar": 16,
+        "endLine": 1019,
+        "endChar": 82
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b89037a_052be04c",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 5
@@ -128,6 +248,30 @@
       "writtenOn": "2016-11-10T01:22:31Z",
       "side": 1,
       "message": "e",
+      "range": {
+        "startLine": 1021,
+        "startChar": 20,
+        "endLine": 1021,
+        "endChar": 21
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0bc273c7_c4625ec6",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_052be04c",
       "range": {
         "startLine": 1021,
         "startChar": 20,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "0bc273c7_246892a3",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_4521e864",
+      "range": {
+        "startLine": 1024,
+        "startChar": 16,
+        "endLine": 1024,
+        "endChar": 17
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b89037a_456fa8a9",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 5
@@ -174,6 +342,30 @@
       "writtenOn": "2016-11-10T01:22:31Z",
       "side": 1,
       "message": "I guess this was for debugging purpose and we don\u0027t need all log lines.",
+      "range": {
+        "startLine": 1045,
+        "startChar": 8,
+        "endLine": 1046,
+        "endChar": 80
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0bc273c7_2491b26b",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_456fa8a9",
       "range": {
         "startLine": 1045,
         "startChar": 8,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "0bc273c7_443aee88",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_65fe6cc0",
+      "range": {
+        "startLine": 1133,
+        "startChar": 4,
+        "endLine": 1133,
+        "endChar": 21
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b89037a_a55d3401",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 5
@@ -220,6 +436,30 @@
       "writtenOn": "2016-11-10T01:22:31Z",
       "side": 1,
       "message": "Also\nrr.mStartTimeMs \u003d SystemClock.elapsedRealtime();",
+      "range": {
+        "startLine": 1144,
+        "startChar": 16,
+        "endLine": 1144,
+        "endChar": 52
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0bc273c7_e4d2fa18",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "That\u0027s only on internal. Will have to add that when merging internally.",
+      "parentUuid": "8b89037a_a55d3401",
       "range": {
         "startLine": 1144,
         "startChar": 16,
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "0bc273c7_6499ea5f",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_e5f25cef",
+      "range": {
+        "startLine": 1151,
+        "startChar": 16,
+        "endLine": 1151,
+        "endChar": 29
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b89037a_3f34f30a",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 5
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "0bc273c7_a76be463",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2752,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_3f34f30a",
+      "range": {
+        "startLine": 2752,
+        "startChar": 76,
+        "endLine": 2752,
+        "endChar": 113
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b89037a_ff2d0bc7",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 5
@@ -289,6 +577,30 @@
       "writtenOn": "2016-11-10T01:22:31Z",
       "side": 1,
       "message": "delete ?",
+      "range": {
+        "startLine": 2946,
+        "startChar": 8,
+        "endLine": 2947,
+        "endChar": 9
+      },
+      "revId": "583c9078112345b4e9c36d7e7e64e5d724ea1c05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0bc273c7_44966e31",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2947,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-11T03:03:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b89037a_ff2d0bc7",
       "range": {
         "startLine": 2946,
         "startChar": 8,
