@@ -34,7 +34,9 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * {@hide}
@@ -96,6 +98,14 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected String[] mFplmns;
 
     private final Object mLock = new Object();
+
+    //Arbitrary offset for the Handler
+    protected static final int HANDLER_ACTION_BASE = 0x12E500;
+    protected static final int HANDLER_ACTION_NONE = HANDLER_ACTION_BASE + 0;
+    protected static final int HANDLER_ACTION_SEND_RESPONSE = HANDLER_ACTION_BASE + 1;
+    protected static final int HANDLER_ACTION_NOTIFY_RESPONSE = HANDLER_ACTION_BASE + 2;
+    protected static AtomicInteger sNextRequestId = new AtomicInteger(1);
+    protected HashMap<Integer, Message> mPendingRequests;
 
     // ***** Constants
 
@@ -174,6 +184,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
         mCi = ci;
         mFh = app.getIccFileHandler();
         mParentApp = app;
+        mPendingRequests = new HashMap<Integer, Message>();
         mTelephonyManager = (TelephonyManager) mContext.getSystemService(
                 Context.TELEPHONY_SERVICE);
     }
@@ -202,6 +213,32 @@ public abstract class IccRecords extends Handler implements IccConstants {
     //***** Public Methods
     public AdnRecordCache getAdnCache() {
         return mAdnCache;
+    }
+
+    /**
+     * Adds a message to the pending requests list by generating a unique
+     * (integer) hash key and returning it. The message should never be null.
+     */
+    public int addPendingRequest(Message msg) {
+        int key = sNextRequestId.getAndIncrement();
+        synchronized (mPendingRequests) {
+            mPendingRequests.put(key, msg);
+        }
+        return key;
+    }
+
+    /**
+     * Returns the pending request, if any or null
+     */
+    public Message removePendingRequest(Integer key) {
+        Message m;
+        synchronized (mPendingRequests) {
+            m = mPendingRequests.get(key);
+            if (m != null) {
+                mPendingRequests.remove(key);
+            }
+        }
+        return m;
     }
 
     /**
