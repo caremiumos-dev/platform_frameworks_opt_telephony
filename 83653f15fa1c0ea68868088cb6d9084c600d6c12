@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b8e57b3_97e1898b",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2016-11-14T18:35:03Z",
+      "side": 1,
+      "message": "This should also take care of type \u003d RESPONSE_SOLICITED_ACK",
+      "range": {
+        "startLine": 722,
+        "startChar": 27,
+        "endLine": 722,
+        "endChar": 42
+      },
+      "revId": "83653f15fa1c0ea68868088cb6d9084c600d6c12",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2b8e57b3_77423dac",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2016-11-14T18:35:03Z",
+      "side": 1,
+      "message": "Instead of this, we should directly have a new api which would be associated with  RIL command RIL_RESPONSE_ACKNOLEDGEMENT. (Currently we don\u0027t have this RIL command in Iradio.hal \u0026 that\u0027s the only one which is missing)",
+      "range": {
+        "startLine": 737,
+        "startChar": 15,
+        "endLine": 740,
+        "endChar": 35
+      },
+      "revId": "83653f15fa1c0ea68868088cb6d9084c600d6c12",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2b8e57b3_d758719e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2016-11-14T18:35:03Z",
+      "side": 1,
+      "message": "Instead of this, we should directly have a new api which would be associated with  RIL command RIL_RESPONSE_ACKNOLEDGEMENT. (Currently we don\u0027t have this RIL command in Iradio.hal \u0026 that\u0027s the only one which is missing)",
+      "range": {
+        "startLine": 1097,
+        "startChar": 15,
+        "endLine": 1100,
+        "endChar": 35
+      },
+      "revId": "83653f15fa1c0ea68868088cb6d9084c600d6c12",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2b8e57b3_b71925eb",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2016-11-14T18:35:03Z",
+      "side": 1,
+      "message": "do we still need this call here ?",
+      "range": {
+        "startLine": 1248,
+        "startChar": 5,
+        "endLine": 1248,
+        "endChar": 24
+      },
+      "revId": "83653f15fa1c0ea68868088cb6d9084c600d6c12",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
