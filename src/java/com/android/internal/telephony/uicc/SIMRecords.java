@@ -181,6 +181,8 @@ public class SIMRecords extends IccRecords {
     private static final int EVENT_SIM_REFRESH = 3 + SYSTEM_EVENT_BASE;
 
 
+    // maximum time to block waiting for a sychronous operation on the UICC
+    private static final int UICC_MAX_SYNC_WAIT = 2000;
 
     // Lookup table for carriers known to produce SIMs which incorrectly indicate MNC length.
 
@@ -354,7 +356,7 @@ public class SIMRecords extends IccRecords {
      * When the operation is complete, onComplete will be sent to its handler
      *
      * @param alphaTag alpha-tagging of the dailing nubmer (up to 10 characters)
-     * @param number dailing nubmer (up to 20 digits)
+     * @param number dialing number (up to 20 digits)
      *        if the number starts with '+', then set to international TOA
      * @param onComplete
      *        onComplete.obj will be an AsyncResult
@@ -1333,6 +1335,19 @@ public class SIMRecords extends IccRecords {
                     } else {
                         mFplmns = parseBcdPlmnList(data, "Forbidden");
                     }
+                    if (msg.arg1 == HANDLER_ACTION_SEND_RESPONSE) {
+                        if (VDBG) logv("getForbiddenPlmns(): send async response");
+                        isRecordLoadResponse = false;
+                        Message response = removePendingRequest(msg.arg2);
+                        if (response != null) {
+                            AsyncResult.forMessage(
+                                    response, Arrays.copyOf(mFplmns, mFplmns.length), null);
+                            response.sendToTarget();
+                        } else {
+                            loge("Failed to retrieve a response message for FPLMN");
+                            break;
+                        }
+                    }
                     break;
 
                 case EVENT_CARRIER_CONFIG_CHANGED:
@@ -1633,6 +1648,16 @@ public class SIMRecords extends IccRecords {
         }
     }
 
+    /**
+     * String[] of forbidden PLMNs will be sent to the Message's handler
+     * in the result field of an AsyncResult in the response.obj.
+     */
+    public void getForbiddenPlmns(Message response) {
+        int key = addPendingRequest(response);
+        mFh.loadEFTransparent(EF_FPLMN, obtainMessage(
+                    EVENT_GET_FPLMN_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
+    }
+
     @Override
     public void onReady() {
         fetchSimRecords();
@@ -1741,7 +1766,8 @@ public class SIMRecords extends IccRecords {
         mFh.loadEFTransparent(EF_EHPLMN, obtainMessage(EVENT_GET_EHPLMN_DONE));
         mRecordsToLoad++;
 
-        mFh.loadEFTransparent(EF_FPLMN, obtainMessage(EVENT_GET_FPLMN_DONE));
+        mFh.loadEFTransparent(EF_FPLMN, obtainMessage(
+                    EVENT_GET_FPLMN_DONE, HANDLER_ACTION_NONE, -1));
         mRecordsToLoad++;
 
         loadEfLiAndEfPl();
