@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "30b088be_2651cb51",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-15T17:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b8e57b3_97e1898b",
+      "range": {
+        "startLine": 722,
+        "startChar": 27,
+        "endLine": 722,
+        "endChar": 42
+      },
+      "revId": "83653f15fa1c0ea68868088cb6d9084c600d6c12",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b8e57b3_77423dac",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2016-11-14T18:35:03Z",
       "side": 1,
       "message": "Instead of this, we should directly have a new api which would be associated with  RIL command RIL_RESPONSE_ACKNOLEDGEMENT. (Currently we don\u0027t have this RIL command in Iradio.hal \u0026 that\u0027s the only one which is missing)",
+      "range": {
+        "startLine": 737,
+        "startChar": 15,
+        "endLine": 740,
+        "endChar": 35
+      },
+      "revId": "83653f15fa1c0ea68868088cb6d9084c600d6c12",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "30b088be_06584f72",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-15T17:38:22Z",
+      "side": 1,
+      "message": "Added a todo",
+      "parentUuid": "2b8e57b3_77423dac",
       "range": {
         "startLine": 737,
         "startChar": 15,
@@ -82,6 +130,30 @@
       "writtenOn": "2016-11-14T18:35:03Z",
       "side": 1,
       "message": "do we still need this call here ?",
+      "range": {
+        "startLine": 1248,
+        "startChar": 5,
+        "endLine": 1248,
+        "endChar": 24
+      },
+      "revId": "83653f15fa1c0ea68868088cb6d9084c600d6c12",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "30b088be_063fefe9",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-15T17:38:22Z",
+      "side": 1,
+      "message": "yes, unsolicited will not be received if radioIndication callback isn\u0027t set. This is used to set that.",
+      "parentUuid": "2b8e57b3_b71925eb",
       "range": {
         "startLine": 1248,
         "startChar": 5,
