@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "30ca486f_f687b52e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2016-11-18T02:42:35Z",
+      "side": 1,
+      "message": "It releases RilRequest object for EVENT_SEND_ACK every time. see line 477 in ril.java.\nIf we release it here then there is a possibility of race condition leading to crash. \n1) resposne.release gets called\n2) Released RilRequest object is reused by calling Obtain()\n3) EVENT_SEND_ACK is handled making rr.mParcel \u003d null\n4) Context is switched back to obtain function leading to crash while accessing mParcel.\n\nActually I have already merged CL for new hal api for sending ack. You can just call that function directly here and in that case we can eliminate above code.",
+      "parentUuid": "30ca486f_96804194",
+      "range": {
+        "startLine": 762,
+        "startChar": 20,
+        "endLine": 762,
+        "endChar": 39
+      },
+      "revId": "983192651fdd444e59e27393eb9d7dec13819954",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30b088be_41a631a6",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 7
