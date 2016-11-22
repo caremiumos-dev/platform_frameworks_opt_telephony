@@ -1,0 +1,395 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50197c0d_eb5c799e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "A comment may be nice",
+      "range": {
+        "startLine": 430,
+        "startChar": 40,
+        "endLine": 430,
+        "endChar": 54
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_eba2394a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "was this a bug before?",
+      "range": {
+        "startLine": 431,
+        "startChar": 31,
+        "endLine": 431,
+        "endChar": 38
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_4b01e569",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "why return?",
+      "range": {
+        "startLine": 432,
+        "startChar": 28,
+        "endLine": 432,
+        "endChar": 34
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_2b04b17a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "why return?",
+      "range": {
+        "startLine": 443,
+        "startChar": 28,
+        "endLine": 443,
+        "endChar": 34
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_0bfbed59",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "why return?",
+      "range": {
+        "startLine": 454,
+        "startChar": 28,
+        "endLine": 454,
+        "endChar": 34
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_8bedbd47",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "move to separate file?",
+      "range": {
+        "startLine": 727,
+        "startChar": 0,
+        "endLine": 727,
+        "endChar": 53
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_c61decde",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "comment what this function is responsible for, ditto processResponseDone below",
+      "range": {
+        "startLine": 728,
+        "startChar": 27,
+        "endLine": 728,
+        "endChar": 42
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_71e858f7",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "error check for unexpected types?\n\nAre SOLICITED, SOLICITED_ACK and SOLICITED_ACK_EXP all still ok?  Might be nice to have an else comment explaining how the SOLICITED is handled and why it\u0027s a noop here.",
+      "range": {
+        "startLine": 768,
+        "startChar": 16,
+        "endLine": 768,
+        "endChar": 17
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_e60ef0aa",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "private?",
+      "range": {
+        "startLine": 774,
+        "startChar": 8,
+        "endLine": 774,
+        "endChar": 12
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_26ce2846",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "private?",
+      "range": {
+        "startLine": 784,
+        "startChar": 8,
+        "endLine": 784,
+        "endChar": 12
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_06e524c0",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "is this the preferred format?  I\u0027d put this on the line above and just 8-indent overflow, but I don\u0027t know if this has been discussed.",
+      "range": {
+        "startLine": 884,
+        "startChar": 16,
+        "endLine": 884,
+        "endChar": 33
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_ab7201c1",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "separate file?",
+      "range": {
+        "startLine": 1116,
+        "startChar": 10,
+        "endLine": 1116,
+        "endChar": 25
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_4b36c5fa",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "else?  Silently failing if the type is unexpected is bad",
+      "range": {
+        "startLine": 1128,
+        "startChar": 12,
+        "endLine": 1128,
+        "endChar": 13
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_0b6e8dde",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "setRadioState and remove the pointless switchToRadioState function?",
+      "range": {
+        "startLine": 1135,
+        "startChar": 12,
+        "endLine": 1135,
+        "endChar": 30
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_ebbeb908",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "recovery if vendor RIL crashes?",
+      "range": {
+        "startLine": 1271,
+        "startChar": 8,
+        "endLine": 1271,
+        "endChar": 21
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_cbcdf5c4",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2971,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "I think it was better before - we\u0027re going to *get* radioState from this int, so the int can\u0027t be the radioState.\n\nMaybe getRadioStateFromHardwareRadioState?  Can we just make the two line up so there\u0027s no translation/",
+      "range": {
+        "startLine": 2971,
+        "startChar": 48,
+        "endLine": 2971,
+        "endChar": 58
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_0b7f6d55",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 3117,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-22T23:13:13Z",
+      "side": 1,
+      "message": "why?  There\u0027s a strong philosophy for single return statements that you\u0027re violating here for no reason.  also, inconsistently - why not on line 3109 too?  and 3129 and 3134?",
+      "range": {
+        "startLine": 3117,
+        "startChar": 16,
+        "endLine": 3117,
+        "endChar": 22
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
