@@ -22,6 +22,30 @@
       "revId": "d992bc1a7ef757a40eb53017e5b610df653e9b38",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50197c0d_8067d7cd",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2646,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-23T01:53:17Z",
+      "side": 0,
+      "message": "yes, fix is already present on internal master. Included it here since affected code was being touched.\nhttps://googleplex-android-review.git.corp.google.com/#/c/1076741/",
+      "parentUuid": "50197c0d_2b883140",
+      "range": {
+        "startLine": 2646,
+        "startChar": 21,
+        "endLine": 2646,
+        "endChar": 28
+      },
+      "revId": "d992bc1a7ef757a40eb53017e5b610df653e9b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
