@@ -284,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "10c9c4ea_e51e768a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-23T05:30:18Z",
+      "side": 1,
+      "message": "Patch set 10 has other changes based on your comments; 11 has the change to move this and RadioIndication to separate files.",
+      "parentUuid": "50197c0d_03a671f6",
+      "range": {
+        "startLine": 727,
+        "startChar": 0,
+        "endLine": 727,
+        "endChar": 53
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50197c0d_c61decde",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 9
