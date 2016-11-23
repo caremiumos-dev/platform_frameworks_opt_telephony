@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "b010f8cf_aac3efef",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-23T01:53:17Z",
+      "side": 1,
+      "message": "Done. Picked the fix from internal master.",
+      "parentUuid": "30ca486f_f687b52e",
+      "range": {
+        "startLine": 762,
+        "startChar": 20,
+        "endLine": 762,
+        "endChar": 39
+      },
+      "revId": "983192651fdd444e59e27393eb9d7dec13819954",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30b088be_41a631a6",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 7
