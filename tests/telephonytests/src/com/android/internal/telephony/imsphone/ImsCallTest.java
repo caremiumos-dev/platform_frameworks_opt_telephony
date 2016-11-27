@@ -60,6 +60,7 @@ public class ImsCallTest extends TelephonyTest {
         mBundle.putString(ImsCallProfile.EXTRA_CALL_RAT_TYPE,
                 ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN + "");
         assertTrue(mTestImsCall.isWifiCall());
+        assertFalse(mTestImsCall.isEnhanced4gLteCall());
     }
 
     @Test
@@ -70,25 +71,28 @@ public class ImsCallTest extends TelephonyTest {
         mBundle.putString(ImsCallProfile.EXTRA_CALL_RAT_TYPE_ALT,
                 ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN + "");
         assertTrue(mTestImsCall.isWifiCall());
+        assertFalse(mTestImsCall.isEnhanced4gLteCall());
     }
 
     @Test
     @SmallTest
-    public void testSetLteNoWifi() {
+    public void testSetLte() {
         ImsCall mTestImsCall = new ImsCall(mContext, mTestCallProfile);
         assertFalse(mTestImsCall.isWifiCall());
         mBundle.putString(ImsCallProfile.EXTRA_CALL_RAT_TYPE,
                 ServiceState.RIL_RADIO_TECHNOLOGY_LTE + "");
         assertFalse(mTestImsCall.isWifiCall());
+        assertTrue(mTestImsCall.isEnhanced4gLteCall());
     }
 
     @Test
     @SmallTest
-    public void testSetLteNoWifiAlt() {
+    public void testSetLteAlt() {
         ImsCall mTestImsCall = new ImsCall(mContext, mTestCallProfile);
         assertFalse(mTestImsCall.isWifiCall());
         mBundle.putString(ImsCallProfile.EXTRA_CALL_RAT_TYPE_ALT,
                 ServiceState.RIL_RADIO_TECHNOLOGY_LTE + "");
         assertFalse(mTestImsCall.isWifiCall());
+        assertTrue(mTestImsCall.isEnhanced4gLteCall());
     }
 }

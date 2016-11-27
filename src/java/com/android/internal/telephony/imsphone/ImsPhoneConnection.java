@@ -974,13 +974,16 @@ public class ImsPhoneConnection extends Connection implements
     }
 
     /**
-     * Updates the wifi state based on the {@link ImsCallProfile#EXTRA_CALL_RAT_TYPE}.
+     * Updates the IMS call rat based on the {@link ImsCallProfile#EXTRA_CALL_RAT_TYPE}.
      * The call is considered to be a WIFI call if the extra value is
      * {@link ServiceState#RIL_RADIO_TECHNOLOGY_IWLAN}.
      *
+     * The call is considered to be a enhanced LTE call if the extra value is
+     * {@link ServiceState#RIL_RADIO_TECHNOLOGY_LTE}.
+     *
      * @param extras The ImsCallProfile extras.
      */
-    private void updateWifiStateFromExtras(Bundle extras) {
+    private void updateImsCallRatFromExtras(Bundle extras) {
         if (extras.containsKey(ImsCallProfile.EXTRA_CALL_RAT_TYPE) ||
                 extras.containsKey(ImsCallProfile.EXTRA_CALL_RAT_TYPE_ALT)) {
 
@@ -990,9 +993,19 @@ public class ImsPhoneConnection extends Connection implements
                 isWifi = call.isWifiCall();
             }
 
-            // Report any changes
+            // Report any changes for WIFI call
             if (isWifi() != isWifi) {
                 setWifi(isWifi);
+            }
+
+            boolean isEnhanced4gLteCall = false;
+            if (call != null) {
+                isEnhanced4gLteCall = call.isEnhanced4gLteCall();
+            }
+
+            // Report any changes for LTE call
+            if (isEnhanced4gLteCall() != isEnhanced4gLteCall) {
+                setEnhanced4gLteCall(isEnhanced4gLteCall);
             }
         }
     }
@@ -1017,7 +1030,7 @@ public class ImsPhoneConnection extends Connection implements
 
         final boolean changed = !areBundlesEqual(extras, mExtras);
         if (changed) {
-            updateWifiStateFromExtras(extras);
+            updateImsCallRatFromExtras(extras);
 
             mExtras.clear();
             mExtras.putAll(extras);
