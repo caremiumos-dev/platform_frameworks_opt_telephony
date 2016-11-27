@@ -90,6 +90,7 @@ public abstract class Connection {
         public void onVideoStateChanged(int videoState);
         public void onConnectionCapabilitiesChanged(int capability);
         public void onWifiChanged(boolean isWifi);
+        public void onEnhanced4gLteCallChanged(boolean isEnhanced4gLteCall);
         public void onVideoProviderChanged(
                 android.telecom.Connection.VideoProvider videoProvider);
         public void onAudioQualityChanged(int audioQuality);
@@ -119,6 +120,8 @@ public abstract class Connection {
         public void onConnectionCapabilitiesChanged(int capability) {}
         @Override
         public void onWifiChanged(boolean isWifi) {}
+        @Override
+        public void onEnhanced4gLteCallChanged(boolean isEnhanced4gLteCall) {}
         @Override
         public void onVideoProviderChanged(
                 android.telecom.Connection.VideoProvider videoProvider) {}
@@ -204,6 +207,7 @@ public abstract class Connection {
     private int mVideoState;
     private int mConnectionCapabilities;
     private boolean mIsWifi;
+    private boolean mIsEnhanced4gLteCall;
     private boolean mAudioModeIsVoip;
     private int mAudioQuality;
     private int mCallSubstate;
@@ -743,6 +747,15 @@ public abstract class Connection {
     }
 
     /**
+     * Returns whether the connection is using a LTE network.
+     *
+     * @return {@code True} if the connection is using LTE network.
+     */
+    public boolean isEnhanced4gLteCall() {
+        return mIsEnhanced4gLteCall;
+    }
+
+    /**
      * Returns whether the connection uses voip audio mode
      *
      * @return {@code True} if the connection uses voip audio mode
@@ -818,6 +831,18 @@ public abstract class Connection {
         mIsWifi = isWifi;
         for (Listener l : mListeners) {
             l.onWifiChanged(mIsWifi);
+        }
+    }
+
+    /**
+     * Sets whether a LTE network is used for the connection.
+     *
+     * @param isEnhanced4gLteCall {@code True} if LTE is being used.
+     */
+    public void setEnhanced4gLteCall(boolean isEnhanced4gLteCall) {
+        mIsEnhanced4gLteCall = isEnhanced4gLteCall;
+        for (Listener l : mListeners) {
+            l.onEnhanced4gLteCallChanged(mIsEnhanced4gLteCall);
         }
     }
 
