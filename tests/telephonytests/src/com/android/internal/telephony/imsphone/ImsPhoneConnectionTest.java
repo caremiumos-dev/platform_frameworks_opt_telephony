@@ -265,6 +265,34 @@ public class ImsPhoneConnectionTest extends TelephonyTest {
         assertTrue(mConnectionUT.isWifi());
     }
 
+    @Test
+    @SmallTest
+    public void testSetLTE() {
+        mConnectionUT = new ImsPhoneConnection(mImsPhone, mImsCall, mImsCT, mForeGroundCall, false);
+        assertFalse(mConnectionUT.isEnhanced4gLteCall());
+        // ImsCall.isEnhanced4gLteCall is tested elsewhere
+        doReturn(true).when(mImsCall).isEnhanced4gLteCall();
+        mBundle.putString(ImsCallProfile.EXTRA_CALL_RAT_TYPE,
+                ServiceState.RIL_RADIO_TECHNOLOGY_LTE + "");
+        assertTrue(mConnectionUT.update(mImsCall, Call.State.ACTIVE));
+        assertTrue(mConnectionUT.isEnhanced4gLteCall());
+    }
+
+    @Test
+    @SmallTest
+    public void testSetLTE2() {
+        mConnectionUT = new ImsPhoneConnection(mImsPhone, mImsCall, mImsCT, mForeGroundCall, false);
+        assertFalse(mConnectionUT.isEnhanced4gLteCall());
+        // ImsCall.isEnhanced4gLteCall is tested elsewhere
+        doReturn(true).when(mImsCall).isEnhanced4gLteCall();
+        // Tests to make sure that the EXTRA_CALL_RAT_TYPE_ALT string is set correctly for newer
+        // devices.
+        mBundle.putString(ImsCallProfile.EXTRA_CALL_RAT_TYPE_ALT,
+                ServiceState.RIL_RADIO_TECHNOLOGY_LTE + "");
+        assertTrue(mConnectionUT.update(mImsCall, Call.State.ACTIVE));
+        assertTrue(mConnectionUT.isEnhanced4gLteCall());
+    }
+
     /**
      * Test updates to address for incoming calls.
      */
