@@ -90,6 +90,7 @@ public abstract class Connection {
         public void onVideoStateChanged(int videoState);
         public void onConnectionCapabilitiesChanged(int capability);
         public void onWifiChanged(boolean isWifi);
+        public void onVolteChanged(boolean isVolte);
         public void onVideoProviderChanged(
                 android.telecom.Connection.VideoProvider videoProvider);
         public void onAudioQualityChanged(int audioQuality);
@@ -116,6 +117,8 @@ public abstract class Connection {
         public void onConnectionCapabilitiesChanged(int capability) {}
         @Override
         public void onWifiChanged(boolean isWifi) {}
+        @Override
+        public void onVolteChanged(boolean isVolte) {}
         @Override
         public void onVideoProviderChanged(
                 android.telecom.Connection.VideoProvider videoProvider) {}
@@ -195,6 +198,7 @@ public abstract class Connection {
     private int mVideoState;
     private int mConnectionCapabilities;
     private boolean mIsWifi;
+    private boolean mIsVolte;
     private boolean mAudioModeIsVoip;
     private int mAudioQuality;
     private int mCallSubstate;
@@ -729,6 +733,15 @@ public abstract class Connection {
     }
 
     /**
+     * Returns whether the connection is using volte.
+     *
+     * @return {@code True} if the connection is using volte.
+     */
+    public boolean isVolte() {
+        return mIsVolte;
+    }
+
+    /**
      * Returns whether the connection uses voip audio mode
      *
      * @return {@code True} if the connection uses voip audio mode
@@ -804,6 +817,18 @@ public abstract class Connection {
         mIsWifi = isWifi;
         for (Listener l : mListeners) {
             l.onWifiChanged(mIsWifi);
+        }
+    }
+
+    /**
+     * Sets whether volte is used for the connection.
+     *
+     * @param isWifi {@code True} if volte is being used.
+     */
+    public void setVolte(boolean isVolte) {
+        mIsVolte = isVolte;
+        for (Listener l : mListeners) {
+            l.onVolteChanged(mIsVolte);
         }
     }
 
