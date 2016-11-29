@@ -754,6 +754,29 @@
     },
     {
       "key": {
+        "uuid": "702a0062_5d23ad1a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 3003,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-11-29T20:02:48Z",
+      "side": 1,
+      "message": "This sort of complicated pattern should be contained within a single file and not exposed like this.\n\nI realize this is probably because you moved those other interfaces out, but we probably need to look hard to see if there is a simpler API and pattern to use for this.\n\nCalls seem to use:\n RILRequest rr \u003d RILRequest.obtain(RIL_RESPONSE_ACKNOWLEDGEMENT, null);\n msg \u003d mRil.mSender.obtainMessage(RIL.EVENT_SEND_ACK, rr);\n mRil.acquireWakeLock(rr, RIL.FOR_ACK_WAKELOCK);\n msg.sendToTarget();\n\nperhaps mRil.sendAck to do all those things and not leak the wakelock calls outside the file?\n\nOr bury it in RilRequest (expose that as a separate file) and the decrement happens when rr.release() is called and obtain takes an optional wakelock type.",
+      "range": {
+        "startLine": 3003,
+        "startChar": 4,
+        "endLine": 3003,
+        "endChar": 11
+      },
+      "revId": "82a724563a97e9ee48e34a968e9a6f27e66c8230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50197c0d_0b7f6d55",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 9
