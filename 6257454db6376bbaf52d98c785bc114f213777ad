@@ -22,6 +22,30 @@
       "revId": "6257454db6376bbaf52d98c785bc114f213777ad",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "702a0062_07b2b42d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 2556,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-30T22:16:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "702a0062_cbe7cc61",
+      "range": {
+        "startLine": 2556,
+        "startChar": 4,
+        "endLine": 2556,
+        "endChar": 8
+      },
+      "revId": "6257454db6376bbaf52d98c785bc114f213777ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
