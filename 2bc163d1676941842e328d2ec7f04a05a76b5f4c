@@ -70,6 +70,30 @@
       "revId": "2bc163d1676941842e328d2ec7f04a05a76b5f4c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "702a0062_c12df305",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-30T02:16:40Z",
+      "side": 1,
+      "message": "It\u0027s not in the hal; it\u0027s in IRadio interface auto-generated from the hal.",
+      "parentUuid": "ed1b7768_faba6107",
+      "range": {
+        "startLine": 735,
+        "startChar": 32,
+        "endLine": 735,
+        "endChar": 42
+      },
+      "revId": "2bc163d1676941842e328d2ec7f04a05a76b5f4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
