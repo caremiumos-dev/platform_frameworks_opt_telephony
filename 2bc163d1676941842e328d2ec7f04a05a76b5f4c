@@ -22,6 +22,30 @@
       "revId": "2bc163d1676941842e328d2ec7f04a05a76b5f4c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "702a0062_8f89670f",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2016-11-30T01:22:55Z",
+      "side": 1,
+      "message": "Which device are you trying this on?\n+ smoreland to help with this.",
+      "parentUuid": "ed1b7768_5ad035b7",
+      "range": {
+        "startLine": 735,
+        "startChar": 32,
+        "endLine": 735,
+        "endChar": 42
+      },
+      "revId": "2bc163d1676941842e328d2ec7f04a05a76b5f4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
