@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2ddbcf69_bc8d63c3",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2016-12-05T23:09:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ddbcf69_48eda3d2",
+      "range": {
+        "startLine": 153,
+        "startChar": 32,
+        "endLine": 153,
+        "endChar": 36
+      },
+      "revId": "fcc5b2381b8aa9f97860e5b24ce15373b414e057",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ddbcf69_28ea57bc",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2016-12-03T04:49:04Z",
       "side": 1,
       "message": "either make it private (mSAT) or get rid of this accessor - doing both is silly.",
+      "range": {
+        "startLine": 460,
+        "startChar": 0,
+        "endLine": 460,
+        "endChar": 59
+      },
+      "revId": "fcc5b2381b8aa9f97860e5b24ce15373b414e057",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ddbcf69_9c8aa7a8",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2016-12-05T23:09:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ddbcf69_28ea57bc",
       "range": {
         "startLine": 460,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2ddbcf69_5c843f9b",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2016-12-05T23:09:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ddbcf69_2385d8ef",
+      "range": {
+        "startLine": 1520,
+        "startChar": 11,
+        "endLine": 1520,
+        "endChar": 31
+      },
+      "revId": "fcc5b2381b8aa9f97860e5b24ce15373b414e057",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ddbcf69_83224c16",
         "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2016-12-03T04:49:04Z",
       "side": 1,
       "message": "can this be Phone?  It\u0027s best to use the base classes.  If you need to know it\u0027s a GsmCdmaPhone we should look at why.",
+      "range": {
+        "startLine": 44,
+        "startChar": 12,
+        "endLine": 44,
+        "endChar": 24
+      },
+      "revId": "fcc5b2381b8aa9f97860e5b24ce15373b414e057",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ddbcf69_3c46139c",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2016-12-05T23:09:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ddbcf69_83224c16",
       "range": {
         "startLine": 44,
         "startChar": 12,
