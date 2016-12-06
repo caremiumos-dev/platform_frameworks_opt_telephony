@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d14e7d4_67b65c8f",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2016-12-06T22:46:13Z",
+      "side": 1,
+      "message": "the only concern is we used to check the new update value against the old value before notify \u0026 update, which might have some concurrency issue. Given the update is not a frequent action and totally rely on the sequence, I think we could skip checking and simply notify.",
+      "parentUuid": "2ddbcf69_62e0700c",
+      "range": {
+        "startLine": 52,
+        "startChar": 18,
+        "endLine": 52,
+        "endChar": 36
+      },
+      "revId": "a44b8927db6ddfc22de6e8769d4973f1dbd0cc4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ddbcf69_a5a9c25a",
         "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6d14e7d4_27d944de",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2016-12-06T22:46:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ddbcf69_a5a9c25a",
+      "range": {
+        "startLine": 73,
+        "startChar": 20,
+        "endLine": 73,
+        "endChar": 48
+      },
+      "revId": "a44b8927db6ddfc22de6e8769d4973f1dbd0cc4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ddbcf69_45e1feb5",
         "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2016-12-06T03:08:44Z",
       "side": 1,
       "message": "if only done in one place (setDataActivationState) don\u0027t bother with util functions",
+      "range": {
+        "startLine": 81,
+        "startChar": 17,
+        "endLine": 81,
+        "endChar": 45
+      },
+      "revId": "a44b8927db6ddfc22de6e8769d4973f1dbd0cc4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ddbcf69_a5b8a20f",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2016-12-06T22:46:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ddbcf69_45e1feb5",
       "range": {
         "startLine": 81,
         "startChar": 17,
