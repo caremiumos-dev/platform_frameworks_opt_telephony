@@ -47,6 +47,8 @@ import java.util.regex.Matcher;
  *
  */
 public final class GsmMmiCode extends Handler implements MmiCode {
+    private static final boolean DBG_BUILD = !Build.TYPE.equals("user");
+
     static final String LOG_TAG = "GsmMmiCode";
 
     //***** Constants
@@ -1601,12 +1603,15 @@ public final class GsmMmiCode extends Handler implements MmiCode {
         sb.append("State=" + getState());
         if (mAction != null) sb.append(" action=" + mAction);
         if (mSc != null) sb.append(" sc=" + mSc);
-        if (mSia != null) sb.append(" sia=" + mSia);
-        if (mSib != null) sb.append(" sib=" + mSib);
-        if (mSic != null) sb.append(" sic=" + mSic);
-        if (mPoundString != null) sb.append(" poundString=" + mPoundString);
-        if (mDialingNumber != null) sb.append(" dialingNumber=" + mDialingNumber);
-        if (mPwd != null) sb.append(" pwd=" + mPwd);
+        // Refrain from logging user personal information like phone number in user build.
+        if (DBG_BUILD) {
+            if (mSia != null) sb.append(" sia=" + mSia);
+            if (mSib != null) sb.append(" sib=" + mSib);
+            if (mSic != null) sb.append(" sic=" + mSic);
+            if (mPoundString != null) sb.append(" poundString=" + mPoundString);
+            if (mDialingNumber != null) sb.append(" dialingNumber=" + mDialingNumber);
+            if (mPwd != null) sb.append(" pwd=" + mPwd);
+        }
         sb.append("}");
         return sb.toString();
     }
