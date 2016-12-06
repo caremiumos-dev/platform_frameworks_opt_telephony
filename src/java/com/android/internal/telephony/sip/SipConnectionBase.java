@@ -22,6 +22,7 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.UUSInfo;
 
+import android.os.Build;
 import android.os.SystemClock;
 import android.telephony.DisconnectCause;
 import android.telephony.Rlog;
@@ -31,6 +32,7 @@ abstract class SipConnectionBase extends Connection {
     private static final String LOG_TAG = "SipConnBase";
     private static final boolean DBG = true;
     private static final boolean VDBG = false; // STOPSHIP if true
+    private static final boolean DBG_BUILD = !Build.TYPE.equals("user");
 
     /*
      * These time/timespan values are based on System.currentTimeMillis(),
@@ -52,7 +54,10 @@ abstract class SipConnectionBase extends Connection {
 
     SipConnectionBase(String dialString) {
         super(PhoneConstants.PHONE_TYPE_SIP);
-        if (DBG) log("SipConnectionBase: ctor dialString=" + SipPhone.hidePii(dialString));
+        // Refrain from logging user personal information like phone number in user build.
+        if (DBG && DBG_BUILD) {
+            log("SipConnectionBase: ctor dialString=" + SipPhone.hidePii(dialString));
+        }
         mPostDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
 
         mCreateTime = System.currentTimeMillis();

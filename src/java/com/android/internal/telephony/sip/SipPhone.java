@@ -26,6 +26,7 @@ import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipSession;
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Message;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
@@ -51,6 +52,7 @@ public class SipPhone extends SipPhoneBase {
     private static final String LOG_TAG = "SipPhone";
     private static final boolean DBG = true;
     private static final boolean VDBG = false; // STOPSHIP if true
+    private static final boolean DBG_BUILD = !Build.TYPE.equals("user");
     private static final int TIMEOUT_MAKE_CALL = 15; // in seconds
     private static final int TIMEOUT_ANSWER_CALL = 8; // in seconds
     private static final int TIMEOUT_HOLD_CALL = 15; // in seconds
@@ -70,7 +72,8 @@ public class SipPhone extends SipPhoneBase {
     SipPhone (Context context, PhoneNotifier notifier, SipProfile profile) {
         super("SIP:" + profile.getUriString(), context, notifier);
 
-        if (DBG) log("new SipPhone: " + hidePii(profile.getUriString()));
+        // Refrain from logging user personal information like phone number in user build.
+        if (DBG && DBG_BUILD) log("new SipPhone: " + hidePii(profile.getUriString()));
         mRingingCall = new SipCall();
         mForegroundCall = new SipCall();
         mBackgroundCall = new SipCall();
@@ -120,8 +123,11 @@ public class SipPhone extends SipPhoneBase {
 
             try {
                 SipAudioCall sipAudioCall = (SipAudioCall) incomingCall;
-                if (DBG) log("takeIncomingCall: taking call from: "
+                // Refrain from logging user personal information like phone number in user build.
+                if (DBG && DBG_BUILD) {
+                    log("takeIncomingCall: taking call from: "
                         + sipAudioCall.getPeerProfile().getUriString());
+                }
                 String localUri = sipAudioCall.getLocalProfile().getUriString();
                 if (localUri.equals(mProfile.getUriString())) {
                     boolean makeCallWait = mForegroundCall.getState().isAlive();
@@ -764,10 +770,20 @@ public class SipPhone extends SipPhoneBase {
                     String sessionState = (sipAudioCall == null)
                             ? ""
                             : (sipAudioCall.getState() + ", ");
-                    if (SCN_DBG) log("[SipAudioCallAdapter] onCallEnded: "
-                            + hidePii(mPeer.getUriString()) + ": " + sessionState
-                            + "cause: " + getDisconnectCause() + ", on phone "
-                            + getPhone());
+                    if (SCN_DBG) {
+                        // Refrain from logging user personal information
+                        // like phone number in user build.
+                        if (DBG_BUILD) {
+                            log("[SipAudioCallAdapter] onCallEnded: "
+                                    + hidePii(mPeer.getUriString()) + ": " + sessionState
+                                    + "cause: " + getDisconnectCause() + ", on phone "
+                                    + getPhone());
+                        } else {
+                            log("[SipAudioCallAdapter] onCallEnded: "
+                                    + sessionState + "cause: " + getDisconnectCause()
+                                    + ", on phone " + getPhone());
+                        }
+                    }
                     if (sipAudioCall != null) {
                         sipAudioCall.setListener(null);
                         sipAudioCall.close();
@@ -813,9 +829,16 @@ public class SipPhone extends SipPhoneBase {
                         setState(newState);
                     }
                     mOwner.onConnectionStateChanged(SipConnection.this);
-                    if (SCN_DBG) log("onChanged: "
-                            + mPeer.getUriString() + ": " + mState
-                            + " on phone " + getPhone());
+                    if (SCN_DBG) {
+                        // Refrain from logging user personal information
+                        // like phone number in user build.
+                        if (DBG_BUILD) {
+                            log("onChanged: " + mPeer.getUriString() + ": " + mState
+                                    + " on phone " + getPhone());
+                        } else {
+                            log("onChanged: " + mState + " on phone " + getPhone());
+                        }
+                    }
                 }
             }
 
@@ -950,9 +973,18 @@ public class SipPhone extends SipPhoneBase {
         @Override
         public void hangup() throws CallStateException {
             synchronized (SipPhone.class) {
-                if (SCN_DBG) log("hangup: conn=" + mPeer.getUriString()
-                        + ": " + mState + ": on phone "
-                        + getPhone().getPhoneName());
+                if (SCN_DBG) {
+                    // Refrain from logging user personal information
+                    // like phone number in user build.
+                    if (DBG_BUILD) {
+                        log("hangup: conn=" + mPeer.getUriString()
+                                + ": " + mState + ": on phone "
+                                + getPhone().getPhoneName());
+                    } else {
+                        log("hangup: " + mState + ": on phone "
+                                + getPhone().getPhoneName());
+                    }
+                }
                 if (!mState.isAlive()) return;
                 try {
                     SipAudioCall sipAudioCall = mSipAudioCall;

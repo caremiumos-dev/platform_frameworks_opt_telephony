@@ -19,6 +19,7 @@ package com.android.internal.telephony.imsphone;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -57,6 +58,7 @@ public class ImsPhoneConnection extends Connection implements
 
     private static final String LOG_TAG = "ImsPhoneConnection";
     private static final boolean DBG = true;
+    private static final boolean DBG_BUILD = !Build.TYPE.equals("user");
 
     //***** Instance Variables
 
@@ -758,8 +760,13 @@ public class ImsPhoneConnection extends Connection implements
             int namep = ImsCallProfile.OIRToPresentation(
                     callProfile.getCallExtraInt(ImsCallProfile.EXTRA_CNAP));
             if (Phone.DEBUG_PHONE) {
-                Rlog.d(LOG_TAG, "address = " + Rlog.pii(LOG_TAG, address) + " name = " + name +
-                        " nump = " + nump + " namep = " + namep);
+                // Refrain from logging user personal information like phone number in user build.
+                if (DBG_BUILD) {
+                    Rlog.d(LOG_TAG, "address = " + Rlog.pii(LOG_TAG, address) + " name = " + name
+                            + " nump = " + nump + " namep = " + namep);
+                } else {
+                    Rlog.d(LOG_TAG, "nump = " + nump + " namep = " + namep);
+                }
             }
             if(equalsHandlesNulls(mAddress, address)) {
                 mAddress = address;
