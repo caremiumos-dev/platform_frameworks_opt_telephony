@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ddbcf69_62e0700c",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-12-06T03:08:44Z",
+      "side": 1,
+      "message": "just track the state and then you can make one of these to send out and publish the result.  The SimActivatationState can be final (like a string). and you don\u0027t have to make atomic or worry about making copies.",
+      "range": {
+        "startLine": 52,
+        "startChar": 18,
+        "endLine": 52,
+        "endChar": 36
+      },
+      "revId": "a44b8927db6ddfc22de6e8769d4973f1dbd0cc4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ddbcf69_a5a9c25a",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-12-06T03:08:44Z",
+      "side": 1,
+      "message": "already inside setDataActivationState?",
+      "range": {
+        "startLine": 73,
+        "startChar": 20,
+        "endLine": 73,
+        "endChar": 48
+      },
+      "revId": "a44b8927db6ddfc22de6e8769d4973f1dbd0cc4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ddbcf69_45e1feb5",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2016-12-06T03:08:44Z",
+      "side": 1,
+      "message": "if only done in one place (setDataActivationState) don\u0027t bother with util functions",
+      "range": {
+        "startLine": 81,
+        "startChar": 17,
+        "endLine": 81,
+        "endChar": 45
+      },
+      "revId": "a44b8927db6ddfc22de6e8769d4973f1dbd0cc4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
