@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d14e7d4_00165133",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/ApnSettingTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2016-12-08T22:32:40Z",
+      "side": 1,
+      "message": "This can only check the existing fields. We want to catch a case that if one day someone add a new field but forget to add it into equals(). Maybe you can use reflection\u0027s getDeclaredFields() to populate all \u0027final\u0027 fields.",
+      "range": {
+        "startLine": 522,
+        "startChar": 0,
+        "endLine": 547,
+        "endChar": 65
+      },
+      "revId": "2243b8610662a4001ec61bb253bf3cf315d1fd05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
