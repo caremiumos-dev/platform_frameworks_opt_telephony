@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8db4bb48_71ed38d3",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2016-12-08T12:10:52Z",
+      "side": 1,
+      "message": "These unrelated changes were triggered by the checkstyle fail:\n\nCOMMIT a1ba6a4d7b27] Map IMEI_NOT_ACCEPTED fail cause\n[FAILED] checkstyle_hook\n    Running Checkstyle on a1ba6a4d7b2731bcd56994feafb67a1de85b069f commit\n    ERRORS:\n      [platform/frameworks/opt/telephony] src/java/com/android/internal/telephony/GsmCdmaConnection.java:30: Wrong order for android.telephony.PhoneNumberUtils import. Use Ctrl+Shift+O (Eclipse) or Ctrl+Alt+O (Intellij) to sort imports\n      [platform/frameworks/opt/telephony] src/java/com/android/internal/telephony/GsmCdmaConnection.java:37:8: Unused import: com.android.internal.telephony.uicc.UiccController. Use Ctrl+Shift+O (Eclipse) or Ctrl+Alt+O (Intellij) to sort imports\n      [platform/frameworks/opt/telephony] src/java/com/android/internal/telephony/GsmCdmaConnection.java:38: Wrong order for com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState import. Use Ctrl+Shift+O (Eclipse) or Ctrl+Alt+O (Intellij) to sort imports",
+      "revId": "1d7bfb91683b3df05b4d437d79a82fec4ce04f79",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
