@@ -16,6 +16,10 @@
 
 package com.android.internal.telephony;
 
+import static android.telephony.TelephonyManager.NETWORK_TYPE_UNKNOWN;
+
+import static com.android.internal.telephony.RILConstants.*;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -58,6 +62,7 @@ import com.android.internal.telephony.TelephonyProto.TelephonySettings;
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
 import com.android.internal.telephony.cdma.CdmaInformationRecords;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
+import com.android.internal.telephony.dataconnection.ApnSetting;
 import com.android.internal.telephony.dataconnection.DataCallResponse;
 import com.android.internal.telephony.dataconnection.DataProfile;
 import com.android.internal.telephony.dataconnection.DcFailCause;
@@ -84,9 +89,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static android.telephony.TelephonyManager.NETWORK_TYPE_UNKNOWN;
-import static com.android.internal.telephony.RILConstants.*;
 
 /**
  * {@hide}
@@ -1644,31 +1646,39 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void
-    setupDataCall(int radioTechnology, int profile, String apn,
-            String user, String password, int authType, String protocol,
-            Message result) {
+    public void setupDataCall(int radioTechnology, int profile, int authType, ApnSetting apnSetting,
+                              boolean allowRoaming, Message result) {
         RILRequest rr
                 = RILRequest.obtain(RIL_REQUEST_SETUP_DATA_CALL, result);
 
-        rr.mParcel.writeInt(7);
+        rr.mParcel.writeInt(15);
 
         rr.mParcel.writeString(Integer.toString(radioTechnology + 2));
         rr.mParcel.writeString(Integer.toString(profile));
-        rr.mParcel.writeString(apn);
-        rr.mParcel.writeString(user);
-        rr.mParcel.writeString(password);
+        rr.mParcel.writeString(apnSetting.apn);
+        rr.mParcel.writeString(apnSetting.user);
+        rr.mParcel.writeString(apnSetting.password);
         rr.mParcel.writeString(Integer.toString(authType));
-        rr.mParcel.writeString(protocol);
+        rr.mParcel.writeString(apnSetting.protocol);
 
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> "
-                + requestToString(rr.mRequest) + " " + radioTechnology + " "
-                + profile + " " + apn + " " + user + " "
-                + password + " " + authType + " " + protocol);
+        // the followings are added since v15.
+        rr.mParcel.writeString(Integer.toString(apnSetting.typesBitmask));
+        rr.mParcel.writeString(apnSetting.roamingProtocol);
+        rr.mParcel.writeString(Integer.toString(apnSetting.bearerBitmask));
+        rr.mParcel.writeString(apnSetting.modemCognitive ? "1" : "0");
+        rr.mParcel.writeString(Integer.toString(apnSetting.mtu));
+        rr.mParcel.writeString(apnSetting.mvnoType);
+        rr.mParcel.writeString(apnSetting.mvnoMatchData);
+        rr.mParcel.writeString(allowRoaming ? "1" : "0");
+
+        if (RILJ_LOGD) {
+            riljLog(rr.serialString() + "> " + requestToString(rr.mRequest) + "," + "profile="
+                    + profile + ",authType=" + authType + ",allowRoaming=" + allowRoaming + ","
+                    + apnSetting);
+        }
 
         mMetrics.writeRilSetupDataCall(mInstanceId, rr.mSerial,
-                radioTechnology, profile, apn, authType, protocol);
-
+                radioTechnology, profile, apnSetting.apn, authType, apnSetting.protocol);
         send(rr);
     }
 
@@ -4893,25 +4903,41 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         send(rr);
     }
 
-    public void setInitialAttachApn(String apn, String protocol, int authType, String username,
-            String password, Message result) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setInitialAttachApn(ApnSetting apnSetting, Message result) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_SET_INITIAL_ATTACH_APN, result);
 
         if (RILJ_LOGD) riljLog("Set RIL_REQUEST_SET_INITIAL_ATTACH_APN");
 
-        rr.mParcel.writeString(apn);
-        rr.mParcel.writeString(protocol);
-        rr.mParcel.writeInt(authType);
-        rr.mParcel.writeString(username);
-        rr.mParcel.writeString(password);
+        rr.mParcel.writeString(apnSetting.apn);
+        rr.mParcel.writeString(apnSetting.protocol);
+        rr.mParcel.writeInt(apnSetting.authType);
+        rr.mParcel.writeString(apnSetting.user);
+        rr.mParcel.writeString(apnSetting.password);
 
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                + ", apn:" + apn + ", protocol:" + protocol + ", authType:" + authType
-                + ", username:" + username + ", password:" + password);
+        // The followings are added since v15.
+        rr.mParcel.writeInt(apnSetting.typesBitmask);
+        rr.mParcel.writeString(apnSetting.roamingProtocol);
+        rr.mParcel.writeInt(apnSetting.bearerBitmask);
+        rr.mParcel.writeInt(apnSetting.modemCognitive ? 1 : 0);
+        rr.mParcel.writeInt(apnSetting.mtu);
+        rr.mParcel.writeString(apnSetting.mvnoType);
+        rr.mParcel.writeString(apnSetting.mvnoMatchData);
+
+        if (RILJ_LOGD) {
+            riljLog(rr.serialString() + "> " + requestToString(rr.mRequest) + apnSetting);
+        }
 
         send(rr);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setDataProfile(DataProfile[] dps, Message result) {
         if (RILJ_LOGD) riljLog("Set RIL_REQUEST_SET_DATA_PROFILE");
 
@@ -5149,9 +5175,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         send(rr);
     }
 
-    /**
-    * @hide
-    */
+    @Override
     public void getModemActivityInfo(Message response) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_GET_ACTIVITY_INFO, response);
         if (RILJ_LOGD) {

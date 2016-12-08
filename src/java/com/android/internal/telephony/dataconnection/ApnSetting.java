@@ -24,6 +24,7 @@ import android.telephony.ServiceState;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.PhoneConstants.ApnTypeBitmask;
 import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.uicc.IccRecords;
 
@@ -57,6 +58,7 @@ public class ApnSetting {
     public final String password;
     public final int authType;
     public final String[] types;
+    public final int typesBitmask;
     public final int id;
     public final String numeric;
     public final String protocol;
@@ -132,9 +134,12 @@ public class ApnSetting {
         this.password = password;
         this.authType = authType;
         this.types = new String[types.length];
+        int apnBitmask = 0;
         for (int i = 0; i < types.length; i++) {
             this.types[i] = types[i].toLowerCase(Locale.ROOT);
+            apnBitmask |= getApnBitmask(this.types[i]);
         }
+        this.typesBitmask = apnBitmask;
         this.protocol = protocol;
         this.roamingProtocol = roamingProtocol;
         this.carrierEnabled = carrierEnabled;
@@ -503,5 +508,22 @@ public class ApnSetting {
                 mtu == other.mtu &&
                 mvnoType.equals(other.mvnoType) &&
                 mvnoMatchData.equals(other.mvnoMatchData);
+    }
+
+    private static int getApnBitmask(String apn) {
+        switch (apn) {
+            case PhoneConstants.APN_TYPE_DEFAULT: return ApnTypeBitmask.APN_TYPE_DEFAULT_BIT;
+            case PhoneConstants.APN_TYPE_MMS: return ApnTypeBitmask.APN_TYPE_MMS_BIT;
+            case PhoneConstants.APN_TYPE_SUPL: return ApnTypeBitmask.APN_TYPE_SUPL_BIT;
+            case PhoneConstants.APN_TYPE_DUN: return ApnTypeBitmask.APN_TYPE_DUN_BIT;
+            case PhoneConstants.APN_TYPE_HIPRI: return ApnTypeBitmask.APN_TYPE_HIPRI_BIT;
+            case PhoneConstants.APN_TYPE_FOTA: return ApnTypeBitmask.APN_TYPE_FOTA_BIT;
+            case PhoneConstants.APN_TYPE_IMS: return ApnTypeBitmask.APN_TYPE_IMS_BIT;
+            case PhoneConstants.APN_TYPE_CBS: return ApnTypeBitmask.APN_TYPE_CBS_BIT;
+            case PhoneConstants.APN_TYPE_IA: return ApnTypeBitmask.APN_TYPE_IA_BIT;
+            case PhoneConstants.APN_TYPE_EMERGENCY: return ApnTypeBitmask.APN_TYPE_EMERGENCY_BIT;
+            case PhoneConstants.APN_TYPE_ALL: return ApnTypeBitmask.APN_TYPE_ALL_BIT;
+            default: return ApnTypeBitmask.APN_TYPE_UNKNOWN_BIT;
+        }
     }
 }

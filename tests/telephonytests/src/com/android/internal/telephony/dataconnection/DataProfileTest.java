@@ -81,7 +81,7 @@ public class DataProfileTest extends TestCase {
 
     @SmallTest
     public void testCreateFromApnSetting() throws Exception {
-        DataProfile dp = new DataProfile(mApn1, false);
+        DataProfile dp = new DataProfile(mApn1);
         assertEquals(mApn1.profileId, dp.profileId);
         assertEquals(mApn1.apn, dp.apn);
         assertEquals(mApn1.protocol, dp.protocol);
@@ -99,8 +99,8 @@ public class DataProfileTest extends TestCase {
     public void testParcel() throws Exception {
         Parcel p = Parcel.obtain();
 
-        DataProfile[] dps = new DataProfile[]{new DataProfile(mApn1, false),
-                new DataProfile(mApn1, false)};
+        DataProfile[] dps = new DataProfile[]{new DataProfile(mApn1),
+                new DataProfile(mApn1)};
 
         DataProfile.toParcel(p, dps);
         p.setDataPosition(0);
@@ -118,19 +118,22 @@ public class DataProfileTest extends TestCase {
             assertEquals("i = " + i, mApn1.maxConns, p.readInt());
             assertEquals("i = " + i, mApn1.waitTime, p.readInt());
             assertEquals("i = " + i, mApn1.carrierEnabled?1:0, p.readInt());
+            assertEquals("i = " + i, mApn1.typesBitmask, p.readInt());
+            assertEquals("i = " + i, mApn1.roamingProtocol, p.readString());
+            assertEquals("i = " + i, mApn1.bearerBitmask, p.readInt());
+            assertEquals("i = " + i, mApn1.mtu, p.readInt());
+            assertEquals("i = " + i, mApn1.mvnoType, p.readString());
+            assertEquals("i = " + i, mApn1.mvnoMatchData, p.readString());
         }
     }
 
     @SmallTest
     public void testEquals() throws Exception {
-        DataProfile dp1 = new DataProfile(mApn1, false);
-        DataProfile dp2 = new DataProfile(mApn1, false);
+        DataProfile dp1 = new DataProfile(mApn1);
+        DataProfile dp2 = new DataProfile(mApn1);
         assertEquals(dp1, dp2);
 
-        dp2 = new DataProfile(mApn1, true);
-        assertFalse(dp1.equals(dp2));
-
-        dp2 = new DataProfile(mApn2, false);
+        dp2 = new DataProfile(mApn2);
         assertFalse(dp1.equals(dp2));
     }
 }
