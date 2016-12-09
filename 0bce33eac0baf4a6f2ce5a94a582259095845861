@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3cf3c1_3a77c079",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/ApnSettingTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2016-12-09T19:38:46Z",
+      "side": 1,
+      "message": "If a boolean field in ApnSetting is initialized as false, then you won\u0027t be able to catch it. Also Java\u0027s has default value \u0027false\u0027 for the class\u0027s boolean field.\n\nMaybe for integer you just add 1, and for boolean you just toggle it.",
+      "range": {
+        "startLine": 507,
+        "startChar": 32,
+        "endLine": 507,
+        "endChar": 47
+      },
+      "revId": "0bce33eac0baf4a6f2ce5a94a582259095845861",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
