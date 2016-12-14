@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7fdbe6_5556a7ea",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/ApnSettingTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2016-12-14T22:25:47Z",
+      "side": 1,
+      "message": "using \"dummy1\", \"dummy2\" is safer.",
+      "range": {
+        "startLine": 509,
+        "startChar": 60,
+        "endLine": 509,
+        "endChar": 76
+      },
+      "revId": "f9dd30c89f32186a07a40817b783a29c2f6dbb66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
