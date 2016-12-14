@@ -22,6 +22,30 @@
       "revId": "f9dd30c89f32186a07a40817b783a29c2f6dbb66",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dadd8b5f_4b512524",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/ApnSettingTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2016-12-14T23:01:33Z",
+      "side": 1,
+      "message": "Hi Jack, thanks for your comment. These values are actually used for \"types\" in ApnSetting object which is used as test base and those values are compared to dummyStringArr defined in line 507. Therefore, I think it is safe if they are different each other. Please kindly let me know if I miss your point. \nIf there is no problem, could you put +2 and submit?",
+      "parentUuid": "5a7fdbe6_5556a7ea",
+      "range": {
+        "startLine": 509,
+        "startChar": 60,
+        "endLine": 509,
+        "endChar": 76
+      },
+      "revId": "f9dd30c89f32186a07a40817b783a29c2f6dbb66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
