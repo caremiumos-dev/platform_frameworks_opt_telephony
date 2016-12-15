@@ -46,6 +46,30 @@
       "revId": "f9dd30c89f32186a07a40817b783a29c2f6dbb66",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7fdbe6_a83f85c7",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/ApnSettingTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2016-12-15T08:01:53Z",
+      "side": 1,
+      "message": "Yes you are right",
+      "parentUuid": "dadd8b5f_4b512524",
+      "range": {
+        "startLine": 509,
+        "startChar": 60,
+        "endLine": 509,
+        "endChar": 76
+      },
+      "revId": "f9dd30c89f32186a07a40817b783a29c2f6dbb66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
