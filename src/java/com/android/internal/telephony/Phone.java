@@ -2944,6 +2944,13 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public void dispose() {
     }
 
+    private void sendImsPhoneCreatedBroadcast() {
+        Intent intent = new Intent(ImsManager.ACTION_IMS_PHONE_CREATED);
+        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+        intent.putExtra(ImsManager.EXTRA_PHONE_ID, getImsPhone().getPhoneId());
+        mContext.sendBroadcast(new Intent(intent));
+    }
+
     private void updateImsPhone() {
         Rlog.d(LOG_TAG, "updateImsPhone"
                 + " mImsServiceReady=" + mImsServiceReady);
@@ -2953,6 +2960,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             CallManager.getInstance().registerPhone(mImsPhone);
             mImsPhone.registerForSilentRedial(
                     this, EVENT_INITIATE_SILENT_REDIAL, null);
+            sendImsPhoneCreatedBroadcast();
         } else if (!mImsServiceReady && (mImsPhone != null)) {
             CallManager.getInstance().unregisterPhone(mImsPhone);
             mImsPhone.unregisterForSilentRedial(this);
