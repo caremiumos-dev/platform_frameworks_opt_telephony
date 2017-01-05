@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97a04ea7_0bb95e11",
+        "filename": "src/java/com/android/internal/telephony/cat/AppInterface.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-01-05T23:49:06Z",
+      "side": 1,
+      "message": "maybe this should be configurable with resource overlay?",
+      "range": {
+        "startLine": 55,
+        "startChar": 45,
+        "endLine": 55,
+        "endChar": 79
+      },
+      "revId": "e28dde0b00438f22178aa56223f106086f5d11b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
