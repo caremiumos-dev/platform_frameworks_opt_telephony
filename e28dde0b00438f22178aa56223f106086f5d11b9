@@ -70,6 +70,54 @@
       "revId": "e28dde0b00438f22178aa56223f106086f5d11b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_c7e3bebf",
+        "filename": "src/java/com/android/internal/telephony/cat/AppInterface.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-07T01:02:12Z",
+      "side": 1,
+      "message": "cannot define private variable inside a public interface",
+      "parentUuid": "97a04ea7_3cd0215a",
+      "range": {
+        "startLine": 55,
+        "startChar": 45,
+        "endLine": 55,
+        "endChar": 79
+      },
+      "revId": "e28dde0b00438f22178aa56223f106086f5d11b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_93e2e014",
+        "filename": "src/java/com/android/internal/telephony/cat/AppInterface.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-07T01:02:12Z",
+      "side": 1,
+      "message": "there is really no other apps exist today which are able to process STK command from telephony and STK app itself is working cross carriers, not sure if we really need an overlay, or we could add it later if there is new requirement? but I am okay to follow the same format with other apps like CellbroadcastReceivers.",
+      "parentUuid": "97a04ea7_0bb95e11",
+      "range": {
+        "startLine": 55,
+        "startChar": 45,
+        "endLine": 55,
+        "endChar": 79
+      },
+      "revId": "e28dde0b00438f22178aa56223f106086f5d11b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
