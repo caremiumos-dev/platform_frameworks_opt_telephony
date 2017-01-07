@@ -2,6 +2,282 @@
   "comments": [
     {
       "key": {
+        "uuid": "97a04ea7_39074e3e",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "should spell it out to match CarrierSignalAgent with \"(CAA)\" trailing.  Also can just have the link",
+      "range": {
+        "startLine": 33,
+        "startChar": 3,
+        "endLine": 33,
+        "endChar": 6
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_59141265",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "CarrierActionAgent?",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 26
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_39f02e1d",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "where these supposed to be public so they could be inspected?",
+      "range": {
+        "startLine": 60,
+        "startChar": 20,
+        "endLine": 60,
+        "endChar": 53
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_7911d672",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "we need to avoid large scale locks.",
+      "range": {
+        "startLine": 63,
+        "startChar": 24,
+        "endLine": 63,
+        "endChar": 25
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_99ff5af2",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "when you need a lock you need to think about what needs protection.  Make the lock as small scale as possible.",
+      "range": {
+        "startLine": 73,
+        "startChar": 22,
+        "endLine": 73,
+        "endChar": 27
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_d9f9e20c",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "you never do any \"check, do stuff, set\" patterned operations with this.\n\nYou could make this an AtomicBoolean, but is that even need protection?",
+      "range": {
+        "startLine": 76,
+        "startChar": 20,
+        "endLine": 76,
+        "endChar": 53
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_99183a8f",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "these could need protection, are these local logs synchronized?",
+      "range": {
+        "startLine": 78,
+        "startChar": 20,
+        "endLine": 78,
+        "endChar": 41
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_f9fea6f2",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "this is already synchronized",
+      "range": {
+        "startLine": 80,
+        "startChar": 49,
+        "endLine": 80,
+        "endChar": 66
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_59edf244",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 84,
+        "startChar": 20,
+        "endLine": 84,
+        "endChar": 48
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_79eab62e",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 87,
+        "startChar": 20,
+        "endLine": 87,
+        "endChar": 43
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_b91dfe7e",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "we may not need to do this stuff with handler and all if we\u0027re just going to synchronize anyway.",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 78
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_f92786c8",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T22:23:30Z",
+      "side": 1,
+      "message": "throw exception instead of silent fail",
+      "range": {
+        "startLine": 144,
+        "startChar": 30,
+        "endLine": 144,
+        "endChar": 36
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_c25e4c92",
         "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
         "patchSetId": 3
