@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97a04ea7_c25e4c92",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "if DBG?",
+      "range": {
+        "startLine": 81,
+        "startChar": 12,
+        "endLine": 81,
+        "endChar": 15
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_c272cc02",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "this is probably not worth doing - instead trm the resulting splitStr components",
+      "range": {
+        "startLine": 137,
+        "startChar": 47,
+        "endLine": 137,
+        "endChar": 51
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_e24990ab",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "does this trim for you or should you trim splitstr[0] before calling?",
+      "range": {
+        "startLine": 140,
+        "startChar": 33,
+        "endLine": 140,
+        "endChar": 52
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_a26dc81e",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "continue?  Next config may be ok..",
+      "range": {
+        "startLine": 143,
+        "startChar": 28,
+        "endLine": 143,
+        "endChar": 33
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_c22d6cc5",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "also, this should just be List\u003cComponentName\u003e.   Unless you need val to be known as ArrayList it\u0027s best to promote to the highest needed abstraction",
+      "range": {
+        "startLine": 147,
+        "startChar": 28,
+        "endLine": 147,
+        "endChar": 37
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_229b9800",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "trim s first and also to-lower it just the once.",
+      "range": {
+        "startLine": 147,
+        "startChar": 28,
+        "endLine": 147,
+        "endChar": 37
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_623e80eb",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "I think you can do \"new ArrayList\u003c\u003e\" and the ComponentName is implied in the val definition",
+      "range": {
+        "startLine": 148,
+        "startChar": 61,
+        "endLine": 148,
+        "endChar": 89
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_420a5c45",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "isn\u0027t this wasteful?\n\nCouldn\u0027t you just do\nList\u003cComponentName\u003e componentList \u003d cachedConfigs.get(s);\nif (componentList \u003d\u003d null) {\n    componentList \u003d new ArrayList\u003c\u003e();\n    cachedConfigs.put(s, componentList);\n}\ncomponentList.add(componentName);\nSo you just do one lookup and if needed one insert of the list?",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 68
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_22ff18f1",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "receiverList?",
+      "range": {
+        "startLine": 227,
+        "startChar": 33,
+        "endLine": 227,
+        "endChar": 45
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_a2330807",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "uh, this isn\u0027t sufficient.  This underlying lists may be getting modified.  Need to hold the sync until broadcast is done or make a dupe of the list.",
+      "range": {
+        "startLine": 229,
+        "startChar": 8,
+        "endLine": 229,
+        "endChar": 20
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_2228f897",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "make a static final boolean WAKE/NO_WAKE pair so it\u0027s clear reading the code what\u0027s intended:\nbroadcast(intent, receiverList, NO_WAKE), etc",
+      "range": {
+        "startLine": 233,
+        "startChar": 44,
+        "endLine": 233,
+        "endChar": 49
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_c291ec33",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "final on both of these?",
+      "range": {
+        "startLine": 232,
+        "startChar": 4,
+        "endLine": 232,
+        "endChar": 11
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_a79a3a55",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-07T02:09:16Z",
+      "side": 1,
+      "message": "put an empty line between normal imports and statics.",
+      "range": {
+        "startLine": 90,
+        "startChar": 7,
+        "endLine": 90,
+        "endChar": 13
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
