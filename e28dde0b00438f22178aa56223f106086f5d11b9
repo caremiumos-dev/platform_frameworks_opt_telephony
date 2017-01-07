@@ -46,6 +46,30 @@
       "revId": "e28dde0b00438f22178aa56223f106086f5d11b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_3cd0215a",
+        "filename": "src/java/com/android/internal/telephony/cat/AppInterface.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-01-07T00:24:59Z",
+      "side": 1,
+      "message": "I think either is fine. If there is no customization need, you probably don\u0027t need a resource. You can define a private static final String for it.\n\np.s. using ComponentName.unflattenFromString so you only define one string.",
+      "parentUuid": "97a04ea7_33ebf4f5",
+      "range": {
+        "startLine": 55,
+        "startChar": 45,
+        "endLine": 55,
+        "endChar": 79
+      },
+      "revId": "e28dde0b00438f22178aa56223f106086f5d11b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
