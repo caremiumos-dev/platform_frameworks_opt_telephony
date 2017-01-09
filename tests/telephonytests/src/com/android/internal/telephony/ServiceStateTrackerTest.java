@@ -63,6 +63,7 @@ import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -773,6 +774,51 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
         verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
         assertEquals(EVENT_PS_RESTRICT_DISABLED, messageArgumentCaptor.getValue().what);
+    }
+
+    @Test
+    @MediumTest
+    public void testOnRestrictedStateChanged() throws Exception {
+        ServiceStateTracker spySst = spy(sst);
+        doReturn(true).when(mPhone).isPhoneTypeGsm();
+        doReturn(IccCardApplicationStatus.AppState.APPSTATE_READY).when(
+                mUiccCardApplication3gpp).getState();
+        spySst.updatePhoneType();
+
+        int notifyCount = 0;
+        // cs not restricted -> cs emergency/normal restricted
+        internalCheckForRestrictedStateChange(spySst, ++notifyCount,
+                RILConstants.RIL_RESTRICTED_STATE_CS_ALL, ServiceStateTracker.CS_ENABLED);
+
+        // cs emergency/normal restricted -> cs normal restricted
+        internalCheckForRestrictedStateChange(spySst, ++notifyCount,
+                RILConstants.RIL_RESTRICTED_STATE_CS_NORMAL, ServiceStateTracker.CS_NORMAL_ENABLED);
+
+        // cs normal restricted -> cs emergency restricted
+        internalCheckForRestrictedStateChange(spySst, ++notifyCount,
+                RILConstants.RIL_RESTRICTED_STATE_CS_EMERGENCY,
+                ServiceStateTracker.CS_EMERGENCY_ENABLED);
+
+        // cs emergency restricted -> cs not restricted
+        internalCheckForRestrictedStateChange(spySst, ++notifyCount,
+                RILConstants.RIL_RESTRICTED_STATE_NONE, ServiceStateTracker.CS_DISABLED);
+
+        // ps not restricted -> ps restricted
+        internalCheckForRestrictedStateChange(spySst, ++notifyCount,
+                RILConstants.RIL_RESTRICTED_STATE_PS_ALL, ServiceStateTracker.PS_ENABLED);
+
+        // ps restricted -> ps not restricted
+        internalCheckForRestrictedStateChange(spySst, ++notifyCount,
+                RILConstants.RIL_RESTRICTED_STATE_NONE, ServiceStateTracker.PS_DISABLED);
+    }
+
+    private void internalCheckForRestrictedStateChange(ServiceStateTracker serviceStateTracker,
+                int times, int restrictedState, int notifyType) {
+        mSimulatedCommands.triggerRestrictedStateChanged(restrictedState);
+        waitForMs(200);
+        ArgumentCaptor<Integer> intArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        verify(serviceStateTracker, times(times)).setNotification(intArgumentCaptor.capture());
+        assertEquals(intArgumentCaptor.getValue().intValue(), notifyType);
     }
 
     @Test
