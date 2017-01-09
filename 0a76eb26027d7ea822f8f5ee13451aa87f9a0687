@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_e52c3560",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-09T17:49:41Z",
+      "side": 1,
+      "message": "philosophically I really don\u0027t like simple getters, but it does give greater flexibility in adding logic in the future.  For example if you want different answers for different callers.  It may also be more testible/mockable to have a getter.  You\u0027re last point is a good one - if the setting needs to be controlled you can\u0027t make it public.",
+      "parentUuid": "97a04ea7_6f3664a2",
+      "range": {
+        "startLine": 60,
+        "startChar": 20,
+        "endLine": 60,
+        "endChar": 53
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_7911d672",
         "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
         "patchSetId": 3
