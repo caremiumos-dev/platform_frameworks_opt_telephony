@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_f9f6a6db",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_39074e3e",
+      "range": {
+        "startLine": 33,
+        "startChar": 3,
+        "endLine": 33,
+        "endChar": 6
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_59141265",
         "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_19eb6af5",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_59141265",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 26
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_39f02e1d",
         "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2017-01-07T22:23:30Z",
       "side": 1,
       "message": "where these supposed to be public so they could be inspected?",
+      "range": {
+        "startLine": 60,
+        "startChar": 20,
+        "endLine": 60,
+        "endChar": 53
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_6f3664a2",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "this variable is intended to be internal for tracking the latest action value, only async inspection is supported now: registerCarrierAction(notifynow). Maybe add a getter function instead of make it public? since all value update should be done by CARRIER_ACTION_SET_METERED_APNS_ENABLED",
+      "parentUuid": "97a04ea7_39f02e1d",
       "range": {
         "startLine": 60,
         "startChar": 20,
@@ -140,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_b9cb3e62",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "right, no such pattern will remove unnecessary synchronization",
+      "parentUuid": "97a04ea7_d9f9e20c",
+      "range": {
+        "startLine": 76,
+        "startChar": 20,
+        "endLine": 76,
+        "endChar": 53
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_99183a8f",
         "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
         "patchSetId": 3
@@ -151,6 +247,30 @@
       "writtenOn": "2017-01-07T22:23:30Z",
       "side": 1,
       "message": "these could need protection, are these local logs synchronized?",
+      "range": {
+        "startLine": 78,
+        "startChar": 20,
+        "endLine": 78,
+        "endChar": 41
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_0f8dd853",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "locallog is synchronized, besides all operations on it is on handler, lock is unnecessary as well",
+      "parentUuid": "97a04ea7_99183a8f",
       "range": {
         "startLine": 78,
         "startChar": 20,
@@ -186,6 +306,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_39058ec4",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_f9fea6f2",
+      "range": {
+        "startLine": 80,
+        "startChar": 49,
+        "endLine": 80,
+        "endChar": 66
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_59edf244",
         "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
         "patchSetId": 3
@@ -197,6 +341,30 @@
       "writtenOn": "2017-01-07T22:23:30Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 84,
+        "startChar": 20,
+        "endLine": 84,
+        "endChar": 48
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_5912520a",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_59edf244",
       "range": {
         "startLine": 84,
         "startChar": 20,
@@ -232,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_790f16e2",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_79eab62e",
+      "range": {
+        "startLine": 87,
+        "startChar": 20,
+        "endLine": 87,
+        "endChar": 43
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_b91dfe7e",
         "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
         "patchSetId": 3
@@ -255,6 +447,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_1908cada",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_b91dfe7e",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 78
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_f92786c8",
         "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
         "patchSetId": 3
@@ -266,6 +482,30 @@
       "writtenOn": "2017-01-07T22:23:30Z",
       "side": 1,
       "message": "throw exception instead of silent fail",
+      "range": {
+        "startLine": 144,
+        "startChar": 30,
+        "endLine": 144,
+        "endChar": 36
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_f90306c0",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_f92786c8",
       "range": {
         "startLine": 144,
         "startChar": 30,
@@ -324,6 +564,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_2f4ffcdc",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "since the delimiter itself(\"\\\\s*:\\\\s*\") has taken care of the trailing \u0026 leading whitespace, so I only need to trim it once at the beginning.",
+      "parentUuid": "97a04ea7_c272cc02",
+      "range": {
+        "startLine": 137,
+        "startChar": 47,
+        "endLine": 137,
+        "endChar": 51
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_e24990ab",
         "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
         "patchSetId": 3
@@ -347,6 +611,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_6c32f24d",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_e24990ab",
+      "range": {
+        "startLine": 140,
+        "startChar": 33,
+        "endLine": 140,
+        "endChar": 52
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_a26dc81e",
         "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
         "patchSetId": 3
@@ -358,6 +646,30 @@
       "writtenOn": "2017-01-07T02:09:16Z",
       "side": 1,
       "message": "continue?  Next config may be ok..",
+      "range": {
+        "startLine": 143,
+        "startChar": 28,
+        "endLine": 143,
+        "endChar": 33
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_ccaafe21",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_a26dc81e",
       "range": {
         "startLine": 143,
         "startChar": 28,
@@ -416,6 +728,54 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_6cb592ab",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_c22d6cc5",
+      "range": {
+        "startLine": 147,
+        "startChar": 28,
+        "endLine": 147,
+        "endChar": 37
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_4f5c4094",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_229b9800",
+      "range": {
+        "startLine": 147,
+        "startChar": 28,
+        "endLine": 147,
+        "endChar": 37
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_623e80eb",
         "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
         "patchSetId": 3
@@ -427,6 +787,30 @@
       "writtenOn": "2017-01-07T02:09:16Z",
       "side": 1,
       "message": "I think you can do \"new ArrayList\u003c\u003e\" and the ComponentName is implied in the val definition",
+      "range": {
+        "startLine": 148,
+        "startChar": 61,
+        "endLine": 148,
+        "endChar": 89
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_2cb1ca91",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_623e80eb",
       "range": {
         "startLine": 148,
         "startChar": 61,
@@ -462,6 +846,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_0cdde6c9",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_420a5c45",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 68
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_22ff18f1",
         "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
         "patchSetId": 3
@@ -473,6 +881,30 @@
       "writtenOn": "2017-01-07T02:09:16Z",
       "side": 1,
       "message": "receiverList?",
+      "range": {
+        "startLine": 227,
+        "startChar": 33,
+        "endLine": 227,
+        "endChar": 45
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_59c4124f",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_22ff18f1",
       "range": {
         "startLine": 227,
         "startChar": 33,
@@ -519,6 +951,30 @@
       "writtenOn": "2017-01-07T02:09:16Z",
       "side": 1,
       "message": "make a static final boolean WAKE/NO_WAKE pair so it\u0027s clear reading the code what\u0027s intended:\nbroadcast(intent, receiverList, NO_WAKE), etc",
+      "range": {
+        "startLine": 233,
+        "startChar": 44,
+        "endLine": 233,
+        "endChar": 49
+      },
+      "revId": "0a76eb26027d7ea822f8f5ee13451aa87f9a0687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_79c1d63c",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-09T06:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_2228f897",
       "range": {
         "startLine": 233,
         "startChar": 44,
