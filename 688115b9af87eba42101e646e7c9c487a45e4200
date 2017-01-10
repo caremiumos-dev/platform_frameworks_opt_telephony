@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97a04ea7_cf201913",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-10T23:18:39Z",
+      "side": 1,
+      "message": "how about both -\u003e none",
+      "revId": "688115b9af87eba42101e646e7c9c487a45e4200",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_ef1b1de3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-10T23:18:39Z",
+      "side": 1,
+      "message": "can 100 work or is 200 needed?",
+      "range": {
+        "startLine": 818,
+        "startChar": 18,
+        "endLine": 818,
+        "endChar": 21
+      },
+      "revId": "688115b9af87eba42101e646e7c9c487a45e4200",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
