@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d7be4636_66357034",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2017-01-11T09:20:30Z",
+      "side": 1,
+      "message": "Done. We have added all the test scenario in new patch-set.",
+      "parentUuid": "97a04ea7_cf201913",
+      "revId": "688115b9af87eba42101e646e7c9c487a45e4200",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_ef1b1de3",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2017-01-10T23:18:39Z",
       "side": 1,
       "message": "can 100 work or is 200 needed?",
+      "range": {
+        "startLine": 818,
+        "startChar": 18,
+        "endLine": 818,
+        "endChar": 21
+      },
+      "revId": "688115b9af87eba42101e646e7c9c487a45e4200",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d7be4636_a69f6805",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2017-01-11T09:20:30Z",
+      "side": 1,
+      "message": "100 can work. \nAccording to our measurement, it takes around 15-25ms on Nexus 6p. We have modified to 100ms keeping safe margin.",
+      "parentUuid": "97a04ea7_ef1b1de3",
       "range": {
         "startLine": 818,
         "startChar": 18,
