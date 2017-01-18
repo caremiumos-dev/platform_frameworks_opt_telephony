@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_4007af3c",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-18T21:10:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_851d2929",
+      "range": {
+        "startLine": 33,
+        "startChar": 41,
+        "endLine": 33,
+        "endChar": 59
+      },
+      "revId": "665aa59f9a39cb8ed3f855c63d4f4db067e0913e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_253f1d78",
         "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "97a04ea7_6014b365",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-18T21:10:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_253f1d78",
+      "range": {
+        "startLine": 36,
+        "startChar": 5,
+        "endLine": 36,
+        "endChar": 9
+      },
+      "revId": "665aa59f9a39cb8ed3f855c63d4f4db067e0913e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a04ea7_e5fef58b",
         "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2017-01-09T17:49:41Z",
       "side": 1,
       "message": "should these have better defaults?  Otherwise registers before these are set will throw exceptions as invalid actions",
+      "range": {
+        "startLine": 61,
+        "startChar": 56,
+        "endLine": 61,
+        "endChar": 60
+      },
+      "revId": "665aa59f9a39cb8ed3f855c63d4f4db067e0913e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a04ea7_a09bfb00",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-18T21:10:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a04ea7_e5fef58b",
       "range": {
         "startLine": 61,
         "startChar": 56,
