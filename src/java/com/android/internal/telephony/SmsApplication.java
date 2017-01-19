@@ -113,6 +113,11 @@ public final class SmsApplication {
         public String mProviderChangedReceiverClass;
 
         /**
+         * The class name of the SIM_FULL_ACTION receiver in this app.
+         */
+        public String mSimFullReceiverClass;
+
+        /**
          * The user-id for this application
          */
         public int mUid;
@@ -151,14 +156,15 @@ public final class SmsApplication {
 
         @Override
         public String toString() {
-            return " mPackageName: " + mPackageName +
-                    " mSmsReceiverClass: " + mSmsReceiverClass +
-                    " mMmsReceiverClass: " + mMmsReceiverClass +
-                    " mRespondViaMessageClass: " + mRespondViaMessageClass +
-                    " mSendToClass: " + mSendToClass +
-                    " mSmsAppChangedClass: " + mSmsAppChangedReceiverClass +
-                    " mProviderChangedReceiverClass: " + mProviderChangedReceiverClass +
-                    " mUid: " + mUid;
+            return " mPackageName: " + mPackageName
+                    + " mSmsReceiverClass: " + mSmsReceiverClass
+                    + " mMmsReceiverClass: " + mMmsReceiverClass
+                    + " mRespondViaMessageClass: " + mRespondViaMessageClass
+                    + " mSendToClass: " + mSendToClass
+                    + " mSmsAppChangedClass: " + mSmsAppChangedReceiverClass
+                    + " mProviderChangedReceiverClass: " + mProviderChangedReceiverClass
+                    + " mSimFullReceiverClass: " + mSimFullReceiverClass
+                    + " mUid: " + mUid;
         }
     }
 
@@ -300,8 +306,8 @@ public final class SmsApplication {
 
         // Update any existing entries with the default sms changed handler.
         intent = new Intent(Telephony.Sms.Intents.ACTION_DEFAULT_SMS_PACKAGE_CHANGED);
-        List<ResolveInfo> smsAppChangedReceivers = packageManager.queryBroadcastReceiversAsUser(intent,
-                0, userId);
+        List<ResolveInfo> smsAppChangedReceivers =
+                packageManager.queryBroadcastReceiversAsUser(intent, 0, userId);
         if (DEBUG_MULTIUSER) {
             Log.i(LOG_TAG, "getApplicationCollectionInternal smsAppChangedActivities=" +
                     smsAppChangedReceivers);
@@ -325,8 +331,8 @@ public final class SmsApplication {
 
         // Update any existing entries with the external provider changed handler.
         intent = new Intent(Telephony.Sms.Intents.ACTION_EXTERNAL_PROVIDER_CHANGE);
-        List<ResolveInfo> providerChangedReceivers = packageManager.queryBroadcastReceiversAsUser(intent,
-                0, userId);
+        List<ResolveInfo> providerChangedReceivers =
+                packageManager.queryBroadcastReceiversAsUser(intent, 0, userId);
         if (DEBUG_MULTIUSER) {
             Log.i(LOG_TAG, "getApplicationCollectionInternal providerChangedActivities=" +
                     providerChangedReceivers);
@@ -345,6 +351,31 @@ public final class SmsApplication {
             }
             if (smsApplicationData != null) {
                 smsApplicationData.mProviderChangedReceiverClass = activityInfo.name;
+            }
+        }
+
+        // Update any existing entries with the sim full handler.
+        intent = new Intent(Intents.SIM_FULL_ACTION);
+        List<ResolveInfo> simFullReceivers =
+                packageManager.queryBroadcastReceiversAsUser(intent, 0, userId);
+        if (DEBUG_MULTIUSER) {
+            Log.i(LOG_TAG, "getApplicationCollectionInternal simFullReceivers="
+                    + simFullReceivers);
+        }
+        for (ResolveInfo resolveInfo : simFullReceivers) {
+            final ActivityInfo activityInfo = resolveInfo.activityInfo;
+            if (activityInfo == null) {
+                continue;
+            }
+            final String packageName = activityInfo.packageName;
+            final SmsApplicationData smsApplicationData = receivers.get(packageName);
+            if (DEBUG_MULTIUSER) {
+                Log.i(LOG_TAG, "getApplicationCollectionInternal packageName="
+                        + packageName + " smsApplicationData: " + smsApplicationData
+                        + " activityInfo.name: " + activityInfo.name);
+            }
+            if (smsApplicationData != null) {
+                smsApplicationData.mSimFullReceiverClass = activityInfo.name;
             }
         }
 
@@ -876,6 +907,31 @@ public final class SmsApplication {
                     && smsApplicationData.mProviderChangedReceiverClass != null) {
                 component = new ComponentName(smsApplicationData.mPackageName,
                         smsApplicationData.mProviderChangedReceiverClass);
+            }
+            return component;
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    /**
+     * Gets the default application that handles sim full event.
+     * @param context context from the calling app
+     * @param updateIfNeeded update the default app if there is no valid default app configured.
+     * @return component name of the app and class to deliver change intents to
+     */
+    public static ComponentName getDefaultSimFullApplication(
+            Context context, boolean updateIfNeeded) {
+        int userId = getIncomingUserId(context);
+        final long token = Binder.clearCallingIdentity();
+        try {
+            ComponentName component = null;
+            SmsApplicationData smsApplicationData = getApplication(context, updateIfNeeded,
+                    userId);
+            if (smsApplicationData != null
+                    && smsApplicationData.mSimFullReceiverClass != null) {
+                component = new ComponentName(smsApplicationData.mPackageName,
+                        smsApplicationData.mSimFullReceiverClass);
             }
             return component;
         } finally {
