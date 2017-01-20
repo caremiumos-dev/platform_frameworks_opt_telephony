@@ -46,6 +46,53 @@
       "revId": "74da2b4a09ab735c7538cf1610fa302135c4ec1b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c865c6f6_6a9af8b2",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-20T19:21:38Z",
+      "side": 1,
+      "message": "I think this class would be clearer with the following minor changes:\n1) Rename to something like CarrierSmsFilterController or CarrierSmsFilterHelper since it\u0027s not the filter... just the thing that controls/manages/creates the filters.\n\n2) Split the .filter() function into two:\nCarrierSmsFilterController.hasCarrierFilter() and then make CarrierSmsFilterController.filterWithCarrierApp(). This makes the semantics in the inboundSmsHandler() more readable.\n\n3) obviously, in making filterWithCarrierApp() public... you\u0027d want to ensure that the CarrierApp package name is cached... no need to pass it in.",
+      "parentUuid": "c865c6f6_990a3007",
+      "range": {
+        "startLine": 43,
+        "startChar": 13,
+        "endLine": 43,
+        "endChar": 37
+      },
+      "revId": "74da2b4a09ab735c7538cf1610fa302135c4ec1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c865c6f6_6a6d58aa",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-20T19:21:38Z",
+      "side": 1,
+      "message": "suggest to pass the SMS and the Callback in to the filterWithCarrierApp() function instead of passing everything in the constructor.",
+      "range": {
+        "startLine": 59,
+        "startChar": 12,
+        "endLine": 62,
+        "endChar": 86
+      },
+      "revId": "74da2b4a09ab735c7538cf1610fa302135c4ec1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
