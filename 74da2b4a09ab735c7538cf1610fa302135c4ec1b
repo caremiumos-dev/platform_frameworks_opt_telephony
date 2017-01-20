@@ -141,6 +141,30 @@
       "revId": "74da2b4a09ab735c7538cf1610fa302135c4ec1b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c865c6f6_68ac3fdd",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-20T20:56:41Z",
+      "side": 1,
+      "message": "Right now there are 2 problems with this implementation:\n\n1) it\u0027s forcing the use of class members that don\u0027t need to be class members in \"CarrierServicesSmsFilter\". The actual content of the SMS rightfully and solely is used by the actual thing doing the filtering. So this class actually does MORE caching rather than less. Even if it doesn\u0027t find a target, we\u0027ve copied and cached the SMS in this class every time.\n\n2) The semantics are confusing because you have the \"filter\" class calling a filter class, which is what led to the awkward naming pointed out by Madhu. Neither the filter() function nor anything in the CarrierServicesSmsFilter class is actually a filter for anything.",
+      "parentUuid": "c865c6f6_05024e2b",
+      "range": {
+        "startLine": 59,
+        "startChar": 12,
+        "endLine": 62,
+        "endChar": 86
+      },
+      "revId": "74da2b4a09ab735c7538cf1610fa302135c4ec1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
