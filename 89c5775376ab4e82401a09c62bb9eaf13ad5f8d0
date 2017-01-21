@@ -22,6 +22,30 @@
       "revId": "89c5775376ab4e82401a09c62bb9eaf13ad5f8d0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c865c6f6_3116af74",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-21T02:43:10Z",
+      "side": 1,
+      "message": "1) Potentially, sure.\n2) If the package declares CarrierMessagingService.SERVICE_INTERFACE then afaik yes.",
+      "parentUuid": "c865c6f6_11904bdc",
+      "range": {
+        "startLine": 996,
+        "startChar": 19,
+        "endLine": 996,
+        "endChar": 48
+      },
+      "revId": "89c5775376ab4e82401a09c62bb9eaf13ad5f8d0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
