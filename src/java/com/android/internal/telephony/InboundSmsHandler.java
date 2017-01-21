@@ -41,24 +41,26 @@ import android.content.pm.UserInfo;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
-import android.os.storage.StorageManager;
 import android.os.AsyncResult;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IDeviceIdleController;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.os.storage.StorageManager;
 import android.provider.Telephony;
 import android.provider.Telephony.Sms.Intents;
 import android.service.carrier.CarrierMessagingService;
 import android.service.carrier.ICarrierMessagingCallback;
 import android.service.carrier.ICarrierMessagingService;
 import android.service.carrier.MessagePdu;
+import android.telephony.CarrierConfigManager;
 import android.telephony.CarrierMessagingServiceManager;
 import android.telephony.Rlog;
 import android.telephony.SmsManager;
@@ -986,6 +988,45 @@ public abstract class InboundSmsHandler extends StateMachine {
                 }
         }
         return packages;
+    }
+
+    /* FIXME: Real key is defined in ag/322274 */
+    /*CarrierConfigManager.KEY_CONFIG_IMS_PACKAGE_OVERRIDE*/
+    private static final String CARRIER_IMS_PACKAGE_KEY = "test";
+    private String getCarrierImsPackageForIntent(Intent intent) {
+        PackageManager packageManager = mContext.getPackageManager();
+
+        CarrierConfigManager cm = (CarrierConfigManager) mContext.getSystemService(
+                            Context.CARRIER_CONFIG_SERVICE);
+        if (cm == null) {
+            loge("Failed to retrieve CarrierConfigManager");
+            return null;
+        }
+
+        PersistableBundle config = cm.getConfigForSubId(mPhone.getSubId());
+        if (config == null) {
+            if (VDBG) log("No carrierConfig for subId:" + mPhone.getSubId());
+            return null;
+        }
+
+        String carrierImsPackage = config.getString(CARRIER_IMS_PACKAGE_KEY, null);
+        if (carrierImsPackage == null) {
+            if (VDBG) log("No CarrierImsPackage override found");
+            return null;
+        }
+
+        List<ResolveInfo> receivers = packageManager.queryIntentServices(intent, 0);
+        for (ResolveInfo info : receivers) {
+            if (info.serviceInfo == null) {
+                loge("Can't get service information from " + info);
+                continue;
+            }
+
+            if (info.serviceInfo.packageName.equals(carrierImsPackage)) {
+                return carrierImsPackage;
+            }
+        }
+        return null;
     }
 
     /**
