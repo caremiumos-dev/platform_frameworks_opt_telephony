@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c865c6f6_11904bdc",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-21T02:34:09Z",
+      "side": 1,
+      "message": "Can this be added in a Util that can be used for SMS sending as well?\nAlso, is this package guaranteed to implement the CarrierMessagingService?",
+      "range": {
+        "startLine": 996,
+        "startChar": 19,
+        "endLine": 996,
+        "endChar": 48
+      },
+      "revId": "89c5775376ab4e82401a09c62bb9eaf13ad5f8d0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
