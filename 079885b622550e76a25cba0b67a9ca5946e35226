@@ -1,0 +1,8 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Code-Review+2: Amit Mahajan <amitmahajan@google.com>
+Verified+1: Colin Cross <ccross@android.com>
+Submitted-by: Colin Cross <ccross@android.com>
+Submitted-at: Mon, 23 Jan 2017 03:55:58 +0000
+Reviewed-on: https://android-review.googlesource.com/326181
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
