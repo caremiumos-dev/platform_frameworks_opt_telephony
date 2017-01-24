@@ -34,6 +34,7 @@ public class InboundSmsTrackerTest {
     private static final long FAKE_TIMESTAMP = 123456L;
     private static final int FAKE_DEST_PORT = 1234;
     private static final String FAKE_ADDRESS = "address";
+    private static final String FAKE_DISPLAY_ADDRESS = "disp_addr";
     private static final int FAKE_REFERENCE_NUMBER = 345;
     private static final int FAKE_SEQUENCE_NUMBER = 3;
     private static final int FAKE_MESSAGE_COUNT = 5;
@@ -42,7 +43,7 @@ public class InboundSmsTrackerTest {
     @Before
     public void setUp() throws Exception {
         mInboundSmsTracker = new InboundSmsTracker(FAKE_PDU, FAKE_TIMESTAMP, FAKE_DEST_PORT, false,
-                FAKE_ADDRESS, FAKE_REFERENCE_NUMBER, FAKE_SEQUENCE_NUMBER, FAKE_MESSAGE_COUNT,
+                FAKE_ADDRESS, FAKE_DISPLAY_ADDRESS, FAKE_REFERENCE_NUMBER, FAKE_SEQUENCE_NUMBER, FAKE_MESSAGE_COUNT,
                 false, FAKE_MESSAGE_BODY);
     }
 
