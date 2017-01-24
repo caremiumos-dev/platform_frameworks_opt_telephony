@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f215bc37_3246c5e5",
+        "filename": "src/java/com/android/internal/telephony/SmsApplication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-01-24T17:09:54Z",
+      "side": 1,
+      "message": "This is just copy/paste from the section above.",
+      "range": {
+        "startLine": 357,
+        "startChar": 0,
+        "endLine": 378,
+        "endChar": 77
+      },
+      "revId": "97a723c3e464ea53d77ac2166d7cd49e1e44406f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a1f53ca5_b7dfbd95",
+        "filename": "src/java/com/android/internal/telephony/SmsApplication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-01-24T17:09:54Z",
+      "side": 1,
+      "message": "This is just copy/paste from the section above.",
+      "range": {
+        "startLine": 923,
+        "startChar": 0,
+        "endLine": 940,
+        "endChar": 5
+      },
+      "revId": "97a723c3e464ea53d77ac2166d7cd49e1e44406f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
