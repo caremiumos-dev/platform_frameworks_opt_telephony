@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68821acf_3ce239e5",
+        "filename": "src/java/com/android/internal/telephony/PhoneSubInfoController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-24T19:36:06Z",
+      "side": 1,
+      "message": "return null",
+      "revId": "e89f05853ee6702a9b4fefbdf5222de7799ff2a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d9a4d74_c16cf332",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-24T19:36:06Z",
+      "side": 1,
+      "message": "delete empty lines?",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 0
+      },
+      "revId": "e89f05853ee6702a9b4fefbdf5222de7799ff2a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7fefca5a_b8bf0a6b",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-24T19:36:06Z",
+      "side": 1,
+      "message": "delete extra line?",
+      "revId": "e89f05853ee6702a9b4fefbdf5222de7799ff2a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a85c350a_1cec57ae",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-24T19:36:06Z",
+      "side": 1,
+      "message": "Shouldn\u0027t an empty message be sent anyway to not keep the caller waiting?",
+      "revId": "e89f05853ee6702a9b4fefbdf5222de7799ff2a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "96365060_9d92f31e",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-24T19:36:06Z",
+      "side": 1,
+      "message": "Why do you need this message? is this a sync call all the way down to RIL? it\u0027s oneway with hidl, and even today Parcel is just sent on socket. So you can directly call it from the binder thread, no?",
+      "range": {
+        "startLine": 1377,
+        "startChar": 20,
+        "endLine": 1377,
+        "endChar": 41
+      },
+      "revId": "e89f05853ee6702a9b4fefbdf5222de7799ff2a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a2b7981_abe471bd",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-24T19:36:06Z",
+      "side": 1,
+      "message": "is this used anywhere?",
+      "revId": "e89f05853ee6702a9b4fefbdf5222de7799ff2a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
