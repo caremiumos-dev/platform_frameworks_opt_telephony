@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79a49374_901e69bc",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-25T01:46:25Z",
+      "side": 1,
+      "message": "Will this be very chatty if you submit?",
+      "range": {
+        "startLine": 33,
+        "startChar": 35,
+        "endLine": 33,
+        "endChar": 39
+      },
+      "revId": "f2a63195d15c20a6b6b5deadc05fee0d7f94a177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e26d1c73_03554ce2",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-25T01:46:25Z",
+      "side": 1,
+      "message": "This has changed in my code review. I forgot to append _STRING to the key, so it is CarrierConfigManager.KEY_CONFIG_IMS_PACKAGE_OVERRIDE_STRING and \"config_ims_package_override_string\".",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 88
+      },
+      "revId": "f2a63195d15c20a6b6b5deadc05fee0d7f94a177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a4d36c6a_a2fafba2",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-25T01:46:25Z",
+      "side": 1,
+      "message": "Nit: space between constant and javadoc for method",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 85
+      },
+      "revId": "f2a63195d15c20a6b6b5deadc05fee0d7f94a177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "055bfdf7_f1b35d7f",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-25T01:46:25Z",
+      "side": 1,
+      "message": "\"IMS Override\" isn\u0027t very descriptive. Maybe some thing like \"Carrier defined ImsService override\"",
+      "range": {
+        "startLine": 39,
+        "startChar": 47,
+        "endLine": 39,
+        "endChar": 59
+      },
+      "revId": "f2a63195d15c20a6b6b5deadc05fee0d7f94a177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b0b3e76_89af9f6e",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-25T01:46:25Z",
+      "side": 1,
+      "message": "so descriptive :)",
+      "range": {
+        "startLine": 42,
+        "startChar": 20,
+        "endLine": 42,
+        "endChar": 26
+      },
+      "revId": "f2a63195d15c20a6b6b5deadc05fee0d7f94a177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e4e66982_13beda54",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-25T01:46:25Z",
+      "side": 1,
+      "message": "sanity check: is the phone object going to ever be null?",
+      "range": {
+        "startLine": 57,
+        "startChar": 56,
+        "endLine": 57,
+        "endChar": 61
+      },
+      "revId": "f2a63195d15c20a6b6b5deadc05fee0d7f94a177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
