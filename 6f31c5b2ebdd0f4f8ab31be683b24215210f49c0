@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "241bcf8f_18db52c1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T03:32:28Z",
+      "side": 1,
+      "message": "and to aggregate multiple parts?",
+      "range": {
+        "startLine": 14,
+        "startChar": 46,
+        "endLine": 14,
+        "endChar": 70
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d8e09f37_36cf915a",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T03:32:28Z",
+      "side": 1,
+      "message": "PUD-\u003ePDU here and in the comment.",
+      "range": {
+        "startLine": 123,
+        "startChar": 47,
+        "endLine": 123,
+        "endChar": 89
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "64bedd3a_8e8713f2",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T03:32:28Z",
+      "side": 1,
+      "message": "could use -\u003e could be used",
+      "range": {
+        "startLine": 799,
+        "startChar": 27,
+        "endLine": 799,
+        "endChar": 37
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ead45946_fc21682c",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T03:32:28Z",
+      "side": 1,
+      "message": "blockcheck seems to be skipped for single part sms.",
+      "range": {
+        "startLine": 800,
+        "startChar": 45,
+        "endLine": 800,
+        "endChar": 54
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e9885299_d8966882",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T03:32:28Z",
+      "side": 1,
+      "message": "So will the display address be null for all parts except the first one?\nThis distinction of display address vs address is very subtle:\nShould mAddress be changed to mPduAddress, and mDisplayAddress to mRecipientAddress (or just mAddress) or some such?",
+      "range": {
+        "startLine": 42,
+        "startChar": 25,
+        "endLine": 42,
+        "endChar": 40
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c2a59d1_1e448fb4",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/InboundSmsTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T03:32:28Z",
+      "side": 1,
+      "message": "Check for FAKE_DISPLAY_ADDRESS?",
+      "range": {
+        "startLine": 65,
+        "startChar": 16,
+        "endLine": 65,
+        "endChar": 34
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ef84ff4_d76c20ee",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/gsm/GsmInboundSmsHandlerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T03:32:28Z",
+      "side": 1,
+      "message": "Can you add another test for the case when the 2nd part does not contain the address?",
+      "range": {
+        "startLine": 473,
+        "startChar": 16,
+        "endLine": 473,
+        "endChar": 66
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
