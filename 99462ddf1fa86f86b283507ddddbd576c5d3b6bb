@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "a175c796_798cabf2",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T20:44:14Z",
+      "side": 1,
+      "message": "Yes, the plan is to add a IMS filter here, and potentially move VisualVoicemailFilter here.",
+      "revId": "99462ddf1fa86f86b283507ddddbd576c5d3b6bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85d1c8b3_be669ab3",
         "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
         "patchSetId": 2
@@ -30,6 +47,23 @@
       "writtenOn": "2017-01-25T20:36:47Z",
       "side": 1,
       "message": "Although that shouldn\u0027t happen, what if there are conflicting results?",
+      "revId": "99462ddf1fa86f86b283507ddddbd576c5d3b6bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62f66d51_78bec275",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T20:44:14Z",
+      "side": 1,
+      "message": "The goal is to handle conflicting results.\nSo if 1 filter says drop the end result should be drop (hence the or on the bitmasks).",
       "revId": "99462ddf1fa86f86b283507ddddbd576c5d3b6bb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
