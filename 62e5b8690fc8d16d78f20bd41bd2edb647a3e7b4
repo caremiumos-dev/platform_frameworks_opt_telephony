@@ -94,6 +94,52 @@
     },
     {
       "key": {
+        "uuid": "937b35af_df738957",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T17:17:55Z",
+      "side": 1,
+      "message": "Clarfiication: \nMy ask was to add a public method without the intent param to retrieve the carriermessaging package.",
+      "range": {
+        "startLine": 47,
+        "startChar": 25,
+        "endLine": 47,
+        "endChar": 54
+      },
+      "revId": "62e5b8690fc8d16d78f20bd41bd2edb647a3e7b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb7739c4_e5a1e946",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T17:17:55Z",
+      "side": 1,
+      "message": "re consistency: Old code wouldn\u0027t have the optional because we didn\u0027t have Java1.8.\nLooks like passing around Optional is ok, but storing in class members is not.\nhttp://shortn/_VdyONUc3G5\n\"tl;dr: Feel free to pass Optional around, but don\u0027t use it on e.g. class fields.\"\n\nI prefer Optional since the semantics is clear, upto you.",
+      "range": {
+        "startLine": 47,
+        "startChar": 18,
+        "endLine": 47,
+        "endChar": 24
+      },
+      "revId": "62e5b8690fc8d16d78f20bd41bd2edb647a3e7b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d4e1a78_b93257c8",
         "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
         "patchSetId": 5
