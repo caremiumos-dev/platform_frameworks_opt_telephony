@@ -48,6 +48,52 @@
     },
     {
       "key": {
+        "uuid": "b8cdfa37_f811cdcf",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-25T03:48:41Z",
+      "side": 1,
+      "message": "returning null is stylistically consistent. I can add an @Nullable annotation.",
+      "range": {
+        "startLine": 47,
+        "startChar": 18,
+        "endLine": 47,
+        "endChar": 24
+      },
+      "revId": "62e5b8690fc8d16d78f20bd41bd2edb647a3e7b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "548f59fa_0fd3bb50",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-25T03:48:41Z",
+      "side": 1,
+      "message": "Done",
+      "range": {
+        "startLine": 47,
+        "startChar": 25,
+        "endLine": 47,
+        "endChar": 54
+      },
+      "revId": "62e5b8690fc8d16d78f20bd41bd2edb647a3e7b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d4e1a78_b93257c8",
         "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
         "patchSetId": 5
@@ -59,6 +105,29 @@
       "writtenOn": "2017-01-25T03:03:57Z",
       "side": 1,
       "message": "Unrelated to this CL, rather a design question:\nThis may run into the same issues as CarrierMessagingService: flakiness during switching. Any plans to tackle this?",
+      "range": {
+        "startLine": 60,
+        "startChar": 35,
+        "endLine": 60,
+        "endChar": 61
+      },
+      "revId": "62e5b8690fc8d16d78f20bd41bd2edb647a3e7b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "855c0c8f_89dd4bff",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-25T03:48:41Z",
+      "side": 1,
+      "message": "It\u0027s a real problem, but I have no idea if anything is being done about it. I\u0027m also not sure how frequent it is.",
       "range": {
         "startLine": 60,
         "startChar": 35,
