@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c252c178_a838329b",
+        "filename": "src/java/com/android/internal/telephony/SmsApplication.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-25T22:50:12Z",
+      "side": 1,
+      "message": "make \nString getAppNameForIntentHandler(intent, userId, typeLabel) and replace this whole block of code with a call.",
+      "range": {
+        "startLine": 357,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 9
+      },
+      "revId": "cc4a880881d9563e85852d1da1f611d15362c10a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
