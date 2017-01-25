@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00b42611_898d1cf6",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T03:03:57Z",
+      "side": 1,
+      "message": "Can this be changed to Optional\u003cString\u003e?",
+      "range": {
+        "startLine": 47,
+        "startChar": 18,
+        "endLine": 47,
+        "endChar": 24
+      },
+      "revId": "62e5b8690fc8d16d78f20bd41bd2edb647a3e7b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2a4d2570_976805be",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T03:03:57Z",
+      "side": 1,
+      "message": "How about adding a helper method for just the carrier messaging intent?",
+      "range": {
+        "startLine": 47,
+        "startChar": 25,
+        "endLine": 47,
+        "endChar": 54
+      },
+      "revId": "62e5b8690fc8d16d78f20bd41bd2edb647a3e7b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9d4e1a78_b93257c8",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-25T03:03:57Z",
+      "side": 1,
+      "message": "Unrelated to this CL, rather a design question:\nThis may run into the same issues as CarrierMessagingService: flakiness during switching. Any plans to tackle this?",
+      "range": {
+        "startLine": 60,
+        "startChar": 35,
+        "endLine": 60,
+        "endChar": 61
+      },
+      "revId": "62e5b8690fc8d16d78f20bd41bd2edb647a3e7b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
