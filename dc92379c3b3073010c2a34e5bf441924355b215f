@@ -22,6 +22,46 @@
       "revId": "dc92379c3b3073010c2a34e5bf441924355b215f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0de42026_82a839c7",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-25T21:49:17Z",
+      "side": 1,
+      "message": "can packageName be null?",
+      "range": {
+        "startLine": 66,
+        "startChar": 33,
+        "endLine": 66,
+        "endChar": 44
+      },
+      "revId": "dc92379c3b3073010c2a34e5bf441924355b215f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84346e14_43d9b4d8",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-25T21:49:17Z",
+      "side": 1,
+      "message": "fix indentation",
+      "revId": "dc92379c3b3073010c2a34e5bf441924355b215f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
