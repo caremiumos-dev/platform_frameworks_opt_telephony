@@ -29,6 +29,7 @@ import android.os.ServiceManager;
 import android.util.Log;
 import android.util.Pair;
 
+import com.android.ims.internal.IImsFeatureStatusCallback;
 import com.android.ims.internal.IImsServiceController;
 import com.android.ims.internal.IImsServiceFeatureListener;
 import com.android.internal.annotations.VisibleForTesting;
@@ -164,6 +165,30 @@ public class ImsServiceController {
     private ImsServiceConnection mImsServiceConnection;
     private ImsDeathRecipient mImsDeathRecipient;
     private Set<IImsServiceFeatureListener> mImsStatusCallbacks = new HashSet<>();
+    private Set<ImsFeatureStatusCallback> mFeatureStatusCallbacks = new HashSet<>();
+
+    private class ImsFeatureStatusCallback {
+        private int mSlotId;
+        private int mFeatureType;
+
+        private final IImsFeatureStatusCallback mCallback = new IImsFeatureStatusCallback.Stub() {
+
+            @Override
+            public void notifyImsFeatureStatus(int featureStatus) throws RemoteException {
+                Log.i(LOG_TAG, "notifyImsFeatureStatus");
+                sendImsFeatureStatusChanged(mSlotId, mFeatureType, featureStatus);
+            }
+        };
+
+        ImsFeatureStatusCallback(int slotId, int featureType) {
+            mSlotId = slotId;
+            mFeatureType = featureType;
+        }
+
+        public IImsFeatureStatusCallback getCallback() {
+            return mCallback;
+        }
+    }
 
     // Retry the bind to the ImsService that has died after mRebindRetry timeout.
     private Runnable mRestartImsServiceRunnable = new Runnable() {
@@ -376,12 +401,33 @@ public class ImsServiceController {
         }
     }
 
+    private void sendImsFeatureStatusChanged(int slot, int feature, int status) {
+        synchronized (mLock) {
+            for (Iterator<IImsServiceFeatureListener> i = mImsStatusCallbacks.iterator();
+                    i.hasNext(); ) {
+                IImsServiceFeatureListener callbacks = i.next();
+                try {
+                    callbacks.imsStatusChanged(slot, feature, status);
+                } catch (RemoteException e) {
+                    // binder died, remove callback.
+                    Log.w(LOG_TAG, "sendImsFeatureStatusChanged: Binder died, removing "
+                            + "callback. Exception:" + e.getMessage());
+                    i.remove();
+                }
+            }
+        }
+    }
+
     private void addImsServiceFeature(Pair<Integer, Integer> featurePair) throws RemoteException {
         if (mIImsServiceController == null || mCallbacks == null) {
             Log.w(LOG_TAG, "addImsServiceFeature called with null values.");
             return;
         }
-        mIImsServiceController.createImsFeature(featurePair.first, featurePair.second);
+        ImsFeatureStatusCallback c = new ImsFeatureStatusCallback(featurePair.first,
+                featurePair.second);
+        mFeatureStatusCallbacks.add(c);
+        mIImsServiceController.createImsFeature(featurePair.first, featurePair.second,
+                c.getCallback());
         // Signal ImsResolver to change supported ImsFeatures for this ImsServiceController
         mCallbacks.imsServiceFeatureCreated(featurePair.first, featurePair.second, this);
         // Send callback to ImsServiceProxy to change supported ImsFeatures
@@ -402,6 +448,9 @@ public class ImsServiceController {
         // ImsManager requests the ImsService while it is being removed in ImsResolver, this
         // callback will clean it up after.
         sendImsFeatureRemovedCallback(featurePair.first, featurePair.second);
+        // Remove status callbacks from list.
+        mFeatureStatusCallbacks.removeIf(c -> c.mSlotId == featurePair.first
+                && c.mFeatureType == featurePair.second);
     }
 
     private void notifyAllFeaturesRemoved() {
