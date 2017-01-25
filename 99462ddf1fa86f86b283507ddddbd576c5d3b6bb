@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "91de8332_be3b48e2",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-25T20:37:34Z",
+      "side": 1,
+      "message": "As of now the size can at most be 1, and later you can add more filters here.. is that the idea?",
+      "revId": "99462ddf1fa86f86b283507ddddbd576c5d3b6bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85d1c8b3_be669ab3",
         "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
         "patchSetId": 2
