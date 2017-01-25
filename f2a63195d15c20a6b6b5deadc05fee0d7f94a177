@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "a1966054_3709f1aa",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-25T03:48:41Z",
+      "side": 1,
+      "message": "Yes.",
+      "range": {
+        "startLine": 33,
+        "startChar": 35,
+        "endLine": 33,
+        "endChar": 39
+      },
+      "revId": "f2a63195d15c20a6b6b5deadc05fee0d7f94a177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e26d1c73_03554ce2",
         "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
         "patchSetId": 4
@@ -94,6 +117,29 @@
     },
     {
       "key": {
+        "uuid": "d2f2c2ac_47a70e4e",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-25T03:48:41Z",
+      "side": 1,
+      "message": "Done",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 85
+      },
+      "revId": "f2a63195d15c20a6b6b5deadc05fee0d7f94a177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b0b3e76_89af9f6e",
         "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
         "patchSetId": 4
@@ -117,6 +163,29 @@
     },
     {
       "key": {
+        "uuid": "7c60fe59_1ce77c10",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-25T03:48:41Z",
+      "side": 1,
+      "message": "I took another stab at it.",
+      "range": {
+        "startLine": 42,
+        "startChar": 20,
+        "endLine": 42,
+        "endChar": 26
+      },
+      "revId": "f2a63195d15c20a6b6b5deadc05fee0d7f94a177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4e66982_13beda54",
         "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
         "patchSetId": 4
@@ -128,6 +197,29 @@
       "writtenOn": "2017-01-25T01:46:25Z",
       "side": 1,
       "message": "sanity check: is the phone object going to ever be null?",
+      "range": {
+        "startLine": 57,
+        "startChar": 56,
+        "endLine": 57,
+        "endChar": 61
+      },
+      "revId": "f2a63195d15c20a6b6b5deadc05fee0d7f94a177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "72de03a6_b4961d47",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-25T03:48:41Z",
+      "side": 1,
+      "message": "It will never be null.",
       "range": {
         "startLine": 57,
         "startChar": 56,
