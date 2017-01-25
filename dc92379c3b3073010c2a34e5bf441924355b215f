@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "8465da70_b4973fee",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-25T22:54:10Z",
+      "side": 1,
+      "message": "If it resolves to a package then I don\u0027t think the name of the package can be null... but without even adding a check I can reverse the logic because the other is explicitly null checked.",
+      "range": {
+        "startLine": 66,
+        "startChar": 33,
+        "endLine": 66,
+        "endChar": 44
+      },
+      "revId": "dc92379c3b3073010c2a34e5bf441924355b215f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84346e14_43d9b4d8",
         "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
         "patchSetId": 6
@@ -59,6 +82,23 @@
       "writtenOn": "2017-01-25T21:49:17Z",
       "side": 1,
       "message": "fix indentation",
+      "revId": "dc92379c3b3073010c2a34e5bf441924355b215f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7dd0621d_3634cf88",
+        "filename": "src/java/com/android/internal/telephony/CarrierSmsUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-01-25T22:54:10Z",
+      "side": 1,
+      "message": "Done",
       "revId": "dc92379c3b3073010c2a34e5bf441924355b215f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
