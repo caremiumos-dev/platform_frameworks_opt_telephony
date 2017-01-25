@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "d605f04f_927812ed",
+        "filename": "src/java/com/android/internal/telephony/SmsApplication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-01-25T20:18:52Z",
+      "side": 1,
+      "message": "Right. Then all other similar need to be private as well.",
+      "range": {
+        "startLine": 118,
+        "startChar": 8,
+        "endLine": 118,
+        "endChar": 14
+      },
+      "revId": "97a723c3e464ea53d77ac2166d7cd49e1e44406f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f215bc37_3246c5e5",
         "filename": "src/java/com/android/internal/telephony/SmsApplication.java",
         "patchSetId": 2
@@ -59,6 +82,29 @@
       "writtenOn": "2017-01-25T18:41:52Z",
       "side": 1,
       "message": "break this out into a util function where you pass in the intent and it gives you the activityInfo.name?\n\nSeems like at least 4x uses",
+      "range": {
+        "startLine": 379,
+        "startChar": 12,
+        "endLine": 379,
+        "endChar": 13
+      },
+      "revId": "97a723c3e464ea53d77ac2166d7cd49e1e44406f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cdb922ac_43d23bd4",
+        "filename": "src/java/com/android/internal/telephony/SmsApplication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-01-25T20:18:52Z",
+      "side": 1,
+      "message": "Probably a little bit complicated. This is inside the loop. we have whole bunch of different activityInfo.name. Let me think about it.",
       "range": {
         "startLine": 379,
         "startChar": 12,
