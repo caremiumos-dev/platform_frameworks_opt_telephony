@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "880aee5b_bea7e592",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-01-25T21:46:30Z",
+      "side": 1,
+      "message": "PRobably should be android.telephony.ims.ImsService",
+      "range": {
+        "startLine": 71,
+        "startChar": 52,
+        "endLine": 71,
+        "endChar": 74
+      },
+      "revId": "af352429d189e89b358409bf1c6ad700fb544514",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
