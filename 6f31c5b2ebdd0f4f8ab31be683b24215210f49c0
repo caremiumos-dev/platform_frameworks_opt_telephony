@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "49d63f57_c51f9f0f",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-26T02:15:15Z",
+      "side": 1,
+      "message": "Done",
+      "range": {
+        "startLine": 123,
+        "startChar": 47,
+        "endLine": 123,
+        "endChar": 89
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64bedd3a_8e8713f2",
         "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
         "patchSetId": 1
@@ -59,6 +82,29 @@
       "writtenOn": "2017-01-25T03:32:28Z",
       "side": 1,
       "message": "could use -\u003e could be used",
+      "range": {
+        "startLine": 799,
+        "startChar": 27,
+        "endLine": 799,
+        "endChar": 37
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2638b46_4ee31030",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-26T02:15:15Z",
+      "side": 1,
+      "message": "Done",
       "range": {
         "startLine": 799,
         "startChar": 27,
@@ -117,6 +163,29 @@
     },
     {
       "key": {
+        "uuid": "2338e182_fadcde31",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-26T02:15:15Z",
+      "side": 1,
+      "message": "display address will be the same as address except for the first one(if it is appended at the beginning of the user data) \nspec also mentioned other cases:\n\"the origination address is either derived from the content of the SMS TP-OA\"\nmy understanding is if configured @SMS TP-OA field, all SMS will have the same display email address.",
+      "range": {
+        "startLine": 42,
+        "startChar": 25,
+        "endLine": 42,
+        "endChar": 40
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c2a59d1_1e448fb4",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/InboundSmsTrackerTest.java",
         "patchSetId": 1
@@ -140,6 +209,29 @@
     },
     {
       "key": {
+        "uuid": "d0b233ec_e7ba8911",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/InboundSmsTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-26T02:15:15Z",
+      "side": 1,
+      "message": "Done",
+      "range": {
+        "startLine": 65,
+        "startChar": 16,
+        "endLine": 65,
+        "endChar": 34
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ef84ff4_d76c20ee",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/gsm/GsmInboundSmsHandlerTest.java",
         "patchSetId": 1
@@ -151,6 +243,29 @@
       "writtenOn": "2017-01-25T03:32:28Z",
       "side": 1,
       "message": "Can you add another test for the case when the 2nd part does not contain the address?",
+      "range": {
+        "startLine": 473,
+        "startChar": 16,
+        "endLine": 473,
+        "endChar": 66
+      },
+      "revId": "6f31c5b2ebdd0f4f8ab31be683b24215210f49c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0454eb1_84954295",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/gsm/GsmInboundSmsHandlerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-26T02:15:15Z",
+      "side": 1,
+      "message": "Done",
       "range": {
         "startLine": 473,
         "startChar": 16,
