@@ -128,6 +128,29 @@
     },
     {
       "key": {
+        "uuid": "1c9045a1_7085b29d",
+        "filename": "src/java/com/android/internal/telephony/SmsBroadcastUndelivered.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-26T21:51:45Z",
+      "side": 1,
+      "message": "it should be getAddress, we use originatingAddress to concatenate msg",
+      "range": {
+        "startLine": 248,
+        "startChar": 31,
+        "endLine": 248,
+        "endChar": 41
+      },
+      "revId": "0cc12dcbf6d871aeb61e8e722743d9f2e1f6adf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1111469d_92512b1f",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/InboundSmsTrackerTest.java",
         "patchSetId": 3
