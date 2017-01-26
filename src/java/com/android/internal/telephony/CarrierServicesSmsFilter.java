@@ -53,7 +53,7 @@ public class CarrierServicesSmsFilter {
     private final CarrierServicesSmsFilterCallbackInterface mCarrierServicesSmsFilterCallback;
     private final String mLogTag;
 
-    CarrierServicesSmsFilter(
+    public CarrierServicesSmsFilter(
             Context context,
             int phoneId,
             int subId,
@@ -75,7 +75,7 @@ public class CarrierServicesSmsFilter {
     /**
      * @return {@code true} if the SMS was handled by carrier services.
      */
-    boolean filter() {
+    public boolean filter() {
         Optional<String> carrierAppForFiltering = getCarrierAppPackageForFiltering();
         List<String> smsFilterPackages = new ArrayList<>();
         if (carrierAppForFiltering.isPresent()) {
@@ -161,7 +161,7 @@ public class CarrierServicesSmsFilter {
     /**
      * Result of filtering SMS is returned in this callback.
      */
-    interface CarrierServicesSmsFilterCallbackInterface {
+    public interface CarrierServicesSmsFilterCallbackInterface {
         void onFilterComplete(int result);
     }
 
