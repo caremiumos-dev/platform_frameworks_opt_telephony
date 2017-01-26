@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e75d3e4a_ef08640e",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-26T20:49:25Z",
+      "side": 1,
+      "message": "Should be getDisplayAddress",
+      "range": {
+        "startLine": 752,
+        "startChar": 41,
+        "endLine": 752,
+        "endChar": 51
+      },
+      "revId": "0cc12dcbf6d871aeb61e8e722743d9f2e1f6adf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "967366b2_82ecb8de",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-26T20:49:25Z",
+      "side": 1,
+      "message": "Should be getDisplayAddress",
+      "range": {
+        "startLine": 1177,
+        "startChar": 33,
+        "endLine": 1177,
+        "endChar": 43
+      },
+      "revId": "0cc12dcbf6d871aeb61e8e722743d9f2e1f6adf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7843d708_0f9dba69",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-26T20:49:25Z",
+      "side": 1,
+      "message": "Should be getDisplayAddress",
+      "range": {
+        "startLine": 1255,
+        "startChar": 33,
+        "endLine": 1255,
+        "endChar": 43
+      },
+      "revId": "0cc12dcbf6d871aeb61e8e722743d9f2e1f6adf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68dfc7fa_e23c3687",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-26T20:49:25Z",
+      "side": 1,
+      "message": "Can you add a comment here about how its different from mDisplayAddress and why it\u0027s needed? Also mention that not all segments have mDisplayAddress so that cannot be used.",
+      "revId": "0cc12dcbf6d871aeb61e8e722743d9f2e1f6adf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a2b66323_ea890584",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-26T20:49:25Z",
+      "side": 1,
+      "message": "Update @param list here and in other places.",
+      "revId": "0cc12dcbf6d871aeb61e8e722743d9f2e1f6adf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eabf125d_378071c0",
+        "filename": "src/java/com/android/internal/telephony/SmsBroadcastUndelivered.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-26T20:49:25Z",
+      "side": 1,
+      "message": "Should be getDisplayAddress",
+      "range": {
+        "startLine": 248,
+        "startChar": 31,
+        "endLine": 248,
+        "endChar": 41
+      },
+      "revId": "0cc12dcbf6d871aeb61e8e722743d9f2e1f6adf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1111469d_92512b1f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/InboundSmsTrackerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-26T20:49:25Z",
+      "side": 1,
+      "message": "Should be getDisplayAddress",
+      "range": {
+        "startLine": 73,
+        "startChar": 54,
+        "endLine": 73,
+        "endChar": 64
+      },
+      "revId": "0cc12dcbf6d871aeb61e8e722743d9f2e1f6adf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
