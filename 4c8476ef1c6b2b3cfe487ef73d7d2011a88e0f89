@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8110b15a_3bd34e36",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-26T00:03:27Z",
+      "side": 1,
+      "message": "same as other comments - give spec reference for interpretation of P2 and say that the default is 0x00",
+      "range": {
+        "startLine": 1798,
+        "startChar": 20,
+        "endLine": 1798,
+        "endChar": 29
+      },
+      "revId": "4c8476ef1c6b2b3cfe487ef73d7d2011a88e0f89",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32ea188c_6652254c",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4972,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-26T00:03:27Z",
+      "side": 1,
+      "message": "don\u0027t we normally pass args in arg order (ie do this after writing AID)?",
+      "range": {
+        "startLine": 4972,
+        "startChar": 11,
+        "endLine": 4972,
+        "endChar": 18
+      },
+      "revId": "4c8476ef1c6b2b3cfe487ef73d7d2011a88e0f89",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c23e98af_d026f677",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccPkcs15.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-26T00:03:27Z",
+      "side": 1,
+      "message": "why?  This looks like a functional change.  The old code used to use 0x00 effectively, correct?\n\nAlso - please add a comment on what 0x04 means and why it\u0027s correct.",
+      "range": {
+        "startLine": 147,
+        "startChar": 22,
+        "endLine": 147,
+        "endChar": 26
+      },
+      "revId": "4c8476ef1c6b2b3cfe487ef73d7d2011a88e0f89",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
