@@ -68,6 +68,29 @@
       "revId": "af7bc32573007f2ea1185fc5cb4f3980e1ff1304",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "474e9b38_92058325",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-27T04:45:41Z",
+      "side": 1,
+      "message": "recipientAddress or senderAddress? should be latter.\nIs there a better name than pduAddress for mAddress? But I agree, the distinction is subtle.",
+      "range": {
+        "startLine": 97,
+        "startChar": 8,
+        "endLine": 97,
+        "endChar": 16
+      },
+      "revId": "af7bc32573007f2ea1185fc5cb4f3980e1ff1304",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
