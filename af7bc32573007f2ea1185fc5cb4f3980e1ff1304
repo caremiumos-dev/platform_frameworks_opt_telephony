@@ -22,6 +22,29 @@
       "revId": "af7bc32573007f2ea1185fc5cb4f3980e1ff1304",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f7c242a9_074946c8",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-27T02:45:38Z",
+      "side": 1,
+      "message": "One of my earlier suggestions was to rename this to pduAddress, and displayAddress to recipientAddress or some such. Otherwise, the distinction is really subtle and can be missed.",
+      "range": {
+        "startLine": 97,
+        "startChar": 8,
+        "endLine": 97,
+        "endChar": 16
+      },
+      "revId": "af7bc32573007f2ea1185fc5cb4f3980e1ff1304",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
