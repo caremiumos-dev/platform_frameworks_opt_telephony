@@ -68,6 +68,29 @@
       "revId": "4c8476ef1c6b2b3cfe487ef73d7d2011a88e0f89",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90a1c233_dce9b1c1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccPkcs15.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1134734
+      },
+      "writtenOn": "2017-01-27T00:08:48Z",
+      "side": 1,
+      "message": "1) The old code was not using 0x00, but rather was leaving the decision on the P2 value to lower layers.\nWith the previous release (V2.05), it was not possible to set P2 value. This value was always set to ‘00’. Except for specific needs, it is recommended that P2 remains set to ‘00’.\n\n2) The PKCS15 specification does not explicitly mention the value of P2 to be used. The value 0x04 is found based on values from the field.",
+      "range": {
+        "startLine": 147,
+        "startChar": 22,
+        "endLine": 147,
+        "endChar": 26
+      },
+      "revId": "4c8476ef1c6b2b3cfe487ef73d7d2011a88e0f89",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
