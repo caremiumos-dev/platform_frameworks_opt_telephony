@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68cee887_9385d839",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-01-27T02:43:06Z",
+      "side": 1,
+      "message": "Question for you and Amit:\nSo mAddress would be the gateway address for email. So is it better to use display address even for concatenating?",
+      "range": {
+        "startLine": 43,
+        "startChar": 25,
+        "endLine": 43,
+        "endChar": 33
+      },
+      "revId": "af7bc32573007f2ea1185fc5cb4f3980e1ff1304",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
