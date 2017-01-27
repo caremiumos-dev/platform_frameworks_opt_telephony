@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "68bcea53_894536eb",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-27T04:44:01Z",
+      "side": 1,
+      "message": "isn\u0027t display address available only in the first segment? That\u0027s why we need mAddress for concatenating.",
+      "range": {
+        "startLine": 43,
+        "startChar": 25,
+        "endLine": 43,
+        "endChar": 33
+      },
+      "revId": "af7bc32573007f2ea1185fc5cb4f3980e1ff1304",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7c242a9_074946c8",
         "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
         "patchSetId": 5
