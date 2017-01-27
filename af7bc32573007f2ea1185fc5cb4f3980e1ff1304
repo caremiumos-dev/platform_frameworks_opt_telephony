@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "7f19d094_aac2aafb",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-27T05:51:36Z",
+      "side": 1,
+      "message": "no matter mAddress is gateway address or real email address, it is consistent between all Multi-part SMS, thus should be used for aggregating.\n\nwhen we switched from mAddress to displayAddress (on NYC) for concatenating,  it caused this regression, because displayAddress is not same for all Multi-part SMS, hope it explains :)",
+      "range": {
+        "startLine": 43,
+        "startChar": 25,
+        "endLine": 43,
+        "endChar": 33
+      },
+      "revId": "af7bc32573007f2ea1185fc5cb4f3980e1ff1304",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7c242a9_074946c8",
         "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
         "patchSetId": 5
@@ -82,6 +105,29 @@
       "writtenOn": "2017-01-27T04:45:41Z",
       "side": 1,
       "message": "recipientAddress or senderAddress? should be latter.\nIs there a better name than pduAddress for mAddress? But I agree, the distinction is subtle.",
+      "range": {
+        "startLine": 97,
+        "startChar": 8,
+        "endLine": 97,
+        "endChar": 16
+      },
+      "revId": "af7bc32573007f2ea1185fc5cb4f3980e1ff1304",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0dab5941_b6cf6f4f",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-01-27T05:51:36Z",
+      "side": 1,
+      "message": "recipient address doesn\u0027t sounds right, mAddress and mDisplayAddress are both from sender side. yes the difference is subtle :(",
       "range": {
         "startLine": 97,
         "startChar": 8,
