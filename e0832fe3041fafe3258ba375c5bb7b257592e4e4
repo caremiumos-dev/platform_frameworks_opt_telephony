@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc058efe_a4087657",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-01-28T01:25:38Z",
+      "side": 1,
+      "message": "Mark @VisibleForTesting if not meant to be public otherwise.",
+      "revId": "e0832fe3041fafe3258ba375c5bb7b257592e4e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
