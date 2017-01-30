@@ -730,7 +730,7 @@ public class ImsPhoneConnection extends Connection {
                 Rlog.d(LOG_TAG, "address = " +  address + " name = " + name +
                         " nump = " + nump + " namep = " + namep);
             }
-            if(equalsHandlesNulls(mAddress, address)) {
+            if(!equalsHandlesNulls(mAddress, address)) {
                 mAddress = address;
                 changed = true;
             }
