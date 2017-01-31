@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e6cfc28_f3f00511",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-31T22:48:06Z",
+      "side": 1,
+      "message": "use new addReasonCodeMapping method instead?",
+      "range": {
+        "startLine": 595,
+        "startChar": 20,
+        "endLine": 595,
+        "endChar": 81
+      },
+      "revId": "77bb7e6c5ce2d1f719785056c16dd1b8493b76bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f4cc472d_e49c4a72",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-31T22:48:06Z",
+      "side": 1,
+      "message": "nit: space",
+      "range": {
+        "startLine": 597,
+        "startChar": 63,
+        "endLine": 597,
+        "endChar": 64
+      },
+      "revId": "77bb7e6c5ce2d1f719785056c16dd1b8493b76bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
