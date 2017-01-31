@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a752e416_e04300d3",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-31T21:59:35Z",
+      "side": 1,
+      "message": "spaces, not tabs",
+      "range": {
+        "startLine": 512,
+        "startChar": 0,
+        "endLine": 512,
+        "endChar": 5
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b13f832_557fb96c",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-31T21:59:35Z",
+      "side": 1,
+      "message": "why is this needed?",
+      "range": {
+        "startLine": 1534,
+        "startChar": 32,
+        "endLine": 1534,
+        "endChar": 55
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2140fe79_5ff436d6",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-31T21:59:35Z",
+      "side": 1,
+      "message": "I wonder if this is actually useful.\n\nWe only expect exceptional problems: no SAT or a bad arg.  Both of those warrant exceptions and we can\u0027t expect the caller to do anything about it.  Making them check a return value seems silly.",
+      "range": {
+        "startLine": 1541,
+        "startChar": 11,
+        "endLine": 1541,
+        "endChar": 18
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "72c82306_41aff3b7",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-31T21:59:35Z",
+      "side": 1,
+      "message": "ditto - should we just throw an exception here?\n\nIf the tracker has to be set in the constructor (and we make tracker final) why would this ever happen?",
+      "range": {
+        "startLine": 1572,
+        "startChar": 36,
+        "endLine": 1572,
+        "endChar": 64
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca847df0_0302ccb3",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-31T21:59:35Z",
+      "side": 1,
+      "message": "and empty space before these would make it more clear that this applies to the var below.",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 7
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "52fb8d36_681254a7",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-31T21:59:35Z",
+      "side": 1,
+      "message": "sReceiver means static.  I think you want mReceiver.",
+      "range": {
+        "startLine": 67,
+        "startChar": 30,
+        "endLine": 67,
+        "endChar": 39
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "465d1b6a_ffb40467",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-31T21:59:35Z",
+      "side": 1,
+      "message": "all 3 final?",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 11
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6dd17d94_a69b0848",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-31T21:59:35Z",
+      "side": 1,
+      "message": "safer to say \nif (TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(action))\n\nThat way if getAction can return null you\u0027re covered.  I don\u0027t know if it can or not, but it\u0027s good defensive programming.",
+      "range": {
+        "startLine": 79,
+        "startChar": 20,
+        "endLine": 79,
+        "endChar": 26
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "91994a6b_23f3220d",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-01-31T21:59:35Z",
+      "side": 1,
+      "message": "this won\u0027t fit on one line?",
+      "range": {
+        "startLine": 83,
+        "startChar": 28,
+        "endLine": 83,
+        "endChar": 31
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
