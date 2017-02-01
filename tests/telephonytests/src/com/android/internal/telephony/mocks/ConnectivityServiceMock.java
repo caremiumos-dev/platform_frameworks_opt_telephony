@@ -658,6 +658,11 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
     }
 
     @Override
+    public void doesCarrierAllowTethering(int type, ResultReceiver receiver) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
     public void startTethering(int type, ResultReceiver receiver, boolean showProvisioningUi) {
         throw new RuntimeException("not implemented");
     }
