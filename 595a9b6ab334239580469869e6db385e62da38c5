@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "a0e5467f_b3fbe284",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-01T01:27:41Z",
+      "side": 1,
+      "message": "Done",
+      "range": {
+        "startLine": 512,
+        "startChar": 0,
+        "endLine": 512,
+        "endChar": 5
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b13f832_557fb96c",
         "filename": "src/java/com/android/internal/telephony/Phone.java",
         "patchSetId": 10
@@ -36,6 +59,29 @@
       "writtenOn": "2017-01-31T21:59:35Z",
       "side": 1,
       "message": "why is this needed?",
+      "range": {
+        "startLine": 1534,
+        "startChar": 32,
+        "endLine": 1534,
+        "endChar": 55
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1bc72986_eb781c75",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-01T01:27:41Z",
+      "side": 1,
+      "message": "private memeber of Phone, easy to access from internally and easy to mock for unit test?",
       "range": {
         "startLine": 1534,
         "startChar": 32,
@@ -71,6 +117,29 @@
     },
     {
       "key": {
+        "uuid": "ee892a2d_d4075897",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-01T01:27:41Z",
+      "side": 1,
+      "message": "no SAT is not a valid scenario..\ndo we want to through exceptions on bad parameters or just silent failure? we don\u0027t usually throw exceptions in telephonyManager APIs, usually catch internally with an error message instead.",
+      "range": {
+        "startLine": 1541,
+        "startChar": 11,
+        "endLine": 1541,
+        "endChar": 18
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72c82306_41aff3b7",
         "filename": "src/java/com/android/internal/telephony/Phone.java",
         "patchSetId": 10
@@ -94,6 +163,29 @@
     },
     {
       "key": {
+        "uuid": "1a914fb0_bbebd07b",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-01T01:27:41Z",
+      "side": 1,
+      "message": "Done",
+      "range": {
+        "startLine": 1572,
+        "startChar": 36,
+        "endLine": 1572,
+        "endChar": 64
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca847df0_0302ccb3",
         "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
         "patchSetId": 10
@@ -105,6 +197,29 @@
       "writtenOn": "2017-01-31T21:59:35Z",
       "side": 1,
       "message": "and empty space before these would make it more clear that this applies to the var below.",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 7
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6b0482bb_66d8b702",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-01T01:27:41Z",
+      "side": 1,
+      "message": "Done",
       "range": {
         "startLine": 56,
         "startChar": 4,
@@ -163,6 +278,29 @@
     },
     {
       "key": {
+        "uuid": "b358351b_c9e37c0d",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-01T01:27:41Z",
+      "side": 1,
+      "message": "Done",
+      "range": {
+        "startLine": 67,
+        "startChar": 30,
+        "endLine": 67,
+        "endChar": 39
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6dd17d94_a69b0848",
         "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
         "patchSetId": 10
@@ -186,6 +324,29 @@
     },
     {
       "key": {
+        "uuid": "69ccc6af_e68adacb",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-01T01:27:41Z",
+      "side": 1,
+      "message": "yes, that\u0027s better",
+      "range": {
+        "startLine": 79,
+        "startChar": 20,
+        "endLine": 79,
+        "endChar": 26
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91994a6b_23f3220d",
         "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
         "patchSetId": 10
@@ -197,6 +358,29 @@
       "writtenOn": "2017-01-31T21:59:35Z",
       "side": 1,
       "message": "this won\u0027t fit on one line?",
+      "range": {
+        "startLine": 83,
+        "startChar": 28,
+        "endLine": 83,
+        "endChar": 31
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a99ff314_2bcf2381",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-01T01:27:41Z",
+      "side": 1,
+      "message": "Done",
       "range": {
         "startLine": 83,
         "startChar": 28,
