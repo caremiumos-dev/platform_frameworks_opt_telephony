@@ -16,9 +16,10 @@
 
 package com.android.internal.telephony;
 
+import android.telephony.Rlog;
+
 import com.android.internal.telephony.RILConstants;
 
-import android.telephony.Rlog;
 
 /**
  * {@hide}
@@ -91,6 +92,7 @@ public class CommandException extends RuntimeException {
         NO_NETWORK_FOUND,
         DEVICE_IN_USE,
         ABORTED,
+        SIM_STATUS_UNKNOWN,
         OEM_ERROR_1,
         OEM_ERROR_2,
         OEM_ERROR_3,
@@ -258,6 +260,8 @@ public class CommandException extends RuntimeException {
                 return new CommandException(Error.NO_NETWORK_FOUND);
             case RILConstants.DEVICE_IN_USE:
                 return new CommandException(Error.DEVICE_IN_USE);
+            case RILConstants.SIM_STATUS_UNKNOWN:
+                return new CommandException(Error.SIM_STATUS_UNKNOWN);
             case RILConstants.ABORTED:
                 return new CommandException(Error.ABORTED);
             case RILConstants.OEM_ERROR_1:

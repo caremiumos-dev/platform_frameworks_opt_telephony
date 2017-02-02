@@ -24,13 +24,13 @@ import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.SystemProperties;
 import android.os.storage.StorageManager;
-import android.telephony.TelephonyManager;
 import android.telephony.Rlog;
+import android.telephony.TelephonyManager;
 import android.text.format.Time;
 
+import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.PhoneConstants;
-import com.android.internal.telephony.SubscriptionController;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -284,9 +284,15 @@ public class UiccController extends Handler {
 
     private synchronized void onGetIccCardStatusDone(AsyncResult ar, Integer index) {
         if (ar.exception != null) {
-            Rlog.e(LOG_TAG,"Error getting ICC status. "
-                    + "RIL_REQUEST_GET_ICC_STATUS should "
-                    + "never return an error", ar.exception);
+            if (ar.exception instanceof CommandException
+                    && ((CommandException) (ar.exception)).getCommandError()
+                    == CommandException.Error.SIM_STATUS_UNKNOWN) {
+                if (DBG) log("Sim status is unknown");
+            } else {
+                Rlog.e(LOG_TAG, "Unexpected Error while getting ICC status. "
+                        + ar.exception);
+            }
+
             return;
         }
         if (!isValidCardIndex(index)) {
