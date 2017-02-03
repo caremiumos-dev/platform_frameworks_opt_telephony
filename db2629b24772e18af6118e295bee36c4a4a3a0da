@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa8b3c80_5aa999f5",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-03T01:56:58Z",
+      "side": 1,
+      "message": "now simActivationTracker throws an unchecked invalidParameter exception",
+      "range": {
+        "startLine": 1542,
+        "startChar": 8,
+        "endLine": 1542,
+        "endChar": 54
+      },
+      "revId": "db2629b24772e18af6118e295bee36c4a4a3a0da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
