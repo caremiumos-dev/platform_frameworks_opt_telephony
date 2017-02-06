@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b737a2fe_8319ac34",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-06T21:38:07Z",
+      "side": 1,
+      "message": "finally is executed before return. You don\u0027t want that.",
+      "revId": "cb30b80ed84063dc073703ca2e261d796b1ad19c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
