@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca434b1b_32f548fb",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/mocks/ConnectivityServiceMock.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1107893
+      },
+      "writtenOn": "2017-02-06T21:15:37Z",
+      "side": 1,
+      "message": "I know it is not much used, but do you know about Preconditions.checkArgumentNonNegative() ? \n\nhttps://cs.corp.google.com/android/frameworks/base/core/java/com/android/internal/util/Preconditions.java?rcl\u003d556897f7018e1b231d6200e21dd45657f180a63c\u0026l\u003d165",
+      "range": {
+        "startLine": 687,
+        "startChar": 8,
+        "endLine": 687,
+        "endChar": 26
+      },
+      "revId": "c44e97d59bc92bc4204121782768abf43ee855f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
