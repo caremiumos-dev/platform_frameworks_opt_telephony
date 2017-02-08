@@ -1430,9 +1430,12 @@ public class ImsPhone extends ImsPhoneBase {
                 if (VDBG) logd("EVENT_SERVICE_STATE_CHANGED");
                 ar = (AsyncResult) msg.obj;
                 ServiceState newServiceState = (ServiceState) ar.result;
+<<<<<<< HEAD
                 // only update if roaming status changed
                 if (mRoaming != newServiceState.getRoaming()) {
-                    if (DBG) logd("Roaming state changed");
+                    if (DBG) logd("Roaming state changed - " + mRoaming);
+=======
+>>>>>>> fa09c499f... Do not consider no service as home network
                     updateRoamingState(newServiceState.getRoaming());
                 }
                 break;
@@ -1808,8 +1811,16 @@ public class ImsPhone extends ImsPhoneBase {
         if (mCT.getState() == PhoneConstants.State.IDLE) {
             if (DBG) logd("updateRoamingState now: " + newRoaming);
             mRoaming = newRoaming;
-            ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
-            imsManager.setWfcMode(imsManager.getWfcMode(newRoaming), newRoaming);
+            // Update WFC mode only if voice or data is in service.
+            // The STATE_IN_SERVICE is checked to prevent wifi calling mode change when phone
+            // moves from roaming to no service.
+            if (newServiceState.getVoiceRegState() == ServiceState.STATE_IN_SERVICE ||
+                    newServiceState.getDataRegState() == ServiceState.STATE_IN_SERVICE) {
+                ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
+                imsManager.setWfcMode(imsManager.getWfcMode(newRoaming), newRoaming);
+            } else {
+                if (DBG) Rlog.d(LOG_TAG, "updateRoamingState service state is Out_of_service");
+            }
         } else {
             if (DBG) logd("updateRoamingState postponed: " + newRoaming);
             mCT.registerForVoiceCallEnded(this,
