@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "b8e76f98_a0004c1e",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-09T18:20:49Z",
+      "side": 1,
+      "message": "Do you have users for it?\n\nIf you hand it out you lose control over how it\u0027s used - it could be modified from other thread, etc.  So unless there is a need it\u0027s better to not expose everything.\n\nWe can test without this I think.\n\nYou have accessor methods (get/set of activation state) so it seems like the impl should be masked and users should have to use the accessors.",
+      "parentUuid": "1bc72986_eb781c75",
+      "range": {
+        "startLine": 1534,
+        "startChar": 32,
+        "endLine": 1534,
+        "endChar": 55
+      },
+      "revId": "595a9b6ab334239580469869e6db385e62da38c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2140fe79_5ff436d6",
         "filename": "src/java/com/android/internal/telephony/Phone.java",
         "patchSetId": 10
