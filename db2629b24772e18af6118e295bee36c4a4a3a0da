@@ -22,6 +22,52 @@
       "revId": "db2629b24772e18af6118e295bee36c4a4a3a0da",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b0f8ba1f_e43f81cc",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-09T18:20:49Z",
+      "side": 1,
+      "message": "I think Android uses IllegalArgumentException generally - This class is a subclass \"designed for use by the JCA/JCE enginie classes\", so probably the IllegalArg base class is more appropriate.",
+      "range": {
+        "startLine": 99,
+        "startChar": 22,
+        "endLine": 99,
+        "endChar": 47
+      },
+      "revId": "db2629b24772e18af6118e295bee36c4a4a3a0da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8dbaba8a_9a0e81bf",
+        "filename": "src/java/com/android/internal/telephony/SimActivationTracker.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-09T18:20:49Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 109,
+        "startChar": 22,
+        "endLine": 109,
+        "endChar": 47
+      },
+      "revId": "db2629b24772e18af6118e295bee36c4a4a3a0da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
