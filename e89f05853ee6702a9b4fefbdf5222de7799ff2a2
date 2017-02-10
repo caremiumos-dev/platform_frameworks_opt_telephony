@@ -99,6 +99,29 @@
     },
     {
       "key": {
+        "uuid": "49172bac_4ad032f3",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-02-10T21:05:40Z",
+      "side": 1,
+      "message": "I thought we weren\u0027t supposed to do work on the binder thread? I believe that risks weird synchronization errors.",
+      "range": {
+        "startLine": 1377,
+        "startChar": 20,
+        "endLine": 1377,
+        "endChar": 41
+      },
+      "revId": "e89f05853ee6702a9b4fefbdf5222de7799ff2a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a2b7981_abe471bd",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 8
