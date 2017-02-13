@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32d8d269_bec100da",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-13T22:23:57Z",
+      "side": 1,
+      "message": "move this up after 1110?",
+      "range": {
+        "startLine": 1119,
+        "startChar": 16,
+        "endLine": 1119,
+        "endChar": 53
+      },
+      "revId": "6f75943d15075631cd775a6efe6ff114334ebabd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
