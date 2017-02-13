@@ -328,9 +328,15 @@ public class RadioResponse extends IRadioResponse.Stub {
         responseSms(responseInfo, sms);
     }
 
+    /**
+     * Respond setup data call request
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param setupDataCallResult Response to data call setup as defined by setupDataCallResult in
+     *                            types.hal
+     */
     public void setupDataCallResponse(RadioResponseInfo responseInfo,
-                                      SetupDataCallResult dcResponse) {
-        responseSetupDataCall(responseInfo, dcResponse);
+                                      SetupDataCallResult setupDataCallResult) {
+        responseSetupDataCall(responseInfo, setupDataCallResult);
     }
 
     /**
@@ -551,9 +557,15 @@ public class RadioResponse extends IRadioResponse.Stub {
         responseInts(responseInfo, status);
     }
 
+    /**
+     * Respond get data call list
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param dataCallResultList Response to get data call list as defined by setupDataCallResult in
+     *                     types.hal
+     */
     public void getDataCallListResponse(RadioResponseInfo responseInfo,
-                                        ArrayList<SetupDataCallResult> dcResponse) {
-        responseDataCallList(responseInfo, dcResponse);
+                                        ArrayList<SetupDataCallResult> dataCallResultList) {
+        responseDataCallList(responseInfo, dataCallResultList);
     }
 
     public void sendOemRilRequestRawResponse(RadioResponseInfo responseInfo,
@@ -1445,13 +1457,13 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     private void responseSetupDataCall(RadioResponseInfo responseInfo,
-                                       SetupDataCallResult dcResponse) {
+                                  SetupDataCallResult setupDataCallResult) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
             DataCallResponse ret = null;
             if (responseInfo.error == RadioError.NONE) {
-                ret = RIL.convertHalDc(dcResponse);
+                ret = new DataCallResponse(setupDataCallResult);
                 sendMessageResponse(rr.mResult, ret);
             }
             mRil.processResponseDone(rr, responseInfo, ret);
@@ -1530,16 +1542,19 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     private void responseDataCallList(RadioResponseInfo responseInfo,
-                                      ArrayList<SetupDataCallResult> dcResponse) {
+                                      ArrayList<SetupDataCallResult> dataCallResultList) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
-            ArrayList<DataCallResponse> ret = null;
+            ArrayList<DataCallResponse> dcResponseList = null;
             if (responseInfo.error == RadioError.NONE) {
-                ret = RIL.convertHalDcList(dcResponse);
-                sendMessageResponse(rr.mResult, ret);
+                dcResponseList = new ArrayList<>();
+                for (SetupDataCallResult dcResult : dataCallResultList) {
+                    dcResponseList.add(new DataCallResponse(dcResult));
+                }
+                sendMessageResponse(rr.mResult, dcResponseList);
             }
-            mRil.processResponseDone(rr, responseInfo, ret);
+            mRil.processResponseDone(rr, responseInfo, dcResponseList);
         }
     }
 
