@@ -16,6 +16,10 @@
 
 package com.android.internal.telephony.dataconnection;
 
+import static com.android.internal.telephony.dataconnection.DcTracker.SetDataProfileStatus.NEVER_SET_DATA_PROFILE;
+import static com.android.internal.telephony.dataconnection.DcTracker.SetDataProfileStatus.SET_DATA_PROFILE_WITH_HOME_PROTOCOL;
+import static com.android.internal.telephony.dataconnection.DcTracker.SetDataProfileStatus.SET_DATA_PROFILE_WITH_ROAMING_PROTOCOL;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -107,6 +111,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * {@hide}
  */
@@ -608,10 +613,21 @@ public class DcTracker extends Handler {
 
     private int mDisconnectPendingCount = 0;
 
-    /** Indicate if metered APNs are disabled.
-     *  set to block all the metered APNs from continuously sending requests, which causes
-     *  undesired network load */
-    private boolean mMeteredApnDisabled = false;
+    /**
+     * Whether carrier allow user edited tether APN. Updated by carrier config
+     * KEY_EDITABLE_TETHER_APN_BOOL
+     * If true, APN with dun type from database will be used, see fetchDunApn for details.
+     */
+    private boolean mAllowUserEditTetherApn = false;
+
+    enum SetDataProfileStatus {
+        NEVER_SET_DATA_PROFILE,
+        SET_DATA_PROFILE_WITH_HOME_PROTOCOL,
+        SET_DATA_PROFILE_WITH_ROAMING_PROTOCOL
+    };
+
+    /** to remember whether has setDataProfiles and with roaming or not. */
+    private SetDataProfileStatus mSetDataProfileStatus = NEVER_SET_DATA_PROFILE;
 
     /**
      * Handles changes to the APN db.
@@ -2179,9 +2195,7 @@ public class DcTracker extends Handler {
         } else {
             if (DBG) log("setInitialAttachApn: X selected Apn=" + initialAttachApnSetting);
 
-            mPhone.mCi.setInitialAttachApn(initialAttachApnSetting.apn,
-                    initialAttachApnSetting.protocol, initialAttachApnSetting.authType,
-                    initialAttachApnSetting.user, initialAttachApnSetting.password, null);
+            mPhone.mCi.setInitialAttachApn(new DataProfile(initialAttachApnSetting), null);
         }
     }
 
@@ -2742,6 +2756,10 @@ public class DcTracker extends Handler {
     private void onRoamingOff() {
         if (DBG) log("onRoamingOff");
 
+        // Note onRoamingOff will be called immediately when DcTracker registerForDataRoamingOff,
+        // and will be called again if SST calls mDataRoamingOffRegistrants.notify().
+        setDataProfilesAsNeeded();
+
         if (!mDataEnabledSettings.isUserDataEnabled()) return;
 
         if (getDataOnRoamingEnabled() == false) {
@@ -3276,27 +3294,28 @@ public class DcTracker extends Handler {
     }
 
     private void setDataProfilesAsNeeded() {
-        if (DBG) log("setDataProfilesAsNeeded");
+        if (DBG) log("setDataProfilesAsNeeded mSetDataProfileStatus: " + mSetDataProfileStatus);
         if (mAllApnSettings != null && !mAllApnSettings.isEmpty()) {
             ArrayList<DataProfile> dps = new ArrayList<DataProfile>();
+            // Note getDataRoaming is also false if data not registered
+            boolean isRoaming = mPhone.getServiceState().getDataRoaming();
+            // If has set profile with home, and isRoaming is also false, no need to resend
+            // Also skip if has set profile with roaming and isRoaming is true.
+            if ((mSetDataProfileStatus == SET_DATA_PROFILE_WITH_HOME_PROTOCOL && !isRoaming)
+                    || (mSetDataProfileStatus == SET_DATA_PROFILE_WITH_ROAMING_PROTOCOL
+                    && isRoaming)) {
+                return;
+            }
             for (ApnSetting apn : mAllApnSettings) {
                 if (apn.modemCognitive) {
-                    DataProfile dp = new DataProfile(apn,
-                            mPhone.getServiceState().getDataRoaming());
-                    boolean isDup = false;
-                    for(DataProfile dpIn : dps) {
-                        if (dp.equals(dpIn)) {
-                            isDup = true;
-                            break;
-                        }
-                    }
-                    if (!isDup) {
+                    DataProfile dp = new DataProfile(apn);
+                    if (!dps.contains(dp)) {
                         dps.add(dp);
                     }
                 }
             }
-            if(dps.size() > 0) {
-                mPhone.mCi.setDataProfile(dps.toArray(new DataProfile[0]), null);
+            if (dps.size() > 0) {
+                mPhone.mCi.setDataProfile(dps.toArray(new DataProfile[0]), isRoaming, null);
             }
         }
     }
@@ -3307,7 +3326,7 @@ public class DcTracker extends Handler {
      */
     private void createAllApnList() {
         mMvnoMatched = false;
-        mAllApnSettings = new ArrayList<ApnSetting>();
+        mAllApnSettings = new ArrayList<>();
         IccRecords r = mIccRecords.get();
         String operator = (r != null) ? r.getOperatorNumeric() : "";
         if (operator != null) {
