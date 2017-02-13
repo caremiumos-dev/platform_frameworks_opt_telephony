@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bc417cf_bd1d1e26",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-02-13T19:56:48Z",
+      "side": 1,
+      "message": "didn\u0027t you deprecate these?",
+      "range": {
+        "startLine": 532,
+        "startChar": 13,
+        "endLine": 533,
+        "endChar": 66
+      },
+      "revId": "d3bf75abcc4f1bea4ec47871d09b54a369b4e78e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bfd900b3_1d906cd9",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-02-13T19:56:48Z",
+      "side": 1,
+      "message": "this variable name sounds like it\u0027ll stop trying after failing 6 times.",
+      "range": {
+        "startLine": 228,
+        "startChar": 29,
+        "endLine": 228,
+        "endChar": 52
+      },
+      "revId": "d3bf75abcc4f1bea4ec47871d09b54a369b4e78e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
