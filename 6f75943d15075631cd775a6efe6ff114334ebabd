@@ -22,6 +22,30 @@
       "revId": "6f75943d15075631cd775a6efe6ff114334ebabd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "007d65db_7152464e",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-13T22:24:42Z",
+      "side": 1,
+      "message": "it\u0027s needed for the else case as well.",
+      "parentUuid": "32d8d269_bec100da",
+      "range": {
+        "startLine": 1119,
+        "startChar": 16,
+        "endLine": 1119,
+        "endChar": 53
+      },
+      "revId": "6f75943d15075631cd775a6efe6ff114334ebabd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
