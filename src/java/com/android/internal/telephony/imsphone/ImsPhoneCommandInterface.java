@@ -23,11 +23,11 @@ import android.service.carrier.CarrierIdentifier;
 
 import com.android.internal.telephony.BaseCommands;
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.RadioCapability;
+import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.dataconnection.DataProfile;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
-import com.android.internal.telephony.RadioCapability;
-import com.android.internal.telephony.UUSInfo;
 
 import java.util.List;
 
@@ -258,9 +258,8 @@ class ImsPhoneCommandInterface extends BaseCommands implements CommandsInterface
     }
 
     @Override
-    public void setupDataCall(int radioTechnology, int profile,
-            String apn, String user, String password, int authType,
-            String protocol, Message result) {
+    public void setupDataCall(int radioTechnology, DataProfile dataProfile, boolean isRoaming,
+                              boolean allowRoaming, Message result) {
     }
 
     @Override
@@ -551,12 +550,11 @@ class ImsPhoneCommandInterface extends BaseCommands implements CommandsInterface
     }
 
     @Override
-    public void setInitialAttachApn(String apn, String protocol, int authType, String username,
-            String password, Message result) {
+    public void setInitialAttachApn(DataProfile dataProfile, Message result) {
     }
 
     @Override
-    public void setDataProfile(DataProfile[] dps, Message result) {
+    public void setDataProfile(DataProfile[] dps, boolean isRoaming, Message result) {
     }
 
     @Override
