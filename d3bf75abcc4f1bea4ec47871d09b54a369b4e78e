@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "45761762_e78d6236",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-02-14T00:25:50Z",
+      "side": 1,
+      "message": "Yes, but they are still used in bullhead/angler to relay when the vendor ImsService is up, since they are not getting the refactor.",
+      "parentUuid": "8bc417cf_bd1d1e26",
+      "range": {
+        "startLine": 532,
+        "startChar": 13,
+        "endLine": 533,
+        "endChar": 66
+      },
+      "revId": "d3bf75abcc4f1bea4ec47871d09b54a369b4e78e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfd900b3_1d906cd9",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-02-13T19:56:48Z",
       "side": 1,
       "message": "this variable name sounds like it\u0027ll stop trying after failing 6 times.",
+      "range": {
+        "startLine": 228,
+        "startChar": 29,
+        "endLine": 228,
+        "endChar": 52
+      },
+      "revId": "d3bf75abcc4f1bea4ec47871d09b54a369b4e78e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a144adc2_69a556ef",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-02-14T00:25:50Z",
+      "side": 1,
+      "message": "Will update",
+      "parentUuid": "bfd900b3_1d906cd9",
       "range": {
         "startLine": 228,
         "startChar": 29,
