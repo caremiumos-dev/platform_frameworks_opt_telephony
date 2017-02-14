@@ -45,6 +45,30 @@
       "revId": "7a8469a9f97ff36e44db062d93ce8ab22f85b4f2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "006836ba_24c9e6ab",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-14T04:46:58Z",
+      "side": 1,
+      "message": "Assuming impl detail. But still an open question for treble folks here: https://docs.google.com/document/d/1bXxdGiAX-XI7XOj_PSfvztjuO7T_EyDv4DpMu7HiO1k/edit?disco\u003dAAAAA6Pboos",
+      "parentUuid": "05c55b4e_9a92fa30",
+      "range": {
+        "startLine": 876,
+        "startChar": 16,
+        "endLine": 877,
+        "endChar": 61
+      },
+      "revId": "7a8469a9f97ff36e44db062d93ce8ab22f85b4f2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
