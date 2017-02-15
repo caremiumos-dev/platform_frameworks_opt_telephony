@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16e59e99_baebbf2f",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2017-02-15T19:47:47Z",
+      "side": 1,
+      "message": "should we move this log outside so that it gets printed only once for wifi only device and not for every call.",
+      "range": {
+        "startLine": 838,
+        "startChar": 12,
+        "endLine": 838,
+        "endChar": 59
+      },
+      "revId": "c0cd47316a551043bab2a0b9e02b496cd16ae1d8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
