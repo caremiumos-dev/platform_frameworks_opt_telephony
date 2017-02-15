@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6125c045_d15142f4",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1567,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-15T21:24:19Z",
+      "side": 1,
+      "message": "I thought you were going to assume old RIL for now since new will behavior will be needed only later on DR.",
+      "range": {
+        "startLine": 1567,
+        "startChar": 11,
+        "endLine": 1567,
+        "endChar": 15
+      },
+      "revId": "e4cf3ea3d9298501f2d61acd4102d11d270c1f3c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
