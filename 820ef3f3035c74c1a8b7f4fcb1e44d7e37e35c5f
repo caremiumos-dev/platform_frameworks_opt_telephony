@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "057a4616_735f634b",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCommandInterface.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-16T23:56:00Z",
+      "side": 1,
+      "message": "any reason to touch this file?",
+      "revId": "820ef3f3035c74c1a8b7f4fcb1e44d7e37e35c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
