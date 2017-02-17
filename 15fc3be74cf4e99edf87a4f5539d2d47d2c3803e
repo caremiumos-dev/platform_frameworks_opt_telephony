@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "783007cc_77d8b16a",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-17T01:13:25Z",
+      "side": 1,
+      "message": "can you add a comment above this to indicate the 3 allowed ones?",
+      "revId": "15fc3be74cf4e99edf87a4f5539d2d47d2c3803e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
