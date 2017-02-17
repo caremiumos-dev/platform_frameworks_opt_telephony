@@ -16,6 +16,24 @@
       "revId": "820ef3f3035c74c1a8b7f4fcb1e44d7e37e35c5f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "471c96a8_c0ba3048",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCommandInterface.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-17T00:04:21Z",
+      "side": 1,
+      "message": "check style script asked me to fix the order. I think it is because in the parent CL I used --no-verify. The script apparently scanned the previous un-published CL in the same branch.",
+      "parentUuid": "057a4616_735f634b",
+      "revId": "820ef3f3035c74c1a8b7f4fcb1e44d7e37e35c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
