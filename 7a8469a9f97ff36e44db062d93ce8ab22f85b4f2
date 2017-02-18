@@ -93,6 +93,30 @@
       "revId": "7a8469a9f97ff36e44db062d93ce8ab22f85b4f2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8abc4693_d1d6e6de",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-18T02:15:27Z",
+      "side": 1,
+      "message": "I think you should treat these separate hal services as separate and not assume if oemhook dies we\u0027ll get the death notification from iradio.  This is not in the throw-away ril.cpp layer..",
+      "parentUuid": "006836ba_24c9e6ab",
+      "range": {
+        "startLine": 876,
+        "startChar": 16,
+        "endLine": 877,
+        "endChar": 61
+      },
+      "revId": "7a8469a9f97ff36e44db062d93ce8ab22f85b4f2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
