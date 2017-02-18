@@ -627,6 +627,14 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     }
 
     @Override
+    public void sendDeviceState(int stateType, boolean state, Message result) {
+    }
+
+    @Override
+    public void setUnsolResponseFilter(int filter, Message result){
+    }
+
+    @Override
     public void setSimCardPower(boolean powerUp, Message result) {
     }
 }
