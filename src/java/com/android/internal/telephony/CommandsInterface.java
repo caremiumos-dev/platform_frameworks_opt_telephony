@@ -22,6 +22,7 @@ import android.os.WorkSource;
 import android.service.carrier.CarrierIdentifier;
 import android.telephony.ClientRequestStats;
 
+import com.android.internal.telephony.DeviceStateMonitor.DeviceStateType;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.dataconnection.DataProfile;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
@@ -2062,12 +2063,39 @@ public interface CommandsInterface {
     public void unregisterForPcoData(Handler h);
 
     /**
+     * Send the updated device state
+     *
+     * @param stateType Device state type
+     * @param state True if enabled, otherwise disabled
+     * @param result callback message contains the information of SUCCESS/FAILURE
+     */
+    void sendDeviceState(DeviceStateType stateType, boolean state, Message result);
+
+    /**
+     * Send the device state to the modem
+     *
+     * @param filter unsolicited response filter. See DeviceStateMonitor.UnsolicitedResponseFilter
+     * @param result callback message contains the information of SUCCESS/FAILURE
+     */
+    void setUnsolResponseFilter(int filter, Message result);
+
+    /**
      * Set SIM card power up or down
      *
      * @param powerUp True if powering up the sim card
      * @param result callback message contains the information of SUCCESS/FAILURE
      */
-    public void setSimCardPower(boolean powerUp, Message result);
+    void setSimCardPower(boolean powerUp, Message result);
+
+    /**
+     * Invoke the legacy screen state RIL API. Note this is only for supporting the legacy vendor
+     * RIL. Once all vendor RILs support RIL_REQUEST_SEND_DEVICE_STATE and
+     * RIL_REQUEST_SET_UNSOLICITED_RESPONSE_FILTER, we should remove this.
+     *
+     * @param on True if screen state on. Note that the actual screen is not necessarily on for
+     *           historical reasons.
+     */
+    void sendLegacyScreenState(boolean on);
 
     default public List<ClientRequestStats> getClientRequestStats() {
         return null;
