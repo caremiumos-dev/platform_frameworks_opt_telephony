@@ -153,6 +153,8 @@ public class ServiceStateTracker extends Handler {
      */
     private boolean mDontPollSignalStrength = false;
 
+    private boolean mIsModemTriggeredPollingPending = false;
+
     private RegistrantList mVoiceRoamingOnRegistrants = new RegistrantList();
     private RegistrantList mVoiceRoamingOffRegistrants = new RegistrantList();
     private RegistrantList mDataRoamingOnRegistrants = new RegistrantList();
@@ -2691,13 +2693,15 @@ public class ServiceStateTracker extends Handler {
                 // don't poll when device is shutting down or the poll was not modemTrigged
                 // (they sent us new radio data) and current network is not IWLAN
                 if (mDeviceShuttingDown ||
-                        (!modemTriggered && ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN
+                        (!modemTriggered && !mIsModemTriggeredPollingPending &&
+                        ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN
                         != mSS.getRilDataRadioTechnology())) {
                     pollStateDone();
                     break;
                 }
 
             default:
+                if (modemTriggered) mIsModemTriggeredPollingPending = true;
                 // Issue all poll-related commands at once then count down the responses, which
                 // are allowed to arrive out-of-order
                 // TODO: Add WLAN support.
@@ -2724,6 +2728,7 @@ public class ServiceStateTracker extends Handler {
     }
 
     private void pollStateDone() {
+        mIsModemTriggeredPollingPending = false;
         if (!mPhone.isPhoneTypeGsm()) {
             updateRoamingState();
         }
