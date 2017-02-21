@@ -145,6 +145,8 @@ public class ServiceStateTracker extends Handler {
      */
     private boolean mDontPollSignalStrength = false;
 
+    private boolean mIsModemTriggeredPollingPending = false;
+
     private RegistrantList mVoiceRoamingOnRegistrants = new RegistrantList();
     private RegistrantList mVoiceRoamingOffRegistrants = new RegistrantList();
     private RegistrantList mDataRoamingOnRegistrants = new RegistrantList();
@@ -2525,13 +2527,15 @@ public class ServiceStateTracker extends Handler {
                 // don't poll for state when the radio is off
                 // EXCEPT, if the poll was modemTrigged (they sent us new radio data)
                 // or we're on IWLAN
-                if (!modemTriggered && ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN
+                if (!modemTriggered && !mIsModemTriggeredPollingPending &&
+                        ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN
                         != mSS.getRilDataRadioTechnology()) {
                     pollStateDone();
                     break;
                 }
 
             default:
+                if (modemTriggered) mIsModemTriggeredPollingPending = true;
                 // Issue all poll-related commands at once then count down the responses, which
                 // are allowed to arrive out-of-order
                 mPollingContext[0]++;
@@ -2555,6 +2559,7 @@ public class ServiceStateTracker extends Handler {
 
     //todo: try to merge pollstate functions
     private void pollStateDone() {
+        mIsModemTriggeredPollingPending = false;
         if (mPhone.isPhoneTypeGsm()) {
             pollStateDoneGsm();
         } else if (mPhone.isPhoneTypeCdma()) {
