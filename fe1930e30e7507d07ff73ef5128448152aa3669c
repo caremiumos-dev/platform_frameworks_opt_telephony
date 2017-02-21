@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75f80610_fe9fa83a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3162,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-21T23:31:42Z",
+      "side": 1,
+      "message": "Checked the history of this. This was a fix added only for GSM but is applicable to other RATs as well. Other mNitzUpdatedTime updates are also related to this.",
+      "range": {
+        "startLine": 3137,
+        "startChar": 16,
+        "endLine": 3162,
+        "endChar": 17
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
