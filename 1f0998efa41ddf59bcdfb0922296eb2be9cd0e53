@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9bc90ea0_1fbb4df6",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-21T19:22:33Z",
+      "side": 1,
+      "message": "it\u0027ll be clearer if this is done only when actually polling, that is under default: in the switch block.",
+      "range": {
+        "startLine": 2508,
+        "startChar": 8,
+        "endLine": 2508,
+        "endChar": 67
+      },
+      "revId": "1f0998efa41ddf59bcdfb0922296eb2be9cd0e53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6c066e39_11abd5c9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2531,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-21T19:22:33Z",
+      "side": 1,
+      "message": "and this can be modified to !modemTriggered \u0026\u0026 !mIsModemTriggeredPollingPending",
+      "range": {
+        "startLine": 2531,
+        "startChar": 20,
+        "endLine": 2531,
+        "endChar": 52
+      },
+      "revId": "1f0998efa41ddf59bcdfb0922296eb2be9cd0e53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
