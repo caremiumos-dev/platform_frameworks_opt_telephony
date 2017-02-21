@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d81ce87e_7ab511ce",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-21T20:37:27Z",
+      "side": 1,
+      "message": "Did you see the other comment below? that takes care of what you\u0027re saying.\nit makes more sense to set pollingPending to true only when actually polling.",
+      "parentUuid": "8b7c095b_d0b21a8a",
+      "range": {
+        "startLine": 2508,
+        "startChar": 8,
+        "endLine": 2508,
+        "endChar": 67
+      },
+      "revId": "1f0998efa41ddf59bcdfb0922296eb2be9cd0e53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c066e39_11abd5c9",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
