@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "991ba480_52fa3636",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1614,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-02-21T22:19:05Z",
+      "side": 1,
+      "message": "We should just use android.telecom.Log.pii here instead of gating on DBG_BUILD.\nI don\u0027t foresee an instance where a release build would have a log level higher than VERBOSE.",
+      "range": {
+        "startLine": 1607,
+        "startChar": 7,
+        "endLine": 1614,
+        "endChar": 9
+      },
+      "revId": "e7dd5bba6d60a6cc45ce30bc453c95bc85b60d84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
