@@ -72,6 +72,23 @@
     },
     {
       "key": {
+        "uuid": "98de9483_56b9ac4c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2787,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-22T23:53:23Z",
+      "side": 1,
+      "message": "extra space or colom",
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98bef24c_954db21e",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
@@ -119,6 +136,53 @@
     },
     {
       "key": {
+        "uuid": "660bb656_3e8e8b49",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-22T23:53:23Z",
+      "side": 1,
+      "message": "I think this is fine. This is a hack for testing roaming by setting the system properties.",
+      "parentUuid": "15b8641f_2ef12443",
+      "range": {
+        "startLine": 2916,
+        "startChar": 12,
+        "endLine": 2916,
+        "endChar": 88
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19a82d30_4450d194",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-22T23:53:23Z",
+      "side": 1,
+      "message": "I thought NITZ is a 3GPP thing...",
+      "range": {
+        "startLine": 3094,
+        "startChar": 0,
+        "endLine": 3095,
+        "endChar": 48
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75f80610_fe9fa83a",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
@@ -135,6 +199,53 @@
         "startChar": 16,
         "endLine": 3162,
         "endChar": 17
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "584d2b69_c22fb6b6",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3162,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-22T23:53:23Z",
+      "side": 1,
+      "message": "I think NITZ is only for 3GPP not 3GPP2.",
+      "parentUuid": "75f80610_fe9fa83a",
+      "range": {
+        "startLine": 3137,
+        "startChar": 16,
+        "endLine": 3162,
+        "endChar": 17
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a4d5ca61_a5d1dd43",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3176,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-22T23:53:23Z",
+      "side": 1,
+      "message": "you probably didn\u0027t change the behavior, but why would this apply to GSM only? Shouldn\u0027t this be same for all?",
+      "range": {
+        "startLine": 3175,
+        "startChar": 0,
+        "endLine": 3176,
+        "endChar": 77
       },
       "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
