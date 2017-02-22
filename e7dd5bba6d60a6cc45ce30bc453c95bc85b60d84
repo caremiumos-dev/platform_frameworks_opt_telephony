@@ -22,6 +22,30 @@
       "revId": "e7dd5bba6d60a6cc45ce30bc453c95bc85b60d84",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "18b9af13_94a08d03",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1614,
+      "author": {
+        "id": 1134899
+      },
+      "writtenOn": "2017-02-22T10:13:41Z",
+      "side": 1,
+      "message": "We don’t think it is enough to use hashing for private data from security point of view.\nThey are still visible in GsmCdmaPhone#dialInternal even if it is a release build.",
+      "parentUuid": "991ba480_52fa3636",
+      "range": {
+        "startLine": 1607,
+        "startChar": 7,
+        "endLine": 1614,
+        "endChar": 9
+      },
+      "revId": "e7dd5bba6d60a6cc45ce30bc453c95bc85b60d84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
