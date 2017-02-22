@@ -46,6 +46,30 @@
       "revId": "e7dd5bba6d60a6cc45ce30bc453c95bc85b60d84",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae7ab10_1486a3cb",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1614,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-02-22T16:47:16Z",
+      "side": 1,
+      "message": "Instead of using a DBG_BUILD switch here, why don\u0027t we modify the Log.pii method to remove the number for user builds. This way, you don\u0027t have to modify each file with PII.",
+      "parentUuid": "18b9af13_94a08d03",
+      "range": {
+        "startLine": 1607,
+        "startChar": 7,
+        "endLine": 1614,
+        "endChar": 9
+      },
+      "revId": "e7dd5bba6d60a6cc45ce30bc453c95bc85b60d84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
