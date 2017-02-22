@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5ae956e6_d61bd55e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2563,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-22T17:52:36Z",
+      "side": 1,
+      "message": "It seems that pollStateDoneGsm(), pollStateDoneCdma(), pollStateDoneCdmaLte() are byte-to-byte identical. If not, maybe only few places different. Can we combine them into one method?",
+      "range": {
+        "startLine": 2559,
+        "startChar": 0,
+        "endLine": 2563,
+        "endChar": 35
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75f80610_fe9fa83a",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
