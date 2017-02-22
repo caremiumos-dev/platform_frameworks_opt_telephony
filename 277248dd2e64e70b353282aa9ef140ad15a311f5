@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "2569e93c_a520a867",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2294,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-22T00:56:21Z",
+      "side": 1,
+      "message": "combine these two strings. The line limit is 100 chars. Also for two-lines-if, you need wrap it with {}.",
+      "range": {
+        "startLine": 2293,
+        "startChar": 29,
+        "endLine": 2294,
+        "endChar": 44
+      },
+      "revId": "277248dd2e64e70b353282aa9ef140ad15a311f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3abe39f5_43883603",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 6
