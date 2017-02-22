@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "27d7a17d_f4cc0a9d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2292,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-22T00:46:09Z",
+      "side": 1,
+      "message": "If we going for nits, can you add another 4 spaces here and 2 lines down?",
+      "range": {
+        "startLine": 2292,
+        "startChar": 20,
+        "endLine": 2292,
+        "endChar": 40
+      },
+      "revId": "277248dd2e64e70b353282aa9ef140ad15a311f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3abe39f5_43883603",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 5031,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-22T00:46:09Z",
+      "side": 1,
+      "message": "yeah - this should only be 4 spaces in from the \"if\" two lines up.  Next line should be the same (in line with this corrected one).",
+      "range": {
+        "startLine": 5031,
+        "startChar": 20,
+        "endLine": 5031,
+        "endChar": 23
+      },
+      "revId": "277248dd2e64e70b353282aa9ef140ad15a311f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd0045e7_dec53a83",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 6
