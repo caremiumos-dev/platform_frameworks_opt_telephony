@@ -25,6 +25,52 @@
     },
     {
       "key": {
+        "uuid": "c5fdcebe_699109e3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2775,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-02-22T19:06:48Z",
+      "side": 1,
+      "message": "is this a change in behavior for cases where operatorNumeric is not null but is too long or begins with an invalid mcc?",
+      "range": {
+        "startLine": 2775,
+        "startChar": 16,
+        "endLine": 2775,
+        "endChar": 40
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98bef24c_954db21e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-02-22T19:06:48Z",
+      "side": 1,
+      "message": "is this a change in behavior?",
+      "range": {
+        "startLine": 2916,
+        "startChar": 12,
+        "endLine": 2916,
+        "endChar": 88
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75f80610_fe9fa83a",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
