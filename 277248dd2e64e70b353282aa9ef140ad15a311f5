@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd0045e7_dec53a83",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 5032,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-22T00:01:52Z",
+      "side": 1,
+      "message": "nit: both indentations are incorrect.",
+      "range": {
+        "startLine": 5031,
+        "startChar": 0,
+        "endLine": 5032,
+        "endChar": 45
+      },
+      "revId": "277248dd2e64e70b353282aa9ef140ad15a311f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
