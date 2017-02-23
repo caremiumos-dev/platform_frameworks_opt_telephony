@@ -86,8 +86,8 @@ public class GsmCellBroadcastHandlerTest extends TelephonyTest {
     @Test @SmallTest
     public void testBroadcastSms() {
         mContextFixture.putResource(
-                com.android.internal.R.string.config_defaultCellBroadcastReceiverComponent,
-                "fake.cellbroadcastreceiver.component");
+                com.android.internal.R.string.config_defaultCellBroadcastReceiverPkg,
+                "fake.cellbroadcastreceiver");
         mSimulatedCommands.notifyGsmBroadcastSms(new byte[] {
                 (byte)0xc0, //geographical scope
                 (byte)0x01, //serial number
@@ -103,5 +103,6 @@ public class GsmCellBroadcastHandlerTest extends TelephonyTest {
                 Telephony.Sms.Intents.SMS_EMERGENCY_CB_RECEIVED_ACTION) ||
                 intentArgumentCaptor.getValue().getAction().equals(
                         Telephony.Sms.Intents.SMS_CB_RECEIVED_ACTION));
+        assertEquals("fake.cellbroadcastreceiver", intentArgumentCaptor.getPackage());
     }
 }
