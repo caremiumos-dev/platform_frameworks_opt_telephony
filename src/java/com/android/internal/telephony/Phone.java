@@ -1992,6 +1992,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      *
      * @see #invokeOemRilRequestRaw(byte[], android.os.Message)
      */
+    @Deprecated
     public void invokeOemRilRequestRaw(byte[] data, Message response) {
         mCi.invokeOemRilRequestRaw(data, response);
     }
@@ -2010,6 +2011,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      *
      * @see #invokeOemRilRequestStrings(java.lang.String[], android.os.Message)
      */
+    @Deprecated
     public void invokeOemRilRequestStrings(String[] strings, Message response) {
         mCi.invokeOemRilRequestStrings(strings, response);
     }
