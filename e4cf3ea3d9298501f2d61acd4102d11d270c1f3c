@@ -22,6 +22,80 @@
       "revId": "e4cf3ea3d9298501f2d61acd4102d11d270c1f3c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1591e72e_ac01a5c7",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-23T18:13:02Z",
+      "side": 1,
+      "message": "not updating the hal for this?",
+      "range": {
+        "startLine": 1571,
+        "startChar": 8,
+        "endLine": 1575,
+        "endChar": 9
+      },
+      "revId": "e4cf3ea3d9298501f2d61acd4102d11d270c1f3c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d1ee6a68_1062da96",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-23T18:13:02Z",
+      "side": 1,
+      "message": "fix indentation",
+      "revId": "e4cf3ea3d9298501f2d61acd4102d11d270c1f3c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "401e5f3f_eb6c2a1f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-23T18:13:02Z",
+      "side": 1,
+      "message": "I thought you were trying to keep these classes limited to RIL?\nAlthough don\u0027t spend time on this as it is probably ok to have them outside RIL as well.",
+      "revId": "e4cf3ea3d9298501f2d61acd4102d11d270c1f3c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "025ae1e5_bae054ec",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-23T18:13:02Z",
+      "side": 1,
+      "message": "unrelated change?",
+      "revId": "e4cf3ea3d9298501f2d61acd4102d11d270c1f3c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
