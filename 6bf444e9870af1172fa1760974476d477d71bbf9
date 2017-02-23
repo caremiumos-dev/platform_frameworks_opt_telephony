@@ -22,6 +22,30 @@
       "revId": "6bf444e9870af1172fa1760974476d477d71bbf9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c086010_c374a46a",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-23T18:54:12Z",
+      "side": 1,
+      "message": "sorry this was a merge error from internal master.",
+      "parentUuid": "07576c45_c07a1b3c",
+      "range": {
+        "startLine": 107,
+        "startChar": 19,
+        "endLine": 107,
+        "endChar": 51
+      },
+      "revId": "6bf444e9870af1172fa1760974476d477d71bbf9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
