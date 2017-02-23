@@ -249,6 +249,30 @@
     },
     {
       "key": {
+        "uuid": "e3794abc_2d6d394e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-23T00:57:45Z",
+      "side": 1,
+      "message": "yes, CDMA SST had nitz related code which was pretty much identical to GSM except fixes that one got but not the other.",
+      "parentUuid": "9190af31_c2776c74",
+      "range": {
+        "startLine": 3094,
+        "startChar": 0,
+        "endLine": 3095,
+        "endChar": 48
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75f80610_fe9fa83a",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
