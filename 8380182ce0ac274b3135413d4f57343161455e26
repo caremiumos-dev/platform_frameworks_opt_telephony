@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d1ee7f0_c8cc10fe",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4106,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-23T00:19:44Z",
+      "side": 1,
+      "message": "better to log the 3 so we can understand how we got to the final answer.\n\nRemember this is to debug when things go wrong and if we don\u0027t have the info in the log it doesn\u0027t help.\n\nFor space you might try to log one of these and then log diffs from that to the others instead of logging 3 long numbers..",
+      "range": {
+        "startLine": 4106,
+        "startChar": 0,
+        "endLine": 4106,
+        "endChar": 64
+      },
+      "revId": "8380182ce0ac274b3135413d4f57343161455e26",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
