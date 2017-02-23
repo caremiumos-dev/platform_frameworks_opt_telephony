@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3b723956_1ecdf87f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2787,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-23T00:51:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98de9483_56b9ac4c",
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98bef24c_954db21e",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
@@ -183,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "a555168f_e49a14e3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-23T00:51:01Z",
+      "side": 1,
+      "message": "no, cdma networks support it too.",
+      "parentUuid": "19a82d30_4450d194",
+      "range": {
+        "startLine": 3094,
+        "startChar": 0,
+        "endLine": 3095,
+        "endChar": 48
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75f80610_fe9fa83a",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
@@ -230,6 +272,30 @@
     },
     {
       "key": {
+        "uuid": "cc09615e_6cd5d3b4",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3162,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-23T00:51:01Z",
+      "side": 1,
+      "message": "No, not all cdma networks support it but its for both.",
+      "parentUuid": "584d2b69_c22fb6b6",
+      "range": {
+        "startLine": 3137,
+        "startChar": 16,
+        "endLine": 3162,
+        "endChar": 17
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4d5ca61_a5d1dd43",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
@@ -241,6 +307,30 @@
       "writtenOn": "2017-02-22T23:53:23Z",
       "side": 1,
       "message": "you probably didn\u0027t change the behavior, but why would this apply to GSM only? Shouldn\u0027t this be same for all?",
+      "range": {
+        "startLine": 3175,
+        "startChar": 0,
+        "endLine": 3176,
+        "endChar": 77
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "03e9e149_498b4769",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3176,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-23T00:51:01Z",
+      "side": 1,
+      "message": "not sure, and even if it was the same it\u0027s a subtle thing that can potentially change behavior. I\u0027d rather keep the behavior unchanged. Will look into the history though.",
+      "parentUuid": "a4d5ca61_a5d1dd43",
       "range": {
         "startLine": 3175,
         "startChar": 0,
