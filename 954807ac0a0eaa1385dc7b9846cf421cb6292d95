@@ -46,6 +46,30 @@
       "revId": "954807ac0a0eaa1385dc7b9846cf421cb6292d95",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3adc61ef_f3d3fbee",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1123518
+      },
+      "writtenOn": "2017-02-23T22:05:26Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "79e3d14c_f77dcb86",
+      "range": {
+        "startLine": 104,
+        "startChar": 7,
+        "endLine": 104,
+        "endChar": 91
+      },
+      "revId": "954807ac0a0eaa1385dc7b9846cf421cb6292d95",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
