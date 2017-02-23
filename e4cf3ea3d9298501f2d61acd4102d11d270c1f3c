@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "ba860403_0c09f8ae",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-23T21:48:53Z",
+      "side": 1,
+      "message": "as discussed offline. The next upload will have hal changes.",
+      "parentUuid": "1591e72e_ac01a5c7",
+      "range": {
+        "startLine": 1571,
+        "startChar": 8,
+        "endLine": 1575,
+        "endChar": 9
+      },
+      "revId": "e4cf3ea3d9298501f2d61acd4102d11d270c1f3c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1ee6a68_1062da96",
         "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
         "patchSetId": 4
@@ -59,6 +83,24 @@
       "writtenOn": "2017-02-23T18:13:02Z",
       "side": 1,
       "message": "fix indentation",
+      "revId": "e4cf3ea3d9298501f2d61acd4102d11d270c1f3c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68c37aff_5cdca74d",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-23T21:48:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1ee6a68_1062da96",
       "revId": "e4cf3ea3d9298501f2d61acd4102d11d270c1f3c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
