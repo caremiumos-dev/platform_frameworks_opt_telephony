@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import static android.provider.Settings.Secure.CMAS_ADDITIONAL_BROADCAST_PKG;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AppOpsManager;
@@ -24,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.provider.Telephony;
 import android.telephony.SmsCbMessage;
 import android.telephony.SubscriptionManager;
@@ -97,6 +100,14 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
         SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhone.getPhoneId());
         mContext.sendOrderedBroadcastAsUser(intent, UserHandle.ALL, receiverPermission, appOp,
                 mReceiver, getHandler(), Activity.RESULT_OK, null, null);
+
+        String additionalPackage = Settings.Secure.getString(mContext.getContentResolver(),
+                CMAS_ADDITIONAL_BROADCAST_PKG);
+        if (additionalPackage != null) {
+            intent.setComponent(additionalPackage);
+            mContext.sendOrderedBroadcastAsUser(intent, UserHandle.ALL, receiverPermission, appOp,
+                    mReceiver, getHandler(), Activity.RESULT_OK, null, null);
+        }
     }
 
     /**
