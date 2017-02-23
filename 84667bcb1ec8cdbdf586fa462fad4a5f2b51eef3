@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e73821ee_64ca1b55",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2296,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-23T01:40:12Z",
+      "side": 1,
+      "message": "outOfService doesn\u0027t fit?  this is not a widely used acronym..\n\nradio on but outOfService, set...",
+      "range": {
+        "startLine": 2296,
+        "startChar": 59,
+        "endLine": 2296,
+        "endChar": 62
+      },
+      "revId": "84667bcb1ec8cdbdf586fa462fad4a5f2b51eef3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
