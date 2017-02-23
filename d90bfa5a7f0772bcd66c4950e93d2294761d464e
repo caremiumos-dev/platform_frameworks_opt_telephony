@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13ca2e55_f3b6ee8d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 4107,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-23T00:40:57Z",
+      "side": 1,
+      "message": "Wouldn\u0027t this make the string even longer? lol\nyour max line is only 15 so it won\u0027t be a concern if you log all 3.",
+      "range": {
+        "startLine": 4105,
+        "startChar": 0,
+        "endLine": 4107,
+        "endChar": 73
+      },
+      "revId": "d90bfa5a7f0772bcd66c4950e93d2294761d464e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
