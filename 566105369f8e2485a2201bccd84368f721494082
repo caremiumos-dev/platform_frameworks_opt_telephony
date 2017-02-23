@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8aace19e_cb25a147",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-23T22:13:58Z",
+      "side": 1,
+      "message": "is there any conflict if you setComponent to default cellbroadcastreceiver and setPackage for testing app?",
+      "range": {
+        "startLine": 109,
+        "startChar": 16,
+        "endLine": 109,
+        "endChar": 53
+      },
+      "revId": "566105369f8e2485a2201bccd84368f721494082",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
