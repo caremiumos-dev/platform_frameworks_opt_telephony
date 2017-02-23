@@ -225,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "9190af31_c2776c74",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-23T00:55:08Z",
+      "side": 1,
+      "message": "I searched all the 3GPP2 spec but couldn\u0027t find it at all. Wiki also says CDMA uses sync channel to transmit time information. Did we really handle it correctly before?",
+      "parentUuid": "a555168f_e49a14e3",
+      "range": {
+        "startLine": 3094,
+        "startChar": 0,
+        "endLine": 3095,
+        "endChar": 48
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75f80610_fe9fa83a",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
