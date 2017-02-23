@@ -273,6 +273,30 @@
     },
     {
       "key": {
+        "uuid": "b8fffb8d_de67aa8b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-23T01:06:10Z",
+      "side": 1,
+      "message": "I suspect those code never hit and was just carried from the GSM side. Anyway this CL is just for merging 3 together not changing the logic.",
+      "parentUuid": "e3794abc_2d6d394e",
+      "range": {
+        "startLine": 3094,
+        "startChar": 0,
+        "endLine": 3095,
+        "endChar": 48
+      },
+      "revId": "fe1930e30e7507d07ff73ef5128448152aa3669c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75f80610_fe9fa83a",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
