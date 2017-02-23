@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5809e364_32aae131",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1994,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-23T20:19:17Z",
+      "side": 1,
+      "message": "do you get a warning that you don\u0027t have a matching javadoc deprecation?\n\nYou should have a comment indicating the new preferred mechanism for this - that the oem needs a vendor-extension hal that their apps use.",
+      "range": {
+        "startLine": 1993,
+        "startChar": 5,
+        "endLine": 1994,
+        "endChar": 7
+      },
+      "revId": "9c50fa2d97ba70ae90eec7d3edf2945a951c1aaa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
