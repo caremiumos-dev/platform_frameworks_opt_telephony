@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a35b88b_d5f64b92",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-02-23T19:11:56Z",
+      "side": 1,
+      "message": "how about gate with\nif (Build.IS_DEBUGGABLE) {}",
+      "range": {
+        "startLine": 104,
+        "startChar": 7,
+        "endLine": 104,
+        "endChar": 91
+      },
+      "revId": "954807ac0a0eaa1385dc7b9846cf421cb6292d95",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
