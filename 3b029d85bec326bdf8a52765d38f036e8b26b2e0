@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a03091f4_c46058de",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-24T18:29:09Z",
+      "side": 1,
+      "message": "as discussed. will not do the cleanup work in this CL.",
+      "parentUuid": "3dd80e50_cd92bdae",
+      "range": {
+        "startLine": 754,
+        "startChar": 24,
+        "endLine": 761,
+        "endChar": 36
+      },
+      "revId": "3b029d85bec326bdf8a52765d38f036e8b26b2e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3498085c_8563180a",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2017-02-23T23:52:02Z",
       "side": 1,
       "message": "can you add to or from information similar to the ones at the end of the file? convertHalMvnoType (for from) or convertToHalMvnoType",
+      "range": {
+        "startLine": 1603,
+        "startChar": 23,
+        "endLine": 1603,
+        "endChar": 38
+      },
+      "revId": "3b029d85bec326bdf8a52765d38f036e8b26b2e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c0967d6_56182b98",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-24T18:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3498085c_8563180a",
       "range": {
         "startLine": 1603,
         "startChar": 23,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d66827e1_6d9f7b6e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-24T18:29:09Z",
+      "side": 1,
+      "message": "as discussed, leave it for the cleanup cl.",
+      "parentUuid": "beeafce8_378002c9",
+      "range": {
+        "startLine": 4402,
+        "startChar": 4,
+        "endLine": 4433,
+        "endChar": 5
+      },
+      "revId": "3b029d85bec326bdf8a52765d38f036e8b26b2e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d0ef725_d45ecfa3",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 6
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "f11838bd_0752a86c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-24T18:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d0ef725_d45ecfa3",
+      "revId": "3b029d85bec326bdf8a52765d38f036e8b26b2e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb660979_982466e6",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DataCallResponseTest.java",
         "patchSetId": 6
@@ -99,6 +189,30 @@
       "writtenOn": "2017-02-23T23:52:02Z",
       "side": 1,
       "message": "nit: use empty strings instead if the values aren\u0027t relevant to the test?",
+      "range": {
+        "startLine": 81,
+        "startChar": 17,
+        "endLine": 81,
+        "endChar": 28
+      },
+      "revId": "3b029d85bec326bdf8a52765d38f036e8b26b2e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f689cf96_b11ad470",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DataCallResponseTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-24T18:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb660979_982466e6",
       "range": {
         "startLine": 81,
         "startChar": 17,
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "2374d593_289f2e15",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DataConnectionTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-24T18:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f4c54c3_3229aa99",
+      "range": {
+        "startLine": 199,
+        "startChar": 60,
+        "endLine": 199,
+        "endChar": 82
+      },
+      "revId": "3b029d85bec326bdf8a52765d38f036e8b26b2e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad827aa8_f65c516f",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DataConnectionTest.java",
         "patchSetId": 6
@@ -145,6 +283,30 @@
       "writtenOn": "2017-02-23T23:52:02Z",
       "side": 1,
       "message": "use empty values or static fakes defined in DcTrackerTest?",
+      "range": {
+        "startLine": 223,
+        "startChar": 32,
+        "endLine": 223,
+        "endChar": 43
+      },
+      "revId": "3b029d85bec326bdf8a52765d38f036e8b26b2e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "680157c9_34405fc3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DataConnectionTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-24T18:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad827aa8_f65c516f",
       "range": {
         "startLine": 223,
         "startChar": 32,
@@ -180,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "9fe8bc4b_c1e22e0b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-24T18:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61ef3273_e7a869cc",
+      "range": {
+        "startLine": 777,
+        "startChar": 64,
+        "endLine": 777,
+        "endChar": 81
+      },
+      "revId": "3b029d85bec326bdf8a52765d38f036e8b26b2e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19a8cebc_02bb0dc5",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/metrics/TelephonyMetricsTest.java",
         "patchSetId": 6
@@ -191,6 +377,30 @@
       "writtenOn": "2017-02-23T23:52:02Z",
       "side": 1,
       "message": "nit: use empty strings instead if the values are not relevant for the test?",
+      "range": {
+        "startLine": 323,
+        "startChar": 17,
+        "endLine": 323,
+        "endChar": 24
+      },
+      "revId": "3b029d85bec326bdf8a52765d38f036e8b26b2e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d5ed810_295f7369",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/metrics/TelephonyMetricsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-24T18:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19a8cebc_02bb0dc5",
       "range": {
         "startLine": 323,
         "startChar": 17,
