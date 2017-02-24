@@ -22,6 +22,30 @@
       "revId": "9c50fa2d97ba70ae90eec7d3edf2945a951c1aaa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b6ebfd1d_c26c0df0",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1994,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-24T01:32:00Z",
+      "side": 1,
+      "message": "Didn\u0027t check for the warning, but done.",
+      "parentUuid": "5809e364_32aae131",
+      "range": {
+        "startLine": 1993,
+        "startChar": 5,
+        "endLine": 1994,
+        "endChar": 7
+      },
+      "revId": "9c50fa2d97ba70ae90eec7d3edf2945a951c1aaa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
