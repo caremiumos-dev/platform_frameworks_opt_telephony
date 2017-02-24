@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98c012f8_73c4039b",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-02-24T18:47:51Z",
+      "side": 1,
+      "message": "What about when getVoiceMessageCount() returns UNKNOWN_VOICE_MESSAGE_COUNT? I dont think we want to return -1 to setVoiceMessageCount",
+      "range": {
+        "startLine": 470,
+        "startChar": 16,
+        "endLine": 470,
+        "endChar": 34
+      },
+      "revId": "4b9edae9820978691082673e51798c793833ad25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f1b50d83_5e937853",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-02-24T18:47:51Z",
+      "side": 1,
+      "message": "What is the difference between these two? I am assuming that if the vm count is unknown, then you would be using the default value shared in the pref",
+      "range": {
+        "startLine": 123,
+        "startChar": 28,
+        "endLine": 124,
+        "endChar": 55
+      },
+      "revId": "4b9edae9820978691082673e51798c793833ad25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
