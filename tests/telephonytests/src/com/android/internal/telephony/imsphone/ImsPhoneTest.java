@@ -452,6 +452,7 @@ public class ImsPhoneTest extends TelephonyTest {
         assertEquals(msg, messageArgumentCaptor.getValue().obj);
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @SmallTest
@@ -578,6 +579,7 @@ public class ImsPhoneTest extends TelephonyTest {
         assertEquals(false, mImsPhoneUT.getWakeLock().isHeld());
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @SmallTest

@@ -50,6 +50,7 @@ public class Sms7BitEncodingTranslatorTest extends TelephonyTest {
         super.tearDown();
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @SmallTest
@@ -57,6 +58,7 @@ public class Sms7BitEncodingTranslatorTest extends TelephonyTest {
         assertEquals("123", Sms7BitEncodingTranslator.translate("123"));
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @SmallTest
@@ -71,6 +73,7 @@ public class Sms7BitEncodingTranslatorTest extends TelephonyTest {
         assertEquals("OIA", Sms7BitEncodingTranslator.translate(s));
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @SmallTest
@@ -85,6 +88,7 @@ public class Sms7BitEncodingTranslatorTest extends TelephonyTest {
         assertEquals("??Ç", Sms7BitEncodingTranslator.translate(s));
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @SmallTest

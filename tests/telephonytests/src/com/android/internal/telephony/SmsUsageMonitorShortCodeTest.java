@@ -457,6 +457,7 @@ public class SmsUsageMonitorShortCodeTest extends AndroidTestCase {
             new ShortCodeTest(null, "112", CATEGORY_NOT_SHORT_CODE),
     };
 
+    @FlakyTest
     @Postsubmit
     @SmallTest
     public void testSmsUsageMonitor() {

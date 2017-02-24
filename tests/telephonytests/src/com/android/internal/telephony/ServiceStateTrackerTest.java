@@ -316,6 +316,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertFalse(sst.isImsRegistered());
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @MediumTest

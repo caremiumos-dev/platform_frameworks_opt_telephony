@@ -69,6 +69,7 @@ public class ImsExternalCallTrackerTest {
         mTracker = new ImsExternalCallTracker(mImsPhone, mImsPullCall, mCallNotifier);
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     public void testAddExternalCall() {
@@ -92,6 +93,7 @@ public class ImsExternalCallTrackerTest {
         assert(connection instanceof ImsExternalConnection);
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     public void testRemoveExternalCall() {

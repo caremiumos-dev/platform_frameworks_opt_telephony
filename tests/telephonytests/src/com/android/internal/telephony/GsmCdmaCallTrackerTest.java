@@ -176,6 +176,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
 
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @MediumTest

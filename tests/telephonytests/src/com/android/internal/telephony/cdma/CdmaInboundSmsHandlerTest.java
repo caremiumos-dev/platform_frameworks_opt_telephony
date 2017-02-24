@@ -174,6 +174,7 @@ public class CdmaInboundSmsHandlerTest extends TelephonyTest {
         assertEquals("IdleState", getCurrentState().getName());
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @MediumTest

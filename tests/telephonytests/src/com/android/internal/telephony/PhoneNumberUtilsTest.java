@@ -413,6 +413,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     // To run this test, the device has to be registered with network
+    @FlakyTest
     @Postsubmit
     public void testCheckAndProcessPlusCode() {
         assertEquals("0118475797000",

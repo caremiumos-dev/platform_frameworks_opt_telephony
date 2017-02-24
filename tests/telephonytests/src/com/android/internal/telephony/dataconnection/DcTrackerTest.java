@@ -657,6 +657,7 @@ public class DcTrackerTest extends TelephonyTest {
         waitForMs(200);
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @MediumTest
@@ -768,6 +769,7 @@ public class DcTrackerTest extends TelephonyTest {
     }
 
     // Test for API carrierActionSetMeteredApnsEnabled.
+    @FlakyTest
     @Postsubmit
     @Test
     @MediumTest

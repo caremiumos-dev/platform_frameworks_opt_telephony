@@ -355,6 +355,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         doReturn(mInboundSmsTrackerCVPart2).when(mInboundSmsTrackerPart2).getContentValues();
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @MediumTest
@@ -624,6 +625,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
 
     }
 
+    @FlakyTest
     @Postsubmit
     @Test
     @MediumTest
