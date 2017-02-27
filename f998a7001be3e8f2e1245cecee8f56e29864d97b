@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d5dda03_82b32bd1",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:14:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dfd1ad2_61fac640",
+      "range": {
+        "startLine": 49,
+        "startChar": 35,
+        "endLine": 49,
+        "endChar": 74
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afd63f1c_7981845f",
         "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
         "patchSetId": 3
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "cded371d_d7448eed",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:14:23Z",
+      "side": 1,
+      "message": "Because those two values are defined here, not mapping to values at other places.",
+      "parentUuid": "0b2cef0a_2247ad3e",
+      "range": {
+        "startLine": 232,
+        "startChar": 7,
+        "endLine": 233,
+        "endChar": 35
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74956f92_20943868",
         "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
         "patchSetId": 3
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "c152a269_cadae31e",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:14:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74956f92_20943868",
+      "range": {
+        "startLine": 240,
+        "startChar": 8,
+        "endLine": 240,
+        "endChar": 18
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f846306c_3503ad2c",
         "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
         "patchSetId": 3
@@ -105,6 +177,30 @@
       "writtenOn": "2017-02-27T17:55:09Z",
       "side": 1,
       "message": "same as lowDataExpected? probably return isLowDataExpected directly to avoid duplicate logic.  It seems all data related update should be turn off under low data mode?",
+      "range": {
+        "startLine": 278,
+        "startChar": 8,
+        "endLine": 278,
+        "endChar": 86
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "abd3cb8a_32842fd2",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:14:23Z",
+      "side": 1,
+      "message": "Yes, they are same now. I intentionally do it because that\u0027s easier for fine tuning later. This is just an initial version and we are likely to add flags or changing the logic here. So I leave them separated functions.",
+      "parentUuid": "f846306c_3503ad2c",
       "range": {
         "startLine": 278,
         "startChar": 8,
@@ -163,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "c3d3a1be_bafd4f8f",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:14:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84e1bded_6a76cd82",
+      "range": {
+        "startLine": 349,
+        "startChar": 7,
+        "endLine": 350,
+        "endChar": 79
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f4805f6_6d5992b4",
         "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
         "patchSetId": 3
@@ -174,6 +294,30 @@
       "writtenOn": "2017-02-27T17:55:09Z",
       "side": 1,
       "message": "move under newFilter !\u003d mUnsolicitedResponseFilter, so that only print if there is a delta for filter setting.",
+      "range": {
+        "startLine": 367,
+        "startChar": 7,
+        "endLine": 367,
+        "endChar": 97
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b0fffb0_59f7b09b",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:14:23Z",
+      "side": 1,
+      "message": "Actually seeing it no change was very helpful in my early development stage. Moved it to local log instead.",
+      "parentUuid": "9f4805f6_6d5992b4",
       "range": {
         "startLine": 367,
         "startChar": 7,
@@ -209,6 +353,30 @@
     },
     {
       "key": {
+        "uuid": "f77484b1_b3838f81",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:14:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae81df5d_44507f95",
+      "range": {
+        "startLine": 429,
+        "startChar": 8,
+        "endLine": 429,
+        "endChar": 20
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22b17816_6dc57c1a",
         "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
         "patchSetId": 3
@@ -220,6 +388,30 @@
       "writtenOn": "2017-02-27T17:55:09Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 441,
+        "startChar": 8,
+        "endLine": 441,
+        "endChar": 22
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84f25c73_7cc26aa1",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:14:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22b17816_6dc57c1a",
       "range": {
         "startLine": 441,
         "startChar": 8,
@@ -255,6 +447,30 @@
     },
     {
       "key": {
+        "uuid": "f9050640_686fe9e2",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:14:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "add72912_b36f9843",
+      "range": {
+        "startLine": 451,
+        "startChar": 8,
+        "endLine": 451,
+        "endChar": 20
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f675db40_0db08513",
         "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
         "patchSetId": 3
@@ -266,6 +482,30 @@
       "writtenOn": "2017-02-27T17:55:09Z",
       "side": 1,
       "message": "increase Indent?",
+      "range": {
+        "startLine": 470,
+        "startChar": 8,
+        "endLine": 470,
+        "endChar": 36
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b41aa65c_ca38dc41",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:14:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f675db40_0db08513",
       "range": {
         "startLine": 470,
         "startChar": 8,
