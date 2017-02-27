@@ -34,6 +34,24 @@
       "revId": "0d9abcf3098dff8b8b45c2ba83a9b8641392ce0b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ee797524_518b711c",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T22:58:14Z",
+      "side": 1,
+      "message": "And the top ++++ was already put by gsmcdmaphone",
+      "parentUuid": "4c20a72a_9c0cbdce",
+      "revId": "0d9abcf3098dff8b8b45c2ba83a9b8641392ce0b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
