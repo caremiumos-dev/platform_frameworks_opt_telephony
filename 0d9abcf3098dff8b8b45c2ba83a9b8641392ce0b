@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efaff6db_0c93b88b",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-27T22:53:55Z",
+      "side": 1,
+      "message": "nit: should be between the 2 decreaseIndent()",
+      "revId": "0d9abcf3098dff8b8b45c2ba83a9b8641392ce0b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
