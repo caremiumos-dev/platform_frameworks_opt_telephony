@@ -46,6 +46,30 @@
       "revId": "0728780b42dba6b9ff9b8156c809ee93bd86089c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "099bb22c_4c0cc94a",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T17:37:31Z",
+      "side": 1,
+      "message": "In the error case, we still need setupDataCallResult.status. If the return value is \u0027null\u0027, we\u0027ll hit NPE at https://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/dataconnection/DataConnection.java?type\u003dcs\u0026q\u003d%22DcFailCause.fromInt(response.status);%22\u0026l\u003d714",
+      "parentUuid": "2c44dd3e_d1c4d286",
+      "range": {
+        "startLine": 1446,
+        "startChar": 35,
+        "endLine": 1446,
+        "endChar": 82
+      },
+      "revId": "0728780b42dba6b9ff9b8156c809ee93bd86089c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
