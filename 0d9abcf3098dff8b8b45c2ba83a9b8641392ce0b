@@ -16,6 +16,24 @@
       "revId": "0d9abcf3098dff8b8b45c2ba83a9b8641392ce0b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4c20a72a_9c0cbdce",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T22:57:10Z",
+      "side": 1,
+      "message": "Actually I was intended to use this as the divider for the end of DeviceStateMonitor. Uploaded a newer version.",
+      "parentUuid": "efaff6db_0c93b88b",
+      "revId": "0d9abcf3098dff8b8b45c2ba83a9b8641392ce0b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
