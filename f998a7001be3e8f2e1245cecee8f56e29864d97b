@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "3c9eabb1_6e9e7ca4",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:38:11Z",
+      "side": 1,
+      "message": "This has been discussed in the HAL changes CL. Now they (except low data expected) are coming independently from different system modules, even some of them might not be really mutual exclusive. And our definition of \"low data expected\" might be changed or adding more complex logic in the future.",
+      "parentUuid": "afd63f1c_7981845f",
+      "range": {
+        "startLine": 77,
+        "startChar": 8,
+        "endLine": 77,
+        "endChar": 25
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b2cef0a_2247ad3e",
         "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
         "patchSetId": 3
@@ -541,6 +565,30 @@
     },
     {
       "key": {
+        "uuid": "db639c1d_fd3c5462",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3897,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:38:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04d519db_d744a48c",
+      "range": {
+        "startLine": 3897,
+        "startChar": 16,
+        "endLine": 3897,
+        "endChar": 23
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "405880fe_176e6460",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 3
@@ -552,6 +600,30 @@
       "writtenOn": "2017-02-27T19:58:23Z",
       "side": 1,
       "message": "can we have a default that the API accepts?",
+      "range": {
+        "startLine": 3906,
+        "startChar": 23,
+        "endLine": 3906,
+        "endChar": 25
+      },
+      "revId": "f998a7001be3e8f2e1245cecee8f56e29864d97b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a641e59_08724801",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3906,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-27T20:38:11Z",
+      "side": 1,
+      "message": "I proposed NONE or UNKNOWN in the HAL change CL earlier but trebel team didn\u0027t like it.",
+      "parentUuid": "405880fe_176e6460",
       "range": {
         "startLine": 3906,
         "startChar": 23,
