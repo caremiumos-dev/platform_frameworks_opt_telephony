@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f82a69b2_f9930c9d",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-27T23:16:23Z",
+      "side": 1,
+      "message": "Ooh - I\u0027d really rather not.\n\nCan we synthesize this in ril.cpp?",
+      "range": {
+        "startLine": 2098,
+        "startChar": 9,
+        "endLine": 2098,
+        "endChar": 30
+      },
+      "revId": "8be853bb6df6404c7dc2bc6e2214871b5c731de1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce6054f2_8d9409b0",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-27T23:16:23Z",
+      "side": 1,
+      "message": "empty line between for clarity.",
+      "range": {
+        "startLine": 88,
+        "startChar": 8,
+        "endLine": 88,
+        "endChar": 11
+      },
+      "revId": "8be853bb6df6404c7dc2bc6e2214871b5c731de1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a7b1911e_73aaa8cc",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-27T23:16:23Z",
+      "side": 1,
+      "message": "put this in the parent.\n\nYou don\u0027t know the context of who\u0027s dumping you so let them label this - if they want to dump an array of this they don\u0027t want this label for each.",
+      "range": {
+        "startLine": 459,
+        "startChar": 21,
+        "endLine": 459,
+        "endChar": 39
+      },
+      "revId": "8be853bb6df6404c7dc2bc6e2214871b5c731de1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf0b208b_d5c64247",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-27T23:16:23Z",
+      "side": 1,
+      "message": "why did you move these?\n\nI\u0027m creating new files on aosp/master and the checking script is just fine with static imports coming in after the standard imports.\n\nWe really don\u0027t want arbitrary changes and if the tool isn\u0027t mandating this, don\u0027t do it.",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 13
+      },
+      "revId": "8be853bb6df6404c7dc2bc6e2214871b5c731de1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "317e802b_1f89165e",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-27T23:16:23Z",
+      "side": 1,
+      "message": "move to base class",
+      "range": {
+        "startLine": 153,
+        "startChar": 31,
+        "endLine": 153,
+        "endChar": 50
+      },
+      "revId": "8be853bb6df6404c7dc2bc6e2214871b5c731de1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0917b32_0401b79a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3924,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-27T23:16:23Z",
+      "side": 1,
+      "message": "long line",
+      "range": {
+        "startLine": 3924,
+        "startChar": 95,
+        "endLine": 3924,
+        "endChar": 100
+      },
+      "revId": "8be853bb6df6404c7dc2bc6e2214871b5c731de1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1226a73f_82ae58b3",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-27T23:16:23Z",
+      "side": 1,
+      "message": "bug number?",
+      "range": {
+        "startLine": 277,
+        "startChar": 19,
+        "endLine": 277,
+        "endChar": 23
+      },
+      "revId": "8be853bb6df6404c7dc2bc6e2214871b5c731de1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
