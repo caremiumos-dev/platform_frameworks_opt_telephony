@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "aad59062_7dff1b06",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-02-28T01:24:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6d27d1d_70b0c59a",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 13
+      },
+      "revId": "dc5b6b709d4cf1a21f7ed4440cdf609542902bac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "adf5b03b_f1e3dc31",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 12
@@ -36,6 +60,30 @@
       "writtenOn": "2017-02-28T00:56:22Z",
       "side": 1,
       "message": "new HashMap\u003c\u003e();  The generics can be inferred.",
+      "range": {
+        "startLine": 185,
+        "startChar": 38,
+        "endLine": 185,
+        "endChar": 56
+      },
+      "revId": "dc5b6b709d4cf1a21f7ed4440cdf609542902bac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b402ee2c_b53ab679",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-02-28T01:24:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adf5b03b_f1e3dc31",
       "range": {
         "startLine": 185,
         "startChar": 38,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "162cd20d_e6dbf018",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-02-28T01:24:34Z",
+      "side": 1,
+      "message": "Updated along the lines of your suggestion.",
+      "parentUuid": "42dcd44f_551814de",
+      "range": {
+        "startLine": 220,
+        "startChar": 15,
+        "endLine": 220,
+        "endChar": 32
+      },
+      "revId": "dc5b6b709d4cf1a21f7ed4440cdf609542902bac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1bf538ea_b8021564",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 12
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "f590c689_fe632d5c",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-02-28T01:24:34Z",
+      "side": 1,
+      "message": "done. In cpp the equivalent data structure throws on a pop of an empty key. Can\u0027t keep \u0027em straight.",
+      "parentUuid": "1bf538ea_b8021564",
+      "range": {
+        "startLine": 234,
+        "startChar": 12,
+        "endLine": 239,
+        "endChar": 17
+      },
+      "revId": "dc5b6b709d4cf1a21f7ed4440cdf609542902bac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e0d8fc30_0aca79b5",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 12
@@ -105,6 +201,30 @@
       "writtenOn": "2017-02-28T00:56:22Z",
       "side": 1,
       "message": "if this is only used from this class move it to this class.  Do you anticipate it being used elsewhere in the future?\n\nrename getResponseMessageByKey and storeResponseMessage?",
+      "range": {
+        "startLine": 1337,
+        "startChar": 43,
+        "endLine": 1337,
+        "endChar": 63
+      },
+      "revId": "dc5b6b709d4cf1a21f7ed4440cdf609542902bac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d8bae102_ecaa5404",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-02-28T01:24:34Z",
+      "side": 1,
+      "message": "Yes, the mechanism should be used by anything that uses IccRecords and needs to do this multithreading dance... it seems that it belongs in the base.\n\nwrt the names, done.",
+      "parentUuid": "e0d8fc30_0aca79b5",
       "range": {
         "startLine": 1337,
         "startChar": 43,
