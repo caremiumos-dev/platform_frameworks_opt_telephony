@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f8118337_b653366d",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-02-28T04:33:14Z",
+      "side": 1,
+      "message": "hmm..the logic of \"low data expected\" and \"legacy screen off\" are same for now. We probably can hook this up with setDeviceState in ril cpp layer.",
+      "parentUuid": "7e72c1a2_c86fa2d0",
+      "range": {
+        "startLine": 2098,
+        "startChar": 9,
+        "endLine": 2098,
+        "endChar": 30
+      },
+      "revId": "8be853bb6df6404c7dc2bc6e2214871b5c731de1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce6054f2_8d9409b0",
         "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
         "patchSetId": 6
