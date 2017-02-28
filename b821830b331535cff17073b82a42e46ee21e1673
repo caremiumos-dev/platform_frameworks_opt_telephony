@@ -130,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "15c5af1a_5744e2aa",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1699,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-02-28T23:36:36Z",
+      "side": 1,
+      "message": "Why, in case of CDMA we dont set it...may be I did not follow.",
+      "parentUuid": "84625f97_85c24021",
+      "range": {
+        "startLine": 1697,
+        "startChar": 2,
+        "endLine": 1699,
+        "endChar": 63
+      },
+      "revId": "b821830b331535cff17073b82a42e46ee21e1673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdd2c1e9_1feb3509",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
