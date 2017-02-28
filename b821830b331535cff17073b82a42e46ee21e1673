@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "2994dfc8_4c946a42",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-28T23:33:28Z",
+      "side": 1,
+      "message": "we may not be able to get rid of ServiceState constants due to this: https://cs.corp.google.com/android/vendor/qcom/msm8998/proprietary/telephony-fwk/opt/telephony/src/java/com/qualcomm/qti/internal/telephony/QtiServiceStateTracker.java?q\u003dRIL_REG_STATE_\u0026sq\u003dpackage:%5Eandroid$\u0026dr\u003dC\u0026l\u003d77",
+      "parentUuid": "5102f954_66108fc1",
+      "range": {
+        "startLine": 1684,
+        "startChar": 0,
+        "endLine": 1684,
+        "endChar": 88
+      },
+      "revId": "b821830b331535cff17073b82a42e46ee21e1673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84625f97_85c24021",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
