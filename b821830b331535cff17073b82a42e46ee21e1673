@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e83171b_f328adfb",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-28T00:54:51Z",
+      "side": 1,
+      "message": "LTE info is not used in either case (gsm or cdma)?",
+      "revId": "b821830b331535cff17073b82a42e46ee21e1673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cdd2c1e9_1feb3509",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-02-28T00:54:51Z",
+      "side": 1,
+      "message": "cell info is never used, even with newer RILs?",
+      "revId": "b821830b331535cff17073b82a42e46ee21e1673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
