@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "830652f1_03c86aeb",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1632,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-28T23:17:59Z",
+      "side": 1,
+      "message": "don\u0027t pull out into these local vars, the *.rat is clear enough.  These were useful as placeholders for parseLong(states[3]) but that\u0027s gone now.",
+      "range": {
+        "startLine": 1632,
+        "startChar": 20,
+        "endLine": 1632,
+        "endChar": 35
+      },
+      "revId": "b821830b331535cff17073b82a42e46ee21e1673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e83171b_f328adfb",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
@@ -31,6 +54,52 @@
       "side": 1,
       "message": "as per the lte cell identitity info i do not pass the lac or cid or psc.\n\nAlso, we are getting cell info in data registration state. and LTE cell info receiving only through voice registration did not look like a valid scenarios",
       "parentUuid": "1e83171b_f328adfb",
+      "revId": "b821830b331535cff17073b82a42e46ee21e1673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5102f954_66108fc1",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-28T23:17:59Z",
+      "side": 1,
+      "message": "use types defined in ril and get rid of the ServiceState constants?",
+      "range": {
+        "startLine": 1684,
+        "startChar": 0,
+        "endLine": 1684,
+        "endChar": 88
+      },
+      "revId": "b821830b331535cff17073b82a42e46ee21e1673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84625f97_85c24021",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1699,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-02-28T23:17:59Z",
+      "side": 1,
+      "message": "set these write after the swtich which sets lac/cid/psc?",
+      "range": {
+        "startLine": 1697,
+        "startChar": 2,
+        "endLine": 1699,
+        "endChar": 63
+      },
       "revId": "b821830b331535cff17073b82a42e46ee21e1673",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
