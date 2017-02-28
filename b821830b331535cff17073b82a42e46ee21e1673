@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2706a338_2b40dd83",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-02-28T02:08:47Z",
+      "side": 1,
+      "message": "as per the lte cell identitity info i do not pass the lac or cid or psc.\n\nAlso, we are getting cell info in data registration state. and LTE cell info receiving only through voice registration did not look like a valid scenarios",
+      "parentUuid": "1e83171b_f328adfb",
+      "revId": "b821830b331535cff17073b82a42e46ee21e1673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdd2c1e9_1feb3509",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-02-28T00:54:51Z",
       "side": 1,
       "message": "cell info is never used, even with newer RILs?",
+      "revId": "b821830b331535cff17073b82a42e46ee21e1673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f6b0946_b8b1d53e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-02-28T02:08:47Z",
+      "side": 1,
+      "message": "Not in this change. Planning to use earfcn for a signal strength specific change",
+      "parentUuid": "cdd2c1e9_1feb3509",
       "revId": "b821830b331535cff17073b82a42e46ee21e1673",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
