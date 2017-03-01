@@ -62,7 +62,6 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mCdmaSubscriptionChangedRegistrants = new RegistrantList();
     protected RegistrantList mCdmaPrlChangedRegistrants = new RegistrantList();
     protected RegistrantList mExitEmergencyCallbackModeRegistrants = new RegistrantList();
-    protected RegistrantList mRilConnectedRegistrants = new RegistrantList();
     protected RegistrantList mIccRefreshRegistrants = new RegistrantList();
     protected RegistrantList mRilCellInfoListRegistrants = new RegistrantList();
     protected RegistrantList mSubscriptionStatusRegistrants = new RegistrantList();
@@ -102,8 +101,6 @@ public abstract class BaseCommands implements CommandsInterface {
     protected int mCdmaSubscription;
     // Type of Phone, GSM or CDMA. Set by GsmCdmaPhone.
     protected int mPhoneType;
-    // RIL Version
-    protected int mRilVersion = -1;
 
     public BaseCommands(Context context) {
         mContext = context;  // May be null (if so we won't log statistics)
@@ -729,23 +726,6 @@ public abstract class BaseCommands implements CommandsInterface {
         mHardwareConfigChangeRegistrants.remove(h);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void registerForRilConnected(Handler h, int what, Object obj) {
-        Registrant r = new Registrant (h, what, obj);
-        mRilConnectedRegistrants.add(r);
-        if (mRilVersion != -1) {
-            r.notifyRegistrant(new AsyncResult(null, new Integer(mRilVersion), null));
-        }
-    }
-
-    @Override
-    public void unregisterForRilConnected(Handler h) {
-        mRilConnectedRegistrants.remove(h);
-    }
-
     public void registerForSubscriptionStatusChanged(Handler h, int what, Object obj) {
         Registrant r = new Registrant (h, what, obj);
         mSubscriptionStatusRegistrants.add(r);
@@ -839,11 +819,6 @@ public abstract class BaseCommands implements CommandsInterface {
 
     @Override
     public void testingEmergencyCall() {}
-
-    @Override
-    public int getRilVersion() {
-        return mRilVersion;
-    }
 
     public void setUiccSubscription(int slotId, int appIndex, int subId, int subStatus,
             Message response) {
