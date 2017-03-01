@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabd0cec_c078c929",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierServicesSmsFilterTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1136763
+      },
+      "writtenOn": "2017-03-01T18:35:42Z",
+      "side": 0,
+      "message": "mContext, mPhone, new byte [][]{SMS_PDU},",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 88
+      },
+      "revId": "51b3661b7966e819052126e7260a060da7a7e994",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
