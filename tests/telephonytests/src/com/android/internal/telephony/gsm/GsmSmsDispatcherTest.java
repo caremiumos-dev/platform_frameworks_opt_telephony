@@ -119,6 +119,7 @@ public class GsmSmsDispatcherTest extends TelephonyTest {
         assertEquals(0, mFakeBlockedNumberContentProvider.mNumEmergencyContactNotifications);
     }
 
+    @FlakyTest
     @Test @MediumTest
     public void testSendSmsToEmergencyNumber_notifiesBlockedNumberProvider() throws Exception {
         setupMockPackagePermissionChecks();
