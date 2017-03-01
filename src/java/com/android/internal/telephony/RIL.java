@@ -737,8 +737,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                     InputStream is = mSocket.getInputStream();
 
                     for (;;) {
-                        Parcel p;
-
                         length = readRilMessage(is, buffer);
 
                         if (length < 0) {
@@ -746,14 +744,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                             break;
                         }
 
-                        p = Parcel.obtain();
-                        p.unmarshall(buffer, 0, length);
-                        p.setDataPosition(0);
-
-                        //Rlog.v(RILJ_LOG_TAG, "Read packet: " + length + " bytes");
-
-                        //processResponse(p);
-                        p.recycle();
+                        throw new RuntimeException("Not expected to receive anything on socket");
                     }
                 } catch (java.io.IOException ex) {
                     Rlog.i(RILJ_LOG_TAG, "'" + rilSocket + "' socket closed",
@@ -781,9 +772,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             }} catch (Throwable tr) {
                 Rlog.e(RILJ_LOG_TAG,"Uncaught exception", tr);
             }
-
-            /* We're disconnected so we don't know the ril version */
-            notifyRegistrantsRilConnectionChanged(-1);
         }
     }
 
@@ -828,6 +816,9 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     private void resetProxyAndRequestList() {
         mRadioProxy = null;
         mOemHookProxy = null;
+
+        setRadioState(RadioState.RADIO_UNAVAILABLE);
+
         RILRequest.resetSerial();
         // Clear request list on close
         clearRequestList(RADIO_NOT_AVAILABLE, false);
@@ -4558,20 +4549,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
     void writeMetricsSrvcc(int state) {
         mMetrics.writeRilSrvcc(mPhoneId, state);
-    }
-
-
-    /**
-     * Notify all registrants that the ril has connected or disconnected.
-     *
-     * @param rilVer is the version of the ril or -1 if disconnected.
-     */
-    void notifyRegistrantsRilConnectionChanged(int rilVer) {
-        mRilVersion = rilVer;
-        if (mRilConnectedRegistrants != null) {
-            mRilConnectedRegistrants.notifyRegistrants(
-                    new AsyncResult(null, new Integer(rilVer), null));
-        }
     }
 
     private Object responseInts(Parcel p) {

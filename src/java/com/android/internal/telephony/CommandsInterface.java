@@ -607,20 +607,6 @@ public interface CommandsInterface {
      void registerForExitEmergencyCallbackMode(Handler h, int what, Object obj);
      void unregisterForExitEmergencyCallbackMode(Handler h);
 
-     /**
-      * Registers the handler for RIL_UNSOL_RIL_CONNECT events.
-      *
-      * When ril connects or disconnects a message is sent to the registrant
-      * which contains an AsyncResult, ar, in msg.obj. The ar.result is an
-      * Integer which is the version of the ril or -1 if the ril disconnected.
-      *
-      * @param h Handler for notification message.
-      * @param what User-defined message code.
-      * @param obj User object.
-      */
-     void registerForRilConnected(Handler h, int what, Object obj);
-     void unregisterForRilConnected(Handler h);
-
     /**
      * Supply the ICC PIN to the ICC card
      *
@@ -1885,11 +1871,6 @@ public interface CommandsInterface {
      *  ar.result contains a List of HardwareConfig
      */
     void getHardwareConfig (Message result);
-
-    /**
-     * @return version of the ril.
-     */
-    int getRilVersion();
 
    /**
      * Sets user selected subscription at Modem.

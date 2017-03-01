@@ -564,16 +564,6 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public void registerForRilConnected(Handler h, int what, Object obj) {
-
-    }
-
-    @Override
-    public void unregisterForRilConnected(Handler h) {
-
-    }
-
-    @Override
     public void supplyIccPin(String pin, Message result) {
 
     }
@@ -1264,11 +1254,6 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     @Override
     public void getHardwareConfig(Message result) {
 
-    }
-
-    @Override
-    public int getRilVersion() {
-        return 0;
     }
 
     @Override
