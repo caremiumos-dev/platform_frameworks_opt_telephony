@@ -22,6 +22,30 @@
       "revId": "48c52ffe68e1e3a5e8b48aa8046a4aa97bd2e75c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf4eda9e_b1409431",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-01T01:22:15Z",
+      "side": 1,
+      "message": "As discussed offline, we\u0027ll switch back to display manager. The original CL https://googleplex-android-review.git.corp.google.com/#/c/560659/",
+      "parentUuid": "e9b895de_ecabdc6c",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 50
+      },
+      "revId": "48c52ffe68e1e3a5e8b48aa8046a4aa97bd2e75c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
