@@ -154,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "16579ddb_25e55c5e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1699,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-01T01:28:45Z",
+      "side": 1,
+      "message": "These are set up around 1669 and above.  I meant to move these to 1678 or so just to be close to where cid/lac/etc were set.\n\nNot a big deal and no worse than before.",
+      "parentUuid": "15c5af1a_5744e2aa",
+      "range": {
+        "startLine": 1697,
+        "startChar": 2,
+        "endLine": 1699,
+        "endChar": 63
+      },
+      "revId": "b821830b331535cff17073b82a42e46ee21e1673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdd2c1e9_1feb3509",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
