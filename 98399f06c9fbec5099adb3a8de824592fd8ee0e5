@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d8fabe6_1da9a052",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-02T04:04:59Z",
+      "side": 0,
+      "message": "can we still keep this? no version is needed though. DeviceStateMonitor needs to know ril reconnected. The code below related to screen state has been moved into DeviceStateMonitor.",
+      "range": {
+        "startLine": 605,
+        "startChar": 8,
+        "endLine": 605,
+        "endChar": 55
+      },
+      "revId": "98399f06c9fbec5099adb3a8de824592fd8ee0e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
