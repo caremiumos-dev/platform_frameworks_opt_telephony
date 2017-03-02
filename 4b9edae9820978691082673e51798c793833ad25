@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b5cc8c4e_273a9c8f",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2017-03-02T13:17:46Z",
+      "side": 1,
+      "message": "Hope the second comment address this",
+      "parentUuid": "98c012f8_73c4039b",
+      "range": {
+        "startLine": 470,
+        "startChar": 16,
+        "endLine": 470,
+        "endChar": 34
+      },
+      "revId": "4b9edae9820978691082673e51798c793833ad25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1b50d83_5e937853",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-02-24T18:47:51Z",
       "side": 1,
       "message": "What is the difference between these two? I am assuming that if the vm count is unknown, then you would be using the default value shared in the pref",
+      "range": {
+        "startLine": 123,
+        "startChar": 28,
+        "endLine": 124,
+        "endChar": 55
+      },
+      "revId": "4b9edae9820978691082673e51798c793833ad25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "578f5319_3732aeb9",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2017-03-02T13:17:46Z",
+      "side": 1,
+      "message": "UNKNOWN Count represents there are some voice messages present in the SIM but not known to the user. In this case We need to show the VMWI indicator and should not rely on Shared preferences.\nAs per the 3GPP TS 23.038 [9]) 9.2.3.24.2 in one of the case, message waiting indication does not provide the message waiting count but only specifies whether there is some message waiting. So to differentiate this scenario from No Message indication, UNKNOWN_VOICE_MESSAGE_COUNT is introduced from Telephony in which case Android is not supposed to rely on shared preference.",
+      "parentUuid": "f1b50d83_5e937853",
       "range": {
         "startLine": 123,
         "startChar": 28,
