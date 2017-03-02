@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "438e1f5f_e65ed92d",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-03-02T21:39:18Z",
+      "side": 1,
+      "message": "remove #377?",
+      "range": {
+        "startLine": 376,
+        "startChar": 5,
+        "endLine": 376,
+        "endChar": 84
+      },
+      "revId": "82929551c9ac7591afa8ec47365420f6009e1e8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "af75be2c_d17026ce",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-03-02T21:39:18Z",
+      "side": 1,
+      "message": "final?",
+      "range": {
+        "startLine": 378,
+        "startChar": 8,
+        "endLine": 378,
+        "endChar": 11
+      },
+      "revId": "82929551c9ac7591afa8ec47365420f6009e1e8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
