@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2d4e911_6f31a1e0",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-02T01:39:01Z",
+      "side": 1,
+      "message": "isScreenState\u0027On\u0027?",
+      "revId": "783f19e672302e8b9621614cd871824f63fafdc0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a375e02f_10040fbe",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-02T01:39:01Z",
+      "side": 1,
+      "message": "long line.",
+      "revId": "783f19e672302e8b9621614cd871824f63fafdc0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
