@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f2b8dcb_b94c01df",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-03T21:46:57Z",
+      "side": 1,
+      "message": "Do we really need to reset the serial?",
+      "range": {
+        "startLine": 789,
+        "startChar": 8,
+        "endLine": 789,
+        "endChar": 33
+      },
+      "revId": "4db5becf54dd7b3c9068f5579940c02db949303b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
