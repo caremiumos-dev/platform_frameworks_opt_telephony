@@ -46,6 +46,30 @@
       "revId": "b53ad908c84ffe4fc7c88b58ec682f1dbcd34bd3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "52413787_2df12ce9",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1061207
+      },
+      "writtenOn": "2017-03-03T22:31:04Z",
+      "side": 1,
+      "message": "Gotcha, not sure really. granting sgtm.",
+      "parentUuid": "5c484eb5_6a4aa657",
+      "range": {
+        "startLine": 82,
+        "startChar": 16,
+        "endLine": 82,
+        "endChar": 44
+      },
+      "revId": "b53ad908c84ffe4fc7c88b58ec682f1dbcd34bd3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
