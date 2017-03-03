@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1db6c2d2_0c988d88",
+        "filename": "src/java/android/telephony/SmsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-03T18:51:44Z",
+      "side": 1,
+      "message": "isn\u0027t this incomplete? It\u0027s either this or IMS app, right?",
+      "range": {
+        "startLine": 381,
+        "startChar": 86,
+        "endLine": 382,
+        "endChar": 17
+      },
+      "revId": "2deee0c9fa8b4c667a79a6dec6391fff06d73ca2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
