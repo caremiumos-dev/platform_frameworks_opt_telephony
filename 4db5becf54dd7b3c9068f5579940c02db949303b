@@ -22,6 +22,30 @@
       "revId": "4db5becf54dd7b3c9068f5579940c02db949303b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1503038e_4d72981f",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-03T22:00:29Z",
+      "side": 1,
+      "message": "Not sure, but keeping behavior same as earlier. We can revisit this separately. The reason though was to reset to something completely different from what was being used earlier.\n\nMore importantly what we can do is change what we log, and match the logged number in java and cpp. We can log % 10000 in both places. Will keep that as a separate CL.",
+      "parentUuid": "1f2b8dcb_b94c01df",
+      "range": {
+        "startLine": 789,
+        "startChar": 8,
+        "endLine": 789,
+        "endChar": 33
+      },
+      "revId": "4db5becf54dd7b3c9068f5579940c02db949303b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
