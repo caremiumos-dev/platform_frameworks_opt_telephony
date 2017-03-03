@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ce76fe2_6719cb18",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2017-03-03T22:22:03Z",
+      "side": 1,
+      "message": "can we decrement each of these or they need to be same nos ?",
+      "range": {
+        "startLine": 186,
+        "startChar": 73,
+        "endLine": 190,
+        "endChar": 73
+      },
+      "revId": "81ea341d2deb767cbd1de2f356296ad92e951c52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
