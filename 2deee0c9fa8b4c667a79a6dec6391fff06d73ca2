@@ -22,6 +22,30 @@
       "revId": "2deee0c9fa8b4c667a79a6dec6391fff06d73ca2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b796f74e_8920b11a",
+        "filename": "src/java/android/telephony/SmsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-03-03T19:21:47Z",
+      "side": 1,
+      "message": "I don\u0027t think the IMS app has been added to any APIs: will probably leave this as is: IMS should be added separately after the concept matures.",
+      "parentUuid": "1db6c2d2_0c988d88",
+      "range": {
+        "startLine": 381,
+        "startChar": 86,
+        "endLine": 382,
+        "endChar": 17
+      },
+      "revId": "2deee0c9fa8b4c667a79a6dec6391fff06d73ca2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
