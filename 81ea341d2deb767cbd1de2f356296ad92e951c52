@@ -46,6 +46,30 @@
       "revId": "81ea341d2deb767cbd1de2f356296ad92e951c52",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea08e9c8_6ff48e04",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-03T22:29:16Z",
+      "side": 1,
+      "message": "I think that\u0027s unnecessary and messes up the history too. I\u0027d rather leave it this way.",
+      "parentUuid": "cc8c2297_f525c7bf",
+      "range": {
+        "startLine": 186,
+        "startChar": 73,
+        "endLine": 190,
+        "endChar": 73
+      },
+      "revId": "81ea341d2deb767cbd1de2f356296ad92e951c52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
