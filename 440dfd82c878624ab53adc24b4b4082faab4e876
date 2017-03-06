@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de8ff6a0_8893cb4a",
+        "filename": "src/java/com/android/internal/telephony/HbpcdUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-06T23:20:20Z",
+      "side": 1,
+      "message": "have it under else to make it clear that if case is already taken care of in the block above.",
+      "revId": "440dfd82c878624ab53adc24b4b4082faab4e876",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
