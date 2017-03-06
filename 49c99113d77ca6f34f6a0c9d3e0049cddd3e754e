@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3a957e7_7d65fc87",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-06T19:06:46Z",
+      "side": 1,
+      "message": "can you please LTE also here..looking further, I see that RIL is sendinf LTE lac and cid as well. If you would like, I can have it as a seperate gerrit",
+      "revId": "49c99113d77ca6f34f6a0c9d3e0049cddd3e754e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
