@@ -26,17 +26,20 @@ import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import android.app.IAlarmManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.radio.V1_0.CellIdentityGsm;
 import android.hardware.radio.V1_0.CellInfoType;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
+import android.net.Uri;
 import android.os.AsyncResult;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,6 +59,7 @@ import android.telephony.SubscriptionManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.util.Log;
 import android.util.Pair;
 
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
@@ -82,6 +86,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     private Handler mTestHandler;
     @Mock
     protected IAlarmManager mAlarmManager;
+    @Mock
+    private ContentResolver mContentResolver;
 
     private ServiceStateTracker sst;
     private ServiceStateTrackerTestHandler mSSTTestHandler;
@@ -95,6 +101,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     private static final int EVENT_DATA_RAT_CHANGED = 7;
     private static final int EVENT_PS_RESTRICT_ENABLED = 8;
     private static final int EVENT_PS_RESTRICT_DISABLED = 9;
+
+    private static final String TAG = "ServiceStateTrackerTest";
 
     private class ServiceStateTrackerTestHandler extends HandlerThread {
 
@@ -148,6 +156,52 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst = null;
         mSSTTestHandler.quitSafely();
         super.tearDown();
+    }
+
+
+    @Test
+    @SmallTest
+    public void testNotifyViaProvider() {
+        doReturn(mContentResolver).when(mContext).getContentResolver();
+        doThrow(new RuntimeException("notifyChange!")).when(mContentResolver).notifyChange(
+                Uri.parse("content://service-state/service_state/voice_reg_state"), null, false);
+
+        ServiceState oldSS = new ServiceState();
+        oldSS.setStateOutOfService();
+        oldSS.setVoiceRegState(ServiceState.STATE_OUT_OF_SERVICE);
+
+        ServiceState copyOfOldSS = new ServiceState();
+        copyOfOldSS.setStateOutOfService();
+        copyOfOldSS.setVoiceRegState(ServiceState.STATE_OUT_OF_SERVICE);
+
+        ServiceState newSS = new ServiceState();
+        newSS.setStateOutOfService();
+        newSS.setVoiceRegState(ServiceState.STATE_POWER_OFF);
+
+        // Test that notifyChange is not called with no change
+        boolean notifyChangeWasCalled = false;
+        try {
+            sst.notifyViaProvider(oldSS, copyOfOldSS);
+        } catch (RuntimeException e) {
+            final String message = e.getMessage();
+            if (message != null &&  message.equals("notifyChange!")) {
+                Log.d("ServiceStateTrackerTest", "notifyChange called on voice_reg_state!");
+                notifyChangeWasCalled = true;
+            }
+        }
+        assertFalse(notifyChangeWasCalled);
+
+        // Test that notifyChange is called when the voice_reg_state changes
+        try {
+            sst.notifyViaProvider(oldSS, newSS);
+        } catch (RuntimeException e) {
+            final String message = e.getMessage();
+            if (message != null &&  message.equals("notifyChange!")) {
+                Log.d("ServiceStateTrackerTest", "notifyChange called on voice_reg_state!");
+                notifyChangeWasCalled = true;
+            }
+        }
+        assertTrue(notifyChangeWasCalled);
     }
 
     @Test
