@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import static android.provider.Telephony.ServiceStateTable.*;
 import static com.android.internal.telephony.CarrierActionAgent.CARRIER_ACTION_SET_RADIO_ENABLED;
 
 import android.app.AlarmManager;
@@ -2828,7 +2829,12 @@ public class ServiceStateTracker extends Handler {
 
             setRoamingType(mSS);
             log("Broadcasting ServiceState : " + mSS);
+            // notify using PhoneStateListener and the legacy intent ACTION_SERVICE_STATE_CHANGED
             mPhone.notifyServiceStateChanged(mSS);
+
+            // insert into ServiceStateProvider. This will trigger apps to wake through JobScheduler
+            mPhone.getContext().getContentResolver().insert(getUriForSubId(mPhone.getSubId()),
+                    getContentValuesForServiceState(mSS));
 
             TelephonyMetrics.getInstance().writeServiceStateChanged(mPhone.getPhoneId(), mSS);
         }
