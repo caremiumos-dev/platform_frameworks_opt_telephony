@@ -980,7 +980,8 @@ public abstract class SMSDispatcher extends Handler {
         PackageInfo appInfo;
         try {
             // XXX this is lossy- apps can share a UID
-            appInfo = pm.getPackageInfo(packageNames[0], PackageManager.GET_SIGNATURES);
+            appInfo = pm.getPackageInfoAsUser(packageNames[0], PackageManager.GET_SIGNATURES,
+                    mContext.getUserId());
         } catch (PackageManager.NameNotFoundException e) {
             Rlog.e(TAG, "Can't get calling app package info: refusing to send SMS");
             tracker.onFailed(mContext, RESULT_ERROR_GENERIC_FAILURE, 0/*errorCode*/);
