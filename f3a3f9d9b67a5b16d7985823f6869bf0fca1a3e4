@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89bb7280_fa9adae2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-07T19:57:37Z",
+      "side": 1,
+      "message": "probably remove those unnecessary curly braces all together. Above and below.",
+      "range": {
+        "startLine": 914,
+        "startChar": 38,
+        "endLine": 914,
+        "endChar": 40
+      },
+      "revId": "f3a3f9d9b67a5b16d7985823f6869bf0fca1a3e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7866cb00_169ce955",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-07T19:57:37Z",
+      "side": 1,
+      "message": "Are we sure \"tracking area code\" \u003d\u003d \"location area code\", if yes then I am okay.",
+      "range": {
+        "startLine": 919,
+        "startChar": 24,
+        "endLine": 919,
+        "endChar": 50
+      },
+      "revId": "f3a3f9d9b67a5b16d7985823f6869bf0fca1a3e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "272ca848_2970fe37",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-07T19:57:37Z",
+      "side": 1,
+      "message": "Consider following the naming convention we use in other places, \"convertHalRegState\"",
+      "range": {
+        "startLine": 1665,
+        "startChar": 16,
+        "endLine": 1665,
+        "endChar": 48
+      },
+      "revId": "f3a3f9d9b67a5b16d7985823f6869bf0fca1a3e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85585821_f1bda888",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-07T19:57:37Z",
+      "side": 1,
+      "message": "This wasn\u0027t caught by ServiceStateTrackerTest earlier. Can we add this check in the test case?",
+      "range": {
+        "startLine": 1697,
+        "startChar": 0,
+        "endLine": 1698,
+        "endChar": 87
+      },
+      "revId": "f3a3f9d9b67a5b16d7985823f6869bf0fca1a3e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
