@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9555d9d6_a38dc2f0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-07T20:01:13Z",
+      "side": 1,
+      "message": "I find the braces useful as it is consistent with all other blocks and not depend upon the indentation. If it is a guideline, I can remove. Please let me know.",
+      "parentUuid": "89bb7280_fa9adae2",
+      "range": {
+        "startLine": 914,
+        "startChar": 38,
+        "endLine": 914,
+        "endChar": 40
+      },
+      "revId": "f3a3f9d9b67a5b16d7985823f6869bf0fca1a3e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7866cb00_169ce955",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-07T19:57:37Z",
       "side": 1,
       "message": "Are we sure \"tracking area code\" \u003d\u003d \"location area code\", if yes then I am okay.",
+      "range": {
+        "startLine": 919,
+        "startChar": 24,
+        "endLine": 919,
+        "endChar": 50
+      },
+      "revId": "f3a3f9d9b67a5b16d7985823f6869bf0fca1a3e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "31816dc2_3d3969c5",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-07T20:01:13Z",
+      "side": 1,
+      "message": "Checked the current code, it is using tac for lac.",
+      "parentUuid": "7866cb00_169ce955",
       "range": {
         "startLine": 919,
         "startChar": 24,
