@@ -32,6 +32,7 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.hardware.radio.V1_0.CellInfoType;
 import android.hardware.radio.V1_0.DataRegStateResult;
+import android.hardware.radio.V1_0.RegState;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
 import android.os.AsyncResult;
 import android.os.BaseBundle;
@@ -910,6 +911,15 @@ public class ServiceStateTracker extends Handler {
                     }
                     break;
                 }
+                case CellInfoType.LTE: {
+                    if (voiceRegStateResult.cellIdentity.cellIdentityLte.size() == 1) {
+                        android.hardware.radio.V1_0.CellIdentityLte cellIdentityLte =
+                                voiceRegStateResult.cellIdentity.cellIdentityLte.get(0);
+                        cid = cellIdentityLte.ci;
+                        lac = cellIdentityLte.tac;
+                    }
+                    break;
+                }
                 default: {
                     break;
                 }
@@ -1652,12 +1662,40 @@ public class ServiceStateTracker extends Handler {
         return cdmaRoaming && !isSameOperatorNameFromSimAndSS(s);
     }
 
+    private int convertRILRegStateToServiceState(int regState) {
+        switch (regState) {
+            case RegState.NOT_REG_MT_NOT_SEARCHING_OP:
+                return ServiceState.RIL_REG_STATE_NOT_REG;
+            case RegState.REG_HOME:
+                return ServiceState.RIL_REG_STATE_HOME;
+            case RegState.NOT_REG_MT_SEARCHING_OP:
+                return ServiceState.RIL_REG_STATE_SEARCHING;
+            case RegState.REG_DENIED:
+                return ServiceState.RIL_REG_STATE_DENIED;
+            case RegState.UNKNOWN:
+                return ServiceState.RIL_REG_STATE_UNKNOWN;
+            case RegState.REG_ROAMING:
+                return ServiceState.RIL_REG_STATE_ROAMING;
+            case RegState.NOT_REG_MT_NOT_SEARCHING_OP_EM:
+                return ServiceState.RIL_REG_STATE_NOT_REG_EMERGENCY_CALL_ENABLED;
+            case RegState.NOT_REG_MT_SEARCHING_OP_EM:
+                return ServiceState.RIL_REG_STATE_SEARCHING_EMERGENCY_CALL_ENABLED;
+            case RegState.REG_DENIED_EM:
+                return ServiceState.RIL_REG_STATE_DENIED_EMERGENCY_CALL_ENABLED;
+            case RegState.UNKNOWN_EM:
+                return ServiceState.RIL_REG_STATE_UNKNOWN_EMERGENCY_CALL_ENABLED;
+            default:
+                return ServiceState.REGISTRATION_STATE_NOT_REGISTERED_AND_NOT_SEARCHING;
+        }
+    }
+
     void handlePollStateResultMessage(int what, AsyncResult ar) {
         int ints[];
         switch (what) {
             case EVENT_POLL_STATE_REGISTRATION: {
                 VoiceRegStateResult voiceRegStateResult = (VoiceRegStateResult) ar.result;
-                int registrationState = voiceRegStateResult.regState;
+                int registrationState =
+                        convertRILRegStateToServiceState(voiceRegStateResult.regState);
 
                 mNewSS.setVoiceRegState(regCodeToServiceState(registrationState));
                 mNewSS.setRilVoiceRadioTechnology(voiceRegStateResult.rat);
@@ -1743,7 +1781,7 @@ public class ServiceStateTracker extends Handler {
 
             case EVENT_POLL_STATE_GPRS: {
                 DataRegStateResult dataRegStateResult = (DataRegStateResult) ar.result;
-                int regState = dataRegStateResult.regState;
+                int regState = convertRILRegStateToServiceState(dataRegStateResult.regState);
                 int dataRegState = regCodeToServiceState(regState);
                 int newDataRat = dataRegStateResult.rat;
 
