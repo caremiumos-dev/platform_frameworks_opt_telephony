@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1988cb16_e857ab3f",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-07T19:47:42Z",
+      "side": 1,
+      "message": "LGTM. Actually there are 2 instances of getPackageInfo in SMSDispatcher.java and 2 in SmsApplication.java as well, should we fix them as well? Also not sure if this change will fail unit test or not because there is 1 instance in TelephonyTest.java as well.",
+      "range": {
+        "startLine": 983,
+        "startChar": 25,
+        "endLine": 983,
+        "endChar": 45
+      },
+      "revId": "f77fb51e9af277e3064f1e418845a95b82a72cc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
