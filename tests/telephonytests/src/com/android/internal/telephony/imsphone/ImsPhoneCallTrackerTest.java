@@ -43,8 +43,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.support.test.filters.FlakyTest;
-import android.telephony.DisconnectCause;
 import android.telecom.VideoProfile;
+import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ims.feature.ImsFeature;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -546,5 +546,15 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 new ImsReasonInfo(ImsReasonInfo.CODE_LOCAL_LOW_BATTERY, 0), Call.State.DIALING));
         assertEquals(DisconnectCause.DIAL_LOW_BATTERY, mCTUT.getDisconnectCauseFromReasonInfo(
                 new ImsReasonInfo(ImsReasonInfo.CODE_LOW_BATTERY, 0), Call.State.DIALING));
+    }
+
+    @Test
+    @SmallTest
+    public void testCallResumeStateNotResetByHoldFailure() throws ImsException {
+        mCTUT.setSwitchingFgAndBgCallsValue(true);
+        if (mImsCallListener != null) {
+            mImsCallListener.onCallHoldFailed(mImsCall, new ImsReasonInfo(0, -1));
+        }
+        assertTrue(mCTUT.getSwitchingFgAndBgCallsValue());
     }
 }
