@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import static android.provider.Telephony.ServiceStateTable.*;
+
 import static com.android.internal.telephony.CarrierActionAgent.CARRIER_ACTION_SET_RADIO_ENABLED;
 
 import android.app.AlarmManager;
@@ -94,6 +96,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
+
 
 /**
  * {@hide}
@@ -2649,9 +2652,9 @@ public class ServiceStateTracker extends Handler {
         }
 
         // swap mSS and mNewSS to put new state in mSS
-        ServiceState tss = mSS;
+        ServiceState oldSS = mSS;
         mSS = mNewSS;
-        mNewSS = tss;
+        mNewSS = new ServiceState();
         // clean slate for next time
         mNewSS.setStateOutOfService();
 
@@ -2768,7 +2771,12 @@ public class ServiceStateTracker extends Handler {
 
             setRoamingType(mSS);
             log("Broadcasting ServiceState : " + mSS);
+            // notify using PhoneStateListener and the legacy intent ACTION_SERVICE_STATE_CHANGED
             mPhone.notifyServiceStateChanged(mSS);
+
+            // notify using the ServiceStateProvider. This will trigger apps to wake through
+            // JobScheduler
+            notifyViaProvider(oldSS, mNewSS, mPhone.getSubId());
 
             TelephonyMetrics.getInstance().writeServiceStateChanged(mPhone.getPhoneId(), mSS);
         }
@@ -2840,6 +2848,140 @@ public class ServiceStateTracker extends Handler {
             } else {
                 mReportedGprsNoReg = false;
             }
+        }
+    }
+
+    /**
+     * Using the phone's context, use the content provider to notify interested apps which fields of
+     * the ServiceState have changed.
+     *
+     * Apps which want to wake when specific fields change can use
+     * JobScheduler's TriggerContentUri.  This replaces the waking functionality of the implicit
+     * broadcast of ACTION_SERVICE_STATE_CHANGED for apps targetting version O.
+     */
+    @VisibleForTesting
+    public void notifyViaProvider(ServiceState oldSS, ServiceState newSS, int subId) {
+        // for every field, if the field has changed values, notify via the provider
+        if (oldSS.getVoiceRegState() != newSS.getVoiceRegState()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(VOICE_REG_STATE, subId),
+                    /* observer= */ null, /* syncToNetwork= */ false);
+        }
+        if (oldSS.getDataRegState() != newSS.getDataRegState()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(DATA_REG_STATE, subId),
+                    null, false);
+        }
+        final String oldVoiceOperatorAlphaLong = oldSS.getVoiceOperatorAlphaLong();
+        final String newVoiceOperatorAlphaLong = newSS.getVoiceOperatorAlphaLong();
+        if (oldVoiceOperatorAlphaLong != null
+                && !oldVoiceOperatorAlphaLong.equals(newVoiceOperatorAlphaLong)) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(VOICE_OPERATOR_ALPHA_LONG, subId),
+                    null, false);
+        }
+        final String oldVoiceOperatorAlphaShort = oldSS.getVoiceOperatorAlphaShort();
+        final String newVoiceOperatorAlphaShort = newSS.getVoiceOperatorAlphaShort();
+        if (oldVoiceOperatorAlphaShort != null
+                && !oldVoiceOperatorAlphaShort.equals(newVoiceOperatorAlphaShort)) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(VOICE_OPERATOR_ALPHA_SHORT, subId),
+                    null, false);
+        }
+        final String oldVoiceOperatorNumeric = oldSS.getVoiceOperatorNumeric();
+        final String newVoiceOperatorNumeric = newSS.getVoiceOperatorNumeric();
+        if (oldVoiceOperatorNumeric != null
+                && !oldVoiceOperatorNumeric.equals(newVoiceOperatorNumeric)) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(VOICE_OPERATOR_NUMERIC, subId),
+                    null, false);
+        }
+        final String oldDataOperatorAlphaLong = oldSS.getDataOperatorAlphaLong();
+        final String newDataOperatorAlphaLong = newSS.getDataOperatorAlphaLong();
+        if (oldDataOperatorAlphaLong != null
+                && !oldDataOperatorAlphaLong.equals(newDataOperatorAlphaLong)) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(DATA_OPERATOR_ALPHA_LONG, subId),
+                    null, false);
+        }
+        final String oldDataOperatorAlphaShort = oldSS.getDataOperatorAlphaShort();
+        final String newDataOperatorAlphaShort = newSS.getDataOperatorAlphaShort();
+        if (oldDataOperatorAlphaShort != null
+                && !oldDataOperatorAlphaShort.equals(newDataOperatorAlphaShort)) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(DATA_OPERATOR_ALPHA_SHORT, subId),
+                    null, false);
+        }
+        final String oldDataOperatorNumeric = oldSS.getDataOperatorNumeric();
+        final String newDataOperatorNumeric = newSS.getDataOperatorNumeric();
+        if (oldDataOperatorNumeric != null
+                && !oldDataOperatorNumeric.equals(newDataOperatorNumeric)) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(DATA_OPERATOR_NUMERIC, subId),
+                    null, false);
+        }
+        if (oldSS.getIsManualSelection() != newSS.getIsManualSelection()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(IS_MANUAL_NETWORK_SELECTION, subId),
+                    null, false);
+        }
+        if (oldSS.getRilVoiceRadioTechnology() != newSS.getRilVoiceRadioTechnology()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(RIL_VOICE_RADIO_TECHNOLOGY, subId),
+                    null, false);
+        }
+        if (oldSS.getRilDataRadioTechnology() != newSS.getRilDataRadioTechnology()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(RIL_DATA_RADIO_TECHNOLOGY, subId),
+                    null, false);
+        }
+        if (oldSS.getCssIndicator() != newSS.getCssIndicator()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(CSS_INDICATOR, subId),
+                    null, false);
+        }
+        if (oldSS.getNetworkId() != newSS.getNetworkId()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(NETWORK_ID, subId),
+                    null, false);
+        }
+        if (oldSS.getSystemId() != newSS.getSystemId()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(SYSTEM_ID, subId),
+                    null, false);
+        }
+        if (oldSS.getCdmaRoamingIndicator() != newSS.getCdmaRoamingIndicator()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(CDMA_ROAMING_INDICATOR, subId),
+                    null, false);
+        }
+        if (oldSS.getCdmaDefaultRoamingIndicator() != newSS.getCdmaDefaultRoamingIndicator()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(CDMA_DEFAULT_ROAMING_INDICATOR, subId), null, false);
+        }
+        if (oldSS.getCdmaEriIconIndex() != newSS.getCdmaEriIconIndex()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(CDMA_ERI_ICON_INDEX, subId),
+                    null, false);
+        }
+        if (oldSS.getCdmaEriIconMode() != newSS.getCdmaEriIconMode()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(CDMA_ERI_ICON_MODE, subId),
+                    null, false);
+        }
+        if (oldSS.isEmergencyOnly() != newSS.isEmergencyOnly()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(IS_EMERGENCY_ONLY, subId),
+                    null, false);
+        }
+        if (oldSS.getDataRoamingFromRegistration() != newSS.getDataRoamingFromRegistration()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(IS_DATA_ROAMING_FROM_REGISTRATION, subId), null, false);
+        }
+        if (oldSS.isUsingCarrierAggregation() != newSS.isUsingCarrierAggregation()) {
+            mPhone.getContext().getContentResolver().notifyChange(
+                    getUriForSubId(IS_USING_CARRIER_AGGREGATION, subId),
+                    null, false);
         }
     }
 
