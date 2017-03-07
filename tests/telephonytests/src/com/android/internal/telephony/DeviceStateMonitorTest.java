@@ -32,6 +32,7 @@ import android.net.ConnectivityManager;
 import android.os.BatteryManager;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.test.filters.FlakyTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import org.junit.After;
@@ -90,6 +91,7 @@ public class DeviceStateMonitorTest extends TelephonyTest {
                 any(Message.class));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testTethering() throws Exception {
@@ -135,6 +137,7 @@ public class DeviceStateMonitorTest extends TelephonyTest {
                 eq(true), any(Message.class));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testCharging() throws Exception {
