@@ -529,6 +529,7 @@ public class ContextFixture implements TestFixture<Context> {
         doReturn(mConfiguration).when(mResources).getConfiguration();
 
         mContentResolver.addProvider(Settings.AUTHORITY, mContentProvider);
+        mContentResolver.addProvider("service-state", mContentProvider);
         mPermissionTable.add(PERMISSION_ENABLE_ALL);
     }
 
