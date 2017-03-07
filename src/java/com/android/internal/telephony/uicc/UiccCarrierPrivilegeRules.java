@@ -31,20 +31,11 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.CommandException;
-import com.android.internal.telephony.CommandsInterface;
-import com.android.internal.telephony.uicc.IccUtils;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-import java.lang.IllegalArgumentException;
-import java.lang.IndexOutOfBoundsException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -323,8 +314,10 @@ public class UiccCarrierPrivilegeRules extends Handler {
             // Include DISABLED_UNTIL_USED components. This facilitates cases where a carrier app
             // is disabled by default, and some other component wants to enable it when it has
             // gained carrier privileges (as an indication that a matching SIM has been inserted).
-            PackageInfo pInfo = packageManager.getPackageInfo(packageName,
-                PackageManager.GET_SIGNATURES | PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS);
+            PackageInfo pInfo = packageManager.getPackageInfoAsUser(packageName,
+                    PackageManager.GET_SIGNATURES
+                            | PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS,
+                    Binder.getCallingUid());
             return getCarrierPrivilegeStatus(pInfo);
         } catch (PackageManager.NameNotFoundException ex) {
             Rlog.e(LOG_TAG, "NameNotFoundException", ex);
