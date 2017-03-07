@@ -32,6 +32,7 @@ import android.net.ConnectivityManager;
 import android.os.BatteryManager;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.test.filters.FlakyTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import org.junit.After;
@@ -76,6 +77,25 @@ public class DeviceStateMonitorTest extends TelephonyTest {
 
     @Test
     @SmallTest
+    public void testScreenOff() throws Exception {
+        Intent intent = new Intent(Intent.ACTION_SCREEN_ON);
+        mContext.sendBroadcast(intent);
+        intent = new Intent(Intent.ACTION_SCREEN_OFF);
+        mContext.sendBroadcast(intent);
+        waitForMs(100);
+        verify(mSimulatedCommandsVerifier, times(1)).setUnsolResponseFilter(eq(0),
+                any(Message.class));
+
+        intent = new Intent(Intent.ACTION_SCREEN_ON);
+        mContext.sendBroadcast(intent);
+        waitForMs(100);
+        verify(mSimulatedCommandsVerifier, times(1)).setUnsolResponseFilter(eq(7),
+                any(Message.class));
+    }
+
+    @FlakyTest
+    @Test
+    @SmallTest
     public void testTethering() throws Exception {
         // Turn tethering on
         Intent intent = new Intent(ConnectivityManager.ACTION_TETHER_STATE_CHANGED);
@@ -100,6 +120,7 @@ public class DeviceStateMonitorTest extends TelephonyTest {
                 eq(true), any(Message.class));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testCharging() throws Exception {
