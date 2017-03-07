@@ -27,10 +27,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SqliteWrapper;
 import android.net.Uri;
+import android.telephony.Rlog;
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
-import android.telephony.Rlog;
 import android.util.Patterns;
 
 import com.android.internal.telephony.PhoneConstants;
@@ -2971,5 +2971,53 @@ public final class Telephony {
                 CMAS_URGENCY,
                 CMAS_CERTAINTY
         };
+    }
+
+    /**
+     * Constants for interfacing with the ServiceStateProvider and the different fields of the
+     * ServiceState class accessible through the provider
+     */
+    public static final class ServiceStateTable {
+        public static final Uri CONTENT_URI = Uri.parse("content://service-state/");
+        /**
+         * The MIME-type of {@link #CONTENT_URI}.
+         */
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/service_state";
+
+        /**
+         * Used to push and receive updates to a field in the ServiceState for a given subId
+         * @param field the ServiceState field to receive updates on
+         * @param subId the subId to receive updates on
+         * @return the Uri that will be notified by ServiceStateTracker
+         */
+        public static Uri getUriForSubId(String field, int subId) {
+            return CONTENT_URI.buildUpon().appendEncodedPath(String.valueOf(subId))
+                    .appendEncodedPath(field).build();
+        }
+
+        public static final String VOICE_REG_STATE = "voice_reg_state";
+        public static final String DATA_REG_STATE = "data_reg_state";
+        public static final String VOICE_OPERATOR_ALPHA_LONG = "voice_operator_alpha_long";
+        public static final String VOICE_OPERATOR_ALPHA_SHORT = "voice_operator_alpha_short";
+        public static final String VOICE_OPERATOR_NUMERIC = "voice_operator_numeric";
+        public static final String DATA_OPERATOR_ALPHA_LONG = "data_operator_alpha_long";
+        public static final String DATA_OPERATOR_ALPHA_SHORT = "data_operator_alpha_short";
+        public static final String DATA_OPERATOR_NUMERIC = "data_operator_numeric";
+        public static final String IS_MANUAL_NETWORK_SELECTION = "is_manual_network_selection";
+        public static final String RIL_VOICE_RADIO_TECHNOLOGY = "ril_voice_radio_technology";
+        public static final String RIL_DATA_RADIO_TECHNOLOGY = "ril_data_radio_technology";
+        public static final String CSS_INDICATOR = "css_indicator";
+        public static final String NETWORK_ID = "network_id";
+        public static final String SYSTEM_ID = "system_id";
+        public static final String CDMA_ROAMING_INDICATOR = "cdma_roaming_indicator";
+        public static final String CDMA_DEFAULT_ROAMING_INDICATOR =
+                "cdma_default_roaming_indicator";
+        public static final String CDMA_ERI_ICON_INDEX = "cdma_eri_icon_index";
+        public static final String CDMA_ERI_ICON_MODE = "cdma_eri_icon_mode";
+        public static final String IS_EMERGENCY_ONLY = "is_emergency_only";
+        public static final String IS_DATA_ROAMING_FROM_REGISTRATION =
+                "is_data_roaming_from_registration";
+        public static final String IS_USING_CARRIER_AGGREGATION = "is_using_carrier_aggregation";
     }
 }
