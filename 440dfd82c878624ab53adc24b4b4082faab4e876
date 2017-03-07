@@ -16,6 +16,24 @@
       "revId": "440dfd82c878624ab53adc24b4b4082faab4e876",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dbddbc91_913b82da",
+        "filename": "src/java/com/android/internal/telephony/HbpcdUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-07T00:15:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de8ff6a0_8893cb4a",
+      "revId": "440dfd82c878624ab53adc24b4b4082faab4e876",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
