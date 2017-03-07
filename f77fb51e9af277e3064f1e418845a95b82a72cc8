@@ -46,6 +46,30 @@
       "revId": "f77fb51e9af277e3064f1e418845a95b82a72cc8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "459e4e97_ad876f91",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1060841
+      },
+      "writtenOn": "2017-03-07T20:35:32Z",
+      "side": 1,
+      "message": "Few things:\n1. You need to amend all the places used PackageManager throughout this class.\n2.the user id needed to be the calling user id, see Binder.getCallingUserId\n\nThanks :)",
+      "parentUuid": "d0aee724_d6612dd4",
+      "range": {
+        "startLine": 983,
+        "startChar": 25,
+        "endLine": 983,
+        "endChar": 45
+      },
+      "revId": "f77fb51e9af277e3064f1e418845a95b82a72cc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
