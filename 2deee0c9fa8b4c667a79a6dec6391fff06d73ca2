@@ -46,6 +46,30 @@
       "revId": "2deee0c9fa8b4c667a79a6dec6391fff06d73ca2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c79e13b_1a830614",
+        "filename": "src/java/android/telephony/SmsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-07T18:56:50Z",
+      "side": 1,
+      "message": "What do you mean? It ultimately goes through this, right? https://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/IccSmsInterfaceManager.java?q\u003dinjectSmsPdu\u0026sq\u003dpackage:%5Eandroid$\u0026l\u003d468",
+      "parentUuid": "b796f74e_8920b11a",
+      "range": {
+        "startLine": 381,
+        "startChar": 86,
+        "endLine": 382,
+        "endChar": 17
+      },
+      "revId": "2deee0c9fa8b4c667a79a6dec6391fff06d73ca2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
