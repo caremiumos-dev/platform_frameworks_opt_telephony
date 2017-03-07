@@ -27,10 +27,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SqliteWrapper;
 import android.net.Uri;
+import android.telephony.Rlog;
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
-import android.telephony.Rlog;
 import android.util.Patterns;
 
 import com.android.internal.telephony.PhoneConstants;
@@ -2971,5 +2971,92 @@ public final class Telephony {
                 CMAS_URGENCY,
                 CMAS_CERTAINTY
         };
+    }
+
+    /**
+     * Constants for interfacing with the ServiceStateProvider and the different fields of the
+     * ServiceState class accessible through the provider
+     */
+    public static final class ServiceStateTable {
+        public static final Uri CONTENT_URI = Uri.parse("content://service-state/");
+
+        /**
+         * Used to push and receive updates to a field in the ServiceState for a given subId
+         * @param field the ServiceState field to receive updates on
+         * @param subId the subId to receive updates on
+         * @return the Uri that will be notified by ServiceStateTracker
+         */
+        public static Uri getUriForFieldAndSubId(String field, int subId) {
+            return CONTENT_URI.buildUpon().appendEncodedPath(String.valueOf(subId))
+                    .appendEncodedPath(field).build();
+        }
+
+        /**
+         * Used to push and receive updates to the ServiceState for a given subId. Subscribers will
+         * be notified when any field in the ServiceState changes.
+         *
+         * @param field the ServiceState field to receive updates on
+         * @param subId the subId to receive updates on
+         * @return the Uri that will be notified by ServiceStateTracker
+         */
+        public static Uri getUriForSubId(String field, int subId) {
+            return CONTENT_URI.buildUpon().appendEncodedPath(String.valueOf(subId)).build();
+        }
+
+        /**
+         * Used to insert a ServiceState into the ServiceStateProvider as a ContentValues instance.
+         *
+         * @param state the ServiceState to convert into ContentValues
+         * @return the convertedContentValues instance
+         */
+        public static ContentValues getContentValuesForServiceState(ServiceState state) {
+            ContentValues values = new ContentValues();
+            values.put(VOICE_REG_STATE, state.getVoiceRegState());
+            values.put(DATA_REG_STATE, state.getDataRegState());
+            values.put(VOICE_OPERATOR_ALPHA_LONG, state.getVoiceOperatorAlphaLong());
+            values.put(VOICE_OPERATOR_ALPHA_SHORT, state.getVoiceOperatorAlphaShort());
+            values.put(VOICE_OPERATOR_NUMERIC, state.getVoiceOperatorNumeric());
+            values.put(DATA_OPERATOR_ALPHA_LONG, state.getDataOperatorAlphaLong());
+            values.put(DATA_OPERATOR_ALPHA_SHORT, state.getDataOperatorAlphaShort());
+            values.put(DATA_OPERATOR_NUMERIC, state.getDataOperatorNumeric());
+            values.put(IS_MANUAL_NETWORK_SELECTION, state.getIsManualSelection());
+            values.put(RIL_VOICE_RADIO_TECHNOLOGY, state.getRilVoiceRadioTechnology());
+            values.put(RIL_DATA_RADIO_TECHNOLOGY, state.getRilDataRadioTechnology());
+            values.put(CSS_INDICATOR, state.getCssIndicator());
+            values.put(NETWORK_ID, state.getNetworkId());
+            values.put(SYSTEM_ID, state.getSystemId());
+            values.put(CDMA_ROAMING_INDICATOR, state.getCdmaRoamingIndicator());
+            values.put(CDMA_DEFAULT_ROAMING_INDICATOR, state.getCdmaDefaultRoamingIndicator());
+            values.put(CDMA_ERI_ICON_INDEX, state.getCdmaEriIconIndex());
+            values.put(CDMA_ERI_ICON_MODE, state.getCdmaEriIconMode());
+            values.put(IS_EMERGENCY_ONLY, state.isEmergencyOnly());
+            values.put(IS_DATA_ROAMING_FROM_REGISTRATION, state.isDataRoamingFromRegistration());
+            values.put(IS_USING_CARRIER_AGGREGATION, state.isUsingCarrierAggregation());
+            return values;
+        }
+
+        public static final String VOICE_REG_STATE = "voice_reg_state";
+        public static final String DATA_REG_STATE = "data_reg_state";
+        public static final String VOICE_OPERATOR_ALPHA_LONG = "voice_operator_alpha_long";
+        public static final String VOICE_OPERATOR_ALPHA_SHORT = "voice_operator_alpha_short";
+        public static final String VOICE_OPERATOR_NUMERIC = "voice_operator_numeric";
+        public static final String DATA_OPERATOR_ALPHA_LONG = "data_operator_alpha_long";
+        public static final String DATA_OPERATOR_ALPHA_SHORT = "data_operator_alpha_short";
+        public static final String DATA_OPERATOR_NUMERIC = "data_operator_numeric";
+        public static final String IS_MANUAL_NETWORK_SELECTION = "is_manual_network_selection";
+        public static final String RIL_VOICE_RADIO_TECHNOLOGY = "ril_voice_radio_technology";
+        public static final String RIL_DATA_RADIO_TECHNOLOGY = "ril_data_radio_technology";
+        public static final String CSS_INDICATOR = "css_indicator";
+        public static final String NETWORK_ID = "network_id";
+        public static final String SYSTEM_ID = "system_id";
+        public static final String CDMA_ROAMING_INDICATOR = "cdma_roaming_indicator";
+        public static final String CDMA_DEFAULT_ROAMING_INDICATOR =
+                "cdma_default_roaming_indicator";
+        public static final String CDMA_ERI_ICON_INDEX = "cdma_eri_icon_index";
+        public static final String CDMA_ERI_ICON_MODE = "cdma_eri_icon_mode";
+        public static final String IS_EMERGENCY_ONLY = "is_emergency_only";
+        public static final String IS_DATA_ROAMING_FROM_REGISTRATION =
+                "is_data_roaming_from_registration";
+        public static final String IS_USING_CARRIER_AGGREGATION = "is_using_carrier_aggregation";
     }
 }
