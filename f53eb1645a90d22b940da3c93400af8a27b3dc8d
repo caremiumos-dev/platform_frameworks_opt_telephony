@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a906e844_7ac4406c",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1060841
+      },
+      "writtenOn": "2017-03-08T14:43:20Z",
+      "side": 1,
+      "message": "Hmm,  uid \u003d/\u003d user id, I guess you meant getCallingUserId.\n\nAlso, be careful that getCallingUserId won\u0027t be working if called after Binder.clearCallingIdentity().",
+      "revId": "f53eb1645a90d22b940da3c93400af8a27b3dc8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
