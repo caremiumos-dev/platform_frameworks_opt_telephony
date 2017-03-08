@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "299f4b46_f7bc3c19",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-08T19:24:56Z",
+      "side": 1,
+      "message": "This is to make sure that we continue to have the same behavior as earlier. From the code it looks like RIL was setting tac as lac in voice registration state and we used the same here. Do you mean to say, have a specific entry for tac in GsmCellLocation?",
+      "parentUuid": "5f2ef052_469f71fa",
+      "range": {
+        "startLine": 919,
+        "startChar": 46,
+        "endLine": 919,
+        "endChar": 49
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87f5e778_bea55528",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "32000bdf_dabb4e55",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-08T19:24:56Z",
+      "side": 1,
+      "message": "Wouldn\u0027t that be redundant as we have RILJ logging?",
+      "parentUuid": "87f5e778_bea55528",
+      "range": {
+        "startLine": 920,
+        "startChar": 18,
+        "endLine": 920,
+        "endChar": 21
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fac42878_d118508f",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 5
@@ -59,6 +107,30 @@
       "writtenOn": "2017-03-08T18:50:55Z",
       "side": 1,
       "message": "If the HalRegState is really constrained to Hal it should get translated before it leaves Ril.java.  If it\u0027s not it should probably be just convertRegStateToServiceState\n\nLooking at this furtuer this appear to not be regState -\u003e ServiceState but Hal -\u003e AOSP.  Does anybody above RIL.java need the RegState version?",
+      "range": {
+        "startLine": 1665,
+        "startChar": 16,
+        "endLine": 1665,
+        "endChar": 48
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "78c1b4dc_32cae0ac",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-08T19:24:56Z",
+      "side": 1,
+      "message": "We are using android.hardware.radio.V1_0 types directly in ServiceStateTracker. It was decided not to replicate the HAL info into another class and instead use the same in ServiceStateTracker.",
+      "parentUuid": "fac42878_d118508f",
       "range": {
         "startLine": 1665,
         "startChar": 16,
