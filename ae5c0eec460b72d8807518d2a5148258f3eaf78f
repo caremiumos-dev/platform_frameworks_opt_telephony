@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f2ef052_469f71fa",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-08T18:50:55Z",
+      "side": 1,
+      "message": "why isn\u0027t this lac?  or the local var tac?  This seems like a bug or design flaw",
+      "range": {
+        "startLine": 919,
+        "startChar": 46,
+        "endLine": 919,
+        "endChar": 49
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "87f5e778_bea55528",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-08T18:50:55Z",
+      "side": 1,
+      "message": "all of these should log an error if cellIdendity isn\u0027t populated, yeah?",
+      "range": {
+        "startLine": 920,
+        "startChar": 18,
+        "endLine": 920,
+        "endChar": 21
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fac42878_d118508f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-08T18:50:55Z",
+      "side": 1,
+      "message": "If the HalRegState is really constrained to Hal it should get translated before it leaves Ril.java.  If it\u0027s not it should probably be just convertRegStateToServiceState\n\nLooking at this furtuer this appear to not be regState -\u003e ServiceState but Hal -\u003e AOSP.  Does anybody above RIL.java need the RegState version?",
+      "range": {
+        "startLine": 1665,
+        "startChar": 16,
+        "endLine": 1665,
+        "endChar": 48
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3185e182_a3871fd8",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-08T18:50:55Z",
+      "side": 1,
+      "message": "what - if this is converting to ServiceState it shouldn\u0027t be stored in a var call regState",
+      "range": {
+        "startLine": 1785,
+        "startChar": 0,
+        "endLine": 1785,
+        "endChar": 1
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f3dd66f0_ccb51adc",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-08T18:50:55Z",
+      "side": 1,
+      "message": "why did you move this if nobody else in-scope is using?  Please put back to tightest scoping..",
+      "range": {
+        "startLine": 1787,
+        "startChar": 0,
+        "endLine": 1787,
+        "endChar": 65
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
