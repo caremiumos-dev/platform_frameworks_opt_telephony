@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "590e30fd_bd6b9756",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-08T04:28:45Z",
+      "side": 1,
+      "message": "but HAL is an short form of a 3 words, so shouldn\u0027t it be HAL and Hal?",
+      "parentUuid": "16c4feaf_65e470ef",
+      "range": {
+        "startLine": 1665,
+        "startChar": 23,
+        "endLine": 1665,
+        "endChar": 26
+      },
+      "revId": "c7eee14651bcdb9ffb4aa1582a1eb5703d673919",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fd9b12f_223bebec",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2017-03-08T04:14:19Z",
       "side": 1,
       "message": "since these are not consecutive values, will be good to add the actual int value as a comment against each.",
+      "revId": "c7eee14651bcdb9ffb4aa1582a1eb5703d673919",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4aef8df7_91a2521f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1667,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-08T04:28:45Z",
+      "side": 1,
+      "message": "why should we do that? enums are not assumed to be consecutive anyway? also the definition is always available if someone is interested in the original value. Another argument against documenting original value is that if in future the value changes, you have to remember to come here and make sure the comment is changed which generally easily missed for value changes of enums",
+      "parentUuid": "4fd9b12f_223bebec",
       "revId": "c7eee14651bcdb9ffb4aa1582a1eb5703d673919",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
