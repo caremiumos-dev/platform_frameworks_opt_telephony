@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16c4feaf_65e470ef",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-08T04:14:19Z",
+      "side": 1,
+      "message": "Hal (not caps)",
+      "range": {
+        "startLine": 1665,
+        "startChar": 23,
+        "endLine": 1665,
+        "endChar": 26
+      },
+      "revId": "c7eee14651bcdb9ffb4aa1582a1eb5703d673919",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4fd9b12f_223bebec",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1667,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-08T04:14:19Z",
+      "side": 1,
+      "message": "since these are not consecutive values, will be good to add the actual int value as a comment against each.",
+      "revId": "c7eee14651bcdb9ffb4aa1582a1eb5703d673919",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4f2f16eb_d6fd4cfd",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-08T04:14:19Z",
+      "side": 1,
+      "message": "can you also update this function to use the service state constants?",
+      "range": {
+        "startLine": 1700,
+        "startChar": 40,
+        "endLine": 1700,
+        "endChar": 61
+      },
+      "revId": "c7eee14651bcdb9ffb4aa1582a1eb5703d673919",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
