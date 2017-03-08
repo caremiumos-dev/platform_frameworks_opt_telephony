@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ca7327b1_8e63dfb8",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-08T20:10:16Z",
+      "side": 1,
+      "message": "If this is what we used to do then please add a comment and a bug to clean that up.  I assume lac !\u003d tac and so setLacAndCid isn\u0027t correct below, etc.  I understand keeping it the same and keeping the scope of change small (both good) but reading the code we\u0027d think this is wrong so a comment acking that with a path forward is good.",
+      "parentUuid": "299f4b46_f7bc3c19",
+      "range": {
+        "startLine": 919,
+        "startChar": 46,
+        "endLine": 919,
+        "endChar": 49
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87f5e778_bea55528",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 5
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "6a769970_dd6278cc",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-08T20:10:16Z",
+      "side": 1,
+      "message": "How does RIL deal with this?  Can we assert that the size is 1 here?  That would be best and remove the needless ifs.",
+      "parentUuid": "32000bdf_dabb4e55",
+      "range": {
+        "startLine": 920,
+        "startChar": 18,
+        "endLine": 920,
+        "endChar": 21
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fac42878_d118508f",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 5
@@ -131,6 +179,30 @@
       "side": 1,
       "message": "We are using android.hardware.radio.V1_0 types directly in ServiceStateTracker. It was decided not to replicate the HAL info into another class and instead use the same in ServiceStateTracker.",
       "parentUuid": "fac42878_d118508f",
+      "range": {
+        "startLine": 1665,
+        "startChar": 16,
+        "endLine": 1665,
+        "endChar": 48
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f24b5e66_3e0a7876",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-08T20:10:16Z",
+      "side": 1,
+      "message": "It appears that RIL_REG_* is only used in SST.  If we\u0027re replacing with RegState.* then we shouldn\u0027t convert types - the ServiceState.RIL_REG should be removed.\n\nIf you plan to do that in the future, please put a comment on this function (temp - to be removed: b/####) and file a bug to track",
+      "parentUuid": "78c1b4dc_32cae0ac",
       "range": {
         "startLine": 1665,
         "startChar": 16,
