@@ -70,6 +70,30 @@
       "revId": "2deee0c9fa8b4c667a79a6dec6391fff06d73ca2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "547d3eaa_d7ce2dc4",
+        "filename": "src/java/android/telephony/SmsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1060832
+      },
+      "writtenOn": "2017-03-08T04:00:47Z",
+      "side": 1,
+      "message": "There are other APIs that need to updated with documentation that states that the IMS app is permitted to use it as well.  Hence, I want to limit the scope of this CL to just the MODIFY_PHONE_STATE.",
+      "parentUuid": "7c79e13b_1a830614",
+      "range": {
+        "startLine": 381,
+        "startChar": 86,
+        "endLine": 382,
+        "endChar": 17
+      },
+      "revId": "2deee0c9fa8b4c667a79a6dec6391fff06d73ca2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
