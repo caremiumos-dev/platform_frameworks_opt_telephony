@@ -416,6 +416,9 @@ public class ServiceStateTracker extends Handler {
      * handlePollStateResult to store CGREG roaming result.
      */
     private boolean mDataRoaming = false;
+
+    /* LTE EARFCN value */
+    private int mLteEarfcn = -1;
     /**
      * Mark when service state is in emergency call only mode
      */
@@ -952,6 +955,25 @@ public class ServiceStateTracker extends Handler {
             ((CdmaCellLocation) cellLocation).setCellLocationData(baseStationId,
                     baseStationLatitude, baseStationLongitude, systemId, networkId);
         }
+    }
+
+    private int processDataCellLocationInfo(DataRegStateResult dataRegStateResult) {
+        int lteEarfcn = -1;
+        switch(dataRegStateResult.cellIdentity.cellInfoType) {
+            case CellInfoType.LTE: {
+                if (dataRegStateResult.cellIdentity.cellIdentityLte.size() == 1) {
+                    android.hardware.radio.V1_0.CellIdentityLte cellIdentityLte =
+                            dataRegStateResult.cellIdentity.cellIdentityLte.get(0);
+                    lteEarfcn = cellIdentityLte.earfcn;
+                }
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+
+        return lteEarfcn;
     }
 
     @Override
@@ -1746,9 +1768,10 @@ public class ServiceStateTracker extends Handler {
                 int regState = dataRegStateResult.regState;
                 int dataRegState = regCodeToServiceState(regState);
                 int newDataRat = dataRegStateResult.rat;
-
+                int oldLteEarfcn = mLteEarfcn;
                 mNewSS.setDataRegState(dataRegState);
                 mNewSS.setRilDataRadioTechnology(newDataRat);
+                mLteEarfcn = processDataCellLocationInfo(dataRegStateResult);
 
                 if (mPhone.isPhoneTypeGsm()) {
 
@@ -1783,7 +1806,8 @@ public class ServiceStateTracker extends Handler {
                             && (newDataRat != ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN))
                             || (ServiceState.isCdma(oldDataRAT) && ServiceState.isLte(newDataRat))
                             || (ServiceState.isLte(oldDataRAT)
-                            && ServiceState.isCdma(newDataRat))) {
+                            && ServiceState.isCdma(newDataRat))
+                            || (ServiceState.isLte(newDataRat) && (mLteEarfcn != oldLteEarfcn))) {
                         mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
                     }
 
@@ -4005,6 +4029,15 @@ public class ServiceStateTracker extends Handler {
             mSignalStrength = (SignalStrength) ar.result;
             mSignalStrength.validateInput();
             mSignalStrength.setGsm(isGsm);
+            CarrierConfigManager configManager = (CarrierConfigManager)
+                    mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+            PersistableBundle b = configManager.getConfigForSubId(mPhone.getSubId());
+            int offset = b.getInt(CarrierConfigManager.KEY_SIGNAL_STRENGTH_OFFSET_INT, 0);
+            int earfcnThreshold = b.getInt(
+                    CarrierConfigManager.KEY_SIGNAL_STRENGTH_EARFCN_THRESHOLD_INT, -1);
+            if ((earfcnThreshold != -1) && (mLteEarfcn != -1) && (mLteEarfcn > earfcnThreshold)) {
+                mSignalStrength.setLteOffset(offset);
+            }
         } else {
             log("onSignalStrengthResult() Exception from RIL : " + ar.exception);
             mSignalStrength = new SignalStrength(isGsm);
@@ -4282,6 +4315,7 @@ public class ServiceStateTracker extends Handler {
         pw.println(" mPowerOffDelayNeed=" + mPowerOffDelayNeed);
         pw.println(" mDeviceShuttingDown=" + mDeviceShuttingDown);
         pw.println(" mSpnUpdatePending=" + mSpnUpdatePending);
+        pw.println(" mLteEarfcn=" + mLteEarfcn);
 
         pw.println(" Roaming Log:");
         IndentingPrintWriter ipw = new IndentingPrintWriter(pw, "  ");
