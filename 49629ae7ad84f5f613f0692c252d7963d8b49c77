@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0eadb59f_5185baca",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-03-09T18:08:00Z",
+      "side": 1,
+      "message": "can you explain again why this test is being added? I don\u0027t see it on aosp-master or internal-master",
+      "range": {
+        "startLine": 80,
+        "startChar": 16,
+        "endLine": 80,
+        "endChar": 29
+      },
+      "revId": "49629ae7ad84f5f613f0692c252d7963d8b49c77",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
