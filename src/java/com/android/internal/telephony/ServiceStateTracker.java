@@ -94,6 +94,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * {@hide}
@@ -417,6 +418,10 @@ public class ServiceStateTracker extends Handler {
      * handlePollStateResult to store CGREG roaming result.
      */
     private boolean mDataRoaming = false;
+
+    /* LTE EARFCN value */
+    private int mLteEarfcn = -1;
+
     /**
      * Mark when service state is in emergency call only mode
      */
@@ -456,6 +461,9 @@ public class ServiceStateTracker extends Handler {
                 mAlarmSwitch = false;
                 DcTracker dcTracker = mPhone.mDcTracker;
                 powerOffRadioSafely(dcTracker);
+            } else if (intent.getAction().equals(
+                    CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED)) {
+                updateLteEarfcnLists();
             }
         }
     };
@@ -497,6 +505,13 @@ public class ServiceStateTracker extends Handler {
     /* Used only for debugging purposes. */
     private String mRegistrationDeniedReason;
     private String mCurrentCarrier = null;
+
+    /* LTE EARFCN list for which the lte rsrp boost is applied */
+    private String[] mEarfcnsListForRsrpBoost = null;
+
+    private Integer mLteRsrpBoost = new Integer(0); // offset to be reduced from the rsrp threshold
+                                                    // while signal strength level calculating
+    private final Object mLteRsrpBoostLock = new Object(); // mLteRsrpBoost lock
 
     public ServiceStateTracker(GsmCdmaPhone phone, CommandsInterface ci) {
         mPhone = phone;
@@ -550,6 +565,9 @@ public class ServiceStateTracker extends Handler {
         context.registerReceiver(mIntentReceiver, filter);
         filter = new IntentFilter();
         filter.addAction(ACTION_RADIO_OFF);
+        context.registerReceiver(mIntentReceiver, filter);
+        filter = new IntentFilter();
+        filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         context.registerReceiver(mIntentReceiver, filter);
 
         mPhone.notifyOtaspChanged(OTASP_UNINITIALIZED);
@@ -964,6 +982,25 @@ public class ServiceStateTracker extends Handler {
             ((CdmaCellLocation) cellLocation).setCellLocationData(baseStationId,
                     baseStationLatitude, baseStationLongitude, systemId, networkId);
         }
+    }
+
+    private int getLteEarfcn(DataRegStateResult dataRegStateResult) {
+        int lteEarfcn = -1;
+        switch(dataRegStateResult.cellIdentity.cellInfoType) {
+            case CellInfoType.LTE: {
+                if (dataRegStateResult.cellIdentity.cellIdentityLte.size() == 1) {
+                    android.hardware.radio.V1_0.CellIdentityLte cellIdentityLte =
+                            dataRegStateResult.cellIdentity.cellIdentityLte.get(0);
+                    lteEarfcn = cellIdentityLte.earfcn;
+                }
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+
+        return lteEarfcn;
     }
 
     @Override
@@ -1785,9 +1822,10 @@ public class ServiceStateTracker extends Handler {
                 int regState = getRegStateFromHalRegState(dataRegStateResult.regState);
                 int dataRegState = regCodeToServiceState(regState);
                 int newDataRat = dataRegStateResult.rat;
-
+                int oldLteEarfcn = mLteEarfcn;
                 mNewSS.setDataRegState(dataRegState);
                 mNewSS.setRilDataRadioTechnology(newDataRat);
+                mLteEarfcn = getLteEarfcn(dataRegStateResult);
 
                 if (mPhone.isPhoneTypeGsm()) {
 
@@ -1822,7 +1860,8 @@ public class ServiceStateTracker extends Handler {
                             && (newDataRat != ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN))
                             || (ServiceState.isCdma(oldDataRAT) && ServiceState.isLte(newDataRat))
                             || (ServiceState.isLte(oldDataRAT)
-                            && ServiceState.isCdma(newDataRat))) {
+                            && ServiceState.isCdma(newDataRat))
+                            || (ServiceState.isLte(newDataRat) && (mLteEarfcn != oldLteEarfcn))) {
                         mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
                     }
 
@@ -4012,6 +4051,69 @@ public class ServiceStateTracker extends Handler {
     }
 
     /**
+     * Checks if the provided earfcn falls withing the range of earfcns.
+     *
+     * return true if earfcn falls within the provided range; false otherwise.
+     * Format of the earfcnsList is expected to be {"erafcn1_start-earfcn1_end",
+     * "earfcn2_start-earfcn2_end" ... }
+     */
+    private boolean containsEarfcnInEarfcnRange(String[] earfcnsList, int earfcn) {
+        if ((earfcnsList != null) && (earfcnsList.length != 0)
+                && ((earfcnsList.length % 2) == 0)) {
+            int earfcnStart;
+            int earfcnEnd;
+            for (int i = 0; i < earfcnsList.length; i++) {
+                try {
+                    String[] earfcns = earfcnsList[i].split("-");
+                    if (earfcns.length != 2) {
+                        if (VDBG) {
+                            log("Invalid earfcn range format");
+                        }
+                        return false;
+                    }
+
+                    earfcnStart = Integer.parseInt(earfcns[0]);
+                    earfcnEnd = Integer.parseInt(earfcns[1]);
+                } catch (PatternSyntaxException pse) {
+                    if (VDBG) {
+                        log("Invalid earfcn range format");
+                    }
+                    return false;
+                } catch (NumberFormatException nfe) {
+                    if (VDBG) {
+                        log("Invalid earfcn number format");
+                    }
+                    return false;
+                }
+
+                if (earfcnStart > earfcnEnd) {
+                    if (VDBG) {
+                        log("Invalid earfcn range format");
+                    }
+                    return false;
+                }
+
+                if ((earfcn >= earfcnStart) && (earfcn <= earfcnEnd)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void updateLteEarfcnLists() {
+        CarrierConfigManager configManager = (CarrierConfigManager)
+                mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle b = configManager.getConfigForSubId(mPhone.getSubId());
+        synchronized (mLteRsrpBoostLock) {
+            mLteRsrpBoost = b.getInt(CarrierConfigManager.KEY_SIGNAL_STRENGTH_BOOST_INT, 0);
+            mEarfcnsListForRsrpBoost = b.getStringArray(
+                    CarrierConfigManager.KEY_SIGNAL_STRENGTH_EARFCNS_LIST_STRING_ARRAY);
+        }
+    }
+
+    /**
      * send signal-strength-changed notification if changed Called both for
      * solicited and unsolicited signal strength updates
      *
@@ -4033,6 +4135,12 @@ public class ServiceStateTracker extends Handler {
             mSignalStrength = (SignalStrength) ar.result;
             mSignalStrength.validateInput();
             mSignalStrength.setGsm(isGsm);
+            synchronized (mLteRsrpBoostLock) {
+                if ((mLteEarfcn != -1)
+                        && containsEarfcnInEarfcnRange(mEarfcnsListForRsrpBoost, mLteEarfcn)) {
+                    mSignalStrength.setLteRsrpBoost(mLteRsrpBoost);
+                }
+            }
         } else {
             log("onSignalStrengthResult() Exception from RIL : " + ar.exception);
             mSignalStrength = new SignalStrength(isGsm);
@@ -4316,6 +4424,9 @@ public class ServiceStateTracker extends Handler {
         pw.println(" mPowerOffDelayNeed=" + mPowerOffDelayNeed);
         pw.println(" mDeviceShuttingDown=" + mDeviceShuttingDown);
         pw.println(" mSpnUpdatePending=" + mSpnUpdatePending);
+        pw.println(" mLteEarfcn=" + mLteEarfcn);
+        pw.println(" mLteRsrpBoost=" + mLteRsrpBoost);
+        pw.println(" mEarfcnsListForRsrpBoost=" + mEarfcnsListForRsrpBoost);
 
         pw.println(" Roaming Log:");
         IndentingPrintWriter ipw = new IndentingPrintWriter(pw, "  ");
