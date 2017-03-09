@@ -16,6 +16,24 @@
       "revId": "f53eb1645a90d22b940da3c93400af8a27b3dc8d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de464cfe_b3ff7a82",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-09T20:33:14Z",
+      "side": 1,
+      "message": "So should it be Binder.getCallingUserHandle().getIdentifier()? Or would mContext.getUserId() work? There\u0027s also UserHandle.myUserId().",
+      "parentUuid": "a906e844_7ac4406c",
+      "revId": "f53eb1645a90d22b940da3c93400af8a27b3dc8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
