@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "3fdfa916_a97b21be",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-09T02:24:17Z",
+      "side": 1,
+      "message": "Also to make it clear, we will set it to -1 if they are not available. If that is reported as an issue, we will use RILJ logging to find the HAL behavior.",
+      "parentUuid": "61842d46_369ac957",
+      "range": {
+        "startLine": 920,
+        "startChar": 18,
+        "endLine": 920,
+        "endChar": 21
+      },
+      "revId": "ae5c0eec460b72d8807518d2a5148258f3eaf78f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fac42878_d118508f",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 5
