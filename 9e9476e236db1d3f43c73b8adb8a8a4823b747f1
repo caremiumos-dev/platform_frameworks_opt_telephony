@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ed64726_d6c00211",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-03-10T08:01:31Z",
+      "side": 1,
+      "message": "Whats 23 here? Can we use constants like the one at line 625 below ?",
+      "revId": "9e9476e236db1d3f43c73b8adb8a8a4823b747f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e4d6e30e_7948d44a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-03-10T08:01:31Z",
+      "side": 1,
+      "message": "same comment. Can we use predefined constants ?",
+      "revId": "9e9476e236db1d3f43c73b8adb8a8a4823b747f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "75373d0d_1fed8b80",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-03-10T08:01:31Z",
+      "side": 1,
+      "message": "Why not combine this with the previous test for DataConnAttached ?\n\nWas the intention to separate our Voice and Data tests? If so, do we need to set VoiceRegState also here?",
+      "revId": "9e9476e236db1d3f43c73b8adb8a8a4823b747f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f1018952_720df641",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-03-10T08:01:31Z",
+      "side": 1,
+      "message": "Whats the point of unregister followed by register below without checking for anything in between.",
+      "revId": "9e9476e236db1d3f43c73b8adb8a8a4823b747f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
