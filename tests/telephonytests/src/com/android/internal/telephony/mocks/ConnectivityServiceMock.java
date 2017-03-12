@@ -34,6 +34,7 @@ import android.net.NetworkQuotaInfo;
 import android.net.NetworkRequest;
 import android.net.NetworkState;
 import android.net.ProxyInfo;
+import android.net.wifi.WifiConfiguration;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
@@ -577,6 +578,15 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
         throw new RuntimeException("not implemented");
     }
 
+    @Override
+    public int startLocalOnlyWifiHotspot(WifiConfiguration cfg) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public void stopLocalOnlyWifiHotspot() {
+        throw new RuntimeException("not implemented");
+    }
 
     public void reportInetCondition(int networkType, int percentage) {
         throw new RuntimeException("not implemented");
