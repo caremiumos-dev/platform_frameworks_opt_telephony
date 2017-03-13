@@ -22,6 +22,29 @@
       "revId": "4e0b94362dacb923853d8fce396a8ebcdc071406",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c130d9aa_accf7b6a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 4098,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-13T21:38:23Z",
+      "side": 1,
+      "message": "I think all this should be done in advance and update athe cached array when the carrier config changes.  Loading it each time we get a sig str is too much work.",
+      "range": {
+        "startLine": 4098,
+        "startChar": 40,
+        "endLine": 4098,
+        "endChar": 56
+      },
+      "revId": "4e0b94362dacb923853d8fce396a8ebcdc071406",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7d77838_20e15b2e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-13T21:38:23Z",
+      "side": 1,
+      "message": "I\u0027d like fewer acronym.  mLteChannel?\n\nAlso, this should probably be in service state if we store it at all..  if we don\u0027t need to compare this to the old (you were using that to request new sig str from modem but I don\u0027t think you should - see below) then we may not need to store this at all, just apply it to sig str when this comes in, check for change in offset and broadcast if it makes a diff.",
+      "range": {
+        "startLine": 422,
+        "startChar": 16,
+        "endLine": 422,
+        "endChar": 26
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0fe9560f_be1b4f2a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-13T21:38:23Z",
+      "side": 1,
+      "message": "I think this would make more sense as part of the service state.",
+      "range": {
+        "startLine": 1813,
+        "startChar": 16,
+        "endLine": 1813,
+        "endChar": 26
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "58f0cc9c_b5307d89",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1849,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-13T21:38:23Z",
+      "side": 1,
+      "message": "Is this needed?  I think we fetch sign str enough.",
+      "range": {
+        "startLine": 1849,
+        "startChar": 0,
+        "endLine": 1849,
+        "endChar": 98
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5e25aeb3_c234699c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4073,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-13T21:38:23Z",
+      "side": 1,
+      "message": "parse the list into pairs once when we get a change in carrier settings.",
+      "range": {
+        "startLine": 4043,
+        "startChar": 0,
+        "endLine": 4073,
+        "endChar": 5
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0c80b0e_ff2bad9c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4098,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-13T21:38:23Z",
+      "side": 1,
+      "message": "load this once when the carrier config changes",
+      "range": {
+        "startLine": 4098,
+        "startChar": 0,
+        "endLine": 4098,
+        "endChar": 89
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "017d3222_d4a32047",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4102,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-13T21:38:23Z",
+      "side": 1,
+      "message": "this name is too generic.\nKEY_BOOSTED_LTE_CHANNELS_STRING_ARRAY?",
+      "range": {
+        "startLine": 4102,
+        "startChar": 41,
+        "endLine": 4102,
+        "endChar": 86
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
