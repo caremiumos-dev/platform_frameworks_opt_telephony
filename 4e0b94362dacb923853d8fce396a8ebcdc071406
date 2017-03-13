@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7756577b_696060c7",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-13T16:49:51Z",
+      "side": 1,
+      "message": "how about get or extract lteEarfcn?",
+      "range": {
+        "startLine": 972,
+        "startChar": 16,
+        "endLine": 972,
+        "endChar": 43
+      },
+      "revId": "4e0b94362dacb923853d8fce396a8ebcdc071406",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
