@@ -27,7 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.content.res.Resources.NotFoundException;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -1069,39 +1069,42 @@ public class DcTracker extends Handler {
             ApnContext apnContext = null;
 
             switch (networkConfig.type) {
-            case ConnectivityManager.TYPE_MOBILE:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_DEFAULT, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_MMS:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_MMS, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_SUPL:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_SUPL, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_DUN:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_DUN, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_HIPRI:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_HIPRI, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_FOTA:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_FOTA, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_IMS:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_IMS, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_CBS:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_CBS, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_IA:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_IA, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_EMERGENCY:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_EMERGENCY, networkConfig);
-                break;
-            default:
-                log("initApnContexts: skipping unknown type=" + networkConfig.type);
-                continue;
+                case ConnectivityManager.TYPE_MOBILE:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_DEFAULT, networkConfig);
+                    break;
+                case ConnectivityManager.TYPE_MOBILE_MMS:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_MMS, networkConfig);
+                    break;
+                case ConnectivityManager.TYPE_MOBILE_SUPL:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_SUPL, networkConfig);
+                    break;
+                case ConnectivityManager.TYPE_MOBILE_DUN:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_DUN, networkConfig);
+                    break;
+                case ConnectivityManager.TYPE_MOBILE_HIPRI:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_HIPRI, networkConfig);
+                    break;
+                case ConnectivityManager.TYPE_MOBILE_FOTA:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_FOTA, networkConfig);
+                    break;
+                case ConnectivityManager.TYPE_MOBILE_IMS:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_IMS, networkConfig);
+                    break;
+                case ConnectivityManager.TYPE_MOBILE_CBS:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_CBS, networkConfig);
+                    break;
+                case ConnectivityManager.TYPE_MOBILE_IA:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_IA, networkConfig);
+                    break;
+                case ConnectivityManager.TYPE_MOBILE_EMERGENCY:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_EMERGENCY, networkConfig);
+                    break;
+                case ConnectivityManager.TYPE_MOBILE_XCAP:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_XCAP, networkConfig);
+                    break;
+                default:
+                    log("initApnContexts: skipping unknown type=" + networkConfig.type);
+                    continue;
             }
             log("initApnContexts: apnContext=" + apnContext);
         }
@@ -3527,7 +3530,7 @@ public class DcTracker extends Handler {
         try {
             usePreferred = ! mPhone.getContext().getResources().getBoolean(com.android.
                     internal.R.bool.config_dontPreferApn);
-        } catch (Resources.NotFoundException e) {
+        } catch (NotFoundException e) {
             if (DBG) log("buildWaitingApns: usePreferred NotFoundException set to true");
             usePreferred = true;
         }
@@ -4027,6 +4030,8 @@ public class DcTracker extends Handler {
             return RILConstants.DATA_PROFILE_DEFAULT; // DEFAULT for now
         } else if (TextUtils.equals(apnType, PhoneConstants.APN_TYPE_DUN)) {
             return RILConstants.DATA_PROFILE_TETHERED;
+        } else if (TextUtils.equals(apnType, PhoneConstants.APN_TYPE_XCAP)) {
+            return RILConstants.DATA_PROFILE_XCAP;
         } else {
             return RILConstants.DATA_PROFILE_DEFAULT;
         }
