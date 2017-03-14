@@ -50,13 +50,9 @@ import android.hardware.radio.V1_0.SmsWriteArgs;
 import android.hardware.radio.V1_0.UusInfo;
 import android.hardware.radio.deprecated.V1_0.IOemHook;
 import android.net.ConnectivityManager;
-import android.net.LocalSocket;
-import android.net.LocalSocketAddress;
 import android.os.AsyncResult;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.HwBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.PowerManager;
@@ -85,9 +81,7 @@ import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.dataconnection.DataCallResponse;
 import com.android.internal.telephony.dataconnection.DataProfile;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
-import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
-import com.android.internal.telephony.uicc.IccRefreshResponse;
 import com.android.internal.telephony.uicc.IccUtils;
 
 import java.io.ByteArrayInputStream;
@@ -298,9 +292,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
     //***** Instance Variables
 
-    LocalSocket mSocket;
-    Thread mReceiverThread;
-    RILReceiver mReceiver;
     final WakeLock mWakeLock;           // Wake lock associated with request/response
     final WakeLock mAckWakeLock;        // Wake lock associated with ack sent
     final int mWakeLockTimeout;         // Timeout associated with request/response
@@ -340,19 +331,10 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
     //***** Constants
 
-    // match with constant in ril.cpp
-    static final int RIL_MAX_COMMAND_BYTES = (8 * 1024);
-    static final int RESPONSE_SOLICITED = 0;
-    static final int RESPONSE_UNSOLICITED = 1;
-    static final int RESPONSE_SOLICITED_ACK = 2;
-    static final int RESPONSE_SOLICITED_ACK_EXP = 3;
-    static final int RESPONSE_UNSOLICITED_ACK_EXP = 4;
-
     static final String[] RIL_SERVICE_NAME = {"rild", "rild2", "rild3"};
     static final String[] OEM_HOOK_SERVICE_NAME = {"oemhook", "oemhook2", "oemhook3"};
 
-    static final int SOCKET_OPEN_RETRY_MILLIS = 4 * 1000;
-    static final int IRADIO_GET_SERVICE_DELAY_MILLIS = 3 * 1000;
+    static final int IRADIO_GET_SERVICE_DELAY_MILLIS = 4 * 1000;
 
     public static List<TelephonyHistogram> getTelephonyRILTimingHistograms() {
         List<TelephonyHistogram> list;
@@ -527,114 +509,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return messageLength;
     }
 
-    class RILReceiver implements Runnable {
-        byte[] buffer;
-
-        RILReceiver() {
-            buffer = new byte[RIL_MAX_COMMAND_BYTES];
-        }
-
-        @Override
-        public void
-        run() {
-            int retryCount = 0;
-            String rilSocket = "rild";
-
-            try {for (;;) {
-                LocalSocket s = null;
-                LocalSocketAddress l;
-
-                if (mPhoneId == null || mPhoneId == 0 ) {
-                    rilSocket = RIL_SERVICE_NAME[0];
-                } else {
-                    rilSocket = RIL_SERVICE_NAME[mPhoneId];
-                }
-
-                try {
-                    s = new LocalSocket();
-                    l = new LocalSocketAddress(rilSocket,
-                            LocalSocketAddress.Namespace.RESERVED);
-                    s.connect(l);
-                } catch (IOException ex){
-                    try {
-                        if (s != null) {
-                            s.close();
-                        }
-                    } catch (IOException ex2) {
-                        //ignore failure to close after failure to connect
-                    }
-
-                    // don't print an error message after the the first time
-                    // or after the 8th time
-
-                    if (retryCount == 8) {
-                        riljLoge("Couldn't find '" + rilSocket + "' socket after " + retryCount +
-                                " times, continuing to retry silently");
-                    } else if (retryCount >= 0 && retryCount < 8) {
-                        Rlog.i (RILJ_LOG_TAG, "Couldn't find '" + rilSocket +
-                                "' socket; retrying after timeout");
-                    }
-
-                    try {
-                        Thread.sleep(SOCKET_OPEN_RETRY_MILLIS);
-                    } catch (InterruptedException er) {
-                    }
-
-                    retryCount++;
-                    continue;
-                }
-
-                retryCount = 0;
-
-                mSocket = s;
-                Rlog.i(RILJ_LOG_TAG, "(" + mPhoneId + ") Connected to '"
-                        + rilSocket + "' socket");
-
-                int length = 0;
-                try {
-                    InputStream is = mSocket.getInputStream();
-
-                    for (;;) {
-                        length = readRilMessage(is, buffer);
-
-                        if (length < 0) {
-                            // End-of-stream reached
-                            break;
-                        }
-
-                    }
-                } catch (java.io.IOException ex) {
-                    Rlog.i(RILJ_LOG_TAG, "'" + rilSocket + "' socket closed",
-                          ex);
-                } catch (Throwable tr) {
-                    riljLoge("Uncaught exception read length=" + length + "Exception:" +
-                            tr.toString());
-                }
-
-                Rlog.i(RILJ_LOG_TAG, "(" + mPhoneId + ") Disconnected from '" + rilSocket
-                      + "' socket");
-
-                setRadioState (RadioState.RADIO_UNAVAILABLE);
-
-                try {
-                    mSocket.close();
-                } catch (IOException ex) {
-                }
-
-                mSocket = null;
-                RILRequest.resetSerial();
-
-                // Clear request list on close
-                clearRequestList(RADIO_NOT_AVAILABLE, false);
-            }} catch (Throwable tr) {
-                Rlog.e(RILJ_LOG_TAG,"Uncaught exception", tr);
-            }
-
-            /* We're disconnected so we don't know the ril version */
-            notifyRegistrantsRilConnectionChanged(-1);
-        }
-    }
-
     boolean mIsMobileNetworkSupported;
     RadioResponse mRadioResponse;
     RadioIndication mRadioIndication;
@@ -684,13 +558,16 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             return mRadioProxy;
         }
         try {
-            mRadioProxy = IRadio.getService(RIL_SERVICE_NAME[mPhoneId == null ? 0 : mPhoneId]);
-            if (mRadioProxy != null) {
-                mRadioProxy.linkToDeath(mRadioProxyDeathRecipient,
-                        mRadioProxyCookie.incrementAndGet());
-                mRadioProxy.setResponseFunctions(mRadioResponse, mRadioIndication);
-            } else {
-                riljLoge("getRadioProxy: mRadioProxy == null");
+            while (true) {
+                mRadioProxy = IRadio.getService(RIL_SERVICE_NAME[mPhoneId == null ? 0 : mPhoneId]);
+                if (mRadioProxy != null) {
+                    mRadioProxy.linkToDeath(mRadioProxyDeathRecipient,
+                            mRadioProxyCookie.incrementAndGet());
+                    mRadioProxy.setResponseFunctions(mRadioResponse, mRadioIndication);
+                    break;
+                } else {
+                    riljLoge("getRadioProxy: mRadioProxy == null");
+                }
             }
         } catch (RemoteException | RuntimeException e) {
             mRadioProxy = null;
@@ -706,7 +583,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                     mRilHandler.obtainMessage(EVENT_RADIO_PROXY_DEAD, mRadioProxyCookie.get()),
                     IRADIO_GET_SERVICE_DELAY_MILLIS);
 
-            riljLoge("setResponseFunctions", e);
+            riljLoge("RadioProxy getService/setResponseFunctions: " + e);
         }
         return mRadioProxy;
     }
@@ -744,7 +621,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                     mRilHandler.obtainMessage(EVENT_RADIO_PROXY_DEAD, mRadioProxyCookie.get()),
                     IRADIO_GET_SERVICE_DELAY_MILLIS);
 
-            riljLoge("setResponseFunctions", e);
+            riljLoge("OemHookProxy getService/setResponseFunctions: " + e);
         }
         return mOemHookProxy;
     }
@@ -779,9 +656,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         mOemHookIndication = new OemHookIndication(this);
         mRilHandler = new RilHandler();
         mRadioProxyDeathRecipient = new RadioProxyDeathRecipient();
-        // set radio callback; needed to set RadioIndication callback
-        getRadioProxy(null);
-        getOemHookProxy(null);
 
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, RILJ_LOG_TAG);
@@ -796,17 +670,13 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         mRILDefaultWorkSource = new WorkSource(context.getApplicationInfo().uid,
                 context.getPackageName());
 
-        if (!mIsMobileNetworkSupported) {
-            riljLog("Not starting RILReceiver: wifi-only");
-        } else {
-            riljLog("Starting RILReceiver" + mPhoneId);
-            mReceiver = new RILReceiver();
-            mReceiverThread = new Thread(mReceiver, "RILReceiver" + mPhoneId);
-            mReceiverThread.start();
-        }
-
         TelephonyDevController tdc = TelephonyDevController.getInstance();
         tdc.registerRIL(this);
+
+        // set radio callback; needed to set RadioIndication callback (should be done after
+        // wakelock stuff is initialized above as callbacks are received on separate binder threads)
+        getRadioProxy(null);
+        getOemHookProxy(null);
     }
 
     @Override public void
@@ -836,7 +706,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     }
 
     private void handleRadioProxyExceptionForRR(RILRequest rr, String caller, Exception e) {
-        riljLoge(caller, e);
+        riljLoge(caller + ": " + e);
         resetProxyAndRequestList();
     }
 
@@ -4048,7 +3918,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                 radioProxy.responseAcknowledgement();
             } catch (RemoteException | RuntimeException e) {
                 resetProxyAndRequestList();
-                riljLoge("sendAck", e);
+                riljLoge("sendAck: " + e);
             }
         } else {
             Rlog.e(RILJ_LOG_TAG, "Error trying to send ack, radioProxy = null");
@@ -4855,9 +4725,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("RIL: " + this);
-        pw.println(" mSocket=" + mSocket);
-        pw.println(" mReceiverThread=" + mReceiverThread);
-        pw.println(" mReceiver=" + mReceiver);
         pw.println(" mWakeLock=" + mWakeLock);
         pw.println(" mWakeLockTimeout=" + mWakeLockTimeout);
         synchronized (mRequestList) {
