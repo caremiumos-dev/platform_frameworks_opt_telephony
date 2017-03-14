@@ -557,6 +557,7 @@ public class ApnSetting {
             case PhoneConstants.APN_TYPE_CBS: return ApnTypes.CBS;
             case PhoneConstants.APN_TYPE_IA: return ApnTypes.IA;
             case PhoneConstants.APN_TYPE_EMERGENCY: return ApnTypes.EMERGENCY;
+            case PhoneConstants.APN_TYPE_XCAP: return ApnTypes.XCAP;
             case PhoneConstants.APN_TYPE_ALL: return ApnTypes.ALL;
             default: return ApnTypes.NONE;
         }

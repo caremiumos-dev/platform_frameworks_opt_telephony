@@ -17,7 +17,6 @@
 package com.android.internal.telephony.dataconnection;
 
 import android.app.PendingIntent;
-import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkConfig;
@@ -617,7 +616,7 @@ public class ApnContext {
         if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_XCAP)) {
             if (apnId != DctConstants.APN_INVALID_ID) error = true;
 
-            Rlog.d(SLOG_TAG, "XCAP APN type not yet supported");
+            apnId = DctConstants.APN_XCAP_ID;
         }
         if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_EIMS)) {
             if (apnId != DctConstants.APN_INVALID_ID) error = true;
@@ -659,6 +658,8 @@ public class ApnContext {
                 return DctConstants.APN_IA_ID;
             case PhoneConstants.APN_TYPE_EMERGENCY:
                 return DctConstants.APN_EMERGENCY_ID;
+            case PhoneConstants.APN_TYPE_XCAP:
+                return DctConstants.APN_XCAP_ID;
             default:
                 return DctConstants.APN_INVALID_ID;
         }
@@ -686,6 +687,8 @@ public class ApnContext {
                 return PhoneConstants.APN_TYPE_IA;
             case DctConstants.APN_EMERGENCY_ID:
                 return PhoneConstants.APN_TYPE_EMERGENCY;
+            case DctConstants.APN_XCAP_ID:
+                return PhoneConstants.APN_TYPE_XCAP;
             default:
                 Rlog.d(SLOG_TAG, "Unknown id (" + id + ") in apnIdToType");
                 return PhoneConstants.APN_TYPE_DEFAULT;
