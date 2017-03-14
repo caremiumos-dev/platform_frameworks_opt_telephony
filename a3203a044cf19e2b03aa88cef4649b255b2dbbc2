@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6ad86802_e370851e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-14T17:13:32Z",
+      "side": 1,
+      "message": "same as below",
+      "parentUuid": "a7d77838_20e15b2e",
+      "range": {
+        "startLine": 422,
+        "startChar": 16,
+        "endLine": 422,
+        "endChar": 26
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0fe9560f_be1b4f2a",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-13T21:38:23Z",
       "side": 1,
       "message": "I think this would make more sense as part of the service state.",
+      "range": {
+        "startLine": 1813,
+        "startChar": 16,
+        "endLine": 1813,
+        "endChar": 26
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0418055a_836a2b32",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-14T17:13:32Z",
+      "side": 1,
+      "message": "thinking to keep LteBoost instead of earfcn, but will move it to ServiceState",
+      "parentUuid": "0fe9560f_be1b4f2a",
       "range": {
         "startLine": 1813,
         "startChar": 16,
@@ -118,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "2e757de1_f0ceb7f1",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4073,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-14T17:13:32Z",
+      "side": 1,
+      "message": "will change",
+      "parentUuid": "5e25aeb3_c234699c",
+      "range": {
+        "startLine": 4043,
+        "startChar": 0,
+        "endLine": 4073,
+        "endChar": 5
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0c80b0e_ff2bad9c",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 5
@@ -141,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "a6e41d46_1aff89fc",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4098,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-14T17:13:32Z",
+      "side": 1,
+      "message": "will change",
+      "parentUuid": "d0c80b0e_ff2bad9c",
+      "range": {
+        "startLine": 4098,
+        "startChar": 0,
+        "endLine": 4098,
+        "endChar": 89
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "017d3222_d4a32047",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 5
@@ -152,6 +248,30 @@
       "writtenOn": "2017-03-13T21:38:23Z",
       "side": 1,
       "message": "this name is too generic.\nKEY_BOOSTED_LTE_CHANNELS_STRING_ARRAY?",
+      "range": {
+        "startLine": 4102,
+        "startChar": 41,
+        "endLine": 4102,
+        "endChar": 86
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "72f67e06_933615d3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4102,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-14T17:13:32Z",
+      "side": 1,
+      "message": "I am keeping EARFCN through out. So will keep the EARFCN...i.e KEY_BOOSTED_LTE_EARFCNS_STRING_ARRAY",
+      "parentUuid": "017d3222_d4a32047",
       "range": {
         "startLine": 4102,
         "startChar": 41,
