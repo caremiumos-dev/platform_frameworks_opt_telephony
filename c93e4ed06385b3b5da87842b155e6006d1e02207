@@ -22,6 +22,30 @@
       "revId": "c93e4ed06385b3b5da87842b155e6006d1e02207",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dce34fd9_b1af726c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-03-14T19:12:40Z",
+      "side": 1,
+      "message": "Ok, i can change it to static hash map. any concerns ?",
+      "parentUuid": "7584aa49_c65b3d60",
+      "range": {
+        "startLine": 1503,
+        "startChar": 8,
+        "endLine": 1503,
+        "endChar": 14
+      },
+      "revId": "c93e4ed06385b3b5da87842b155e6006d1e02207",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
