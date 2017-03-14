@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7584aa49_c65b3d60",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1043929
+      },
+      "writtenOn": "2017-03-14T17:57:06Z",
+      "side": 1,
+      "message": "using a map seems better. the map can be static as the values mapping won\u0027t change",
+      "range": {
+        "startLine": 1503,
+        "startChar": 8,
+        "endLine": 1503,
+        "endChar": 14
+      },
+      "revId": "c93e4ed06385b3b5da87842b155e6006d1e02207",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
