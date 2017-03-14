@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "317fcbae_d4a4e2e9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1849,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-14T16:31:27Z",
+      "side": 1,
+      "message": "will remove",
+      "parentUuid": "58f0cc9c_b5307d89",
+      "range": {
+        "startLine": 1849,
+        "startChar": 0,
+        "endLine": 1849,
+        "endChar": 98
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e25aeb3_c234699c",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 5
