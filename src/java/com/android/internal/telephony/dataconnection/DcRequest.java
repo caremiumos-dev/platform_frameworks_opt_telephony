@@ -25,6 +25,7 @@ import static com.android.internal.telephony.DctConstants.APN_IMS_ID;
 import static com.android.internal.telephony.DctConstants.APN_INVALID_ID;
 import static com.android.internal.telephony.DctConstants.APN_MMS_ID;
 import static com.android.internal.telephony.DctConstants.APN_SUPL_ID;
+import static com.android.internal.telephony.DctConstants.APN_XCAP_ID;
 
 import android.content.Context;
 import android.net.NetworkCapabilities;
@@ -119,8 +120,7 @@ public class DcRequest implements Comparable<DcRequest> {
         }
         if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_XCAP)) {
             if (apnId != APN_INVALID_ID) error = true;
-            apnId = APN_INVALID_ID;
-            loge("XCAP APN type not yet supported");
+            apnId = APN_XCAP_ID;
         }
         if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_EIMS)) {
             if (apnId != APN_INVALID_ID) error = true;
