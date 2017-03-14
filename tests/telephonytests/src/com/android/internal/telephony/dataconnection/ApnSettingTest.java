@@ -269,6 +269,7 @@ public class ApnSettingTest extends TelephonyTest {
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_FOTA, mPhone));
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_IA, mPhone));
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_HIPRI, mPhone));
+        assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_XCAP, mPhone));
 
         // Carrier config settings changes.
         mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
@@ -322,6 +323,7 @@ public class ApnSettingTest extends TelephonyTest {
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_DEFAULT, mPhone));
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_MMS, mPhone));
         assertTrue(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_FOTA, mPhone));
+        assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_XCAP, mPhone));
     }
 
     @Test
@@ -370,6 +372,7 @@ public class ApnSettingTest extends TelephonyTest {
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_DEFAULT, mPhone));
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_MMS, mPhone));
         assertTrue(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_FOTA, mPhone));
+        assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_XCAP, mPhone));
     }
 
     @Test
@@ -407,6 +410,9 @@ public class ApnSettingTest extends TelephonyTest {
 
         assertFalse(createApnSetting(
                 new String[]{PhoneConstants.APN_TYPE_IMS}).isMetered(mPhone));
+
+        assertFalse(createApnSetting(
+                new String[]{PhoneConstants.APN_TYPE_XCAP}).isMetered(mPhone));
     }
 
     @Test
@@ -452,6 +458,7 @@ public class ApnSettingTest extends TelephonyTest {
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_FOTA, mPhone));
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_IA, mPhone));
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_HIPRI, mPhone));
+        assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_XCAP, mPhone));
     }
 
     @Test
@@ -499,6 +506,7 @@ public class ApnSettingTest extends TelephonyTest {
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_FOTA, mPhone));
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_IA, mPhone));
         assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_HIPRI, mPhone));
+        assertFalse(ApnSetting.isMeteredApnType(PhoneConstants.APN_TYPE_XCAP, mPhone));
     }
 
     @Test
@@ -599,6 +607,9 @@ public class ApnSettingTest extends TelephonyTest {
                 new String[]{PhoneConstants.APN_TYPE_IA, PhoneConstants.APN_TYPE_DUN}).
                 isMetered(mPhone));
 
+        assertTrue(createApnSetting(
+                new String[]{PhoneConstants.APN_TYPE_XCAP})
+                .isMetered(mPhone));
     }
 
     @Test
@@ -623,6 +634,10 @@ public class ApnSettingTest extends TelephonyTest {
 
         assertTrue(createApnSetting(
                 new String[]{PhoneConstants.APN_TYPE_IA, PhoneConstants.APN_TYPE_DUN})
+                .isMetered(mPhone));
+
+        assertTrue(createApnSetting(
+                new String[]{PhoneConstants.APN_TYPE_XCAP})
                 .isMetered(mPhone));
     }
 
@@ -651,6 +666,10 @@ public class ApnSettingTest extends TelephonyTest {
         assertTrue(createApnSetting(
                 new String[]{PhoneConstants.APN_TYPE_IA, PhoneConstants.APN_TYPE_DUN}).
                 isMetered(mPhone));
+
+        assertTrue(createApnSetting(
+                new String[]{PhoneConstants.APN_TYPE_XCAP})
+                .isMetered(mPhone));
     }
 
     @Test
@@ -684,8 +703,14 @@ public class ApnSettingTest extends TelephonyTest {
         assertTrue(createApnSetting(new String[]{APN_TYPE_DEFAULT, APN_TYPE_MMS}).
                 canHandleType(APN_TYPE_MMS));
 
+        assertTrue(createApnSetting(new String[]{APN_TYPE_XCAP})
+                .canHandleType(APN_TYPE_XCAP));
+
         assertFalse(createApnSetting(new String[]{APN_TYPE_DEFAULT, APN_TYPE_MMS}).
                 canHandleType(APN_TYPE_SUPL));
+
+        assertFalse(createApnSetting(new String[]{APN_TYPE_DEFAULT, APN_TYPE_MMS})
+                .canHandleType(APN_TYPE_XCAP));
 
         // special IA case - doesn't match wildcards
         assertFalse(createApnSetting(new String[]{APN_TYPE_DEFAULT, APN_TYPE_MMS}).
@@ -696,6 +721,8 @@ public class ApnSettingTest extends TelephonyTest {
                 canHandleType("iA"));
         assertTrue(createApnSetting(new String[]{APN_TYPE_DEFAULT, APN_TYPE_MMS, APN_TYPE_IA}).
                 canHandleType(APN_TYPE_IA));
+        assertTrue(createApnSetting(new String[]{APN_TYPE_DEFAULT, APN_TYPE_MMS, APN_TYPE_XCAP})
+                .canHandleType(APN_TYPE_XCAP));
 
         // check carrier disabled
         assertFalse(createDisabledApnSetting(new String[]{APN_TYPE_ALL}).
@@ -711,6 +738,9 @@ public class ApnSettingTest extends TelephonyTest {
         assertFalse(createDisabledApnSetting(new String[]
                 {APN_TYPE_DEFAULT, APN_TYPE_MMS, APN_TYPE_IA}).
                 canHandleType(APN_TYPE_IA));
+        assertFalse(createDisabledApnSetting(new String[]
+                {APN_TYPE_DEFAULT, APN_TYPE_MMS, APN_TYPE_IA})
+                .canHandleType(APN_TYPE_XCAP));
     }
 
     @Test
