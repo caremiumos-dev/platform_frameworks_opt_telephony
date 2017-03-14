@@ -46,6 +46,30 @@
       "revId": "c93e4ed06385b3b5da87842b155e6006d1e02207",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "301009ee_35ef2ab2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-03-14T21:38:40Z",
+      "side": 1,
+      "message": "A static array-map seems like a reasonable approach.",
+      "parentUuid": "dce34fd9_b1af726c",
+      "range": {
+        "startLine": 1503,
+        "startChar": 8,
+        "endLine": 1503,
+        "endChar": 14
+      },
+      "revId": "c93e4ed06385b3b5da87842b155e6006d1e02207",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
