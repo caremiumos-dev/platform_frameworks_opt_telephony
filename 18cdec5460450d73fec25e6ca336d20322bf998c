@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "72afb13d_4ab3b60a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-15T22:30:58Z",
+      "side": 1,
+      "message": "Yes..will update the comment",
+      "parentUuid": "dec7ec67_758bbd19",
+      "range": {
+        "startLine": 510,
+        "startChar": 7,
+        "endLine": 510,
+        "endChar": 12
+      },
+      "revId": "18cdec5460450d73fec25e6ca336d20322bf998c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af8376ed_f51c7666",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 13
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-15T22:15:58Z",
       "side": 1,
       "message": "don\u0027t need (it\u0027s the name..)",
+      "range": {
+        "startLine": 515,
+        "startChar": 59,
+        "endLine": 515,
+        "endChar": 80
+      },
+      "revId": "18cdec5460450d73fec25e6ca336d20322bf998c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "beb762f9_34236cd0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-15T22:30:58Z",
+      "side": 1,
+      "message": "will remove the comment",
+      "parentUuid": "af8376ed_f51c7666",
       "range": {
         "startLine": 515,
         "startChar": 59,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "7846d399_c2dc9e66",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1875,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-15T22:30:58Z",
+      "side": 1,
+      "message": "will change",
+      "parentUuid": "4d3e86d6_dd8b4f63",
+      "range": {
+        "startLine": 1875,
+        "startChar": 16,
+        "endLine": 1875,
+        "endChar": 36
+      },
+      "revId": "18cdec5460450d73fec25e6ca336d20322bf998c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c6637a0_464e8826",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 13
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "d55b6ee5_7ea3ab90",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 4135,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-15T22:30:58Z",
+      "side": 1,
+      "message": "will fix",
+      "parentUuid": "9c6637a0_464e8826",
+      "range": {
+        "startLine": 4135,
+        "startChar": 31,
+        "endLine": 4135,
+        "endChar": 32
+      },
+      "revId": "18cdec5460450d73fec25e6ca336d20322bf998c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78e01767_bc570abb",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 13
@@ -105,6 +201,30 @@
       "writtenOn": "2017-03-15T22:15:58Z",
       "side": 1,
       "message": "I think I had commented that the Earfcn should be in ServiceState - it is something relevant to the service state.  This boost value is less so.  I appreciate precomputing it but once it\u0027s this massaged it doesn\u0027t feel appropriate to ServiceState anymore.  How about keeping this here in SST.",
+      "range": {
+        "startLine": 4166,
+        "startChar": 48,
+        "endLine": 4166,
+        "endChar": 69
+      },
+      "revId": "18cdec5460450d73fec25e6ca336d20322bf998c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c0915167_106b6a7a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 4166,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-15T22:30:58Z",
+      "side": 1,
+      "message": "I thought about it ..and also felt that it is in borderline\nbut thinking again...it is purely related to that service state\nand it can change for next registration state\nso I felt the boost value makes sense to be in serviceState",
+      "parentUuid": "78e01767_bc570abb",
       "range": {
         "startLine": 4166,
         "startChar": 48,
