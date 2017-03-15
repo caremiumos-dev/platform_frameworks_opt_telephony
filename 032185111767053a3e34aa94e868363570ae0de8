@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db5464c8_bf180a3a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-15T23:05:29Z",
+      "side": 1,
+      "message": "I wasn\u0027t suggesting you change the name of the function.  If you can get the info from the param list like you can here, it\u0027s not needed and make things longer.",
+      "range": {
+        "startLine": 1876,
+        "startChar": 16,
+        "endLine": 1876,
+        "endChar": 48
+      },
+      "revId": "032185111767053a3e34aa94e868363570ae0de8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
