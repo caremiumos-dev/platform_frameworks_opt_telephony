@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dec7ec67_758bbd19",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-15T22:15:58Z",
+      "side": 1,
+      "message": "range.  Also is it inclusive?  Inclusiveness should also appear in the carrierconfig comments.",
+      "range": {
+        "startLine": 510,
+        "startChar": 7,
+        "endLine": 510,
+        "endChar": 12
+      },
+      "revId": "18cdec5460450d73fec25e6ca336d20322bf998c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "af8376ed_f51c7666",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-15T22:15:58Z",
+      "side": 1,
+      "message": "don\u0027t need (it\u0027s the name..)",
+      "range": {
+        "startLine": 515,
+        "startChar": 59,
+        "endLine": 515,
+        "endChar": 80
+      },
+      "revId": "18cdec5460450d73fec25e6ca336d20322bf998c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d3e86d6_dd8b4f63",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1875,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-15T22:15:58Z",
+      "side": 1,
+      "message": "pass in ServiceState so it\u0027s clear what\u0027s getting updated.  The name doesn\u0027t suggested mNewSS is altered.",
+      "range": {
+        "startLine": 1875,
+        "startChar": 16,
+        "endLine": 1875,
+        "endChar": 36
+      },
+      "revId": "18cdec5460450d73fec25e6ca336d20322bf998c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c6637a0_464e8826",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 4135,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-15T22:15:58Z",
+      "side": 1,
+      "message": "this should be a defined constant used here and in getLteEarfcn when not found.",
+      "range": {
+        "startLine": 4135,
+        "startChar": 31,
+        "endLine": 4135,
+        "endChar": 32
+      },
+      "revId": "18cdec5460450d73fec25e6ca336d20322bf998c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "78e01767_bc570abb",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 4166,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-15T22:15:58Z",
+      "side": 1,
+      "message": "I think I had commented that the Earfcn should be in ServiceState - it is something relevant to the service state.  This boost value is less so.  I appreciate precomputing it but once it\u0027s this massaged it doesn\u0027t feel appropriate to ServiceState anymore.  How about keeping this here in SST.",
+      "range": {
+        "startLine": 4166,
+        "startChar": 48,
+        "endLine": 4166,
+        "endChar": 69
+      },
+      "revId": "18cdec5460450d73fec25e6ca336d20322bf998c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
