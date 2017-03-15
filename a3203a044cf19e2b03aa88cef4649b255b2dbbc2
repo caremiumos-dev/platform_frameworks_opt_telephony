@@ -305,6 +305,30 @@
       "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4285246_b9f806a3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4102,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-03-15T03:31:48Z",
+      "side": 1,
+      "message": "As discussed, I have updated the comments to reflect the EARFCNs expansion",
+      "parentUuid": "a3f03da8_923fbad0",
+      "range": {
+        "startLine": 4102,
+        "startChar": 41,
+        "endLine": 4102,
+        "endChar": 86
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
