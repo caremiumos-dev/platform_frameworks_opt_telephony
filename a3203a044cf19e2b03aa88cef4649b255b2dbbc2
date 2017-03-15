@@ -281,6 +281,30 @@
       "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a3f03da8_923fbad0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4102,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-15T00:22:22Z",
+      "side": 1,
+      "message": "Why keep EARFCN?  Acronyms are bad.  What is it?\nE-UTRA Absolute Radio Frequency Channel Number.\n\nWell, it\u0027s an int, so \"number\" isn\u0027t needed.  Absolute?  Not needed.  Channel is assumed to mean \"Radio Frequency Channel\" in wireless domains.  E-UTRA?  That\u0027s just LTE air interface.\n\nI think this should be mLteChannel.  Means the same and is more clear.",
+      "parentUuid": "72f67e06_933615d3",
+      "range": {
+        "startLine": 4102,
+        "startChar": 41,
+        "endLine": 4102,
+        "endChar": 86
+      },
+      "revId": "a3203a044cf19e2b03aa88cef4649b255b2dbbc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
