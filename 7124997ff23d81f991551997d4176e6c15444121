@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6bb8b345_e6409fda",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-03-15T23:02:30Z",
+      "side": 1,
+      "message": "NORMAL means its terminated by remote and it also aligns with DisconnectCause#NORMAL. Pls refer PreciseDisconnectCause#NORMAL \u0026 DisconnectCause#NORMAL. In case local termination there won\u0027t be any PreciseDisconnectCause.. Pls refer PreciseDisconnectCause#NO_DISCONNECT_CAUSE_AVAILABLE",
+      "parentUuid": "55401230_49a6f7c2",
+      "range": {
+        "startLine": 377,
+        "startChar": 16,
+        "endLine": 377,
+        "endChar": 45
+      },
+      "revId": "7124997ff23d81f991551997d4176e6c15444121",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6959f7be_016327a1",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d18d80ce_a8dd613b",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1834,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-03-15T23:02:30Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "6959f7be_016327a1",
+      "range": {
+        "startLine": 1834,
+        "startChar": 93,
+        "endLine": 1834,
+        "endChar": 108
+      },
+      "revId": "7124997ff23d81f991551997d4176e6c15444121",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c6739d8_0100fa95",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
         "patchSetId": 5
@@ -59,6 +107,30 @@
       "writtenOn": "2017-03-15T21:49:52Z",
       "side": 1,
       "message": "mPreciseDisconnectCause",
+      "range": {
+        "startLine": 114,
+        "startChar": 16,
+        "endLine": 114,
+        "endChar": 29
+      },
+      "revId": "7124997ff23d81f991551997d4176e6c15444121",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "58823471_2bae152d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-03-15T23:02:30Z",
+      "side": 1,
+      "message": "ok, will change this",
+      "parentUuid": "0c6739d8_0100fa95",
       "range": {
         "startLine": 114,
         "startChar": 16,
