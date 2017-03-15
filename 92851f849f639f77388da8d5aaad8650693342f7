@@ -16,6 +16,24 @@
       "revId": "92851f849f639f77388da8d5aaad8650693342f7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ec114c7_132f4418",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1060841
+      },
+      "writtenOn": "2017-03-15T10:41:31Z",
+      "side": 0,
+      "message": "Done :)",
+      "parentUuid": "f5a150e7_3c601931",
+      "revId": "92851f849f639f77388da8d5aaad8650693342f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
