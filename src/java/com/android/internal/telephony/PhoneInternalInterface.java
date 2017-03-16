@@ -16,31 +16,17 @@
 
 package com.android.internal.telephony;
 
-import android.content.Context;
-import android.net.LinkProperties;
-import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.WorkSource;
-import android.telephony.CellInfo;
-import android.telephony.CellLocation;
 import android.telephony.CarrierConfigManager;
-import android.telephony.PhoneStateListener;
+import android.telephony.CellLocation;
 import android.telephony.ServiceState;
-import android.telephony.SignalStrength;
 
-import com.android.internal.telephony.imsphone.ImsPhone;
-import com.android.internal.telephony.RadioCapability;
-import com.android.internal.telephony.test.SimulatedRadioControl;
-import com.android.internal.telephony.uicc.IsimRecords;
-import com.android.internal.telephony.uicc.UiccCard;
-import com.android.internal.telephony.uicc.UsimServiceTable;
-
-import com.android.internal.telephony.PhoneConstants.*; // ????
+import com.android.internal.telephony.PhoneConstants.DataState;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Internal interface used to control the phone; SDK developers cannot
@@ -765,12 +751,13 @@ public interface PhoneInternalInterface {
     String getEsn();
 
     /**
-     * Retrieves MEID for CDMA phones.
+     * Retrieves MEID (Mobile Equipment Identifier). Returns null if MEID is not available.
      */
     String getMeid();
 
     /**
-     * Retrieves IMEI for phones. Returns null if IMEI is not set.
+     * Retrieves IMEI (International Mobile Equipment Identity). Returns null if IMEI is not
+     * available.
      */
     String getImei();
 
