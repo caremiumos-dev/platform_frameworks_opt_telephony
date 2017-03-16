@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7d6a94d_c73955b8",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-03-16T22:17:26Z",
+      "side": 1,
+      "message": "Tyler, got you, i realize this is also used for multi-endpoint. i will change it.",
+      "range": {
+        "startLine": 454,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 47
+      },
+      "revId": "6d27d946bd83a6f8a9a0e7f6f7a613426e7892af",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
