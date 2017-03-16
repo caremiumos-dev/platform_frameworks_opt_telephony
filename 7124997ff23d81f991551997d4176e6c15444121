@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "24666027_364294ab",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-03-16T21:38:38Z",
+      "side": 1,
+      "message": "But doesn\u0027t ImsReaosnInfo.CODE_USER_TERMINATED_BY_REMOTE imply that the call was terminated remotely?  I\u0027m curious why we have to lump this together",
+      "parentUuid": "6bb8b345_e6409fda",
+      "range": {
+        "startLine": 377,
+        "startChar": 16,
+        "endLine": 377,
+        "endChar": 45
+      },
+      "revId": "7124997ff23d81f991551997d4176e6c15444121",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6959f7be_016327a1",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 5
