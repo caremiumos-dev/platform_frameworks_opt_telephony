@@ -52,6 +52,7 @@ import com.android.internal.telephony.uicc.IccUtils;
 import java.util.ArrayList;
 
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CALL_RING;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CARRIER_INFO_IMSI_ENCRYPTION;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CDMA_CALL_WAITING;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CDMA_INFO_REC;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CDMA_OTA_PROVISION_STATUS;
@@ -792,5 +793,14 @@ public class RadioIndication extends IRadioIndication.Stub {
                 throw new RuntimeException("Unrecognized RadioState: " + stateInt);
         }
         return state;
+    }
+
+    public void carrierInfoForImsiEncryption(int indicationType) {
+        mRil.processIndication(indicationType);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_CARRIER_INFO_IMSI_ENCRYPTION, null);
+
+        mRil.mCarrierInfoForImsiEncryptionRegistrants.notifyRegistrants(
+                new AsyncResult(null, null, null));
     }
 }
