@@ -164,7 +164,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
          */
         int getSubId(int slotId);
         /**
-         * Mock-able interface for {@link SubscriptionManager#getSlotId(int)} used for testing.
+         * Mock-able interface for {@link SubscriptionManager#getSlotIndex(int)} used for testing.
          */
         int getSlotId(int subId);
     }
@@ -182,7 +182,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
 
         @Override
         public int getSlotId(int subId) {
-            return SubscriptionManager.getSlotId(subId);
+            return SubscriptionManager.getSlotIndex(subId);
         }
     };
 
