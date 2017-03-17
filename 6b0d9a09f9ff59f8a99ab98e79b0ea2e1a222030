@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccbf4c81_934e7b4b",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-17T00:33:29Z",
+      "side": 0,
+      "message": "I believe this is also defined in init.rc and should be removed",
+      "range": {
+        "startLine": 541,
+        "startChar": 32,
+        "endLine": 541,
+        "endChar": 36
+      },
+      "revId": "6b0d9a09f9ff59f8a99ab98e79b0ea2e1a222030",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
