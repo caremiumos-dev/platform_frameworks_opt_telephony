@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c63868d0_3666d4dd",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneConnectionTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-17T17:27:31Z",
+      "side": 1,
+      "message": "Please include the test:\n{\"12345*00000\", \"12346\", \"12345*00000\"}\n\nI do not think this test will pass...",
+      "range": {
+        "startLine": 285,
+        "startChar": 16,
+        "endLine": 285,
+        "endChar": 66
+      },
+      "revId": "85bc176d2bb94ac00223c2a4a46e42726dd1b14a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
