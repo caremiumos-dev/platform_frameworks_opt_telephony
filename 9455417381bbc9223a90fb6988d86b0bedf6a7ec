@@ -39,6 +39,30 @@
       "revId": "9455417381bbc9223a90fb6988d86b0bedf6a7ec",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "24cfae2f_c015b214",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1134734
+      },
+      "writtenOn": "2017-03-17T22:08:00Z",
+      "side": 1,
+      "message": "P2 needs to be set to 0x00 for other applications related to UiccCarrierPrivilege",
+      "parentUuid": "95e07c39_aee1bb91",
+      "range": {
+        "startLine": 229,
+        "startChar": 17,
+        "endLine": 229,
+        "endChar": 21
+      },
+      "revId": "9455417381bbc9223a90fb6988d86b0bedf6a7ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
