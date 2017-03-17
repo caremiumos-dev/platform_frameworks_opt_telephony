@@ -264,7 +264,7 @@ public class SubscriptionControllerMock extends SubscriptionController {
         throw new RuntimeException("not implemented");
     }
     @Override
-    public int getSimStateForSlotIdx(int slotIdx) {
+    public int getSimStateForSlotIndex(int slotIndex) {
         throw new RuntimeException("not implemented");
     }
     @Override
