@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dd462a68_7fc43f4c",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2017-03-20T22:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d89cdcf8_2d190091",
+      "range": {
+        "startLine": 61,
+        "startChar": 33,
+        "endLine": 61,
+        "endChar": 39
+      },
+      "revId": "f3740fe8eb15bd3acbd124ea302b87c14245d419",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "860b1205_3a3c4a12",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-20T20:52:21Z",
       "side": 1,
       "message": "getSlotIndex",
+      "range": {
+        "startLine": 69,
+        "startChar": 64,
+        "endLine": 69,
+        "endChar": 73
+      },
+      "revId": "f3740fe8eb15bd3acbd124ea302b87c14245d419",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f690ffd_388dff84",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2017-03-20T22:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "860b1205_3a3c4a12",
       "range": {
         "startLine": 69,
         "startChar": 64,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e6cf6024_a508bc40",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2017-03-20T22:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcfba6a7_ef3810ca",
+      "range": {
+        "startLine": 70,
+        "startChar": 15,
+        "endLine": 70,
+        "endChar": 30
+      },
+      "revId": "f3740fe8eb15bd3acbd124ea302b87c14245d419",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77b67882_4e4c88ff",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 3
@@ -82,6 +154,30 @@
       "writtenOn": "2017-03-20T20:52:21Z",
       "side": 1,
       "message": "slotIndex",
+      "range": {
+        "startLine": 669,
+        "startChar": 14,
+        "endLine": 669,
+        "endChar": 20
+      },
+      "revId": "f3740fe8eb15bd3acbd124ea302b87c14245d419",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf0e53e1_2392cb7e",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2017-03-20T22:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77b67882_4e4c88ff",
       "range": {
         "startLine": 669,
         "startChar": 14,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "4cb5c2fd_7cb30107",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2017-03-20T22:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8beccaf3_56cef88e",
+      "range": {
+        "startLine": 673,
+        "startChar": 50,
+        "endLine": 673,
+        "endChar": 56
+      },
+      "revId": "f3740fe8eb15bd3acbd124ea302b87c14245d419",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "591ee510_2b6c2b00",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 3
@@ -128,6 +248,30 @@
       "writtenOn": "2017-03-20T20:52:21Z",
       "side": 1,
       "message": "slotIndex - there may be more.  Please do a search.  I stopped looking here.",
+      "range": {
+        "startLine": 675,
+        "startChar": 18,
+        "endLine": 675,
+        "endChar": 24
+      },
+      "revId": "f3740fe8eb15bd3acbd124ea302b87c14245d419",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dede32b3_dd13ca87",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2017-03-20T22:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "591ee510_2b6c2b00",
       "range": {
         "startLine": 675,
         "startChar": 18,
