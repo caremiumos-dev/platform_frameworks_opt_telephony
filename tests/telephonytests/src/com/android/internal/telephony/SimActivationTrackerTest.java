@@ -18,6 +18,8 @@ package com.android.internal.telephony;
 
 import junit.framework.AssertionFailedError;
 
+import android.support.test.filters.FlakyTest;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +46,7 @@ public class SimActivationTrackerTest extends TelephonyTest {
         mSAT = new SimActivationTracker(mPhone);
     }
 
+    @FlakyTest
     @Test
     public void testSetVoiceActivationState() {
         // verify initial state is unknown

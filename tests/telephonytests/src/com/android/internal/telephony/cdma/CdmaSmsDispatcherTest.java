@@ -18,6 +18,7 @@ package com.android.internal.telephony.cdma;
 
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.test.filters.FlakyTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.internal.telephony.ImsSMSDispatcher;
@@ -76,6 +77,7 @@ public class CdmaSmsDispatcherTest extends TelephonyTest {
         super.tearDown();
     }
 
+    @FlakyTest
     @Test @SmallTest
     public void testSendSms() {
         doReturn(mServiceState).when(mPhone).getServiceState();
@@ -83,6 +85,7 @@ public class CdmaSmsDispatcherTest extends TelephonyTest {
         verify(mSimulatedCommandsVerifier).sendCdmaSms(any(byte[].class), any(Message.class));
     }
 
+    @FlakyTest
     @Test @SmallTest
     public void testSendText() {
         mCdmaSmsDispatcher.sendText("111"/* desAddr*/, "222" /*scAddr*/, TAG,

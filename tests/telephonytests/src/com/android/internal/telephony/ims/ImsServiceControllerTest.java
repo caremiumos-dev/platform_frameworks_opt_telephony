@@ -344,6 +344,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
      * Verifies that the ImsServiceController automatically tries to bind again after an untimely
      * binder death.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testAutoBindAfterBinderDied() throws RemoteException {
