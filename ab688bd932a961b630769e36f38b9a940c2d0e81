@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7cbe9b3_dc3eef47",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSmsCbMessage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2017-03-20T22:38:04Z",
+      "side": 1,
+      "message": "final",
+      "range": {
+        "startLine": 75,
+        "startChar": 8,
+        "endLine": 75,
+        "endChar": 17
+      },
+      "revId": "ab688bd932a961b630769e36f38b9a940c2d0e81",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
