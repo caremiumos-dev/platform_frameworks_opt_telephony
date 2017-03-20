@@ -418,6 +418,7 @@ public class DcTrackerTest extends TelephonyTest {
     }
 
     // Test the normal data call setup scenario.
+    @FlakyTest
     @Test
     @MediumTest
     public void testDataSetup() {
@@ -479,6 +480,7 @@ public class DcTrackerTest extends TelephonyTest {
     }
 
     // Test the scenario where the first data call setup is failed, and then retry the setup later.
+    @FlakyTest
     @Test
     @MediumTest
     public void testDataRetry() {
@@ -721,6 +723,7 @@ public class DcTrackerTest extends TelephonyTest {
     }
 
     // Test the default data switch scenario.
+    @FlakyTest
     @Test
     @MediumTest
     public void testDDSResetAutoAttach() throws Exception {
