@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.support.test.filters.FlakyTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Pair;
@@ -344,6 +345,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
      * Verifies that the ImsServiceController automatically tries to bind again after an untimely
      * binder death.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testAutoBindAfterBinderDied() throws RemoteException {

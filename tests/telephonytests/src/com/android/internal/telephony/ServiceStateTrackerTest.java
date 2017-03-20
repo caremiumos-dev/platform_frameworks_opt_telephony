@@ -391,6 +391,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(3, cl.getCid());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testUpdatePhoneType() {
@@ -807,6 +808,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndInvalidRegForNetworkAttached() throws Exception {
@@ -989,6 +991,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 any(Message.class));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testDisableLocationUpdates() throws Exception {
