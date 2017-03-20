@@ -36,6 +36,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.test.filters.FlakyTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Singleton;
 
@@ -113,6 +114,7 @@ public class ImsSMSDispatcherTest extends TelephonyTest {
         assertTrue(mImsSmsDispatcher.isIms());
     }
 
+    @FlakyTest
     @Test @SmallTest
     public void testSendImsGmsTest() throws Exception {
         switchImsSmsFormat(PhoneConstants.PHONE_TYPE_GSM);
@@ -132,6 +134,7 @@ public class ImsSMSDispatcherTest extends TelephonyTest {
                 anyInt(), anyInt(), any(Message.class));
     }
 
+    @FlakyTest
     @Test @SmallTest
     public void testSendImsCdmaTest() throws Exception {
         switchImsSmsFormat(PhoneConstants.PHONE_TYPE_CDMA);

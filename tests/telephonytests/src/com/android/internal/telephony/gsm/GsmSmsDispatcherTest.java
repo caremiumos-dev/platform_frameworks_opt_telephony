@@ -103,6 +103,7 @@ public class GsmSmsDispatcherTest extends TelephonyTest {
                 Telephony.Sms.Intents.RESULT_SMS_HANDLED, null);
     }
 
+    @FlakyTest
     @Test @MediumTest
     public void testSendSmsToRegularNumber_doesNotNotifyblockedNumberProvider() throws Exception {
         setupMockPackagePermissionChecks();

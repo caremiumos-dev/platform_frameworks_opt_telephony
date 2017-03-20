@@ -202,6 +202,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         super.tearDown();
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testImsFeatureCapabilityChange() {
