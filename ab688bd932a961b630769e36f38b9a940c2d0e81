@@ -22,6 +22,30 @@
       "revId": "ab688bd932a961b630769e36f38b9a940c2d0e81",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cdc22d5d_556369a3",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSmsCbMessage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-20T22:46:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7cbe9b3_dc3eef47",
+      "range": {
+        "startLine": 75,
+        "startChar": 8,
+        "endLine": 75,
+        "endChar": 17
+      },
+      "revId": "ab688bd932a961b630769e36f38b9a940c2d0e81",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
