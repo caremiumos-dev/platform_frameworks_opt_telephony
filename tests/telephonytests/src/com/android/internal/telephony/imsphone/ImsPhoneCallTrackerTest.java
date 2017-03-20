@@ -202,6 +202,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         super.tearDown();
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testImsFeatureCapabilityChange() {
@@ -230,6 +231,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         verify(mImsPhone, times(1)).notifyForVideoCapabilityChanged(eq(true));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testImsMTCall() {
@@ -245,6 +247,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         assertEquals(1, mCTUT.mRingingCall.getConnections().size());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testImsMTCallAccept() {
@@ -264,6 +267,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         assertEquals(1, mCTUT.mForegroundCall.getConnections().size());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testImsMTCallReject() {
@@ -281,6 +285,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         assertEquals(PhoneConstants.State.IDLE, mCTUT.getState());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testImsMTCallAcceptHangUp() {
@@ -297,6 +302,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         assertEquals(Call.State.IDLE, mCTUT.mForegroundCall.getState());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testImsMTCallAcceptHold() {
@@ -357,6 +363,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         assertEquals(Call.State.ALERTING, mCTUT.mForegroundCall.getState());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testImsMTActiveMODial() {
@@ -380,6 +387,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         assertEquals(Call.State.HOLDING, mCTUT.mBackgroundCall.getState());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testImsMOCallHangup() {
@@ -395,6 +403,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         assertEquals(Call.State.IDLE, mCTUT.mForegroundCall.getState());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testImsSendDtmf() {
@@ -422,6 +431,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         verify(mSecondImsCall, times(1)).sendDtmf(eq(PhoneNumberUtils.WAIT), (Message) isNull());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testReasonCodeRemap() {

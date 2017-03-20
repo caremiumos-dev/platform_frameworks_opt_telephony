@@ -149,6 +149,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         super.tearDown();
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testSetRadioPower() {
@@ -158,6 +159,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertTrue(oldState != mSimulatedCommands.getRadioState().isOn());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testSetRadioPowerFromCarrier() {
@@ -191,6 +193,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertTrue(sst.getPowerStateFromCarrier());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRilTrafficAfterSetRadioPower() {
@@ -278,6 +281,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 intArgumentCaptor.getValue().intValue());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testCellInfoList() {
@@ -305,6 +309,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(sst.getAllCellInfo(workSource), list);
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testImsRegState() {
@@ -371,6 +376,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(sst.getSignalStrength().isGsm(), false);
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testGsmCellLocation() {
@@ -391,6 +397,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(3, cl.getCid());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testUpdatePhoneType() {
@@ -435,6 +442,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mRuimRecords, times(1)).isProvisioned();
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndUnregForVoiceRoamingOn() throws Exception {
@@ -474,6 +482,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndUnregForVoiceRoamingOff() throws Exception {
@@ -521,6 +530,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndUnregForDataRoamingOn() throws Exception {
@@ -560,6 +570,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndUnregForDataRoamingOff() throws Exception {
@@ -607,6 +618,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndInvalidregForDataConnAttach() throws Exception {
@@ -652,6 +664,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         // verify that no new message posted to handler
         verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
     }
+
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndUnregForDataConnAttach() throws Exception {
@@ -698,6 +712,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndUnregForDataConnDetach() throws Exception {
@@ -742,6 +757,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegisterForDataRegStateOrRatChange() {
@@ -761,6 +777,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 ((AsyncResult)messageArgumentCaptor.getValue().obj).result);
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndUnregForNetworkAttached() throws Exception {
@@ -807,6 +824,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndInvalidRegForNetworkAttached() throws Exception {
@@ -860,6 +878,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_REGISTERED_TO_NETWORK, messageArgumentCaptor.getValue().what);
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegisterForPsRestrictedEnabled() throws Exception {
@@ -876,6 +895,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_PS_RESTRICT_ENABLED, messageArgumentCaptor.getValue().what);
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegisterForPsRestrictedDisabled() throws Exception {
@@ -892,6 +912,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_PS_RESTRICT_DISABLED, messageArgumentCaptor.getValue().what);
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testOnRestrictedStateChanged() throws Exception {
@@ -956,6 +977,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(intArgumentCaptor.getValue().intValue(), restrictedState[1]);
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegisterForSubscriptionInfoReady() {
@@ -974,6 +996,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_SUBSCRIPTION_INFO_READY, messageArgumentCaptor.getValue().what);
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testGetDesiredPowerState() {
@@ -981,6 +1004,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(sst.getDesiredPowerState(), true);
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testEnableLocationUpdates() throws Exception {
@@ -989,6 +1013,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 any(Message.class));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testDisableLocationUpdates() throws Exception {
@@ -997,6 +1022,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 any(Message.class));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testGetCurrentDataRegState() throws Exception {
@@ -1004,6 +1030,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(sst.getCurrentDataConnectionState(), ServiceState.STATE_OUT_OF_SERVICE);
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testIsConcurrentVoiceAndDataAllowed() {
@@ -1024,6 +1051,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(false, sst.isConcurrentVoiceAndDataAllowed());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testIsImsRegistered() throws Exception {
@@ -1033,6 +1061,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(sst.isImsRegistered(), true);
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testIsDeviceShuttingDown() throws Exception {
@@ -1040,6 +1069,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(true, sst.isDeviceShuttingDown());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testSetTimeFromNITZStr() throws Exception {

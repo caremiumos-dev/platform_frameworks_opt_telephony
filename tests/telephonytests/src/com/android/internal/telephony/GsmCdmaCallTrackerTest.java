@@ -89,6 +89,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         super.tearDown();
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testMOCallDial() {
@@ -128,6 +129,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(GsmCdmaCall.State.IDLE, mCTUT.mBackgroundCall.getState());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testMOCallHangup() {
@@ -150,6 +152,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(PhoneConstants.State.IDLE, mCTUT.getState());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testMOCallDialPickUpHangup() {
@@ -196,6 +199,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(PhoneConstants.State.IDLE, mCTUT.getState());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testMOCallSwitch() {
@@ -237,6 +241,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(1, mCTUT.mRingingCall.getConnections().size());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testMTCallAccept() {
@@ -258,6 +263,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(0, mCTUT.mRingingCall.getConnections().size());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testMTCallReject() {
@@ -282,6 +288,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
 
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testMOCallSwitchHangupForeGround() {
@@ -300,6 +307,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(GsmCdmaCall.State.HOLDING, mCTUT.mBackgroundCall.getState());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testMOCallPickUpHangUpResumeBackGround() {
@@ -330,6 +338,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(GsmCdmaCall.State.IDLE, mCTUT.mBackgroundCall.getState());
     }
 
+    @FlakyTest
     @Test @SmallTest
     public void testVoiceCallStartListener(){
         logd("register for voice call started event");
@@ -343,6 +352,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
 
     }
 
+    @FlakyTest
     @Test @SmallTest
     public void testVoiceCallEndedListener(){
         logd("register for voice call ended event");
@@ -354,6 +364,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(VOICE_CALL_ENDED_EVENT, mCaptorMessage.getValue().what);
     }
 
+    @FlakyTest
     @Test @SmallTest
     public void testUpdatePhoneType() {
         // verify getCurrentCalls is called on init

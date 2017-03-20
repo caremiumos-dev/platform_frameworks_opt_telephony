@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.provider.Telephony;
+import android.support.test.filters.FlakyTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import org.junit.After;
@@ -66,6 +67,7 @@ public class WapPushOverSmsTest extends TelephonyTest {
         super.tearDown();
     }
 
+    @FlakyTest
     @Test @SmallTest
     public void testDispatchWapPdu() {
         doReturn(true).when(mWspTypeDecoder).decodeUintvarInteger(anyInt());
