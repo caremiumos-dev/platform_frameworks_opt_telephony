@@ -393,6 +393,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(3, cl.getCid());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testUpdatePhoneType() {
@@ -893,6 +894,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 any(Message.class));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testDisableLocationUpdates() throws Exception {

@@ -138,6 +138,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         super.tearDown();
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testPhoneTypeSwitch() {
@@ -146,6 +147,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertTrue(mPhoneUT.isPhoneTypeCdmaLte());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testHandleActionCarrierConfigChanged() {
@@ -167,6 +169,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertEquals(serviceState, mPhoneUT.getServiceState());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testGetCellLocation() {
@@ -209,6 +212,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
                 actualCellLocation.getBaseStationLongitude());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testGetPhoneType() {
@@ -252,6 +256,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
                 PhoneConstants.APN_TYPE_EMERGENCY));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testHandleInCallMmiCommands() {
@@ -310,6 +315,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertFalse(mPhoneUT.handlePinMmi("1234567890"));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testSendBurstDtmf() {
@@ -366,6 +372,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testVoiceMailNumberCdma() {
@@ -454,6 +461,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertEquals(0, mPhoneUT.getVoiceMessageCount());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testGetCallForwardingOption() {

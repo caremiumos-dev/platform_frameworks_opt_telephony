@@ -214,6 +214,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         assertEquals("IdleState", getCurrentState().getName());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testNewSms() {
@@ -235,6 +236,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         assertEquals("IdleState", getCurrentState().getName());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testNewSmsFromBlockedNumber_noBroadcastsSent() {
@@ -286,6 +288,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         verifyDataSmsIntentBroadcasts(1);
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testInjectSms() {
@@ -428,6 +431,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         assertEquals("IdleState", getCurrentState().getName());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testMultiPartIncompleteSms() {
@@ -473,6 +477,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         assertEquals("IdleState", getCurrentState().getName());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testMultipartSmsFromBlockedNumber_noBroadcastsSent() {
@@ -509,6 +514,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         assertEquals("IdleState", getCurrentState().getName());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testMultipartSmsFromBlockedEmail_noBroadcastsSent() {

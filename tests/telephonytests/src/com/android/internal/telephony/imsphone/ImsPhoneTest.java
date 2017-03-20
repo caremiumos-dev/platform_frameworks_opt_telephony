@@ -394,6 +394,7 @@ public class ImsPhoneTest extends TelephonyTest {
         verify(mImsCT).dial(dialString, videoState, null);
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testDtmf() {
