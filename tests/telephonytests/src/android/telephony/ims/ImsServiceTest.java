@@ -47,6 +47,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.nullable;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -154,7 +155,7 @@ public class ImsServiceTest {
     @SmallTest
     public void testMethodWithNoPermissions() throws RemoteException {
         doThrow(new SecurityException()).when(mMockContext).enforceCallingOrSelfPermission(
-                eq(READ_PHONE_STATE), anyString());
+                eq(READ_PHONE_STATE), nullable(String.class));
         mTestImsServiceBinder.createImsFeature(TEST_SLOT_0, ImsFeature.MMTEL, mTestCallback);
 
         try {
