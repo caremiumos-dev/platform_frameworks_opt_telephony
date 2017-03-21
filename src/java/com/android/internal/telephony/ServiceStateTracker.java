@@ -1158,6 +1158,8 @@ public class ServiceStateTracker extends Handler {
                 log("EVENT_SIM_RECORDS_LOADED: what=" + msg.what);
                 updatePhoneObject();
                 updateOtaspState();
+                // reset carrier actions on sim loaded
+                setRadioPowerFromCarrier(true);
                 if (mPhone.isPhoneTypeGsm()) {
                     updateSpnDisplay();
                 }
