@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89c6ef57_4ce9c24f",
+        "filename": "tests/telephonytests/src/android/telephony/ims/ImsServiceTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-21T23:09:22Z",
+      "side": 1,
+      "message": "remove?",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 39
+      },
+      "revId": "88de50b5c7d0720b6cdaa4e5277525a0cb17b424",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
