@@ -1399,6 +1399,43 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         mPhone.notifyPreciseCallStateChanged();
     }
 
+    /**
+     * Sends a user-requested RTT upgrade request.
+     */
+    public void sendRttModifyRequest(android.telecom.Connection.RttTextStream textStream) {
+        if (DBG) log("sendRttModifyRequest");
+
+        ImsCall imscall = mForegroundCall.getImsCall();
+        if (imscall != null) {
+            imscall.sendRttModifyRequest();
+            mForegroundCall.setCurrentRttTextStream(textStream);
+        } else {
+            loge("sendRttModifyRequest: no foreground call");
+        }
+    }
+
+    /**
+     * Sends the user's response to a remotely-issued RTT upgrade request
+     *
+     * @param textStream A valid {@link android.telecom.Connection.RttTextStream} if the user
+     *                   accepts, {@code null} if not.
+     */
+    public void sendRttModifyResponse(android.telecom.Connection.RttTextStream textStream) {
+        if (DBG) log("sendRttModifyResponse: " + (textStream == null));
+
+        ImsCall imscall = mForegroundCall.getImsCall();
+        if (imscall != null) {
+            boolean accept = textStream != null;
+            imscall.sendRttModifyResponse(accept);
+            if (accept) {
+                mForegroundCall.setCurrentRttTextStream(textStream);
+                mForegroundCall.startRttTextProcessing();
+            }
+        } else {
+            loge("sendRttModifyResponse: no foreground call");
+        }
+    }
+
     void callEndCleanupHandOverCallIfAny() {
         if (mHandoverCall.mConnections.size() > 0) {
             if (DBG) log("callEndCleanupHandOverCallIfAny, mHandoverCall.mConnections="
@@ -2301,6 +2338,34 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     // Only notify others if carrier config indicates to do so.
                     conn.onHandoverToWifiFailed();
                 }
+            }
+        }
+
+        @Override
+        public void onRttModifyRequestReceived(ImsCall imsCall) {
+            ImsPhoneConnection conn = findConnection(imsCall);
+            if (conn != null) {
+                conn.onRttModifyRequestReceived();
+            }
+        }
+
+        @Override
+        public void onRttModifyResponseReceived(ImsCall imsCall, int status) {
+            ImsPhoneConnection conn = findConnection(imsCall);
+            if (conn != null) {
+                conn.onRttModifyResponseReceived(status);
+                if (status ==
+                        android.telecom.Connection.RttModifyStatus.SESSION_MODIFY_REQUEST_SUCCESS) {
+                    conn.getCall().startRttTextProcessing();
+                }
+            }
+        }
+
+        @Override
+        public void onRttMessageReceived(ImsCall imsCall, String message) {
+            ImsPhoneConnection conn = findConnection(imsCall);
+            if (conn != null && conn.getCall() != null) {
+                conn.getCall().onRttMessageReceived(message);
             }
         }
 

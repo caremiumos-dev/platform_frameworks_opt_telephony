@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.imsphone;
 
+import android.os.Looper;
 import android.telecom.ConferenceParticipant;
 import android.telephony.Rlog;
 import android.telephony.DisconnectCause;
@@ -59,6 +60,9 @@ public class ImsPhoneCall extends Call {
     // ImsPhoneCall to for fg, bg, etc calls.  This is used as a convenience for logging so that it
     // can be made clear whether a call being logged is the foreground, background, etc.
     private final String mCallContext;
+
+    private ImsRttTextHandler mRttTextHandler;
+    private android.telecom.Connection.RttTextStream mRttTextStream;
 
     /****************************** Constructors *****************************/
     /*package*/
@@ -357,6 +361,27 @@ public class ImsPhoneCall extends Call {
             that.takeOver(tmp);
         }
         mOwner.logState();
+    }
+
+    public void onRttMessageReceived(String message) {
+        getOrCreateRttTextHandler().sendToInCall(message);
+    }
+
+    public void setCurrentRttTextStream(android.telecom.Connection.RttTextStream rttTextStream) {
+        mRttTextStream = rttTextStream;
+    }
+
+    public void startRttTextProcessing() {
+        getOrCreateRttTextHandler().initialize(mRttTextStream);
+    }
+
+    private ImsRttTextHandler getOrCreateRttTextHandler() {
+        if (mRttTextHandler != null) {
+            return mRttTextHandler;
+        }
+        mRttTextHandler = new ImsRttTextHandler(Looper.getMainLooper(),
+                (message) -> getImsCall().sendRttMessage(message));
+        return mRttTextHandler;
     }
 
     private void takeOver(ImsPhoneCall that) {
