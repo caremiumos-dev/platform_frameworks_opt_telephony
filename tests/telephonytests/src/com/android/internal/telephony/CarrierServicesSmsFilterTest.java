@@ -36,6 +36,7 @@ import android.service.carrier.CarrierMessagingService;
 import android.service.carrier.ICarrierMessagingCallback;
 import android.service.carrier.ICarrierMessagingService;
 import android.service.carrier.MessagePdu;
+import android.support.test.filters.FlakyTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.internal.telephony.uicc.UiccCard;
@@ -87,6 +88,7 @@ public class CarrierServicesSmsFilterTest extends TelephonyTest {
         assertFalse(mCarrierServicesSmsFilterUT.filter());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testFilter_carrierAppPresent_handled() throws Exception {
@@ -99,6 +101,7 @@ public class CarrierServicesSmsFilterTest extends TelephonyTest {
                 .onFilterComplete(eq(CarrierMessagingService.RECEIVE_OPTIONS_DROP));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testFilter_systemAppPresent_handled() throws Exception {
@@ -112,6 +115,7 @@ public class CarrierServicesSmsFilterTest extends TelephonyTest {
                 .onFilterComplete(eq(CarrierMessagingService.RECEIVE_OPTIONS_DROP));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testFilter_bothCarrierAndSystemAppPresent_carrierAppDecides() throws Exception {

@@ -807,6 +807,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testRegAndInvalidRegForNetworkAttached() throws Exception {

@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.support.test.filters.FlakyTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Pair;
@@ -382,6 +383,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     /**
      * Ensure that calling unbind stops automatic rebind of the ImsService from occuring.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testUnbindCauseAutoBindCancelAfterBinderDied() throws RemoteException {

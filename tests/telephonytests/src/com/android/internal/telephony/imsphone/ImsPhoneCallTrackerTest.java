@@ -422,6 +422,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         verify(mSecondImsCall, times(1)).sendDtmf(eq(PhoneNumberUtils.WAIT), (Message) isNull());
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testReasonCodeRemap() {

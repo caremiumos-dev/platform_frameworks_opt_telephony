@@ -19,6 +19,7 @@ package android.telephony.ims;
 import android.content.Context;
 import android.content.Intent;
 import android.os.RemoteException;
+import android.support.test.filters.FlakyTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.telephony.ims.feature.ImsFeature;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -150,6 +151,7 @@ public class ImsServiceTest {
         }
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testMethodWithNoPermissions() throws RemoteException {
