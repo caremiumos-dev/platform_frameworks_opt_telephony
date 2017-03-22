@@ -2412,6 +2412,9 @@ public class DcTracker extends Handler {
     private void onSimNotReady() {
         if (DBG) log("onSimNotReady");
 
+        // Clear auto attach as modem is expected to do a new attach once SIM is ready
+        mAutoAttachOnCreation.set(false);
+
         cleanUpAllConnections(true, Phone.REASON_SIM_NOT_READY);
         mAllApnSettings = null;
         mAutoAttachOnCreationConfig = false;
@@ -2813,6 +2816,9 @@ public class DcTracker extends Handler {
         // next time the radio comes on
 
         mReregisterOnReconnectFailure = false;
+
+        // Clear auto attach as modem is expected to do a new attach
+        mAutoAttachOnCreation.set(false);
 
         if (mPhone.getSimulatedRadioControl() != null) {
             // Assume data is connected on the simulator
