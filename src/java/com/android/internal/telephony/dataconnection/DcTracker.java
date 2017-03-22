@@ -2814,6 +2814,9 @@ public class DcTracker extends Handler {
 
         mReregisterOnReconnectFailure = false;
 
+        // Clear auto attach as modem is expected to do a new attach
+        mAutoAttachOnCreation.set(false);
+
         if (mPhone.getSimulatedRadioControl() != null) {
             // Assume data is connected on the simulator
             // FIXME  this can be improved
