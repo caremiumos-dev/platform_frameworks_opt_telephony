@@ -22,6 +22,30 @@
       "revId": "e2d7202b18de6d226b132d4e3cd9b432c015cc08",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32cfe0fb_c1ce2f30",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-22T21:03:30Z",
+      "side": 1,
+      "message": "Actually, we may no longer get SimNotReady in APM.  Please add a set(false) there and leave this here as well.",
+      "parentUuid": "3dc52327_72198883",
+      "range": {
+        "startLine": 2818,
+        "startChar": 8,
+        "endLine": 2818,
+        "endChar": 29
+      },
+      "revId": "e2d7202b18de6d226b132d4e3cd9b432c015cc08",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
