@@ -1,0 +1,10 @@
+Presubmit-Verified-1: Treehugger Robot <treehugger-gerrit@google.com>
+Verified+1: Jack Yu <jackyu@google.com>
+Code-Review+1: Chen Xu <fionaxu@google.com>
+Code-Review+1: Yoshiaki Naka <yoshiaki.naka@sonymobile.com>
+Code-Review+2: Jack Yu <jackyu@google.com>
+Submitted-by: Jack Yu <jackyu@google.com>
+Submitted-at: Wed, 22 Mar 2017 20:52:36 +0000
+Reviewed-on: https://android-review.googlesource.com/61564
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
