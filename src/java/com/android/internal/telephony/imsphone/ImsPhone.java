@@ -638,6 +638,14 @@ public class ImsPhone extends ImsPhoneBase {
         return mCT.getMute();
     }
 
+    public void sendRttModifyRequest(android.telecom.Connection.RttTextStream textStream) {
+        mCT.sendRttModifyRequest(textStream);
+    }
+
+    public void sendRttModifyResponse(android.telecom.Connection.RttTextStream textStream) {
+        mCT.sendRttModifyResponse(textStream);
+    }
+
     @Override
     public PhoneConstants.State getState() {
         return mCT.getState();

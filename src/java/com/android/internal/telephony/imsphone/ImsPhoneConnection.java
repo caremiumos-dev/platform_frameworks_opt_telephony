@@ -113,6 +113,9 @@ public class ImsPhoneConnection extends Connection implements
 
     private int mPreciseDisconnectCause = 0;
 
+    private ImsRttTextHandler mRttTextHandler;
+    private android.telecom.Connection.RttTextStream mRttTextStream;
+
     //***** Event Constants
     private static final int EVENT_DTMF_DONE = 1;
     private static final int EVENT_PAUSE_DONE = 2;
@@ -903,6 +906,27 @@ public class ImsPhoneConnection extends Connection implements
         }
 
         return changed;
+    }
+
+    public void onRttMessageReceived(String message) {
+        getOrCreateRttTextHandler().sendToInCall(message);
+    }
+
+    public void setCurrentRttTextStream(android.telecom.Connection.RttTextStream rttTextStream) {
+        mRttTextStream = rttTextStream;
+    }
+
+    public void startRttTextProcessing() {
+        getOrCreateRttTextHandler().initialize(mRttTextStream);
+    }
+
+    private ImsRttTextHandler getOrCreateRttTextHandler() {
+        if (mRttTextHandler != null) {
+            return mRttTextHandler;
+        }
+        mRttTextHandler = new ImsRttTextHandler(Looper.getMainLooper(),
+                (message) -> getImsCall().sendRttMessage(message));
+        return mRttTextHandler;
     }
 
     /**
