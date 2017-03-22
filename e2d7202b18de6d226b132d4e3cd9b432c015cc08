@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3dc52327_72198883",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-22T20:59:35Z",
+      "side": 1,
+      "message": "how about moving to onSimNotReady - also clearing state on a sim switch/dropout.",
+      "range": {
+        "startLine": 2818,
+        "startChar": 8,
+        "endLine": 2818,
+        "endChar": 29
+      },
+      "revId": "e2d7202b18de6d226b132d4e3cd9b432c015cc08",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
