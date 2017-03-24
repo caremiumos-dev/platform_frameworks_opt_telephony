@@ -22,6 +22,30 @@
       "revId": "37800d3cdb300fca83462d95221a05bbef21a951",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "89aefe5b_4939cd46",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-24T19:36:08Z",
+      "side": 1,
+      "message": "Will fix it in a separate CL now since this has already been submitted on master.",
+      "parentUuid": "57f2f3da_dc26e075",
+      "range": {
+        "startLine": 124,
+        "startChar": 16,
+        "endLine": 124,
+        "endChar": 19
+      },
+      "revId": "37800d3cdb300fca83462d95221a05bbef21a951",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
