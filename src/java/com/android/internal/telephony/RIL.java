@@ -478,6 +478,9 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         mRadioProxy = null;
         mOemHookProxy = null;
 
+        // increment the cookie so that death notification can be ignored
+        mRadioProxyCookie.incrementAndGet();
+
         setRadioState(RadioState.RADIO_UNAVAILABLE);
 
         RILRequest.resetSerial();
@@ -522,7 +525,8 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
             // if service is not up, treat it like death notification to try to get service again
             mRilHandler.sendMessageDelayed(
-                    mRilHandler.obtainMessage(EVENT_RADIO_PROXY_DEAD, mRadioProxyCookie.get()),
+                    mRilHandler.obtainMessage(EVENT_RADIO_PROXY_DEAD,
+                            mRadioProxyCookie.incrementAndGet()),
                     IRADIO_GET_SERVICE_DELAY_MILLIS);
         }
 
@@ -563,7 +567,8 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
             // if service is not up, treat it like death notification to try to get service again
             mRilHandler.sendMessageDelayed(
-                    mRilHandler.obtainMessage(EVENT_RADIO_PROXY_DEAD, mRadioProxyCookie.get()),
+                    mRilHandler.obtainMessage(EVENT_RADIO_PROXY_DEAD,
+                            mRadioProxyCookie.incrementAndGet()),
                     IRADIO_GET_SERVICE_DELAY_MILLIS);
         }
 
@@ -652,6 +657,13 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     private void handleRadioProxyExceptionForRR(RILRequest rr, String caller, Exception e) {
         riljLoge(caller + ": " + e);
         resetProxyAndRequestList();
+
+        // service most likely died, handle exception like death notification to try to get service
+        // again
+        mRilHandler.sendMessageDelayed(
+                mRilHandler.obtainMessage(EVENT_RADIO_PROXY_DEAD,
+                        mRadioProxyCookie.incrementAndGet()),
+                IRADIO_GET_SERVICE_DELAY_MILLIS);
     }
 
     private String convertNullToEmptyString(String string) {
@@ -3861,7 +3873,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             try {
                 radioProxy.responseAcknowledgement();
             } catch (RemoteException | RuntimeException e) {
-                resetProxyAndRequestList();
+                handleRadioProxyExceptionForRR(rr, "sendAck", e);
                 riljLoge("sendAck: " + e);
             }
         } else {
