@@ -426,6 +426,9 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                     riljLog("handleMessage: EVENT_RADIO_PROXY_DEAD cookie = " + msg.obj +
                             " mRadioProxyCookie = " + mRadioProxyCookie.get());
                     if ((long) msg.obj == mRadioProxyCookie.get()) {
+                        // increment the cookie so that more indications with the same cookie are
+                        // ignored
+                        mRadioProxyCookie.incrementAndGet();
                         resetProxyAndRequestList();
 
                         // todo: rild should be back up since message was sent with a delay. this is
