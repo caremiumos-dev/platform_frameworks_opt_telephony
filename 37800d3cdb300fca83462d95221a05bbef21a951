@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57f2f3da_dc26e075",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-24T19:29:38Z",
+      "side": 1,
+      "message": "nullable needed for this one as well.",
+      "range": {
+        "startLine": 124,
+        "startChar": 16,
+        "endLine": 124,
+        "endChar": 19
+      },
+      "revId": "37800d3cdb300fca83462d95221a05bbef21a951",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
