@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.support.test.filters.FlakyTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Pair;
@@ -91,6 +92,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     /**
      * Tests that Context.bindService is called with the correct parameters when we call bind.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindService() {
@@ -113,6 +115,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     /**
      * Verify that if bind is called multiple times, we only call bindService once.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindFailureWhenBound() {
@@ -130,6 +133,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
      * Tests ImsServiceController callbacks are properly called when an ImsService is bound and
      * connected.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindServiceAndConnected() throws RemoteException {
@@ -157,6 +161,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
      * Tests ImsServiceController callbacks are properly called when an ImsService is bound and
      * connected.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindServiceAndConnectedDisconnected() throws RemoteException {
@@ -183,6 +188,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
      * Tests ImsServiceController callbacks are properly called when an ImsService is bound and
      * connected.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindServiceBindUnbind() throws RemoteException {
@@ -209,6 +215,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     /**
      * Ensures that imsServiceFeatureRemoved is called when the binder dies in another process.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindServiceAndBinderDied() throws RemoteException {
@@ -234,6 +241,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     /**
      * Ensures ImsService and ImsResolver are notified when a feature is added.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindServiceAndAddFeature() throws RemoteException {
@@ -259,6 +267,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     /**
      * Ensures ImsService and ImsResolver are notified when a feature is added.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindServiceAndRemoveFeature() throws RemoteException {
@@ -289,6 +298,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     /**
      * Ensures ImsService and ImsResolver are notified when all features are removed.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindServiceAndRemoveAllFeatures() throws RemoteException {
@@ -321,6 +331,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     /**
      * Verifies that nothing is notified of a feature change if the service is not bound.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindUnbindServiceAndAddFeature() throws RemoteException {
@@ -344,6 +355,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
      * Verifies that the ImsServiceController automatically tries to bind again after an untimely
      * binder death.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testAutoBindAfterBinderDied() throws RemoteException {
@@ -364,6 +376,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     /**
      * Ensure that bindService has only been called once before automatic rebind occurs.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testNoAutoBindBeforeTimeout() throws RemoteException {
@@ -382,6 +395,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     /**
      * Ensure that calling unbind stops automatic rebind of the ImsService from occuring.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testUnbindCauseAutoBindCancelAfterBinderDied() throws RemoteException {
@@ -404,6 +418,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
      * Ensure that calling bind causes the automatic rebinding to be cancelled or not cause another
      * call to bindService.
      */
+    @FlakyTest
     @Test
     @SmallTest
     public void testBindCauseAutoBindCancelAfterBinderDied() throws RemoteException {
