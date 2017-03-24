@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e550e4bd_0df29b8c",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-24T22:30:20Z",
+      "side": 1,
+      "message": "should that be done in resetProxy?",
+      "range": {
+        "startLine": 432,
+        "startChar": 24,
+        "endLine": 432,
+        "endChar": 48
+      },
+      "revId": "9b173671c7b02f78d0ec7746310ca9b4972998b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
