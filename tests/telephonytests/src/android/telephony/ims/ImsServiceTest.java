@@ -18,6 +18,7 @@ package android.telephony.ims;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.RemoteException;
 import android.support.test.runner.AndroidJUnit4;
 import android.telephony.ims.feature.ImsFeature;
@@ -153,6 +154,8 @@ public class ImsServiceTest {
     @Test
     @SmallTest
     public void testMethodWithNoPermissions() throws RemoteException {
+        when(mMockContext.checkCallingOrSelfPermission(READ_PRIVILEGED_PHONE_STATE)).thenReturn(
+                PackageManager.PERMISSION_DENIED);
         doThrow(new SecurityException()).when(mMockContext).enforceCallingOrSelfPermission(
                 eq(READ_PHONE_STATE), anyString());
         mTestImsServiceBinder.createImsFeature(TEST_SLOT_0, ImsFeature.MMTEL, mTestCallback);
