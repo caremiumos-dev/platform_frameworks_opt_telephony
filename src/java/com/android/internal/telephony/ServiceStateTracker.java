@@ -3758,6 +3758,22 @@ public class ServiceStateTracker extends Handler {
             return;
         }
 
+        CarrierConfigManager configManager = (CarrierConfigManager)
+                mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configManager != null) {
+            PersistableBundle bundle = configManager.getConfig();
+            if (bundle != null) {
+                boolean displayVoiceCallBarring = bundle.getBoolean(
+                        CarrierConfigManager.KEY_VOICE_CALL_BARRING_NOTIFICATION_ALLOWED);
+                if(!displayVoiceCallBarring && (notifyType == CS_ENABLED
+                        || notifyType == CS_NORMAL_ENABLED
+                        || notifyType == CS_EMERGENCY_ENABLED)) {
+                    if (DBG) log("Voice/emergency call barred notification disabled");
+                    return;
+                }
+            }
+        }
+
         Context context = mPhone.getContext();
 
 
