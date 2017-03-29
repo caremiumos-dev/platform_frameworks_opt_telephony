@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "061536d1_6bfcaed2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3768,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-29T02:02:19Z",
+      "side": 1,
+      "message": "passing the default value \u0027true\u0027 into getBoolean as well?",
+      "range": {
+        "startLine": 3768,
+        "startChar": 57,
+        "endLine": 3768,
+        "endChar": 67
+      },
+      "revId": "03e7f83d54da1c43fd717ec5c692cb875442baaf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
