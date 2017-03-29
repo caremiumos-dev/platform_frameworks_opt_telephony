@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "497f71a1_20e1b206",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2982,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-03-29T20:20:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3670dcc8_c6d6e1ce",
+      "revId": "1712b0926f654ded544c090a5eff16c38a1c4bf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60a1134e_c6b585fd",
         "filename": "src/java/android/provider/Telephony.java",
         "patchSetId": 4
@@ -53,6 +71,30 @@
       "writtenOn": "2017-03-21T03:24:14Z",
       "side": 1,
       "message": "is this used?",
+      "range": {
+        "startLine": 2985,
+        "startChar": 35,
+        "endLine": 2985,
+        "endChar": 47
+      },
+      "revId": "1712b0926f654ded544c090a5eff16c38a1c4bf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e665116f_85369cfd",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2985,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-03-29T20:20:33Z",
+      "side": 1,
+      "message": "Nope, I thought maybe all content providers needed these but I guess not",
+      "parentUuid": "60a1134e_c6b585fd",
       "range": {
         "startLine": 2985,
         "startChar": 35,
@@ -88,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "6a6130b3_8632fb3a",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2994,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-03-29T20:20:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25af0de7_fbbef74c",
+      "range": {
+        "startLine": 2994,
+        "startChar": 26,
+        "endLine": 2994,
+        "endChar": 40
+      },
+      "revId": "1712b0926f654ded544c090a5eff16c38a1c4bf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c03d78d_e99f7857",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 4
@@ -99,6 +165,30 @@
       "writtenOn": "2017-03-21T03:24:14Z",
       "side": 1,
       "message": "why new? shouldn\u0027t it be oldSS?",
+      "range": {
+        "startLine": 2656,
+        "startChar": 17,
+        "endLine": 2656,
+        "endChar": 35
+      },
+      "revId": "1712b0926f654ded544c090a5eff16c38a1c4bf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "79c392a9_adb415a1",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2656,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-03-29T20:20:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c03d78d_e99f7857",
       "range": {
         "startLine": 2656,
         "startChar": 17,
