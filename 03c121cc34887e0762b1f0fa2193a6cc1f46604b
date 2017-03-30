@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95cd2440_9b4b81fc",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-03-30T00:18:19Z",
+      "side": 1,
+      "message": "Isn\u0027t the oem-hook a vendor extension now?  Shouldn\u0027t it use a different service name, or is the vendor-extesion-ness captured in some other way?",
+      "range": {
+        "startLine": 546,
+        "startChar": 0,
+        "endLine": 546,
+        "endChar": 72
+      },
+      "revId": "03c121cc34887e0762b1f0fa2193a6cc1f46604b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
