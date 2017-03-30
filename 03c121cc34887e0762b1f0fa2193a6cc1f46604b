@@ -22,6 +22,30 @@
       "revId": "03c121cc34887e0762b1f0fa2193a6cc1f46604b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "17ed4dca_18f3a7a7",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-30T00:21:01Z",
+      "side": 1,
+      "message": "It isn\u0027t yet. When it will be, this code will be removed anyway. This is a stopgap solution till we have a vendor extension for existing devices.",
+      "parentUuid": "95cd2440_9b4b81fc",
+      "range": {
+        "startLine": 546,
+        "startChar": 0,
+        "endLine": 546,
+        "endChar": 72
+      },
+      "revId": "03c121cc34887e0762b1f0fa2193a6cc1f46604b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
