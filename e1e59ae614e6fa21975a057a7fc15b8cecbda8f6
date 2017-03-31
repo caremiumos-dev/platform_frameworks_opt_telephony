@@ -22,6 +22,30 @@
       "revId": "e1e59ae614e6fa21975a057a7fc15b8cecbda8f6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5a75a09_b27ccefb",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-03-31T18:42:41Z",
+      "side": 1,
+      "message": "Not only manifest registered. What I want to say here is this allows intents to be sent to the receivers either registered via manifest or the API registerReceiver().",
+      "parentUuid": "785222d0_370e17eb",
+      "range": {
+        "startLine": 1253,
+        "startChar": 25,
+        "endLine": 1253,
+        "endChar": 35
+      },
+      "revId": "e1e59ae614e6fa21975a057a7fc15b8cecbda8f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
