@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7430bb1f_21f3c9b1",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-03-31T17:43:03Z",
+      "side": 1,
+      "message": "what does other mean here? This is for all broadcast receivers right?\n\nAnd registered is misleading too. AFAIK registered refers to non-manifest ones (explicitly registered via registerReceiver())",
+      "range": {
+        "startLine": 1253,
+        "startChar": 25,
+        "endLine": 1253,
+        "endChar": 30
+      },
+      "revId": "d2c831562352123488d37eae2bbd7c38a81521c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
