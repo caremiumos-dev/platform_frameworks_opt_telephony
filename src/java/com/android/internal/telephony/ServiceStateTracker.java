@@ -34,6 +34,7 @@ import android.hardware.radio.V1_0.CellInfoType;
 import android.hardware.radio.V1_0.DataRegStateResult;
 import android.hardware.radio.V1_0.RegState;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
+import android.icu.util.TimeZone;
 import android.os.AsyncResult;
 import android.os.BaseBundle;
 import android.os.Build;
@@ -85,6 +86,8 @@ import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.util.IndentingPrintWriter;
 
+import libcore.util.TimeZoneFinder;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -92,7 +95,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.PatternSyntaxException;
 
@@ -2815,7 +2817,7 @@ public class ServiceStateTracker extends Handler {
                             TelephonyProperties.PROPERTY_IGNORE_NITZ, false)
                             && ((SystemClock.uptimeMillis() & 1) == 0);
 
-                    ArrayList<TimeZone> uniqueZones = TimeUtils.getTimeZonesWithUniqueOffsets(iso);
+                    List<TimeZone> uniqueZones = TimeUtils.getTimeZonesWithUniqueOffsets(iso);
                     if ((uniqueZones.size() == 1) || testOneUniqueOffsetPath) {
                         TimeZone zone = uniqueZones.get(0);
                         if (DBG) {
@@ -3108,8 +3110,10 @@ public class ServiceStateTracker extends Handler {
             }
             if (DBG) log("fixTimeZone: using default TimeZone");
         } else {
-            zone = TimeUtils.getTimeZone(mZoneOffset, mZoneDst, mZoneTime, isoCountryCode);
-            if (DBG) log("fixTimeZone: using getTimeZone(off, dst, time, iso)");
+            TimeZone bias = TimeZone.getDefault();
+            zone = TimeZoneFinder.getInstance().lookupTimeZoneByCountryAndOffset(
+                    isoCountryCode, mZoneOffset, mZoneDst, mZoneTime, bias);
+            if (DBG) log("fixTimeZone: using lookupTimeZone(off, dst, time, iso, bias)");
         }
 
         final String tmpLog = "fixTimeZone zoneName=" + zoneName + " mZoneOffset=" + mZoneOffset
@@ -3472,7 +3476,7 @@ public class ServiceStateTracker extends Handler {
         try {
             /* NITZ time (hour:min:sec) will be in UTC but it supplies the timezone
              * offset as well (which we won't worry about until later) */
-            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+            Calendar c = Calendar.getInstance(java.util.TimeZone.getTimeZone("GMT"));
 
             c.clear();
             c.set(Calendar.DST_OFFSET, 0);
@@ -3536,9 +3540,9 @@ public class ServiceStateTracker extends Handler {
 
                 if (mGotCountryCode) {
                     if (iso != null && iso.length() > 0) {
-                        zone = TimeUtils.getTimeZone(tzOffset, dst != 0,
-                                c.getTimeInMillis(),
-                                iso);
+                        TimeZone bias = TimeZone.getDefault();
+                        zone = TimeZoneFinder.getInstance().lookupTimeZoneByCountryAndOffset(
+                                iso, tzOffset, dst != 0, c.getTimeInMillis(), bias);
                     } else {
                         // We don't have a valid iso country code.  This is
                         // most likely because we're on a test network that's
