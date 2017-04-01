@@ -37,7 +37,6 @@ import android.telephony.AnomalyReporter;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
-import android.telephony.data.NrQosSessionAttributes;
 import android.telephony.data.QosBearerSession;
 import android.util.ArrayMap;
 import android.util.LocalLog;
@@ -194,6 +193,14 @@ public class DcNetworkAgent extends NetworkAgent {
         if (mDataConnection == null) {
             loge("onNetworkUnwanted found called on no-owner DcNetworkAgent!");
             return;
+        }
+
+        DcTracker dct = mPhone.getDcTracker(mTransportType);
+        if (dct != null) {
+            // Rollbacks an initial attach APN before deactivate data call to prevent multi PDN
+            // connections for single PDN support carriers. Without this, Modem will try to
+            // reattach with the initial attach APN which was used for the unwanted network.
+            dct.setInitialAttachApnForSinglePdn();
         }
 
         logd("onNetworkUnwanted called. Now tear down the data connection "
