@@ -2044,4 +2044,126 @@ public class DcTrackerTest extends TelephonyTest {
                 .filter(x -> x.getApnType().equals(type))
                 .findFirst().get().getPriority());
     }
+
+    @Test
+    public void testSetInitialAttachApnForSingleDcOnEnableMmsApn() throws Exception {
+        setUpSetInitialAttachApnForSingleDc();
+
+        // Enable Default APN for singleDc.
+        sendEnableApnEvent(ApnSetting.TYPE_DEFAULT);
+        clearInvocations(mSimulatedCommandsVerifier);
+
+        // Enable MMS APN for singleDc.
+        sendEnableApnEvent(ApnSetting.TYPE_MMS);
+
+        // Verify that setInitialAttachApn is called two times when disconnecting and reconnecting
+        // because there is connected APN.
+        verifySetInitialAttachApn(FAKE_APN6, 2);
+        verifyLatestInitialAttachApn();
+    }
+
+    @Test
+    public void testSetInitialAttachApnForSingleDcOnEnableImsApn() throws Exception {
+        setUpSetInitialAttachApnForSingleDc();
+        clearInvocations(mSimulatedCommandsVerifier);
+
+        // Enable IMS APN for singleDc.
+        sendEnableApnEvent(ApnSetting.TYPE_IMS);
+
+        // Verify that SetInitialAttachApn does not run if IMS APN.
+        verifySetInitialAttachApn(FAKE_APN3, 0);
+    }
+
+    @Test
+    public void testSetInitialAttachApnForSingleDcOnDisableMmsApn() throws Exception {
+        setUpSetInitialAttachApnForSingleDc();
+
+        // Enable MMS APN for singleDc.
+        sendEnableApnEvent(ApnSetting.TYPE_DEFAULT);
+        sendEnableApnEvent(ApnSetting.TYPE_MMS);
+        clearInvocations(mSimulatedCommandsVerifier);
+
+        // Disable MMS APN for singleDc.
+        sendDisableApnEvent(ApnSetting.TYPE_MMS, DcTracker.RELEASE_TYPE_NORMAL);
+
+        // Verify that run setInitialAttachApn two times with default APN when disconnecting and
+        // reconnecting.
+        verifySetInitialAttachApn(FAKE_APN1, 2);
+        verifyLatestInitialAttachApn();
+    }
+
+    @Test
+    public void testSetInitialAttachApnForSingleDcOnDisableDunApn() throws Exception {
+        setUpSetInitialAttachApnForSingleDc();
+
+        // Enable DUN APN for singleDc.
+        sendEnableApnEvent(ApnSetting.TYPE_DEFAULT);
+        sendEnableApnEvent(ApnSetting.TYPE_DUN);
+        clearInvocations(mSimulatedCommandsVerifier);
+
+        // Disable DUN APN for singleDc.
+        sendDisableApnEvent(ApnSetting.TYPE_DUN, DcTracker.RELEASE_TYPE_NORMAL);
+
+        // Verify that setInitialAttachApn runs once on DcTracker#setInitialAttachApnForSinglePdn()
+        // and twice on DcTracker#updateApnProfile().
+        verifySetInitialAttachApn(FAKE_APN1, 3);
+        verifyLatestInitialAttachApn();
+    }
+
+    private void setUpSetInitialAttachApnForSingleDc() throws Exception {
+        mBundle.putIntArray(CarrierConfigManager.KEY_ONLY_SINGLE_DC_ALLOWED_INT_ARRAY,
+                new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                          20});
+        sendInitializationEvents();
+        doReturn(true).when(mPhone).getIccRecordsLoaded();
+        mSimulatedCommands.setDataCallResult(true, createSetupDataCallResult());
+    }
+
+    private void sendEnableApnEvent(int apnType) {
+        logd("Sending EVENT_ENABLE_APN");
+        mDct.enableApn(apnType, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        waitForMs(200);
+    }
+
+    private void sendDisableApnEvent(int apnType, int releaseType) {
+        logd("Sending EVENT_DISABLE_APN");
+        mDct.disableApn(apnType, releaseType);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        waitForMs(200);
+    }
+
+    private void verifySetInitialAttachApn(String fakeApn, int count) {
+        // Verify that running setInitialAttachApn
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, times(count)).setInitialAttachApn(
+                dpCaptor.capture(), eq(false), any(Message.class));
+        List<DataProfile> setInitialApnDplist = dpCaptor.getAllValues();
+
+        // Verify that APN with setInitialAttachApn is fakeApn
+        Optional<DataProfile> setInitialApn = setInitialApnDplist.stream()
+                .filter(dp -> dp.getApn().equals(fakeApn)).findFirst();
+        if (0 == count) {
+            assertFalse(setInitialApn.isPresent());
+        } else {
+            assertTrue(setInitialApn.isPresent());
+        }
+    }
+
+    private void verifyLatestInitialAttachApn() {
+        // Verify that a same APN is specified as an argument for setupDataCall and
+        // setInitialAttachApn.
+        ArgumentCaptor<DataProfile> dpCaptor1 = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, atLeastOnce()).setInitialAttachApn(
+                dpCaptor1.capture(), eq(false), any(Message.class));
+        DataProfile setInitialAttachApnDP = dpCaptor1.getValue();
+
+        ArgumentCaptor<DataProfile> dpCaptor2 = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, atLeastOnce()).setupDataCall(
+                eq(AccessNetworkType.EUTRAN), dpCaptor2.capture(), eq(false), eq(false),
+                eq(DataService.REQUEST_REASON_NORMAL), any(), any(Message.class));
+        DataProfile setupDataCallDP = dpCaptor2.getValue();
+
+        assertEquals(setInitialAttachApnDP.getApn(), setupDataCallDP.getApn());
+    }
 }

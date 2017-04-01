@@ -1983,6 +1983,11 @@ public class DcTracker extends Handler {
                     return false;
                 }
 
+                // Updates an initial attach apn with the requested APN to prevent multi PDN
+                // connections for single PDN support carriers. Without this update, Modem will try
+                // to reattach with current initial attach apn.
+                updateApnProfile(apnSetting);
+
                 // Should not start cleanUp if the setupData is for IMS APN
                 // or retry of same APN(State==RETRYING).
                 if (!apnContext.getApnType().equals(PhoneConstants.APN_TYPE_IMS)
@@ -2571,6 +2576,7 @@ public class DcTracker extends Handler {
 
         apnContext.setEnabled(false);
         if (cleanup) {
+            setInitialAttachApnForSinglePdn();
             cleanUpConnectionInternal(true, releaseType, apnContext);
         }
 
@@ -5130,5 +5136,30 @@ public class DcTracker extends Handler {
             }
         }
         updateLinkBandwidths(bandwidths, useLte);
+    }
+
+    void setInitialAttachApnForSinglePdn() {
+        if (isOnlySingleDcAllowed(mPhone.getServiceState().getRilDataRadioTechnology())) {
+            if (DBG) log("setInitialAttachApnForSinglePdn");
+            setInitialAttachApn();
+        }
+    }
+
+    private void updateApnProfile(ApnSetting apnSetting) {
+        // If records are not yet loaded, not necessary to update APN profile.
+        if (!mPhone.getIccRecordsLoaded()) {
+            if (DBG) log("updateApnProfile, Record is not yet loaded.");
+            return;
+        }
+
+        // Prevents to send IMS APN profile.
+        if (apnSetting == null || apnSetting.getApnTypeBitmask() == ApnSetting.TYPE_IMS) {
+            return;
+        }
+
+        if (DBG) log("setInitialAttachApn single DC case: Apn=" + apnSetting);
+        mDataServiceManager.setInitialAttachApn(createDataProfile(apnSetting,
+                apnSetting.equals(getPreferredApn())),
+                mPhone.getServiceState().getDataRoamingFromRegistration(), null);
     }
 }

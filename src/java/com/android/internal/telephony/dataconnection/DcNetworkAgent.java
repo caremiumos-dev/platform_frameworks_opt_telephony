@@ -169,6 +169,14 @@ public class DcNetworkAgent extends NetworkAgent {
             return;
         }
 
+        DcTracker dct = mPhone.getDcTracker(mTransportType);
+        if (dct != null) {
+            // Rollbacks an initial attach APN before deactivate data call to prevent multi PDN
+            // connections for single PDN support carriers. Without this, Modem will try to
+            // reattach with the initial attach APN which was used for the unwanted network.
+            dct.setInitialAttachApnForSinglePdn();
+        }
+
         logd("onNetworkUnwanted called. Now tear down the data connection "
                 + mDataConnection.getName());
         mDataConnection.tearDownAll(Phone.REASON_RELEASED_BY_CONNECTIVITY_SERVICE,

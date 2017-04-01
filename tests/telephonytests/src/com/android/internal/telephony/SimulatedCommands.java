@@ -2021,6 +2021,7 @@ public class SimulatedCommands extends BaseCommands
 
     @Override
     public void setInitialAttachApn(DataProfile dataProfile, boolean isRoaming, Message result) {
+        SimulatedCommandsVerifier.getInstance().setInitialAttachApn(dataProfile, isRoaming, result);
     }
 
     @Override
