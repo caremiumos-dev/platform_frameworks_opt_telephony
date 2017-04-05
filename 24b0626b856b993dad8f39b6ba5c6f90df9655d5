@@ -22,6 +22,30 @@
       "revId": "24b0626b856b993dad8f39b6ba5c6f90df9655d5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6cf55233_08ea9886",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1039103
+      },
+      "writtenOn": "2017-04-05T23:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f4b93d2_814aaa62",
+      "range": {
+        "startLine": 374,
+        "startChar": 28,
+        "endLine": 374,
+        "endChar": 36
+      },
+      "revId": "24b0626b856b993dad8f39b6ba5c6f90df9655d5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
