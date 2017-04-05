@@ -1396,6 +1396,21 @@ public class DataConnection extends StateMachine {
                     retVal = HANDLED;
                     break;
 
+                case EVENT_DISCONNECT:
+                    DisconnectParams dp = (DisconnectParams) msg.obj;
+
+                    // Check if this request's apnContext is in our list
+                    if (mApnContexts.containsKey(dp.mApnContext)) {
+                        // DISCONNECT can't be processed until we're done.
+                        deferMessage(msg);
+                    } else {
+                        log("DcActivatingState ERROR no such apnContext=" + dp.mApnContext
+                                   + " in this dc=" + DataConnection.this);
+                        notifyDisconnectCompleted(dp, false);
+                    }
+                    retVal = HANDLED;
+                    break;
+
                 case EVENT_SETUP_DATA_CONNECTION_DONE:
                     ar = (AsyncResult) msg.obj;
                     cp = (ConnectionParams) ar.userObj;
