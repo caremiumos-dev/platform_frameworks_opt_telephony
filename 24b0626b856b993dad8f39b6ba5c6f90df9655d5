@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f4b93d2_814aaa62",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-04-05T23:36:05Z",
+      "side": 1,
+      "message": "please catch the NumberFormatException and use INVALID.\n\nyeah, I know you didn\u0027t introduce this, but while we\u0027re here.",
+      "range": {
+        "startLine": 374,
+        "startChar": 28,
+        "endLine": 374,
+        "endChar": 36
+      },
+      "revId": "24b0626b856b993dad8f39b6ba5c6f90df9655d5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
