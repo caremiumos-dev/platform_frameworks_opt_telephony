@@ -16,6 +16,29 @@
       "revId": "c831be43d9d45ab08bd9b2c5f10a58e2018125c7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6a8a4cb_7787cc1f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ContextFixture.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-04-07T04:33:40Z",
+      "side": 1,
+      "message": "ServiceStateProvider.AUTHORITY",
+      "range": {
+        "startLine": 532,
+        "startChar": 37,
+        "endLine": 532,
+        "endChar": 52
+      },
+      "revId": "c831be43d9d45ab08bd9b2c5f10a58e2018125c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
