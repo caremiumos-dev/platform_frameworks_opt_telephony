@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "318a024c_3237c782",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 3012,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-04-07T04:28:49Z",
+      "side": 1,
+      "message": "Should be @hide\n\nI haven\u0027t looked at other classes in this file closely, but is provider a better place for this function?",
+      "revId": "c831be43d9d45ab08bd9b2c5f10a58e2018125c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
