@@ -22,6 +22,30 @@
       "revId": "b6f41c787d72c0df11d43f35b87e33a96098c506",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "64c00ce9_eccf5e25",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4293,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-04-07T23:38:48Z",
+      "side": 1,
+      "message": "I have just added one more additional check to reduce the risk of this change :) ... i see your point that we could definitely change the conditions based on the reported RAT... shall we take this less risky change for oc-dev and i will re-work on the new change for master?",
+      "parentUuid": "88fe0172_491eb850",
+      "range": {
+        "startLine": 4292,
+        "startChar": 23,
+        "endLine": 4293,
+        "endChar": 38
+      },
+      "revId": "b6f41c787d72c0df11d43f35b87e33a96098c506",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
