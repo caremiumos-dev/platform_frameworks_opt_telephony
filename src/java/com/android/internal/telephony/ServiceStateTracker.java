@@ -4288,7 +4288,9 @@ public class ServiceStateTracker extends Handler {
         //override isGsm for CDMA LTE
         if (mPhone.isPhoneTypeGsm() ||
                 (mPhone.isPhoneTypeCdmaLte() &&
-                        ServiceState.isLte(mSS.getRilDataRadioTechnology()))) {
+                        ServiceState.isLte(mSS.getRilDataRadioTechnology())) ||
+                        (mPhone.isPhoneTypeCdmaLte() &&
+                                ServiceState.isLte(mSS.getRilVoiceRadioTechnology()))) {
             isGsm = true;
         }
 
