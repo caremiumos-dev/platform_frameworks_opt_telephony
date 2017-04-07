@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bbab46ac_1548fb65",
+        "filename": "src/java/android/provider/Telephony.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 3012,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-04-07T17:29:26Z",
+      "side": 1,
+      "message": "Will mark @hide. As far as moving into the provider, (see below) I\u0027m not able to import com.android.providers.telephony into ServiceStateTracker.java",
+      "parentUuid": "318a024c_3237c782",
+      "revId": "c831be43d9d45ab08bd9b2c5f10a58e2018125c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c6a8a4cb_7787cc1f",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/ContextFixture.java",
         "patchSetId": 9
