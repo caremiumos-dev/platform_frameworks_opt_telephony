@@ -16,6 +16,24 @@
       "revId": "8ea0afbfe65f2a162e8b0e7b219abfb96e83eb59",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fee1b86f_48fb0592",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-04-11T21:59:55Z",
+      "side": 1,
+      "message": "Seems reasonable. I had forgotten that ImsPhoneCall was just a wrapper that swapped ImsPhoneConnections around...",
+      "parentUuid": "f2567e00_0b27c590",
+      "revId": "8ea0afbfe65f2a162e8b0e7b219abfb96e83eb59",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
