@@ -46,6 +46,30 @@
       "revId": "b6f41c787d72c0df11d43f35b87e33a96098c506",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "246708ae_4e6289de",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4293,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-04-11T00:16:01Z",
+      "side": 1,
+      "message": "Does it really matter what the VOLTE_REPLACEMENT_RAT is? As long as at least one of data or voice rat is LTE, isGsm should be true, no?",
+      "parentUuid": "64c00ce9_eccf5e25",
+      "range": {
+        "startLine": 4292,
+        "startChar": 23,
+        "endLine": 4293,
+        "endChar": 38
+      },
+      "revId": "b6f41c787d72c0df11d43f35b87e33a96098c506",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
