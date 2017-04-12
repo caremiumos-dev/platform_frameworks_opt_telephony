@@ -362,6 +362,7 @@ public class ServiceStateTracker extends Handler {
     private GsmCdmaPhone mPhone;
     public CellLocation mCellLoc;
     private CellLocation mNewCellLoc;
+    private final Object mCellLocLock = new Object();
     public static final int MS_PER_HOUR = 60 * 60 * 1000;
     /* Time stamp after 19 January 2038 is not supported under 32 bit */
     private static final int MAX_NITZ_YEAR = 2037;
@@ -980,9 +981,11 @@ public class ServiceStateTracker extends Handler {
                     break;
                 }
             }
-            // LAC and CID are -1 if not avail
-            ((GsmCellLocation) cellLocation).setLacAndCid(lac, cid);
-            ((GsmCellLocation) cellLocation).setPsc(psc);
+            synchronized (mCellLocLock) {
+                // LAC and CID are -1 if not avail
+                ((GsmCellLocation) cellLocation).setLacAndCid(lac, cid);
+                ((GsmCellLocation) cellLocation).setPsc(psc);
+            }
         } else {
             int baseStationId = -1;
             int baseStationLatitude = CdmaCellLocation.INVALID_LAT_LONG;
@@ -1014,9 +1017,11 @@ public class ServiceStateTracker extends Handler {
                 baseStationLongitude = CdmaCellLocation.INVALID_LAT_LONG;
             }
 
-            // Values are -1 if not available.
-            ((CdmaCellLocation) cellLocation).setCellLocationData(baseStationId,
-                    baseStationLatitude, baseStationLongitude, systemId, networkId);
+            synchronized (mCellLocLock) {
+                // Values are -1 if not available.
+                ((CdmaCellLocation) cellLocation).setCellLocationData(baseStationId,
+                        baseStationLatitude, baseStationLongitude, systemId, networkId);
+            }
         }
     }
 
@@ -2778,9 +2783,11 @@ public class ServiceStateTracker extends Handler {
         mNewSS.setStateOutOfService();
 
         // swap mCellLoc and mNewCellLoc to put new state in mCellLoc
-        CellLocation tcl = mCellLoc;
-        mCellLoc = mNewCellLoc;
-        mNewCellLoc = tcl;
+        synchronized (mCellLocLock) {
+            CellLocation tcl = mCellLoc;
+            mCellLoc = mNewCellLoc;
+            mNewCellLoc = tcl;
+        }
 
         if (hasRilVoiceRadioTechnologyChanged) {
             updatePhoneObject();
@@ -3432,6 +3439,25 @@ public class ServiceStateTracker extends Handler {
             mRestrictedState = newRs;
         }
         log("onRestrictedStateChanged: X rs "+ mRestrictedState);
+    }
+
+    /**
+     * @return Integer array of system id and network id of CDMA network if available,
+     * otherwise null.
+     */
+    public int[] getCdmaNetworkSidNid() {
+        synchronized (mCellLocLock) {
+            if (mCellLoc instanceof CdmaCellLocation) {
+                CdmaCellLocation cdmaCellLoc = (CdmaCellLocation) mCellLoc;
+                int sid = cdmaCellLoc.getSystemId();
+                int nid = cdmaCellLoc.getNetworkId();
+                if (sid != -1 && nid != -1) {
+                    return new int[]{sid, nid};
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
