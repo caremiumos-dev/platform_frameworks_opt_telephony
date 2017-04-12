@@ -3435,6 +3435,25 @@ public class ServiceStateTracker extends Handler {
     }
 
     /**
+     * @return Integer array of system id and network id of CDMA network if available,
+     * otherwise null.
+     */
+    public int[] getCdmaNetworkSidNid() {
+        synchronized (mCellLocLock) {
+            if (mCellLoc instanceof CdmaCellLocation) {
+                CdmaCellLocation cdmaCellLoc = (CdmaCellLocation) mCellLoc;
+                int sid = cdmaCellLoc.getSystemId();
+                int nid = cdmaCellLoc.getNetworkId();
+                if (sid != -1 && nid != -1) {
+                    return new int[]{sid, nid};
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param workSource calling WorkSource
      * @return the current cell location information. Prefer Gsm location
      * information if available otherwise return LTE location information
