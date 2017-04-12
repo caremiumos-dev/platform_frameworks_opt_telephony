@@ -2162,4 +2162,16 @@ public class SimulatedCommands extends BaseCommands
     public void setRadioPowerFailResponse(boolean fail) {
         mIsRadioPowerFailResponse = fail;
     }
+
+    @Override
+    public void registerForIccRefresh(Handler h, int what, Object obj) {
+        super.registerForIccRefresh(h, what, obj);
+        SimulatedCommandsVerifier.getInstance().registerForIccRefresh(h, what, obj);
+    }
+
+    @Override
+    public void unregisterForIccRefresh(Handler h) {
+        super.unregisterForIccRefresh(h);
+        SimulatedCommandsVerifier.getInstance().unregisterForIccRefresh(h);
+    }
 }
