@@ -61,7 +61,6 @@ import com.android.ims.ImsManager;
 import com.android.internal.R;
 import com.android.internal.telephony.dataconnection.DataConnectionReasons;
 import com.android.internal.telephony.dataconnection.DcTracker;
-import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCall;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
@@ -1652,6 +1651,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public List<CellInfo> getAllCellInfo(WorkSource workSource) {
         List<CellInfo> cellInfoList = getServiceStateTracker().getAllCellInfo(workSource);
         return privatizeCellInfoList(cellInfoList);
+    }
+
+    /**
+     * @return Integer array of system id and network id of CDMA network if available,
+     * otherwise null.
+     */
+    public int[] getCdmaNetworkSidNid() {
+        return getServiceStateTracker().getCdmaNetworkSidNid();
     }
 
     public CellLocation getCellLocation() {
