@@ -4285,10 +4285,17 @@ public class ServiceStateTracker extends Handler {
      */
     protected boolean onSignalStrengthResult(AsyncResult ar) {
         boolean isGsm = false;
-        //override isGsm for CDMA LTE
-        if (mPhone.isPhoneTypeGsm() ||
-                (mPhone.isPhoneTypeCdmaLte() &&
-                        ServiceState.isLte(mSS.getRilDataRadioTechnology()))) {
+        /* Override isGsm
+         * 1. Use VOICE_REGISTRATION_STATE RAT if there is an active CS call. It helps
+         *    to display 1x signal bars in case of 1x voice call and data RAT is LTE.
+         * 2. Use DATA_REGISTRATION_STATE or VOICE_REGISTRATION_STATE RAT otherwise.
+         */
+        if (mPhone.isInCall()) {
+            if (ServiceState.isLteUmtsGsm(mSS.getRilVoiceRadioTechnology())) {
+                isGsm = true;
+            }
+        } else if (ServiceState.isLteUmtsGsm(mSS.getRilDataRadioTechnology())
+                || ServiceState.isLteUmtsGsm(mSS.getRilVoiceRadioTechnology())) {
             isGsm = true;
         }
 
