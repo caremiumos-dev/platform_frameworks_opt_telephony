@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "924f94a3_e03ee455",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1948,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-04-13T20:51:50Z",
+      "side": 1,
+      "message": "I dont think this is a good place in the file for this (between OemHook APIs). Try to keep the same order as hal?",
+      "revId": "13f080babab5d067417390820c8e06af9b839144",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "15400434_4de785f0",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1959,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-04-13T20:51:50Z",
+      "side": 1,
+      "message": "Use this: https://docs.google.com/document/d/1z5uzQBc_ksHoqVvzlo7YnjczvUxVvRFamuJaN3Fomn0/edit#heading\u003dh.qve6e97bisog",
+      "range": {
+        "startLine": 1958,
+        "startChar": 16,
+        "endLine": 1959,
+        "endChar": 84
+      },
+      "revId": "13f080babab5d067417390820c8e06af9b839144",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4df92c10_60574132",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-04-13T20:51:50Z",
+      "side": 1,
+      "message": "Move it above getRadioStateFromInt",
+      "revId": "13f080babab5d067417390820c8e06af9b839144",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
