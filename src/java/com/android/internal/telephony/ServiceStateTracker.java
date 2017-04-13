@@ -4293,10 +4293,9 @@ public class ServiceStateTracker extends Handler {
      */
     protected boolean onSignalStrengthResult(AsyncResult ar) {
         boolean isGsm = false;
-        //override isGsm for CDMA LTE
-        if (mPhone.isPhoneTypeGsm() ||
-                (mPhone.isPhoneTypeCdmaLte() &&
-                        ServiceState.isLte(mSS.getRilDataRadioTechnology()))) {
+        /* Override isGsm */
+        if (ServiceState.isGsm(mSS.getRilDataRadioTechnology())
+                || ServiceState.isGsm(mSS.getRilVoiceRadioTechnology())) {
             isGsm = true;
         }
 

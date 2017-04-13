@@ -106,10 +106,11 @@ public class ServiceStateTest extends TestCase {
 
             if (isCdma) {
                 assertTrue("RAT " + rat + " should be CDMA", ServiceState.isCdma(rat.first));
-                assertFalse("RAT " + rat + " should not be GSM", ServiceState.isGsm(rat.first));
+                assertFalse("RAT " + rat + " should not be GSM",
+                        ServiceState.isGsmOrIwlan(rat.first));
             } else {
                 assertFalse("RAT " + rat + " should not be CDMA", ServiceState.isCdma(rat.first));
-                assertTrue("RAT " + rat + " should be GSM", ServiceState.isGsm(rat.first));
+                assertTrue("RAT " + rat + " should be GSM", ServiceState.isGsmOrIwlan(rat.first));
             }
         }
     }

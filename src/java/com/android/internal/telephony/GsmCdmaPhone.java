@@ -3073,7 +3073,7 @@ public class GsmCdmaPhone extends Phone {
             }
 
             boolean matchCdma = ServiceState.isCdma(newVoiceRadioTech);
-            boolean matchGsm = ServiceState.isGsm(newVoiceRadioTech);
+            boolean matchGsm = ServiceState.isGsmOrIwlan(newVoiceRadioTech);
             if ((matchCdma && getPhoneType() == PhoneConstants.PHONE_TYPE_CDMA) ||
                     (matchGsm && getPhoneType() == PhoneConstants.PHONE_TYPE_GSM)) {
                 // Nothing changed. Keep phone as it is.
@@ -3128,11 +3128,11 @@ public class GsmCdmaPhone extends Phone {
         String outgoingPhoneName = getPhoneName();
 
         logd("Switching Voice Phone : " + outgoingPhoneName + " >>> "
-                + (ServiceState.isGsm(newVoiceRadioTech) ? "GSM" : "CDMA"));
+                + (ServiceState.isGsmOrIwlan(newVoiceRadioTech) ? "GSM" : "CDMA"));
 
         if (ServiceState.isCdma(newVoiceRadioTech)) {
             switchPhoneType(PhoneConstants.PHONE_TYPE_CDMA_LTE);
-        } else if (ServiceState.isGsm(newVoiceRadioTech)) {
+        } else if (ServiceState.isGsmOrIwlan(newVoiceRadioTech)) {
             switchPhoneType(PhoneConstants.PHONE_TYPE_GSM);
         } else {
             loge("deleteAndCreatePhone: newVoiceRadioTech=" + newVoiceRadioTech +

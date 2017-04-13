@@ -154,7 +154,7 @@ public class IccCardProxy extends Handler implements IccCard {
             if (DBG) {
                 log("Setting radio tech " + ServiceState.rilRadioTechnologyToString(radioTech));
             }
-            if (ServiceState.isGsm(radioTech)) {
+            if (ServiceState.isGsmOrIwlan(radioTech)) {
                 mCurrentAppType = UiccController.APP_FAM_3GPP;
             } else {
                 mCurrentAppType = UiccController.APP_FAM_3GPP2;
