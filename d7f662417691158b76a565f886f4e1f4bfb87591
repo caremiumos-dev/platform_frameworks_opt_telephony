@@ -34,6 +34,24 @@
       "revId": "d7f662417691158b76a565f886f4e1f4bfb87591",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c00ade63_55cc5417",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4294,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-04-14T17:05:32Z",
+      "side": 1,
+      "message": "1) what if there is an active data call as well on LTE? how do you define active RAT. It is possible for SVLTE\n\n2) Even if verizon expect that way, how can we say all other operator expects that way. Is there an open bug on this behavior from other operators?",
+      "parentUuid": "70ca743a_88372ee9",
+      "revId": "d7f662417691158b76a565f886f4e1f4bfb87591",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
