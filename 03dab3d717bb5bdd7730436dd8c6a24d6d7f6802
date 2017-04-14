@@ -16,6 +16,24 @@
       "revId": "03dab3d717bb5bdd7730436dd8c6a24d6d7f6802",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c1c27d5d_09d995d2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4291,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-04-14T06:48:51Z",
+      "side": 0,
+      "message": "It doesn\u0027t cover SRLTE case mentioned in the other comment...\n\nAlso this code is bit hard to understand because we are using phone type instead of directly checking the camped RAT",
+      "parentUuid": "3f33fe2a_2bf2ae63",
+      "revId": "03dab3d717bb5bdd7730436dd8c6a24d6d7f6802",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

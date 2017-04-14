@@ -16,6 +16,24 @@
       "revId": "d7f662417691158b76a565f886f4e1f4bfb87591",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70ca743a_88372ee9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4294,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-04-14T06:48:51Z",
+      "side": 1,
+      "message": "Its better to display the active RAT\u0027s signal bar instead of displaying stale  LTE signal bar during 1x call in SRLTE mode... Its Vzw requirement too... pls refer https://docs.google.com/a/google.com/document/d/1r4hp2Ile0EUZJ1pwU_S54YwEN3SEo2dIEqgzM17nuvM/edit?usp\u003dsharing",
+      "parentUuid": "2e76157e_2518e33f",
+      "revId": "d7f662417691158b76a565f886f4e1f4bfb87591",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
