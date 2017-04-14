@@ -70,6 +70,24 @@
       "revId": "d7f662417691158b76a565f886f4e1f4bfb87591",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9240f19_71aad50c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4294,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-04-14T18:26:38Z",
+      "side": 1,
+      "message": "This code will go to older device as well, which means it will go to SVLTE device as well.\n\nAlso, my concern is more with changing 1 signal for call and another for other usecase",
+      "parentUuid": "20a148e6_b5b7297b",
+      "revId": "d7f662417691158b76a565f886f4e1f4bfb87591",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
