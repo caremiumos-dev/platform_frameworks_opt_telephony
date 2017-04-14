@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f33fe2a_2bf2ae63",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4291,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-04-14T06:36:32Z",
+      "side": 0,
+      "message": "isn\u0027t adding a check ServiceState.isLte(mSS.getRilVoiceRadioTechnology() to above condition enough in this case?",
+      "revId": "03dab3d717bb5bdd7730436dd8c6a24d6d7f6802",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

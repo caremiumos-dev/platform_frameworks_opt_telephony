@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e76157e_2518e33f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4294,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-04-14T06:36:32Z",
+      "side": 1,
+      "message": "if the device is SRLTE, why do we think we should report 1x signal strength?",
+      "revId": "d7f662417691158b76a565f886f4e1f4bfb87591",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
