@@ -52,6 +52,24 @@
       "revId": "d7f662417691158b76a565f886f4e1f4bfb87591",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "20a148e6_b5b7297b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4294,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-04-14T18:24:06Z",
+      "side": 1,
+      "message": "1) I think showing CS signal quality during voice call makes more sense because most of the time when audio is flaky people see the signal bar :)\n\n2) Its Vzw requirement for SVLTE to show 1x bar during 1x call. We have sprint open market requirements which doesn\u0027s state anything... more over all major 1x + LTE operators (Verizon, Sprint, CT ) all moved to SRLTE and QC has technically deprecated SVLTE.",
+      "parentUuid": "c00ade63_55cc5417",
+      "revId": "d7f662417691158b76a565f886f4e1f4bfb87591",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

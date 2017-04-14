@@ -52,6 +52,24 @@
       "revId": "03dab3d717bb5bdd7730436dd8c6a24d6d7f6802",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "509be456_d2b7ab9f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4291,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-04-14T18:24:06Z",
+      "side": 0,
+      "message": "No, the comment was given by junda and i discussed with him and we both felt mixing of phone type \u0026 RAT is bit hard to read... its better to check directly the camped technology instead of mixing phone type \u0026 voice rat..",
+      "parentUuid": "0452da0c_9855e414",
+      "revId": "03dab3d717bb5bdd7730436dd8c6a24d6d7f6802",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
