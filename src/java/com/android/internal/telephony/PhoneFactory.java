@@ -20,13 +20,11 @@ import static com.android.internal.telephony.TelephonyProperties.PROPERTY_DEFAUL
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.LocalServerSocket;
-import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.ServiceManager;
-import android.os.SystemProperties;
-import android.os.UserHandle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.telephony.Rlog;
@@ -48,6 +46,7 @@ import com.android.internal.util.IndentingPrintWriter;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * {@hide}
@@ -80,6 +79,7 @@ public class PhoneFactory {
     static private SubscriptionMonitor sSubscriptionMonitor;
     static private TelephonyNetworkFactory[] sTelephonyNetworkFactories;
     static private ImsResolver sImsResolver;
+    static private SharedPreferences sp;
 
     static private final HashMap<String, LocalLog>sLocalLogs = new HashMap<String, LocalLog>();
 
@@ -100,6 +100,7 @@ public class PhoneFactory {
         synchronized (sLockProxyPhones) {
             if (!sMadeDefaults) {
                 sContext = context;
+                sp = PreferenceManager.getDefaultSharedPreferences(sContext);
 
                 // create the telephony device controller.
                 TelephonyDevController.create();
@@ -472,6 +473,22 @@ public class PhoneFactory {
             }
             pw.flush();
         }
+        pw.decreaseIndent();
+
+        pw.println("++++++++++++++++++++++++++++++++");
+        pw.println("SharedPreference: com.android.phone");
+        pw.increaseIndent();
+        try {
+            if (sp != null) {
+                Map spValues = sp.getAll();
+                for (Object key : spValues.keySet()) {
+                    pw.println(key + " : " + spValues.get(key));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        pw.flush();
         pw.decreaseIndent();
     }
 }
