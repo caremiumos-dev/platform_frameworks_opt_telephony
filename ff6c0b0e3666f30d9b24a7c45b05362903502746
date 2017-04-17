@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "95d9120e_9b408c86",
+        "filename": "Android.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-04-17T20:44:00Z",
+      "side": 1,
+      "message": "delete this",
+      "range": {
+        "startLine": 28,
+        "startChar": 46,
+        "endLine": 28,
+        "endChar": 55
+      },
+      "revId": "ff6c0b0e3666f30d9b24a7c45b05362903502746",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "868da72b_6f78aedd",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 8
