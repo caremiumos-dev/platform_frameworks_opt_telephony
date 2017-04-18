@@ -580,10 +580,21 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
      */
     private boolean mShouldUpdateImsConfigOnDisconnect = false;
 
-    private ImsServiceProxy.INotifyStatusChanged mNotifyFeatureRemovedCallback = () -> {
+    // Callback fires when ImsManager MMTel Feature changes state
+    private ImsServiceProxy.INotifyStatusChanged mNotifyStatusChangedCallback = () -> {
         try {
-            if (mImsManager.getImsServiceStatus() != ImsFeature.STATE_READY) {
-                retryGetImsService();
+            switch(mImsManager.getImsServiceStatus()) {
+                case ImsFeature.STATE_READY: {
+                    startListeningForCalls();
+                    break;
+                }
+                case ImsFeature.STATE_INITIALIZING:
+                    // fall through
+                case ImsFeature.STATE_NOT_AVAILABLE:
+                    // fall through
+                default: {
+                    stopListeningForCalls();
+                }
             }
         } catch (ImsException e) {
             // Could not get the ImsService, retry!
@@ -627,12 +638,13 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         if (DBG) log("getImsService");
         mImsManager = ImsManager.getInstance(mPhone.getContext(), mPhone.getPhoneId());
         // Adding to set, will be safe adding multiple times.
-        mImsManager.addNotifyStatusChangedCallback(mNotifyFeatureRemovedCallback);
-        if (mImsManager.getImsServiceStatus() != ImsFeature.STATE_READY) {
-            // We can not call "open" until the ims service is ready
-            throw new ImsException("getImsServiceStatus()",
-                    ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
-        }
+        mImsManager.addNotifyStatusChangedCallback(mNotifyStatusChangedCallback);
+        // Wait for ImsService.STATE_READY to start listening for calls.
+        // Call the callback right away for compatibility with older devices that do not use states.
+        mNotifyStatusChangedCallback.notifyStatusChanged();
+    }
+
+    private void startListeningForCalls() throws ImsException {
         mImsServiceRetryCount = 0;
         mServiceId = mImsManager.open(ImsServiceClass.MMTEL,
                 createIncomingCallPendingIntent(),
@@ -647,15 +659,26 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             mPhone.exitEmergencyCallbackMode();
         }
         int mPreferredTtyMode = Settings.Secure.getInt(
-            mPhone.getContext().getContentResolver(),
-            Settings.Secure.PREFERRED_TTY_MODE,
-            Phone.TTY_MODE_OFF);
+                mPhone.getContext().getContentResolver(),
+                Settings.Secure.PREFERRED_TTY_MODE,
+                Phone.TTY_MODE_OFF);
         mImsManager.setUiTTYMode(mPhone.getContext(), mPreferredTtyMode, null);
 
         ImsMultiEndpoint multiEndpoint = getMultiEndpointInterface();
         if (multiEndpoint != null) {
             multiEndpoint.setExternalCallStateListener(
                     mPhone.getExternalCallTracker().getExternalCallStateListener());
+        }
+    }
+
+    private void stopListeningForCalls() {
+        try {
+            // Only close on valid session.
+            if (mServiceId > 0) {
+                mImsManager.close(mServiceId);
+            }
+        } catch (ImsException e) {
+            // If the binder is unavailable, then the ImsService doesn't need to close.
         }
     }
 
