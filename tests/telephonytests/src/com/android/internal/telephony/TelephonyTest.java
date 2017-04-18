@@ -80,6 +80,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public abstract class TelephonyTest {
     protected static String TAG;
@@ -351,7 +353,7 @@ public abstract class TelephonyTest {
         doReturn(mImsExternalCallTracker).when(mTelephonyComponentFactory)
                 .makeImsExternalCallTracker(nullable(ImsPhone.class));
         doReturn(mCarrierSignalAgent).when(mTelephonyComponentFactory)
-                .makeCarrierActionAgent(nullable(Phone.class));
+                .makeCarrierSignalAgent(nullable(Phone.class));
         doReturn(mCarrierActionAgent).when(mTelephonyComponentFactory)
                 .makeCarrierActionAgent(nullable(Phone.class));
         doReturn(mDeviceStateMonitor).when(mTelephonyComponentFactory)
@@ -475,5 +477,17 @@ public abstract class TelephonyTest {
         doReturn(mPackageInfo).when(mPackageManager).getPackageInfo(eq(TAG), anyInt());
         doReturn(mPackageInfo).when(mPackageManager).getPackageInfoAsUser(
                 eq(TAG), anyInt(), anyInt());
+    }
+
+    protected final void waitForHandlerAction(Handler h, long timeoutMillis) {
+        final CountDownLatch lock = new CountDownLatch(1);
+        h.post(lock::countDown);
+        while (lock.getCount() > 0) {
+            try {
+                lock.await(timeoutMillis, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+        }
     }
 }
