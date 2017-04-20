@@ -70,6 +70,24 @@
       "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ae02d77e_4afa8a0f",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3076,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-04-20T02:10:11Z",
+      "side": 1,
+      "message": "I was thinking as long as voice registration state is not expected to be IWLAN , we need not expect voice radio tech also as iwlan.",
+      "parentUuid": "b8d02628_e54bbd2b",
+      "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
