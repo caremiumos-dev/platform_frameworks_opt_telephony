@@ -52,6 +52,24 @@
       "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b8d02628_e54bbd2b",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3076,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-04-20T02:04:04Z",
+      "side": 1,
+      "message": "yes (or) can we use volte_replacement_rat for IWLAN as well (currently its used for TECH UNKNOWN \u0026 LTE).",
+      "parentUuid": "1b5f52ec_52567e87",
+      "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
