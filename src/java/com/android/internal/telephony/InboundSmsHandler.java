@@ -145,17 +145,17 @@ public abstract class InboundSmsHandler extends StateMachine {
     /** Sent on exit from {@link WaitingState} to return to idle after sending all broadcasts. */
     private static final int EVENT_RETURN_TO_IDLE = 4;
 
-    /** Release wakelock after a short timeout when returning to idle state. */
-    private static final int EVENT_RELEASE_WAKELOCK = 5;
-
     /** Sent by {@link SmsBroadcastUndelivered} after cleaning the raw table. */
-    public static final int EVENT_START_ACCEPTING_SMS = 6;
+    public static final int EVENT_START_ACCEPTING_SMS = 5;
 
     /** Update phone object */
-    private static final int EVENT_UPDATE_PHONE_OBJECT = 7;
+    private static final int EVENT_UPDATE_PHONE_OBJECT = 6;
 
     /** New SMS received as an AsyncResult. */
-    public static final int EVENT_INJECT_SMS = 8;
+    public static final int EVENT_INJECT_SMS = 7;
+
+    /** Release wakelock after a short timeout.  */
+    static final int EVENT_WAKE_LOCK_TIMEOUT = 8;
 
     /** Wakelock release delay when returning to idle state. */
     private static final int WAKELOCK_TIMEOUT = 3000;
@@ -178,6 +178,9 @@ public abstract class InboundSmsHandler extends StateMachine {
 
     /** Wake lock to ensure device stays awake while dispatching the SMS intents. */
     private final PowerManager.WakeLock mWakeLock;
+
+    /** Wakelock count to ensure that wakelock is released only when count is 0 */
+    int mWakeLockCount = 0;
 
     /** DefaultState throws an exception or logs an error for unhandled message types. */
     private final DefaultState mDefaultState = new DefaultState();
@@ -239,6 +242,7 @@ public abstract class InboundSmsHandler extends StateMachine {
 
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, name);
+        mWakeLock.setReferenceCounted(false);
         mWakeLock.acquire();    // wake lock released after we enter idle state
         mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
         mDeviceIdleController = TelephonyComponentFactory.getInstance().getIDeviceIdleController();
@@ -285,6 +289,43 @@ public abstract class InboundSmsHandler extends StateMachine {
     }
 
     /**
+     * Acquire PowerManager wakelock
+     */
+    void acquireWakeLock() {
+        synchronized (mWakeLock) {
+            mWakeLock.acquire();
+            mWakeLockCount++;
+            removeMessages(EVENT_WAKE_LOCK_TIMEOUT);
+            sendMessageDelayed(EVENT_WAKE_LOCK_TIMEOUT, WAKELOCK_TIMEOUT);
+        }
+    }
+
+    /**
+     * Decrement wakelock
+     */
+    void decrementWakeLock() {
+        synchronized (mWakeLock) {
+            if (mWakeLockCount > 1) {
+                mWakeLockCount--;
+            } else {
+                releaseWakeLock();
+            }
+        }
+    }
+
+    /**
+     * Release wakelock and remove pending EVENT_WAKE_LOCK_TIMEOUT messages.
+     */
+    void releaseWakeLock() {
+        synchronized (mWakeLock) {
+            mWakeLockCount = 0;
+            mWakeLock.release();
+            removeMessages(EVENT_WAKE_LOCK_TIMEOUT);
+            log("Wkaelock released");
+        }
+    }
+
+    /**
      * This parent state throws an exception (for debug builds) or prints an error for unhandled
      * message types.
      */
@@ -296,6 +337,12 @@ public abstract class InboundSmsHandler extends StateMachine {
                     onUpdatePhoneObject((Phone) msg.obj);
                     break;
                 }
+
+                case EVENT_WAKE_LOCK_TIMEOUT:
+                    loge("Release wakelock as it timed out");
+                    releaseWakeLock();
+                    break;
+
                 default: {
                     String errorText = "processMessage: unhandled message type " + msg.what +
                         " currState=" + getCurrentState().getName();
@@ -339,7 +386,6 @@ public abstract class InboundSmsHandler extends StateMachine {
 
                 case EVENT_BROADCAST_COMPLETE:
                 case EVENT_RETURN_TO_IDLE:
-                case EVENT_RELEASE_WAKELOCK:
                 default:
                     // let DefaultState handle these unexpected message types
                     return NOT_HANDLED;
@@ -355,12 +401,12 @@ public abstract class InboundSmsHandler extends StateMachine {
         @Override
         public void enter() {
             if (DBG) log("entering Idle state");
-            sendMessageDelayed(EVENT_RELEASE_WAKELOCK, WAKELOCK_TIMEOUT);
+            decrementWakeLock();
         }
 
         @Override
         public void exit() {
-            mWakeLock.acquire();
+            acquireWakeLock();
             if (DBG) log("acquired wakelock, leaving Idle state");
         }
 
@@ -374,18 +420,6 @@ public abstract class InboundSmsHandler extends StateMachine {
                 case EVENT_BROADCAST_SMS:
                     deferMessage(msg);
                     transitionTo(mDeliveringState);
-                    return HANDLED;
-
-                case EVENT_RELEASE_WAKELOCK:
-                    mWakeLock.release();
-                    if (DBG) {
-                        if (mWakeLock.isHeld()) {
-                            // this is okay as long as we call release() for every acquire()
-                            log("mWakeLock is still held after release");
-                        } else {
-                            log("mWakeLock released");
-                        }
-                    }
                     return HANDLED;
 
                 case EVENT_RETURN_TO_IDLE:
@@ -453,14 +487,6 @@ public abstract class InboundSmsHandler extends StateMachine {
                 case EVENT_RETURN_TO_IDLE:
                     // return to idle after processing all other messages
                     transitionTo(mIdleState);
-                    return HANDLED;
-
-                case EVENT_RELEASE_WAKELOCK:
-                    mWakeLock.release();    // decrement wakelock from previous entry to Idle
-                    if (!mWakeLock.isHeld()) {
-                        // wakelock should still be held until 3 seconds after we enter Idle
-                        loge("mWakeLock released while delivering/broadcasting!");
-                    }
                     return HANDLED;
 
                 // we shouldn't get this message type in this state, log error and halt.
@@ -1501,6 +1527,11 @@ public abstract class InboundSmsHandler extends StateMachine {
     @VisibleForTesting
     public int getWakeLockTimeout() {
         return WAKELOCK_TIMEOUT;
+    }
+
+    @VisibleForTesting
+    public int getWakelockCount() {
+        return mWakeLockCount;
     }
 
     /**
