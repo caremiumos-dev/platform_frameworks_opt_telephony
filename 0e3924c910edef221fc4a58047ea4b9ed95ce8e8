@@ -16,6 +16,24 @@
       "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19d31024_9e07be2e",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3076,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-04-20T01:45:43Z",
+      "side": 1,
+      "message": "let us say other vendors are sending it, then how was it behaving earlier?",
+      "parentUuid": "9d87a2d7_e9ac1686",
+      "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
