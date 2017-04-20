@@ -34,6 +34,24 @@
       "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1b5f52ec_52567e87",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3076,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-04-20T01:47:42Z",
+      "side": 1,
+      "message": "If we make this change now, it is like saying we expect IWLAN in voice radio tech. Not sure if we need to introduce this unless there is an open issue. If there is a concern, we should just update RIL.h saying it is not expected.",
+      "parentUuid": "19d31024_9e07be2e",
+      "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
