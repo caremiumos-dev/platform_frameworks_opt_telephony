@@ -88,6 +88,24 @@
       "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b028decd_ed4e057e",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3076,
+      "author": {
+        "id": 1043929
+      },
+      "writtenOn": "2017-04-20T16:31:53Z",
+      "side": 1,
+      "message": "as more carriers are moving from cs to volte/vowifi, if we don\u0027t allow iwlan as voice radio tech, it\u0027ll cause confusion in the future.\n\nI discussed this with Jaya offline. It\u0027s ok to have isGsmOrIwlan.",
+      "parentUuid": "ae02d77e_4afa8a0f",
+      "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
