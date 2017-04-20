@@ -106,6 +106,24 @@
       "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ed74e8a_f0a35539",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3076,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-04-20T16:43:58Z",
+      "side": 1,
+      "message": "Not sure how carriers moving to vowifi related to voice radio tech being iwlan.\n\nMy thought was as long as we do not expect Voice registration state being IWLAN, we need not expect Voice Radio tech also as IWLAN.",
+      "parentUuid": "b028decd_ed4e057e",
+      "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
