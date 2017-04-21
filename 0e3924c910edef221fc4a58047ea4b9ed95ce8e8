@@ -150,6 +150,30 @@
     },
     {
       "key": {
+        "uuid": "975fa4e6_22232a9d",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3076,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-04-21T00:19:33Z",
+      "side": 1,
+      "message": "This change is done because of the ServiceState API isGsm() split. Its not going to change any behavior when compared to the baseline.\n\nI am wondering Why QC added IWLAN to ServiceState.isGsm(). Was there any justification at that time? Its not a cellular RAT at all. \n\nif you think its not good then the other option i see\n\nBring back the ServiceState.isLteUmtsGsm() API and use it for the main change to set SignalStrength.isGsm flag. This way i don\u0027t have to touch this file unnecessarily.\n\npls suggest",
+      "parentUuid": "5bb7b126_ca658a82",
+      "range": {
+        "startLine": 3076,
+        "startChar": 20,
+        "endLine": 3076,
+        "endChar": 28
+      },
+      "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c6e50afc_a44f6378",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 4
@@ -161,6 +185,30 @@
       "writtenOn": "2017-04-20T22:20:48Z",
       "side": 1,
       "message": "this feels like the guts of the change and doesn\u0027t mandate the iwlan split in ServiceState.  Why did we add the other stuff?",
+      "range": {
+        "startLine": 4297,
+        "startChar": 0,
+        "endLine": 4297,
+        "endChar": 63
+      },
+      "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bdb323ca_9e855c78",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 4297,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-04-21T00:19:33Z",
+      "side": 1,
+      "message": "Yes, to set isGsm flag in SignalStrength object we cannot use IWLAN RAT because its not a cellular RAT. We need to check cellular RATs only. I initially introduced isLteUmtsGsm() method in ServiceState but got a comment to split the existing isGsm() and re-use it here.\n\nNote: IWLAN was originally added by QC in isGsm() in ServiceState when they introduced IWLAN though its not a cellular RAT.",
+      "parentUuid": "c6e50afc_a44f6378",
       "range": {
         "startLine": 4297,
         "startChar": 0,
