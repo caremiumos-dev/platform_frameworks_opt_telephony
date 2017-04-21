@@ -580,7 +580,7 @@ public class UiccCard {
     public void iccOpenLogicalChannel(String AID, int p2, Message response) {
         loglocal("Open Logical Channel: " + AID + " , " + p2 + " by pid:" + Binder.getCallingPid()
                 + " uid:" + Binder.getCallingUid());
-        mCi.iccOpenLogicalChannel(AID, p2,
+        getCommandsInterface().iccOpenLogicalChannel(AID, p2,
                 mHandler.obtainMessage(EVENT_OPEN_LOGICAL_CHANNEL_DONE, response));
     }
 
@@ -589,7 +589,7 @@ public class UiccCard {
      */
     public void iccCloseLogicalChannel(int channel, Message response) {
         loglocal("Close Logical Channel: " + channel);
-        mCi.iccCloseLogicalChannel(channel,
+        getCommandsInterface().iccCloseLogicalChannel(channel,
                 mHandler.obtainMessage(EVENT_CLOSE_LOGICAL_CHANNEL_DONE, response));
     }
 
@@ -598,8 +598,9 @@ public class UiccCard {
      */
     public void iccTransmitApduLogicalChannel(int channel, int cla, int command,
             int p1, int p2, int p3, String data, Message response) {
-        mCi.iccTransmitApduLogicalChannel(channel, cla, command, p1, p2, p3,
-                data, mHandler.obtainMessage(EVENT_TRANSMIT_APDU_LOGICAL_CHANNEL_DONE, response));
+        getCommandsInterface().iccTransmitApduLogicalChannel(channel, cla, command, p1, p2, p3,
+                data,
+                mHandler.obtainMessage(EVENT_TRANSMIT_APDU_LOGICAL_CHANNEL_DONE, response));
     }
 
     /**
@@ -607,7 +608,7 @@ public class UiccCard {
      */
     public void iccTransmitApduBasicChannel(int cla, int command,
             int p1, int p2, int p3, String data, Message response) {
-        mCi.iccTransmitApduBasicChannel(cla, command, p1, p2, p3,
+        getCommandsInterface().iccTransmitApduBasicChannel(cla, command, p1, p2, p3,
                 data, mHandler.obtainMessage(EVENT_TRANSMIT_APDU_BASIC_CHANNEL_DONE, response));
     }
 
@@ -616,7 +617,7 @@ public class UiccCard {
      */
     public void iccExchangeSimIO(int fileID, int command, int p1, int p2, int p3,
             String pathID, Message response) {
-        mCi.iccIO(command, fileID, pathID, p1, p2, p3, null, null,
+        getCommandsInterface().iccIO(command, fileID, pathID, p1, p2, p3, null, null,
                 mHandler.obtainMessage(EVENT_SIM_IO_DONE, response));
     }
 
@@ -624,15 +625,24 @@ public class UiccCard {
      * Exposes {@link CommandsInterface#sendEnvelopeWithStatus}
      */
     public void sendEnvelopeWithStatus(String contents, Message response) {
-        mCi.sendEnvelopeWithStatus(contents, response);
+        getCommandsInterface().sendEnvelopeWithStatus(contents, response);
+    }
+
+    /** Returns a reference to the current {@link CommandsInterface}. */
+    private CommandsInterface getCommandsInterface() {
+        synchronized (mLock) {
+            return mCi;
+        }
     }
 
     /* Returns number of applications on this card */
     public int getNumApplications() {
         int count = 0;
-        for (UiccCardApplication a : mUiccApplications) {
-            if (a != null) {
-                count++;
+        synchronized (mLock) {
+            for (UiccCardApplication a : mUiccApplications) {
+                if (a != null) {
+                    count++;
+                }
             }
         }
         return count;
@@ -748,12 +758,14 @@ public class UiccCard {
     }
 
     public String getIccId() {
-        // ICCID should be same across all the apps.
-        for (UiccCardApplication app : mUiccApplications) {
-            if (app != null) {
-                IccRecords ir = app.getIccRecords();
-                if (ir != null && ir.getIccId() != null) {
-                    return ir.getIccId();
+        synchronized (mLock) {
+            // ICCID should be same across all the apps.
+            for (UiccCardApplication app : mUiccApplications) {
+                if (app != null) {
+                    IccRecords ir = app.getIccRecords();
+                    if (ir != null && ir.getIccId() != null) {
+                        return ir.getIccId();
+                    }
                 }
             }
         }
