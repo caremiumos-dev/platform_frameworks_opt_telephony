@@ -218,6 +218,30 @@
       "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61867364_619452f2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 4297,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-04-21T18:03:25Z",
+      "side": 1,
+      "message": "how about manually pull out iwlan here.  Just:\ndRat \u003d mss.getRilDat..\nvRat \u003d mSS.getRilVoi..\nif ((dRat !\u003d IWLAN \u0026\u0026 ServiceState.isGsm(dRat)) || (vRat !\u003d IWLAN \u0026\u0026 ServiceState.isGsm(vRat)) isGsm \u003d true;",
+      "parentUuid": "bdb323ca_9e855c78",
+      "range": {
+        "startLine": 4297,
+        "startChar": 0,
+        "endLine": 4297,
+        "endChar": 63
+      },
+      "revId": "0e3924c910edef221fc4a58047ea4b9ed95ce8e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
