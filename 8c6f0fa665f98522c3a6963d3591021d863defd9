@@ -22,6 +22,30 @@
       "revId": "8c6f0fa665f98522c3a6963d3591021d863defd9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "582719c0_222eab61",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-04-21T21:57:00Z",
+      "side": 1,
+      "message": "An ImsException will be thrown any time the binder is not available. For instance, ImsManager#open() inside of startListeningForCalls() can throw an error if the other process crashes. \n\nIf the ImsService process crashes, we will not get any more updates to this callback.We need a way to periodically try to get a new binder connection to the ImsService and call ImsManager#open to register the Incoming Call PendingIntent and Registration listener.",
+      "parentUuid": "533002ef_2f0d7997",
+      "range": {
+        "startLine": 605,
+        "startChar": 12,
+        "endLine": 605,
+        "endChar": 30
+      },
+      "revId": "8c6f0fa665f98522c3a6963d3591021d863defd9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
