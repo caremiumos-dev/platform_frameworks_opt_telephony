@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "533002ef_2f0d7997",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1127148
+      },
+      "writtenOn": "2017-04-21T00:16:29Z",
+      "side": 1,
+      "message": "For what scenarios are we expecting an ImsException to be thrown? Also, do we need to retry getting IMS service here, since mNotifyStatusChangedCallback will anyways be called eventually when the state moves to STATE_READY/STATE_NOT_AVAILABLE?",
+      "range": {
+        "startLine": 605,
+        "startChar": 12,
+        "endLine": 605,
+        "endChar": 30
+      },
+      "revId": "8c6f0fa665f98522c3a6963d3591021d863defd9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
