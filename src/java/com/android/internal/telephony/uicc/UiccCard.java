@@ -98,21 +98,13 @@ public class UiccCard {
 
     private static final LocalLog mLocalLog = new LocalLog(100);
 
-    private int mPhoneId;
-
-    public UiccCard(Context c, CommandsInterface ci, IccCardStatus ics) {
-        if (DBG) log("Creating");
-        mCardState = ics.mCardState;
-        update(c, ci, ics);
-    }
+    private final int mPhoneId;
 
     public UiccCard(Context c, CommandsInterface ci, IccCardStatus ics, int phoneId) {
+        if (DBG) log("Creating");
         mCardState = ics.mCardState;
         mPhoneId = phoneId;
         update(c, ci, ics);
-    }
-
-    protected UiccCard() {
     }
 
     public void dispose() {
@@ -160,18 +152,19 @@ public class UiccCard {
                 }
             }
 
-            createAndUpdateCatService();
+            createAndUpdateCatServiceLocked();
 
             // Reload the carrier privilege rules if necessary.
             log("Before privilege rules: " + mCarrierPrivilegeRules + " : " + mCardState);
             if (mCarrierPrivilegeRules == null && mCardState == CardState.CARDSTATE_PRESENT) {
                 mCarrierPrivilegeRules = new UiccCarrierPrivilegeRules(this,
                         mHandler.obtainMessage(EVENT_CARRIER_PRIVILIGES_LOADED));
-            } else if (mCarrierPrivilegeRules != null && mCardState != CardState.CARDSTATE_PRESENT) {
+            } else if (mCarrierPrivilegeRules != null
+                    && mCardState != CardState.CARDSTATE_PRESENT) {
                 mCarrierPrivilegeRules = null;
             }
 
-            sanitizeApplicationIndexes();
+            sanitizeApplicationIndexesLocked();
 
             RadioState radioState = mCi.getRadioState();
             if (DBG) log("update: radioState=" + radioState + " mLastRadioState="
@@ -193,13 +186,13 @@ public class UiccCard {
         }
     }
 
-    protected void createAndUpdateCatService() {
+    private void createAndUpdateCatServiceLocked() {
         if (mUiccApplications.length > 0 && mUiccApplications[0] != null) {
             // Initialize or Reinitialize CatService
             if (mCatService == null) {
                 mCatService = CatService.getInstance(mCi, mContext, this, mPhoneId);
             } else {
-                ((CatService)mCatService).update(mCi, mContext, this);
+                mCatService.update(mCi, mContext, this);
             }
         } else {
             if (mCatService != null) {
@@ -207,10 +200,6 @@ public class UiccCard {
             }
             mCatService = null;
         }
-    }
-
-    public CatService getCatService() {
-        return mCatService;
     }
 
     @Override
@@ -223,16 +212,18 @@ public class UiccCard {
      * and resets invalid indexes. (This should never happen, but in case
      * RIL misbehaves we need to manage situation gracefully)
      */
-    private void sanitizeApplicationIndexes() {
+    private void sanitizeApplicationIndexesLocked() {
         mGsmUmtsSubscriptionAppIndex =
-                checkIndex(mGsmUmtsSubscriptionAppIndex, AppType.APPTYPE_SIM, AppType.APPTYPE_USIM);
+                checkIndexLocked(
+                        mGsmUmtsSubscriptionAppIndex, AppType.APPTYPE_SIM, AppType.APPTYPE_USIM);
         mCdmaSubscriptionAppIndex =
-                checkIndex(mCdmaSubscriptionAppIndex, AppType.APPTYPE_RUIM, AppType.APPTYPE_CSIM);
+                checkIndexLocked(
+                        mCdmaSubscriptionAppIndex, AppType.APPTYPE_RUIM, AppType.APPTYPE_CSIM);
         mImsSubscriptionAppIndex =
-                checkIndex(mImsSubscriptionAppIndex, AppType.APPTYPE_ISIM, null);
+                checkIndexLocked(mImsSubscriptionAppIndex, AppType.APPTYPE_ISIM, null);
     }
 
-    private int checkIndex(int index, AppType expectedAppType, AppType altExpectedAppType) {
+    private int checkIndexLocked(int index, AppType expectedAppType, AppType altExpectedAppType) {
         if (mUiccApplications == null || index >= mUiccApplications.length) {
             loge("App index " + index + " is invalid since there are no applications");
             return -1;
@@ -568,71 +559,88 @@ public class UiccCard {
                     changed = true;
                 }
             }
+            if (mCarrierPrivilegeRules != null) {
+                mCarrierPrivilegeRules = null;
+                changed = true;
+            }
+            if (mCatService != null) {
+                mCatService.dispose();
+                mCatService = null;
+                changed = true;
+            }
             return changed;
         }
-        // TODO: For a card level notification, we should delete the CarrierPrivilegeRules and the
-        // CAT service.
     }
 
     /**
-     * Exposes {@link CommandsInterface.iccOpenLogicalChannel}
+     * Exposes {@link CommandsInterface#iccOpenLogicalChannel}
      */
     public void iccOpenLogicalChannel(String AID, int p2, Message response) {
         loglocal("Open Logical Channel: " + AID + " , " + p2 + " by pid:" + Binder.getCallingPid()
                 + " uid:" + Binder.getCallingUid());
-        mCi.iccOpenLogicalChannel(AID, p2,
+        getCommandsInterface().iccOpenLogicalChannel(AID, p2,
                 mHandler.obtainMessage(EVENT_OPEN_LOGICAL_CHANNEL_DONE, response));
     }
 
     /**
-     * Exposes {@link CommandsInterface.iccCloseLogicalChannel}
+     * Exposes {@link CommandsInterface#iccCloseLogicalChannel}
      */
     public void iccCloseLogicalChannel(int channel, Message response) {
         loglocal("Close Logical Channel: " + channel);
-        mCi.iccCloseLogicalChannel(channel,
+        getCommandsInterface().iccCloseLogicalChannel(channel,
                 mHandler.obtainMessage(EVENT_CLOSE_LOGICAL_CHANNEL_DONE, response));
     }
 
     /**
-     * Exposes {@link CommandsInterface.iccTransmitApduLogicalChannel}
+     * Exposes {@link CommandsInterface#iccTransmitApduLogicalChannel}
      */
     public void iccTransmitApduLogicalChannel(int channel, int cla, int command,
             int p1, int p2, int p3, String data, Message response) {
-        mCi.iccTransmitApduLogicalChannel(channel, cla, command, p1, p2, p3,
-                data, mHandler.obtainMessage(EVENT_TRANSMIT_APDU_LOGICAL_CHANNEL_DONE, response));
+        getCommandsInterface().iccTransmitApduLogicalChannel(channel, cla, command, p1, p2, p3,
+                data,
+                mHandler.obtainMessage(EVENT_TRANSMIT_APDU_LOGICAL_CHANNEL_DONE, response));
     }
 
     /**
-     * Exposes {@link CommandsInterface.iccTransmitApduBasicChannel}
+     * Exposes {@link CommandsInterface#iccTransmitApduBasicChannel}
      */
     public void iccTransmitApduBasicChannel(int cla, int command,
             int p1, int p2, int p3, String data, Message response) {
-        mCi.iccTransmitApduBasicChannel(cla, command, p1, p2, p3,
+        getCommandsInterface().iccTransmitApduBasicChannel(cla, command, p1, p2, p3,
                 data, mHandler.obtainMessage(EVENT_TRANSMIT_APDU_BASIC_CHANNEL_DONE, response));
     }
 
     /**
-     * Exposes {@link CommandsInterface.iccIO}
+     * Exposes {@link CommandsInterface#iccIO}
      */
     public void iccExchangeSimIO(int fileID, int command, int p1, int p2, int p3,
             String pathID, Message response) {
-        mCi.iccIO(command, fileID, pathID, p1, p2, p3, null, null,
+        getCommandsInterface().iccIO(command, fileID, pathID, p1, p2, p3, null, null,
                 mHandler.obtainMessage(EVENT_SIM_IO_DONE, response));
     }
 
     /**
-     * Exposes {@link CommandsInterface.sendEnvelopeWithStatus}
+     * Exposes {@link CommandsInterface#sendEnvelopeWithStatus}
      */
     public void sendEnvelopeWithStatus(String contents, Message response) {
-        mCi.sendEnvelopeWithStatus(contents, response);
+        getCommandsInterface().sendEnvelopeWithStatus(contents, response);
+    }
+
+    /** Returns a reference to the current {@link CommandsInterface}. */
+    private CommandsInterface getCommandsInterface() {
+        synchronized (mLock) {
+            return mCi;
+        }
     }
 
     /* Returns number of applications on this card */
     public int getNumApplications() {
         int count = 0;
-        for (UiccCardApplication a : mUiccApplications) {
-            if (a != null) {
-                count++;
+        synchronized (mLock) {
+            for (UiccCardApplication a : mUiccApplications) {
+                if (a != null) {
+                    count++;
+                }
             }
         }
         return count;
@@ -646,62 +654,77 @@ public class UiccCard {
      * Returns true iff carrier privileges rules are null (dont need to be loaded) or loaded.
      */
     public boolean areCarrierPriviligeRulesLoaded() {
-        return mCarrierPrivilegeRules == null
-            || mCarrierPrivilegeRules.areCarrierPriviligeRulesLoaded();
+        synchronized (mLock) {
+            return mCarrierPrivilegeRules == null
+                    || mCarrierPrivilegeRules.areCarrierPriviligeRulesLoaded();
+        }
     }
 
     /**
      * Returns true if there are some carrier privilege rules loaded and specified.
      */
     public boolean hasCarrierPrivilegeRules() {
-        return mCarrierPrivilegeRules != null
-                && mCarrierPrivilegeRules.hasCarrierPrivilegeRules();
+        synchronized (mLock) {
+            return mCarrierPrivilegeRules != null
+                    && mCarrierPrivilegeRules.hasCarrierPrivilegeRules();
+        }
     }
 
     /**
-     * Exposes {@link UiccCarrierPrivilegeRules.getCarrierPrivilegeStatus}.
+     * Exposes {@link UiccCarrierPrivilegeRules#getCarrierPrivilegeStatus}.
      */
     public int getCarrierPrivilegeStatus(Signature signature, String packageName) {
-        return mCarrierPrivilegeRules == null ?
-            TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
-            mCarrierPrivilegeRules.getCarrierPrivilegeStatus(signature, packageName);
+        synchronized (mLock) {
+            return mCarrierPrivilegeRules == null
+                    ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
+                    mCarrierPrivilegeRules.getCarrierPrivilegeStatus(signature, packageName);
+        }
     }
 
     /**
-     * Exposes {@link UiccCarrierPrivilegeRules.getCarrierPrivilegeStatus}.
+     * Exposes {@link UiccCarrierPrivilegeRules#getCarrierPrivilegeStatus}.
      */
     public int getCarrierPrivilegeStatus(PackageManager packageManager, String packageName) {
-        return mCarrierPrivilegeRules == null ?
-            TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
-            mCarrierPrivilegeRules.getCarrierPrivilegeStatus(packageManager, packageName);
+        synchronized (mLock) {
+            return mCarrierPrivilegeRules == null
+                    ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
+                    mCarrierPrivilegeRules.getCarrierPrivilegeStatus(packageManager, packageName);
+        }
     }
 
     /**
-     * Exposes {@link UiccCarrierPrivilegeRules.getCarrierPrivilegeStatus}.
+     * Exposes {@link UiccCarrierPrivilegeRules#getCarrierPrivilegeStatus}.
      */
     public int getCarrierPrivilegeStatus(PackageInfo packageInfo) {
-        return mCarrierPrivilegeRules == null ?
-            TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
-            mCarrierPrivilegeRules.getCarrierPrivilegeStatus(packageInfo);
+        synchronized (mLock) {
+            return mCarrierPrivilegeRules == null
+                    ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
+                    mCarrierPrivilegeRules.getCarrierPrivilegeStatus(packageInfo);
+        }
     }
 
     /**
-     * Exposes {@link UiccCarrierPrivilegeRules.getCarrierPrivilegeStatusForCurrentTransaction}.
+     * Exposes {@link UiccCarrierPrivilegeRules#getCarrierPrivilegeStatusForCurrentTransaction}.
      */
     public int getCarrierPrivilegeStatusForCurrentTransaction(PackageManager packageManager) {
-        return mCarrierPrivilegeRules == null ?
-            TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
-            mCarrierPrivilegeRules.getCarrierPrivilegeStatusForCurrentTransaction(packageManager);
+        synchronized (mLock) {
+            return mCarrierPrivilegeRules == null
+                    ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
+                    mCarrierPrivilegeRules.getCarrierPrivilegeStatusForCurrentTransaction(
+                            packageManager);
+        }
     }
 
     /**
-     * Exposes {@link UiccCarrierPrivilegeRules.getCarrierPackageNamesForIntent}.
+     * Exposes {@link UiccCarrierPrivilegeRules#getCarrierPackageNamesForIntent}.
      */
     public List<String> getCarrierPackageNamesForIntent(
             PackageManager packageManager, Intent intent) {
-        return mCarrierPrivilegeRules == null ? null :
-            mCarrierPrivilegeRules.getCarrierPackageNamesForIntent(
-                    packageManager, intent);
+        synchronized (mLock) {
+            return mCarrierPrivilegeRules == null ? null :
+                    mCarrierPrivilegeRules.getCarrierPackageNamesForIntent(
+                            packageManager, intent);
+        }
     }
 
     public boolean setOperatorBrandOverride(String brand) {
@@ -734,12 +757,14 @@ public class UiccCard {
     }
 
     public String getIccId() {
-        // ICCID should be same across all the apps.
-        for (UiccCardApplication app : mUiccApplications) {
-            if (app != null) {
-                IccRecords ir = app.getIccRecords();
-                if (ir != null && ir.getIccId() != null) {
-                    return ir.getIccId();
+        synchronized (mLock) {
+            // ICCID should be same across all the apps.
+            for (UiccCardApplication app : mUiccApplications) {
+                if (app != null) {
+                    IccRecords ir = app.getIccRecords();
+                    if (ir != null && ir.getIccId() != null) {
+                        return ir.getIccId();
+                    }
                 }
             }
         }
