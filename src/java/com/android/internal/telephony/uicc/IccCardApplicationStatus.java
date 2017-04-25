@@ -92,7 +92,27 @@ public class IccCardApplicationStatus {
         PERSOSUBSTATE_RUIM_HRPD_PUK,
         PERSOSUBSTATE_RUIM_CORPORATE_PUK,
         PERSOSUBSTATE_RUIM_SERVICE_PROVIDER_PUK,
-        PERSOSUBSTATE_RUIM_RUIM_PUK;
+        PERSOSUBSTATE_RUIM_RUIM_PUK,
+        PERSOSUBSTATE_OEM_PERSO_STATE_1,
+        PERSOSUBSTATE_OEM_PERSO_STATE_2,
+        PERSOSUBSTATE_OEM_PERSO_STATE_3,
+        PERSOSUBSTATE_OEM_PERSO_STATE_4,
+        PERSOSUBSTATE_OEM_PERSO_STATE_5,
+        PERSOSUBSTATE_OEM_PERSO_STATE_6,
+        PERSOSUBSTATE_OEM_PERSO_STATE_7,
+        PERSOSUBSTATE_OEM_PERSO_STATE_8,
+        PERSOSUBSTATE_OEM_PERSO_STATE_9,
+        PERSOSUBSTATE_OEM_PERSO_STATE_10,
+        PERSOSUBSTATE_OEM_PERSO_STATE_1_PUK,
+        PERSOSUBSTATE_OEM_PERSO_STATE_2_PUK,
+        PERSOSUBSTATE_OEM_PERSO_STATE_3_PUK,
+        PERSOSUBSTATE_OEM_PERSO_STATE_4_PUK,
+        PERSOSUBSTATE_OEM_PERSO_STATE_5_PUK,
+        PERSOSUBSTATE_OEM_PERSO_STATE_6_PUK,
+        PERSOSUBSTATE_OEM_PERSO_STATE_7_PUK,
+        PERSOSUBSTATE_OEM_PERSO_STATE_8_PUK,
+        PERSOSUBSTATE_OEM_PERSO_STATE_9_PUK,
+        PERSOSUBSTATE_OEM_PERSO_STATE_10_PUK;
 
         boolean isPersoSubStateUnknown() {
             return this == PERSOSUBSTATE_UNKNOWN;
@@ -175,6 +195,26 @@ public class IccCardApplicationStatus {
             case 22: newSubState = PersoSubState.PERSOSUBSTATE_RUIM_CORPORATE_PUK; break;
             case 23: newSubState = PersoSubState.PERSOSUBSTATE_RUIM_SERVICE_PROVIDER_PUK; break;
             case 24: newSubState = PersoSubState.PERSOSUBSTATE_RUIM_RUIM_PUK; break;
+            case 25: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_1; break;
+            case 26: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_2; break;
+            case 27: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_3; break;
+            case 28: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_4; break;
+            case 29: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_5; break;
+            case 30: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_6; break;
+            case 31: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_7; break;
+            case 32: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_8; break;
+            case 33: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_9; break;
+            case 34: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_10; break;
+            case 35: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_1_PUK; break;
+            case 36: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_2_PUK; break;
+            case 37: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_3_PUK; break;
+            case 38: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_4_PUK; break;
+            case 39: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_5_PUK; break;
+            case 40: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_6_PUK; break;
+            case 41: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_7_PUK; break;
+            case 42: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_8_PUK; break;
+            case 43: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_9_PUK; break;
+            case 44: newSubState = PersoSubState.PERSOSUBSTATE_OEM_PERSO_STATE_10_PUK; break;
             default:
                 newSubState = PersoSubState.PERSOSUBSTATE_UNKNOWN;
                 loge("PersoSubstateFromRILInt: bad substate: " + substate
