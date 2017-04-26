@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16f81800_ac05832c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-04-26T21:11:12Z",
+      "side": 1,
+      "message": "Why wouldn\u0027t this retry up to CEILING_SERVICE_RETRY_COUNT?",
+      "range": {
+        "startLine": 475,
+        "startChar": 34,
+        "endLine": 475,
+        "endChar": 35
+      },
+      "revId": "5de5ed316baf3ff3d7d58ac8c6d882fe1949d426",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
