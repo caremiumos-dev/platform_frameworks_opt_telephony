@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f2ccbb5_1149107b",
+        "filename": "src/java/com/android/internal/telephony/DefaultPhoneNotifier.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-04-27T22:07:05Z",
+      "side": 1,
+      "message": "is this needed?",
+      "range": {
+        "startLine": 33,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 52
+      },
+      "revId": "61c9eab99c91fdd8aaf5e93bce8e7a42ad51f34e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
