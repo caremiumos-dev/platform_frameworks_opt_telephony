@@ -3629,6 +3629,9 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                 } else if (!TextUtils.isEmpty(ci.getGid2())) {
                     matchType = CarrierIdentifier.MatchType.GID2;
                     matchData = ci.getGid2();
+                } else if (!TextUtils.isEmpty(ci.getIccid())) {
+                    matchType = CarrierIdentifier.MatchType.ICCID;
+                    matchData = ci.getIccid();
                 }
                 c.matchType = matchType;
                 c.matchData = convertNullToEmptyString(matchData);

@@ -1790,7 +1790,7 @@ public class RadioResponse extends IRadioResponse.Stub {
             for (int i = 0; i < carriers.allowedCarriers.size(); i++) {
                 String mcc = carriers.allowedCarriers.get(i).mcc;
                 String mnc = carriers.allowedCarriers.get(i).mnc;
-                String spn = null, imsi = null, gid1 = null, gid2 = null;
+                String spn = null, imsi = null, gid1 = null, gid2 = null, iccid = null;
                 int matchType = carriers.allowedCarriers.get(i).matchType;
                 String matchData = carriers.allowedCarriers.get(i).matchData;
                 if (matchType == CarrierIdentifier.MatchType.SPN) {
@@ -1801,8 +1801,10 @@ public class RadioResponse extends IRadioResponse.Stub {
                     gid1 = matchData;
                 } else if (matchType == CarrierIdentifier.MatchType.GID2) {
                     gid2 = matchData;
+                } else if (matchType == CarrierIdentifier.MatchType.ICCID) {
+                    iccid = matchData;
                 }
-                ret.add(new CarrierIdentifier(mcc, mnc, spn, imsi, gid1, gid2));
+                ret.add(new CarrierIdentifier(mcc, mnc, spn, imsi, gid1, gid2, iccid));
             }
             if (responseInfo.error == RadioError.NONE) {
                 /* TODO: Handle excluded carriers */
