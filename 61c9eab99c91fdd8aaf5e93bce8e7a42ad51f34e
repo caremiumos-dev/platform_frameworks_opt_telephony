@@ -22,6 +22,30 @@
       "revId": "61c9eab99c91fdd8aaf5e93bce8e7a42ad51f34e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9f76d5f_39545988",
+        "filename": "src/java/com/android/internal/telephony/DefaultPhoneNotifier.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-04-28T22:43:24Z",
+      "side": 1,
+      "message": "No it isn\u0027t, but this is a clean cherry pick so I don\u0027t want to change it here.\n\nNew CL uploaded to fix this:\nhttps://android-review.googlesource.com/#/c/384143/",
+      "parentUuid": "8f2ccbb5_1149107b",
+      "range": {
+        "startLine": 33,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 52
+      },
+      "revId": "61c9eab99c91fdd8aaf5e93bce8e7a42ad51f34e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
