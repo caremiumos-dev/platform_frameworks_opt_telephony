@@ -73,6 +73,8 @@ public class UiccCarrierPrivilegeRules extends Handler {
     private static final int P2_EXTENDED_DATA = 0x60;
     private static final int P3 = 0x00;
     private static final String DATA = "";
+    // Handle "6Cxx" response bad length value in Le, ‘xx’ is the correct length.
+    private static int mLe = 0x00;
 
     /*
      * Rules format:
@@ -460,8 +462,9 @@ public class UiccCarrierPrivilegeRules extends Handler {
                           if (isDataComplete()) {
                               mAccessRules = parseRules(mRules);
                               updateState(STATE_LOADED, "Success!");
+                              mLe = 0x00;
                           } else {
-                              mUiccCard.iccTransmitApduLogicalChannel(mChannelId, CLA, COMMAND, P1, P2_EXTENDED_DATA, P3, DATA,
+                              mUiccCard.iccTransmitApduLogicalChannel(mChannelId, CLA, COMMAND, P1, P2_EXTENDED_DATA, mLe, DATA,
                                   obtainMessage(EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE, new Integer(mChannelId)));
                               break;
                           }
@@ -470,6 +473,19 @@ public class UiccCarrierPrivilegeRules extends Handler {
                       } catch (IndexOutOfBoundsException ex) {
                           updateState(STATE_ERROR, "Error parsing rules: " + ex);
                       }
+                   } else if (response.sw1 == 0x61) {
+                       // ISO/IEC 7816-4 to handle "61xx"
+                       // ‘xx’ bytes of data are available and can be requested using GET RESPONSE.
+                       mUiccCard.iccTransmitApduLogicalChannel(mChannelId, CLA, 0xC0, 0x00, 0x00, response.sw2, "",
+                               obtainMessage(EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE, new Integer(mChannelId)));
+                       break;
+                   } else if (response.sw1 == 0x6C) {
+                       // To handle "6Cxx"
+                       // Bad length value in Le; ‘xx’ is the correct length.
+                       mLe = response.sw2;
+                       mUiccCard.iccTransmitApduLogicalChannel(mChannelId, CLA, COMMAND, P1, P2, mLe, DATA,
+                               obtainMessage(EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE, new Integer(mChannelId)));
+                       break;
                    } else {
                       String errorMsg = "Invalid response: payload=" + response.payload +
                               " sw1=" + response.sw1 + " sw2=" + response.sw2;
