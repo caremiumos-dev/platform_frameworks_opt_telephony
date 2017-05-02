@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1512c43e_ded4ad7e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4860,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-05-02T23:02:58Z",
+      "side": 1,
+      "message": "is this correct. as per the documentation of toUnsignedInt it expects a byte. But the cellIdentityGsm defines the same as int. Which means it is already converted. \n\nAlso as per the doc of toUnsignedInte it says\n\"In an unsigned conversion to an int, the high-order 24 bits of the int are zero and the low-order 8 bits are equal to the bits of the byte argume\"\n\nand it doesnt look like the expected value here.\n\nAlso I feel this conversion should be explicit and should be done inside CellIdentityGsm",
+      "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
