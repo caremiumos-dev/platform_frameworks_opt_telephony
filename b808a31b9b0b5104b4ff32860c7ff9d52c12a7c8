@@ -34,6 +34,24 @@
       "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de0ac25c_9fb1644b",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4860,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-05-03T01:54:18Z",
+      "side": 1,
+      "message": "From my perspective, the correct fix is to have the RIL pass up an int32, correctly switching from 0xFF to the standard \"unset\" value of 0x7FFFFFFF that\u0027s used elsewhere.\n\nActually, I did a little digging and found this:\nhttps://b.corp.google.com/issues/28299027\n\nhttps://googleplex-android-review.git.corp.google.com/#/c/1008533/\n\nThis was a quick patch that was never intended to last, and at that time I suggested converting to uint32_t. :-) Regardless of where a hack lives, it\u0027s still a hack.",
+      "parentUuid": "9619413f_a7072603",
+      "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
