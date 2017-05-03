@@ -52,6 +52,24 @@
       "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b3a4829_2923b456",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4860,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-05-03T02:27:37Z",
+      "side": 1,
+      "message": "What I was trying to say is even if the toUnsignedInt was being passed a byte, I was thinking it would not return you 0x7FFFFFFF. But anyways your new change is exactly what was in my mind. :)",
+      "parentUuid": "de0ac25c_9fb1644b",
+      "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
