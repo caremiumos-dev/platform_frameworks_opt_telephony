@@ -16,6 +16,24 @@
       "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9619413f_a7072603",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4860,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-05-03T01:44:57Z",
+      "side": 1,
+      "message": "The CellInfoGsm.cellIdentityGsm.bsic is actually a \"byte\" here (otherwise this wouldn\u0027t compile)... it\u0027s the auto-generated HIDL code and isn\u0027t the CellIdentityGsm we see elsewhere in Android. So this is where the byte-\u003eint conversion happens.\n\nI\u0027ve put some history of the regression into the bug.",
+      "parentUuid": "1512c43e_ded4ad7e",
+      "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
