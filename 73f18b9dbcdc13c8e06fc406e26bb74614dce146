@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a1320c9_95be1a7c",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1616,
+      "author": {
+        "id": 1000718
+      },
+      "writtenOn": "2017-05-03T16:32:33Z",
+      "side": 1,
+      "message": "Does carrier want to hide *all* APN fields, or just user and password? If it\u0027s just user and password, then make a change in DataProfile to just obscure those fields.  Many of the other fields are still very useful for debugging, even on user builds.",
+      "revId": "73f18b9dbcdc13c8e06fc406e26bb74614dce146",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
