@@ -70,6 +70,24 @@
       "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "313a208a_488d6e57",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4860,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-05-03T02:45:49Z",
+      "side": 1,
+      "message": "Also looking at CellIdentityGsm I see following\n\n    // 6-bit Base Station Identity Code\n    private final int mBsic;\n\nwhich is an int not byte",
+      "parentUuid": "7b3a4829_2923b456",
+      "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
