@@ -88,6 +88,24 @@
       "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "96ef74b0_16a700af",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4860,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-05-03T02:57:59Z",
+      "side": 1,
+      "message": "Yeah it looks like about a year ago I wanted to change from uint8 to uint32 and it was too late to make a RIL change. Now we have a new bug, and I want to change from uint8 to uint32 and it\u0027s too late to make a RIL/HIDL change. :-/",
+      "parentUuid": "313a208a_488d6e57",
+      "revId": "b808a31b9b0b5104b4ff32860c7ff9d52c12a7c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
