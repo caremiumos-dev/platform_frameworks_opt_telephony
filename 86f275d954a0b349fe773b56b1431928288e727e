@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a4c4a22_9ebba53a",
+        "filename": "src/java/com/android/internal/telephony/CallStateException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-05-04T22:38:40Z",
+      "side": 1,
+      "message": "Why do we need to rename this?",
+      "revId": "86f275d954a0b349fe773b56b1431928288e727e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de74d9cf_a134688f",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 2
