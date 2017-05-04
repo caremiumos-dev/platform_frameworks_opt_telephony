@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de74d9cf_a134688f",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2017-05-04T21:00:47Z",
+      "side": 1,
+      "message": "Sorry if asking dumb question: why check PS LTE?",
+      "range": {
+        "startLine": 1136,
+        "startChar": 81,
+        "endLine": 1136,
+        "endChar": 100
+      },
+      "revId": "86f275d954a0b349fe773b56b1431928288e727e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
