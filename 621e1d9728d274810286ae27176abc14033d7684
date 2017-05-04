@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9129d0a9_4c77bc07",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2624,
+      "author": {
+        "id": 1134734
+      },
+      "writtenOn": "2017-05-04T18:16:40Z",
+      "side": 1,
+      "message": "Dual Transfer Mode is 3GPP spec and so it wouldn\u0027t be needed for CDMA/CDMA_LTE",
+      "parentUuid": "a323ac19_f5d69eb1",
+      "range": {
+        "startLine": 2624,
+        "startChar": 16,
+        "endLine": 2624,
+        "endChar": 38
+      },
+      "revId": "621e1d9728d274810286ae27176abc14033d7684",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c742956c_4066aae5",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-02-21T23:38:46Z",
       "side": 1,
       "message": "please add an empty line for readability",
+      "range": {
+        "startLine": 2625,
+        "startChar": 8,
+        "endLine": 2625,
+        "endChar": 24
+      },
+      "revId": "621e1d9728d274810286ae27176abc14033d7684",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "521ccf2a_2df0c756",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2625,
+      "author": {
+        "id": 1134734
+      },
+      "writtenOn": "2017-05-04T18:16:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c742956c_4066aae5",
       "range": {
         "startLine": 2625,
         "startChar": 8,
