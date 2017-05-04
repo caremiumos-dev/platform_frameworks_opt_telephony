@@ -22,6 +22,30 @@
       "revId": "86f275d954a0b349fe773b56b1431928288e727e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e9160d80_fcf5f070",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-05-04T21:34:12Z",
+      "side": 1,
+      "message": "To make it same as TelephonyConnectionService#getTelephonyConnection() which also checks for CS no service \u0026 No PS LTE\n\nPer my understanding, this could be to allow DIAL during the transient state where data acquired on LTE and LTE acquisition is in progress.",
+      "parentUuid": "de74d9cf_a134688f",
+      "range": {
+        "startLine": 1136,
+        "startChar": 81,
+        "endLine": 1136,
+        "endChar": 100
+      },
+      "revId": "86f275d954a0b349fe773b56b1431928288e727e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
