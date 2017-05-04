@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d9cd6544_00eeefbf",
+        "filename": "src/java/com/android/internal/telephony/CallStateException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-05-04T22:52:29Z",
+      "side": 1,
+      "message": "1) ERROR_DISCONNECTED is currently used only by GsmCdmaPhone to fail the call for Wifi only case and IMS is not registered over wifi. so basically its IMS OUT_OF_SERVICE.\n\n2) Later ERROR_DISCONNECTED is mapped to OUT_OF_SERVICE in TelephonyConnectionService.java\n\nChecked with Tyler, he also thought that its reasonable to rename",
+      "parentUuid": "9a4c4a22_9ebba53a",
+      "revId": "86f275d954a0b349fe773b56b1431928288e727e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de74d9cf_a134688f",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 2
