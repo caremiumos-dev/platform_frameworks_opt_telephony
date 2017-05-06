@@ -1763,6 +1763,15 @@ public class ServiceStateTracker extends Handler {
         }
     }
 
+    /**
+     * If registration state is roaming and TSB58 roaming indicator is not in
+     * the carrier-specified list of ERIs for home system then roaming is true
+     */
+    private boolean isCdmaRoaming(int registrationState, int roamingIndicator) {
+        return regCodeIsRoaming(registrationState)
+                && !isRoamIndForHomeSystem(Integer.toString(roamingIndicator));
+    }
+
     void handlePollStateResultMessage(int what, AsyncResult ar) {
         int ints[];
         switch (what) {
@@ -1807,14 +1816,7 @@ public class ServiceStateTracker extends Handler {
                     int defaultRoamingIndicator = voiceRegStateResult.defaultRoamingIndicator;
 
                     mRegistrationState = registrationState;
-                    // When registration state is roaming and TSB58
-                    // roaming indicator is not in the carrier-specified
-                    // list of ERIs for home system, mCdmaRoaming is true.
-                    boolean cdmaRoaming =
-                            regCodeIsRoaming(registrationState)
-                                    && !isRoamIndForHomeSystem(
-                                            Integer.toString(roamingIndicator));
-                    mNewSS.setVoiceRoaming(cdmaRoaming);
+                    mNewSS.setVoiceRoaming(isCdmaRoaming(registrationState, roamingIndicator));
                     mNewSS.setCssIndicator(cssIndicator);
                     mRoamingIndicator = roamingIndicator;
                     mIsInPrl = (systemIsInPrl == 0) ? false : true;
@@ -1898,8 +1900,16 @@ public class ServiceStateTracker extends Handler {
                         mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
                     }
 
-                    // voice roaming state in done while handling EVENT_POLL_STATE_REGISTRATION_CDMA
-                    mNewSS.setDataRoaming(regCodeIsRoaming(regState));
+                    // voice roaming state in done while handling EVENT_POLL_STATE_REGISTRATION
+                    if (ServiceState.isCdma(regState)) {
+                        // Set data roaming based on ERI. This will be overwritten with voice
+                        // roaming if voice is service. Setting here based on ERI will be useful
+                        // in case voice is not in service.
+                        mNewSS.setDataRoaming(isCdmaRoaming(regState, mRoamingIndicator));
+                    } else {
+                        mNewSS.setDataRoaming(regCodeIsRoaming(regState));
+                    }
+
                     if (DBG) {
                         log("handlPollStateResultMessage: CdmaLteSST setDataRegState=" + dataRegState
                                 + " regState=" + regState
