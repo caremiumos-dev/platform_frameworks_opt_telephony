@@ -500,7 +500,7 @@ public class ServiceStateTracker extends Handler {
     public static final int NITZ_UPDATE_DIFF_DEFAULT = 2000;
     private int mNitzUpdateDiff = SystemProperties.getInt("ro.nitz_update_diff",
             NITZ_UPDATE_DIFF_DEFAULT);
-    private int mRoamingIndicator;
+    private int mRoamingIndicator = -1;
     private boolean mIsInPrl;
     private int mDefaultRoamingIndicator;
     /**
@@ -1657,12 +1657,24 @@ public class ServiceStateTracker extends Handler {
                 if (mIsSubscriptionFromRuim) {
                     mNewSS.setVoiceRoaming(isRoamingBetweenOperators(mNewSS.getVoiceRoaming(), mNewSS));
                 }
-                // For CDMA, voice and data should have the same roaming status
-                final boolean isVoiceInService =
-                        (mNewSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE);
-                final int dataRegType = mNewSS.getRilDataRadioTechnology();
-                if (isVoiceInService && ServiceState.isCdma(dataRegType)) {
-                    mNewSS.setDataRoaming(mNewSS.getVoiceRoaming());
+                /**
+                 * For CDMA, voice and data should have the same roaming status.
+                 * If voice is not in service, use TSB58 roaming indicator to set
+                 * data roaming status. If TSB58 roaming indicator is not in the
+                 * carrier-specified list of ERIs for home system then set roaming.
+                 */
+                final int dataRat = mNewSS.getRilDataRadioTechnology();
+                if (ServiceState.isCdma(dataRat)) {
+                    final boolean isVoiceInService =
+                            (mNewSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE);
+                    if (isVoiceInService) {
+                        mNewSS.setDataRoaming(mNewSS.getVoiceRoaming());
+                    } else if (mRoamingIndicator >= 0) {
+                        /* As per RIL.h (VOICE_REGISTRATION_STATE) TSB58 Roaming Indicator
+                         * will be sent if device is registered a CDMA or EVDO system */
+                        mNewSS.setDataRoaming(
+                                !isRoamIndForHomeSystem(Integer.toString(mRoamingIndicator)));
+                    }
                 }
 
                 // Setting SS CdmaRoamingIndicator and CdmaDefaultRoamingIndicator
