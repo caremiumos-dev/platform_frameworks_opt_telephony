@@ -34,6 +34,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.CommandsInterface.RadioState;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.IccCardConstants.State;
@@ -107,7 +108,7 @@ public class IccCardProxy extends Handler implements IccCard {
     private UiccCardApplication mUiccApplication = null;
     private IccRecords mIccRecords = null;
     private CdmaSubscriptionSourceManager mCdmaSSM = null;
-    private boolean mRadioOn = false;
+    private CommandsInterface.RadioState mRadioState = RadioState.RADIO_UNAVAILABLE;
     private boolean mQuietMode = false; // when set to true IccCardProxy will not broadcast
                                         // ACTION_SIM_STATE_CHANGED intents
     private boolean mInitialized = false;
@@ -130,7 +131,7 @@ public class IccCardProxy extends Handler implements IccCard {
         ci.registerForOffOrNotAvailable(this, EVENT_RADIO_OFF_OR_UNAVAILABLE, null);
 
         resetProperties();
-        setExternalState(State.NOT_READY, false);
+        setExternalState(State.UNKNOWN, false);
     }
 
     public void dispose() {
@@ -211,16 +212,15 @@ public class IccCardProxy extends Handler implements IccCard {
     public void handleMessage(Message msg) {
         switch (msg.what) {
             case EVENT_RADIO_OFF_OR_UNAVAILABLE:
-                mRadioOn = false;
-                if (CommandsInterface.RadioState.RADIO_UNAVAILABLE == mCi.getRadioState()) {
-                    setExternalState(State.NOT_READY);
-                }
+                mRadioState = mCi.getRadioState();
+                updateExternalState();
                 break;
             case EVENT_RADIO_ON:
-                mRadioOn = true;
+                mRadioState = RadioState.RADIO_ON;
                 if (!mInitialized) {
                     updateQuietMode();
                 }
+                updateExternalState();
                 break;
             case EVENT_ICC_CHANGED:
                 if (mInitialized) {
@@ -326,11 +326,9 @@ public class IccCardProxy extends Handler implements IccCard {
     private void updateIccAvailability() {
         synchronized (mLock) {
             UiccCard newCard = mUiccController.getUiccCard(mPhoneId);
-            CardState state = CardState.CARDSTATE_ABSENT;
             UiccCardApplication newApp = null;
             IccRecords newRecords = null;
             if (newCard != null) {
-                state = newCard.getCardState();
                 newApp = newCard.getApplication(mCurrentAppType);
                 if (newApp != null) {
                     newRecords = newApp.getIccRecords();
@@ -338,7 +336,7 @@ public class IccCardProxy extends Handler implements IccCard {
             }
 
             if (mIccRecords != newRecords || mUiccApplication != newApp || mUiccCard != newCard) {
-                if (DBG) log("Icc changed. Reregestering.");
+                if (DBG) log("Icc changed. Reregistering.");
                 unregisterUiccCardEvents();
                 mUiccCard = newCard;
                 mUiccApplication = newApp;
@@ -368,15 +366,15 @@ public class IccCardProxy extends Handler implements IccCard {
         // mUiccCard could be null at bootup, before valid card states have
         // been received from UiccController.
         if (mUiccCard == null) {
-            setExternalState(State.NOT_READY);
+            setExternalState(State.UNKNOWN);
             return;
         }
 
         if (mUiccCard.getCardState() == CardState.CARDSTATE_ABSENT) {
-            if (mRadioOn) {
-                setExternalState(State.ABSENT);
+            if (mRadioState == RadioState.RADIO_UNAVAILABLE) {
+                setExternalState(State.UNKNOWN);
             } else {
-                setExternalState(State.NOT_READY);
+                setExternalState(State.ABSENT);
             }
             return;
         }
@@ -398,7 +396,7 @@ public class IccCardProxy extends Handler implements IccCard {
 
         switch (mUiccApplication.getState()) {
             case APPSTATE_UNKNOWN:
-                setExternalState(State.UNKNOWN);
+                setExternalState(State.NOT_READY);
                 break;
             case APPSTATE_DETECTED:
                 HandleDetectedState();
@@ -516,15 +514,16 @@ public class IccCardProxy extends Handler implements IccCard {
             }
 
             if (!override && newState == mExternalState) {
-                loge("setExternalState: !override and newstate unchanged from " + newState);
+                log("setExternalState: !override and newstate unchanged from " + newState);
                 return;
             }
             mExternalState = newState;
-            loge("setExternalState: set mPhoneId=" + mPhoneId + " mExternalState=" + mExternalState);
+            log("setExternalState: set mPhoneId=" + mPhoneId + " mExternalState=" + mExternalState);
             mTelephonyManager.setSimStateForPhone(mPhoneId, getState().toString());
 
             // For locked states, we should be sending internal broadcast.
-            if (IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(getIccStateIntentString(mExternalState))) {
+            if (IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(
+                        getIccStateIntentString(mExternalState))) {
                 broadcastInternalIccStateChangedIntent(getIccStateIntentString(mExternalState),
                         getIccStateReason(mExternalState));
             } else {
@@ -937,7 +936,7 @@ public class IccCardProxy extends Handler implements IccCard {
         pw.println(" mUiccApplication=" + mUiccApplication);
         pw.println(" mIccRecords=" + mIccRecords);
         pw.println(" mCdmaSSM=" + mCdmaSSM);
-        pw.println(" mRadioOn=" + mRadioOn);
+        pw.println(" mRadioState=" + mRadioState);
         pw.println(" mQuietMode=" + mQuietMode);
         pw.println(" mInitialized=" + mInitialized);
         pw.println(" mExternalState=" + mExternalState);
