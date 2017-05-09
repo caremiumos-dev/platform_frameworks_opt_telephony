@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "fd3db281_4563cc99",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-09T18:15:18Z",
+      "side": 1,
+      "message": "not needed - see comment below.",
+      "range": {
+        "startLine": 503,
+        "startChar": 38,
+        "endLine": 503,
+        "endChar": 39
+      },
+      "revId": "c02f53a01ebcc95754c19f6275e2fadfdb63af53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c900f08_dae8724b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-09T18:15:18Z",
+      "side": 1,
+      "message": "I don\u0027t think this is needed.  We can\u0027t get here if we havn\u0027t gotten a response for voice reg state and that response always sets a value in mDefaultRoamingIndicator.",
+      "range": {
+        "startLine": 1672,
+        "startChar": 49,
+        "endLine": 1672,
+        "endChar": 51
+      },
+      "revId": "c02f53a01ebcc95754c19f6275e2fadfdb63af53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40d3d888_8f905cec",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-09T18:15:18Z",
+      "side": 1,
+      "message": "RIL.h is deprectated - please add comment to IRadioResponse.hal and reference that here.",
+      "range": {
+        "startLine": 1673,
+        "startChar": 34,
+        "endLine": 1673,
+        "endChar": 37
+      },
+      "revId": "c02f53a01ebcc95754c19f6275e2fadfdb63af53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82db9ace_6595d39e",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 3
