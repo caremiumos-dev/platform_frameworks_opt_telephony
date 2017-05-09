@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "bcf3268d_a0ae7552",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-05-09T20:13:06Z",
+      "side": 1,
+      "message": "ok, thanks Robert. will do",
+      "parentUuid": "eb0cf0e3_cdd53b13",
+      "range": {
+        "startLine": 503,
+        "startChar": 38,
+        "endLine": 503,
+        "endChar": 39
+      },
+      "revId": "c02f53a01ebcc95754c19f6275e2fadfdb63af53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c900f08_dae8724b",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 3
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "This code isn\u0027t in the general path of handlePollStateResult, but in the mPollingContext[0] \u003d\u003d 0 case, meaning all polls have completed and both data and voice reg have been determined.",
       "parentUuid": "a007aac9_3aec286e",
+      "range": {
+        "startLine": 1672,
+        "startChar": 49,
+        "endLine": 1672,
+        "endChar": 51
+      },
+      "revId": "c02f53a01ebcc95754c19f6275e2fadfdb63af53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "17acc114_974611df",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-05-09T20:13:06Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "03582f20_761954a3",
       "range": {
         "startLine": 1672,
         "startChar": 49,
