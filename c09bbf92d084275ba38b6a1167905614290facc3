@@ -16,6 +16,24 @@
       "revId": "c09bbf92d084275ba38b6a1167905614290facc3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69275ec1_5c17c876",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4305,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-05-09T18:03:23Z",
+      "side": 1,
+      "message": "QC doesn\u0027t send IWALN in VOICE_REG.\nNot sure about other chipset vendors.\n\nEven if some one sends both IWLAN and expect cell signal strength to be shown then even old code will have trouble if cell is on CDMA.\n\nLong term, it would be good if we remove the mangling and just rely on radio to set correct tech type.",
+      "parentUuid": "559fa5ba_60fe7545",
+      "revId": "c09bbf92d084275ba38b6a1167905614290facc3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
