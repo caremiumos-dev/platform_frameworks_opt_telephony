@@ -288,7 +288,7 @@ public class SubscriptionInfoUpdater extends Handler {
                 if (ar.exception == null) {
                     if (ar.result != null) {
                         byte[] data = (byte[])ar.result;
-                        mIccId[slotId] = IccUtils.bcdToString(data, 0, data.length);
+                        mIccId[slotId] = IccUtils.bchToString(data, 0, data.length);
                     } else {
                         logd("Null ar");
                         mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
@@ -400,11 +400,11 @@ public class SubscriptionInfoUpdater extends Handler {
             logd("onRecieve: IccRecords null");
             return;
         }
-        if (records.getIccId() == null) {
+        if (records.getFullIccId() == null) {
             logd("onRecieve: IccID null");
             return;
         }
-        mIccId[slotId] = records.getIccId();
+        mIccId[slotId] = records.getFullIccId();
 
         if (isAllIccIdQueryDone()) {
             updateSubscriptionInfoByIccId();
@@ -565,16 +565,19 @@ public class SubscriptionInfoUpdater extends Handler {
 
         ContentResolver contentResolver = mContext.getContentResolver();
         String[] oldIccId = new String[PROJECT_SIM_NUM];
+        String[] decIccId = new String[PROJECT_SIM_NUM];
         for (int i = 0; i < PROJECT_SIM_NUM; i++) {
             oldIccId[i] = null;
             List<SubscriptionInfo> oldSubInfo =
                     SubscriptionController.getInstance().getSubInfoUsingSlotIndexWithCheck(i, false,
                     mContext.getOpPackageName());
+            decIccId[i] = IccUtils.getDecimalSubstring(mIccId[i]);
             if (oldSubInfo != null && oldSubInfo.size() > 0) {
                 oldIccId[i] = oldSubInfo.get(0).getIccId();
                 logd("updateSubscriptionInfoByIccId: oldSubId = "
                         + oldSubInfo.get(0).getSubscriptionId());
-                if (mInsertSimState[i] == SIM_NOT_CHANGE && !mIccId[i].equals(oldIccId[i])) {
+                if (mInsertSimState[i] == SIM_NOT_CHANGE
+                    && !(mIccId[i].equals(oldIccId[i]) || decIccId[i].equals(oldIccId[i]))) {
                     mInsertSimState[i] = SIM_CHANGED;
                 }
                 if (mInsertSimState[i] != SIM_NOT_CHANGE) {
@@ -616,7 +619,7 @@ public class SubscriptionInfoUpdater extends Handler {
                 } else /*if (sInsertSimState[i] != SIM_NOT_INSERT)*/ {
                     mSubscriptionManager.addSubscriptionInfoRecord(mIccId[i], i);
                 }
-                if (isNewSim(mIccId[i], oldIccId)) {
+                if (isNewSim(mIccId[i], decIccId[i], oldIccId)) {
                     nNewCardCount++;
                     switch (i) {
                         case PhoneConstants.SUB1:
@@ -672,10 +675,13 @@ public class SubscriptionInfoUpdater extends Handler {
         logd("updateSubscriptionInfoByIccId:- SsubscriptionInfo update complete");
     }
 
-    private boolean isNewSim(String iccId, String[] oldIccId) {
+    private boolean isNewSim(String iccId, String decIccId, String[] oldIccId) {
         boolean newSim = true;
         for(int i = 0; i < PROJECT_SIM_NUM; i++) {
             if(iccId.equals(oldIccId[i])) {
+                newSim = false;
+                break;
+            } else if (decIccId.equals(oldIccId[i])) {
                 newSim = false;
                 break;
             }
