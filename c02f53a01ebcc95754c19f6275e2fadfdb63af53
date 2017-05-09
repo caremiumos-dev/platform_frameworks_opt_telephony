@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "eb0cf0e3_cdd53b13",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-09T20:08:35Z",
+      "side": 1,
+      "message": "?\n\nYou\u0027re processing once when everything has come in (mPollingContext[0] \u003d\u003d 0), not when data reg comes in so the order doesn\u0027t matter.",
+      "parentUuid": "4bb17cca_5a77604a",
+      "range": {
+        "startLine": 503,
+        "startChar": 38,
+        "endLine": 503,
+        "endChar": 39
+      },
+      "revId": "c02f53a01ebcc95754c19f6275e2fadfdb63af53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c900f08_dae8724b",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 3
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "handlePollStateResult() could be called for DATA_REGISTRATION_STATE alone if that comes first right?\n\nExample scenario:\n1) Device is on GSM family RAT (mRoamingIndicator will be -1) \n2) Device moved to CDMA RAT\n3) RIL reported CDMA DATA_REGISTRATION_STATE before the VOICE_REGISTRATION_STATE (its possible)\n\nhandlePollStateResult() will be called for DATA_REGISTRATION_STATE when mRoamingIndicator is -1. So i think the check is needed.\n\nNote:\n-1 is an invalid value which could be sent by RIL/modem if the tech is on GSM/UNKNOWN.",
       "parentUuid": "0c900f08_dae8724b",
+      "range": {
+        "startLine": 1672,
+        "startChar": 49,
+        "endLine": 1672,
+        "endChar": 51
+      },
+      "revId": "c02f53a01ebcc95754c19f6275e2fadfdb63af53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "03582f20_761954a3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-09T20:08:35Z",
+      "side": 1,
+      "message": "This code isn\u0027t in the general path of handlePollStateResult, but in the mPollingContext[0] \u003d\u003d 0 case, meaning all polls have completed and both data and voice reg have been determined.",
+      "parentUuid": "a007aac9_3aec286e",
       "range": {
         "startLine": 1672,
         "startChar": 49,
