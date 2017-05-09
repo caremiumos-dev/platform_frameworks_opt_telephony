@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4bb17cca_5a77604a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-05-09T19:20:28Z",
+      "side": 1,
+      "message": "What if DATA_REGISTRATION_STATE comes first before VOICE_REGISTRATION_STATE?\n\nhandlePollStateResult() will be called without mRoamingIndicator initialized so thought better to initialize here.",
+      "parentUuid": "fd3db281_4563cc99",
+      "range": {
+        "startLine": 503,
+        "startChar": 38,
+        "endLine": 503,
+        "endChar": 39
+      },
+      "revId": "c02f53a01ebcc95754c19f6275e2fadfdb63af53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c900f08_dae8724b",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a007aac9_3aec286e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-05-09T19:20:28Z",
+      "side": 1,
+      "message": "handlePollStateResult() could be called for DATA_REGISTRATION_STATE alone if that comes first right?\n\nExample scenario:\n1) Device is on GSM family RAT (mRoamingIndicator will be -1) \n2) Device moved to CDMA RAT\n3) RIL reported CDMA DATA_REGISTRATION_STATE before the VOICE_REGISTRATION_STATE (its possible)\n\nhandlePollStateResult() will be called for DATA_REGISTRATION_STATE when mRoamingIndicator is -1. So i think the check is needed.\n\nNote:\n-1 is an invalid value which could be sent by RIL/modem if the tech is on GSM/UNKNOWN.",
+      "parentUuid": "0c900f08_dae8724b",
+      "range": {
+        "startLine": 1672,
+        "startChar": 49,
+        "endLine": 1672,
+        "endChar": 51
+      },
+      "revId": "c02f53a01ebcc95754c19f6275e2fadfdb63af53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40d3d888_8f905cec",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2017-05-09T18:15:18Z",
       "side": 1,
       "message": "RIL.h is deprectated - please add comment to IRadioResponse.hal and reference that here.",
+      "range": {
+        "startLine": 1673,
+        "startChar": 34,
+        "endLine": 1673,
+        "endChar": 37
+      },
+      "revId": "c02f53a01ebcc95754c19f6275e2fadfdb63af53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d925d88a_378604be",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-05-09T19:20:28Z",
+      "side": 1,
+      "message": "Ok, The comment is already there on types.hal for VoiceRegStateResult so i will just update this comment to refer types.hal VoiceRegStateResult.",
+      "parentUuid": "40d3d888_8f905cec",
       "range": {
         "startLine": 1673,
         "startChar": 34,
