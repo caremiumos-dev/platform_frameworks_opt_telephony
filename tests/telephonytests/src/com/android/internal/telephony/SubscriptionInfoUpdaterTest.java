@@ -66,6 +66,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -602,5 +603,28 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
         // No existing entries should have been updated.
         verify(mContentProvider, never()).update(eq(SubscriptionManager.CONTENT_URI), any(),
                 any(), isNull());
+    }
+
+    @Test
+    @SmallTest
+    public void testHexIccId() throws Exception {
+        SubscriptionInfo subInfo = new SubscriptionInfo(1, "898600910916", 0, "China Mobile",
+                "CMCC", 0, 255, null, 0, null, 460, 0, "cn");
+        doReturn(Arrays.asList(subInfo)).when(mSubscriptionController)
+                .getSubInfoUsingSlotIndexWithCheck(eq(FAKE_SUB_ID_1), anyBoolean(), anyString());
+        doReturn("898600910916f4078561").when(mIccRecord).getFullIccId();
+        doReturn(FAKE_MCC_MNC_1).when(mTelephonyManager).getSimOperatorNumeric(eq(FAKE_SUB_ID_1));
+        Intent intentInternalSimStateChanged =
+                new Intent(IccCardProxy.ACTION_INTERNAL_SIM_STATE_CHANGED);
+        intentInternalSimStateChanged.putExtra(IccCardConstants.INTENT_KEY_ICC_STATE,
+                IccCardConstants.INTENT_VALUE_ICC_LOADED);
+        intentInternalSimStateChanged.putExtra(PhoneConstants.PHONE_KEY, FAKE_SUB_ID_1);
+
+        waitForMs(100);
+
+        Field field = SubscriptionInfoUpdater.class.getDeclaredField("mInsertSimState");
+        field.setAccessible(true);
+        int[] mState = (int[]) field.get(mUpdater);
+        assertEquals(SubscriptionInfoUpdater.SIM_NOT_CHANGE, mState[FAKE_SUB_ID_1]);
     }
 }
