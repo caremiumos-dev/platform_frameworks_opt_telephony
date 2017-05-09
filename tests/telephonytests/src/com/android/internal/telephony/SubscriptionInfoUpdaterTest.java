@@ -17,6 +17,7 @@ package com.android.internal.telephony;
 
 import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyInt;
@@ -55,6 +56,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -65,6 +67,7 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
 
     private SubscriptionInfoUpdaterHandlerThread mSubscriptionInfoUpdaterHandlerThread;
     private IccRecords mIccRecord;
+    private SubscriptionInfoUpdater mSubscriptionInfoUpdaterUT;
     @Mock
     private UserInfo mUserInfo;
     @Mock
@@ -95,7 +98,7 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
 
         @Override
         public void onLooperPrepared() {
-            new SubscriptionInfoUpdater(mContext, new Phone[]{mPhone},
+            mSubscriptionInfoUpdaterUT = new SubscriptionInfoUpdater(mContext, new Phone[]{mPhone},
                     new CommandsInterface[]{mSimulatedCommands});
             setReady(true);
         }
@@ -376,5 +379,28 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
         /* broadcast is done */
         verify(mConfigManager, times(1)).updateConfigForPhoneId(eq(0),
                 eq(IccCardConstants.INTENT_VALUE_ICC_LOCKED));
+    }
+
+    @Test
+    @SmallTest
+    public void testHexIccId() throws Exception {
+        SubscriptionInfo subInfo= new SubscriptionInfo(1, "898600910916", 0, "China Mobile",
+               "CMCC", 0, 255, null, 0, null, 460, 0, "cn");
+        doReturn(Arrays.asList(subInfo)).when(mSubscriptionController)
+                .getSubInfoUsingSlotIndexWithCheck(eq(FAKE_SUB_ID_1), anyBoolean(), anyString());
+        doReturn("898600910916f4078561").when(mIccRecord).getFullIccId();
+        doReturn(FAKE_MCC_MNC_1).when(mPhone).getOperatorNumeric();
+        Intent intentInternalSimStateChanged =
+                new Intent(IccCardProxy.ACTION_INTERNAL_SIM_STATE_CHANGED);
+        intentInternalSimStateChanged.putExtra(IccCardConstants.INTENT_KEY_ICC_STATE,
+                IccCardConstants.INTENT_VALUE_ICC_LOADED);
+        intentInternalSimStateChanged.putExtra(PhoneConstants.PHONE_KEY, FAKE_SUB_ID_1);
+
+        waitForMs(100);
+
+        Field field = SubscriptionInfoUpdater.class.getDeclaredField("mInsertSimState");
+        field.setAccessible(true);
+        int[] mState = (int[]) field.get(mSubscriptionInfoUpdaterUT);
+        assertEquals(SubscriptionInfoUpdater.SIM_NOT_CHANGE, mState[FAKE_SUB_ID_1]);
     }
 }
