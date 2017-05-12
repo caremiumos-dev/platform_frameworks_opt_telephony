@@ -476,6 +476,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 nullable(ImsConnectionStateListener.class));
     }
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testTTYImsServiceUnavailable() throws ImsException {
