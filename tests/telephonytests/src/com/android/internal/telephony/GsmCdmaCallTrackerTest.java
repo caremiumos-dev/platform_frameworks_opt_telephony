@@ -27,6 +27,7 @@ import android.os.Message;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.ArgumentCaptor;
@@ -128,6 +129,8 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(GsmCdmaCall.State.IDLE, mCTUT.mBackgroundCall.getState());
     }
 
+    @FlakyTest
+    @Ignore
     @Test
     @MediumTest
     public void testMOCallHangup() {
@@ -343,6 +346,8 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
 
     }
 
+    @FlakyTest
+    @Ignore
     @Test @SmallTest
     public void testVoiceCallEndedListener(){
         logd("register for voice call ended event");
