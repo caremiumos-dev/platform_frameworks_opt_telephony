@@ -46,6 +46,7 @@ import com.android.internal.telephony.TelephonyTest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
@@ -476,6 +477,8 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 nullable(ImsConnectionStateListener.class));
     }
 
+    @Ignore
+    @FlakyTest
     @Test
     @SmallTest
     public void testTTYImsServiceUnavailable() throws ImsException {

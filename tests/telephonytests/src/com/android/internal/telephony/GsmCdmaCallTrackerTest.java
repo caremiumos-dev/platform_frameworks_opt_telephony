@@ -128,6 +128,8 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(GsmCdmaCall.State.IDLE, mCTUT.mBackgroundCall.getState());
     }
 
+    @FlakyTest
+    @Ignore
     @Test
     @MediumTest
     public void testMOCallHangup() {
@@ -343,6 +345,8 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
 
     }
 
+    @FlakyTest
+    @Ignore
     @Test @SmallTest
     public void testVoiceCallEndedListener(){
         logd("register for voice call ended event");
