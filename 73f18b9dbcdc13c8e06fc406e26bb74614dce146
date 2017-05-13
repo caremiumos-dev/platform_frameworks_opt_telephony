@@ -16,6 +16,24 @@
       "revId": "73f18b9dbcdc13c8e06fc406e26bb74614dce146",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "86a05328_56d8a672",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1616,
+      "author": {
+        "id": 1115453
+      },
+      "writtenOn": "2017-05-13T01:28:40Z",
+      "side": 1,
+      "message": "Apn name, user, and password should be hide. I will move this change to DataProfile.",
+      "parentUuid": "6a1320c9_95be1a7c",
+      "revId": "73f18b9dbcdc13c8e06fc406e26bb74614dce146",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
