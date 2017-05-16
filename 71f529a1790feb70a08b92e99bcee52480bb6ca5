@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c9298680_9ee2b0a5",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-16T22:19:10Z",
+      "side": 1,
+      "message": "OK - add a comment why you\u0027re doing the belt+suspenders (avoid race and absent blip).  Otherwise somebody in the future will remove this..",
+      "parentUuid": "f8f9568f_7bec46c6",
+      "range": {
+        "startLine": 375,
+        "startChar": 0,
+        "endLine": 375,
+        "endChar": 48
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b99b92d_b737398b",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
         "patchSetId": 2
@@ -202,6 +226,30 @@
       "side": 1,
       "message": "From the following RIL enumeration, here are the possibilities:\ntypedef enum {\n    RIL_APPSTATE_UNKNOWN               \u003d 0,\n    RIL_APPSTATE_DETECTED              \u003d 1,\n    RIL_APPSTATE_PIN                   \u003d 2, /* If PIN1 or UPin is required */\n    RIL_APPSTATE_PUK                   \u003d 3, /* If PUK1 or Puk for UPin is required */\n    RIL_APPSTATE_SUBSCRIPTION_PERSO    \u003d 4, /* perso_substate should be look at\n                                               when app_state is assigned to this value */\n    RIL_APPSTATE_READY                 \u003d 5\n} RIL_AppState;\n\nBy process of elimination, APPSTATE_UNKNOWN is \"any time the app isn\u0027t loading or explicitly reporting its own state\".\n\nTo support the eSIM case where there isn\u0027t an App to load, but there is a SIM, NOT_READY is specifically intended to be the reported disambiguated state to indicate \"we have a card, but no app\". If there is an app, then NOT_READY is transient.",
       "parentUuid": "6ff9b4b8_0e189ee3",
+      "range": {
+        "startLine": 399,
+        "startChar": 39,
+        "endLine": 399,
+        "endChar": 48
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "324a12fd_5c839721",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-16T22:19:10Z",
+      "side": 1,
+      "message": "comment in code as to why NOT_READY is appropriate.",
+      "parentUuid": "95c778e5_dc7d01e9",
       "range": {
         "startLine": 399,
         "startChar": 39,
