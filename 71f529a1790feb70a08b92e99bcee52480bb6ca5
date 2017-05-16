@@ -49,6 +49,52 @@
     },
     {
       "key": {
+        "uuid": "2d762f98_c9040ec0",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-16T18:53:18Z",
+      "side": 1,
+      "message": "just RadioState?",
+      "range": {
+        "startLine": 111,
+        "startChar": 12,
+        "endLine": 111,
+        "endChar": 29
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69d680ad_8d1be4f3",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-16T18:53:18Z",
+      "side": 1,
+      "message": "this shouldn\u0027t be needed as UiccController will set the card to null when the radio is unavailable and send out notification.  Can you check?\n\nIt would be appealing to have the code here just say ABSENT when the cardstate is absent..",
+      "range": {
+        "startLine": 375,
+        "startChar": 0,
+        "endLine": 375,
+        "endChar": 48
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b99b92d_b737398b",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
         "patchSetId": 2
@@ -84,6 +130,30 @@
       "side": 1,
       "message": "Well, Applications can\u0027t actually use card-Apps until the state is READY, so for actually using a card-App, UNKNOWN vs NOT_READY is necessarily a don\u0027t-care. But setting this to NOT_READY allows us to differentiate between when the card is present and when the card is not present, and the state is definitely not \"UNKNOWN\": if we reach here, we are confident that the card is present.\n\n|  That sounds ok to me, but are we sure this change in semantics won\u0027t break any apps\n\nThat would be very hard to prove definitively, but given my assertion above (that for trying to use an App, anything other than READY is more-or-less a don\u0027t-care), it shouldn\u0027t^TM. Even better, because the NOT_READY state was very sparsely (and incorrectly) used, it\u0027s unlikely that legacy apps are incorrectly waiting for an explicit \"NOT_READY\" to do something.",
       "parentUuid": "4b99b92d_b737398b",
+      "range": {
+        "startLine": 399,
+        "startChar": 39,
+        "endLine": 399,
+        "endChar": 48
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6ff9b4b8_0e189ee3",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-16T18:53:18Z",
+      "side": 1,
+      "message": "agreed.\n\nDo you know what it means to be APPSTATE_UNKNOWN?  If that means we\u0027re still reading it clearly falls into NOT_READY.  Do we eventually pop out into READY or ERROR?  I don\u0027t think we want State.NOT_READY to be a permanent end-state.",
+      "parentUuid": "754f32f9_c596fac7",
       "range": {
         "startLine": 399,
         "startChar": 39,
