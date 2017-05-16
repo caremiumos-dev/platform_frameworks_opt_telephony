@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fce17ad_213cdbf7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-05-16T18:15:08Z",
+      "side": 1,
+      "message": "Why? Is it because if radio is unavailable, we do not know the card state? And if we do that must be stale and may not be updated while radio is unavailable?",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 14,
+        "endChar": 42
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4b99b92d_b737398b",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-05-16T18:15:08Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this still be UNKNOWN?\nAre we not treating UNKNOWN as we don\u0027t know if card is present or not? That sounds ok to me, but are we sure this change in semantics won\u0027t break any apps?",
+      "range": {
+        "startLine": 399,
+        "startChar": 39,
+        "endLine": 399,
+        "endChar": 48
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
