@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3de7f073_42baa783",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3479,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-16T23:34:25Z",
+      "side": 1,
+      "message": "TimeUtils.getCalendar(String timezone)?",
+      "range": {
+        "startLine": 3479,
+        "startChar": 25,
+        "endLine": 3479,
+        "endChar": 84
+      },
+      "revId": "b6f96040cd5422450d247ce0b6d267adaa4fb8b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
