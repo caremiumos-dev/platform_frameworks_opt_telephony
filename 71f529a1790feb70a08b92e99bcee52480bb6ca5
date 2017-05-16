@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "f8f9568f_7bec46c6",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-05-16T20:36:51Z",
+      "side": 1,
+      "message": "I did some digging, and it turns out there is a race here. The IccCardProxy is registered both with Phone for RadioState changes and UiccController for IccChanged.\n\nThe UiccController is also registerd with Phone for RadioState, and when it sees UNAVAILABLE it will null out the IccCards and send IccChanged, so the final state will be correct; however... in the meantime, the RadioState has already changed, which will (likely) be the first message that IccCardProxy sees (not the notification from Uicc), and without this change there will be a transient where the radio (and SIM) is unavailable and the IccCard state will be unknown. Doing this narrows the race window and may be snowing over some other problems; if not, then I\u0027m not sure why RADIO_STATE would need to be used directly. In the abstract, the IccChanged notifications from UiccController seem like they should be enough. I\u0027m not anxious to find out what\u0027s lurking behind the curtain here in 1/100000 cases when the SIM is considered \"READY\" for a few uS too long.",
+      "parentUuid": "69d680ad_8d1be4f3",
+      "range": {
+        "startLine": 375,
+        "startChar": 0,
+        "endLine": 375,
+        "endChar": 48
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b99b92d_b737398b",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
         "patchSetId": 2
@@ -154,6 +178,30 @@
       "side": 1,
       "message": "agreed.\n\nDo you know what it means to be APPSTATE_UNKNOWN?  If that means we\u0027re still reading it clearly falls into NOT_READY.  Do we eventually pop out into READY or ERROR?  I don\u0027t think we want State.NOT_READY to be a permanent end-state.",
       "parentUuid": "754f32f9_c596fac7",
+      "range": {
+        "startLine": 399,
+        "startChar": 39,
+        "endLine": 399,
+        "endChar": 48
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "95c778e5_dc7d01e9",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-05-16T20:36:51Z",
+      "side": 1,
+      "message": "From the following RIL enumeration, here are the possibilities:\ntypedef enum {\n    RIL_APPSTATE_UNKNOWN               \u003d 0,\n    RIL_APPSTATE_DETECTED              \u003d 1,\n    RIL_APPSTATE_PIN                   \u003d 2, /* If PIN1 or UPin is required */\n    RIL_APPSTATE_PUK                   \u003d 3, /* If PUK1 or Puk for UPin is required */\n    RIL_APPSTATE_SUBSCRIPTION_PERSO    \u003d 4, /* perso_substate should be look at\n                                               when app_state is assigned to this value */\n    RIL_APPSTATE_READY                 \u003d 5\n} RIL_AppState;\n\nBy process of elimination, APPSTATE_UNKNOWN is \"any time the app isn\u0027t loading or explicitly reporting its own state\".\n\nTo support the eSIM case where there isn\u0027t an App to load, but there is a SIM, NOT_READY is specifically intended to be the reported disambiguated state to indicate \"we have a card, but no app\". If there is an app, then NOT_READY is transient.",
+      "parentUuid": "6ff9b4b8_0e189ee3",
       "range": {
         "startLine": 399,
         "startChar": 39,
