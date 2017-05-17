@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f8a5b2c_88ce3e66",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-17T00:30:00Z",
+      "side": 1,
+      "message": "actually, would it be simpler not to register for this and just get pinged by UiccController if the radio goes unavailable?",
+      "range": {
+        "startLine": 214,
+        "startChar": 17,
+        "endLine": 214,
+        "endChar": 47
+      },
+      "revId": "135cc603eadd1e6bfb0d0dd607b1d7974795f381",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
