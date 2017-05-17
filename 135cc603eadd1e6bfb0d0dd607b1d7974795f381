@@ -22,6 +22,30 @@
       "revId": "135cc603eadd1e6bfb0d0dd607b1d7974795f381",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3811f8a4_4e34c17d",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-05-17T01:06:22Z",
+      "side": 1,
+      "message": "Maybe I didn\u0027t understand the previous question you asked. To me this seems like the same question. To restate: it\u0027s absolutely simpler to not listen to the radio events directly: it\u0027s just slower. It increases the delay between the radio state changing and the proxy being updated. Since the existing code explicitly handles the RADIO_UNAVAILABLE case, and since I\u0027m not fundamentally mucking with that logic or timing, just doing some 1-1 state swaps, I don\u0027t want or need to go looking for trouble in a CL addressing short term requirements.\n\nInterestingly, both the path from UiccController that would do this cleanup by disposing of the Uicc as well as this explicit check in IccCardProxy were added in the same CL, ag/562602, which lends more weight to both paths being needed for *goodness knows what reason*. For even more historical context, the IccCardProxy has been listening to radio states directly since its inception, which is in aosp/41115.",
+      "parentUuid": "9f8a5b2c_88ce3e66",
+      "range": {
+        "startLine": 214,
+        "startChar": 17,
+        "endLine": 214,
+        "endChar": 47
+      },
+      "revId": "135cc603eadd1e6bfb0d0dd607b1d7974795f381",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
