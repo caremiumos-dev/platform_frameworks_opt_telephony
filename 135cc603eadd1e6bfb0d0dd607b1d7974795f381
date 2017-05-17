@@ -46,6 +46,30 @@
       "revId": "135cc603eadd1e6bfb0d0dd607b1d7974795f381",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e56c2738_a0a5e51e",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-17T19:19:04Z",
+      "side": 1,
+      "message": "My previous comment was about not updating mRadioState before calling updateExternalState.\n\nYou responded that we need to to avoid a race.\n\nNow I\u0027m suggesting avoid the race by not having EVENT_RADIO_OFF_OR_UNAVAIL in this class - no race as there\u0027s only one input.\n\nYou\u0027re correct you\u0027re not making it worse, so if you\u0027re uncomfortable this is ok.",
+      "parentUuid": "3811f8a4_4e34c17d",
+      "range": {
+        "startLine": 214,
+        "startChar": 17,
+        "endLine": 214,
+        "endChar": 47
+      },
+      "revId": "135cc603eadd1e6bfb0d0dd607b1d7974795f381",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
