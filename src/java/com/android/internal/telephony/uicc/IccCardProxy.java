@@ -34,7 +34,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.CommandsInterface;
-import com.android.internal.telephony.CommandsInterface.RadioState;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.IccCardConstants.State;
@@ -75,7 +74,6 @@ public class IccCardProxy extends Handler implements IccCard {
     private static final boolean DBG = true;
     private static final String LOG_TAG = "IccCardProxy";
 
-    private static final int EVENT_RADIO_OFF_OR_UNAVAILABLE = 1;
     private static final int EVENT_RADIO_ON = 2;
     private static final int EVENT_ICC_CHANGED = 3;
     private static final int EVENT_ICC_ABSENT = 4;
@@ -108,7 +106,6 @@ public class IccCardProxy extends Handler implements IccCard {
     private UiccCardApplication mUiccApplication = null;
     private IccRecords mIccRecords = null;
     private CdmaSubscriptionSourceManager mCdmaSSM = null;
-    private RadioState mRadioState = RadioState.RADIO_UNAVAILABLE;
     private boolean mQuietMode = false; // when set to true IccCardProxy will not broadcast
                                         // ACTION_SIM_STATE_CHANGED intents
     private boolean mInitialized = false;
@@ -128,7 +125,6 @@ public class IccCardProxy extends Handler implements IccCard {
         mUiccController = UiccController.getInstance();
         mUiccController.registerForIccChanged(this, EVENT_ICC_CHANGED, null);
         ci.registerForOn(this,EVENT_RADIO_ON, null);
-        ci.registerForOffOrNotAvailable(this, EVENT_RADIO_OFF_OR_UNAVAILABLE, null);
 
         resetProperties();
         setExternalState(State.UNKNOWN, false);
@@ -211,16 +207,10 @@ public class IccCardProxy extends Handler implements IccCard {
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
-            case EVENT_RADIO_OFF_OR_UNAVAILABLE:
-                mRadioState = mCi.getRadioState();
-                updateExternalState();
-                break;
             case EVENT_RADIO_ON:
-                mRadioState = RadioState.RADIO_ON;
                 if (!mInitialized) {
                     updateQuietMode();
                 }
-                updateExternalState();
                 break;
             case EVENT_ICC_CHANGED:
                 if (mInitialized) {
@@ -371,23 +361,7 @@ public class IccCardProxy extends Handler implements IccCard {
         }
 
         if (mUiccCard.getCardState() == CardState.CARDSTATE_ABSENT) {
-            /*
-             * Both IccCardProxy and UiccController are registered for
-             * RadioState changes. When the UiccController receives a radio
-             * state changed to Unknown it will dispose of all of the IccCard
-             * objects, which will then notify the IccCardProxy and the null
-             * object will force the state to unknown. However, because the
-             * IccCardProxy is also registered for RadioState changes, it will
-             * recieve that signal first. By triggering on radio state changes
-             * directly, we reduce the time window during which the modem is
-             * UNAVAILABLE but the IccStatus is reported as something valid.
-             * This is not ideal.
-             */
-            if (mRadioState == RadioState.RADIO_UNAVAILABLE) {
-                setExternalState(State.UNKNOWN);
-            } else {
-                setExternalState(State.ABSENT);
-            }
+            setExternalState(State.ABSENT);
             return;
         }
 
@@ -959,7 +933,6 @@ public class IccCardProxy extends Handler implements IccCard {
         pw.println(" mUiccApplication=" + mUiccApplication);
         pw.println(" mIccRecords=" + mIccRecords);
         pw.println(" mCdmaSSM=" + mCdmaSSM);
-        pw.println(" mRadioState=" + mRadioState);
         pw.println(" mQuietMode=" + mQuietMode);
         pw.println(" mInitialized=" + mInitialized);
         pw.println(" mExternalState=" + mExternalState);
