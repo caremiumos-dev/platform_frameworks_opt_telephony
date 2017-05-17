@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "63f720b2_f3597c9d",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-05-17T00:20:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d762f98_c9040ec0",
+      "range": {
+        "startLine": 111,
+        "startChar": 12,
+        "endLine": 111,
+        "endChar": 29
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69d680ad_8d1be4f3",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
         "patchSetId": 2
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "OK - add a comment why you\u0027re doing the belt+suspenders (avoid race and absent blip).  Otherwise somebody in the future will remove this..",
       "parentUuid": "f8f9568f_7bec46c6",
+      "range": {
+        "startLine": 375,
+        "startChar": 0,
+        "endLine": 375,
+        "endChar": 48
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9a56958_17474a72",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-05-17T00:20:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9298680_9ee2b0a5",
       "range": {
         "startLine": 375,
         "startChar": 0,
@@ -250,6 +298,30 @@
       "side": 1,
       "message": "comment in code as to why NOT_READY is appropriate.",
       "parentUuid": "95c778e5_dc7d01e9",
+      "range": {
+        "startLine": 399,
+        "startChar": 39,
+        "endLine": 399,
+        "endChar": 48
+      },
+      "revId": "71f529a1790feb70a08b92e99bcee52480bb6ca5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "52b55a47_396bf5e4",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-05-17T00:20:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "324a12fd_5c839721",
       "range": {
         "startLine": 399,
         "startChar": 39,
