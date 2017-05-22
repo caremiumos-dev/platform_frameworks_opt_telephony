@@ -22,6 +22,30 @@
       "revId": "c6d4c6a7cc7b21f4b3631bee422669401467b3e2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dba9cda2_40e33d81",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-05-22T20:30:25Z",
+      "side": 1,
+      "message": "The initial state (line 115) is UNKNOWN so this is no change and we won\u0027t bcast.",
+      "parentUuid": "3c8a64d5_9a64cbd6",
+      "range": {
+        "startLine": 134,
+        "startChar": 31,
+        "endLine": 134,
+        "endChar": 38
+      },
+      "revId": "c6d4c6a7cc7b21f4b3631bee422669401467b3e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
