@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c8a64d5_9a64cbd6",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1043929
+      },
+      "writtenOn": "2017-05-22T17:20:09Z",
+      "side": 1,
+      "message": "if it\u0027s unknown, we\u0027re broadcasting we have no idea about the sim state during init, which doesn\u0027t seem helpful. Does it make sense to not broadcasting here?",
+      "range": {
+        "startLine": 134,
+        "startChar": 31,
+        "endLine": 134,
+        "endChar": 38
+      },
+      "revId": "c6d4c6a7cc7b21f4b3631bee422669401467b3e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
