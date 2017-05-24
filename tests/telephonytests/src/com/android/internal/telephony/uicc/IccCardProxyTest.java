@@ -84,6 +84,15 @@ public class IccCardProxyTest extends TelephonyTest {
         super.tearDown();
     }
 
+    private void expectPolledState(int maxWaitMs, State state) {
+        for (int i = 0; i < (maxWaitMs + SCARY_SLEEP_MS - 1) / SCARY_SLEEP_MS; i++) {
+            if (mIccCardProxyUT.getState() == state) return;
+            waitForMs(SCARY_SLEEP_MS);
+        }
+
+        assertEquals(state, mIccCardProxyUT.getState());
+    }
+
     @Test
     @SmallTest
     public void testInitialCardState() {
@@ -97,10 +106,8 @@ public class IccCardProxyTest extends TelephonyTest {
         mSimulatedCommands.notifyRadioOn();
         when(mUiccController.getUiccCard(anyInt())).thenReturn(mUiccCard);
         mIccCardProxyUT.sendMessage(mIccCardProxyUT.obtainMessage(EVENT_ICC_CHANGED));
-        waitForMs(SCARY_SLEEP_MS);
+        expectPolledState(SCARY_SLEEP_MS * 5, State.NOT_READY);
         assertEquals(CommandsInterface.RadioState.RADIO_ON, mSimulatedCommands.getRadioState());
-        assertEquals(mIccCardProxyUT.getState(), State.NOT_READY);
-        logd("IccCardProxy state = " + mIccCardProxyUT.getState());
     }
 
     @Test
@@ -109,8 +116,7 @@ public class IccCardProxyTest extends TelephonyTest {
         testPowerOn();
         when(mUiccCard.getCardState()).thenReturn(CardState.CARDSTATE_PRESENT);
         mIccCardProxyUT.sendMessage(mIccCardProxyUT.obtainMessage(EVENT_ICC_CHANGED));
-        waitForMs(SCARY_SLEEP_MS);
-        assertEquals(mIccCardProxyUT.getState(), State.NOT_READY);
+        expectPolledState(SCARY_SLEEP_MS * 5, State.NOT_READY);
     }
 
     @Test
@@ -121,9 +127,7 @@ public class IccCardProxyTest extends TelephonyTest {
         mIccCardProxyUT.sendMessage(mIccCardProxyUT.obtainMessage(EVENT_ICC_CHANGED));
         when(mUiccCardApplication.getState()).thenReturn(AppState.APPSTATE_UNKNOWN);
         when(mUiccCard.getApplication(anyInt())).thenReturn(mUiccCardApplication);
-
-        waitForMs(SCARY_SLEEP_MS);
-        assertEquals(mIccCardProxyUT.getState(), State.NOT_READY);
+        expectPolledState(SCARY_SLEEP_MS * 5, State.NOT_READY);
     }
 
     @Test
@@ -134,8 +138,6 @@ public class IccCardProxyTest extends TelephonyTest {
         mIccCardProxyUT.sendMessage(mIccCardProxyUT.obtainMessage(EVENT_ICC_CHANGED));
         when(mUiccCardApplication.getState()).thenReturn(AppState.APPSTATE_READY);
         when(mUiccCard.getApplication(anyInt())).thenReturn(mUiccCardApplication);
-
-        waitForMs(SCARY_SLEEP_MS);
-        assertEquals(mIccCardProxyUT.getState(), State.READY);
+        expectPolledState(SCARY_SLEEP_MS * 20, State.READY);
     }
 }
