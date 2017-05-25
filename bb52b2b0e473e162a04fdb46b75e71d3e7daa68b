@@ -22,6 +22,30 @@
       "revId": "bb52b2b0e473e162a04fdb46b75e71d3e7daa68b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "09c7b800_37bd29eb",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3789,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2017-05-25T23:33:51Z",
+      "side": 1,
+      "message": "6 is correct actually. Some operator requested displaying error when MM reject cause code #1, #2, #3 and #6. (b/28923693 has some info)",
+      "parentUuid": "2920542f_d35dc5bd",
+      "range": {
+        "startLine": 3789,
+        "startChar": 17,
+        "endLine": 3789,
+        "endChar": 32
+      },
+      "revId": "bb52b2b0e473e162a04fdb46b75e71d3e7daa68b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
