@@ -70,6 +70,30 @@
       "revId": "bb52b2b0e473e162a04fdb46b75e71d3e7daa68b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "76bb4f0a_0adb7cc8",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3789,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2017-05-25T23:58:14Z",
+      "side": 1,
+      "message": "Understood, thanks. \nFYI. This is based on operator requirement, but I also checked this 3gpp document - #6 is described as Illegal ME.\nhttp://www.qtc.jp/3GPP/Specs/24008-930.pdf",
+      "parentUuid": "2762ca18_d1abe14c",
+      "range": {
+        "startLine": 3789,
+        "startChar": 17,
+        "endLine": 3789,
+        "endChar": 32
+      },
+      "revId": "bb52b2b0e473e162a04fdb46b75e71d3e7daa68b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
