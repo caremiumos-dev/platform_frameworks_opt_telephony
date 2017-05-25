@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dad9710e_851c2192",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccCardProxyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-05-25T22:43:31Z",
+      "side": 1,
+      "message": "I\u0027d say keep it simple and get rid of this. May be change \u003c to \u003c\u003d; we don\u0027t care if it runs an extra time.",
+      "range": {
+        "startLine": 88,
+        "startChar": 39,
+        "endLine": 88,
+        "endChar": 59
+      },
+      "revId": "3f98cd2fa44345541d6b9d320b5606e61f85fcf9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
