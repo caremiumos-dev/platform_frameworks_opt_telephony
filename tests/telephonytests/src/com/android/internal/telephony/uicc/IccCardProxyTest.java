@@ -34,6 +34,7 @@ import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -127,6 +128,7 @@ public class IccCardProxyTest extends TelephonyTest {
     }
 
     @Test
+    @Ignore
     @SmallTest
     public void testAppReady() {
         testPowerOn();
