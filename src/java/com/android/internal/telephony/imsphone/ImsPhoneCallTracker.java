@@ -40,8 +40,8 @@ import android.telecom.ConferenceParticipant;
 import android.telecom.VideoProfile;
 import android.telephony.CarrierConfigManager;
 import android.telephony.DisconnectCause;
-import android.telephony.PreciseDisconnectCause;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.PreciseDisconnectCause;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
@@ -49,10 +49,10 @@ import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsServiceProxy;
 import android.telephony.ims.feature.ImsFeature;
 import android.text.TextUtils;
-import android.util.SparseIntArray;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.util.Pair;
+import android.util.SparseIntArray;
 
 import com.android.ims.ImsCall;
 import com.android.ims.ImsCallProfile;
@@ -1765,9 +1765,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
             case ImsReasonInfo.CODE_FDN_BLOCKED:
                 return DisconnectCause.FDN_BLOCKED;
-
-            case ImsReasonInfo.CODE_IMEI_NOT_ACCEPTED:
-                return DisconnectCause.IMEI_NOT_ACCEPTED;
 
             case ImsReasonInfo.CODE_ANSWERED_ELSEWHERE:
                 return DisconnectCause.ANSWERED_ELSEWHERE;
