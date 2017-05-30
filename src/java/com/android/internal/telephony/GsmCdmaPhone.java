@@ -55,6 +55,7 @@ import android.provider.Telephony;
 import android.telecom.VideoProfile;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
+import android.telephony.NetworkScanRequest;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
@@ -1779,8 +1780,8 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
-    public void startNetworkScan(Message response) {
-        mCi.startNetworkScan(response);
+    public void startNetworkScan(NetworkScanRequest nsr, Message response) {
+        mCi.startNetworkScan(nsr, response);
     }
 
     @Override
