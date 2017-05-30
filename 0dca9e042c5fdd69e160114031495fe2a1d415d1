@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "329c47b3_b9453d00",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-05-30T18:07:30Z",
+      "side": 1,
+      "message": "the same logic has been applied from pollState() function, isn\u0027t it a duplicate?",
+      "range": {
+        "startLine": 1471,
+        "startChar": 15,
+        "endLine": 1481,
+        "endChar": 36
+      },
+      "revId": "0dca9e042c5fdd69e160114031495fe2a1d415d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
