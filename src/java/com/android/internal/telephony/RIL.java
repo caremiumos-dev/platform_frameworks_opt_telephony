@@ -83,6 +83,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.android.internal.telephony.NetworkScanRequestTracker.NetworkScanRequestInfo;
 import com.android.internal.telephony.TelephonyProto.SmsSession;
 import com.android.internal.telephony.cdma.CdmaInformationRecords;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
@@ -1790,7 +1791,8 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                     result.sendToTarget();
                 }
             } else {
-                NetworkScanRequest nsr = (NetworkScanRequest) result.obj;
+                NetworkScanRequestInfo nsri = (NetworkScanRequestInfo) result.obj;
+                NetworkScanRequest nsr = nsri.getRequest();
                 android.hardware.radio.V1_1.NetworkScanRequest request =
                         new android.hardware.radio.V1_1.NetworkScanRequest();
                 request.type = nsr.scanType;
