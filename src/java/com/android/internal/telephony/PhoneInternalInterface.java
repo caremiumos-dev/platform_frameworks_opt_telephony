@@ -23,6 +23,7 @@ import android.os.ResultReceiver;
 import android.os.WorkSource;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
+import android.telephony.NetworkScanRequest;
 import android.telephony.ServiceState;
 
 import com.android.internal.telephony.PhoneConstants.*; // ????
@@ -652,7 +653,7 @@ public interface PhoneInternalInterface {
      * on failure.</li>
      * </ul>
      */
-    void startNetworkScan(Message response);
+    void startNetworkScan(NetworkScanRequest nsr, Message response);
 
     /**
      * Stop ongoing network scan. This method is asynchronous; .
