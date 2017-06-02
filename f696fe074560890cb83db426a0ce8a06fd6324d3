@@ -22,6 +22,30 @@
       "revId": "f696fe074560890cb83db426a0ce8a06fd6324d3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4a18960e_a05db49c",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-02T03:49:36Z",
+      "side": 1,
+      "message": "I think comment makes more sense",
+      "parentUuid": "c795c487_854edd07",
+      "range": {
+        "startLine": 93,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 7
+      },
+      "revId": "f696fe074560890cb83db426a0ce8a06fd6324d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
