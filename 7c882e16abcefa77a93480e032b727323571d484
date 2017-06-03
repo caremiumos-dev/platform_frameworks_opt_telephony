@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bede1a83_b5550bd9",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-06-03T02:44:33Z",
+      "side": 1,
+      "message": "iirc java does this by default, but you\u0027ve highlighted a readability issue. 1) Should this be done on the declaration rather than the constructor.\n2) Is there not a constant for something like DEFAULT_PHONE_ID or INVALID_PHONE_ID?\n3) With a very quick look I didn\u0027t see this version of the constructor used except in tests (and I kinda hope it isn\u0027t). Where is this used/is this OK?\n\nI\u0027m kinda trying to figure out why this constructor is a thing.",
+      "range": {
+        "startLine": 106,
+        "startChar": 8,
+        "endLine": 106,
+        "endChar": 21
+      },
+      "revId": "7c882e16abcefa77a93480e032b727323571d484",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d8c6763_24b7d76f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-06-03T02:44:33Z",
+      "side": 1,
+      "message": "the idea being these functions should only be called from within a synchronized block? Is the fooLocked() sufficiently idiomatic that these functions don\u0027t need an \"only call this within a synchronized block\" comment? \u003c--- honest question, I\u0027m kind of a noob at this.",
+      "range": {
+        "startLine": 199,
+        "startChar": 17,
+        "endLine": 199,
+        "endChar": 48
+      },
+      "revId": "7c882e16abcefa77a93480e032b727323571d484",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25157b36_076c185d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-06-03T02:44:33Z",
+      "side": 1,
+      "message": "This CL is going to great pains to always get the synchronized version of the commands interface. I don\u0027t see the setter, update(), also being synchronized. May I ignorantly ask what\u0027s the purpose of the getter and locking here? Maybe a comment would help it make sense. If it\u0027s another way to synchronize these one-liner functions on mLock... maybe easier to just \"synchronize\" the whole function. AFAICT all the sync block is doing here is forcing a cache flush+reload as part of getting mCi, but I don\u0027t know why.",
+      "range": {
+        "startLine": 640,
+        "startChar": 0,
+        "endLine": 643,
+        "endChar": 9
+      },
+      "revId": "7c882e16abcefa77a93480e032b727323571d484",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c52f73e6_455dc4ae",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-06-03T02:44:33Z",
+      "side": 1,
+      "message": "I know that the \"mLock\" is traditional, but recently I\u0027ve been pointed to just using synchronized(this) which means that we can just make the methods synchronized in most cases. Especially given the number of them, would that be cleaner than putting all the contents of each method into a synchronized (mLock) block?",
+      "range": {
+        "startLine": 667,
+        "startChar": 22,
+        "endLine": 667,
+        "endChar": 27
+      },
+      "revId": "7c882e16abcefa77a93480e032b727323571d484",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
