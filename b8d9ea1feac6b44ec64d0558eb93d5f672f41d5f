@@ -1,0 +1,164 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bc59983_e3a72249",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-03T00:55:35Z",
+      "side": 1,
+      "message": "@Overrides",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cb81187f_76eece9c",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-03T00:55:35Z",
+      "side": 1,
+      "message": "There\u0027s a null check for this in else. Shouldn\u0027t it be here as well? Or is it that in else you want to return partial results only if available?",
+      "range": {
+        "startLine": 240,
+        "startChar": 49,
+        "endLine": 240,
+        "endChar": 65
+      },
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c07b6ff9_eaa978ae",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-03T00:55:35Z",
+      "side": 1,
+      "message": "Already notified above.",
+      "range": {
+        "startLine": 242,
+        "startChar": 34,
+        "endLine": 242,
+        "endChar": 43
+      },
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e6a797c9_aaef36c2",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-03T00:55:35Z",
+      "side": 1,
+      "message": "Already notified above.",
+      "range": {
+        "startLine": 250,
+        "startChar": 30,
+        "endLine": 250,
+        "endChar": 39
+      },
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ac4ce195_f39f8a25",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-03T00:55:35Z",
+      "side": 1,
+      "message": "This should never happen before startScanDone() right? Because here you unregister but register may not have been called. Is it possible stop is called before start done, and we get stop done first?",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "75c3bc7a_50889e45",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-03T00:55:35Z",
+      "side": 1,
+      "message": "no notification in case of interrupt?",
+      "range": {
+        "startLine": 312,
+        "startChar": 12,
+        "endLine": 312,
+        "endChar": 22
+      },
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec0ef092_5f6f922d",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-03T00:55:35Z",
+      "side": 1,
+      "message": "Should never fail; either ignore the return value or throw exception in else?",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6daec15_76147aec",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-03T00:55:35Z",
+      "side": 1,
+      "message": "This may call binderDied() which will first send CMD_INTERRUPT_NETWORK_SCAN and then the CMD_START_NETWORK_SCAN below will be sent.",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
