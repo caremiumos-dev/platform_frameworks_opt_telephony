@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf826eb6_c9216cd3",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-04T03:52:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bc59983_e3a72249",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb81187f_76eece9c",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 3
@@ -30,6 +48,30 @@
       "writtenOn": "2017-06-03T00:55:35Z",
       "side": 1,
       "message": "There\u0027s a null check for this in else. Shouldn\u0027t it be here as well? Or is it that in else you want to return partial results only if available?",
+      "range": {
+        "startLine": 240,
+        "startChar": 49,
+        "endLine": 240,
+        "endChar": 65
+      },
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21bb8b56_e81c5265",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-04T03:52:49Z",
+      "side": 1,
+      "message": "When there is no error, we will return whatever in the nsr.networkInfos, but if there is error, we will first check whether there is partial results together with the error (typical scenario is that the modem is interrupted by a incoming call), if there is any result, we will first return them, that is why we check only if nsr.networkInfos is null in the else branch.",
+      "parentUuid": "cb81187f_76eece9c",
       "range": {
         "startLine": 240,
         "startChar": 49,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "aaa8d9aa_aa4c8e45",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-04T03:52:49Z",
+      "side": 1,
+      "message": "If it is the last piece of scan result, we will first call onResult(), and then onComplete().",
+      "parentUuid": "c07b6ff9_eaa978ae",
+      "range": {
+        "startLine": 242,
+        "startChar": 34,
+        "endLine": 242,
+        "endChar": 43
+      },
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6a797c9_aaef36c2",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 3
@@ -76,6 +142,30 @@
       "writtenOn": "2017-06-03T00:55:35Z",
       "side": 1,
       "message": "Already notified above.",
+      "range": {
+        "startLine": 250,
+        "startChar": 30,
+        "endLine": 250,
+        "endChar": 39
+      },
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff159253_6ebec2b0",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-04T03:52:49Z",
+      "side": 1,
+      "message": "similar, if there is error together with result, we will first call onResult(), and then onError()",
+      "parentUuid": "e6a797c9_aaef36c2",
       "range": {
         "startLine": 250,
         "startChar": 30,
@@ -105,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "0b280cab_5e730324",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-04T03:52:49Z",
+      "side": 1,
+      "message": "This would never happen since the scan request will only be stored before the \"start\" command is sent to the modem in method startNewScan(), and when stopping any scan, the first step is to compare the \"scanId\" with the stored requests. In another word, because the handler is single thread, you can not send \"stop\" command to the modem before the \"start\" command is sent, or else the \"stop\" command will fail",
+      "parentUuid": "ac4ce195_f39f8a25",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75c3bc7a_50889e45",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 3
@@ -116,6 +224,30 @@
       "writtenOn": "2017-06-03T00:55:35Z",
       "side": 1,
       "message": "no notification in case of interrupt?",
+      "range": {
+        "startLine": 312,
+        "startChar": 12,
+        "endLine": 312,
+        "endChar": 22
+      },
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "10fbfc36_a8f1b97e",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-04T03:52:49Z",
+      "side": 1,
+      "message": "If it is interrupted by higher priority request, the notice has been sent to the user when the \"interrupt\" command is sent to the modem, if the \"interrupt\" is caused by BinderDeath, we don\u0027t send any notice at all, that is why no notice will be sent inside interruptScanDone(), but according to different types of \"interrupt\", we may or may not notify.",
+      "parentUuid": "75c3bc7a_50889e45",
       "range": {
         "startLine": 312,
         "startChar": 12,
@@ -145,6 +277,24 @@
     },
     {
       "key": {
+        "uuid": "1ea2653a_5f2a963e",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-04T03:52:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec0ef092_5f6f922d",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6daec15_76147aec",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 3
@@ -156,6 +306,24 @@
       "writtenOn": "2017-06-03T00:55:35Z",
       "side": 1,
       "message": "This may call binderDied() which will first send CMD_INTERRUPT_NETWORK_SCAN and then the CMD_START_NETWORK_SCAN below will be sent.",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b18840a_d486a667",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-04T03:52:49Z",
+      "side": 1,
+      "message": "This question has been answered above",
+      "parentUuid": "f6daec15_76147aec",
       "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
