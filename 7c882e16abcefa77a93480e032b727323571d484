@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "f1149519_d435558c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-06-05T17:58:32Z",
+      "side": 1,
+      "message": "Doh!",
+      "parentUuid": "0f0026bc_7bed123c",
+      "range": {
+        "startLine": 640,
+        "startChar": 0,
+        "endLine": 643,
+        "endChar": 9
+      },
+      "revId": "7c882e16abcefa77a93480e032b727323571d484",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c52f73e6_455dc4ae",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
         "patchSetId": 1
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "I\u0027ve occasionally seen the advice to be careful around using synchronized(this) \u003d\u003d synchronized methods, because the following scenarios can cause unexpected lock contention or even deadlock:\n\n-Someone external using a UiccCard instance as a lock object\n-Someone subclassing UiccCard and declaring synchronized methods\n\nWhere the problem with both of these is that they\u0027re impossible to detect just from looking at the source of UiccCard in isolation.\n\nIn the interest of that as well as keeping this change isolated to the minimum purpose it needs to serve, I think I\u0027d prefer to keep this as is unless the Telephony team feels more strongly.",
       "parentUuid": "c52f73e6_455dc4ae",
+      "range": {
+        "startLine": 667,
+        "startChar": 22,
+        "endLine": 667,
+        "endChar": 27
+      },
+      "revId": "7c882e16abcefa77a93480e032b727323571d484",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "248921d5_5f5a72fa",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-06-05T17:58:32Z",
+      "side": 1,
+      "message": "Ok. I might take this up in a more general context with the telephony team. Almost every method in this class is entirely protected by an mLock synchronization. But you are definitely just following the pattern, so no harm in that.",
+      "parentUuid": "26111322_dde75b1e",
       "range": {
         "startLine": 667,
         "startChar": 22,
