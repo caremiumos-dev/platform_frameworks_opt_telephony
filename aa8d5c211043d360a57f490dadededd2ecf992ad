@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9fd36737_cf40c115",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T21:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73dcc05b_87b0b799",
+      "range": {
+        "startLine": 272,
+        "startChar": 26,
+        "endLine": 272,
+        "endChar": 42
+      },
+      "revId": "aa8d5c211043d360a57f490dadededd2ecf992ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7b795c29_478e463c",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2017-06-05T20:07:41Z",
       "side": 1,
       "message": "this could be null.  Must check",
+      "range": {
+        "startLine": 302,
+        "startChar": 26,
+        "endLine": 302,
+        "endChar": 42
+      },
+      "revId": "aa8d5c211043d360a57f490dadededd2ecf992ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2666741a_b183a2fa",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T21:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b795c29_478e463c",
       "range": {
         "startLine": 302,
         "startChar": 26,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "05245986_9435b006",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T21:39:57Z",
+      "side": 1,
+      "message": "The current implementation assumes that there will be at most 2 requests and more new requests will be rejected directly (so we don\u0027t expect serialized requests). We use mLiveRequestInfo and mPendingRequestInfo instead of a queue. With current implementation, whenever we delete the mLiveRequestInfo (no matter it is stopped, interrupted or scan is done), we will start a new scan with mPendingRequestInfo, so that the logic is simple and unified.\nAnother reason why we put the mLiveRequestInfo in the interrupt-done msg instead of the new request, is because in interruptDone(), we can check whether the current mLiveRequestInfo is still the request that was interrupted, just as we do in the deleteScanAndMayNotify()",
+      "parentUuid": "fd6d1fd9_362cb95d",
+      "range": {
+        "startLine": 331,
+        "startChar": 16,
+        "endLine": 331,
+        "endChar": 35
+      },
+      "revId": "aa8d5c211043d360a57f490dadededd2ecf992ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1dfb97a7_5c276fe8",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 5
@@ -82,6 +154,30 @@
       "writtenOn": "2017-06-05T20:07:41Z",
       "side": 1,
       "message": "should this populate mPendingRequest if mLiveRequestInfo is non-null?",
+      "range": {
+        "startLine": 345,
+        "startChar": 37,
+        "endLine": 345,
+        "endChar": 49
+      },
+      "revId": "aa8d5c211043d360a57f490dadededd2ecf992ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "827dc937_7fe4c8c6",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T21:39:57Z",
+      "side": 1,
+      "message": "This is done in cacheScan() which is not supported in DR. The reason why we use another function to do this is because the scan will only be cashed in mPendingRequest when certain criteria is met.",
+      "parentUuid": "1dfb97a7_5c276fe8",
       "range": {
         "startLine": 345,
         "startChar": 37,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "0e42b610_e481a09d",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T21:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16006d3e_35e45253",
+      "range": {
+        "startLine": 357,
+        "startChar": 34,
+        "endLine": 357,
+        "endChar": 53
+      },
+      "revId": "aa8d5c211043d360a57f490dadededd2ecf992ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae9b138a_49379415",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 5
@@ -128,6 +248,30 @@
       "writtenOn": "2017-06-05T20:07:41Z",
       "side": 1,
       "message": "this could be null - must check",
+      "range": {
+        "startLine": 358,
+        "startChar": 32,
+        "endLine": 358,
+        "endChar": 48
+      },
+      "revId": "aa8d5c211043d360a57f490dadededd2ecf992ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d35894c_522e407e",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T21:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae9b138a_49379415",
       "range": {
         "startLine": 358,
         "startChar": 32,
@@ -186,6 +330,54 @@
     },
     {
       "key": {
+        "uuid": "448a498f_044198be",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T21:39:57Z",
+      "side": 1,
+      "message": "Done (merged with deleteScanAndNotify())",
+      "parentUuid": "63d0709a_ae6a2f95",
+      "range": {
+        "startLine": 377,
+        "startChar": 32,
+        "endLine": 377,
+        "endChar": 48
+      },
+      "revId": "aa8d5c211043d360a57f490dadededd2ecf992ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15e98773_1238c77b",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T21:39:57Z",
+      "side": 1,
+      "message": "I don\u0027t think we need that method unless we plan to fully compare two mLiveRequestInfo, comparing scanId should be enough since it is unique.",
+      "parentUuid": "1eda1d83_5c0ec010",
+      "range": {
+        "startLine": 377,
+        "startChar": 16,
+        "endLine": 377,
+        "endChar": 56
+      },
+      "revId": "aa8d5c211043d360a57f490dadededd2ecf992ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2da4c2ff_06e681a3",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 5
@@ -197,6 +389,30 @@
       "writtenOn": "2017-06-05T20:07:41Z",
       "side": 1,
       "message": "null check",
+      "range": {
+        "startLine": 426,
+        "startChar": 38,
+        "endLine": 426,
+        "endChar": 54
+      },
+      "revId": "aa8d5c211043d360a57f490dadededd2ecf992ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c611dc9a_b7199c53",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T21:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2da4c2ff_06e681a3",
       "range": {
         "startLine": 426,
         "startChar": 38,
