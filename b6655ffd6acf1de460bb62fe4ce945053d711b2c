@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4ec9dc2_c48b1674",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-06-05T02:25:43Z",
+      "side": 1,
+      "message": "for multipart SMS, the state machine will move from deliveringState to idle State. only when all parts of SMS received, it then move to the waitingState.  we should update at delieveringState?",
+      "range": {
+        "startLine": 496,
+        "startChar": 6,
+        "endLine": 501,
+        "endChar": 9
+      },
+      "revId": "b6655ffd6acf1de460bb62fe4ce945053d711b2c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
