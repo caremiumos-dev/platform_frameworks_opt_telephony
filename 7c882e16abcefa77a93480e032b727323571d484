@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "85fcab63_39466f7e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-06-05T17:47:48Z",
+      "side": 1,
+      "message": "This constructor appears to be used for tests only. I\u0027ve removed it and updated the tests. (The reason it needed an explicit value here was that I made it final to enforce that it can never change during the object\u0027s lifecycle, as otherwise there would be other threading issues to reason about).",
+      "parentUuid": "bede1a83_b5550bd9",
+      "range": {
+        "startLine": 106,
+        "startChar": 8,
+        "endLine": 106,
+        "endChar": 21
+      },
+      "revId": "7c882e16abcefa77a93480e032b727323571d484",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d8c6763_24b7d76f",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-06-03T02:44:33Z",
       "side": 1,
       "message": "the idea being these functions should only be called from within a synchronized block? Is the fooLocked() sufficiently idiomatic that these functions don\u0027t need an \"only call this within a synchronized block\" comment? \u003c--- honest question, I\u0027m kind of a noob at this.",
+      "range": {
+        "startLine": 199,
+        "startChar": 17,
+        "endLine": 199,
+        "endChar": 48
+      },
+      "revId": "7c882e16abcefa77a93480e032b727323571d484",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f57ffd68_5aac74e1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-06-05T17:47:48Z",
+      "side": 1,
+      "message": "Yeah, I\u0027ve seen this pattern used in a few places throughout the framework:\n\nhttps://cs.corp.google.com/search/?q\u003dLocked%5C(+file:%5C.java\u0026m\u003d25\u0026sq\u003dpackage:%5Eandroid$\u0026type\u003dcs",
+      "parentUuid": "1d8c6763_24b7d76f",
       "range": {
         "startLine": 199,
         "startChar": 17,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0f0026bc_7bed123c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-06-05T17:47:48Z",
+      "side": 1,
+      "message": "Hmm - update() has always had a synchronized block guarding the write to mCi. Perhaps you weren\u0027t seeing it because Gerrit collapsed the unchanged lines above?",
+      "parentUuid": "25157b36_076c185d",
+      "range": {
+        "startLine": 640,
+        "startChar": 0,
+        "endLine": 643,
+        "endChar": 9
+      },
+      "revId": "7c882e16abcefa77a93480e032b727323571d484",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c52f73e6_455dc4ae",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2017-06-03T02:44:33Z",
       "side": 1,
       "message": "I know that the \"mLock\" is traditional, but recently I\u0027ve been pointed to just using synchronized(this) which means that we can just make the methods synchronized in most cases. Especially given the number of them, would that be cleaner than putting all the contents of each method into a synchronized (mLock) block?",
+      "range": {
+        "startLine": 667,
+        "startChar": 22,
+        "endLine": 667,
+        "endChar": 27
+      },
+      "revId": "7c882e16abcefa77a93480e032b727323571d484",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26111322_dde75b1e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-06-05T17:47:48Z",
+      "side": 1,
+      "message": "I\u0027ve occasionally seen the advice to be careful around using synchronized(this) \u003d\u003d synchronized methods, because the following scenarios can cause unexpected lock contention or even deadlock:\n\n-Someone external using a UiccCard instance as a lock object\n-Someone subclassing UiccCard and declaring synchronized methods\n\nWhere the problem with both of these is that they\u0027re impossible to detect just from looking at the source of UiccCard in isolation.\n\nIn the interest of that as well as keeping this change isolated to the minimum purpose it needs to serve, I think I\u0027d prefer to keep this as is unless the Telephony team feels more strongly.",
+      "parentUuid": "c52f73e6_455dc4ae",
       "range": {
         "startLine": 667,
         "startChar": 22,
