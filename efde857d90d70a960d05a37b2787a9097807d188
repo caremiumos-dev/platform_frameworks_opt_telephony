@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dc4ba5f_73c95258",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-06-05T18:40:24Z",
+      "side": 1,
+      "message": "per Shishir: this should probably only happen when aid is empty (indicating a card-level reset), not for every application reset, although the difference in practice is unlikely to matter.",
+      "revId": "efde857d90d70a960d05a37b2787a9097807d188",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
