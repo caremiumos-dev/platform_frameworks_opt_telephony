@@ -231,6 +231,24 @@
     },
     {
       "key": {
+        "uuid": "af203b4d_a398ab81",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T17:07:50Z",
+      "side": 1,
+      "message": "If we get the stop confirmation before we get the start confirmation, we will\n1. unregister the handler before it is registered, this is logically incorrect but fine because the RegistrantList will remove whatever can be found for that handler.\n2. We will register the handler but no one will unregister it, and now this is actually a problem. I added one more check in the  startScanDone() to make sure the scan is still live before we register the handler.",
+      "parentUuid": "7b670e74_5f1de72e",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75c3bc7a_50889e45",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 3
@@ -360,6 +378,24 @@
       "side": 1,
       "message": "I dont think it has been answered. This comment is about the ordering; interrupt will be sent before start.",
       "parentUuid": "5b18840a_d486a667",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "30fa5c23_aebbf81b",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-05T17:07:50Z",
+      "side": 1,
+      "message": "Because \"interrupt\" acts in a similar way of \"stop\", in both doInterruptScan() and doStopScan(), the first step is to check whether the requested \"scanId\" matches the stored scan requests, so \"interrupt\" and \"stop\" command won\u0027t be sent to the modem before the \"start\" commend.",
+      "parentUuid": "6db4f37c_60b9170b",
       "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
