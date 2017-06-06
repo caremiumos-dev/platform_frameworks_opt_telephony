@@ -22,6 +22,30 @@
       "revId": "b6655ffd6acf1de460bb62fe4ce945053d711b2c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "60957883_6645a358",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1152149
+      },
+      "writtenOn": "2017-06-06T05:32:18Z",
+      "side": 1,
+      "message": "If the state machine is moving from delivering state to idle state, it is because either a new SMS has arrived, or because an existing multi-part SMS has not been completely processed. In both cases, the SMS is not going to be broadcast to the clients.\n\nThe state machine will move to Waiting State only after it has processed all the parts of the incoming SMS. That is, once the state machine enters the Waiting State, all that is left for it to do is to broadcast the SMS to the clients. Since this wakelock is being acquired here to give clients sufficient time to aqcuire their own wakelocks, the timeout is updated in the exit() of waiting state.",
+      "parentUuid": "e4ec9dc2_c48b1674",
+      "range": {
+        "startLine": 496,
+        "startChar": 6,
+        "endLine": 501,
+        "endChar": 9
+      },
+      "revId": "b6655ffd6acf1de460bb62fe4ce945053d711b2c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
