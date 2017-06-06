@@ -46,6 +46,30 @@
       "revId": "b6655ffd6acf1de460bb62fe4ce945053d711b2c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b161796_ce629274",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-06-06T19:20:00Z",
+      "side": 1,
+      "message": "I think there are two parts: \n1. smsinboundhandler hold a wakelock to cover the duration for delivering intents to sms apps and make sure sms apps have enough time to grab its own wakelock before going to sleep so that users will not miss a time-critical message.\n2. smsinboundhandler grabs a wakelock when leaving idle state to processing incoming SMS to make sure telephony framework don\u0027t go to sleep. the processing might takes some time (writing to db etc).\n\nso this wake lock covers both time processing from telephony framework and notifying all sms apps.",
+      "parentUuid": "60957883_6645a358",
+      "range": {
+        "startLine": 496,
+        "startChar": 6,
+        "endLine": 501,
+        "endChar": 9
+      },
+      "revId": "b6655ffd6acf1de460bb62fe4ce945053d711b2c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
