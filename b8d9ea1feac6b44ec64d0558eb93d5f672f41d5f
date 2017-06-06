@@ -417,6 +417,24 @@
       "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6312058d_be52951b",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-06T03:52:14Z",
+      "side": 1,
+      "message": "it seems weird to me to send a \"start\" command when the binder died, for example, if there is a live scan running and binder died, if we start a new scan before interrupt, this new scan will actually fail and do nothing since there is already a scan running.",
+      "parentUuid": "4ac78662_27a1dc2b",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
