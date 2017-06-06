@@ -399,6 +399,24 @@
       "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4ac78662_27a1dc2b",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-06T01:32:12Z",
+      "side": 1,
+      "message": "Agreed that interrupt wont do anything, but do you want to call start when binder died and the request was meant to be interrupted?",
+      "parentUuid": "30fa5c23_aebbf81b",
+      "revId": "b8d9ea1feac6b44ec64d0558eb93d5f672f41d5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
