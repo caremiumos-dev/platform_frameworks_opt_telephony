@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6d79c65_9c2596ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-06-06T17:57:39Z",
+      "side": 1,
+      "message": "Commit message needs:\n1) a \"Bug: \u003cbug number\u003e\" line\n2) a \"Test: testOriginalDialString\" line pointing to the test that you\u0027ve uploaded.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 6
+      },
+      "revId": "7d0500955132733e30ee42f1b614644dc15dd6c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
