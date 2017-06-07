@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Binder;
 import android.os.PersistableBundle;
 import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
@@ -71,20 +72,26 @@ public class CarrierSmsUtils {
 
     @Nullable
     private static String getCarrierImsPackage(Context context, Phone phone) {
-        CarrierConfigManager cm = (CarrierConfigManager) context.getSystemService(
-                Context.CARRIER_CONFIG_SERVICE);
-        if (cm == null) {
-            Rlog.e(TAG, "Failed to retrieve CarrierConfigManager");
-            return null;
-        }
+        String imsPackage = null;
+        final long identity = Binder.clearCallingIdentity();
+        try {
+            CarrierConfigManager cm = (CarrierConfigManager) context.getSystemService(
+                    Context.CARRIER_CONFIG_SERVICE);
+            if (cm == null) {
+                Rlog.e(TAG, "Failed to retrieve CarrierConfigManager");
+                return null;
+            }
 
-        PersistableBundle config = cm.getConfigForSubId(phone.getSubId());
-        if (config == null) {
-            if (VDBG) Rlog.v(TAG, "No CarrierConfig for subId:" + phone.getSubId());
-            return null;
+            PersistableBundle config = cm.getConfigForSubId(phone.getSubId());
+            if (config == null) {
+                if (VDBG) Rlog.v(TAG, "No CarrierConfig for subId:" + phone.getSubId());
+                return null;
+            }
+            imsPackage = config.getString(CARRIER_IMS_PACKAGE_KEY, null);
+        } finally {
+            Binder.restoreCallingIdentity(identity);
         }
-
-        return config.getString(CARRIER_IMS_PACKAGE_KEY, null);
+        return imsPackage;
     }
 
     private CarrierSmsUtils() {}
