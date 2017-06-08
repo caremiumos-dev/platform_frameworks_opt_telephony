@@ -22,6 +22,30 @@
       "revId": "ff8da4e765e451852ca5ce849a7e272c64a2d2ec",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "853fbc21_01843911",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-08T18:18:52Z",
+      "side": 1,
+      "message": "This was not a bug before. When I wrote the code for the RIL.java, I thought only the \"NetworkScanRequest\" is needed to start the scan. However, when I later wrote the NetworkScanRequestTracker.java, I realized that we actually need to send the \"NetworkScanRequestInfo\" to the RIL so that we can do some check when this \"NetworkScanRequestInfo\" is sent back from RIL together with the \"NetworkScanResult\". We can not do the check with \"NetworkScanRequest\" is because \"NetworkScanRequest\" is not unique but \"NetworkScanRequestInfo\" is.",
+      "parentUuid": "2e0252a7_cb3a0fd0",
+      "range": {
+        "startLine": 1794,
+        "startChar": 47,
+        "endLine": 1794,
+        "endChar": 69
+      },
+      "revId": "ff8da4e765e451852ca5ce849a7e272c64a2d2ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
