@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4215c70d_396ec2fa",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4017,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-06-08T16:11:13Z",
+      "side": 1,
+      "message": "Should there be a profile type for XCAP?",
+      "range": {
+        "startLine": 4017,
+        "startChar": 16,
+        "endLine": 4017,
+        "endChar": 31
+      },
+      "revId": "4862e650f6d39ba0b1bf56e9ad6917542c1e8682",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
