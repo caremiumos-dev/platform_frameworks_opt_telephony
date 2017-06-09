@@ -70,6 +70,30 @@
       "revId": "b6655ffd6acf1de460bb62fe4ce945053d711b2c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "409e3969_8435a01e",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1152149
+      },
+      "writtenOn": "2017-06-09T10:11:20Z",
+      "side": 1,
+      "message": "Yes, this wakelock covers both the parts.\n\nThe only difference with the existing implementation is the value of timeout when no SMS needs to be processed during device boot, in which case, the timeout is set to 0.\nIf an SMS needs to be processed, the timeout is set back to the default 3 seconds.",
+      "parentUuid": "9b161796_ce629274",
+      "range": {
+        "startLine": 496,
+        "startChar": 6,
+        "endLine": 501,
+        "endChar": 9
+      },
+      "revId": "b6655ffd6acf1de460bb62fe4ce945053d711b2c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
