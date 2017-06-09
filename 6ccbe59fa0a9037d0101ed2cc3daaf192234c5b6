@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af5b6e6c_11fe620c",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-09T03:45:24Z",
+      "side": 1,
+      "message": "Since this can also be SUCCESS, it should be called status instead of err in all places.",
+      "range": {
+        "startLine": 207,
+        "startChar": 34,
+        "endLine": 207,
+        "endChar": 41
+      },
+      "revId": "6ccbe59fa0a9037d0101ed2cc3daaf192234c5b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "794e5c23_d332aba9",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1795,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-09T03:45:24Z",
+      "side": 1,
+      "message": "It seems a little weird that response is part of the result message. Ideally RIL should not need to know anything about result, except that it needs to be sent on response.",
+      "revId": "6ccbe59fa0a9037d0101ed2cc3daaf192234c5b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
