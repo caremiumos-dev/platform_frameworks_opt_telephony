@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "368c2aa5_c5eb62ed",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-10T03:20:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b4ae085_0fbc7887",
+      "range": {
+        "startLine": 205,
+        "startChar": 46,
+        "endLine": 205,
+        "endChar": 52
+      },
+      "revId": "6d1de9b3ddaeb8906368b1ef04961de1870b34d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "796090df_6982c781",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 12
@@ -36,6 +60,30 @@
       "writtenOn": "2017-06-10T00:28:17Z",
       "side": 1,
       "message": "Ideally this should be Status too.",
+      "range": {
+        "startLine": 280,
+        "startChar": 79,
+        "endLine": 280,
+        "endChar": 84
+      },
+      "revId": "6d1de9b3ddaeb8906368b1ef04961de1870b34d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef2972e3_64b26a08",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-10T03:20:28Z",
+      "side": 1,
+      "message": "This is actually the \"RadioError\" returned from the RIL, so how about we keep it as scanError?",
+      "parentUuid": "796090df_6982c781",
       "range": {
         "startLine": 280,
         "startChar": 79,
