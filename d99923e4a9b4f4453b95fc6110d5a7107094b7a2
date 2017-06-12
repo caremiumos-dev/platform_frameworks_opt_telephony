@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "310a1b08_0da802fe",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-06-12T20:33:56Z",
+      "side": 1,
+      "message": "not telephony, remove",
+      "range": {
+        "startLine": 4,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 18
+      },
+      "revId": "d99923e4a9b4f4453b95fc6110d5a7107094b7a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72d868d9_6f49972e",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-06-12T20:33:56Z",
+      "side": 1,
+      "message": "not telephony, remove",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 15
+      },
+      "revId": "d99923e4a9b4f4453b95fc6110d5a7107094b7a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
