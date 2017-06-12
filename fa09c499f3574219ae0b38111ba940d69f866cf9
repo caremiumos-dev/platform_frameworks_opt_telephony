@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a9e4142_319d7c0a",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2017-06-12T22:46:06Z",
+      "side": 1,
+      "message": "I agree with the spirit of this change, but Brad may know the best method to test in service state.",
+      "range": {
+        "startLine": 1286,
+        "startChar": 27,
+        "endLine": 1287,
+        "endChar": 93
+      },
+      "revId": "fa09c499f3574219ae0b38111ba940d69f866cf9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
