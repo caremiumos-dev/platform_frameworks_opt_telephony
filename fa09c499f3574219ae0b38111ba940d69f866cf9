@@ -22,6 +22,30 @@
       "revId": "fa09c499f3574219ae0b38111ba940d69f866cf9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e65d1fd3_9ee91b3d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-06-12T23:49:50Z",
+      "side": 1,
+      "message": "There are no helper methods for this right now. If you want it to be cleaner, you could add a helper method in ServiceState that does this, such as isDataOrVoiceInService().\n\nFrom a code health perspective, I am a little uncomfortable with ignoring roaming changes when out of service. The property \"mRoaming\" makes no mention of WFC but is used exclusively to set the WFC mode for home/roaming networks. We are essentially making the \"mRoaming\" variable in ImsPhone different than the ServiceState roaming variable. The problem is that there is no concept of \"roaming\" when out of service. \n\nInstead, set mRoaming according to ServiceState, but only update the WFC mode if we are in service. Or you can change mRoaming to something more explicit, like misWfcModeRoaming.",
+      "parentUuid": "7a9e4142_319d7c0a",
+      "range": {
+        "startLine": 1286,
+        "startChar": 27,
+        "endLine": 1287,
+        "endChar": 93
+      },
+      "revId": "fa09c499f3574219ae0b38111ba940d69f866cf9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
