@@ -70,6 +70,30 @@
       "revId": "fa09c499f3574219ae0b38111ba940d69f866cf9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26e00e5c_2c82c12f",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-06-13T17:55:38Z",
+      "side": 1,
+      "message": "Where do you see the logic for tm.isNetworkRoaming(), where it returns true when not in service? From what I can tell, tm.isNetworkRoaming calculates the roaming status by checking if the ServiceState is roaming, which is what ImsPhone currently does. To me, it looks like tm.isNetworkRoaming will return false when out of service.",
+      "parentUuid": "8fdec2be_b6eeb87d",
+      "range": {
+        "startLine": 1286,
+        "startChar": 27,
+        "endLine": 1287,
+        "endChar": 93
+      },
+      "revId": "fa09c499f3574219ae0b38111ba940d69f866cf9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
