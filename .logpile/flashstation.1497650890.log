@@ -1,0 +1,13 @@
+# (flashstation) 06/16/17 15:08:10: new fresh new log...
+# 06/16/17 15:08:10: About to create a new LoginPanel...
+# 06/16/17 15:08:10: 
+#------------------------------------------------------------
+# sha1sum (version key): aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e
+# Built on Thu Jun 15 15:04:40 2017 (1497564280)
+# Built by mwills@mwills2.mtv.corp.google.com:/google/src/cloud/mwills/flashstation/google3
+# Built as //wireless/android/build_tools/flashstation:android_flashstation
+# Build ID: e7c9fabd-0c29-41b6-8bd7-e2271eb34012
+# Built from version map "map 159159680 default { // } import buildenv/11231;" in a possibly-modified Components client in CitC workspace mwills:flashstation:4579:citc at snapshot 4
+# command line FLAGS: ['/usr/local/google/home/yinxu/Downloads/android_flashstation.par']
+#------------------------------------------------------------
+# 06/16/17 15:08:10: Reseting to main login panel...

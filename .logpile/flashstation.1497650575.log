@@ -1,0 +1,166 @@
+# (flashstation) 06/16/17 15:02:55: Flashstation main() starting...
+# (flashstation) 06/16/17 15:02:55: 
+#------------------------------------------------------------
+# sha1sum (version key): aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e
+# Built on Thu Jun 15 15:04:40 2017 (1497564280)
+# Built by mwills@mwills2.mtv.corp.google.com:/google/src/cloud/mwills/flashstation/google3
+# Built as //wireless/android/build_tools/flashstation:android_flashstation
+# Build ID: e7c9fabd-0c29-41b6-8bd7-e2271eb34012
+# Built from version map "map 159159680 default { // } import buildenv/11231;" in a possibly-modified Components client in CitC workspace mwills:flashstation:4579:citc at snapshot 4
+# command line FLAGS: ['/usr/local/google/home/yinxu/Downloads/android_flashstation.par']
+#------------------------------------------------------------
+# 06/16/17 15:02:55: Reseting to main login panel...
+# 06/16/17 15:02:55: Now running basic sanity check...
+# 06/16/17 15:03:03: 
+#------------------------------------------------------------
+# sha1sum (version key): aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e
+# Built on Thu Jun 15 15:04:40 2017 (1497564280)
+# Built by mwills@mwills2.mtv.corp.google.com:/google/src/cloud/mwills/flashstation/google3
+# Built as //wireless/android/build_tools/flashstation:android_flashstation
+# Build ID: e7c9fabd-0c29-41b6-8bd7-e2271eb34012
+# Built from version map "map 159159680 default { // } import buildenv/11231;" in a possibly-modified Components client in CitC workspace mwills:flashstation:4579:citc at snapshot 4
+# command line FLAGS: ['/usr/local/google/home/yinxu/Downloads/android_flashstation.par']
+#------------------------------------------------------------
+# 06/16/17 15:03:03: Basic user info lookup passed (yinxu@google.com)...
+# 06/16/17 15:03:03: Basic cloud storage download succeeded (aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e  android_flashstation.par
+)...
+# 06/16/17 15:03:04: IsFlashstationCurrent(): sha1 for '/usr/local/google/home/yinxu/Downloads/android_flashstation.par' is 'aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e', sha1 for remote is 'aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e', 
+# 06/16/17 15:03:05: downloading fastboot...
+downloading fastboot...
+100
+100
+# 06/16/17 15:03:06: BuildServerTool download took 1.18935s; to download 9776000 bytes, or 8.22 Mbps.
+# 06/16/17 15:03:06: Downloaded fastboot from git_master-release, angler-userdebug, build # 4106250...
+# 06/16/17 15:03:07: downloading adb...
+downloading adb...
+100
+100
+# 06/16/17 15:03:09: BuildServerTool download took 1.52649s; to download 17583032 bytes, or 11.5 Mbps.
+# 06/16/17 15:03:09: Downloaded adb from git_master-release, angler-userdebug, build # 4106250...
+# 06/16/17 15:03:09: All sanity tests passed, ready to go...
+# 06/16/17 15:03:12: no badge scanner, using local user account...
+# 06/16/17 15:03:12: User yinxu - validated as Ying
+# 06/16/17 15:03:12: Flashstation version check...
+# 06/16/17 15:03:13: IsFlashstationCurrent(): sha1 for '/usr/local/google/home/yinxu/Downloads/android_flashstation.par' is 'aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e', sha1 for remote is 'aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e', 
+# 06/16/17 15:03:13: Asking service for latest project & ota information...
+# 06/16/17 15:03:13: Skipped download of fastboot; age=6 seconds, which is less than max of age: 7200 seconds.
+# 06/16/17 15:03:13: Skipped download of adb; age=4 seconds, which is less than max of age: 7200 seconds.
+# 06/16/17 15:03:13: Checking for device...
+# 06/16/17 15:03:13: BasicInspection()
+# 06/16/17 15:03:13: After USB scan, we have 11 total devices...
+# 06/16/17 15:03:13: 0 Product ID: 8002
+# 06/16/17 15:03:13: 0 Vendor ID:  8087
+# 06/16/17 15:03:13: 0 Serial Num: unknown_serial
+# 06/16/17 15:03:13: 1 Product ID: 0002
+# 06/16/17 15:03:13: 1 Vendor ID:  1d6b
+# 06/16/17 15:03:13: 1 Serial Num: unknown_serial
+# 06/16/17 15:03:13: 2 Product ID: 800a
+# 06/16/17 15:03:13: 2 Vendor ID:  8087
+# 06/16/17 15:03:13: 2 Serial Num: unknown_serial
+# 06/16/17 15:03:13: 3 Product ID: 0002
+# 06/16/17 15:03:13: 3 Vendor ID:  1d6b
+# 06/16/17 15:03:13: 3 Serial Num: unknown_serial
+# 06/16/17 15:03:13: 4 Product ID: 8140
+# 06/16/17 15:03:13: 4 Vendor ID:  0451
+# 06/16/17 15:03:13: 4 Serial Num: unknown_serial
+# 06/16/17 15:03:13: 5 Product ID: 0003
+# 06/16/17 15:03:13: 5 Vendor ID:  1d6b
+# 06/16/17 15:03:13: 5 Serial Num: unknown_serial
+# 06/16/17 15:03:13: 6 Product ID: c069
+# 06/16/17 15:03:13: 6 Vendor ID:  046d
+# 06/16/17 15:03:13: 6 Serial Num: unknown_serial
+# 06/16/17 15:03:13: 7 Product ID: 00db
+# 06/16/17 15:03:13: 7 Vendor ID:  045e
+# 06/16/17 15:03:13: 7 Serial Num: unknown_serial
+# 06/16/17 15:03:13: 8 Product ID: 0211
+# 06/16/17 15:03:13: 8 Vendor ID:  1050
+# 06/16/17 15:03:13: 8 Serial Num: unknown_serial
+# 06/16/17 15:03:13: 9 Product ID: 8142
+# 06/16/17 15:03:13: 9 Vendor ID:  0451
+# 06/16/17 15:03:13: 9 Serial Num: 7A0508719185
+# 06/16/17 15:03:13: 10 Product ID: 0002
+# 06/16/17 15:03:13: 10 Vendor ID:  1d6b
+# 06/16/17 15:03:13: 10 Serial Num: unknown_serial
+# 06/16/17 15:03:13: No Android devices found on attempt # 1...retrying...
+# 06/16/17 15:03:17: After USB scan, we have 11 total devices...
+# 06/16/17 15:03:17: 0 Product ID: 8002
+# 06/16/17 15:03:17: 0 Vendor ID:  8087
+# 06/16/17 15:03:17: 0 Serial Num: unknown_serial
+# 06/16/17 15:03:17: 1 Product ID: 0002
+# 06/16/17 15:03:17: 1 Vendor ID:  1d6b
+# 06/16/17 15:03:17: 1 Serial Num: unknown_serial
+# 06/16/17 15:03:17: 2 Product ID: 800a
+# 06/16/17 15:03:17: 2 Vendor ID:  8087
+# 06/16/17 15:03:17: 2 Serial Num: unknown_serial
+# 06/16/17 15:03:17: 3 Product ID: 0002
+# 06/16/17 15:03:17: 3 Vendor ID:  1d6b
+# 06/16/17 15:03:17: 3 Serial Num: unknown_serial
+# 06/16/17 15:03:17: 4 Product ID: 8140
+# 06/16/17 15:03:17: 4 Vendor ID:  0451
+# 06/16/17 15:03:17: 4 Serial Num: unknown_serial
+# 06/16/17 15:03:17: 5 Product ID: 0003
+# 06/16/17 15:03:17: 5 Vendor ID:  1d6b
+# 06/16/17 15:03:17: 5 Serial Num: unknown_serial
+# 06/16/17 15:03:17: 6 Product ID: c069
+# 06/16/17 15:03:17: 6 Vendor ID:  046d
+# 06/16/17 15:03:17: 6 Serial Num: unknown_serial
+# 06/16/17 15:03:17: 7 Product ID: 00db
+# 06/16/17 15:03:17: 7 Vendor ID:  045e
+# 06/16/17 15:03:17: 7 Serial Num: unknown_serial
+# 06/16/17 15:03:17: 8 Product ID: 0211
+# 06/16/17 15:03:17: 8 Vendor ID:  1050
+# 06/16/17 15:03:17: 8 Serial Num: unknown_serial
+# 06/16/17 15:03:17: 9 Product ID: 8142
+# 06/16/17 15:03:17: 9 Vendor ID:  0451
+# 06/16/17 15:03:17: 9 Serial Num: 7A0508719185
+# 06/16/17 15:03:17: 10 Product ID: 0002
+# 06/16/17 15:03:17: 10 Vendor ID:  1d6b
+# 06/16/17 15:03:17: 10 Serial Num: unknown_serial
+# 06/16/17 15:03:17: No Android devices found on attempt # 2...retrying...
+# 06/16/17 15:03:20: After USB scan, we have 11 total devices...
+# 06/16/17 15:03:20: 0 Product ID: 8002
+# 06/16/17 15:03:20: 0 Vendor ID:  8087
+# 06/16/17 15:03:20: 0 Serial Num: unknown_serial
+# 06/16/17 15:03:20: 1 Product ID: 0002
+# 06/16/17 15:03:20: 1 Vendor ID:  1d6b
+# 06/16/17 15:03:20: 1 Serial Num: unknown_serial
+# 06/16/17 15:03:20: 2 Product ID: 800a
+# 06/16/17 15:03:20: 2 Vendor ID:  8087
+# 06/16/17 15:03:20: 2 Serial Num: unknown_serial
+# 06/16/17 15:03:20: 3 Product ID: 0002
+# 06/16/17 15:03:20: 3 Vendor ID:  1d6b
+# 06/16/17 15:03:20: 3 Serial Num: unknown_serial
+# 06/16/17 15:03:20: 4 Product ID: 8140
+# 06/16/17 15:03:20: 4 Vendor ID:  0451
+# 06/16/17 15:03:20: 4 Serial Num: unknown_serial
+# 06/16/17 15:03:20: 5 Product ID: 0003
+# 06/16/17 15:03:20: 5 Vendor ID:  1d6b
+# 06/16/17 15:03:20: 5 Serial Num: unknown_serial
+# 06/16/17 15:03:20: 6 Product ID: c069
+# 06/16/17 15:03:20: 6 Vendor ID:  046d
+# 06/16/17 15:03:20: 6 Serial Num: unknown_serial
+# 06/16/17 15:03:20: 7 Product ID: 00db
+# 06/16/17 15:03:20: 7 Vendor ID:  045e
+# 06/16/17 15:03:20: 7 Serial Num: unknown_serial
+# 06/16/17 15:03:20: 8 Product ID: 0211
+# 06/16/17 15:03:20: 8 Vendor ID:  1050
+# 06/16/17 15:03:20: 8 Serial Num: unknown_serial
+# 06/16/17 15:03:20: 9 Product ID: 8142
+# 06/16/17 15:03:20: 9 Vendor ID:  0451
+# 06/16/17 15:03:20: 9 Serial Num: 7A0508719185
+# 06/16/17 15:03:20: 10 Product ID: 0002
+# 06/16/17 15:03:20: 10 Vendor ID:  1d6b
+# 06/16/17 15:03:20: 10 Serial Num: unknown_serial
+# 06/16/17 15:03:20: About to throw Device not Found:
+[{'vendorID': '8087', 'serial': 'unknown_serial', 'productID': '8002'}, {'vendorID': '1d6b', 'serial': 'unknown_serial', 'productID': '0002'}, {'vendorID': '8087', 'serial': 'unknown_serial', 'productID': '800a'}, {'vendorID': '1d6b', 'serial': 'unknown_serial', 'productID': '0002'}, {'vendorID': '0451', 'serial': 'unknown_serial', 'productID': '8140'}, {'vendorID': '1d6b', 'serial': 'unknown_serial', 'productID': '0003'}, {'vendorID': '046d', 'serial': 'unknown_serial', 'productID': 'c069'}, {'vendorID': '045e', 'serial': 'unknown_serial', 'productID': '00db'}, {'vendorID': '1050', 'serial': 'unknown_serial', 'productID': '0211'}, {'vendorID': '0451', 'serial': '7A0508719185', 'productID': '8142'}, {'vendorID': '1d6b', 'serial': 'unknown_serial', 'productID': '0002'}]
+No recognized Android device connected
+# (flashstation) 06/16/17 15:03:20: DeviceInspectorNotFoundException'>: No recognized Android device connected
+  Traceback (most recent call last):
+    File "google3/wireless/android/build_tools/flashstation/login_panel.py", line 332, in OnGoButtonClick
+      self.di.BasicInspection()
+    File "google3/wireless/android/build_tools/flashstation/device_inspector.py", line 113, in BasicInspection
+      'No recognized Android device connected')
+  DeviceInspectorNotFoundException: No recognized Android device connected
+  
+# 06/16/17 15:03:20: No recognized Android device connected
+# (flashstation) 06/16/17 15:03:22: closing log for rotation...

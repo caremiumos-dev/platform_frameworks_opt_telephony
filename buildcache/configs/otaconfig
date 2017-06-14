@@ -1,0 +1,396 @@
+# The format of this file and legacy branches is described in the comments at
+# the end.
+# Note: Just adding a new branch here doesn't guarantee it will be built by
+# the Auto OTA system. See
+# http://g3doc/company/teams/android-ota/support/auto-ota/configurations.md for
+# details.
+
+BRANCH  AAAA  git_master-release
+BRANCH  OPR1  git_oc-release
+BRANCH  OPP1  git_oc-preview-release
+BRANCH  OPP2  git_oc-preview2-release
+BRANCH  OPP3  git_oc-preview3-release
+BRANCH  OR    git_oc-release
+BRANCH  OPD1  git_oc-dr1-release
+BRANCH  OWR1  git_oc-wear-release
+BRANCH  AWG1  git_wear-master-release
+BRANCH  OWP1  git_oc-wear-preview-release
+
+BRANCH  MC  git_mnc-sw-release
+BRANCH  MN  partner-emerald-mr1-release
+BRANCH  MQ  partner-feldspar-mnc-release
+BRANCH  MW  partner-emerald-dr-release
+BRANCH  M1  partner-emerald-dr-sec-release
+BRANCH  M9  partner-emerald-dr-sec3-release
+BRANCH  NF  partner-feldspar-release
+BRANCH  NWD1  partner-feldspar-dr-release
+BRANCH  NL  partner-feldspar-le-release
+BRANCH  NQ  partner-feldspar-factory-release
+BRANCH  NM  git_nyc-mr1-release
+BRANCH  N4  git_nyc-mr1-security-a-release
+BRANCH  N6  git_nyc-mr1-security-e-release
+BRANCH  N9  git_nyc-mr1-volantis-release
+BRANCH  N2  git_nyc-mr2-release
+BRANCH  NH  git_nyc-mr2-security-a-release
+BRANCH  NV  partner-feldspar-preview-release
+BRANCH  NX  partner-feldspar-stable-release
+BRANCH  N7  partner-feldspar-stable2-release
+
+
+#### OTA support for canary
+OTA canary shasta                   LATEST(NX)
+OTA canary volantis                 LATEST_WEEKDAY(N4)
+OTA canary volantisg                LATEST_WEEKDAY(N4),LATEST_WEEKDAY(NM)
+OTA canary seed_l8150               LATEST_WEEKDAY(NM),LATEST_WEEKDAY(N2)
+OTA canary shamu                    LATEST_WEEKDAY(N6)
+OTA canary angler                   LATEST_WEEKDAY(NM),LATEST_WEEKDAY(OPR1),LATEST_WEEKDAY(OPP1),LATEST_WEEKDAY(OPP2),LATEST_WEEKDAY(N2),LATEST_WEEKDAY(AAAA)
+OTA canary angler_gmscore_next      LATEST_WEEKDAY(NM),LATEST_WEEKDAY(OPR1),LATEST_WEEKDAY(N2)
+OTA canary bullhead                 LATEST_WEEKDAY(NM),LATEST_WEEKDAY(OPR1),LATEST_WEEKDAY(OPP1),LATEST_WEEKDAY(OPP2),LATEST_WEEKDAY(N2)
+OTA canary ryu                      LATEST_WEEKDAY(NM),LATEST_WEEKDAY(OPR1),LATEST_WEEKDAY(OPP1),LATEST_WEEKDAY(OPP2),LATEST_WEEKDAY(N2)
+OTA canary fugu                     LATEST_WEEKDAY(NM),LATEST_WEEKDAY(OPR1),LATEST_WEEKDAY(OPP1),LATEST_WEEKDAY(OPP2),LATEST_WEEKDAY(N2)
+OTA canary fugu_gmscore_next        LATEST_WEEKDAY(NM),LATEST_WEEKDAY(OPR1),LATEST_WEEKDAY(N2)
+OTA canary muskie                   LATEST_WEEKDAY(OPD1)
+OTA canary walleye                  LATEST_WEEKDAY(OPD1)
+OTA canary taimen                   LATEST_WEEKDAY(OPD1)
+OTA canary anglersw                 LATEST_WEEKDAY(MC)
+OTA canary bullheadsw               LATEST_WEEKDAY(MC)
+OTA canary hammerheadsw             LATEST_WEEKDAY(MC)
+OTA canary shamusw                  LATEST_WEEKDAY(MC)
+OTA canary nemo                     LATEST(MQ),LATEST(NF),LATEST(NV),LATEST(NQ)
+OTA canary glacier                  LATEST(MN),LATEST(MQ),LATEST(MW),LATEST(NF)
+OTA canary koi                      LATEST(MN),LATEST(MQ),LATEST(MW)
+OTA canary gar                      LATEST(NF),LATEST(NX)
+OTA canary swordfish                LATEST(NF),LATEST(NX),LATEST(OWR1)
+OTA canary angelfish                LATEST(NF),LATEST(NX),LATEST(OWR1)
+OTA canary marlin                   LATEST_WEEKDAY(NM),LATEST_WEEKDAY(OPR1),LATEST_WEEKDAY(OPD1),LATEST_WEEKDAY(OPP1),LATEST_WEEKDAY(OPP2),LATEST_WEEKDAY(N2)
+OTA canary sailfish                 LATEST_WEEKDAY(NM),LATEST_WEEKDAY(OPR1),LATEST_WEEKDAY(OPD1),LATEST_WEEKDAY(OPP1),LATEST_WEEKDAY(OPP2),LATEST_WEEKDAY(N2)
+OTA canary sailfish_gmscore_next    LATEST(OPR1)
+OTA canary sculpin                  LATEST(NX),LATEST(NF)
+OTA canary dorado                   LATEST(MW)
+OTA canary sawshark                 LATEST(NX),LATEST(NWD1),LATEST(OWR1)
+OTA canary sawfish                  LATEST(NX),LATEST(NWD1),LATEST(OWR1)
+OTA canary platy                    LATEST(NF)
+OTA canary anthracite               LATEST(NF)
+OTA canary stargazer                LATEST(NWD1)
+OTA canary lionfish                 LATEST(NWD1)
+OTA canary sundial                  LATEST(NWD1)
+OTA canary mullet                   LATEST(NWD1)
+OTA canary spectralite              LATEST(NF)
+OTA canary narwhal                  LATEST(NWD1)
+OTA canary bluegill                 LATEST(NWD1)
+OTA canary shiner                   LATEST(NWD1)
+OTA canary glowlight                LATEST(NWD1)
+
+#### OTA support for droidfood  testing
+OTA googlefood.droidfoodtesting         angler          N2G47G,OPR1.170615.002
+OTA googlefood.droidfoodtesting         bullhead        N2G47F,OPR1.170615.002
+OTA googlefood.droidfoodtesting         fugu            N2G47D,OPR1.170615.002
+OTA googlefood.droidfoodtesting         ryu             N2G47D,OPR1.170615.002
+
+OTA googlefood.droidfoodtesting         marlin          N2G47E,OPR1.170615.002,OPD1.170615.005
+OTA googlefood.droidfoodtesting         sailfish        N2G47E,OPR1.170615.002,OPD1.170615.005
+
+OTA googlefood.droidfoodtesting         muskie          OPD1.170615.005
+OTA googlefood.droidfoodtesting         taimen          OPD1.170615.005
+OTA googlefood.droidfoodtesting         walleye         OPD1.170615.005
+
+OTA googlefood.droidfoodtesting         shamu           N6F26R
+OTA googlefood.droidfoodtesting         volantis        N4F26Q
+OTA googlefood.droidfoodtesting         volantisg       N4F26Q
+OTA googlefood.droidfoodtesting         seed_l8150      N2F69
+
+OTA googlefood.droidfoodtesting         angler_cc       OPP2.170420.011
+OTA googlefood.droidfoodtesting         bullhead_cc     OPP2.170420.011
+OTA googlefood.droidfoodtesting         marlin_cc       OPP2.170420.016
+OTA googlefood.droidfoodtesting         ryu_cc          OPP2.170420.011
+OTA googlefood.droidfoodtesting         sailfish_cc     OPP2.170420.016
+
+
+#### OTA support for experimental testing
+OTA googlefood.testing      angler      N2=OPR1.170316.007,OR=OPR1.170316.007,OPR1.170316.007
+OTA googlefood.testing      bullhead    N2=OPR1.170316.007,OR=OPR1.170316.007,OPR1.170316.007
+OTA googlefood.testing      fugu        N2=OPR1.170316.007,OR=OPR1.170316.007,OPR1.170316.007
+OTA googlefood.testing      ryu         N2=OPR1.170316.007,OR=OPR1.170316.007,OPR1.170316.007
+
+OTA googlefood.testing      marlin      N2G47Q,OPR1=OPP3.170518.004,OPP2=OPP3.170518.004,OPP3.170518.004
+OTA googlefood.testing      sailfish    N2G47Q,OPR1=OPP3.170518.004,OPP2=OPP3.170518.004,OPP3.170518.004
+
+OTA googlefood.testing      muskie      OPR1=OPD1.170413.006,OPD1.170413.006
+OTA googlefood.testing      taimen      OPR1=OPD1.170413.006,OPD1.170413.006
+OTA googlefood.testing      walleye     OPR1=OPD1.170413.006,OPD1.170413.006
+
+OTA googlefood.testing      shamu       NR=N6F26R,N6F26R
+OTA googlefood.testing      volantis    NR=N4F26Q,N4F26Q
+OTA googlefood.testing      volantisg   NR=N4F26Q,N4F26Q
+OTA googlefood.testing      seed_l8150  NMF26F
+
+
+#### OTA support for droidfood
+OTA droidfood shamu                 N6F27E
+OTA droidfood volantis              N4=N9F27C,N9F27C
+OTA droidfood volantisg             N4F27E
+OTA droidfood seed_l8150            N2F62
+
+OTA droidfood angler                OPP2=OPR1.170615.002,OPR1.170615.002
+OTA droidfood bullhead              OPP2=OPR1.170615.002,OPR1.170615.002
+OTA droidfood fugu                  OPP2=OPR1.170615.002,OPR1.170615.002
+OTA droidfood ryu                   OPP2=OPR1.170615.002,OPR1.170615.002
+
+OTA droidfood marlin                OPP2=OPR1.170615.002,OPR1.170615.002,OPD1.170615.005
+OTA droidfood sailfish              OPP2=OPR1.170615.002,OPR1.170615.002,OPD1.170615.005
+
+OTA droidfood muskie                OPD1.170615.005
+OTA droidfood walleye               OPD1.170615.005
+OTA droidfood taimen                OPD1.170615.005
+
+OTA droidfood angler_cc             OPP2=OPR1.170615.002,OPR1.170615.002
+OTA droidfood bullhead_cc           OPP2=OPR1.170615.002,OPR1.170615.002
+OTA droidfood marlin_cc             OPP2=OPR1.170615.002,OPR1.170615.002
+OTA droidfood ryu_cc                OPP2=OPR1.170615.002,OPR1.170615.002
+OTA droidfood sailfish_cc           OPP2=OPR1.170615.002,OPR1.170615.002
+
+OTA droidfood carp                  NF=NXH19Q,NXH19Q
+OTA droidfood bowfin                NF=NXH19Q,NXH19Q
+OTA droidfood smelt                 NF=NXH19Q,NXH19Q
+OTA droidfood bass                  NF=NXH19X,NXH19X
+OTA droidfood platina               M1D64S
+OTA droidfood sprat                 M1D65D
+OTA droidfood nemo                  NF=NXH20B,NXH20B
+OTA droidfood swordfish             NQ=OWR1.170612.003,NX=OWR1.170612.003,NF=OWR1.170612.003,OWP1=OWR1.170612.003,OWR1.170612.003
+OTA droidfood angelfish             NQ=OWR1.170523.004,NX=OWR1.170523.004,N7=OWR1.170523.004,NF=OWR1.170523.004,OWP1=OWR1.170523.004,OWR1.170523.004
+OTA droidfood shasta                MW=NXH19X,NF=NXH19X,N7=NXH19X,NXH19X
+OTA droidfood lionfish              NF=NWD1.170614.001,NX=NWD1.170614.001,N7=NWD1.170614.001,NWD1.170614.001
+OTA droidfood mullet                NWD1.170428.001
+
+
+#### OTA support for droidfood weekly
+OTA droidfood.weekly shamu                 N6F27E
+OTA droidfood.weekly volantis              N4=N9F27C,N9F27C
+OTA droidfood.weekly volantisg             N4F27E
+OTA droidfood.weekly seed_l8150            N2F62
+
+OTA droidfood.weekly angler                OPP2=OPR1.170608.004,OPR1.170608.004
+OTA droidfood.weekly bullhead              OPP2=OPR1.170608.004,OPR1.170608.004
+OTA droidfood.weekly fugu                  OPP2=OPR1.170608.004,OPR1.170608.004
+OTA droidfood.weekly ryu                   OPP2=OPR1.170608.004,OPR1.170608.004
+
+OTA droidfood.weekly marlin                OPP2=OPR1.170608.004,OPR1.170608.004,OPD1.170615.005
+OTA droidfood.weekly sailfish              OPP2=OPR1.170608.004,OPR1.170608.004,OPD1.170615.005
+
+OTA droidfood.weekly muskie                OPD1.170615.005
+OTA droidfood.weekly walleye               OPD1.170615.005
+OTA droidfood.weekly taimen                OPD1.170615.005
+
+OTA droidfood.weekly angler_cc             OPP2=OPR1.170608.004,OPR1.170608.004
+OTA droidfood.weekly bullhead_cc           OPP2=OPR1.170608.004,OPR1.170608.004
+OTA droidfood.weekly marlin_cc             OPP2=OPR1.170608.004,OPR1.170608.004
+OTA droidfood.weekly ryu_cc                OPP2=OPR1.170608.004,OPR1.170608.004
+OTA droidfood.weekly sailfish_cc           OPP2=OPR1.170608.004,OPR1.170608.004
+
+
+#### OTA support for experimental
+OTA googlefood.nyc                      angler          NR=N2G47P,NB=N2G47P,NM=N2G47P,NP=N2G47P,N2G47P
+OTA googlefood.nyc                      bullhead        NR=N2G47F,NB=N2G47F,NM=N2G47F,NP=N2G47F,N2G47F
+OTA googlefood.nyc                      fugu            NR=N2G47H,NB=N2G47H,NM=N2G47H,NP=N2G47H,N2G47H
+OTA googlefood.nyc                      marlin          NM=NHG47O,NO=NHG47O,ND=NHG47O,NP=NHG47O,N2=NHG47O,NHG47O
+OTA googlefood.nyc                      ryu             NR=N2G47D,NB=N2G47D,NM=N2G47D,NP=N2G47D,N2G47D
+OTA googlefood.nyc                      sailfish        NM=NHG47O,NO=NHG47O,ND=NHG47O,NP=NHG47O,N2=NHG47O,NHG47O
+OTA googlefood.nyc                      shamu           NR=N6F27C,NB=N6F27C,NM=N6F27C,N6F27C
+OTA googlefood.nyc                      volantis        NR=N4F27B,NB=N4F27B,NM=N4F27B,N4F27B
+OTA googlefood.nyc                      volantisg       NR=N4F27B,NB=N4F27B,NM=N4F27B,N4F27B
+
+OTA googlefood.oc.a                     angler          N2=OPR1.170608.004,OPP2=OPR1.170608.004,OPP3=OPR1.170608.004,OPR1.170608.004
+OTA googlefood.oc.a                     bullhead        N2=OPR1.170608.004,OPP2=OPR1.170608.004,OPP3=OPR1.170608.004,OPR1.170608.004
+OTA googlefood.oc.a                     fugu            N2=OPR1.170607.002,OPP2=OPR1.170607.002,OPP3=OPR1.170607.002,OPR1.170607.002
+OTA googlefood.oc.a                     marlin          N2=OPR1.170608.004,NH=OPR1.170608.004,OPP2=OPR1.170608.004,OPP3=OPR1.170608.004,OPR1.170608.004
+OTA googlefood.oc.a                     ryu             N2=OPR1.170608.004,OPP2=OPR1.170608.004,OPP3=OPR1.170608.004,OPR1.170608.004
+OTA googlefood.oc.a                     sailfish        N2=OPR1.170608.004,NH=OPR1.170608.004,OPP2=OPR1.170608.004,OPP3=OPR1.170608.004,OPR1.170608.004
+
+OTA googlefood.oc.a                     muskie          OPD1.170601.007
+OTA googlefood.oc.a                     taimen          OPD1.170601.007
+OTA googlefood.oc.a                     walleye         OPD1.170601.007
+
+OTA googlefood.oc.b                     marlin          N2=OPR1.170608.004,NH=OPR1.170608.004,OPP2=OPR1.170608.004,OPP3=OPR1.170608.004,OPR1.170608.004
+OTA googlefood.oc.b                     sailfish        N2=OPR1.170608.004,NH=OPR1.170608.004,OPP2=OPR1.170608.004,OPP3=OPR1.170608.004,OPR1.170608.004
+
+OTA googlefood.oc.b                     muskie          OPD1.170601.007
+OTA googlefood.oc.b                     taimen          OPD1.170601.007
+OTA googlefood.oc.b                     walleye         OPD1.170601.007
+
+
+#### OTA group for Clockwork
+# OTA group for Clockwork
+OTA googlefood.cw                       platina         M1D64S
+OTA googlefood.cw                       tetra           M1D64T
+OTA googlefood.cw                       metallica       MWD49B
+OTA googlefood.cw                       sprat           M1D65D
+OTA googlefood.cw                       bass            NF=NXH19X,NXH19X
+OTA googlefood.cw                       smelt           NF=NXH19Q,NXH19Q
+OTA googlefood.cw                       carp            NF=NXH19Q,NXH19Q
+OTA googlefood.cw                       bowfin          NF=NXH19Q,NXH19Q
+OTA googlefood.cw                       nemo            NF=NXH20B,NXH20B
+OTA googlefood.cw                       sculpin         MW=NXG74O,M9=NXG74O,NF=NXG74O,NXG74O
+OTA googlefood.cw                       gar             MW=NXH20C,M9=NXH20C,NF=NXH20C,NXH20C
+OTA googlefood.cw                       swordfish       NQ=NXH20B,NXH20B
+OTA googlefood.cw                       angelfish       NQ=NXH19X,N7=NXH19X,NXH19X
+OTA googlefood.cw                       shasta          MW=NXH19X,NF=NXH19X,N7=NXH19X,NXH19X
+OTA googlefood.cw                       lionfish        NF=NWD1.170614.001,NX=NWD1.170614.001,n7=NWD1.170614.001,NWD1.170614.001
+OTA googlefood.cw                       mullet          NWD1.170428.001
+
+OTA googlefood.ios                      platina         M1D64S
+OTA googlefood.ios                      tetra           M1D64T
+OTA googlefood.ios                      metallica       MWD49B
+OTA googlefood.ios                      sprat           M1D65D
+OTA googlefood.ios                      bass            NF=NXH19X,NXH19X
+OTA googlefood.ios                      smelt           NF=NXH19Q,NXH19Q
+OTA googlefood.ios                      carp            NF=NXH19Q,NXH19Q
+OTA googlefood.ios                      nemo            NF=NXH20B,NXH20B
+OTA googlefood.ios                      bowfin          NF=NXH19Q,NXH19Q
+OTA googlefood.ios                      sculpin         MW=NXG74O,M9=NXG74O,NF=NXG74O,NXG74O
+OTA googlefood.ios                      gar             MW=NXH20C,M9=NXH20C,NF=NXH20C,NXH20C
+OTA googlefood.ios                      swordfish       NQ=NXH20B,NXH20B
+OTA googlefood.ios                      angelfish       NQ=NXH19X,N7=NXH19X,NXH19X
+OTA googlefood.ios                      shasta          MW=NXH19X,NF=NXH19X,N7=NXH19X,NXH19X
+OTA googlefood.ios                      lionfish        NF=NWD1.170614.001,NX=NWD1.170614.001,N7=NWD1.170614.001,NWD1.170614.001
+OTA googlefood.ios                      mullet          NWD1.170428.001
+
+
+#### SW OTA groups ###
+
+# SW - Pre-dogfood upgrade validation
+OTA googlefood.sw.test            anglersw        MR=MCB76T,MCB76T
+OTA googlefood.sw.test            bullheadsw      MR=MCB76T,MCB76T
+OTA googlefood.sw.test            hammerheadsw    MR=MCB76T,MCB76T
+OTA googlefood.sw.test            shamusw         MR=MCB76T,MCB76T
+
+# SW - Primary dogfood group
+OTA googlefood.sw                 anglersw        MR=MCB76T,MCB76T
+OTA googlefood.sw                 bullheadsw      MR=MCB76T,MCB76T
+OTA googlefood.sw                 hammerheadsw    MR=MCB76T,MCB76T
+OTA googlefood.sw                 shamusw         MR=MCB76T,MCB76T
+
+### End SW OTA groups ###
+
+
+### Format ###
+
+# Parameters:
+#
+# audience: the target audience (backed by checkin groups), such as "droidfood".
+# branch: the branch name, such as "git_oc-release".
+# build_prefix: the prefix for the release candidate id, such as "OR" for short
+#     build id, or "APAA" for long build id.
+# release_candidate_id: the release candidate id of a build, such as "ORF41B"
+#     for short build id, or "APAA.170123.001" for long build id.
+
+# BRANCH <build_prefix> <branch>
+#
+#     Specifies what branch to use for a given build prefix.
+
+# OTA <audience> <device_model> <build_config,...>
+#
+#     Specifies one or more named builds to be sent to devices in the audience
+#     and with the specified device_model that are already running a build from
+#     the same series. For instance if you say "DMD64,ERD15", then DMD64 will be
+#     sent to any device already running a DM build, and ERD15 to any device
+#     running an ER build. Devices running other builds will not get an OTA.
+#
+#     Optionally, the build series prequisite can be explictly specified using
+#     "<build_prefix>=release_candidate_id" syntax. For example, to send ORF41B
+#     to devices running a N2 build, state "N2=ORF41B".
+#
+#     A build name can be replaced with "LATEST($build_prefix)" or
+#     "LATEST_WEEKDAY($build_prefix)" to mean "the latest green (weekday) build
+#     for the target on that branch".
+
+
+
+### Legacy Branches ###
+
+# BRANCH  DM  git_donut-release-mr2
+# BRANCH  DR  git_donut-release
+# BRANCH  EP  git_eclair-passion-release
+# BRANCH  ER  git_eclair-release
+# BRANCH  ES  git_eclair-sholes-release
+# BRANCH  FR  git_froyo-release
+# BRANCH  GM  git_gingerbread-mr1-release
+# BRANCH  GR  git_gingerbread-release
+# BRANCH  HL  git_honeycomb-LTE-release
+# BRANCH  HM  git_honeycomb-mr1-release
+# BRANCH  HR  git_honeycomb-release
+# BRANCH  HT  git_honeycomb-mr2-release
+# BRANCH  HW  git_honeycomb-wr-release
+# BRANCH  IA  git_ics-aah-release
+# BRANCH  IC  git_ics-mr0-release
+# BRANCH  ID  git_dalvik-dev-release
+# BRANCH  IE  git_ics-mr1-plus-art-release
+# BRANCH  IF  git_ics-factoryrom-release
+# BRANCH  IL  git_florida-dev-release
+# BRANCH  IM  git_ics-mr1-release
+# BRANCH  IR  git_ics-release
+# BRANCH  IT  git_ics-factoryrom-2-release
+# BRANCH  IX  git_ics-aah-mr0-release
+# BRANCH  JC  git_jb-mr2-deb-factory-release
+# BRANCH  JD  git_jb-mr1.1-release
+# BRANCH  JH  git_jb-mr2-aah-release
+# BRANCH  JL  git_jb-mr2-zeroday-deb-release
+# BRANCH  JO  git_jb-mr1-release
+# BRANCH  JS  git_jb-mr2-zeroday-release
+# BRANCH  JT  git_jb-mr1-aah-release
+# BRANCH  JW  git_jb-mr2-release
+# BRANCH  JZ  git_jb-mr0-release
+# BRANCH  KF  git_klp-factoryrom-release
+# BRANCH  KG  git_klp-modular-mr0-release
+# BRANCH  KH  git_klp-aah-release
+# BRANCH  KI  git_klp-modular-mr0-la-release
+# BRANCH  KJ  git_klp-mr1-j1-release
+# BRANCH  KK  git_klp-cw-factory-release
+# BRANCH  KM  git_klp-modular-release
+# BRANCH  KN  git_klp-modular-mr1-release
+# BRANCH  KO  git_klp-mr1-release
+# BRANCH  KP  git_klp-sprout-release
+# BRANCH  KQ  git_klp-factoryrom-sprint-release
+# BRANCH  KR  git_klp-release
+# BRANCH  KS  git_master-security-release
+# BRANCH  KT  git_klp-mr2-release
+# BRANCH  KV  git_klp-mr1-vzw-release
+# BRANCH  LB  git_lmp-mr1-sprout-release
+# BRANCH  LC  partner-diamond-mr1-release
+# BRANCH  LD  partner-diamond-release
+# BRANCH  LF  git-lmp-factoryrom-release
+# BRANCH  LJ  partner-diamond-factory-release
+# BRANCH  LK  git_lmp-mr1-florida-release
+# BRANCH  LL  partner-diamond-mr1-factory-release
+# BRANCH  LM  git_lmp-mr1-release
+# BRANCH  LN  git_lmp-shamu-factoryrom-release
+# BRANCH  LP  git_lmp-preview-release
+# BRANCH  LQ  git_lmp-mr1-enso-release
+# BRANCH  LR  git_lmp-release
+# BRANCH  LS  partner-diamond-mr1-f-release
+# BRANCH  LT  git_lmp-fugu-factoryrom-release
+# BRANCH  LU  git_lmp-mr1-seed-release
+# BRANCH  LV  git_lmp-mr1-nova-release
+# BRANCH  LW  git_lmp-modular-release
+# BRANCH  LY  git_lmp-mr1-wfc-release
+# BRANCH  M4  git_mnc-mr3-release
+# BRANCH  M5  git_mnc-dr-ryu-security-release
+# BRANCH  MD  git_mnc-dr-release
+# BRANCH  ME  partner-emerald-release
+# BRANCH  MF  partner-emerald-factory-release
+# BRANCH  MH  git_mnc-dr1.5-release
+# BRANCH  MJ  git_mnc-dr-enso-release
+# BRANCH  MK  git_mnc-florida-release
+# BRANCH  MM  git_mnc-mr1-release
+# BRANCH  MO  git_mnc-mr2-release
+# BRANCH  MP  git_mnc-preview-release
+# BRANCH  MR  git_mnc-release
+# BRANCH  MT  git_mnc-dr1.6-release
+# BRANCH  MX  git_mnc-dr-ryu-release
+# BRANCH  N1  git_nyc-mr1-daydreamos-release
+# BRANCH  NA  git_nyc-dogfood-release
+# BRANCH  NB  git_nyc-bugfix-release
+# BRANCH  ND  git_nyc-dr1-release
+# BRANCH  NO  git_nyc-mr1-security-c-release
+# BRANCH  NP  git_nyc-preview-release
+# BRANCH  NR  git_nyc-release
+# BRANCH  XM  glass-1-xe06.0-release

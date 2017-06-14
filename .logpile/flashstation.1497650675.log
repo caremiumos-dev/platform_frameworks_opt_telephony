@@ -1,0 +1,69 @@
+# (flashstation) 06/16/17 15:04:35: new fresh new log...
+# 06/16/17 15:04:52: no badge scanner, using local user account...
+# 06/16/17 15:04:52: User yinxu - validated as Ying
+# 06/16/17 15:04:52: Flashstation version check...
+# 06/16/17 15:04:53: IsFlashstationCurrent(): sha1 for '/usr/local/google/home/yinxu/Downloads/android_flashstation.par' is 'aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e', sha1 for remote is 'aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e', 
+# 06/16/17 15:04:53: Asking service for latest project & ota information...
+# 06/16/17 15:04:53: Skipped download of fastboot; age=107 seconds, which is less than max of age: 7200 seconds.
+# 06/16/17 15:04:53: Skipped download of adb; age=104 seconds, which is less than max of age: 7200 seconds.
+# 06/16/17 15:04:53: Checking for device...
+# 06/16/17 15:04:53: BasicInspection()
+# 06/16/17 15:04:54: After USB scan, we have 12 total devices...
+# 06/16/17 15:04:54: 0 Product ID: 8002
+# 06/16/17 15:04:54: 0 Vendor ID:  8087
+# 06/16/17 15:04:54: 0 Serial Num: unknown_serial
+# 06/16/17 15:04:54: 1 Product ID: 0002
+# 06/16/17 15:04:54: 1 Vendor ID:  1d6b
+# 06/16/17 15:04:54: 1 Serial Num: unknown_serial
+# 06/16/17 15:04:54: 2 Product ID: 800a
+# 06/16/17 15:04:54: 2 Vendor ID:  8087
+# 06/16/17 15:04:54: 2 Serial Num: unknown_serial
+# 06/16/17 15:04:54: 3 Product ID: 0002
+# 06/16/17 15:04:54: 3 Vendor ID:  1d6b
+# 06/16/17 15:04:54: 3 Serial Num: unknown_serial
+# 06/16/17 15:04:54: 4 Product ID: 8140
+# 06/16/17 15:04:54: 4 Vendor ID:  0451
+# 06/16/17 15:04:54: 4 Serial Num: unknown_serial
+# 06/16/17 15:04:54: 5 Product ID: 0003
+# 06/16/17 15:04:54: 5 Vendor ID:  1d6b
+# 06/16/17 15:04:54: 5 Serial Num: unknown_serial
+# 06/16/17 15:04:54: 6 Product ID: 4ee7
+# 06/16/17 15:04:54: 6 Vendor ID:  18d1
+# 06/16/17 15:04:54: 6 Serial Num: 00ff52e27cd6a9b3
+# 06/16/17 15:04:54: 7 Product ID: c069
+# 06/16/17 15:04:54: 7 Vendor ID:  046d
+# 06/16/17 15:04:54: 7 Serial Num: unknown_serial
+# 06/16/17 15:04:54: 8 Product ID: 00db
+# 06/16/17 15:04:54: 8 Vendor ID:  045e
+# 06/16/17 15:04:54: 8 Serial Num: unknown_serial
+# 06/16/17 15:04:54: 9 Product ID: 0211
+# 06/16/17 15:04:54: 9 Vendor ID:  1050
+# 06/16/17 15:04:54: 9 Serial Num: unknown_serial
+# 06/16/17 15:04:54: 10 Product ID: 8142
+# 06/16/17 15:04:54: 10 Vendor ID:  0451
+# 06/16/17 15:04:54: 10 Serial Num: 7A0508719185
+# 06/16/17 15:04:54: 11 Product ID: 0002
+# 06/16/17 15:04:54: 11 Vendor ID:  1d6b
+# 06/16/17 15:04:54: 11 Serial Num: unknown_serial
+# 06/16/17 15:04:54: One device connected, assuming it to be the primary device: 00ff52e27cd6a9b3
+# 06/16/17 15:04:54: Android team?: True
+# 06/16/17 15:04:54: GetDeviceDetails()
+# 06/16/17 15:04:54: RunCommand: ./fastboot devices
+# 06/16/17 15:04:54:   RunCommand results: '[]'
+# 06/16/17 15:04:54: RunCommand: ./adb devices
+# 06/16/17 15:04:55:   RunCommand results: '['List of devices attached\n', '00ff52e27cd6a9b3\tunauthorized\n', '\n', '\n']'
+# 06/16/17 15:04:55: adb devices returned:
+['List of devices attached\n', '00ff52e27cd6a9b3\tunauthorized\n', '\n', '\n']
+Your device is connected, however adb believes the device is 'unauthorized'.  Please check the device screen to 'Allow adb debugging', otherwise reboot the device and try again (00ff52e27cd6a9b3).
+# (flashstation) 06/16/17 15:04:55: DeviceOfflineException'>: Your device is connected, however adb believes the device is 'unauthorized'.  Please check the device screen to 'Allow adb debugging', otherwise reboot the device and try again (00ff52e27cd6a9b3).
+  Traceback (most recent call last):
+    File "google3/wireless/android/build_tools/flashstation/login_panel.py", line 381, in OnGoButtonClick
+      self.di.GetDeviceDetails()
+    File "google3/wireless/android/build_tools/flashstation/device_inspector.py", line 167, in GetDeviceDetails
+      elif self.device.DeviceBooted():
+    File "google3/wireless/android/build_tools/flashstation/device.py", line 329, in DeviceBooted
+      (offlinedict[self.serial], self.serial))
+  DeviceOfflineException: Your device is connected, however adb believes the device is 'unauthorized'.  Please check the device screen to 'Allow adb debugging', otherwise reboot the device and try again (00ff52e27cd6a9b3).
+  
+# 06/16/17 15:04:55: Unexpected Exception: Your device is connected, however adb believes the device is 'unauthorized'.  Please check the device screen to 'Allow adb debugging', otherwise reboot the device and try again (00ff52e27cd6a9b3).
+# (flashstation) 06/16/17 15:04:56: closing log for rotation...

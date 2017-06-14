@@ -1,0 +1,127 @@
+# (flashstation) 06/16/17 15:03:47: new fresh new log...
+# 06/16/17 15:04:21: no badge scanner, using local user account...
+# 06/16/17 15:04:21: User yinxu - validated as Ying
+# 06/16/17 15:04:21: Flashstation version check...
+# 06/16/17 15:04:22: IsFlashstationCurrent(): sha1 for '/usr/local/google/home/yinxu/Downloads/android_flashstation.par' is 'aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e', sha1 for remote is 'aea3f00e83cd6ccb14d7ed5a2c56fc4e32f65d3e', 
+# 06/16/17 15:04:22: Asking service for latest project & ota information...
+# 06/16/17 15:04:22: Skipped download of fastboot; age=76 seconds, which is less than max of age: 7200 seconds.
+# 06/16/17 15:04:22: Skipped download of adb; age=73 seconds, which is less than max of age: 7200 seconds.
+# 06/16/17 15:04:22: Checking for device...
+# 06/16/17 15:04:22: BasicInspection()
+# 06/16/17 15:04:23: After USB scan, we have 11 total devices...
+# 06/16/17 15:04:23: 0 Product ID: 8002
+# 06/16/17 15:04:23: 0 Vendor ID:  8087
+# 06/16/17 15:04:23: 0 Serial Num: unknown_serial
+# 06/16/17 15:04:23: 1 Product ID: 0002
+# 06/16/17 15:04:23: 1 Vendor ID:  1d6b
+# 06/16/17 15:04:23: 1 Serial Num: unknown_serial
+# 06/16/17 15:04:23: 2 Product ID: 800a
+# 06/16/17 15:04:23: 2 Vendor ID:  8087
+# 06/16/17 15:04:23: 2 Serial Num: unknown_serial
+# 06/16/17 15:04:23: 3 Product ID: 0002
+# 06/16/17 15:04:23: 3 Vendor ID:  1d6b
+# 06/16/17 15:04:23: 3 Serial Num: unknown_serial
+# 06/16/17 15:04:23: 4 Product ID: 8140
+# 06/16/17 15:04:23: 4 Vendor ID:  0451
+# 06/16/17 15:04:23: 4 Serial Num: unknown_serial
+# 06/16/17 15:04:23: 5 Product ID: 0003
+# 06/16/17 15:04:23: 5 Vendor ID:  1d6b
+# 06/16/17 15:04:23: 5 Serial Num: unknown_serial
+# 06/16/17 15:04:23: 6 Product ID: c069
+# 06/16/17 15:04:23: 6 Vendor ID:  046d
+# 06/16/17 15:04:23: 6 Serial Num: unknown_serial
+# 06/16/17 15:04:23: 7 Product ID: 00db
+# 06/16/17 15:04:23: 7 Vendor ID:  045e
+# 06/16/17 15:04:23: 7 Serial Num: unknown_serial
+# 06/16/17 15:04:23: 8 Product ID: 0211
+# 06/16/17 15:04:23: 8 Vendor ID:  1050
+# 06/16/17 15:04:23: 8 Serial Num: unknown_serial
+# 06/16/17 15:04:23: 9 Product ID: 8142
+# 06/16/17 15:04:23: 9 Vendor ID:  0451
+# 06/16/17 15:04:23: 9 Serial Num: 7A0508719185
+# 06/16/17 15:04:23: 10 Product ID: 0002
+# 06/16/17 15:04:23: 10 Vendor ID:  1d6b
+# 06/16/17 15:04:23: 10 Serial Num: unknown_serial
+# 06/16/17 15:04:23: No Android devices found on attempt # 1...retrying...
+# 06/16/17 15:04:26: After USB scan, we have 11 total devices...
+# 06/16/17 15:04:26: 0 Product ID: 8002
+# 06/16/17 15:04:26: 0 Vendor ID:  8087
+# 06/16/17 15:04:26: 0 Serial Num: unknown_serial
+# 06/16/17 15:04:26: 1 Product ID: 0002
+# 06/16/17 15:04:26: 1 Vendor ID:  1d6b
+# 06/16/17 15:04:26: 1 Serial Num: unknown_serial
+# 06/16/17 15:04:26: 2 Product ID: 800a
+# 06/16/17 15:04:26: 2 Vendor ID:  8087
+# 06/16/17 15:04:26: 2 Serial Num: unknown_serial
+# 06/16/17 15:04:26: 3 Product ID: 0002
+# 06/16/17 15:04:26: 3 Vendor ID:  1d6b
+# 06/16/17 15:04:26: 3 Serial Num: unknown_serial
+# 06/16/17 15:04:26: 4 Product ID: 8140
+# 06/16/17 15:04:26: 4 Vendor ID:  0451
+# 06/16/17 15:04:26: 4 Serial Num: unknown_serial
+# 06/16/17 15:04:26: 5 Product ID: 0003
+# 06/16/17 15:04:26: 5 Vendor ID:  1d6b
+# 06/16/17 15:04:26: 5 Serial Num: unknown_serial
+# 06/16/17 15:04:26: 6 Product ID: c069
+# 06/16/17 15:04:26: 6 Vendor ID:  046d
+# 06/16/17 15:04:26: 6 Serial Num: unknown_serial
+# 06/16/17 15:04:26: 7 Product ID: 00db
+# 06/16/17 15:04:26: 7 Vendor ID:  045e
+# 06/16/17 15:04:26: 7 Serial Num: unknown_serial
+# 06/16/17 15:04:26: 8 Product ID: 0211
+# 06/16/17 15:04:26: 8 Vendor ID:  1050
+# 06/16/17 15:04:26: 8 Serial Num: unknown_serial
+# 06/16/17 15:04:26: 9 Product ID: 8142
+# 06/16/17 15:04:26: 9 Vendor ID:  0451
+# 06/16/17 15:04:26: 9 Serial Num: 7A0508719185
+# 06/16/17 15:04:26: 10 Product ID: 0002
+# 06/16/17 15:04:26: 10 Vendor ID:  1d6b
+# 06/16/17 15:04:26: 10 Serial Num: unknown_serial
+# 06/16/17 15:04:26: No Android devices found on attempt # 2...retrying...
+# 06/16/17 15:04:30: After USB scan, we have 11 total devices...
+# 06/16/17 15:04:30: 0 Product ID: 8002
+# 06/16/17 15:04:30: 0 Vendor ID:  8087
+# 06/16/17 15:04:30: 0 Serial Num: unknown_serial
+# 06/16/17 15:04:30: 1 Product ID: 0002
+# 06/16/17 15:04:30: 1 Vendor ID:  1d6b
+# 06/16/17 15:04:30: 1 Serial Num: unknown_serial
+# 06/16/17 15:04:30: 2 Product ID: 800a
+# 06/16/17 15:04:30: 2 Vendor ID:  8087
+# 06/16/17 15:04:30: 2 Serial Num: unknown_serial
+# 06/16/17 15:04:30: 3 Product ID: 0002
+# 06/16/17 15:04:30: 3 Vendor ID:  1d6b
+# 06/16/17 15:04:30: 3 Serial Num: unknown_serial
+# 06/16/17 15:04:30: 4 Product ID: 8140
+# 06/16/17 15:04:30: 4 Vendor ID:  0451
+# 06/16/17 15:04:30: 4 Serial Num: unknown_serial
+# 06/16/17 15:04:30: 5 Product ID: 0003
+# 06/16/17 15:04:30: 5 Vendor ID:  1d6b
+# 06/16/17 15:04:30: 5 Serial Num: unknown_serial
+# 06/16/17 15:04:30: 6 Product ID: c069
+# 06/16/17 15:04:30: 6 Vendor ID:  046d
+# 06/16/17 15:04:30: 6 Serial Num: unknown_serial
+# 06/16/17 15:04:30: 7 Product ID: 00db
+# 06/16/17 15:04:30: 7 Vendor ID:  045e
+# 06/16/17 15:04:30: 7 Serial Num: unknown_serial
+# 06/16/17 15:04:30: 8 Product ID: 0211
+# 06/16/17 15:04:30: 8 Vendor ID:  1050
+# 06/16/17 15:04:30: 8 Serial Num: unknown_serial
+# 06/16/17 15:04:30: 9 Product ID: 8142
+# 06/16/17 15:04:30: 9 Vendor ID:  0451
+# 06/16/17 15:04:30: 9 Serial Num: 7A0508719185
+# 06/16/17 15:04:30: 10 Product ID: 0002
+# 06/16/17 15:04:30: 10 Vendor ID:  1d6b
+# 06/16/17 15:04:30: 10 Serial Num: unknown_serial
+# 06/16/17 15:04:30: About to throw Device not Found:
+[{'vendorID': '8087', 'serial': 'unknown_serial', 'productID': '8002'}, {'vendorID': '1d6b', 'serial': 'unknown_serial', 'productID': '0002'}, {'vendorID': '8087', 'serial': 'unknown_serial', 'productID': '800a'}, {'vendorID': '1d6b', 'serial': 'unknown_serial', 'productID': '0002'}, {'vendorID': '0451', 'serial': 'unknown_serial', 'productID': '8140'}, {'vendorID': '1d6b', 'serial': 'unknown_serial', 'productID': '0003'}, {'vendorID': '046d', 'serial': 'unknown_serial', 'productID': 'c069'}, {'vendorID': '045e', 'serial': 'unknown_serial', 'productID': '00db'}, {'vendorID': '1050', 'serial': 'unknown_serial', 'productID': '0211'}, {'vendorID': '0451', 'serial': '7A0508719185', 'productID': '8142'}, {'vendorID': '1d6b', 'serial': 'unknown_serial', 'productID': '0002'}]
+No recognized Android device connected
+# (flashstation) 06/16/17 15:04:30: DeviceInspectorNotFoundException'>: No recognized Android device connected
+  Traceback (most recent call last):
+    File "google3/wireless/android/build_tools/flashstation/login_panel.py", line 332, in OnGoButtonClick
+      self.di.BasicInspection()
+    File "google3/wireless/android/build_tools/flashstation/device_inspector.py", line 113, in BasicInspection
+      'No recognized Android device connected')
+  DeviceInspectorNotFoundException: No recognized Android device connected
+  
+# 06/16/17 15:04:30: No recognized Android device connected
+# (flashstation) 06/16/17 15:04:35: closing log for rotation...
