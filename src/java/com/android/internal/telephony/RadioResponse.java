@@ -1551,8 +1551,11 @@ public class RadioResponse extends IRadioResponse.Stub {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
-            NetworkScanResult nsr = new NetworkScanResult(0, responseInfo.error, null);
-            sendMessageResponse(rr.mResult, nsr);
+            NetworkScanResult nsr = null;
+            if (responseInfo.error == RadioError.NONE) {
+                nsr = new NetworkScanResult(0, 0, null);
+                sendMessageResponse(rr.mResult, nsr);
+            }
             mRil.processResponseDone(rr, responseInfo, nsr);
         }
     }
