@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e917a231_71ec6d3d",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-15T16:51:41Z",
+      "side": 1,
+      "message": "From the implementation in RadioResponse.java, it is either (ar.exception \u003d\u003d null \u0026\u0026 ar.result !\u003d null)   or   (ar.exception !\u003d null \u0026\u0026 ar.result \u003d\u003d null)\nSo do you mean I should check the ar.exception here and throw exception (or log.wtf) if it is null here?",
+      "parentUuid": "1c9843c2_f6a94b0b",
+      "range": {
+        "startLine": 314,
+        "startChar": 45,
+        "endLine": 314,
+        "endChar": 57
+      },
+      "revId": "86ecd4b6de58da54d939e730ee6ffb5383bf9a83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5be9e1bc_1bc37343",
         "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-06-15T11:28:03Z",
       "side": 1,
       "message": "may be null",
+      "range": {
+        "startLine": 379,
+        "startChar": 45,
+        "endLine": 379,
+        "endChar": 57
+      },
+      "revId": "86ecd4b6de58da54d939e730ee6ffb5383bf9a83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "db8db623_7ca38f0d",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-15T16:51:41Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "5be9e1bc_1bc37343",
       "range": {
         "startLine": 379,
         "startChar": 45,
