@@ -2423,12 +2423,12 @@ public class ServiceStateTracker extends Handler {
         mRatLog.log(mSS.toString());
     }
 
-    protected final void log(String s) {
-        Rlog.d(LOG_TAG, s);
+    protected void log(String s) {
+        Rlog.d(LOG_TAG, "[" + mPhone.getPhoneId() + "] " + s);
     }
 
-    protected final void loge(String s) {
-        Rlog.e(LOG_TAG, s);
+    protected void loge(String s) {
+        Rlog.e(LOG_TAG, "[" + mPhone.getPhoneId() + "] " + s);
     }
 
     /**
