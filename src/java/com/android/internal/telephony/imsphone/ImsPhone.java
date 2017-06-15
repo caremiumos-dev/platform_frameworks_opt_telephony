@@ -236,7 +236,7 @@ public class ImsPhone extends ImsPhoneBase {
     //todo: get rid of this function. It is not needed since parentPhone obj never changes
     @Override
     public void dispose() {
-        Rlog.d(LOG_TAG, "dispose");
+        logd("dispose");
         // Nothing to dispose in Phone
         //super.dispose();
         mPendingMMIs.clear();
@@ -366,7 +366,7 @@ public class ImsPhone extends ImsPhoneBase {
         }
 
         if (getRingingCall().getState() != ImsPhoneCall.State.IDLE) {
-            if (DBG) Rlog.d(LOG_TAG, "MmiCode 0: rejectCall");
+            if (DBG) logd("MmiCode 0: rejectCall");
             try {
                 mCT.rejectCall();
             } catch (CallStateException e) {
@@ -374,7 +374,7 @@ public class ImsPhone extends ImsPhoneBase {
                 notifySuppServiceFailed(Phone.SuppService.REJECT);
             }
         } else if (getBackgroundCall().getState() != ImsPhoneCall.State.IDLE) {
-            if (DBG) Rlog.d(LOG_TAG, "MmiCode 0: hangupWaitingOrBackground");
+            if (DBG) logd("MmiCode 0: hangupWaitingOrBackground");
             try {
                 mCT.hangup(getBackgroundCall());
             } catch (CallStateException e) {
@@ -399,7 +399,7 @@ public class ImsPhone extends ImsPhoneBase {
             throws CallStateException {
         if (mPendingMMIs.size() > 0) {
             // There are MMI codes in progress; fail attempt now.
-            Rlog.i(LOG_TAG, "handleUssdRequest: queue full: " + Rlog.pii(LOG_TAG, ussdRequest));
+            logi("handleUssdRequest: queue full: " + Rlog.pii(LOG_TAG, ussdRequest));
             sendUssdResponse(ussdRequest, null, TelephonyManager.USSD_RETURN_FAILURE,
                     wrappedCallback );
             return true;
@@ -435,14 +435,14 @@ public class ImsPhone extends ImsPhoneBase {
 
         try {
             if (len > 1) {
-                if (DBG) Rlog.d(LOG_TAG, "not support 1X SEND");
+                if (DBG) logd("not support 1X SEND");
                 notifySuppServiceFailed(Phone.SuppService.HANGUP);
             } else {
                 if (call.getState() != ImsPhoneCall.State.IDLE) {
-                    if (DBG) Rlog.d(LOG_TAG, "MmiCode 1: hangup foreground");
+                    if (DBG) logd("MmiCode 1: hangup foreground");
                     mCT.hangup(call);
                 } else {
-                    if (DBG) Rlog.d(LOG_TAG, "MmiCode 1: switchWaitingOrHoldingAndActive");
+                    if (DBG) logd("MmiCode 1: switchWaitingOrHoldingAndActive");
                     mCT.switchWaitingOrHoldingAndActive();
                 }
             }
@@ -462,15 +462,15 @@ public class ImsPhone extends ImsPhoneBase {
         }
 
         if (len > 1) {
-            if (DBG) Rlog.d(LOG_TAG, "separate not supported");
+            if (DBG) logd("separate not supported");
             notifySuppServiceFailed(Phone.SuppService.SEPARATE);
         } else {
             try {
                 if (getRingingCall().getState() != ImsPhoneCall.State.IDLE) {
-                    if (DBG) Rlog.d(LOG_TAG, "MmiCode 2: accept ringing call");
+                    if (DBG) logd("MmiCode 2: accept ringing call");
                     mCT.acceptCall(ImsCallProfile.CALL_TYPE_VOICE);
                 } else {
-                    if (DBG) Rlog.d(LOG_TAG, "MmiCode 2: switchWaitingOrHoldingAndActive");
+                    if (DBG) logd("MmiCode 2: switchWaitingOrHoldingAndActive");
                     mCT.switchWaitingOrHoldingAndActive();
                 }
             } catch (CallStateException e) {
@@ -488,7 +488,7 @@ public class ImsPhone extends ImsPhoneBase {
             return false;
         }
 
-        if (DBG) Rlog.d(LOG_TAG, "MmiCode 3: merge calls");
+        if (DBG) logd("MmiCode 3: merge calls");
         conference();
         return true;
     }
@@ -501,7 +501,7 @@ public class ImsPhone extends ImsPhoneBase {
             return false;
         }
 
-        if (DBG) Rlog.d(LOG_TAG, "MmiCode 4: not support explicit call transfer");
+        if (DBG) logd("MmiCode 4: not support explicit call transfer");
         notifySuppServiceFailed(Phone.SuppService.TRANSFER);
         return true;
     }
@@ -511,14 +511,14 @@ public class ImsPhone extends ImsPhoneBase {
             return false;
         }
 
-        Rlog.i(LOG_TAG, "MmiCode 5: CCBS not supported!");
+        logi("MmiCode 5: CCBS not supported!");
         // Treat it as an "unknown" service.
         notifySuppServiceFailed(Phone.SuppService.UNKNOWN);
         return true;
     }
 
     public void notifySuppSvcNotification(SuppServiceNotification suppSvc) {
-        Rlog.d(LOG_TAG, "notifySuppSvcNotification: suppSvc = " + suppSvc);
+        logd("notifySuppSvcNotification: suppSvc = " + suppSvc);
 
         AsyncResult ar = new AsyncResult(null, suppSvc, null);
         mSsnRegistrants.notifyRegistrants(ar);
@@ -636,8 +636,7 @@ public class ImsPhone extends ImsPhoneBase {
         String networkPortion = PhoneNumberUtils.extractNetworkPortionAlt(newDialString);
         ImsPhoneMmiCode mmi =
                 ImsPhoneMmiCode.newFromDialString(networkPortion, this, wrappedCallback);
-        if (DBG) Rlog.d(LOG_TAG,
-                "dialInternal: dialing w/ mmi '" + mmi + "'...");
+        if (DBG) logd("dialInternal: dialing w/ mmi '" + mmi + "'...");
 
         if (mmi == null) {
             return mCT.dial(dialString, videoState, intentExtras);
@@ -649,7 +648,7 @@ public class ImsPhone extends ImsPhoneBase {
             // Note: This code is never reached; there is a bug in isSupportedOverImsPhone which
             // causes it to return true even though the "processCode" method ultimately throws the
             // exception.
-            Rlog.i(LOG_TAG, "dialInternal: USSD not supported by IMS; fallback to CS.");
+            logi("dialInternal: USSD not supported by IMS; fallback to CS.");
             throw new CallStateException(CS_FALLBACK);
         } else {
             mPendingMMIs.add(mmi);
@@ -659,7 +658,7 @@ public class ImsPhone extends ImsPhoneBase {
                 mmi.processCode();
             } catch (CallStateException cse) {
                 if (CS_FALLBACK.equals(cse.getMessage())) {
-                    Rlog.i(LOG_TAG, "dialInternal: fallback to GSM required.");
+                    logi("dialInternal: fallback to GSM required.");
                     // Make sure we remove from the list of pending MMIs since it will handover to
                     // GSM.
                     mPendingMMIs.remove(mmi);
@@ -675,8 +674,7 @@ public class ImsPhone extends ImsPhoneBase {
     public void
     sendDtmf(char c) {
         if (!PhoneNumberUtils.is12Key(c)) {
-            Rlog.e(LOG_TAG,
-                    "sendDtmf called with invalid character '" + c + "'");
+            loge("sendDtmf called with invalid character '" + c + "'");
         } else {
             if (mCT.getState() ==  PhoneConstants.State.OFFHOOK) {
                 mCT.sendDtmf(c, null);
@@ -688,8 +686,7 @@ public class ImsPhone extends ImsPhoneBase {
     public void
     startDtmf(char c) {
         if (!(PhoneNumberUtils.is12Key(c) || (c >= 'A' && c <= 'D'))) {
-            Rlog.e(LOG_TAG,
-                    "startDtmf called with invalid character '" + c + "'");
+            loge("startDtmf called with invalid character '" + c + "'");
         } else {
             mCT.startDtmf(c);
         }
@@ -702,7 +699,7 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     public void notifyIncomingRing() {
-        if (DBG) Rlog.d(LOG_TAG, "notifyIncomingRing");
+        if (DBG) logd("notifyIncomingRing");
         AsyncResult ar = new AsyncResult(null, null, null);
         sendMessage(obtainMessage(EVENT_CALL_RING, ar));
     }
@@ -807,7 +804,7 @@ public class ImsPhone extends ImsPhoneBase {
 
     @Override
     public void getOutgoingCallerIdDisplay(Message onComplete) {
-        if (DBG) Rlog.d(LOG_TAG, "getCLIR");
+        if (DBG) logd("getCLIR");
         Message resp;
         resp = obtainMessage(EVENT_GET_CLIR_DONE, onComplete);
 
@@ -821,7 +818,7 @@ public class ImsPhone extends ImsPhoneBase {
 
     @Override
     public void setOutgoingCallerIdDisplay(int clirMode, Message onComplete) {
-        if (DBG) Rlog.d(LOG_TAG, "setCLIR action= " + clirMode);
+        if (DBG) logd("setCLIR action= " + clirMode);
         Message resp;
         // Packing CLIR value in the message. This will be required for
         // SharedPreference caching, if the message comes back as part of
@@ -838,9 +835,9 @@ public class ImsPhone extends ImsPhoneBase {
     @Override
     public void getCallForwardingOption(int commandInterfaceCFReason,
             Message onComplete) {
-        if (DBG) Rlog.d(LOG_TAG, "getCallForwardingOption reason=" + commandInterfaceCFReason);
+        if (DBG) logd("getCallForwardingOption reason=" + commandInterfaceCFReason);
         if (isValidCommandInterfaceCFReason(commandInterfaceCFReason)) {
-            if (DBG) Rlog.d(LOG_TAG, "requesting call forwarding query.");
+            if (DBG) logd("requesting call forwarding query.");
             Message resp;
             resp = obtainMessage(EVENT_GET_CALL_FORWARD_DONE, onComplete);
 
@@ -871,8 +868,10 @@ public class ImsPhone extends ImsPhoneBase {
             int serviceClass,
             int timerSeconds,
             Message onComplete) {
-        if (DBG) Rlog.d(LOG_TAG, "setCallForwardingOption action=" + commandInterfaceCFAction
-                + ", reason=" + commandInterfaceCFReason + " serviceClass=" + serviceClass);
+        if (DBG) {
+            logd("setCallForwardingOption action=" + commandInterfaceCFAction
+                    + ", reason=" + commandInterfaceCFReason + " serviceClass=" + serviceClass);
+        }
         if ((isValidCommandInterfaceCFAction(commandInterfaceCFAction)) &&
                 (isValidCommandInterfaceCFReason(commandInterfaceCFReason))) {
             Message resp;
@@ -899,7 +898,7 @@ public class ImsPhone extends ImsPhoneBase {
 
     @Override
     public void getCallWaiting(Message onComplete) {
-        if (DBG) Rlog.d(LOG_TAG, "getCallWaiting");
+        if (DBG) logd("getCallWaiting");
         Message resp;
         resp = obtainMessage(EVENT_GET_CALL_WAITING_DONE, onComplete);
 
@@ -917,7 +916,7 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     public void setCallWaiting(boolean enable, int serviceClass, Message onComplete) {
-        if (DBG) Rlog.d(LOG_TAG, "setCallWaiting enable=" + enable);
+        if (DBG) logd("setCallWaiting enable=" + enable);
         Message resp;
         resp = obtainMessage(EVENT_SET_CALL_WAITING_DONE, onComplete);
 
@@ -956,10 +955,7 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     public void getCallBarring(String facility, Message onComplete, int serviceClass) {
-        if (DBG) {
-            Rlog.d(LOG_TAG, "getCallBarring facility=" + facility
-                    + ", serviceClass = " + serviceClass);
-        }
+        if (DBG) logd("getCallBarring facility=" + facility + ", serviceClass = " + serviceClass);
         Message resp;
         resp = obtainMessage(EVENT_GET_CALL_BARRING_DONE, onComplete);
 
@@ -980,7 +976,7 @@ public class ImsPhone extends ImsPhoneBase {
     public void setCallBarring(String facility, boolean lockState, String password,
             Message onComplete,  int serviceClass) {
         if (DBG) {
-            Rlog.d(LOG_TAG, "setCallBarring facility=" + facility
+            logd("setCallBarring facility=" + facility
                     + ", lockState=" + lockState + ", serviceClass = " + serviceClass);
         }
         Message resp;
@@ -1006,7 +1002,7 @@ public class ImsPhone extends ImsPhoneBase {
 
     @Override
     public void sendUssdResponse(String ussdMessge) {
-        Rlog.d(LOG_TAG, "sendUssdResponse");
+        logd("sendUssdResponse");
         ImsPhoneMmiCode mmi = ImsPhoneMmiCode.newFromUssdUserInput(ussdMessge, this);
         mPendingMMIs.add(mmi);
         mMmiRegistrants.notifyRegistrants(new AsyncResult(null, mmi, null));
@@ -1023,7 +1019,7 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     private void sendErrorResponse(Message onComplete) {
-        Rlog.d(LOG_TAG, "sendErrorResponse");
+        logd("sendErrorResponse");
         if (onComplete != null) {
             AsyncResult.forMessage(onComplete, null,
                     new CommandException(CommandException.Error.GENERIC_FAILURE));
@@ -1033,7 +1029,7 @@ public class ImsPhone extends ImsPhoneBase {
 
     @VisibleForTesting
     public void sendErrorResponse(Message onComplete, Throwable e) {
-        Rlog.d(LOG_TAG, "sendErrorResponse");
+        logd("sendErrorResponse");
         if (onComplete != null) {
             AsyncResult.forMessage(onComplete, null, getCommandException(e));
             onComplete.sendToTarget();
@@ -1041,8 +1037,7 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     private CommandException getCommandException(int code, String errorString) {
-        Rlog.d(LOG_TAG, "getCommandException code= " + code
-                + ", errorString= " + errorString);
+        logd("getCommandException code= " + code + ", errorString= " + errorString);
         CommandException.Error error = CommandException.Error.GENERIC_FAILURE;
 
         switch(code) {
@@ -1083,7 +1078,7 @@ public class ImsPhone extends ImsPhoneBase {
         if (e instanceof ImsException) {
             ex = getCommandException(((ImsException)e).getCode(), e.getMessage());
         } else {
-            Rlog.d(LOG_TAG, "getCommandException generic failure");
+            logd("getCommandException generic failure");
             ex = new CommandException(CommandException.Error.GENERIC_FAILURE);
         }
         return ex;
@@ -1091,14 +1086,14 @@ public class ImsPhone extends ImsPhoneBase {
 
     private void
     onNetworkInitiatedUssd(ImsPhoneMmiCode mmi) {
-        Rlog.d(LOG_TAG, "onNetworkInitiatedUssd");
+        logd("onNetworkInitiatedUssd");
         mMmiCompleteRegistrants.notifyRegistrants(
             new AsyncResult(null, mmi, null));
     }
 
     /* package */
     void onIncomingUSSD(int ussdMode, String ussdMessage) {
-        if (DBG) Rlog.d(LOG_TAG, "onIncomingUSSD ussdMode=" + ussdMode);
+        if (DBG) logd("onIncomingUSSD ussdMode=" + ussdMode);
 
         boolean isUssdError;
         boolean isUssdRequest;
@@ -1150,7 +1145,7 @@ public class ImsPhone extends ImsPhoneBase {
          * The exception is cancellation of an incoming USSD-REQUEST, which is
          * not on the list.
          */
-        Rlog.d(LOG_TAG, "onMMIDone: mmi=" + mmi);
+        logd("onMMIDone: mmi=" + mmi);
         if (mPendingMMIs.remove(mmi) || mmi.isUssdRequest() || mmi.isSsInfo()) {
             ResultReceiver receiverCallback = mmi.getUssdCallbackReceiver();
             if (receiverCallback != null) {
@@ -1159,7 +1154,7 @@ public class ImsPhone extends ImsPhoneBase {
                 sendUssdResponse(mmi.getDialString(), mmi.getMessage(), returnCode,
                         receiverCallback );
             } else {
-                Rlog.v(LOG_TAG, "onMMIDone: notifyRegistrants");
+                logv("onMMIDone: notifyRegistrants");
                 mMmiCompleteRegistrants.notifyRegistrants(
                     new AsyncResult(null, mmi, null));
             }
@@ -1311,7 +1306,7 @@ public class ImsPhone extends ImsPhoneBase {
             ServiceState ss = mDefaultPhone.getServiceStateTracker().mSS;
             mSS.setDataRegState(ss.getDataRegState());
             mSS.setRilDataRadioTechnology(ss.getRilDataRadioTechnology());
-            Rlog.d(LOG_TAG, "updateDataServiceState: defSs = " + ss + " imsSs = " + mSS);
+            logd("updateDataServiceState: defSs = " + ss + " imsSs = " + mSS);
         }
     }
 
@@ -1319,7 +1314,7 @@ public class ImsPhone extends ImsPhoneBase {
     public void handleMessage(Message msg) {
         AsyncResult ar = (AsyncResult) msg.obj;
 
-        if (DBG) Rlog.d(LOG_TAG, "handleMessage what=" + msg.what);
+        if (DBG) logd("handleMessage what=" + msg.what);
         switch (msg.what) {
             case EVENT_SET_CALL_FORWARD_DONE:
                 IccRecords r = mDefaultPhone.getIccRecords();
@@ -1371,22 +1366,22 @@ public class ImsPhone extends ImsPhoneBase {
                 break;
 
             case EVENT_DEFAULT_PHONE_DATA_STATE_CHANGED:
-                if (DBG) Rlog.d(LOG_TAG, "EVENT_DEFAULT_PHONE_DATA_STATE_CHANGED");
+                if (DBG) logd("EVENT_DEFAULT_PHONE_DATA_STATE_CHANGED");
                 updateDataServiceState();
                 break;
 
             case EVENT_SERVICE_STATE_CHANGED:
-                if (VDBG) Rlog.d(LOG_TAG, "EVENT_SERVICE_STATE_CHANGED");
+                if (VDBG) logd("EVENT_SERVICE_STATE_CHANGED");
                 ar = (AsyncResult) msg.obj;
                 ServiceState newServiceState = (ServiceState) ar.result;
                 // only update if roaming status changed
                 if (mRoaming != newServiceState.getRoaming()) {
-                    if (DBG) Rlog.d(LOG_TAG, "Roaming state changed");
+                    if (DBG) logd("Roaming state changed");
                     updateRoamingState(newServiceState.getRoaming());
                 }
                 break;
             case EVENT_VOICE_CALL_ENDED:
-                if (DBG) Rlog.d(LOG_TAG, "Voice call ended. Handle pending updateRoamingState.");
+                if (DBG) logd("Voice call ended. Handle pending updateRoamingState.");
                 mCT.unregisterForVoiceCallEnded(this);
                 // only update if roaming status changed
                 boolean newRoaming = getCurrentRoaming();
@@ -1408,13 +1403,13 @@ public class ImsPhone extends ImsPhoneBase {
             new ImsEcbmStateListener() {
                 @Override
                 public void onECBMEntered() {
-                    if (DBG) Rlog.d(LOG_TAG, "onECBMEntered");
+                    if (DBG) logd("onECBMEntered");
                     handleEnterEmergencyCallbackMode();
                 }
 
                 @Override
                 public void onECBMExited() {
-                    if (DBG) Rlog.d(LOG_TAG, "onECBMExited");
+                    if (DBG) logd("onECBMExited");
                     handleExitEmergencyCallbackMode();
                 }
             };
@@ -1435,7 +1430,7 @@ public class ImsPhone extends ImsPhoneBase {
         intent.putExtra(PhoneConstants.PHONE_IN_ECM_STATE, isInEcm());
         SubscriptionManager.putPhoneIdAndSubIdExtra(intent, getPhoneId());
         ActivityManager.broadcastStickyIntent(intent, UserHandle.USER_ALL);
-        if (DBG) Rlog.d(LOG_TAG, "sendEmergencyCallbackModeChange: isInEcm=" + isInEcm());
+        if (DBG) logd("sendEmergencyCallbackModeChange: isInEcm=" + isInEcm());
     }
 
     @Override
@@ -1443,7 +1438,7 @@ public class ImsPhone extends ImsPhoneBase {
         if (mWakeLock.isHeld()) {
             mWakeLock.release();
         }
-        if (DBG) Rlog.d(LOG_TAG, "exitEmergencyCallbackMode()");
+        if (DBG) logd("exitEmergencyCallbackMode()");
 
         // Send a message which will invoke handleExitEmergencyCallbackMode
         ImsEcbm ecbm;
@@ -1456,10 +1451,7 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     private void handleEnterEmergencyCallbackMode() {
-        if (DBG) {
-            Rlog.d(LOG_TAG, "handleEnterEmergencyCallbackMode,mIsPhoneInEcmState= "
-                    + isInEcm());
-        }
+        if (DBG) logd("handleEnterEmergencyCallbackMode,mIsPhoneInEcmState= " + isInEcm());
         // if phone is not in Ecm mode, and it's changed to Ecm mode
         if (!isInEcm()) {
             setIsInEcm(true);
@@ -1478,10 +1470,7 @@ public class ImsPhone extends ImsPhoneBase {
 
     @Override
     protected void handleExitEmergencyCallbackMode() {
-        if (DBG) {
-            Rlog.d(LOG_TAG, "handleExitEmergencyCallbackMode: mIsPhoneInEcmState = "
-                    + isInEcm());
-        }
+        if (DBG) logd("handleExitEmergencyCallbackMode: mIsPhoneInEcmState = " + isInEcm());
 
         if (isInEcm()) {
             setIsInEcm(false);
@@ -1522,7 +1511,7 @@ public class ImsPhone extends ImsPhoneBase {
                 ((GsmCdmaPhone) mDefaultPhone).notifyEcbmTimerReset(Boolean.FALSE);
                 break;
             default:
-                Rlog.e(LOG_TAG, "handleTimerInEmergencyCallbackMode, unsupported action " + action);
+                loge("handleTimerInEmergencyCallbackMode, unsupported action " + action);
         }
     }
 
@@ -1641,12 +1630,12 @@ public class ImsPhone extends ImsPhoneBase {
         CarrierConfigManager configManager =
                 (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         if (configManager == null) {
-            Rlog.e(LOG_TAG, "processDisconnectReason: CarrierConfigManager is not ready");
+            loge("processDisconnectReason: CarrierConfigManager is not ready");
             return;
         }
         PersistableBundle pb = configManager.getConfigForSubId(getSubId());
         if (pb == null) {
-            Rlog.e(LOG_TAG, "processDisconnectReason: no config for subId " + getSubId());
+            loge("processDisconnectReason: no config for subId " + getSubId());
             return;
         }
         final String[] wfcOperatorErrorCodes =
@@ -1667,7 +1656,7 @@ public class ImsPhone extends ImsPhoneBase {
         for (int i = 0; i < wfcOperatorErrorCodes.length; i++) {
             String[] codes = wfcOperatorErrorCodes[i].split("\\|");
             if (codes.length != 2) {
-                Rlog.e(LOG_TAG, "Invalid carrier config: " + wfcOperatorErrorCodes[i]);
+                loge("Invalid carrier config: " + wfcOperatorErrorCodes[i]);
                 continue;
             }
 
@@ -1698,7 +1687,7 @@ public class ImsPhone extends ImsPhoneBase {
             if (idx < 0
                     || idx >= wfcOperatorErrorAlertMessages.length
                     || idx >= wfcOperatorErrorNotificationMessages.length) {
-                Rlog.e(LOG_TAG, "Invalid index: " + wfcOperatorErrorCodes[i]);
+                loge("Invalid index: " + wfcOperatorErrorCodes[i]);
                 continue;
             }
             String messageAlert = imsReasonInfo.mExtraMessage;
@@ -1759,12 +1748,12 @@ public class ImsPhone extends ImsPhoneBase {
 
     private void updateRoamingState(boolean newRoaming) {
         if (mCT.getState() == PhoneConstants.State.IDLE) {
-            if (DBG) Rlog.d(LOG_TAG, "updateRoamingState now: " + newRoaming);
+            if (DBG) logd("updateRoamingState now: " + newRoaming);
             mRoaming = newRoaming;
             ImsManager.setWfcMode(mContext,
                     ImsManager.getWfcMode(mContext, newRoaming), newRoaming);
         } else {
-            if (DBG) Rlog.d(LOG_TAG, "updateRoamingState postponed: " + newRoaming);
+            if (DBG) logd("updateRoamingState postponed: " + newRoaming);
             mCT.registerForVoiceCallEnded(this,
                     EVENT_VOICE_CALL_ENDED, null);
         }
@@ -1795,5 +1784,21 @@ public class ImsPhone extends ImsPhoneBase {
         pw.println("  mRoaming = " + mRoaming);
         pw.println("  mSsnRegistrants = " + mSsnRegistrants);
         pw.flush();
+    }
+
+    private void logi(String s) {
+        Rlog.i(LOG_TAG, "[" + getPhoneId() + "] " + s);
+    }
+
+    private void logv(String s) {
+        Rlog.v(LOG_TAG, "[" + getPhoneId() + "] " + s);
+    }
+
+    private void logd(String s) {
+        Rlog.d(LOG_TAG, "[" + getPhoneId() + "] " + s);
+    }
+
+    private void loge(String s) {
+        Rlog.e(LOG_TAG, "[" + getPhoneId() + "] " + s);
     }
 }

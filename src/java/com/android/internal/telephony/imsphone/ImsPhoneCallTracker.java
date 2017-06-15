@@ -3093,11 +3093,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     @Override
     protected void log(String msg) {
-        Rlog.d(LOG_TAG, "[ImsPhoneCallTracker] " + msg);
+        Rlog.d(LOG_TAG, "[" + mPhone.getPhoneId() + "] " + msg);
     }
 
     protected void loge(String msg) {
-        Rlog.e(LOG_TAG, "[ImsPhoneCallTracker] " + msg);
+        Rlog.e(LOG_TAG, "[" + mPhone.getPhoneId() + "] " + msg);
     }
 
     /**
