@@ -2539,11 +2539,11 @@ public class ServiceStateTracker extends Handler {
     }
 
     protected void log(String s) {
-        Rlog.d(LOG_TAG, s);
+        Rlog.d(LOG_TAG, "[ServiceStateTracker][" + mPhone.getPhoneId() + "] " + s);
     }
 
     protected void loge(String s) {
-        Rlog.e(LOG_TAG, s);
+        Rlog.e(LOG_TAG, "[ServiceStateTracker][" + mPhone.getPhoneId() + "] " + s);
     }
 
     /**
