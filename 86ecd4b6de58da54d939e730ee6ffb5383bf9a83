@@ -211,6 +211,30 @@
       "revId": "86ecd4b6de58da54d939e730ee6ffb5383bf9a83",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4f982913_16b28b87",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-06-16T21:43:54Z",
+      "side": 1,
+      "message": "Are you saying that if you did this over you\u0027d use a bool but you don\u0027t want to add risk by changing now, or are you saying something else?",
+      "parentUuid": "84273419_afcbd09a",
+      "range": {
+        "startLine": 1556,
+        "startChar": 15,
+        "endLine": 1556,
+        "endChar": 56
+      },
+      "revId": "86ecd4b6de58da54d939e730ee6ffb5383bf9a83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
