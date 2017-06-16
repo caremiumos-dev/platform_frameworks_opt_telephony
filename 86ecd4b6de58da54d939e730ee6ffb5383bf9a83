@@ -235,6 +235,30 @@
       "revId": "86ecd4b6de58da54d939e730ee6ffb5383bf9a83",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "92358509_7ef762e4",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-16T21:58:57Z",
+      "side": 1,
+      "message": "Actually I took another look at the RadioResponse.java. In all the existing codes, we either call \"sendMessageResponse()\" if there is no error, or RILRequest.onError() if there is. Because the method sendMessageResponse(Message msg, Object ret) only takes Object, so we can not send a pure bool back to indicate whether there is error or not. Unless we don\u0027t use this sendMessageResponse() but directly send a message, which seems not worthy to me since the code style will be different from existing codes. So If I started it over, I would still prefer the way I am using now.",
+      "parentUuid": "4f982913_16b28b87",
+      "range": {
+        "startLine": 1556,
+        "startChar": 15,
+        "endLine": 1556,
+        "endChar": 56
+      },
+      "revId": "86ecd4b6de58da54d939e730ee6ffb5383bf9a83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
