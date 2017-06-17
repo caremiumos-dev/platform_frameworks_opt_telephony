@@ -22,6 +22,30 @@
       "revId": "b2f9d8bcc2183fa786153a8ec1ba5115fbf9408d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c136520_905763b9",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-06-17T02:35:21Z",
+      "side": 1,
+      "message": "Yes, although the value is the same, but using constants will be more readable.",
+      "parentUuid": "4772ee5d_72af8000",
+      "range": {
+        "startLine": 1556,
+        "startChar": 47,
+        "endLine": 1556,
+        "endChar": 48
+      },
+      "revId": "b2f9d8bcc2183fa786153a8ec1ba5115fbf9408d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
