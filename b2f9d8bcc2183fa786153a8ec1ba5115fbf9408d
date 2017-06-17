@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4772ee5d_72af8000",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-06-17T01:08:27Z",
+      "side": 1,
+      "message": "Should this be RadioError.NONE?  This is defined as the error code, so we shouldn\u0027t use a literal here.  Same with the first arg - it\u0027s scanStatus and should have a CONSTANT instead of a literal",
+      "range": {
+        "startLine": 1556,
+        "startChar": 47,
+        "endLine": 1556,
+        "endChar": 48
+      },
+      "revId": "b2f9d8bcc2183fa786153a8ec1ba5115fbf9408d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
