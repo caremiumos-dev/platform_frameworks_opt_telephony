@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33629535_60c77132",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-22T21:09:03Z",
+      "side": 1,
+      "message": "Why is this change needed? The result of these 2 should be the same. If you disagree, can you share a plmnEntries example where this would be different?",
+      "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
