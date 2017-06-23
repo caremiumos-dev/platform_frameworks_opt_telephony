@@ -16,6 +16,24 @@
       "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2fe8bedd_7bbe6bcb",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1171399
+      },
+      "writtenOn": "2017-06-23T02:08:35Z",
+      "side": 1,
+      "message": "05-15 22:26:39.624   285   354 D use-Rlog/RLOG-RILC: [0] [0062]\u003c SIM_IO {sw1\u003d0x90,sw2\u003d0x0,A320801E373201FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}\n\nFor the subString \"373201\" in the above log, the right EF_SPDI should be \"732103\" according TS24008. However, the return value of bcdToString is \"732310\", this is wrong.\n\nMaybe you can check the details of these 2 methods.",
+      "parentUuid": "33629535_60c77132",
+      "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
