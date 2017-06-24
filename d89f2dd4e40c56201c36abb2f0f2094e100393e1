@@ -52,6 +52,24 @@
       "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84df96cf_661ff3e4",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1171399
+      },
+      "writtenOn": "2017-06-24T01:19:09Z",
+      "side": 1,
+      "message": "I think the problem also exist where calling bcdPlmnToString, eg. EVENT_GET_EHPLMN_DONE and EVENT_GET_FPLMN_DONE.\n\n1. If we want to fix it, the method bcdPlmnToString should be modify. \n2. Or add a new method to parse EF_SPDI.\n\nWhich option do you prefer?",
+      "parentUuid": "a3bc98a8_fa8e99d8",
+      "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
