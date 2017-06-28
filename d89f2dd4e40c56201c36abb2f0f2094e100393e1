@@ -70,6 +70,24 @@
       "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4668b5ba_2d0e7a0c",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-06-28T04:10:35Z",
+      "side": 1,
+      "message": "If there\u0027s an issue in bcdPlmnToString it\u0027s better to fix that instead of adding a new method.",
+      "parentUuid": "84df96cf_661ff3e4",
+      "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
