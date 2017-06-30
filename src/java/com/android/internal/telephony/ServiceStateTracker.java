@@ -2011,7 +2011,9 @@ public class ServiceStateTracker extends Handler {
      */
     private boolean isRoamIndForHomeSystem(String roamInd) {
         // retrieve the carrier-specified list of ERIs for home system
-        String[] homeRoamIndicators = mPhone.getContext().getResources()
+        log("isRoamIndForHomeSystem: " + Resources.getSystem()
+                .getConfiguration().toString());
+        String[] homeRoamIndicators = Resources.getSystem()
                 .getStringArray(com.android.internal.R.array.config_cdma_home_system);
 
         if (homeRoamIndicators != null) {
