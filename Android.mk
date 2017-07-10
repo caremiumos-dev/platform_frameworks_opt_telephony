@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# enable this build only when platform library is available
+# s enable this build only when platform library is available
 ifneq ($(TARGET_BUILD_PDK), true)
 
 LOCAL_PATH := $(call my-dir)
