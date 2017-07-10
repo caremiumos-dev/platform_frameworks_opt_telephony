@@ -267,7 +267,6 @@ public class SIMRecords extends IccRecords {
         mMncLength = UNINITIALIZED;
         log("setting0 mMncLength" + mMncLength);
         mIccId = null;
-        mFullIccId = null;
         // -1 means no EF_SPN found; treat accordingly.
         mSpnDisplayCondition = -1;
         mEfMWIS = null;
@@ -915,10 +914,9 @@ public class SIMRecords extends IccRecords {
                         break;
                     }
 
-                    mIccId = IccUtils.bcdToString(data, 0, data.length);
-                    mFullIccId = IccUtils.bchToString(data, 0, data.length);
+                    mIccId = IccUtils.bchToString(data, 0, data.length);
 
-                    log("iccid: " + SubscriptionInfo.givePrintableIccid(mFullIccId));
+                    log("iccid: " + SubscriptionInfo.givePrintableIccid(mIccId));
                     break;
 
 

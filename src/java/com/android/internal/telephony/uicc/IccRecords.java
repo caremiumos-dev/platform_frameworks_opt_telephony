@@ -66,8 +66,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     protected boolean mRecordsRequested = false; // true if we've made requests for the sim records
 
-    protected String mIccId;  // Includes only decimals (no hex)
-    protected String mFullIccId;  // Includes hex characters in ICCID
+    protected String mIccId;  // Includes hex characters in ICCID
     protected String mMsisdn = null;  // My mobile number
     protected String mMsisdnTag = null;
     protected String mNewMsisdn = null;
@@ -133,7 +132,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     @Override
     public String toString() {
-        String iccIdToPrint = SubscriptionInfo.givePrintableIccid(mFullIccId);
+        String iccIdToPrint = SubscriptionInfo.givePrintableIccid(mIccId);
         return "mDestroyed=" + mDestroyed
                 + " mContext=" + mContext
                 + " mCi=" + mCi
@@ -238,10 +237,8 @@ public abstract class IccRecords extends Handler implements IccConstants {
     }
 
     /**
-     * Returns the ICC ID stripped at the first hex character. Some SIMs have ICC IDs
-     * containing hex digits; {@link #getFullIccId()} should be used to get the full ID including
-     * hex digits.
-     * @return ICC ID without hex digits
+     * Returns the full ICC ID including hex digits.
+     * @return full ICC ID including hex digits
      */
     public String getIccId() {
         return mIccId;
@@ -252,7 +249,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
      * @return full ICC ID including hex digits
      */
     public String getFullIccId() {
-        return mFullIccId;
+        return mIccId;
     }
 
     public void registerForRecordsLoaded(Handler h, int what, Object obj) {
@@ -766,7 +763,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
         pw.println(" mRecordsToLoad=" + mRecordsToLoad);
         pw.println(" mRdnCache=" + mAdnCache);
 
-        String iccIdToPrint = SubscriptionInfo.givePrintableIccid(mFullIccId);
+        String iccIdToPrint = SubscriptionInfo.givePrintableIccid(mIccId);
         pw.println(" iccid=" + iccIdToPrint);
         pw.println(" mMsisdn=" + Rlog.pii(VDBG, mMsisdn));
         pw.println(" mMsisdnTag=" + mMsisdnTag);
