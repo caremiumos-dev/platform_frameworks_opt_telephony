@@ -160,6 +160,24 @@
       "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e71b420c_b4864828",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-07-11T18:13:24Z",
+      "side": 1,
+      "message": "Ideally it should return just 1 PLMN like bcdToString().",
+      "parentUuid": "b815afdb_ce47d82e",
+      "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
