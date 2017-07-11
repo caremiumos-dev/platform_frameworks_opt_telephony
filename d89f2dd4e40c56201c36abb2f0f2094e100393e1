@@ -124,6 +124,24 @@
       "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "717525f6_415a23ef",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-07-11T04:28:34Z",
+      "side": 1,
+      "message": "I haven\u0027t tested it yet but it seems this will still return 2 additional PLMNs, both empty in this case.",
+      "parentUuid": "2185c568_9356c3aa",
+      "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
