@@ -142,6 +142,24 @@
       "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b815afdb_ce47d82e",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1171399
+      },
+      "writtenOn": "2017-07-11T07:23:00Z",
+      "side": 1,
+      "message": "Hi Amit,\n\nWhich return value do you want? I think only null or \"\" is needed. But if we return null, the following code will throw nullpointerexception.\n\nif (plmnCode.length() \u003e\u003d 5) {",
+      "parentUuid": "717525f6_415a23ef",
+      "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
