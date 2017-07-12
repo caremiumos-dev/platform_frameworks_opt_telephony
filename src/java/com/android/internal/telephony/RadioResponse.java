@@ -1224,14 +1224,39 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void startKeepaliveResponse(RadioResponseInfo responseInfo,
             KeepaliveStatus keepaliveStatus) {
-        throw new UnsupportedOperationException("startKeepaliveResponse not implemented");
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr == null) {
+            return;
+        }
+
+        if (responseInfo.error == RadioError.NONE) {
+            com.android.internal.telephony.dataconnection.KeepaliveStatus ret = new
+                com.android.internal.telephony.dataconnection.KeepaliveStatus(
+                        keepaliveStatus.sessionHandle, keepaliveStatus.code);
+            sendMessageResponse(rr.mResult, ret);
+            mRil.processResponseDone(rr, responseInfo, ret);
+        } else {
+            //TODO: Error code translation
+        }
     }
 
     /**
      * @param responseInfo Response info struct containing response type, serial no. and error
      */
     public void stopKeepaliveResponse(RadioResponseInfo responseInfo) {
-        throw new UnsupportedOperationException("stopKeepaliveResponse not implemented");
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr == null) {
+            return;
+        }
+
+        if (responseInfo.error == RadioError.NONE) {
+            sendMessageResponse(rr.mResult, null);
+            mRil.processResponseDone(rr, responseInfo, null);
+        } else {
+            //TODO: Error code translation
+        }
     }
 
     private void responseIccCardStatus(RadioResponseInfo responseInfo, CardStatus cardStatus) {

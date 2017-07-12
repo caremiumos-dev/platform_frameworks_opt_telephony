@@ -29,6 +29,7 @@ import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.dataconnection.DataProfile;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
+import com.android.server.connectivity.KeepalivePacketData;
 
 import java.util.List;
 
@@ -649,5 +650,14 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 
     @Override
     public void setSimCardPower(int state, Message result) {
+    }
+
+    @Override
+    public void startNattKeepalive(
+            int contextId, KeepalivePacketData packetData, int intervalMillis, Message result) {
+    }
+
+    @Override
+    public void stopNattKeepalive(int sessionHandle, Message result) {
     }
 }
