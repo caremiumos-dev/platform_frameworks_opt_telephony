@@ -54,6 +54,7 @@ import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccIoResult;
+import com.android.server.connectivity.KeepalivePacketData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -2150,5 +2151,14 @@ public class SimulatedCommands extends BaseCommands
             mRestrictedStateRegistrant.notifyRegistrant(
                     new AsyncResult(null, restrictedState, null));
         }
+    }
+
+    @Override
+    public void startNattKeepalive(
+            int contextId, KeepalivePacketData packetData, int intervalMillis, Message result) {
+    }
+
+    @Override
+    public void stopNattKeepalive(int sessionHandle, Message result) {
     }
 }

@@ -28,6 +28,7 @@ import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.dataconnection.DataProfile;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
+import com.android.server.connectivity.KeepalivePacketData;
 
 import java.util.List;
 
@@ -1399,5 +1400,14 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
 
     @Override
     public void unregisterForCarrierInfoForImsiEncryption(Handler h) {
+    }
+
+    @Override
+    public void startNattKeepalive(
+            int contextId, KeepalivePacketData packetData, int intervalMillis, Message result) {
+    }
+
+    @Override
+    public void stopNattKeepalive(int sessionHandle, Message result)  {
     }
 }

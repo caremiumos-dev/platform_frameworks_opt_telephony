@@ -28,6 +28,7 @@ import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.dataconnection.DataProfile;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccCardStatus;
+import com.android.server.connectivity.KeepalivePacketData;
 
 import java.util.List;
 
@@ -2135,6 +2136,23 @@ public interface CommandsInterface {
      * @param h Handler for notificaiton message.
      */
     void unregisterForNetworkScanResult(Handler h);
+
+    /**
+     * Start sending NAT-T Keepalive packets on a specified data connection
+     *
+     * @param contextId cid that identifies the data connection for this keepalive
+     * @param packetData the keepalive packet data description
+     * @param intervalMillis a time interval in ms between keepalive packet transmissions
+     */
+    public void startNattKeepalive(
+            int contextId, KeepalivePacketData packetData, int intervalMillis, Message result);
+
+    /**
+     * Start sending NAT-T Keepalive packets on a specified data connection
+     *
+     * @param sessionHandle the keepalive session handle (from the modem) to stop
+     */
+    public void stopNattKeepalive(int sessionHandle, Message result);
 
     default public List<ClientRequestStats> getClientRequestStats() {
         return null;
