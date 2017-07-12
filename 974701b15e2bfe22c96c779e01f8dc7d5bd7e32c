@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0043d132_301ca3fc",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-07-12T19:28:48Z",
+      "side": 1,
+      "message": "This actually comes from HIDL generated file. If we really want to support this, we\u0027ll have to add a new APN type at https://android.googlesource.com/platform/hardware/interfaces/+/master/radio/1.0/types.hal#1100\n\nNeed some discussions if we can add this in 1.1 or 1.2.",
+      "range": {
+        "startLine": 560,
+        "startChar": 54,
+        "endLine": 560,
+        "endChar": 67
+      },
+      "revId": "974701b15e2bfe22c96c779e01f8dc7d5bd7e32c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
