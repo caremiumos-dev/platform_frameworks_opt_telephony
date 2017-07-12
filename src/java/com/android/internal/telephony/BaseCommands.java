@@ -73,7 +73,7 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mPcoDataRegistrants = new RegistrantList();
     protected RegistrantList mCarrierInfoForImsiEncryptionRegistrants = new RegistrantList();
     protected RegistrantList mRilNetworkScanResultRegistrants = new RegistrantList();
-
+    protected RegistrantList mNattKeepaliveStatusRegistrants = new RegistrantList();
 
     protected Registrant mGsmSmsRegistrant;
     protected Registrant mCdmaSmsRegistrant;
@@ -927,5 +927,22 @@ public abstract class BaseCommands implements CommandsInterface {
     @Override
     public void unregisterForCarrierInfoForImsiEncryption(Handler h) {
         mCarrierInfoForImsiEncryptionRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForNattKeepaliveStatus(Handler h, int what, Object obj) {
+        Registrant r = new Registrant (h, what, obj);
+
+        synchronized (mStateMonitor) {
+            mNattKeepaliveStatusRegistrants.add(r);
+            r.notifyRegistrant();
+        }
+    }
+
+    @Override
+    public void unregisterForNattKeepaliveStatus(Handler h) {
+        synchronized (mStateMonitor) {
+            mNattKeepaliveStatusRegistrants.remove(h);
+        }
     }
 }
