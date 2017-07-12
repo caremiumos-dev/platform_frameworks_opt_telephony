@@ -28,6 +28,7 @@ import static com.android.internal.telephony.RILConstants.RIL_UNSOL_DATA_CALL_LI
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_ENTER_EMERGENCY_CALLBACK_MODE;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_HARDWARE_CONFIG_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_KEEPALIVE_STATUS;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_LCEDATA_RECV;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_MODEM_RESTART;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_NETWORK_SCAN_RESULT;
@@ -81,7 +82,6 @@ import android.hardware.radio.V1_0.SsInfoData;
 import android.hardware.radio.V1_0.StkCcUnsolSsResult;
 import android.hardware.radio.V1_0.SuppSvcNotification;
 import android.hardware.radio.V1_1.IRadioIndication;
-import android.hardware.radio.V1_1.KeepaliveStatus;
 import android.os.AsyncResult;
 import android.os.SystemProperties;
 import android.telephony.CellInfo;
@@ -93,6 +93,7 @@ import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
 import com.android.internal.telephony.cdma.CdmaInformationRecords;
 import com.android.internal.telephony.cdma.SmsMessageConverter;
 import com.android.internal.telephony.dataconnection.DataCallResponse;
+import com.android.internal.telephony.dataconnection.KeepaliveStatus;
 import com.android.internal.telephony.gsm.SsData;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.nano.TelephonyProto.SmsSession;
@@ -815,8 +816,17 @@ public class RadioIndication extends IRadioIndication.Stub {
      * @param indicationType RadioIndicationType
      * @param keepaliveStatus Status of the ongoing Keepalive session
      */
-    public void keepaliveStatus(int indicationType, KeepaliveStatus keepaliveStatus) {
-        throw new UnsupportedOperationException("keepaliveStatus Indications are not implemented");
+    public void keepaliveStatus(
+            int indicationType, android.hardware.radio.V1_1.KeepaliveStatus halStatus) {
+        mRil.processIndication(indicationType);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_KEEPALIVE_STATUS, null);
+
+        KeepaliveStatus ks = new KeepaliveStatus(
+                /*halStatus.sessionHandle, */ 0xF00, // Debug code
+                halStatus.code);
+        mRil.mNattKeepaliveStatusRegistrants.notifyRegistrants(
+                new AsyncResult(null, ks, null));
     }
 
     private CommandsInterface.RadioState getRadioStateFromInt(int stateInt) {
