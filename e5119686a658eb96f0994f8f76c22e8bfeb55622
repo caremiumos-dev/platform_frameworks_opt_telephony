@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8f9b14d_fce09b9e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-07-12T22:00:58Z",
+      "side": 1,
+      "message": "Please change this to !StorageMonitor.inCryptKeeperBounce()\n+ Paul, do the checks seem equivalent?",
+      "range": {
+        "startLine": 132,
+        "startChar": 16,
+        "endLine": 134,
+        "endChar": 68
+      },
+      "revId": "e5119686a658eb96f0994f8f76c22e8bfeb55622",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
