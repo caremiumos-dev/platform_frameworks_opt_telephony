@@ -33,9 +33,13 @@ import android.hardware.radio.V1_0.RadioResponseInfo;
 import android.hardware.radio.V1_0.SendSmsResult;
 import android.hardware.radio.V1_0.SetupDataCallResult;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
+<<<<<<< HEAD
 import android.hardware.radio.V1_1.KeepaliveStatus;
 import android.hardware.radio.V1_2.IRadioResponse;
 import android.hardware.radio.V1_2.SimSlotStatus;
+=======
+import android.hardware.radio.V1_1.IRadioResponse;
+>>>>>>> 3af8a8767... Plumb NattKeepalive from HAL to DataConnection
 import android.os.AsyncResult;
 import android.os.Message;
 import android.os.SystemClock;
@@ -50,6 +54,11 @@ import android.telephony.TelephonyManager;
 import android.telephony.data.DataCallResponse;
 import android.text.TextUtils;
 
+<<<<<<< HEAD
+=======
+import com.android.internal.telephony.dataconnection.DataCallResponse;
+import com.android.internal.telephony.dataconnection.KeepaliveStatus;
+>>>>>>> 3af8a8767... Plumb NattKeepalive from HAL to DataConnection
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccCardStatus;
@@ -1257,15 +1266,54 @@ public class RadioResponse extends IRadioResponse.Stub {
      * @param keepaliveStatus status of the keepalive with a handle for the session
      */
     public void startKeepaliveResponse(RadioResponseInfo responseInfo,
-            KeepaliveStatus keepaliveStatus) {
-        throw new UnsupportedOperationException("startKeepaliveResponse not implemented");
+            android.hardware.radio.V1_1.KeepaliveStatus keepaliveStatus) {
+
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr == null) {
+            return;
+        }
+
+        KeepaliveStatus ret = null;
+
+        switch(responseInfo.error) {
+            case RadioError.NONE:
+                ret = new KeepaliveStatus(
+                        keepaliveStatus.sessionHandle, keepaliveStatus.code);
+                break;
+            case RadioError.REQUEST_NOT_SUPPORTED:
+                ret = new KeepaliveStatus(KeepaliveStatus.ERROR_UNSUPPORTED);
+                // The request is unsupported, which is ok. We'll report it to the higher
+                // layer and treat it as acceptable in the RIL.
+                responseInfo.error = RadioError.NONE;
+                break;
+            case RadioError.NO_RESOURCES:
+                ret = new KeepaliveStatus(KeepaliveStatus.ERROR_NO_RESOURCES);
+                break;
+            default:
+                ret = new KeepaliveStatus(KeepaliveStatus.ERROR_UNKNOWN);
+                break;
+        }
+        sendMessageResponse(rr.mResult, ret);
+        mRil.processResponseDone(rr, responseInfo, ret);
     }
 
     /**
      * @param responseInfo Response info struct containing response type, serial no. and error
      */
     public void stopKeepaliveResponse(RadioResponseInfo responseInfo) {
-        throw new UnsupportedOperationException("stopKeepaliveResponse not implemented");
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr == null) {
+            return;
+        }
+
+        if (responseInfo.error == RadioError.NONE) {
+            sendMessageResponse(rr.mResult, null);
+            mRil.processResponseDone(rr, responseInfo, null);
+        } else {
+            //TODO: Error code translation
+        }
     }
 
     private IccCardStatus convertHalCardStatus(CardStatus cardStatus) {

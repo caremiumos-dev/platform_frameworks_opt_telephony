@@ -18,8 +18,12 @@ package com.android.internal.telephony.test;
 
 import android.hardware.radio.V1_0.DataRegStateResult;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
+<<<<<<< HEAD
 import android.net.LinkAddress;
 import android.net.NetworkUtils;
+=======
+import android.net.KeepalivePacketData;
+>>>>>>> 3af8a8767... Plumb NattKeepalive from HAL to DataConnection
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -2197,6 +2201,7 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
+<<<<<<< HEAD
     public void registerForIccRefresh(Handler h, int what, Object obj) {
         super.registerForIccRefresh(h, what, obj);
         SimulatedCommandsVerifier.getInstance().registerForIccRefresh(h, what, obj);
@@ -2206,5 +2211,13 @@ public class SimulatedCommands extends BaseCommands
     public void unregisterForIccRefresh(Handler h) {
         super.unregisterForIccRefresh(h);
         SimulatedCommandsVerifier.getInstance().unregisterForIccRefresh(h);
+=======
+    public void startNattKeepalive(
+            int contextId, KeepalivePacketData packetData, int intervalMillis, Message result) {
+    }
+
+    @Override
+    public void stopNattKeepalive(int sessionHandle, Message result) {
+>>>>>>> 3af8a8767... Plumb NattKeepalive from HAL to DataConnection
     }
 }
