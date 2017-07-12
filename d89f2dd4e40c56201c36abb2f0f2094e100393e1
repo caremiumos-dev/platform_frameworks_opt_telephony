@@ -178,6 +178,24 @@
       "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d2cb212_7b86c2ba",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1171399
+      },
+      "writtenOn": "2017-07-12T01:26:10Z",
+      "side": 1,
+      "message": "If data is “FFFFFF”, the return value of bcdToString is also \"\", an empty String. Because it\u0027s length is zero, mSpdiNetworks wont add it into list.\n\nif (plmnCode.length() \u003e\u003d 5) {\n    mSpdiNetworks.add(plmnCode);\n}\n\nThis is the same with bcdPlmnToString().",
+      "parentUuid": "e71b420c_b4864828",
+      "revId": "d89f2dd4e40c56201c36abb2f0f2094e100393e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
