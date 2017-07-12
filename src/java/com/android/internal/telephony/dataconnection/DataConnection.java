@@ -19,6 +19,7 @@ package com.android.internal.telephony.dataconnection;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.KeepalivePacketData;
 import android.net.LinkProperties;
 import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
@@ -196,6 +197,8 @@ public class DataConnection extends StateMachine {
     static final int EVENT_BW_REFRESH_RESPONSE = BASE + 14;
     static final int EVENT_DATA_CONNECTION_VOICE_CALL_STARTED = BASE + 15;
     static final int EVENT_DATA_CONNECTION_VOICE_CALL_ENDED = BASE + 16;
+    static final int EVENT_KEEPALIVE_STATUS = BASE + 17;
+    static final int EVENT_KEEPALIVE_STARTED = BASE + 18;
 
     private static final int CMD_TO_STRING_COUNT =
             EVENT_DATA_CONNECTION_VOICE_CALL_ENDED - BASE + 1;
@@ -1733,6 +1736,20 @@ public class DataConnection extends StateMachine {
                     retVal = HANDLED;
                     break;
                 }
+                case EVENT_KEEPALIVE_STARTED:
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    int slot = msg.arg1;
+                    if (ar.exception != null) {
+                        log("EVENT_KEEPALIVE_STARTED: error starting keepalive, e=" + ar.exception);
+                        // TODO: correct error codes
+                        mNetworkAgent.onPacketKeepaliveEvent(
+                                slot, ConnectivityManager.PacketKeepalive.ERROR_HARDWARE_ERROR);
+                    }
+                    retVal = HANDLED;
+                    break;
+                case EVENT_KEEPALIVE_STATUS:
+                    retVal = HANDLED;
+                    break;
                 default:
                     if (VDBG) {
                         log("DcActiveState not handled msg.what=" + getWhatToString(msg.what));
@@ -1907,6 +1924,22 @@ public class DataConnection extends StateMachine {
                 mNetworkCapabilities = networkCapabilities;
             }
             super.sendNetworkCapabilities(networkCapabilities);
+        }
+
+        @Override
+        protected void startPacketKeepalive(Message msg) {
+            KeepalivePacketData pkt = (KeepalivePacketData) msg.obj;
+            int slotId = msg.arg1;
+            int intervalMillis = msg.arg2 * 1000;
+
+            mPhone.mCi.startNattKeepalive(
+                    DataConnection.this.mCid, pkt, intervalMillis,
+                    DataConnection.this.obtainMessage(EVENT_KEEPALIVE_STARTED, slotId, 0, null));
+            mPhone.mCi.registerForNattKeepaliveStatus(getHandler(), EVENT_KEEPALIVE_STATUS, null);
+        }
+
+        @Override
+        protected void stopPacketKeepalive(Message msg) {
         }
     }
 
