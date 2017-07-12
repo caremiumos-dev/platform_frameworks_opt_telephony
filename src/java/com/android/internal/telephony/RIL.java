@@ -54,6 +54,7 @@ import android.hardware.radio.V1_0.SmsWriteArgs;
 import android.hardware.radio.V1_0.UusInfo;
 import android.hardware.radio.deprecated.V1_0.IOemHook;
 import android.net.ConnectivityManager;
+import android.net.KeepalivePacketData;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HwBinder;
@@ -66,6 +67,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.WorkSource;
 import android.service.carrier.CarrierIdentifier;
+import android.system.OsConstants;
 import android.telephony.CellInfo;
 import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
@@ -3874,6 +3876,95 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
+    public void startNattKeepalive(
+            int contextId, KeepalivePacketData packetData, int intervalMillis, Message result) {
+        checkNotNull(packetData, "KeepaliveRequest cannot be null.");
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy == null) {
+            Rlog.e(RIL.RILJ_LOG_TAG, "Radio Proxy object is null!");
+            return;
+        }
+
+        android.hardware.radio.V1_1.IRadio radioProxy11 =
+                android.hardware.radio.V1_1.IRadio.castFrom(radioProxy);
+        if (radioProxy11 == null) {
+            if (result != null) {
+                AsyncResult.forMessage(result, null,
+                        CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                result.sendToTarget();
+            }
+            return;
+        }
+
+        RILRequest rr = obtainRequest(
+                RIL_REQUEST_START_KEEPALIVE, result, mRILDefaultWorkSource);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        try {
+            android.hardware.radio.V1_1.KeepaliveRequest req =
+                    new android.hardware.radio.V1_1.KeepaliveRequest();
+
+            req.cid = contextId;
+
+            // Cannot be a switch because OsConstants are late-binding
+            if (packetData.protocol ==  OsConstants.ETH_P_IP) {
+                req.type = android.hardware.radio.V1_1.KeepaliveType.NATT_IPV4;
+            } else if (packetData.protocol == OsConstants.ETH_P_IPV6) {
+                req.type = android.hardware.radio.V1_1.KeepaliveType.NATT_IPV6;
+            } else {
+                AsyncResult.forMessage(result, null,
+                        CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                result.sendToTarget();
+                return;
+            }
+
+            appendPrimitiveArrayToArrayList(
+                    packetData.srcAddress.getAddress(), req.sourceAddress);
+            req.sourcePort = packetData.srcPort;
+            appendPrimitiveArrayToArrayList(
+                    packetData.dstAddress.getAddress(), req.destinationAddress);
+            req.destinationPort = packetData.dstPort;
+
+            radioProxy11.startKeepalive(rr.mSerial, req);
+        } catch (RemoteException | RuntimeException e) {
+            handleRadioProxyExceptionForRR(rr, "startNattKeepalive", e);
+        }
+    }
+
+    @Override
+    public void stopNattKeepalive(int sessionHandle, Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy == null) {
+            Rlog.e(RIL.RILJ_LOG_TAG, "Radio Proxy object is null!");
+            return;
+        }
+
+        android.hardware.radio.V1_1.IRadio radioProxy11 =
+                android.hardware.radio.V1_1.IRadio.castFrom(radioProxy);
+        if (radioProxy11 == null) {
+            if (result != null) {
+                AsyncResult.forMessage(result, null,
+                        CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                result.sendToTarget();
+            }
+            return;
+        }
+
+        RILRequest rr = obtainRequest(
+                RIL_REQUEST_STOP_KEEPALIVE, result, mRILDefaultWorkSource);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        try {
+
+            radioProxy11.stopKeepalive(rr.mSerial, sessionHandle);
+        } catch (RemoteException | RuntimeException e) {
+            handleRadioProxyExceptionForRR(rr, "stopNattKeepalive", e);
+        }
+    }
+
+    @Override
     public void getIMEI(Message result) {
         throw new RuntimeException("getIMEI not expected to be called");
     }
@@ -4967,6 +5058,12 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return mClientWakelockTracker.getClientRequestStats();
     }
 
+    /** Append the data to the end of an ArrayList */
+    public static void appendPrimitiveArrayToArrayList(byte[] src, ArrayList<Byte> dst) {
+        for (byte b : src) {
+            dst.add(b);
+        }
+    }
     public static ArrayList<Byte> primitiveArrayToArrayList(byte[] arr) {
         ArrayList<Byte> arrayList = new ArrayList<>(arr.length);
         for (byte b : arr) {
@@ -4975,6 +5072,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return arrayList;
     }
 
+    /** Convert an ArrayList of Bytes to an exactly-sized primitive array */
     public static byte[] arrayListToPrimitiveArray(ArrayList<Byte> bytes) {
         byte[] ret = new byte[bytes.size()];
         for (int i = 0; i < ret.length; i++) {
