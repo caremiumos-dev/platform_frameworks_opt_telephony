@@ -28,6 +28,7 @@ import static com.android.internal.telephony.RILConstants.RIL_UNSOL_DATA_CALL_LI
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_ENTER_EMERGENCY_CALLBACK_MODE;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_HARDWARE_CONFIG_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_KEEPALIVE_STATUS;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_LCEDATA_RECV;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_MODEM_RESTART;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_NETWORK_SCAN_RESULT;
@@ -816,7 +817,12 @@ public class RadioIndication extends IRadioIndication.Stub {
      * @param keepaliveStatus Status of the ongoing Keepalive session
      */
     public void keepaliveStatus(int indicationType, KeepaliveStatus keepaliveStatus) {
-        throw new UnsupportedOperationException("keepaliveStatus Indications are not implemented");
+        mRil.processIndication(indicationType);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_KEEPALIVE_STATUS, null);
+
+        mRil.mNattKeepaliveStatusRegistrants.notifyRegistrants(
+                new AsyncResult(null, keepaliveStatus, null));
     }
 
     private CommandsInterface.RadioState getRadioStateFromInt(int stateInt) {

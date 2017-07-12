@@ -18,6 +18,7 @@ package com.android.internal.telephony.test;
 
 import android.hardware.radio.V1_0.DataRegStateResult;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
+import android.net.KeepalivePacketData;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -2161,5 +2162,14 @@ public class SimulatedCommands extends BaseCommands
 
     public void setRadioPowerFailResponse(boolean fail) {
         mIsRadioPowerFailResponse = fail;
+    }
+
+    @Override
+    public void startNattKeepalive(
+            int contextId, KeepalivePacketData packetData, int intervalMillis, Message result) {
+    }
+
+    @Override
+    public void stopNattKeepalive(int sessionHandle, Message result) {
     }
 }
