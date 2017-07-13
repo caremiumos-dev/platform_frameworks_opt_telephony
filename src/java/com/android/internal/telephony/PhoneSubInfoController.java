@@ -331,8 +331,8 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
     }
 
 
-    public String getIsimImpi() {
-        Phone phone = getPhone(getDefaultSubscription());
+    public String getIsimImpi(int subId) {
+        Phone phone = getPhone(subId);
         mContext.enforceCallingOrSelfPermission(READ_PRIVILEGED_PHONE_STATE,
                 "Requires READ_PRIVILEGED_PHONE_STATE");
         IsimRecords isim = phone.getIsimRecords();
@@ -343,8 +343,8 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
         }
     }
 
-    public String getIsimDomain() {
-        Phone phone = getPhone(getDefaultSubscription());
+    public String getIsimDomain(int subId) {
+        Phone phone = getPhone(subId);
         mContext.enforceCallingOrSelfPermission(READ_PRIVILEGED_PHONE_STATE,
                 "Requires READ_PRIVILEGED_PHONE_STATE");
         IsimRecords isim = phone.getIsimRecords();
@@ -355,8 +355,8 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
         }
     }
 
-    public String[] getIsimImpu() {
-        Phone phone = getPhone(getDefaultSubscription());
+    public String[] getIsimImpu(int subId) {
+        Phone phone = getPhone(subId);
         mContext.enforceCallingOrSelfPermission(READ_PRIVILEGED_PHONE_STATE,
                 "Requires READ_PRIVILEGED_PHONE_STATE");
         IsimRecords isim = phone.getIsimRecords();
@@ -367,8 +367,8 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
         }
     }
 
-    public String getIsimIst() throws RemoteException {
-        Phone phone = getPhone(getDefaultSubscription());
+    public String getIsimIst(int subId) throws RemoteException {
+        Phone phone = getPhone(subId);
         mContext.enforceCallingOrSelfPermission(READ_PRIVILEGED_PHONE_STATE,
                 "Requires READ_PRIVILEGED_PHONE_STATE");
         IsimRecords isim = phone.getIsimRecords();
@@ -379,8 +379,8 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
         }
     }
 
-    public String[] getIsimPcscf() throws RemoteException {
-        Phone phone = getPhone(getDefaultSubscription());
+    public String[] getIsimPcscf(int subId) throws RemoteException {
+        Phone phone = getPhone(subId);
         mContext.enforceCallingOrSelfPermission(READ_PRIVILEGED_PHONE_STATE,
                 "Requires READ_PRIVILEGED_PHONE_STATE");
         IsimRecords isim = phone.getIsimRecords();
