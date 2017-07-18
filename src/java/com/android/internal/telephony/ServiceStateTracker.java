@@ -2653,6 +2653,9 @@ public class ServiceStateTracker extends Handler {
         boolean hasRilDataRadioTechnologyChanged =
                 mSS.getRilDataRadioTechnology() != mNewSS.getRilDataRadioTechnology();
 
+        boolean isRilDataRadioTechnologyIWlan =
+                ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN == mSS.getRilDataRadioTechnology();
+
         boolean hasChanged = !mNewSS.equals(mSS);
 
         boolean hasVoiceRoamingOn = !mSS.getVoiceRoaming() && mNewSS.getVoiceRoaming();
@@ -2772,8 +2775,7 @@ public class ServiceStateTracker extends Handler {
         if (hasRilDataRadioTechnologyChanged) {
             tm.setDataNetworkTypeForPhone(mPhone.getPhoneId(), mSS.getRilDataRadioTechnology());
 
-            if (ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN
-                    == mSS.getRilDataRadioTechnology()) {
+            if (isRilDataRadioTechnologyIWlan) {
                 log("pollStateDone: IWLAN enabled");
             }
         }
@@ -2830,8 +2832,15 @@ public class ServiceStateTracker extends Handler {
                     loge("pollStateDone: countryCodeForMcc error: " + ex);
                 }
 
-                tm.setNetworkCountryIsoForPhone(mPhone.getPhoneId(), iso);
-                mGotCountryCode = true;
+                if (isRilDataRadioTechnologyIWlan) {
+                    // Reporting the correct network country is ambiguous when IWLAN could conflict
+                    // with registered cell info, so return a NULL country instead.
+                    tm.setNetworkCountryIsoForPhone(mPhone.getPhoneId(), "");
+                    mGotCountryCode = false;
+                } else {
+                    tm.setNetworkCountryIsoForPhone(mPhone.getPhoneId(), iso);
+                    mGotCountryCode = true;
+                }
 
                 if (!mNitzUpdatedTime && !mcc.equals("000") && !TextUtils.isEmpty(iso)
                         && getAutoTimeZone()) {
