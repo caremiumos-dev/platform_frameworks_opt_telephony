@@ -58,6 +58,12 @@ public final class NetworkScanRequestTracker {
     private static final int EVENT_STOP_NETWORK_SCAN_DONE = 5;
     private static final int CMD_INTERRUPT_NETWORK_SCAN = 6;
     private static final int EVENT_INTERRUPT_NETWORK_SCAN_DONE = 7;
+    private static final int MIN_SEARCH_PERIODICITY_SEC = 5;
+    private static final int MAX_SEARCH_PERIODICITY_SEC = 300;
+    private static final int MIN_SEARCH_MAX_SEC = 60;
+    private static final int MAX_SEARCH_MAX_SEC = 3600;
+    private static final int MIN_INCREMENTAL_PERIODICITY_SEC = 1;
+    private static final int MAX_INCREMENTAL_PERIODICITY_SEC = 10;
 
     private final Handler mHandler = new Handler() {
         @Override
@@ -124,6 +130,32 @@ public final class NetworkScanRequestTracker {
             if (ras.channels != null && ras.channels.length > NetworkScanRequest.MAX_CHANNELS) {
                 return false;
             }
+        }
+
+        if ((nsri.mRequest.searchPeriodicity < MIN_SEARCH_PERIODICITY_SEC)
+                || (nsri.mRequest.searchPeriodicity > MAX_SEARCH_PERIODICITY_SEC)) {
+            return false;
+        }
+
+        if ((nsri.mRequest.maxSearchTime < MIN_SEARCH_MAX_SEC)
+                || (nsri.mRequest.maxSearchTime > MAX_SEARCH_MAX_SEC)) {
+            return false;
+        }
+
+        if ((nsri.mRequest.incrementalResultsPeriodicity < MIN_INCREMENTAL_PERIODICITY_SEC)
+                || (nsri.mRequest.incrementalResultsPeriodicity
+                > MAX_INCREMENTAL_PERIODICITY_SEC)) {
+            return false;
+        }
+
+        if ((nsri.mRequest.searchPeriodicity > nsri.mRequest.maxSearchTime)
+                || (nsri.mRequest.incrementalResultsPeriodicity > nsri.mRequest.maxSearchTime)) {
+            return false;
+        }
+
+        if ((nsri.mRequest.mccMncs != null)
+                && (nsri.mRequest.mccMncs.size() > NetworkScanRequest.MAX_MCC_MNC_LIST_SIZE)) {
+            return false;
         }
         return true;
     }
