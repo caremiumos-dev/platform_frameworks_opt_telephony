@@ -3495,5 +3495,4 @@ public class GsmCdmaPhone extends Phone {
     public PowerManager.WakeLock getWakeLock() {
         return mWakeLock;
     }
-
 }
