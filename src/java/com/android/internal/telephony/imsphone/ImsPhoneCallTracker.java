@@ -601,6 +601,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             switch(status) {
                 case ImsFeature.STATE_READY: {
                     startListeningForCalls();
+                    ImsManager.updateImsServiceConfig(mPhone.getContext(),
+                            mPhone.getPhoneId(), true);
                     break;
                 }
                 case ImsFeature.STATE_INITIALIZING:
