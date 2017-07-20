@@ -54,6 +54,7 @@ import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
+import android.telephony.ims.feature.ImsFeature;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.internal.telephony.test.SimulatedCommands;
@@ -301,6 +302,37 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
             Connection connection = mPhoneUT.dial("1234567890", 0);
             verify(mCT).dial("1234567890", null, null);
         } catch (CallStateException e) {
+            fail();
+        }
+    }
+
+    @Test
+    @SmallTest
+    public void testEmergencyDial() {
+        try {
+            mSST.mSS = mServiceState;
+            doReturn(ServiceState.STATE_IN_SERVICE).when(mServiceState).getState();
+
+            mCT.mForegroundCall = mGsmCdmaCall;
+            mCT.mBackgroundCall = mGsmCdmaCall;
+            mCT.mRingingCall = mGsmCdmaCall;
+            doReturn(GsmCdmaCall.State.IDLE).when(mGsmCdmaCall).getState();
+
+            mPhoneUT.setImsPhone(mImsPhone);
+            mContextFixture.getCarrierConfigBundle()
+                    .putBoolean(CarrierConfigManager.KEY_CARRIER_USE_IMS_FIRST_FOR_EMERGENCY_BOOL,
+                    true);
+            doReturn(true).when(mImsManager).isNonTtyOrTtyOnVolteEnabled();
+
+            //Emergency Dial when feature state is NOT_READY
+            Connection connection = mPhoneUT.dial("911", 0);
+            verify(mCT).dial("911", null, null);
+
+            //Emergency Dial when feature state is READY
+            doReturn(ImsFeature.STATE_READY).when(mImsManager).getImsServiceStatus();
+            connection = mPhoneUT.dial("911", 0);
+            verify(mImsPhone).dial("911", null, 0, null);
+        } catch (Exception e) {
             fail();
         }
     }
