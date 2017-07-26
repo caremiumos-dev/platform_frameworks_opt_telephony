@@ -36,7 +36,6 @@ import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Pair;
-import android.util.Patterns;
 import android.util.TimeUtils;
 
 import com.android.internal.telephony.CallTracker;
@@ -979,7 +978,7 @@ public class DataConnection extends StateMachine {
     private boolean isIpAddress(String address) {
         if (address == null) return false;
 
-        return Patterns.IP_ADDRESS.matcher(address).matches();
+        return InetAddress.isNumeric(address);
     }
 
     private DataCallResponse.SetupResult setLinkProperties(DataCallResponse response,
