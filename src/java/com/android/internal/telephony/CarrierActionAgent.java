@@ -143,7 +143,39 @@ public class CarrierActionAgent extends Handler {
                 break;
             case EVENT_MOBILE_DATA_SETTINGS_CHANGED:
                 log("EVENT_MOBILE_DATA_SETTINGS_CHANGED");
-                if (!mPhone.getDataEnabled()) sendEmptyMessage(CARRIER_ACTION_RESET);
+                if (!mPhone.getDataEnabled()) carrierActionReset();
+                break;
+            case EVENT_DATA_ROAMING_OFF:
+                log("EVENT_DATA_ROAMING_OFF");
+                // reset carrier actions when exit roaming state.
+                carrierActionReset();
+                break;
+            case EVENT_SIM_STATE_CHANGED:
+                String iccState = (String) msg.obj;
+                if (IccCardConstants.INTENT_VALUE_ICC_LOADED.equals(iccState)) {
+                    log("EVENT_SIM_STATE_CHANGED status: " + iccState);
+                    carrierActionReset();
+                    String mobileData = Settings.Global.MOBILE_DATA;
+                    if (TelephonyManager.getDefault().getSimCount() != 1) {
+                        mobileData = mobileData + mPhone.getSubId();
+                    }
+                    mSettingsObserver.observe(Settings.Global.getUriFor(mobileData),
+                            EVENT_MOBILE_DATA_SETTINGS_CHANGED);
+                    mSettingsObserver.observe(
+                            Settings.Global.getUriFor(Settings.Global.AIRPLANE_MODE_ON),
+                            EVENT_APM_SETTINGS_CHANGED);
+                    if (mPhone.getServiceStateTracker() != null) {
+                        mPhone.getServiceStateTracker().registerForDataRoamingOff(
+                                this, EVENT_DATA_ROAMING_OFF, null, false);
+                    }
+                } else if (IccCardConstants.INTENT_VALUE_ICC_ABSENT.equals(iccState)) {
+                    log("EVENT_SIM_STATE_CHANGED status: " + iccState);
+                    carrierActionReset();
+                    mSettingsObserver.unobserve();
+                    if (mPhone.getServiceStateTracker() != null) {
+                        mPhone.getServiceStateTracker().unregisterForDataRoamingOff(this);
+                    }
+                }
                 break;
             default:
                 loge("Unknown carrier action: " + msg.what);
