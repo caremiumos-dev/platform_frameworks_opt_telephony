@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c655f4b_46847864",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2017-07-28T14:19:04Z",
+      "side": 1,
+      "message": "Just for the record, I\u0027m ok with this as a *hack* until we get a better way of telling if the value as been defaulted.\n\nYou should check my assertion that nothing legitimate would be using \"GMT\" if you haven\u0027t. I\u0027m only guessing that code wanting to use GMT would use \"Etc/GMT\" (or \"Etc/UTC\") instead. We can\u0027t check OEM code, but we can certainly check stock Android.\n\nSince it is a hack we should have a bug to revert it and a comment explaining and apologising for the smell.",
+      "range": {
+        "startLine": 365,
+        "startChar": 67,
+        "endLine": 365,
+        "endChar": 73
+      },
+      "revId": "694f01bc8c344b5fb736c7a6df2f727286eb97b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
