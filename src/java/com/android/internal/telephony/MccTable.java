@@ -362,7 +362,11 @@ public final class MccTable {
      */
     private static void setTimezoneFromMccIfNeeded(Context context, int mcc) {
         String timezone = SystemProperties.get(ServiceStateTracker.TIMEZONE_PROPERTY);
-        if (timezone == null || timezone.length() == 0) {
+        // timezone.equals("GMT") will be true and only true if the timezone was
+        // set to a default value by the system server.
+        // TODO(b/64056758): Remove "timezone.equals("GMT")" hack when there's a
+        // better way of telling if the value has been defaulted.
+        if (timezone == null || timezone.length() == 0 || timezone.equals("GMT")) {
             String zoneId = defaultTimeZoneForMcc(mcc);
             if (zoneId != null && zoneId.length() > 0) {
                 // Set time zone based on MCC
