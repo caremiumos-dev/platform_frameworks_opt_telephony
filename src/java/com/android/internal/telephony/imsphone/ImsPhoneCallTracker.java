@@ -239,6 +239,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private static final int EVENT_GET_IMS_SERVICE = 24;
     private static final int EVENT_CHECK_FOR_WIFI_HANDOVER = 25;
     private static final int EVENT_ON_FEATURE_CAPABILITY_CHANGED = 26;
+    private static final int EVENT_SUPP_SERVICE_INDICATION = 27;
 
     private static final int TIMEOUT_HANGUP_PENDINGMO = 500;
 
@@ -289,6 +290,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     private int mImsServiceRetryCount;
     private ImsManager mImsManager;
+    private ImsUtInterface mUtInterface;
     private int mServiceId = -1;
 
     private Call.SrvccState mSrvccState = Call.SrvccState.NONE;
@@ -762,6 +764,13 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     mPhone.getExternalCallTracker().getExternalCallStateListener());
         }
 
+        //Set UT interface listener to receive UT indications.
+        mUtInterface = getUtInterface();
+        if (mUtInterface != null) {
+            mUtInterface.registerForSuppServiceIndication(this,
+                    EVENT_SUPP_SERVICE_INDICATION, null);
+        }
+
         if (mCarrierConfigLoaded) {
             ImsManager.updateImsServiceConfig(mPhone.getContext(),
                     mPhone.getPhoneId(), true);
@@ -789,6 +798,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         mHandoverCall.dispose();
 
         clearDisconnected();
+        if (mUtInterface != null) {
+            mUtInterface.unregisterForSuppServiceIndication(this);
+        }
         mPhone.getContext().unregisterReceiver(mReceiver);
         mPhone.getDefaultPhone().unregisterForDataEnabledChanged(this);
         removeMessages(EVENT_GET_IMS_SERVICE);
@@ -1942,6 +1954,30 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             case ImsReasonInfo.CODE_EMERGENCY_PERM_FAILURE:
                 return DisconnectCause.EMERGENCY_PERM_FAILURE;
 
+            case ImsReasonInfo.CODE_DIAL_MODIFIED_TO_USSD:
+                return DisconnectCause.DIAL_MODIFIED_TO_USSD;
+
+            case ImsReasonInfo.CODE_DIAL_MODIFIED_TO_SS:
+                return DisconnectCause.DIAL_MODIFIED_TO_SS;
+
+            case ImsReasonInfo.CODE_DIAL_MODIFIED_TO_DIAL:
+                return DisconnectCause.DIAL_MODIFIED_TO_DIAL;
+
+            case ImsReasonInfo.CODE_DIAL_MODIFIED_TO_DIAL_VIDEO:
+                return DisconnectCause.DIAL_MODIFIED_TO_DIAL_VIDEO;
+
+            case ImsReasonInfo.CODE_DIAL_VIDEO_MODIFIED_TO_DIAL:
+                return DisconnectCause.DIAL_VIDEO_MODIFIED_TO_DIAL;
+
+            case ImsReasonInfo.CODE_DIAL_VIDEO_MODIFIED_TO_DIAL_VIDEO:
+                return DisconnectCause.DIAL_VIDEO_MODIFIED_TO_DIAL_VIDEO;
+
+            case ImsReasonInfo.CODE_DIAL_VIDEO_MODIFIED_TO_SS:
+                return DisconnectCause.DIAL_VIDEO_MODIFIED_TO_SS;
+
+            case ImsReasonInfo.CODE_DIAL_VIDEO_MODIFIED_TO_USSD:
+                return DisconnectCause.DIAL_VIDEO_MODIFIED_TO_USSD;
+
             default:
         }
 
@@ -2958,6 +2994,17 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     handleFeatureCapabilityChanged(serviceClass, enabledFeatures, disabledFeatures);
                 } finally {
                     args.recycle();
+                }
+                break;
+            }
+            case EVENT_SUPP_SERVICE_INDICATION: {
+                ar = (AsyncResult) msg.obj;
+                ImsPhoneMmiCode mmiCode = new ImsPhoneMmiCode(mPhone);
+                try {
+                    mmiCode.setIsSsInfo(true);
+                    mmiCode.processImsSsData(ar);
+                } catch (ClassCastException | NullPointerException e) {
+                    Rlog.e(LOG_TAG, "Exception in parsing SS Data: " + e);
                 }
                 break;
             }
