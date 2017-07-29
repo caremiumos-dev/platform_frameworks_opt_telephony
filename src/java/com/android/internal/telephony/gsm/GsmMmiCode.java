@@ -18,23 +18,24 @@ package com.android.internal.telephony.gsm;
 
 import android.content.Context;
 import android.content.res.Resources;
-import com.android.internal.telephony.*;
+
+import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.UiccCardApplication;
-import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
+import com.android.internal.telephony.*;
 
 import android.os.*;
 import android.telephony.PhoneNumberUtils;
-import android.text.SpannableStringBuilder;
+import android.telephony.Rlog;
 import android.text.BidiFormatter;
+import android.text.SpannableStringBuilder;
 import android.text.TextDirectionHeuristics;
 import android.text.TextUtils;
-import android.telephony.Rlog;
 
 import static com.android.internal.telephony.CommandsInterface.*;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The motto for this file is:
@@ -1174,6 +1175,9 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             } else if (err == CommandException.Error.SS_MODIFIED_TO_SS) {
                 Rlog.i(LOG_TAG, "SS_MODIFIED_TO_SS");
                 return mContext.getText(com.android.internal.R.string.stk_cc_ss_to_ss);
+            } else if (err == CommandException.Error.OEM_ERROR_1) {
+                Rlog.i(LOG_TAG, "OEM_ERROR_1 USSD_MODIFIED_TO_DIAL_VIDEO");
+                return mContext.getText(com.android.internal.R.string.stk_cc_ussd_to_dial_video);
             }
         }
 
