@@ -22,6 +22,30 @@
       "revId": "8b2d6ce452af8ddc444065bdd7ccf4cd3f872e5c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9ff1ea3_f05d87f9",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1015680
+      },
+      "writtenOn": "2017-07-31T10:12:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79882255_0fa8f090",
+      "range": {
+        "startLine": 365,
+        "startChar": 11,
+        "endLine": 366,
+        "endChar": 55
+      },
+      "revId": "8b2d6ce452af8ddc444065bdd7ccf4cd3f872e5c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
