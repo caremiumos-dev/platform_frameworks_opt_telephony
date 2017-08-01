@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0d00ddc_71742d0d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DataConnectionTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-08-01T18:48:10Z",
+      "side": 1,
+      "message": "add false case as well?",
+      "revId": "9532f2980833b32446de2b3762bd993ec6de1b62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
