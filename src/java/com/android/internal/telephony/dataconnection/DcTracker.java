@@ -314,8 +314,9 @@ public class DcTracker extends Handler {
                     if (SubscriptionManager.isValidSubscriptionId(subId)) {
                         registerSettingsObserver();
                     }
-                    if (mPreviousSubId.getAndSet(subId) != subId &&
-                            SubscriptionManager.isValidSubscriptionId(subId)) {
+                    boolean recordsLoaded = (r != null) ? r.getRecordsLoaded() : false;
+                    if (recordsLoaded  && mPreviousSubId.getAndSet(subId) != subId &&
+                            SubscriptionManager.isActiveSubId(subId)) {
                         onRecordsLoadedOrSubIdChanged();
                     }
                 }
@@ -3670,7 +3671,7 @@ public class DcTracker extends Handler {
                 // If onRecordsLoadedOrSubIdChanged() is not called here, it should be called on
                 // onSubscriptionsChanged() when a valid subId is available.
                 int subId = mPhone.getSubId();
-                if (SubscriptionManager.isValidSubscriptionId(subId)) {
+                if (SubscriptionManager.isActiveSubId(subId)) {
                     onRecordsLoadedOrSubIdChanged();
                 } else {
                     log("Ignoring EVENT_RECORDS_LOADED as subId is not valid: " + subId);
