@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98062db9_43009c47",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2486,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-08-02T17:07:37Z",
+      "side": 1,
+      "message": "Comment isn\u0027t really accurate. We are using the flag always.\n\nAre you sure this is populated correctly by the RIL always, including for CDMA case?",
+      "range": {
+        "startLine": 2486,
+        "startChar": 64,
+        "endLine": 2486,
+        "endChar": 79
+      },
+      "revId": "a7b9a404decb139dcf3d189842d298edd4146f08",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
