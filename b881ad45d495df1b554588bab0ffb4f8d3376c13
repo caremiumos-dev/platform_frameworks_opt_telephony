@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9318f2c_4508c627",
+        "filename": "src/java/com/android/internal/telephony/PhoneSubInfoController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-08-09T00:00:05Z",
+      "side": 1,
+      "message": "all these should be done after the enforceCalling.\n\nsecond, all of these may fail due to bad params, so need to handle that - would phone be null?",
+      "range": {
+        "startLine": 335,
+        "startChar": 31,
+        "endLine": 335,
+        "endChar": 36
+      },
+      "revId": "b881ad45d495df1b554588bab0ffb4f8d3376c13",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
