@@ -489,6 +489,23 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
         }
     }
 
+    public String getGroupIdLevel2(String callingPackage) {
+        return getGroupIdLevel2ForSubscriber(getDefaultSubscription(), callingPackage);
+    }
+
+    public String getGroupIdLevel2ForSubscriber(int subId, String callingPackage) {
+        Phone phone = getPhone(subId);
+        if (phone != null) {
+            if (!checkReadPhoneState(callingPackage, "getGroupIdLevel2")) {
+                return null;
+            }
+            return phone.getGroupIdLevel2();
+        } else {
+            loge("getGroupIdLevel2 phone is null for Subscription:" + subId);
+            return null;
+        }
+    }
+
     private boolean checkReadPhoneState(String callingPackage, String message) {
         try {
             mContext.enforceCallingOrSelfPermission(READ_PRIVILEGED_PHONE_STATE, message);
