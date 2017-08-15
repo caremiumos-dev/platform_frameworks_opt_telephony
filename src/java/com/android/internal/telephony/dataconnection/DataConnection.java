@@ -467,9 +467,18 @@ public class DataConnection extends StateMachine {
 
         DataProfile dp = new DataProfile(mApnSetting, cp.mProfileId);
 
-        mPhone.mCi.setupDataCall(cp.mRilRat, dp,
-                mPhone.getServiceState().getDataRoamingFromRegistration(),
-                mPhone.getDataRoamingEnabled(), msg);
+        // We need to use the actual modem roaming state instead of the framework roaming state
+        // here. This flag is only passed down to ril_service for picking the correct protocol (for
+        // old modem backward compatibility).
+        boolean isModemRoaming = mPhone.getServiceState().getDataRoamingFromRegistration();
+
+        // Set this flag to true if the user turns on data roaming. Or if we override the roaming
+        // state in framework, we should set this flag to true as well so the modem will not reject
+        // the data call setup (because the modem actually thinks the device is roaming).
+        boolean allowRoaming = mPhone.getDataRoamingEnabled()
+                || (isModemRoaming && !mPhone.getServiceState().getDataRoaming());
+
+        mPhone.mCi.setupDataCall(cp.mRilRat, dp, isModemRoaming, allowRoaming, msg);
     }
 
     /**
@@ -491,21 +500,12 @@ public class DataConnection extends StateMachine {
                 discReason = RILConstants.DEACTIVATE_REASON_PDP_RESET;
             }
         }
-        if (mPhone.mCi.getRadioState().isOn()
-                || (mPhone.getServiceState().getRilDataRadioTechnology()
-                        == ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN )) {
-            String str = "tearDownData radio is on, call deactivateDataCall";
-            if (DBG) log(str);
-            if (apnContext != null) apnContext.requestLog(str);
-            mPhone.mCi.deactivateDataCall(mCid, discReason,
-                    obtainMessage(EVENT_DEACTIVATE_DONE, mTag, 0, o));
-        } else {
-            String str = "tearDownData radio is off sendMessage EVENT_DEACTIVATE_DONE immediately";
-            if (DBG) log(str);
-            if (apnContext != null) apnContext.requestLog(str);
-            AsyncResult ar = new AsyncResult(o, null, null);
-            sendMessage(obtainMessage(EVENT_DEACTIVATE_DONE, mTag, 0, ar));
-        }
+
+        String str = "tearDownData. mCid=" + mCid + ", reason=" + discReason;
+        if (DBG) log(str);
+        if (apnContext != null) apnContext.requestLog(str);
+        mPhone.mCi.deactivateDataCall(mCid, discReason,
+                obtainMessage(EVENT_DEACTIVATE_DONE, mTag, 0, o));
     }
 
     private void notifyAllWithEvent(ApnContext alreadySent, int event, String reason) {
@@ -1057,7 +1057,7 @@ public class DataConnection extends StateMachine {
             mPhone.getServiceStateTracker().registerForDataRoamingOn(getHandler(),
                     DataConnection.EVENT_DATA_CONNECTION_ROAM_ON, null);
             mPhone.getServiceStateTracker().registerForDataRoamingOff(getHandler(),
-                    DataConnection.EVENT_DATA_CONNECTION_ROAM_OFF, null);
+                    DataConnection.EVENT_DATA_CONNECTION_ROAM_OFF, null, true);
 
             // Add ourselves to the list of data connections
             mDcController.addDc(DataConnection.this);

@@ -390,18 +390,18 @@ public class SubscriptionInfoUpdater extends Handler {
     }
 
     private void handleSimLoaded(int slotId) {
-        logd("handleSimStateLoadedInternal: slotId: " + slotId);
+        logd("handleSimLoaded: slotId: " + slotId);
 
         // The SIM should be loaded at this state, but it is possible in cases such as SIM being
         // removed or a refresh RESET that the IccRecords could be null. The right behavior is to
         // not broadcast the SIM loaded.
         IccRecords records = mPhone[slotId].getIccCard().getIccRecords();
         if (records == null) {  // Possibly a race condition.
-            logd("onRecieve: IccRecords null");
+            logd("handleSimLoaded: IccRecords null");
             return;
         }
         if (records.getIccId() == null) {
-            logd("onRecieve: IccID null");
+            logd("handleSimLoaded: IccID null");
             return;
         }
         mIccId[slotId] = records.getIccId();
@@ -533,8 +533,6 @@ public class SubscriptionInfoUpdater extends Handler {
     synchronized private void updateSubscriptionInfoByIccId() {
         logd("updateSubscriptionInfoByIccId:+ Start");
 
-        mSubscriptionManager.clearSubscriptionInfo();
-
         for (int i = 0; i < PROJECT_SIM_NUM; i++) {
             mInsertSimState[i] = SIM_NOT_CHANGE;
         }
@@ -547,6 +545,13 @@ public class SubscriptionInfoUpdater extends Handler {
             }
         }
         logd("insertedSimCount = " + insertedSimCount);
+
+        // We only clear the slot-to-sub map when one/some SIM was removed. Note this is a
+        // workaround for some race conditions that the empty map was accessed while we are
+        // rebuilding the map.
+        if (SubscriptionController.getInstance().getActiveSubIdList().length > insertedSimCount) {
+            SubscriptionController.getInstance().clearSubInfo();
+        }
 
         int index = 0;
         for (int i = 0; i < PROJECT_SIM_NUM; i++) {
