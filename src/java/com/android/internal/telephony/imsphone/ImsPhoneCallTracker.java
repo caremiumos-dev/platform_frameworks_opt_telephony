@@ -897,6 +897,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         return mPendingMO;
     }
 
+    boolean isImsServiceReady() {
+        if (mImsManager == null) {
+            return false;
+        }
+
+        return mImsManager.isServiceAvailable();
+    }
+
     /**
      * Caches frequently used carrier configuration items locally.
      *
@@ -1256,19 +1264,16 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             && !mForegroundCall.isFull();
     }
 
-    public boolean
-    canDial() {
+    public boolean canDial() {
         boolean ret;
-        int serviceState = mPhone.getServiceState().getState();
         String disableCall = SystemProperties.get(
                 TelephonyProperties.PROPERTY_DISABLE_CALL, "false");
 
-        ret = (serviceState != ServiceState.STATE_POWER_OFF)
-            && mPendingMO == null
-            && !mRingingCall.isRinging()
-            && !disableCall.equals("true")
-            && (!mForegroundCall.getState().isAlive()
-                    || !mBackgroundCall.getState().isAlive());
+        ret = mPendingMO == null
+                && !mRingingCall.isRinging()
+                && !disableCall.equals("true")
+                && (!mForegroundCall.getState().isAlive()
+                        || !mBackgroundCall.getState().isAlive());
 
         return ret;
     }
@@ -3015,8 +3020,15 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         IImsVideoCallProvider imsVideoCallProvider =
                 imsCall.getCallSession().getVideoCallProvider();
         if (imsVideoCallProvider != null) {
+            // TODO: Remove this when we can better formalize the format of session modify requests.
+            boolean useVideoPauseWorkaround = mPhone.getContext().getResources().getBoolean(
+                    com.android.internal.R.bool.config_useVideoPauseWorkaround);
+
             ImsVideoCallProviderWrapper imsVideoCallProviderWrapper =
                     new ImsVideoCallProviderWrapper(imsVideoCallProvider);
+            if (useVideoPauseWorkaround) {
+                imsVideoCallProviderWrapper.setUseVideoPauseWorkaround(useVideoPauseWorkaround);
+            }
             conn.setVideoProvider(imsVideoCallProviderWrapper);
             imsVideoCallProviderWrapper.registerForDataUsageUpdate
                     (this, EVENT_VT_DATA_USAGE_UPDATE, imsCall);
@@ -3307,7 +3319,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             mShouldUpdateImsConfigOnDisconnect = false;
         }
 
-        if (!mShouldUpdateImsConfigOnDisconnect) {
+
+        // We do not want to update the ImsConfig for REASON_REGISTERED, since it can happen before
+        // the carrier config has loaded and will deregister IMS.
+        if (!mShouldUpdateImsConfigOnDisconnect
+                && reason != DataEnabledSettings.REASON_REGISTERED) {
             // This will call into updateVideoCallFeatureValue and eventually all clients will be
             // asynchronously notified that the availability of VT over LTE has changed.
             ImsManager.updateImsServiceConfig(mPhone.getContext(), mPhone.getPhoneId(), true);

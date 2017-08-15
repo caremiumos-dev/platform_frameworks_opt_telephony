@@ -46,6 +46,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -739,10 +740,11 @@ public class SubscriptionController extends ISub.Stub {
                     do {
                         int subId = cursor.getInt(cursor.getColumnIndexOrThrow(
                                 SubscriptionManager.UNIQUE_KEY_SUBSCRIPTION_ID));
-                        // If sSlotIndexToSubId already has a valid subId for a slotIndex/phoneId,
-                        // do not add another subId for same slotIndex/phoneId.
+                        // If sSlotIndexToSubId already has the same subId for a slotIndex/phoneId,
+                        // do not add it.
                         Integer currentSubId = sSlotIndexToSubId.get(slotIndex);
                         if (currentSubId == null
+                                || currentSubId != subId
                                 || !SubscriptionManager.isValidSubscriptionId(currentSubId)) {
                             // TODO While two subs active, if user deactivats first
                             // one, need to update the default subId with second one.
@@ -1642,7 +1644,7 @@ public class SubscriptionController extends ISub.Stub {
      */
     @Override
     public int[] getActiveSubIdList() {
-        Set<Entry<Integer, Integer>> simInfoSet = sSlotIndexToSubId.entrySet();
+        Set<Entry<Integer, Integer>> simInfoSet = new HashSet<>(sSlotIndexToSubId.entrySet());
 
         int[] subIdArr = new int[simInfoSet.size()];
         int i = 0;
