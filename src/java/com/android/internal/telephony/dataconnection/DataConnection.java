@@ -16,6 +16,21 @@
 
 package com.android.internal.telephony.dataconnection;
 
+import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.CarrierSignalAgent;
+import com.android.internal.telephony.CommandException;
+import com.android.internal.telephony.DctConstants;
+import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.RILConstants;
+import com.android.internal.telephony.RetryManager;
+import com.android.internal.telephony.ServiceStateTracker;
+import com.android.internal.telephony.TelephonyIntents;
+import com.android.internal.util.AsyncChannel;
+import com.android.internal.util.Protocol;
+import com.android.internal.util.State;
+import com.android.internal.util.StateMachine;
+
 import android.app.PendingIntent;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -37,22 +52,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.TimeUtils;
-
-import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.telephony.CallTracker;
-import com.android.internal.telephony.CarrierSignalAgent;
-import com.android.internal.telephony.CommandException;
-import com.android.internal.telephony.DctConstants;
-import com.android.internal.telephony.Phone;
-import com.android.internal.telephony.PhoneConstants;
-import com.android.internal.telephony.RILConstants;
-import com.android.internal.telephony.RetryManager;
-import com.android.internal.telephony.ServiceStateTracker;
-import com.android.internal.telephony.TelephonyIntents;
-import com.android.internal.util.AsyncChannel;
-import com.android.internal.util.Protocol;
-import com.android.internal.util.State;
-import com.android.internal.util.StateMachine;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -1262,8 +1261,7 @@ public class DataConnection extends StateMachine {
         } else {
             // check for voice call and concurrency issues
             if (sst.isConcurrentVoiceAndDataAllowed() == false) {
-                final CallTracker ct = mPhone.getCallTracker();
-                if (ct.getState() != PhoneConstants.State.IDLE) {
+                if (mPhone.getState() != PhoneConstants.State.IDLE) {
                     mNetworkInfo.setDetailedState(NetworkInfo.DetailedState.SUSPENDED, null,
                             mNetworkInfo.getExtraInfo());
                     return (oldState != NetworkInfo.DetailedState.SUSPENDED);
