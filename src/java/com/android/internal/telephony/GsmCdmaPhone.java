@@ -518,7 +518,7 @@ public class GsmCdmaPhone extends Phone {
 
                 case CONNECTED:
                 case DISCONNECTING:
-                    if ( mCT.mState != PhoneConstants.State.IDLE
+                    if (getState() != PhoneConstants.State.IDLE
                             && !mSST.isConcurrentVoiceAndDataAllowed()) {
                         ret = PhoneConstants.DataState.SUSPENDED;
                     } else {

@@ -39,7 +39,6 @@ import android.util.Pair;
 import android.util.TimeUtils;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.telephony.CallTracker;
 import com.android.internal.telephony.CarrierSignalAgent;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.DctConstants;
@@ -1258,8 +1257,7 @@ public class DataConnection extends StateMachine {
         } else {
             // check for voice call and concurrency issues
             if (sst.isConcurrentVoiceAndDataAllowed() == false) {
-                final CallTracker ct = mPhone.getCallTracker();
-                if (ct.getState() != PhoneConstants.State.IDLE) {
+                if (mPhone.getState() != PhoneConstants.State.IDLE) {
                     mNetworkInfo.setDetailedState(NetworkInfo.DetailedState.SUSPENDED, null,
                             mNetworkInfo.getExtraInfo());
                     return (oldState != NetworkInfo.DetailedState.SUSPENDED);
