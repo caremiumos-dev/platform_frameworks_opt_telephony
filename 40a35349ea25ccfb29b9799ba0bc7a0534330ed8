@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "497e4ed9_72525abd",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-08-16T15:47:33Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this also change to getServiceState().getDataRegState()?",
+      "range": {
+        "startLine": 501,
+        "startChar": 19,
+        "endLine": 501,
+        "endChar": 55
+      },
+      "revId": "40a35349ea25ccfb29b9799ba0bc7a0534330ed8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e3ddc409_ff28c500",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-08-16T15:47:33Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 1254,
+        "startChar": 12,
+        "endLine": 1254,
+        "endChar": 47
+      },
+      "revId": "40a35349ea25ccfb29b9799ba0bc7a0534330ed8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
