@@ -16,6 +16,24 @@
       "revId": "6dfc83e8a4dcfc0ea1442b3d1abc81db581e2b34",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "95f60b19_e65b123a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2017-08-17T22:07:44Z",
+      "side": 1,
+      "message": "Thanks for review. Understood. Will update the gerrit.",
+      "parentUuid": "e7b6ae78_4b5f4887",
+      "revId": "6dfc83e8a4dcfc0ea1442b3d1abc81db581e2b34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
