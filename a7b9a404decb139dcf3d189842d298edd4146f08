@@ -46,6 +46,30 @@
       "revId": "a7b9a404decb139dcf3d189842d298edd4146f08",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f783a5fc_6e17fd0d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2486,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2017-08-17T11:31:11Z",
+      "side": 1,
+      "message": "Yes. css indicator is properly configured for CDMA case with Qualcomm RIL. I have modified the comment accordingly in new patch-set. Please kindly check it.",
+      "parentUuid": "dc9e8048_c1cf8433",
+      "range": {
+        "startLine": 2486,
+        "startChar": 64,
+        "endLine": 2486,
+        "endChar": 79
+      },
+      "revId": "a7b9a404decb139dcf3d189842d298edd4146f08",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
