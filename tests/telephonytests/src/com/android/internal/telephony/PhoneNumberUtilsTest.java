@@ -24,6 +24,7 @@ import static junit.framework.Assert.assertTrue;
 import android.net.Uri;
 import android.support.test.filters.FlakyTest;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.PhoneNumberUtils.BCDExtendedType;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.text.SpannableStringBuilder;
 
@@ -197,6 +198,20 @@ public class PhoneNumberUtilsTest {
         assertNull(PhoneNumberUtils.toCallerIDMinMatch(null));
         assertNull(PhoneNumberUtils.getStrippedReversed(null));
         assertNull(PhoneNumberUtils.stringFromStringAndTOA(null, 1));
+    }
+
+    @SmallTest
+    @Test
+    public void testNonIntegerAddress() {
+        byte[] b = new byte[6];
+        b[0] = (byte) 0x81; b[1] = (byte) 0xba; b[2] = (byte) 0xdc; b[3] = (byte) 0xbe;
+        b[4] = (byte) 0x5a; b[5] = (byte) 0xf1;
+        assertEquals("*#abc#*51",
+                PhoneNumberUtils.calledPartyBCDToString(
+                        b, 0, 6, BCDExtendedType.CALLED_PARTY));
+        assertEquals("*#,N;#*51",
+                PhoneNumberUtils.calledPartyBCDToString(
+                        b, 0, 6, BCDExtendedType.EF_ADN));
     }
 
     @SmallTest

@@ -25,6 +25,7 @@ import android.os.AsyncResult;
 import android.os.Message;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.PhoneNumberUtils.BCDExtendedType;
 import android.telephony.Rlog;
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionInfo;
@@ -563,7 +564,8 @@ public class SIMRecords extends IccRecords {
                 // Spec reference for EF_CFIS contents, TS 51.011 section 10.3.46.
                 if (enable && !TextUtils.isEmpty(dialNumber)) {
                     logv("EF_CFIS: updating cf number, " + Rlog.pii(LOG_TAG, dialNumber));
-                    byte[] bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(dialNumber);
+                    byte[] bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(
+                            dialNumber, BCDExtendedType.EF_ADN);
 
                     System.arraycopy(bcdNumber, 0, mEfCfis, CFIS_TON_NPI_OFFSET, bcdNumber.length);
 
