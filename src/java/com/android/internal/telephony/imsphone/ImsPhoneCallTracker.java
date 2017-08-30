@@ -3357,8 +3357,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         boolean isActiveCallVideo = activeCall.isVideoCall() ||
                 (mTreatDowngradedVideoCallsAsVideoCalls && activeCall.wasVideoCall());
         boolean isActiveCallOnWifi = activeCall.isWifiCall();
-        boolean isVoWifiEnabled = mImsManager.isWfcEnabledByPlatform(mPhone.getContext()) &&
-                mImsManager.isWfcEnabledByUser(mPhone.getContext());
+        boolean isVoWifiEnabled = mImsManager.isWfcEnabledByPlatform() &&
+                mImsManager.isWfcEnabledByUser();
         boolean isIncomingCallAudio = !incomingCall.isVideoCall();
         log("shouldDisconnectActiveCallOnAnswer : isActiveCallVideo=" + isActiveCallVideo +
                 " isActiveCallOnWifi=" + isActiveCallOnWifi + " isIncomingCallAudio=" +
