@@ -376,6 +376,10 @@ public class SubscriptionInfoUpdater extends Handler {
                 String operator = tm.getSimOperatorNumeric(subId);
                 slotId = SubscriptionController.getInstance().getPhoneId(subId);
 
+                if (mPhone[slotId].getIccCard().getState() != IccCardConstants.State.READY) {
+                    continue;
+                }
+
                 if (!TextUtils.isEmpty(operator)) {
                     if (subId == SubscriptionController.getInstance().getDefaultSubId()) {
                         MccTable.updateMccMncConfiguration(mContext, operator, false);
