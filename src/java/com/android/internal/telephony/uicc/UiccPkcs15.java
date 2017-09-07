@@ -17,24 +17,15 @@
 package com.android.internal.telephony.uicc;
 
 import android.os.AsyncResult;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.Rlog;
-import android.telephony.TelephonyManager;
 
-import com.android.internal.telephony.CommandException;
-import com.android.internal.telephony.CommandsInterface;
-import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.UiccCarrierPrivilegeRules.TLV;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-import java.lang.IllegalArgumentException;
-import java.lang.IndexOutOfBoundsException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -80,6 +71,7 @@ public class UiccPkcs15 extends Handler {
 
         public boolean loadFile(String fileId, Message callBack) {
             log("loadFile: " + fileId);
+            android.util.Log.e("cassie", "loadFile: " + fileId);
             if (fileId == null || callBack == null) return false;
             mFileId = fileId;
             mCallback = callBack;
@@ -88,6 +80,7 @@ public class UiccPkcs15 extends Handler {
         }
 
         private void selectFile() {
+            android.util.Log.e("cassie", "selectFile");
             if (mChannelId >= 0) {
                 mUiccCard.iccTransmitApduLogicalChannel(mChannelId, 0x00, 0xA4, 0x00, 0x04, 0x02,
                         mFileId, obtainMessage(EVENT_SELECT_FILE_DONE));
@@ -109,6 +102,11 @@ public class UiccPkcs15 extends Handler {
         public void handleMessage(Message msg) {
             log("handleMessage: " + msg.what);
             AsyncResult ar = (AsyncResult) msg.obj;
+            IccIoResult response1 = (IccIoResult) ar.result;
+            String result1 = IccUtils.bytesToHexString(response1.payload)
+                    .toUpperCase(Locale.US);
+            android.util.Log.e("cassie result", "IccIoResult1: " + response1 + " payload1: "
+                    + result1);
             if (ar.exception != null || ar.result == null) {
                 log("Error: " + ar.exception);
                 AsyncResult.forMessage(mCallback, null, ar.exception);
@@ -125,6 +123,8 @@ public class UiccPkcs15 extends Handler {
                     IccIoResult response = (IccIoResult) ar.result;
                     String result = IccUtils.bytesToHexString(response.payload)
                             .toUpperCase(Locale.US);
+                    android.util.Log.e("cassie result", "IccIoResult: " + response + " payload: "
+                            + result);
                     log("IccIoResult: " + response + " payload: " + result);
                     AsyncResult.forMessage(mCallback, result, (result == null) ?
                             new IccException("Error: null response for " + mFileId) : null);
@@ -152,26 +152,29 @@ public class UiccPkcs15 extends Handler {
 
         @Override
         public void handleMessage(Message msg) {
+            android.util.Log.e("cassie handle", msg.toString());
             log("handleMessage: " + msg.what);
             AsyncResult ar;
 
             switch (msg.what) {
-              case EVENT_OPEN_LOGICAL_CHANNEL_DONE:
-                  ar = (AsyncResult) msg.obj;
-                  if (ar.exception == null && ar.result != null) {
-                      mChannelId = ((int[]) ar.result)[0];
-                      log("mChannelId: " + mChannelId);
-                      AsyncResult.forMessage(mCallback, null, null);
-                  } else {
-                      log("error: " + ar.exception);
-                      AsyncResult.forMessage(mCallback, null, ar.exception);
-                      // TODO: don't sendToTarget and read EF_DIR to find PKCS15
-                  }
-                  mCallback.sendToTarget();
-                  break;
+                case EVENT_OPEN_LOGICAL_CHANNEL_DONE:
+                    android.util.Log.e("cassie", "selector EVENT_OPEN_LOGICAL_CHANNEL_DONE");
+                    ar = (AsyncResult) msg.obj;
+                    if (ar.exception == null && ar.result != null) {
+                        mChannelId = ((int[]) ar.result)[0];
+                        log("mChannelId: " + mChannelId);
+                        AsyncResult.forMessage(mCallback, null, null);
+                    } else {
+                        android.util.Log.e("cassie", "selector error");
+                        log("error: " + ar.exception);
+                        AsyncResult.forMessage(mCallback, null, ar.exception);
+                        // TODO: don't sendToTarget and read EF_DIR to find PKCS15
+                    }
+                    mCallback.sendToTarget();
+                    break;
 
-              default:
-                  log("Unknown event" + msg.what);
+                default:
+                    log("Unknown event" + msg.what);
             }
         }
     }
@@ -193,6 +196,7 @@ public class UiccPkcs15 extends Handler {
 
     public UiccPkcs15(UiccCard uiccCard, Message loadedCallback) {
         log("Creating UiccPkcs15");
+        android.util.Log.e("cassie", "Creating UiccPkcs15");
         mUiccCard = uiccCard;
         mLoadedCallback = loadedCallback;
         mPkcs15Selector = new Pkcs15Selector(obtainMessage(EVENT_SELECT_PKCS15_DONE));
@@ -202,47 +206,90 @@ public class UiccPkcs15 extends Handler {
     public void handleMessage(Message msg) {
         log("handleMessage: " + msg.what);
         AsyncResult ar = (AsyncResult) msg.obj;
+        android.util.Log.e("cassie handle message", msg.toString());
 
         switch (msg.what) {
-          case EVENT_SELECT_PKCS15_DONE:
-              if (ar.exception == null) {
-                  // ar.result is null if using logical channel,
-                  // or string for pkcs15 path if using file access.
-                  mFh = new FileHandler((String)ar.result);
-                  if (!mFh.loadFile(ID_ACRF, obtainMessage(EVENT_LOAD_ACRF_DONE))) {
-                      cleanUp();
-                  }
-              } else {
-                  log("select pkcs15 failed: " + ar.exception);
-                  // select PKCS15 failed, notify uiccCarrierPrivilegeRules
-                  mLoadedCallback.sendToTarget();
-              }
-              break;
+            case EVENT_SELECT_PKCS15_DONE:
+                android.util.Log.e("cassie", "EVENT_SELECT_PKCS15_DONE");
+                if (ar.exception == null) {
+                    // ar.result is null if using logical channel,
+                    // or string for pkcs15 path if using file access.
+                    mFh = new FileHandler((String) ar.result);
+                    android.util.Log.e("cassie", "created new fh");
+                    if (!mFh.loadFile(ID_ODF, obtainMessage(EVENT_LOAD_ODF_DONE))) {
+                        android.util.Log.e("cassie", "loaded ODF failed");
+                        cleanUp();
+                    }
+                } else {
+                    android.util.Log.e("cassie", "select pkcs15 failed");
+                    log("select pkcs15 failed: " + ar.exception);
+                    // select PKCS15 failed, notify uiccCarrierPrivilegeRules
+                    mLoadedCallback.sendToTarget();
+                }
+                break;
 
-          case EVENT_LOAD_ACRF_DONE:
-              if (ar.exception == null && ar.result != null) {
-                  String idAccf = parseAcrf((String)ar.result);
-                  if (!mFh.loadFile(idAccf, obtainMessage(EVENT_LOAD_ACCF_DONE))) {
-                      cleanUp();
-                  }
-              } else {
-                  cleanUp();
-              }
-              break;
+            case EVENT_LOAD_ODF_DONE:
+                android.util.Log.e("cassie", "EVENT_LOAD_ODF_DONE");
+                if (ar.exception == null && ar.result != null) {
+                    String idDodf = getPath((String) ar.result);
+                    if (!mFh.loadFile(idDodf, obtainMessage(EVENT_LOAD_DODF_DONE))) {
+                        cleanUp();
+                    }
+                } else {
+                    cleanUp();
+                }
+                break;
 
-          case EVENT_LOAD_ACCF_DONE:
-              if (ar.exception == null && ar.result != null) {
-                  parseAccf((String)ar.result);
-              }
-              // We are done here, no more file to read
-              cleanUp();
-              break;
+            case EVENT_LOAD_DODF_DONE:
+                android.util.Log.e("cassie", "EVENT_LOAD_DODF_DONE");
+                if (ar.exception == null && ar.result != null) {
+                    String idAcmf = getPath((String) ar.result);
+                    if (!mFh.loadFile(idAcmf, obtainMessage(EVENT_LOAD_ACMF_DONE))) {
+                        cleanUp();
+                    }
+                } else {
+                    cleanUp();
+                }
+                break;
 
-          case EVENT_CLOSE_LOGICAL_CHANNEL_DONE:
-              break;
+            case EVENT_LOAD_ACMF_DONE:
+                android.util.Log.e("cassie", "EVENT_LOAD_ACMF_DONE");
+                if (ar.exception == null && ar.result != null) {
+                    String idAcrf = getPath((String) ar.result);
+                    if (!mFh.loadFile(idAcrf, obtainMessage(EVENT_LOAD_ACRF_DONE))) {
+                        cleanUp();
+                    }
+                } else {
+                    cleanUp();
+                }
+                break;
 
-          default:
-              Rlog.e(LOG_TAG, "Unknown event " + msg.what);
+            case EVENT_LOAD_ACRF_DONE:
+                android.util.Log.e("cassie", "EVENT_LOAD_ACRF_DONE");
+                if (ar.exception == null && ar.result != null) {
+                    String idAccf = parseAcrf((String) ar.result);
+                    if (!mFh.loadFile(idAccf, obtainMessage(EVENT_LOAD_ACCF_DONE))) {
+                        cleanUp();
+                    }
+                } else {
+                    cleanUp();
+                }
+                break;
+
+            case EVENT_LOAD_ACCF_DONE:
+                android.util.Log.e("cassie", "EVENT_LOAD_ACCF_DONE");
+                if (ar.exception == null && ar.result != null) {
+                    parseAccf((String) ar.result);
+                }
+                // We are done here, no more file to read
+                cleanUp();
+                break;
+
+            case EVENT_CLOSE_LOGICAL_CHANNEL_DONE:
+                break;
+
+            default:
+                Rlog.e(LOG_TAG, "Unknown event " + msg.what);
         }
     }
 
@@ -258,14 +305,63 @@ public class UiccPkcs15 extends Handler {
 
     // Constants defined in specs, needed for parsing
     private static final String CARRIER_RULE_AID = "FFFFFFFFFFFF"; // AID for carrier privilege rule
-    private static final String ID_ACRF = "4300";
+//    private static final String ID_ACRF = "4300";
+    private static final String ID_ODF = "5207";
     private static final String TAG_ASN_SEQUENCE = "30";
     private static final String TAG_ASN_OCTET_STRING = "04";
     private static final String TAG_TARGET_AID = "A0";
 
+    private String getPath(String data) {
+        // Continue to parse the remains/value until there's a TAG_ASN_OCTET_STRING with length of
+        // two. And if there's remains, ignore the value and continue to parse the remains.
+        String ret = null;
+        String tmp = null;
+        String rule = data;
+        while (!rule.isEmpty()) {
+            // Gets the first two characters as TAG.
+            String tag = rule.substring(0, 2);
+            android.util.Log.e("cassie rule: ", rule);
+            if (tag.equals("04")) {
+                UiccCarrierPrivilegeRules.TLV tlvPath = new UiccCarrierPrivilegeRules.TLV("04");
+
+                try {
+                    android.util.Log.e("cassie: ", "true");
+                    tlvPath.parse(rule, true);
+                } catch (IllegalArgumentException e) {
+                    android.util.Log.e("cassie: ", "false");
+                    tmp = tlvPath.parse(rule, false);
+                }
+                if (tlvPath.parseLength(rule).equals("02")) {
+                    // Returns the value if the tag is TAG_ASN_OCTET_STRING and length is 2.
+                    ret = tlvPath.getValue();
+                    android.util.Log.e("cassie ret: ", ret);
+                    return ret;
+                }
+            }
+            UiccCarrierPrivilegeRules.TLV tlv = new UiccCarrierPrivilegeRules.TLV(tag);
+            try {
+                android.util.Log.e("cassie: ", "true");
+                tmp = tlv.parse(rule, true);
+            } catch (IllegalArgumentException e) {
+                // Did not consume all.
+                android.util.Log.e("cassie: ", "false");
+                tmp = tlv.parse(rule, false);
+            }
+
+            if (tmp.isEmpty()) {
+                rule = tlv.getValue();
+            } else {
+                rule = tmp;
+            }
+        }
+        android.util.Log.e("cassie ret: ", ret);
+        return ret;
+    }
+
     // parse ACRF file to get file id for ACCF file
     // data is hex string, return file id if parse success, null otherwise
     private String parseAcrf(String data) {
+        android.util.Log.e("cassie acrf", data);
         String ret = null;
 
         String acRules = data;
@@ -302,6 +398,7 @@ public class UiccPkcs15 extends Handler {
                 break; // Bad data, ignore all remaining ACRules
             }
         }
+        android.util.Log.e("cassie path", ret);
         return ret;
     }
 
