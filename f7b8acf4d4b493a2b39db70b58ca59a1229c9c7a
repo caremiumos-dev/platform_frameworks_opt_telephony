@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5be7ed86_a1bf59c4",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-09-11T20:17:58Z",
+      "side": 1,
+      "message": "Move into startListeningForCalls()",
+      "range": {
+        "startLine": 620,
+        "startChar": 20,
+        "endLine": 621,
+        "endChar": 55
+      },
+      "revId": "f7b8acf4d4b493a2b39db70b58ca59a1229c9c7a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
