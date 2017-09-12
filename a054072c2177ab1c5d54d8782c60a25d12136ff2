@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b162360_5a8a7d62",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-09-12T21:35:50Z",
+      "side": 1,
+      "message": "Support both ARA-D and ARA-M for Carrier Privilege Rules",
+      "range": {
+        "startLine": 7,
+        "startChar": 27,
+        "endLine": 7,
+        "endChar": 28
+      },
+      "revId": "a054072c2177ab1c5d54d8782c60a25d12136ff2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc936c70_913e20fc",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-09-12T21:35:50Z",
+      "side": 1,
+      "message": "local variable should not have m prefix",
+      "range": {
+        "startLine": 223,
+        "startChar": 15,
+        "endLine": 223,
+        "endChar": 19
+      },
+      "revId": "a054072c2177ab1c5d54d8782c60a25d12136ff2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
