@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33fc4b3f_4fcb6adb",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-12T14:20:40Z",
+      "side": 1,
+      "message": "Since this is internal method, it can be modified directly instead of adding a new method sendTextWithOptions. Any reason for adding a new method ?",
+      "revId": "da8d182d0cb1006850908959909e970d6ddec8f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a62b32c0_6a9910a8",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-12T14:20:40Z",
+      "side": 1,
+      "message": "Can we log priority and expectMore flag as well ?",
+      "revId": "da8d182d0cb1006850908959909e970d6ddec8f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca3613ab_955f4b82",
+        "filename": "src/java/com/android/internal/telephony/ImsSMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-12T14:20:40Z",
+      "side": 1,
+      "message": "Can we just call this expectMore ?",
+      "revId": "da8d182d0cb1006850908959909e970d6ddec8f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "582e7c37_f11efd99",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-12T14:20:40Z",
+      "side": 1,
+      "message": "mValidityPeriod",
+      "revId": "da8d182d0cb1006850908959909e970d6ddec8f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ddb8c01c_585ff77e",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-12T14:20:40Z",
+      "side": 1,
+      "message": "Why is priority not stored in the tracker ?",
+      "revId": "da8d182d0cb1006850908959909e970d6ddec8f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8f0aca9e_8e292888",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-12T14:20:40Z",
+      "side": 1,
+      "message": "Just expectMore sounds better.",
+      "revId": "da8d182d0cb1006850908959909e970d6ddec8f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
