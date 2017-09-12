@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87c002c9_55e4e329",
+        "filename": "src/java/com/google/android/mms/pdu/EncodedStringValue.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-09-12T22:42:09Z",
+      "side": 1,
+      "message": "I think exception handling should be moved out of this function, if someone wants to instantiate an EncodedStringValue with an explicit charSet then they should be in charge of making sure the data fits the charset.",
+      "range": {
+        "startLine": 77,
+        "startChar": 10,
+        "endLine": 90,
+        "endChar": 9
+      },
+      "revId": "c89136822f63dbdfedd60f629deb3a885600b567",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c028dc9_471770ee",
+        "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-09-12T22:42:09Z",
+      "side": 1,
+      "message": "We should have a unit test to exercise this code path",
+      "range": {
+        "startLine": 820,
+        "startChar": 17,
+        "endLine": 820,
+        "endChar": 28
+      },
+      "revId": "c89136822f63dbdfedd60f629deb3a885600b567",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
