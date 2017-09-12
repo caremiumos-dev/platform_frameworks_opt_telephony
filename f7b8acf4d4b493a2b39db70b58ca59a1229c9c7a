@@ -22,6 +22,30 @@
       "revId": "f7b8acf4d4b493a2b39db70b58ca59a1229c9c7a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4c38d5bf_893f9d0e",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1135337
+      },
+      "writtenOn": "2017-09-12T04:05:39Z",
+      "side": 1,
+      "message": "Done. Also added carrierconfigloaded check in latest patch to ensure that IMS feature flags will be updated only if carrier config loading is done during boot up.",
+      "parentUuid": "5be7ed86_a1bf59c4",
+      "range": {
+        "startLine": 620,
+        "startChar": 20,
+        "endLine": 621,
+        "endChar": 55
+      },
+      "revId": "f7b8acf4d4b493a2b39db70b58ca59a1229c9c7a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
