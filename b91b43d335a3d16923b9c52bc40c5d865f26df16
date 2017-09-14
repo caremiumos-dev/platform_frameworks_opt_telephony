@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69941ff0_41c3bc7e",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3275,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-09-14T17:11:26Z",
+      "side": 1,
+      "message": "I believe it was intentionally set to true for this case.\nIs there any issue you see?",
+      "range": {
+        "startLine": 3275,
+        "startChar": 37,
+        "endLine": 3275,
+        "endChar": 53
+      },
+      "revId": "b91b43d335a3d16923b9c52bc40c5d865f26df16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
