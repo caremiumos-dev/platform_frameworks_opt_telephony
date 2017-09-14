@@ -22,6 +22,52 @@
       "revId": "4377effe409e4fb765fbc2aab4a29772f8ed5ecf",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d34df421_581d6766",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-09-14T23:36:29Z",
+      "side": 1,
+      "message": "Remove and probably need to remove two use cases in PackageManagerService.java and DcTrackerTest.java",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 60
+      },
+      "revId": "4377effe409e4fb765fbc2aab4a29772f8ed5ecf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "05d67f0b_989213b7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-09-14T23:36:29Z",
+      "side": 1,
+      "message": "remove?",
+      "range": {
+        "startLine": 619,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 9
+      },
+      "revId": "4377effe409e4fb765fbc2aab4a29772f8ed5ecf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
