@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a109d8b_b8548cda",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-09-14T16:27:27Z",
+      "side": 1,
+      "message": "not obvious that 0 refers to ARAD and 1 to ARAM. Would it be better to have this as a string directly pointing to the AID?",
+      "range": {
+        "startLine": 213,
+        "startChar": 16,
+        "endLine": 213,
+        "endChar": 25
+      },
+      "revId": "eae805bc9e80cec84b930adc4e34fb4678060f8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "55a0773f_6c2336cf",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-09-14T16:27:27Z",
+      "side": 1,
+      "message": "use constants for this if you decide to not use the Strings.",
+      "range": {
+        "startLine": 419,
+        "startChar": 31,
+        "endLine": 419,
+        "endChar": 66
+      },
+      "revId": "eae805bc9e80cec84b930adc4e34fb4678060f8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
