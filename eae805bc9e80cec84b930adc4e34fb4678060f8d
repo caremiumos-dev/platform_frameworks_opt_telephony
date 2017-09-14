@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "6e554444_5e49d3ea",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-09-14T17:46:29Z",
+      "side": 1,
+      "message": "msg.arg2 is an object so I don\u0027t think there\u0027s any memory difference as such. I am ok either way, but if you decide to use int, at least define constants for 0 and 1.",
+      "parentUuid": "2be0d2cd_92d49290",
+      "range": {
+        "startLine": 213,
+        "startChar": 16,
+        "endLine": 213,
+        "endChar": 25
+      },
+      "revId": "eae805bc9e80cec84b930adc4e34fb4678060f8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55a0773f_6c2336cf",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
         "patchSetId": 3
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Sorry that I didn\u0027t quite get it here. So do you mean to use a constants here inside of the function instead of the global variable mAIDInUse? like:\n\nmAIDInUse \u003d msg.arg2;\nstatic final int aid \u003d msg.arg2;\n...\nuse \u0027aid\u0027 in the following function\n...",
       "parentUuid": "55a0773f_6c2336cf",
+      "range": {
+        "startLine": 419,
+        "startChar": 31,
+        "endLine": 419,
+        "endChar": 66
+      },
+      "revId": "eae805bc9e80cec84b930adc4e34fb4678060f8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48057a18_25752578",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-09-14T17:46:29Z",
+      "side": 1,
+      "message": "No I didn\u0027t mean to suggest any change here. I meant define constants for 0 and 1 above if you decide to use integer value for mAIDInUse.",
+      "parentUuid": "db772317_dd5b3d61",
       "range": {
         "startLine": 419,
         "startChar": 31,
