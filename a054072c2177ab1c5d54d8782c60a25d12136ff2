@@ -45,6 +45,30 @@
       "revId": "a054072c2177ab1c5d54d8782c60a25d12136ff2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf0e4675_3328a5c6",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-09-14T17:38:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc936c70_913e20fc",
+      "range": {
+        "startLine": 223,
+        "startChar": 15,
+        "endLine": 223,
+        "endChar": 19
+      },
+      "revId": "a054072c2177ab1c5d54d8782c60a25d12136ff2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
