@@ -22,6 +22,30 @@
       "revId": "b91b43d335a3d16923b9c52bc40c5d865f26df16",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cce6b9fe_41b869db",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3275,
+      "author": {
+        "id": 1171399
+      },
+      "writtenOn": "2017-09-15T02:56:15Z",
+      "side": 1,
+      "message": "Hi Amit，\n\nThanks for your review.\n\nAt the beginning, sim1 is default data card, sim2 select network to 2G manually, and then switch default data card to sim2. Sim2 can only register to 2G network.\n\nBecause for many firms, default data card is the only 4G card. It is not acceptable to the user， if unable register to 4G.\n\nSo I think it is more flexible to restore the network according to the configuration file.",
+      "parentUuid": "69941ff0_41c3bc7e",
+      "range": {
+        "startLine": 3275,
+        "startChar": 37,
+        "endLine": 3275,
+        "endChar": 53
+      },
+      "revId": "b91b43d335a3d16923b9c52bc40c5d865f26df16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
