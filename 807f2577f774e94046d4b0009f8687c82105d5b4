@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c144fc7_aafe4df8",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-09-19T18:39:10Z",
+      "side": 1,
+      "message": "This variable indicates the number of records in the EF file,  which is different than the Capacity, right?",
+      "range": {
+        "startLine": 763,
+        "startChar": 8,
+        "endLine": 763,
+        "endChar": 30
+      },
+      "revId": "807f2577f774e94046d4b0009f8687c82105d5b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
