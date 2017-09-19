@@ -16,6 +16,24 @@
       "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7904fb1f_0d12bc4d",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-09-19T06:13:54Z",
+      "side": 1,
+      "message": "check in https://android-review.googlesource.com/#/c/platform/frameworks/base/+/429505",
+      "parentUuid": "3bc9b41d_be69381e",
+      "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
