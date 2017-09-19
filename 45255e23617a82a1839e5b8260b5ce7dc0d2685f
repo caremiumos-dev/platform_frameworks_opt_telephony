@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9f99652_15315b63",
+        "filename": "src/java/com/android/internal/telephony/cat/AppInterface.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1138138
+      },
+      "writtenOn": "2017-09-19T20:37:14Z",
+      "side": 1,
+      "message": "change to com.android.internal to keep uniform",
+      "range": {
+        "startLine": 63,
+        "startChar": 36,
+        "endLine": 63,
+        "endChar": 59
+      },
+      "revId": "45255e23617a82a1839e5b8260b5ce7dc0d2685f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6967950_b51471d8",
+        "filename": "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1138138
+      },
+      "writtenOn": "2017-09-19T20:37:14Z",
+      "side": 1,
+      "message": "why does this function always return false?\nshouldn\u0027t it return true when it succeeds?",
+      "range": {
+        "startLine": 1080,
+        "startChar": 7,
+        "endLine": 1080,
+        "endChar": 21
+      },
+      "revId": "45255e23617a82a1839e5b8260b5ce7dc0d2685f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
