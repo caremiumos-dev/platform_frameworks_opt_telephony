@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ae7f766_a12be905",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2750,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-09-20T00:33:39Z",
+      "side": 1,
+      "message": "I think we should just pass in byte[] here. Otherwise we convert it to hex string in copyMessageToIccEf() and then convert it back to byte here.",
+      "range": {
+        "startLine": 2750,
+        "startChar": 43,
+        "endLine": 2750,
+        "endChar": 53
+      },
+      "revId": "554652dc9c361ee86e300c7c04c6503d940742b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
