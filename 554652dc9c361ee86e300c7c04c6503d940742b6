@@ -22,6 +22,30 @@
       "revId": "554652dc9c361ee86e300c7c04c6503d940742b6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ead1ad54_ced5ebda",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2750,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2017-09-20T17:37:30Z",
+      "side": 1,
+      "message": "Yes, we should directly pass in byte[]. When all APIs were converted to HIDL we wanted to avoid changes in frameworks code and so we kept function definitions in ril.java same. But for this particular case, it would be better now to directly pass in byte[].",
+      "parentUuid": "7ae7f766_a12be905",
+      "range": {
+        "startLine": 2750,
+        "startChar": 43,
+        "endLine": 2750,
+        "endChar": 53
+      },
+      "revId": "554652dc9c361ee86e300c7c04c6503d940742b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
