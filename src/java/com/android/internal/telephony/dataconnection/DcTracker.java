@@ -2078,6 +2078,11 @@ public class DcTracker extends Handler {
             }
         }
 
+        if ((iaApnSetting == null) && (defaultApnSetting == null)) {
+            if (DBG) log("setInitialAttachApn: aborting request");
+            return;
+        }
+
         // The priority of apn candidates from highest to lowest is:
         //   1) APN_TYPE_IA (Initial Attach)
         //   2) mPreferredApn, i.e. the current preferred apn
@@ -2288,13 +2293,25 @@ public class DcTracker extends Handler {
         return mAutoAttachOnCreation.get();
     }
 
+    private boolean isRecordsLoaded() {
+        boolean recordsLoaded = false;
+
+        IccRecords r = mIccRecords.get();
+        if (r != null) {
+            recordsLoaded = r.getRecordsLoaded();
+        }
+        return recordsLoaded;
+    }
+
     private void onRecordsLoadedOrSubIdChanged() {
         if (DBG) log("onRecordsLoadedOrSubIdChanged: createAllApnList");
         mAutoAttachOnCreationConfig = mPhone.getContext().getResources()
                 .getBoolean(com.android.internal.R.bool.config_auto_attach_data_on_creation);
 
         createAllApnList();
-        setInitialAttachApn();
+        if (isRecordsLoaded()) {
+            setInitialAttachApn();
+        }
         if (mPhone.mCi.getRadioState().isOn()) {
             if (DBG) log("onRecordsLoadedOrSubIdChanged: notifying data availability");
             notifyOffApnsOfAvailability(Phone.REASON_SIM_LOADED);
