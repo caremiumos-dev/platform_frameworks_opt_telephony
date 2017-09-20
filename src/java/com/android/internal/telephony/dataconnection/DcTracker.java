@@ -2288,13 +2288,25 @@ public class DcTracker extends Handler {
         return mAutoAttachOnCreation.get();
     }
 
+    private boolean isRecordsLoaded() {
+        boolean recordsLoaded = false;
+
+        IccRecords r = mIccRecords.get();
+        if (r != null) {
+            recordsLoaded = r.getRecordsLoaded();
+        }
+        return recordsLoaded;
+    }
+
     private void onRecordsLoadedOrSubIdChanged() {
         if (DBG) log("onRecordsLoadedOrSubIdChanged: createAllApnList");
         mAutoAttachOnCreationConfig = mPhone.getContext().getResources()
                 .getBoolean(com.android.internal.R.bool.config_auto_attach_data_on_creation);
 
         createAllApnList();
-        setInitialAttachApn();
+        if (isRecordsLoaded()) {
+            setInitialAttachApn();
+        }
         if (mPhone.mCi.getRadioState().isOn()) {
             if (DBG) log("onRecordsLoadedOrSubIdChanged: notifying data availability");
             notifyOffApnsOfAvailability(Phone.REASON_SIM_LOADED);
