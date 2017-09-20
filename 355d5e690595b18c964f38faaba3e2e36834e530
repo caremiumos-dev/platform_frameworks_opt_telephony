@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "176d82a4_6ebdbbc0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-09-20T20:37:49Z",
+      "side": 1,
+      "message": "hmm. Looks like merge error to me.",
+      "range": {
+        "startLine": 365,
+        "startChar": 4,
+        "endLine": 365,
+        "endChar": 53
+      },
+      "revId": "355d5e690595b18c964f38faaba3e2e36834e530",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
