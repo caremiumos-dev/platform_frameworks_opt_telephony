@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d326f17_bf2f835b",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-09-25T21:11:06Z",
+      "side": 1,
+      "message": "why you need static mLe if it will be changed per result of APDU result?",
+      "range": {
+        "startLine": 77,
+        "startChar": 12,
+        "endLine": 77,
+        "endChar": 18
+      },
+      "revId": "db709b27ee133a568667e06db7cb5202d3bb9730",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "656ac039_22838066",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-09-25T21:11:06Z",
+      "side": 1,
+      "message": "From your commit message \"If response is SW 6Cxx, resends the command with the appropriate Le.\"\nThen why are you using \"mLe\" in this branch too? This branch is not for response.sw1 \u003d\u003d 0x61.",
+      "range": {
+        "startLine": 467,
+        "startChar": 118,
+        "endLine": 467,
+        "endChar": 121
+      },
+      "revId": "db709b27ee133a568667e06db7cb5202d3bb9730",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
