@@ -34,6 +34,23 @@
       "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c32b1a64_e77a0239",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-26T14:35:56Z",
+      "side": 1,
+      "message": "Do we need both lastPart and expectMore parameters to this method? Is it ever possible that lastPart is true and expectMore is true as well? Seems like we could just reuse the lastPart field for expectMore.",
+      "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
