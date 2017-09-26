@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "32f76e2e_41e24da1",
+        "filename": "src/java/com/google/android/mms/pdu/EncodedStringValue.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-09-26T03:18:00Z",
+      "side": 1,
+      "message": "yes, maybe someone needs to keep charset fits data, but always 3rd party app or carrier/oem ignores on this.\n\ni think it is better to leave it that gets more compability",
+      "parentUuid": "87c002c9_55e4e329",
+      "range": {
+        "startLine": 77,
+        "startChar": 10,
+        "endLine": 90,
+        "endChar": 9
+      },
+      "revId": "c89136822f63dbdfedd60f629deb3a885600b567",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c028dc9_471770ee",
         "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-12T22:42:09Z",
       "side": 1,
       "message": "We should have a unit test to exercise this code path",
+      "range": {
+        "startLine": 820,
+        "startChar": 17,
+        "endLine": 820,
+        "endChar": 28
+      },
+      "revId": "c89136822f63dbdfedd60f629deb3a885600b567",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe421566_de1e1dab",
+        "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-09-26T03:18:00Z",
+      "side": 1,
+      "message": "this is google specific pakcage\n\nthe related unit test is not there for whole pakcage yet",
+      "parentUuid": "0c028dc9_471770ee",
       "range": {
         "startLine": 820,
         "startChar": 17,
