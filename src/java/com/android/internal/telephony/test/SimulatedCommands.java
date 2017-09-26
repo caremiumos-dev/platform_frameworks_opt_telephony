@@ -1193,6 +1193,7 @@ public class SimulatedCommands extends BaseCommands
         } else {
             setRadioState(RadioState.RADIO_OFF);
         }
+        resultSuccess(result, null);
     }
 
 
