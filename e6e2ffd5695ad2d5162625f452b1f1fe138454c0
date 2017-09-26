@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1490c149_96d716c0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-09-26T21:02:35Z",
+      "side": 1,
+      "message": "Looks like this change will be useful in case APN conf.xml is not configured correctly but modem has correct settings in the profile.\n\nThis looks to me like a workaround rather than a clean fix. The fix is to add the attach APN to the APN conf.xml",
+      "range": {
+        "startLine": 2081,
+        "startChar": 8,
+        "endLine": 2084,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "703960b5_ce6192db",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2314,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-09-26T21:02:35Z",
+      "side": 1,
+      "message": "I am not getting why this change is needed. Is the issue seen if there is a IA APN configured as well for the SIM card mcc/mnc ? \n\nTelephony gets the APNs based on the SIM card IMSI mcc/mnc so wondering why telephony needs to wait for all records to be loaded ?",
+      "range": {
+        "startLine": 2312,
+        "startChar": 7,
+        "endLine": 2314,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
