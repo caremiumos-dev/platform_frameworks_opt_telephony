@@ -1114,6 +1114,26 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
     @Test
     @SmallTest
+    public void testShuttingDownRequest() throws Exception {
+        sst.setRadioPower(true);
+        waitForMs(100);
+
+        sst.requestShutdown();
+        waitForMs(100);
+        assertFalse(mSimulatedCommands.getRadioState().isAvailable());
+
+        sst.setRadioPower(true);
+        waitForMs(100);
+
+        // Simulate RIL fails the radio power settings.
+        mSimulatedCommands.setRadioPowerFailResponse(true);
+        sst.requestShutdown();
+        waitForMs(100);
+        assertFalse(mSimulatedCommands.getRadioState().isAvailable());
+    }
+
+    @Test
+    @SmallTest
     public void testSetTimeFromNITZStr() throws Exception {
         doReturn(mAlarmManager).when(mIBinder).queryLocalInterface(anyString());
         mServiceManagerMockedServices.put(Context.ALARM_SERVICE, mIBinder);
