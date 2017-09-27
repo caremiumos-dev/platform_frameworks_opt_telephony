@@ -45,6 +45,54 @@
       "revId": "98c41ad997b4fa2e4f8f23c6d85b1c06a5396687",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "15409b04_7ec74911",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-09-27T23:32:12Z",
+      "side": 1,
+      "message": "Sorry i added this by mistake...",
+      "parentUuid": "85ec3c3a_34a8c575",
+      "range": {
+        "startLine": 1097,
+        "startChar": 12,
+        "endLine": 1097,
+        "endChar": 13
+      },
+      "revId": "98c41ad997b4fa2e4f8f23c6d85b1c06a5396687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85bea959_ecca5e50",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-09-27T23:32:12Z",
+      "side": 1,
+      "message": "thanks!",
+      "parentUuid": "3661bf16_848699ae",
+      "range": {
+        "startLine": 1097,
+        "startChar": 14,
+        "endLine": 1097,
+        "endChar": 27
+      },
+      "revId": "98c41ad997b4fa2e4f8f23c6d85b1c06a5396687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
