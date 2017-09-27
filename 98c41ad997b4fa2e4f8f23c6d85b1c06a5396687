@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3661bf16_848699ae",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-09-27T22:19:35Z",
+      "side": 1,
+      "message": "To make this more readable, rename to useImsForVolte",
+      "range": {
+        "startLine": 1097,
+        "startChar": 14,
+        "endLine": 1097,
+        "endChar": 27
+      },
+      "revId": "98c41ad997b4fa2e4f8f23c6d85b1c06a5396687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85ec3c3a_34a8c575",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-09-27T22:19:35Z",
+      "side": 1,
+      "message": "I don\u0027t think you need that second layer of parentheses, it can be (imscall || ut || emergency)",
+      "range": {
+        "startLine": 1097,
+        "startChar": 12,
+        "endLine": 1097,
+        "endChar": 13
+      },
+      "revId": "98c41ad997b4fa2e4f8f23c6d85b1c06a5396687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
