@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c4bc1a6_d3fb3af6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-09-27T00:08:50Z",
+      "side": 1,
+      "message": "If it does not have EF_SPN, how does it populate operator name later?",
+      "revId": "4cdc85b96c77d334c056ee7ac504f90479e57796",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2847015f_a6956875",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-09-27T00:08:50Z",
+      "side": 1,
+      "message": "Should this happen only if oldSubName is invalid? If it had already received a valid value, why should it be overwritten?",
+      "revId": "4cdc85b96c77d334c056ee7ac504f90479e57796",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
