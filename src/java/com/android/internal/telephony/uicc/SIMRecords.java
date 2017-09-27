@@ -1628,7 +1628,8 @@ public class SIMRecords extends IccRecords {
             setServiceProviderName(carrierName);
             mTelephonyManager.setSimOperatorNameForPhone(mParentApp.getPhoneId(),
                     carrierName);
-        } else {
+        } else if (TextUtils.isEmpty(getServiceProviderName())) {
+            // Override SPN when no EF_SPN content was found on the SIM
             setSpnFromConfig(getOperatorNumeric());
         }
     }
