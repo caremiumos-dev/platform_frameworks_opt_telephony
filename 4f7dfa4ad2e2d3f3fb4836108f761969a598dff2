@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7bcb63fb_f93a79dc",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-09-28T19:12:55Z",
+      "side": 1,
+      "message": "if language\u003dnull we still send ResultCode.OK, is this intentional?",
+      "range": {
+        "startLine": 469,
+        "startChar": 56,
+        "endLine": 469,
+        "endChar": 62
+      },
+      "revId": "4f7dfa4ad2e2d3f3fb4836108f761969a598dff2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8b47af83_1dd205b7",
+        "filename": "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-09-28T19:12:55Z",
+      "side": 1,
+      "message": "Processes LANGUAGE_NOTIFICATION proactive command from the SIM card.\nThe SPECIFIC_LANGUAGE notification sets the specified language.\nThe NON_SPECIFIC_LANGUAGE notification restores the last specifically set language.\n\n@param cmdDet Command Details object retrieved from the proactive command object\n@param ctlvs List of ComprehensionTlv objects following Command Details object and Device Identities object within the proactive command\n@return false. This function always returns false meaning that the command processing is  not pending and additional asynchronous processing is not required.",
+      "revId": "4f7dfa4ad2e2d3f3fb4836108f761969a598dff2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7322d885_c1758d5c",
+        "filename": "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-09-28T19:12:55Z",
+      "side": 1,
+      "message": "In what case would the last requested language not be equal to the current language? Is this to deal with a potential race between handling the last notification and receiving a new one?",
+      "range": {
+        "startLine": 1035,
+        "startChar": 58,
+        "endLine": 1036,
+        "endChar": 70
+      },
+      "revId": "4f7dfa4ad2e2d3f3fb4836108f761969a598dff2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
