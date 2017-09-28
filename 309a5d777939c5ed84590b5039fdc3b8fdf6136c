@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c370f13_f3cc8bc0",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-09-28T15:32:23Z",
+      "side": 1,
+      "message": "Oops, sorry bad suggestion! Can you name it something along the lines of useImsForCall, since it can be VoLTE, VT and WiFi callng?",
+      "range": {
+        "startLine": 1060,
+        "startChar": 16,
+        "endLine": 1060,
+        "endChar": 30
+      },
+      "revId": "309a5d777939c5ed84590b5039fdc3b8fdf6136c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
