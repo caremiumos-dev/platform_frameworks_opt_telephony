@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec19b398_72f110ad",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-09-29T22:39:21Z",
+      "side": 1,
+      "message": "maybe this line should go near EVENT_SIM_READY?",
+      "range": {
+        "startLine": 222,
+        "startChar": 31,
+        "endLine": 222,
+        "endChar": 47
+      },
+      "revId": "62e04d4880c19d5c1fccbc758a44761617b0200b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfbeaa52_a7211879",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-09-29T22:39:21Z",
+      "side": 1,
+      "message": "Is it necessary to listen for sim locked? Does a sim locked not trigger EVENT_ICC_CHANGED?",
+      "range": {
+        "startLine": 1138,
+        "startChar": 0,
+        "endLine": 1145,
+        "endChar": 22
+      },
+      "revId": "62e04d4880c19d5c1fccbc758a44761617b0200b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
