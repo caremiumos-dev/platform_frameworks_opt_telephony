@@ -491,6 +491,22 @@ public class UiccCarrierPrivilegeRules extends Handler {
                                 updateState(STATE_ERROR, "Error parsing rules: " + ex);
                             }
                         }
+                    } else if (response.sw1 == 0x61) {
+                        // ISO/IEC 7816-4 to deal with "61xx"
+                        // ‘xx’ bytes of data are available and can be requested using GET RESPONSE.
+                        mUiccCard.iccTransmitApduLogicalChannel(mChannelId, CLA,
+                                0xC0, 0x00, 0x00, response.sw2, "",
+                                obtainMessage(EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE,
+                                mChannelId, mAIDInUse));
+                        break;
+                    } else if (response.sw1 == 0x6C) {
+                        // ISO/IEC 7816-4 To deal with "6Cxx"
+                        // Bad length value in Le; ‘xx’ is the correct length.
+                        mUiccCard.iccTransmitApduLogicalChannel(mChannelId, CLA,
+                                COMMAND, P1, P2, response.sw2, DATA,
+                                obtainMessage(EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE,
+                                mChannelId, mAIDInUse));
+                        break;
                     } else {
                         if (mAIDInUse == ARAM) {
                             String errorMsg = "Invalid response: payload=" + response.payload

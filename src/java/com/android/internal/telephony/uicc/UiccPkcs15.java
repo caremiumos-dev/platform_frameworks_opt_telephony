@@ -17,24 +17,16 @@
 package com.android.internal.telephony.uicc;
 
 import android.os.AsyncResult;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.Rlog;
-import android.telephony.TelephonyManager;
 
-import com.android.internal.telephony.CommandException;
-import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.UiccCarrierPrivilegeRules.TLV;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-import java.lang.IllegalArgumentException;
-import java.lang.IndexOutOfBoundsException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -105,6 +97,33 @@ public class UiccPkcs15 extends Handler {
             }
         }
 
+        /**
+         * For TS 51.011 "GET RESPONSE"
+         * Request data from the smart card (used with the T = 0 transmission protocol).
+         * @param length bytes of data are available and can be requested
+         */
+        private void getResponse(int length) {
+            if (mChannelId >= 0) {
+                mUiccCard.iccTransmitApduLogicalChannel(mChannelId, 0x00, 0xC0, 0x00, 0x00, length,
+                        "", obtainMessage(EVENT_SELECT_FILE_DONE));
+            } else {
+                log("EF based");
+            }
+        }
+
+        /**
+         * For ISO/IEC 7816-4 Bad length value in Le; ‘xx’ is the correct length.
+         * @param le Encodes the maximum number of response bytes expected
+         */
+        private void readBinaryWithLe(int le) {
+            if (mChannelId >= 0) {
+                mUiccCard.iccTransmitApduLogicalChannel(mChannelId, 0x00, 0xB0, 0x00, 0x00, le,
+                        "", obtainMessage(EVENT_READ_BINARY_DONE));
+            } else {
+                log("EF based");
+            }
+        }
+
         @Override
         public void handleMessage(Message msg) {
             log("handleMessage: " + msg.what);
@@ -115,20 +134,32 @@ public class UiccPkcs15 extends Handler {
                 mCallback.sendToTarget();
                 return;
             }
-
+            IccIoResult response = (IccIoResult) ar.result;
             switch (msg.what) {
                 case EVENT_SELECT_FILE_DONE:
-                    readBinary();
+                    log("EVENT_SELECT_FILE_DONE IccIoResult: " + response);
+                    // To handle "61xx" response. Command successfully executed,
+                    // ‘xx’ bytes of data are available and can be requested using GET RESPONSE.
+                    if (response.sw1 == 0x61) {
+                        getResponse(response.sw2);
+                    } else {
+                        readBinary();
+                    }
                     break;
 
                 case EVENT_READ_BINARY_DONE:
-                    IccIoResult response = (IccIoResult) ar.result;
-                    String result = IccUtils.bytesToHexString(response.payload)
-                            .toUpperCase(Locale.US);
-                    log("IccIoResult: " + response + " payload: " + result);
-                    AsyncResult.forMessage(mCallback, result, (result == null) ?
-                            new IccException("Error: null response for " + mFileId) : null);
-                    mCallback.sendToTarget();
+                    // To handle "6Cxx" response.
+                    // Bad length value in Le; ‘xx’ is the correct length.
+                    if (response.sw1 == 0x6C) {
+                        readBinaryWithLe(response.sw2);
+                    } else {
+                        String result = IccUtils.bytesToHexString(response.payload)
+                                .toUpperCase(Locale.US);
+                        log("IccIoResult: " + response + " payload: " + result);
+                        AsyncResult.forMessage(mCallback, result, (result == null)
+                                ? new IccException("Error: null response for " + mFileId) : null);
+                        mCallback.sendToTarget();
+                    }
                     break;
 
                 default:
