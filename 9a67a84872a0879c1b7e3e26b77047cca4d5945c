@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "b0a9940e_c1aaa1a8",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-30T01:35:20Z",
+      "side": 1,
+      "message": "Why do we need this API here? I dont see any changes in RIL.java. So I feel this is unnecessary",
+      "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "507bc7ff_3ea1189e",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-30T01:35:20Z",
+      "side": 1,
+      "message": "typo: change \"included Negative\" to \"including negative\". \n\nnit: Dont use upper case in the middle of the sentence if not needed. For example, change \"Other\" to other\"",
+      "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c619456c_45ffb62b",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-30T01:35:20Z",
+      "side": 1,
+      "message": "typo: change \"included Negative\" to \"including negative\". \n\nnit: Dont use upper case in the middle of the sentence if not needed. For example, change \"Other\" to other\"",
+      "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3bc9b41d_be69381e",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 3
@@ -31,6 +82,81 @@
       "side": 1,
       "message": "check in https://android-review.googlesource.com/#/c/platform/frameworks/base/+/429505",
       "parentUuid": "3bc9b41d_be69381e",
+      "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "674fa21f_e01fe5bb",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-30T01:35:20Z",
+      "side": 1,
+      "message": "Most of the other methods that call this API like sendText enforce Permissions before calling sendTextInternal.\n\nSeems like we need that here as well to prevent rougue Apps from sending SMS without users permission.",
+      "parentUuid": "7904fb1f_0d12bc4d",
+      "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "80e05362_437bbb09",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-30T01:35:20Z",
+      "side": 1,
+      "message": "Seems like you can just reuse the new function here instead of repeating the same code.",
+      "range": {
+        "startLine": 586,
+        "startChar": 2,
+        "endLine": 639,
+        "endChar": 31
+      },
+      "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a8c92eef_600b88a3",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-30T01:35:20Z",
+      "side": 1,
+      "message": "Seem to be missing these lines that are there in the sendMultipartText method above.\n\n      if (!persistMessageForNonDefaultSmsApp) {\n            // Only allow carrier app or carrier ims to skip auto message persistence.\n            enforcePrivilegedAppPermissions();\n        }",
+      "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3555cda8_3a739af3",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-09-30T01:35:20Z",
+      "side": 1,
+      "message": "Instead of this hard coded constant \u0027-1\u0027, it may be better to use a more readable constant like SMS_MESSAGE_PRIORITY_NOT_SPECIFIED, DONT_EXPECT_MORE, etc.",
       "revId": "9a67a84872a0879c1b7e3e26b77047cca4d5945c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
