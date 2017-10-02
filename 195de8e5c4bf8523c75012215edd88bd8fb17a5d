@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94288776_045c789c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-02T19:14:50Z",
+      "side": 1,
+      "message": "instead of this, can you call getErrorMessage in the else-block? The only difference is that when err.getMessage() !\u003d null you will use that message instead of mmiFdnError, but ideally that message should be equally descriptive if it exists.",
+      "range": {
+        "startLine": 1203,
+        "startChar": 18,
+        "endLine": 1204,
+        "endChar": 91
+      },
+      "revId": "195de8e5c4bf8523c75012215edd88bd8fb17a5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6780f3f0_dd5cac14",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-02T19:14:50Z",
+      "side": 1,
+      "message": "if (ar.exception instanceof ImsException) {",
+      "range": {
+        "startLine": 1210,
+        "startChar": 14,
+        "endLine": 1210,
+        "endChar": 20
+      },
+      "revId": "195de8e5c4bf8523c75012215edd88bd8fb17a5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dd6a2ab5_164cc807",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-02T19:14:50Z",
+      "side": 1,
+      "message": "getImsErrorMessage",
+      "range": {
+        "startLine": 1211,
+        "startChar": 16,
+        "endLine": 1218,
+        "endChar": 17
+      },
+      "revId": "195de8e5c4bf8523c75012215edd88bd8fb17a5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5731a45c_678a91cc",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-02T19:14:50Z",
+      "side": 1,
+      "message": "this should be a function, getImsErrorMessage()",
+      "range": {
+        "startLine": 1351,
+        "startChar": 16,
+        "endLine": 1358,
+        "endChar": 17
+      },
+      "revId": "195de8e5c4bf8523c75012215edd88bd8fb17a5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5e2e213_56f50e52",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-02T19:14:50Z",
+      "side": 1,
+      "message": "this happens in either if-block, just move it outside",
+      "range": {
+        "startLine": 1415,
+        "startChar": 1,
+        "endLine": 1415,
+        "endChar": 34
+      },
+      "revId": "195de8e5c4bf8523c75012215edd88bd8fb17a5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21f4f432_7e65f552",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-02T19:14:50Z",
+      "side": 1,
+      "message": "getImsErrorMessage",
+      "range": {
+        "startLine": 1418,
+        "startChar": 16,
+        "endLine": 1425,
+        "endChar": 17
+      },
+      "revId": "195de8e5c4bf8523c75012215edd88bd8fb17a5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b1712f6a_2c874931",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-02T19:14:50Z",
+      "side": 1,
+      "message": "getImsErrorMessage",
+      "range": {
+        "startLine": 1481,
+        "startChar": 16,
+        "endLine": 1488,
+        "endChar": 17
+      },
+      "revId": "195de8e5c4bf8523c75012215edd88bd8fb17a5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc93f8aa_1a576b39",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1530,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-02T19:14:50Z",
+      "side": 1,
+      "message": "getImsErrorMessage",
+      "range": {
+        "startLine": 1523,
+        "startChar": 16,
+        "endLine": 1530,
+        "endChar": 17
+      },
+      "revId": "195de8e5c4bf8523c75012215edd88bd8fb17a5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f7b56f49_a89c3eaa",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-02T19:14:50Z",
+      "side": 1,
+      "message": "getImsErrorMessage",
+      "range": {
+        "startLine": 1621,
+        "startChar": 16,
+        "endLine": 1628,
+        "endChar": 17
+      },
+      "revId": "195de8e5c4bf8523c75012215edd88bd8fb17a5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
