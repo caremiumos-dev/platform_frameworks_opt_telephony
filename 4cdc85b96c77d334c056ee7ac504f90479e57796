@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "78c9cd8d_9c5ada20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2017-10-03T11:08:44Z",
+      "side": 1,
+      "message": "Operator name would be picked from Carrier config loader \"CarrierConfigManager.KEY_CARRIER_NAME_STRING\" or from \"etc/spn-conf.xml\" or \"telephony/spn-conf.xml\"(please refer SpnOverride.java file)\n\nExample for KEY_CARRIER_NAME_STRING key:\nhttp://androidxref.com/8.0.0_r4/xref/packages/apps/CarrierConfig/assets/carrier_config_23438.xml#5",
+      "parentUuid": "8c4bc1a6_d3fb3af6",
+      "revId": "4cdc85b96c77d334c056ee7ac504f90479e57796",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2847015f_a6956875",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-09-27T00:08:50Z",
       "side": 1,
       "message": "Should this happen only if oldSubName is invalid? If it had already received a valid value, why should it be overwritten?",
+      "revId": "4cdc85b96c77d334c056ee7ac504f90479e57796",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a349d936_9f2e4783",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2017-10-03T11:08:44Z",
+      "side": 1,
+      "message": "No, this can happen even when oldSubName has a valid value.\n\nThe value present in KEY_CARRIER_NAME_STRING or to the value  mSpnOverride has given high preference hence same is updated here as displayName.\n\nPls refer line number #1624 and #1658 where the name from KEY_CARRIER_NAME_STRING or mSpnOverride is taken as higher preference and updated as SimOperator Name.",
+      "parentUuid": "2847015f_a6956875",
       "revId": "4cdc85b96c77d334c056ee7ac504f90479e57796",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
