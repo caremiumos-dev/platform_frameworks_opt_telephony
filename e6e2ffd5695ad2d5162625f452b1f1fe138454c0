@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7fd0ca79_b7b40f43",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2017-10-03T10:38:45Z",
+      "side": 1,
+      "message": "For operators which use default apn as initial attach apn, which is open for edit, and if user deletes that apn, then initial attach request would be sent with the next available apn. In such cases, lte attach would fail with wrong apn. This check would make sure to block initial attach requests with apns other than default and ia type.",
+      "parentUuid": "1490c149_96d716c0",
+      "range": {
+        "startLine": 2081,
+        "startChar": 8,
+        "endLine": 2084,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "703960b5_ce6192db",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-26T21:02:35Z",
       "side": 1,
       "message": "I am not getting why this change is needed. Is the issue seen if there is a IA APN configured as well for the SIM card mcc/mnc ? \n\nTelephony gets the APNs based on the SIM card IMSI mcc/mnc so wondering why telephony needs to wait for all records to be loaded ?",
+      "range": {
+        "startLine": 2312,
+        "startChar": 7,
+        "endLine": 2314,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b23a4d1_5f57adb0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2314,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2017-10-03T10:38:45Z",
+      "side": 1,
+      "message": "Subscription id will be assigned as soon as iccid is loaded, and this method \"onRecordsLoadedOrSubIdChanged\" will be invoked on Subid change. If IMSI is not loaded by that time, then initial attach request will be sent with wrong apn as there is no mcc-mnc. Emergency apn would be used by default, if its configured in apns file.",
+      "parentUuid": "703960b5_ce6192db",
       "range": {
         "startLine": 2312,
         "startChar": 7,
