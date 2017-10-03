@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b11840cd_88e14167",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1115438
+      },
+      "writtenOn": "2017-10-03T03:05:44Z",
+      "side": 1,
+      "message": "Yes, it is intentional result. \u0027language\u003dnull\u0027 means that we determined it is unnecessary to change the language setting in CommandParamsFactory.",
+      "parentUuid": "7bcb63fb_f93a79dc",
+      "range": {
+        "startLine": 469,
+        "startChar": 56,
+        "endLine": 469,
+        "endChar": 62
+      },
+      "revId": "4f7dfa4ad2e2d3f3fb4836108f761969a598dff2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b47af83_1dd205b7",
         "filename": "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java",
         "patchSetId": 2
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "401e83be_bdc0e79b",
+        "filename": "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1115438
+      },
+      "writtenOn": "2017-10-03T03:05:44Z",
+      "side": 1,
+      "message": "Thanks. I will add that comment here in the next patch set.",
+      "parentUuid": "8b47af83_1dd205b7",
+      "revId": "4f7dfa4ad2e2d3f3fb4836108f761969a598dff2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7322d885_c1758d5c",
         "filename": "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java",
         "patchSetId": 2
@@ -53,6 +95,30 @@
       "writtenOn": "2017-09-28T19:12:55Z",
       "side": 1,
       "message": "In what case would the last requested language not be equal to the current language? Is this to deal with a potential race between handling the last notification and receiving a new one?",
+      "range": {
+        "startLine": 1035,
+        "startChar": 58,
+        "endLine": 1036,
+        "endChar": 70
+      },
+      "revId": "4f7dfa4ad2e2d3f3fb4836108f761969a598dff2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4ccf57ad_2ea3efe4",
+        "filename": "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1115438
+      },
+      "writtenOn": "2017-10-03T03:05:44Z",
+      "side": 1,
+      "message": "\u0027mRequestedLanguage\u0027 can be updated in this method, but \u0027currentLanguage\u0027 is from the present system locale. User can change the launguage setting in the settings application even after it was once changed by LAUNGUAGE NOTIFICATION command. The last requested language and the current language can be different in that case. We think that user preference should be prioritized.",
+      "parentUuid": "7322d885_c1758d5c",
       "range": {
         "startLine": 1035,
         "startChar": 58,
