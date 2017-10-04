@@ -128,6 +128,37 @@ public class CarrierActionAgentTest extends TelephonyTest {
         assertEquals(RADIO_CARRIER_ACTION_EVENT, message.getValue().what);
     }
 
+    @Test
+    @SmallTest
+    public void testCarrierActionResetOnAPNChange() {
+        // Setting observer register at sim loading
+        final Intent intent = new Intent(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
+        intent.putExtra(IccCardConstants.INTENT_KEY_ICC_STATE,
+                IccCardConstants.INTENT_VALUE_ICC_LOADED);
+        mContext.sendBroadcast(intent);
+        waitForMs(200);
+
+        // Carrier actions triggered from sim loading
+        ArgumentCaptor<Message> message = ArgumentCaptor.forClass(Message.class);
+
+        verify(mDataActionHandler).sendMessageAtTime(message.capture(), anyLong());
+        assertEquals(DATA_CARRIER_ACTION_EVENT, message.getValue().what);
+
+        verify(mRadioActionHandler).sendMessageAtTime(message.capture(), anyLong());
+        assertEquals(RADIO_CARRIER_ACTION_EVENT, message.getValue().what);
+
+        // Simulate APN change
+        mFakeContentResolver.notifyChange(Telephony.Carriers.CONTENT_URI, null);
+        waitForMs(200);
+
+        // Carrier actions triggered from APN change
+        verify(mDataActionHandler, times(2)).sendMessageAtTime(message.capture(), anyLong());
+        assertEquals(DATA_CARRIER_ACTION_EVENT, message.getValue().what);
+
+        verify(mRadioActionHandler, times(2)).sendMessageAtTime(message.capture(), anyLong());
+        assertEquals(RADIO_CARRIER_ACTION_EVENT, message.getValue().what);
+    }
+
     @After
     public void tearDown() throws Exception {
         Settings.Global.putInt(mFakeContentResolver, Settings.Global.AIRPLANE_MODE_ON, 0);
