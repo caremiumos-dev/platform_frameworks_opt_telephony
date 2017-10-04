@@ -26,6 +26,7 @@ import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
 import android.provider.Settings;
+import android.provider.Telephony;
 import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.util.LocalLog;
@@ -61,6 +62,7 @@ public class CarrierActionAgent extends Handler {
     public static final int EVENT_MOBILE_DATA_SETTINGS_CHANGED           = 4;
     public static final int EVENT_DATA_ROAMING_OFF                       = 5;
     public static final int EVENT_SIM_STATE_CHANGED                      = 6;
+    public static final int EVENT_APN_SETTINGS_CHANGED                   = 7;
 
     /** Member variables */
     private final Phone mPhone;
@@ -93,6 +95,8 @@ public class CarrierActionAgent extends Handler {
                     mSettingsObserver.observe(
                             Settings.Global.getUriFor(Settings.Global.AIRPLANE_MODE_ON),
                             EVENT_APM_SETTINGS_CHANGED);
+                    mSettingsObserver.observe(
+                            Telephony.Carriers.CONTENT_URI, EVENT_APN_SETTINGS_CHANGED);
                 } else if (IccCardConstants.INTENT_VALUE_ICC_ABSENT.equals(iccState)) {
                     sendEmptyMessage(CARRIER_ACTION_RESET);
                     mSettingsObserver.unobserve();
@@ -174,6 +178,11 @@ public class CarrierActionAgent extends Handler {
                         mPhone.getServiceStateTracker().unregisterForDataRoamingOff(this);
                     }
                 }
+                break;
+            case EVENT_APN_SETTINGS_CHANGED:
+                log("EVENT_APN_SETTINGS_CHANGED");
+                // Reset carrier actions when APN change.
+                carrierActionReset();
                 break;
             default:
                 loge("Unknown carrier action: " + msg.what);
