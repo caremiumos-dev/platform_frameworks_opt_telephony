@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3307f774_38718e61",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2017-10-05T10:48:12Z",
+      "side": 1,
+      "message": "Due to Bug 37941868, responseInts() was earlier failing  to return remainingAttempts in failue case hence we added this new method to read remainingAttempts in failure case as well.\n\nOn latest code base I see the bug #37941868 related changes merged, so now we dont need this new method hence will remove this new method and upload a new patch.\n\nThanks.",
+      "range": {
+        "startLine": 1259,
+        "startChar": 17,
+        "endLine": 1259,
+        "endChar": 40
+      },
+      "revId": "8224a386e9a81ccf1d38e3868902a8d8a2023825",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
