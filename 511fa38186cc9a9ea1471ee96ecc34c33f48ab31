@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b49b01fb_a0844296",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-05T19:45:46Z",
+      "side": 1,
+      "message": "if ar.result \u003d\u003d null this returns -1, so I guess we don\u0027t need the above null-check at all. Maybe you can just simplify this to\n\nint attemptsRemaining \u003d parsePinPukErrorResult(ar);",
+      "range": {
+        "startLine": 388,
+        "startChar": 44,
+        "endLine": 388,
+        "endChar": 66
+      },
+      "revId": "511fa38186cc9a9ea1471ee96ecc34c33f48ab31",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
