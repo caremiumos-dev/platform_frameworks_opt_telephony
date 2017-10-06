@@ -22,6 +22,30 @@
       "revId": "511fa38186cc9a9ea1471ee96ecc34c33f48ab31",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "08b9d529_c01feab7",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2017-10-06T17:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b49b01fb_a0844296",
+      "range": {
+        "startLine": 388,
+        "startChar": 44,
+        "endLine": 388,
+        "endChar": 66
+      },
+      "revId": "511fa38186cc9a9ea1471ee96ecc34c33f48ab31",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
