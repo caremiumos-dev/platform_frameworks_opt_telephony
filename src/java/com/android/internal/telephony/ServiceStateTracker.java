@@ -4975,6 +4975,15 @@ public class ServiceStateTracker extends Handler {
     }
 
     /**
+     * These countries have more than one geographical time zones,
+     * but only one official national standard time.
+     */
+    private String[][] mStandardTZForMultiTZCountry = {
+        // {Country ISO code, Time zone id}
+        {"cn", "Asia/Shanghai"} // CHINA, 8:00
+    };
+
+    /**
      * Update time zone by network country code, works on countries which only have one time zone.
      * @param iso Country code from network MCC
      */
@@ -4996,6 +5005,16 @@ public class ServiceStateTracker extends Handler {
                     + " iso=" + iso);
             setAndBroadcastNetworkSetTimeZone(zoneId);
         } else {
+            // Some countries may have multiple geographical time zones,
+            // but only one official national standard time.
+            for (int i = 0; i < mStandardTZForMultiTZCountry.length; i++) {
+                if (iso.equals(mStandardTZForMultiTZCountry[i][0])) {
+                    setAndBroadcastNetworkSetTimeZone(mStandardTZForMultiTZCountry[i][1]);
+                    mTimeZoneLog.log("updateTimeZoneByNetworkCountryCode: set time zone="
+                            + mStandardTZForMultiTZCountry[i][1] + " iso=" + iso);
+                    return;
+                }
+            }
             if (DBG) {
                 log("updateTimeZoneByNetworkCountryCode: there are " + uniqueZoneIds.size()
                         + " unique offsets for iso-cc='" + iso
