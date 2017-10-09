@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02392443_28dce4cc",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-09T23:39:40Z",
+      "side": 1,
+      "message": "are these used?",
+      "range": {
+        "startLine": 931,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 5
+      },
+      "revId": "ee146702cdc4c4370435682d110d2c6a61e32f62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
