@@ -22,6 +22,30 @@
       "revId": "03da5646e6eecc269b6b569f42ec0635e62486cd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d100be6_6f6feb5c",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2017-10-10T11:10:53Z",
+      "side": 1,
+      "message": "This comments are inline to the existing comments @ line #1063.\nWe feel its better to keep in sync to existing comments.\n\nKindly let me know if you still want me to change it.",
+      "parentUuid": "ca85d2dc_4cf46754",
+      "range": {
+        "startLine": 1074,
+        "startChar": 12,
+        "endLine": 1075,
+        "endChar": 40
+      },
+      "revId": "03da5646e6eecc269b6b569f42ec0635e62486cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
