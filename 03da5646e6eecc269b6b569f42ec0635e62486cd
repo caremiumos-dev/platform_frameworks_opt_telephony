@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca85d2dc_4cf46754",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1138138
+      },
+      "writtenOn": "2017-10-10T01:15:11Z",
+      "side": 1,
+      "message": "Change to: \n// Route to setup call handler to send correct response per spec",
+      "range": {
+        "startLine": 1074,
+        "startChar": 12,
+        "endLine": 1075,
+        "endChar": 40
+      },
+      "revId": "03da5646e6eecc269b6b569f42ec0635e62486cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
