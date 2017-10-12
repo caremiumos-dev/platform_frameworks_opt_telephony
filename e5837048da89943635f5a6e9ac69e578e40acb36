@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fcded29_64e1a23c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-12T19:21:39Z",
+      "side": 1,
+      "message": "We should include the bug# with either the tag \"Bug\" or \"Fixes\" to make it easier to trace the root of this change.\nFixes: 62245439",
+      "revId": "e5837048da89943635f5a6e9ac69e578e40acb36",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

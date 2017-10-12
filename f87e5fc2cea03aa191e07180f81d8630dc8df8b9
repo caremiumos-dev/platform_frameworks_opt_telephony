@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "784c574a_7f47592d",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-12T19:21:39Z",
+      "side": 1,
+      "message": "Let\u0027s call this \"position\"",
+      "range": {
+        "startLine": 574,
+        "startChar": 16,
+        "endLine": 574,
+        "endChar": 19
+      },
+      "revId": "f87e5fc2cea03aa191e07180f81d8630dc8df8b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "77d284c3_c0b3c878",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-12T19:21:39Z",
+      "side": 1,
+      "message": "!Character.isDigit(mIccId[i].charAt(position))",
+      "range": {
+        "startLine": 576,
+        "startChar": 20,
+        "endLine": 576,
+        "endChar": 78
+      },
+      "revId": "f87e5fc2cea03aa191e07180f81d8630dc8df8b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "169cdab4_64ed8f12",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-12T19:21:39Z",
+      "side": 1,
+      "message": "can you move this into a function so we simplify the next line to:\ndecIccId[i] \u003d getDecimalSubstring(mIccId[i]);",
+      "range": {
+        "startLine": 574,
+        "startChar": 12,
+        "endLine": 577,
+        "endChar": 13
+      },
+      "revId": "f87e5fc2cea03aa191e07180f81d8630dc8df8b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b6864065_cb78520d",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-12T19:21:39Z",
+      "side": 1,
+      "message": "Can we break this into two lines?",
+      "range": {
+        "startLine": 584,
+        "startChar": 0,
+        "endLine": 584,
+        "endChar": 130
+      },
+      "revId": "f87e5fc2cea03aa191e07180f81d8630dc8df8b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
