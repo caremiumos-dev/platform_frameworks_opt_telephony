@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eaf02441_3bbc68ee",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-10-12T22:27:14Z",
+      "side": 1,
+      "message": "should these be public as part of the API?  If we have limits and either reject requests or force requests to conform with limits, callers should be able to know what they are.",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 66
+      },
+      "revId": "3b257c7732d7e24bb14e4aebb433084c0106d660",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca53c777_c57fad81",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-10-12T22:27:14Z",
+      "side": 1,
+      "message": "See how we dealt with previous limits?\n\nSecond point here is to try to follow the existing patterns..  if you\u0027d done that you\u0027d see these limits are in the public API-defining class, not here.",
+      "range": {
+        "startLine": 130,
+        "startChar": 62,
+        "endLine": 130,
+        "endChar": 93
+      },
+      "revId": "3b257c7732d7e24bb14e4aebb433084c0106d660",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f33ec25_5534573d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-10-12T22:27:14Z",
+      "side": 1,
+      "message": "if this isn\u0027t used (see comment below) it can be removed",
+      "range": {
+        "startLine": 292,
+        "startChar": 29,
+        "endLine": 292,
+        "endChar": 59
+      },
+      "revId": "3b257c7732d7e24bb14e4aebb433084c0106d660",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "622c2c5f_83b9ccd4",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1901,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-10-12T22:27:14Z",
+      "side": 1,
+      "message": "?  The nsr struct still has a searchPeriodicity and this can be fixed up",
+      "range": {
+        "startLine": 1901,
+        "startChar": 39,
+        "endLine": 1901,
+        "endChar": 69
+      },
+      "revId": "3b257c7732d7e24bb14e4aebb433084c0106d660",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
