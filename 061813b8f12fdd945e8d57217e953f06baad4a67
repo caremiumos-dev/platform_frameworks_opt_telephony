@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66866a6a_30ac4d6c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-12T22:03:09Z",
+      "side": 1,
+      "message": "Let\u0027s add the \"Bug\" or \"Fixes\" tag. I can\u0027t find the bug number but the format should be \"Bug: #######\" on it\u0027s own line.",
+      "revId": "061813b8f12fdd945e8d57217e953f06baad4a67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
