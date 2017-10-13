@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fc228288_e8f901d0",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-13T22:38:20Z",
+      "side": 1,
+      "message": "Ignore this. isNewSim is definitely still used.",
+      "parentUuid": "bf8a3224_70d5202b",
+      "range": {
+        "startLine": 568,
+        "startChar": 17,
+        "endLine": 568,
+        "endChar": 25
+      },
+      "revId": "0360794455bf62cc31372a60c77ae2783d79dc4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f233b59_784c932e",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 3
@@ -59,6 +83,30 @@
       "writtenOn": "2017-10-13T22:28:56Z",
       "side": 1,
       "message": "No need for this. isNewSim doesn\u0027t do anything. I\u0027ll clean it up after this CL.",
+      "range": {
+        "startLine": 686,
+        "startChar": 50,
+        "endLine": 686,
+        "endChar": 68
+      },
+      "revId": "0360794455bf62cc31372a60c77ae2783d79dc4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01d9fdbb_c2ded47d",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-13T22:38:20Z",
+      "side": 1,
+      "message": "please ignore this (:",
+      "parentUuid": "19617677_5a3cc3dd",
       "range": {
         "startLine": 686,
         "startChar": 50,
