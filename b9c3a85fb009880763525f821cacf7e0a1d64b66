@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d632f17_7d3ab974",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-13T21:05:11Z",
+      "side": 1,
+      "message": "Can we change this to\n\"Ignore the exception when parsing remaining attempts\n\nCurrently when the user inputs the wrong PIN, the vendor RIL/Modem returns failure and number of remaining attempts.\nTo parse the number of remaining attempts we need to ignore the exception.\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 9
+      },
+      "revId": "b9c3a85fb009880763525f821cacf7e0a1d64b66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
