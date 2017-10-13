@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "227f4a2b_f752b674",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-10-13T02:48:40Z",
+      "side": 0,
+      "message": "Instead of changing ratRatchet logic, having a check that if device is registered before applying this logic should be enough. Isnt it? Wont taht solve the issue?",
+      "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
