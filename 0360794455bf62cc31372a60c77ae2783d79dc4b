@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf8a3224_70d5202b",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-13T22:28:56Z",
+      "side": 1,
+      "message": "Looks like isNewSim isn\u0027t actually used for anything anymore. I\u0027ll clean that up after this CL goes in. For now I think we could just have the variable below instead of a variable:\n\nString decIccId \u003d getDecimalSubstring(mIccId[i]);",
+      "range": {
+        "startLine": 568,
+        "startChar": 17,
+        "endLine": 568,
+        "endChar": 25
+      },
+      "revId": "0360794455bf62cc31372a60c77ae2783d79dc4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4f233b59_784c932e",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-13T22:28:56Z",
+      "side": 1,
+      "message": "This might be more readable as\n\n\u0026\u0026 !mIccId[i].equals(oldIccId[i]) \u0026\u0026 !decIccId[i].equals(oldIccId[i])",
+      "range": {
+        "startLine": 580,
+        "startChar": 23,
+        "endLine": 580,
+        "endChar": 89
+      },
+      "revId": "0360794455bf62cc31372a60c77ae2783d79dc4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19617677_5a3cc3dd",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-13T22:28:56Z",
+      "side": 1,
+      "message": "No need for this. isNewSim doesn\u0027t do anything. I\u0027ll clean it up after this CL.",
+      "range": {
+        "startLine": 686,
+        "startChar": 50,
+        "endLine": 686,
+        "endChar": 68
+      },
+      "revId": "0360794455bf62cc31372a60c77ae2783d79dc4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
