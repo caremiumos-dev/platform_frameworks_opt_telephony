@@ -46,6 +46,30 @@
       "revId": "3571dd3e0ecb72e03eb1b4d43f72107611ef757a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cbb207ab_d9d1596f",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-10-13T15:17:12Z",
+      "side": 1,
+      "message": "I think that\u0027s the wrong point of view.  We had a mechanism to pass stuff down to the modem in 1_1 but no api in the framework that used it.  now you\u0027re adding the framework piece and this should be hooked up.  If we didn\u0027t require interval to be implemented it should have been removed form the 1_1 hal.  You\u0027re trying to impose a level of compatibility contrary to Treble goals.",
+      "parentUuid": "873b5a59_9e03da61",
+      "range": {
+        "startLine": 1900,
+        "startChar": 39,
+        "endLine": 1900,
+        "endChar": 57
+      },
+      "revId": "3571dd3e0ecb72e03eb1b4d43f72107611ef757a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
