@@ -22,6 +22,30 @@
       "revId": "6f7c1e167422ce4a9a81169634484abf2ebd0b25",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff704324_312b63cc",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2017-10-13T13:31:20Z",
+      "side": 0,
+      "message": "We dont need it.\nWhen user input wrong PIN, Vendor RIL/Modem would return failure and number of remaining attempts, to parse the number of remaining attempts we need to ignore the exception.",
+      "parentUuid": "445172da_73e9d628",
+      "range": {
+        "startLine": 387,
+        "startChar": 24,
+        "endLine": 387,
+        "endChar": 46
+      },
+      "revId": "6f7c1e167422ce4a9a81169634484abf2ebd0b25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
