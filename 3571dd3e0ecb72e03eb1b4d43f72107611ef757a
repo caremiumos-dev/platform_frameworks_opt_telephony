@@ -22,6 +22,30 @@
       "revId": "3571dd3e0ecb72e03eb1b4d43f72107611ef757a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "873b5a59_9e03da61",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-10-13T01:04:41Z",
+      "side": 1,
+      "message": "This is incase of 1.1 and thought not to alter the current behavior in this case. So that the new interface and corresponding inputs will be applied only for 1.2 hidl and 1.1 will continue to have the same behavior as it used to.",
+      "parentUuid": "0db8e6a3_4cf93069",
+      "range": {
+        "startLine": 1900,
+        "startChar": 39,
+        "endLine": 1900,
+        "endChar": 57
+      },
+      "revId": "3571dd3e0ecb72e03eb1b4d43f72107611ef757a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
