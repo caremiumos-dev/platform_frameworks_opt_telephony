@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26b91e02_447b1de4",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SubscriptionInfoUpdaterTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-16T22:21:18Z",
+      "side": 1,
+      "message": "getOperatorNumeric is private, I think you might want: doReturn(FAKE_MCC_MNC_1).when(mTelephonyManager).getSimOperatorNumeric(eq(FAKE_SUB_ID_1));",
+      "range": {
+        "startLine": 392,
+        "startChar": 8,
+        "endLine": 392,
+        "endChar": 67
+      },
+      "revId": "d950d50a1464a83104e5cdf9d6963aa055e07475",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
