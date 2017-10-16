@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1904dbc7_c9b5f899",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityCdmaTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-10-16T18:47:18Z",
+      "side": 1,
+      "message": "65535 \u003e Short.MAX_VALUE. It\u0027s \"unsigned short. max value\" or something. Not sure there\u0027s an easy way to define this other than 0xFFFF or 65535 and add a comment explaining the value.",
+      "range": {
+        "startLine": 31,
+        "startChar": 52,
+        "endLine": 31,
+        "endChar": 61
+      },
+      "revId": "3a061f1cf4fc2f4c0f292804b570a384744ddb15",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6e90fab_11ae6953",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityGsmTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-10-16T18:47:18Z",
+      "side": 1,
+      "message": "same... 65535 is \"unsigned short max value\".",
+      "range": {
+        "startLine": 30,
+        "startChar": 41,
+        "endLine": 30,
+        "endChar": 50
+      },
+      "revId": "3a061f1cf4fc2f4c0f292804b570a384744ddb15",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bfd59f1b_72ccea88",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityLteTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-10-16T18:47:18Z",
+      "side": 1,
+      "message": "Please check the ranges on these. I\u0027m not sure what they should be, but since the tests are testing the \"max values\", we should be explicit about it.",
+      "range": {
+        "startLine": 30,
+        "startChar": 40,
+        "endLine": 30,
+        "endChar": 49
+      },
+      "revId": "3a061f1cf4fc2f4c0f292804b570a384744ddb15",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
