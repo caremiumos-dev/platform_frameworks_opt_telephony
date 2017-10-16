@@ -71,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "3995f9a0_af595196",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityWcdmaTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-10-16T18:09:04Z",
+      "side": 1,
+      "message": "According to the java naming style, static final constant should be upper case. Here is the link: https://engdoc.corp.google.com/eng/doc/devguide/java/style/index.md?cl\u003dhead#s5-naming\n\nplease fix it in all the classes.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 54
+      },
+      "revId": "2c30622e34df2cdcee6d73c3054c0e19b6efea55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a2409f1_215febac",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityWcdmaTest.java",
         "patchSetId": 3
