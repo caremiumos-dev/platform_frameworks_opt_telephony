@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "49752a86_c530656e",
+        "filename": "src/java/com/google/android/mms/pdu/EncodedStringValue.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-16T08:53:51Z",
+      "side": 1,
+      "message": "remove this",
+      "parentUuid": "25fbc4f4_2fbcfcb1",
+      "range": {
+        "startLine": 77,
+        "startChar": 10,
+        "endLine": 90,
+        "endChar": 9
+      },
+      "revId": "c89136822f63dbdfedd60f629deb3a885600b567",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c028dc9_471770ee",
         "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
         "patchSetId": 1
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "You can add the unit test tests/telephonytests/src/android/telephony/PduPersisterTest.java, or else include instructions on how we can manually test this change in the commit message and include a line like\n\nTest: manually test by doing so-and-so\n\nat the bototm",
       "parentUuid": "fe421566_de1e1dab",
+      "range": {
+        "startLine": 820,
+        "startChar": 17,
+        "endLine": 820,
+        "endChar": 28
+      },
+      "revId": "c89136822f63dbdfedd60f629deb3a885600b567",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d5a159df_24adb31b",
+        "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-16T08:53:51Z",
+      "side": 1,
+      "message": "Test: manually test by doing so-and-so",
+      "parentUuid": "fc9a8093_4eae430f",
       "range": {
         "startLine": 820,
         "startChar": 17,
