@@ -22,6 +22,30 @@
       "revId": "b9c3a85fb009880763525f821cacf7e0a1d64b66",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8d0b9cce_4a35e430",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2017-10-16T12:57:05Z",
+      "side": 1,
+      "message": "Agreed, will update the commit text accordingly.",
+      "parentUuid": "0d632f17_7d3ab974",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 9
+      },
+      "revId": "b9c3a85fb009880763525f821cacf7e0a1d64b66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
