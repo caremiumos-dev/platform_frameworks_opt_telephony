@@ -34,6 +34,24 @@
       "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aefed4f_481866f3",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1134734
+      },
+      "writtenOn": "2017-10-17T22:17:47Z",
+      "side": 0,
+      "message": "Just to clarify, there isn\u0027t an issue when the device is OOS. \nThe issue seen is that after the OOS and only LTE is reported, in cases where there hasn\u0027t been a cell location change, the 4G+ icon will still show on the UI, which confuses the tester.",
+      "parentUuid": "c73f8c0f_dd406aba",
+      "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
