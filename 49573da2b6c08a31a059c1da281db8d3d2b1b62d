@@ -16,6 +16,24 @@
       "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c73f8c0f_dd406aba",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-10-17T21:22:52Z",
+      "side": 0,
+      "message": "What I meant was that you should not change the ratRatchet logic to fix this issue. instead, do we even have to call rachetRat if the device is OOS. Can you restrict the same instead of changing this function.",
+      "parentUuid": "227f4a2b_f752b674",
+      "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
