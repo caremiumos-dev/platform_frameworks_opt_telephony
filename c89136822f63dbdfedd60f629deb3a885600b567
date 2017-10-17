@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "d34a5d3e_f95c6ca8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-17T21:35:59Z",
+      "side": 1,
+      "message": "Can you add a line here like:\n\nTest: \u003cdescription of how you manually tested this change\u003e",
+      "revId": "c89136822f63dbdfedd60f629deb3a885600b567",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87c002c9_55e4e329",
         "filename": "src/java/com/google/android/mms/pdu/EncodedStringValue.java",
         "patchSetId": 1
@@ -180,6 +197,30 @@
       "side": 1,
       "message": "Test: manually test by doing so-and-so",
       "parentUuid": "fc9a8093_4eae430f",
+      "range": {
+        "startLine": 820,
+        "startChar": 17,
+        "endLine": 820,
+        "endChar": 28
+      },
+      "revId": "c89136822f63dbdfedd60f629deb3a885600b567",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "500f83a7_9fa63ad1",
+        "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-17T21:35:59Z",
+      "side": 1,
+      "message": "I added a comment on the commit message. Could you explain how you manually tested this there?",
+      "parentUuid": "d5a159df_24adb31b",
       "range": {
         "startLine": 820,
         "startChar": 17,
