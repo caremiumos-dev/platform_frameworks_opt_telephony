@@ -88,6 +88,24 @@
       "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26befaa8_77135570",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-10-18T00:38:29Z",
+      "side": 0,
+      "message": "Okay, I think my point, is still valid, and is that how can usingCA be true in this case. It is only because in OOS same is not getting cleared isnt it?",
+      "parentUuid": "69c48ca1_6b8dafb2",
+      "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
