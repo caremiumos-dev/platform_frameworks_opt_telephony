@@ -70,6 +70,24 @@
       "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69c48ca1_6b8dafb2",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1134734
+      },
+      "writtenOn": "2017-10-18T00:35:38Z",
+      "side": 0,
+      "message": "the correct data rat is used, however, LTE_CA is currently hidden from SystemUI, so they check on the carrierAggregation value to determine whether to show 4G/4G+.",
+      "parentUuid": "63b07d7f_f7c2e532",
+      "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
