@@ -106,6 +106,24 @@
       "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2853f807_c68d513f",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2017-10-18T00:40:08Z",
+      "side": 0,
+      "message": "I will setup a meeting. Let us discuss this in a meeting",
+      "parentUuid": "26befaa8_77135570",
+      "revId": "49573da2b6c08a31a059c1da281db8d3d2b1b62d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
