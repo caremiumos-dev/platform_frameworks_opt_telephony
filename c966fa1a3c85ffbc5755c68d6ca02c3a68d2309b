@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f574c09a_a310be71",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4314,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-10-19T17:52:50Z",
+      "side": 1,
+      "message": "This is incorrect when the phoneType is CDMA_LTE. The signal strength type is GSM in that case. We can\u0027t determine the signal strength type when both dataRat and voiceRat are unknown. In that case, we can use the signal strength to determine the type.\n\nI create two CLs to solve the issue. https://android-review.googlesource.com/#/q/topic:SignalStrength",
+      "range": {
+        "startLine": 4314,
+        "startChar": 23,
+        "endLine": 4314,
+        "endChar": 48
+      },
+      "revId": "c966fa1a3c85ffbc5755c68d6ca02c3a68d2309b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
