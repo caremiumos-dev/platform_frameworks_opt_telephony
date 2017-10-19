@@ -753,7 +753,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         mImsManager.setImsConfigListener(mImsConfigListener);
 
         // Get the ECBM interface and set IMSPhone's listener object for notifications
-        getEcbmInterface().setEcbmStateListener(mPhone.getImsEcbmStateListener());
+        getEcbmInterface().addEcbmStateCallback(mPhone.getImsEcbmStateCallback());
         if (mPhone.isInEcm()) {
             // Call exit ECBM which will invoke onECBMExited
             mPhone.exitEmergencyCallbackMode();
@@ -3096,8 +3096,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             throw getImsManagerIsNullException();
         }
 
-        ImsEcbm ecbm = mImsManager.getEcbmInterface(mServiceId);
-        return ecbm;
+        return mImsManager.getEcbmInterface();
     }
 
     /* package */

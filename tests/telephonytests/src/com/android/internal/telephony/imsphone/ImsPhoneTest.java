@@ -50,7 +50,7 @@ import android.telephony.CarrierConfigManager;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.ims.ImsCallProfile;
-import com.android.ims.ImsEcbmStateListener;
+import com.android.ims.ImsEcbmStateCallback;
 import com.android.ims.ImsManager;
 import com.android.ims.ImsReasonInfo;
 import com.android.ims.ImsUtInterface;
@@ -512,10 +512,10 @@ public class ImsPhoneTest extends TelephonyTest {
     @Test
     @Ignore
     public void testEcbm() throws Exception {
-        ImsEcbmStateListener imsEcbmStateListener = mImsPhoneUT.getImsEcbmStateListener();
+        ImsEcbmStateCallback imsEcbmStateCallback = mImsPhoneUT.getImsEcbmStateCallback();
 
         // verify handling of emergency callback mode
-        imsEcbmStateListener.onECBMEntered();
+        imsEcbmStateCallback.onECBMEntered();
 
         // verify ACTION_EMERGENCY_CALLBACK_MODE_CHANGED
         ArgumentCaptor<Intent> intentArgumentCaptor = ArgumentCaptor.forClass(Intent.class);
@@ -544,7 +544,7 @@ public class ImsPhoneTest extends TelephonyTest {
                 null);
 
         // verify handling of emergency callback mode exit
-        imsEcbmStateListener.onECBMExited();
+        imsEcbmStateCallback.onECBMExited();
 
         // verify ACTION_EMERGENCY_CALLBACK_MODE_CHANGED
         verify(mIActivityManager, atLeast(2)).broadcastIntent(eq((IApplicationThread)null),

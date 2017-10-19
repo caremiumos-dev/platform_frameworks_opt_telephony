@@ -72,7 +72,7 @@ import android.text.TextUtils;
 import com.android.ims.ImsCallForwardInfo;
 import com.android.ims.ImsCallProfile;
 import com.android.ims.ImsEcbm;
-import com.android.ims.ImsEcbmStateListener;
+import com.android.ims.ImsEcbmStateCallback;
 import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.ims.ImsReasonInfo;
@@ -1361,8 +1361,8 @@ public class ImsPhone extends ImsPhoneBase {
     /**
      * Listen to the IMS ECBM state change
      */
-    private ImsEcbmStateListener mImsEcbmStateListener =
-            new ImsEcbmStateListener() {
+    private ImsEcbmStateCallback mImsEcbmStateCallback =
+            new ImsEcbmStateCallback() {
                 @Override
                 public void onECBMEntered() {
                     if (DBG) Rlog.d(LOG_TAG, "onECBMEntered");
@@ -1377,8 +1377,8 @@ public class ImsPhone extends ImsPhoneBase {
             };
 
     @VisibleForTesting
-    public ImsEcbmStateListener getImsEcbmStateListener() {
-        return mImsEcbmStateListener;
+    public ImsEcbmStateCallback getImsEcbmStateCallback() {
+        return mImsEcbmStateCallback;
     }
 
     @Override
