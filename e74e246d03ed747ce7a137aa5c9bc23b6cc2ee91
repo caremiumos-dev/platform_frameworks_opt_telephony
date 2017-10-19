@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8c3529b_4a4c5bd4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-19T20:39:34Z",
+      "side": 1,
+      "message": "Can you add the line:\nFixes: 37884144",
+      "revId": "e74e246d03ed747ce7a137aa5c9bc23b6cc2ee91",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
