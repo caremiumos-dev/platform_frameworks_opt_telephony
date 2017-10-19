@@ -16,6 +16,52 @@
       "revId": "e74e246d03ed747ce7a137aa5c9bc23b6cc2ee91",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66a2e6b2_89e499af",
+        "filename": "src/java/com/android/internal/telephony/uicc/PlmnActRecord.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-10-19T21:36:10Z",
+      "side": 1,
+      "message": "For completeness, we probably should either cast both of the bytes this way to avoid sign extension even though the high-order 16 is unused. or mask the entire value as 16 bits.",
+      "range": {
+        "startLine": 67,
+        "startChar": 40,
+        "endLine": 67,
+        "endChar": 46
+      },
+      "revId": "e74e246d03ed747ce7a137aa5c9bc23b6cc2ee91",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a135c04_2ea1120f",
+        "filename": "src/java/com/android/internal/telephony/uicc/PlmnActRecord.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-10-19T21:36:10Z",
+      "side": 1,
+      "message": "Since we have moved to Java 8, we can use Byte.toUnsignedInt() https://docs.oracle.com/javase/8/docs/api/java/lang/Byte.html#toUnsignedInt-byte-",
+      "range": {
+        "startLine": 67,
+        "startChar": 61,
+        "endLine": 67,
+        "endChar": 65
+      },
+      "revId": "e74e246d03ed747ce7a137aa5c9bc23b6cc2ee91",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
