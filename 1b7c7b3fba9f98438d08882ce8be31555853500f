@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "51b64d4a_63636490",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityCdmaTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-20T16:48:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ec7fb49_bd20e1bf",
+      "range": {
+        "startLine": 30,
+        "startChar": 43,
+        "endLine": 30,
+        "endChar": 60
+      },
+      "revId": "1b7c7b3fba9f98438d08882ce8be31555853500f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c36ba276_a6d39482",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityCdmaTest.java",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-16T20:09:57Z",
       "side": 1,
       "message": "The most common error classes for Parcel involve either forgetting to un-parcel a value or unparceling in the wrong order. If we use unique non-default values we can check both of those conditions.",
+      "range": {
+        "startLine": 51,
+        "startChar": 16,
+        "endLine": 51,
+        "endChar": 26
+      },
+      "revId": "1b7c7b3fba9f98438d08882ce8be31555853500f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "87e68589_1d81980f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityCdmaTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-20T16:48:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c36ba276_a6d39482",
       "range": {
         "startLine": 51,
         "startChar": 16,

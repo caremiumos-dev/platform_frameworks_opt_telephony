@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "42b6511a_ff2191d0",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityCdmaTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-20T16:48:37Z",
+      "side": 1,
+      "message": "According to the comments of those variables, they\u0027re all ID, code or Channel Number, so they shouldn\u0027t be negative. I changed them all into Short.MAX_VALUE in the following files.",
+      "parentUuid": "0c723439_8f0b26fc",
+      "range": {
+        "startLine": 30,
+        "startChar": 41,
+        "endLine": 30,
+        "endChar": 47
+      },
+      "revId": "f5bc43676fcfa7d01c836299a78da76a1a4264ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2241cbc2_379b6b9e",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityLteTest.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-16T18:15:44Z",
       "side": 1,
       "message": "Also, suggest non-zero bonus digit here.",
+      "range": {
+        "startLine": 76,
+        "startChar": 40,
+        "endLine": 76,
+        "endChar": 42
+      },
+      "revId": "f5bc43676fcfa7d01c836299a78da76a1a4264ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8459777a_9a9abe1e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityLteTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-20T16:48:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2241cbc2_379b6b9e",
       "range": {
         "startLine": 76,
         "startChar": 40,

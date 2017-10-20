@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "83979089_6c9e30b2",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityCdmaTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-20T16:48:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d933bd1_aa0d41e8",
+      "range": {
+        "startLine": 33,
+        "startChar": 37,
+        "endLine": 33,
+        "endChar": 92
+      },
+      "revId": "153d5152109eb50ea03c47fa35254c0b6c2ae831",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe8a06be_217f6bd6",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityGsmTest.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-13T21:05:18Z",
       "side": 1,
       "message": "Creates some static constants for the parameters to make the test more readable. Apply it for all the test case, thanks!",
+      "range": {
+        "startLine": 51,
+        "startChar": 36,
+        "endLine": 51,
+        "endChar": 86
+      },
+      "revId": "153d5152109eb50ea03c47fa35254c0b6c2ae831",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "63f8a391_01fd0a4d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityGsmTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-20T16:48:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe8a06be_217f6bd6",
       "range": {
         "startLine": 51,
         "startChar": 36,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "94c62bec_bc4c8921",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityGsmTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-20T16:48:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44e8ecb1_501a372e",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 99,
+        "endChar": 55
+      },
+      "revId": "153d5152109eb50ea03c47fa35254c0b6c2ae831",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da0e7278_830d7354",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityLteTest.java",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2017-10-13T21:05:18Z",
       "side": 1,
       "message": "Use assertNull instead.",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 55
+      },
+      "revId": "153d5152109eb50ea03c47fa35254c0b6c2ae831",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61625ee4_de8d5c4c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityLteTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-20T16:48:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da0e7278_830d7354",
       "range": {
         "startLine": 98,
         "startChar": 0,
