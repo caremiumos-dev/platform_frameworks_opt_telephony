@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "638fccae_4d8038ee",
+        "filename": "tests/telephonytests/src/android/telephony/ims/CallbackManagerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-10-20T21:06:26Z",
+      "side": 1,
+      "message": "nit: define member variables below inner classes",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 53
+      },
+      "revId": "0971d434d7f81cf006f450830a60d68e68c1396b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
