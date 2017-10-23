@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "dd079022_a9eb5b06",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-23T19:02:25Z",
+      "side": 1,
+      "message": "Can you do a null check on oldIccId",
+      "range": {
+        "startLine": 723,
+        "startChar": 24,
+        "endLine": 723,
+        "endChar": 32
+      },
+      "revId": "17c4bba8fa791325924347bda7513655d0610dd0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f121587_a38fd7b8",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-23T19:02:25Z",
+      "side": 1,
+      "message": "Line\u0027s too long",
+      "range": {
+        "startLine": 723,
+        "startChar": 100,
+        "endLine": 723,
+        "endChar": 110
+      },
+      "revId": "17c4bba8fa791325924347bda7513655d0610dd0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "067bfda9_b1a323ff",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 7
