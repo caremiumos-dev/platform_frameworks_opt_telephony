@@ -34,7 +34,9 @@ import static com.android.internal.telephony.CommandsInterface.CF_REASON_BUSY;
 import static com.android.internal.telephony.CommandsInterface.CF_REASON_NOT_REACHABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_REASON_NO_REPLY;
 import static com.android.internal.telephony.CommandsInterface.CF_REASON_UNCONDITIONAL;
+import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_DATA_SYNC;
 import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_NONE;
+import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_PACKET;
 import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
 
 import android.app.Activity;
@@ -232,11 +234,13 @@ public class ImsPhone extends ImsPhoneBase {
         final String mSetCfNumber;
         final Message mOnComplete;
         final boolean mIsCfu;
+        final int mServiceClass;
 
-        Cf(String cfNumber, boolean isCfu, Message onComplete) {
+        Cf(String cfNumber, boolean isCfu, Message onComplete, int serviceClass) {
             mSetCfNumber = cfNumber;
             mIsCfu = isCfu;
             mOnComplete = onComplete;
+            mServiceClass = serviceClass;
         }
     }
 
@@ -328,6 +332,13 @@ public class ImsPhone extends ImsPhoneBase {
     @Override
     public CallTracker getCallTracker() {
         return mCT;
+    }
+
+    public void setVoiceCallForwardingFlag(int line, boolean enable, String number) {
+        IccRecords r = mDefaultPhone.getIccRecords();
+        if (r != null) {
+            setVoiceCallForwardingFlag(r, line, enable, number);
+        }
     }
 
     public ImsExternalCallTracker getExternalCallTracker() {
@@ -883,7 +894,17 @@ public class ImsPhone extends ImsPhoneBase {
     @Override
     public void getCallForwardingOption(int commandInterfaceCFReason,
             Message onComplete) {
-        if (DBG) logd("getCallForwardingOption reason=" + commandInterfaceCFReason);
+        getCallForwardingOption(commandInterfaceCFReason,
+                SERVICE_CLASS_VOICE, onComplete);
+    }
+
+    @Override
+    public void getCallForwardingOption(int commandInterfaceCFReason,
+            int commandInterfaceServiceClass, Message onComplete) {
+        if (DBG) {
+            logd("getCallForwardingOption reason=" + commandInterfaceCFReason
+                    + "serviceclass =" + commandInterfaceServiceClass);
+        }
         if (isValidCommandInterfaceCFReason(commandInterfaceCFReason)) {
             if (DBG) logd("requesting call forwarding query.");
             Message resp;
@@ -891,7 +912,8 @@ public class ImsPhone extends ImsPhoneBase {
 
             try {
                 ImsUtInterface ut = mCT.getUtInterface();
-                ut.queryCallForward(getConditionFromCFReason(commandInterfaceCFReason), null, resp);
+                ut.queryCallForward(getConditionFromCFReason(commandInterfaceCFReason), null,
+                        commandInterfaceServiceClass, resp);
             } catch (ImsException e) {
                 sendErrorResponse(onComplete, e);
             }
@@ -910,6 +932,7 @@ public class ImsPhone extends ImsPhoneBase {
                 CommandsInterface.SERVICE_CLASS_VOICE, timerSeconds, onComplete);
     }
 
+    @Override
     public void setCallForwardingOption(int commandInterfaceCFAction,
             int commandInterfaceCFReason,
             String dialingNumber,
@@ -924,7 +947,7 @@ public class ImsPhone extends ImsPhoneBase {
                 (isValidCommandInterfaceCFReason(commandInterfaceCFReason))) {
             Message resp;
             Cf cf = new Cf(dialingNumber, GsmMmiCode.isVoiceUnconditionalForwarding(
-                    commandInterfaceCFReason, serviceClass), onComplete);
+                    commandInterfaceCFReason, serviceClass), onComplete, serviceClass);
             resp = obtainMessage(EVENT_SET_CALL_FORWARD_DONE,
                     isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, cf);
 
@@ -1281,7 +1304,16 @@ public class ImsPhone extends ImsPhoneBase {
         CallForwardInfo cfInfo = new CallForwardInfo();
         cfInfo.status = info.mStatus;
         cfInfo.reason = getCFReasonFromCondition(info.mCondition);
-        cfInfo.serviceClass = SERVICE_CLASS_VOICE;
+        //Check if the service class signifies Video call forward
+        //As per 3GPP TS 29002 MAP Specification : Section 17.7.10, the BearerServiceCode for
+        //"allDataCircuitAsynchronous" is '01010000' ( i.e. 80).
+        //Hence, SERVICE_CLASS_DATA_SYNC (1<<4) and SERVICE_CLASS_PACKET (1<<6)
+        //together make video service class.
+        if (info.mServiceClass == (SERVICE_CLASS_DATA_SYNC + SERVICE_CLASS_PACKET)) {
+            cfInfo.serviceClass = info.mServiceClass;
+        } else {
+            cfInfo.serviceClass = SERVICE_CLASS_VOICE;
+        }
         cfInfo.toa = info.mToA;
         cfInfo.number = info.mNumber;
         cfInfo.timeSeconds = info.mTimeSeconds;
@@ -1309,7 +1341,12 @@ public class ImsPhone extends ImsPhoneBase {
         } else {
             for (int i = 0, s = infos.length; i < s; i++) {
                 if (infos[i].mCondition == ImsUtInterface.CDIV_CF_UNCONDITIONAL) {
-                    if (r != null) {
+                    //Check if the service class signifies Video call forward
+                    if (infos[i].mServiceClass == (SERVICE_CLASS_DATA_SYNC
+                            + SERVICE_CLASS_PACKET)) {
+                        setVideoCallForwardingPreference(infos[i].mStatus == 1);
+                        notifyCallForwardingIndicator();
+                    } else if (r != null) {
                         setVoiceCallForwardingFlag(r, 1, (infos[i].mStatus == 1),
                             infos[i].mNumber);
                     }
@@ -1375,8 +1412,13 @@ public class ImsPhone extends ImsPhoneBase {
             case EVENT_SET_CALL_FORWARD_DONE:
                 IccRecords r = mDefaultPhone.getIccRecords();
                 Cf cf = (Cf) ar.userObj;
-                if (cf.mIsCfu && ar.exception == null && r != null) {
-                    setVoiceCallForwardingFlag(r, 1, msg.arg1 == 1, cf.mSetCfNumber);
+                if (cf.mIsCfu && ar.exception == null) {
+                    if (cf.mServiceClass == (SERVICE_CLASS_DATA_SYNC + SERVICE_CLASS_PACKET)) {
+                        setVideoCallForwardingPreference(msg.arg1 == 1);
+                        notifyCallForwardingIndicator();
+                    } else if (r != null && cf.mServiceClass == SERVICE_CLASS_VOICE) {
+                        setVoiceCallForwardingFlag(r, 1, msg.arg1 == 1, cf.mSetCfNumber);
+                    }
                 }
                 sendResponse(cf.mOnComplete, null, ar.exception);
                 break;
@@ -1795,6 +1837,11 @@ public class ImsPhone extends ImsPhoneBase {
     @Override
     public void setBroadcastEmergencyCallStateChanges(boolean broadcast) {
         mDefaultPhone.setBroadcastEmergencyCallStateChanges(broadcast);
+    }
+
+    @Override
+    public void notifyCallForwardingIndicator() {
+        mDefaultPhone.notifyCallForwardingIndicator();
     }
 
     @VisibleForTesting
