@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "3f8ab559_6593626e",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-10-24T05:39:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f121587_a38fd7b8",
+      "range": {
+        "startLine": 723,
+        "startChar": 100,
+        "endLine": 723,
+        "endChar": 110
+      },
+      "revId": "17c4bba8fa791325924347bda7513655d0610dd0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8534e1b5_3d4bc08f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-10-24T05:39:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd079022_a9eb5b06",
+      "range": {
+        "startLine": 723,
+        "startChar": 24,
+        "endLine": 723,
+        "endChar": 32
+      },
+      "revId": "17c4bba8fa791325924347bda7513655d0610dd0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "067bfda9_b1a323ff",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 7
@@ -59,6 +107,24 @@
       "writtenOn": "2017-10-23T18:49:23Z",
       "side": 1,
       "message": "return iccId.substring( 0, position );",
+      "revId": "17c4bba8fa791325924347bda7513655d0610dd0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48698c4e_9b772da6",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-10-24T05:39:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "067bfda9_b1a323ff",
       "revId": "17c4bba8fa791325924347bda7513655d0610dd0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
