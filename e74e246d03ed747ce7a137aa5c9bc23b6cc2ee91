@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "25a8e48c_885c7cb7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-10-24T06:08:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8c3529b_4a4c5bd4",
+      "revId": "e74e246d03ed747ce7a137aa5c9bc23b6cc2ee91",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66a2e6b2_89e499af",
         "filename": "src/java/com/android/internal/telephony/uicc/PlmnActRecord.java",
         "patchSetId": 1
@@ -53,6 +71,30 @@
       "writtenOn": "2017-10-19T21:36:10Z",
       "side": 1,
       "message": "Since we have moved to Java 8, we can use Byte.toUnsignedInt() https://docs.oracle.com/javase/8/docs/api/java/lang/Byte.html#toUnsignedInt-byte-",
+      "range": {
+        "startLine": 67,
+        "startChar": 61,
+        "endLine": 67,
+        "endChar": 65
+      },
+      "revId": "e74e246d03ed747ce7a137aa5c9bc23b6cc2ee91",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c022084_26269417",
+        "filename": "src/java/com/android/internal/telephony/uicc/PlmnActRecord.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-10-24T06:08:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a135c04_2ea1120f",
       "range": {
         "startLine": 67,
         "startChar": 61,
