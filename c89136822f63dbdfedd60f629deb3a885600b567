@@ -230,6 +230,30 @@
       "revId": "c89136822f63dbdfedd60f629deb3a885600b567",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6ec031f9_be267362",
+        "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-24T06:24:01Z",
+      "side": 1,
+      "message": "add it",
+      "parentUuid": "500f83a7_9fa63ad1",
+      "range": {
+        "startLine": 820,
+        "startChar": 17,
+        "endLine": 820,
+        "endChar": 28
+      },
+      "revId": "c89136822f63dbdfedd60f629deb3a885600b567",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
