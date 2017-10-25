@@ -56,9 +56,6 @@ public class SIMRecords extends IccRecords {
 
     VoiceMailConstants mVmConfig;
 
-
-    SpnOverride mSpnOverride;
-
     // ***** Cached SIM State; cleared on channel close
 
     private int mCallForwardingStatus;
@@ -97,7 +94,6 @@ public class SIMRecords extends IccRecords {
     public String toString() {
         return "SimRecords: " + super.toString()
                 + " mVmConfig" + mVmConfig
-                + " mSpnOverride=" + mSpnOverride
                 + " callForwardingEnabled=" + mCallForwardingStatus
                 + " spnState=" + mSpnState
                 + " mCphsInfo=" + mCphsInfo
@@ -212,7 +208,6 @@ public class SIMRecords extends IccRecords {
         mAdnCache = new AdnRecordCache(mFh);
 
         mVmConfig = new VoiceMailConstants();
-        mSpnOverride = new SpnOverride();
 
         mRecordsRequested = false;  // No load request is made till SIM ready
 
@@ -1632,29 +1627,32 @@ public class SIMRecords extends IccRecords {
 
     //***** Private methods
 
+    /**
+     * Override the carrier name with either carrier config or SPN
+     * if an override is provided.
+     */
     private void handleCarrierNameOverride() {
         CarrierConfigManager configLoader = (CarrierConfigManager)
                 mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
-        if (configLoader != null && configLoader.getConfig().getBoolean(
-                CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL)) {
-            String carrierName = configLoader.getConfig().getString(
+        if (configLoader == null) {
+            return;
+        }
+
+        boolean preferCcName = configLoader.getConfig().getBoolean(
+                CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL, false);
+        String ccName = configLoader.getConfig().getString(
                     CarrierConfigManager.KEY_CARRIER_NAME_STRING);
-            setServiceProviderName(carrierName);
+        // If carrier config is priority, use it regardless - the preference
+        // and the name were both set by the carrier, so this is safe;
+        // otherwise, if the SPN is priority but we don't have one *and* we have
+        // a name in carrier config, use the carrier config name as a backup.
+        if (preferCcName || (TextUtils.isEmpty(getServiceProviderName())
+                             && !TextUtils.isEmpty(ccName))) {
+            setServiceProviderName(ccName);
             mTelephonyManager.setSimOperatorNameForPhone(mParentApp.getPhoneId(),
-                    carrierName);
-        } else {
-            setSpnFromConfig(getOperatorNumeric());
+                    ccName);
         }
     }
-
-    private void setSpnFromConfig(String carrier) {
-        if (mSpnOverride.containsCarrier(carrier)) {
-            setServiceProviderName(mSpnOverride.getSpn(carrier));
-            mTelephonyManager.setSimOperatorNameForPhone(
-                    mParentApp.getPhoneId(), getServiceProviderName());
-        }
-    }
-
 
     private void setVoiceMailByCountry (String spn) {
         if (mVmConfig.containsCarrier(spn)) {
@@ -2166,7 +2164,6 @@ public class SIMRecords extends IccRecords {
         pw.println(" extends:");
         super.dump(fd, pw, args);
         pw.println(" mVmConfig=" + mVmConfig);
-        pw.println(" mSpnOverride=" + mSpnOverride);
         pw.println(" mCallForwardingStatus=" + mCallForwardingStatus);
         pw.println(" mSpnState=" + mSpnState);
         pw.println(" mCphsInfo=" + mCphsInfo);
