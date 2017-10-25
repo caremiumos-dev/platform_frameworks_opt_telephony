@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a429f8f6_43c346b8",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-25T20:43:37Z",
+      "side": 1,
+      "message": "Nitpick: this should be double indented",
+      "revId": "25fa08b7b8070ab407893e3930c505680b951c4d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
