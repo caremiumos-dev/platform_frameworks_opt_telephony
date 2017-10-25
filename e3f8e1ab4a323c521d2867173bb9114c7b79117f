@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbe2e54b_95c3f897",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4457,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-10-25T01:16:03Z",
+      "side": 1,
+      "message": "What if setRadioPower is successful? Will \"requestShutdown\" command be called twice?",
+      "range": {
+        "startLine": 4457,
+        "startChar": 7,
+        "endLine": 4457,
+        "endChar": 76
+      },
+      "revId": "e3f8e1ab4a323c521d2867173bb9114c7b79117f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
