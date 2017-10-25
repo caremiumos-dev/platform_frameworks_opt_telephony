@@ -22,6 +22,30 @@
       "revId": "e3f8e1ab4a323c521d2867173bb9114c7b79117f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c583f6ce_aecdf663",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4457,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-10-25T14:27:16Z",
+      "side": 1,
+      "message": "Yes, the requestShutdown command is called twice but I could not see any problems in our terminal and Nexus6P.\n\nEven if an error occurs by 2nd requestShutdown command, the error is not handled in the ServiceStateTracker class. So, I don\u0027t think there is problem if it is called twice.",
+      "parentUuid": "dbe2e54b_95c3f897",
+      "range": {
+        "startLine": 4457,
+        "startChar": 7,
+        "endLine": 4457,
+        "endChar": 76
+      },
+      "revId": "e3f8e1ab4a323c521d2867173bb9114c7b79117f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
