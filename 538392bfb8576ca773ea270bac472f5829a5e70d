@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "492927f6_c0f9280e",
+        "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-25T20:37:38Z",
+      "side": 1,
+      "message": "This function is supposed to return ISO, I\u0027m not sure we should be changing it to return UTF-8",
+      "range": {
+        "startLine": 1599,
+        "startChar": 25,
+        "endLine": 1599,
+        "endChar": 36
+      },
+      "revId": "538392bfb8576ca773ea270bac472f5829a5e70d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "911fb2cc_284fd9e1",
+        "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-25T20:37:38Z",
+      "side": 1,
+      "message": "Seems this message should be updated... do we expect UTF_8 to be always supported? If not, we shouldn\u0027t change this function.",
+      "range": {
+        "startLine": 1617,
+        "startChar": 0,
+        "endLine": 1617,
+        "endChar": 59
+      },
+      "revId": "538392bfb8576ca773ea270bac472f5829a5e70d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
