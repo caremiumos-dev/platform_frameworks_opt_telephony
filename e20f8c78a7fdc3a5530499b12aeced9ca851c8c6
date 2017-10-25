@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec22d046_4944ca6f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityGsmTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-10-25T22:24:41Z",
+      "side": 1,
+      "message": "Use assertNull instead.",
+      "range": {
+        "startLine": 118,
+        "startChar": 7,
+        "endLine": 120,
+        "endChar": 58
+      },
+      "revId": "e20f8c78a7fdc3a5530499b12aeced9ca851c8c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9732d857_546eb0c8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityLteTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-10-25T22:24:41Z",
+      "side": 1,
+      "message": "Use assertNull instead.",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 58
+      },
+      "revId": "e20f8c78a7fdc3a5530499b12aeced9ca851c8c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4fa2f8d_82f809a1",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CellIdentityWcdmaTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-10-25T22:24:41Z",
+      "side": 1,
+      "message": "Use assertNull instead.",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 58
+      },
+      "revId": "e20f8c78a7fdc3a5530499b12aeced9ca851c8c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
