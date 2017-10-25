@@ -3505,6 +3505,21 @@ public class DcTracker extends Handler {
                     apnList.add(mPreferredApn);
                     if (DBG) log("buildWaitingApns: X added preferred apnList=" + apnList);
                     return apnList;
+                } else if (isEnforceUseDefaultPreferredApnEnabled()) {
+                    if (DBG) log("buildWaitingApns: Enforce to use default apn enabled");
+                    ApnSetting topApn = getTopApnOfRequestedType(requestedApnType);
+                    // If default preferred apn supports current RAT, set it as preferred apn.
+                    if (topApn != null && ServiceState.bitmaskHasTech(
+                            topApn.bearerBitmask, radioTech)) {
+                        apnList.add(topApn);
+                        if (DBG) log("buildWaitingApns: Default APN added preferred apnList");
+                        setPreferredApn(topApn.id);
+                        mPreferredApn = topApn;
+                    } else if (DBG) {
+                        log("buildWaitingApns: couldn't handle current RAT=" + radioTech
+                                + " with default APN =" + topApn);
+                    }
+                    return apnList;
                 } else {
                     if (DBG) log("buildWaitingApns: no preferred APN");
                     setPreferredApn(-1);
@@ -3609,7 +3624,62 @@ public class DcTracker extends Handler {
             cursor.close();
         }
 
+        // Get and set the first apn of requested type as preferred.
+        if (mCanSetPreferApn && isEnforceUseDefaultPreferredApnEnabled()) {
+            ApnSetting topApn = getTopApnOfRequestedType(mRequestedApnType);
+            if (topApn != null) {
+                log("getPreferredApn: isDefaultPreferredApn X found apnSetting" + topApn);
+                setPreferredApn(topApn.id);
+                return topApn;
+            }
+        }
+
         log("getPreferredApn: X not found");
+        return null;
+    }
+
+    /**
+     * Returns whether the feature enforce to use the first default preferred apn is enabled or not.
+     * configured by {@link CarrierConfigManager#KEY_DEFAULT_PREFERRED_APN_ENABLED_BOOL}
+     *
+     * @return {@true} if enforce to use default preferred apn is enabled, {@false} otherwise.
+     */
+    private boolean isEnforceUseDefaultPreferredApnEnabled() {
+        boolean isDefaultPreferredEnabled = false;
+        CarrierConfigManager configManager = (CarrierConfigManager)
+                mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configManager != null) {
+            PersistableBundle bundle = configManager.getConfigForSubId(mPhone.getSubId());
+            if (bundle != null) {
+                isDefaultPreferredEnabled = bundle.getBoolean(
+                        CarrierConfigManager.KEY_DEFAULT_PREFERRED_APN_ENABLED_BOOL);
+            }
+        }
+
+        return isDefaultPreferredEnabled;
+    }
+
+    /**
+     * Get the top apn of requested apn type from mAllApnSettings.
+     *
+     * @param requestedApnType
+     * @return The top ApnSetting of the requested apn type.
+     */
+    private ApnSetting getTopApnOfRequestedType(String requestedApnType) {
+        if (mAllApnSettings == null || mAllApnSettings.isEmpty()) {
+            log("getTopApnOfRequestedType: mAllApnSettings is "
+                    + ((mAllApnSettings == null) ? "null" : "empty"));
+            return null;
+        }
+
+        for (ApnSetting p : mAllApnSettings) {
+            log("getTopApnOfRequestedType: apnSetting=" + p);
+            if (p.canHandleType(requestedApnType)) {
+                log("getTopApnOfRequestedType: X found apnSetting" + p);
+                return p;
+            }
+        }
+
         return null;
     }
 
