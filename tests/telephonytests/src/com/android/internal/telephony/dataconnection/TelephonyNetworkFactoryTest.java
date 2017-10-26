@@ -56,6 +56,7 @@ public class TelephonyNetworkFactoryTest extends AndroidTestCase {
     }
 
     private class TestSetup {
+        private final Object mLock = new Object();
         final TelephonyRegistryMock telephonyRegistryMock;
         final PhoneSwitcherMock phoneSwitcherMock;
         final SubscriptionControllerMock subscriptionControllerMock;
@@ -65,6 +66,7 @@ public class TelephonyNetworkFactoryTest extends AndroidTestCase {
         final Looper looper;
         DcTrackerMock dcTrackerMock;
         final Context contextMock;
+        private boolean mReady = false;
 
         TestSetup(int numPhones) {
             handlerThread = new HandlerThread("TelephonyNetworkFactoryTest");
@@ -74,6 +76,10 @@ public class TelephonyNetworkFactoryTest extends AndroidTestCase {
             Handler myHandler = new Handler(looper) {
                 public void handleMessage(Message msg) {
                     if (dcTrackerMock == null) dcTrackerMock = new DcTrackerMock();
+                    synchronized (mLock) {
+                        mReady = true;
+                        mLock.notifyAll();
+                    }
                 }
             };
             myHandler.obtainMessage(0).sendToTarget();
@@ -97,6 +103,19 @@ public class TelephonyNetworkFactoryTest extends AndroidTestCase {
             subscriptionMonitorMock = new SubscriptionMonitorMock(numPhones);
         }
 
+        void waitUntilReady() {
+            synchronized (mLock) {
+                if (!mReady) {
+                    try {
+                        mLock.wait(5000);
+                    } catch (InterruptedException ie) {
+                        throw new IllegalStateException(
+                                "DcTracker thread never became ready!" + ie);
+                    }
+                }
+            }
+        }
+
         void die() {
             connectivityServiceMock.die();
             looper.quit();
@@ -105,6 +124,7 @@ public class TelephonyNetworkFactoryTest extends AndroidTestCase {
     }
 
     private TelephonyNetworkFactory makeTnf(int phoneId, TestSetup ts) {
+        ts.waitUntilReady();
         return new TelephonyNetworkFactory(ts.phoneSwitcherMock, ts.subscriptionControllerMock,
                 ts.subscriptionMonitorMock, ts.looper, ts.contextMock, phoneId, ts.dcTrackerMock);
     }
