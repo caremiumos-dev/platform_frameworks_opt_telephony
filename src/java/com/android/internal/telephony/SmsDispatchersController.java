@@ -383,14 +383,17 @@ public class SmsDispatchersController extends Handler {
      *  raw pdu of the status report is in the extended data ("pdu").
      */
     protected void sendData(String destAddr, String scAddr, int destPort,
-                            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+                            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent,
+                            String callingPackage) {
         if (mImsSmsDispatcher.isAvailable()) {
             mImsSmsDispatcher.sendData(destAddr, scAddr, destPort, data, sentIntent,
-                    deliveryIntent);
+                    deliveryIntent, callingPackage);
         } else if (isCdmaMo()) {
-            mCdmaDispatcher.sendData(destAddr, scAddr, destPort, data, sentIntent, deliveryIntent);
+            mCdmaDispatcher.sendData(destAddr, scAddr, destPort, data, sentIntent, deliveryIntent,
+                                    callingPackage);
         } else {
-            mGsmDispatcher.sendData(destAddr, scAddr, destPort, data, sentIntent, deliveryIntent);
+            mGsmDispatcher.sendData(destAddr, scAddr, destPort, data, sentIntent, deliveryIntent,
+                                    callingPackage);
         }
     }
 

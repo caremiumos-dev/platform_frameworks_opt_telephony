@@ -336,7 +336,8 @@ public class IccSmsInterfaceManager {
             returnUnspecifiedFailure(sentIntent);
             return;
         }
-        sendDataInternal(destAddr, scAddr, destPort, data, sentIntent, deliveryIntent);
+        sendDataInternal(callingPackage, destAddr, scAddr, destPort, data,
+                sentIntent, deliveryIntent);
     }
 
     /**
@@ -349,7 +350,8 @@ public class IccSmsInterfaceManager {
             returnUnspecifiedFailure(sentIntent);
             return;
         }
-        sendDataInternal(destAddr, scAddr, destPort, data, sentIntent, deliveryIntent);
+        sendDataInternal(callingPackage, destAddr, scAddr, destPort, data,
+                sentIntent, deliveryIntent);
     }
 
     /**
@@ -378,7 +380,7 @@ public class IccSmsInterfaceManager {
      *  raw pdu of the status report is in the extended data ("pdu").
      */
 
-    private void sendDataInternal(String destAddr, String scAddr,
+    private void sendDataInternal(String callingPackage, String destAddr, String scAddr,
             int destPort, byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
         if (Rlog.isLoggable("SMS", Log.VERBOSE)) {
             log("sendData: destAddr=" + destAddr + " scAddr=" + scAddr + " destPort=" +
@@ -386,8 +388,8 @@ public class IccSmsInterfaceManager {
                 sentIntent + " deliveryIntent=" + deliveryIntent);
         }
         destAddr = filterDestAddress(destAddr);
-        mDispatchersController.sendData(destAddr, scAddr, destPort, data, sentIntent,
-                deliveryIntent);
+        mDispatchersController.sendData(destAddr, scAddr, destPort, data, sentIntent, deliveryIntent,
+                callingPackage);
     }
 
     /**
