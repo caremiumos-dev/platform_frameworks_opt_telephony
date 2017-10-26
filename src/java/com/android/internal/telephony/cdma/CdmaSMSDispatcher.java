@@ -22,7 +22,6 @@ import android.app.PendingIntent.CanceledException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Message;
-import android.os.SystemProperties;
 import android.provider.Telephony.Sms;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
@@ -38,7 +37,6 @@ import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.telephony.SmsConstants;
 import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsUsageMonitor;
-import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.cdma.sms.UserData;
 
 import java.util.HashMap;
@@ -107,14 +105,15 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
     /** {@inheritDoc} */
     @Override
     public void sendData(String destAddr, String scAddr, int destPort,
-            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent,
+            String callingPackage) {
         SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
                 scAddr, destAddr, destPort, data, (deliveryIntent != null));
         if (pdu != null) {
             HashMap map = getSmsTrackerMap(destAddr, scAddr, destPort, data, pdu);
             SmsTracker tracker = getSmsTracker(map, sentIntent, deliveryIntent, getFormat(),
                     null /*messageUri*/, false /*isExpectMore*/, null /*fullMessageText*/,
-                    false /*isText*/, true /*persistMessage*/);
+                    false /*isText*/, true /*persistMessage*/, callingPackage);
 
             String carrierPackage = getCarrierAppPackageName();
             if (carrierPackage != null) {
@@ -147,7 +146,8 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
         if (pdu != null) {
             HashMap map = getSmsTrackerMap(destAddr, scAddr, text, pdu);
             SmsTracker tracker = getSmsTracker(map, sentIntent, deliveryIntent, getFormat(),
-                    messageUri, false /*isExpectMore*/, text, true /*isText*/, persistMessage);
+                    messageUri, false /*isExpectMore*/, text, true /*isText*/, persistMessage,
+                    callingPkg);
 
             String carrierPackage = getCarrierAppPackageName();
             if (carrierPackage != null) {
@@ -189,7 +189,7 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
             String message, SmsHeader smsHeader, int encoding,
             PendingIntent sentIntent, PendingIntent deliveryIntent, boolean lastPart,
             AtomicInteger unsentPartCount, AtomicBoolean anyPartFailed, Uri messageUri,
-            String fullMessageText) {
+            String fullMessageText, String callingPackage) {
         UserData uData = new UserData();
         uData.payloadStr = message;
         uData.userDataHeader = smsHeader;
@@ -212,7 +212,7 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
         return getSmsTracker(map, sentIntent, deliveryIntent,
                 getFormat(), unsentPartCount, anyPartFailed, messageUri, smsHeader,
                 false /*isExpextMore*/, fullMessageText, true /*isText*/,
-                true /*persistMessage*/);
+                true /*persistMessage*/, callingPackage);
     }
 
     @Override
