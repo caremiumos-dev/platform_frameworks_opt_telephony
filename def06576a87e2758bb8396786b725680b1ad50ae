@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6d2af5_e6eee672",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-10-26T22:13:48Z",
+      "side": 1,
+      "message": "during SIM record loading, we should already setServiceProviderName() and override spn systemProperties. Do we have to do it again here?",
+      "range": {
+        "startLine": 1652,
+        "startChar": 9,
+        "endLine": 1653,
+        "endChar": 29
+      },
+      "revId": "def06576a87e2758bb8396786b725680b1ad50ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
