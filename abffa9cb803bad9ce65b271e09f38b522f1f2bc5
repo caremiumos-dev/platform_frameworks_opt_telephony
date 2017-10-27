@@ -22,6 +22,30 @@
       "revId": "abffa9cb803bad9ce65b271e09f38b522f1f2bc5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ed076ab_41380c0e",
+        "filename": "src/java/com/android/internal/telephony/test/SimulatedCommands.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-10-27T17:08:10Z",
+      "side": 1,
+      "message": "This class is used for testing, how can it affect the RIL?",
+      "parentUuid": "74e2be25_9d024b70",
+      "range": {
+        "startLine": 1196,
+        "startChar": 8,
+        "endLine": 1196,
+        "endChar": 36
+      },
+      "revId": "abffa9cb803bad9ce65b271e09f38b522f1f2bc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
