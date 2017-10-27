@@ -22,6 +22,30 @@
       "revId": "3fe6c7f53963649d11777137c79585f9e3270ff9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "169fc0a2_669bbcdf",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2017-10-27T09:56:24Z",
+      "side": 1,
+      "message": "Valid subId verification would be done internally by \nSubscrionManager.getActiveSubscriptionInfo() method, its called below.",
+      "parentUuid": "a1c7b26f_296a591e",
+      "range": {
+        "startLine": 1657,
+        "startChar": 8,
+        "endLine": 1662,
+        "endChar": 9
+      },
+      "revId": "3fe6c7f53963649d11777137c79585f9e3270ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
