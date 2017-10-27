@@ -22,6 +22,30 @@
       "revId": "def06576a87e2758bb8396786b725680b1ad50ae",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5526dfe4_810dc639",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-10-27T20:02:51Z",
+      "side": 1,
+      "message": "I think you\u0027re correct and this is redundant. Done.",
+      "parentUuid": "1a6d2af5_e6eee672",
+      "range": {
+        "startLine": 1652,
+        "startChar": 9,
+        "endLine": 1653,
+        "endChar": 29
+      },
+      "revId": "def06576a87e2758bb8396786b725680b1ad50ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
