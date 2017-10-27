@@ -1,0 +1,8 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Code-Review+2: Pengquan Meng <mpq@google.com>
+Verified+1: Cassie Han <xih@google.com>
+Submitted-by: Cassie Han <xih@google.com>
+Submitted-at: Fri, 27 Oct 2017 17:17:53 +0000
+Reviewed-on: https://android-review.googlesource.com/510758
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
