@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d89393f7_22c7f386",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-27T03:26:33Z",
+      "side": 1,
+      "message": "yes, not correct",
+      "parentUuid": "566a5340_24628446",
+      "range": {
+        "startLine": 455,
+        "startChar": 14,
+        "endLine": 455,
+        "endChar": 96
+      },
+      "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67263cee_1e06237b",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-26T17:48:23Z",
       "side": 1,
       "message": "Can you please add more details on what priority level and validity period mean? It will be better to give a brief description of the usage/meaning of these fields so that spec doesn\u0027t have to be looked up for that.",
+      "range": {
+        "startLine": 456,
+        "startChar": 29,
+        "endLine": 456,
+        "endChar": 44
+      },
+      "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7dfd95cb_e0aa896e",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-27T03:26:33Z",
+      "side": 1,
+      "message": "if want to understand spce clearly, susggest looking up spec again, both fields are controlled by carrier, i think SMS related guy should understand it, so keep prvious description.",
+      "parentUuid": "67263cee_1e06237b",
       "range": {
         "startLine": 456,
         "startChar": 29,
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "3fec0a01_caa3fec6",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-27T03:26:33Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "56c02141_e7548d0d",
+      "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5878c68_1f31c8c4",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 6
@@ -76,6 +142,24 @@
       "writtenOn": "2017-10-26T17:48:23Z",
       "side": 1,
       "message": "nit: long line",
+      "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe3d3127_3b02f0a8",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-27T03:26:33Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "a5878c68_1f31c8c4",
       "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "1ab15597_72414940",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-27T03:26:33Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "dcbc9c2f_e5134f0e",
+      "range": {
+        "startLine": 1680,
+        "startChar": 57,
+        "endLine": 1680,
+        "endChar": 63
+      },
+      "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bbf1ed23_00d8c546",
         "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
         "patchSetId": 6
@@ -116,6 +224,24 @@
       "writtenOn": "2017-10-26T17:48:23Z",
       "side": 1,
       "message": "@Override",
+      "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "227b1a08_8c385909",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-27T03:26:33Z",
+      "side": 1,
+      "message": "yes, previously removed by merging internally for differnet component, will add back",
+      "parentUuid": "bbf1ed23_00d8c546",
       "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -139,6 +265,24 @@
     },
     {
       "key": {
+        "uuid": "5fbf0fd3_28d6ded1",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-27T03:26:33Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "ed97e3ba_9f3131ea",
+      "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fca4e5e_8f989d74",
         "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
         "patchSetId": 6
@@ -150,6 +294,24 @@
       "writtenOn": "2017-10-26T17:48:23Z",
       "side": 1,
       "message": "@Override",
+      "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf4c7f88_99255f69",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-10-27T03:26:33Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "4fca4e5e_8f989d74",
       "revId": "9103bc79e7b3bae4c442f2245aab3a8e581e2546",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
