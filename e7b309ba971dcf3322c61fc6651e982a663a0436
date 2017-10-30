@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd890635_9fe41fa2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5106,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-30T22:29:33Z",
+      "side": 1,
+      "message": "Can we nest the if-blocks?\nprivate boolean isUseOnlyRsrpForLteLevel() {\n    CarrierConfigManager configManager \u003d (CarrierConfigManager) mPhone.getContext()\n            .getSystemService(Context.CARRIER_CONFIG_SERVICE);\n    if (configManager !\u003d null) {\n        // If an invalid subId is used, this bundle will contain default values.\n        PersistableBundle config \u003d configManager.getConfigForSubId(mPhone.getSubId());\n        if (config !\u003d null) {\n            return config.getBoolean(\n                    CarrierConfigManager.KEY_USE_ONLY_RSRP_FOR_LTE_SIGNAL_BAR_BOOL);\n        }\n    }\n    // Return static default defined in CarrierConfigManager.\n    return CarrierConfigManager.getDefaultConfig().getBoolean(\n            CarrierConfigManager.KEY_USE_ONLY_RSRP_FOR_LTE_SIGNAL_BAR_BOOL);\n    }\n}",
+      "range": {
+        "startLine": 5090,
+        "startChar": 4,
+        "endLine": 5106,
+        "endChar": 5
+      },
+      "revId": "e7b309ba971dcf3322c61fc6651e982a663a0436",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
