@@ -107,6 +107,8 @@ import android.os.IPowerManager;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.WorkSource;
+import android.telephony.CellInfo;
+import android.telephony.CellInfoLte;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 
@@ -871,5 +873,163 @@ public class RILTest extends TelephonyTest {
         respInfo.error = error;
         respInfo.type = type;
         return respInfo;
+    }
+
+    private static final int TYPE_LTE = 3;
+    private static final int RIL_TIMESTAMP_TYPE_OEM_RIL = 3;
+    private static final long TIMESTAMP = 215924934;
+    // Cell identity ranges from 0 to 268435456.
+    private static final int CI = 268435456;
+    // Physical cell id ranges from 0 to 503.
+    private static final int PCI = 503;
+    // Tracking area code ranges from 0 to 65535.
+    private static final int TAC = 65535;
+    // Absolute RF Channel Number ranges from 0 to 262140.
+    private static final int EARFCN = 262140;
+    private static final int MCC = 120;
+    private static final int MNC = 260;
+    private static final String MCC_STR = "120";
+    private static final String MNC_STR = "260";
+    private static final String ALPHA_LONG = "long";
+    private static final String ALPHA_SHORT = "short";
+    private static final int SIGNAL_STRENGTH = 24;
+    private static final int RSRP = 96;
+    private static final int RSRQ = 10;
+    private static final int RSSNR = 2147483647;
+    private static final int CQI = 2147483647;
+    private static final int TIME_ADVANCE = 4;
+
+    @Test
+    public void testConvertHalCellInfoList() throws Exception {
+        android.hardware.radio.V1_0.CellInfoLte lte = new android.hardware.radio.V1_0.CellInfoLte();
+        lte.cellIdentityLte.ci = CI;
+        lte.cellIdentityLte.pci = PCI;
+        lte.cellIdentityLte.tac = TAC;
+        lte.cellIdentityLte.earfcn = EARFCN;
+        lte.cellIdentityLte.mcc = MCC_STR;
+        lte.cellIdentityLte.mnc = MNC_STR;
+        lte.signalStrengthLte.signalStrength = SIGNAL_STRENGTH;
+        lte.signalStrengthLte.rsrp = RSRP;
+        lte.signalStrengthLte.rsrq = RSRQ;
+        lte.signalStrengthLte.rssnr = RSSNR;
+        lte.signalStrengthLte.cqi = CQI;
+        lte.signalStrengthLte.timingAdvance = TIME_ADVANCE;
+        android.hardware.radio.V1_0.CellInfo record = new android.hardware.radio.V1_0.CellInfo();
+        record.cellInfoType = TYPE_LTE;
+        record.registered = false;
+        record.timeStampType = RIL_TIMESTAMP_TYPE_OEM_RIL;
+        record.timeStamp = TIMESTAMP;
+        record.lte.add(lte);
+        ArrayList<android.hardware.radio.V1_0.CellInfo> records =
+                new ArrayList<android.hardware.radio.V1_0.CellInfo>();
+        records.add(record);
+
+        ArrayList<CellInfo> ret = RIL.convertHalCellInfoList(records);
+
+        assertEquals(1, ret.size());
+        CellInfoLte cellInfoLte = (CellInfoLte) ret.get(0);
+        assertEquals(MCC, cellInfoLte.getCellIdentity().getMcc());
+        assertEquals(MNC, cellInfoLte.getCellIdentity().getMnc());
+        assertEquals(CI, cellInfoLte.getCellIdentity().getCi());
+        assertEquals(TAC, cellInfoLte.getCellIdentity().getTac());
+        assertEquals(PCI, cellInfoLte.getCellIdentity().getPci());
+        assertEquals("", cellInfoLte.getCellIdentity().getOperatorAlphaLong());
+        assertEquals("", cellInfoLte.getCellIdentity().getOperatorAlphaShort());
+        assertEquals(-RSRQ, cellInfoLte.getCellSignalStrength().getRsrq());
+        assertEquals(RSSNR, cellInfoLte.getCellSignalStrength().getRssnr());
+        assertEquals(-RSRP, cellInfoLte.getCellSignalStrength().getRsrp());
+        assertEquals(CQI, cellInfoLte.getCellSignalStrength().getCqi());
+        assertEquals(-RSRP, cellInfoLte.getCellSignalStrength().getDbm());
+        assertEquals(TIME_ADVANCE, cellInfoLte.getCellSignalStrength().getTimingAdvance());
+    }
+
+    @Test
+    public void testConvertHalCellInfoList_1_2() throws Exception {
+        android.hardware.radio.V1_2.CellInfoLte lte = new android.hardware.radio.V1_2.CellInfoLte();
+        lte.cellIdentityLte.base.ci = CI;
+        lte.cellIdentityLte.base.pci = PCI;
+        lte.cellIdentityLte.base.tac = TAC;
+        lte.cellIdentityLte.base.earfcn = EARFCN;
+        lte.cellIdentityLte.base.mcc = MCC_STR;
+        lte.cellIdentityLte.base.mnc = MNC_STR;
+        lte.cellIdentityLte.operatorNames.alphaLong = ALPHA_LONG;
+        lte.cellIdentityLte.operatorNames.alphaShort = ALPHA_SHORT;
+        lte.signalStrengthLte.signalStrength = SIGNAL_STRENGTH;
+        lte.signalStrengthLte.rsrp = RSRP;
+        lte.signalStrengthLte.rsrq = RSRQ;
+        lte.signalStrengthLte.rssnr = RSSNR;
+        lte.signalStrengthLte.cqi = CQI;
+        lte.signalStrengthLte.timingAdvance = TIME_ADVANCE;
+        android.hardware.radio.V1_2.CellInfo record = new android.hardware.radio.V1_2.CellInfo();
+        record.cellInfoType = TYPE_LTE;
+        record.registered = false;
+        record.timeStampType = RIL_TIMESTAMP_TYPE_OEM_RIL;
+        record.timeStamp = TIMESTAMP;
+        record.lte.add(lte);
+        ArrayList<android.hardware.radio.V1_2.CellInfo> records =
+                new ArrayList<android.hardware.radio.V1_2.CellInfo>();
+        records.add(record);
+
+        ArrayList<CellInfo> ret = RIL.convertHalCellInfoList_1_2(records);
+
+        assertEquals(1, ret.size());
+        CellInfoLte cellInfoLte = (CellInfoLte) ret.get(0);
+        assertEquals(MCC, cellInfoLte.getCellIdentity().getMcc());
+        assertEquals(MNC, cellInfoLte.getCellIdentity().getMnc());
+        assertEquals(CI, cellInfoLte.getCellIdentity().getCi());
+        assertEquals(TAC, cellInfoLte.getCellIdentity().getTac());
+        assertEquals(PCI, cellInfoLte.getCellIdentity().getPci());
+        assertEquals(ALPHA_LONG, cellInfoLte.getCellIdentity().getOperatorAlphaLong());
+        assertEquals(ALPHA_SHORT, cellInfoLte.getCellIdentity().getOperatorAlphaShort());
+        assertEquals(-RSRQ, cellInfoLte.getCellSignalStrength().getRsrq());
+        assertEquals(RSSNR, cellInfoLte.getCellSignalStrength().getRssnr());
+        assertEquals(-RSRP, cellInfoLte.getCellSignalStrength().getRsrp());
+        assertEquals(CQI, cellInfoLte.getCellSignalStrength().getCqi());
+        assertEquals(-RSRP, cellInfoLte.getCellSignalStrength().getDbm());
+        assertEquals(TIME_ADVANCE, cellInfoLte.getCellSignalStrength().getTimingAdvance());
+    }
+
+    @Test
+    public void testConvertHalCellInfoList_1_2_EmptyOperatorInfo() throws Exception {
+        android.hardware.radio.V1_2.CellInfoLte lte = new android.hardware.radio.V1_2.CellInfoLte();
+        lte.cellIdentityLte.base.ci = CI;
+        lte.cellIdentityLte.base.pci = PCI;
+        lte.cellIdentityLte.base.tac = TAC;
+        lte.cellIdentityLte.base.earfcn = EARFCN;
+        lte.cellIdentityLte.base.mcc = MCC_STR;
+        lte.cellIdentityLte.base.mnc = MNC_STR;
+        lte.signalStrengthLte.signalStrength = SIGNAL_STRENGTH;
+        lte.signalStrengthLte.rsrp = RSRP;
+        lte.signalStrengthLte.rsrq = RSRQ;
+        lte.signalStrengthLte.rssnr = RSSNR;
+        lte.signalStrengthLte.cqi = CQI;
+        lte.signalStrengthLte.timingAdvance = TIME_ADVANCE;
+        android.hardware.radio.V1_2.CellInfo record = new android.hardware.radio.V1_2.CellInfo();
+        record.cellInfoType = TYPE_LTE;
+        record.registered = false;
+        record.timeStampType = RIL_TIMESTAMP_TYPE_OEM_RIL;
+        record.timeStamp = TIMESTAMP;
+        record.lte.add(lte);
+        ArrayList<android.hardware.radio.V1_2.CellInfo> records =
+                new ArrayList<android.hardware.radio.V1_2.CellInfo>();
+        records.add(record);
+
+        ArrayList<CellInfo> ret = RIL.convertHalCellInfoList_1_2(records);
+
+        assertEquals(1, ret.size());
+        CellInfoLte cellInfoLte = (CellInfoLte) ret.get(0);
+        assertEquals(MCC, cellInfoLte.getCellIdentity().getMcc());
+        assertEquals(MNC, cellInfoLte.getCellIdentity().getMnc());
+        assertEquals(CI, cellInfoLte.getCellIdentity().getCi());
+        assertEquals(TAC, cellInfoLte.getCellIdentity().getTac());
+        assertEquals(PCI, cellInfoLte.getCellIdentity().getPci());
+        assertEquals("", cellInfoLte.getCellIdentity().getOperatorAlphaLong());
+        assertEquals("", cellInfoLte.getCellIdentity().getOperatorAlphaShort());
+        assertEquals(-RSRQ, cellInfoLte.getCellSignalStrength().getRsrq());
+        assertEquals(RSSNR, cellInfoLte.getCellSignalStrength().getRssnr());
+        assertEquals(-RSRP, cellInfoLte.getCellSignalStrength().getRsrp());
+        assertEquals(CQI, cellInfoLte.getCellSignalStrength().getCqi());
+        assertEquals(-RSRP, cellInfoLte.getCellSignalStrength().getDbm());
+        assertEquals(TIME_ADVANCE, cellInfoLte.getCellSignalStrength().getTimingAdvance());
     }
 }
