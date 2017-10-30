@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c21bd733_2c60e6b0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2017-10-30T08:34:50Z",
+      "side": 1,
+      "message": "I don\u0027t know much about this code, but I notice that previously we wouldn\u0027t send an update NetworkInfo object if roaming changes, but now we do.\n\nI wonder if it\u0027s more correct *not* to send an update NetworkInfo in this case? Particularly if we send a DISCONNECTED NetworkInfo, ConnectivityService might not deal with it well. But maybe not.",
+      "range": {
+        "startLine": 1240,
+        "startChar": 38,
+        "endLine": 1240,
+        "endChar": 53
+      },
+      "revId": "1349810b07c58fbd14a638979b5cd295cc3f000b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
