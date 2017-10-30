@@ -5142,6 +5142,98 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
+    static ArrayList<CellInfo> convertHalCellInfoList_1_2(
+            ArrayList<android.hardware.radio.V1_2.CellInfo> records) {
+        ArrayList<CellInfo> response = new ArrayList<CellInfo>(records.size());
+
+        for (android.hardware.radio.V1_2.CellInfo record : records) {
+            // first convert RIL CellInfo to Parcel
+            Parcel p = Parcel.obtain();
+            p.writeInt(record.cellInfoType);
+            p.writeInt(record.registered ? 1 : 0);
+            p.writeInt(record.timeStampType);
+            p.writeLong(record.timeStamp);
+            switch (record.cellInfoType) {
+                case CellInfoType.GSM: {
+                    CellInfoGsm cellInfoGsm = record.gsm.get(0);
+                    p.writeInt(Integer.parseInt(cellInfoGsm.cellIdentityGsm.mcc));
+                    p.writeInt(Integer.parseInt(cellInfoGsm.cellIdentityGsm.mnc));
+                    p.writeInt(cellInfoGsm.cellIdentityGsm.lac);
+                    p.writeInt(cellInfoGsm.cellIdentityGsm.cid);
+                    p.writeInt(cellInfoGsm.cellIdentityGsm.arfcn);
+                    p.writeInt(Byte.toUnsignedInt(cellInfoGsm.cellIdentityGsm.bsic));
+                    p.writeString(cellInfoGsm.cellIdentityGsm.alphaLong);
+                    p.writeString(cellInfoGsm.cellIdentityGsm.alphaShort);
+                    p.writeInt(cellInfoGsm.signalStrengthGsm.signalStrength);
+                    p.writeInt(cellInfoGsm.signalStrengthGsm.bitErrorRate);
+                    p.writeInt(cellInfoGsm.signalStrengthGsm.timingAdvance);
+                    break;
+                }
+
+                case CellInfoType.CDMA: {
+                    CellInfoCdma cellInfoCdma = record.cdma.get(0);
+                    p.writeInt(cellInfoCdma.cellIdentityCdma.networkId);
+                    p.writeInt(cellInfoCdma.cellIdentityCdma.systemId);
+                    p.writeInt(cellInfoCdma.cellIdentityCdma.baseStationId);
+                    p.writeInt(cellInfoCdma.cellIdentityCdma.longitude);
+                    p.writeInt(cellInfoCdma.cellIdentityCdma.latitude);
+                    p.writeString(cellInfoCdma.cellIdentityCdma.alphaLong);
+                    p.writeString(cellInfoCdma.cellIdentityCdma.alphaShort);
+                    p.writeInt(cellInfoCdma.signalStrengthCdma.dbm);
+                    p.writeInt(cellInfoCdma.signalStrengthCdma.ecio);
+                    p.writeInt(cellInfoCdma.signalStrengthEvdo.dbm);
+                    p.writeInt(cellInfoCdma.signalStrengthEvdo.ecio);
+                    p.writeInt(cellInfoCdma.signalStrengthEvdo.signalNoiseRatio);
+                    break;
+                }
+
+                case CellInfoType.LTE: {
+                    CellInfoLte cellInfoLte = record.lte.get(0);
+                    p.writeInt(Integer.parseInt(cellInfoLte.cellIdentityLte.mcc));
+                    p.writeInt(Integer.parseInt(cellInfoLte.cellIdentityLte.mnc));
+                    p.writeInt(cellInfoLte.cellIdentityLte.ci);
+                    p.writeInt(cellInfoLte.cellIdentityLte.pci);
+                    p.writeInt(cellInfoLte.cellIdentityLte.tac);
+                    p.writeInt(cellInfoLte.cellIdentityLte.earfcn);
+                    p.writeString(cellInfoLte.cellIdentityLte.alphaLong);
+                    p.writeString(cellInfoLte.cellIdentityLte.alphaShort);
+                    p.writeInt(cellInfoLte.signalStrengthLte.signalStrength);
+                    p.writeInt(cellInfoLte.signalStrengthLte.rsrp);
+                    p.writeInt(cellInfoLte.signalStrengthLte.rsrq);
+                    p.writeInt(cellInfoLte.signalStrengthLte.rssnr);
+                    p.writeInt(cellInfoLte.signalStrengthLte.cqi);
+                    p.writeInt(cellInfoLte.signalStrengthLte.timingAdvance);
+                    break;
+                }
+
+                case CellInfoType.WCDMA: {
+                    CellInfoWcdma cellInfoWcdma = record.wcdma.get(0);
+                    p.writeInt(Integer.parseInt(cellInfoWcdma.cellIdentityWcdma.mcc));
+                    p.writeInt(Integer.parseInt(cellInfoWcdma.cellIdentityWcdma.mnc));
+                    p.writeInt(cellInfoWcdma.cellIdentityWcdma.lac);
+                    p.writeInt(cellInfoWcdma.cellIdentityWcdma.cid);
+                    p.writeInt(cellInfoWcdma.cellIdentityWcdma.psc);
+                    p.writeInt(cellInfoWcdma.cellIdentityWcdma.uarfcn);
+                    p.writeString(cellInfoWcdma.cellIdentityWcdma.alphaLong);
+                    p.writeString(cellInfoWcdma.cellIdentityWcdma.alphaShort);
+                    p.writeInt(cellInfoWcdma.signalStrengthWcdma.signalStrength);
+                    p.writeInt(cellInfoWcdma.signalStrengthWcdma.bitErrorRate);
+                    break;
+                }
+
+                default:
+                    throw new RuntimeException("unexpected cellinfotype: " + record.cellInfoType);
+            }
+
+            p.setDataPosition(0);
+            CellInfo InfoRec = CellInfo.CREATOR.createFromParcel(p);
+            p.recycle();
+            response.add(InfoRec);
+        }
+
+        return response;
+    }
+
     static SignalStrength convertHalSignalStrength(
             android.hardware.radio.V1_0.SignalStrength signalStrength) {
         return new SignalStrength(signalStrength.gw.signalStrength,
