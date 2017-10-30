@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "cd6ef2a2_1414ec21",
+        "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-30T18:58:40Z",
+      "side": 1,
+      "message": "But a function should do what the name says. We should add a new function:\n\n     * Wrap a byte[] into a String using UTF-8.\n     */\n    public static String toUtfString(byte[] bytes) {\n        try {\n            return new String(bytes, CharacterSets.MIMENAME_UTF_8);\n        } catch (UnsupportedEncodingException e) {\n            // Impossible to reach here!\n            Log.e(TAG, \"UTF-8 must be supported!\", e);\n            return \"\";\n        }\n    }\n\nWe should also update the documentation on this function:\n\nWrap a byte[] into a String using ISO-8859-1. See also {@link #toUtfString(byte[])}.\n\nAnd then we should change the callsites to use toUtfString instead.",
+      "parentUuid": "c6537175_714ce9ec",
+      "range": {
+        "startLine": 1599,
+        "startChar": 25,
+        "endLine": 1599,
+        "endChar": 36
+      },
+      "revId": "538392bfb8576ca773ea270bac472f5829a5e70d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "911fb2cc_284fd9e1",
         "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
         "patchSetId": 3
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "same as above",
       "parentUuid": "911fb2cc_284fd9e1",
+      "range": {
+        "startLine": 1617,
+        "startChar": 0,
+        "endLine": 1617,
+        "endChar": 59
+      },
+      "revId": "538392bfb8576ca773ea270bac472f5829a5e70d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc3aa221_2067e1d0",
+        "filename": "src/java/com/google/android/mms/pdu/PduPersister.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-30T18:58:40Z",
+      "side": 1,
+      "message": "Please update the error message to \"UTF-8 must be supported\"",
+      "parentUuid": "eb0bc2f0_88b4f967",
       "range": {
         "startLine": 1617,
         "startChar": 0,
