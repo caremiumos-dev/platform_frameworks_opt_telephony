@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2725e784_fbef772f",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5160,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-31T17:32:05Z",
+      "side": 1,
+      "message": "I didn\u0027t quite get it over here actually.. MNC/MCC filed are added to cellIdentityGsm/cellIdentityLte/cellIdentityWcdma but not cellIdentityCdma, and those cellIdenty is a component of the cellInfo.\nAnd for this changes, I actually only added alphaLong/alphaShort to all those four cellIdentity. This function convertHalCellInfoList_1_2 keeps the same format with convertHalCellInfoList except adding alphaLong/alphaShort.",
+      "parentUuid": "b44d4039_5707666a",
+      "range": {
+        "startLine": 5159,
+        "startChar": 0,
+        "endLine": 5160,
+        "endChar": 82
+      },
+      "revId": "7ef990475eb3186bb240b428ded1a98d4a842e78",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bcc834d0_a4d4a1ec",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b6f33005_73efc802",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5169,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-31T17:32:05Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "bcc834d0_a4d4a1ec",
+      "range": {
+        "startLine": 5158,
+        "startChar": 0,
+        "endLine": 5169,
+        "endChar": 76
+      },
+      "revId": "7ef990475eb3186bb240b428ded1a98d4a842e78",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf598309_70e8e493",
         "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2017-10-31T17:17:59Z",
       "side": 1,
       "message": "This comment is the same as the comment for networkScanResult, is that mean the previous method also supports incremental network scan results? Could you please investigate it and write down the difference in the comment?",
+      "range": {
+        "startLine": 643,
+        "startChar": 3,
+        "endLine": 643,
+        "endChar": 43
+      },
+      "revId": "7ef990475eb3186bb240b428ded1a98d4a842e78",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2c2e7984_bbc2c9dd",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-10-31T17:32:05Z",
+      "side": 1,
+      "message": "Yes they\u0027re basically the same but applying with different version of the input NetworkScanResult. And since all the other multi-versions functions share the same comments (e.g. https://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/RadioResponse.java?rcl\u003dc30a024e7be8ec7b05187a4e66791ee808adc6c5\u0026l\u003d1217), I would like to keep the pattern here.",
+      "parentUuid": "bf598309_70e8e493",
       "range": {
         "startLine": 643,
         "startChar": 3,
