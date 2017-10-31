@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3ac1ed3_452f49e5",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-10-31T21:16:38Z",
+      "side": 1,
+      "message": "I would rather this not go here. This should be checked in the  ImsPhoneCallTracker#isImsServiceReady(). ImsPhone#isImsAvailable already uses this method. ImsServiceProxy#isBinderReady already performs the check you are looking for, it is just a matter of exposing it to isImsAvailable.\n\nWe also need to make sure that this does not cause a race condition at boot up for 911. We were having an issue before when placing an emergency call at boot, where the call would go over CS when it was supposed to be going through IMS because it was being placed before the service was ready...",
+      "range": {
+        "startLine": 1073,
+        "startChar": 8,
+        "endLine": 1081,
+        "endChar": 9
+      },
+      "revId": "0de12709c28000c06134c477d7339ca57084c4ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
