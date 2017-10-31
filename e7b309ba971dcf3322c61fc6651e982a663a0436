@@ -22,6 +22,30 @@
       "revId": "e7b309ba971dcf3322c61fc6651e982a663a0436",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "849966a4_d59185f3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5106,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-10-31T12:41:57Z",
+      "side": 1,
+      "message": "Yes, I updated the method in patchset3.",
+      "parentUuid": "cd890635_9fe41fa2",
+      "range": {
+        "startLine": 5090,
+        "startChar": 4,
+        "endLine": 5106,
+        "endChar": 5
+      },
+      "revId": "e7b309ba971dcf3322c61fc6651e982a663a0436",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
