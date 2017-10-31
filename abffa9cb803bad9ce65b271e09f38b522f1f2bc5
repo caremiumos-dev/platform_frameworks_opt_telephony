@@ -46,6 +46,30 @@
       "revId": "abffa9cb803bad9ce65b271e09f38b522f1f2bc5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e3048268_3b8206e5",
+        "filename": "src/java/com/android/internal/telephony/test/SimulatedCommands.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-10-31T10:52:29Z",
+      "side": 1,
+      "message": "I\u0027m sorry but I didn\u0027t quite understand what you meant.\n\n\nSimulatedCommands class is stub implementation of RIL for testing.\n\nAnd this code is added for stubbing solicited response event of setRadioPower() which RIL and lower layer originally has.\nThis fix doesn\u0027t affect the RIL",
+      "parentUuid": "0ed076ab_41380c0e",
+      "range": {
+        "startLine": 1196,
+        "startChar": 8,
+        "endLine": 1196,
+        "endChar": 36
+      },
+      "revId": "abffa9cb803bad9ce65b271e09f38b522f1f2bc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
