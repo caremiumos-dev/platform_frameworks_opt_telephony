@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b44d4039_5707666a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5160,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-10-31T17:17:59Z",
+      "side": 1,
+      "message": "Seem MNC/MCC filed are not added to CellInfoGsm, so please write a unit test for this method to ensure that the data are converted successfully.\n\nThis comment also apply to the remain case below, please fix it at the same time :-)",
+      "range": {
+        "startLine": 5159,
+        "startChar": 0,
+        "endLine": 5160,
+        "endChar": 82
+      },
+      "revId": "7ef990475eb3186bb240b428ded1a98d4a842e78",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bcc834d0_a4d4a1ec",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5169,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-10-31T17:17:59Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s a good idea to put the value to a parcel, because you make the dependency outside of the parcel(at the bottom of this function, you call \"CellInfo.CREATOR.createFromParcel(p)\"). \n\nInstead, you should use the method \"writeToParcel\" to construct the parcel.",
+      "range": {
+        "startLine": 5158,
+        "startChar": 0,
+        "endLine": 5169,
+        "endChar": 76
+      },
+      "revId": "7ef990475eb3186bb240b428ded1a98d4a842e78",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf598309_70e8e493",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-10-31T17:17:59Z",
+      "side": 1,
+      "message": "This comment is the same as the comment for networkScanResult, is that mean the previous method also supports incremental network scan results? Could you please investigate it and write down the difference in the comment?",
+      "range": {
+        "startLine": 643,
+        "startChar": 3,
+        "endLine": 643,
+        "endChar": 43
+      },
+      "revId": "7ef990475eb3186bb240b428ded1a98d4a842e78",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
