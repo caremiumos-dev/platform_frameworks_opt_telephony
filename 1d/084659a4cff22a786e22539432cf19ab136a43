@@ -1,0 +1,8 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Code-Review+2: Jordan Liu <jminjie@google.com>
+Verified+1: Jordan Liu <jminjie@google.com>
+Submitted-by: Jordan Liu <jminjie@google.com>
+Submitted-at: Wed, 01 Nov 2017 23:20:38 +0000
+Reviewed-on: https://android-review.googlesource.com/406756
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
