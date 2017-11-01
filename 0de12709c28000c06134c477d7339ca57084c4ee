@@ -46,6 +46,30 @@
       "revId": "0de12709c28000c06134c477d7339ca57084c4ee",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0eaf873d_59d1db1b",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-11-01T13:22:14Z",
+      "side": 1,
+      "message": "Hi Brad,\n\nAs per above discussion i am seeing below two approaches to rearrange this code.\n\n1) return callStateException from ImsPhonecallTracker.dialInternal() when received ImsException like below\n\n} catch (ImsException e) {\n   loge(\"dialInternal : \" + e);\n   throw new CallStateException(Phone.CS_FALLBACK);\n}\n\n2) Add new API in ImsManager.isServiceReady() which will return ImsserviceProxy.isBinderReady().\n\nIn ImsPhoneCalltracker.isImsServiceReady() use mImsManager.isServiceReady instead of mImsManager.isServiceAvailable\n\nPlease let me know your comments so that i can update change as per comments.",
+      "parentUuid": "8138031d_c017c0af",
+      "range": {
+        "startLine": 1073,
+        "startChar": 8,
+        "endLine": 1081,
+        "endChar": 9
+      },
+      "revId": "0de12709c28000c06134c477d7339ca57084c4ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
