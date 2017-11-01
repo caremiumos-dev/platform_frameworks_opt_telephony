@@ -56,7 +56,6 @@ import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.telephony.VoLteServiceState;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.ims.ImsCall;
 import com.android.ims.ImsConfig;
@@ -125,10 +124,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 } else if (intent.getAction().equals(ImsManager.ACTION_IMS_SERVICE_DOWN)) {
                     mImsServiceReady = false;
                     updateImsPhone();
-                } else if (intent.getAction().equals(ImsConfig.ACTION_IMS_CONFIG_CHANGED)) {
-                    int item = intent.getIntExtra(ImsConfig.EXTRA_CHANGED_ITEM, -1);
-                    String value = intent.getStringExtra(ImsConfig.EXTRA_NEW_VALUE);
-                    ImsManager.onProvisionedValueChanged(context, item, value);
                 }
             }
         }
@@ -562,7 +557,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 filter.addAction(ImsManager.ACTION_IMS_SERVICE_UP);
                 filter.addAction(ImsManager.ACTION_IMS_SERVICE_DOWN);
             }
-            filter.addAction(ImsConfig.ACTION_IMS_CONFIG_CHANGED);
             mContext.registerReceiver(mImsIntentReceiver, filter);
 
             // Monitor IMS service - but first poll to see if already up (could miss
