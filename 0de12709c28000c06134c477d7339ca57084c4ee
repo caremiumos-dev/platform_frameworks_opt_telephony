@@ -22,6 +22,30 @@
       "revId": "0de12709c28000c06134c477d7339ca57084c4ee",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8138031d_c017c0af",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-11-01T01:25:54Z",
+      "side": 1,
+      "message": "ImsPhoneCallTracker#isImsServiceReady will not consider for fature state_READY hence added extra check here.\n\nwe an modify throwing callStateException(Phone.CS_FALLBACK) in ImsPhoneCallTracker as below.\n\n} catch (ImsException e) {\n   loge(\"dialInternal : \" + e);\n   throw new CallStateException(Phone.CS_FALLBACK);\n}\n\nPlease share inputs on this.",
+      "parentUuid": "d3ac1ed3_452f49e5",
+      "range": {
+        "startLine": 1073,
+        "startChar": 8,
+        "endLine": 1081,
+        "endChar": 9
+      },
+      "revId": "0de12709c28000c06134c477d7339ca57084c4ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
