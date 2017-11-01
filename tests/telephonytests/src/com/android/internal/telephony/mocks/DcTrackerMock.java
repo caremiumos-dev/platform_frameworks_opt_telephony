@@ -20,7 +20,6 @@ import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.LocalLog;
 
@@ -62,10 +61,6 @@ public class DcTrackerMock extends DcTracker {
         throw new RuntimeException("Not Implemented");
     }
     @Override
-    public boolean isDataPossible(String apnType) {
-        throw new RuntimeException("Not Implemented");
-    }
-    @Override
     public LinkProperties getLinkProperties(String apnType) {
         throw new RuntimeException("Not Implemented");
     }
@@ -90,10 +85,6 @@ public class DcTrackerMock extends DcTracker {
         throw new RuntimeException("Not Implemented");
     }
     @Override
-    public boolean getAnyDataEnabled() {
-        throw new RuntimeException("Not Implemented");
-    }
-    @Override
     public boolean hasMatchedTetherApnSetting() {
         throw new RuntimeException("Not Implemented");
     }
@@ -106,11 +97,11 @@ public class DcTrackerMock extends DcTracker {
         throw new RuntimeException("Not Implemented");
     }
     @Override
-    public void setDataOnRoamingEnabled(boolean enabled) {
+    public void setDataRoamingEnabledByUser(boolean enabled) {
         throw new RuntimeException("Not Implemented");
     }
     @Override
-    public boolean getDataOnRoamingEnabled() {
+    public boolean getDataRoamingEnabled() {
         throw new RuntimeException("Not Implemented");
     }
     @Override

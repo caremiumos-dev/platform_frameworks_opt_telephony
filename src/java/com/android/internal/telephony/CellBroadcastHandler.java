@@ -16,14 +16,17 @@
 
 package com.android.internal.telephony;
 
+import static android.provider.Settings.Secure.CMAS_ADDITIONAL_BROADCAST_PKG;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AppOpsManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Message;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.provider.Telephony;
 import android.telephony.SmsCbMessage;
 import android.telephony.SubscriptionManager;
@@ -83,30 +86,39 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
         if (message.isEmergencyMessage()) {
             log("Dispatching emergency SMS CB, SmsCbMessage is: " + message);
             intent = new Intent(Telephony.Sms.Intents.SMS_EMERGENCY_CB_RECEIVED_ACTION);
+            // Explicitly send the intent to the default cell broadcast receiver.
+            intent.setPackage(mContext.getResources().getString(
+                    com.android.internal.R.string.config_defaultCellBroadcastReceiverPkg));
             receiverPermission = Manifest.permission.RECEIVE_EMERGENCY_BROADCAST;
             appOp = AppOpsManager.OP_RECEIVE_EMERGECY_SMS;
         } else {
             log("Dispatching SMS CB, SmsCbMessage is: " + message);
             intent = new Intent(Telephony.Sms.Intents.SMS_CB_RECEIVED_ACTION);
+            // Send implicit intent since there are various 3rd party carrier apps listen to
+            // this intent.
+            intent.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
             receiverPermission = Manifest.permission.RECEIVE_SMS;
             appOp = AppOpsManager.OP_RECEIVE_SMS;
         }
-        // explicitly send it to the default cell broadcast receiver only.
-        intent.setComponent(getDefaultCellBroadcastReceiverApp(mContext));
+
         intent.putExtra("message", message);
         SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhone.getPhoneId());
+
+        if (Build.IS_DEBUGGABLE) {
+            // Send additional broadcast intent to the specified package. This is only for sl4a
+            // automation tests.
+            final String additionalPackage = Settings.Secure.getString(
+                    mContext.getContentResolver(), CMAS_ADDITIONAL_BROADCAST_PKG);
+            if (additionalPackage != null) {
+                Intent additionalIntent = new Intent(intent);
+                additionalIntent.setPackage(additionalPackage);
+                mContext.sendOrderedBroadcastAsUser(additionalIntent, UserHandle.ALL,
+                        receiverPermission, appOp, null, getHandler(), Activity.RESULT_OK, null,
+                        null);
+            }
+        }
+
         mContext.sendOrderedBroadcastAsUser(intent, UserHandle.ALL, receiverPermission, appOp,
                 mReceiver, getHandler(), Activity.RESULT_OK, null, null);
-    }
-
-    /**
-     * Get the default cell broadcast receiver component name.
-     * @param context Device context
-     * @return Component name of the default cell broadcast receiver
-     */
-    public static ComponentName getDefaultCellBroadcastReceiverApp(Context context) {
-        String defaultCellBroadcastReceiver = context.getResources().getString(
-                com.android.internal.R.string.config_defaultCellBroadcastReceiverComponent);
-        return ComponentName.unflattenFromString(defaultCellBroadcastReceiver);
     }
 }

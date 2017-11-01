@@ -15,6 +15,9 @@
  */
 package com.android.internal.telephony;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 import android.app.AppOpsManager;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -24,20 +27,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.test.mock.MockContentProvider;
 import android.test.mock.MockContentResolver;
 import android.test.suitebuilder.annotation.SmallTest;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import android.util.Log;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-
-import android.telephony.SubscriptionInfo;
-import android.telephony.SubscriptionManager;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
                 SubscriptionManager.CB_ALERT_VIBRATE, SubscriptionManager.CB_ALERT_SPEECH,
                 SubscriptionManager.CB_ETWS_TEST_ALERT, SubscriptionManager.CB_CHANNEL_50_ALERT,
                 SubscriptionManager.CB_CMAS_TEST_ALERT, SubscriptionManager.CB_OPT_OUT_DIALOG,
-                SubscriptionManager.SIM_PROVISIONING_STATUS};
+                SubscriptionManager.SIM_PROVISIONING_STATUS, SubscriptionManager.IS_EMBEDDED,
+                SubscriptionManager.ACCESS_RULES};
 
         /* internal util function */
         private MatrixCursor convertFromContentToCursor(ContentValues initialValues) {
@@ -201,7 +203,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         for (int i = 0; i < mSubList.size(); i++) {
             assertTrue(SubscriptionManager.isValidSubscriptionId(
                     mSubList.get(i).getSubscriptionId()));
-            assertTrue(SubscriptionManager.isValidSlotId(mSubList.get(i).getSimSlotIndex()));
+            assertTrue(SubscriptionManager.isValidSlotIndex(mSubList.get(i).getSimSlotIndex()));
         }
     }
 
@@ -247,7 +249,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mSubscriptionControllerUT.clearSubInfo();
         assertFalse(mSubscriptionControllerUT.isActiveSubId(0));
         assertEquals(SubscriptionManager.SIM_NOT_INSERTED,
-                mSubscriptionControllerUT.getSlotId(0));
+                mSubscriptionControllerUT.getSlotIndex(0));
     }
 
     @Test @SmallTest

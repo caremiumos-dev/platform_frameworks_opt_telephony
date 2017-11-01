@@ -16,12 +16,14 @@
 
 package com.android.internal.telephony;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
-import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
@@ -47,6 +49,7 @@ import android.database.MatrixCursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IInterface;
@@ -55,13 +58,23 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.provider.Telephony.ServiceStateTable;
+import android.telecom.TelecomManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.euicc.EuiccManager;
 import android.test.mock.MockContentProvider;
 import android.test.mock.MockContentResolver;
 import android.test.mock.MockContext;
 import android.util.Log;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,15 +84,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 /**
  * Controls a test {@link Context} as would be provided by the Android framework to an
@@ -181,8 +185,12 @@ public class ContextFixture implements TestFixture<Context> {
             }
             IInterface service = mServiceByComponentName.get(serviceIntent.getComponent());
             if (service == null) {
-                throw new RuntimeException("ServiceConnection not found: "
-                        + serviceIntent.getComponent());
+                service = mServiceByPackageName.get(serviceIntent.getPackage());
+            }
+            if (service == null) {
+                throw new RuntimeException(
+                        String.format("ServiceConnection not found for component: %s, package: %s",
+                                serviceIntent.getComponent(), serviceIntent.getPackage()));
             }
             mServiceByServiceConnection.put(connection, service);
             connection.onServiceConnected(serviceIntent.getComponent(), service.asBinder());
@@ -216,9 +224,6 @@ public class ContextFixture implements TestFixture<Context> {
                     return mUserManager;
                 case Context.CARRIER_CONFIG_SERVICE:
                     return mCarrierConfigManager;
-                case Context.POWER_SERVICE:
-                    // PowerManager is a final class so cannot be mocked, return real service
-                    return TestApplication.getAppContext().getSystemService(name);
                 case Context.TELEPHONY_SUBSCRIPTION_SERVICE:
                     return mSubscriptionManager;
                 case Context.WIFI_SERVICE:
@@ -229,6 +234,17 @@ public class ContextFixture implements TestFixture<Context> {
                     return mConnectivityManager;
                 case Context.USAGE_STATS_SERVICE:
                     return mUsageStatManager;
+                case Context.BATTERY_SERVICE:
+                    return mBatteryManager;
+                case Context.EUICC_SERVICE:
+                    return mEuiccManager;
+                case Context.TELECOM_SERVICE:
+                    return mTelecomManager;
+                case Context.DISPLAY_SERVICE:
+                case Context.POWER_SERVICE:
+                    // PowerManager and DisplayManager are final classes so cannot be mocked,
+                    // return real services.
+                    return TestApplication.getAppContext().getSystemService(name);
                 default:
                     return null;
             }
@@ -426,7 +442,14 @@ public class ContextFixture implements TestFixture<Context> {
 
         @Override
         public int checkCallingOrSelfPermission(String permission) {
-            return PackageManager.PERMISSION_GRANTED;
+            if (mPermissionTable.contains(permission)
+                    || mPermissionTable.contains(PERMISSION_ENABLE_ALL)) {
+                logd("checkCallingOrSelfPermission: " + permission + " return GRANTED");
+                return PackageManager.PERMISSION_GRANTED;
+            } else {
+                logd("checkCallingOrSelfPermission: " + permission + " return DENIED");
+                return PackageManager.PERMISSION_DENIED;
+            }
         }
 
         @Override
@@ -444,8 +467,11 @@ public class ContextFixture implements TestFixture<Context> {
             ArrayListMultimap.create();
     private final Map<ComponentName, IInterface> mServiceByComponentName =
             new HashMap<ComponentName, IInterface>();
+    private final Map<String, IInterface> mServiceByPackageName =
+            new HashMap<String, IInterface>();
     private final Map<ComponentName, ServiceInfo> mServiceInfoByComponentName =
             new HashMap<ComponentName, ServiceInfo>();
+    private final Map<ComponentName, IntentFilter> mIntentFilterByComponentName = new HashMap<>();
     private final Map<IInterface, ComponentName> mComponentNameByService =
             new HashMap<IInterface, ComponentName>();
     private final Map<ServiceConnection, IInterface> mServiceByServiceConnection =
@@ -479,6 +505,9 @@ public class ContextFixture implements TestFixture<Context> {
     private final ConnectivityManager mConnectivityManager = mock(ConnectivityManager.class);
     private final UsageStatsManager mUsageStatManager = null;
     private final WifiManager mWifiManager = mock(WifiManager.class);
+    private final BatteryManager mBatteryManager = mock(BatteryManager.class);
+    private final EuiccManager mEuiccManager = mock(EuiccManager.class);
+    private final TelecomManager mTelecomManager = mock(TelecomManager.class);
 
     private final ContentProvider mContentProvider = spy(new FakeContentProvider());
 
@@ -517,6 +546,10 @@ public class ContextFixture implements TestFixture<Context> {
         doReturn(mConfiguration).when(mResources).getConfiguration();
 
         mContentResolver.addProvider(Settings.AUTHORITY, mContentProvider);
+        // Settings caches the provider after first get/set call, this is needed to make sure
+        // Settings is using mContentProvider as the cached provider across all tests.
+        Settings.Global.getInt(mContentResolver, Settings.Global.AIRPLANE_MODE_ON, 0);
+        mContentResolver.addProvider(ServiceStateTable.AUTHORITY, mContentProvider);
         mPermissionTable.add(PERMISSION_ENABLE_ALL);
     }
 
@@ -553,9 +586,18 @@ public class ContextFixture implements TestFixture<Context> {
         return mBundle;
     }
 
-    private void addService(String action, ComponentName name, IInterface service) {
+    public void addService(String action, ComponentName name, String packageName,
+                           IInterface service, ServiceInfo serviceInfo) {
+        addService(action, name, packageName, service, serviceInfo, null /* filter */);
+    }
+
+    public void addService(String action, ComponentName name, String packageName,
+            IInterface service, ServiceInfo serviceInfo, IntentFilter filter) {
         mComponentNamesByAction.put(action, name);
+        mServiceInfoByComponentName.put(name, serviceInfo);
+        mIntentFilterByComponentName.put(name, filter);
         mServiceByComponentName.put(name, service);
+        mServiceByPackageName.put(packageName, service);
         mComponentNameByService.put(service, name);
     }
 
@@ -564,6 +606,7 @@ public class ContextFixture implements TestFixture<Context> {
         for (ComponentName componentName : mComponentNamesByAction.get(intent.getAction())) {
             ResolveInfo resolveInfo = new ResolveInfo();
             resolveInfo.serviceInfo = mServiceInfoByComponentName.get(componentName);
+            resolveInfo.filter = mIntentFilterByComponentName.get(componentName);
             result.add(resolveInfo);
         }
         return result;

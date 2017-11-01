@@ -72,7 +72,7 @@ public class CdmaSmsDispatcherTest extends TelephonyTest {
     @After
     public void tearDown() throws Exception {
         mCdmaSmsDispatcher = null;
-        mCdmaSmsDispatcherTestHandler.quitSafely();
+        mCdmaSmsDispatcherTestHandler.quit();
         super.tearDown();
     }
 
@@ -80,20 +80,20 @@ public class CdmaSmsDispatcherTest extends TelephonyTest {
     public void testSendSms() {
         doReturn(mServiceState).when(mPhone).getServiceState();
         mCdmaSmsDispatcher.sendSms(mSmsTracker);
-        verify(mSimulatedCommandsVerifier).sendCdmaSms(any(byte[].class), any(Message.class));
+        verify(mSimulatedCommandsVerifier).sendCdmaSms(nullable(byte[].class), any(Message.class));
     }
 
     @Test @SmallTest
     public void testSendText() {
         mCdmaSmsDispatcher.sendText("111"/* desAddr*/, "222" /*scAddr*/, TAG,
-                null, null, null, null, false);
+                null, null, null, null, false, -1, false, -1);
         verify(mSimulatedCommandsVerifier).sendCdmaSms(any(byte[].class), any(Message.class));
     }
 
     @Test @SmallTest
     public void testSendTextWithOutDesAddr() {
         mCdmaSmsDispatcher.sendText(null, "222" /*scAddr*/, TAG,
-                null, null, null, null, false);
+                null, null, null, null, false, -1, false, -1);
         verify(mSimulatedCommandsVerifier, times(0)).sendImsGsmSms(anyString(), anyString(),
                 anyInt(), anyInt(), any(Message.class));
     }

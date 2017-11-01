@@ -18,8 +18,8 @@ package com.android.internal.telephony.metrics;
 
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.android.internal.telephony.TelephonyProto;
 import com.android.internal.telephony.TelephonyTest;
+import com.android.internal.telephony.nano.TelephonyProto;
 
 import org.junit.After;
 import org.junit.Before;
@@ -68,7 +68,7 @@ public class InProgressSmsSessionTest extends TelephonyTest {
         }
 
         assertTrue(mSmsSession.isEventsDropped());
-        assertEquals(6, mSmsSession.events.getFirst().getRilRequestId());
+        assertEquals(6, mSmsSession.events.getFirst().rilRequestId);
     }
 
     // Test dropped event scenario

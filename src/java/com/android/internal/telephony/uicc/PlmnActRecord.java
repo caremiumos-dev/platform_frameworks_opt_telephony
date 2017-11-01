@@ -42,7 +42,7 @@ public class PlmnActRecord implements Parcelable {
     public final String plmn;
     public final int accessTechs;
 
-    private static final boolean VDBG = true;
+    private static final boolean VDBG = false;
 
     public static final Parcelable.Creator<PlmnActRecord> CREATOR =
             new Parcelable.Creator<PlmnActRecord>() {
@@ -64,7 +64,8 @@ public class PlmnActRecord implements Parcelable {
     public PlmnActRecord(byte[] bytes, int offset) {
         if (VDBG) Rlog.v(LOG_TAG, "Creating PlmnActRecord " + offset);
         this.plmn = IccUtils.bcdPlmnToString(bytes, offset);
-        this.accessTechs = ((int) bytes[offset + 3] << 8) | bytes[offset + 4];
+        this.accessTechs = (Byte.toUnsignedInt(bytes[offset + 3]) << 8)
+                        | Byte.toUnsignedInt(bytes[offset + 4]);
     }
 
     private PlmnActRecord(String plmn, int accessTechs) {

@@ -16,16 +16,24 @@
 
 package com.android.internal.telephony;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
+
 import android.net.Uri;
-import android.platform.test.annotations.Postsubmit;
-import android.test.AndroidTestCase;
+import android.support.test.filters.FlakyTest;
+import android.telephony.PhoneNumberUtils;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.text.SpannableStringBuilder;
-import android.telephony.PhoneNumberUtils;
 
-public class PhoneNumberUtilsTest extends AndroidTestCase {
+import org.junit.Ignore;
+import org.junit.Test;
+
+public class PhoneNumberUtilsTest {
 
     @SmallTest
+    @Test
     public void testExtractNetworkPortion() throws Exception {
         assertEquals(
                 "+17005554141",
@@ -192,6 +200,21 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
+    public void testNonIntegerAddress() {
+        byte[] b = new byte[6];
+        b[0] = (byte) 0x81; b[1] = (byte) 0xba; b[2] = (byte) 0xdc; b[3] = (byte) 0xbe;
+        b[4] = (byte) 0x5a; b[5] = (byte) 0xf1;
+        assertEquals("*#abc#*51",
+                PhoneNumberUtils.calledPartyBCDToString(
+                        b, 0, 6, PhoneNumberUtils.BCD_EXTENDED_TYPE_CALLED_PARTY));
+        assertEquals("*#,N;#*51",
+                PhoneNumberUtils.calledPartyBCDToString(
+                        b, 0, 6, PhoneNumberUtils.BCD_EXTENDED_TYPE_EF_ADN));
+    }
+
+    @SmallTest
+    @Test
     public void testExtractNetworkPortionAlt() throws Exception {
         assertEquals(
                 "+17005554141",
@@ -254,6 +277,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testB() throws Exception {
         assertEquals("", PhoneNumberUtils.extractPostDialPortion("+17005554141"));
         assertEquals("", PhoneNumberUtils.extractPostDialPortion("+1 (700).555-4141"));
@@ -265,6 +289,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testCompare() throws Exception {
         // this is odd
         assertFalse(PhoneNumberUtils.compare("", ""));
@@ -330,8 +355,8 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
         assertTrue(PhoneNumberUtils.compare("404-04", "40404"));
     }
 
-
     @SmallTest
+    @Test
     public void testToCallerIDIndexable() throws Exception {
         assertEquals("1414555", PhoneNumberUtils.toCallerIDMinMatch("17005554141"));
         assertEquals("1414555", PhoneNumberUtils.toCallerIDMinMatch("1-700-555-4141"));
@@ -349,6 +374,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testGetIndexable() throws Exception {
         assertEquals("14145550071", PhoneNumberUtils.getStrippedReversed("1-700-555-4141"));
         assertEquals("14145550071", PhoneNumberUtils.getStrippedReversed("1-700-555-4141,1234"));
@@ -365,6 +391,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testNanpFormatting() {
         SpannableStringBuilder number = new SpannableStringBuilder();
         number.append("8005551212");
@@ -393,6 +420,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testConvertKeypadLettersToDigits() {
         assertEquals("1-800-4664-411",
                      PhoneNumberUtils.convertKeypadLettersToDigits("1-800-GOOG-411"));
@@ -413,7 +441,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     // To run this test, the device has to be registered with network
-    @Postsubmit
+    @FlakyTest
     public void testCheckAndProcessPlusCode() {
         assertEquals("0118475797000",
                 PhoneNumberUtils.cdmaCheckAndProcessPlusCode("+8475797000"));
@@ -467,6 +495,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testCheckAndProcessPlusCodeByNumberFormat() {
         assertEquals("18475797000",
                 PhoneNumberUtils.cdmaCheckAndProcessPlusCodeByNumberFormat("+18475797000",
@@ -477,6 +506,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
      * Basic checks for the VoiceMail number.
      */
     @SmallTest
+    @Test
     public void testWithNumberNotEqualToVoiceMail() throws Exception {
         assertFalse(PhoneNumberUtils.isVoiceMailNumber("911"));
         assertFalse(PhoneNumberUtils.isVoiceMailNumber("tel:911"));
@@ -492,6 +522,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testFormatNumberToE164() {
         // Note: ISO 3166-1 only allows upper case country codes.
         assertEquals("+16502910000", PhoneNumberUtils.formatNumberToE164("650 2910000", "US"));
@@ -500,6 +531,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testFormatNumber() {
         assertEquals("(650) 291-0000", PhoneNumberUtils.formatNumber("650 2910000", "US"));
         assertEquals("223-4567", PhoneNumberUtils.formatNumber("2234567", "US"));
@@ -510,7 +542,32 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
         assertEquals("800-GOOG-114", PhoneNumberUtils.formatNumber("800-GOOG-114", "US"));
     }
 
+    /**
+     * Tests ability to format phone numbers from Japan using the international format when the
+     * current country is not Japan.
+     */
     @SmallTest
+    @Test
+    public void testFormatJapanInternational() {
+        assertEquals("+81 90-6657-1180", PhoneNumberUtils.formatNumber("+819066571180", "US"));
+    }
+
+    /**
+     * Tests ability to format phone numbers from Japan using the national format when the current
+     * country is Japan.
+     */
+    @SmallTest
+    @Test
+    public void testFormatJapanNational() {
+        assertEquals("090-6657-0660", PhoneNumberUtils.formatNumber("09066570660", "JP"));
+        assertEquals("090-6657-1180", PhoneNumberUtils.formatNumber("+819066571180", "JP"));
+
+        // US number should still be internationally formatted
+        assertEquals("+1 650-555-1212", PhoneNumberUtils.formatNumber("+16505551212", "JP"));
+    }
+
+    @SmallTest
+    @Test
     public void testFormatNumber_LeadingStarAndHash() {
         // Numbers with a leading '*' or '#' should be left unchanged.
         assertEquals("*650 2910000", PhoneNumberUtils.formatNumber("*650 2910000", "US"));
@@ -524,6 +581,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testNormalizeNumber() {
         assertEquals("6502910000", PhoneNumberUtils.normalizeNumber("650 2910000"));
         assertEquals("1234567", PhoneNumberUtils.normalizeNumber("12,3#4*567"));
@@ -532,6 +590,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testFormatDailabeNumber() {
         // Using the phoneNumberE164's country code
         assertEquals("(650) 291-0000",
@@ -562,7 +621,9 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
                 PhoneNumberUtils.formatNumber("011861088880000", "", "GB"));
     }
 
-    @SmallTest
+    @FlakyTest
+    @Test
+    @Ignore
     public void testIsEmergencyNumber() {
         // There are two parallel sets of tests here: one for the
         // regular isEmergencyNumber() method, and the other for
@@ -616,6 +677,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testStripSeparators() {
         // Smoke tests which should never fail.
         assertEquals("1234567890", PhoneNumberUtils.stripSeparators("1234567890"));
@@ -631,6 +693,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testConvertAndStrip() {
         // Smoke tests which should never fail.
         assertEquals("1234567890", PhoneNumberUtils.convertAndStrip("1234567890"));
@@ -647,6 +710,7 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testConvertSipUriToTelUri1() {
         // Nominal case, a tel Uri came in, so we expect one out.
         Uri source = Uri.fromParts("tel", "+16505551212", null);
@@ -666,5 +730,38 @@ public class PhoneNumberUtilsTest extends AndroidTestCase {
         source = Uri.fromParts("sip", "+16505551212@something.com;user=phone", null);
         converted = PhoneNumberUtils.convertSipUriToTelUri(source);
         assertEquals(expected, converted);
+    }
+
+    @SmallTest
+    @Test
+    public void testIsInternational() {
+        assertFalse(PhoneNumberUtils.isInternationalNumber("", "US"));
+        assertFalse(PhoneNumberUtils.isInternationalNumber(null, "US"));
+        assertFalse(PhoneNumberUtils.isInternationalNumber("+16505551212", "US"));
+        assertTrue(PhoneNumberUtils.isInternationalNumber("+16505551212", "UK"));
+        assertTrue(PhoneNumberUtils.isInternationalNumber("+16505551212", "JP"));
+        assertTrue(PhoneNumberUtils.isInternationalNumber("+86 10 8888 0000", "US"));
+        assertTrue(PhoneNumberUtils.isInternationalNumber("001-541-754-3010", "DE"));
+        assertFalse(PhoneNumberUtils.isInternationalNumber("001-541-754-3010", "US"));
+        assertTrue(PhoneNumberUtils.isInternationalNumber("01161396694916", "US"));
+        assertTrue(PhoneNumberUtils.isInternationalNumber("011-613-966-94916", "US"));
+        assertFalse(PhoneNumberUtils.isInternationalNumber("011-613-966-94916", "AU"));
+    }
+
+    @SmallTest
+    @Test
+    public void testIsUriNumber() {
+        assertTrue(PhoneNumberUtils.isUriNumber("foo@google.com"));
+        assertTrue(PhoneNumberUtils.isUriNumber("xyz@zzz.org"));
+        assertFalse(PhoneNumberUtils.isUriNumber("+15103331245"));
+        assertFalse(PhoneNumberUtils.isUriNumber("+659231235"));
+    }
+
+    @SmallTest
+    @Test
+    public void testGetUsernameFromUriNumber() {
+        assertEquals("john", PhoneNumberUtils.getUsernameFromUriNumber("john@myorg.com"));
+        assertEquals("tim_123", PhoneNumberUtils.getUsernameFromUriNumber("tim_123@zzz.org"));
+        assertEquals("5103331245", PhoneNumberUtils.getUsernameFromUriNumber("5103331245"));
     }
 }

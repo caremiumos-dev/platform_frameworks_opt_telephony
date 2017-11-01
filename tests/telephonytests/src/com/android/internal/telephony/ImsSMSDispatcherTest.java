@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -24,11 +26,11 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-import android.app.ActivityManagerNative;
+import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,13 +38,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.test.FlakyTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Singleton;
 
-import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
-
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -95,11 +97,11 @@ public class ImsSMSDispatcherTest extends TelephonyTest {
     @After
     public void tearDown() throws Exception {
         mImsSmsDispatcher = null;
-        mImsSmsDispatcherTestHandler.quitSafely();
+        mImsSmsDispatcherTestHandler.quit();
         super.tearDown();
     }
 
-    @Test @SmallTest
+    @Test @SmallTest @FlakyTest @Ignore
     public void testSmsHandleStateUpdate() throws Exception {
         assertEquals(SmsConstants.FORMAT_UNKNOWN, mImsSmsDispatcher.getImsSmsFormat());
         //Mock ImsNetWorkStateChange with GSM phone type
@@ -113,11 +115,11 @@ public class ImsSMSDispatcherTest extends TelephonyTest {
         assertTrue(mImsSmsDispatcher.isIms());
     }
 
-    @Test @SmallTest
+    @Test @SmallTest @FlakyTest @Ignore
     public void testSendImsGmsTest() throws Exception {
         switchImsSmsFormat(PhoneConstants.PHONE_TYPE_GSM);
         mImsSmsDispatcher.sendText("111"/* desAddr*/, "222" /*scAddr*/, TAG,
-                null, null, null, null, false);
+                null, null, null, null, false, -1, false, -1);
         verify(mSimulatedCommandsVerifier).sendImsGsmSms(eq("038122f2"),
                 eq("0100038111f1000014c9f67cda9c12d37378983e4697e5d4f29c0e"), eq(0), eq(0),
                 any(Message.class));
@@ -127,7 +129,7 @@ public class ImsSMSDispatcherTest extends TelephonyTest {
     public void testSendImsGmsTestWithOutDesAddr() throws Exception {
         switchImsSmsFormat(PhoneConstants.PHONE_TYPE_GSM);
         mImsSmsDispatcher.sendText(null, "222" /*scAddr*/, TAG,
-                null, null, null, null, false);
+                null, null, null, null, false, -1, false, -1);
         verify(mSimulatedCommandsVerifier, times(0)).sendImsGsmSms(anyString(), anyString(),
                 anyInt(), anyInt(), any(Message.class));
     }
@@ -136,7 +138,7 @@ public class ImsSMSDispatcherTest extends TelephonyTest {
     public void testSendImsCdmaTest() throws Exception {
         switchImsSmsFormat(PhoneConstants.PHONE_TYPE_CDMA);
         mImsSmsDispatcher.sendText("111"/* desAddr*/, "222" /*scAddr*/, TAG,
-                null, null, null, null, false);
+                null, null, null, null, false, -1, false, -1);
         verify(mSimulatedCommandsVerifier).sendImsCdmaSms((byte[])any(), eq(0), eq(0),
                 any(Message.class));
     }
@@ -172,7 +174,7 @@ public class ImsSMSDispatcherTest extends TelephonyTest {
         // unmock ActivityManager to be able to register receiver, create real PendingIntent and
         // receive TEST_INTENT
         restoreInstance(Singleton.class, "mInstance", mIActivityManagerSingleton);
-        restoreInstance(ActivityManagerNative.class, "gDefault", null);
+        restoreInstance(ActivityManager.class, "IActivityManagerSingleton", null);
 
         Context realContext = TestApplication.getAppContext();
         realContext.registerReceiver(mTestReceiver, new IntentFilter(TEST_INTENT));

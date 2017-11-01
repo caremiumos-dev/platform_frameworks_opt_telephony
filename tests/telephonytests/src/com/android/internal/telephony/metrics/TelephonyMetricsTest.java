@@ -16,6 +16,26 @@
 
 package com.android.internal.telephony.metrics;
 
+import static android.telephony.ServiceState.RIL_RADIO_TECHNOLOGY_LTE;
+import static android.telephony.ServiceState.ROAMING_TYPE_DOMESTIC;
+
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DEACTIVATE_DATA_CALL;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SEND_SMS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SETUP_DATA_CALL;
+import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_ADDRESS;
+import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_DNS;
+import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_GATEWAY;
+import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_IFNAME;
+import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_PCSCF_ADDRESS;
+import static com.android.internal.telephony.nano.TelephonyProto.PdpType.PDP_TYPE_IPV4V6;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doReturn;
+
+import android.support.test.filters.FlakyTest;
 import android.telephony.ServiceState;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Base64;
@@ -24,22 +44,24 @@ import com.android.ims.ImsConfig;
 import com.android.ims.ImsReasonInfo;
 import com.android.ims.internal.ImsCallSession;
 import com.android.internal.telephony.Call;
+import com.android.internal.telephony.GsmCdmaConnection;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.SmsResponse;
-import com.android.internal.telephony.TelephonyProto;
-import com.android.internal.telephony.TelephonyProto.ImsConnectionState;
-import com.android.internal.telephony.TelephonyProto.SmsSession;
-import com.android.internal.telephony.TelephonyProto.RadioAccessTechnology;
-import com.android.internal.telephony.TelephonyProto.TelephonyCallSession;
-import com.android.internal.telephony.TelephonyProto.TelephonyCallSession.Event.CallState;
-import com.android.internal.telephony.TelephonyProto.TelephonyCallSession.Event.ImsCommand;
-import com.android.internal.telephony.TelephonyProto.TelephonyEvent;
-import com.android.internal.telephony.TelephonyProto.TelephonyLog;
-import com.android.internal.telephony.TelephonyProto.TelephonyServiceState;
-import com.android.internal.telephony.TelephonyProto.TelephonyServiceState.RoamingType;
 import com.android.internal.telephony.TelephonyTest;
 import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.dataconnection.DataCallResponse;
+import com.android.internal.telephony.nano.TelephonyProto;
+import com.android.internal.telephony.nano.TelephonyProto.ImsConnectionState;
+import com.android.internal.telephony.nano.TelephonyProto.RadioAccessTechnology;
+import com.android.internal.telephony.nano.TelephonyProto.SmsSession;
+import com.android.internal.telephony.nano.TelephonyProto.TelephonyCallSession;
+import com.android.internal.telephony.nano.TelephonyProto.TelephonyCallSession.Event.CallState;
+import com.android.internal.telephony.nano.TelephonyProto.TelephonyCallSession.Event.ImsCommand;
+import com.android.internal.telephony.nano.TelephonyProto.TelephonyCallSession.Event.RilCall;
+import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent;
+import com.android.internal.telephony.nano.TelephonyProto.TelephonyLog;
+import com.android.internal.telephony.nano.TelephonyProto.TelephonyServiceState;
+import com.android.internal.telephony.nano.TelephonyProto.TelephonyServiceState.RoamingType;
 
 import org.junit.After;
 import org.junit.Before;
@@ -47,18 +69,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import java.lang.reflect.Method;
-
-import static android.telephony.ServiceState.RIL_RADIO_TECHNOLOGY_LTE;
-import static android.telephony.ServiceState.ROAMING_TYPE_DOMESTIC;
-import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DEACTIVATE_DATA_CALL;
-import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SEND_SMS;
-import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SETUP_DATA_CALL;
-import static com.android.internal.telephony.TelephonyProto.PdpType.PDP_TYPE_IPV4V6;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doReturn;
 
 public class TelephonyMetricsTest extends TelephonyTest {
 
@@ -70,6 +80,9 @@ public class TelephonyMetricsTest extends TelephonyTest {
 
     @Mock
     private ServiceState mServiceState;
+
+    @Mock
+    private GsmCdmaConnection mConnection;
 
     private TelephonyMetrics mMetrics;
 
@@ -133,9 +146,8 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1000, log.events.length);
         assertEquals(0, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
-        assertTrue(log.hasEventsDropped());
-        assertTrue(log.getEventsDropped());
-        assertEquals(1, log.events[0].getDataStallAction());
+        assertTrue(log.eventsDropped);
+        assertEquals(1, log.events[0].dataStallAction);
     }
 
     // Test write data stall event
@@ -148,9 +160,23 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1, log.events.length);
         assertEquals(0, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
-        assertTrue(log.events[0].hasPhoneId());
-        assertEquals(mPhone.getPhoneId(), log.events[0].getPhoneId());
-        assertEquals(3, log.events[0].getDataStallAction());
+        assertEquals(mPhone.getPhoneId(), log.events[0].phoneId);
+        assertEquals(3, log.events[0].dataStallAction);
+    }
+
+    // Test write modem restart event
+    @Test
+    @SmallTest
+    public void testModemRestartEvent() throws Exception {
+        mMetrics.writeModemRestartEvent(mPhone.getPhoneId(), "Test");
+        TelephonyLog log = buildProto();
+
+        assertEquals(1, log.events.length);
+        assertEquals(0, log.callSessions.length);
+        assertEquals(0, log.smsSessions.length);
+
+        assertEquals(mPhone.getPhoneId(), log.events[0].phoneId);
+        assertEquals("Test", log.events[0].modemRestart.reason);
     }
 
     // Test write on IMS call start
@@ -164,16 +190,36 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(0, log.events.length);
         assertEquals(1, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
-        assertTrue(log.callSessions[0].hasPhoneId());
-        assertEquals(mPhone.getPhoneId(), log.callSessions[0].getPhoneId());
-        assertTrue(log.callSessions[0].hasEventsDropped());
-        assertFalse(log.callSessions[0].getEventsDropped());
-        assertTrue(log.callSessions[0].hasStartTimeMinutes());
+
+        assertEquals(mPhone.getPhoneId(), log.callSessions[0].phoneId);
+
+        assertFalse(log.callSessions[0].eventsDropped);
+
         assertEquals(1, log.callSessions[0].events.length);
-        assertTrue(log.callSessions[0].events[0].hasCallIndex());
-        assertEquals(123, log.callSessions[0].events[0].getCallIndex());
-        assertTrue(log.callSessions[0].events[0].hasImsCommand());
-        assertEquals(ImsCommand.IMS_CMD_START, log.callSessions[0].events[0].getImsCommand());
+
+        assertEquals(123, log.callSessions[0].events[0].callIndex);
+
+        assertEquals(ImsCommand.IMS_CMD_START, log.callSessions[0].events[0].imsCommand);
+    }
+
+    // Test write on IMS call received
+    @Test
+    @SmallTest
+    public void testWriteOnImsCallReceive() throws Exception {
+        mMetrics.writeOnImsCallReceive(mPhone.getPhoneId(), mImsCallSession);
+        mMetrics.writePhoneState(mPhone.getPhoneId(), PhoneConstants.State.IDLE);
+        TelephonyLog log = buildProto();
+
+        assertEquals(0, log.events.length);
+        assertEquals(1, log.callSessions.length);
+        assertEquals(0, log.smsSessions.length);
+        assertEquals(mPhone.getPhoneId(), log.callSessions[0].phoneId);
+
+        assertFalse(log.callSessions[0].eventsDropped);
+
+        assertEquals(1, log.callSessions[0].events.length);
+
+        assertEquals(123, log.callSessions[0].events[0].callIndex);
     }
 
     // Test write ims call state
@@ -189,12 +235,11 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
         assertEquals(2, log.callSessions[0].events.length);
-        assertTrue(log.callSessions[0].hasEventsDropped());
-        assertFalse(log.callSessions[0].getEventsDropped());
-        assertTrue(log.callSessions[0].events[1].hasCallIndex());
-        assertEquals(123, log.callSessions[0].events[1].getCallIndex());
-        assertTrue(log.callSessions[0].events[1].hasCallState());
-        assertEquals(CallState.CALL_ACTIVE, log.callSessions[0].events[1].getCallState());
+        assertFalse(log.callSessions[0].eventsDropped);
+
+        assertEquals(123, log.callSessions[0].events[1].callIndex);
+
+        assertEquals(CallState.CALL_ACTIVE, log.callSessions[0].events[1].callState);
     }
 
     // Test write ims set feature value
@@ -204,6 +249,8 @@ public class TelephonyMetricsTest extends TelephonyTest {
         mMetrics.writeOnImsCallStart(mPhone.getPhoneId(), mImsCallSession);
         mMetrics.writeImsSetFeatureValue(mPhone.getPhoneId(),
                 ImsConfig.FeatureConstants.FEATURE_TYPE_VOICE_OVER_LTE, 0, 1, 0);
+        mMetrics.writeImsSetFeatureValue(mPhone.getPhoneId(),
+                ImsConfig.FeatureConstants.FEATURE_TYPE_VOICE_OVER_LTE, 0, 1, 0);
         mMetrics.writePhoneState(mPhone.getPhoneId(), PhoneConstants.State.IDLE);
         TelephonyLog log = buildProto();
 
@@ -211,10 +258,8 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
         assertEquals(2, log.callSessions[0].events.length);
-        assertTrue(log.callSessions[0].hasEventsDropped());
-        assertFalse(log.callSessions[0].getEventsDropped());
-        assertTrue(log.callSessions[0].events[1].settings.hasIsEnhanced4GLteModeEnabled());
-        assertTrue(log.callSessions[0].events[1].settings.getIsEnhanced4GLteModeEnabled());
+        assertFalse(log.callSessions[0].eventsDropped);
+        assertTrue(log.callSessions[0].events[1].settings.isEnhanced4GLteModeEnabled);
     }
 
     // Test write on ims call handover event
@@ -232,24 +277,16 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
         assertEquals(2, log.callSessions[0].events.length);
-        assertTrue(log.callSessions[0].hasEventsDropped());
-        assertFalse(log.callSessions[0].getEventsDropped());
-        assertTrue(log.callSessions[0].events[1].hasType());
+        assertFalse(log.callSessions[0].eventsDropped);
         assertEquals(TelephonyCallSession.Event.Type.IMS_CALL_HANDOVER,
-                log.callSessions[0].events[1].getType());
-        assertTrue(log.callSessions[0].events[1].hasCallIndex());
-        assertEquals(123, log.callSessions[0].events[1].getCallIndex());
-        assertTrue(log.callSessions[0].events[1].hasSrcAccessTech());
-        assertEquals(5, log.callSessions[0].events[1].getSrcAccessTech());
-        assertTrue(log.callSessions[0].events[1].hasTargetAccessTech());
-        assertEquals(6, log.callSessions[0].events[1].getTargetAccessTech());
+                log.callSessions[0].events[1].type);
+        assertEquals(123, log.callSessions[0].events[1].callIndex);
+        assertEquals(5, log.callSessions[0].events[1].srcAccessTech);
+        assertEquals(6, log.callSessions[0].events[1].targetAccessTech);
 
-        assertTrue(log.callSessions[0].events[1].reasonInfo.hasExtraMessage());
-        assertEquals("extramessage", log.callSessions[0].events[1].reasonInfo.getExtraMessage());
-        assertTrue(log.callSessions[0].events[1].reasonInfo.hasExtraCode());
-        assertEquals(456, log.callSessions[0].events[1].reasonInfo.getExtraCode());
-        assertTrue(log.callSessions[0].events[1].reasonInfo.hasReasonCode());
-        assertEquals(123, log.callSessions[0].events[1].reasonInfo.getReasonCode());
+        assertEquals("extramessage", log.callSessions[0].events[1].reasonInfo.extraMessage);
+        assertEquals(456, log.callSessions[0].events[1].reasonInfo.extraCode);
+        assertEquals(123, log.callSessions[0].events[1].reasonInfo.reasonCode);
     }
 
     // Test write on ims command
@@ -265,15 +302,15 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
         assertEquals(2, log.callSessions[0].events.length);
-        assertTrue(log.callSessions[0].hasEventsDropped());
-        assertFalse(log.callSessions[0].getEventsDropped());
-        assertTrue(log.callSessions[0].events[1].hasType());
+
+        assertFalse(log.callSessions[0].eventsDropped);
+
         assertEquals(TelephonyCallSession.Event.Type.IMS_COMMAND,
-                log.callSessions[0].events[1].getType());
-        assertTrue(log.callSessions[0].events[1].hasImsCommand());
-        assertEquals(123, log.callSessions[0].events[1].getImsCommand());
-        assertTrue(log.callSessions[0].events[1].hasCallIndex());
-        assertEquals(123, log.callSessions[0].events[1].getCallIndex());
+                log.callSessions[0].events[1].type);
+
+        assertEquals(123, log.callSessions[0].events[1].imsCommand);
+
+        assertEquals(123, log.callSessions[0].events[1].callIndex);
     }
 
     // Test write on ims connection state
@@ -283,6 +320,8 @@ public class TelephonyMetricsTest extends TelephonyTest {
         mMetrics.writeOnImsCallStart(mPhone.getPhoneId(), mImsCallSession);
         mMetrics.writeOnImsConnectionState(mPhone.getPhoneId(),
                 ImsConnectionState.State.CONNECTED, mImsReasonInfo);
+        mMetrics.writeOnImsConnectionState(mPhone.getPhoneId(),
+                ImsConnectionState.State.CONNECTED, mImsReasonInfo);
         mMetrics.writePhoneState(mPhone.getPhoneId(), PhoneConstants.State.IDLE);
         TelephonyLog log = buildProto();
 
@@ -290,40 +329,26 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
         assertEquals(2, log.callSessions[0].events.length);
-        assertTrue(log.hasEventsDropped());
-        assertFalse(log.getEventsDropped());
-        assertTrue(log.events[0].hasType());
-        assertEquals(TelephonyEvent.Type.IMS_CONNECTION_STATE_CHANGED, log.events[0].getType());
-        assertTrue(log.events[0].imsConnectionState.hasState());
+        assertFalse(log.eventsDropped);
+        assertEquals(TelephonyEvent.Type.IMS_CONNECTION_STATE_CHANGED, log.events[0].type);
         assertEquals(ImsConnectionState.State.CONNECTED,
-                log.events[0].imsConnectionState.getState());
-        assertTrue(log.events[0].imsConnectionState.reasonInfo.hasReasonCode());
-        assertEquals(123, log.events[0].imsConnectionState.reasonInfo.getReasonCode());
-        assertTrue(log.events[0].imsConnectionState.reasonInfo.hasExtraCode());
-        assertEquals(456, log.events[0].imsConnectionState.reasonInfo.getExtraCode());
-        assertTrue(log.events[0].imsConnectionState.reasonInfo.hasExtraMessage());
-        assertEquals("extramessage", log.events[0].imsConnectionState.reasonInfo.getExtraMessage());
-        assertTrue(log.callSessions[0].hasEventsDropped());
-        assertFalse(log.callSessions[0].getEventsDropped());
-        assertTrue(log.callSessions[0].events[1].hasType());
+                log.events[0].imsConnectionState.state);
+        assertEquals(123, log.events[0].imsConnectionState.reasonInfo.reasonCode);
+        assertEquals(456, log.events[0].imsConnectionState.reasonInfo.extraCode);
+        assertEquals("extramessage", log.events[0].imsConnectionState.reasonInfo.extraMessage);
+        assertFalse(log.callSessions[0].eventsDropped);
         assertEquals(TelephonyCallSession.Event.Type.IMS_CONNECTION_STATE_CHANGED,
-                log.callSessions[0].events[1].getType());
-        assertTrue(log.callSessions[0].events[1].imsConnectionState.hasState());
+                log.callSessions[0].events[1].type);
         assertEquals(ImsConnectionState.State.CONNECTED,
-                log.callSessions[0].events[1].imsConnectionState.getState());
+                log.callSessions[0].events[1].imsConnectionState.state);
     }
 
     // Test write on setup data call response
     @Test
     @SmallTest
     public void testWriteOnSetupDataCallResponse() throws Exception {
-        DataCallResponse response = new DataCallResponse();
-        response.status = 5;
-        response.suggestedRetryTime = 6;
-        response.cid = 7;
-        response.active = 8;
-        response.type = "IPV4V6";
-        response.ifname = "ifname";
+        DataCallResponse response = new DataCallResponse(5, 6, 7, 8, "IPV4V6", FAKE_IFNAME,
+                FAKE_ADDRESS, FAKE_DNS, FAKE_GATEWAY, FAKE_PCSCF_ADDRESS, 1440);
 
         mMetrics.writeOnRilSolicitedResponse(mPhone.getPhoneId(), 1, 2,
                 RIL_REQUEST_SETUP_DATA_CALL, response);
@@ -332,21 +357,15 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1, log.events.length);
         assertEquals(0, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
-        assertTrue(log.hasEventsDropped());
-        assertFalse(log.getEventsDropped());
+        assertFalse(log.eventsDropped);
 
         TelephonyEvent.RilSetupDataCallResponse respProto = log.events[0].setupDataCallResponse;
 
-        assertTrue(respProto.hasStatus());
-        assertEquals(5, respProto.getStatus());
-        assertTrue(respProto.hasSuggestedRetryTimeMillis());
-        assertEquals(6, respProto.getSuggestedRetryTimeMillis());
-        assertTrue(respProto.call.hasCid());
-        assertEquals(7, respProto.call.getCid());
-        assertTrue(respProto.call.hasType());
-        assertEquals(PDP_TYPE_IPV4V6, respProto.call.getType());
-        assertTrue(respProto.call.hasIframe());
-        assertEquals("ifname", respProto.call.getIframe());
+        assertEquals(5, respProto.status);
+        assertEquals(6, respProto.suggestedRetryTimeMillis);
+        assertEquals(7, respProto.call.cid);
+        assertEquals(PDP_TYPE_IPV4V6, respProto.call.type);
+        assertEquals(FAKE_IFNAME, respProto.call.iframe);
     }
 
     // Test write on deactivate data call response
@@ -360,13 +379,10 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1, log.events.length);
         assertEquals(0, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
-        assertTrue(log.hasEventsDropped());
-        assertFalse(log.getEventsDropped());
+        assertFalse(log.eventsDropped);
 
-        assertTrue(log.events[0].hasType());
-        assertEquals(TelephonyEvent.Type.DATA_CALL_DEACTIVATE_RESPONSE, log.events[0].getType());
-        assertTrue(log.events[0].hasError());
-        assertEquals(4, log.events[0].getError());
+        assertEquals(TelephonyEvent.Type.DATA_CALL_DEACTIVATE_RESPONSE, log.events[0].type);
+        assertEquals(4, log.events[0].error);
     }
 
     // Test write RIL send SMS
@@ -388,46 +404,29 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(0, log.events.length);
         assertEquals(0, log.callSessions.length);
         assertEquals(1, log.smsSessions.length);
-        assertTrue(log.hasEventsDropped());
-        assertFalse(log.getEventsDropped());
+        assertFalse(log.eventsDropped);
 
         SmsSession.Event[] events = log.smsSessions[0].events;
         assertEquals(4, events.length);
-        assertTrue(events[0].hasType());
-        assertEquals(SmsSession.Event.Type.SMS_SEND, events[0].getType());
-        assertTrue(events[0].hasRilRequestId());
-        assertEquals(1, events[0].getRilRequestId());
-        assertTrue(events[0].hasTech());
-        assertEquals(2, events[0].getTech());
-        assertTrue(events[0].hasFormat());
-        assertEquals(1, events[0].getFormat());
+        assertEquals(SmsSession.Event.Type.SMS_SEND, events[0].type);
+        assertEquals(1, events[0].rilRequestId);
+        assertEquals(2, events[0].tech);
+        assertEquals(1, events[0].format);
 
-        assertTrue(events[1].hasType());
-        assertEquals(SmsSession.Event.Type.SMS_SEND, events[1].getType());
-        assertTrue(events[1].hasRilRequestId());
-        assertEquals(4, events[1].getRilRequestId());
-        assertTrue(events[1].hasTech());
-        assertEquals(5, events[1].getTech());
-        assertTrue(events[1].hasFormat());
-        assertEquals(2, events[1].getFormat());
+        assertEquals(SmsSession.Event.Type.SMS_SEND, events[1].type);
+        assertEquals(4, events[1].rilRequestId);
+        assertEquals(5, events[1].tech);
+        assertEquals(2, events[1].format);
 
-        assertTrue(events[2].hasType());
-        assertEquals(SmsSession.Event.Type.SMS_SEND_RESULT, events[2].getType());
-        assertTrue(events[2].hasRilRequestId());
-        assertEquals(1, events[2].getRilRequestId());
-        assertTrue(events[2].hasError());
-        assertEquals(0, events[2].getError());
-        assertTrue(events[2].hasErrorCode());
-        assertEquals(123, events[2].getErrorCode());
+        assertEquals(SmsSession.Event.Type.SMS_SEND_RESULT, events[2].type);
+        assertEquals(1, events[2].rilRequestId);
+        assertEquals(1, events[2].error);
+        assertEquals(123, events[2].errorCode);
 
-        assertTrue(events[3].hasType());
-        assertEquals(SmsSession.Event.Type.SMS_SEND_RESULT, events[3].getType());
-        assertTrue(events[3].hasRilRequestId());
-        assertEquals(4, events[3].getRilRequestId());
-        assertTrue(events[3].hasError());
-        assertEquals(0, events[3].getError());
-        assertTrue(events[3].hasErrorCode());
-        assertEquals(456, events[3].getErrorCode());
+        assertEquals(SmsSession.Event.Type.SMS_SEND_RESULT, events[3].type);
+        assertEquals(4, events[3].rilRequestId);
+        assertEquals(1, events[3].error);
+        assertEquals(456, events[3].errorCode);
     }
 
     // Test write phone state
@@ -442,53 +441,47 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(0, log.events.length);
         assertEquals(1, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
-        assertTrue(log.hasEventsDropped());
-        assertFalse(log.getEventsDropped());
+        assertFalse(log.eventsDropped);
 
-        assertTrue(log.callSessions[0].hasPhoneId());
-        assertEquals(mPhone.getPhoneId(), log.callSessions[0].getPhoneId());
+        assertEquals(mPhone.getPhoneId(), log.callSessions[0].phoneId);
         assertEquals(2, log.callSessions[0].events.length);
-        assertTrue(log.callSessions[0].events[1].hasType());
         assertEquals(TelephonyCallSession.Event.Type.PHONE_STATE_CHANGED,
-                log.callSessions[0].events[1].getType());
-        assertTrue(log.callSessions[0].events[1].hasPhoneState());
+                log.callSessions[0].events[1].type);
         assertEquals(TelephonyCallSession.Event.PhoneState.STATE_OFFHOOK,
-                log.callSessions[0].events[1].getPhoneState());
+                log.callSessions[0].events[1].phoneState);
     }
 
     // Test write RIL dial and hangup
     @Test
     @SmallTest
     public void testWriteRilDialHangup() throws Exception {
-        mMetrics.writeRilDial(mPhone.getPhoneId(), 1, 2, mUusInfo);
-        mMetrics.writeRilHangup(mPhone.getPhoneId(), 2, 3);
+        doReturn(Call.State.DIALING).when(mConnection).getState();
+        mMetrics.writeRilDial(mPhone.getPhoneId(), mConnection, 2, mUusInfo);
+        doReturn(Call.State.DISCONNECTED).when(mConnection).getState();
+        mMetrics.writeRilHangup(mPhone.getPhoneId(), mConnection, 3);
         mMetrics.writePhoneState(mPhone.getPhoneId(), PhoneConstants.State.IDLE);
         TelephonyLog log = buildProto();
 
         assertEquals(0, log.events.length);
         assertEquals(1, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
-        assertTrue(log.hasEventsDropped());
-        assertFalse(log.getEventsDropped());
+        assertFalse(log.eventsDropped);
 
         TelephonyCallSession.Event[] events = log.callSessions[0].events;
 
         assertEquals(2, events.length);
-        assertTrue(events[0].hasType());
-        assertEquals(TelephonyCallSession.Event.Type.RIL_REQUEST, events[0].getType());
-        assertTrue(events[0].hasRilRequest());
-        assertEquals(TelephonyCallSession.Event.RilRequest.RIL_REQUEST_DIAL,
-                events[0].getRilRequest());
-        assertTrue(events[0].hasRilRequestId());
-        assertEquals(1, events[0].getRilRequestId());
+        assertEquals(TelephonyCallSession.Event.Type.RIL_REQUEST, events[0].type);
 
-        assertTrue(events[1].hasType());
-        assertEquals(TelephonyCallSession.Event.Type.RIL_REQUEST, events[1].getType());
-        assertTrue(events[1].hasRilRequest());
+        assertEquals(TelephonyCallSession.Event.RilRequest.RIL_REQUEST_DIAL,
+                events[0].rilRequest);
+        RilCall[] calls = events[0].calls;
+        assertEquals(CallState.CALL_DIALING, calls[0].state);
+
         assertEquals(TelephonyCallSession.Event.RilRequest.RIL_REQUEST_HANGUP,
-                events[1].getRilRequest());
-        assertTrue(events[1].hasCallIndex());
-        assertEquals(3, events[1].getCallIndex());
+                events[1].rilRequest);
+        calls = events[1].calls;
+        assertEquals(3, calls[0].index);
+        assertEquals(CallState.CALL_DISCONNECTED, calls[0].state);
     }
 
     // Test write RIL setup data call
@@ -503,21 +496,21 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1, log.events.length);
         assertEquals(0, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
-        assertTrue(log.hasEventsDropped());
-        assertFalse(log.getEventsDropped());
 
-        assertTrue(log.events[0].hasType());
-        assertEquals(TelephonyEvent.Type.DATA_CALL_SETUP, log.events[0].getType());
+        assertFalse(log.eventsDropped);
+
+
+        assertEquals(TelephonyEvent.Type.DATA_CALL_SETUP, log.events[0].type);
 
         TelephonyEvent.RilSetupDataCall setupDataCall = log.events[0].setupDataCall;
-        assertTrue(setupDataCall.hasApn());
-        assertEquals("apn", setupDataCall.getApn());
-        assertTrue(setupDataCall.hasRat());
-        assertEquals(14, setupDataCall.getRat());
-        assertTrue(setupDataCall.hasDataProfile());
-        assertEquals(4, setupDataCall.getDataProfile());
-        assertTrue(setupDataCall.hasType());
-        assertEquals(PDP_TYPE_IPV4V6, setupDataCall.getType());
+
+        assertEquals("apn", setupDataCall.apn);
+
+        assertEquals(14, setupDataCall.rat);
+
+        assertEquals(4, setupDataCall.dataProfile);
+
+        assertEquals(PDP_TYPE_IPV4V6, setupDataCall.type);
     }
 
     // Test write service state changed
@@ -525,39 +518,40 @@ public class TelephonyMetricsTest extends TelephonyTest {
     @SmallTest
     public void testWriteServiceStateChanged() throws Exception {
         mMetrics.writeServiceStateChanged(mPhone.getPhoneId(), mServiceState);
+        mMetrics.writeServiceStateChanged(mPhone.getPhoneId(), mServiceState);
         TelephonyLog log = buildProto();
 
         assertEquals(1, log.events.length);
         assertEquals(0, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
-        assertTrue(log.hasEventsDropped());
-        assertFalse(log.getEventsDropped());
+
+        assertFalse(log.eventsDropped);
 
         TelephonyEvent event = log.events[0];
-        assertTrue(event.hasType());
-        assertEquals(TelephonyEvent.Type.RIL_SERVICE_STATE_CHANGED, event.getType());
+
+        assertEquals(TelephonyEvent.Type.RIL_SERVICE_STATE_CHANGED, event.type);
 
         TelephonyServiceState state = event.serviceState;
-        assertTrue(state.hasVoiceRat());
-        assertEquals(RadioAccessTechnology.RAT_LTE, state.getVoiceRat());
-        assertTrue(state.hasDataRat());
-        assertEquals(RadioAccessTechnology.RAT_LTE, state.getDataRat());
-        assertTrue(state.hasVoiceRoamingType());
-        assertEquals(RoamingType.ROAMING_TYPE_DOMESTIC, state.getVoiceRoamingType());
-        assertTrue(state.hasDataRoamingType());
-        assertEquals(RoamingType.ROAMING_TYPE_DOMESTIC, state.getDataRoamingType());
-        assertTrue(state.voiceOperator.hasAlphaLong());
-        assertEquals("voicelong", state.voiceOperator.getAlphaLong());
-        assertTrue(state.voiceOperator.hasAlphaShort());
-        assertEquals("voiceshort", state.voiceOperator.getAlphaShort());
-        assertTrue(state.voiceOperator.hasNumeric());
-        assertEquals("123456", state.voiceOperator.getNumeric());
-        assertTrue(state.dataOperator.hasAlphaLong());
-        assertEquals("datalong", state.dataOperator.getAlphaLong());
-        assertTrue(state.dataOperator.hasAlphaShort());
-        assertEquals("datashort", state.dataOperator.getAlphaShort());
-        assertTrue(state.dataOperator.hasNumeric());
-        assertEquals("123456", state.dataOperator.getNumeric());
+
+        assertEquals(RadioAccessTechnology.RAT_LTE, state.voiceRat);
+
+        assertEquals(RadioAccessTechnology.RAT_LTE, state.dataRat);
+
+        assertEquals(RoamingType.ROAMING_TYPE_DOMESTIC, state.voiceRoamingType);
+
+        assertEquals(RoamingType.ROAMING_TYPE_DOMESTIC, state.dataRoamingType);
+
+        assertEquals("voicelong", state.voiceOperator.alphaLong);
+
+        assertEquals("voiceshort", state.voiceOperator.alphaShort);
+
+        assertEquals("123456", state.voiceOperator.numeric);
+
+        assertEquals("datalong", state.dataOperator.alphaLong);
+
+        assertEquals("datashort", state.dataOperator.alphaShort);
+
+        assertEquals("123456", state.dataOperator.numeric);
     }
 
     // Test reset scenario
@@ -571,34 +565,34 @@ public class TelephonyMetricsTest extends TelephonyTest {
         assertEquals(1, log.events.length);
         assertEquals(0, log.callSessions.length);
         assertEquals(0, log.smsSessions.length);
-        assertTrue(log.hasEventsDropped());
-        assertFalse(log.getEventsDropped());
+
+        assertFalse(log.eventsDropped);
 
         TelephonyEvent event = log.events[0];
-        assertTrue(event.hasType());
-        assertEquals(TelephonyEvent.Type.RIL_SERVICE_STATE_CHANGED, event.getType());
+
+        assertEquals(TelephonyEvent.Type.RIL_SERVICE_STATE_CHANGED, event.type);
 
         TelephonyServiceState state = event.serviceState;
-        assertTrue(state.hasVoiceRat());
-        assertEquals(RadioAccessTechnology.RAT_LTE, state.getVoiceRat());
-        assertTrue(state.hasDataRat());
-        assertEquals(RadioAccessTechnology.RAT_LTE, state.getDataRat());
-        assertTrue(state.hasVoiceRoamingType());
-        assertEquals(RoamingType.ROAMING_TYPE_DOMESTIC, state.getVoiceRoamingType());
-        assertTrue(state.hasDataRoamingType());
-        assertEquals(RoamingType.ROAMING_TYPE_DOMESTIC, state.getDataRoamingType());
-        assertTrue(state.voiceOperator.hasAlphaLong());
-        assertEquals("voicelong", state.voiceOperator.getAlphaLong());
-        assertTrue(state.voiceOperator.hasAlphaShort());
-        assertEquals("voiceshort", state.voiceOperator.getAlphaShort());
-        assertTrue(state.voiceOperator.hasNumeric());
-        assertEquals("123456", state.voiceOperator.getNumeric());
-        assertTrue(state.dataOperator.hasAlphaLong());
-        assertEquals("datalong", state.dataOperator.getAlphaLong());
-        assertTrue(state.dataOperator.hasAlphaShort());
-        assertEquals("datashort", state.dataOperator.getAlphaShort());
-        assertTrue(state.dataOperator.hasNumeric());
-        assertEquals("123456", state.dataOperator.getNumeric());
+
+        assertEquals(RadioAccessTechnology.RAT_LTE, state.voiceRat);
+
+        assertEquals(RadioAccessTechnology.RAT_LTE, state.dataRat);
+
+        assertEquals(RoamingType.ROAMING_TYPE_DOMESTIC, state.voiceRoamingType);
+
+        assertEquals(RoamingType.ROAMING_TYPE_DOMESTIC, state.dataRoamingType);
+
+        assertEquals("voicelong", state.voiceOperator.alphaLong);
+
+        assertEquals("voiceshort", state.voiceOperator.alphaShort);
+
+        assertEquals("123456", state.voiceOperator.numeric);
+
+        assertEquals("datalong", state.dataOperator.alphaLong);
+
+        assertEquals("datashort", state.dataOperator.alphaShort);
+
+        assertEquals("123456", state.dataOperator.numeric);
     }
 
     // Test Proto Encoding/Decoding
@@ -611,5 +605,43 @@ public class TelephonyMetricsTest extends TelephonyTest {
 
         byte[] decodedString = Base64.decode(encodedString, Base64.DEFAULT);
         assertArrayEquals(TelephonyProto.TelephonyLog.toByteArray(log), decodedString);
+    }
+
+    // Test write ims capabilities changed
+    @Test
+    @SmallTest
+    public void testWriteOnImsCapabilities() throws Exception {
+        boolean[] caps1 = new boolean[]{true, false, true, false, true, false};
+        mMetrics.writeOnImsCapabilities(mPhone.getPhoneId(), caps1);
+        boolean[] caps2 = new boolean[]{true, false, true, false, true, false};
+        // The duplicate one should be filtered out.
+        mMetrics.writeOnImsCapabilities(mPhone.getPhoneId(), caps2);
+        boolean[] caps3 = new boolean[]{false, true, false, true, false, true};
+        mMetrics.writeOnImsCapabilities(mPhone.getPhoneId(), caps3);
+        TelephonyLog log = buildProto();
+
+        assertEquals(2, log.events.length);
+        assertEquals(0, log.callSessions.length);
+        assertEquals(0, log.smsSessions.length);
+
+        TelephonyEvent event = log.events[0];
+
+        assertEquals(TelephonyEvent.Type.IMS_CAPABILITIES_CHANGED, event.type);
+        assertEquals(caps1[0], event.imsCapabilities.voiceOverLte);
+        assertEquals(caps1[1], event.imsCapabilities.videoOverLte);
+        assertEquals(caps1[2], event.imsCapabilities.voiceOverWifi);
+        assertEquals(caps1[3], event.imsCapabilities.videoOverWifi);
+        assertEquals(caps1[4], event.imsCapabilities.utOverLte);
+        assertEquals(caps1[5], event.imsCapabilities.utOverWifi);
+
+        event = log.events[1];
+
+        assertEquals(TelephonyEvent.Type.IMS_CAPABILITIES_CHANGED, event.type);
+        assertEquals(caps3[0], event.imsCapabilities.voiceOverLte);
+        assertEquals(caps3[1], event.imsCapabilities.videoOverLte);
+        assertEquals(caps3[2], event.imsCapabilities.voiceOverWifi);
+        assertEquals(caps3[3], event.imsCapabilities.videoOverWifi);
+        assertEquals(caps3[4], event.imsCapabilities.utOverLte);
+        assertEquals(caps3[5], event.imsCapabilities.utOverWifi);
     }
 }

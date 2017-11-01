@@ -34,6 +34,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * {@hide}
  */
 public abstract class Connection {
+    private static final String TAG = "Connection";
 
     public interface PostDialListener {
         void onPostDialWait();
@@ -101,6 +102,8 @@ public abstract class Connection {
         public void onCallPullFailed(Connection externalConnection);
         public void onHandoverToWifiFailed();
         public void onConnectionEvent(String event, Bundle extras);
+        public void onRttModifyRequestReceived();
+        public void onRttModifyResponseReceived(int status);
     }
 
     /**
@@ -136,6 +139,10 @@ public abstract class Connection {
         public void onHandoverToWifiFailed() {}
         @Override
         public void onConnectionEvent(String event, Bundle extras) {}
+        @Override
+        public void onRttModifyRequestReceived() {}
+        @Override
+        public void onRttModifyResponseReceived(int status) {}
     }
 
     public static final int AUDIO_QUALITY_STANDARD = 1;
@@ -305,6 +312,15 @@ public abstract class Connection {
     }
 
     /**
+     * Sets the Connection connect time in {@link SystemClock#elapsedRealtime()} format.
+     *
+     * @param connectTimeReal the new connect time.
+     */
+    public void setConnectTimeReal(long connectTimeReal) {
+        mConnectTimeReal = connectTimeReal;
+    }
+
+    /**
      * Connection connect time in elapsedRealtime() format.
      * For outgoing calls: Begins at (DIALING|ALERTING) -> ACTIVE transition.
      * For incoming calls: Begins at (INCOMING|WAITING) -> ACTIVE transition.
@@ -379,6 +395,15 @@ public abstract class Connection {
      */
     public boolean isIncoming() {
         return mIsIncoming;
+    }
+
+    /**
+     * Sets whether this call is an incoming call or not.
+     * @param isIncoming {@code true} if the call is an incoming call, {@code false} if it is an
+     *                               outgoing call.
+     */
+    public void setIsIncoming(boolean isIncoming) {
+        mIsIncoming = isIncoming;
     }
 
     /**
@@ -502,7 +527,9 @@ public abstract class Connection {
     }
 
     protected final void clearPostDialListeners() {
-        mPostDialListeners.clear();
+        if (mPostDialListeners != null) {
+            mPostDialListeners.clear();
+        }
     }
 
     protected final void notifyPostDialListeners() {
@@ -625,6 +652,7 @@ public abstract class Connection {
         mOrigConnection = c.getOrigConnection();
         mPostDialString = c.mPostDialString;
         mNextPostDialChar = c.mNextPostDialChar;
+        mPostDialState = c.mPostDialState;
     }
 
     /**
@@ -809,6 +837,16 @@ public abstract class Connection {
     public void setConnectionExtras(Bundle extras) {
         if (extras != null) {
             mExtras = new Bundle(extras);
+
+            int previousCount = mExtras.size();
+            // Prevent vendors from passing in extras other than primitive types and android API
+            // parcelables.
+            mExtras = mExtras.filterValues();
+            int filteredCount = mExtras.size();
+            if (filteredCount != previousCount) {
+                Rlog.i(TAG, "setConnectionExtras: filtering " + (previousCount - filteredCount)
+                        + " invalid extras.");
+            }
         } else {
             mExtras = null;
         }
@@ -1002,6 +1040,18 @@ public abstract class Connection {
      * to the local device.
      */
     public void pullExternalCall() {
+    }
+
+    public void onRttModifyRequestReceived() {
+        for (Listener l : mListeners) {
+            l.onRttModifyRequestReceived();
+        }
+    }
+
+    public void onRttModifyResponseReceived(int status) {
+        for (Listener l : mListeners) {
+            l.onRttModifyResponseReceived(status);
+        }
     }
 
     /**
