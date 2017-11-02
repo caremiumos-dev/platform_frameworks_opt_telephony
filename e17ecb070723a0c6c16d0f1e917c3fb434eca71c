@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5770f09_d4c62216",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5170,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-02T21:05:15Z",
+      "side": 1,
+      "message": "Please use writeToParcel to create the parcelable, because your change aosp/490589 broken the unparcel logic. \n\nAs I mentioned in the previous comment, don\u0027t place the parcel/unparcel logic into difference class, it\u0027s easy to break the code.\n\n\nHere is the unparcel message I saw in the log, the CellIdentity is obviously incorrect. \n\nCellInfoLte: getCellIdentity: CellIdentityLte:{ mCi\u003d310 mPci\u003d260 mTac\u003d21358084 mEarfcn\u003d10 mMcc\u003dnull mMnc\u003dnull mAlphaLong\u003dnull mAlphaShort\u003dnull}\n\nPlease also fix the method convertHalCellInfoList.",
+      "range": {
+        "startLine": 5158,
+        "startChar": 0,
+        "endLine": 5170,
+        "endChar": 26
+      },
+      "revId": "e17ecb070723a0c6c16d0f1e917c3fb434eca71c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
