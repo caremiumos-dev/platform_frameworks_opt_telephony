@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8bf51a4_82b2ef6d",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-11-03T20:04:59Z",
+      "side": 1,
+      "message": "If this is the only difference, can you create a helper function that takes in ArrayList\u003cCellInfo\u003e and can be used for both older versions and 1.2?",
+      "range": {
+        "startLine": 857,
+        "startChar": 40,
+        "endLine": 857,
+        "endChar": 66
+      },
+      "revId": "c430d8c8df016a6fbc1f8ba5f12d6cc5e05069c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0cb5b3a6_974976f2",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-11-03T20:04:59Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 1704,
+        "startChar": 42,
+        "endLine": 1704,
+        "endChar": 68
+      },
+      "revId": "c430d8c8df016a6fbc1f8ba5f12d6cc5e05069c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
