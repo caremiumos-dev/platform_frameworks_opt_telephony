@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbf51908_ea0334cc",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2488,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-11-03T18:45:53Z",
+      "side": 1,
+      "message": "It makes more sense to just do this in ImsCall#clearMergeInfo().",
+      "range": {
+        "startLine": 2488,
+        "startChar": 12,
+        "endLine": 2488,
+        "endChar": 52
+      },
+      "revId": "3e1d2599f3eee755614d13a477331415e268798d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
