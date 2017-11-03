@@ -97,6 +97,7 @@ public class RuimRecords extends IccRecords {
     private static final int EVENT_GET_SMS_DONE = 22;
 
     private static final int EVENT_RUIM_REFRESH = 31;
+    private static final int EVENT_APP_LOCKED = 32;
 
     public RuimRecords(UiccCardApplication app, Context c, CommandsInterface ci) {
         super(app, c, ci);
@@ -104,8 +105,9 @@ public class RuimRecords extends IccRecords {
         mAdnCache = new AdnRecordCache(mFh);
 
         mRecordsRequested = false;  // No load request is made till SIM ready
+        mLockedRecordsRequested = false;
 
-        // recordsToLoad is set to 0 because no requests are made yet
+                // recordsToLoad is set to 0 because no requests are made yet
         mRecordsToLoad = 0;
 
         // NOTE the EVENT_SMS_ON_RUIM is not registered
@@ -115,6 +117,7 @@ public class RuimRecords extends IccRecords {
         resetRecords();
 
         mParentApp.registerForReady(this, EVENT_APP_READY, null);
+        mParentApp.registerForLocked(this, EVENT_APP_LOCKED, null);
         if (DBG) log("RuimRecords X ctor this=" + this);
     }
 
@@ -151,6 +154,7 @@ public class RuimRecords extends IccRecords {
         // read requests made so far are not valid. This is set to
         // true only when fresh set of read requests are made.
         mRecordsRequested = false;
+        mLockedRecordsRequested = false;
     }
 
     public String getMdnNumber() {
@@ -596,10 +600,15 @@ public class RuimRecords extends IccRecords {
             return;
         }
 
-        try { switch (msg.what) {
+        try {
+            switch (msg.what) {
             case EVENT_APP_READY:
                 onReady();
                 break;
+
+                case EVENT_APP_LOCKED:
+                    onLocked();
+                    break;
 
             case EVENT_GET_DEVICE_IDENTITY_DONE:
                 log("Event EVENT_GET_DEVICE_IDENTITY_DONE Received");
@@ -744,12 +753,18 @@ public class RuimRecords extends IccRecords {
         mRecordsToLoad -= 1;
         if (DBG) log("onRecordLoaded " + mRecordsToLoad + " requested: " + mRecordsRequested);
 
-        if (mRecordsToLoad == 0 && mRecordsRequested == true) {
+        if (getRecordsLoaded()) {
             onAllRecordsLoaded();
+        } else if (getLockedRecordsLoaded()) {
+            onLockedAllRecordsLoaded();
         } else if (mRecordsToLoad < 0) {
             loge("recordsToLoad <0, programmer error suspected");
             mRecordsToLoad = 0;
         }
+    }
+
+    private void onLockedAllRecordsLoaded() {
+        mLockedRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
     }
 
     @Override
@@ -789,8 +804,7 @@ public class RuimRecords extends IccRecords {
             setSimLanguage(mEFli, mEFpl);
         }
 
-        mRecordsLoadedRegistrants.notifyRegistrants(
-            new AsyncResult(null, null, null));
+        mRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
 
         // TODO: The below is hacky since the SubscriptionController may not be ready at this time.
         if (!TextUtils.isEmpty(mMdn)) {
@@ -811,6 +825,14 @@ public class RuimRecords extends IccRecords {
         mCi.getCDMASubscription(obtainMessage(EVENT_GET_CDMA_SUBSCRIPTION_DONE));
     }
 
+    private void onLocked() {
+        if (DBG) log("only fetch EF_ICCID in locked state");
+        mLockedRecordsRequested = true;
+
+        mFh.loadEFTransparent(EF_ICCID,
+                obtainMessage(EVENT_GET_ICCID_DONE));
+        mRecordsToLoad++;
+    }
 
     private void fetchRuimRecords() {
         mRecordsRequested = true;
