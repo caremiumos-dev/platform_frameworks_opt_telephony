@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d5e5e46d_c59dadec",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-11-03T21:06:26Z",
+      "side": 1,
+      "message": "This is not the only difference here, since the result in the next line is actually V1_2.",
+      "parentUuid": "d8bf51a4_82b2ef6d",
+      "range": {
+        "startLine": 857,
+        "startChar": 40,
+        "endLine": 857,
+        "endChar": 66
+      },
+      "revId": "c430d8c8df016a6fbc1f8ba5f12d6cc5e05069c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0cb5b3a6_974976f2",
         "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-11-03T20:04:59Z",
       "side": 1,
       "message": "same here",
+      "range": {
+        "startLine": 1704,
+        "startChar": 42,
+        "endLine": 1704,
+        "endChar": 68
+      },
+      "revId": "c430d8c8df016a6fbc1f8ba5f12d6cc5e05069c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "581dbff8_7dad201f",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-11-03T21:06:26Z",
+      "side": 1,
+      "message": "Same here the input cellInfo is in V1_2.",
+      "parentUuid": "0cb5b3a6_974976f2",
       "range": {
         "startLine": 1704,
         "startChar": 42,
