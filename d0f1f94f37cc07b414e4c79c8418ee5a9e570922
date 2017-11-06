@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0a13a1f_e1fca14e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/cdma/CdmaSmsAddressTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-06T20:41:24Z",
+      "side": 1,
+      "message": "you can also mark CdmaSmsAddress#parseToDtmf with the annotation @VisibleForTesting, change the function to package access and change the package of this test to \u003c\u003e.cdma.sms. This way if the parseToDtmf function changes the unit test won\u0027t need to be updated.",
+      "range": {
+        "startLine": 75,
+        "startChar": 26,
+        "endLine": 75,
+        "endChar": 37
+      },
+      "revId": "d0f1f94f37cc07b414e4c79c8418ee5a9e570922",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
