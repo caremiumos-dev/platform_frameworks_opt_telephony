@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1da5f894_5d04393d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-06T23:55:48Z",
+      "side": 1,
+      "message": "Also check to make sure the CarrierConfigManager is not null.",
+      "range": {
+        "startLine": 756,
+        "startChar": 39,
+        "endLine": 756,
+        "endChar": 46
+      },
+      "revId": "b2fbd009a3888fe26bc51ac0f0a7efa47818aad2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
