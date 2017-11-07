@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d135b3e2_dbe24e7a",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-07T21:23:34Z",
+      "side": 1,
+      "message": "Seems it also has the side effect of modifying the call forwarding flags for the default phone\u0027s IccRecords, is this intentional?",
+      "range": {
+        "startLine": 1215,
+        "startChar": 7,
+        "endLine": 1215,
+        "endChar": 64
+      },
+      "revId": "8e40a66817b3b5412f43bd76975650edb1f28c98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1532e30c_b879a78c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-07T21:23:34Z",
+      "side": 1,
+      "message": "registerForSuppServiceIndication",
+      "range": {
+        "startLine": 769,
+        "startChar": 21,
+        "endLine": 769,
+        "endChar": 45
+      },
+      "revId": "8e40a66817b3b5412f43bd76975650edb1f28c98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50ef8743_eba54111",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-07T21:23:34Z",
+      "side": 1,
+      "message": "unregisterForSuppServiceIndication",
+      "range": {
+        "startLine": 799,
+        "startChar": 25,
+        "endLine": 799,
+        "endChar": 51
+      },
+      "revId": "8e40a66817b3b5412f43bd76975650edb1f28c98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bba5aa9e_f23bf7c2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1683,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-07T21:23:34Z",
+      "side": 1,
+      "message": "Do we still want to do this if we get an exception below?",
+      "range": {
+        "startLine": 1683,
+        "startChar": 8,
+        "endLine": 1683,
+        "endChar": 24
+      },
+      "revId": "8e40a66817b3b5412f43bd76975650edb1f28c98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
