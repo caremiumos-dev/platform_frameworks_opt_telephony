@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "230e8c8a_fcde7f07",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-07T18:21:39Z",
+      "side": 1,
+      "message": "why not use getLockedRecordsLoaded() since you already defined that helper method?",
+      "range": {
+        "startLine": 316,
+        "startChar": 12,
+        "endLine": 316,
+        "endChar": 58
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ddf54d53_35c53e8d",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-07T18:21:39Z",
+      "side": 1,
+      "message": "If the ISIM app is locked, then IsimUiccRecords will never notify \"LOCKED\" or \"LOADED\", it seems an issue to me. Even we don\u0027t need to read the ICCID for ISIM in case of LOCKED, maybe we still need to notify \"LOCKED\" just like SIM and RUIM?",
+      "range": {
+        "startLine": 199,
+        "startChar": 8,
+        "endLine": 199,
+        "endChar": 31
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "17777684_7dad28a4",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-07T18:21:39Z",
+      "side": 1,
+      "message": "Incorrect indentation",
+      "range": {
+        "startLine": 110,
+        "startChar": 19,
+        "endLine": 110,
+        "endChar": 32
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cff8d078_af675dbe",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-07T18:21:39Z",
+      "side": 1,
+      "message": "incorrect indentation",
+      "range": {
+        "startLine": 609,
+        "startChar": 16,
+        "endLine": 609,
+        "endChar": 20
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ae6b9f3a_8aa44092",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-07T18:21:39Z",
+      "side": 1,
+      "message": "I think one line is enough",
+      "range": {
+        "startLine": 833,
+        "startChar": 16,
+        "endLine": 833,
+        "endChar": 29
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
