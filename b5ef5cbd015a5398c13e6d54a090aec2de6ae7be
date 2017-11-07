@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c26e62a_79e7b03a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 4951,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-07T17:55:26Z",
+      "side": 1,
+      "message": "Please define a constant for these parameters, i.e EMPTY_ALPHA_LONG.",
+      "range": {
+        "startLine": 4950,
+        "startChar": 0,
+        "endLine": 4951,
+        "endChar": 38
+      },
+      "revId": "b5ef5cbd015a5398c13e6d54a090aec2de6ae7be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4e0adf00_740f8855",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 5006,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-07T17:55:26Z",
+      "side": 1,
+      "message": "Add some helper functions to share with convertHalCellInfoList_1_2, i.e createParcelForCellInfoWCDMA, createParcelForCellInfoLTE. There are too much redundant code between two convert method.",
+      "range": {
+        "startLine": 4944,
+        "startChar": 1,
+        "endLine": 5006,
+        "endChar": 26
+      },
+      "revId": "b5ef5cbd015a5398c13e6d54a090aec2de6ae7be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea1e9b5b_ac3dad72",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-07T17:55:26Z",
+      "side": 1,
+      "message": "Please also add the test for other types, i.e GSM, CDMA. As I mentioned in RIL.java, you could add some helper functions to share with two convert method, and then you could write the test for only one method.",
+      "range": {
+        "startLine": 904,
+        "startChar": 48,
+        "endLine": 904,
+        "endChar": 51
+      },
+      "revId": "b5ef5cbd015a5398c13e6d54a090aec2de6ae7be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
