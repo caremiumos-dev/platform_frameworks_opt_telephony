@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63721864_6a7bd3a0",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3417,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-07T17:57:57Z",
+      "side": 1,
+      "message": "Is this check needed? REASON_REGISTERED should be the only message happening before CarrierConfig is loaded...",
+      "range": {
+        "startLine": 3417,
+        "startChar": 70,
+        "endLine": 3417,
+        "endChar": 90
+      },
+      "revId": "293f5c7471ab17792e47bdebb6d37523ee1120db",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
