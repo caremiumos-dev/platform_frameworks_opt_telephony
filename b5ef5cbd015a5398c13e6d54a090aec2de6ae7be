@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "7fd5aa26_c8dcd796",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 5006,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-07T21:55:22Z",
+      "side": 1,
+      "message": "Although the raido_1_0 and radio_1_2 are different, but we convert them to the same class, CellInfo. We use parcel to store the information and pass it to the CREATOR of CellInfo. \nTheoretically, we can use the same function to create the parcel for convert_1_0 and convert_1_2.  \n\nThe code should look like:\n\ncase CellInfoType.LTE:\n    p \u003d createParcelForLTE(ci, pci, tac, earfcn, mcc, mnc, alphaLong, alphaShort, signalStrength, rsrp, rssnr, cqi, timingAdvance);\n\ncase CellInfoType.WCDMA:\n    p \u003d createParcelForWCDMA(lac, cid, psc, uarfcn, mcc, mnc, alphaLong, alphaShort, signalStrength, bitErrorRate);",
+      "parentUuid": "101518b4_2575af36",
+      "range": {
+        "startLine": 4944,
+        "startChar": 1,
+        "endLine": 5006,
+        "endChar": 26
+      },
+      "revId": "b5ef5cbd015a5398c13e6d54a090aec2de6ae7be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea1e9b5b_ac3dad72",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
         "patchSetId": 6

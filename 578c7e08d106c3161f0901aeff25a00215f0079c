@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "15386cc5_3623b709",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4926,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-07T21:55:22Z",
+      "side": 1,
+      "message": "Put this to the top of the class, like other static final variable.",
+      "range": {
+        "startLine": 4924,
+        "startChar": 0,
+        "endLine": 4926,
+        "endChar": 55
+      },
+      "revId": "578c7e08d106c3161f0901aeff25a00215f0079c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f0a26b4_c93945bb",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 7
@@ -18,6 +41,29 @@
         "startChar": 20,
         "endLine": 5006,
         "endChar": 81
+      },
+      "revId": "578c7e08d106c3161f0901aeff25a00215f0079c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7949a1_ac1edf9a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-07T21:55:22Z",
+      "side": 1,
+      "message": "Put all the static final field to the top of the class.",
+      "range": {
+        "startLine": 1035,
+        "startChar": 0,
+        "endLine": 1040,
+        "endChar": 49
       },
       "revId": "578c7e08d106c3161f0901aeff25a00215f0079c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
