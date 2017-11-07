@@ -22,6 +22,30 @@
       "revId": "d0f1f94f37cc07b414e4c79c8418ee5a9e570922",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c943a833_de2b19ed",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/cdma/CdmaSmsAddressTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-07T17:57:22Z",
+      "side": 1,
+      "message": "Good point, I change the package to \u003c\u003e.cdma.sms, thanks!",
+      "parentUuid": "d0a13a1f_e1fca14e",
+      "range": {
+        "startLine": 75,
+        "startChar": 26,
+        "endLine": 75,
+        "endChar": 37
+      },
+      "revId": "d0f1f94f37cc07b414e4c79c8418ee5a9e570922",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
