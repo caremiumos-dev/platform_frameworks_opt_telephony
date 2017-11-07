@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f0a26b4_c93945bb",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 5006,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-07T21:49:35Z",
+      "side": 1,
+      "message": "Why \"signalStrength\" is written twice? Won\u0027t it break the Unit test?",
+      "range": {
+        "startLine": 5006,
+        "startChar": 20,
+        "endLine": 5006,
+        "endChar": 81
+      },
+      "revId": "578c7e08d106c3161f0901aeff25a00215f0079c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "839e8fbc_2753c2aa",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-07T21:49:35Z",
+      "side": 1,
+      "message": "If you have added the check for bitErrorRate, it should have captured the bug",
+      "range": {
+        "startLine": 1158,
+        "startChar": 76,
+        "endLine": 1158,
+        "endChar": 87
+      },
+      "revId": "578c7e08d106c3161f0901aeff25a00215f0079c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
