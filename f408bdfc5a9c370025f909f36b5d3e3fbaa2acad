@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "72daf00e_e2dfc83c",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-07T19:02:55Z",
+      "side": 1,
+      "message": "I agree that you didn\u0027t change the existing behavior. But think about this, currently the app state is sent per current app type, and later we are going to change it into per all app types. So the profile will broadcast \"LOADED\" when all apps are loaded, or broadcast \"LOCKED\" when any one the apps is locked, right? If the ISIM app is stuck when locked, the overall INTERNAL_SIM_APPLICATION_STATE_CHANGED will be stuck. I am OK if we want to keep the current behavior unchanged in this CL, but it would be helpful to leave a TODO here so that we can make the change when redefining the whole state hierarchy",
+      "parentUuid": "6e21a14b_bc8a170d",
+      "range": {
+        "startLine": 199,
+        "startChar": 8,
+        "endLine": 199,
+        "endChar": 31
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17777684_7dad28a4",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 1
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "This is actually the correct indentation and others are not, but I did want to touch them as that would affect the history unnecessarily.",
       "parentUuid": "cff8d078_af675dbe",
+      "range": {
+        "startLine": 609,
+        "startChar": 16,
+        "endLine": 609,
+        "endChar": 20
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ddc486dc_7102314b",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-07T19:02:55Z",
+      "side": 1,
+      "message": "oh, I see, but this really looks wired...",
+      "parentUuid": "1f461ea1_35d2637a",
       "range": {
         "startLine": 609,
         "startChar": 16,
