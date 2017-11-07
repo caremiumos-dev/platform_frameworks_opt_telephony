@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1d40b08d_00ab4ef0",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4926,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-11-07T23:12:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15386cc5_3623b709",
+      "range": {
+        "startLine": 4924,
+        "startChar": 0,
+        "endLine": 4926,
+        "endChar": 55
+      },
+      "revId": "578c7e08d106c3161f0901aeff25a00215f0079c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f0a26b4_c93945bb",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 7
@@ -154,6 +178,30 @@
       "side": 1,
       "message": "In that case, why not construct an \"CellInfoWcdma expectCellInfoWcdma\" using the constructor, and compare the cellInfoWcdma with expectCellInfoWcdma using equals()? This check should be more thourgh, and the code will also be more neat.",
       "parentUuid": "3347e25d_7182382c",
+      "range": {
+        "startLine": 1158,
+        "startChar": 76,
+        "endLine": 1158,
+        "endChar": 87
+      },
+      "revId": "578c7e08d106c3161f0901aeff25a00215f0079c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73b04834_f99f4fb3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-11-07T23:12:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9443e4c4_7aa3659b",
       "range": {
         "startLine": 1158,
         "startChar": 76,

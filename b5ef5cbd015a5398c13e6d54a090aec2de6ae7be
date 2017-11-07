@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "aa661b33_582626a7",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 5006,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-11-07T23:12:45Z",
+      "side": 1,
+      "message": "Just want to let you know that I tried it actually, but found out that the code finalized got longer in size, as you can see below. But if you insisted on it, I could do it in this way.\n\n public static void writeToParcelForGsm(Parcel p, int lac, int cid, int arfcn, int bsic, String mcc,\n                                String mnc, String alphaLong, String alphsShort, int signalStrength,\n                                int bitErrorRate, int timingAdvance) {\n        p.writeInt(lac);\n        p.writeInt(cid);\n        p.writeInt(arfcn);\n        p.writeInt(bsic);\n        p.writeString(mcc);\n        p.writeString(mnc);\n        p.writeString(alphaLong);\n        p.writeString(alphsShort);\n        p.writeInt(signalStrength);\n        p.writeInt(bitErrorRate);\n        p.writeInt(timingAdvance);\n    }\n...\ncase CellInfoType.GSM: {\n                    CellInfoGsm cellInfoGsm \u003d record.gsm.get(0);\n                    writeToParcelForGsm(cellInfoGsm.cellIdentityGsm.lac,\n                            cellInfoGsm.cellIdentityGsm.cid, cellInfoGsm.cellIdentityGsm.arfcn,\n                            Byte.toUnsignedInt(cellInfoGsm.cellIdentityGsm.bsic),\n                            cellInfoGsm.cellIdentityGsm.mcc, cellInfoGsm.cellIdentityGsm.mnc,\n                            EMPTY_ALPHA_LONG, EMPTY_ALPHA_SHORT,\n                            cellInfoGsm.signalStrengthGsm.signalStrength,\n                            cellInfoGsm.signalStrengthGsm.bitErrorRate,\n                            cellInfoGsm.signalStrengthGsm.timingAdvance);\n                    break;\n                }",
+      "parentUuid": "7fd5aa26_c8dcd796",
+      "range": {
+        "startLine": 4944,
+        "startChar": 1,
+        "endLine": 5006,
+        "endChar": 26
+      },
+      "revId": "b5ef5cbd015a5398c13e6d54a090aec2de6ae7be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea1e9b5b_ac3dad72",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
         "patchSetId": 6
