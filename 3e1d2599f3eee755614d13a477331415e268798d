@@ -22,6 +22,30 @@
       "revId": "3e1d2599f3eee755614d13a477331415e268798d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "876c3119_5d61b012",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2488,
+      "author": {
+        "id": 1127148
+      },
+      "writtenOn": "2017-11-07T23:44:01Z",
+      "side": 1,
+      "message": "That\u0027s what I thought, and was the original patch actually. But due to the way we assign conference hosts and peers (for the different merge cases), the logic to reset the flag was just blindly doing it for both the host and the peer.\n\nThis approach follows the pattern in onCallMerged above, at line 2474.",
+      "parentUuid": "dbf51908_ea0334cc",
+      "range": {
+        "startLine": 2488,
+        "startChar": 12,
+        "endLine": 2488,
+        "endChar": 52
+      },
+      "revId": "3e1d2599f3eee755614d13a477331415e268798d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
