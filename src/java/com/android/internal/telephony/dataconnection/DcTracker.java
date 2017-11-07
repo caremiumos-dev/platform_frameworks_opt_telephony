@@ -3555,8 +3555,7 @@ public class DcTracker extends Handler {
                         + mPreferredApn.getOperatorNumeric() + ":" + mPreferredApn);
             }
             if (mPreferredApn.getOperatorNumeric().equals(operator)) {
-                if (mPreferredApn.canSupportNetworkType(
-                        ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
+                if (isRadioTechSupported(mPreferredApn, radioTech, requestedApnType)) {
                     apnList.add(mPreferredApn);
                     if (DBG) log("buildWaitingApns: X added preferred apnList=" + apnList);
                     return apnList;
@@ -3571,8 +3570,7 @@ public class DcTracker extends Handler {
         int preferredApnSetId = getPreferredApnSetId();
         for (ApnSetting apn : mAllApnSettings) {
             if (apn.canHandleType(requestedApnTypeBitmask)) {
-                if (apn.canSupportNetworkType(
-                        ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
+                if (isRadioTechSupported(apn, radioTech, requestedApnType)) {
                     if (apn.getApnSetId() == Telephony.Carriers.MATCH_ALL_APN_SET_ID
                             || preferredApnSetId == apn.getApnSetId()) {
                         if (VDBG) log("buildWaitingApns: adding apn=" + apn);
@@ -3597,6 +3595,44 @@ public class DcTracker extends Handler {
 
         if (DBG) log("buildWaitingApns: " + apnList.size() + " APNs in the list: " + apnList);
         return apnList;
+    }
+
+    /**
+     * Evaluates if a given APN supports a given radio technology
+     *
+     * @param apn The APN that is being evaluated
+     * @param radioTech The RIL Radio Tech currently in use
+     * @param requestedApnType Currently requested APN type
+     *
+     * @return true if the APN supports the given radio technology.
+     */
+    private boolean isRadioTechSupported(ApnSetting apn, int radioTech, String requestedApnType) {
+        boolean canSupportNetworkType = apn.canSupportNetworkType(
+                ServiceState.rilRadioTechnologyToNetworkType(radioTech));
+        String[] carrierSpecifiedApnTypesArray = getCarrierConfig().getStringArray(
+                CarrierConfigManager.KEY_APN_TYPES_USING_SPECIFIED_IWLAN_APN_DURING_VOWIFI_STRINGS);
+        if (carrierSpecifiedApnTypesArray != null
+                && Arrays.asList(carrierSpecifiedApnTypesArray).contains(requestedApnType)) {
+            boolean isIwlanSpecifiedApn = apn.getNetworkTypeBitmask() != 0
+                    && apn.canSupportNetworkType(ServiceState.rilRadioTechnologyToNetworkType(
+                            ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN));
+
+            if (DBG) {
+                log("isRadioTechSupported: should use IWLAN APN over VoWiFi:"
+                        + " apn= " + apn
+                        + ", radioTech=" + radioTech
+                        + ", isWifiCallingEnabled=" + mPhone.isWifiCallingEnabled()
+                        + ", canSupportNetworkType=" + canSupportNetworkType
+                        + ", isIwlanSpecifiedApn=" + isIwlanSpecifiedApn);
+            }
+
+            if (mPhone.isWifiCallingEnabled()) {
+                return isIwlanSpecifiedApn;
+            } else {
+                return !isIwlanSpecifiedApn && canSupportNetworkType;
+            }
+        }
+        return canSupportNetworkType;
     }
 
     private String apnListToString (ArrayList<ApnSetting> apns) {

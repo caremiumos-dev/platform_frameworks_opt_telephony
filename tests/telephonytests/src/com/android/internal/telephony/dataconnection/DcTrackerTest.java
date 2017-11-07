@@ -128,6 +128,7 @@ public class DcTrackerTest extends TelephonyTest {
     public static final String FAKE_APN7 = "FAKE APN 7";
     public static final String FAKE_APN8 = "FAKE APN 8";
     public static final String FAKE_APN9 = "FAKE APN 9";
+    public static final String FAKE_APN10 = "FAKE APN 10";
     public static final String FAKE_IFNAME = "FAKE IFNAME";
     public static final String FAKE_PCSCF_ADDRESS = "22.33.44.55";
     public static final String FAKE_GATEWAY = "11.22.33.44";
@@ -139,6 +140,8 @@ public class DcTrackerTest extends TelephonyTest {
             1 << (TelephonyManager.NETWORK_TYPE_LTE - 1);
     private static final int NETWORK_TYPE_EHRPD_BITMASK =
             1 << (TelephonyManager.NETWORK_TYPE_EHRPD - 1);
+    private static final int NETWORK_TYPE_IWLAN_BITMASK =
+            1 << (TelephonyManager.NETWORK_TYPE_IWLAN - 1);
     private static final Uri PREFERAPN_URI = Uri.parse(
             Telephony.Carriers.CONTENT_URI + "/preferapn");
     private static final int DATA_ENABLED_CHANGED = 0;
@@ -578,6 +581,41 @@ public class DcTrackerTest extends TelephonyTest {
             };
         }
 
+        public Object[] getFakeApn10() {
+            return new Object[]{
+                    2172 + mRowIdOffset,    // id
+                    FAKE_PLMN,              // numeric
+                    "MMS for WLAN",           // name
+                    FAKE_APN10,              // apn
+                    "",                     // proxy
+                    "",                     // port
+                    "",                     // mmsc
+                    "",                     // mmsproxy
+                    "",                     // mmsport
+                    "",                     // user
+                    "",                     // password
+                    -1,                     // authtype
+                    "mms",                  // types
+                    "IP",                   // protocol
+                    "IP",                   // roaming_protocol
+                    1,                      // carrier_enabled
+                    0,                      // bearer
+                    0,                      // bearer_bitmask
+                    0,                      // profile_id
+                    1,                      // modem_cognitive
+                    0,                      // max_conns
+                    0,                      // wait_time
+                    0,                      // max_conns_time
+                    0,                      // mtu
+                    "",                     // mvno_type
+                    "",                     // mnvo_match_data
+                    NETWORK_TYPE_IWLAN_BITMASK, // network_type_bitmask
+                    0,                      // apn_set_id
+                    -1,                     // carrier_id
+                    -1                      // skip_464xlat
+            };
+        }
+
         @Override
         public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                             String sortOrder) {
@@ -606,6 +644,7 @@ public class DcTrackerTest extends TelephonyTest {
                     mc.addRow(getFakeApn7());
                     mc.addRow(getFakeApn8());
                     mc.addRow(getFakeApn9());
+                    mc.addRow(getFakeApn10());
 
                     return mc;
                 }
@@ -1659,6 +1698,41 @@ public class DcTrackerTest extends TelephonyTest {
         assertEquals(2, dunApns.size());
         assertEquals(FAKE_APN5, dunApns.get(0).getApnName());
         assertEquals(FAKE_APN1, dunApns.get(1).getApnName());
+    }
+
+    // Test for IWLAN specified APN while VoWiFi enabled.
+    @Test
+    public void testIwlanSpecifiedApnWhileVowifiEnabled() {
+        // Set CarrierConfig.
+        mBundle.putStringArray(
+                CarrierConfigManager.KEY_APN_TYPES_USING_SPECIFIED_IWLAN_APN_DURING_VOWIFI_STRINGS,
+                new String[]{ApnSetting.TYPE_MMS_STRING});
+
+        // Enabled VoWiFi.
+        doReturn(true).when(mPhone).isWifiCallingEnabled();
+
+        // Init APN.
+        initApns(ApnSetting.TYPE_MMS_STRING, new String[]{ApnSetting.TYPE_MMS_STRING});
+
+        sendInitializationEvents();
+
+        // Enabled canSupportNetworkType.
+        mNetworkRegistrationInfo = new NetworkRegistrationInfo.Builder()
+                .setAccessNetworkTechnology(TelephonyManager.NETWORK_TYPE_IWLAN)
+                .setRegistrationState(NetworkRegistrationInfo.REGISTRATION_STATE_HOME)
+                .build();
+        doReturn(mNetworkRegistrationInfo).when(mServiceState).getNetworkRegistrationInfo(
+                anyInt(), anyInt());
+
+        mDct.enableApn(ApnSetting.TYPE_MMS, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(eq(AccessNetworkType.IWLAN),
+                dpCaptor.capture(), eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL),
+                any(), anyInt(), any(), any(), anyBoolean(), any(Message.class));
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN10, 0, ApnSetting.TYPE_MMS, 0,
+                NETWORK_TYPE_IWLAN_BITMASK);
     }
 
     // This tests simulates the race case where the sim status change event is triggered, the
