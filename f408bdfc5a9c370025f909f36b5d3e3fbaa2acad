@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9d912eb5_63008c40",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-11-07T18:49:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "230e8c8a_fcde7f07",
+      "range": {
+        "startLine": 316,
+        "startChar": 12,
+        "endLine": 316,
+        "endChar": 58
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ddf54d53_35c53e8d",
         "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-11-07T18:21:39Z",
       "side": 1,
       "message": "If the ISIM app is locked, then IsimUiccRecords will never notify \"LOCKED\" or \"LOADED\", it seems an issue to me. Even we don\u0027t need to read the ICCID for ISIM in case of LOCKED, maybe we still need to notify \"LOCKED\" just like SIM and RUIM?",
+      "range": {
+        "startLine": 199,
+        "startChar": 8,
+        "endLine": 199,
+        "endChar": 31
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e21a14b_bc8a170d",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-11-07T18:49:37Z",
+      "side": 1,
+      "message": "That\u0027s possibly an issue but there\u0027s no change in behavior here. The changes in this file are for uniformity with the other 2 files, but functionally there is no change here.",
+      "parentUuid": "ddf54d53_35c53e8d",
       "range": {
         "startLine": 199,
         "startChar": 8,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f11a912e_5b1d687f",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-11-07T18:49:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17777684_7dad28a4",
+      "range": {
+        "startLine": 110,
+        "startChar": 19,
+        "endLine": 110,
+        "endChar": 32
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cff8d078_af675dbe",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "1f461ea1_35d2637a",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-11-07T18:49:37Z",
+      "side": 1,
+      "message": "This is actually the correct indentation and others are not, but I did want to touch them as that would affect the history unnecessarily.",
+      "parentUuid": "cff8d078_af675dbe",
+      "range": {
+        "startLine": 609,
+        "startChar": 16,
+        "endLine": 609,
+        "endChar": 20
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae6b9f3a_8aa44092",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2017-11-07T18:21:39Z",
       "side": 1,
       "message": "I think one line is enough",
+      "range": {
+        "startLine": 833,
+        "startChar": 16,
+        "endLine": 833,
+        "endChar": 29
+      },
+      "revId": "f408bdfc5a9c370025f909f36b5d3e3fbaa2acad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a61ab691_4931e728",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-11-07T18:49:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae6b9f3a_8aa44092",
       "range": {
         "startLine": 833,
         "startChar": 16,
