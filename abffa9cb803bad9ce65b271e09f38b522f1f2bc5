@@ -118,6 +118,30 @@
       "revId": "abffa9cb803bad9ce65b271e09f38b522f1f2bc5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4ba3d5f1_19fa4445",
+        "filename": "src/java/com/android/internal/telephony/test/SimulatedCommands.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-11-07T00:51:46Z",
+      "side": 1,
+      "message": "I have added the test case. Could you please review the latest patchset? It checks below.\n\n1. Check whether the radio status becomes RAIDO_UNAVAILABLE when the shutdown request is sent normally\n\n2. Check whether the raido status becomes RADIO_UNAVAILABLE when the shutdown request is sent even if setRadioPower fails",
+      "parentUuid": "66097593_ff361692",
+      "range": {
+        "startLine": 1196,
+        "startChar": 8,
+        "endLine": 1196,
+        "endChar": 36
+      },
+      "revId": "abffa9cb803bad9ce65b271e09f38b522f1f2bc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
