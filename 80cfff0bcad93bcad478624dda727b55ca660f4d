@@ -22,6 +22,30 @@
       "revId": "80cfff0bcad93bcad478624dda727b55ca660f4d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26f22fe5_7df7ef42",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1885,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-11-07T03:50:25Z",
+      "side": 1,
+      "message": "Thank you for your comment. I will update the name.\nI think it is better to update carrier config name. What do you think?\n\nCurrent:\nKEY_SPN_DISPLAY_RULE_SHOULD_CONSIDER_SERVICE_STATE_ROAMING_BOOL\n\nProposal:\nKEY_SPN_DISPLAY_RULE_USE_ROAMING_FROM_SERVICE_STATE_BOOL",
+      "parentUuid": "72b6b70f_4bff183f",
+      "range": {
+        "startLine": 1885,
+        "startChar": 20,
+        "endLine": 1885,
+        "endChar": 53
+      },
+      "revId": "80cfff0bcad93bcad478624dda727b55ca660f4d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
