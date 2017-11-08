@@ -70,6 +70,30 @@
       "revId": "80cfff0bcad93bcad478624dda727b55ca660f4d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "003fa26c_d3086701",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1885,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-11-08T10:46:26Z",
+      "side": 1,
+      "message": "Okay. I updated the name.",
+      "parentUuid": "05631bf6_d2c10021",
+      "range": {
+        "startLine": 1885,
+        "startChar": 20,
+        "endLine": 1885,
+        "endChar": 53
+      },
+      "revId": "80cfff0bcad93bcad478624dda727b55ca660f4d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
