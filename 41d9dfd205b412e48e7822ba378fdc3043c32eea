@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1be8e245_d9c1c3f5",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-08T22:09:15Z",
+      "side": 1,
+      "message": "current service state.",
+      "range": {
+        "startLine": 670,
+        "startChar": 7,
+        "endLine": 670,
+        "endChar": 50
+      },
+      "revId": "41d9dfd205b412e48e7822ba378fdc3043c32eea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
