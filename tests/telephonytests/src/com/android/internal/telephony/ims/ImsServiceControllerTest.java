@@ -40,7 +40,7 @@ import android.support.test.filters.FlakyTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Pair;
 
-import com.android.ims.internal.IImsServiceFeatureListener;
+import com.android.ims.internal.IImsServiceFeatureCallback;
 
 import org.junit.After;
 import org.junit.Before;
@@ -65,7 +65,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Spy TestImsServiceControllerAdapter mMockServiceControllerBinder;
     @Mock IBinder mMockBinder;
     @Mock ImsServiceController.ImsServiceControllerCallbacks mMockCallbacks;
-    @Mock IImsServiceFeatureListener mMockProxyCallbacks;
+    @Mock IImsServiceFeatureCallback mMockProxyCallbacks;
     @Mock Context mMockContext;
     private final ComponentName mTestComponentName = new ComponentName("TestPkg",
             "ImsServiceControllerTest");
@@ -98,7 +98,9 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindService() {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // Slot 1, RCS
         testFeatures.add(new Pair<>(1, 2));
         ArgumentCaptor<Intent> intentCaptor =
                 ArgumentCaptor.forClass(Intent.class);
@@ -120,6 +122,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindFailureWhenBound() {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
         bindAndConnectService(testFeatures);
 
@@ -137,15 +140,17 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindServiceAndConnected() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // Slot 1, RCS
         testFeatures.add(new Pair<>(1, 2));
 
         bindAndConnectService(testFeatures);
 
         IBinder binder = mMockServiceControllerBinder.getBinder().asBinder();
         verify(binder).linkToDeath(any(), anyInt());
-        verify(mMockServiceControllerBinder).createImsFeature(eq(1), eq(1));
-        verify(mMockServiceControllerBinder).createImsFeature(eq(1), eq(2));
+        verify(mMockServiceControllerBinder).createMMTelFeature(eq(1));
+        verify(mMockServiceControllerBinder).createRcsFeature(eq(1));
         verify(mMockCallbacks).imsServiceFeatureCreated(eq(1), eq(1),
                 eq(mTestImsServiceController));
         verify(mMockCallbacks).imsServiceFeatureCreated(eq(1), eq(2),
@@ -164,7 +169,9 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindServiceAndConnectedDisconnected() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // Slot 1, RCS
         testFeatures.add(new Pair<>(1, 2));
         ServiceConnection conn = bindAndConnectService(testFeatures);
 
@@ -190,7 +197,9 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindServiceBindUnbind() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // Slot 1, RCS
         testFeatures.add(new Pair<>(1, 2));
         ServiceConnection conn = bindAndConnectService(testFeatures);
 
@@ -216,7 +225,9 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindServiceAndBinderDied() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // Slot 1, RCS
         testFeatures.add(new Pair<>(1, 2));
         bindAndConnectService(testFeatures);
         ArgumentCaptor<IBinder.DeathRecipient> deathCaptor =
@@ -241,9 +252,10 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindServiceAndAddFeature() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
         bindAndConnectService(testFeatures);
-        verify(mMockServiceControllerBinder).createImsFeature(eq(1), eq(1));
+        verify(mMockServiceControllerBinder).createMMTelFeature(eq(1));
         verify(mMockCallbacks).imsServiceFeatureCreated(eq(1), eq(1),
                 eq(mTestImsServiceController));
         verify(mMockProxyCallbacks).imsFeatureCreated(eq(1), eq(1));
@@ -253,7 +265,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
 
         mTestImsServiceController.changeImsServiceFeatures(testFeaturesWithAddition);
 
-        verify(mMockServiceControllerBinder).createImsFeature(eq(2), eq(1));
+        verify(mMockServiceControllerBinder).createMMTelFeature(eq(2));
         verify(mMockCallbacks).imsServiceFeatureCreated(eq(2), eq(1),
                 eq(mTestImsServiceController));
         verify(mMockProxyCallbacks).imsFeatureCreated(eq(2), eq(1));
@@ -266,14 +278,16 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindServiceAndRemoveFeature() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // Slot 2, MMTel
         testFeatures.add(new Pair<>(2, 1));
         bindAndConnectService(testFeatures);
-        verify(mMockServiceControllerBinder).createImsFeature(eq(1), eq(1));
+        verify(mMockServiceControllerBinder).createMMTelFeature(eq(1));
         verify(mMockCallbacks).imsServiceFeatureCreated(eq(1), eq(1),
                 eq(mTestImsServiceController));
         verify(mMockProxyCallbacks).imsFeatureCreated(eq(1), eq(1));
-        verify(mMockServiceControllerBinder).createImsFeature(eq(2), eq(1));
+        verify(mMockServiceControllerBinder).createMMTelFeature(eq(2));
         verify(mMockCallbacks).imsServiceFeatureCreated(eq(2), eq(1),
                 eq(mTestImsServiceController));
         verify(mMockProxyCallbacks).imsFeatureCreated(eq(2), eq(1));
@@ -296,14 +310,16 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindServiceAndRemoveAllFeatures() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // slot 2, MMTel
         testFeatures.add(new Pair<>(2, 1));
         bindAndConnectService(testFeatures);
-        verify(mMockServiceControllerBinder).createImsFeature(eq(1), eq(1));
+        verify(mMockServiceControllerBinder).createMMTelFeature(eq(1));
         verify(mMockCallbacks).imsServiceFeatureCreated(eq(1), eq(1),
                 eq(mTestImsServiceController));
         verify(mMockProxyCallbacks).imsFeatureCreated(eq(1), eq(1));
-        verify(mMockServiceControllerBinder).createImsFeature(eq(2), eq(1));
+        verify(mMockServiceControllerBinder).createMMTelFeature(eq(2));
         verify(mMockCallbacks).imsServiceFeatureCreated(eq(2), eq(1),
                 eq(mTestImsServiceController));
         verify(mMockProxyCallbacks).imsFeatureCreated(eq(2), eq(1));
@@ -328,16 +344,18 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindUnbindServiceAndAddFeature() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
         bindAndConnectService(testFeatures);
         mTestImsServiceController.unbind();
         // Create a new list with an additional item
         HashSet<Pair<Integer, Integer>> testFeaturesWithAddition = new HashSet<>(testFeatures);
+        // Try to create an RCS feature
         testFeaturesWithAddition.add(new Pair<>(1, 2));
 
         mTestImsServiceController.changeImsServiceFeatures(testFeaturesWithAddition);
 
-        verify(mMockServiceControllerBinder, never()).createImsFeature(eq(1), eq(2));
+        verify(mMockServiceControllerBinder, never()).createRcsFeature(eq(1));
         verify(mMockCallbacks, never()).imsServiceFeatureCreated(eq(1), eq(2),
                 eq(mTestImsServiceController));
         verify(mMockProxyCallbacks, never()).imsFeatureCreated(eq(1), eq(2));
@@ -351,7 +369,9 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testAutoBindAfterBinderDied() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // Slot 1, RCS
         testFeatures.add(new Pair<>(1, 2));
         bindAndConnectService(testFeatures);
         mTestImsServiceController.setRebindRetryTime(() -> RETRY_TIMEOUT);
@@ -371,7 +391,9 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testNoAutoBindBeforeTimeout() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // Slot 1, RCS
         testFeatures.add(new Pair<>(1, 2));
         bindAndConnectService(testFeatures);
         mTestImsServiceController.setRebindRetryTime(() -> RETRY_TIMEOUT);
@@ -389,7 +411,9 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testUnbindCauseAutoBindCancelAfterBinderDied() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // Slot 1, RCS
         testFeatures.add(new Pair<>(1, 2));
         bindAndConnectService(testFeatures);
         mTestImsServiceController.setRebindRetryTime(() -> RETRY_TIMEOUT);
@@ -411,7 +435,9 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Test
     public void testBindCauseAutoBindCancelAfterBinderDied() throws RemoteException {
         HashSet<Pair<Integer, Integer>> testFeatures = new HashSet<>();
+        // Slot 1, MMTel
         testFeatures.add(new Pair<>(1, 1));
+        // Slot 1, RCS
         testFeatures.add(new Pair<>(1, 2));
         bindAndConnectService(testFeatures);
         mTestImsServiceController.setRebindRetryTime(() -> RETRY_TIMEOUT);
