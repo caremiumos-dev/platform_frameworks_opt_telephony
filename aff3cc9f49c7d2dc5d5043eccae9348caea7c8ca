@@ -22,6 +22,30 @@
       "revId": "aff3cc9f49c7d2dc5d5043eccae9348caea7c8ca",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4509fac_363f6017",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccProfileTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-09T22:23:49Z",
+      "side": 1,
+      "message": "It is used actually.\nIn old UiccCardTest, we mocked the CommandInterface by using mSimulatedCommands, for example:\n\nmSimulatedCommands.setIccIoResultForApduLogicalChannel(mIccIoResult);\n\nbut in this UiccProfileTest, we mocked the UiccCard instead of the mSimulatedCommands. The reason of doing this is that I don\u0027t want to create a UiccCard obj for the UiccProfileTest.",
+      "parentUuid": "56f2cb08_538eef36",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 80
+      },
+      "revId": "aff3cc9f49c7d2dc5d5043eccae9348caea7c8ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
