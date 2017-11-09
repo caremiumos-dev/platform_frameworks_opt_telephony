@@ -22,6 +22,30 @@
       "revId": "41d9dfd205b412e48e7822ba378fdc3043c32eea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a94d7b6_c15de666",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-11-09T12:19:44Z",
+      "side": 1,
+      "message": "Thank you. I updated it in the patchset3.",
+      "parentUuid": "1be8e245_d9c1c3f5",
+      "range": {
+        "startLine": 670,
+        "startChar": 7,
+        "endLine": 670,
+        "endChar": 50
+      },
+      "revId": "41d9dfd205b412e48e7822ba378fdc3043c32eea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
