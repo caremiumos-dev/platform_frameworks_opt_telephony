@@ -39,6 +39,30 @@
       "revId": "44db07849dacb028bcb39468e0e07e95c001851e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fcc0005a_5d8c985b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3058,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2017-11-09T05:00:37Z",
+      "side": 1,
+      "message": "Even if in multi-sim, I think single IDD will be fine since it retrieves the current country information with the MCC got from operatorNumeric.\n\nAnd currently multi IDDs for those country having more than 1 IDD are not supported.",
+      "parentUuid": "097d1536_52728249",
+      "range": {
+        "startLine": 3058,
+        "startChar": 12,
+        "endLine": 3058,
+        "endChar": 88
+      },
+      "revId": "44db07849dacb028bcb39468e0e07e95c001851e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
