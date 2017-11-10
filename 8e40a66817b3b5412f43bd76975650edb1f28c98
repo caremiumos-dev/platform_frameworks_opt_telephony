@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5c39004e_51f1f4cb",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-11-10T10:30:10Z",
+      "side": 1,
+      "message": "Updated comment.",
+      "parentUuid": "15bc3634_59dfd002",
+      "range": {
+        "startLine": 1215,
+        "startChar": 7,
+        "endLine": 1215,
+        "endChar": 64
+      },
+      "revId": "8e40a66817b3b5412f43bd76975650edb1f28c98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1532e30c_b879a78c",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 2
