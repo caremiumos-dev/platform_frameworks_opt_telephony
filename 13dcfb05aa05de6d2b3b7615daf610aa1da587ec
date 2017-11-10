@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fac2ba7_eb9a9824",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2718,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-11-10T18:25:29Z",
+      "side": 1,
+      "message": "why do we care if the old state was in service?",
+      "range": {
+        "startLine": 2718,
+        "startChar": 16,
+        "endLine": 2718,
+        "endChar": 19
+      },
+      "revId": "13dcfb05aa05de6d2b3b7615daf610aa1da587ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
