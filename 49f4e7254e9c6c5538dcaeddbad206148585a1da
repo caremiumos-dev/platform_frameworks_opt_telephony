@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c0424f8_cce13334",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1061207
+      },
+      "writtenOn": "2017-11-10T23:33:44Z",
+      "side": 1,
+      "message": "nit:nullable",
+      "range": {
+        "startLine": 307,
+        "startChar": 28,
+        "endLine": 307,
+        "endChar": 52
+      },
+      "revId": "49f4e7254e9c6c5538dcaeddbad206148585a1da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "067e9619_b05cd69a",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1061207
+      },
+      "writtenOn": "2017-11-10T23:33:44Z",
+      "side": 1,
+      "message": "three methods bellow look very similar, consider introducing a helper function that they call.",
+      "range": {
+        "startLine": 406,
+        "startChar": 28,
+        "endLine": 406,
+        "endChar": 43
+      },
+      "revId": "49f4e7254e9c6c5538dcaeddbad206148585a1da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e0b28a8f_714d7ca5",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1061207
+      },
+      "writtenOn": "2017-11-10T23:33:44Z",
+      "side": 1,
+      "message": "nit:nullable",
+      "range": {
+        "startLine": 406,
+        "startChar": 11,
+        "endLine": 406,
+        "endChar": 27
+      },
+      "revId": "49f4e7254e9c6c5538dcaeddbad206148585a1da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
