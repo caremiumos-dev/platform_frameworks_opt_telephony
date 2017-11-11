@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 The Android Open Source Project
+ * Copyright 2006 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,6 @@ import android.hardware.radio.V1_0.SetupDataCallResult;
 import android.hardware.radio.V1_0.SimApdu;
 import android.hardware.radio.V1_0.SmsWriteArgs;
 import android.hardware.radio.V1_0.UusInfo;
-import android.hardware.radio.deprecated.V1_0.IOemHook;
 import android.net.ConnectivityManager;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -85,6 +84,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaInformationRecords;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.dataconnection.DataCallResponse;
@@ -102,176 +102,15 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
-/**
- * {@hide}
- */
-
-class RILRequest {
-    static final String LOG_TAG = "RilRequest";
-
-    //***** Class Variables
-    static Random sRandom = new Random();
-    static AtomicInteger sNextSerial = new AtomicInteger(0);
-    private static Object sPoolSync = new Object();
-    private static RILRequest sPool = null;
-    private static int sPoolSize = 0;
-    private static final int MAX_POOL_SIZE = 4;
-
-    //***** Instance Variables
-    int mSerial;
-    int mRequest;
-    Message mResult;
-    RILRequest mNext;
-    int mWakeLockType;
-    WorkSource mWorkSource;
-    String mClientId;
-    // time in ms when RIL request was made
-    long mStartTimeMs;
-
-    /**
-     * Retrieves a new RILRequest instance from the pool.
-     *
-     * @param request RIL_REQUEST_*
-     * @param result sent when operation completes
-     * @return a RILRequest instance from the pool.
-     */
-    private static RILRequest obtain(int request, Message result) {
-        RILRequest rr = null;
-
-        synchronized(sPoolSync) {
-            if (sPool != null) {
-                rr = sPool;
-                sPool = rr.mNext;
-                rr.mNext = null;
-                sPoolSize--;
-            }
-        }
-
-        if (rr == null) {
-            rr = new RILRequest();
-        }
-
-        rr.mSerial = sNextSerial.getAndIncrement();
-
-        rr.mRequest = request;
-        rr.mResult = result;
-
-        rr.mWakeLockType = RIL.INVALID_WAKELOCK;
-        rr.mWorkSource = null;
-        rr.mStartTimeMs = SystemClock.elapsedRealtime();
-        if (result != null && result.getTarget() == null) {
-            throw new NullPointerException("Message target must not be null");
-        }
-
-        return rr;
-    }
-
-
-    /**
-     * Retrieves a new RILRequest instance from the pool and sets the clientId
-     *
-     * @param request RIL_REQUEST_*
-     * @param result sent when operation completes
-     * @param workSource WorkSource to track the client
-     * @return a RILRequest instance from the pool.
-     */
-    static RILRequest obtain(int request, Message result, WorkSource workSource) {
-        RILRequest rr = null;
-
-        rr = obtain(request, result);
-        if(workSource != null) {
-            rr.mWorkSource = workSource;
-            rr.mClientId = String.valueOf(workSource.get(0)) + ":" + workSource.getName(0);
-        } else {
-            Rlog.e(LOG_TAG, "null workSource " + request);
-        }
-
-        return rr;
-    }
-
-    /**
-     * Returns a RILRequest instance to the pool.
-     *
-     * Note: This should only be called once per use.
-     */
-    void release() {
-        synchronized (sPoolSync) {
-            if (sPoolSize < MAX_POOL_SIZE) {
-                mNext = sPool;
-                sPool = this;
-                sPoolSize++;
-                mResult = null;
-                if(mWakeLockType != RIL.INVALID_WAKELOCK) {
-                    //This is OK for some wakelock types and not others
-                    if(mWakeLockType == RIL.FOR_WAKELOCK) {
-                        Rlog.e(LOG_TAG, "RILRequest releasing with held wake lock: "
-                                + serialString());
-                    }
-                }
-            }
-        }
-    }
-
-    private RILRequest() {
-    }
-
-    static void
-    resetSerial() {
-        // use a random so that on recovery we probably don't mix old requests
-        // with new.
-        sNextSerial.set(sRandom.nextInt());
-    }
-
-    String
-    serialString() {
-        //Cheesy way to do %04d
-        StringBuilder sb = new StringBuilder(8);
-        String sn;
-
-        long adjustedSerial = (((long)mSerial) - Integer.MIN_VALUE)%10000;
-
-        sn = Long.toString(adjustedSerial);
-
-        //sb.append("J[");
-        sb.append('[');
-        for (int i = 0, s = sn.length() ; i < 4 - s; i++) {
-            sb.append('0');
-        }
-
-        sb.append(sn);
-        sb.append(']');
-        return sb.toString();
-    }
-
-    void
-    onError(int error, Object ret) {
-        CommandException ex;
-
-        ex = CommandException.fromRilErrno(error);
-
-        if (RIL.RILJ_LOGD) Rlog.d(LOG_TAG, serialString() + "< "
-            + RIL.requestToString(mRequest)
-            + " error: " + ex + " ret=" + RIL.retToString(mRequest, ret));
-
-        if (mResult != null) {
-            AsyncResult.forMessage(mResult, ret, ex);
-            mResult.sendToTarget();
-        }
-    }
-}
-
 
 /**
  * RIL implementation of the CommandsInterface.
  *
  * {@hide}
  */
-public final class RIL extends BaseCommands implements CommandsInterface {
+public class RIL extends BaseCommands implements CommandsInterface {
     static final String RILJ_LOG_TAG = "RILJ";
     // Have a separate wakelock instance for Ack
     static final String RILJ_ACK_WAKELOCK_NAME = "RILJ_ACK_WL";
@@ -334,9 +173,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     RadioResponse mRadioResponse;
     RadioIndication mRadioIndication;
     volatile IRadio mRadioProxy = null;
-    OemHookResponse mOemHookResponse;
-    OemHookIndication mOemHookIndication;
-    volatile IOemHook mOemHookProxy = null;
     final AtomicLong mRadioProxyCookie = new AtomicLong(0);
     final RadioProxyDeathRecipient mRadioProxyDeathRecipient;
     final RilHandler mRilHandler;
@@ -365,10 +201,13 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return list;
     }
 
-    class RilHandler extends Handler {
+    /** The handler used to handle the internal event of RIL. */
+    @VisibleForTesting
+    public class RilHandler extends Handler {
+
         //***** Handler implementation
-        @Override public void
-        handleMessage(Message msg) {
+        @Override
+        public void handleMessage(Message msg) {
             RILRequest rr;
 
             switch (msg.what) {
@@ -437,7 +276,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                         // todo: rild should be back up since message was sent with a delay. this is
                         // a hack.
                         getRadioProxy(null);
-                        getOemHookProxy(null);
                     }
                     break;
             }
@@ -482,7 +320,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
     private void resetProxyAndRequestList() {
         mRadioProxy = null;
-        mOemHookProxy = null;
 
         // increment the cookie so that death notification can be ignored
         mRadioProxyCookie.incrementAndGet();
@@ -498,7 +335,9 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         // it here. Current hack is to call getService() on death notification after a delay.
     }
 
-    private IRadio getRadioProxy(Message result) {
+    /** Returns a {@link IRadio} instance or null if the service is not available. */
+    @VisibleForTesting
+    public IRadio getRadioProxy(Message result) {
         if (!mIsMobileNetworkSupported) {
             if (RILJ_LOGV) riljLog("getRadioProxy: Not calling getService(): wifi-only");
             if (result != null) {
@@ -544,53 +383,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return mRadioProxy;
     }
 
-    private IOemHook getOemHookProxy(Message result) {
-        if (!mIsMobileNetworkSupported) {
-            if (RILJ_LOGV) riljLog("getOemHookProxy: Not calling getService(): wifi-only");
-            if (result != null) {
-                AsyncResult.forMessage(result, null,
-                        CommandException.fromRilErrno(RADIO_NOT_AVAILABLE));
-                result.sendToTarget();
-            }
-            return null;
-        }
-
-        if (mOemHookProxy != null) {
-            return mOemHookProxy;
-        }
-
-        try {
-            mOemHookProxy = IOemHook.getService(
-                    HIDL_SERVICE_NAME[mPhoneId == null ? 0 : mPhoneId]);
-            if (mOemHookProxy != null) {
-                // not calling linkToDeath() as ril service runs in the same process and death
-                // notification for that should be sufficient
-                mOemHookProxy.setResponseFunctions(mOemHookResponse, mOemHookIndication);
-            } else {
-                riljLoge("getOemHookProxy: mOemHookProxy == null");
-            }
-        } catch (RemoteException | RuntimeException e) {
-            mOemHookProxy = null;
-            riljLoge("OemHookProxy getService/setResponseFunctions: " + e);
-        }
-
-        if (mOemHookProxy == null) {
-            if (result != null) {
-                AsyncResult.forMessage(result, null,
-                        CommandException.fromRilErrno(RADIO_NOT_AVAILABLE));
-                result.sendToTarget();
-            }
-
-            // if service is not up, treat it like death notification to try to get service again
-            mRilHandler.sendMessageDelayed(
-                    mRilHandler.obtainMessage(EVENT_RADIO_PROXY_DEAD,
-                            mRadioProxyCookie.incrementAndGet()),
-                    IRADIO_GET_SERVICE_DELAY_MILLIS);
-        }
-
-        return mOemHookProxy;
-    }
-
     //***** Constructors
 
     public RIL(Context context, int preferredNetworkType, int cdmaSubscription) {
@@ -617,8 +409,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
         mRadioResponse = new RadioResponse(this);
         mRadioIndication = new RadioIndication(this);
-        mOemHookResponse = new OemHookResponse(this);
-        mOemHookIndication = new OemHookIndication(this);
         mRilHandler = new RilHandler();
         mRadioProxyDeathRecipient = new RadioProxyDeathRecipient();
 
@@ -641,11 +431,10 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         // set radio callback; needed to set RadioIndication callback (should be done after
         // wakelock stuff is initialized above as callbacks are received on separate binder threads)
         getRadioProxy(null);
-        getOemHookProxy(null);
     }
 
-    @Override public void
-    setOnNITZTime(Handler h, int what, Object obj) {
+    @Override
+    public void setOnNITZTime(Handler h, int what, Object obj) {
         super.setOnNITZTime(h, what, obj);
 
         // Send the last NITZ time if we have it
@@ -687,8 +476,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void
-    getIccCardStatus(Message result) {
+    public void getIccCardStatus(Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_GET_SIM_STATUS, result,
@@ -704,13 +492,13 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
-    @Override public void
-    supplyIccPin(String pin, Message result) {
+    @Override
+    public void supplyIccPin(String pin, Message result) {
         supplyIccPinForApp(pin, null, result);
     }
 
-    @Override public void
-    supplyIccPinForApp(String pin, String aid, Message result) {
+    @Override
+    public void supplyIccPinForApp(String pin, String aid, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_ENTER_SIM_PIN, result,
@@ -759,13 +547,13 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
-    @Override public void
-    supplyIccPin2(String pin, Message result) {
+    @Override
+    public void supplyIccPin2(String pin, Message result) {
         supplyIccPin2ForApp(pin, null, result);
     }
 
-    @Override public void
-    supplyIccPin2ForApp(String pin, String aid, Message result) {
+    @Override
+    public void supplyIccPin2ForApp(String pin, String aid, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_ENTER_SIM_PIN2, result,
@@ -786,13 +574,13 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
-    @Override public void
-    supplyIccPuk2(String puk2, String newPin2, Message result) {
+    @Override
+    public void supplyIccPuk2(String puk2, String newPin2, Message result) {
         supplyIccPuk2ForApp(puk2, newPin2, null, result);
     }
 
-    @Override public void
-    supplyIccPuk2ForApp(String puk, String newPin2, String aid, Message result) {
+    @Override
+    public void supplyIccPuk2ForApp(String puk, String newPin2, String aid, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_ENTER_SIM_PUK2, result,
@@ -814,13 +602,13 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
-    @Override public void
-    changeIccPin(String oldPin, String newPin, Message result) {
+    @Override
+    public void changeIccPin(String oldPin, String newPin, Message result) {
         changeIccPinForApp(oldPin, newPin, null, result);
     }
 
-    @Override public void
-    changeIccPinForApp(String oldPin, String newPin, String aid, Message result) {
+    @Override
+    public void changeIccPinForApp(String oldPin, String newPin, String aid, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_CHANGE_SIM_PIN, result,
@@ -842,13 +630,13 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
-    @Override public void
-    changeIccPin2(String oldPin2, String newPin2, Message result) {
+    @Override
+    public void changeIccPin2(String oldPin2, String newPin2, Message result) {
         changeIccPin2ForApp(oldPin2, newPin2, null, result);
     }
 
-    @Override public void
-    changeIccPin2ForApp(String oldPin2, String newPin2, String aid, Message result) {
+    @Override
+    public void changeIccPin2ForApp(String oldPin2, String newPin2, String aid, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_CHANGE_SIM_PIN2, result,
@@ -2102,51 +1890,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                 radioProxy.getDataCallList(rr.mSerial);
             } catch (RemoteException | RuntimeException e) {
                 handleRadioProxyExceptionForRR(rr, "getDataCallList", e);
-            }
-        }
-    }
-
-    @Override
-    public void invokeOemRilRequestRaw(byte[] data, Message response) {
-        IOemHook oemHookProxy = getOemHookProxy(response);
-        if (oemHookProxy != null) {
-            RILRequest rr = obtainRequest(RIL_REQUEST_OEM_HOOK_RAW, response,
-                    mRILDefaultWorkSource);
-
-            if (RILJ_LOGD) {
-                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                        + "[" + IccUtils.bytesToHexString(data) + "]");
-            }
-
-            try {
-                oemHookProxy.sendRequestRaw(rr.mSerial, primitiveArrayToArrayList(data));
-            } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(rr, "invokeOemRilRequestStrings", e);
-            }
-        }
-    }
-
-    @Override
-    public void invokeOemRilRequestStrings(String[] strings, Message result) {
-        IOemHook oemHookProxy = getOemHookProxy(result);
-        if (oemHookProxy != null) {
-            RILRequest rr = obtainRequest(RIL_REQUEST_OEM_HOOK_STRINGS, result,
-                    mRILDefaultWorkSource);
-
-            String logStr = "";
-            for (int i = 0; i < strings.length; i++) {
-                logStr = logStr + strings[i] + " ";
-            }
-            if (RILJ_LOGD) {
-                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest) + " strings = "
-                        + logStr);
-            }
-
-            try {
-                oemHookProxy.sendRequestStrings(rr.mSerial,
-                        new ArrayList<String>(Arrays.asList(strings)));
-            } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(rr, "invokeOemRilRequestStrings", e);
             }
         }
     }
@@ -3449,8 +3192,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void
-    getHardwareConfig (Message result) {
+    public void getHardwareConfig(Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_GET_HARDWARE_CONFIG, result,
@@ -3986,7 +3728,8 @@ public final class RIL extends BaseCommands implements CommandsInterface {
      * @param responseInfo RadioResponseInfo received in response callback
      * @return RILRequest corresponding to the response
      */
-    RILRequest processResponse(RadioResponseInfo responseInfo) {
+    @VisibleForTesting
+    public RILRequest processResponse(RadioResponseInfo responseInfo) {
         int serial = responseInfo.serial;
         int error = responseInfo.error;
         int type = responseInfo.type;
@@ -4086,7 +3829,8 @@ public final class RIL extends BaseCommands implements CommandsInterface {
      * @param responseInfo RadioResponseInfo received in the callback
      * @param ret object to be returned to request sender
      */
-    void processResponseDone(RILRequest rr, RadioResponseInfo responseInfo, Object ret) {
+    @VisibleForTesting
+    public void processResponseDone(RILRequest rr, RadioResponseInfo responseInfo, Object ret) {
         if (responseInfo.error == 0) {
             if (RILJ_LOGD) {
                 riljLog(rr.serialString() + "< " + requestToString(rr.mRequest)
@@ -4155,7 +3899,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
      * There is a WAKE_LOCK_TIMEOUT to release the lock, though it shouldn't
      * happen often.
      */
-
     private void acquireWakeLock(RILRequest rr, int wakeLockType) {
         synchronized (rr) {
             if (rr.mWakeLockType != INVALID_WAKELOCK) {
@@ -4204,6 +3947,24 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             }
             rr.mWakeLockType = wakeLockType;
         }
+    }
+
+    /** Returns the wake lock of the given type. */
+    @VisibleForTesting
+    public WakeLock getWakeLock(int wakeLockType) {
+        return wakeLockType == FOR_WAKELOCK ? mWakeLock : mAckWakeLock;
+    }
+
+    /** Returns the {@link RilHandler} instance. */
+    @VisibleForTesting
+    public RilHandler getRilHandler() {
+        return mRilHandler;
+    }
+
+    /** Returns the Ril request list. */
+    @VisibleForTesting
+    public SparseArray<RILRequest> getRilRequestList() {
+        return mRequestList;
     }
 
     private void decrementWakeLock(RILRequest rr) {
@@ -4616,10 +4377,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                 return "DATA_CALL_LIST";
             case RIL_REQUEST_RESET_RADIO:
                 return "RESET_RADIO";
-            case RIL_REQUEST_OEM_HOOK_RAW:
-                return "OEM_HOOK_RAW";
-            case RIL_REQUEST_OEM_HOOK_STRINGS:
-                return "OEM_HOOK_STRINGS";
             case RIL_REQUEST_SCREEN_STATE:
                 return "SCREEN_STATE";
             case RIL_REQUEST_SET_SUPP_SVC_NOTIFICATION:
@@ -4845,8 +4602,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                 return "UNSOL_CDMA_OTA_PROVISION_STATUS";
             case RIL_UNSOL_CDMA_INFO_REC:
                 return "UNSOL_CDMA_INFO_REC";
-            case RIL_UNSOL_OEM_HOOK_RAW:
-                return "UNSOL_OEM_HOOK_RAW";
             case RIL_UNSOL_RINGBACK_TONE:
                 return "UNSOL_RINGBACK_TONE";
             case RIL_UNSOL_RESEND_INCALL_MUTE:
