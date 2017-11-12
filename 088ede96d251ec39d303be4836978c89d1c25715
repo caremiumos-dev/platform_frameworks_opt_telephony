@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a90a67be_091f1356",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-11-12T02:44:19Z",
+      "side": 1,
+      "message": "The purpose of this code is to make sure radioPower status is UNAVAILABLE by calling requestShutdown(). So, we think current code is better.",
+      "parentUuid": "e742fdc5_fd4b6b00",
+      "range": {
+        "startLine": 1123,
+        "startChar": 0,
+        "endLine": 1123,
+        "endChar": 70
+      },
+      "revId": "088ede96d251ec39d303be4836978c89d1c25715",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f580590c_2aba9a0b",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2017-11-10T02:15:30Z",
       "side": 1,
       "message": "The test case here should be:\n1. setRadioPower(false), but modem didn\u0027t response this request, the radioPower is still on.\n2. sst.requestShutdown()\n3. assert that mSimulatedCommands.requestShutdown is called.",
+      "range": {
+        "startLine": 1125,
+        "startChar": 8,
+        "endLine": 1132,
+        "endChar": 70
+      },
+      "revId": "088ede96d251ec39d303be4836978c89d1c25715",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8fdaa62b_308ab29e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-11-12T02:44:19Z",
+      "side": 1,
+      "message": "Thank you for your suggestion. I agree with you.\n\nI fixed this test case in the latest patchset. And I divided  it into the testShuttingDownRequest and the testShuttingDownRequestWithRadioPowerFailResponse.",
+      "parentUuid": "f580590c_2aba9a0b",
       "range": {
         "startLine": 1125,
         "startChar": 8,
