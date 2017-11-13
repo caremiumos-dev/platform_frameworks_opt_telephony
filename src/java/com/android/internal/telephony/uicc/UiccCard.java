@@ -86,6 +86,7 @@ public class UiccCard {
     private CatService mCatService;
     private RadioState mLastRadioState =  RadioState.RADIO_UNAVAILABLE;
     private UiccCarrierPrivilegeRules mCarrierPrivilegeRules;
+    private UiccSeac mUiccSeac;
 
     private RegistrantList mAbsentRegistrants = new RegistrantList();
     private RegistrantList mCarrierPrivilegeRegistrants = new RegistrantList();
@@ -122,6 +123,7 @@ public class UiccCard {
             mCatService = null;
             mUiccApplications = null;
             mCarrierPrivilegeRules = null;
+            mUiccSeac = null;
         }
     }
 
@@ -168,6 +170,9 @@ public class UiccCard {
             }
 
             sanitizeApplicationIndexesLocked();
+            if (mUiccSeac == null) {
+                mUiccSeac = new UiccSeac(this);
+            }
 
             RadioState radioState = mCi.getRadioState();
             if (DBG) log("update: radioState=" + radioState + " mLastRadioState="
@@ -852,5 +857,15 @@ public class UiccCard {
         pw.println("mLocalLog:");
         mLocalLog.dump(fd, pw, args);
         pw.flush();
+    }
+
+    public void updateAccessRules(Message onComplete) {
+        log("updateAccessRules - IN ");
+        if (mUiccSeac != null) {
+            mUiccSeac.updateAccessRules(onComplete);
+        } else {
+            AsyncResult.forMessage(onComplete, null, new Exception("UiccSeac is null"));
+            onComplete.sendToTarget();
+        }
     }
 }
