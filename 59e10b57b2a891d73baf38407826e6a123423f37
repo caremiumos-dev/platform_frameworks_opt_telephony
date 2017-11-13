@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dffe1e5a_e2229dbf",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/cdma/sms/CdmaSmsAddressTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2017-11-13T01:00:12Z",
+      "side": 1,
+      "message": "TON_INTERNATIONAL_OR_IP",
+      "range": {
+        "startLine": 57,
+        "startChar": 36,
+        "endLine": 57,
+        "endChar": 53
+      },
+      "revId": "59e10b57b2a891d73baf38407826e6a123423f37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5e85b0_a7483deb",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/cdma/sms/CdmaSmsAddressTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2017-11-13T01:00:12Z",
+      "side": 1,
+      "message": "stringToAscii() for DIGIT_MODE_8BIT_CHAR",
+      "range": {
+        "startLine": 58,
+        "startChar": 52,
+        "endLine": 58,
+        "endChar": 53
+      },
+      "revId": "59e10b57b2a891d73baf38407826e6a123423f37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
