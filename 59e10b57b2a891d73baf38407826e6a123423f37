@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b57befaa_fd240f11",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/cdma/sms/CdmaSmsAddressTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-13T18:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dffe1e5a_e2229dbf",
+      "range": {
+        "startLine": 57,
+        "startChar": 36,
+        "endLine": 57,
+        "endChar": 53
+      },
+      "revId": "59e10b57b2a891d73baf38407826e6a123423f37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da5e85b0_a7483deb",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/cdma/sms/CdmaSmsAddressTest.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-11-13T01:00:12Z",
       "side": 1,
       "message": "stringToAscii() for DIGIT_MODE_8BIT_CHAR",
+      "range": {
+        "startLine": 58,
+        "startChar": 52,
+        "endLine": 58,
+        "endChar": 53
+      },
+      "revId": "59e10b57b2a891d73baf38407826e6a123423f37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "128f0375_86064607",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/cdma/sms/CdmaSmsAddressTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-13T18:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5e85b0_a7483deb",
       "range": {
         "startLine": 58,
         "startChar": 52,
