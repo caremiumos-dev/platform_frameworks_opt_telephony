@@ -101,11 +101,11 @@ public class DcTrackerMock extends DcTracker {
         throw new RuntimeException("Not Implemented");
     }
     @Override
-    public void setDataRoamingEnabledByUser(boolean enabled) {
+    public void setDataRoamingTypeByUser(int roamingType) {
         throw new RuntimeException("Not Implemented");
     }
     @Override
-    public boolean getDataRoamingEnabled() {
+    public int getDataRoamingType() {
         throw new RuntimeException("Not Implemented");
     }
     @Override

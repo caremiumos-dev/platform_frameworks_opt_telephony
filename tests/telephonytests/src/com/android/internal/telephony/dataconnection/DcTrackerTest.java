@@ -759,7 +759,7 @@ public class DcTrackerTest extends TelephonyTest {
         //step 4: only tear down metered data connections.
 
         //set Default and MMS to be metered in the CarrierConfigManager
-        boolean roamingEnabled = mDct.getDataRoamingEnabled();
+        int roamingType = mDct.getDataRoamingType();
         boolean dataEnabled = mDct.isUserDataEnabled();
 
         mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_ROAMING_APN_TYPES_STRINGS,
@@ -790,7 +790,7 @@ public class DcTrackerTest extends TelephonyTest {
         //user is in roaming
         doReturn(true).when(mServiceState).getDataRoaming();
         logd("Sending DISABLE_ROAMING_CMD");
-        mDct.setDataRoamingEnabledByUser(false);
+        mDct.setDataRoamingTypeByUser(PhoneConstants.ROAMING_OFF);
         mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_ROAMING_ON));
         waitForMs(200);
 
@@ -803,7 +803,120 @@ public class DcTrackerTest extends TelephonyTest {
         assertEquals(DctConstants.State.CONNECTED, mDct.getState(PhoneConstants.APN_TYPE_IMS));
 
         // reset roaming settings / data enabled settings at end of this test
-        mDct.setDataRoamingEnabledByUser(roamingEnabled);
+        mDct.setDataRoamingTypeByUser(roamingType);
+        mDct.setUserDataEnabled(dataEnabled);
+        waitForMs(200);
+    }
+
+
+    @Test
+    @MediumTest
+    public void testNationalRoamingWhenOutsideHomeCountry() throws Exception {
+        //step 1: setup two DataCalls one for Metered: default, another one for Non-metered: IMS
+        //step 2: set roaming to national roaming, data is enabled
+        //step 3: mock networks to be roaming outside of home country
+        //step 4: only tear down metered data connections.
+
+        //set Default and MMS to be metered in the CarrierConfigManager
+        int roamingType = mDct.getDataRoamingType();
+        boolean dataEnabled = mDct.isUserDataEnabled();
+
+        mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_ROAMING_APN_TYPES_STRINGS,
+                new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
+        mDct.setEnabled(5, true);
+        mDct.setEnabled(0, true);
+
+        logd("Sending EVENT_RECORDS_LOADED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_DATA_CONNECTION_ATTACHED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
+        waitForMs(200);
+
+        logd("Sending DATA_ENABLED_CMD");
+        mDct.setUserDataEnabled(true);
+
+        waitForMs(300);
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, times(2)).setupDataCall(
+                eq(mServiceState.getRilDataRadioTechnology()), dpCaptor.capture(),
+                eq(false), eq(false), any(Message.class));
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 5, 1, LTE_BEARER_BITMASK);
+
+        //user is outside of home country
+        doReturn(true).when(mServiceState).getDataRoaming();
+        doReturn("00101").when(mServiceState).getOperatorNumeric();
+        doReturn("00201").when(mTelephonyManager).getSimOperator(anyInt());
+        logd("Setting roaming type to PhoneConstants.ROAMING_NATIONAL");
+        mDct.setDataRoamingTypeByUser(PhoneConstants.ROAMING_NATIONAL);
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_ROAMING_ON));
+        waitForMs(200);
+
+        // expected tear down all metered DataConnections
+        verify(mSimulatedCommandsVerifier, times(1)).deactivateDataCall(anyInt(), anyInt(),
+                any(Message.class));
+        assertEquals(DctConstants.State.CONNECTED, mDct.getOverallState());
+        assertEquals(DctConstants.State.IDLE, mDct.getState(PhoneConstants.APN_TYPE_DEFAULT));
+        assertEquals(DctConstants.State.CONNECTED, mDct.getState(PhoneConstants.APN_TYPE_IMS));
+
+        // reset roaming settings / data enabled settings at end of this test
+        mDct.setDataRoamingTypeByUser(roamingType);
+        mDct.setUserDataEnabled(dataEnabled);
+        waitForMs(200);
+    }
+
+    @Test
+    @MediumTest
+    public void testNationalRoamingWhenInHomeCountry() throws Exception {
+        //step 1: setup two DataCalls one for Metered: default, another one for Non-metered: IMS
+        //step 2: set roaming to national roaming, data is enabled
+        //step 3: mock networks to be roaming inside of home country
+        //step 4: do not tear down any data connections.
+
+        //set Default and MMS to be metered in the CarrierConfigManager
+        int roamingType = mDct.getDataRoamingType();
+        boolean dataEnabled = mDct.isUserDataEnabled();
+
+        mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_ROAMING_APN_TYPES_STRINGS,
+                new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
+        mDct.setEnabled(5, true);
+        mDct.setEnabled(0, true);
+
+        logd("Sending EVENT_RECORDS_LOADED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_DATA_CONNECTION_ATTACHED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
+        waitForMs(200);
+
+        logd("Sending DATA_ENABLED_CMD");
+        mDct.setUserDataEnabled(true);
+
+        waitForMs(300);
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, times(2)).setupDataCall(
+                eq(mServiceState.getRilDataRadioTechnology()), dpCaptor.capture(),
+                eq(false), eq(false), any(Message.class));
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 5, 1, LTE_BEARER_BITMASK);
+
+        //user is roaming inside of home country
+        doReturn(true).when(mServiceState).getDataRoaming();
+        doReturn("00101").when(mServiceState).getOperatorNumeric();
+        doReturn("00102").when(mTelephonyManager).getSimOperator(anyInt());
+        logd("Setting roaming type to PhoneConstants.ROAMING_NATIONAL");
+        mDct.setDataRoamingTypeByUser(PhoneConstants.ROAMING_NATIONAL);
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_ROAMING_ON));
+        waitForMs(200);
+
+        // no tear down of any DataConnections
+        assertEquals(DctConstants.State.CONNECTED, mDct.getOverallState());
+        assertEquals(DctConstants.State.CONNECTED, mDct.getState(PhoneConstants.APN_TYPE_DEFAULT));
+        assertEquals(DctConstants.State.CONNECTED, mDct.getState(PhoneConstants.APN_TYPE_IMS));
+
+        // reset roaming settings / data enabled settings at end of this test
+        mDct.setDataRoamingTypeByUser(roamingType);
         mDct.setUserDataEnabled(dataEnabled);
         waitForMs(200);
     }
@@ -815,7 +928,7 @@ public class DcTrackerTest extends TelephonyTest {
         //step 2: user toggled data settings on
         //step 3: only non-metered data call is established
 
-        boolean roamingEnabled = mDct.getDataRoamingEnabled();
+        int roamingType = mDct.getDataRoamingType();
         boolean dataEnabled = mDct.isUserDataEnabled();
         doReturn(true).when(mServiceState).getDataRoaming();
 
@@ -829,7 +942,7 @@ public class DcTrackerTest extends TelephonyTest {
         mDct.setUserDataEnabled(true);
 
         logd("Sending DISABLE_ROAMING_CMD");
-        mDct.setDataRoamingEnabledByUser(false);
+        mDct.setDataRoamingTypeByUser(PhoneConstants.ROAMING_OFF);
 
         logd("Sending EVENT_RECORDS_LOADED");
         mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
@@ -853,8 +966,79 @@ public class DcTrackerTest extends TelephonyTest {
         assertEquals(DctConstants.State.CONNECTED, mDct.getState(PhoneConstants.APN_TYPE_IMS));
 
         // reset roaming settings / data enabled settings at end of this test
-        mDct.setDataRoamingEnabledByUser(roamingEnabled);
+        mDct.setDataRoamingTypeByUser(roamingType);
         mDct.setUserDataEnabled(dataEnabled);
+        waitForMs(200);
+    }
+
+    // Test function isDataRoamingAllowed when roaming type is ROAMING_OFF
+    @Test
+    @MediumTest
+    public void testIsDataRoamingAllowedOnRoamingOff() throws Exception {
+        //step 1: Set roaming type to PhoneConstants.ROAMING_OFF.
+        //step 2: Verify isDataRoamingAllowed returns false.
+
+        int roamingType = mDct.getDataRoamingType();
+
+        logd("Setting roaming type to PhoneConstants.ROAMING_OFF");
+        mDct.setDataRoamingTypeByUser(PhoneConstants.ROAMING_OFF);
+
+        assertFalse(mDct.isDataRoamingAllowed());
+
+        // reset roaming settings at end of this test
+        mDct.setDataRoamingTypeByUser(roamingType);
+        waitForMs(200);
+    }
+
+    // Test function isDataRoamingAllowed when roaming type is ROAMING_NATIONAL
+    @Test
+    @MediumTest
+    public void testIsDataRoamingAllowedOnNationalRoaming() throws Exception {
+        //step 1: Set roaming type to PhoneConstants.ROAMING_NATIONAL.
+        //step 2: Mock different networks and verify output from isDataRoamingAllowed.
+
+        int roamingType = mDct.getDataRoamingType();
+
+        logd("Setting roaming type to PhoneConstants.ROAMING_NATIONAL");
+        mDct.setDataRoamingTypeByUser(PhoneConstants.ROAMING_NATIONAL);
+
+        doReturn("00101").when(mServiceState).getOperatorNumeric();
+        doReturn("00101").when(mTelephonyManager).getSimOperator(anyInt());
+        assertTrue(mDct.isDataRoamingAllowed());
+
+        doReturn("00101").when(mServiceState).getOperatorNumeric();
+        doReturn("00102").when(mTelephonyManager).getSimOperator(anyInt());
+        assertTrue(mDct.isDataRoamingAllowed());
+
+        doReturn("00101").when(mServiceState).getOperatorNumeric();
+        doReturn("00201").when(mTelephonyManager).getSimOperator(anyInt());
+        assertFalse(mDct.isDataRoamingAllowed());
+
+        doReturn(null).when(mServiceState).getOperatorNumeric();
+        doReturn(null).when(mTelephonyManager).getSimOperator(anyInt());
+        assertFalse(mDct.isDataRoamingAllowed());
+
+        // reset roaming settings at end of this test
+        mDct.setDataRoamingTypeByUser(roamingType);
+        waitForMs(200);
+    }
+
+    // Test function isDataRoamingAllowed when roaming type is ROAMING_ON
+    @Test
+    @MediumTest
+    public void testIsDataRoamingAllowedOnRoamingOn() throws Exception {
+        //step 1: Set roaming type to PhoneConstants.ROAMING_ON.
+        //step 2: Verify isDataRoamingAllowed returns true.
+
+        int roamingType = mDct.getDataRoamingType();
+
+        logd("Setting roaming type to PhoneConstants.ROAMING_ON");
+        mDct.setDataRoamingTypeByUser(PhoneConstants.ROAMING_ON);
+
+        assertTrue(mDct.isDataRoamingAllowed());
+
+        // reset roaming settings at end of this test
+        mDct.setDataRoamingTypeByUser(roamingType);
         waitForMs(200);
     }
 

@@ -1272,11 +1272,16 @@ public class PhoneMock extends Phone {
         throw new RuntimeException("not implemented");
     }
 
-    public boolean getDataRoamingEnabled() {
+    public void setDataRoamingType(int roamingType) {
         throw new RuntimeException("not implemented");
     }
 
-    public void setDataRoamingEnabled(boolean enable) {
+    public int getDataRoamingType() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public boolean isDataRoamingAllowed() {
         throw new RuntimeException("not implemented");
     }
 
