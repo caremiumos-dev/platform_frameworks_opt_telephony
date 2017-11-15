@@ -436,12 +436,17 @@ abstract class SipPhoneBase extends Phone {
     }
 
     @Override
-    public boolean getDataRoamingEnabled() {
-        return false;
+    public int getDataRoamingType() {
+        return PhoneConstants.ROAMING_OFF;
     }
 
     @Override
-    public void setDataRoamingEnabled(boolean enable) {
+    public void setDataRoamingType(int roamingType) {
+    }
+
+    @Override
+    public boolean isDataRoamingAllowed() {
+        return false;
     }
 
     @Override
