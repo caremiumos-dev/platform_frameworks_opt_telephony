@@ -478,7 +478,7 @@ public class DataConnection extends StateMachine {
         // Set this flag to true if the user turns on data roaming. Or if we override the roaming
         // state in framework, we should set this flag to true as well so the modem will not reject
         // the data call setup (because the modem actually thinks the device is roaming).
-        boolean allowRoaming = mPhone.getDataRoamingEnabled()
+        boolean allowRoaming = mPhone.isDataRoamingAllowed()
                 || (isModemRoaming && !mPhone.getServiceState().getDataRoaming());
 
         mPhone.mCi.setupDataCall(cp.mRilRat, dp, isModemRoaming, allowRoaming, msg);

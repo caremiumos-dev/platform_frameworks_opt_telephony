@@ -1899,13 +1899,18 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
-    public boolean getDataRoamingEnabled() {
-        return mDcTracker.getDataRoamingEnabled();
+    public int getDataRoamingType() {
+        return mDcTracker.getDataRoamingType();
     }
 
     @Override
-    public void setDataRoamingEnabled(boolean enable) {
-        mDcTracker.setDataRoamingEnabledByUser(enable);
+    public void setDataRoamingType(int roamingType) {
+        mDcTracker.setDataRoamingTypeByUser(roamingType);
+    }
+
+    @Override
+    public boolean isDataRoamingAllowed() {
+        return mDcTracker.isDataRoamingAllowed();
     }
 
     @Override
