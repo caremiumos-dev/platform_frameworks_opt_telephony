@@ -735,14 +735,19 @@ public interface PhoneInternalInterface {
     void disableLocationUpdates();
 
     /**
-     * @return true if enable data connection on roaming
+     * @return roaming type.
      */
-    boolean getDataRoamingEnabled();
+    int getDataRoamingType();
 
     /**
-     * @param enable set true if enable data connection on roaming
+     * @param roamingType New roaming type.
      */
-    void setDataRoamingEnabled(boolean enable);
+    void setDataRoamingType(int roamingType);
+
+    /**
+     * @return true if roaming is currently allowed.
+     */
+    boolean isDataRoamingAllowed();
 
     /**
      * @return true if user has enabled data
