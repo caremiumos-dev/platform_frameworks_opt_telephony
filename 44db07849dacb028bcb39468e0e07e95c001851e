@@ -111,6 +111,30 @@
       "revId": "44db07849dacb028bcb39468e0e07e95c001851e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "192e4e87_20fb6404",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3058,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2017-11-17T03:25:21Z",
+      "side": 1,
+      "message": "hi, sorry for delay to reply\n\ncall the API from phone (override by GsmCdmaPhone), finally call the interfce from TelephonyManager, if it occurs on sub2, will be \",xx\", right?\n686            TelephonyManager.setTelephonyProperty(mPhoneId, property, value);\n\nfrom Phonenumberutis, see below\n\n2583            // in case, there is no IDD is found, we shouldn\u0027t convert it.\n2584            ps \u003d SystemProperties.get(PROPERTY_OPERATOR_IDP_STRING, PLUS_SIGN_STRING);\n\n\nos the whole string \",xx\" is used to replace \"+\", that is not expected",
+      "parentUuid": "0e475189_c6fbd832",
+      "range": {
+        "startLine": 3058,
+        "startChar": 12,
+        "endLine": 3058,
+        "endChar": 88
+      },
+      "revId": "44db07849dacb028bcb39468e0e07e95c001851e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
