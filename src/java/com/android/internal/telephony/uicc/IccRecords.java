@@ -280,7 +280,12 @@ public abstract class IccRecords extends Handler implements IccConstants {
      * @return full ICC ID including hex digits
      */
     public String getFullIccId() {
-        return mFullIccId;
+        String ret = mFullIccId;
+        // trim the trailing 'f'
+        while (ret.endsWith("f")) {
+            ret = ret.substring(0, ret.length() - 1);
+        }
+        return ret;
     }
 
     public void registerForRecordsLoaded(Handler h, int what, Object obj) {
