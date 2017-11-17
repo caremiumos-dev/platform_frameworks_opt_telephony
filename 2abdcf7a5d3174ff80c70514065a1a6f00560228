@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55e83604_a8ba26fd",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-11-17T23:21:14Z",
+      "side": 1,
+      "message": "how about just return hexIccId.replaceAll(\"(?i)f*$\", \"\")",
+      "range": {
+        "startLine": 816,
+        "startChar": 0,
+        "endLine": 822,
+        "endChar": 39
+      },
+      "revId": "2abdcf7a5d3174ff80c70514065a1a6f00560228",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
