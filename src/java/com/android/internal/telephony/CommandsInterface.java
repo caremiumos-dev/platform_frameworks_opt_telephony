@@ -189,6 +189,10 @@ public interface CommandsInterface {
      */
     void registerForIccStatusChanged(Handler h, int what, Object obj);
     void unregisterForIccStatusChanged(Handler h);
+    /** Register for ICC slot status changed event */
+    void registerForIccSlotStatusChanged(Handler h, int what, Object obj);
+    /** Unregister for ICC slot status changed event */
+    void unregisterForIccSlotStatusChanged(Handler h);
 
     void registerForCallStateChanged(Handler h, int what, Object obj);
     void unregisterForCallStateChanged(Handler h);
@@ -1690,6 +1694,21 @@ public interface CommandsInterface {
      *          Callback message containing {@link IccCardStatus} structure for the card.
      */
     public void getIccCardStatus(Message result);
+
+    /**
+     * Request the status of the physical UICC slots.
+     *
+     * @param result Callback message containing {@link IccSlotStatus} structure for the slot.
+     */
+    void getIccSlotStatus(Message result);
+
+    /**
+     * Set the mapping from logical slots to physical slots.
+     *
+     * @param physicalSlots Mapping from logical slots to physical slots.
+     * @param result Callback message is empty on completion.
+     */
+    void setLogicalToPhysicalSlotMapping(int[] physicalSlots, Message result);
 
     /**
      * Return if the current radio is LTE on CDMA. This

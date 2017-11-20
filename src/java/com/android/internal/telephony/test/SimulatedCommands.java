@@ -175,6 +175,14 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
+    public void getIccSlotStatus(Message result) {
+    }
+
+    @Override
+    public void setLogicalToPhysicalSlotMapping(int[] physicalSlots, Message result) {
+    }
+
+    @Override
     public void supplyIccPin(String pin, Message result)  {
         if (mSimLockedState != SimLockState.REQUIRE_PIN) {
             Rlog.i(LOG_TAG, "[SimCmd] supplyIccPin: wrong state, state=" +

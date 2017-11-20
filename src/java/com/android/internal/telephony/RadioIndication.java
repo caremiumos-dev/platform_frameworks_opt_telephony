@@ -28,6 +28,7 @@ import static com.android.internal.telephony.RILConstants.RIL_UNSOL_DATA_CALL_LI
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_ENTER_EMERGENCY_CALLBACK_MODE;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_HARDWARE_CONFIG_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_ICC_SLOT_STATUS;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_LCEDATA_RECV;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_MODEM_RESTART;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_NETWORK_SCAN_RESULT;
@@ -97,6 +98,7 @@ import com.android.internal.telephony.gsm.SsData;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.nano.TelephonyProto.SmsSession;
 import com.android.internal.telephony.uicc.IccRefreshResponse;
+import com.android.internal.telephony.uicc.IccSlotStatus;
 import com.android.internal.telephony.uicc.IccUtils;
 
 import java.util.ArrayList;
@@ -631,7 +633,24 @@ public class RadioIndication extends IRadioIndication.Stub {
 
         if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_CELL_INFO_LIST, response);
 
-        mRil.mRilCellInfoListRegistrants.notifyRegistrants(new AsyncResult (null, response, null));
+        mRil.mRilCellInfoListRegistrants.notifyRegistrants(new AsyncResult(null, response, null));
+    }
+
+    /**
+     * Indicates a change of the ICC slot status
+     * @param indicationType RadioIndicationType
+     * @param slotsStatus ICC slot status
+     */
+    public void iccSlotStatus(int indicationType,
+                              android.hardware.radio.V1_2.SlotsStatus slotsStatus) {
+        mRil.processIndication(indicationType);
+
+        ArrayList<IccSlotStatus> iccSlotStatus = RIL.convertHalSlotsStatus(slotsStatus);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_ICC_SLOT_STATUS, iccSlotStatus);
+
+        mRil.mIccStatusChangedRegistrants.notifyRegistrants(
+                new AsyncResult(null, iccSlotStatus, null));
     }
 
     /** Incremental network scan results */
