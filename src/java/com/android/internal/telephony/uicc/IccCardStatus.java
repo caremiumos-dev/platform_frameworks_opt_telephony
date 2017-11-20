@@ -62,6 +62,9 @@ public class IccCardStatus {
     public int        mGsmUmtsSubscriptionAppIndex;
     public int        mCdmaSubscriptionAppIndex;
     public int        mImsSubscriptionAppIndex;
+    public int        physicalSlotIndex;
+    public String     atr;
+    public String     iccid;
 
     public IccCardApplicationStatus[] mApplications;
 
@@ -141,6 +144,9 @@ public class IccCardStatus {
             app = mApplications[mImsSubscriptionAppIndex];
             sb.append(app == null ? "null" : app);
         }
+
+        sb.append(",physical_slot_id=").append(physicalSlotIndex).append(",atr=").append(atr);
+        sb.append(",iccid=").append(iccid);
 
         sb.append("}");
         return sb.toString();
