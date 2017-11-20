@@ -62,6 +62,8 @@ public class IccCardStatus {
     public int        mGsmUmtsSubscriptionAppIndex;
     public int        mCdmaSubscriptionAppIndex;
     public int        mImsSubscriptionAppIndex;
+    public int        physicalSlotIndex;
+    public String     atr;
 
     public IccCardApplicationStatus[] mApplications;
 

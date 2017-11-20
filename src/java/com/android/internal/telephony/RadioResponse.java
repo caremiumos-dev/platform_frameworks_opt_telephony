@@ -35,6 +35,7 @@ import android.hardware.radio.V1_0.SetupDataCallResult;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
 import android.hardware.radio.V1_1.IRadioResponse;
 import android.hardware.radio.V1_1.KeepaliveStatus;
+import android.hardware.radio.V1_2.SlotsStatus;
 import android.os.AsyncResult;
 import android.os.Message;
 import android.os.SystemClock;
@@ -53,6 +54,7 @@ import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccIoResult;
+import com.android.internal.telephony.uicc.IccSlotStatus;
 import com.android.internal.telephony.uicc.IccUtils;
 
 import java.util.ArrayList;
@@ -101,6 +103,21 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void getIccCardStatusResponse(RadioResponseInfo responseInfo, CardStatus cardStatus) {
         responseIccCardStatus(responseInfo, cardStatus);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param slotsStatus ICC slot status as defined by SlotsStatus in 1.2/types.hal
+     */
+    public void getIccSlotStatusResponse(RadioResponseInfo responseInfo, SlotsStatus slotsStatus) {
+        responseIccSlotStatus(responseInfo, slotsStatus);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void setLogicalToPhysicalSlotMappingResponse(RadioResponseInfo responseInfo) {
+        responseVoid(responseInfo);
     }
 
     /**
@@ -1251,6 +1268,8 @@ public class RadioResponse extends IRadioResponse.Stub {
             iccCardStatus.mGsmUmtsSubscriptionAppIndex = cardStatus.gsmUmtsSubscriptionAppIndex;
             iccCardStatus.mCdmaSubscriptionAppIndex = cardStatus.cdmaSubscriptionAppIndex;
             iccCardStatus.mImsSubscriptionAppIndex = cardStatus.imsSubscriptionAppIndex;
+            iccCardStatus.physicalSlotIndex = 0;
+            iccCardStatus.atr = null;
             int numApplications = cardStatus.applications.size();
 
             // limit to maximum allowed applications
@@ -1279,6 +1298,19 @@ public class RadioResponse extends IRadioResponse.Stub {
                 sendMessageResponse(rr.mResult, iccCardStatus);
             }
             mRil.processResponseDone(rr, responseInfo, iccCardStatus);
+        }
+    }
+
+    private void responseIccSlotStatus(RadioResponseInfo responseInfo, SlotsStatus slotsStatus) {
+        RILRequest rr = mRil.processResponse(responseInfo);
+        if (rr != null) {
+            ArrayList<IccSlotStatus> iccSlotStatus = RIL.convertHalSlotsStatus(slotsStatus);
+
+            mRil.riljLog("responseIccSlotStatus: from HIDL: " + iccSlotStatus);
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, iccSlotStatus);
+            }
+            mRil.processResponseDone(rr, responseInfo, iccSlotStatus);
         }
     }
 
