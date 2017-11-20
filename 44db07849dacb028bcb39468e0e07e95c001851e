@@ -135,6 +135,30 @@
       "revId": "44db07849dacb028bcb39468e0e07e95c001851e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5849ccfb_b3365ac6",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3058,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-20T20:20:37Z",
+      "side": 1,
+      "message": "@Taesu, if you don\u0027t have access to the bug then let\u0027s just continue discussion here on gerrit",
+      "parentUuid": "0e475189_c6fbd832",
+      "range": {
+        "startLine": 3058,
+        "startChar": 12,
+        "endLine": 3058,
+        "endChar": 88
+      },
+      "revId": "44db07849dacb028bcb39468e0e07e95c001851e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
