@@ -159,6 +159,30 @@
       "revId": "44db07849dacb028bcb39468e0e07e95c001851e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a263c747_6586c654",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3058,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-20T20:33:13Z",
+      "side": 1,
+      "message": "Hmm after thinking about it more I think it\u0027s okay to make IDD a non-phone-specific value. I agree with your Taesu\u0027s comment above.",
+      "parentUuid": "192e4e87_20fb6404",
+      "range": {
+        "startLine": 3058,
+        "startChar": 12,
+        "endLine": 3058,
+        "endChar": 88
+      },
+      "revId": "44db07849dacb028bcb39468e0e07e95c001851e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
