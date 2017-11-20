@@ -499,6 +499,71 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
+    public void getIccSlotStatus(Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            android.hardware.radio.V1_2.IRadio radioProxy12 =
+                    android.hardware.radio.V1_2.IRadio.castFrom(radioProxy);
+            if (radioProxy12 == null) {
+                if (result != null) {
+                    AsyncResult.forMessage(result, null,
+                            CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                    result.sendToTarget();
+                }
+            } else {
+                RILRequest rr = obtainRequest(RIL_REQUEST_GET_SLOT_STATUS, result,
+                        mRILDefaultWorkSource);
+
+                if (RILJ_LOGD) {
+                    riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+                }
+
+                try {
+                    radioProxy.getIccCardStatus(rr.mSerial);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "getSlotStatus", e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setLogicalToPhysicalSlotMapping(int[] physicalSlots, Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            android.hardware.radio.V1_2.IRadio radioProxy12 =
+                    android.hardware.radio.V1_2.IRadio.castFrom(radioProxy);
+            if (radioProxy12 == null) {
+                if (result != null) {
+                    AsyncResult.forMessage(result, null,
+                            CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                    result.sendToTarget();
+                }
+            } else {
+                android.hardware.radio.V1_2.LogicalToPhysicalSlotMapping mapping =
+                        new android.hardware.radio.V1_2.LogicalToPhysicalSlotMapping();
+                mapping.numSlots = (byte) physicalSlots.length;
+                for (int slot : physicalSlots) {
+                    mapping.pysicalSlots.add((byte) slot);
+                }
+
+                RILRequest rr = obtainRequest(RIL_REQUEST_SET_LOGICAL_TO_PHYSICAL_SLOT_MAPPING,
+                        result, mRILDefaultWorkSource);
+
+                if (RILJ_LOGD) {
+                    riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+                }
+
+                try {
+                    radioProxy.getIccCardStatus(rr.mSerial);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "setLogicalToPhysicalSlotMapping", e);
+                }
+            }
+        }
+    }
+
+    @Override
     public void supplyIccPin(String pin, Message result) {
         supplyIccPinForApp(pin, null, result);
     }
@@ -4589,6 +4654,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_START_NETWORK_SCAN";
             case RIL_REQUEST_STOP_NETWORK_SCAN:
                 return "RIL_REQUEST_STOP_NETWORK_SCAN";
+            case RIL_REQUEST_GET_SLOT_STATUS:
+                return "GET_SLOT_STATUS";
             default: return "<unknown request>";
         }
     }

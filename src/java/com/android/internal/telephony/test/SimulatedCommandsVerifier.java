@@ -1166,6 +1166,14 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
+    public void getIccSlotStatus(Message result) {
+    }
+
+    @Override
+    public void setLogicalToPhysicalSlotMapping(int[] physicalSlots, Message result) {
+    }
+
+    @Override
     public int getLteOnCdmaMode() {
         return 0;
     }

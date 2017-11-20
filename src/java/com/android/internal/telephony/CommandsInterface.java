@@ -1692,6 +1692,22 @@ public interface CommandsInterface {
     public void getIccCardStatus(Message result);
 
     /**
+     * Request the status of the physical UICC slots.
+     *
+     * @param result
+     *          Callback message containing {@link IccSlotStatus} structure for the slot.
+     */
+    void getIccSlotStatus(Message result);
+
+    /**
+     * Set the mapping from logical slots to physical slots.
+     *
+     * @param physicalSlots Mapping from logical slots to physical slots.
+     * @param result Callback message is empty on completion.
+     */
+    void setLogicalToPhysicalSlotMapping(int[] physicalSlots, Message result);
+
+    /**
      * Return if the current radio is LTE on CDMA. This
      * is a tri-state return value as for a period of time
      * the mode may be unknown.

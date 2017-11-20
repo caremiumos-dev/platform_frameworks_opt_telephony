@@ -1251,6 +1251,8 @@ public class RadioResponse extends IRadioResponse.Stub {
             iccCardStatus.mGsmUmtsSubscriptionAppIndex = cardStatus.gsmUmtsSubscriptionAppIndex;
             iccCardStatus.mCdmaSubscriptionAppIndex = cardStatus.cdmaSubscriptionAppIndex;
             iccCardStatus.mImsSubscriptionAppIndex = cardStatus.imsSubscriptionAppIndex;
+            iccCardStatus.physicalSlotIndex = 0;
+            iccCardStatus.atr = null;
             int numApplications = cardStatus.applications.size();
 
             // limit to maximum allowed applications
