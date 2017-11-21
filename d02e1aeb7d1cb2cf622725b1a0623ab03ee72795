@@ -131,6 +131,109 @@
       "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f9773d57_6e0a07a1",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:58:06Z",
+      "side": 1,
+      "message": "Please explain why this is video ?",
+      "range": {
+        "startLine": 1228,
+        "startChar": 35,
+        "endLine": 1228,
+        "endChar": 81
+      },
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "45e28d82_ca874f6c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:58:06Z",
+      "side": 1,
+      "message": "How is that we do not need number for the video option but we need it for voice?",
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b7698ad3_dd6b26ed",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:58:06Z",
+      "side": 1,
+      "message": "Why cant we make this generic for voice and video ?",
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2d685b1_20117740",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:58:06Z",
+      "side": 1,
+      "message": "Please add a comment to explain this check. Why is PACKET+DATA_SYNC considered as Video?",
+      "range": {
+        "startLine": 1095,
+        "startChar": 54,
+        "endLine": 1096,
+        "endChar": 61
+      },
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26078a41_44798354",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:58:06Z",
+      "side": 1,
+      "message": "I dont see the notify for Voice. Why are we adding this ?",
+      "range": {
+        "startLine": 1098,
+        "startChar": 35,
+        "endLine": 1098,
+        "endChar": 64
+      },
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
