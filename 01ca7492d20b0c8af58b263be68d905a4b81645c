@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "250ed3b0_138834d8",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4996,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-21T18:16:55Z",
+      "side": 1,
+      "message": "one parameter each line, please also modify other codes like this.",
+      "range": {
+        "startLine": 4996,
+        "startChar": 26,
+        "endLine": 4996,
+        "endChar": 68
+      },
+      "revId": "01ca7492d20b0c8af58b263be68d905a4b81645c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aa53b888_94c87d3d",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-21T18:16:55Z",
+      "side": 1,
+      "message": "This comment is the same as the previous version api, could you please add some extra information about the new API?",
+      "range": {
+        "startLine": 643,
+        "startChar": 0,
+        "endLine": 643,
+        "endChar": 43
+      },
+      "revId": "01ca7492d20b0c8af58b263be68d905a4b81645c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "137095b0_87527ed4",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-21T18:16:55Z",
+      "side": 1,
+      "message": "Removed?",
+      "range": {
+        "startLine": 1111,
+        "startChar": 46,
+        "endLine": 1111,
+        "endChar": 47
+      },
+      "revId": "01ca7492d20b0c8af58b263be68d905a4b81645c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
