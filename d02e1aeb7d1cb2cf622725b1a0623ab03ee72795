@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5bb2c95_0cbbdcc1",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1682,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:47:59Z",
+      "side": 1,
+      "message": "Why is this not SERVICE_CLASS_VOICE ?",
+      "range": {
+        "startLine": 1682,
+        "startChar": 34,
+        "endLine": 1682,
+        "endChar": 52
+      },
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f2ae705_2455970f",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:47:59Z",
+      "side": 1,
+      "message": "Do we need enabled in the name here? Since it is the name of the key, it seems like \"CF_VIDEO\" will be a better name",
+      "range": {
+        "startLine": 222,
+        "startChar": 31,
+        "endLine": 222,
+        "endChar": 47
+      },
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4dd5ba98_0ecf611e",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:47:59Z",
+      "side": 1,
+      "message": "Should we add subID to the log as well ?",
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e79f984d_8c3c1c4b",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1857,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:47:59Z",
+      "side": 1,
+      "message": "Do we need to check for validity of SUB ID as in line 1763 above?",
+      "range": {
+        "startLine": 1857,
+        "startChar": 43,
+        "endLine": 1857,
+        "endChar": 51
+      },
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "18a32cfb_96c6de69",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1864,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:47:59Z",
+      "side": 1,
+      "message": "Will we get UNKNOWN ever for this API ?",
+      "range": {
+        "startLine": 1864,
+        "startChar": 19,
+        "endLine": 1864,
+        "endChar": 51
+      },
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b82e094a_719bc939",
+        "filename": "src/java/com/android/internal/telephony/PhoneInternalInterface.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T18:47:59Z",
+      "side": 1,
+      "message": "I dont see VIDEO defined in CommandsInterface. Can you update the link?",
+      "range": {
+        "startLine": 614,
+        "startChar": 20,
+        "endLine": 614,
+        "endChar": 68
+      },
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
