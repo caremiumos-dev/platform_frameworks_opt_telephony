@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76b1d227_b82a911e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 4908,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-21T19:42:34Z",
+      "side": 1,
+      "message": "please also update the code like this. one parameter per line.",
+      "range": {
+        "startLine": 4908,
+        "startChar": 15,
+        "endLine": 4908,
+        "endChar": 93
+      },
+      "revId": "1a6f10b06925c723c39539f9e2c5f5a8d7324d8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
