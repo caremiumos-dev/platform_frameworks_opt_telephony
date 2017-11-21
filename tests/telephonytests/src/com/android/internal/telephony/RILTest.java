@@ -44,6 +44,7 @@ import static com.android.internal.telephony.RILConstants.RIL_REQUEST_HANGUP;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_HANGUP_FOREGROUND_RESUME_BACKGROUND;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_HANGUP_WAITING_OR_BACKGROUND;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_IMS_REGISTRATION_STATE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_IMS_SEND_SMS;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ISIM_AUTHENTICATION;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_LAST_CALL_FAIL_CAUSE;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_NV_READ_ITEM;
@@ -87,6 +88,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import android.content.Context;
@@ -94,6 +96,7 @@ import android.content.pm.ApplicationInfo;
 import android.hardware.radio.V1_0.DataProfileInfo;
 import android.hardware.radio.V1_0.GsmSmsMessage;
 import android.hardware.radio.V1_0.IRadio;
+import android.hardware.radio.V1_0.ImsSmsMessage;
 import android.hardware.radio.V1_0.NvWriteItem;
 import android.hardware.radio.V1_0.RadioError;
 import android.hardware.radio.V1_0.RadioResponseInfo;
@@ -658,6 +661,44 @@ public class RILTest extends TelephonyTest {
         verify(mRadioProxy).getImsRegistrationState(mSerialNumberCaptor.capture());
         verifyRILResponse(
                 mRILUnderTest, mSerialNumberCaptor.getValue(), RIL_REQUEST_IMS_REGISTRATION_STATE);
+    }
+
+    @Test
+    public void testSendRetryImsGsmSms() throws Exception {
+        String smscPdu = "smscPdu";
+        String pdu = "pdu";
+        GsmSmsMessage gsmMsg = new GsmSmsMessage();
+        gsmMsg.smscPdu = smscPdu;
+        gsmMsg.pdu = pdu;
+
+        ImsSmsMessage firstMsg = new ImsSmsMessage();
+        firstMsg.tech = RILConstants.GSM_PHONE;
+        firstMsg.retry = false;
+        firstMsg.messageRef = 0;
+        firstMsg.gsmMessage.add(gsmMsg);
+
+        ImsSmsMessage retryMsg = new ImsSmsMessage();
+        retryMsg.tech = RILConstants.GSM_PHONE;
+        retryMsg.retry = true;
+        retryMsg.messageRef = 0;
+        retryMsg.gsmMessage.add(gsmMsg);
+
+        int maxRetryCount = 3;
+        int firstTransmission = 0;
+        for (int i = 0; i <= maxRetryCount; i++) {
+            mRILUnderTest.sendImsGsmSms(smscPdu, pdu, i, 0, obtainMessage());
+            if (i == firstTransmission) {
+                verify(mRadioProxy, times(1)).sendImsSms(mSerialNumberCaptor.capture(),
+                        eq(firstMsg));
+                verifyRILResponse(mRILUnderTest, mSerialNumberCaptor.getValue(),
+                        RIL_REQUEST_IMS_SEND_SMS);
+            } else {
+                verify(mRadioProxy, times(i)).sendImsSms(mSerialNumberCaptor.capture(),
+                        eq(retryMsg));
+                verifyRILResponse(mRILUnderTest, mSerialNumberCaptor.getValue(),
+                        RIL_REQUEST_IMS_SEND_SMS);
+            }
+        }
     }
 
     @Test
