@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "070e03ab_8d85ecdd",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-22T00:50:55Z",
+      "side": 1,
+      "message": "seems they are also definied in commandsinterface",
+      "parentUuid": "02392443_28dce4cc",
+      "range": {
+        "startLine": 931,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 5
+      },
+      "revId": "ee146702cdc4c4370435682d110d2c6a61e32f62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79e0a04a_f2e12119",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 6
