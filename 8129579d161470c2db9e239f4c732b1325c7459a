@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "484149e6_a0d5d2a2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2017-11-22T12:08:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb6ef2a0_34e0b242",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 38
+      },
+      "revId": "8129579d161470c2db9e239f4c732b1325c7459a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb356482_5e334b5e",
         "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "1c553afc_34c703ec",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2017-11-22T12:08:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb356482_5e334b5e",
+      "range": {
+        "startLine": 407,
+        "startChar": 12,
+        "endLine": 416,
+        "endChar": 13
+      },
+      "revId": "8129579d161470c2db9e239f4c732b1325c7459a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f510752_262cd7cc",
         "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2017-11-07T22:35:38Z",
       "side": 1,
       "message": "If mvnoMatchData can be a comma separated list of iccId, is there any chance of the iccId getting reordered as the data is passed around? If so the equals() function needs to handle this.",
+      "range": {
+        "startLine": 527,
+        "startChar": 19,
+        "endLine": 527,
+        "endChar": 32
+      },
+      "revId": "8129579d161470c2db9e239f4c732b1325c7459a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66caa66a_bc4246c2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2017-11-22T12:08:19Z",
+      "side": 1,
+      "message": "No, there is no chance of iccid data getting re-ordered. We read iccid values from the apn entry in apns-conf.xml file.",
+      "parentUuid": "9f510752_262cd7cc",
       "range": {
         "startLine": 527,
         "startChar": 19,
