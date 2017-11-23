@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b506770_1caddb30",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2017-11-23T08:04:05Z",
+      "side": 1,
+      "message": "This code needs to be added inside below handleSimLocked() method @ line number 352 ? otherwise subId may not be generated when SIM card in Locked state.",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 17
+      },
+      "revId": "aa3ee1fc5d6f6fb60f01457da937ea06d495918d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5abe86c_8c82310c",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2017-11-23T08:04:05Z",
+      "side": 1,
+      "message": "The newly added mLockedRecordsLoadedRegistrants registrant need to be printed here ?",
+      "range": {
+        "startLine": 866,
+        "startChar": 1,
+        "endLine": 866,
+        "endChar": 8
+      },
+      "revId": "aa3ee1fc5d6f6fb60f01457da937ea06d495918d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
