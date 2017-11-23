@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c54efe50_56ea16b2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3309,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-11-23T01:02:44Z",
+      "side": 1,
+      "message": "I don\u0027t see the new APIs isWfcEnabledByPlatformForSlot \u0026 isWfcEnabledByPlatformForSlot \n\nDo you have a dependent CLs for that ?",
+      "range": {
+        "startLine": 3308,
+        "startChar": 7,
+        "endLine": 3309,
+        "endChar": 56
+      },
+      "revId": "cfc1a57f05fc773f7f4788a05efec43626dde801",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
