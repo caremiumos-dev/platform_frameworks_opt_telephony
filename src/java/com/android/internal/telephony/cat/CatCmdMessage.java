@@ -79,6 +79,7 @@ public class CatCmdMessage implements Parcelable {
             mMenu = ((SelectItemParams) cmdParams).mMenu;
             break;
         case DISPLAY_TEXT:
+        case REFRESH:
         case SET_UP_IDLE_MODE_TEXT:
         case SEND_DTMF:
         case SEND_SMS:
@@ -121,7 +122,6 @@ public class CatCmdMessage implements Parcelable {
             mSetupEventListSettings.eventList = ((SetEventListParams) cmdParams).mEventInfo;
             break;
         case PROVIDE_LOCAL_INFORMATION:
-        case REFRESH:
         default:
             break;
         }
