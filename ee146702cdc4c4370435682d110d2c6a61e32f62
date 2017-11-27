@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a6a6b44b_b51ac447",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1134734
+      },
+      "writtenOn": "2017-11-27T21:42:20Z",
+      "side": 1,
+      "message": "removed as not related to this change.",
+      "parentUuid": "070e03ab_8d85ecdd",
+      "range": {
+        "startLine": 931,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 5
+      },
+      "revId": "ee146702cdc4c4370435682d110d2c6a61e32f62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79e0a04a_f2e12119",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 6
@@ -60,6 +84,30 @@
       "writtenOn": "2017-10-09T23:51:25Z",
       "side": 1,
       "message": "does this need to be updated to 1_2?",
+      "range": {
+        "startLine": 3830,
+        "startChar": 35,
+        "endLine": 3830,
+        "endChar": 39
+      },
+      "revId": "ee146702cdc4c4370435682d110d2c6a61e32f62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c0f931e2_b18822fa",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3830,
+      "author": {
+        "id": 1134734
+      },
+      "writtenOn": "2017-11-27T21:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79e0a04a_f2e12119",
       "range": {
         "startLine": 3830,
         "startChar": 35,
