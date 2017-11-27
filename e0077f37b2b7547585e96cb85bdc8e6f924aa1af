@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "380f43d1_ecd0fed9",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-27T19:43:32Z",
+      "side": 1,
+      "message": "could you update this comment?",
+      "range": {
+        "startLine": 613,
+        "startChar": 47,
+        "endLine": 613,
+        "endChar": 56
+      },
+      "revId": "e0077f37b2b7547585e96cb85bdc8e6f924aa1af",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
