@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.dataconnection;
 
+import android.telephony.ApnSetting;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.internal.telephony.RILConstants;

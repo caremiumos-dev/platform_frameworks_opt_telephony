@@ -106,6 +106,7 @@ import android.os.IPowerManager;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.WorkSource;
+import android.telephony.ApnSetting;
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellIdentityGsm;
 import android.telephony.CellIdentityLte;
@@ -123,7 +124,6 @@ import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.RIL.RilHandler;
-import com.android.internal.telephony.dataconnection.ApnSetting;
 import com.android.internal.telephony.dataconnection.DataProfile;
 
 import org.junit.After;

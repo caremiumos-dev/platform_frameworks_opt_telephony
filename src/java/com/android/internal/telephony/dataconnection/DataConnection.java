@@ -31,6 +31,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.telephony.ApnSetting;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -855,7 +856,7 @@ public class DataConnection extends StateMachine {
 
         // Do we need a restricted network to satisfy the request?
         // Is this network metered?  If not, then don't add restricted
-        if (!mApnSetting.isMetered(mPhone)) {
+        if (!ApnSettingUtils.isMetered(mApnSetting, mPhone)) {
             return;
         }
 
@@ -872,7 +873,7 @@ public class DataConnection extends StateMachine {
             for (String type : mApnSetting.types) {
                 if (!mRestrictedNetworkOverride
                         && (mConnectionParams != null && mConnectionParams.mUnmeteredUseOnly)
-                        && ApnSetting.isMeteredApnType(type, mPhone)) {
+                        && ApnSettingUtils.isMeteredApnType(type, mPhone)) {
                     log("Dropped the metered " + type + " for the unmetered data call.");
                     continue;
                 }
@@ -939,7 +940,7 @@ public class DataConnection extends StateMachine {
             // 2. The non-restricted data and is intended for unmetered use only.
             if (((mConnectionParams != null && mConnectionParams.mUnmeteredUseOnly)
                     && !mRestrictedNetworkOverride)
-                    || !mApnSetting.isMetered(mPhone)) {
+                    || !ApnSettingUtils.isMetered(mApnSetting, mPhone)) {
                 result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
                 mNetworkInfo.setMetered(false);
             } else {

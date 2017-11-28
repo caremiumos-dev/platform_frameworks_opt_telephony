@@ -16,9 +16,19 @@
 
 package com.android.internal.telephony.dataconnection;
 
-import android.net.NetworkCapabilities;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
+
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import android.net.NetworkConfig;
 import android.net.NetworkRequest;
+import android.telephony.ApnSetting;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.LocalLog;
 
@@ -31,16 +41,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 public class ApnContextTest extends TelephonyTest {
 

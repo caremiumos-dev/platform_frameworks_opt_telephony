@@ -16,7 +16,11 @@
 
 package com.android.internal.telephony.dataconnection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import android.os.PersistableBundle;
+import android.telephony.ApnSetting;
 import android.telephony.CarrierConfigManager;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -30,9 +34,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * APN retry manager tests
