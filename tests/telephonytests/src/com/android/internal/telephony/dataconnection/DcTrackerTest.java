@@ -54,6 +54,7 @@ import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.support.test.filters.FlakyTest;
+import android.telephony.ApnSetting;
 import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
@@ -1162,7 +1163,7 @@ public class DcTrackerTest extends TelephonyTest {
 
         String dunApnString = "[ApnSettingV3]HOT mobile PC,pc.hotm,,,,,,,,,440,10,,DUN,,,true,"
                 + "0,,,,,,,,";
-        ApnSetting dunApnExpected = ApnSetting.fromString(dunApnString);
+        ApnSetting dunApnExpected = ApnSettingUtils.fromString(dunApnString);
 
         Settings.Global.putString(mContext.getContentResolver(),
                 Settings.Global.TETHER_DUN_APN, dunApnString);
@@ -1174,7 +1175,7 @@ public class DcTrackerTest extends TelephonyTest {
                 Settings.Global.TETHER_DUN_APN, null);
         // should return APN from db
         dunApn = mDct.fetchDunApn();
-        assertEquals(FAKE_APN5, dunApn.apn);
+        assertEquals(FAKE_APN5, dunApn.getApn());
     }
     // Test oos
     @Test
