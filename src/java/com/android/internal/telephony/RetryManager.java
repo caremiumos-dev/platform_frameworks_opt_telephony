@@ -20,12 +20,11 @@ import android.content.Context;
 import android.os.Build;
 import android.os.PersistableBundle;
 import android.os.SystemProperties;
+import android.telephony.ApnSetting;
 import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
 import android.text.TextUtils;
 import android.util.Pair;
-
-import com.android.internal.telephony.dataconnection.ApnSetting;
 
 import java.util.ArrayList;
 import java.util.Random;

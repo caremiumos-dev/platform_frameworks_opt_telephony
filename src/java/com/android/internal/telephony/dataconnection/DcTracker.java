@@ -36,7 +36,6 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkConfig;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
-import android.net.NetworkUtils;
 import android.net.ProxyInfo;
 import android.net.TrafficStats;
 import android.net.Uri;
@@ -56,6 +55,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.provider.Telephony;
+import android.telephony.ApnSetting;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
 import android.telephony.PcoData;
@@ -862,7 +862,7 @@ public class DcTracker extends Handler {
                             // data connection.
                             apnContext.setReason(Phone.REASON_DATA_ENABLED);
                             cleanUpConnection(true, apnContext);
-                        } else if (apnContext.getApnSetting().isMetered(mPhone)
+                        } else if (ApnSettingUtils.isMetered(apnContext.getApnSetting(), mPhone)
                                 && (netCaps != null && netCaps.hasCapability(
                                         NetworkCapabilities.NET_CAPABILITY_NOT_METERED))) {
                             if (DBG) {
@@ -1276,7 +1276,7 @@ public class DcTracker extends Handler {
                 SubscriptionManager.getDefaultDataSubscriptionId());
 
         boolean isMeteredApnType = apnContext == null
-                || ApnSetting.isMeteredApnType(apnContext.getApnType(), mPhone);
+                || ApnSettingUtils.isMeteredApnType(apnContext.getApnType(), mPhone);
 
         PhoneConstants.State phoneState = PhoneConstants.State.IDLE;
         // Note this is explicitly not using mPhone.getState.  See b/19090488.
@@ -1580,7 +1580,7 @@ public class DcTracker extends Handler {
                 // Use ApnSetting to decide metered or non-metered.
                 // Tear down all metered data connections.
                 ApnSetting apnSetting = apnContext.getApnSetting();
-                if (apnSetting != null && apnSetting.isMetered(mPhone)) {
+                if (apnSetting != null && ApnSettingUtils.isMetered(apnSetting, mPhone)) {
                     if (DBG) log("clean up metered ApnContext Type: " + apnContext.getApnType());
                     apnContext.setReason(reason);
                     cleanUpConnection(tearDown, apnContext);
@@ -1737,7 +1737,7 @@ public class DcTracker extends Handler {
         // APN database, and config_tether_apndata resource (to be deprecated soon).
         String apnData = Settings.Global.getString(mResolver, Settings.Global.TETHER_DUN_APN);
         if (!TextUtils.isEmpty(apnData)) {
-            dunCandidates.addAll(ApnSetting.arrayFromString(apnData));
+            dunCandidates.addAll(ApnSettingUtils.arrayFromString(apnData));
             if (VDBG) log("fetchDunApn: dunCandidates from Setting: " + dunCandidates);
         }
 
@@ -1749,7 +1749,7 @@ public class DcTracker extends Handler {
                 .getStringArray(R.array.config_tether_apndata);
             if (!ArrayUtils.isEmpty(apnArrayData)) {
                 for (String apnString : apnArrayData) {
-                    ApnSetting apn = ApnSetting.fromString(apnString);
+                    ApnSetting apn = ApnSettingUtils.fromString(apnString);
                     // apn may be null if apnString isn't valid or has error parsing
                     if (apn != null) dunCandidates.add(apn);
                 }
@@ -1772,7 +1772,7 @@ public class DcTracker extends Handler {
             if (!ServiceState.bitmaskHasTech(dunSetting.bearerBitmask, bearer)) continue;
             if (dunSetting.numeric.equals(operator)) {
                 if (dunSetting.hasMvnoParams()) {
-                    if (r != null && ApnSetting.mvnoMatches(r, dunSetting.mvnoType,
+                    if (r != null && ApnSettingUtils.mvnoMatches(r, dunSetting.mvnoType,
                             dunSetting.mvnoMatchData)) {
                         retDunSetting = dunSetting;
                         break;
@@ -1823,68 +1823,9 @@ public class DcTracker extends Handler {
         }
     }
 
-    /**
-     * @param types comma delimited list of APN types
-     * @return array of APN types
-     */
-    private String[] parseTypes(String types) {
-        String[] result;
-        // If unset, set to DEFAULT.
-        if (types == null || types.equals("")) {
-            result = new String[1];
-            result[0] = PhoneConstants.APN_TYPE_ALL;
-        } else {
-            result = types.split(",");
-        }
-        return result;
-    }
-
     boolean isPermanentFailure(DcFailCause dcFailCause) {
         return (dcFailCause.isPermanentFailure(mPhone.getContext(), mPhone.getSubId()) &&
                 (mAttached.get() == false || dcFailCause != DcFailCause.SIGNAL_LOST));
-    }
-
-    private ApnSetting makeApnSetting(Cursor cursor) {
-        String[] types = parseTypes(
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.TYPE)));
-        ApnSetting apn = new ApnSetting(
-                cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers._ID)),
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.NUMERIC)),
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.NAME)),
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.APN)),
-                NetworkUtils.trimV4AddrZeros(
-                        cursor.getString(
-                        cursor.getColumnIndexOrThrow(Telephony.Carriers.PROXY))),
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.PORT)),
-                NetworkUtils.trimV4AddrZeros(
-                        cursor.getString(
-                        cursor.getColumnIndexOrThrow(Telephony.Carriers.MMSC))),
-                NetworkUtils.trimV4AddrZeros(
-                        cursor.getString(
-                        cursor.getColumnIndexOrThrow(Telephony.Carriers.MMSPROXY))),
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.MMSPORT)),
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.USER)),
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.PASSWORD)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers.AUTH_TYPE)),
-                types,
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.PROTOCOL)),
-                cursor.getString(cursor.getColumnIndexOrThrow(
-                        Telephony.Carriers.ROAMING_PROTOCOL)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(
-                        Telephony.Carriers.CARRIER_ENABLED)) == 1,
-                cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers.BEARER)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers.BEARER_BITMASK)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers.PROFILE_ID)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(
-                        Telephony.Carriers.MODEM_COGNITIVE)) == 1,
-                cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers.MAX_CONNS)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(
-                        Telephony.Carriers.WAIT_TIME)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers.MAX_CONNS_TIME)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers.MTU)),
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.MVNO_TYPE)),
-                cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.MVNO_MATCH_DATA)));
-        return apn;
     }
 
     private ArrayList<ApnSetting> createApnList(Cursor cursor) {
@@ -1894,13 +1835,14 @@ public class DcTracker extends Handler {
 
         if (cursor.moveToFirst()) {
             do {
-                ApnSetting apn = makeApnSetting(cursor);
+                ApnSetting apn = ApnSetting.makeApnSetting(cursor);
                 if (apn == null) {
                     continue;
                 }
 
                 if (apn.hasMvnoParams()) {
-                    if (r != null && ApnSetting.mvnoMatches(r, apn.mvnoType, apn.mvnoMatchData)) {
+                    if (r != null && ApnSettingUtils.mvnoMatches(r, apn.mvnoType,
+                            apn.mvnoMatchData)) {
                         mvnoApns.add(apn);
                     }
                 } else {
@@ -4324,7 +4266,7 @@ public class DcTracker extends Handler {
         if (cursor != null) {
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
-                    mEmergencyApn = makeApnSetting(cursor);
+                    mEmergencyApn = ApnSetting.makeApnSetting(cursor);
                 }
             }
             cursor.close();

@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.dataconnection;
 
+import android.telephony.ApnSetting;
 import android.telephony.ServiceState;
 import android.text.TextUtils;
 

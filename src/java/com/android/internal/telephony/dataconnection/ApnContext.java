@@ -21,6 +21,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkConfig;
 import android.net.NetworkRequest;
+import android.telephony.ApnSetting;
 import android.telephony.Rlog;
 import android.text.TextUtils;
 import android.util.LocalLog;

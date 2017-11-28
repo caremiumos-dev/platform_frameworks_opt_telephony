@@ -16,7 +16,8 @@
 
 package com.android.internal.telephony;
 
-import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU;
+import static com.android.internal.telephony.RILConstants
+.RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ALLOW_DATA;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_GET_SUBSCRIPTION_SOURCE;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CHANGE_SIM_PIN;
@@ -26,7 +27,8 @@ import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DATA_REGIS
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DELETE_SMS_ON_SIM;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DEVICE_IDENTITY;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DTMF;
-import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ENTER_NETWORK_DEPERSONALIZATION;
+import static com.android.internal.telephony.RILConstants
+.RIL_REQUEST_ENTER_NETWORK_DEPERSONALIZATION;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ENTER_SIM_PIN;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ENTER_SIM_PIN2;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ENTER_SIM_PUK;
@@ -41,7 +43,8 @@ import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_RADIO_
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_SIM_STATUS;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_SMSC_ADDRESS;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_HANGUP;
-import static com.android.internal.telephony.RILConstants.RIL_REQUEST_HANGUP_FOREGROUND_RESUME_BACKGROUND;
+import static com.android.internal.telephony.RILConstants
+.RIL_REQUEST_HANGUP_FOREGROUND_RESUME_BACKGROUND;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_HANGUP_WAITING_OR_BACKGROUND;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_IMS_REGISTRATION_STATE;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ISIM_AUTHENTICATION;
@@ -60,7 +63,8 @@ import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SEND_SMS_E
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_INITIAL_ATTACH_APN;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_SIM_CARD_POWER;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_SMSC_ADDRESS;
-import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_UNSOLICITED_RESPONSE_FILTER;
+import static com.android.internal.telephony.RILConstants
+.RIL_REQUEST_SET_UNSOLICITED_RESPONSE_FILTER;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_UNSOL_CELL_INFO_LIST_RATE;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SHUTDOWN;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIGNAL_STRENGTH;
@@ -68,9 +72,11 @@ import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIM_AUTHEN
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIM_CLOSE_CHANNEL;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIM_OPEN_CHANNEL;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_START_LCE;
-import static com.android.internal.telephony.RILConstants.RIL_REQUEST_STK_HANDLE_CALL_SETUP_REQUESTED_FROM_SIM;
+import static com.android.internal.telephony.RILConstants
+.RIL_REQUEST_STK_HANDLE_CALL_SETUP_REQUESTED_FROM_SIM;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_STOP_LCE;
-import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SWITCH_WAITING_OR_HOLDING_AND_ACTIVE;
+import static com.android.internal.telephony.RILConstants
+.RIL_REQUEST_SWITCH_WAITING_OR_HOLDING_AND_ACTIVE;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_UDUB;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_VOICE_RADIO_TECH;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_VOICE_REGISTRATION_STATE;
@@ -107,6 +113,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.WorkSource;
 import android.support.test.filters.FlakyTest;
+import android.telephony.ApnSetting;
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellIdentityGsm;
 import android.telephony.CellIdentityLte;
@@ -124,7 +131,6 @@ import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.RIL.RilHandler;
-import com.android.internal.telephony.dataconnection.ApnSetting;
 import com.android.internal.telephony.dataconnection.DataProfile;
 
 import org.junit.After;
