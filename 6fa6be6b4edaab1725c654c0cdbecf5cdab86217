@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d8847d3_2c8ac5a6",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1668,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-11-28T23:02:50Z",
+      "side": 1,
+      "message": "there are two APIs: 1. SetServiceProviderName which override mSpn from SIMrecord\nanother one UiccCard.setOperatorBrandOverride which only sets the override name in a sharedpreference without modifying original values read from subscription. Maybe we should call the latter one and kept mSpn untouched?",
+      "range": {
+        "startLine": 1668,
+        "startChar": 12,
+        "endLine": 1668,
+        "endChar": 42
+      },
+      "revId": "6fa6be6b4edaab1725c654c0cdbecf5cdab86217",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
