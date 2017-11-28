@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.dataconnection;
 
+import android.telephony.ApnSetting;
 import android.telephony.data.DataProfile;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -83,27 +84,27 @@ public class DataProfileTest extends TestCase {
 
     @SmallTest
     public void testCreateFromApnSetting() throws Exception {
-        DataProfile dp = DcTracker.createDataProfile(mApn1, mApn1.profileId);
-        assertEquals(mApn1.profileId, dp.getProfileId());
-        assertEquals(mApn1.apn, dp.getApn());
-        assertEquals(mApn1.protocol, dp.getProtocol());
+        DataProfile dp = DcTracker.createDataProfile(mApn1, mApn1.getProfileId());
+        assertEquals(mApn1.getProfileId(), dp.getProfileId());
+        assertEquals(mApn1.getApnName(), dp.getApn());
+        assertEquals(mApn1.getProtocol(), dp.getProtocol());
         assertEquals(RILConstants.SETUP_DATA_AUTH_PAP_CHAP, dp.getAuthType());
-        assertEquals(mApn1.user, dp.getUserName());
-        assertEquals(mApn1.password, dp.getPassword());
+        assertEquals(mApn1.getUser(), dp.getUserName());
+        assertEquals(mApn1.getPassword(), dp.getPassword());
         assertEquals(0, dp.getType());
-        assertEquals(mApn1.maxConnsTime, dp.getMaxConnsTime());
-        assertEquals(mApn1.maxConns, dp.getMaxConns());
-        assertEquals(mApn1.waitTime, dp.getWaitTime());
-        assertEquals(mApn1.carrierEnabled, dp.isEnabled());
+        assertEquals(mApn1.getMaxConnsTime(), dp.getMaxConnsTime());
+        assertEquals(mApn1.getMaxConns(), dp.getMaxConns());
+        assertEquals(mApn1.getWaitTime(), dp.getWaitTime());
+        assertEquals(mApn1.isEnabled(), dp.isEnabled());
     }
 
     @SmallTest
     public void testEquals() throws Exception {
-        DataProfile dp1 = DcTracker.createDataProfile(mApn1, mApn1.profileId);
-        DataProfile dp2 = DcTracker.createDataProfile(mApn1, mApn1.profileId);
+        DataProfile dp1 = DcTracker.createDataProfile(mApn1, mApn1.getProfileId());
+        DataProfile dp2 = DcTracker.createDataProfile(mApn1, mApn1.getProfileId());
         assertEquals(dp1, dp2);
 
-        dp2 = DcTracker.createDataProfile(mApn2, mApn2.profileId);
+        dp2 = DcTracker.createDataProfile(mApn2, mApn2.getProfileId());
         assertFalse(dp1.equals(dp2));
     }
 }
