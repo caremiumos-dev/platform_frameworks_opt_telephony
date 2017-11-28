@@ -21,6 +21,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkConfig;
 import android.net.NetworkRequest;
+import android.telephony.ApnSetting;
 import android.telephony.Rlog;
 import android.text.TextUtils;
 import android.util.LocalLog;
@@ -392,8 +393,8 @@ public class ApnContext {
         String provisioningApn = mPhone.getContext().getResources()
                 .getString(R.string.mobile_provisioning_apn);
         if (!TextUtils.isEmpty(provisioningApn) &&
-                (mApnSetting != null) && (mApnSetting.apn != null)) {
-            return (mApnSetting.apn.equals(provisioningApn));
+                (mApnSetting != null) && (mApnSetting.getApn() != null)) {
+            return (mApnSetting.getApn().equals(provisioningApn));
         } else {
             return false;
         }

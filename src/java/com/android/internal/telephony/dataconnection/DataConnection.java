@@ -34,6 +34,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.telephony.ApnSetting;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -463,9 +464,12 @@ public class DataConnection extends StateMachine {
      * @param cp is the connection parameters
      */
     private void onConnect(ConnectionParams cp) {
-        if (DBG) log("onConnect: carrier='" + mApnSetting.carrier
-                + "' APN='" + mApnSetting.apn
-                + "' proxy='" + mApnSetting.proxy + "' port='" + mApnSetting.port + "'");
+        if (DBG) {
+            log("onConnect: carrier='" + mApnSetting.getCarrier()
+                    + "' APN='" + mApnSetting.getApn()
+                    + "' proxy='" + mApnSetting.getProxy() + "' port='"
+                    + mApnSetting.getPort() + "'");
+        }
         if (cp.mApnContext != null) cp.mApnContext.requestLog("DataConnection.onConnect");
 
         // Check if we should fake an error.
@@ -742,12 +746,12 @@ public class DataConnection extends StateMachine {
             // Do not apply the race condition workaround for MMS APN
             // if Proxy is an IP-address.
             // Otherwise, the default APN will not be restored anymore.
-            if (!mApnSetting.types[0].equals(PhoneConstants.APN_TYPE_MMS)
-                || !isIpAddress(mApnSetting.mmsProxy)) {
+            if (!mApnSetting.getTypes()[0].equals(PhoneConstants.APN_TYPE_MMS)
+                    || !isIpAddress(mApnSetting.getMmsProxy())) {
                 log(String.format(
                         "isDnsOk: return false apn.types[0]=%s APN_TYPE_MMS=%s isIpAddress(%s)=%s",
-                        mApnSetting.types[0], PhoneConstants.APN_TYPE_MMS, mApnSetting.mmsProxy,
-                        isIpAddress(mApnSetting.mmsProxy)));
+                        mApnSetting.getTypes()[0], PhoneConstants.APN_TYPE_MMS,
+                        mApnSetting.getMmsProxy(), isIpAddress(mApnSetting.getMmsProxy())));
                 return false;
             }
         }
@@ -881,7 +885,7 @@ public class DataConnection extends StateMachine {
 
         // Do we need a restricted network to satisfy the request?
         // Is this network metered?  If not, then don't add restricted
-        if (!mApnSetting.isMetered(mPhone)) {
+        if (!ApnSettingUtils.isMetered(mApnSetting, mPhone)) {
             return;
         }
 
@@ -895,10 +899,10 @@ public class DataConnection extends StateMachine {
 
         if (mApnSetting != null) {
             ApnSetting securedDunApn = mDct.fetchDunApn();
-            for (String type : mApnSetting.types) {
+            for (String type : mApnSetting.getTypes()) {
                 if (!mRestrictedNetworkOverride
                         && (mConnectionParams != null && mConnectionParams.mUnmeteredUseOnly)
-                        && ApnSetting.isMeteredApnType(type, mPhone)) {
+                        && ApnSettingUtils.isMeteredApnType(type, mPhone)) {
                     log("Dropped the metered " + type + " for the unmetered data call.");
                     continue;
                 }
@@ -965,7 +969,7 @@ public class DataConnection extends StateMachine {
             // 2. The non-restricted data and is intended for unmetered use only.
             if (((mConnectionParams != null && mConnectionParams.mUnmeteredUseOnly)
                     && !mRestrictedNetworkOverride)
-                    || !mApnSetting.isMetered(mPhone)) {
+                    || !ApnSettingUtils.isMetered(mApnSetting, mPhone)) {
                 result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
             } else {
                 result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
@@ -1714,7 +1718,7 @@ public class DataConnection extends StateMachine {
 
             mNetworkInfo.setDetailedState(NetworkInfo.DetailedState.CONNECTED,
                     mNetworkInfo.getReason(), null);
-            mNetworkInfo.setExtraInfo(mApnSetting.apn);
+            mNetworkInfo.setExtraInfo(mApnSetting.getApn());
             updateTcpBufferSizes(mRilRat);
 
             final NetworkMisc misc = new NetworkMisc();
