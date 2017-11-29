@@ -22,6 +22,30 @@
       "revId": "9107e3227fb5e8501d2ff8a012fd6c520fb7f1e1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d071660_821f4950",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1135337
+      },
+      "writtenOn": "2017-11-29T06:52:23Z",
+      "side": 1,
+      "message": "Initially the fix included setting mSwitchingFgAndBgCalls to false as well. However there is an issue observed as mentioned below.\n\nScenario\nDUT calls A\nDUT receives a call from B\nWhile DUT is trying to accept the waiting call from B, A terminates the call with the DUT and hold request for call with A is failed.\n\nIssue\nDUT is not able to accept the call with B.\n\nSo mSwitchingFgAndBgCalls has to be true to accept the waiting call successfully in this scenario. The code flow for waiting call accept is as follows.\n\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#2013\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#2036\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#1488\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#1505\n\nUpdated the gerrit with Unit test.",
+      "parentUuid": "81e68c0a_9dc8616c",
+      "range": {
+        "startLine": 2274,
+        "startChar": 0,
+        "endLine": 2276,
+        "endChar": 21
+      },
+      "revId": "9107e3227fb5e8501d2ff8a012fd6c520fb7f1e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
