@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e271472c_e924cf55",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1842,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-29T23:47:10Z",
+      "side": 1,
+      "message": "We may not need to expose this two variables to test. Please check the comment at ImsPhoneCallTrackerTest. Thanks!",
+      "range": {
+        "startLine": 1834,
+        "startChar": 0,
+        "endLine": 1842,
+        "endChar": 5
+      },
+      "revId": "f4bdebba6a6c657e282be91dbfdc7894183bc888",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a6f25d2a_26340812",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-29T23:47:10Z",
+      "side": 1,
+      "message": "I think we want to check if the foreground is active. The bug occurred because the foreground was switched twice. \n\nThe test flow should be:\n1. We currently have a call A.\n2. There is an incoming call B, and we try to hold A but failed.\n3. Terminated call B and resume the foreground call. \n4. Check if the foreground is ACTIVE.",
+      "range": {
+        "startLine": 551,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 5
+      },
+      "revId": "f4bdebba6a6c657e282be91dbfdc7894183bc888",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
