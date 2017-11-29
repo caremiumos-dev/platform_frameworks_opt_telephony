@@ -22,6 +22,30 @@
       "revId": "6fa6be6b4edaab1725c654c0cdbecf5cdab86217",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1bf6e67_4e135bba",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1668,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2017-11-29T00:59:12Z",
+      "side": 1,
+      "message": "If brand override is null then the carrierConfig value is already used UiccCard.getOperatorBrandOverride():\nhttps://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/uicc/UiccCard.java?sq\u003dpackage:android\u0026l\u003d753\n\nThus, I think it\u0027s possible to do a brand override on top of a SPN override. If we only do brand override then the SPN override would be lost. I don\u0027t know all the reasons the original code does this, but I believe the existing behavior is to override spn (line 1650 of the current code).",
+      "parentUuid": "9d8847d3_2c8ac5a6",
+      "range": {
+        "startLine": 1668,
+        "startChar": 12,
+        "endLine": 1668,
+        "endChar": 42
+      },
+      "revId": "6fa6be6b4edaab1725c654c0cdbecf5cdab86217",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
