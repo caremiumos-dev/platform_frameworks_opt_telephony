@@ -37,6 +37,20 @@ public class DriverCall implements Comparable<DriverCall> {
         // statements that use this enum
     }
 
+    /**
+     * Audio information
+     */
+    public static final int AUDIO_QUALITY_NONE = 0;
+    public static final int AUDIO_QUALITY_AMR = 1;
+    public static final int AUDIO_QUALITY_AMR_WB = 2;
+    public static final int AUDIO_QUALITY_GSM_EFR = 3;
+    public static final int AUDIO_QUALITY_GSM_FR = 4;
+    public static final int AUDIO_QUALITY_GSM_HR = 5;
+    public static final int AUDIO_QUALITY_EVRC = 6;
+    public static final int AUDIO_QUALITY_EVRC_B = 7;
+    public static final int AUDIO_QUALITY_EVRC_WB = 8;
+    public static final int AUDIO_QUALITY_EVRC_NW = 9;
+
     public int index;
     public boolean isMT;
     public State state;     // May be null if unavail
@@ -50,6 +64,7 @@ public class DriverCall implements Comparable<DriverCall> {
     public String name;
     public int namePresentation;
     public UUSInfo uusInfo;
+    public int audioQuality = AUDIO_QUALITY_NONE;
 
     /** returns null on error */
     static DriverCall
@@ -113,7 +128,8 @@ public class DriverCall implements Comparable<DriverCall> {
                 + (isVoice ? "voc" : "nonvoc") + ","
                 + (isVoicePrivacy ? "evp" : "noevp") + ","
                 /*+ "number=" + number */ + ",cli=" + numberPresentation + ","
-                /*+ "name="+ name */ + "," + namePresentation;
+                /*+ "name="+ name */ + "," + namePresentation + ","
+                + "audioQuality=" + audioQuality;
     }
 
     public static State
