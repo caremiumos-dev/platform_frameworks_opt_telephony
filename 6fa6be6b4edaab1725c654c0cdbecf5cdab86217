@@ -46,6 +46,30 @@
       "revId": "6fa6be6b4edaab1725c654c0cdbecf5cdab86217",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f029baf_25a1769a",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1668,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2017-11-29T06:01:06Z",
+      "side": 1,
+      "message": "there are some inconsistencies here setOperaterBrandOverride doesn\u0027t override spn while carrier config does override (#1650 of the current code). But when I checked IccRecord# getServiceProviderName, it does return mSpn + OperatorBrandOverride SharedPref, thus there shouldn\u0027t be any issue :) \nThis CL LGTM cuz it kept the current behavior but we may want to look into cleaning this up later \ne.g., mSpn always return values from subscription; UiccCard.getOperatorBrandOverride returns overriding value only (either from carrier config or sharedPref); IccRecord.getServiceProviderName returns mSpn + getOperatorBrandOverride",
+      "parentUuid": "f1bf6e67_4e135bba",
+      "range": {
+        "startLine": 1668,
+        "startChar": 12,
+        "endLine": 1668,
+        "endChar": 42
+      },
+      "revId": "6fa6be6b4edaab1725c654c0cdbecf5cdab86217",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
