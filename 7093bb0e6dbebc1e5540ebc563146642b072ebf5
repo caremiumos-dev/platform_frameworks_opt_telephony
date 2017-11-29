@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c645631b_89bfc985",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-29T18:09:50Z",
+      "side": 1,
+      "message": "Since we will get the \"public int logicalSlotIndex;\" and \"public String[] iccid;\", should we also add those information into the UiccSlot class?",
+      "revId": "7093bb0e6dbebc1e5540ebc563146642b072ebf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0f3e0a5_3d68e8d5",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-11-29T18:09:50Z",
+      "side": 1,
+      "message": "When we want to update the \"UiccSlot\"?  Whenever there is card status change?  slot status change?  or even both?  In that case, we may need the IccSlotStatus as in the input of update()?",
+      "range": {
+        "startLine": 78,
+        "startChar": 16,
+        "endLine": 78,
+        "endChar": 22
+      },
+      "revId": "7093bb0e6dbebc1e5540ebc563146642b072ebf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
