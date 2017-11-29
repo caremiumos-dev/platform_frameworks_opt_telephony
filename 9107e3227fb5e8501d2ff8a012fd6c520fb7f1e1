@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81e68c0a_9dc8616c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-11-29T00:13:16Z",
+      "side": 1,
+      "message": "Why not set mSwitchingFgAndBgCalls to false?\n\nAnd please also add a unit test to ensure the ForegroundCall is not switched after the second incoming call terminated.",
+      "range": {
+        "startLine": 2274,
+        "startChar": 0,
+        "endLine": 2276,
+        "endChar": 21
+      },
+      "revId": "9107e3227fb5e8501d2ff8a012fd6c520fb7f1e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
