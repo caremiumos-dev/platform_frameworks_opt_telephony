@@ -31,10 +31,12 @@ import android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.LocalLog;
+import android.util.Log;
 
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.dataconnection.TelephonyNetworkFactory;
+import com.android.internal.telephony.euicc.EuiccCardController;
 import com.android.internal.telephony.euicc.EuiccController;
 import com.android.internal.telephony.ims.ImsResolver;
 import com.android.internal.telephony.imsphone.ImsPhone;
@@ -73,6 +75,7 @@ public class PhoneFactory {
     static private UiccController sUiccController;
     private static IntentBroadcaster sIntentBroadcaster;
     private static @Nullable EuiccController sEuiccController;
+    private static @Nullable EuiccCardController sEuiccCardController;
 
     static private CommandsInterface sCommandsInterface = null;
     static private SubscriptionInfoUpdater sSubInfoRecordUpdater = null;
@@ -141,6 +144,8 @@ public class PhoneFactory {
                 if (context.getPackageManager().hasSystemFeature(
                         PackageManager.FEATURE_TELEPHONY_EUICC)) {
                     sEuiccController = EuiccController.init(context);
+                    sEuiccCardController = EuiccCardController.init(context);
+                    Log.e("PhoneFactory", "HOLLY DEBUG - PhoneFactory - sEuiccCardController : " + sEuiccCardController);
                 }
 
                 /* In case of multi SIM mode two instances of Phone, RIL are created,
