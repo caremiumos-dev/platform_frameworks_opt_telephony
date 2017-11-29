@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e6cdf40_11451bd3",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-29T23:32:21Z",
+      "side": 1,
+      "message": "This doesnt look to be used anywhere else, why are you creating a new method instead of modifying the args of the current method?",
+      "range": {
+        "startLine": 944,
+        "startChar": 16,
+        "endLine": 944,
+        "endChar": 67
+      },
+      "revId": "f1dee281b1140327626b45700bb771fa7e0b8299",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c88f3640_d9007615",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-29T23:32:21Z",
+      "side": 1,
+      "message": "New method needs to be tested in ImsPhoneTest",
+      "range": {
+        "startLine": 948,
+        "startChar": 16,
+        "endLine": 948,
+        "endChar": 30
+      },
+      "revId": "f1dee281b1140327626b45700bb771fa7e0b8299",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "81618e67_24de06ad",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-29T23:32:21Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 962,
+        "startChar": 16,
+        "endLine": 962,
+        "endChar": 30
+      },
+      "revId": "f1dee281b1140327626b45700bb771fa7e0b8299",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
