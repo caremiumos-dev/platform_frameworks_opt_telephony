@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3bbf5205_bef6930d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/ApnSettingTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1061229
+      },
+      "writtenOn": "2017-11-30T13:39:03Z",
+      "side": 1,
+      "message": "Let\u0027s separate into ApnSettingTest and ApnSettingUtilTest. ApnSettingTest should be moved into android.telephony package",
+      "range": {
+        "startLine": 51,
+        "startChar": 13,
+        "endLine": 51,
+        "endChar": 27
+      },
+      "revId": "6ac1d4edb0f6866b8656ee07c2a5b7496fdbdc11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
