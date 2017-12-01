@@ -96,6 +96,7 @@ import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.SmsSession;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.SimPhoneBookAdnRecord;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -4589,6 +4590,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_START_NETWORK_SCAN";
             case RIL_REQUEST_STOP_NETWORK_SCAN:
                 return "RIL_REQUEST_STOP_NETWORK_SCAN";
+            case RIL_REQUEST_GET_ADN_RECORD:
+                return "RIL_REQUEST_GET_ADN_RECORD";
+            case RIL_REQUEST_UPDATE_ADN_RECORD:
+                return "RIL_REQUEST_UPDATE_ADN_RECORD";
             default: return "<unknown request>";
         }
     }
@@ -4691,6 +4696,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_UNSOL_CARRIER_INFO_IMSI_ENCRYPTION";
             case RIL_UNSOL_NETWORK_SCAN_RESULT:
                 return "RIL_UNSOL_NETWORK_SCAN_RESULT";
+            case RIL_UNSOL_RESPONSE_ADN_INIT_DONE:
+                return "RIL_UNSOL_RESPONSE_ADN_INIT_DONE";
+            case RIL_UNSOL_RESPONSE_ADN_RECORDS:
+                return "RIL_UNSOL_RESPONSE_ADN_RECORDS";
             default:
                 return "<unknown response>";
         }
@@ -5157,5 +5166,67 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 signalStrength.lte.cqi,
                 signalStrength.tdScdma.rscp,
                 false /* gsmFlag - don't care; will be changed by SST */);
+    }
+
+
+
+    @Override
+    public void getAdnRecord(Message result) {
+    IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            android.hardware.radio.V1_2.IRadio radioProxy12 =
+                    android.hardware.radio.V1_2.IRadio.castFrom(radioProxy);
+            RILRequest rr = obtainRequest(RIL_REQUEST_GET_ADN_RECORD, result,
+                    mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+            try {
+                radioProxy12.getAdnRecord(rr.mSerial);
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "getAdnRecord", e);
+            }
+        }
+    }
+
+    @Override
+    public void updateAdnRecord(SimPhoneBookAdnRecord simRecordInfo, Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            android.hardware.radio.V1_2.IRadio radioProxy12 =
+                    android.hardware.radio.V1_2.IRadio.castFrom(radioProxy);
+            RILRequest rr = obtainRequest(RIL_REQUEST_UPDATE_ADN_RECORD, result,
+                    mRILDefaultWorkSource);
+
+            android.hardware.radio.V1_2.AdnRecordInfo adnRecordInfo =
+                    new android.hardware.radio.V1_2.AdnRecordInfo();
+            adnRecordInfo.recordId = simRecordInfo.getRecordIndex();
+            adnRecordInfo.name = convertNullToEmptyString(simRecordInfo.getAlphaTag());
+            adnRecordInfo.number = convertNullToEmptyString(
+                    SimPhoneBookAdnRecord.ConvertToRecordNumber(simRecordInfo.getNumber()));
+
+            int numEmails = simRecordInfo.getNumEmails();
+            adnRecordInfo.emailElements = numEmails;
+            for (int i = 0; i < numEmails; i++) {
+                adnRecordInfo.email.add(simRecordInfo.getEmails()[i]);
+            }
+
+            int numAdNumbers = simRecordInfo.getNumAdNumbers();
+            adnRecordInfo.anrElements = numAdNumbers;
+            for (int j = 0 ; j < numAdNumbers; j++) {
+                adnRecordInfo.adNumber.add(simRecordInfo.getAdNumbers()[j]);
+            }
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                        + " with " + adnRecordInfo.toString());
+            }
+
+            try {
+                radioProxy12.updateAdnRecord(rr.mSerial, adnRecordInfo);
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "updateAdnRecord", e);
+            }
+        }
     }
 }

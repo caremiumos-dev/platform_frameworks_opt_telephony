@@ -63,6 +63,8 @@ import static com.android.internal.telephony.RILConstants.RIL_UNSOL_SUPP_SVC_NOT
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UICC_SUBSCRIPTION_STATUS_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_VOICE_RADIO_TECH_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOl_CDMA_PRL_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_ADN_RECORDS;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_ADN_INIT_DONE;
 
 import android.hardware.radio.V1_0.CdmaCallWaiting;
 import android.hardware.radio.V1_0.CdmaInformationRecord;
@@ -817,6 +819,22 @@ public class RadioIndication extends IRadioIndication.Stub {
      */
     public void keepaliveStatus(int indicationType, KeepaliveStatus keepaliveStatus) {
         throw new UnsupportedOperationException("keepaliveStatus Indications are not implemented");
+    }
+
+    public void adnInitDone(int indicationType) {
+        mRil.processIndication(indicationType);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLog(RIL_UNSOL_RESPONSE_ADN_INIT_DONE);
+
+        mRil.mAdnInitDoneRegistrants.notifyRegistrants();
+    }
+
+	public void adnRecordsReceived(int indicationType) {
+        mRil.processIndication(indicationType);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLog(RIL_UNSOL_RESPONSE_ADN_RECORDS);
+
+        mRil.mAdnRecordsInfoRegistrants.notifyRegistrants();
     }
 
     private CommandsInterface.RadioState getRadioStateFromInt(int stateInt) {

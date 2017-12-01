@@ -28,6 +28,7 @@ import com.android.internal.telephony.RadioCapability;
 import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
+import com.android.internal.telephony.uicc.SimPhoneBookAdnRecord;
 
 import java.util.List;
 
@@ -1388,4 +1389,29 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     @Override
     public void unregisterForCarrierInfoForImsiEncryption(Handler h) {
     }
+
+    @Override
+    public void getAdnRecord(Message result){
+    }
+
+    @Override
+    public void updateAdnRecord(SimPhoneBookAdnRecord adnRecordInfo, Message result){
+    }
+
+    @Override
+    public void registerForAdnInitDone(Handler h, int what, Object obj){
+    }
+
+    @Override
+    public void unregisterForAdnInitDone(Handler h){
+    }
+
+    @Override
+    public void registerForAdnRecordsInfo(Handler h, int what, Object obj){
+    }
+
+    @Override
+    public void unregisterForAdnRecordsInfo(Handler h){
+    }
+
 }
