@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73197466_b034ade9",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-01T19:58:32Z",
+      "side": 1,
+      "message": "Slots since it is for all slots.",
+      "range": {
+        "startLine": 1703,
+        "startChar": 15,
+        "endLine": 1703,
+        "endChar": 19
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "313636c4_8b622124",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5014,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-01T19:58:32Z",
+      "side": 1,
+      "message": "Why not \u0027android.hardware.radio.V1_2.SlotStatus slotStatus : slotsStatus\u0027?",
+      "range": {
+        "startLine": 5014,
+        "startChar": 13,
+        "endLine": 5014,
+        "endChar": 53
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0477d0c5_f91e5625",
+        "filename": "src/java/com/android/internal/telephony/test/SimulatedCommands.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-01T19:58:32Z",
+      "side": 1,
+      "message": "Instead of keeping these functions empty, call corresponding SimulatedCommandsVerifier functions. That will be needed with tests.",
+      "range": {
+        "startLine": 178,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 5
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27b902f8_cdd1abc1",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-01T19:58:32Z",
+      "side": 1,
+      "message": "Add ICCID as well.",
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bca0db39_62ba9397",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccSlotStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-01T19:58:32Z",
+      "side": 1,
+      "message": "Add atr",
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
