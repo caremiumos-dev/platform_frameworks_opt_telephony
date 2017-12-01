@@ -108,6 +108,14 @@ public class CellIdentityLteTest extends AndroidTestCase {
         assertEquals(null, ci.getMncStr());
         assertEquals(null, ci.getMobileNetworkOperator());
 
+        ci = new CellIdentityLte(CI, PCI, TAC, EARFCN, null, MNC_STR, ALPHA_LONG, ALPHA_SHORT);
+
+        assertEquals(MNC, ci.getMnc());
+        assertEquals(Integer.MAX_VALUE, ci.getMcc());
+        assertEquals(MNC_STR, ci.getMncStr());
+        assertEquals(null, ci.getMccStr());
+        assertEquals(null, ci.getMobileNetworkOperator());
+
         ci = new CellIdentityLte(CI, PCI, TAC, EARFCN, "", "", ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(Integer.MAX_VALUE, ci.getMcc());
