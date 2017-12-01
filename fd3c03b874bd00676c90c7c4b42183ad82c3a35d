@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8c0b53b_3a476cce",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-01T21:16:39Z",
+      "side": 1,
+      "message": "Can you add an explanation comment that these are reserved oem/carrier values?",
+      "revId": "fd3c03b874bd00676c90c7c4b42183ad82c3a35d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
