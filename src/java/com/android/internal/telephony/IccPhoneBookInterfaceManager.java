@@ -48,6 +48,7 @@ public class IccPhoneBookInterfaceManager {
     protected Phone mPhone;
     private   UiccCardApplication mCurrentApp = null;
     protected AdnRecordCache mAdnCache;
+    protected SimPhoneBookAdnRecordCache mSimPbAdnCache;
     protected final Object mLock = new Object();
     protected int mRecordSize[];
     protected boolean mSuccess;
@@ -135,6 +136,13 @@ public class IccPhoneBookInterfaceManager {
             mAdnCache = r.getAdnCache();
         }
         mBaseHandler = new IccPbHandler(mHandlerThread.getLooper());
+
+        if(isSimPhoneBookEnabled()){
+            if(mSimPbAdnCache == null) {
+                mSimPbAdnCache = new SimPhoneBookAdnRecordCache(
+                        phone.getContext(), phone.getPhoneId(), phone.mCi);
+            }
+        }
     }
 
     public void dispose() {
@@ -313,11 +321,21 @@ public class IccPhoneBookInterfaceManager {
             AtomicBoolean status = new AtomicBoolean(false);
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, status);
             AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
-            if (mAdnCache != null) {
-                mAdnCache.updateAdnByIndex(efid, newAdn, index, pin2, response);
-                waitForResult(status);
+            if (isSimPhoneBookEnabled() &&
+                (efid == IccConstants.EF_PBR || efid == IccConstants.EF_ADN)) {
+                if (mSimPbAdnCache != null) {
+                    mSimPbAdnCache.requestLoadAllAdnLike(response);
+                    waitForResult(status);
+                } else {
+                    loge("Failure while trying to load from SIM due to uninit  sim pb adncache");
+                }
             } else {
-                loge("Failure while trying to update by index due to uninitialised adncache");
+                if (mAdnCache != null) {
+                    mAdnCache.updateAdnByIndex(efid, newAdn, index, pin2, response);
+                    waitForResult(status);
+                } else {
+                    loge("Failure while trying to update by index due to uninitialised adncache");
+                }
             }
         }
         return mSuccess;
@@ -407,6 +425,14 @@ public class IccPhoneBookInterfaceManager {
                 logd("interrupted while trying to update by search");
             }
         }
+    }
+
+    private boolean isSimPhoneBookEnabled() {
+        if (mPhone.getContext().getResources().getBoolean(
+            com.android.internal.R.bool.config_sim_phonebook_batch_operation)) {
+            return true;
+        }
+        return false;
     }
 
     protected int updateEfForIccType(int efid) {
