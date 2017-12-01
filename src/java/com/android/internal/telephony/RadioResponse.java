@@ -1241,6 +1241,28 @@ public class RadioResponse extends IRadioResponse.Stub {
         throw new UnsupportedOperationException("stopKeepaliveResponse not implemented");
     }
 
+    /**
+     * @param info Response info struct containing response type, serial no. and error
+     * @param adnCapacity Contains the adn,email,anr capacities in the sim card
+     */
+    public void getAdnRecordResponse(RadioResponseInfo responseInfo,
+                                      ArrayList<Integer> adnCapacity) {
+        ArrayList<Integer> arr = new ArrayList<>();
+        for (int i = 0; i < adnCapacity.size(); i++) {
+            arr.add((int) adnCapacity.get(i));
+        }
+        responseIntArrayList(responseInfo, arr);
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error
+     * @param updatedRecordIndex The index of the updated record
+     */
+    public void updateAdnRecordResponse(RadioResponseInfo responseInfo,
+                                      int updatedRecordIndex) {
+        responseInts(responseInfo, updatedRecordIndex);
+    }
+
     private void responseIccCardStatus(RadioResponseInfo responseInfo, CardStatus cardStatus) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
@@ -1832,4 +1854,5 @@ public class RadioResponse extends IRadioResponse.Stub {
             mRil.processResponseDone(rr, responseInfo, ret);
         }
     }
+
 }

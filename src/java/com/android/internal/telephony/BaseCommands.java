@@ -25,6 +25,8 @@ import android.os.Registrant;
 import android.os.RegistrantList;
 import android.telephony.TelephonyManager;
 
+import com.android.internal.telephony.uicc.SimPhoneBookAdnRecord;
+
 /**
  * {@hide}
  */
@@ -73,6 +75,8 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mCarrierInfoForImsiEncryptionRegistrants = new RegistrantList();
     protected RegistrantList mRilNetworkScanResultRegistrants = new RegistrantList();
     protected RegistrantList mModemResetRegistrants = new RegistrantList();
+    protected RegistrantList mAdnInitDoneRegistrants = new RegistrantList();
+    protected RegistrantList mAdnRecordsInfoRegistrants = new RegistrantList();
 
 
     protected Registrant mGsmSmsRegistrant;
@@ -926,5 +930,33 @@ public abstract class BaseCommands implements CommandsInterface {
     @Override
     public void unregisterForCarrierInfoForImsiEncryption(Handler h) {
         mCarrierInfoForImsiEncryptionRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForAdnInitDone(Handler h, int what, Object obj) {
+        mAdnInitDoneRegistrants.add(new Registrant(h, what, obj));
+    }
+
+    @Override
+    public void unregisterForAdnInitDone(Handler h) {
+        mAdnInitDoneRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForAdnRecordsInfo(Handler h, int what, Object obj) {
+        mAdnRecordsInfoRegistrants.add(new Registrant(h, what, obj));
+    }
+
+    @Override
+    public void unregisterForAdnRecordsInfo(Handler h) {
+        mAdnRecordsInfoRegistrants.remove(h);
+    }
+
+    @Override
+    public void getAdnRecord(Message result) {
+    }
+
+    @Override
+    public void updateAdnRecord(SimPhoneBookAdnRecord adnRecordInfo, Message result) {
     }
 }
