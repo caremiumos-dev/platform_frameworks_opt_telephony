@@ -679,7 +679,6 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void getNeighboringCidsResponse(RadioResponseInfo responseInfo,
                                            ArrayList<NeighboringCell> cells) {
-        responseCellList(responseInfo, cells);
     }
 
     /**
