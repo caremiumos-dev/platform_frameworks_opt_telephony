@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0158ed83_bf5abe3e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-12-04T19:32:51Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "7fd0ca79_b7b40f43",
+      "range": {
+        "startLine": 2081,
+        "startChar": 8,
+        "endLine": 2084,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "703960b5_ce6192db",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Subscription id will be assigned as soon as iccid is loaded, and this method \"onRecordsLoadedOrSubIdChanged\" will be invoked on Subid change. If IMSI is not loaded by that time, then initial attach request will be sent with wrong apn as there is no mcc-mnc. Emergency apn would be used by default, if its configured in apns file.",
       "parentUuid": "703960b5_ce6192db",
+      "range": {
+        "startLine": 2312,
+        "startChar": 7,
+        "endLine": 2314,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5d4474a6_2d11839b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2314,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-12-04T19:32:51Z",
+      "side": 1,
+      "message": "AOSP doesn\u0027t have isRecordsLoaded() private method here. I think you need to add it here\n\nAlso setInitialAttachApn() is called from two other places. Isn\u0027t that a problem ?",
+      "parentUuid": "0b23a4d1_5f57adb0",
       "range": {
         "startLine": 2312,
         "startChar": 7,
