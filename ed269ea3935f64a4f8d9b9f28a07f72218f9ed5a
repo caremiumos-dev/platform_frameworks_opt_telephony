@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "56fddb0a_17d0b32f",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T23:02:42Z",
+      "side": 1,
+      "message": "Or, why not add a code for USSD_MODIFIED_TO_DIAL_VIDEO?",
+      "parentUuid": "c0ba78c9_e2697b8d",
+      "range": {
+        "startLine": 1254,
+        "startChar": 53,
+        "endLine": 1254,
+        "endChar": 64
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b68e208d_12ffd3da",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 5
