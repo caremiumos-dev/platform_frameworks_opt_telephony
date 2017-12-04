@@ -1,0 +1,268 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d22f276_d1f962a1",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "why is this check changed?",
+      "range": {
+        "startLine": 1750,
+        "startChar": 23,
+        "endLine": 1750,
+        "endChar": 43
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "95e2dffe_7bae774c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1766,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 1766,
+        "startChar": 23,
+        "endLine": 1766,
+        "endChar": 43
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c0ba78c9_e2697b8d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "why not SS_MODIFIED_TO_DIAL_VIDEO, the code being added?",
+      "range": {
+        "startLine": 1254,
+        "startChar": 53,
+        "endLine": 1254,
+        "endChar": 64
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b68e208d_12ffd3da",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "see comment on ImsPhoneMmiCode, why is this being used exactly? If it\u0027s for conversion then it shouldn\u0027t have side effects. If its doing the handling itself then why is it called on an argument passed to onQueryCfComplete?",
+      "range": {
+        "startLine": 1224,
+        "startChar": 4,
+        "endLine": 1228,
+        "endChar": 10
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "64f441b0_d11c4b13",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2994,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "as per my comments on ImsPhoneMmiCode, lets call the newly added method ImsPhoneMmiCode#setIsSsData here and process ImsSsData in a try-block\n\nImsPhoneMmiCode mmiCode \u003d new ImsPhoneMmiCode(mPhone);\ntry {\n    mmiCode.processImsSsData(ar);\n    mmiCode.setIsSsData(true);\n} catch (ClassCastException, NullPointerException e) {\n    Rlog.e(TAG, \"Exception in parsing SS Data: \" + e);\n}",
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9321d39c_2f6b1bcd",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "can we have this method throw the exceptions instead of just logging errors?",
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c8802429_3a51a234",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1710,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "lets instead add a setter method setIsSsInfo(boolean isSsInfo) and make sure to call it when we call processImsSsData.",
+      "range": {
+        "startLine": 1710,
+        "startChar": 12,
+        "endLine": 1710,
+        "endChar": 28
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bfdf81fa_bfffe983",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1735,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "When ssData.serviceType is unconditional (SS_CFU or SS_CF_ALL)",
+      "range": {
+        "startLine": 1735,
+        "startChar": 23,
+        "endLine": 1735,
+        "endChar": 59
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bb7491bd_b965911d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1736,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "turn on voice call forwarding.",
+      "range": {
+        "startLine": 1736,
+        "startChar": 57,
+        "endLine": 1736,
+        "endChar": 98
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73849144_0ff6a184",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "What is this behavior based on?",
+      "range": {
+        "startLine": 1734,
+        "startChar": 20,
+        "endLine": 1738,
+        "endChar": 23
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "118644b3_aec82963",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "There\u0027s a comment above explaining why only the status is set, please move it here and explain how we will eventually set the number",
+      "range": {
+        "startLine": 1746,
+        "startChar": 73,
+        "endLine": 1746,
+        "endChar": 77
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "735e5823_9ed37569",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1762,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-04T22:56:22Z",
+      "side": 1,
+      "message": "are we just using this method for conversion as the comment suggests? Doesn\u0027t the method also have other side effects?",
+      "range": {
+        "startLine": 1761,
+        "startChar": 60,
+        "endLine": 1762,
+        "endChar": 64
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
