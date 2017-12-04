@@ -16,6 +16,24 @@
       "revId": "fd3c03b874bd00676c90c7c4b42183ad82c3a35d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cfb67db9_4f4f657e",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2017-12-04T07:21:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8c0b53b_3a476cce",
+      "revId": "fd3c03b874bd00676c90c7c4b42183ad82c3a35d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
