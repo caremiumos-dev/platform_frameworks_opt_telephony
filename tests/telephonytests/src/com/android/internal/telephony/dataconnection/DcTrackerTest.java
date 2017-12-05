@@ -192,7 +192,8 @@ public class DcTrackerTest extends TelephonyTest {
                                     Telephony.Carriers.MAX_CONNS, Telephony.Carriers.WAIT_TIME,
                                     Telephony.Carriers.MAX_CONNS_TIME, Telephony.Carriers.MTU,
                                     Telephony.Carriers.MVNO_TYPE,
-                                    Telephony.Carriers.MVNO_MATCH_DATA});
+                                    Telephony.Carriers.MVNO_MATCH_DATA,
+                                    Telephony.Carriers.NETWORK_TYPE_BITMASK});
 
                     mc.addRow(new Object[]{
                             2163,                   // id
@@ -220,7 +221,8 @@ public class DcTrackerTest extends TelephonyTest {
                             0,                      // max_conns_time
                             0,                      // mtu
                             "",                     // mvno_type
-                            ""                      // mnvo_match_data
+                            "",                     // mnvo_match_data
+                            0                       // network_type_bitmask
                     });
 
                     mc.addRow(new Object[]{
@@ -249,7 +251,8 @@ public class DcTrackerTest extends TelephonyTest {
                             0,                      // max_conns_time
                             0,                      // mtu
                             "",                     // mvno_type
-                            ""                      // mnvo_match_data
+                            "",                     // mnvo_match_data
+                            0                       // network_type_bitmask
                     });
 
                     mc.addRow(new Object[]{
@@ -278,7 +281,8 @@ public class DcTrackerTest extends TelephonyTest {
                             0,                      // max_conns_time
                             0,                      // mtu
                             "",                     // mvno_type
-                            ""                      // mnvo_match_data
+                            "",                     // mnvo_match_data
+                            0                       // network_type_bitmask
                     });
 
                     mc.addRow(new Object[]{
@@ -307,7 +311,8 @@ public class DcTrackerTest extends TelephonyTest {
                             0,                      // max_conns_time
                             0,                      // mtu
                             "",                     // mvno_type
-                            ""                      // mnvo_match_data
+                            "",                     // mnvo_match_data
+                            0                       // network_type_bitmask
                     });
 
                     mc.addRow(new Object[]{
@@ -336,7 +341,8 @@ public class DcTrackerTest extends TelephonyTest {
                             0,                      // max_conns_time
                             0,                      // mtu
                             "",                     // mvno_type
-                            ""                      // mnvo_match_data
+                            "",                     // mnvo_match_data
+                            0                       // network_type_bitmask
                     });
                     return mc;
                 }
