@@ -68,6 +68,40 @@ public class ServiceStateTest extends TestCase {
     }
 
     @SmallTest
+    public void testGetNetworkTypeBitmaskFromString() {
+        String networkTypeList = "4|7|5|6|12|13|14|19";
+        int networkTypeBitmask = 1 << (4 - 1) | 1 << (7 - 1) | 1 << (5 - 1) | 1 << (6 - 1)
+                | 1 << (12 - 1) | 1 << (14 - 1) | 1 << (13 - 1) | 1 << (19 - 1);
+        assertEquals(networkTypeBitmask,
+                ServiceState.getNetworkTypeBitmaskFromString(networkTypeList));
+
+        networkTypeList = "13";
+        networkTypeBitmask = 1 << (13 - 1);
+        assertEquals(networkTypeBitmask,
+                ServiceState.getNetworkTypeBitmaskFromString(networkTypeList));
+    }
+
+    @SmallTest
+    public void testConvertNetworkTypeBitmaskToBearerBitmask() {
+        // The value was calculated by adding "4|4|7|5|6|12|14|13|19".
+        int networkTypeBitmask = 276600;
+        // The value was calculated by adding "4|5|6|7|8|12|13|14|19".
+        int bearerBitmask = 276728;
+        assertEquals(bearerBitmask,
+                ServiceState.convertNetworkTypeBitmaskToBearerBitmask(networkTypeBitmask));
+    }
+
+    @SmallTest
+    public void testConvertBearerBitmaskToNetworkTypeBitmask() {
+        // The value was calculated by adding "4|4|7|5|6|12|14|13|19".
+        int networkTypeBitmask = 276600;
+        // The value was calculated by adding "4|5|6|7|8|12|13|14|19".
+        int bearerBitmask = 276728;
+        assertEquals(networkTypeBitmask,
+                ServiceState.convertBearerBitmaskToNetworkTypeBitmask(bearerBitmask));
+    }
+
+    @SmallTest
     public void testRAT() {
         ServiceState ss = new ServiceState();
 
