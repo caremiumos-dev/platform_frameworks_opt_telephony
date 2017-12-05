@@ -137,6 +137,7 @@ public class ApnSettingTest extends TelephonyTest {
         assertEquals(a1.mtu, a2.mtu);
         assertEquals(a1.mvnoType, a2.mvnoType);
         assertEquals(a1.mvnoMatchData, a2.mvnoMatchData);
+        assertEquals(a1.networkTypeBitmask, a2.networkTypeBitmask);
     }
 
     @Test
@@ -177,6 +178,41 @@ public class ApnSettingTest extends TelephonyTest {
         expectedApn = new ApnSetting(
                 -1, "12345", "Name", "apn", "", "", "", "", "", "", "", 0, mmsTypes, "IPV6",
                 "IP", true, 14, 0, 0, false, 0, 0, 0, 0, "spn", "testspn");
+        assertApnSettingEqual(expectedApn, ApnSetting.fromString(testString));
+
+        // A v3 string with network type bitmask.
+        testString =
+                "[ApnSettingV3] Name,apn,,,,,,,,,123,45,,mms|*,IPV6,IP,true,0,,,,,,,spn,testspn, 6";
+        int networkTypeBitmask = 1 << (6 - 1);
+        expectedApn = new ApnSetting(
+                -1, "12345", "Name", "apn", "", "", "", "", "", "", "", 0, mmsTypes, "IPV6",
+                "IP", true, networkTypeBitmask, 0, false, 0, 0, 0, 0, "spn", "testspn");
+        assertApnSettingEqual(expectedApn, ApnSetting.fromString(testString));
+
+        // A v3 string with network type bitmask and compatible bearer bitmask.
+        testString =
+                "[ApnSettingV3] Name,apn,,,,,,,,,123,45,,mms|*,IPV6,IP,true,8,,,,,,,spn,testspn, 6";
+        networkTypeBitmask = 1 << (6 - 1);
+        int bearerBitmask = 1 << (8 - 1);
+        expectedApn = new ApnSetting(
+                -1, "12345", "Name", "apn", "", "", "", "", "", "", "", 0, mmsTypes, "IPV6",
+                "IP", true, 0, bearerBitmask, 0, false, 0, 0, 0, 0, "spn",
+                "testspn");
+        assertApnSettingEqual(expectedApn, ApnSetting.fromString(testString));
+        expectedApn = new ApnSetting(
+                -1, "12345", "Name", "apn", "", "", "", "", "", "", "", 0, mmsTypes, "IPV6",
+                "IP", true, networkTypeBitmask, 0, false, 0, 0, 0, 0, "spn",
+                "testspn");
+        assertApnSettingEqual(expectedApn, ApnSetting.fromString(testString));
+
+        // A v3 string with network type bitmask and incompatible bearer bitmask.
+        testString =
+                "[ApnSettingV3] Name,apn,,,,,,,,,123,45,,mms|*,IPV6,IP,true,9,,,,,,,spn,testspn, 6";
+        bearerBitmask = 1 << (8 - 1);
+        expectedApn = new ApnSetting(
+                -1, "12345", "Name", "apn", "", "", "", "", "", "", "", 0, mmsTypes, "IPV6",
+                "IP", true, 0, bearerBitmask, 0, false, 0, 0, 0, 0, "spn",
+                "testspn");
         assertApnSettingEqual(expectedApn, ApnSetting.fromString(testString));
 
         // Return no apn if insufficient fields given.
@@ -220,7 +256,7 @@ public class ApnSettingTest extends TelephonyTest {
                 types, "IPV6", "IP", true, 14, 0, 0, false, 0, 0, 0, 0, "", "");
         String expected = "[ApnSettingV3] Name, 99, 12345, apn, proxy, " +
                 "mmsc, mmsproxy, mmsport, port, 0, default | *, " +
-                "IPV6, IP, true, 14, 8192, 0, false, 0, 0, 0, 0, , , false";
+                "IPV6, IP, true, 14, 8192, 0, false, 0, 0, 0, 0, , , false, 4096";
         assertEquals(expected, apn.toString());
     }
 
