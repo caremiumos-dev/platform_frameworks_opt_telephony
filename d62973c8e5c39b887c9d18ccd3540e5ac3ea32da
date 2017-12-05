@@ -22,6 +22,30 @@
       "revId": "d62973c8e5c39b887c9d18ccd3540e5ac3ea32da",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "850d890b_9f18779c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-05T02:50:18Z",
+      "side": 1,
+      "message": "Not needed since its under ../internal/.. Everything here is hidden.",
+      "parentUuid": "dc15136f_28eac43f",
+      "range": {
+        "startLine": 45,
+        "startChar": 1,
+        "endLine": 45,
+        "endChar": 3
+      },
+      "revId": "d62973c8e5c39b887c9d18ccd3540e5ac3ea32da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
