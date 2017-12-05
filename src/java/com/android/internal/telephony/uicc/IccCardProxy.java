@@ -272,6 +272,7 @@ public class IccCardProxy extends Handler implements IccCard {
                         loge("EVENT_RECORDS_LOADED Operator name is null");
                     }
                 }
+                loge("mUiccCard: " + mUiccCard + ", " + mUiccCard.areCarrierPriviligeRulesLoaded());
                 if (mUiccCard != null && !mUiccCard.areCarrierPriviligeRulesLoaded()) {
                     mUiccCard.registerForCarrierPrivilegeRulesLoaded(
                             this, EVENT_CARRIER_PRIVILEGES_LOADED, null);

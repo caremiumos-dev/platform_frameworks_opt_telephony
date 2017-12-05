@@ -100,6 +100,7 @@ public class UiccProfile {
     public UiccProfile(Context c, CommandsInterface ci, IccCardStatus ics, int phoneId,
             UiccCard uiccCard) {
         if (DBG) log("Creating profile");
+        if (DBG) log("mCarrierPrivilegeRules: " + mCarrierPrivilegeRules);
         mUiccCard = uiccCard;
         mPhoneId = phoneId;
         update(c, ci, ics);
@@ -153,7 +154,6 @@ public class UiccProfile {
                     mUiccApplications[i].update(ics.mApplications[i], mContext, mCi);
                 }
             }
-
             createAndUpdateCatServiceLocked();
 
             log("Before privilege rules: " + mCarrierPrivilegeRules);
@@ -555,6 +555,7 @@ public class UiccProfile {
      */
     public boolean areCarrierPriviligeRulesLoaded() {
         UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
+        log("carrierPrivilegeRules" + carrierPrivilegeRules);
         return carrierPrivilegeRules == null
                 || carrierPrivilegeRules.areCarrierPriviligeRulesLoaded();
     }

@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class UiccCarrierPrivilegeRules extends Handler {
     private static final String LOG_TAG = "UiccCarrierPrivilegeRules";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
     private static final String ARAM_AID = "A00000015141434C00";
     private static final String ARAD_AID = "A00000015144414300";
