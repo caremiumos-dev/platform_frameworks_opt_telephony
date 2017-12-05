@@ -67,6 +67,7 @@ import java.util.List;
 public class UiccCard {
     protected static final String LOG_TAG = "UiccCard";
     protected static final boolean DBG = true;
+    protected static final boolean UICC_REFACTOR = true;
 
     public static final String EXTRA_ICC_CARD_ADDED =
             "com.android.internal.telephony.uicc.ICC_CARD_ADDED";
@@ -79,6 +80,7 @@ public class UiccCard {
     private int mGsmUmtsSubscriptionAppIndex;
     private int mCdmaSubscriptionAppIndex;
     private int mImsSubscriptionAppIndex;
+    private UiccProfile mUiccProfile;
     private UiccCardApplication[] mUiccApplications =
             new UiccCardApplication[IccCardStatus.CARD_MAX_APPS];
     private Context mContext;
@@ -113,15 +115,26 @@ public class UiccCard {
     public void dispose() {
         synchronized (mLock) {
             if (DBG) log("Disposing card");
-            if (mCatService != null) mCatService.dispose();
-            for (UiccCardApplication app : mUiccApplications) {
-                if (app != null) {
-                    app.dispose();
+            if (!UICC_REFACTOR) {
+                if (mCatService != null) {
+                    mCatService.dispose();
                 }
+                for (UiccCardApplication app : mUiccApplications) {
+                    if (app != null) {
+                        app.dispose();
+                    }
+                }
+                mCatService = null;
+                mUiccApplications = null;
+                mCarrierPrivilegeRules = null;
             }
-            mCatService = null;
-            mUiccApplications = null;
-            mCarrierPrivilegeRules = null;
+
+            if (UICC_REFACTOR) {
+                if (mUiccProfile != null) {
+                    mUiccProfile.dispose();
+                }
+                mUiccProfile = null;
+            }
         }
     }
 
@@ -129,49 +142,60 @@ public class UiccCard {
         synchronized (mLock) {
             CardState oldState = mCardState;
             mCardState = ics.mCardState;
-            mUniversalPinState = ics.mUniversalPinState;
-            mGsmUmtsSubscriptionAppIndex = ics.mGsmUmtsSubscriptionAppIndex;
-            mCdmaSubscriptionAppIndex = ics.mCdmaSubscriptionAppIndex;
-            mImsSubscriptionAppIndex = ics.mImsSubscriptionAppIndex;
+            if (!UICC_REFACTOR) {
+                mUniversalPinState = ics.mUniversalPinState;
+                mGsmUmtsSubscriptionAppIndex = ics.mGsmUmtsSubscriptionAppIndex;
+                mCdmaSubscriptionAppIndex = ics.mCdmaSubscriptionAppIndex;
+                mImsSubscriptionAppIndex = ics.mImsSubscriptionAppIndex;
+            }
             mContext = c;
             mCi = ci;
 
-            //update applications
-            if (DBG) log(ics.mApplications.length + " applications");
-            for ( int i = 0; i < mUiccApplications.length; i++) {
-                if (mUiccApplications[i] == null) {
-                    //Create newly added Applications
-                    if (i < ics.mApplications.length) {
-                        mUiccApplications[i] = new UiccCardApplication(this,
+            if (!UICC_REFACTOR) {
+                //update applications
+                if (DBG) log(ics.mApplications.length + " applications");
+                for (int i = 0; i < mUiccApplications.length; i++) {
+                    if (mUiccApplications[i] == null) {
+                        //Create newly added Applications
+                        if (i < ics.mApplications.length) {
+                            mUiccApplications[i] = new UiccCardApplication(this,
                                 ics.mApplications[i], mContext, mCi);
+                        }
+                    } else if (i >= ics.mApplications.length) {
+                        //Delete removed applications
+                        mUiccApplications[i].dispose();
+                        mUiccApplications[i] = null;
+                    } else {
+                        //Update the rest
+                        mUiccApplications[i].update(ics.mApplications[i], mContext, mCi);
                     }
-                } else if (i >= ics.mApplications.length) {
-                    //Delete removed applications
-                    mUiccApplications[i].dispose();
-                    mUiccApplications[i] = null;
+                }
+
+                createAndUpdateCatServiceLocked();
+
+                // Reload the carrier privilege rules if necessary.
+                log("Before privilege rules: " + mCarrierPrivilegeRules + " : " + mCardState);
+                if (mCarrierPrivilegeRules == null && mCardState == CardState.CARDSTATE_PRESENT) {
+                    mCarrierPrivilegeRules = new UiccCarrierPrivilegeRules(this,
+                        mHandler.obtainMessage(EVENT_CARRIER_PRIVILEGES_LOADED));
+                } else if (mCarrierPrivilegeRules != null
+                    && mCardState != CardState.CARDSTATE_PRESENT) {
+                    mCarrierPrivilegeRules = null;
+                }
+
+                sanitizeApplicationIndexesLocked();
+            } else {
+                if (mUiccProfile == null) {
+                    mUiccProfile = new UiccProfile(mContext, mCi, ics, mPhoneId, this);
                 } else {
-                    //Update the rest
-                    mUiccApplications[i].update(ics.mApplications[i], mContext, mCi);
+                    mUiccProfile.update(mContext, mCi, ics);
                 }
             }
-
-            createAndUpdateCatServiceLocked();
-
-            // Reload the carrier privilege rules if necessary.
-            log("Before privilege rules: " + mCarrierPrivilegeRules + " : " + mCardState);
-            if (mCarrierPrivilegeRules == null && mCardState == CardState.CARDSTATE_PRESENT) {
-                mCarrierPrivilegeRules = new UiccCarrierPrivilegeRules(this,
-                        mHandler.obtainMessage(EVENT_CARRIER_PRIVILEGES_LOADED));
-            } else if (mCarrierPrivilegeRules != null
-                    && mCardState != CardState.CARDSTATE_PRESENT) {
-                mCarrierPrivilegeRules = null;
-            }
-
-            sanitizeApplicationIndexesLocked();
 
             RadioState radioState = mCi.getRadioState();
             if (DBG) log("update: radioState=" + radioState + " mLastRadioState="
                     + mLastRadioState);
+            log("oldState: " + oldState + ", mCardState: " + mCardState);
             // No notifications while radio is off or we just powering up
             if (radioState == RadioState.RADIO_ON && mLastRadioState == RadioState.RADIO_ON) {
                 if (oldState != CardState.CARDSTATE_ABSENT &&
@@ -273,20 +297,32 @@ public class UiccCard {
      * Notifies handler when carrier privilege rules are loaded.
      */
     public void registerForCarrierPrivilegeRulesLoaded(Handler h, int what, Object obj) {
-        synchronized (mLock) {
-            Registrant r = new Registrant (h, what, obj);
+        if (!UICC_REFACTOR) {
+            synchronized (mLock) {
+                Registrant r = new Registrant(h, what, obj);
 
-            mCarrierPrivilegeRegistrants.add(r);
+                mCarrierPrivilegeRegistrants.add(r);
 
-            if (areCarrierPriviligeRulesLoaded()) {
-                r.notifyRegistrant();
+                if (areCarrierPriviligeRulesLoaded()) {
+                    r.notifyRegistrant();
+                }
+            }
+        } else {
+            if (mUiccProfile != null) {
+                mUiccProfile.registerForCarrierPrivilegeRulesLoaded(h, what, obj);
             }
         }
     }
 
     public void unregisterForCarrierPrivilegeRulesLoaded(Handler h) {
-        synchronized (mLock) {
-            mCarrierPrivilegeRegistrants.remove(h);
+        if (!UICC_REFACTOR) {
+            synchronized (mLock) {
+                mCarrierPrivilegeRegistrants.remove(h);
+            }
+        } else {
+            if (mUiccProfile != null) {
+                mUiccProfile.unregisterForCarrierPrivilegeRulesLoaded(h);
+            }
         }
     }
 
@@ -475,13 +511,21 @@ public class UiccCard {
     }
 
     public boolean isApplicationOnIcc(IccCardApplicationStatus.AppType type) {
-        synchronized (mLock) {
-            for (int i = 0 ; i < mUiccApplications.length; i++) {
-                if (mUiccApplications[i] != null && mUiccApplications[i].getType() == type) {
-                    return true;
+        if (!UICC_REFACTOR) {
+            synchronized (mLock) {
+                for (int i = 0; i < mUiccApplications.length; i++) {
+                    if (mUiccApplications[i] != null && mUiccApplications[i].getType() == type) {
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.isApplicationOnIcc(type);
+            } else {
+                return false;
+            }
         }
     }
 
@@ -492,38 +536,62 @@ public class UiccCard {
     }
 
     public PinState getUniversalPinState() {
-        synchronized (mLock) {
-            return mUniversalPinState;
+        if (!UICC_REFACTOR) {
+            synchronized (mLock) {
+                return mUniversalPinState;
+            }
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getUniversalPinState();
+            } else {
+                return PinState.PINSTATE_UNKNOWN;
+            }
         }
     }
 
     public UiccCardApplication getApplication(int family) {
-        synchronized (mLock) {
-            int index = IccCardStatus.CARD_MAX_APPS;
-            switch (family) {
-                case UiccController.APP_FAM_3GPP:
-                    index = mGsmUmtsSubscriptionAppIndex;
-                    break;
-                case UiccController.APP_FAM_3GPP2:
-                    index = mCdmaSubscriptionAppIndex;
-                    break;
-                case UiccController.APP_FAM_IMS:
-                    index = mImsSubscriptionAppIndex;
-                    break;
+        if (!UICC_REFACTOR) {
+            synchronized (mLock) {
+                int index = IccCardStatus.CARD_MAX_APPS;
+                switch (family) {
+                    case UiccController.APP_FAM_3GPP:
+                        index = mGsmUmtsSubscriptionAppIndex;
+                        break;
+                    case UiccController.APP_FAM_3GPP2:
+                        index = mCdmaSubscriptionAppIndex;
+                        break;
+                    case UiccController.APP_FAM_IMS:
+                        index = mImsSubscriptionAppIndex;
+                        break;
+                }
+                if (index >= 0 && index < mUiccApplications.length) {
+                    return mUiccApplications[index];
+                }
+                return null;
             }
-            if (index >= 0 && index < mUiccApplications.length) {
-                return mUiccApplications[index];
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getApplication(family);
+            } else {
+                return null;
             }
-            return null;
         }
     }
 
     public UiccCardApplication getApplicationIndex(int index) {
-        synchronized (mLock) {
-            if (index >= 0 && index < mUiccApplications.length) {
-                return mUiccApplications[index];
+        if (!UICC_REFACTOR) {
+            synchronized (mLock) {
+                if (index >= 0 && index < mUiccApplications.length) {
+                    return mUiccApplications[index];
+                }
+                return null;
             }
-            return null;
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getApplicationIndex(index);
+            } else {
+                return null;
+            }
         }
     }
 
@@ -534,14 +602,22 @@ public class UiccCard {
      * @return application corresponding to type or a null if no match found
      */
     public UiccCardApplication getApplicationByType(int type) {
-        synchronized (mLock) {
-            for (int i = 0 ; i < mUiccApplications.length; i++) {
-                if (mUiccApplications[i] != null &&
-                        mUiccApplications[i].getType().ordinal() == type) {
-                    return mUiccApplications[i];
+        if (!UICC_REFACTOR) {
+            synchronized (mLock) {
+                for (int i = 0; i < mUiccApplications.length; i++) {
+                    if (mUiccApplications[i] != null
+                            && mUiccApplications[i].getType().ordinal() == type) {
+                        return mUiccApplications[i];
+                    }
                 }
+                return null;
             }
-            return null;
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getApplicationByType(type);
+            } else {
+                return null;
+            }
         }
     }
 
@@ -551,29 +627,37 @@ public class UiccCard {
      * A null aid implies a card level reset - all applications must be reset.
      */
     public boolean resetAppWithAid(String aid) {
-        synchronized (mLock) {
-            boolean changed = false;
-            for (int i = 0; i < mUiccApplications.length; i++) {
-                if (mUiccApplications[i] != null
+        if (!UICC_REFACTOR) {
+            synchronized (mLock) {
+                boolean changed = false;
+                for (int i = 0; i < mUiccApplications.length; i++) {
+                    if (mUiccApplications[i] != null
                         && (TextUtils.isEmpty(aid) || aid.equals(mUiccApplications[i].getAid()))) {
-                    // Delete removed applications
-                    mUiccApplications[i].dispose();
-                    mUiccApplications[i] = null;
-                    changed = true;
+                        // Delete removed applications
+                        mUiccApplications[i].dispose();
+                        mUiccApplications[i] = null;
+                        changed = true;
+                    }
                 }
+                if (TextUtils.isEmpty(aid)) {
+                    if (mCarrierPrivilegeRules != null) {
+                        mCarrierPrivilegeRules = null;
+                        changed = true;
+                    }
+                    if (mCatService != null) {
+                        mCatService.dispose();
+                        mCatService = null;
+                        changed = true;
+                    }
+                }
+                return changed;
             }
-            if (TextUtils.isEmpty(aid)) {
-                if (mCarrierPrivilegeRules != null) {
-                    mCarrierPrivilegeRules = null;
-                    changed = true;
-                }
-                if (mCatService != null) {
-                    mCatService.dispose();
-                    mCatService = null;
-                    changed = true;
-                }
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.resetAppWithAid(aid);
+            } else {
+                return false;
             }
-            return changed;
         }
     }
 
@@ -581,19 +665,32 @@ public class UiccCard {
      * Exposes {@link CommandsInterface#iccOpenLogicalChannel}
      */
     public void iccOpenLogicalChannel(String AID, int p2, Message response) {
-        loglocal("Open Logical Channel: " + AID + " , " + p2 + " by pid:" + Binder.getCallingPid()
-                + " uid:" + Binder.getCallingUid());
-        mCi.iccOpenLogicalChannel(AID, p2,
-                mHandler.obtainMessage(EVENT_OPEN_LOGICAL_CHANNEL_DONE, response));
+        if (!UICC_REFACTOR || mUiccProfile == null) {
+            loglocal("Open Logical Channel: " + AID + " , " + p2 + " by pid:"
+                    + Binder.getCallingPid() + " uid:" + Binder.getCallingUid());
+            mCi.iccOpenLogicalChannel(AID, p2,
+                    mHandler.obtainMessage(EVENT_OPEN_LOGICAL_CHANNEL_DONE, response));
+        } else {
+            if (mUiccProfile != null) {
+                mUiccProfile.iccOpenLogicalChannel(AID, p2, response);
+            }
+        }
+
     }
 
     /**
      * Exposes {@link CommandsInterface#iccCloseLogicalChannel}
      */
     public void iccCloseLogicalChannel(int channel, Message response) {
-        loglocal("Close Logical Channel: " + channel);
-        mCi.iccCloseLogicalChannel(channel,
-                mHandler.obtainMessage(EVENT_CLOSE_LOGICAL_CHANNEL_DONE, response));
+        if (!UICC_REFACTOR || mUiccProfile == null) {
+            loglocal("Close Logical Channel: " + channel);
+            mCi.iccCloseLogicalChannel(channel,
+                    mHandler.obtainMessage(EVENT_CLOSE_LOGICAL_CHANNEL_DONE, response));
+        } else {
+            if (mUiccProfile != null) {
+                mUiccProfile.iccCloseLogicalChannel(channel, response);
+            }
+        }
     }
 
     /**
@@ -601,8 +698,15 @@ public class UiccCard {
      */
     public void iccTransmitApduLogicalChannel(int channel, int cla, int command,
             int p1, int p2, int p3, String data, Message response) {
-        mCi.iccTransmitApduLogicalChannel(channel, cla, command, p1, p2, p3,
-                data, mHandler.obtainMessage(EVENT_TRANSMIT_APDU_LOGICAL_CHANNEL_DONE, response));
+        if (!UICC_REFACTOR || mUiccProfile == null) {
+            mCi.iccTransmitApduLogicalChannel(channel, cla, command, p1, p2, p3, data,
+                    mHandler.obtainMessage(EVENT_TRANSMIT_APDU_LOGICAL_CHANNEL_DONE, response));
+        } else {
+            if (mUiccProfile != null) {
+                mUiccProfile.iccTransmitApduLogicalChannel(
+                        channel, cla, command, p1, p2, p3, data, response);
+            }
+        }
     }
 
     /**
@@ -610,8 +714,14 @@ public class UiccCard {
      */
     public void iccTransmitApduBasicChannel(int cla, int command,
             int p1, int p2, int p3, String data, Message response) {
-        mCi.iccTransmitApduBasicChannel(cla, command, p1, p2, p3,
-                data, mHandler.obtainMessage(EVENT_TRANSMIT_APDU_BASIC_CHANNEL_DONE, response));
+        if (!UICC_REFACTOR || mUiccProfile == null) {
+            mCi.iccTransmitApduBasicChannel(cla, command, p1, p2, p3, data,
+                    mHandler.obtainMessage(EVENT_TRANSMIT_APDU_BASIC_CHANNEL_DONE, response));
+        } else {
+            if (mUiccProfile != null) {
+                mUiccProfile.iccTransmitApduBasicChannel(cla, command, p1, p2, p3, data, response);
+            }
+        }
     }
 
     /**
@@ -619,26 +729,46 @@ public class UiccCard {
      */
     public void iccExchangeSimIO(int fileID, int command, int p1, int p2, int p3,
             String pathID, Message response) {
-        mCi.iccIO(command, fileID, pathID, p1, p2, p3, null, null,
-                mHandler.obtainMessage(EVENT_SIM_IO_DONE, response));
+        if (!UICC_REFACTOR || mUiccProfile == null) {
+            mCi.iccIO(command, fileID, pathID, p1, p2, p3, null, null,
+                    mHandler.obtainMessage(EVENT_SIM_IO_DONE, response));
+        } else {
+            if (mUiccProfile != null) {
+                mUiccProfile.iccExchangeSimIO(fileID, command, p1, p2, p3, pathID, response);
+            }
+        }
     }
 
     /**
      * Exposes {@link CommandsInterface#sendEnvelopeWithStatus}
      */
     public void sendEnvelopeWithStatus(String contents, Message response) {
-        mCi.sendEnvelopeWithStatus(contents, response);
+        if (!UICC_REFACTOR || mUiccProfile == null) {
+            mCi.sendEnvelopeWithStatus(contents, response);
+        } else {
+            if (mUiccProfile != null) {
+                mUiccProfile.sendEnvelopeWithStatus(contents, response);
+            }
+        }
     }
 
     /* Returns number of applications on this card */
     public int getNumApplications() {
-        int count = 0;
-        for (UiccCardApplication a : mUiccApplications) {
-            if (a != null) {
-                count++;
+        if (!UICC_REFACTOR) {
+            int count = 0;
+            for (UiccCardApplication a : mUiccApplications) {
+                if (a != null) {
+                    count++;
+                }
+            }
+            return count;
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getNumApplications();
+            } else {
+                return 0;
             }
         }
-        return count;
     }
 
     public int getPhoneId() {
@@ -649,58 +779,108 @@ public class UiccCard {
      * Returns true iff carrier privileges rules are null (dont need to be loaded) or loaded.
      */
     public boolean areCarrierPriviligeRulesLoaded() {
-        UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
-        return carrierPrivilegeRules == null
-                || carrierPrivilegeRules.areCarrierPriviligeRulesLoaded();
+        if (!UICC_REFACTOR) {
+            UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
+            return carrierPrivilegeRules == null
+                   || carrierPrivilegeRules.areCarrierPriviligeRulesLoaded();
+        } else {
+            log("mUiccProfile: " + mUiccProfile);
+            if (mUiccProfile != null) {
+                return mUiccProfile.areCarrierPriviligeRulesLoaded();
+            } else {
+                return false;
+            }
+        }
     }
 
     /**
      * Returns true if there are some carrier privilege rules loaded and specified.
      */
     public boolean hasCarrierPrivilegeRules() {
-        UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
-        return carrierPrivilegeRules != null && carrierPrivilegeRules.hasCarrierPrivilegeRules();
+        if (!UICC_REFACTOR) {
+            UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
+            return carrierPrivilegeRules != null && carrierPrivilegeRules
+                   .hasCarrierPrivilegeRules();
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.hasCarrierPrivilegeRules();
+            } else {
+                return false;
+            }
+        }
     }
 
     /**
      * Exposes {@link UiccCarrierPrivilegeRules#getCarrierPrivilegeStatus}.
      */
     public int getCarrierPrivilegeStatus(Signature signature, String packageName) {
-        UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
-        return carrierPrivilegeRules == null
-                ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
-                carrierPrivilegeRules.getCarrierPrivilegeStatus(signature, packageName);
+        if (!UICC_REFACTOR) {
+            UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
+            return carrierPrivilegeRules == null
+                    ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
+                   carrierPrivilegeRules.getCarrierPrivilegeStatus(signature, packageName);
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getCarrierPrivilegeStatus(signature, packageName);
+            } else {
+                return TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED;
+            }
+        }
     }
 
     /**
      * Exposes {@link UiccCarrierPrivilegeRules#getCarrierPrivilegeStatus}.
      */
     public int getCarrierPrivilegeStatus(PackageManager packageManager, String packageName) {
-        UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
-        return carrierPrivilegeRules == null
-                ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
-                carrierPrivilegeRules.getCarrierPrivilegeStatus(packageManager, packageName);
+        if (!UICC_REFACTOR) {
+            UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
+            return carrierPrivilegeRules == null
+                    ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
+                    carrierPrivilegeRules.getCarrierPrivilegeStatus(packageManager, packageName);
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getCarrierPrivilegeStatus(packageManager, packageName);
+            } else {
+                return TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED;
+            }
+        }
     }
 
     /**
      * Exposes {@link UiccCarrierPrivilegeRules#getCarrierPrivilegeStatus}.
      */
     public int getCarrierPrivilegeStatus(PackageInfo packageInfo) {
-        UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
-        return carrierPrivilegeRules == null
-                ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
-                carrierPrivilegeRules.getCarrierPrivilegeStatus(packageInfo);
+        if (!UICC_REFACTOR) {
+            UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
+            return carrierPrivilegeRules == null
+                    ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
+                    carrierPrivilegeRules.getCarrierPrivilegeStatus(packageInfo);
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getCarrierPrivilegeStatus(packageInfo);
+            } else {
+                return TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED;
+            }
+        }
     }
 
     /**
      * Exposes {@link UiccCarrierPrivilegeRules#getCarrierPrivilegeStatusForCurrentTransaction}.
      */
     public int getCarrierPrivilegeStatusForCurrentTransaction(PackageManager packageManager) {
-        UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
-        return carrierPrivilegeRules == null
-                ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
-                carrierPrivilegeRules.getCarrierPrivilegeStatusForCurrentTransaction(
-                        packageManager);
+        if (!UICC_REFACTOR) {
+            UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
+            return carrierPrivilegeRules == null
+                   ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
+                    carrierPrivilegeRules.getCarrierPrivilegeStatusForCurrentTransaction(
+                            packageManager);
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getCarrierPrivilegeStatusForCurrentTransaction(packageManager);
+            } else {
+                return TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED;
+            }
+        }
     }
 
     /**
@@ -708,10 +888,17 @@ public class UiccCard {
      */
     public List<String> getCarrierPackageNamesForIntent(
             PackageManager packageManager, Intent intent) {
-        UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
-        return carrierPrivilegeRules == null ? null :
-                carrierPrivilegeRules.getCarrierPackageNamesForIntent(
-                        packageManager, intent);
+        if (!UICC_REFACTOR) {
+            UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
+            return carrierPrivilegeRules == null ? null :
+                    carrierPrivilegeRules.getCarrierPackageNamesForIntent(packageManager, intent);
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getCarrierPackageNamesForIntent(packageManager, intent);
+            } else {
+                return null;
+            }
+        }
     }
 
     /** Returns a reference to the current {@link UiccCarrierPrivilegeRules}. */
@@ -722,59 +909,83 @@ public class UiccCard {
     }
 
     public boolean setOperatorBrandOverride(String brand) {
-        log("setOperatorBrandOverride: " + brand);
-        log("current iccId: " + getIccId());
+        if (!UICC_REFACTOR) {
+            log("setOperatorBrandOverride: " + brand);
+            log("current iccId: " + getIccId());
 
-        String iccId = getIccId();
-        if (TextUtils.isEmpty(iccId)) {
-            return false;
-        }
+            String iccId = getIccId();
+            if (TextUtils.isEmpty(iccId)) {
+                return false;
+            }
 
-        SharedPreferences.Editor spEditor =
-                PreferenceManager.getDefaultSharedPreferences(mContext).edit();
-        String key = OPERATOR_BRAND_OVERRIDE_PREFIX + iccId;
-        if (brand == null) {
-            spEditor.remove(key).commit();
+            SharedPreferences.Editor spEditor =
+                    PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+            String key = OPERATOR_BRAND_OVERRIDE_PREFIX + iccId;
+            if (brand == null) {
+                spEditor.remove(key).commit();
+            } else {
+                spEditor.putString(key, brand).commit();
+            }
+            return true;
         } else {
-            spEditor.putString(key, brand).commit();
+            if (mUiccProfile != null) {
+                return mUiccProfile.setOperatorBrandOverride(brand);
+            } else {
+                return false;
+            }
         }
-        return true;
     }
 
     public String getOperatorBrandOverride() {
-        String iccId = getIccId();
-        if (TextUtils.isEmpty(iccId)) {
-            return null;
-        }
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String brandName = sp.getString(OPERATOR_BRAND_OVERRIDE_PREFIX + iccId, null);
-        if (brandName == null) {
-            // Check if  CarrierConfig sets carrier name
-            CarrierConfigManager manager = (CarrierConfigManager)
-                    mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
-            int subId = SubscriptionController.getInstance().getSubIdUsingPhoneId(mPhoneId);
-            if (manager != null) {
-                PersistableBundle bundle = manager.getConfigForSubId(subId);
-                if (bundle != null && bundle.getBoolean(
+        if (!UICC_REFACTOR) {
+            String iccId = getIccId();
+            if (TextUtils.isEmpty(iccId)) {
+                return null;
+            }
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
+            String brandName = sp.getString(OPERATOR_BRAND_OVERRIDE_PREFIX + iccId, null);
+            if (brandName == null) {
+                // Check if  CarrierConfig sets carrier name
+                CarrierConfigManager manager = (CarrierConfigManager)
+                        mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+                int subId = SubscriptionController.getInstance().getSubIdUsingPhoneId(mPhoneId);
+                if (manager != null) {
+                    PersistableBundle bundle = manager.getConfigForSubId(subId);
+                    if (bundle != null && bundle.getBoolean(
                         CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL)) {
-                    brandName = bundle.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING);
+                        brandName = bundle.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING);
+                    }
                 }
             }
+            return brandName;
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getOperatorBrandOverride();
+            } else {
+                return null;
+            }
         }
-        return brandName;
     }
 
     public String getIccId() {
-        // ICCID should be same across all the apps.
-        for (UiccCardApplication app : mUiccApplications) {
-            if (app != null) {
-                IccRecords ir = app.getIccRecords();
-                if (ir != null && ir.getIccId() != null) {
-                    return ir.getIccId();
+        if (!UICC_REFACTOR) {
+            // ICCID should be same across all the apps.
+            for (UiccCardApplication app : mUiccApplications) {
+                if (app != null) {
+                    IccRecords ir = app.getIccRecords();
+                    if (ir != null && ir.getIccId() != null) {
+                        return ir.getIccId();
+                    }
                 }
             }
+            return null;
+        } else {
+            if (mUiccProfile != null) {
+                return mUiccProfile.getIccId();
+            } else {
+                return null;
+            }
         }
-        return null;
     }
 
     private void log(String msg) {
@@ -790,67 +1001,84 @@ public class UiccCard {
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-        pw.println("UiccCard:");
-        pw.println(" mCi=" + mCi);
-        pw.println(" mLastRadioState=" + mLastRadioState);
-        pw.println(" mCatService=" + mCatService);
-        pw.println(" mAbsentRegistrants: size=" + mAbsentRegistrants.size());
-        for (int i = 0; i < mAbsentRegistrants.size(); i++) {
-            pw.println("  mAbsentRegistrants[" + i + "]="
-                    + ((Registrant)mAbsentRegistrants.get(i)).getHandler());
-        }
-        for (int i = 0; i < mCarrierPrivilegeRegistrants.size(); i++) {
-            pw.println("  mCarrierPrivilegeRegistrants[" + i + "]="
-                    + ((Registrant)mCarrierPrivilegeRegistrants.get(i)).getHandler());
-        }
-        pw.println(" mCardState=" + mCardState);
-        pw.println(" mUniversalPinState=" + mUniversalPinState);
-        pw.println(" mGsmUmtsSubscriptionAppIndex=" + mGsmUmtsSubscriptionAppIndex);
-        pw.println(" mCdmaSubscriptionAppIndex=" + mCdmaSubscriptionAppIndex);
-        pw.println(" mImsSubscriptionAppIndex=" + mImsSubscriptionAppIndex);
-        pw.println(" mImsSubscriptionAppIndex=" + mImsSubscriptionAppIndex);
-        pw.println(" mUiccApplications: length=" + mUiccApplications.length);
-        for (int i = 0; i < mUiccApplications.length; i++) {
-            if (mUiccApplications[i] == null) {
-                pw.println("  mUiccApplications[" + i + "]=" + null);
-            } else {
-                pw.println("  mUiccApplications[" + i + "]="
-                        + mUiccApplications[i].getType() + " " + mUiccApplications[i]);
+        if (!UICC_REFACTOR) {
+            pw.println("UiccCard:");
+            pw.println(" mCi=" + mCi);
+            pw.println(" mLastRadioState=" + mLastRadioState);
+            pw.println(" mCatService=" + mCatService);
+            pw.println(" mAbsentRegistrants: size=" + mAbsentRegistrants.size());
+            for (int i = 0; i < mAbsentRegistrants.size(); i++) {
+                pw.println("  mAbsentRegistrants[" + i + "]="
+                        + ((Registrant) mAbsentRegistrants.get(i)).getHandler());
             }
-        }
-        pw.println();
-        // Print details of all applications
-        for (UiccCardApplication app : mUiccApplications) {
-            if (app != null) {
-                app.dump(fd, pw, args);
-                pw.println();
+            for (int i = 0; i < mCarrierPrivilegeRegistrants.size(); i++) {
+                pw.println("  mCarrierPrivilegeRegistrants[" + i + "]="
+                        + ((Registrant) mCarrierPrivilegeRegistrants.get(i)).getHandler());
             }
-        }
-        // Print details of all IccRecords
-        for (UiccCardApplication app : mUiccApplications) {
-            if (app != null) {
-                IccRecords ir = app.getIccRecords();
-                if (ir != null) {
-                    ir.dump(fd, pw, args);
+            pw.println(" mCardState=" + mCardState);
+            pw.println(" mUniversalPinState=" + mUniversalPinState);
+            pw.println(" mGsmUmtsSubscriptionAppIndex=" + mGsmUmtsSubscriptionAppIndex);
+            pw.println(" mCdmaSubscriptionAppIndex=" + mCdmaSubscriptionAppIndex);
+            pw.println(" mImsSubscriptionAppIndex=" + mImsSubscriptionAppIndex);
+            pw.println(" mImsSubscriptionAppIndex=" + mImsSubscriptionAppIndex);
+            pw.println(" mUiccApplications: length=" + mUiccApplications.length);
+            for (int i = 0; i < mUiccApplications.length; i++) {
+                if (mUiccApplications[i] == null) {
+                    pw.println("  mUiccApplications[" + i + "]=" + null);
+                } else {
+                    pw.println("  mUiccApplications[" + i + "]="
+                            + mUiccApplications[i].getType() + " " + mUiccApplications[i]);
+                }
+            }
+            pw.println();
+            // Print details of all applications
+            for (UiccCardApplication app : mUiccApplications) {
+                if (app != null) {
+                    app.dump(fd, pw, args);
                     pw.println();
                 }
             }
-        }
-        // Print UiccCarrierPrivilegeRules and registrants.
-        if (mCarrierPrivilegeRules == null) {
-            pw.println(" mCarrierPrivilegeRules: null");
+            // Print details of all IccRecords
+            for (UiccCardApplication app : mUiccApplications) {
+                if (app != null) {
+                    IccRecords ir = app.getIccRecords();
+                    if (ir != null) {
+                        ir.dump(fd, pw, args);
+                        pw.println();
+                    }
+                }
+            }
+            // Print UiccCarrierPrivilegeRules and registrants.
+            if (mCarrierPrivilegeRules == null) {
+                pw.println(" mCarrierPrivilegeRules: null");
+            } else {
+                pw.println(" mCarrierPrivilegeRules: " + mCarrierPrivilegeRules);
+                mCarrierPrivilegeRules.dump(fd, pw, args);
+            }
+            pw.println(
+                    " mCarrierPrivilegeRegistrants: size=" + mCarrierPrivilegeRegistrants.size());
+            for (int i = 0; i < mCarrierPrivilegeRegistrants.size(); i++) {
+                pw.println("  mCarrierPrivilegeRegistrants[" + i + "]="
+                            + ((Registrant) mCarrierPrivilegeRegistrants.get(i)).getHandler());
+            }
+            pw.flush();
+            pw.println("mLocalLog:");
+            mLocalLog.dump(fd, pw, args);
+            pw.flush();
         } else {
-            pw.println(" mCarrierPrivilegeRules: " + mCarrierPrivilegeRules);
-            mCarrierPrivilegeRules.dump(fd, pw, args);
+            pw.println("UiccCard:");
+            pw.println(" mCi=" + mCi);
+            pw.println(" mLastRadioState=" + mLastRadioState);
+            pw.println(" mAbsentRegistrants: size=" + mAbsentRegistrants.size());
+            for (int i = 0; i < mAbsentRegistrants.size(); i++) {
+                pw.println("  mAbsentRegistrants[" + i + "]="
+                        + ((Registrant) mAbsentRegistrants.get(i)).getHandler());
+            }
+            pw.println(" mCardState=" + mCardState);
+            pw.println();
+            if (mUiccProfile != null) {
+                mUiccProfile.dump(fd, pw, args);
+            }
         }
-        pw.println(" mCarrierPrivilegeRegistrants: size=" + mCarrierPrivilegeRegistrants.size());
-        for (int i = 0; i < mCarrierPrivilegeRegistrants.size(); i++) {
-            pw.println("  mCarrierPrivilegeRegistrants[" + i + "]="
-                    + ((Registrant)mCarrierPrivilegeRegistrants.get(i)).getHandler());
-        }
-        pw.flush();
-        pw.println("mLocalLog:");
-        mLocalLog.dump(fd, pw, args);
-        pw.flush();
     }
 }
