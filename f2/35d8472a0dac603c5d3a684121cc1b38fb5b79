@@ -1,0 +1,10 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Code-Review+1: Ying Xu <yinxu@google.com>
+Code-Review+2: Amit Mahajan <amitmahajan@google.com>
+Autosubmit+1: Amit Mahajan <amitmahajan@google.com>
+Verified+1: Amit Mahajan <amitmahajan@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Tue, 05 Dec 2017 23:46:42 +0000
+Reviewed-on: https://android-review.googlesource.com/529603
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
