@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3c4f11b_22ca3f29",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3004,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:58:37Z",
+      "side": 1,
+      "message": "Will update as setIsSsInfo which is defined in ImsPhoneMmiCode.",
+      "range": {
+        "startLine": 3004,
+        "startChar": 28,
+        "endLine": 3004,
+        "endChar": 39
+      },
+      "revId": "f3d098d28617b6b3298b74314b39268bbd13a30b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
