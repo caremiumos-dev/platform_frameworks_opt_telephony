@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9723c781_109e8295",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "This check missed in base code which we are adding now as part of this gerrit similar to line #1715.\n\nIf UT is enabled no need to depends on service state check hence add extra condition.",
+      "parentUuid": "7d22f276_d1f962a1",
+      "range": {
+        "startLine": 1750,
+        "startChar": 23,
+        "endLine": 1750,
+        "endChar": 43
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95e2dffe_7bae774c",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-04T22:56:22Z",
       "side": 1,
       "message": "same",
+      "range": {
+        "startLine": 1766,
+        "startChar": 23,
+        "endLine": 1766,
+        "endChar": 43
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6923bb04_a6f39e9a",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1766,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "same as above @ line 1750",
+      "parentUuid": "95e2dffe_7bae774c",
       "range": {
         "startLine": 1766,
         "startChar": 23,
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "77e4ab7d_efe206ba",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "As per Google framework all USSD requests will dial using CS path so adding USSD_MODIFIED_TO_DIAL_VIDEO in CS path is not appropriate.",
+      "parentUuid": "56fddb0a_17d0b32f",
+      "range": {
+        "startLine": 1254,
+        "startChar": 53,
+        "endLine": 1254,
+        "endChar": 64
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72f8f827_868a6ef6",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 5
@@ -106,6 +178,30 @@
       "writtenOn": "2017-12-05T03:28:24Z",
       "side": 1,
       "message": "spelling errors:\nreceived\ndefault",
+      "range": {
+        "startLine": 1226,
+        "startChar": 15,
+        "endLine": 1226,
+        "endChar": 52
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6b3708d_926de889",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72f8f827_868a6ef6",
       "range": {
         "startLine": 1226,
         "startChar": 15,
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "6efa4cc8_f0efbda1",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "We are using this for both conversion and updating the latest call forward status received as part of STK CC interrogation response received.\n\nIndication from vendor is in form of ImsCallForwardInfo and framework requires CallForwardInfo hence using handleCfQueryResult as argument to onQueryCfComplete.",
+      "parentUuid": "b68e208d_12ffd3da",
+      "range": {
+        "startLine": 1224,
+        "startChar": 4,
+        "endLine": 1228,
+        "endChar": 10
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64f441b0_d11c4b13",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 5
@@ -152,6 +272,24 @@
       "writtenOn": "2017-12-04T22:56:22Z",
       "side": 1,
       "message": "as per my comments on ImsPhoneMmiCode, lets call the newly added method ImsPhoneMmiCode#setIsSsData here and process ImsSsData in a try-block\n\nImsPhoneMmiCode mmiCode \u003d new ImsPhoneMmiCode(mPhone);\ntry {\n    mmiCode.processImsSsData(ar);\n    mmiCode.setIsSsData(true);\n} catch (ClassCastException, NullPointerException e) {\n    Rlog.e(TAG, \"Exception in parsing SS Data: \" + e);\n}",
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1734574f_9552b9a7",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2994,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64f441b0_d11c4b13",
       "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -175,6 +313,24 @@
     },
     {
       "key": {
+        "uuid": "e60519dc_8ee0e8eb",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9321d39c_2f6b1bcd",
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8802429_3a51a234",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 5
@@ -186,6 +342,30 @@
       "writtenOn": "2017-12-04T22:56:22Z",
       "side": 1,
       "message": "lets instead add a setter method setIsSsInfo(boolean isSsInfo) and make sure to call it when we call processImsSsData.",
+      "range": {
+        "startLine": 1710,
+        "startChar": 12,
+        "endLine": 1710,
+        "endChar": 28
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e99a7c7_c248edce",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1710,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8802429_3a51a234",
       "range": {
         "startLine": 1710,
         "startChar": 12,
@@ -221,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "b52d8261_bf4cac21",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1735,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfdf81fa_bfffe983",
+      "range": {
+        "startLine": 1735,
+        "startChar": 23,
+        "endLine": 1735,
+        "endChar": 59
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb7491bd_b965911d",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 5
@@ -232,6 +436,30 @@
       "writtenOn": "2017-12-04T22:56:22Z",
       "side": 1,
       "message": "turn on voice call forwarding.",
+      "range": {
+        "startLine": 1736,
+        "startChar": 57,
+        "endLine": 1736,
+        "endChar": 98
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f13814a3_2a7908a9",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1736,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb7491bd_b965911d",
       "range": {
         "startLine": 1736,
         "startChar": 57,
@@ -267,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "f631ad5b_224b4442",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "In CS case as well we will not receive call forwarding number as part of SSData.\nPlease refer @ http://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/gsm/GsmMmiCode.java#315",
+      "parentUuid": "73849144_0ff6a184",
+      "range": {
+        "startLine": 1734,
+        "startChar": 20,
+        "endLine": 1738,
+        "endChar": 23
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "118644b3_aec82963",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 5
@@ -290,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "e7d631b9_e5b0d733",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "Moved comment here explained in above comment for number.",
+      "parentUuid": "118644b3_aec82963",
+      "range": {
+        "startLine": 1746,
+        "startChar": 73,
+        "endLine": 1746,
+        "endChar": 77
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "735e5823_9ed37569",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 5
@@ -301,6 +577,30 @@
       "writtenOn": "2017-12-04T22:56:22Z",
       "side": 1,
       "message": "are we just using this method for conversion as the comment suggests? Doesn\u0027t the method also have other side effects?",
+      "range": {
+        "startLine": 1761,
+        "startChar": 60,
+        "endLine": 1762,
+        "endChar": 64
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6403f29b_905954b2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1762,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:22:33Z",
+      "side": 1,
+      "message": "This API will convert ImsCallForwardInfo to CallForwardInfo and updates the call forward status in SimRecords. There will not be any side effect as we are trying to update the latest call forward status in simrecords as well.",
+      "parentUuid": "735e5823_9ed37569",
       "range": {
         "startLine": 1761,
         "startChar": 60,
