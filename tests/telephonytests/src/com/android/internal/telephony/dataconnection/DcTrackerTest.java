@@ -58,6 +58,7 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.InterfaceAddress;
@@ -112,6 +113,10 @@ public class DcTrackerTest extends TelephonyTest {
     public static final String FAKE_GATEWAY = "11.22.33.44";
     public static final String FAKE_DNS = "55.66.77.88";
     public static final String FAKE_ADDRESS = "99.88.77.66";
+    private static final int NETWORK_TYPE_LTE_BITMASK =
+            1 << (TelephonyManager.NETWORK_TYPE_LTE - 1);
+    private static final int NETWORK_TYPE_EHRPD_BITMASK =
+            1 << (TelephonyManager.NETWORK_TYPE_EHRPD - 1);
 
     @Mock
     ISub mIsub;
@@ -195,7 +200,8 @@ public class DcTrackerTest extends TelephonyTest {
                                     Telephony.Carriers.MAX_CONNS, Telephony.Carriers.WAIT_TIME,
                                     Telephony.Carriers.MAX_CONNS_TIME, Telephony.Carriers.MTU,
                                     Telephony.Carriers.MVNO_TYPE,
-                                    Telephony.Carriers.MVNO_MATCH_DATA});
+                                    Telephony.Carriers.MVNO_MATCH_DATA,
+                                    Telephony.Carriers.NETWORK_TYPE_BITMASK});
 
                     mc.addRow(new Object[]{
                             2163,                   // id
@@ -223,7 +229,8 @@ public class DcTrackerTest extends TelephonyTest {
                             0,                      // max_conns_time
                             0,                      // mtu
                             "",                     // mvno_type
-                            ""                      // mnvo_match_data
+                            "",                     // mnvo_match_data
+                            NETWORK_TYPE_LTE_BITMASK // network_type_bitmask
                     });
 
                     mc.addRow(new Object[]{
@@ -252,7 +259,8 @@ public class DcTrackerTest extends TelephonyTest {
                             0,                      // max_conns_time
                             0,                      // mtu
                             "",                     // mvno_type
-                            ""                      // mnvo_match_data
+                            "",                     // mnvo_match_data
+                            NETWORK_TYPE_LTE_BITMASK // network_type_bitmask
                     });
 
                     mc.addRow(new Object[]{
@@ -281,7 +289,8 @@ public class DcTrackerTest extends TelephonyTest {
                             0,                      // max_conns_time
                             0,                      // mtu
                             "",                     // mvno_type
-                            ""                      // mnvo_match_data
+                            "",                     // mnvo_match_data
+                            0                       // network_type_bitmask
                     });
 
                     mc.addRow(new Object[]{
@@ -310,7 +319,8 @@ public class DcTrackerTest extends TelephonyTest {
                             0,                      // max_conns_time
                             0,                      // mtu
                             "",                     // mvno_type
-                            ""                      // mnvo_match_data
+                            "",                     // mnvo_match_data
+                            NETWORK_TYPE_EHRPD_BITMASK // network_type_bitmask
                     });
 
                     mc.addRow(new Object[]{
@@ -339,7 +349,8 @@ public class DcTrackerTest extends TelephonyTest {
                             0,                      // max_conns_time
                             0,                      // mtu
                             "",                     // mvno_type
-                            ""                      // mnvo_match_data
+                            "",                     // mnvo_match_data
+                            0                       // network_type_bitmask
                     });
                     return mc;
                 }
