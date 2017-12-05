@@ -50,7 +50,7 @@ import java.io.PrintWriter;
  */
 public class CarrierActionAgent extends Handler {
     private static final String LOG_TAG = "CarrierActionAgent";
-    private static final boolean DBG = true;
+    private static final boolean DBG = false;
     private static final boolean VDBG = Rlog.isLoggable(LOG_TAG, Log.VERBOSE);
 
     /** A list of carrier actions */
