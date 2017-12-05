@@ -102,7 +102,6 @@ public class UiccProfile {
         if (DBG) log("Creating profile");
         mUiccCard = uiccCard;
         mPhoneId = phoneId;
-        update(c, ci, ics);
     }
 
     /**
