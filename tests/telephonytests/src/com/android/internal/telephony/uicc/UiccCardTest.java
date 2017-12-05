@@ -35,7 +35,6 @@ import android.os.Message;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.internal.telephony.TelephonyTest;
-import com.android.internal.telephony.cat.CatService;
 
 import org.junit.After;
 import org.junit.Before;
@@ -59,8 +58,6 @@ public class UiccCardTest extends TelephonyTest {
     private static final int UICCCARD_CARRIER_PRIVILEDGE_LOADED_EVENT = 3;
     private static final int UICCCARD_ABSENT = 4;
 
-    @Mock
-    private CatService mCAT;
     @Mock
     private IccCardStatus mIccCardStatus;
     @Mock
@@ -136,7 +133,6 @@ public class UiccCardTest extends TelephonyTest {
         mTestHandlerThread.start();
 
         waitUntilReady();
-        replaceInstance(UiccCard.class, "mCatService", mUicccard, mCAT);
     }
 
     @After
