@@ -24,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.isA;
 import static org.mockito.Mockito.times;
@@ -35,6 +36,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.TelephonyTest;
 import com.android.internal.telephony.cat.CatService;
 
@@ -69,6 +71,8 @@ public class UiccProfileTest extends TelephonyTest {
     private Handler mMockedHandler;
     @Mock
     private UiccCard mUiccCard;
+    @Mock
+    private CommandsInterface mCi;
 
 
     private class UiccProfileHandlerThread extends HandlerThread {
@@ -80,7 +84,7 @@ public class UiccProfileTest extends TelephonyTest {
         @Override
         public void onLooperPrepared() {
             mUiccProfile = new UiccProfile(mContextFixture.getTestDouble(),
-                                           mSimulatedCommands, mIccCardStatus, 0 /* phoneId */,
+                                           mCi, mIccCardStatus, 0 /* phoneId */,
                                            mUiccCard);
             /* create a custom handler for the Handler Thread */
             mHandler = new Handler(mTestHandlerThread.getLooper()) {
@@ -92,13 +96,13 @@ public class UiccProfileTest extends TelephonyTest {
                             will be created with the looper of HandlerThread */
                             logd("Update UICC Profile");
                             mUiccProfile.update(mContextFixture.getTestDouble(),
-                                    mSimulatedCommands, mIccCardStatus);
+                                    mCi, mIccCardStatus);
                             setReady(true);
                             break;
                         case UICCPROFILE_UPDATE_APPLICATION_EVENT:
                             logd("Update UICC Profile Applications");
                             mUiccProfile.update(mContextFixture.getTestDouble(),
-                                    mSimulatedCommands, mIccCardStatus);
+                                    mCi, mIccCardStatus);
                             setReady(true);
                             break;
                         default:
@@ -158,25 +162,26 @@ public class UiccProfileTest extends TelephonyTest {
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 logd("Open");
                 Message message = (Message) invocation.getArguments()[2];
-                AsyncResult ar = new AsyncResult(null, new int[]{0}, null);
+                AsyncResult ar = new AsyncResult(message.obj, new int[]{0}, null);
                 message.obj = ar;
                 message.sendToTarget();
                 return null;
             }
-        }).when(mUiccCard).iccOpenLogicalChannel(anyString(), anyInt(), any(Message.class));
+        }).when(mCi).iccOpenLogicalChannel(anyString(), anyInt(), any(Message.class));
 
         doAnswer(new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 logd("Transmit");
                 Message message = (Message) invocation.getArguments()[7];
-                IccIoResult iir = new IccIoResult(0x90, 0x00, IccUtils.hexStringToBytes(hexString));
-                AsyncResult ar = new AsyncResult(null, iir, null);
+                IccIoResult iir =
+                        new IccIoResult(0x90, 0x00, IccUtils.hexStringToBytes(hexString));
+                AsyncResult ar = new AsyncResult(message.obj, iir, null);
                 message.obj = ar;
                 message.sendToTarget();
                 return null;
             }
-        }).when(mUiccCard).iccTransmitApduLogicalChannel(anyInt(), anyInt(), anyInt(), anyInt(),
+        }).when(mCi).iccTransmitApduLogicalChannel(anyInt(), anyInt(), anyInt(), anyInt(),
                 anyInt(), anyInt(), anyString(), any(Message.class));
 
         doAnswer(new Answer<Void>() {
@@ -184,10 +189,12 @@ public class UiccProfileTest extends TelephonyTest {
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 logd("Close");
                 Message message = (Message) invocation.getArguments()[1];
+                AsyncResult ar = new AsyncResult(message.obj, null, null);
+                message.obj = ar;
                 message.sendToTarget();
                 return null;
             }
-        }).when(mUiccCard).iccCloseLogicalChannel(anyInt(), any(Message.class));
+        }).when(mCi).iccCloseLogicalChannel(anyInt(), any(Message.class));
     }
 
     @Test
@@ -237,6 +244,7 @@ public class UiccProfileTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testUpdateUiccProfile() {
+        mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_PRESENT;
         Message mCardUpdate = mHandler.obtainMessage(UICCPROFILE_UPDATE_PROFILE_EVENT);
         setReady(false);
         mCardUpdate.sendToTarget();
@@ -247,9 +255,9 @@ public class UiccProfileTest extends TelephonyTest {
         waitForMs(50);
 
         assertTrue(mUiccProfile.areCarrierPriviligeRulesLoaded());
-        verify(mUiccCard, times(2)).iccOpenLogicalChannel(isA(String.class),
+        verify(mCi, times(2)).iccOpenLogicalChannel(isA(String.class),
                 anyInt(), isA(Message.class));
-        verify(mUiccCard, times(2)).iccTransmitApduLogicalChannel(
+        verify(mCi, times(2)).iccTransmitApduLogicalChannel(
                 anyInt(), anyInt(), anyInt(), anyInt(), anyInt(), anyInt(), anyString(),
                 isA(Message.class)
         );
@@ -259,7 +267,7 @@ public class UiccProfileTest extends TelephonyTest {
     @SmallTest
     public void testUpdateUiccProfilePinState() {
         mIccCardStatus.mUniversalPinState = IccCardStatus.PinState.PINSTATE_ENABLED_VERIFIED;
-        mUiccProfile.update(mContextFixture.getTestDouble(), mSimulatedCommands, mIccCardStatus);
+        mUiccProfile.update(mContextFixture.getTestDouble(), mCi, mIccCardStatus);
         assertEquals(IccCardStatus.PinState.PINSTATE_ENABLED_VERIFIED,
                 mUiccProfile.getUniversalPinState());
     }
@@ -272,7 +280,7 @@ public class UiccProfileTest extends TelephonyTest {
         ArgumentCaptor<Message> mCaptorMessage = ArgumentCaptor.forClass(Message.class);
         ArgumentCaptor<Long> mCaptorLong = ArgumentCaptor.forClass(Long.class);
         testUpdateUiccProfile();
-        verify(mMockedHandler, times(1)).sendMessageDelayed(mCaptorMessage.capture(),
+        verify(mMockedHandler, atLeast(1)).sendMessageDelayed(mCaptorMessage.capture(),
                 mCaptorLong.capture());
         assertEquals(UICCPROFILE_CARRIER_PRIVILEDGE_LOADED_EVENT, mCaptorMessage.getValue().what);
     }
