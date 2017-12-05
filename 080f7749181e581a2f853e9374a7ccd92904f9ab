@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31afd611_383a4a16",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1642,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-05T19:31:50Z",
+      "side": 1,
+      "message": "nitpick, lets add a space after the paren\n\n(AsyncResult) onComplete.obj",
+      "range": {
+        "startLine": 1642,
+        "startChar": 8,
+        "endLine": 1642,
+        "endChar": 35
+      },
+      "revId": "080f7749181e581a2f853e9374a7ccd92904f9ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
