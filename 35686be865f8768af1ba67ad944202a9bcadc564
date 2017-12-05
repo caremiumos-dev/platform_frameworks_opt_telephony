@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c110888f_9dcb14fe",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3004,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-05T20:24:18Z",
+      "side": 1,
+      "message": "seems we shouldn\u0027t do this if an exception is thrown, so maybe it should be under processImsSsData?",
+      "range": {
+        "startLine": 3004,
+        "startChar": 28,
+        "endLine": 3004,
+        "endChar": 39
+      },
+      "revId": "35686be865f8768af1ba67ad944202a9bcadc564",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

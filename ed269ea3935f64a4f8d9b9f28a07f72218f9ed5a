@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "83e0cc90_d8e971eb",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-05T20:24:18Z",
+      "side": 1,
+      "message": "I don\u0027t understand, can you elaborate?",
+      "parentUuid": "77e4ab7d_efe206ba",
+      "range": {
+        "startLine": 1254,
+        "startChar": 53,
+        "endLine": 1254,
+        "endChar": 64
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72f8f827_868a6ef6",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 5
@@ -519,6 +543,30 @@
     },
     {
       "key": {
+        "uuid": "fed0dae9_c27be02d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-05T20:24:18Z",
+      "side": 1,
+      "message": "I trust that the behavior matches GsmMmiCode, but unfortunately we don\u0027t have an expert on that code since it was upstreamed without very much review. For that exact reason I just want to make sure I\u0027m understanding this code before we merge it in.\n\nWhat does it mean to set call-forwarding without knowing the number to forward to? In both cases, why are we not getting the number with SSData and when do we get the number?",
+      "parentUuid": "f631ad5b_224b4442",
+      "range": {
+        "startLine": 1734,
+        "startChar": 20,
+        "endLine": 1738,
+        "endChar": 23
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "118644b3_aec82963",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 5
@@ -554,6 +602,30 @@
       "side": 1,
       "message": "Moved comment here explained in above comment for number.",
       "parentUuid": "118644b3_aec82963",
+      "range": {
+        "startLine": 1746,
+        "startChar": 73,
+        "endLine": 1746,
+        "endChar": 77
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4db14007_9232cb47",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-05T20:24:18Z",
+      "side": 1,
+      "message": "Can you keep the first part of the comment where it was, and just move the relevant part down here?",
+      "parentUuid": "e7d631b9_e5b0d733",
       "range": {
         "startLine": 1746,
         "startChar": 73,
