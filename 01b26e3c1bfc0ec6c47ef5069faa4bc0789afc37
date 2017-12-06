@@ -2,6 +2,121 @@
   "comments": [
     {
       "key": {
+        "uuid": "8d0e36a1_96cc3167",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2709,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-06T00:33:18Z",
+      "side": 1,
+      "message": "Lets remove this key",
+      "range": {
+        "startLine": 2709,
+        "startChar": 37,
+        "endLine": 2709,
+        "endChar": 82
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0074b0fb_b91db0da",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2839,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-06T00:33:18Z",
+      "side": 1,
+      "message": "What\u0027s the reasoning behind this?",
+      "range": {
+        "startLine": 2839,
+        "startChar": 7,
+        "endLine": 2839,
+        "endChar": 80
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "324ddd97_21772513",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2864,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-06T00:33:18Z",
+      "side": 1,
+      "message": "why do we add this?",
+      "range": {
+        "startLine": 2864,
+        "startChar": 8,
+        "endLine": 2864,
+        "endChar": 36
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d419639c_275d51e8",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-06T00:33:18Z",
+      "side": 1,
+      "message": "PhoneConstants.ROAMING_OFF",
+      "range": {
+        "startLine": 469,
+        "startChar": 15,
+        "endLine": 469,
+        "endChar": 16
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab540d38_ab4bacb6",
+        "filename": "src/java/com/android/internal/telephony/sip/SipPhoneBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-06T00:33:18Z",
+      "side": 1,
+      "message": "PhoneConstants.ROAMING_OFF",
+      "range": {
+        "startLine": 440,
+        "startChar": 15,
+        "endLine": 440,
+        "endChar": 16
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d217e7a_85adbee6",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/mocks/PhoneMock.java",
         "patchSetId": 1
