@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16686532_7fdb5d28",
+        "filename": "tests/telephonytests/src/android/telephony/ims/internal/ImsFeatureTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-12-06T00:01:01Z",
+      "side": 1,
+      "message": "and also CAPABILITY_TEST_1?  Just to be sure?",
+      "range": {
+        "startLine": 106,
+        "startChar": 8,
+        "endLine": 106,
+        "endChar": 66
+      },
+      "revId": "927c83d507d8fbc329889983f1bfe9fa2502f9e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f863620e_4b352b97",
+        "filename": "tests/telephonytests/src/android/telephony/ims/internal/ImsFeatureTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-12-06T00:01:01Z",
+      "side": 1,
+      "message": "assertFalse(c.isCapable(TestImsFeature.CAPABILITY_TEST_1)) as well?",
+      "range": {
+        "startLine": 128,
+        "startChar": 8,
+        "endLine": 128,
+        "endChar": 66
+      },
+      "revId": "927c83d507d8fbc329889983f1bfe9fa2502f9e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

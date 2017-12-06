@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0ee442c_f78a743e",
+        "filename": "tests/telephonytests/src/android/telephony/ims/internal/ImsFeatureTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-12-06T00:01:01Z",
+      "side": 1,
+      "message": "Maybe add one to catch that CAP 1 is removed: \nassertFalse(c.isCapable(TestImsFeature.CAPABILITY_TEST_1))",
+      "range": {
+        "startLine": 128,
+        "startChar": 8,
+        "endLine": 128,
+        "endChar": 66
+      },
+      "revId": "7cec8051865656194153c4a7f50ad76aff57aedb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25704da5_05345217",
+        "filename": "tests/telephonytests/src/android/telephony/ims/internal/ImsFeatureTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-12-06T00:01:01Z",
+      "side": 1,
+      "message": "The next test seems to check this already; think we still need this one?",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 60
+      },
+      "revId": "7cec8051865656194153c4a7f50ad76aff57aedb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f74bbcc3_420d95cf",
+        "filename": "tests/telephonytests/src/android/telephony/ims/internal/ImsFeatureTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-12-06T00:01:01Z",
+      "side": 1,
+      "message": "mmmmmkay.",
+      "range": {
+        "startLine": 177,
+        "startChar": 24,
+        "endLine": 177,
+        "endChar": 45
+      },
+      "revId": "7cec8051865656194153c4a7f50ad76aff57aedb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
