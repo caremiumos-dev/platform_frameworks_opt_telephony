@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3375cf99_2fb7584c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-12-06T02:01:37Z",
+      "side": 1,
+      "message": "\"NETWORK_TYPE_ constants\", to be very clear.",
+      "range": {
+        "startLine": 96,
+        "startChar": 21,
+        "endLine": 96,
+        "endChar": 33
+      },
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad70b880_d3f1f253",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-12-06T02:01:37Z",
+      "side": 1,
+      "message": "is this really still true? (Both for this and bearerBitmask)",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 57
+      },
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a63c4948_10944ba4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-12-06T02:01:37Z",
+      "side": 1,
+      "message": "final",
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d4ebba1_48f9e7da",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-12-06T02:01:37Z",
+      "side": 1,
+      "message": "can/should we @Deprecate this?",
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c5e9b3a_6ee76496",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-12-06T02:01:37Z",
+      "side": 1,
+      "message": "Can we remove bearerBitmask from the new constructor? Why would a caller ever specify both bitmasks?",
+      "range": {
+        "startLine": 178,
+        "startChar": 58,
+        "endLine": 178,
+        "endChar": 77
+      },
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33a8235c_f0f206b7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-12-06T02:01:37Z",
+      "side": 1,
+      "message": "This doesn\u0027t handle bearerBitmask, and ideally we could stop handling bearer as well if it\u0027s not needed and just leave both of those to the old constructor.",
+      "range": {
+        "startLine": 185,
+        "startChar": 53,
+        "endLine": 186,
+        "endChar": 70
+      },
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13362ddc_199209b6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3516,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-12-06T02:01:37Z",
+      "side": 1,
+      "message": "this doesn\u0027t quite feel right to me. Are we populating both bearerBitmask and networkTypeBitmask when constructing the APN object? If not, won\u0027t one of these checks always return false?",
+      "range": {
+        "startLine": 3514,
+        "startChar": 0,
+        "endLine": 3516,
+        "endChar": 80
+      },
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
