@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f10f29bc_c7fa531a",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/async/AsyncResultCallback.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-12-06T20:04:34Z",
+      "side": 1,
+      "message": "In theory these two classes could go in a more generic place (nothing about it is euicc specific). I defer to the telephony team on how visible they want to make it.",
+      "revId": "62f1baaf2ebb4b4025e5fdc45c11e78b01bd90df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
