@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "6a23c892_57c3e565",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-06T13:42:32Z",
+      "side": 1,
+      "message": "As per current framework not supporting sending USSD over IMS path so USSD dialed over IMS/CS will go over CS path using RIL interface.\nRef @ http://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java#764\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java#976\n\nDue to this limitation we are trying to reuse the existing support of OEM_ERRORs in RIL interface.",
+      "parentUuid": "83e0cc90_d8e971eb",
+      "range": {
+        "startLine": 1254,
+        "startChar": 53,
+        "endLine": 1254,
+        "endChar": 64
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72f8f827_868a6ef6",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 5
@@ -567,6 +591,30 @@
     },
     {
       "key": {
+        "uuid": "3038e668_5819090a",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-06T13:42:32Z",
+      "side": 1,
+      "message": "As part of CF activation/registration request we will get to know that only status like success/fail. If we are trying to do the interrogation will get the complete information (CallForwardInfo) like number, status etc. Here we are handling STK CC initiated activation/registration so we will get only status hence number will be null.",
+      "parentUuid": "fed0dae9_c27be02d",
+      "range": {
+        "startLine": 1734,
+        "startChar": 20,
+        "endLine": 1738,
+        "endChar": 23
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "118644b3_aec82963",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 5
@@ -626,6 +674,30 @@
       "side": 1,
       "message": "Can you keep the first part of the comment where it was, and just move the relevant part down here?",
       "parentUuid": "e7d631b9_e5b0d733",
+      "range": {
+        "startLine": 1746,
+        "startChar": 73,
+        "endLine": 1746,
+        "endChar": 77
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "168c7ceb_a9c41402",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-06T13:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4db14007_9232cb47",
       "range": {
         "startLine": 1746,
         "startChar": 73,

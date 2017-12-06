@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5321a021_e9f5574c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3004,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-06T13:42:32Z",
+      "side": 1,
+      "message": "We cannot set flag under processImsSsData because this flag will be used inside processing of processImsSsData() in file ImsPhone.java.\n\nEither we need to set before calling processImsSsData or we need to set like earlier in ImsPhoneMmiCode.",
+      "parentUuid": "c110888f_9dcb14fe",
+      "range": {
+        "startLine": 3004,
+        "startChar": 28,
+        "endLine": 3004,
+        "endChar": 39
+      },
+      "revId": "35686be865f8768af1ba67ad944202a9bcadc564",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5be8688_1cd36044",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-05T22:26:55Z",
       "side": 1,
       "message": "Actually can we catch these and rethrow as ImsException? Sorry for the change, I think this makes more sense though.",
+      "range": {
+        "startLine": 1712,
+        "startChar": 19,
+        "endLine": 1712,
+        "endChar": 59
+      },
+      "revId": "35686be865f8768af1ba67ad944202a9bcadc564",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71615ba4_3a1c12a7",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-06T13:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5be8688_1cd36044",
       "range": {
         "startLine": 1712,
         "startChar": 19,
