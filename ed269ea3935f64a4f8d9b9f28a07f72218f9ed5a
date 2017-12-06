@@ -615,6 +615,30 @@
     },
     {
       "key": {
+        "uuid": "9d6ffd2a_9a73c4b0",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-06T20:33:47Z",
+      "side": 1,
+      "message": "I see! Thank you for the explanation, could you include it in the comments?\n\n\"Only CF status is set here as part of activation/registration, number is not available until interrogation.\"",
+      "parentUuid": "3038e668_5819090a",
+      "range": {
+        "startLine": 1734,
+        "startChar": 20,
+        "endLine": 1738,
+        "endChar": 23
+      },
+      "revId": "ed269ea3935f64a4f8d9b9f28a07f72218f9ed5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "118644b3_aec82963",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 5
