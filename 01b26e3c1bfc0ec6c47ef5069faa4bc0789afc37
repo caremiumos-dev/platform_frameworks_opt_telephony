@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d217e7a_85adbee6",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/mocks/PhoneMock.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-06T00:17:58Z",
+      "side": 1,
+      "message": "throw new RuntimeException(\"not implemented\");",
+      "range": {
+        "startLine": 1281,
+        "startChar": 8,
+        "endLine": 1281,
+        "endChar": 21
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
