@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0129175e_4d0f4b1b",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-06T21:51:45Z",
+      "side": 1,
+      "message": "See discussion on bug, let\u0027s stick to the enums we already know we need.\n\nPERSOSUBSTATE_SIM_SP_EHPLMN, // comment what this is used for\nPERSOSUBSTATE_SIM_ICCID, // same\nPERSOSUBSTATE_SIM_SPN, // same",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 45
+      },
+      "revId": "45ce2bb5a35046f33214807ade8f5728fb6e3e9c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7fcec3_57f19c58",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-06T21:51:45Z",
+      "side": 1,
+      "message": "PERSOSUBSTATE_SIM_SP_EHPLMN\nPERSOSUBSTATE_SIM_ICCID\nPERSOSUBSTATE_SIM_SPN",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 93
+      },
+      "revId": "45ce2bb5a35046f33214807ade8f5728fb6e3e9c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
