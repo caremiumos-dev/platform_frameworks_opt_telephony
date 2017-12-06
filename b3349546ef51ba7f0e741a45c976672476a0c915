@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5e60551e_effc1c78",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-06T21:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3375cf99_2fb7584c",
+      "range": {
+        "startLine": 96,
+        "startChar": 21,
+        "endLine": 96,
+        "endChar": 33
+      },
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad70b880_d3f1f253",
         "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-06T02:01:37Z",
       "side": 1,
       "message": "is this really still true? (Both for this and bearerBitmask)",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 57
+      },
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0a934ed_fda04ff4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-06T21:37:10Z",
+      "side": 1,
+      "message": "I\u0027m not sure about it. But it should be able to use for all technologies from code perspective. I\u0027ll confirm with other reviewers from Android team later.",
+      "parentUuid": "ad70b880_d3f1f253",
       "range": {
         "startLine": 97,
         "startChar": 0,
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "525aa427_0fb41052",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-06T21:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a63c4948_10944ba4",
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1d4ebba1_48f9e7da",
         "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
         "patchSetId": 2
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "7666b9c6_0802578f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-06T21:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d4ebba1_48f9e7da",
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0c5e9b3a_6ee76496",
         "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
         "patchSetId": 2
@@ -93,6 +177,30 @@
       "writtenOn": "2017-12-06T02:01:37Z",
       "side": 1,
       "message": "Can we remove bearerBitmask from the new constructor? Why would a caller ever specify both bitmasks?",
+      "range": {
+        "startLine": 178,
+        "startChar": 58,
+        "endLine": 178,
+        "endChar": 77
+      },
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c86a833_acd0633b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-06T21:37:10Z",
+      "side": 1,
+      "message": "Yes we can. But one thing we need to take care is that we need to support both networkTypeBitmask and  bearerBitmask in the fromString(String data) function below. \nI attached networkTypeBitmask at the end of the ApnSettingV3. So if networkTypeBitmask is provided, we can use the new constructor, but if it is not provided we need to use original constructor.",
+      "parentUuid": "0c5e9b3a_6ee76496",
       "range": {
         "startLine": 178,
         "startChar": 58,
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "5e95cda5_ec2e6fce",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-06T21:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33a8235c_f0f206b7",
+      "range": {
+        "startLine": 185,
+        "startChar": 53,
+        "endLine": 186,
+        "endChar": 70
+      },
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "13362ddc_199209b6",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 2
@@ -139,6 +271,30 @@
       "writtenOn": "2017-12-06T02:01:37Z",
       "side": 1,
       "message": "this doesn\u0027t quite feel right to me. Are we populating both bearerBitmask and networkTypeBitmask when constructing the APN object? If not, won\u0027t one of these checks always return false?",
+      "range": {
+        "startLine": 3514,
+        "startChar": 0,
+        "endLine": 3516,
+        "endChar": 80
+      },
+      "revId": "b3349546ef51ba7f0e741a45c976672476a0c915",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74bc507c_9f7df54b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3516,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-06T21:37:10Z",
+      "side": 1,
+      "message": "What I\u0027m trying to do now is to convert A to B if B is not provided in the constructor in both directions. Ideally it should be fine to use AND or OR condition, or even just use networkTypeBitmask along. But I think it is more safe to use OR here.",
+      "parentUuid": "13362ddc_199209b6",
       "range": {
         "startLine": 3514,
         "startChar": 0,
