@@ -22,6 +22,30 @@
       "revId": "6a74fcc13fd9ed9d45dae2e8dcf1212d5ca7d0f2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e75a8d3e_8909a857",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/ImsManagerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-06T00:51:50Z",
+      "side": 1,
+      "message": "Thanks for the tag. Calling ImsManager#getConfigInterface on gce devices (used for presubmit) seems to occasionally cause an ImsException that manifests itself as some random other test failing.\n\nSince the issue already exists internally I think it\u0027s okay to push to AOSP but I haven\u0027t yet had time to address the issue.",
+      "parentUuid": "a8953e50_1f82b69a",
+      "range": {
+        "startLine": 161,
+        "startChar": 8,
+        "endLine": 161,
+        "endChar": 39
+      },
+      "revId": "6a74fcc13fd9ed9d45dae2e8dcf1212d5ca7d0f2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
