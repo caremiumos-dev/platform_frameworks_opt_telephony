@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2cacf240_15f75e5b",
+        "filename": "src/java/com/android/internal/telephony/cat/CatCmdMessage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2017-12-06T08:33:49Z",
+      "side": 1,
+      "message": "We can see the same \"case: REFRESH\" in the line 126.\nIn addition, Change: 65282 or Change: 320504 will insert this line, right ?\nI think that only one line for RUN_AT should be inserted here.\n\n            case SEND_SMS:\n    +       case RUN_AT:\n            case SEND_SS:",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 21
+      },
+      "revId": "bcdabfcd98768ba8cb05317d1b247de034c2df50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63a8957e_a0127c7f",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2017-12-06T08:33:49Z",
+      "side": 1,
+      "message": "Not sure if R.string.sending is appropriate for RUN AT command.\n\n    \u003c!-- STK sending DTMF, SMS, USSD, SS --\u003e\n    \u003cstring name\u003d\"sending\"\u003eSending\\u2026\u003c/string\u003e\n\nIt might be better for now to remove the temporary string STK_DEFAULT like;\n\n    +           case RUN_AT:\n    +               if (STK_DEFAULT.equals(((DisplayTextParams)cmdParams).mTextMsg.text)) {\n    +                   // Remove the default text which was temporarily added and shall not be shown.\n    +                   ((DisplayTextParams)cmdParams).mTextMsg.text \u003d null;\n    +               }\n    +               break;\n\nPlease note that I have not tested this code yet.",
+      "range": {
+        "startLine": 442,
+        "startChar": 12,
+        "endLine": 442,
+        "endChar": 24
+      },
+      "revId": "bcdabfcd98768ba8cb05317d1b247de034c2df50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
