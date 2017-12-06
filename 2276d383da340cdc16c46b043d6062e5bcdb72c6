@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0faae56b_d76b5dff",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/data/CarrierPrivilegeRule.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-12-06T20:11:11Z",
+      "side": 1,
+      "message": "Not sure if we really need this class any more now that we\u0027re in the platform. Perhaps we should just use UiccAccessRule throughout.",
+      "revId": "2276d383da340cdc16c46b043d6062e5bcdb72c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec2aa63d_058cf0f6",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/androidTest/CarrierPrivilegeRuleAndroidTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2017-12-06T20:11:11Z",
+      "side": 1,
+      "message": "the \"androidTest\" and \"test\" part of the file names isn\u0027t correct for platform build structure (it\u0027s a gradle-ism). As noted in the other CL, all of these run on device by virtue of being in tests/telephonytests/src.\n\nThe source folder should always match the package name. (Looks like you\u0027re also missing the \"data\" part in the folder).",
+      "revId": "2276d383da340cdc16c46b043d6062e5bcdb72c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
