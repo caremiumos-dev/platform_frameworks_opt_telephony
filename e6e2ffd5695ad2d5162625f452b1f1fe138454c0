@@ -141,6 +141,30 @@
       "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5865442d_db3158e6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2314,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2017-12-06T10:33:48Z",
+      "side": 1,
+      "message": "isRecordsLoaded method is already added in this change, please refer to lines 2296-2304\n\nWe see issue only in this method, as setInitialAttachApn picks wrong apn if records are not loaded (Imcc-mnc will not be present). At other places, mcc-mnc will be available already, so setInitialAttachApn can be invoked safely.",
+      "parentUuid": "5d4474a6_2d11839b",
+      "range": {
+        "startLine": 2312,
+        "startChar": 7,
+        "endLine": 2314,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
