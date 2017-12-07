@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.WorkSource;
 import android.telephony.CarrierRestrictionRules;
+import android.telephony.CellInfo;
 import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
@@ -1343,8 +1344,17 @@ public interface CommandsInterface {
     @UnsupportedAppUsage
     void setNetworkSelectionModeAutomatic(Message response);
 
+    /**
+     * Ask the radio to connect to the input network with specific cellType and change
+     * selection mode to manual.
+     *
+     * @param operatorNumeric the PLMN ID of the network to select.
+     * @param cellType Cell identity type (see {@link CellInfo#TYPE_*}).
+     * @param response is callback message.
+     */
     @UnsupportedAppUsage
-    void setNetworkSelectionModeManual(String operatorNumeric, Message response);
+    void setNetworkSelectionModeManual(String operatorNumeric, @CellInfo.Type int cellType,
+        Message response);
 
     /**
      * Queries whether the current network selection mode is automatic

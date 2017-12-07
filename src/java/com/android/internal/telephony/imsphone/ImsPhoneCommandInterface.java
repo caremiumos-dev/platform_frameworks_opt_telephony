@@ -21,6 +21,7 @@ import android.net.KeepalivePacketData;
 import android.net.LinkProperties;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.CellInfo;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
 import android.telephony.data.DataProfile;
@@ -334,7 +335,7 @@ class ImsPhoneCommandInterface extends BaseCommands implements CommandsInterface
 
     @Override
     public void setNetworkSelectionModeManual(
-            String operatorNumeric, Message response) {
+            String operatorNumeric, @CellInfo.Type int cellType, Message response) {
     }
 
     @Override

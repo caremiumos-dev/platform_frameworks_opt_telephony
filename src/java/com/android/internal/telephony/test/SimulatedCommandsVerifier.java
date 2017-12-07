@@ -20,6 +20,7 @@ import android.net.KeepalivePacketData;
 import android.net.LinkProperties;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.CellInfo;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
 import android.telephony.TelephonyManager;
@@ -948,7 +949,8 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public void setNetworkSelectionModeManual(String operatorNumeric, Message response) {
+    public void setNetworkSelectionModeManual(String operatorNumeric, @CellInfo.Type int cellType,
+            Message response) {
 
     }
 

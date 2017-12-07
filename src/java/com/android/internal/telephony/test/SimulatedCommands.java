@@ -1405,8 +1405,8 @@ public class SimulatedCommands extends BaseCommands
     @Override
     public void exitEmergencyCallbackMode(Message result) {unimplemented(result);}
     @Override
-    public void setNetworkSelectionModeManual(
-            String operatorNumeric, Message result) {unimplemented(result);}
+    public void setNetworkSelectionModeManual(String operatorNumeric, @CellInfo.Type int cellType,
+            Message result) {unimplemented(result);}
 
     /**
      * Queries whether the current network selection mode is automatic
