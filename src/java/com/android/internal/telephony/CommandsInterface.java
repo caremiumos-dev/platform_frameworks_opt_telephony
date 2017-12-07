@@ -1270,7 +1270,7 @@ public interface CommandsInterface {
 
     void setNetworkSelectionModeAutomatic(Message response);
 
-    void setNetworkSelectionModeManual(String operatorNumeric, Message response);
+    void setNetworkSelectionModeManual(String operatorNumeric, int rat, Message response);
 
     /**
      * Queries whether the current network selection mode is automatic

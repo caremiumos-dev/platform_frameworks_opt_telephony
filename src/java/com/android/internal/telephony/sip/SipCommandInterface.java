@@ -324,7 +324,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 
     @Override
     public void setNetworkSelectionModeManual(
-            String operatorNumeric, Message response) {
+            String operatorNumeric, int rat, Message response) {
     }
 
     @Override

@@ -140,6 +140,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public static final String NETWORK_SELECTION_NAME_KEY = "network_selection_name_key";
     // Key used to read and write the saved network selection operator short name
     public static final String NETWORK_SELECTION_SHORT_KEY = "network_selection_short_key";
+    // Key used to read and write the saved network selection rat
+    public static final String NETWORK_SELECTION_RAT_KEY = "network_selection_rat_key";
 
 
     // Key used to read/write "disable data connection on boot" pref (used for testing)
@@ -246,6 +248,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         public String operatorNumeric;
         public String operatorAlphaLong;
         public String operatorAlphaShort;
+        public int rat;
     }
 
     /* Instance Variables */
@@ -1240,9 +1243,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         nsm.operatorNumeric = network.getOperatorNumeric();
         nsm.operatorAlphaLong = network.getOperatorAlphaLong();
         nsm.operatorAlphaShort = network.getOperatorAlphaShort();
+        nsm.rat = network.getRilRat();
 
         Message msg = obtainMessage(EVENT_SET_NETWORK_MANUAL_COMPLETE, nsm);
-        mCi.setNetworkSelectionModeManual(network.getOperatorNumeric(), msg);
+        mCi.setNetworkSelectionModeManual(network.getOperatorNumeric(), network.getRilRat(), msg);
 
         if (persistSelection) {
             updateSavedNetworkOperator(nsm);
@@ -1278,6 +1282,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             editor.putString(NETWORK_SELECTION_KEY + subId, nsm.operatorNumeric);
             editor.putString(NETWORK_SELECTION_NAME_KEY + subId, nsm.operatorAlphaLong);
             editor.putString(NETWORK_SELECTION_SHORT_KEY + subId, nsm.operatorAlphaShort);
+            editor.putInt(NETWORK_SELECTION_RAT_KEY + subId, nsm.rat);
 
             // commit and log the result.
             if (!editor.commit()) {
@@ -1319,7 +1324,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         String numeric = sp.getString(NETWORK_SELECTION_KEY + getSubId(), "");
         String name = sp.getString(NETWORK_SELECTION_NAME_KEY + getSubId(), "");
         String shrt = sp.getString(NETWORK_SELECTION_SHORT_KEY + getSubId(), "");
-        return new OperatorInfo(name, shrt, numeric);
+        int rat = sp.getInt(NETWORK_SELECTION_RAT_KEY + getSubId(),
+                ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN);
+        return new OperatorInfo(name, shrt, numeric, rat);
     }
 
     /**
@@ -1330,7 +1337,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         PreferenceManager.getDefaultSharedPreferences(getContext()).edit().
                 remove(NETWORK_SELECTION_KEY + getSubId()).
                 remove(NETWORK_SELECTION_NAME_KEY + getSubId()).
-                remove(NETWORK_SELECTION_SHORT_KEY + getSubId()).commit();
+                remove(NETWORK_SELECTION_SHORT_KEY + getSubId()).
+                remove(NETWORK_SELECTION_RAT_KEY + getSubId()).commit();
     }
 
     /**

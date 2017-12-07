@@ -498,6 +498,18 @@ public class RadioResponse extends IRadioResponse.Stub {
     /**
      *
      * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param networkInfos List of network operator information as OperatorInfos defined in
+     *                     v1.2/types.hal
+     */
+    public void getAvailableNetworksResponse_1_2(RadioResponseInfo responseInfo,
+                                                 ArrayList<android.hardware.radio.V1_2.OperatorInfo>
+                                                         networkInfos) {
+        responseOperatorInfos_1_2(responseInfo, networkInfos);
+    }
+
+    /**
+     *
+     * @param responseInfo Response info struct containing response type, serial no. and error
      */
     public void startNetworkScanResponse(RadioResponseInfo responseInfo) {
         responseScanStatus(responseInfo);
@@ -1544,6 +1556,28 @@ public class RadioResponse extends IRadioResponse.Stub {
                 ret.add(new OperatorInfo(networkInfos.get(i).alphaLong,
                         networkInfos.get(i).alphaShort, networkInfos.get(i).operatorNumeric,
                         convertOpertatorInfoToString(networkInfos.get(i).status)));
+            }
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, ret);
+            }
+            mRil.processResponseDone(rr, responseInfo, ret);
+        }
+    }
+
+    private void responseOperatorInfos_1_2(RadioResponseInfo responseInfo,
+                                           ArrayList<android.hardware.radio.V1_2.OperatorInfo>
+                                                   networkInfos) {
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr != null) {
+            ArrayList<OperatorInfo> ret = new ArrayList<OperatorInfo>();
+            for (int i = 0; i < networkInfos.size(); i++) {
+                android.hardware.radio.V1_0.OperatorInfo baseInfo = networkInfos.get(i).baseInfo;
+                if (baseInfo != null) {
+                    ret.add(new OperatorInfo(baseInfo.alphaLong, baseInfo.alphaShort,
+                            baseInfo.operatorNumeric, convertOpertatorInfoToString(baseInfo.status),
+                            networkInfos.get(i).rat, networkInfos.get(i).isHome));
+                }
             }
             if (responseInfo.error == RadioError.NONE) {
                 sendMessageResponse(rr.mResult, ret);
