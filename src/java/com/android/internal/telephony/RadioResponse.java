@@ -165,7 +165,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      * @param calls Current call list
      */
     public void getCurrentCallsResponse(RadioResponseInfo responseInfo,
-                                        ArrayList<android.hardware.radio.V1_0.Call> calls) {
+                                        List<android.hardware.radio.V1_0.Call> calls) {
         responseCurrentCalls(responseInfo, calls);
     }
 
@@ -377,7 +377,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      *        each distinct registered phone number.
      */
     public void getCallForwardStatusResponse(RadioResponseInfo responseInfo,
-                                             ArrayList<android.hardware.radio.V1_0.CallForwardInfo>
+                                             List<android.hardware.radio.V1_0.CallForwardInfo>
                                                      callForwardInfos) {
         responseCallForwardInfo(responseInfo, callForwardInfos);
     }
@@ -490,7 +490,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      *                     types.hal
      */
     public void getAvailableNetworksResponse(RadioResponseInfo responseInfo,
-                                             ArrayList<android.hardware.radio.V1_0.OperatorInfo>
+                                             List<android.hardware.radio.V1_0.OperatorInfo>
                                                      networkInfos) {
         responseOperatorInfos(responseInfo, networkInfos);
     }
@@ -572,7 +572,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      *                           types.hal
      */
     public void getDataCallListResponse(RadioResponseInfo responseInfo,
-                                        ArrayList<SetupDataCallResult> dataCallResultList) {
+                                        List<SetupDataCallResult> dataCallResultList) {
         responseDataCallList(responseInfo, dataCallResultList);
     }
 
@@ -611,8 +611,8 @@ public class RadioResponse extends IRadioResponse.Stub {
      * @param bandModes List of RadioBandMode listing supported modes
      */
     public void getAvailableBandModesResponse(RadioResponseInfo responseInfo,
-                                              ArrayList<Integer> bandModes) {
-        responseIntArrayList(responseInfo, bandModes);
+                                              List<Integer> bandModes) {
+        responseIntList(responseInfo, bandModes);
     }
 
     /**
@@ -669,7 +669,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      * @param cells Vector of neighboring radio cell information
      */
     public void getNeighboringCidsResponse(RadioResponseInfo responseInfo,
-                                           ArrayList<NeighboringCell> cells) {
+                                           List<NeighboringCell> cells) {
         responseCellList(responseInfo, cells);
     }
 
@@ -773,7 +773,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      * @param configs Vector of GSM/WCDMA Cell broadcast configs
      */
     public void getGsmBroadcastConfigResponse(RadioResponseInfo responseInfo,
-                                              ArrayList<GsmBroadcastSmsConfigInfo> configs) {
+                                              List<GsmBroadcastSmsConfigInfo> configs) {
         responseGmsBroadcastConfig(responseInfo, configs);
     }
 
@@ -797,7 +797,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      * @param configs Vector of CDMA Broadcast SMS configs.
      */
     public void getCdmaBroadcastConfigResponse(RadioResponseInfo responseInfo,
-                                               ArrayList<CdmaBroadcastSmsConfigInfo> configs) {
+                                               List<CdmaBroadcastSmsConfigInfo> configs) {
         responseCdmaBroadcastConfig(responseInfo, configs);
     }
 
@@ -940,7 +940,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     public void getCellInfoListResponse(RadioResponseInfo responseInfo,
-                                        ArrayList<android.hardware.radio.V1_0.CellInfo> cellInfo) {
+                                        List<android.hardware.radio.V1_0.CellInfo> cellInfo) {
         responseCellInfoList(responseInfo, cellInfo);
     }
 
@@ -950,7 +950,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void getCellInfoListResponse_1_2(
             RadioResponseInfo responseInfo,
-            ArrayList<android.hardware.radio.V1_2.CellInfo> cellInfo) {
+            List<android.hardware.radio.V1_2.CellInfo> cellInfo) {
         responseCellInfoList_1_2(responseInfo, cellInfo);
     }
 
@@ -1008,13 +1008,13 @@ public class RadioResponse extends IRadioResponse.Stub {
      *        byte per integer
      */
     public void iccOpenLogicalChannelResponse(RadioResponseInfo responseInfo, int channelId,
-                                              ArrayList<Byte> selectResponse) {
+                                              List<Byte> selectResponse) {
         ArrayList<Integer> arr = new ArrayList<>();
         arr.add(channelId);
         for (int i = 0; i < selectResponse.size(); i++) {
             arr.add((int) selectResponse.get(i));
         }
-        responseIntArrayList(responseInfo, arr);
+        responseIntList(responseInfo, arr);
     }
 
     /**
@@ -1081,7 +1081,7 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     public void getHardwareConfigResponse(
             RadioResponseInfo responseInfo,
-            ArrayList<android.hardware.radio.V1_0.HardwareConfig> config) {
+            List<android.hardware.radio.V1_0.HardwareConfig> config) {
         responseHardwareConfig(responseInfo, config);
     }
 
@@ -1287,10 +1287,10 @@ public class RadioResponse extends IRadioResponse.Stub {
         for (int i = 0; i < var.length; i++) {
             ints.add(var[i]);
         }
-        responseIntArrayList(responseInfo, ints);
+        responseIntList(responseInfo, ints);
     }
 
-    private void responseIntArrayList(RadioResponseInfo responseInfo, ArrayList<Integer> var) {
+    private void responseIntList(RadioResponseInfo responseInfo, List<Integer> var) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
@@ -1306,7 +1306,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     private void responseCurrentCalls(RadioResponseInfo responseInfo,
-                                      ArrayList<android.hardware.radio.V1_0.Call> calls) {
+                                      List<android.hardware.radio.V1_0.Call> calls) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
@@ -1498,7 +1498,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     private void responseCallForwardInfo(RadioResponseInfo responseInfo,
-                                         ArrayList<android.hardware.radio.V1_0.CallForwardInfo>
+                                         List<android.hardware.radio.V1_0.CallForwardInfo>
                                                  callForwardInfos) {
         RILRequest rr = mRil.processResponse(responseInfo);
         if (rr != null) {
@@ -1534,7 +1534,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     private void responseOperatorInfos(RadioResponseInfo responseInfo,
-                                       ArrayList<android.hardware.radio.V1_0.OperatorInfo>
+                                       List<android.hardware.radio.V1_0.OperatorInfo>
                                                networkInfos) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
@@ -1567,7 +1567,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     private void responseDataCallList(RadioResponseInfo responseInfo,
-                                      ArrayList<SetupDataCallResult> dataCallResultList) {
+                                      List<SetupDataCallResult> dataCallResultList) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
@@ -1583,7 +1583,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     private void responseCellList(RadioResponseInfo responseInfo,
-                                  ArrayList<NeighboringCell> cells) {
+                                  List<NeighboringCell> cells) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
@@ -1613,7 +1613,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     private void responseGmsBroadcastConfig(RadioResponseInfo responseInfo,
-                                            ArrayList<GsmBroadcastSmsConfigInfo> configs) {
+                                            List<GsmBroadcastSmsConfigInfo> configs) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
@@ -1631,7 +1631,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     private void responseCdmaBroadcastConfig(RadioResponseInfo responseInfo,
-                                            ArrayList<CdmaBroadcastSmsConfigInfo> configs) {
+                                            List<CdmaBroadcastSmsConfigInfo> configs) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
@@ -1679,7 +1679,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     private void responseCellInfoList(RadioResponseInfo responseInfo,
-                                      ArrayList<android.hardware.radio.V1_0.CellInfo> cellInfo) {
+                                      List<android.hardware.radio.V1_0.CellInfo> cellInfo) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
@@ -1693,7 +1693,7 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     private void responseCellInfoList_1_2(
             RadioResponseInfo responseInfo,
-            ArrayList<android.hardware.radio.V1_2.CellInfo> cellInfo) {
+            List<android.hardware.radio.V1_2.CellInfo> cellInfo) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
@@ -1733,7 +1733,7 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     private void responseHardwareConfig(
             RadioResponseInfo responseInfo,
-            ArrayList<android.hardware.radio.V1_0.HardwareConfig> config) {
+            List<android.hardware.radio.V1_0.HardwareConfig> config) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
