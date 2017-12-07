@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "074b5234_201be2ae",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/data/CarrierPrivilegeRule.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2017-12-07T00:42:39Z",
+      "side": 1,
+      "message": "Yes. We should use UiccAccessRule directly.\nAlso, we should use EuiccProfileInfo and remove the current EuiccProfile.",
+      "parentUuid": "0faae56b_d76b5dff",
+      "revId": "2276d383da340cdc16c46b043d6062e5bcdb72c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec2aa63d_058cf0f6",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/androidTest/CarrierPrivilegeRuleAndroidTest.java",
         "patchSetId": 2
