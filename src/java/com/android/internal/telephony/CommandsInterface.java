@@ -1270,7 +1270,15 @@ public interface CommandsInterface {
 
     void setNetworkSelectionModeAutomatic(Message response);
 
-    void setNetworkSelectionModeManual(String operatorNumeric, Message response);
+    /**
+     * Ask the radio to connect to the input network with specific rat and change
+     * selection mode to manual.
+     *
+     * @param operatorNumeric the PLMN ID of the network to select.
+     * @param rat rilRat of the operator. See {@code ServiceState#RIL_RADIO_TECHNOLOGY_*}.
+     * @param response is callback message.
+     */
+    void setNetworkSelectionModeManual(String operatorNumeric, int rat, Message response);
 
     /**
      * Queries whether the current network selection mode is automatic

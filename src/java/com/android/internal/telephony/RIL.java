@@ -1642,22 +1642,39 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void setNetworkSelectionModeManual(String operatorNumeric, Message result) {
+    public void setNetworkSelectionModeManual(String operatorNumeric, int rat, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_SET_NETWORK_SELECTION_MANUAL, result,
                     mRILDefaultWorkSource);
 
-            if (RILJ_LOGD) {
-                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                        + " operatorNumeric = " + operatorNumeric);
-            }
+            android.hardware.radio.V1_2.IRadio radioProxy12 =
+                    android.hardware.radio.V1_2.IRadio.castFrom(radioProxy);
+            if (radioProxy12 != null) {
+                if (RILJ_LOGD) {
+                    riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                            + " operatorNumeric = " + operatorNumeric
+                            + ", rat = " + rat);
+                }
 
-            try {
-                radioProxy.setNetworkSelectionModeManual(rr.mSerial,
-                        convertNullToEmptyString(operatorNumeric));
-            } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(rr, "setNetworkSelectionModeManual", e);
+                try {
+                    radioProxy12.setNetworkSelectionModeManual_1_2(rr.mSerial,
+                            convertNullToEmptyString(operatorNumeric), rat);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "setNetworkSelectionModeManual", e);
+                }
+            } else {
+                if (RILJ_LOGD) {
+                    riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                            + " operatorNumeric = " + operatorNumeric);
+                }
+
+                try {
+                    radioProxy.setNetworkSelectionModeManual(rr.mSerial,
+                            convertNullToEmptyString(operatorNumeric));
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "setNetworkSelectionModeManual", e);
+                }
             }
         }
     }
