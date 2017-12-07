@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "9b9dd99a_4cdf4bc2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-12-07T23:05:42Z",
+      "side": 1,
+      "message": "I actually agree with Jaya that his looks like a workaround. If the user deletes the APN that supports IA/default that mess up the configuration, I think failing initial attach should be expected. If the operator does not want users to modify/delete the APN, we can mark the APN as read-only so deleting APN would not possible.",
+      "parentUuid": "7fd0ca79_b7b40f43",
+      "range": {
+        "startLine": 2081,
+        "startChar": 8,
+        "endLine": 2084,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "703960b5_ce6192db",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
