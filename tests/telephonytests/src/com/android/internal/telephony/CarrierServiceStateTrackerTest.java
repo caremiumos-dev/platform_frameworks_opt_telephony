@@ -198,4 +198,23 @@ public class CarrierServiceStateTrackerTest extends TelephonyTest {
         verify(mNotificationManager, atLeast(1)).cancel(
                 CarrierServiceStateTracker.NOTIFICATION_PREF_NETWORK);
     }
+
+    @Test
+    @SmallTest
+    public void testSendBothNotificationsForImsCapabilitiesChanged() {
+        logd(LOG_TAG + ":testSendBothNotificationsForImsCapabilitiesChanged()");
+        Notification.Builder mNotificationBuilder = new Notification.Builder(mContext);
+        Message notificationMsg = mCarrierSST.obtainMessage(
+                CarrierServiceStateTracker.CARRIER_EVENT_IMS_CAPABILITIES_CHANGED, null);
+        doReturn(true).when(mCarrierSST).evaluateSendingMessage(any());
+        doReturn(0).when(mCarrierSST).getDelay(any());
+        doReturn(mNotificationBuilder).when(mCarrierSST).getNotificationBuilder(any());
+        doReturn(mNotificationManager).when(mCarrierSST).getNotificationManager(any());
+        mCarrierSST.handleMessage(notificationMsg);
+        waitForHandlerAction(mCarrierSST, TEST_TIMEOUT);
+        verify(mNotificationManager).notify(
+                eq(CarrierServiceStateTracker.NOTIFICATION_PREF_NETWORK), isA(Notification.class));
+        verify(mNotificationManager).notify(
+                eq(CarrierServiceStateTracker.NOTIFICATION_EMERGENCY_NETWORK), any());
+    }
 }

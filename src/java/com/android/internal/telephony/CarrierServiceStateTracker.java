@@ -54,6 +54,8 @@ public class CarrierServiceStateTracker extends Handler {
     protected static final int CARRIER_EVENT_VOICE_DEREGISTRATION = CARRIER_EVENT_BASE + 2;
     protected static final int CARRIER_EVENT_DATA_REGISTRATION = CARRIER_EVENT_BASE + 3;
     protected static final int CARRIER_EVENT_DATA_DEREGISTRATION = CARRIER_EVENT_BASE + 4;
+    protected static final int CARRIER_EVENT_IMS_CAPABILITIES_CHANGED = CARRIER_EVENT_BASE + 5;
+
     private static final int UNINITIALIZED_DELAY_VALUE = -1;
     private Phone mPhone;
     private ServiceStateTracker mSST;
@@ -137,6 +139,7 @@ public class CarrierServiceStateTracker extends Handler {
             case CARRIER_EVENT_DATA_REGISTRATION:
             case CARRIER_EVENT_VOICE_DEREGISTRATION:
             case CARRIER_EVENT_DATA_DEREGISTRATION:
+            case CARRIER_EVENT_IMS_CAPABILITIES_CHANGED:
                 handleConfigChanges();
                 break;
             case NOTIFICATION_EMERGENCY_NETWORK:
