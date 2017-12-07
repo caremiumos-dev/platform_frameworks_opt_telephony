@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13c0c030_8ff6b340",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1413,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-07T13:17:43Z",
+      "side": 1,
+      "message": "Added safe check before accessing infos.",
+      "range": {
+        "startLine": 1413,
+        "startChar": 16,
+        "endLine": 1413,
+        "endChar": 22
+      },
+      "revId": "97d2609e31917538360d1632c9bdd0cc901eace4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
