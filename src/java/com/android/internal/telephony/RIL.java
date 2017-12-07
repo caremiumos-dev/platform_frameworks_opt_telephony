@@ -4779,7 +4779,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return arrayList;
     }
 
-    public static byte[] arrayListToPrimitiveArray(ArrayList<Byte> bytes) {
+    public static byte[] listToPrimitiveArray(List<Byte> bytes) {
         byte[] ret = new byte[bytes.size()];
         for (int i = 0; i < ret.length; i++) {
             ret[i] = bytes.get(i);
@@ -4788,7 +4788,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     static ArrayList<HardwareConfig> convertHalHwConfigList(
-            ArrayList<android.hardware.radio.V1_0.HardwareConfig> hwListRil,
+            List<android.hardware.radio.V1_0.HardwareConfig> hwListRil,
             RIL ril) {
         int num;
         ArrayList<HardwareConfig> response;
@@ -4936,7 +4936,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
      */
     @VisibleForTesting
     public static ArrayList<CellInfo> convertHalCellInfoList(
-            ArrayList<android.hardware.radio.V1_0.CellInfo> records) {
+            List<android.hardware.radio.V1_0.CellInfo> records) {
         ArrayList<CellInfo> response = new ArrayList<CellInfo>(records.size());
 
         for (android.hardware.radio.V1_0.CellInfo record : records) {
@@ -5042,7 +5042,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
      */
     @VisibleForTesting
     public static ArrayList<CellInfo> convertHalCellInfoList_1_2(
-            ArrayList<android.hardware.radio.V1_2.CellInfo> records) {
+            List<android.hardware.radio.V1_2.CellInfo> records) {
         ArrayList<CellInfo> response = new ArrayList<CellInfo>(records.size());
 
         for (android.hardware.radio.V1_2.CellInfo record : records) {

@@ -100,6 +100,7 @@ import com.android.internal.telephony.uicc.IccRefreshResponse;
 import com.android.internal.telephony.uicc.IccUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RadioIndication extends IRadioIndication.Stub {
     RIL mRil;
@@ -145,10 +146,10 @@ public class RadioIndication extends IRadioIndication.Stub {
         mRil.mNetworkStateRegistrants.notifyRegistrants();
     }
 
-    public void newSms(int indicationType, ArrayList<Byte> pdu) {
+    public void newSms(int indicationType, List<Byte> pdu) {
         mRil.processIndication(indicationType);
 
-        byte[] pduArray = RIL.arrayListToPrimitiveArray(pdu);
+        byte[] pduArray = RIL.listToPrimitiveArray(pdu);
         if (RIL.RILJ_LOGD) mRil.unsljLog(RIL_UNSOL_RESPONSE_NEW_SMS);
 
         mRil.writeMetricsNewSms(SmsSession.Event.Tech.SMS_GSM,
@@ -160,10 +161,10 @@ public class RadioIndication extends IRadioIndication.Stub {
         }
     }
 
-    public void newSmsStatusReport(int indicationType, ArrayList<Byte> pdu) {
+    public void newSmsStatusReport(int indicationType, List<Byte> pdu) {
         mRil.processIndication(indicationType);
 
-        byte[] pduArray = RIL.arrayListToPrimitiveArray(pdu);
+        byte[] pduArray = RIL.listToPrimitiveArray(pdu);
         if (RIL.RILJ_LOGD) mRil.unsljLog(RIL_UNSOL_RESPONSE_NEW_SMS_STATUS_REPORT);
 
         if (mRil.mSmsStatusRegistrant != null) {
@@ -233,7 +234,7 @@ public class RadioIndication extends IRadioIndication.Stub {
         }
     }
 
-    public void dataCallListChanged(int indicationType, ArrayList<SetupDataCallResult> dcList) {
+    public void dataCallListChanged(int indicationType, List<SetupDataCallResult> dcList) {
         mRil.processIndication(indicationType);
 
         ArrayList<DataCallResponse> response = new ArrayList<>();
@@ -375,10 +376,10 @@ public class RadioIndication extends IRadioIndication.Stub {
         }
     }
 
-    public void newBroadcastSms(int indicationType, ArrayList<Byte> data) {
+    public void newBroadcastSms(int indicationType, List<Byte> data) {
         mRil.processIndication(indicationType);
 
-        byte response[] = RIL.arrayListToPrimitiveArray(data);
+        byte response[] = RIL.listToPrimitiveArray(data);
         if (RIL.RILJ_LOGD) {
             mRil.unsljLogvRet(RIL_UNSOL_RESPONSE_NEW_BROADCAST_SMS,
                     IccUtils.bytesToHexString(response));
@@ -624,7 +625,7 @@ public class RadioIndication extends IRadioIndication.Stub {
     }
 
     public void cellInfoList(int indicationType,
-                             ArrayList<android.hardware.radio.V1_0.CellInfo> records) {
+                             List<android.hardware.radio.V1_0.CellInfo> records) {
         mRil.processIndication(indicationType);
 
         ArrayList<CellInfo> response = RIL.convertHalCellInfoList(records);
@@ -682,7 +683,7 @@ public class RadioIndication extends IRadioIndication.Stub {
 
     public void hardwareConfigChanged(
             int indicationType,
-            ArrayList<android.hardware.radio.V1_0.HardwareConfig> configs) {
+            List<android.hardware.radio.V1_0.HardwareConfig> configs) {
         mRil.processIndication(indicationType);
 
         ArrayList<HardwareConfig> response = RIL.convertHalHwConfigList(configs, mRil);
@@ -781,7 +782,7 @@ public class RadioIndication extends IRadioIndication.Stub {
         PcoData response = new PcoData(pco.cid,
                 pco.bearerProto,
                 pco.pcoId,
-                RIL.arrayListToPrimitiveArray(pco.contents));
+                RIL.listToPrimitiveArray(pco.contents));
 
         if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_PCO_DATA, response);
 
