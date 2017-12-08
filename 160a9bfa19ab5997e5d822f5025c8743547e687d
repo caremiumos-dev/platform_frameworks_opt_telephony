@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b3a4b90a_1b581e91",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2017-12-08T11:51:19Z",
+      "side": 1,
+      "message": "Agree, will modify this and upload new patch-set.",
+      "parentUuid": "5f691b1a_fb7ff327",
+      "range": {
+        "startLine": 123,
+        "startChar": 21,
+        "endLine": 123,
+        "endChar": 39
+      },
+      "revId": "160a9bfa19ab5997e5d822f5025c8743547e687d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f38f07bc_4c107a18",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-01T03:23:14Z",
       "side": 1,
       "message": "I don\u0027t see why this is needed if changed is false.",
+      "range": {
+        "startLine": 360,
+        "startChar": 31,
+        "endLine": 360,
+        "endChar": 48
+      },
+      "revId": "160a9bfa19ab5997e5d822f5025c8743547e687d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a4b443f_6c4da3b9",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2017-12-08T11:51:19Z",
+      "side": 1,
+      "message": "we dont need above line in both false/true cases as notify would be called once response for getIccCardStatus() is received.\n\nWill remove above line and upload new patch-set.",
+      "parentUuid": "f38f07bc_4c107a18",
       "range": {
         "startLine": 360,
         "startChar": 31,
