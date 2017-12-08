@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "9ed8976e_0dac6c5f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2017-12-08T11:26:38Z",
+      "side": 1,
+      "message": "Attach profile stored at modem would be updated with initial attach request. And if wrong apn is sent from Telephony, attach profile in modem database would be corrupted. If we block sending wrong attach apn, atleast modem would try attach with the default operator profile configured and attach would be successful. The logic added here is like a safety check blocking unwanted attach requests with wrong apns.\n\nAgree that operators can enable \u0027read_only\u0027 to block users from edit.\nMost of the operator apns pre-configured in apns-conf.xml file doesn\u0027t have \u0027read_only\u0027. And, moreover, the default value of \u0027read_only\u0027 field for apn is set as false.\nAlso, for test setups used for network simulation, tester will have to manually add required apns.\nAs apns are open for edit, it is very much likely that critical apns can be deleted, which would affect device functionality.",
+      "parentUuid": "9b9dd99a_4cdf4bc2",
+      "range": {
+        "startLine": 2081,
+        "startChar": 8,
+        "endLine": 2084,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "703960b5_ce6192db",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
