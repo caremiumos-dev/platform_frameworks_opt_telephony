@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "b726830b_0c0021ec",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2017-12-08T17:51:34Z",
+      "side": 1,
+      "message": "Profile getting corrupted just because user removing APN is a QC bug. I don\u0027t think its right to make telephony workaround and i suggest to fix it at QDP in linux data. Moreover the profile matching logic is based on APN name and wondering why it will corrupt modem profile. Any case if user does something with APN then that needs to be allowed and attach is expected to fail if a different profile is selected.",
+      "parentUuid": "9ed8976e_0dac6c5f",
+      "range": {
+        "startLine": 2081,
+        "startChar": 8,
+        "endLine": 2084,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "703960b5_ce6192db",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
