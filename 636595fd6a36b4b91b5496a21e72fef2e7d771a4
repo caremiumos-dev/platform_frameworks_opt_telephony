@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20c1683e_09415b28",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-08T23:58:53Z",
+      "side": 1,
+      "message": "This and the card related assignments above should also be under the flag. This will be in UiccSlot.",
+      "range": {
+        "startLine": 195,
+        "startChar": 12,
+        "endLine": 212,
+        "endChar": 41
+      },
+      "revId": "636595fd6a36b4b91b5496a21e72fef2e7d771a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9972de08_bc0ed911",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-08T23:58:53Z",
+      "side": 1,
+      "message": "How about synchronization? I think it new code should also be under this block.",
+      "range": {
+        "startLine": 301,
+        "startChar": 26,
+        "endLine": 301,
+        "endChar": 31
+      },
+      "revId": "636595fd6a36b4b91b5496a21e72fef2e7d771a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "496a9f7a_ce2dbbb7",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-08T23:58:53Z",
+      "side": 1,
+      "message": "Is this a card thing or a profile thing? This should not be in profile, no?",
+      "range": {
+        "startLine": 667,
+        "startChar": 19,
+        "endLine": 667,
+        "endChar": 37
+      },
+      "revId": "636595fd6a36b4b91b5496a21e72fef2e7d771a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85db0d56_d8a58a24",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-08T23:58:53Z",
+      "side": 1,
+      "message": "How about this one?",
+      "range": {
+        "startLine": 745,
+        "startChar": 16,
+        "endLine": 745,
+        "endChar": 38
+      },
+      "revId": "636595fd6a36b4b91b5496a21e72fef2e7d771a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dbb59f2_733f3b1c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-08T23:58:53Z",
+      "side": 1,
+      "message": "ICCID of the active profile will be available in this class itself.",
+      "range": {
+        "startLine": 984,
+        "startChar": 23,
+        "endLine": 984,
+        "endChar": 47
+      },
+      "revId": "636595fd6a36b4b91b5496a21e72fef2e7d771a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
