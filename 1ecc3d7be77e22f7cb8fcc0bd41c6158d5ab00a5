@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0f404c2_edaa4d1e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-08T23:50:20Z",
+      "side": 1,
+      "message": "nit: code is usually quoted with {@code} and {@link}: ({@code NETWORK_TYPE_} constants) in {@link TelephonyManager}.",
+      "range": {
+        "startLine": 96,
+        "startChar": 21,
+        "endLine": 96,
+        "endChar": 34
+      },
+      "revId": "1ecc3d7be77e22f7cb8fcc0bd41c6158d5ab00a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5030e4bf_28366f37",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-08T23:50:20Z",
+      "side": 1,
+      "message": "nit: It might be better to follow the wrapping of the old constructor. It seems grouping related things together, e.g., (proxy, port), (mmsc, mmsProxy, mmsPort).",
+      "range": {
+        "startLine": 175,
+        "startChar": 22,
+        "endLine": 180,
+        "endChar": 59
+      },
+      "revId": "1ecc3d7be77e22f7cb8fcc0bd41c6158d5ab00a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59338ca4_3300a10f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-08T23:50:20Z",
+      "side": 1,
+      "message": "unnecessary change. But as you mentioned the old constructor has been deprecated, you should really call the new constructor here.",
+      "range": {
+        "startLine": 344,
+        "startChar": 16,
+        "endLine": 344,
+        "endChar": 19
+      },
+      "revId": "1ecc3d7be77e22f7cb8fcc0bd41c6158d5ab00a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f8763d6_030064f0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 4864,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-08T23:50:20Z",
+      "side": 1,
+      "message": "nit: still name it bearerBitmask instead of bitmap?",
+      "range": {
+        "startLine": 4864,
+        "startChar": 12,
+        "endLine": 4864,
+        "endChar": 24
+      },
+      "revId": "1ecc3d7be77e22f7cb8fcc0bd41c6158d5ab00a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
