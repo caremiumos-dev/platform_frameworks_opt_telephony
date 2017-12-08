@@ -107,50 +107,52 @@ public final class NetworkScanRequestTracker {
     }
 
     private boolean isValidScan(NetworkScanRequestInfo nsri) {
-        if (nsri.mRequest.specifiers == null) {
+        if (nsri.mRequest.getSpecifiers() == null) {
             return false;
         }
-        if (nsri.mRequest.specifiers.length > NetworkScanRequest.MAX_RADIO_ACCESS_NETWORKS) {
+        if (nsri.mRequest.getSpecifiers().length > NetworkScanRequest.MAX_RADIO_ACCESS_NETWORKS) {
             return false;
         }
-        for (RadioAccessSpecifier ras : nsri.mRequest.specifiers) {
-            if (ras.radioAccessNetwork != GERAN && ras.radioAccessNetwork != UTRAN
-                    && ras.radioAccessNetwork != EUTRAN) {
+        for (RadioAccessSpecifier ras : nsri.mRequest.getSpecifiers()) {
+            if (ras.getRadioAccessNetwork() != GERAN && ras.getRadioAccessNetwork() != UTRAN
+                    && ras.getRadioAccessNetwork() != EUTRAN) {
                 return false;
             }
-            if (ras.bands != null && ras.bands.length > NetworkScanRequest.MAX_BANDS) {
+            if (ras.getBands() != null && ras.getBands().length > NetworkScanRequest.MAX_BANDS) {
                 return false;
             }
-            if (ras.channels != null && ras.channels.length > NetworkScanRequest.MAX_CHANNELS) {
+            if (ras.getChannels() != null
+                    && ras.getChannels().length > NetworkScanRequest.MAX_CHANNELS) {
                 return false;
             }
         }
 
-        if ((nsri.mRequest.searchPeriodicity < NetworkScanRequest.MIN_SEARCH_PERIODICITY_SEC)
-                || (nsri.mRequest.searchPeriodicity
+        if ((nsri.mRequest.getSearchPeriodicity() < NetworkScanRequest.MIN_SEARCH_PERIODICITY_SEC)
+                || (nsri.mRequest.getSearchPeriodicity()
                 > NetworkScanRequest.MAX_SEARCH_PERIODICITY_SEC)) {
             return false;
         }
 
-        if ((nsri.mRequest.maxSearchTime < NetworkScanRequest.MIN_SEARCH_MAX_SEC)
-                || (nsri.mRequest.maxSearchTime > NetworkScanRequest.MAX_SEARCH_MAX_SEC)) {
+        if ((nsri.mRequest.getMaxSearchTime() < NetworkScanRequest.MIN_SEARCH_MAX_SEC)
+                || (nsri.mRequest.getMaxSearchTime() > NetworkScanRequest.MAX_SEARCH_MAX_SEC)) {
             return false;
         }
 
-        if ((nsri.mRequest.incrementalResultsPeriodicity
+        if ((nsri.mRequest.getIncrementalResultsPeriodicity()
                 < NetworkScanRequest.MIN_INCREMENTAL_PERIODICITY_SEC)
-                || (nsri.mRequest.incrementalResultsPeriodicity
+                || (nsri.mRequest.getIncrementalResultsPeriodicity()
                 > NetworkScanRequest.MAX_INCREMENTAL_PERIODICITY_SEC)) {
             return false;
         }
 
-        if ((nsri.mRequest.searchPeriodicity > nsri.mRequest.maxSearchTime)
-                || (nsri.mRequest.incrementalResultsPeriodicity > nsri.mRequest.maxSearchTime)) {
+        if ((nsri.mRequest.getSearchPeriodicity() > nsri.mRequest.getMaxSearchTime())
+                || (nsri.mRequest.getIncrementalResultsPeriodicity()
+                        > nsri.mRequest.getMaxSearchTime())) {
             return false;
         }
 
-        if ((nsri.mRequest.mccMncs != null)
-                && (nsri.mRequest.mccMncs.size() > NetworkScanRequest.MAX_MCC_MNC_LIST_SIZE)) {
+        if ((nsri.mRequest.getMccMncs() != null)
+                && (nsri.mRequest.getMccMncs().size() > NetworkScanRequest.MAX_MCC_MNC_LIST_SIZE)) {
             return false;
         }
         return true;
