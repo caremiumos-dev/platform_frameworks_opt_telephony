@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d61070a_41273348",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2017-12-08T10:44:26Z",
+      "side": 1,
+      "message": "Dear Reviewers,\n\nCatService.STK_DEFAULT might be set to mConfirmMsg.text,\nso \"Default Message\" can unexpectedly be displayed in the SIM Toolkit application\nif no alpha identifier is specified in REFRESH command.\nWe have an alternative solution here.\n\n    Support the alpha identifier of REFRESH command\n    https://android-review.googlesource.com/547219\n    (frameworks/opt/telephony)\n\nBest regards,\nYoshiaki",
+      "range": {
+        "startLine": 390,
+        "startChar": 78,
+        "endLine": 390,
+        "endChar": 96
+      },
+      "revId": "7b05f51c39b9b141daae81c416330f12bc38f8a9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
