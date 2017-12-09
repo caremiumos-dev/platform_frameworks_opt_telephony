@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6af31202_73e1ccba",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-09T00:32:10Z",
+      "side": 1,
+      "message": "Using the LOG_TAG already prints this (same in other files)",
+      "range": {
+        "startLine": 1637,
+        "startChar": 26,
+        "endLine": 1637,
+        "endChar": 44
+      },
+      "revId": "8de18b16e9214c71d1b798ebdb4e8ca7cadc7a8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
