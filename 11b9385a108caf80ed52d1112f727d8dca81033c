@@ -25,6 +25,98 @@
     },
     {
       "key": {
+        "uuid": "a376b408_78c1af99",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-09T00:17:43Z",
+      "side": 1,
+      "message": "nit: you can return early to make un-indent most of the code lines \n\nif (radioProxy \u003d\u003d null) {\n    return;\n}",
+      "range": {
+        "startLine": 505,
+        "startChar": 8,
+        "endLine": 505,
+        "endChar": 33
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92156496_922f317f",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-09T00:17:43Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 534,
+        "startChar": 8,
+        "endLine": 534,
+        "endChar": 33
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "965aea9a_ae7b12be",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4659,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-09T00:17:43Z",
+      "side": 1,
+      "message": "add RIL_REQUEST_ prefix to keep the name consistent with others",
+      "range": {
+        "startLine": 4659,
+        "startChar": 24,
+        "endLine": 4659,
+        "endChar": 39
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22c3d68f_d5f3ac89",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4661,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-09T00:17:43Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 4661,
+        "startChar": 24,
+        "endLine": 4661,
+        "endChar": 60
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "313636c4_8b622124",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 3
@@ -41,6 +133,29 @@
         "startChar": 13,
         "endLine": 5014,
         "endChar": 53
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90897bd4_7076b216",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5020,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-09T00:17:43Z",
+      "side": 1,
+      "message": "I don\u0027t think this is right. The iccidLen probably means the size of the ICCID bytes, which is usually 10. Need to confirm with QC.",
+      "range": {
+        "startLine": 5020,
+        "startChar": 46,
+        "endLine": 5020,
+        "endChar": 54
       },
       "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
@@ -99,6 +214,52 @@
       "writtenOn": "2017-12-01T19:58:32Z",
       "side": 1,
       "message": "Add atr",
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50921cde_ee9bc57f",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccSlotStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-09T00:17:43Z",
+      "side": 1,
+      "message": "It\u0027s a bit strange to have an array of strings here. Need to check with QC to clarify this.",
+      "range": {
+        "startLine": 41,
+        "startChar": 11,
+        "endLine": 41,
+        "endChar": 19
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b9b5872_ed4937ca",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccSlotStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-09T00:17:43Z",
+      "side": 1,
+      "message": "fix indentation",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 0
+      },
       "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
