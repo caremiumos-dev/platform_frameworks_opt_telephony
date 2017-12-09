@@ -16,6 +16,29 @@
       "revId": "62f1baaf2ebb4b4025e5fdc45c11e78b01bd90df",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e457bcb_b756af71",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/async/AsyncResultCallback.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2017-12-09T00:35:43Z",
+      "side": 1,
+      "message": "This method and related latch is not required anymore. This class can be simply an abstract class with two methods (abstract onResult and empty onException).\n\nIn the current code, it\u0027s used by EuiccServiceImpl and other upper level stuff to wait for async callback (convert async to sync). After moving EuiccCard to the platform, all methods from EuiccCardManager to EuiccCard are async, and no one will need to call this method anymore. We will need some other util class in LPA to wait for async (EuiccCardManager) calls in EuiccServiceImpl.",
+      "range": {
+        "startLine": 79,
+        "startChar": 32,
+        "endLine": 79,
+        "endChar": 40
+      },
+      "revId": "62f1baaf2ebb4b4025e5fdc45c11e78b01bd90df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
