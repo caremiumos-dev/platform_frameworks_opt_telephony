@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45e5f5fd_c5303cde",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-11T19:18:00Z",
+      "side": 1,
+      "message": "Is this needed?",
+      "range": {
+        "startLine": 124,
+        "startChar": 21,
+        "endLine": 124,
+        "endChar": 32
+      },
+      "revId": "1a04d0ebdd472fa40bf25d3637fd6d119294b1d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
