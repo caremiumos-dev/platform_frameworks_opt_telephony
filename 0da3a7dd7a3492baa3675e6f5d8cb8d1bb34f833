@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d145e4bc_45160db2",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2017-12-11T20:00:32Z",
+      "side": 1,
+      "message": "Is this mean we have two copies of PREFERRED_NETWORK_MODE?\n\nOne is index by Settings.Global.PREFERREED_NETWORK_MODE + subId, the other is Settings.Global.PREFERRED_NETWORK_MODE. Why not only use one of them?\n\nAnd where is the PREFERRED_NETWORK_MODE come from? From user setting or from modem?",
+      "range": {
+        "startLine": 467,
+        "startChar": 19,
+        "endLine": 485,
+        "endChar": 21
+      },
+      "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
