@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b12152fb_0e70b599",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3303,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-11T19:06:46Z",
+      "side": 1,
+      "message": "Use \"Uri.withAppendedPath(Telephony.Carriers.CONTENT_URI, \"filtered\")\" instead.",
+      "range": {
+        "startLine": 3303,
+        "startChar": 20,
+        "endLine": 3303,
+        "endChar": 70
+      },
+      "revId": "269d93cf101532abea670e8a1cda08006946b7bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
