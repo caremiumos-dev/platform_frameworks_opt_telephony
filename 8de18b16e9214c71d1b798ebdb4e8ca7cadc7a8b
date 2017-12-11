@@ -22,6 +22,30 @@
       "revId": "8de18b16e9214c71d1b798ebdb4e8ca7cadc7a8b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bd30d6b3_57e45943",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-12-11T07:15:56Z",
+      "side": 1,
+      "message": "Thank you for your comment. I removed it. Could you review the latest patchset?",
+      "parentUuid": "6af31202_73e1ccba",
+      "range": {
+        "startLine": 1637,
+        "startChar": 26,
+        "endLine": 1637,
+        "endChar": 44
+      },
+      "revId": "8de18b16e9214c71d1b798ebdb4e8ca7cadc7a8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
