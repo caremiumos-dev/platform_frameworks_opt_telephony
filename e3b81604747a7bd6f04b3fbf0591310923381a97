@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83dbc0c0_e526c546",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-11T20:25:39Z",
+      "side": 1,
+      "message": "How about just using mPhoneId?",
+      "range": {
+        "startLine": 1790,
+        "startChar": 30,
+        "endLine": 1790,
+        "endChar": 40
+      },
+      "revId": "e3b81604747a7bd6f04b3fbf0591310923381a97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
