@@ -22,15 +22,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
-import android.os.SystemProperties;
 import android.os.storage.StorageManager;
-import android.telephony.TelephonyManager;
 import android.telephony.Rlog;
+import android.telephony.TelephonyManager;
 import android.text.format.Time;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.PhoneConstants;
-import com.android.internal.telephony.SubscriptionController;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -84,6 +82,9 @@ public class UiccController extends Handler {
     public static final int APP_FAM_3GPP2 = 2;
     public static final int APP_FAM_IMS   = 3;
 
+    // todo: add a system property/mk file constant for this
+    public static final int NUM_SLOTS = 2;
+
     private static final int EVENT_ICC_STATUS_CHANGED = 1;
     private static final int EVENT_GET_ICC_STATUS_DONE = 2;
     private static final int EVENT_RADIO_UNAVAILABLE = 3;
@@ -91,6 +92,7 @@ public class UiccController extends Handler {
 
     private CommandsInterface[] mCis;
     private UiccCard[] mUiccCards = new UiccCard[TelephonyManager.getDefault().getPhoneCount()];
+    private UiccSlot[] mUiccSlots = new UiccSlot[NUM_SLOTS];
 
     private static final Object mLock = new Object();
     private static UiccController mInstance;
@@ -139,6 +141,11 @@ public class UiccController extends Handler {
         mLauncher = new UiccStateChangedLauncher(c, this);
     }
 
+    private int getSlotIdFromPhoneId(int phoneId) {
+        // todo: implement
+        return 0;
+    }
+
     public static UiccController getInstance() {
         synchronized (mLock) {
             if (mInstance == null) {
@@ -158,11 +165,62 @@ public class UiccController extends Handler {
         }
     }
 
+    /**
+     * API to get UiccCard corresponding to given physical slot index
+     * @param slotId index of physical slot on the device
+     * @return
+     */
+    public UiccCard getUiccCardForSlot(int slotId) {
+        synchronized (mLock) {
+            UiccSlot uiccSlot = getUiccSlot(slotId);
+            if (uiccSlot != null) {
+                return uiccSlot.getUiccCard();
+            }
+            return null;
+        }
+    }
+
+    /**
+     * API to get UiccCard corresponding to given phone id
+     * @return
+     */
+    public UiccCard getUiccCardForPhone(int phoneId) {
+        synchronized (mLock) {
+            int slotId = getSlotIdFromPhoneId(phoneId);
+            return getUiccCardForSlot(slotId);
+        }
+    }
+
     public UiccCard[] getUiccCards() {
         // Return cloned array since we don't want to give out reference
         // to internal data structure.
         synchronized (mLock) {
             return mUiccCards.clone();
+        }
+    }
+
+    /**
+     * API to get an array of all UiccSlots, which represents all physical slots on the device
+     * @return
+     */
+    public UiccSlot[] getUiccSlots() {
+        // Return cloned array since we don't want to give out reference
+        // to internal data structure.
+        synchronized (mLock) {
+            return mUiccSlots.clone();
+        }
+    }
+
+    /**
+     * API to get UiccSlot object for a specific physical slot index on the device
+     * @return
+     */
+    public UiccSlot getUiccSlot(int slotId) {
+        synchronized (mLock) {
+            if (isValidSlotIndex(slotId)) {
+                return mUiccSlots[slotId];
+            }
+            return null;
         }
     }
 
@@ -209,10 +267,11 @@ public class UiccController extends Handler {
     @Override
     public void handleMessage (Message msg) {
         synchronized (mLock) {
-            Integer index = getCiIndex(msg);
+            Integer phoneId = getCiIndex(msg);
 
-            if (index < 0 || index >= mCis.length) {
-                Rlog.e(LOG_TAG, "Invalid index : " + index + " received with event " + msg.what);
+            if (phoneId < 0 || phoneId >= mCis.length) {
+                Rlog.e(LOG_TAG, "Invalid phoneId : " + phoneId + " received with event "
+                        + msg.what);
                 return;
             }
 
@@ -220,23 +279,26 @@ public class UiccController extends Handler {
             switch (msg.what) {
                 case EVENT_ICC_STATUS_CHANGED:
                     if (DBG) log("Received EVENT_ICC_STATUS_CHANGED, calling getIccCardStatus");
-                    mCis[index].getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE, index));
+                    mCis[phoneId].getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE,
+                            phoneId));
                     break;
                 case EVENT_GET_ICC_STATUS_DONE:
                     if (DBG) log("Received EVENT_GET_ICC_STATUS_DONE");
-                    onGetIccCardStatusDone(ar, index);
+                    onGetIccCardStatusDone(ar, phoneId);
                     break;
                 case EVENT_RADIO_UNAVAILABLE:
                     if (DBG) log("EVENT_RADIO_UNAVAILABLE, dispose card");
-                    if (mUiccCards[index] != null) {
-                        mUiccCards[index].dispose();
+                    if (mUiccCards[phoneId] != null) {
+                        mUiccCards[phoneId].dispose();
                     }
-                    mUiccCards[index] = null;
-                    mIccChangedRegistrants.notifyRegistrants(new AsyncResult(null, index, null));
+                    mUiccCards[phoneId] = null;
+                    mIccChangedRegistrants.notifyRegistrants(new AsyncResult(null, phoneId, null));
+
+                    // todo: do the above in UiccSlot on radio unavailable
                     break;
                 case EVENT_SIM_REFRESH:
                     if (DBG) log("Received EVENT_SIM_REFRESH");
-                    onSimRefresh(ar, index);
+                    onSimRefresh(ar, phoneId);
                     break;
                 default:
                     Rlog.e(LOG_TAG, " Unknown Event " + msg.what);
@@ -279,6 +341,7 @@ public class UiccController extends Handler {
         }
     }
 
+    // todo: should be done in UiccSlot
     private synchronized void onGetIccCardStatusDone(AsyncResult ar, Integer index) {
         if (ar.exception != null) {
             Rlog.e(LOG_TAG,"Error getting ICC status. "
@@ -306,6 +369,7 @@ public class UiccController extends Handler {
 
     }
 
+    // todo: should be done in UiccSlot
     private void onSimRefresh(AsyncResult ar, Integer index) {
         if (ar.exception != null) {
             Rlog.e(LOG_TAG, "Sim REFRESH with exception: " + ar.exception);
@@ -349,6 +413,10 @@ public class UiccController extends Handler {
         return (index >= 0 && index < mUiccCards.length);
     }
 
+    private boolean isValidSlotIndex(int index) {
+        return (index >= 0 && index < mUiccSlots.length);
+    }
+
     private void log(String string) {
         Rlog.d(LOG_TAG, string);
     }
@@ -381,6 +449,15 @@ public class UiccController extends Handler {
             } else {
                 pw.println("  mUiccCards[" + i + "]=" + mUiccCards[i]);
                 mUiccCards[i].dump(fd, pw, args);
+            }
+        }
+        pw.println(" mUiccSlots: size=" + mUiccSlots.length);
+        for (int i = 0; i < mUiccSlots.length; i++) {
+            if (mUiccSlots[i] == null) {
+                pw.println("  mUiccSlots[" + i + "]=null");
+            } else {
+                pw.println("  mUiccSlots[" + i + "]=" + mUiccSlots[i]);
+                mUiccSlots[i].dump(fd, pw, args);
             }
         }
         pw.println("mCardLogs: ");

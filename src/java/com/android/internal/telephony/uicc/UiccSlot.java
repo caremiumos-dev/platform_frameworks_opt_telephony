@@ -225,6 +225,15 @@ public class UiccSlot {
         }
     }
 
+    /**
+     * Returns the UiccCard in the slot.
+     */
+    public UiccCard getUiccCard() {
+        synchronized (mLock) {
+            return mUiccCard;
+        }
+    }
+
     private void log(String msg) {
         Rlog.d(TAG, msg);
     }
