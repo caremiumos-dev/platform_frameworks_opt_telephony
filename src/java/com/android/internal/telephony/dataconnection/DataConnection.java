@@ -1116,6 +1116,20 @@ public class DataConnection extends StateMachine {
                             linkProperties.addDnsServer(ia);
                         }
                     }
+                } else if (okToUseSystemPropertyDns) {
+                    for (String dnsAddr : dnsServers) {
+                        dnsAddr = dnsAddr.trim();
+                        if (dnsAddr.isEmpty()) continue;
+                        InetAddress ia;
+                        try {
+                            ia = NetworkUtils.numericToInetAddress(dnsAddr);
+                        } catch (IllegalArgumentException e) {
+                            throw new UnknownHostException("Non-numeric dns addr=" + dnsAddr);
+                        }
+                        if (!ia.isAnyLocalAddress()) {
+                            linkProperties.addDnsServer(ia);
+                        }
+                    }
                 } else {
                     throw new UnknownHostException("Empty dns response and no system default dns");
                 }
@@ -1140,7 +1154,6 @@ public class DataConnection extends StateMachine {
                 result = SetupResult.SUCCESS;
             } catch (UnknownHostException e) {
                 log("setLinkProperties: UnknownHostException " + e);
-                e.printStackTrace();
                 result = SetupResult.ERR_UnacceptableParameter;
             }
         } else {
