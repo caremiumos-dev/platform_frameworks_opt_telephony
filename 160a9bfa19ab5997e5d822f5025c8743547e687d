@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d192b5d7_3bf55f76",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccRecordsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2017-12-11T12:11:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8e76171_5b201e51",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 38
+      },
+      "revId": "160a9bfa19ab5997e5d822f5025c8743547e687d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3b17b70b_d7812e31",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccRecordsTest.java",
         "patchSetId": 1
@@ -130,6 +154,30 @@
       "writtenOn": "2017-12-01T03:23:14Z",
       "side": 1,
       "message": "why any? use mIccRecords",
+      "range": {
+        "startLine": 80,
+        "startChar": 46,
+        "endLine": 80,
+        "endChar": 67
+      },
+      "revId": "160a9bfa19ab5997e5d822f5025c8743547e687d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfa6401e_e7e2a98a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccRecordsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2017-12-11T12:11:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b17b70b_d7812e31",
       "range": {
         "startLine": 80,
         "startChar": 46,
@@ -165,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "98d8f07e_6d60df0d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccRecordsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2017-12-11T12:11:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46fa198d_9cb52d14",
+      "range": {
+        "startLine": 84,
+        "startChar": 48,
+        "endLine": 84,
+        "endChar": 69
+      },
+      "revId": "160a9bfa19ab5997e5d822f5025c8743547e687d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce6c797b_c02e9f2b",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IsimUiccRecordsTest.java",
         "patchSetId": 1
@@ -188,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "d8bf3985_77ac3c55",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IsimUiccRecordsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2017-12-11T12:11:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce6c797b_c02e9f2b",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 38
+      },
+      "revId": "160a9bfa19ab5997e5d822f5025c8743547e687d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "27a4d380_2f822383",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IsimUiccRecordsTest.java",
         "patchSetId": 1
@@ -199,6 +295,30 @@
       "writtenOn": "2017-12-01T03:23:14Z",
       "side": 1,
       "message": "Use methods in TelephonyTestUtils. And if the needed ones are not present, add them there so that they can be used by other tests too.",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 5
+      },
+      "revId": "160a9bfa19ab5997e5d822f5025c8743547e687d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7173952f_ce97b13b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IsimUiccRecordsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2017-12-11T12:11:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27a4d380_2f822383",
       "range": {
         "startLine": 98,
         "startChar": 0,
