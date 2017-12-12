@@ -22,6 +22,30 @@
       "revId": "e3b81604747a7bd6f04b3fbf0591310923381a97",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ee3eb38_7b50099f",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-12-12T11:38:25Z",
+      "side": 1,
+      "message": "I agree with you. I updated that in the latest patchset.",
+      "parentUuid": "83dbc0c0_e526c546",
+      "range": {
+        "startLine": 1790,
+        "startChar": 30,
+        "endLine": 1790,
+        "endChar": 40
+      },
+      "revId": "e3b81604747a7bd6f04b3fbf0591310923381a97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
