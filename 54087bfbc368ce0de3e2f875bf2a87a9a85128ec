@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f393817_631e1fcf",
+        "filename": "src/java/com/android/internal/telephony/CallFailCause.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-12T20:35:13Z",
+      "side": 1,
+      "message": "Let\u0027s only add the comments when they differ from the constant name, or add some extra information.\n\nBut, in the cases where the comment matches the constant name, if the constant name is a little vague let\u0027s add details in the comment rather than removing it.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 27
+      },
+      "revId": "54087bfbc368ce0de3e2f875bf2a87a9a85128ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
