@@ -38,7 +38,6 @@ import com.android.internal.telephony.MccTable;
 import com.android.internal.telephony.SmsConstants;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.gsm.SimTlv;
-import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 
 import java.io.FileDescriptor;
@@ -59,9 +58,6 @@ public class SIMRecords extends IccRecords {
     // ***** Instance Variables
 
     VoiceMailConstants mVmConfig;
-
-
-    SpnOverride mSpnOverride;
 
     // ***** Cached SIM State; cleared on channel close
 
@@ -99,7 +95,6 @@ public class SIMRecords extends IccRecords {
     public String toString() {
         return "SimRecords: " + super.toString()
                 + " mVmConfig" + mVmConfig
-                + " mSpnOverride=" + mSpnOverride
                 + " callForwardingEnabled=" + mCallForwardingStatus
                 + " spnState=" + mSpnState
                 + " mCphsInfo=" + mCphsInfo
@@ -214,9 +209,9 @@ public class SIMRecords extends IccRecords {
         mAdnCache = new AdnRecordCache(mFh);
 
         mVmConfig = new VoiceMailConstants();
-        mSpnOverride = new SpnOverride();
 
         mRecordsRequested = false;  // No load request is made till SIM ready
+        mLockedRecordsRequested = false;
 
         // recordsToLoad is set to 0 because no requests are made yet
         mRecordsToLoad = 0;
@@ -296,6 +291,7 @@ public class SIMRecords extends IccRecords {
         // read requests made so far are not valid. This is set to
         // true only when fresh set of read requests are made.
         mRecordsRequested = false;
+        mLockedRecordsRequested = false;
     }
 
     //***** Public Methods
@@ -921,7 +917,6 @@ public class SIMRecords extends IccRecords {
 
                     log("iccid: " + SubscriptionInfo.givePrintableIccid(mFullIccId));
                     break;
-
 
                 case EVENT_GET_AD_DONE:
                     try {
@@ -1564,8 +1559,10 @@ public class SIMRecords extends IccRecords {
         mRecordsToLoad -= 1;
         if (DBG) log("onRecordLoaded " + mRecordsToLoad + " requested: " + mRecordsRequested);
 
-        if (mRecordsToLoad == 0 && mRecordsRequested == true) {
+        if (getRecordsLoaded()) {
             onAllRecordsLoaded();
+        } else if (getLockedRecordsLoaded()) {
+            onLockedAllRecordsLoaded();
         } else if (mRecordsToLoad < 0) {
             loge("recordsToLoad <0, programmer error suspected");
             mRecordsToLoad = 0;
@@ -1588,26 +1585,26 @@ public class SIMRecords extends IccRecords {
         }
     }
 
-    @Override
-    protected void onAllRecordsLoaded() {
-        if (DBG) log("record load complete");
-
+    private void setSimLanguageFromEF() {
         Resources resource = Resources.getSystem();
         if (resource.getBoolean(com.android.internal.R.bool.config_use_sim_language_file)) {
             setSimLanguage(mEfLi, mEfPl);
         } else {
             if (DBG) log ("Not using EF LI/EF PL");
         }
+    }
 
+    private void onLockedAllRecordsLoaded() {
+        setSimLanguageFromEF();
+        mLockedRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
+    }
+
+    @Override
+    protected void onAllRecordsLoaded() {
+        if (DBG) log("record load complete");
+
+        setSimLanguageFromEF();
         setVoiceCallForwardingFlagFromSimRecords();
-
-        if (mParentApp.getState() == AppState.APPSTATE_PIN ||
-               mParentApp.getState() == AppState.APPSTATE_PUK) {
-            // reset recordsRequested, since sim is not loaded really
-            mRecordsRequested = false;
-            // lock state, only update language
-            return ;
-        }
 
         // Some fields require more than one SIM record to set
 
@@ -1634,62 +1631,67 @@ public class SIMRecords extends IccRecords {
 
         setVoiceMailByCountry(operator);
 
-        mRecordsLoadedRegistrants.notifyRegistrants(
-            new AsyncResult(null, null, null));
+        mRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
     }
 
     //***** Private methods
 
+    /**
+     * Override the carrier name with either carrier config or SPN
+     * if an override is provided.
+     */
     private void handleCarrierNameOverride() {
-        CarrierConfigManager configLoader = (CarrierConfigManager)
-                mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
-        if (configLoader != null && configLoader.getConfig().getBoolean(
-                CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL)) {
-            String carrierName = configLoader.getConfig().getString(
-                    CarrierConfigManager.KEY_CARRIER_NAME_STRING);
-            setServiceProviderName(carrierName);
-            mTelephonyManager.setSimOperatorNameForPhone(mParentApp.getPhoneId(),
-                    carrierName);
-        } else {
-            setSpnFromConfig(getOperatorNumeric());
-        }
-
-        /* update display name with carrier override */
-        setDisplayName();
-    }
-
-    private void setDisplayName() {
-        SubscriptionManager subManager = SubscriptionManager.from(mContext);
-        int[] subId = subManager.getSubId(mParentApp.getPhoneId());
-
-        if ((subId == null) || subId.length <= 0) {
-            log("subId not valid for Phone " + mParentApp.getPhoneId());
+        final int phoneId = mParentApp.getPhoneId();
+        SubscriptionController subCon = SubscriptionController.getInstance();
+        final int subId = subCon.getSubIdUsingPhoneId(phoneId);
+        if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+            loge("subId not valid for Phone " + phoneId);
             return;
         }
 
-        SubscriptionInfo subInfo = subManager.getActiveSubscriptionInfo(subId[0]);
-        if (subInfo != null && subInfo.getNameSource()
-                    != SubscriptionManager.NAME_SOURCE_USER_INPUT) {
-            CharSequence oldSubName = subInfo.getDisplayName();
-            String newCarrierName = mTelephonyManager.getSimOperatorName(subId[0]);
-
-            if (!TextUtils.isEmpty(newCarrierName) && !newCarrierName.equals(oldSubName)) {
-                log("sim name[" + mParentApp.getPhoneId() + "] = " + newCarrierName);
-                SubscriptionController.getInstance().setDisplayName(newCarrierName, subId[0]);
-            }
-        } else {
-            log("SUB[" + mParentApp.getPhoneId() + "] " + subId[0] + " SubInfo not created yet");
+        CarrierConfigManager configLoader = (CarrierConfigManager)
+                mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configLoader == null) {
+            loge("Failed to load a Carrier Config");
+            return;
         }
+
+        PersistableBundle config = configLoader.getConfigForSubId(subId);
+        boolean preferCcName = config.getBoolean(
+                CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL, false);
+        String ccName = config.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING);
+        // If carrier config is priority, use it regardless - the preference
+        // and the name were both set by the carrier, so this is safe;
+        // otherwise, if the SPN is priority but we don't have one *and* we have
+        // a name in carrier config, use the carrier config name as a backup.
+        if (preferCcName || (TextUtils.isEmpty(getServiceProviderName())
+                             && !TextUtils.isEmpty(ccName))) {
+            setServiceProviderName(ccName);
+            mTelephonyManager.setSimOperatorNameForPhone(phoneId, ccName);
+        }
+
+        updateCarrierNameForSubscription(subCon, subId);
     }
 
-    private void setSpnFromConfig(String carrier) {
-        if (mSpnOverride.containsCarrier(carrier)) {
-            setServiceProviderName(mSpnOverride.getSpn(carrier));
-            mTelephonyManager.setSimOperatorNameForPhone(
-                    mParentApp.getPhoneId(), getServiceProviderName());
+    private void updateCarrierNameForSubscription(SubscriptionController subCon, int subId) {
+        /* update display name with carrier override */
+        SubscriptionInfo subInfo = subCon.getActiveSubscriptionInfo(
+                subId, mContext.getOpPackageName());
+
+        if (subInfo == null || subInfo.getNameSource()
+                == SubscriptionManager.NAME_SOURCE_USER_INPUT) {
+            // either way, there is no subinfo to update
+            return;
+        }
+
+        CharSequence oldSubName = subInfo.getDisplayName();
+        String newCarrierName = mTelephonyManager.getSimOperatorName(subId);
+
+        if (!TextUtils.isEmpty(newCarrierName) && !newCarrierName.equals(oldSubName)) {
+            log("sim name[" + mParentApp.getPhoneId() + "] = " + newCarrierName);
+            subCon.setDisplayName(newCarrierName, subId);
         }
     }
-
 
     private void setVoiceMailByCountry (String spn) {
         if (mVmConfig.containsCarrier(spn)) {
@@ -1715,13 +1717,17 @@ public class SIMRecords extends IccRecords {
     }
 
     private void onLocked() {
-        if (DBG) log("only fetch EF_LI and EF_PL in lock state");
+        if (DBG) log("only fetch EF_LI, EF_PL and EF_ICCID in locked state");
+        mLockedRecordsRequested = true;
+
         loadEfLiAndEfPl();
+
+        mFh.loadEFTransparent(EF_ICCID, obtainMessage(EVENT_GET_ICCID_DONE));
+        mRecordsToLoad++;
     }
 
     private void loadEfLiAndEfPl() {
         if (mParentApp.getType() == AppType.APPTYPE_USIM) {
-            mRecordsRequested = true;
             mFh.loadEFTransparent(EF_LI,
                     obtainMessage(EVENT_GET_ICC_RECORD_DONE, new EfUsimLiLoaded()));
             mRecordsToLoad++;
@@ -2223,7 +2229,6 @@ public class SIMRecords extends IccRecords {
         pw.println(" extends:");
         super.dump(fd, pw, args);
         pw.println(" mVmConfig=" + mVmConfig);
-        pw.println(" mSpnOverride=" + mSpnOverride);
         pw.println(" mCallForwardingStatus=" + mCallForwardingStatus);
         pw.println(" mSpnState=" + mSpnState);
         pw.println(" mCphsInfo=" + mCphsInfo);

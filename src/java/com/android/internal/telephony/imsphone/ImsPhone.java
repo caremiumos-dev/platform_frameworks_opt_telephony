@@ -95,6 +95,7 @@ import com.android.internal.telephony.TelephonyComponentFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.UUSInfo;
+import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.util.NotificationChannelController;
@@ -875,9 +876,8 @@ public class ImsPhone extends ImsPhoneBase {
         if ((isValidCommandInterfaceCFAction(commandInterfaceCFAction)) &&
                 (isValidCommandInterfaceCFReason(commandInterfaceCFReason))) {
             Message resp;
-            Cf cf = new Cf(dialingNumber,
-                    (commandInterfaceCFReason == CF_REASON_UNCONDITIONAL ? true : false),
-                    onComplete);
+            Cf cf = new Cf(dialingNumber, GsmMmiCode.isVoiceUnconditionalForwarding(
+                    commandInterfaceCFReason, serviceClass), onComplete);
             resp = obtainMessage(EVENT_SET_CALL_FORWARD_DONE,
                     isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, cf);
 
@@ -952,22 +952,37 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     public void getCallBarring(String facility, Message onComplete) {
-        if (DBG) Rlog.d(LOG_TAG, "getCallBarring facility=" + facility);
+        getCallBarring(facility, onComplete, CommandsInterface.SERVICE_CLASS_NONE);
+    }
+
+    public void getCallBarring(String facility, Message onComplete, int serviceClass) {
+        if (DBG) {
+            Rlog.d(LOG_TAG, "getCallBarring facility=" + facility
+                    + ", serviceClass = " + serviceClass);
+        }
         Message resp;
         resp = obtainMessage(EVENT_GET_CALL_BARRING_DONE, onComplete);
 
         try {
             ImsUtInterface ut = mCT.getUtInterface();
-            ut.queryCallBarring(getCBTypeFromFacility(facility), resp);
+            ut.queryCallBarring(getCBTypeFromFacility(facility), resp, serviceClass);
         } catch (ImsException e) {
             sendErrorResponse(onComplete, e);
         }
     }
 
-    public void setCallBarring(String facility, boolean lockState, String password, Message
-            onComplete) {
-        if (DBG) Rlog.d(LOG_TAG, "setCallBarring facility=" + facility
-                + ", lockState=" + lockState);
+    public void setCallBarring(String facility, boolean lockState, String password,
+            Message onComplete) {
+        setCallBarring(facility, lockState, password, onComplete,
+                CommandsInterface.SERVICE_CLASS_NONE);
+    }
+
+    public void setCallBarring(String facility, boolean lockState, String password,
+            Message onComplete,  int serviceClass) {
+        if (DBG) {
+            Rlog.d(LOG_TAG, "setCallBarring facility=" + facility
+                    + ", lockState=" + lockState + ", serviceClass = " + serviceClass);
+        }
         Message resp;
         resp = obtainMessage(EVENT_SET_CALL_BARRING_DONE, onComplete);
 
@@ -982,7 +997,8 @@ public class ImsPhone extends ImsPhoneBase {
         try {
             ImsUtInterface ut = mCT.getUtInterface();
             // password is not required with Ut interface
-            ut.updateCallBarring(getCBTypeFromFacility(facility), action, resp, null);
+            ut.updateCallBarring(getCBTypeFromFacility(facility), action,
+                    resp, null,  serviceClass);
         } catch (ImsException e) {
             sendErrorResponse(onComplete, e);
         }
@@ -1041,6 +1057,19 @@ public class ImsPhone extends ImsPhoneBase {
                 break;
             case ImsReasonInfo.CODE_FDN_BLOCKED:
                 error = CommandException.Error.FDN_CHECK_FAILURE;
+                break;
+            case ImsReasonInfo.CODE_UT_SS_MODIFIED_TO_DIAL:
+                error = CommandException.Error.SS_MODIFIED_TO_DIAL;
+                break;
+            case ImsReasonInfo.CODE_UT_SS_MODIFIED_TO_USSD:
+                error = CommandException.Error.SS_MODIFIED_TO_USSD;
+                break;
+            case ImsReasonInfo.CODE_UT_SS_MODIFIED_TO_SS:
+                error = CommandException.Error.SS_MODIFIED_TO_SS;
+                break;
+            case ImsReasonInfo.CODE_UT_SS_MODIFIED_TO_DIAL_VIDEO:
+                error = CommandException.Error.SS_MODIFIED_TO_DIAL_VIDEO;
+                break;
             default:
                 break;
         }
@@ -1122,7 +1151,7 @@ public class ImsPhone extends ImsPhoneBase {
          * not on the list.
          */
         Rlog.d(LOG_TAG, "onMMIDone: mmi=" + mmi);
-        if (mPendingMMIs.remove(mmi) || mmi.isUssdRequest()) {
+        if (mPendingMMIs.remove(mmi) || mmi.isUssdRequest() || mmi.isSsInfo()) {
             ResultReceiver receiverCallback = mmi.getUssdCallbackReceiver();
             if (receiverCallback != null) {
                 int returnCode = (mmi.getState() ==  MmiCode.State.COMPLETE) ?
@@ -1208,7 +1237,11 @@ public class ImsPhone extends ImsPhoneBase {
         return cfInfo;
     }
 
-    private CallForwardInfo[] handleCfQueryResult(ImsCallForwardInfo[] infos) {
+    /**
+     * Used to Convert ImsCallForwardInfo[] to CallForwardInfo[].
+     * Update received call forward status to default IccRecords.
+     */
+    public CallForwardInfo[] handleCfQueryResult(ImsCallForwardInfo[] infos) {
         CallForwardInfo[] cfInfos = null;
 
         if (infos != null && infos.length != 0) {

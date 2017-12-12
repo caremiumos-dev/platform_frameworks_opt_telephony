@@ -68,6 +68,7 @@ import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -239,6 +240,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @FlakyTest
+    @Ignore
     @Test
     @MediumTest
     public void testSpnUpdateShowPlmnOnly() {
@@ -1110,6 +1112,33 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testIsDeviceShuttingDown() throws Exception {
         sst.requestShutdown();
         assertEquals(true, sst.isDeviceShuttingDown());
+    }
+
+    @Test
+    @SmallTest
+    public void testShuttingDownRequest() throws Exception {
+        sst.setRadioPower(true);
+        waitForMs(100);
+
+        sst.requestShutdown();
+        waitForMs(100);
+        assertFalse(mSimulatedCommands.getRadioState().isAvailable());
+    }
+
+    @Test
+    @SmallTest
+    public void testShuttingDownRequestWithRadioPowerFailResponse() throws Exception {
+        sst.setRadioPower(true);
+        waitForMs(100);
+
+        // Simulate RIL fails the radio power settings.
+        mSimulatedCommands.setRadioPowerFailResponse(true);
+        sst.setRadioPower(false);
+        waitForMs(100);
+        assertTrue(mSimulatedCommands.getRadioState().isOn());
+        sst.requestShutdown();
+        waitForMs(100);
+        assertFalse(mSimulatedCommands.getRadioState().isAvailable());
     }
 
     @Test

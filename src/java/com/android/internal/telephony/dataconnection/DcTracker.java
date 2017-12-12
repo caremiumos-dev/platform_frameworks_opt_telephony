@@ -65,6 +65,7 @@ import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
+import android.telephony.data.DataProfile;
 import android.telephony.gsm.GsmCellLocation;
 import android.text.TextUtils;
 import android.util.EventLog;
@@ -215,6 +216,8 @@ public class DcTracker extends Handler {
 
     private AsyncChannel mReplyAc = new AsyncChannel();
 
+    private final LocalLog mDataRoamingLeakageLog = new LocalLog(50);
+
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver () {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -326,7 +329,7 @@ public class DcTracker extends Handler {
 
         mSettingsObserver.observe(
                 Settings.Global.getUriFor(Settings.Global.DATA_ROAMING + simSuffix),
-                DctConstants.EVENT_ROAMING_ON);
+                DctConstants.EVENT_ROAMING_SETTING_CHANGE);
         mSettingsObserver.observe(
                 Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONED),
                 DctConstants.EVENT_DEVICE_PROVISIONED_CHANGE);
@@ -2102,7 +2105,7 @@ public class DcTracker extends Handler {
         } else {
             if (DBG) log("setInitialAttachApn: X selected Apn=" + initialAttachApnSetting);
 
-            mPhone.mCi.setInitialAttachApn(new DataProfile(initialAttachApnSetting),
+            mPhone.mCi.setInitialAttachApn(createDataProfile(initialAttachApnSetting),
                     mPhone.getServiceState().getDataRoamingFromRegistration(), null);
         }
     }
@@ -2772,14 +2775,18 @@ public class DcTracker extends Handler {
     // This method is called
     // 1. When the data roaming status changes from non-roaming to roaming.
     // 2. When allowed data roaming settings is changed by the user.
-    private void onDataRoamingOnOrSettingsChanged() {
+    private void onDataRoamingOnOrSettingsChanged(int messageType) {
         if (DBG) log("onDataRoamingOnOrSettingsChanged");
+        // Used to differentiate data roaming turned on vs settings changed.
+        boolean settingChanged = (messageType == DctConstants.EVENT_ROAMING_SETTING_CHANGE);
 
         // Check if the device is actually data roaming
         if (!mPhone.getServiceState().getDataRoaming()) {
             if (DBG) log("device is not roaming. ignored the request.");
             return;
         }
+
+        checkDataRoamingStatus(settingChanged);
 
         if (getDataRoamingEnabled()) {
             if (DBG) log("onDataRoamingOnOrSettingsChanged: setup data on roaming");
@@ -2793,6 +2800,22 @@ public class DcTracker extends Handler {
             if (DBG) log("onDataRoamingOnOrSettingsChanged: Tear down data connection on roaming.");
             cleanUpAllConnections(true, Phone.REASON_ROAMING_ON);
             notifyOffApnsOfAvailability(Phone.REASON_ROAMING_ON);
+        }
+    }
+
+    // We want to track possible roaming data leakage. Which is, if roaming setting
+    // is disabled, yet we still setup a roaming data connection or have a connected ApnContext
+    // switched to roaming. When this happens, we log it in a local log.
+    private void checkDataRoamingStatus(boolean settingChanged) {
+        if (!settingChanged && !getDataRoamingEnabled()
+                && mPhone.getServiceState().getDataRoaming()) {
+            for (ApnContext apnContext : mApnContexts.values()) {
+                if (apnContext.getState() == DctConstants.State.CONNECTED) {
+                    mDataRoamingLeakageLog.log("PossibleRoamingLeakage "
+                            + " connection params: " + (apnContext.getDcAc() != null
+                            ? apnContext.getDcAc().mLastConnectionParams : ""));
+                }
+            }
         }
     }
 
@@ -2925,7 +2948,7 @@ public class DcTracker extends Handler {
                 }
 
                 // everything is setup
-                if(TextUtils.equals(apnContext.getApnType(),PhoneConstants.APN_TYPE_DEFAULT)) {
+                if (TextUtils.equals(apnContext.getApnType(), PhoneConstants.APN_TYPE_DEFAULT)) {
                     try {
                         SystemProperties.set(PUPPET_MASTER_RADIO_STRESS_TEST, "true");
                     } catch (RuntimeException ex) {
@@ -2948,6 +2971,8 @@ public class DcTracker extends Handler {
 
                 // A connection is setup
                 apnContext.setState(DctConstants.State.CONNECTED);
+
+                checkDataRoamingStatus(false);
 
                 boolean isProvApn = apnContext.isProvisioningApn();
                 final ConnectivityManager cm = ConnectivityManager.from(mPhone.getContext());
@@ -3303,7 +3328,7 @@ public class DcTracker extends Handler {
             ArrayList<DataProfile> dps = new ArrayList<DataProfile>();
             for (ApnSetting apn : mAllApnSettings) {
                 if (apn.modemCognitive) {
-                    DataProfile dp = new DataProfile(apn);
+                    DataProfile dp = createDataProfile(apn);
                     if (!dps.contains(dp)) {
                         dps.add(dp);
                     }
@@ -3760,7 +3785,8 @@ public class DcTracker extends Handler {
                 break;
 
             case DctConstants.EVENT_ROAMING_ON:
-                onDataRoamingOnOrSettingsChanged();
+            case DctConstants.EVENT_ROAMING_SETTING_CHANGE:
+                onDataRoamingOnOrSettingsChanged(msg.what);
                 break;
 
             case DctConstants.EVENT_DEVICE_PROVISIONED_CHANGE:
@@ -4174,6 +4200,8 @@ public class DcTracker extends Handler {
         pw.println(" mAutoAttachOnCreation=" + mAutoAttachOnCreation.get());
         pw.println(" mIsScreenOn=" + mIsScreenOn);
         pw.println(" mUniqueIdGenerator=" + mUniqueIdGenerator);
+        pw.println(" mDataRoamingLeakageLog= ");
+        mDataRoamingLeakageLog.dump(fd, pw, args);
         pw.flush();
         pw.println(" ***************************************");
         DcController dcc = mDcc;
@@ -4272,8 +4300,10 @@ public class DcTracker extends Handler {
         if (dcac != null) {
             result = dcac.getPcscfAddr();
 
-            for (int i = 0; i < result.length; i++) {
-                log("Pcscf[" + i + "]: " + result[i]);
+            if (result != null) {
+                for (int i = 0; i < result.length; i++) {
+                    log("Pcscf[" + i + "]: " + result[i]);
+                }
             }
             return result;
         }
@@ -4819,4 +4849,25 @@ public class DcTracker extends Handler {
         }
     }
 
+    private static DataProfile createDataProfile(ApnSetting apn) {
+        return createDataProfile(apn, apn.profileId);
+    }
+
+    @VisibleForTesting
+    public static DataProfile createDataProfile(ApnSetting apn, int profileId) {
+        int profileType;
+        if (apn.bearerBitmask == 0) {
+            profileType = DataProfile.TYPE_COMMON;
+        } else if (ServiceState.bearerBitmapHasCdma(apn.bearerBitmask)) {
+            profileType = DataProfile.TYPE_3GPP2;
+        } else {
+            profileType = DataProfile.TYPE_3GPP;
+        }
+
+        return new DataProfile(profileId, apn.apn, apn.protocol,
+                apn.authType, apn.user, apn.password, profileType,
+                apn.maxConnsTime, apn.maxConns, apn.waitTime, apn.carrierEnabled, apn.typesBitmap,
+                apn.roamingProtocol, apn.bearerBitmask, apn.mtu, apn.mvnoType, apn.mvnoMatchData,
+                apn.modemCognitive);
+    }
 }

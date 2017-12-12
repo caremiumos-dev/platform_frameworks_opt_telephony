@@ -212,6 +212,7 @@ public class ServiceStateTracker extends Handler {
     protected static final int EVENT_RADIO_POWER_FROM_CARRIER          = 51;
     protected static final int EVENT_SIM_NOT_INSERTED                  = 52;
     protected static final int EVENT_IMS_SERVICE_STATE_CHANGED         = 53;
+    protected static final int EVENT_RADIO_POWER_OFF_DONE              = 54;
 
     protected static final String TIMEZONE_PROPERTY = "persist.sys.timezone";
 
@@ -1134,6 +1135,16 @@ public class ServiceStateTracker extends Handler {
                 }
                 break;
 
+            case EVENT_RADIO_POWER_OFF_DONE:
+                if (DBG) log("EVENT_RADIO_POWER_OFF_DONE");
+                if (mDeviceShuttingDown && mCi.getRadioState().isAvailable()) {
+                    // during shutdown the modem may not send radio state changed event
+                    // as a result of radio power request
+                    // Hence, issuing shut down regardless of radio power response
+                    mCi.requestShutdown(null);
+                }
+                break;
+
             // GSM
             case EVENT_SIM_READY:
                 // Reset the mPreviousSubId so we treat a SIM power bounce
@@ -1318,8 +1329,11 @@ public class ServiceStateTracker extends Handler {
                 break;
 
             case EVENT_SIM_NOT_INSERTED:
-                if (DBG) log("EVENT_SIM_NOT_INSERTED, cancelling notifications.");
+                if (DBG) log("EVENT_SIM_NOT_INSERTED");
                 cancelAllNotifications();
+                mMdn = null;
+                mMin = null;
+                mIsMinInfoReady = false;
                 break;
 
             case EVENT_ALL_DATA_DISCONNECTED:
@@ -3046,7 +3060,8 @@ public class ServiceStateTracker extends Handler {
             if (!hasBrandOverride && (mCi.getRadioState().isOn()) && (mPhone.isEriFileLoaded()) &&
                     (!ServiceState.isLte(mSS.getRilVoiceRadioTechnology()) ||
                             mPhone.getContext().getResources().getBoolean(com.android.internal.R.
-                                    bool.config_LTE_eri_for_network_name))) {
+                                    bool.config_LTE_eri_for_network_name)) &&
+                                    (!mIsSubscriptionFromRuim)) {
                 // Only when CDMA is in service, ERI will take effect
                 String eriText = mSS.getOperatorAlpha();
                 // Now the Phone sees the new ServiceState so it can get the new ERI text
@@ -3890,6 +3905,7 @@ public class ServiceStateTracker extends Handler {
      * removed.
      */
     private void cancelAllNotifications() {
+        if (DBG) log("setNotification: cancelAllNotifications");
         NotificationManager notificationManager = (NotificationManager)
                 mPhone.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
@@ -3993,6 +4009,7 @@ public class ServiceStateTracker extends Handler {
                 .setColor(context.getResources().getColor(
                         com.android.internal.R.color.system_notification_accent_color))
                 .setContentTitle(title)
+                .setStyle(new Notification.BigTextStyle().bigText(details))
                 .setContentText(details)
                 .setChannel(NotificationChannelController.CHANNEL_ID_ALERT)
                 .build();
@@ -4460,7 +4477,7 @@ public class ServiceStateTracker extends Handler {
             mPhone.mCT.mForegroundCall.hangupIfAlive();
         }
 
-        mCi.setRadioPower(false, null);
+        mCi.setRadioPower(false, obtainMessage(EVENT_RADIO_POWER_OFF_DONE));
 
     }
 

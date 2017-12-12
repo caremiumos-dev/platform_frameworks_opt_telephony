@@ -44,6 +44,7 @@ import android.database.MatrixCursor;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
+import android.net.NetworkUtils;
 import android.net.Uri;
 import android.os.AsyncResult;
 import android.os.HandlerThread;
@@ -57,6 +58,9 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
+import android.telephony.data.DataCallResponse;
+import android.telephony.data.DataProfile;
+import android.telephony.data.InterfaceAddress;
 import android.test.mock.MockContentProvider;
 import android.test.mock.MockContentResolver;
 import android.test.suitebuilder.annotation.MediumTest;
@@ -421,32 +425,36 @@ public class DcTrackerTest extends TelephonyTest {
     }
 
     // Create a successful data response
-    public static DataCallResponse createDataCallResponse() {
+    private static DataCallResponse createDataCallResponse() throws Exception {
 
         return new DataCallResponse(0, -1, 1, 2, "IP", FAKE_IFNAME,
-                FAKE_ADDRESS, FAKE_DNS, FAKE_GATEWAY, FAKE_PCSCF_ADDRESS, 1440);
+                Arrays.asList(new InterfaceAddress(FAKE_ADDRESS, 0)),
+                Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
+                Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
+                Arrays.asList(FAKE_PCSCF_ADDRESS),
+                1440);
     }
 
     private void verifyDataProfile(DataProfile dp, String apn, int profileId,
                                    int supportedApnTypesBitmap, int type, int bearerBitmask) {
-        assertEquals(profileId, dp.profileId);
-        assertEquals(apn, dp.apn);
-        assertEquals("IP", dp.protocol);
-        assertEquals(0, dp.authType);
-        assertEquals("", dp.user);
-        assertEquals("", dp.password);
-        assertEquals(type, dp.type);
-        assertEquals(0, dp.maxConnsTime);
-        assertEquals(0, dp.maxConns);
-        assertEquals(0, dp.waitTime);
-        assertTrue(dp.enabled);
-        assertEquals(supportedApnTypesBitmap, dp.supportedApnTypesBitmap);
-        assertEquals("IP", dp.roamingProtocol);
-        assertEquals(bearerBitmask, dp.bearerBitmap);
-        assertEquals(0, dp.mtu);
-        assertEquals("", dp.mvnoType);
-        assertEquals("", dp.mvnoMatchData);
-        assertFalse(dp.modemCognitive);
+        assertEquals(profileId, dp.getProfileId());
+        assertEquals(apn, dp.getApn());
+        assertEquals("IP", dp.getProtocol());
+        assertEquals(0, dp.getAuthType());
+        assertEquals("", dp.getUserName());
+        assertEquals("", dp.getPassword());
+        assertEquals(type, dp.getType());
+        assertEquals(0, dp.getMaxConnsTime());
+        assertEquals(0, dp.getMaxConns());
+        assertEquals(0, dp.getWaitTime());
+        assertTrue(dp.isEnabled());
+        assertEquals(supportedApnTypesBitmap, dp.getSupportedApnTypesBitmap());
+        assertEquals("IP", dp.getRoamingProtocol());
+        assertEquals(bearerBitmask, dp.getBearerBitmap());
+        assertEquals(0, dp.getMtu());
+        assertEquals("", dp.getMvnoType());
+        assertEquals("", dp.getMvnoMatchData());
+        assertFalse(dp.isModemCognitive());
     }
 
     private void verifyDataConnected(final String apnSetting) {
@@ -486,7 +494,7 @@ public class DcTrackerTest extends TelephonyTest {
     // Test the normal data call setup scenario.
     @Test
     @MediumTest
-    public void testDataSetup() {
+    public void testDataSetup() throws Exception {
 
         mDct.setDataEnabled(true);
 
@@ -547,13 +555,18 @@ public class DcTrackerTest extends TelephonyTest {
     // Test the scenario where the first data call setup is failed, and then retry the setup later.
     @Test
     @MediumTest
-    public void testDataRetry() {
+    public void testDataRetry() throws Exception {
 
         mDct.setDataEnabled(true);
 
         // LOST_CONNECTION(0x10004) is a non-permanent failure, so we'll retry data setup later.
         DataCallResponse dcResponse = new DataCallResponse(0x10004, -1, 1, 2, "IP", FAKE_IFNAME,
-                FAKE_ADDRESS, FAKE_DNS, FAKE_GATEWAY, FAKE_PCSCF_ADDRESS, 1440);
+                Arrays.asList(new InterfaceAddress(FAKE_ADDRESS, 0)),
+                Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
+                Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
+                Arrays.asList(FAKE_PCSCF_ADDRESS),
+                1440);
+
         // Simulate RIL fails the data call setup
         mSimulatedCommands.setDataCallResponse(false, dcResponse);
 
@@ -849,6 +862,7 @@ public class DcTrackerTest extends TelephonyTest {
 
     // Test for API carrierActionSetMeteredApnsEnabled.
     @FlakyTest
+    @Ignore
     @Test
     @MediumTest
     public void testCarrierActionSetMeteredApnsEnabled() throws Exception {

@@ -43,8 +43,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.support.test.filters.FlakyTest;
-import android.telephony.DisconnectCause;
 import android.telecom.VideoProfile;
+import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ims.feature.ImsFeature;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -57,6 +57,7 @@ import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.ims.ImsReasonInfo;
 import com.android.ims.ImsServiceClass;
+import com.android.ims.ImsStreamMediaProfile;
 import com.android.ims.internal.ImsCallSession;
 import com.android.internal.telephony.Call;
 import com.android.internal.telephony.CallStateException;
@@ -380,7 +381,47 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         assertEquals("clir_key0", mStringCaptor.getValue());
     }
 
+    /**
+     * Ensures for an emergency call that the dial method will default the CLIR to
+     * {@link CommandsInterface#CLIR_SUPPRESSION}, ensuring the caller's ID is shown.
+     */
+    @Test
+    @SmallTest
+    public void testEmergencyDialSuppressClir() {
+        mCTUT.setSharedPreferenceProxy((Context context) -> {
+            return mSharedPreferences;
+        });
+        // Mock implementation of phone number utils treats everything as an emergency.
+        mCTUT.setPhoneNumberUtilsProxy((String string) -> {
+            return true;
+        });
+        // Set preference to hide caller ID.
+        ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
+        doReturn(CommandsInterface.CLIR_INVOCATION).when(mSharedPreferences).getInt(
+                stringCaptor.capture(), anyInt());
+
+        try {
+            mCTUT.dial("+17005554141", VideoProfile.STATE_AUDIO_ONLY, null);
+
+            ArgumentCaptor<ImsCallProfile> profileCaptor = ArgumentCaptor.forClass(
+                    ImsCallProfile.class);
+            verify(mImsManager, times(1)).makeCall(eq(0), eq(mImsCallProfile),
+                    eq(new String[]{"+17005554141"}), (ImsCall.Listener) any());
+
+            // Because this is an emergency call, we expect caller id to be visible now.
+            verify(mImsCallProfile).setCallExtraInt(ImsCallProfile.EXTRA_OIR,
+                    CommandsInterface.CLIR_SUPPRESSION);
+        } catch (CallStateException cse) {
+            cse.printStackTrace();
+            Assert.fail("unexpected exception thrown" + cse.getMessage());
+        } catch (ImsException ie) {
+            ie.printStackTrace();
+            Assert.fail("unexpected exception thrown" + ie.getMessage());
+        }
+    }
+
     @FlakyTest
+    @Ignore
     @Test
     @SmallTest
     public void testImsMOCallDial() {
@@ -546,5 +587,82 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 new ImsReasonInfo(ImsReasonInfo.CODE_LOCAL_LOW_BATTERY, 0), Call.State.DIALING));
         assertEquals(DisconnectCause.DIAL_LOW_BATTERY, mCTUT.getDisconnectCauseFromReasonInfo(
                 new ImsReasonInfo(ImsReasonInfo.CODE_LOW_BATTERY, 0), Call.State.DIALING));
+    }
+
+    /**
+     * Tests that no hold tone is played if the call is remotely held and the media direction is
+     * send/receive (i.e. there is an audio stream present).
+     */
+    @Test
+    @SmallTest
+    public void testNoRemoteHoldtone() {
+        //establish a MT call
+        testImsMTCallAccept();
+        ImsPhoneConnection connection = mCTUT.mForegroundCall.getFirstConnection();
+        ImsCall call = connection.getImsCall();
+
+        // Set the media direction to send/receive.
+        ImsCallProfile callProfile = new ImsCallProfile();
+        callProfile.mMediaProfile.mAudioDirection = ImsStreamMediaProfile.DIRECTION_SEND_RECEIVE;
+        call.setCallProfile(callProfile);
+
+        try {
+            mCTUT.onCallHoldReceived(call);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Assert.fail("unexpected exception thrown" + ex.getMessage());
+        }
+        verify(mImsPhone, never()).startOnHoldTone(nullable(Connection.class));
+    }
+
+    /**
+     * Verifies that a remote hold tone is played when the call is remotely held and the media
+     * direction is inactive (i.e. the audio stream is not playing, so we should play the tone).
+     */
+    @Test
+    @SmallTest
+    public void testRemoteToneInactive() {
+        //establish a MT call
+        testImsMTCallAccept();
+        ImsPhoneConnection connection = mCTUT.mForegroundCall.getFirstConnection();
+        ImsCall call = connection.getImsCall();
+
+        // Set the media direction to inactive to trigger a hold tone.
+        ImsCallProfile callProfile = new ImsCallProfile();
+        callProfile.mMediaProfile.mAudioDirection = ImsStreamMediaProfile.DIRECTION_INACTIVE;
+        call.setCallProfile(callProfile);
+
+        try {
+            mCTUT.onCallHoldReceived(call);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Assert.fail("unexpected exception thrown" + ex.getMessage());
+        }
+        verify(mImsPhone, times(1)).startOnHoldTone(nullable(Connection.class));
+    }
+
+    @Test
+    @SmallTest
+    public void testRemoteHoldtone() {
+        // Set carrier config to always play remote hold tone.
+        mCTUT.setAlwaysPlayRemoteHoldTone(true);
+        //establish a MT call
+        testImsMTCallAccept();
+        ImsPhoneConnection connection = mCTUT.mForegroundCall.getFirstConnection();
+        ImsCall call = connection.getImsCall();
+
+        // Set the media direction to send/receive; normally we don't play a hold tone but the
+        // carrier config option is set to ensure we will do it in this case.
+        ImsCallProfile callProfile = new ImsCallProfile();
+        callProfile.mMediaProfile.mAudioDirection = ImsStreamMediaProfile.DIRECTION_SEND_RECEIVE;
+        call.setCallProfile(callProfile);
+
+        try {
+            mCTUT.onCallHoldReceived(call);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Assert.fail("unexpected exception thrown" + ex.getMessage());
+        }
+        verify(mImsPhone, times(1)).startOnHoldTone(nullable(Connection.class));
     }
 }
