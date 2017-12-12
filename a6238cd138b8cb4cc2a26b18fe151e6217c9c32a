@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "40acd472_aaf06d86",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/asn1/Asn1Converter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2017-12-12T19:38:05Z",
+      "side": 1,
+      "message": "Add functions in IccUtils in the new CLs.",
+      "parentUuid": "b4946008_214f8abe",
+      "revId": "a6238cd138b8cb4cc2a26b18fe151e6217c9c32a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c7ecc86_926386e0",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/test/asn1/Asn1ConverterTest.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-12-06T19:50:54Z",
       "side": 1,
       "message": "These tests don\u0027t require instrumentation and could theoretically be made host-side tests (as they currently are in Euicc), but tests/telephonytests is device-side. I defer to the telephony team on what they\u0027d like, but if it\u0027s not too painful to define a host-side test rule and get it running, it\u0027ll make execution of these tests and other host-side tests a lot faster and more reliable.",
+      "revId": "a6238cd138b8cb4cc2a26b18fe151e6217c9c32a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de538a78_fc46b8c5",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/test/asn1/Asn1ConverterTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2017-12-12T19:38:05Z",
+      "side": 1,
+      "message": "Created b/70566243 to track the host-side tests. Will do it after IC.",
+      "parentUuid": "5c7ecc86_926386e0",
       "revId": "a6238cd138b8cb4cc2a26b18fe151e6217c9c32a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
