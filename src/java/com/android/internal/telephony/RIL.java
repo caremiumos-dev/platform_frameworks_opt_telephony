@@ -5230,4 +5230,23 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 signalStrength.tdScdma.rscp,
                 false /* gsmFlag - don't care; will be changed by SST */);
     }
+
+    static SignalStrength convertHalSignalStrength_1_2(
+            android.hardware.radio.V1_2.SignalStrength signalStrength) {
+        return new SignalStrength(signalStrength.gw.signalStrength,
+                signalStrength.gw.bitErrorRate,
+                signalStrength.gw.rscp,
+                signalStrength.cdma.dbm,
+                signalStrength.cdma.ecio,
+                signalStrength.evdo.dbm,
+                signalStrength.evdo.ecio,
+                signalStrength.evdo.signalNoiseRatio,
+                signalStrength.lte.signalStrength,
+                signalStrength.lte.rsrp,
+                signalStrength.lte.rsrq,
+                signalStrength.lte.rssnr,
+                signalStrength.lte.cqi,
+                signalStrength.tdScdma.rscp,
+                false /* gsmFlag - don't care; will be changed by SST */);
+    }
 }
