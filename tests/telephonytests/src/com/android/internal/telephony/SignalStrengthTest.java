@@ -50,22 +50,24 @@ public class SignalStrengthTest {
         assertParcelingIsLossless(new SignalStrength());
 
         SignalStrength s = new SignalStrength(
-                20,    // gsmSignalStrength
-                5,     // gsmBitErrorRate
-                -95,   // cdmaDbm
-                10,    // cdmaEcio
-                -98,   // evdoDbm
-                -5,    // evdoEcio
-                -2,    // evdoSnr
-                45,    // lteSignalStrength
-                -105,  // lteRsrp
-                -110,  // lteRsrq
-                -115,  // lteRssnr
-                13,    // lteCqi
-                -90,   // tdscdmaRscp
-                2,     // lteRsrpBoost
-                false, // gsmFlag
-                true); // lteLevelBaseOnRsrp
+                20,      // gsmSignalStrength
+                5,       // gsmBitErrorRate
+                -95,     // cdmaDbm
+                10,      // cdmaEcio
+                -98,     // evdoDbm
+                -5,      // evdoEcio
+                -2,      // evdoSnr
+                45,      // lteSignalStrength
+                -105,    // lteRsrp
+                -110,    // lteRsrq
+                -115,    // lteRssnr
+                13,      // lteCqi
+                -90,     // tdscdmaRscp
+                20,      // wcdmaRscp
+                2,       // lteRsrpBoost
+                false,   // gsmFlag
+                true,    // lteLevelBaseOnRsrp
+                "rscp"); // wcdmaDefaultMeasurement
         assertParcelingIsLossless(s);
     }
 
