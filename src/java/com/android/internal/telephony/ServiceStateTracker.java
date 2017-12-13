@@ -3929,6 +3929,7 @@ public class ServiceStateTracker extends Handler {
             mSignalStrength.setLteRsrpBoost(mSS.getLteEarfcnRsrpBoost());
             mSignalStrength.setUseOnlyRsrpForLteLevel(isUseOnlyRsrpForLteLevel());
             mSignalStrength.setLteRsrpThresholds(getLteRsrpThresholds());
+            mSignalStrength.setWcdmaRscpThresholds(getWcdmaRscpThresholds());
         } else {
             log("onSignalStrengthResult() Exception from RIL : " + ar.exception);
             mSignalStrength = new SignalStrength(isGsm);
@@ -4519,6 +4520,16 @@ public class ServiceStateTracker extends Handler {
     private int[] getLteRsrpThresholds() {
         return getCarrierConfig().getIntArray(
                 CarrierConfigManager.KEY_LTE_RSRP_THRESHOLDS_INT_ARRAY);
+    }
+
+    /**
+     * Gets the threshold array for determining the display level of WCDMA signal bar.
+     *
+     * @return int array for determining the display level.
+     */
+    private int[] getWcdmaRscpThresholds() {
+        return getCarrierConfig().getIntArray(
+                CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY);
     }
 
     /**

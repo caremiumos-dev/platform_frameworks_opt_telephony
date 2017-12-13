@@ -63,6 +63,7 @@ public class SignalStrengthTest {
                 -115,  // lteRssnr
                 13,    // lteCqi
                 -90,   // tdscdmaRscp
+                20,    // wcdmaRscp
                 2,     // lteRsrpBoost
                 false, // gsmFlag
                 true); // lteLevelBaseOnRsrp
