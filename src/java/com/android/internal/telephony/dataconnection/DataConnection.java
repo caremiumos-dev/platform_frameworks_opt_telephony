@@ -913,6 +913,8 @@ public class DataConnection extends StateMachine {
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_IMS);
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_CBS);
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_IA);
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_PUSH_TO_TALK_VOICE);
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_PUBLIC_SAFETY_DATA);
                         // check if this is the DUN apn as well as returned by fetchDunApn().
                         // If yes, add DUN capability too.
                         if (mApnSetting.equals(securedDunApn)) {
@@ -956,6 +958,14 @@ public class DataConnection extends StateMachine {
                     }
                     case PhoneConstants.APN_TYPE_EMERGENCY: {
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
+                        break;
+                    }
+                    case PhoneConstants.APN_TYPE_PUSH_TO_TALK_VOICE: {
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_PUSH_TO_TALK_VOICE);
+                        break;
+                    }
+                    case PhoneConstants.APN_TYPE_PUBLIC_SAFETY_DATA: {
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_PUBLIC_SAFETY_DATA);
                         break;
                     }
                     default:

@@ -72,6 +72,8 @@ public interface PhoneInternalInterface {
     static final String FEATURE_ENABLE_IMS = "enableIMS";
     static final String FEATURE_ENABLE_CBS = "enableCBS";
     static final String FEATURE_ENABLE_EMERGENCY = "enableEmergency";
+    static final String FEATURE_ENABLE_PUSH_TO_TALK_VOICE = "enablePUSH_TO_TALK_VOICE";
+    static final String FEATURE_ENABLE_PUBLIC_SAFETY_DATA = "enablePUBLIC_SAFETY_DATA";
 
     /**
      * Optional reasons for disconnect and connect

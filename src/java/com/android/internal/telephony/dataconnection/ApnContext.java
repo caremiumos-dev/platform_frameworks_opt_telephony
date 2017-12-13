@@ -560,6 +560,10 @@ public class ApnContext {
             return DctConstants.APN_IA_ID;
         case ConnectivityManager.TYPE_MOBILE_EMERGENCY:
             return DctConstants.APN_EMERGENCY_ID;
+        case ConnectivityManager.TYPE_MOBILE_PUSH_TO_TALK_VOICE:
+            return DctConstants.APN_PUSH_TO_TALK_VOICE_ID;
+        case ConnectivityManager.TYPE_MOBILE_PUBLIC_SAFETY_DATA:
+            return DctConstants.APN_PUBLIC_SAFETY_DATA_ID;
         default:
             return DctConstants.APN_INVALID_ID;
         }
@@ -623,6 +627,14 @@ public class ApnContext {
             if (apnId != DctConstants.APN_INVALID_ID) error = true;
             apnId = DctConstants.APN_EMERGENCY_ID;
         }
+        if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_PUSH_TO_TALK_VOICE)) {
+            if (apnId != DctConstants.APN_INVALID_ID) error = true;
+            apnId = DctConstants.APN_PUSH_TO_TALK_VOICE_ID;
+        }
+        if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_PUBLIC_SAFETY_DATA)) {
+            if (apnId != DctConstants.APN_INVALID_ID) error = true;
+            apnId = DctConstants.APN_PUBLIC_SAFETY_DATA_ID;
+        }
         if (error) {
             // TODO: If this error condition is removed, the framework's handling of
             // NET_CAPABILITY_NOT_RESTRICTED will need to be updated so requests for
@@ -659,6 +671,10 @@ public class ApnContext {
                 return DctConstants.APN_IA_ID;
             case PhoneConstants.APN_TYPE_EMERGENCY:
                 return DctConstants.APN_EMERGENCY_ID;
+            case PhoneConstants.APN_TYPE_PUSH_TO_TALK_VOICE:
+                return DctConstants.APN_PUSH_TO_TALK_VOICE_ID;
+            case PhoneConstants.APN_TYPE_PUBLIC_SAFETY_DATA:
+                return DctConstants.APN_PUBLIC_SAFETY_DATA_ID;
             default:
                 return DctConstants.APN_INVALID_ID;
         }
@@ -686,6 +702,10 @@ public class ApnContext {
                 return PhoneConstants.APN_TYPE_IA;
             case DctConstants.APN_EMERGENCY_ID:
                 return PhoneConstants.APN_TYPE_EMERGENCY;
+            case DctConstants.APN_PUSH_TO_TALK_VOICE_ID:
+                return PhoneConstants.APN_TYPE_PUSH_TO_TALK_VOICE;
+            case DctConstants.APN_PUBLIC_SAFETY_DATA_ID:
+                return PhoneConstants.APN_TYPE_PUBLIC_SAFETY_DATA;
             default:
                 Rlog.d(SLOG_TAG, "Unknown id (" + id + ") in apnIdToType");
                 return PhoneConstants.APN_TYPE_DEFAULT;

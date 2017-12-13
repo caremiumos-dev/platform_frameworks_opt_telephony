@@ -1058,6 +1058,12 @@ public class DcTracker extends Handler {
             case ConnectivityManager.TYPE_MOBILE_EMERGENCY:
                 apnContext = addApnContext(PhoneConstants.APN_TYPE_EMERGENCY, networkConfig);
                 break;
+            case ConnectivityManager.TYPE_MOBILE_PUSH_TO_TALK_VOICE:
+                apnContext = addApnContext(PhoneConstants.APN_TYPE_PUSH_TO_TALK_VOICE, networkConfig);
+                break;
+            case ConnectivityManager.TYPE_MOBILE_PUBLIC_SAFETY_DATA:
+                apnContext = addApnContext(PhoneConstants.APN_TYPE_PUBLIC_SAFETY_DATA, networkConfig);
+                break;
             default:
                 log("initApnContexts: skipping unknown type=" + networkConfig.type);
                 continue;

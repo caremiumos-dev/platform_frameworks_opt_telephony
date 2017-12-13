@@ -118,6 +118,8 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_PUSH_TO_TALK_VOICE);
+        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_PUBLIC_SAFETY_DATA);
         nc.setNetworkSpecifier(new StringNetworkSpecifier(String.valueOf(subscriptionId)));
         return nc;
     }
