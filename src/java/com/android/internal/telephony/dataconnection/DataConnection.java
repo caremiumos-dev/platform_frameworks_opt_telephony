@@ -952,6 +952,8 @@ public class DataConnection extends StateMachine {
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_CBS);
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_IA);
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_DUN);
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_MCPTT);
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_PUBLIC_SAFETY_DATA);
                         break;
                     }
                     case PhoneConstants.APN_TYPE_DEFAULT: {
@@ -988,6 +990,14 @@ public class DataConnection extends StateMachine {
                     }
                     case PhoneConstants.APN_TYPE_EMERGENCY: {
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
+                        break;
+                    }
+                    case PhoneConstants.APN_TYPE_MCPTT: {
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_MCPTT);
+                        break;
+                    }
+                    case PhoneConstants.APN_TYPE_PUBLIC_SAFETY_DATA: {
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_PUBLIC_SAFETY_DATA);
                         break;
                     }
                     default:
