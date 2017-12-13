@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d07568f_ebdce542",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-13T23:53:55Z",
+      "side": 1,
+      "message": "Do we need to get it from sim records if it is already sent in slot and card status structs?",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 87
+      },
+      "revId": "41afb4fedefb9e97ab9497b8d1170df2a2e3396b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b21aeecf_fcd0df4f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-13T23:53:55Z",
+      "side": 1,
+      "message": "else log error?",
+      "range": {
+        "startLine": 181,
+        "startChar": 12,
+        "endLine": 181,
+        "endChar": 14
+      },
+      "revId": "41afb4fedefb9e97ab9497b8d1170df2a2e3396b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

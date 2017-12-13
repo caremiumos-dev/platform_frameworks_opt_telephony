@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "fbfe293f_0843fb68",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-13T23:53:55Z",
+      "side": 1,
+      "message": "Actually they should be a profile thing, not slot thing. It\u0027s just for now there is only one active profile assumed to be in the slot, so it can be a slot thing. Later when there are multiple active profiles in a slot, mCi will be an array in slot, if slot maintains it at all. I agree it is possible that there is no active profile, but in that case there should be no mCi associated with it. Ideally we need a separate hal for slot in that case.",
+      "parentUuid": "a29b2777_0d28ba18",
+      "range": {
+        "startLine": 667,
+        "startChar": 19,
+        "endLine": 667,
+        "endChar": 37
+      },
+      "revId": "636595fd6a36b4b91b5496a21e72fef2e7d771a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85db0d56_d8a58a24",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
         "patchSetId": 2
