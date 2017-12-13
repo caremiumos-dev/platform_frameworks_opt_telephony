@@ -243,6 +243,15 @@ public class RadioResponse extends IRadioResponse.Stub {
         responseSignalStrength(responseInfo, sigStrength);
     }
 
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param sigStrength Current signal strength as defined by SignalStrength in types.hal
+     */
+    public void getSignalStrengthResponse_1_2(RadioResponseInfo responseInfo,
+                                          android.hardware.radio.V1_2.SignalStrength sigStrength) {
+        responseSignalStrength_1_2(responseInfo, sigStrength);
+    }
+
     /*
      * @param responseInfo Response info struct containing response type, serial no. and error
      * @param voiceRegResponse Current Voice registration response as defined by VoiceRegStateResult
@@ -1452,6 +1461,19 @@ public class RadioResponse extends IRadioResponse.Stub {
 
         if (rr != null) {
             SignalStrength ret = RIL.convertHalSignalStrength(sigStrength);
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, ret);
+            }
+            mRil.processResponseDone(rr, responseInfo, ret);
+        }
+    }
+
+    private void responseSignalStrength_1_2(RadioResponseInfo responseInfo,
+                                        android.hardware.radio.V1_2.SignalStrength sigStrength) {
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr != null) {
+            SignalStrength ret = RIL.convertHalSignalStrength_1_2(sigStrength);
             if (responseInfo.error == RadioError.NONE) {
                 sendMessageResponse(rr.mResult, ret);
             }

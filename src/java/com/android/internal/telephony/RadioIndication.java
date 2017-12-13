@@ -233,6 +233,23 @@ public class RadioIndication extends IRadioIndication.Stub {
         }
     }
 
+    /**
+     * @param indicationType RadioIndicationType
+     * @param signalStrength Current signal strength as defined by SignalStrength in types.hal
+     */
+    public void currentSignalStrength_1_2(int indicationType,
+                                      android.hardware.radio.V1_2.SignalStrength signalStrength) {
+        mRil.processIndication(indicationType);
+
+        SignalStrength ss = RIL.convertHalSignalStrength_1_2(signalStrength);
+        // Note this is set to "verbose" because it happens frequently
+        if (RIL.RILJ_LOGV) mRil.unsljLogvRet(RIL_UNSOL_SIGNAL_STRENGTH, ss);
+
+        if (mRil.mSignalStrengthRegistrant != null) {
+            mRil.mSignalStrengthRegistrant.notifyRegistrant(new AsyncResult(null, ss, null));
+        }
+    }
+
     public void dataCallListChanged(int indicationType, ArrayList<SetupDataCallResult> dcList) {
         mRil.processIndication(indicationType);
 
