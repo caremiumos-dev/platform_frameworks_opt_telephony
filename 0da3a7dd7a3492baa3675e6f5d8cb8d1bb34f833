@@ -22,6 +22,30 @@
       "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bca8e4d6_ec98ed50",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-12-14T10:01:21Z",
+      "side": 1,
+      "message": "Yes, we have two copies of PREFFERD_NETWORK_MODE.\n\nI\u0027m sorry, I should have uploaded a patch to update Settings.Global.PREFERRED_NETWORK_MODE if user updates the setting. I will update it later.\n\nThe answer of your question is that it comes from DatabaseHelper.java and if user changes the setting manually.",
+      "parentUuid": "d145e4bc_45160db2",
+      "range": {
+        "startLine": 467,
+        "startChar": 19,
+        "endLine": 485,
+        "endChar": 21
+      },
+      "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
