@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.telephony.ims.internal;
+package android.telephony.ims;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -27,13 +27,13 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.support.test.runner.AndroidJUnit4;
 import android.telephony.ServiceState;
-import android.telephony.ims.internal.aidl.IImsRegistration;
 import android.telephony.ims.internal.feature.ImsFeature;
 import android.telephony.ims.internal.stub.ImsFeatureConfiguration;
-import android.telephony.ims.internal.stub.ImsRegistrationImplBase;
+import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.ims.ImsReasonInfo;
+import com.android.ims.internal.IImsRegistration;
 
 import org.junit.After;
 import org.junit.Before;
@@ -46,13 +46,13 @@ import org.mockito.Spy;
 public class ImsRegistrationTests {
 
     @Spy private ImsRegistrationImplBase.Callback mCallback;
-    private TestImsRegistration mRegistration;
+    private ImsRegistrationImplBase mRegistration;
     private IImsRegistration mRegBinder;
 
     @Before
     public void setup() throws RemoteException {
         MockitoAnnotations.initMocks(this);
-        mRegistration = new TestImsRegistration();
+        mRegistration = new ImsRegistrationImplBase();
         mRegBinder = mRegistration.getBinder();
         mRegBinder.addRegistrationCallback(mCallback);
     }
