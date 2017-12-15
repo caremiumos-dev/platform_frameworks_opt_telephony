@@ -18,8 +18,6 @@ package com.android.internal.telephony.uicc;
 
 import android.app.AlertDialog;
 import android.app.usage.UsageStatsManager;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,7 +32,6 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PersistableBundle;
-import android.os.PowerManager;
 import android.os.Registrant;
 import android.os.RegistrantList;
 import android.preference.PreferenceManager;
@@ -48,7 +45,6 @@ import android.view.WindowManager;
 
 import com.android.internal.R;
 import com.android.internal.telephony.CommandsInterface;
-import com.android.internal.telephony.CommandsInterface.RadioState;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.cat.CatService;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
@@ -64,7 +60,7 @@ import java.util.List;
 /**
  * {@hide}
  */
-public class UiccCard {
+public class UiccCard extends Handler {
     protected static final String LOG_TAG = "UiccCard";
     protected static final boolean DBG = true;
 
@@ -84,20 +80,17 @@ public class UiccCard {
     private Context mContext;
     private CommandsInterface mCi;
     private CatService mCatService;
-    private RadioState mLastRadioState =  RadioState.RADIO_UNAVAILABLE;
     private UiccCarrierPrivilegeRules mCarrierPrivilegeRules;
 
-    private RegistrantList mAbsentRegistrants = new RegistrantList();
     private RegistrantList mCarrierPrivilegeRegistrants = new RegistrantList();
 
-    private static final int EVENT_CARD_REMOVED = 13;
-    private static final int EVENT_CARD_ADDED = 14;
     private static final int EVENT_OPEN_LOGICAL_CHANNEL_DONE = 15;
     private static final int EVENT_CLOSE_LOGICAL_CHANNEL_DONE = 16;
     private static final int EVENT_TRANSMIT_APDU_LOGICAL_CHANNEL_DONE = 17;
     private static final int EVENT_TRANSMIT_APDU_BASIC_CHANNEL_DONE = 18;
     private static final int EVENT_SIM_IO_DONE = 19;
     private static final int EVENT_CARRIER_PRIVILEGES_LOADED = 20;
+    private static final int EVENT_SIM_REFRESH = 21;
 
     private static final LocalLog mLocalLog = new LocalLog(100);
 
@@ -108,11 +101,13 @@ public class UiccCard {
         mCardState = ics.mCardState;
         mPhoneId = phoneId;
         update(c, ci, ics);
+        mCi.registerForIccRefresh(this, EVENT_SIM_REFRESH, phoneId);
     }
 
     public void dispose() {
         synchronized (mLock) {
             if (DBG) log("Disposing card");
+            mCi.unregisterForIccRefresh(this);
             if (mCatService != null) mCatService.dispose();
             for (UiccCardApplication app : mUiccApplications) {
                 if (app != null) {
@@ -168,24 +163,49 @@ public class UiccCard {
             }
 
             sanitizeApplicationIndexesLocked();
+        }
+    }
 
-            RadioState radioState = mCi.getRadioState();
-            if (DBG) log("update: radioState=" + radioState + " mLastRadioState="
-                    + mLastRadioState);
-            // No notifications while radio is off or we just powering up
-            if (radioState == RadioState.RADIO_ON && mLastRadioState == RadioState.RADIO_ON) {
-                if (oldState != CardState.CARDSTATE_ABSENT &&
-                        mCardState == CardState.CARDSTATE_ABSENT) {
-                    if (DBG) log("update: notify card removed");
-                    mAbsentRegistrants.notifyRegistrants();
-                    mHandler.sendMessage(mHandler.obtainMessage(EVENT_CARD_REMOVED, null));
-                } else if (oldState == CardState.CARDSTATE_ABSENT &&
-                        mCardState != CardState.CARDSTATE_ABSENT) {
-                    if (DBG) log("update: notify card added");
-                    mHandler.sendMessage(mHandler.obtainMessage(EVENT_CARD_ADDED, null));
-                }
+    @Override
+    public void handleMessage(Message msg) {
+        synchronized (mLock) {
+            AsyncResult ar = (AsyncResult) msg.obj;
+            switch (msg.what) {
+                case EVENT_SIM_REFRESH:
+                    if (DBG) log("Received EVENT_SIM_REFRESH");
+                    onSimRefresh(ar);
+                    break;
+                default:
+                    loge("Unknown Event " + msg.what);
+                    break;
             }
-            mLastRadioState = radioState;
+        }
+    }
+
+    private void onSimRefresh(AsyncResult ar) {
+        if (ar.exception != null) {
+            loge("onSimRefresh: exception: " + ar.exception);
+            return;
+        }
+
+        IccRefreshResponse resp = (IccRefreshResponse) ar.result;
+        Rlog.d(LOG_TAG, "onSimRefresh: " + resp);
+
+        if (resp.refreshResult != IccRefreshResponse.REFRESH_RESULT_RESET) {
+            Rlog.d(LOG_TAG, "Ignoring non reset refresh: " + resp);
+            return;
+        }
+
+        boolean changed = resetAppWithAid(resp.aid);
+        if (changed) {
+            boolean requirePowerOffOnSimRefreshReset = mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_requireRadioPowerOffOnSimRefreshReset);
+            if (requirePowerOffOnSimRefreshReset) {
+                mCi.setRadioPower(false, null);
+            } else {
+                UiccController.getInstance().getIccCardStatus(mPhoneId);
+            }
+            UiccController.getInstance().notifyIccChangedRegistrants(mPhoneId);
         }
     }
 
@@ -249,27 +269,6 @@ public class UiccCard {
     }
 
     /**
-     * Notifies handler of any transition into State.ABSENT
-     */
-    public void registerForAbsent(Handler h, int what, Object obj) {
-        synchronized (mLock) {
-            Registrant r = new Registrant (h, what, obj);
-
-            mAbsentRegistrants.add(r);
-
-            if (mCardState == CardState.CARDSTATE_ABSENT) {
-                r.notifyRegistrant();
-            }
-        }
-    }
-
-    public void unregisterForAbsent(Handler h) {
-        synchronized (mLock) {
-            mAbsentRegistrants.remove(h);
-        }
-    }
-
-    /**
      * Notifies handler when carrier privilege rules are loaded.
      */
     public void registerForCarrierPrivilegeRulesLoaded(Handler h, int what, Object obj) {
@@ -290,90 +289,10 @@ public class UiccCard {
         }
     }
 
-    private void onIccSwap(boolean isAdded) {
-
-        boolean isHotSwapSupported = mContext.getResources().getBoolean(
-                R.bool.config_hotswapCapable);
-
-        if (isHotSwapSupported) {
-            log("onIccSwap: isHotSwapSupported is true, don't prompt for rebooting");
-            return;
-        }
-        log("onIccSwap: isHotSwapSupported is false, prompt for rebooting");
-
-        promptForRestart(isAdded);
-    }
-
-    private void promptForRestart(boolean isAdded) {
-        synchronized (mLock) {
-            final Resources res = mContext.getResources();
-            final String dialogComponent = res.getString(
-                    R.string.config_iccHotswapPromptForRestartDialogComponent);
-            if (dialogComponent != null) {
-                Intent intent = new Intent().setComponent(ComponentName.unflattenFromString(
-                        dialogComponent)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra(EXTRA_ICC_CARD_ADDED, isAdded);
-                try {
-                    mContext.startActivity(intent);
-                    return;
-                } catch (ActivityNotFoundException e) {
-                    loge("Unable to find ICC hotswap prompt for restart activity: " + e);
-                }
-            }
-
-            // TODO: Here we assume the device can't handle SIM hot-swap
-            //      and has to reboot. We may want to add a property,
-            //      e.g. REBOOT_ON_SIM_SWAP, to indicate if modem support
-            //      hot-swap.
-            DialogInterface.OnClickListener listener = null;
-
-
-            // TODO: SimRecords is not reset while SIM ABSENT (only reset while
-            //       Radio_off_or_not_available). Have to reset in both both
-            //       added or removed situation.
-            listener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    synchronized (mLock) {
-                        if (which == DialogInterface.BUTTON_POSITIVE) {
-                            if (DBG) log("Reboot due to SIM swap");
-                            PowerManager pm = (PowerManager) mContext
-                                    .getSystemService(Context.POWER_SERVICE);
-                            pm.reboot("SIM is added.");
-                        }
-                    }
-                }
-
-            };
-
-            Resources r = Resources.getSystem();
-
-            String title = (isAdded) ? r.getString(R.string.sim_added_title) :
-                r.getString(R.string.sim_removed_title);
-            String message = (isAdded) ? r.getString(R.string.sim_added_message) :
-                r.getString(R.string.sim_removed_message);
-            String buttonTxt = r.getString(R.string.sim_restart_button);
-
-            AlertDialog dialog = new AlertDialog.Builder(mContext)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton(buttonTxt, listener)
-            .create();
-            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-            dialog.show();
-        }
-    }
-
     protected Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg){
             switch (msg.what) {
-                case EVENT_CARD_REMOVED:
-                    onIccSwap(false);
-                    break;
-                case EVENT_CARD_ADDED:
-                    onIccSwap(true);
-                    break;
                 case EVENT_OPEN_LOGICAL_CHANNEL_DONE:
                 case EVENT_CLOSE_LOGICAL_CHANNEL_DONE:
                 case EVENT_TRANSMIT_APDU_LOGICAL_CHANNEL_DONE:
@@ -792,13 +711,7 @@ public class UiccCard {
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("UiccCard:");
         pw.println(" mCi=" + mCi);
-        pw.println(" mLastRadioState=" + mLastRadioState);
         pw.println(" mCatService=" + mCatService);
-        pw.println(" mAbsentRegistrants: size=" + mAbsentRegistrants.size());
-        for (int i = 0; i < mAbsentRegistrants.size(); i++) {
-            pw.println("  mAbsentRegistrants[" + i + "]="
-                    + ((Registrant)mAbsentRegistrants.get(i)).getHandler());
-        }
         for (int i = 0; i < mCarrierPrivilegeRegistrants.size(); i++) {
             pw.println("  mCarrierPrivilegeRegistrants[" + i + "]="
                     + ((Registrant)mCarrierPrivilegeRegistrants.get(i)).getHandler());
