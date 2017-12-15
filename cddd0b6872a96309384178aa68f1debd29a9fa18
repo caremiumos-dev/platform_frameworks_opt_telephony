@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "05e10f78_2fb84d39",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 5220,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-12-15T09:05:26Z",
+      "side": 1,
+      "message": "And how about the emails and name in the contact? Do not print as well?",
+      "parentUuid": "50c2f02a_db7a32dc",
+      "range": {
+        "startLine": 5219,
+        "startChar": 16,
+        "endLine": 5220,
+        "endChar": 63
+      },
+      "revId": "cddd0b6872a96309384178aa68f1debd29a9fa18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be831775_04f6faf3",
         "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
         "patchSetId": 4
