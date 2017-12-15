@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8d87d886_8489d864",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-12-15T09:02:57Z",
+      "side": 1,
+      "message": "Done and thanks for your advice.",
+      "parentUuid": "9b6e0337_f5034c06",
+      "range": {
+        "startLine": 141,
+        "startChar": 10,
+        "endLine": 141,
+        "endChar": 11
+      },
+      "revId": "cddd0b6872a96309384178aa68f1debd29a9fa18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "954622b8_5ea681ae",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-14T21:43:59Z",
       "side": 1,
       "message": "Please make sure we do not print any contact numbers in the logs. This is considered as PII information. Check all the code for this and fix.",
+      "range": {
+        "startLine": 5219,
+        "startChar": 16,
+        "endLine": 5220,
+        "endChar": 63
+      },
+      "revId": "cddd0b6872a96309384178aa68f1debd29a9fa18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50c2f02a_db7a32dc",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 5220,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-12-15T09:02:57Z",
+      "side": 1,
+      "message": "will check and fix it.",
+      "parentUuid": "954622b8_5ea681ae",
       "range": {
         "startLine": 5219,
         "startChar": 16,
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "ac282e84_c2d8fe21",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-12-15T09:02:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be831775_04f6faf3",
+      "revId": "cddd0b6872a96309384178aa68f1debd29a9fa18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0d09527_2cba83ea",
         "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
         "patchSetId": 4
@@ -79,6 +145,24 @@
       "revId": "cddd0b6872a96309384178aa68f1debd29a9fa18",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "512475c7_97c33bc8",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-12-15T09:02:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0d09527_2cba83ea",
+      "revId": "cddd0b6872a96309384178aa68f1debd29a9fa18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "e3f6260b_bedd256b",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-12-15T09:02:57Z",
+      "side": 1,
+      "message": "Done and updated SimPhoneBookAdnRecordCache.java as well",
+      "parentUuid": "7fb0f188_d9369d2b",
+      "range": {
+        "startLine": 2,
+        "startChar": 27,
+        "endLine": 2,
+        "endChar": 32
+      },
+      "revId": "cddd0b6872a96309384178aa68f1debd29a9fa18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7018157_829cc07b",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
         "patchSetId": 4
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "5ef39243_c114fbd7",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-12-15T09:02:57Z",
+      "side": 1,
+      "message": "Change to private and fixed in SimPhoneBookAdnRecordCache.java.",
+      "parentUuid": "f7018157_829cc07b",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 10
+      },
+      "revId": "cddd0b6872a96309384178aa68f1debd29a9fa18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ebed1f5b_491037da",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
         "patchSetId": 4
@@ -148,6 +280,30 @@
       "revId": "cddd0b6872a96309384178aa68f1debd29a9fa18",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "128143b2_a0c6bce3",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2017-12-15T09:02:57Z",
+      "side": 1,
+      "message": "Removed and fixed in SimPhoneBookAdnRecordCache.java.",
+      "parentUuid": "ebed1f5b_491037da",
+      "range": {
+        "startLine": 64,
+        "startChar": 12,
+        "endLine": 64,
+        "endChar": 33
+      },
+      "revId": "cddd0b6872a96309384178aa68f1debd29a9fa18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
