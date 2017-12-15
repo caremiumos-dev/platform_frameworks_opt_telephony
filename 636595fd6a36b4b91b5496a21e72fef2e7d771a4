@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "8e505420_98b53314",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-15T19:18:51Z",
+      "side": 1,
+      "message": "Make sense, let\u0027s make it a \"profile\" thing",
+      "parentUuid": "fbfe293f_0843fb68",
+      "range": {
+        "startLine": 667,
+        "startChar": 19,
+        "endLine": 667,
+        "endChar": 37
+      },
+      "revId": "636595fd6a36b4b91b5496a21e72fef2e7d771a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85db0d56_d8a58a24",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
         "patchSetId": 2

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4dd8d139_0fb218ec",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-15T19:18:51Z",
+      "side": 1,
+      "message": "Good point! Previously we have to read this from SIMRecords once loaded, now we can actually directly get it from the card status.",
+      "parentUuid": "7d07568f_ebdce542",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 87
+      },
+      "revId": "41afb4fedefb9e97ab9497b8d1170df2a2e3396b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b21aeecf_fcd0df4f",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "41afb4fedefb9e97ab9497b8d1170df2a2e3396b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "702609fa_c8c4376d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-15T19:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b21aeecf_fcd0df4f",
+      "range": {
+        "startLine": 181,
+        "startChar": 12,
+        "endLine": 181,
+        "endChar": 14
+      },
+      "revId": "41afb4fedefb9e97ab9497b8d1170df2a2e3396b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
