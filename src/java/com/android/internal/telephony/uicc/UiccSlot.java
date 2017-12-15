@@ -58,6 +58,8 @@ public class UiccSlot {
     private UiccCard mUiccCard;
     private RadioState mLastRadioState = RadioState.RADIO_UNAVAILABLE;
 
+    // todo: decide where this should be - ideally not in card since card is null when state is
+    // absent; or maybe change that and not let card be null for an active slot?
     private RegistrantList mAbsentRegistrants = new RegistrantList();
 
     private static final int EVENT_CARD_REMOVED = 13;
@@ -65,9 +67,9 @@ public class UiccSlot {
 
     private static final LocalLog sLocalLog = new LocalLog(100);
 
-    public UiccSlot(Context c, CommandsInterface ci, boolean isActive) {
+    public UiccSlot(Context c, boolean isActive) {
         if (DBG) log("Creating");
-        mCi = ci;
+        mContext = c;
         mActive = isActive;
         mCardState = CardState.CARDSTATE_ABSENT;
     }
@@ -92,8 +94,8 @@ public class UiccSlot {
                 // No notifications while radio is off or we just powering up
                 if (radioState == RadioState.RADIO_ON && mLastRadioState == RadioState.RADIO_ON) {
                     if (DBG) log("update: notify card removed");
-                    // todo - move registrant to uicccontroller
-                    mAbsentRegistrants.notifyRegistrants();
+                    // todo - move registrant to uicccontroller??
+                    mUiccCard.mAbsentRegistrants.notifyRegistrants();
                     mHandler.sendMessage(mHandler.obtainMessage(EVENT_CARD_REMOVED, null));
                 }
 
@@ -115,6 +117,8 @@ public class UiccSlot {
                 }
 
                 mUiccCard = new UiccCard(mContext, mCi, ics, phoneId);
+            } else {
+                mUiccCard.update(mContext, mCi, ics);
             }
             mLastRadioState = radioState;
         }
@@ -234,6 +238,18 @@ public class UiccSlot {
         }
     }
 
+    /**
+     * Processes radio state unavailable event
+     */
+    public void onRadioStateUnavailable() {
+        if (mUiccCard != null) {
+            mUiccCard.dispose();
+        }
+        mUiccCard = null;
+        mCardState = CardState.CARDSTATE_ABSENT;
+        mLastRadioState = RadioState.RADIO_UNAVAILABLE;
+    }
+
     private void log(String msg) {
         Rlog.d(TAG, msg);
     }
@@ -260,7 +276,12 @@ public class UiccSlot {
                     + ((Registrant) mAbsentRegistrants.get(i)).getHandler());
         }
         pw.println(" mCardState=" + mCardState);
-        if (mUiccCard != null) mUiccCard.dump(fd, pw, args);
+        if (mUiccCard != null) {
+            pw.println(" mUiccCard=" + mUiccCard);
+            mUiccCard.dump(fd, pw, args);
+        } else {
+            pw.println(" mUiccCard=null");
+        }
         pw.println();
         pw.flush();
         pw.println("sLocalLog:");

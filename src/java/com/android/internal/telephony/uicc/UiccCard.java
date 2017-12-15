@@ -64,7 +64,7 @@ import java.util.List;
 /**
  * {@hide}
  */
-public class UiccCard {
+public class UiccCard extends Handler {
     protected static final String LOG_TAG = "UiccCard";
     protected static final boolean DBG = true;
 
@@ -87,7 +87,7 @@ public class UiccCard {
     private RadioState mLastRadioState =  RadioState.RADIO_UNAVAILABLE;
     private UiccCarrierPrivilegeRules mCarrierPrivilegeRules;
 
-    private RegistrantList mAbsentRegistrants = new RegistrantList();
+    public RegistrantList mAbsentRegistrants = new RegistrantList();
     private RegistrantList mCarrierPrivilegeRegistrants = new RegistrantList();
 
     private static final int EVENT_CARD_REMOVED = 13;
@@ -98,6 +98,7 @@ public class UiccCard {
     private static final int EVENT_TRANSMIT_APDU_BASIC_CHANNEL_DONE = 18;
     private static final int EVENT_SIM_IO_DONE = 19;
     private static final int EVENT_CARRIER_PRIVILEGES_LOADED = 20;
+    private static final int EVENT_SIM_REFRESH = 21;
 
     private static final LocalLog mLocalLog = new LocalLog(100);
 
@@ -108,11 +109,13 @@ public class UiccCard {
         mCardState = ics.mCardState;
         mPhoneId = phoneId;
         update(c, ci, ics);
+        mCi.registerForIccRefresh(this, EVENT_SIM_REFRESH, phoneId);
     }
 
     public void dispose() {
         synchronized (mLock) {
             if (DBG) log("Disposing card");
+            mCi.unregisterForIccRefresh(this);
             if (mCatService != null) mCatService.dispose();
             for (UiccCardApplication app : mUiccApplications) {
                 if (app != null) {
@@ -169,6 +172,8 @@ public class UiccCard {
 
             sanitizeApplicationIndexesLocked();
 
+            // todo: remove redundant code before check in, otherwise same things will be triggered
+            // twice
             RadioState radioState = mCi.getRadioState();
             if (DBG) log("update: radioState=" + radioState + " mLastRadioState="
                     + mLastRadioState);
@@ -186,6 +191,49 @@ public class UiccCard {
                 }
             }
             mLastRadioState = radioState;
+        }
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+        synchronized (mLock) {
+            AsyncResult ar = (AsyncResult) msg.obj;
+            switch (msg.what) {
+                case EVENT_SIM_REFRESH:
+                    if (DBG) log("Received EVENT_SIM_REFRESH");
+                    onSimRefresh(ar);
+                    break;
+                default:
+                    loge("Unknown Event " + msg.what);
+                    break;
+            }
+        }
+    }
+
+    private void onSimRefresh(AsyncResult ar) {
+        if (ar.exception != null) {
+            loge("onSimRefresh: exception: " + ar.exception);
+            return;
+        }
+
+        IccRefreshResponse resp = (IccRefreshResponse) ar.result;
+        Rlog.d(LOG_TAG, "onSimRefresh: " + resp);
+
+        if (resp.refreshResult != IccRefreshResponse.REFRESH_RESULT_RESET) {
+            Rlog.d(LOG_TAG, "Ignoring non reset refresh: " + resp);
+            return;
+        }
+
+        boolean changed = resetAppWithAid(resp.aid);
+        if (changed) {
+            boolean requirePowerOffOnSimRefreshReset = mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_requireRadioPowerOffOnSimRefreshReset);
+            if (requirePowerOffOnSimRefreshReset) {
+                mCi.setRadioPower(false, null);
+            } else {
+                UiccController.getInstance().getIccCardStatus(mPhoneId);
+            }
+            UiccController.getInstance().notifyIccChangedRegistrants(mPhoneId);
         }
     }
 
