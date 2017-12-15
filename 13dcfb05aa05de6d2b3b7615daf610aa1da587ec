@@ -46,6 +46,30 @@
       "revId": "13dcfb05aa05de6d2b3b7615daf610aa1da587ec",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5884d020_46b185ac",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2718,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2017-12-15T21:26:55Z",
+      "side": 1,
+      "message": "Is the mCellLoc correct if we\u0027re out of service?  If not, it should be cleared.  If so, then this line isn\u0027t needed as we still just care about cell changing.",
+      "parentUuid": "f03e29e1_f5965001",
+      "range": {
+        "startLine": 2718,
+        "startChar": 16,
+        "endLine": 2718,
+        "endChar": 19
+      },
+      "revId": "13dcfb05aa05de6d2b3b7615daf610aa1da587ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
