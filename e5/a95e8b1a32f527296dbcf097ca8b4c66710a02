@@ -1,0 +1,8 @@
+Code-Review+2: Tyler Gunn <tgunn@google.com>
+Verified+1: Brad Ebinger <breadley@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Brad Ebinger <breadley@google.com>
+Submitted-at: Fri, 15 Dec 2017 17:53:14 +0000
+Reviewed-on: https://android-review.googlesource.com/552923
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
