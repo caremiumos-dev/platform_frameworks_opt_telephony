@@ -1,0 +1,8 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Verified+1: Hall Liu <hallliu@google.com>
+Code-Review+2: Hall Liu <hallliu@google.com>
+Submitted-by: Neil Fuller <nfuller@google.com>
+Submitted-at: Fri, 15 Dec 2017 11:28:56 +0000
+Reviewed-on: https://android-review.googlesource.com/568271
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
