@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d55beed9_2331a7e1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-16T00:09:17Z",
+      "side": 1,
+      "message": "Why? This is change in logic from earlier.",
+      "range": {
+        "startLine": 162,
+        "startChar": 46,
+        "endLine": 162,
+        "endChar": 95
+      },
+      "revId": "7d02f375fceaff4d43a87d20c8aad3edec2da97a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb98b55a_501df966",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccProfileTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-16T00:09:17Z",
+      "side": 1,
+      "message": "Why? You should use mSimulatedCommands instead. It is sort of a mock for CommandsInterface.",
+      "range": {
+        "startLine": 87,
+        "startChar": 43,
+        "endLine": 87,
+        "endChar": 46
+      },
+      "revId": "7d02f375fceaff4d43a87d20c8aad3edec2da97a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b55c027a_759ead14",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccProfileTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-16T00:09:17Z",
+      "side": 1,
+      "message": "You can set the responses you want from CommandsInterface by calling set functions on mSimulatedCommands. That is how the rest of the tests are implemented.",
+      "range": {
+        "startLine": 160,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 74
+      },
+      "revId": "7d02f375fceaff4d43a87d20c8aad3edec2da97a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
