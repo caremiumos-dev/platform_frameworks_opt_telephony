@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "c093b6bf_902de650",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-18T22:15:51Z",
+      "side": 1,
+      "message": "There is no any specific reason for this, just personal habit, I usually don\u0027t touch existing things unless I have to, no worries, I am totally fine to keep it this order",
+      "parentUuid": "27e526dc_e81b3323",
+      "range": {
+        "startLine": 86,
+        "startChar": 29,
+        "endLine": 86,
+        "endChar": 54
+      },
+      "revId": "336352964d1d674907d7b067a59ae361b739f123",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "525b479a_23d7fddd",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 2
@@ -140,6 +164,30 @@
       "revId": "336352964d1d674907d7b067a59ae361b739f123",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17e8049c_bc9401e0",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-18T22:15:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b8b220e9_de260359",
+      "range": {
+        "startLine": 99,
+        "startChar": 19,
+        "endLine": 99,
+        "endChar": 21
+      },
+      "revId": "336352964d1d674907d7b067a59ae361b739f123",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

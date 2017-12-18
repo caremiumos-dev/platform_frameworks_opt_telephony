@@ -46,6 +46,30 @@
       "revId": "3a63408bc37cc15650827974fe55e9c658d2f599",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc675e71_a2c6fdea",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-18T22:15:51Z",
+      "side": 0,
+      "message": "But this SIM refresh will result in \"mIccChangedRegistrants.notifyRegistrants()\" which currently is a \"UiccController\" thing, I know you can do \"UiccController.getInstance().notifyIccChangedRegistrants()\" but it still seems strange to me because usually we only provide API to register and unregister, but not notify, right? Adding notify means we may have multiple sources to trigger the notify and cause all the registrants to action, I agree that this sim refresh should only happen when card is present and available, but I don\u0027t see a very strong reason to move this out of controller.",
+      "parentUuid": "4c5087f1_358d78ff",
+      "range": {
+        "startLine": 309,
+        "startChar": 17,
+        "endLine": 309,
+        "endChar": 29
+      },
+      "revId": "3a63408bc37cc15650827974fe55e9c658d2f599",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
