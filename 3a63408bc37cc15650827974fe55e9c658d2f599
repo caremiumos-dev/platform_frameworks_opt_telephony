@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef393590_4ef42ac2",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-18T18:21:41Z",
+      "side": 0,
+      "message": "Any reason to move this into UiccCard? what is the issue if we keep it here?",
+      "range": {
+        "startLine": 309,
+        "startChar": 17,
+        "endLine": 309,
+        "endChar": 29
+      },
+      "revId": "3a63408bc37cc15650827974fe55e9c658d2f599",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

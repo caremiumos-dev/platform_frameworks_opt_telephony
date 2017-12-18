@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee092345_c82016b1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-18T18:21:41Z",
+      "side": 1,
+      "message": "Maybe we should add new events after existing ones without changing existing events?",
+      "range": {
+        "startLine": 86,
+        "startChar": 29,
+        "endLine": 86,
+        "endChar": 54
+      },
+      "revId": "336352964d1d674907d7b067a59ae361b739f123",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "525b479a_23d7fddd",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-18T18:21:41Z",
+      "side": 1,
+      "message": "Is it the plan to only have this \"empty @return\"? Do you want to add // TODO here?",
+      "range": {
+        "startLine": 179,
+        "startChar": 8,
+        "endLine": 179,
+        "endChar": 14
+      },
+      "revId": "336352964d1d674907d7b067a59ae361b739f123",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "642738c5_bbfea348",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-18T18:21:41Z",
+      "side": 1,
+      "message": "This is not a big deal, but some comments have upper case first letter, some don\u0027t",
+      "range": {
+        "startLine": 99,
+        "startChar": 19,
+        "endLine": 99,
+        "endChar": 21
+      },
+      "revId": "336352964d1d674907d7b067a59ae361b739f123",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
