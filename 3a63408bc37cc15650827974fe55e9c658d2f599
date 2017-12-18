@@ -22,6 +22,30 @@
       "revId": "3a63408bc37cc15650827974fe55e9c658d2f599",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c5087f1_358d78ff",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-18T20:39:12Z",
+      "side": 0,
+      "message": "This will work only on a UiccCard that is present, and a UiccCard object that is not null. Any card specific operation that requires the card to be present, I think it makes sense to have it in UiccCard. What do you think? This falls under that category.",
+      "parentUuid": "ef393590_4ef42ac2",
+      "range": {
+        "startLine": 309,
+        "startChar": 17,
+        "endLine": 309,
+        "endChar": 29
+      },
+      "revId": "3a63408bc37cc15650827974fe55e9c658d2f599",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
