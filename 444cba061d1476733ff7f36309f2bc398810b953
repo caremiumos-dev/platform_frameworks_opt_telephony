@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24e49e1e_5fb5a139",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-19T02:15:01Z",
+      "side": 1,
+      "message": "Delete?",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 52
+      },
+      "revId": "444cba061d1476733ff7f36309f2bc398810b953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76ee424d_1f80782f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-19T02:15:01Z",
+      "side": 1,
+      "message": "With my changes included, card state should never be absent. UiccCard will be disposed and set to null when card is removed.\n\nLog an error or better yet for now throw an exception if card state is absent.",
+      "range": {
+        "startLine": 96,
+        "startChar": 12,
+        "endLine": 99,
+        "endChar": 56
+      },
+      "revId": "444cba061d1476733ff7f36309f2bc398810b953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c58d52d1_71b316eb",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-19T02:15:01Z",
+      "side": 1,
+      "message": "Delete? Looks like card doesn\u0027t need a handler for now.",
+      "range": {
+        "startLine": 154,
+        "startChar": 16,
+        "endLine": 158,
+        "endChar": 39
+      },
+      "revId": "444cba061d1476733ff7f36309f2bc398810b953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7cd84f4_090000b8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-19T02:15:01Z",
+      "side": 1,
+      "message": "These should be removed. Will do that in my CL.",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 5
+      },
+      "revId": "444cba061d1476733ff7f36309f2bc398810b953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
