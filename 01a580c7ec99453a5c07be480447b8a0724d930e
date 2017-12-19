@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df8ddce0_7d04336b",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-19T23:56:44Z",
+      "side": 1,
+      "message": "iccid?",
+      "range": {
+        "startLine": 1323,
+        "startChar": 12,
+        "endLine": 1324,
+        "endChar": 47
+      },
+      "revId": "01a580c7ec99453a5c07be480447b8a0724d930e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a970b234_a7cc80c3",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardStatus.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-19T23:56:44Z",
+      "side": 1,
+      "message": "I think its PII, we may want to keep it hidden.",
+      "range": {
+        "startLine": 149,
+        "startChar": 8,
+        "endLine": 149,
+        "endChar": 43
+      },
+      "revId": "01a580c7ec99453a5c07be480447b8a0724d930e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae041d1f_7b35549d",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccSlotStatus.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-19T23:56:44Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we reuse IccCardStatus.CardState?",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 5
+      },
+      "revId": "01a580c7ec99453a5c07be480447b8a0724d930e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2528557_9e56fd73",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccSlotStatus.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-19T23:56:44Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 86,
+        "startChar": 53,
+        "endLine": 86,
+        "endChar": 58
+      },
+      "revId": "01a580c7ec99453a5c07be480447b8a0724d930e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
