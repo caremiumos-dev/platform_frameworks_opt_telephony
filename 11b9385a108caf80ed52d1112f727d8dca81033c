@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dcd6dfe0_4ffd9e1a",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73197466_b034ade9",
+      "range": {
+        "startLine": 1703,
+        "startChar": 15,
+        "endLine": 1703,
+        "endChar": 19
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a376b408_78c1af99",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-09T00:17:43Z",
       "side": 1,
       "message": "nit: you can return early to make un-indent most of the code lines \n\nif (radioProxy \u003d\u003d null) {\n    return;\n}",
+      "range": {
+        "startLine": 505,
+        "startChar": 8,
+        "endLine": 505,
+        "endChar": 33
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "904ebf3a_2ba25dfb",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "It is a hard choice.. The rest of the file is written in this way, should I keep the same style or do it in a smarter way as you suggest?",
+      "parentUuid": "a376b408_78c1af99",
       "range": {
         "startLine": 505,
         "startChar": 8,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9fdc73f1_138a9658",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "92156496_922f317f",
+      "range": {
+        "startLine": 534,
+        "startChar": 8,
+        "endLine": 534,
+        "endChar": 33
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "965aea9a_ae7b12be",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 3
@@ -82,6 +154,30 @@
       "writtenOn": "2017-12-09T00:17:43Z",
       "side": 1,
       "message": "add RIL_REQUEST_ prefix to keep the name consistent with others",
+      "range": {
+        "startLine": 4659,
+        "startChar": 24,
+        "endLine": 4659,
+        "endChar": 39
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "201ba90a_728dcfa8",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4659,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "Good catch! Done",
+      "parentUuid": "965aea9a_ae7b12be",
       "range": {
         "startLine": 4659,
         "startChar": 24,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "09a3cbab_3c281354",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4661,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22c3d68f_d5f3ac89",
+      "range": {
+        "startLine": 4661,
+        "startChar": 24,
+        "endLine": 4661,
+        "endChar": 60
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "313636c4_8b622124",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 3
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "ee96e4d4_4487b961",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5014,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "313636c4_8b622124",
+      "range": {
+        "startLine": 5014,
+        "startChar": 13,
+        "endLine": 5014,
+        "endChar": 53
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90897bd4_7076b216",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 3
@@ -151,6 +295,30 @@
       "writtenOn": "2017-12-09T00:17:43Z",
       "side": 1,
       "message": "I don\u0027t think this is right. The iccidLen probably means the size of the ICCID bytes, which is usually 10. Need to confirm with QC.",
+      "range": {
+        "startLine": 5020,
+        "startChar": 46,
+        "endLine": 5020,
+        "endChar": 54
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bd2acdd_b285b893",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5020,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "Corrected",
+      "parentUuid": "90897bd4_7076b216",
       "range": {
         "startLine": 5020,
         "startChar": 46,
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "5584c9f5_d27a1bf5",
+        "filename": "src/java/com/android/internal/telephony/test/SimulatedCommands.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0477d0c5_f91e5625",
+      "range": {
+        "startLine": 178,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 5
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27b902f8_cdd1abc1",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardStatus.java",
         "patchSetId": 3
@@ -200,6 +392,24 @@
       "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1489adea_e1d242d5",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27b902f8_cdd1abc1",
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -243,6 +453,48 @@
     },
     {
       "key": {
+        "uuid": "cc0d146a_b2819621",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccSlotStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50921cde_ee9bc57f",
+      "range": {
+        "startLine": 41,
+        "startChar": 11,
+        "endLine": 41,
+        "endChar": 19
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0213a84a_601be16a",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccSlotStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bca0db39_62ba9397",
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b9b5872_ed4937ca",
         "filename": "src/java/com/android/internal/telephony/uicc/IccSlotStatus.java",
         "patchSetId": 3
@@ -263,6 +515,30 @@
       "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39dc1d4f_d53450bf",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccSlotStatus.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-19T23:17:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b9b5872_ed4937ca",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 0
+      },
+      "revId": "11b9385a108caf80ed52d1112f727d8dca81033c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
