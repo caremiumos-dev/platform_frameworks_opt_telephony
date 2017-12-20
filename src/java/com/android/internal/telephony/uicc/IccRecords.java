@@ -29,7 +29,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.CommandsInterface;
-import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -48,6 +47,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     // ***** Instance Variables
     protected AtomicBoolean mDestroyed = new AtomicBoolean(false);
+    protected AtomicBoolean mLoaded = new AtomicBoolean(false);
     protected Context mContext;
     protected CommandsInterface mCi;
     protected IccFileHandler mFh;
@@ -244,6 +244,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
         if (mAdnCache != null) {
             mAdnCache.reset();
         }
+        mLoaded.set(false);
     }
 
     public abstract void onReady();
@@ -771,6 +772,15 @@ public abstract class IccRecords extends Handler implements IccConstants {
      * @param number to which CFU is enabled
      */
     public void setVoiceCallForwardingFlag(int line, boolean enable, String number) {
+    }
+
+    /**
+     * Indicates wether the ICC records have been loaded or not
+     *
+     * @return true if the records have been loaded, false otherwise.
+     */
+    public boolean isLoaded() {
+        return mLoaded.get();
     }
 
     /**
