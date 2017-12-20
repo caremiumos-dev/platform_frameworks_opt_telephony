@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55d9a71b_d09c973b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4459,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-12-20T19:26:32Z",
+      "side": 1,
+      "message": "is it possible to get the carrier config values, like we do here, any time SignalStrength is created so we don\u0027t need to save the default values as constants in SignalStrength.java?",
+      "range": {
+        "startLine": 4459,
+        "startChar": 49,
+        "endLine": 4459,
+        "endChar": 69
+      },
+      "revId": "a9f2dc64ef556a59a429b66ec3823eb20d5dfa0b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
