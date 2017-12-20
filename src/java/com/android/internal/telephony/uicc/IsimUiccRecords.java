@@ -28,7 +28,6 @@ import android.os.AsyncResult;
 import android.os.Message;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
-import android.text.TextUtils;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.gsm.SimTlv;
@@ -305,6 +304,7 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
     @Override
     protected void onAllRecordsLoaded() {
        if (DBG) log("record load complete");
+        mLoaded.set(true);
         mRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
     }
 

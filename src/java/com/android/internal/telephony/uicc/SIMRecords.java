@@ -1588,7 +1588,7 @@ public class SIMRecords extends IccRecords {
         }
 
         setVoiceMailByCountry(operator);
-
+        mLoaded.set(true);
         mRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
     }
 

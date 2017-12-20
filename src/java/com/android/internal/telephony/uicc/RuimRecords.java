@@ -794,6 +794,7 @@ public class RuimRecords extends IccRecords {
             setSimLanguage(mEFli, mEFpl);
         }
 
+        mLoaded.set(true);
         mRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
 
         // TODO: The below is hacky since the SubscriptionController may not be ready at this time.
