@@ -22,6 +22,30 @@
       "revId": "54087bfbc368ce0de3e2f875bf2a87a9a85128ec",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aaa0804b_afe6bca3",
+        "filename": "src/java/com/android/internal/telephony/CallFailCause.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2017-12-21T12:43:26Z",
+      "side": 1,
+      "message": "Updated new patch-set. Could you review if no problem? Thanks.",
+      "parentUuid": "2f393817_631e1fcf",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 27
+      },
+      "revId": "54087bfbc368ce0de3e2f875bf2a87a9a85128ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
