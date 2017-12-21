@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71a72a7d_2759623e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccRecordsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-21T20:44:13Z",
+      "side": 1,
+      "message": "Why is this removed?",
+      "revId": "8798cbcca8744d6a35ee9732da04b0d6f809b4a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
