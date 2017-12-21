@@ -38,6 +38,17 @@ public class SuppServiceNotification {
     /** List of forwarded numbers, if any */
     public String[] history;
 
+    /**
+     * Notification type is MO.  This means the {@link #code} will be a code such as
+     * {@link #MO_CODE_CALL_FORWARDED}.
+     */
+    static public final int NOTIFICATION_TYPE_MO = 0;
+    /**
+     * Notification type is MT.  This means the {@link #code} will be a code such as
+     * {@link #MT_CODE_CALL_ON_HOLD}.
+     */
+    static public final int NOTIFICATION_TYPE_MT = 1;
+
     static public final int MO_CODE_UNCONDITIONAL_CF_ACTIVE     = 0;
     static public final int MO_CODE_SOME_CF_ACTIVE              = 1;
     static public final int MO_CODE_CALL_FORWARDED              = 2;
