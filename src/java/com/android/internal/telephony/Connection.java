@@ -516,7 +516,7 @@ public abstract class Connection {
         mUserData = null;
     }
 
-    public final void addPostDialListener(PostDialListener listener) {
+    public void addPostDialListener(PostDialListener listener) {
         if (!mPostDialListeners.contains(listener)) {
             mPostDialListeners.add(listener);
         }
@@ -660,7 +660,7 @@ public abstract class Connection {
      *
      * @param listener A listener.
      */
-    public final void addListener(Listener listener) {
+    public void addListener(Listener listener) {
         mListeners.add(listener);
     }
 
