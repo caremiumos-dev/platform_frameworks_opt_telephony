@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7623d2f7_34aec870",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/ApnSettingTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-12-22T22:26:05Z",
+      "side": 1,
+      "message": "Should be V4 since it has an network type bitmask.\n\nAnother problem is that we don\u0027t even use this in ApnSetting.fromString() to enforce the correct format of each version. An ApnSettingV3 string with network type bitmask will work but it really shouldn\u0027t.",
+      "range": {
+        "startLine": 190,
+        "startChar": 18,
+        "endLine": 190,
+        "endChar": 30
+      },
+      "revId": "a5f6d28cc500851dc25d4ed57a8d381a331de972",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
