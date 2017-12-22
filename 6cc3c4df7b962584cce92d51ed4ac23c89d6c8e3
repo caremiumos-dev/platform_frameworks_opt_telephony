@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0a52773_858a86cd",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-12-22T21:39:42Z",
+      "side": 1,
+      "message": "Adding @Deprecated?",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 35
+      },
+      "revId": "6cc3c4df7b962584cce92d51ed4ac23c89d6c8e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1306ecaf_e82fc9f5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-12-22T21:39:42Z",
+      "side": 1,
+      "message": "4?",
+      "range": {
+        "startLine": 386,
+        "startChar": 31,
+        "endLine": 386,
+        "endChar": 32
+      },
+      "revId": "6cc3c4df7b962584cce92d51ed4ac23c89d6c8e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
