@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22816915_6dc4b90a",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-22T19:08:12Z",
+      "side": 1,
+      "message": "Change to V1_2",
+      "range": {
+        "startLine": 84,
+        "startChar": 30,
+        "endLine": 84,
+        "endChar": 34
+      },
+      "revId": "d7e453ef0a85a3d0ff805f9ea0cd66b707b8341e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "663a172b_87b8e0a5",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-22T19:08:12Z",
+      "side": 1,
+      "message": "Change to V1_2",
+      "range": {
+        "startLine": 36,
+        "startChar": 30,
+        "endLine": 36,
+        "endChar": 34
+      },
+      "revId": "d7e453ef0a85a3d0ff805f9ea0cd66b707b8341e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
