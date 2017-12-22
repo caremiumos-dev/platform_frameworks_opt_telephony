@@ -22,6 +22,30 @@
       "revId": "3caa000d2f0643c50bf74d85a3e6672e484e25e1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b3460d1_ecb71b55",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2017-12-22T19:40:20Z",
+      "side": 1,
+      "message": "If the cardState does not change to/from ABSENT, this branch will be executed. And if old state was absent, and new state is also absent, mUiccCard will be null here.",
+      "parentUuid": "e3441651_99117f7d",
+      "range": {
+        "startLine": 118,
+        "startChar": 20,
+        "endLine": 118,
+        "endChar": 29
+      },
+      "revId": "3caa000d2f0643c50bf74d85a3e6672e484e25e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
