@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3441651_99117f7d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2017-12-22T17:44:10Z",
+      "side": 1,
+      "message": "Is it possible that mUiccCard may be null in this Branch? If it is not card added or card removed, the mUiccCard is expected to be non-null right? Should we log error in that case?",
+      "range": {
+        "startLine": 118,
+        "startChar": 20,
+        "endLine": 118,
+        "endChar": 29
+      },
+      "revId": "3caa000d2f0643c50bf74d85a3e6672e484e25e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
