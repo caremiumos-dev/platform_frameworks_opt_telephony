@@ -16,6 +16,24 @@
       "revId": "8798cbcca8744d6a35ee9732da04b0d6f809b4a2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63ed4768_88c98f69",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccRecordsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2017-12-22T07:43:00Z",
+      "side": 1,
+      "message": "Below the test case testDisposeCallsUnregisterForIccRefresh() already disposing the object.\n\nWhen the dispose called from here second-time NPE observed hence removed it.",
+      "parentUuid": "71a72a7d_2759623e",
+      "revId": "8798cbcca8744d6a35ee9732da04b0d6f809b4a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
