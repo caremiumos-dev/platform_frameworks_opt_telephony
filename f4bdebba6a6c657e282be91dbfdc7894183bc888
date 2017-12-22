@@ -45,6 +45,30 @@
       "revId": "f4bdebba6a6c657e282be91dbfdc7894183bc888",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da44fdb7_64cb6c1e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1135337
+      },
+      "writtenOn": "2017-12-22T18:50:48Z",
+      "side": 1,
+      "message": "We are trying to simulate the below behavior.\n\nTest Procedure:\n1.            UE1 dials a call to UE2.\n2.            UE3 dials a call to UE1.\n3.            UE1 Accepts UE3 Call and UE1 hold call with UE 2 ( This fails)\n4.            Call with UE3 is continue to ring and call is ended after network timeout\n5.            UE 3 dials call to UE 1 again\n6.            UE 1 accepts call with UE 3. \n\nExpected bahavior:\n1. Call with UE2 is onhold and call with UE3 is active.\nActual behavior:\n1. Call with UE3 is active. However call with UE2 is disconnected.\n\nHowever it seems like it is difficult to simulate the complete scenario with UT. Test written here is to ensure that mSwitchingFgandBgCalls is not set to false after the hold failure.",
+      "parentUuid": "a6f25d2a_26340812",
+      "range": {
+        "startLine": 551,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 5
+      },
+      "revId": "f4bdebba6a6c657e282be91dbfdc7894183bc888",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
