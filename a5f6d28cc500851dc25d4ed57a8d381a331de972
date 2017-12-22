@@ -46,6 +46,30 @@
       "revId": "a5f6d28cc500851dc25d4ed57a8d381a331de972",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc9c6681_4e733bf3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/ApnSettingTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2017-12-22T23:29:50Z",
+      "side": 1,
+      "message": "V3 should not have network type bitmask. Ideally a string starting with ApnSettingV3 and network type bitmask should fail to build ApnSetting in fromString() method with the error \"incorrect format\". But with today\u0027s implementation it won\u0027t fail.",
+      "parentUuid": "3e6f649c_5c07919e",
+      "range": {
+        "startLine": 190,
+        "startChar": 18,
+        "endLine": 190,
+        "endChar": 30
+      },
+      "revId": "a5f6d28cc500851dc25d4ed57a8d381a331de972",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
