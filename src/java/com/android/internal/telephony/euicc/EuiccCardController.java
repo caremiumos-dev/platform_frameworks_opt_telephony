@@ -1,0 +1,178 @@
+/*
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.internal.telephony.euicc;
+
+import android.app.AppOpsManager;
+import android.content.Context;
+import android.content.pm.ComponentInfo;
+import android.os.Binder;
+import android.os.ServiceManager;
+import android.telephony.euicc.EuiccCardManager;
+import android.text.TextUtils;
+import android.util.Log;
+
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+
+/** Backing implementation of {@link EuiccCardManager}. */
+public class EuiccCardController extends IEuiccCardController.Stub {
+
+    private static final String TAG = "EuiccCardController";
+
+    private final Context mContext;
+    private AppOpsManager mAppOps;
+    private String mCallingPackage;
+    private ComponentInfo mBestComponent;
+    private static EuiccCardController sInstance;
+
+    /** Initialize the instance. Should only be called once. */
+    public static EuiccCardController init(Context context) {
+        synchronized (EuiccCardController.class) {
+            if (sInstance == null) {
+                sInstance = new EuiccCardController(context);
+            } else {
+                Log.wtf(TAG, "init() called multiple times! sInstance = " + sInstance);
+            }
+        }
+        return sInstance;
+    }
+
+    /** Get an instance. Assumes one has already been initialized with {@link #init}. */
+    public static EuiccCardController get() {
+        if (sInstance == null) {
+            synchronized (EuiccCardController.class) {
+                if (sInstance == null) {
+                    throw new IllegalStateException("get() called before init()");
+                }
+            }
+        }
+        return sInstance;
+    }
+
+    private EuiccCardController(Context context) {
+        mContext = context;
+        mAppOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+
+        ServiceManager.addService("euicc_card_controller", this);
+    }
+
+    private void checkCallingPackage(String callingPackage) {
+        // Check the caller is LPA.
+        mAppOps.checkPackage(Binder.getCallingUid(), callingPackage);
+        mCallingPackage = callingPackage;
+        mBestComponent = EuiccConnector.findBestComponent(mContext.getPackageManager());
+        if (mBestComponent == null
+                || !TextUtils.equals(mCallingPackage, mBestComponent.packageName)) {
+            throw new SecurityException("The calling package can only be LPA.");
+        }
+    }
+
+    @Override
+    public void getAllProfiles(String callingPackage, IGetAllProfilesCallback getProfilesCb) {
+        checkCallingPackage(callingPackage);
+
+        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+    }
+
+    @Override
+    public void getProfile(String callingPackage, String iccid, IGetProfileCallback callback) {
+        checkCallingPackage(callingPackage);
+
+        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+    }
+
+    @Override
+    public void disableProfile(String callingPackage, String iccid, boolean refresh,
+            IDisableProfileCallback callback) {
+        checkCallingPackage(callingPackage);
+
+        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+    }
+
+    @Override
+    public void switchToProfile(String callingPackage, String iccid, boolean refresh,
+            ISwitchToProfileCallback callback) {
+        checkCallingPackage(callingPackage);
+
+        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+    }
+
+    @Override
+    public String getEid() {
+        // TODO(b/38206971): Wait until the eid is ready and return.
+        return null;
+    }
+
+    @Override
+    public void setNickname(String callingPackage, String iccid, String nickname,
+            ISetNicknameCallback callback) {
+        checkCallingPackage(callingPackage);
+
+        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+    }
+
+    @Override
+    public  void deleteProfile(String callingPackage, String iccid,
+            IDeleteProfileCallback callback) {
+        checkCallingPackage(callingPackage);
+
+        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+    }
+
+    @Override
+    public void resetMemory(String callingPackage, int options, IResetMemoryCallback callback) {
+        checkCallingPackage(callingPackage);
+
+        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+    }
+
+    @Override
+    public void getDefaultSmdpAddress(String callingPackage,
+            IGetDefaultSmdpAddressCallback callback) {
+        checkCallingPackage(callingPackage);
+
+        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+    }
+
+    @Override
+    public void getSmdsAddress(String callingPackage, IGetSmdsAddressCallback callback) {
+        checkCallingPackage(callingPackage);
+
+        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+    }
+
+    @Override
+    public void setDefaultSmdpAddress(String callingPackage, String address,
+            ISetDefaultSmdpAddressCallback callback) {
+        checkCallingPackage(callingPackage);
+
+        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+    }
+
+    @Override
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.DUMP, "Requires DUMP");
+        final long token = Binder.clearCallingIdentity();
+
+        super.dump(fd, pw, args);
+        // TODO(b/38206971): dump more information.
+        pw.println("mCallingPackage=" + mCallingPackage);
+        pw.println("mBestComponent=" + mBestComponent);
+
+        Binder.restoreCallingIdentity(token);
+    }
+}
