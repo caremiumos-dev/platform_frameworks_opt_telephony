@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fb715257_43656210",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-22T17:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7af9ec4a_7f76b46b",
+      "range": {
+        "startLine": 254,
+        "startChar": 38,
+        "endLine": 254,
+        "endChar": 58
+      },
+      "revId": "5f8aad93fdd0228271ffa3ad4cbac2bc6a735545",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3bfd06ce_019c1274",
         "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-21T02:23:52Z",
       "side": 1,
       "message": "if both are specified, bearerBitmask is ignored? Can you add a comment for that?",
+      "range": {
+        "startLine": 341,
+        "startChar": 12,
+        "endLine": 341,
+        "endChar": 30
+      },
+      "revId": "5f8aad93fdd0228271ffa3ad4cbac2bc6a735545",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3b60d80_b158d75a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSetting.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-22T17:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bfd06ce_019c1274",
       "range": {
         "startLine": 341,
         "startChar": 12,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "fc3222e9_8ab3acfb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-22T17:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e88a1ee1_b30a469a",
+      "range": {
+        "startLine": 1775,
+        "startChar": 12,
+        "endLine": 1775,
+        "endChar": 89
+      },
+      "revId": "5f8aad93fdd0228271ffa3ad4cbac2bc6a735545",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3a14976_fe09d6b4",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 6
@@ -82,6 +154,30 @@
       "writtenOn": "2017-12-21T02:23:52Z",
       "side": 1,
       "message": "Is this needed? Aren\u0027t you already making sure that if networkTypeBitmask is 0, bearerBitmask will be 0 as well?",
+      "range": {
+        "startLine": 1855,
+        "startChar": 8,
+        "endLine": 1855,
+        "endChar": 36
+      },
+      "revId": "5f8aad93fdd0228271ffa3ad4cbac2bc6a735545",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ce64c77_2582e51a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-22T17:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3a14976_fe09d6b4",
       "range": {
         "startLine": 1855,
         "startChar": 8,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "39f25500_7dbf7fe6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3533,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-22T17:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a1ec2ac_1ebb4fbf",
+      "range": {
+        "startLine": 3533,
+        "startChar": 20,
+        "endLine": 3533,
+        "endChar": 87
+      },
+      "revId": "5f8aad93fdd0228271ffa3ad4cbac2bc6a735545",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f45e7ebf_eea75c61",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 6
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "39456a7f_73eabdb0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3554,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-22T17:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f45e7ebf_eea75c61",
+      "range": {
+        "startLine": 3554,
+        "startChar": 24,
+        "endLine": 3554,
+        "endChar": 81
+      },
+      "revId": "5f8aad93fdd0228271ffa3ad4cbac2bc6a735545",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5ec4030c_0ea93d82",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 6
@@ -151,6 +295,24 @@
       "writtenOn": "2017-12-21T02:23:52Z",
       "side": 1,
       "message": "I am assuming in ApnSetting you always make sure that bearer bitmask and network type bitmask are in sync. And if that\u0027s the case you don\u0027t need these checks in this file or any other place you use ApnSetting.",
+      "revId": "5f8aad93fdd0228271ffa3ad4cbac2bc6a735545",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27060a12_9dc7969f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 4864,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2017-12-22T17:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ec4030c_0ea93d82",
       "revId": "5f8aad93fdd0228271ffa3ad4cbac2bc6a735545",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
