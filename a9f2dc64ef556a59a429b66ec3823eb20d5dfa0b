@@ -22,6 +22,30 @@
       "revId": "a9f2dc64ef556a59a429b66ec3823eb20d5dfa0b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe822f01_607633ff",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4459,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-12-25T08:59:44Z",
+      "side": 1,
+      "message": "I think it is a little difficult since SignalStrength is created in RIL#convertHalSignalStrength.\n\nI also don\u0027t think it is good that SignalStrength has the default values as constants. So, I will refactor to get it from CarrierConfigManager#getDefaultConfig in it.\n\nI also considered to get CarrierConfig value in SignalStrength but it doesn\u0027t have subId. So, ServiceStateTracker needs to tell it subId. I don\u0027t think it is good to set subId to SignalStrength since it is a little strange to save subId in SignalStrength.",
+      "parentUuid": "55d9a71b_d09c973b",
+      "range": {
+        "startLine": 4459,
+        "startChar": 49,
+        "endLine": 4459,
+        "endChar": 69
+      },
+      "revId": "a9f2dc64ef556a59a429b66ec3823eb20d5dfa0b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
