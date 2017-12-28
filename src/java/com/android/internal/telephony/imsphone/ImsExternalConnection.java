@@ -129,6 +129,11 @@ public class ImsExternalConnection extends Connection {
     }
 
     @Override
+    public void deflect(String number) throws CallStateException {
+        // No-op - Deflect is not supported for external calls.
+    }
+
+    @Override
     public void separate() throws CallStateException {
         // No-op - Separate is not supported for external calls.
     }
