@@ -355,6 +355,11 @@ public class GsmCdmaConnection extends Connection {
     }
 
     @Override
+    public void deflect(String number) throws CallStateException {
+        // No-op - Deflect is not supported.
+    }
+
+    @Override
     public void separate() throws CallStateException {
         if (!mDisconnected) {
             mOwner.separate(this);

@@ -1006,6 +1006,11 @@ public class SipPhone extends SipPhoneBase {
             }
         }
 
+    @Override
+    public void deflect(String number) throws CallStateException {
+        // No-op - Deflect is not supported.
+    }
+
         private void log(String s) {
             Rlog.d(SCN_TAG, s);
         }
