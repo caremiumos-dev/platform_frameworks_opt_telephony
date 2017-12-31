@@ -16,9 +16,8 @@
 
 package com.android.internal.telephony;
 
-import static org.junit.Assert.assertEquals;
-
 import android.os.Parcel;
+import android.telephony.CellIdentity;
 import android.telephony.CellIdentityLte;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -182,6 +181,7 @@ public class CellIdentityLteTest extends AndroidTestCase {
         CellIdentityLte ci = new CellIdentityLte(CI, PCI, TAC, EARFCN, null, null, null, null);
 
         Parcel p = Parcel.obtain();
+        p.writeInt(CellIdentity.TYPE_LTE);
         p.writeInt(CI);
         p.writeInt(PCI);
         p.writeInt(TAC);
@@ -201,6 +201,7 @@ public class CellIdentityLteTest extends AndroidTestCase {
         CellIdentityLte ci = new CellIdentityLte(CI, PCI, TAC, EARFCN, null, null, null, null);
 
         Parcel p = Parcel.obtain();
+        p.writeInt(CellIdentity.TYPE_LTE);
         p.writeInt(CI);
         p.writeInt(PCI);
         p.writeInt(TAC);
