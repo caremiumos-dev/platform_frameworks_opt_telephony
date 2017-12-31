@@ -16,11 +16,8 @@
 
 package com.android.internal.telephony;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import android.os.Parcel;
+import android.telephony.CellIdentity;
 import android.telephony.CellIdentityGsm;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -186,6 +183,7 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         CellIdentityGsm ci = new CellIdentityGsm(LAC, CID, ARFCN, BSIC, null, null, null, null);
 
         Parcel p = Parcel.obtain();
+        p.writeInt(CellIdentityGsm.TYPE_GSM);
         p.writeInt(LAC);
         p.writeInt(CID);
         p.writeInt(ARFCN);
@@ -205,6 +203,7 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         CellIdentityGsm ci = new CellIdentityGsm(LAC, CID, ARFCN, BSIC, null, null, null, null);
 
         Parcel p = Parcel.obtain();
+        p.writeInt(CellIdentity.TYPE_GSM);
         p.writeInt(LAC);
         p.writeInt(CID);
         p.writeInt(ARFCN);

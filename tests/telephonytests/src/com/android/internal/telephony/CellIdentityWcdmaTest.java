@@ -16,9 +16,8 @@
 
 package com.android.internal.telephony;
 
-import static org.junit.Assert.assertEquals;
-
 import android.os.Parcel;
+import android.telephony.CellIdentity;
 import android.telephony.CellIdentityWcdma;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -181,6 +180,7 @@ public class CellIdentityWcdmaTest extends AndroidTestCase {
         CellIdentityWcdma ci = new CellIdentityWcdma(LAC, CID, PSC, UARFCN, null, null, null, null);
 
         Parcel p = Parcel.obtain();
+        p.writeInt(CellIdentity.TYPE_WCDMA);
         p.writeInt(LAC);
         p.writeInt(CID);
         p.writeInt(PSC);
@@ -200,6 +200,7 @@ public class CellIdentityWcdmaTest extends AndroidTestCase {
         CellIdentityWcdma ci = new CellIdentityWcdma(LAC, CID, PSC, UARFCN, null, null, null, null);
 
         Parcel p = Parcel.obtain();
+        p.writeInt(CellIdentity.TYPE_WCDMA);
         p.writeInt(LAC);
         p.writeInt(CID);
         p.writeInt(PSC);
