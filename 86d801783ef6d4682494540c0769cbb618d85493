@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6462ed8e_5e4da95b",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-03T19:50:07Z",
+      "side": 1,
+      "message": "Remove the todo?\nBtw when using this iccid we always need to check for null as version 1.2 may not be supported and in that case it won\u0027t be available here.",
+      "range": {
+        "startLine": 85,
+        "startChar": 15,
+        "endLine": 85,
+        "endChar": 19
+      },
+      "revId": "86d801783ef6d4682494540c0769cbb618d85493",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5306d952_62219e23",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-03T19:50:07Z",
+      "side": 1,
+      "message": "delete",
+      "range": {
+        "startLine": 136,
+        "startChar": 4,
+        "endLine": 155,
+        "endChar": 0
+      },
+      "revId": "86d801783ef6d4682494540c0769cbb618d85493",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
