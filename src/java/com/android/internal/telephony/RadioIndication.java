@@ -243,6 +243,14 @@ public class RadioIndication extends IRadioIndication.Stub {
       // TODO(b/70638175) Implement method.
     }
 
+    /**
+     * Indicates current radio configuration.
+     */
+    public void currentRadioConfig(int indicationType,
+                                   android.hardware.radio.V1_2.RadioConfig radioConfig) {
+      // TODO(b/70638175) Implement method.
+    }
+
     public void dataCallListChanged(int indicationType, ArrayList<SetupDataCallResult> dcList) {
         mRil.processIndication(indicationType);
 
