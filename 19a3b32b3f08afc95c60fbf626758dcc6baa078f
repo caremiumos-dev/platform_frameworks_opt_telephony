@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e25f12c_6e070983",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-03T19:36:23Z",
+      "side": 0,
+      "message": "Those two events are not used anymore?",
+      "range": {
+        "startLine": 85,
+        "startChar": 29,
+        "endLine": 85,
+        "endChar": 57
+      },
+      "revId": "19a3b32b3f08afc95c60fbf626758dcc6baa078f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
