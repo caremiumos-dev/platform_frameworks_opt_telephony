@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97f604b0_ec901a11",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-03T22:20:12Z",
+      "side": 1,
+      "message": "I know this violates the style checker, but I\u0027d leave the wildcard. This is uuuuugly.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 66
+      },
+      "revId": "40b6e6eb3af7eb45f950493f3e5e2bbb30c64001",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
