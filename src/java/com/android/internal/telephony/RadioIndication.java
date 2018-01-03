@@ -235,6 +235,14 @@ public class RadioIndication extends IRadioIndication.Stub {
         }
     }
 
+    /**
+     * Indicates current link capacity estimate.
+     */
+    public void currentLinkCapacityEstimate(int indicationType,
+                                            android.hardware.radio.V1_2.LinkCapacityEstimate lce) {
+      // no-op
+    }
+
     public void dataCallListChanged(int indicationType, ArrayList<SetupDataCallResult> dcList) {
         mRil.processIndication(indicationType);
 
