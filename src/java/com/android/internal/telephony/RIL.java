@@ -16,7 +16,209 @@
 
 package com.android.internal.telephony;
 
-import static com.android.internal.telephony.RILConstants.*;
+import static com.android.internal.telephony.RILConstants.RADIO_NOT_AVAILABLE;
+import static com.android.internal.telephony.RILConstants.REQUEST_NOT_SUPPORTED;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ALLOW_DATA;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ANSWER;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_BASEBAND_VERSION;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CANCEL_USSD;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_BROADCAST_ACTIVATION;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_BURST_DTMF;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_DELETE_SMS_ON_RUIM;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_FLASH;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_GET_BROADCAST_CONFIG;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_GET_SUBSCRIPTION_SOURCE;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_CDMA_QUERY_PREFERRED_VOICE_PRIVACY_MODE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_QUERY_ROAMING_PREFERENCE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_SEND_SMS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_SET_BROADCAST_CONFIG;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_CDMA_SET_PREFERRED_VOICE_PRIVACY_MODE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_SET_ROAMING_PREFERENCE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_SET_SUBSCRIPTION_SOURCE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_SMS_ACKNOWLEDGE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_SUBSCRIPTION;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_VALIDATE_AND_WRITE_AKEY;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_WRITE_SMS_TO_RUIM;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CHANGE_BARRING_PASSWORD;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CHANGE_SIM_PIN;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CHANGE_SIM_PIN2;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CONFERENCE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DATA_CALL_LIST;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DATA_REGISTRATION_STATE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DEACTIVATE_DATA_CALL;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DELETE_SMS_ON_SIM;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DEVICE_IDENTITY;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DIAL;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DTMF;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DTMF_START;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DTMF_STOP;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_ENTER_NETWORK_DEPERSONALIZATION;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ENTER_SIM_PIN;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ENTER_SIM_PIN2;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ENTER_SIM_PUK;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ENTER_SIM_PUK2;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_EXIT_EMERGENCY_CALLBACK_MODE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_EXPLICIT_CALL_TRANSFER;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_ACTIVITY_INFO;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_ALLOWED_CARRIERS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_CELL_INFO_LIST;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_CLIR;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_CURRENT_CALLS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_HARDWARE_CONFIG;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_IMEI;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_IMEISV;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_IMSI;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_MUTE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_NEIGHBORING_CELL_IDS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_PREFERRED_NETWORK_TYPE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_RADIO_CAPABILITY;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_SIM_STATUS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_SMSC_ADDRESS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GSM_BROADCAST_ACTIVATION;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GSM_GET_BROADCAST_CONFIG;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GSM_SET_BROADCAST_CONFIG;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_HANGUP;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_HANGUP_FOREGROUND_RESUME_BACKGROUND;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_HANGUP_WAITING_OR_BACKGROUND;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_IMS_REGISTRATION_STATE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_IMS_SEND_SMS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ISIM_AUTHENTICATION;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_LAST_CALL_FAIL_CAUSE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_LAST_DATA_CALL_FAIL_CAUSE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_NV_READ_ITEM;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_NV_RESET_CONFIG;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_NV_WRITE_CDMA_PRL;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_NV_WRITE_ITEM;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_OPERATOR;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_PULL_LCEDATA;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_QUERY_AVAILABLE_BAND_MODE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_QUERY_AVAILABLE_NETWORKS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_QUERY_CALL_FORWARD_STATUS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_QUERY_CALL_WAITING;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_QUERY_CLIP;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_QUERY_FACILITY_LOCK;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_QUERY_NETWORK_SELECTION_MODE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_QUERY_TTY_MODE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_RADIO_POWER;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_REPORT_SMS_MEMORY_STATUS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_RESET_RADIO;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SCREEN_STATE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SEND_DEVICE_STATE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SEND_SMS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SEND_SMS_EXPECT_MORE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SEND_USSD;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SEPARATE_CONNECTION;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SETUP_DATA_CALL;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_ALLOWED_CARRIERS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_BAND_MODE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_CALL_FORWARD;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_CALL_WAITING;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_SET_CARRIER_INFO_IMSI_ENCRYPTION;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_CLIR;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_DATA_PROFILE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_FACILITY_LOCK;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_INITIAL_ATTACH_APN;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_LOCATION_UPDATES;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_MUTE;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_SET_NETWORK_SELECTION_AUTOMATIC;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_NETWORK_SELECTION_MANUAL;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_RADIO_CAPABILITY;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_SIM_CARD_POWER;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_SMSC_ADDRESS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_SUPP_SVC_NOTIFICATION;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_TTY_MODE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_UICC_SUBSCRIPTION;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_SET_UNSOLICITED_RESPONSE_FILTER;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_UNSOL_CELL_INFO_LIST_RATE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SHUTDOWN;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIGNAL_STRENGTH;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIM_AUTHENTICATION;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIM_CLOSE_CHANNEL;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIM_IO;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIM_OPEN_CHANNEL;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIM_TRANSMIT_APDU_BASIC;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SIM_TRANSMIT_APDU_CHANNEL;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SMS_ACKNOWLEDGE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_START_LCE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_START_NETWORK_SCAN;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_STK_GET_PROFILE;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_STK_HANDLE_CALL_SETUP_REQUESTED_FROM_SIM;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_STK_SEND_ENVELOPE_COMMAND;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_STK_SEND_ENVELOPE_WITH_STATUS;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_STK_SEND_TERMINAL_RESPONSE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_STK_SET_PROFILE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_STOP_LCE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_STOP_NETWORK_SCAN;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_SWITCH_WAITING_OR_HOLDING_AND_ACTIVE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_UDUB;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_VOICE_RADIO_TECH;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_VOICE_REGISTRATION_STATE;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_WRITE_SMS_TO_SIM;
+import static com.android.internal.telephony.RILConstants.RIL_RESPONSE_ACKNOWLEDGEMENT;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CALL_RING;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CARRIER_INFO_IMSI_ENCRYPTION;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CDMA_CALL_WAITING;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CDMA_INFO_REC;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CDMA_OTA_PROVISION_STATUS;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CDMA_RUIM_SMS_STORAGE_FULL;
+import static com.android.internal.telephony.RILConstants
+        .RIL_UNSOL_CDMA_SUBSCRIPTION_SOURCE_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CELL_INFO_LIST;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_DATA_CALL_LIST_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_ENTER_EMERGENCY_CALLBACK_MODE;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_HARDWARE_CONFIG_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_LCEDATA_RECV;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_MODEM_RESTART;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_NETWORK_SCAN_RESULT;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_NITZ_TIME_RECEIVED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_ON_SS;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_ON_USSD;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_ON_USSD_REQUEST;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_PCO_DATA;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RADIO_CAPABILITY;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESEND_INCALL_MUTE;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_CALL_STATE_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_CDMA_NEW_SMS;
+import static com.android.internal.telephony.RILConstants
+        .RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_NETWORK_STATE_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_NEW_BROADCAST_SMS;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_NEW_SMS;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_NEW_SMS_ON_SIM;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_NEW_SMS_STATUS_REPORT;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_SIM_STATUS_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESTRICTED_STATE_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RIL_CONNECTED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RINGBACK_TONE;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_SIGNAL_STRENGTH;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_SIM_REFRESH;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_SIM_SMS_STORAGE_FULL;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_SRVCC_STATE_NOTIFY;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_STK_CALL_SETUP;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_STK_CC_ALPHA_NOTIFY;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_STK_EVENT_NOTIFY;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_STK_PROACTIVE_COMMAND;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_STK_SESSION_END;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_SUPP_SVC_NOTIFICATION;
+import static com.android.internal.telephony.RILConstants
+        .RIL_UNSOL_UICC_SUBSCRIPTION_STATUS_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_VOICE_RADIO_TECH_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOl_CDMA_PRL_CHANGED;
 import static com.android.internal.util.Preconditions.checkNotNull;
 
 import android.content.Context;
@@ -72,11 +274,11 @@ import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.ModemActivityInfo;
 import android.telephony.NeighboringCellInfo;
+import android.telephony.NetworkConstants.RadioAccessNetwork;
 import android.telephony.NetworkScanRequest;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.RadioAccessFamily;
 import android.telephony.RadioAccessSpecifier;
-import android.telephony.RadioNetworkConstants.RadioAccessNetworks;
 import android.telephony.Rlog;
 import android.telephony.SignalStrength;
 import android.telephony.SmsManager;
@@ -1750,13 +1952,13 @@ public class RIL extends BaseCommands implements CommandsInterface {
         rasInHalFormat.radioAccessNetwork = ras.getRadioAccessNetwork();
         List<Integer> bands = null;
         switch (ras.getRadioAccessNetwork()) {
-            case RadioAccessNetworks.GERAN:
+            case RadioAccessNetwork.GERAN:
                 bands = rasInHalFormat.geranBands;
                 break;
-            case RadioAccessNetworks.UTRAN:
+            case RadioAccessNetwork.UTRAN:
                 bands = rasInHalFormat.utranBands;
                 break;
-            case RadioAccessNetworks.EUTRAN:
+            case RadioAccessNetwork.EUTRAN:
                 bands = rasInHalFormat.eutranBands;
                 break;
             default:
