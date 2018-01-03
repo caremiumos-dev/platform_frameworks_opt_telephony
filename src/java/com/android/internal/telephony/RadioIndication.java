@@ -653,6 +653,14 @@ public class RadioIndication extends IRadioIndication.Stub {
     }
 
     /**
+     * Indicates cell information known to radio.
+     */
+    public void cellInfoList_1_2(int indicationType,
+                             ArrayList<android.hardware.radio.V1_2.CellInfo> records) {
+      // no-op
+    }
+
+    /**
      * Indicates a change of the ICC slot status
      * @param indicationType RadioIndicationType
      * @param slotsStatus ICC slot status
