@@ -46,6 +46,30 @@
       "revId": "19a3b32b3f08afc95c60fbf626758dcc6baa078f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bbdbde10_001788c1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-01-04T19:19:41Z",
+      "side": 0,
+      "message": "Yep I mean get",
+      "parentUuid": "cd6e8572_b166c620",
+      "range": {
+        "startLine": 625,
+        "startChar": 0,
+        "endLine": 637,
+        "endChar": 25
+      },
+      "revId": "19a3b32b3f08afc95c60fbf626758dcc6baa078f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
