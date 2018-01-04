@@ -464,8 +464,8 @@ public final class NetworkScanRequestTracker {
         //   3. The live scan is not requested by system process
         private synchronized boolean interruptLiveScan(NetworkScanRequestInfo nsri) {
             if (mLiveRequestInfo != null && mPendingRequestInfo == null
-                    && nsri.mUid == Process.SYSTEM_UID
-                            && mLiveRequestInfo.mUid != Process.SYSTEM_UID) {
+                    && nsri.mUid == Process.PHONE_UID
+                            && mLiveRequestInfo.mUid != Process.PHONE_UID) {
                 doInterruptScan(mLiveRequestInfo.mScanId);
                 mPendingRequestInfo = nsri;
                 notifyMessenger(mLiveRequestInfo, TelephonyScanManager.CALLBACK_SCAN_ERROR,
