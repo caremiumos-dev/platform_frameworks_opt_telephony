@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98497ee4_02427e45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-01-04T17:23:11Z",
+      "side": 1,
+      "message": "If this change was merged in ag/3043345 then it should be\n\nMerged-In: Ia69f72eac147e2d2eeeea4cf042943996033f9b1",
+      "range": {
+        "startLine": 12,
+        "startChar": 11,
+        "endLine": 12,
+        "endChar": 52
+      },
+      "revId": "db483a7d83e5a5f557e58841f2e90612d478f6d4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
