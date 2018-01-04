@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b57531a4_4fdd4f08",
+        "filename": "src/java/com/android/internal/telephony/sip/SipPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2018-01-04T03:36:16Z",
+      "side": 1,
+      "message": "Fix indentation",
+      "range": {
+        "startLine": 1009,
+        "startChar": 4,
+        "endLine": 1012,
+        "endChar": 5
+      },
+      "revId": "1df729af346cd10482c342e0e60e499680f063d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
