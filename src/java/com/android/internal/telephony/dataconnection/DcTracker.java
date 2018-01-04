@@ -821,6 +821,8 @@ public class DcTracker extends Handler {
                     }
                 }
 
+                mPhone.notifyCellularDataStateChanged(enabled);
+
                 // TODO: We should register for DataEnabledSetting's data enabled/disabled event and
                 // handle the rest from there.
                 if (enabled) {

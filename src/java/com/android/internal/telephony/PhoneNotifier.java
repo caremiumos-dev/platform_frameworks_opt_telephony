@@ -62,4 +62,6 @@ public interface PhoneNotifier {
     public void notifyVoiceActivationStateChanged(Phone sender, int activationState);
 
     public void notifyDataActivationStateChanged(Phone sender, int activationState);
+
+    public void notifyCellularDataStateChanged(Phone sender, boolean state);
 }

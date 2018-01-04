@@ -2125,6 +2125,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mNotifier.notifyDataActivationStateChanged(this, state);
     }
 
+    public void notifyCellularDataStateChanged(boolean state) {
+        mNotifier.notifyCellularDataStateChanged(this, state);
+    }
+
     public void notifySignalStrength() {
         mNotifier.notifySignalStrength(this);
     }
