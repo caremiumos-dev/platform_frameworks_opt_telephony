@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af437717_0ccc93eb",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/PublicApnSettingTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1131829
+      },
+      "writtenOn": "2018-01-04T17:37:08Z",
+      "side": 1,
+      "message": "I have a suspicion that since ApnSetting is going to be public, it should be a CTS test rather than a unit test.\n\nAlso, what parts are going to become public? For example, ApnSetting.fromString() is not covered here - is it intentional?",
+      "range": {
+        "startLine": 42,
+        "startChar": 13,
+        "endLine": 42,
+        "endChar": 33
+      },
+      "revId": "253f646e06c70624fe51ec2f6dab0eed9732f317",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
