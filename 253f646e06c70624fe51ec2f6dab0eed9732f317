@@ -22,6 +22,30 @@
       "revId": "253f646e06c70624fe51ec2f6dab0eed9732f317",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fa80b7c_b586833c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/PublicApnSettingTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1247187
+      },
+      "writtenOn": "2018-01-04T18:08:31Z",
+      "side": 1,
+      "message": "The parts that is going to be public is in this cl: https://android-review.googlesource.com/c/platform/frameworks/base/+/547020.\n\nApnSetting.fromString() will not be public. Some of the static functions in original ApnSettings relies on internal stuffs like constants in PhoneConstants so we can\u0027t make them public without public those constants. These static functions(include ApnSetting.fromString()) will eventually be left in an internal utility class ApnSettingUtils. So they are not tested here.\n\nAs currently there is no API that uses the public ApnSetting class, we cannot do a cts. We are going to introduce several APIs in DPM that uses this public ApnSetting and will add cts for those APIs, which could cover the cts for this public ApnSetting class.",
+      "parentUuid": "af437717_0ccc93eb",
+      "range": {
+        "startLine": 42,
+        "startChar": 13,
+        "endLine": 42,
+        "endChar": 33
+      },
+      "revId": "253f646e06c70624fe51ec2f6dab0eed9732f317",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
