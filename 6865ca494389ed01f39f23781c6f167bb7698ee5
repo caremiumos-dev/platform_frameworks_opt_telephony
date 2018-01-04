@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5342d747_190e1479",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-01-04T16:50:18Z",
+      "side": 1,
+      "message": "Once you put up the CarrierConfigManager (frameworks/base) patch on this topic, you should also run CarrierConfigTest.java",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 28
+      },
+      "revId": "6865ca494389ed01f39f23781c6f167bb7698ee5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40ab1fe1_741ecff2",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
