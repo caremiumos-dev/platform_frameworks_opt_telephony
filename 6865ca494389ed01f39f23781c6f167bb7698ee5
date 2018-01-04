@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40ab1fe1_741ecff2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-01-04T16:49:28Z",
+      "side": 1,
+      "message": "You can use the \"Merged-In\" tag like so:\n\nMerged-In: c75caec8ddf3776ea5b978575d5eef8a7a4259dc\n\nThis will tell the automerger that the patch already exists in master, and so it will not try to merge a second time.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 68
+      },
+      "revId": "6865ca494389ed01f39f23781c6f167bb7698ee5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
