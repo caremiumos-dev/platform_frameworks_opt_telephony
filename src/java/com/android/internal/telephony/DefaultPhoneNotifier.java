@@ -309,6 +309,16 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         }
     }
 
+    @Override
+    public void notifyCellularDataStateChanged(Phone sender, boolean state) {
+        try {
+            mRegistry.notifyCellularDataChangedForPhoneId(
+                    sender.getPhoneId(), sender.getSubId(), state);
+        } catch (RemoteException ex) {
+            // system process is dead
+        }
+    }
+
     /**
      * Convert the {@link Phone.DataActivityState} enum into the TelephonyManager.DATA_* constants
      * for the public API.
