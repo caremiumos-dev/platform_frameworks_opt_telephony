@@ -45,6 +45,30 @@
       "revId": "6865ca494389ed01f39f23781c6f167bb7698ee5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "248e6bd0_088a3e70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-01-04T17:11:51Z",
+      "side": 1,
+      "message": "Actually, sorry for the confusion, Merged-In shouldn\u0027t refer to the commit hash, it should be the change-id (which in this case matches):\n\nMerged-In: Ia69f72eac147e2d2eeeea4cf042943996033f9b1",
+      "parentUuid": "40ab1fe1_741ecff2",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 68
+      },
+      "revId": "6865ca494389ed01f39f23781c6f167bb7698ee5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
