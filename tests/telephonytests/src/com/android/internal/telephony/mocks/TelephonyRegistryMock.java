@@ -312,4 +312,9 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
                                                           int activationType, int state) {
         throw new RuntimeException("Not implemented");
     }
+
+    @Override
+    public void notifyCellularDataStateChangedForPhoneId(int phoneId, int subId, boolean state) {
+        throw new RuntimeException("Not implemented");
+    }
 }
