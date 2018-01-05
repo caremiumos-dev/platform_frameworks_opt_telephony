@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "552c1bca_88e85f20",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-05T18:30:32Z",
+      "side": 1,
+      "message": "APN change observer will be notified when APN database is changed. Probably need to change the URL here as well.",
+      "range": {
+        "startLine": 636,
+        "startChar": 0,
+        "endLine": 637,
+        "endChar": 68
+      },
+      "revId": "455bc2839985e7a28c558d4ce911988867e6058d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
