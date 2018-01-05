@@ -51,6 +51,7 @@ public class UiccCard {
     private final Object mLock = new Object();
     private CardState mCardState;
     private String mIccid;
+    private String mCardId;
     private UiccProfile mUiccProfile;
     private Context mContext;
     private CommandsInterface mCi;
@@ -81,6 +82,9 @@ public class UiccCard {
             mContext = c;
             mCi = ci;
             mIccid = ics.iccid;
+            // For EuiccCard, override the mCardId with EID.
+            mCardId = ics.iccid;
+
 
             if (mCardState != CardState.CARDSTATE_ABSENT) {
                 if (mUiccProfile == null) {
@@ -458,6 +462,20 @@ public class UiccCard {
     public String getIccId() {
         if (mIccid != null) {
             return mIccid;
+        } else if (mUiccProfile != null) {
+            return mUiccProfile.getIccId();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the ID of this UICC card, it is the ICCID of the active profile on the card for
+     * pSIM or the EID of the card for eSIM.
+     */
+    public String getCardId() {
+        if (mCardId != null) {
+            return mCardId;
         } else if (mUiccProfile != null) {
             return mUiccProfile.getIccId();
         } else {

@@ -46,6 +46,7 @@ import android.util.Log;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.UiccController;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -317,6 +318,8 @@ public class SubscriptionController extends ISub.Stub {
                 SubscriptionManager.MCC));
         int mnc = cursor.getInt(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.MNC));
+        String cardId = cursor.getString(cursor.getColumnIndexOrThrow(
+                SubscriptionManager.CARD_ID));
         // FIXME: consider stick this into database too
         String countryIso = getSubscriptionCountryIso(id);
         boolean isEmbedded = cursor.getInt(cursor.getColumnIndexOrThrow(
@@ -335,7 +338,8 @@ public class SubscriptionController extends ISub.Stub {
                     + simSlotIndex + " displayName:" + displayName + " nameSource:" + nameSource
                     + " iconTint:" + iconTint + " dataRoaming:" + dataRoaming
                     + " mcc:" + mcc + " mnc:" + mnc + " countIso:" + countryIso + " isEmbedded:"
-                    + isEmbedded + " accessRules:" + Arrays.toString(accessRules));
+                    + isEmbedded + " accessRules:" + Arrays.toString(accessRules)
+                    + " cardid:" + cardId);
         }
 
         // If line1number has been set to a different number, use it instead.
@@ -345,7 +349,7 @@ public class SubscriptionController extends ISub.Stub {
         }
         return new SubscriptionInfo(id, iccId, simSlotIndex, displayName, carrierName,
                 nameSource, iconTint, number, dataRoaming, iconBitmap, mcc, mnc, countryIso,
-                isEmbedded, accessRules);
+                isEmbedded, accessRules, cardId);
     }
 
     /**
@@ -911,7 +915,7 @@ public class SubscriptionController extends ISub.Stub {
             Cursor cursor = resolver.query(SubscriptionManager.CONTENT_URI,
                     new String[]{SubscriptionManager.UNIQUE_KEY_SUBSCRIPTION_ID,
                             SubscriptionManager.SIM_SLOT_INDEX, SubscriptionManager.NAME_SOURCE,
-                            SubscriptionManager.ICC_ID},
+                            SubscriptionManager.ICC_ID, SubscriptionManager.CARD_ID},
                     SubscriptionManager.ICC_ID + "=?" + " OR " + SubscriptionManager.ICC_ID + "=?",
                             new String[]{iccId, IccUtils.getDecimalSubstring(iccId)}, null);
 
@@ -926,6 +930,7 @@ public class SubscriptionController extends ISub.Stub {
                     int oldSimInfoId = cursor.getInt(1);
                     int nameSource = cursor.getInt(2);
                     String oldIccId = cursor.getString(3);
+                    String oldCardId = cursor.getString(4);
                     ContentValues value = new ContentValues();
 
                     if (slotIndex != oldSimInfoId) {
@@ -939,6 +944,12 @@ public class SubscriptionController extends ISub.Stub {
                     if (oldIccId != null && oldIccId.length() < iccId.length()
                             && (oldIccId.equals(IccUtils.getDecimalSubstring(iccId)))) {
                         value.put(SubscriptionManager.ICC_ID, iccId);
+                    }
+
+                    String cardId =
+                            UiccController.getInstance().getUiccCardForPhone(slotIndex).getCardId();
+                    if (cardId != null && cardId != oldCardId) {
+                        value.put(SubscriptionManager.CARD_ID, cardId);
                     }
 
                     if (value.size() > 0) {
@@ -1076,6 +1087,13 @@ public class SubscriptionController extends ISub.Stub {
         value.put(SubscriptionManager.COLOR, color);
         value.put(SubscriptionManager.SIM_SLOT_INDEX, slotIndex);
         value.put(SubscriptionManager.CARRIER_NAME, "");
+        String cardId =
+                UiccController.getInstance().getUiccCardForPhone(slotIndex).getCardId();
+        if (cardId != null) {
+            value.put(SubscriptionManager.CARD_ID, cardId);
+        } else {
+            value.put(SubscriptionManager.CARD_ID, iccId);
+        }
 
         Uri uri = resolver.insert(SubscriptionManager.CONTENT_URI, value);
 
