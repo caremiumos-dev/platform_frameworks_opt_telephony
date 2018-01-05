@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f462f1be_de33e22d",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-05T18:40:45Z",
+      "side": 1,
+      "message": "where is this set to false?\nI think it should be done in resetRecords(), not sure if some other place too.",
+      "range": {
+        "startLine": 307,
+        "startChar": 8,
+        "endLine": 307,
+        "endChar": 15
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bdcbf44_d9c83579",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-05T18:40:45Z",
+      "side": 1,
+      "message": "Should the same check be added here as well? Because we load records even for loaded, so broadcast should be sent only after that is done for all apps.",
+      "range": {
+        "startLine": 241,
+        "startChar": 16,
+        "endLine": 241,
+        "endChar": 34
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f6d0dd2_4299574c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-05T18:40:45Z",
+      "side": 1,
+      "message": "As soon as we know that one of the apps is in this state, we broadcast this without waiting for any update from the other app. Is that ok?",
+      "range": {
+        "startLine": 282,
+        "startChar": 16,
+        "endLine": 282,
+        "endChar": 32
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f04e6e5_7656f99f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-05T18:40:45Z",
+      "side": 1,
+      "message": "why? Should it not be the other way round?\nOr is this for the initial case when card and profile have just been created, but we have not received details about apps yet?",
+      "range": {
+        "startLine": 893,
+        "startChar": 0,
+        "endLine": 893,
+        "endChar": 71
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
