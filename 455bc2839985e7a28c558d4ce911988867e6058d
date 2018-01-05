@@ -22,6 +22,30 @@
       "revId": "455bc2839985e7a28c558d4ce911988867e6058d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "15394eb7_2ab97165",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1247187
+      },
+      "writtenOn": "2018-01-05T21:20:29Z",
+      "side": 1,
+      "message": "Thank you for pointing this out. I don\u0027t fully understand registerContentObserver(), but according to the javadoc: \"Register an observer class that gets callbacks when data identified by a given content URI changes\", \"This can be a specific row URI, or a base URI for a whole class of content.\" So I guess here we might keep Telephony.Carriers.CONTENT_URI as it\u0027s the base URI and we want to listen to the change of whole data?\n\nThen when APN change is observed, \nsendMessage(obtainMessage(DctConstants.EVENT_APN_CHANGED))\nis sent out by this observer and createAllApnList()(which has been changed to use URL_FILTERED) is executed again.",
+      "parentUuid": "552c1bca_88e85f20",
+      "range": {
+        "startLine": 636,
+        "startChar": 0,
+        "endLine": 637,
+        "endChar": 68
+      },
+      "revId": "455bc2839985e7a28c558d4ce911988867e6058d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
