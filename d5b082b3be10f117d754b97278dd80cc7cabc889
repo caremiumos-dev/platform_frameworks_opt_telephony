@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5b82205_c597fbad",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-06T02:02:27Z",
+      "side": 1,
+      "message": "TODO: this needs a whole bunch of sweet new stuff. ref b/12345",
+      "range": {
+        "startLine": 243,
+        "startChar": 9,
+        "endLine": 243,
+        "endChar": 14
+      },
+      "revId": "d5b082b3be10f117d754b97278dd80cc7cabc889",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
