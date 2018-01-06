@@ -22,6 +22,8 @@ import android.test.suitebuilder.annotation.SmallTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import java.lang.reflect.Field;
 import static org.mockito.Mockito.verify;
 
@@ -29,6 +31,7 @@ public class PhoneStateListenerTest extends TelephonyTest {
 
     private PhoneStateListener mPhoneStateListenerUT;
     private PhoneStateListenerHandler mPhoneStateListenerHandler;
+    private boolean mCellularDataState = false;
 
     private class PhoneStateListenerHandler extends HandlerThread {
         private PhoneStateListenerHandler(String name) {
@@ -43,6 +46,13 @@ public class PhoneStateListenerTest extends TelephonyTest {
                     logd("Service State Changed");
                     mServiceState.setVoiceRegState(serviceState.getVoiceRegState());
                     mServiceState.setDataRegState(serviceState.getDataRegState());
+                    setReady(true);
+                }
+
+                @Override
+                public void onCellularDataStateChanged(boolean state) {
+                    logd("Cellular Data State Changed");
+                    mCellularDataState = true;
                     setReady(true);
                 }
             };
@@ -79,6 +89,20 @@ public class PhoneStateListenerTest extends TelephonyTest {
 
         verify(mServiceState).setDataRegState(ServiceState.STATE_IN_SERVICE);
         verify(mServiceState).setVoiceRegState(ServiceState.STATE_EMERGENCY_ONLY);
+    }
+
+    @Test @SmallTest
+    public void testTriggerCellularDataStateChanged() throws Exception {
+        Field field = PhoneStateListener.class.getDeclaredField("callback");
+        field.setAccessible(true);
+
+        assertFalse(mCellularDataState);
+
+        setReady(false);
+        ((IPhoneStateListener) field.get(mPhoneStateListenerUT)).onCellularDataStateChanged(true);
+        waitUntilReady();
+
+        assertTrue(mCellularDataState);
     }
 
 }
