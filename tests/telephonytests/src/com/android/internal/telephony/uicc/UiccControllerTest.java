@@ -89,6 +89,8 @@ public class UiccControllerTest extends TelephonyTest {
                 mIccCardStatus.mImsSubscriptionAppIndex =
                         mIccCardStatus.mGsmUmtsSubscriptionAppIndex = -1;
         mSimulatedCommands.setIccCardStatus(mIccCardStatus);
+        // slotIndex should be invalid when testing with older versions (before 1.2) of hal
+        mIccCardStatus.physicalSlotIndex = UiccController.INVALID_SLOT_ID;
         mUiccControllerHandlerThread = new UiccControllerHandlerThread(TAG);
         mUiccControllerHandlerThread.start();
         waitUntilReady();
@@ -105,7 +107,6 @@ public class UiccControllerTest extends TelephonyTest {
 
     @Test @SmallTest
     public void testSanity() {
-        assertEquals(PHONE_COUNT, mUiccControllerUT.getUiccSlots().length);
         assertNotNull(mUiccControllerUT.getUiccCard(0));
         assertNull(mUiccControllerUT.getIccRecords(0, UiccController.APP_FAM_3GPP));
         assertNull(mUiccControllerUT.getIccRecords(0, UiccController.APP_FAM_3GPP2));

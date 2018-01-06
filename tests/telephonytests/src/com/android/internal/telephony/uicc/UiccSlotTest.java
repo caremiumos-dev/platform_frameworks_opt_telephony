@@ -60,8 +60,7 @@ public class UiccSlotTest extends TelephonyTest {
                 public void handleMessage(Message msg) {
                     switch (msg.what) {
                         case UICCCARD_UPDATE_CARD_STATE_EVENT:
-                            mUiccSlot.update(mContext, mSimulatedCommands, mIccCardStatus,
-                                    0 /* phoneId */);
+                            mUiccSlot.update(mSimulatedCommands, mIccCardStatus, 0 /* phoneId */);
                             setReady(true);
                             break;
                         default:
@@ -115,7 +114,7 @@ public class UiccSlotTest extends TelephonyTest {
 
         logd("UICC Card absent update");
         mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_ABSENT;
-        mUiccSlot.update(mContext, mSimulatedCommands, mIccCardStatus, 0 /* phoneId */);
+        mUiccSlot.update(mSimulatedCommands, mIccCardStatus, 0 /* phoneId */);
         waitForMs(50);
 
         ArgumentCaptor<Message> mCaptorMessage = ArgumentCaptor.forClass(Message.class);

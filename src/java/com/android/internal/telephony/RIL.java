@@ -506,11 +506,15 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @Override
     public void getIccSlotsStatus(Message result) {
         IRadio radioProxy = getRadioProxy(result);
+        riljLog("getIccSlotsStatus");
         if (radioProxy != null) {
+            riljLog("getIccSlotsStatus: radioProxy != null");
             android.hardware.radio.V1_2.IRadio radioProxy12 =
                     android.hardware.radio.V1_2.IRadio.castFrom(radioProxy);
             if (radioProxy12 == null) {
+                riljLog("getIccSlotsStatus: radioProxy12 == null");
                 if (result != null) {
+                    riljLog("getIccSlotsStatus: result != null");
                     AsyncResult.forMessage(result, null,
                             CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
                     result.sendToTarget();

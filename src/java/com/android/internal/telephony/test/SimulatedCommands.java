@@ -188,7 +188,8 @@ public class SimulatedCommands extends BaseCommands
         if (mIccSlotStatus != null) {
             resultSuccess(result, mIccSlotStatus);
         } else {
-            resultFail(result, null, new RuntimeException("IccSlotStatus not set"));
+            resultFail(result, null,
+                    new CommandException(CommandException.Error.REQUEST_NOT_SUPPORTED));
         }
     }
 

@@ -57,6 +57,8 @@ public class UiccSlot extends Handler {
     private CommandsInterface mCi;
     private UiccCard mUiccCard;
     private RadioState mLastRadioState = RadioState.RADIO_UNAVAILABLE;
+    private boolean mIsEuicc;
+    private String mIccId;
 
     private RegistrantList mAbsentRegistrants = new RegistrantList();
 
@@ -75,12 +77,11 @@ public class UiccSlot extends Handler {
     /**
      * Update slot. The main trigger for this is a change in the ICC Card status.
      */
-    public void update(Context c, CommandsInterface ci, IccCardStatus ics, int phoneId) {
+    public void update(CommandsInterface ci, IccCardStatus ics, int phoneId) {
         synchronized (mLock) {
             CardState oldState = mCardState;
             mCardState = ics.mCardState;
             mCi = ci;
-            mContext = c;
 
             RadioState radioState = mCi.getRadioState();
             if (DBG) {
@@ -96,7 +97,7 @@ public class UiccSlot extends Handler {
                     sendMessage(obtainMessage(EVENT_CARD_REMOVED, null));
                 }
 
-                // todo: broadcast sim state changed for absent/unknown
+                // todo: broadcast sim state changed for absent/unknown when IccCardProxy is removed
 
                 // no card present in the slot now; dispose card and make mUiccCard null
                 mUiccCard.dispose();
@@ -123,6 +124,43 @@ public class UiccSlot extends Handler {
             }
             mLastRadioState = radioState;
         }
+    }
+
+    /**
+     * Update slot based on IccSlotStatus.
+     */
+    public void update(CommandsInterface ci, IccSlotStatus iss) {
+        log("slotStatus update");
+        synchronized (mLock) {
+            mCi = ci;
+            if (iss.slotState == IccSlotStatus.SlotState.SLOTSTATE_INACTIVE) {
+                if (mActive) {
+                    mActive = false;
+                    // treat as radio state unavailable
+                    onRadioStateUnavailable();
+                }
+                parseAtr(iss.atr);
+                mCardState = iss.cardState;
+                mIccId = iss.iccid;
+            } else if (!mActive && iss.slotState == IccSlotStatus.SlotState.SLOTSTATE_ACTIVE) {
+                mActive = true;
+                // todo - ignoring these fields for now; relying on sim state changed to update
+                // these
+                //      iss.atr;
+                //      iss.cardState;
+                //      iss.iccid;
+                //      iss.logicalSlotIndex;
+            }
+        }
+    }
+
+    private void parseAtr(String atr) {
+        // todo - parse atr and set mIsEuicc based on it
+        mIsEuicc = false;
+    }
+
+    public boolean isEuicc() {
+        return mIsEuicc;
     }
 
     @Override
@@ -246,7 +284,7 @@ public class UiccSlot extends Handler {
         }
         mUiccCard = null;
 
-        // todo: broadcast sim state changed for absent/unknown
+        // todo: broadcast sim state changed for absent/unknown when IccCardProxy is removed
 
         mCardState = CardState.CARDSTATE_ABSENT;
         mLastRadioState = RadioState.RADIO_UNAVAILABLE;
