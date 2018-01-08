@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b136f6b0_bf785e8b",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/data/EuiccNotification.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2018-01-08T19:57:48Z",
+      "side": 1,
+      "message": "same comment as Jun on the other CL re: platform @IntDef format",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 29
+      },
+      "revId": "9840f7b675e782183e5db1bb364e049c2ded6162",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "521f52f8_4abf4a37",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/data/EuiccRat.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2018-01-08T19:57:48Z",
+      "side": 1,
+      "message": "This is still only visible for test purposes, isn\u0027t it? If so it should still retain the @VisibleForTesting even if it\u0027s made private. You should also keep @hide so it remains hidden even when we make the parent class a @SystemApi.",
+      "revId": "9840f7b675e782183e5db1bb364e049c2ded6162",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04b38518_922a56ad",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/data/EuiccSpecVersion.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2018-01-08T19:57:48Z",
+      "side": 1,
+      "message": "Curious - do we actually need to expose this as an API (in EuiccCard) at this point? Will the LPA actually need to know the version (at least at this point, where there is only one version)? If not that\u0027d be one less API we need to plan to expose.",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 44
+      },
+      "revId": "9840f7b675e782183e5db1bb364e049c2ded6162",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61a75f20_34a76bda",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/data/EuiccSpecVersion.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2018-01-08T19:57:48Z",
+      "side": 1,
+      "message": "I think you mean \"whether the given version is included in this range.\"",
+      "range": {
+        "startLine": 44,
+        "startChar": 33,
+        "endLine": 44,
+        "endChar": 38
+      },
+      "revId": "9840f7b675e782183e5db1bb364e049c2ded6162",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
