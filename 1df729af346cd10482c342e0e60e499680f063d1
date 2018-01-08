@@ -22,6 +22,30 @@
       "revId": "1df729af346cd10482c342e0e60e499680f063d1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ec3a633_ae9a68b0",
+        "filename": "src/java/com/android/internal/telephony/sip/SipPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2018-01-08T07:48:27Z",
+      "side": 1,
+      "message": "Will update in the next patch.",
+      "parentUuid": "b57531a4_4fdd4f08",
+      "range": {
+        "startLine": 1009,
+        "startChar": 4,
+        "endLine": 1012,
+        "endChar": 5
+      },
+      "revId": "1df729af346cd10482c342e0e60e499680f063d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
