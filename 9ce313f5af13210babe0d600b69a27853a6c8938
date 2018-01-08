@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "deeaeac8_83016de7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-01-08T01:38:28Z",
+      "side": 1,
+      "message": "there are two relevant API for data enabled:\n1. TelephonyManager#isMobileDataEnabled (there are other factors affecting the data enabled state like provisioned, carrier disabled, user disabled etc)\n2. TelephonyManager#isUserMobileDataEnabled\n\nI think it might make more sense to track 1 instead of 2?\nhttps://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/dataconnection/DataEnabledSettings.java?l\u003d192\n\nlooks like CLs from b/69814555 is missing from AOSP, + Malcolm to check",
+      "range": {
+        "startLine": 824,
+        "startChar": 15,
+        "endLine": 824,
+        "endChar": 63
+      },
+      "revId": "9ce313f5af13210babe0d600b69a27853a6c8938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
