@@ -22,6 +22,30 @@
       "revId": "9ce313f5af13210babe0d600b69a27853a6c8938",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7770595f_748a1f59",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2018-01-08T20:00:26Z",
+      "side": 1,
+      "message": "I\u0027ll defer to Xuan on this since he\u0027s more familiar with why we need to consume this API in the first place. But at least in the current world, we\u0027re currently using TelephonyManager#isDataEnabled \u003d\u003d isUserMobileDataEnabled. Either way we go, the event we send here should correspond with the API we choose to listen to, or we should have multiple events.",
+      "parentUuid": "deeaeac8_83016de7",
+      "range": {
+        "startLine": 824,
+        "startChar": 15,
+        "endLine": 824,
+        "endChar": 63
+      },
+      "revId": "9ce313f5af13210babe0d600b69a27853a6c8938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
