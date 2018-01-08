@@ -46,6 +46,30 @@
       "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e951f32_60dc1d56",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2018-01-08T11:22:25Z",
+      "side": 1,
+      "message": "@Takeshi Tanigawa,\n\nCould you please clarify which UI changes you are referring above ?\n\nAs per my understanding we do not need any UI change for this.\n\nCurrently MobileNetworkSettings.java doing networkMode set/get of on a subId based preference, so i dont think any other change needed in UI.\n\nFYI, below is one of the place in MobileNetworkSettings.java where subId based network mode preference used\nhttp://androidxref.com/8.0.0_r4/xref/packages/services/Telephony/src/com/android/phone/MobileNetworkSettings.java#237",
+      "parentUuid": "bca8e4d6_ec98ed50",
+      "range": {
+        "startLine": 467,
+        "startChar": 19,
+        "endLine": 485,
+        "endChar": 21
+      },
+      "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
