@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37c19919_3162affa",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-08T17:59:25Z",
+      "side": 1,
+      "message": "Are those for debugging or you want to keep them? We didn\u0027t log those info in other methods",
+      "range": {
+        "startLine": 511,
+        "startChar": 40,
+        "endLine": 511,
+        "endChar": 50
+      },
+      "revId": "b234d9f098f426df772f80bd44fd210d7d7f1021",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2088328a_2faaf210",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-08T17:59:25Z",
+      "side": 1,
+      "message": "So whenever there is slot change or ICC change, we will read both of them, any benefit of doing this? what about we separate them?",
+      "range": {
+        "startLine": 303,
+        "startChar": 21,
+        "endLine": 303,
+        "endChar": 53
+      },
+      "revId": "b234d9f098f426df772f80bd44fd210d7d7f1021",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "381283ed_89803bbc",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-08T17:59:25Z",
+      "side": 1,
+      "message": "we will have atr in the ICC status too, should we update it in the  public void update(CommandsInterface ci, IccCardStatus ics, int phoneId) too?",
+      "range": {
+        "startLine": 142,
+        "startChar": 16,
+        "endLine": 142,
+        "endChar": 24
+      },
+      "revId": "b234d9f098f426df772f80bd44fd210d7d7f1021",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
