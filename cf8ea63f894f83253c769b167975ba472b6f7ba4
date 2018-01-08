@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d6604e67_98a464ce",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-08T22:40:22Z",
+      "side": 1,
+      "message": "I set it to be false in both reset and dispose.",
+      "parentUuid": "f462f1be_de33e22d",
+      "range": {
+        "startLine": 307,
+        "startChar": 8,
+        "endLine": 307,
+        "endChar": 15
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0bdcbf44_d9c83579",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-05T18:40:45Z",
       "side": 1,
       "message": "Should the same check be added here as well? Because we load records even for loaded, so broadcast should be sent only after that is done for all apps.",
+      "range": {
+        "startLine": 241,
+        "startChar": 16,
+        "endLine": 241,
+        "endChar": 34
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38988b5d_be09299e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-08T22:40:22Z",
+      "side": 1,
+      "message": "I guess you mean \"Because we load records even for locked\"?\nI think the logic is that \"Loaded means all apps are loaded, while Locked means any app is locked\".  Once we saw any app is locked, the states of the other apps do not matter because we will boradcast \"locked\" anyway, right?  So we don\u0027t need to do similar (or same) check here. As for the point that \"we load records even for locked\", it is actually not related to this line of code since the SIMRecords will load the ICCID anyway and this line only send out the internal broadcast to SubscriptionInfoUpdater.",
+      "parentUuid": "0bdcbf44_d9c83579",
       "range": {
         "startLine": 241,
         "startChar": 16,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "7d34cf41_66d4ddff",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-08T22:40:22Z",
+      "side": 1,
+      "message": "Yes, I think it is OK, because we broadcast Locked as long as any app is locked.",
+      "parentUuid": "3f6d0dd2_4299574c",
+      "range": {
+        "startLine": 282,
+        "startChar": 16,
+        "endLine": 282,
+        "endChar": 32
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f04e6e5_7656f99f",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2018-01-05T18:40:45Z",
       "side": 1,
       "message": "why? Should it not be the other way round?\nOr is this for the initial case when card and profile have just been created, but we have not received details about apps yet?",
+      "range": {
+        "startLine": 893,
+        "startChar": 0,
+        "endLine": 893,
+        "endChar": 71
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10ec1b3b_e8696656",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-08T22:40:22Z",
+      "side": 1,
+      "message": "the method \"areAllApplicationsReady()\" will only be called when at least one \"APP Ready\" is received so that in normal cases this would never happen.  I added this check just in case something weird happens, like after receiving one app ready and suddenly switching to a profile with no apps. in that situation, I prefer to let the user believe the Apps are not ready... What do you think?",
+      "parentUuid": "3f04e6e5_7656f99f",
       "range": {
         "startLine": 893,
         "startChar": 0,
