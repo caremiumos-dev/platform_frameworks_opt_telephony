@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d4c81487_36c52ca2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1224967
+      },
+      "writtenOn": "2018-01-08T17:06:19Z",
+      "side": 1,
+      "message": "Yes I ran the CarrierConfigTest before uploading each pitch (Actually I mentioned in another file under this topic).",
+      "parentUuid": "b84f4c9a_9c858367",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 28
+      },
+      "revId": "6865ca494389ed01f39f23781c6f167bb7698ee5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40ab1fe1_741ecff2",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
