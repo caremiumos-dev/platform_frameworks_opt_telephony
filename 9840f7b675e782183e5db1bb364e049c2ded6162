@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "2e95163d_c91337bc",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/data/EuiccSpecVersion.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-08T20:24:19Z",
+      "side": 1,
+      "message": "I think we can keep this internal to EuiccCard and return a string to LPA for spec version for now. There is currently no need to writing specific code in LPA for different spec version so far, but maybe expose the spec version for LPA logging purpose.",
+      "parentUuid": "04b38518_922a56ad",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 44
+      },
+      "revId": "9840f7b675e782183e5db1bb364e049c2ded6162",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "61a75f20_34a76bda",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/data/EuiccSpecVersion.java",
         "patchSetId": 2
