@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ceb455e_1664247f",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-08T22:56:23Z",
+      "side": 1,
+      "message": "We usually don\u0027t call it unsolicited responses, since normally response is solicited.",
+      "range": {
+        "startLine": 628,
+        "startChar": 28,
+        "endLine": 628,
+        "endChar": 37
+      },
+      "revId": "e60232636b5f75f0a10d2285e8e4de849db3c15c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
