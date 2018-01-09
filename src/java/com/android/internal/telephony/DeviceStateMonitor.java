@@ -25,12 +25,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.display.DisplayManager;
-import android.hardware.radio.V1_0.IndicationFilter;
+import android.hardware.radio.V1_2.IndicationFilter;
 import android.net.ConnectivityManager;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.telephony.AccessNetworkConstants.AccessNetworkType;
+import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
 import android.util.LocalLog;
 import android.view.Display;
@@ -59,6 +61,10 @@ public class DeviceStateMonitor extends Handler {
     private static final int EVENT_POWER_SAVE_MODE_CHANGED      = 2;
     private static final int EVENT_CHARGING_STATE_CHANGED       = 3;
     private static final int EVENT_TETHERING_STATE_CHANGED      = 4;
+
+    // TODO(b/74006656) load hysteresis values from a property when DeviceStateMonitor starts
+    private static final int HYSTERESIS_MILLIS = 3000;
+    private static final int HYSTERESIS_DB = 2;
 
     private final Phone mPhone;
 
@@ -222,6 +228,13 @@ public class DeviceStateMonitor extends Handler {
     }
 
     /**
+     * @return True if link capacity estimate update should be turned off.
+     */
+    private boolean shouldTurnOffLinkCapacityEstimate() {
+        return mIsPowerSaveOn || (!mIsCharging && !mIsTetheringOn && !mIsScreenOn);
+    }
+
+    /**
      * Message handler
      *
      * @param msg The message
@@ -286,6 +299,10 @@ public class DeviceStateMonitor extends Handler {
             newFilter |= IndicationFilter.DATA_CALL_DORMANCY_CHANGED;
         }
 
+        if (!shouldTurnOffLinkCapacityEstimate()) {
+            newFilter |= IndicationFilter.LINK_CAPACITY_ESTIMATE;
+        }
+
         setUnsolResponseFilter(newFilter, false);
     }
 
@@ -302,6 +319,8 @@ public class DeviceStateMonitor extends Handler {
         sendDeviceState(LOW_DATA_EXPECTED, mIsLowDataExpected);
         sendDeviceState(POWER_SAVE_MODE, mIsPowerSaveOn);
         setUnsolResponseFilter(mUnsolicitedResponseFilter, true);
+        setSignalStrengthReportingCriteria();
+        setLinkCapacityReportingCriteria();
     }
 
     /**
@@ -342,6 +361,22 @@ public class DeviceStateMonitor extends Handler {
             mPhone.mCi.setUnsolResponseFilter(newFilter, null);
             mUnsolicitedResponseFilter = newFilter;
         }
+    }
+
+    private void setSignalStrengthReportingCriteria() {
+        // TODO: listen for carrier config changes to update lte
+        mPhone.mCi.setSignalStrengthReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_DB,
+                AccessNetworkThresholds.GERAN, AccessNetworkType.GERAN, null);
+        mPhone.mCi.setSignalStrengthReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_DB,
+                AccessNetworkThresholds.UTRAN, AccessNetworkType.UTRAN, null);
+        mPhone.mCi.setSignalStrengthReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_DB,
+                AccessNetworkThresholds.EUTRAN, AccessNetworkType.EUTRAN, null);
+        mPhone.mCi.setSignalStrengthReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_DB,
+                AccessNetworkThresholds.CDMA2000, AccessNetworkType.CDMA2000, null);
+    }
+
+    private void setLinkCapacityReportingCriteria() {
+        // TODO: add criteria for link capacity reporting
     }
 
     /**
@@ -428,5 +463,64 @@ public class DeviceStateMonitor extends Handler {
         ipw.decreaseIndent();
         ipw.decreaseIndent();
         ipw.flush();
+    }
+
+    /**
+     * dBm thresholds that correspond to changes in signal strength indications.
+     */
+    private static final class AccessNetworkThresholds {
+
+        /**
+         * List of dBm thresholds for GERAN {@link AccessNetworkType}.
+         *
+         * Calculated from GSM asu level thresholds - TS 27.007 Sec 8.5
+         */
+        public static final int[] GERAN = new int[] {
+            -109,
+            -103,
+            -97,
+            -89,
+        };
+
+        /**
+         * List of default dBm thresholds for UTRAN {@link AccessNetworkType}.
+         *
+         * These thresholds are taken from the WCDMA RSCP defaults in {@link CarrierConfigManager}.
+         * See TS 27.007 Sec 8.69.
+         */
+        // TODO(b/74008993) update these values on carrier config changed.
+        public static final int[] UTRAN = new int[] {
+            -114, /* SIGNAL_STRENGTH_POOR */
+            -104, /* SIGNAL_STRENGTH_MODERATE */
+            -94,  /* SIGNAL_STRENGTH_GOOD */
+            -84   /* SIGNAL_STRENGTH_GREAT */
+        };
+
+        /**
+         * List of default dBm thresholds for EUTRAN {@link AccessNetworkType}.
+         *
+         * These thresholds are taken from the LTE RSRP defaults in {@link CarrierConfigManager}.
+         */
+        // TODO(b/74008993) update these values on carrier config changed.
+        public static final int[] EUTRAN = new int[] {
+            -140, /* SIGNAL_STRENGTH_NONE_OR_UNKNOWN */
+            -128, /* SIGNAL_STRENGTH_POOR */
+            -118, /* SIGNAL_STRENGTH_MODERATE */
+            -108, /* SIGNAL_STRENGTH_GOOD */
+            -98,  /* SIGNAL_STRENGTH_GREAT */
+            -44   /* SIGNAL_STRENGTH_NONE_OR_UNKNOWN */
+        };
+
+        /**
+         * List of dBm thresholds for CDMA2000 {@link AccessNetworkType}.
+         *
+         * These correspond to EVDO level thresholds.
+         */
+        public static final int[] CDMA2000 = new int[] {
+            -105,
+            -90,
+            -75,
+            -65
+        };
     }
 }
