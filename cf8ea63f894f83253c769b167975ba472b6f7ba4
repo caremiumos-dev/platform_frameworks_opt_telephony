@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "0a7daa88_bc5da057",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-09T22:24:13Z",
+      "side": 1,
+      "message": "discussed offline. In case of \"locked\", we only listen to the current application.",
+      "parentUuid": "b5ac7b7c_70962de6",
+      "range": {
+        "startLine": 241,
+        "startChar": 16,
+        "endLine": 241,
+        "endChar": 34
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f6d0dd2_4299574c",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 1
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "That\u0027s ok, but SubscriptionInfoUpdater will query ICCID as soon as this is broadcast, and what if ICCID is coming from the other app?",
       "parentUuid": "7d34cf41_66d4ddff",
+      "range": {
+        "startLine": 282,
+        "startChar": 16,
+        "endLine": 282,
+        "endChar": 32
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82b1f4ff_b5c57ba8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-09T22:24:13Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "36376854_4e0e35fb",
       "range": {
         "startLine": 282,
         "startChar": 16,
@@ -259,6 +307,30 @@
       "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfc84a65_ef9f022a",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-09T22:24:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8317267d_8083da60",
+      "range": {
+        "startLine": 893,
+        "startChar": 0,
+        "endLine": 893,
+        "endChar": 71
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
