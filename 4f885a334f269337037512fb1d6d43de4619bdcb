@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d114d0c9_a699afdd",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-09T01:17:08Z",
+      "side": 1,
+      "message": "how about \"Unsolicited message for cellInfoList\"?",
+      "range": {
+        "startLine": 628,
+        "startChar": 12,
+        "endLine": 628,
+        "endChar": 15
+      },
+      "revId": "4f885a334f269337037512fb1d6d43de4619bdcb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e97c7d29_1040ec23",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-09T01:17:08Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 640,
+        "startChar": 26,
+        "endLine": 640,
+        "endChar": 30
+      },
+      "revId": "4f885a334f269337037512fb1d6d43de4619bdcb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
