@@ -70,6 +70,30 @@
       "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "beab6957_a5d0ea1c",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2018-01-09T05:37:33Z",
+      "side": 1,
+      "message": "@Sandeep Gutta\n\nWe need to update Settings.Global.PREFERRED_NETWORK_MODE with slotId when user manually changes the setting. So, I made this new commit.\n\nhttps://android-review.googlesource.com/#/c/platform/packages/services/Telephony/+/583827/\n\nIn this commit, I considered the network reset(from Settings-\u003eSystem-\u003eReset-\u003eNetwork settings reset).",
+      "parentUuid": "6e951f32_60dc1d56",
+      "range": {
+        "startLine": 467,
+        "startChar": 19,
+        "endLine": 485,
+        "endChar": 21
+      },
+      "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
