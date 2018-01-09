@@ -41,6 +41,7 @@ import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
+import android.util.SparseArray;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.BaseCommands;
@@ -146,6 +147,8 @@ public class SimulatedCommands extends BaseCommands
     private boolean mDcSuccess = true;
     private SetupDataCallResult mSetupDataCallResult;
     private boolean mIsRadioPowerFailResponse = false;
+
+    public SparseArray<int[]> mRanSignalStrengthThresholds = new SparseArray<>();
 
     //***** Constructor
     public
@@ -2198,6 +2201,18 @@ public class SimulatedCommands extends BaseCommands
     public void setUnsolResponseFilter(int filter, Message result) {
         SimulatedCommandsVerifier.getInstance().setUnsolResponseFilter(filter, result);
         resultSuccess(result, null);
+    }
+
+    @Override
+    public void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb,
+            int[] thresholdsDbm, int ran, Message result) {
+        mRanSignalStrengthThresholds.put(ran, thresholdsDbm);
+    }
+
+    @Override
+    public void setLinkCapacityReportingCriteria(int hysteresisMs, int hysteresisDlKbps,
+            int hysteresisUlKbps, int[] thresholdsDlKbps, int[] thresholdsUlKbps, int ran,
+            Message result) {
     }
 
     @Override
