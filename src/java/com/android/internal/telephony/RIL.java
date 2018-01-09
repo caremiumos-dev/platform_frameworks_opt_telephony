@@ -3575,11 +3575,102 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 riljLog(rr.serialString() + "> " + requestToString(rr.mRequest) + " " + filter);
             }
 
-            try {
-                radioProxy.setIndicationFilter(rr.mSerial, filter);
-            } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(rr, "setIndicationFilter", e);
+            android.hardware.radio.V1_2.IRadio radioProxy12 =
+                    android.hardware.radio.V1_2.IRadio.castFrom(radioProxy);
+
+            if (radioProxy12 != null) {
+                try {
+                    radioProxy12.setIndicationFilter_1_2(rr.mSerial, filter);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "setIndicationFilter_1_2", e);
+                }
+            } else {
+                try {
+                    radioProxy.setIndicationFilter(rr.mSerial, filter);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "setIndicationFilter", e);
+                }
             }
+        }
+    }
+
+    @Override
+    public void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb,
+            int[] thresholdsDbm, int ran, Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            android.hardware.radio.V1_2.IRadio radioProxy12 =
+                    android.hardware.radio.V1_2.IRadio.castFrom(radioProxy);
+            if (radioProxy12 == null) {
+                riljLoge("Radio Proxy 1.2 is unsupported!");
+                return;
+            }
+
+            RILRequest rr = obtainRequest(RIL_REQUEST_SET_SIGNAL_STRENGTH_REPORTING_CRITERIA,
+                    result, mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+            }
+
+            try {
+                radioProxy12.setSignalStrengthReportingCriteria(rr.mSerial, hysteresisMs,
+                        hysteresisDb, primitiveArrayToArrayList(thresholdsDbm),
+                        convertRanToHalRan(ran));
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "setSignalStrengthReportingCriteria", e);
+            }
+        }
+    }
+
+    @Override
+    public void setLinkCapacityReportingCriteria(int hysteresisMs, int hysteresisDlKbps,
+            int hysteresisUlKbps, int[] thresholdsDlKbps, int[] thresholdsUlKbps, int ran,
+            Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            android.hardware.radio.V1_2.IRadio radioProxy12 =
+                    android.hardware.radio.V1_2.IRadio.castFrom(radioProxy);
+            if (radioProxy12 == null) {
+                riljLoge("Radio Proxy 1.2 is unsupported!");
+                return;
+            }
+
+            RILRequest rr = obtainRequest(RIL_REQUEST_SET_LINK_CAPACITY_REPORTING_CRITERIA,
+                    result, mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+            }
+
+            try {
+                radioProxy12.setLinkCapacityReportingCriteria(rr.mSerial, hysteresisMs,
+                        hysteresisDlKbps, hysteresisUlKbps,
+                        primitiveArrayToArrayList(thresholdsDlKbps),
+                        primitiveArrayToArrayList(thresholdsUlKbps), convertRanToHalRan(ran));
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "setLinkCapacityReportingCriteria", e);
+            }
+        }
+    }
+
+    // TODO: return the actual HAL enums instead of just the int values once the new
+    // RadioAccessNetwork type is merged. Fix the default case
+    private static int convertRanToHalRan(int radioAccessNetwork) {
+        switch (radioAccessNetwork) {
+            case AccessNetworkType.GERAN:
+                return 1;
+            case AccessNetworkType.UTRAN:
+                return 2;
+            case AccessNetworkType.EUTRAN:
+                return 3;
+            case AccessNetworkType.CDMA2000:
+                return 4;
+            case AccessNetworkType.IWLAN:
+                return 5;
+            case AccessNetworkType.UNKNOWN:
+            default:
+                return 0; // TODO ???
         }
     }
 
@@ -4689,6 +4780,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_START_KEEPALIVE";
             case RIL_REQUEST_STOP_KEEPALIVE:
                 return "RIL_REQUEST_STOP_KEEPALIVE";
+            case RIL_REQUEST_SET_SIGNAL_STRENGTH_REPORTING_CRITERIA:
+                return "RIL_REQUEST_SET_SIGNAL_STRENGTH_REPORTING_CRITERIA";
+            case RIL_REQUEST_SET_LINK_CAPACITY_REPORTING_CRITERIA:
+                return "RIL_REQUEST_SET_LINK_CAPACITY_REPORTING_CRITERIA";
             default: return "<unknown request>";
         }
     }
@@ -4886,6 +4981,15 @@ public class RIL extends BaseCommands implements CommandsInterface {
         ArrayList<Byte> arrayList = new ArrayList<>(arr.length);
         for (byte b : arr) {
             arrayList.add(b);
+        }
+        return arrayList;
+    }
+
+    /** Convert a primitive int array to an ArrayList<Integer>. */
+    public static ArrayList<Integer> primitiveArrayToArrayList(int[] arr) {
+        ArrayList<Integer> arrayList = new ArrayList<>(arr.length);
+        for (int i : arr) {
+            arrayList.add(i);
         }
         return arrayList;
     }

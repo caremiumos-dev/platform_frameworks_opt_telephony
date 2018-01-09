@@ -25,12 +25,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.display.DisplayManager;
-import android.hardware.radio.V1_0.IndicationFilter;
+import android.hardware.radio.V1_2.IndicationFilter;
 import android.net.ConnectivityManager;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.telephony.AccessNetworkConstants.AccessNetworkThresholds;
+import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.Rlog;
 import android.util.LocalLog;
 import android.view.Display;
@@ -59,6 +61,10 @@ public class DeviceStateMonitor extends Handler {
     private static final int EVENT_POWER_SAVE_MODE_CHANGED      = 2;
     private static final int EVENT_CHARGING_STATE_CHANGED       = 3;
     private static final int EVENT_TETHERING_STATE_CHANGED      = 4;
+
+    // arbitrarily chosen
+    private static final int HYSTERESIS_MILLIS = 5000;
+    private static final int HYSTERESIS_DB = 2;
 
     private final Phone mPhone;
 
@@ -222,6 +228,13 @@ public class DeviceStateMonitor extends Handler {
     }
 
     /**
+     * @return True if link capacity estimate update should be turned off.
+     */
+    private boolean shouldTurnOffLinkCapacityEstimate() {
+        return mIsPowerSaveOn || (!mIsCharging && !mIsTetheringOn && !mIsScreenOn);
+    }
+
+    /**
      * Message handler
      *
      * @param msg The message
@@ -286,6 +299,10 @@ public class DeviceStateMonitor extends Handler {
             newFilter |= IndicationFilter.DATA_CALL_DORMANCY_CHANGED;
         }
 
+        if (!shouldTurnOffLinkCapacityEstimate()) {
+            newFilter |= IndicationFilter.LINK_CAPACITY_ESTIMATE;
+        }
+
         setUnsolResponseFilter(newFilter, false);
     }
 
@@ -302,6 +319,8 @@ public class DeviceStateMonitor extends Handler {
         sendDeviceState(LOW_DATA_EXPECTED, mIsLowDataExpected);
         sendDeviceState(POWER_SAVE_MODE, mIsPowerSaveOn);
         setUnsolResponseFilter(mUnsolicitedResponseFilter, true);
+        setSignalStrengthReportingCriteria();
+        setLinkCapacityReportingCriteria();
     }
 
     /**
@@ -342,6 +361,22 @@ public class DeviceStateMonitor extends Handler {
             mPhone.mCi.setUnsolResponseFilter(newFilter, null);
             mUnsolicitedResponseFilter = newFilter;
         }
+    }
+
+    private void setSignalStrengthReportingCriteria() {
+        // TODO: listen for carrier config changes to update lte
+        mPhone.mCi.setSignalStrengthReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_DB,
+                AccessNetworkThresholds.GERAN, AccessNetworkType.GERAN, null);
+        mPhone.mCi.setSignalStrengthReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_DB,
+                AccessNetworkThresholds.UTRAN, AccessNetworkType.UTRAN, null);
+        mPhone.mCi.setSignalStrengthReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_DB,
+                AccessNetworkThresholds.EUTRAN, AccessNetworkType.EUTRAN, null);
+        mPhone.mCi.setSignalStrengthReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_DB,
+                AccessNetworkThresholds.CDMA2000, AccessNetworkType.CDMA2000, null);
+    }
+
+    private void setLinkCapacityReportingCriteria() {
+        // TODO: add criteria for link capacity reporting
     }
 
     /**
