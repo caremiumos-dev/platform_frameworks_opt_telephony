@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a60f15d_1fb34498",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/data/EuiccNotification.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-09T05:48:33Z",
+      "side": 1,
+      "message": "I think that to be exposed as system APIs, these classes should be located under frameworks/base/telephony and in android.telephony.euicc package, right?",
+      "range": {
+        "startLine": 36,
+        "startChar": 3,
+        "endLine": 36,
+        "endChar": 44
+      },
+      "revId": "6565165352de70ead1f34a7ba390297828fe5be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
