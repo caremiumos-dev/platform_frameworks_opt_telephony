@@ -46,6 +46,99 @@
       "revId": "253f646e06c70624fe51ec2f6dab0eed9732f317",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "88f753a9_37717fea",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/PublicApnSettingTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1131829
+      },
+      "writtenOn": "2018-01-09T13:52:03Z",
+      "side": 1,
+      "message": "Ok, thanks for clarification.",
+      "parentUuid": "9fa80b7c_b586833c",
+      "range": {
+        "startLine": 42,
+        "startChar": 13,
+        "endLine": 42,
+        "endChar": 33
+      },
+      "revId": "253f646e06c70624fe51ec2f6dab0eed9732f317",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8dd835ca_8f5cd19d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/PublicApnSettingTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1131829
+      },
+      "writtenOn": "2018-01-09T13:52:03Z",
+      "side": 1,
+      "message": "Maybe just use Builder directly? (and kill makeApnSetting)\nThis way you won\u0027t need to specify zeros and nulls and won\u0027t have to type all the comments.\n\nThe same applies to testEqualsRoamingProtocol() below.",
+      "range": {
+        "startLine": 66,
+        "startChar": 15,
+        "endLine": 66,
+        "endChar": 41
+      },
+      "revId": "253f646e06c70624fe51ec2f6dab0eed9732f317",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6767fff5_57491b66",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/PublicApnSettingTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1131829
+      },
+      "writtenOn": "2018-01-09T13:52:03Z",
+      "side": 1,
+      "message": "Is it used anywhere?",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 77
+      },
+      "revId": "253f646e06c70624fe51ec2f6dab0eed9732f317",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "288e67b5_004d816c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/PublicApnSettingTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1131829
+      },
+      "writtenOn": "2018-01-09T13:52:03Z",
+      "side": 1,
+      "message": "can you just set it to ApnSetting.makeApnSetting(baseApn); and remove all the assignments in each \"if\" clause?",
+      "range": {
+        "startLine": 226,
+        "startChar": 33,
+        "endLine": 226,
+        "endChar": 38
+      },
+      "revId": "253f646e06c70624fe51ec2f6dab0eed9732f317",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
