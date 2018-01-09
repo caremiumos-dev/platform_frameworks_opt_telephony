@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1afe4e6_b8220d14",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-09T11:40:34Z",
+      "side": 1,
+      "message": "isSupportedApplication?",
+      "range": {
+        "startLine": 890,
+        "startChar": 20,
+        "endLine": 890,
+        "endChar": 43
+      },
+      "revId": "6412da4d68cc86dcf5d31526c32b908ca2bcc0a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bbadfd1_a2fa5ceb",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-09T11:40:34Z",
+      "side": 1,
+      "message": "It can be SIM or RUIM too.",
+      "range": {
+        "startLine": 891,
+        "startChar": 12,
+        "endLine": 892,
+        "endChar": 56
+      },
+      "revId": "6412da4d68cc86dcf5d31526c32b908ca2bcc0a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

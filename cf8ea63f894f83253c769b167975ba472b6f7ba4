@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "b5ac7b7c_70962de6",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-09T11:40:34Z",
+      "side": 1,
+      "message": "Yes, this line will send out internal broadcast to SubscriptionInfoUpdater, but that should happen only after ICCID is read, and for that it should be read from both apps because we dont know which will be treated as current app type. Basically same logic for LOADED applies here as well and we do need to wait for both apps.",
+      "parentUuid": "38988b5d_be09299e",
+      "range": {
+        "startLine": 241,
+        "startChar": 16,
+        "endLine": 241,
+        "endChar": 34
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f6d0dd2_4299574c",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 1
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "36376854_4e0e35fb",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-09T11:40:34Z",
+      "side": 1,
+      "message": "That\u0027s ok, but SubscriptionInfoUpdater will query ICCID as soon as this is broadcast, and what if ICCID is coming from the other app?",
+      "parentUuid": "7d34cf41_66d4ddff",
+      "range": {
+        "startLine": 282,
+        "startChar": 16,
+        "endLine": 282,
+        "endChar": 32
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f04e6e5_7656f99f",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 1
@@ -178,6 +226,30 @@
       "side": 1,
       "message": "the method \"areAllApplicationsReady()\" will only be called when at least one \"APP Ready\" is received so that in normal cases this would never happen.  I added this check just in case something weird happens, like after receiving one app ready and suddenly switching to a profile with no apps. in that situation, I prefer to let the user believe the Apps are not ready... What do you think?",
       "parentUuid": "3f04e6e5_7656f99f",
+      "range": {
+        "startLine": 893,
+        "startChar": 0,
+        "endLine": 893,
+        "endChar": 71
+      },
+      "revId": "cf8ea63f894f83253c769b167975ba472b6f7ba4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8317267d_8083da60",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-09T11:40:34Z",
+      "side": 1,
+      "message": "I guess that seems ok. We can revisit if needed later.",
+      "parentUuid": "10ec1b3b_e8696656",
       "range": {
         "startLine": 893,
         "startChar": 0,
