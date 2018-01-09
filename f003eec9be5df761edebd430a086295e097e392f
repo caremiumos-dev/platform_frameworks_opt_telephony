@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c63c36d_49f93467",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-09T22:33:22Z",
+      "side": 1,
+      "message": "I am not sure whether we need this flag.  If in the same slot, we first insert a pSIM and later insert a removable eSIM, the state change should be covered by:\noldState \u003d\u003d CardState.CARDSTATE_ABSENT \u0026\u0026 mCardState !\u003d CardState.CARDSTATE_ABSENT\nDo we really need  (wasEuicc !\u003d mIsEuicc) to check whether new card is inserted?\nMaybe mIsEuicc is enough?",
+      "range": {
+        "startLine": 108,
+        "startChar": 69,
+        "endLine": 108,
+        "endChar": 77
+      },
+      "revId": "f003eec9be5df761edebd430a086295e097e392f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
