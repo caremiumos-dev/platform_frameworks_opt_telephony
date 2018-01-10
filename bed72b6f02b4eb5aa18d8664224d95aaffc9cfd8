@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2aa033de_eba30b07",
+        "filename": "src/java/com/android/internal/telephony/DriverCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2018-01-10T06:49:03Z",
+      "side": 1,
+      "message": "\"NONE\" means that there is not any setting from the Modem side. I recommend \"NONE\" because it is already used with Audio quality of the IMS side(ImsStreamMediaProfile.AUDIO_QUALITY_NONE).",
+      "parentUuid": "7c3c6265_5d09467c",
+      "range": {
+        "startLine": 43,
+        "startChar": 28,
+        "endLine": 43,
+        "endChar": 46
+      },
+      "revId": "bed72b6f02b4eb5aa18d8664224d95aaffc9cfd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f58bdd82_139fae60",
         "filename": "src/java/com/android/internal/telephony/DriverCall.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-02T21:46:25Z",
       "side": 1,
       "message": "Let\u0027s repeat the comments from the hal file:\n\n// AMR (Narrowband) audio codec\n// AMR (Wideband) audio codec\n// GSM Enhanced Full-Rate audio codec\n// GSM Full-Rate audio codec\n// GSM Half-Rate audio codec\n// Enhanced Variable rate codec\n// Enhanced Variable rate codec revision B\n// Enhanced Variable rate codec (Wideband)\n// Enhanced Variable rate codec (Narrowband)",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 54
+      },
+      "revId": "bed72b6f02b4eb5aa18d8664224d95aaffc9cfd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cbb9dace_239d7c6e",
+        "filename": "src/java/com/android/internal/telephony/DriverCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2018-01-10T06:49:03Z",
+      "side": 1,
+      "message": "I agree with you. Thank you.",
+      "parentUuid": "f58bdd82_139fae60",
       "range": {
         "startLine": 44,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ffec8939_0bf60a10",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2018-01-10T06:49:03Z",
+      "side": 1,
+      "message": "These are defined in GSMA documents.\n\nhttps://www.gsma.com/futurenetworks/hd-voice-minimum-requirements/\nHD Voice Annex C Minimum Requirements with GSM / UMTS\nHD Voice Annex D Minimum Requirements with CDMA2000",
+      "parentUuid": "246d3a07_d719bf30",
+      "range": {
+        "startLine": 941,
+        "startChar": 0,
+        "endLine": 943,
+        "endChar": 64
+      },
+      "revId": "bed72b6f02b4eb5aa18d8664224d95aaffc9cfd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59700e6a_0f8c6cf2",
         "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2018-01-02T21:46:25Z",
       "side": 1,
       "message": "Can this function share some code with responseCurrentCalls? This line is the only difference, right?",
+      "range": {
+        "startLine": 1447,
+        "startChar": 0,
+        "endLine": 1447,
+        "endChar": 68
+      },
+      "revId": "bed72b6f02b4eb5aa18d8664224d95aaffc9cfd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e393a42c_9ddd1663",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2018-01-10T06:49:03Z",
+      "side": 1,
+      "message": "Yes. only difference is Audio quality setting.\n\nTo avoid an affect of previous version, we have implemented responseCurrentCalls_1_2. I can see similar implementations in RIL#convertHalCellInfoList and RIL#convertHalCellInfoList_1_2. I thought these methods were not commonalized to avoid an affect of previous version.",
+      "parentUuid": "59700e6a_0f8c6cf2",
       "range": {
         "startLine": 1447,
         "startChar": 0,
