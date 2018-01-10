@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c73c2173_c73f9b41",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-10T01:13:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87ede297_02ee511a",
+      "range": {
+        "startLine": 73,
+        "startChar": 29,
+        "endLine": 73,
+        "endChar": 32
+      },
+      "revId": "36a044148bf9cb1d75c814a1431e40058b4f0c0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e276eb34_64a307d5",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "36a044148bf9cb1d75c814a1431e40058b4f0c0a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35d4065b_fa868a33",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-10T01:13:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e276eb34_64a307d5",
+      "range": {
+        "startLine": 74,
+        "startChar": 31,
+        "endLine": 74,
+        "endChar": 67
+      },
+      "revId": "36a044148bf9cb1d75c814a1431e40058b4f0c0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c827025e_e2aac7ad",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-10T01:13:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "093750b3_8cf2f19e",
+      "range": {
+        "startLine": 80,
+        "startChar": 22,
+        "endLine": 80,
+        "endChar": 45
+      },
+      "revId": "36a044148bf9cb1d75c814a1431e40058b4f0c0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6576946_93983710",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "548a97f2_99d1b60d",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-10T01:13:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6576946_93983710",
+      "range": {
+        "startLine": 621,
+        "startChar": 43,
+        "endLine": 621,
+        "endChar": 44
+      },
+      "revId": "36a044148bf9cb1d75c814a1431e40058b4f0c0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e2a12cc_4e9befb5",
         "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2018-01-09T23:59:14Z",
       "side": 1,
       "message": "Just realized that ISIM actually does not register to any \"lock\", which means all the changes to read ICCID when locked for ISIM actually is not necessary, they will never be executed",
+      "range": {
+        "startLine": 85,
+        "startChar": 34,
+        "endLine": 85,
+        "endChar": 64
+      },
+      "revId": "36a044148bf9cb1d75c814a1431e40058b4f0c0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbf83c4e_95c7b3b0",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-10T01:13:38Z",
+      "side": 1,
+      "message": "Yes, that\u0027s why we added the todo above.",
+      "parentUuid": "6e2a12cc_4e9befb5",
       "range": {
         "startLine": 85,
         "startChar": 34,
@@ -137,6 +257,30 @@
       "revId": "36a044148bf9cb1d75c814a1431e40058b4f0c0a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc4e1e14_ededd79f",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-10T01:13:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d32f2ee5_9bc26a0c",
+      "range": {
+        "startLine": 303,
+        "startChar": 10,
+        "endLine": 303,
+        "endChar": 14
+      },
+      "revId": "36a044148bf9cb1d75c814a1431e40058b4f0c0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
