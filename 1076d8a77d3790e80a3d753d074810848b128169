@@ -22,6 +22,30 @@
       "revId": "1076d8a77d3790e80a3d753d074810848b128169",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d653247_d2f8caa5",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-10T19:00:07Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "0cdb74fd_60c314f4",
+      "range": {
+        "startLine": 463,
+        "startChar": 0,
+        "endLine": 464,
+        "endChar": 64
+      },
+      "revId": "1076d8a77d3790e80a3d753d074810848b128169",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
