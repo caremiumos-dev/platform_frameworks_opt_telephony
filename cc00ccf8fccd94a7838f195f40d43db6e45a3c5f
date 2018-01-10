@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "43db0537_0fe28702",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2360,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-10T10:19:25Z",
+      "side": 1,
+      "message": "Querying from network everytime the SIM changes is a costly operation. \nFor voice call forwarding, the SIM\u0027s Elementary file(EFCFIS), is having the info stored, and is read to update the CF status and show indicator.\nHere, since for video CF, we are storing in preferences, we are re-setting it to FALSE when SIM changes, instead of showing wrong info. \nSimilarly, we can see in above lines(2358, 2359), VoiceMailNumber, VmSimImsi are also reset.",
+      "parentUuid": "4cd4c4c1_21994ad4",
+      "range": {
+        "startLine": 2360,
+        "startChar": 20,
+        "endLine": 2360,
+        "endChar": 52
+      },
+      "revId": "cc00ccf8fccd94a7838f195f40d43db6e45a3c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b4d23a5c_1c777911",
         "filename": "src/java/com/android/internal/telephony/PhoneInternalInterface.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-27T19:41:28Z",
       "side": 1,
       "message": "Is this returned array expected to be greater than size 1 only when CFReason is CF_REASON_ALL or CF_REASON_ALL_CONDITIONAL ? or can it be greater than 1 if the caller is querying both VOICE and VIDEO in the same API call?\n\nIt doesnt seem like setCallForwardingOption method below can set multiple Reasons at once. So it will be good to specify how exactly this response should be returned and when the returned value will be an array of size greater than 1.",
+      "range": {
+        "startLine": 607,
+        "startChar": 43,
+        "endLine": 607,
+        "endChar": 48
+      },
+      "revId": "cc00ccf8fccd94a7838f195f40d43db6e45a3c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40d09134_34872e4a",
+        "filename": "src/java/com/android/internal/telephony/PhoneInternalInterface.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-10T10:19:25Z",
+      "side": 1,
+      "message": "1. The new overloaded API \"getCallForwardingOption\" has just introduced the \"commandInterfaceServiceClass\" parameter. Hence, the remaining documentation has been taken from the original API(line#562).\n\n2. The array of CallForwardInfo is not depending on CF Reason (ALL or CONDITIONAL). \nIf Call forwarding query is made without specifying any service class(from MMI code), then it will return one or more CallForwardInfo for each service class provided by that network.( say Voice, Fax etc.).\nCode reference: ImsPhoneMmiCode.java-\u003eonQueryCfComplete(AsyncResult ar)-\u003e line#1447\n\nThe array is generic and would have the size of 1 if the service class has been specified.",
+      "parentUuid": "b4d23a5c_1c777911",
       "range": {
         "startLine": 607,
         "startChar": 43,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0e8fc5ea_a4153a82",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1257,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-10T10:19:25Z",
+      "side": 1,
+      "message": "Sure. Will add the new method isSerivceClassVideo() in the next patchset.",
+      "parentUuid": "ef6f525a_fafa2c22",
+      "range": {
+        "startLine": 1257,
+        "startChar": 12,
+        "endLine": 1257,
+        "endChar": 82
+      },
+      "revId": "cc00ccf8fccd94a7838f195f40d43db6e45a3c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cad84aea_760f1953",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2017-12-27T19:41:28Z",
       "side": 1,
       "message": "Is this notification different from Voice Call Forward notification? If not, wont it be confusing to the user to see this notification and still get voice calls?",
+      "range": {
+        "startLine": 1786,
+        "startChar": 22,
+        "endLine": 1786,
+        "endChar": 51
+      },
+      "revId": "cc00ccf8fccd94a7838f195f40d43db6e45a3c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f59a5a8_a0d0562b",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1786,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-10T10:19:25Z",
+      "side": 1,
+      "message": "As per current implementation, the indicator used is same as for Voice Call Forward notification.\nIt would be ideal if Google can introduce new indicator for Video Call forward.",
+      "parentUuid": "cad84aea_760f1953",
       "range": {
         "startLine": 1786,
         "startChar": 22,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "20ec4d62_9b878fab",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-10T10:19:25Z",
+      "side": 1,
+      "message": "Agreed. Will update in the next patch.",
+      "parentUuid": "30fc9d49_1d279d07",
+      "range": {
+        "startLine": 1094,
+        "startChar": 58,
+        "endLine": 1094,
+        "endChar": 63
+      },
+      "revId": "cc00ccf8fccd94a7838f195f40d43db6e45a3c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "440bff95_d6667335",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 2
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "5deedab0_398e393b",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-10T10:19:25Z",
+      "side": 1,
+      "message": "Agreed. We can move the video preference related logic outside the if condition.",
+      "parentUuid": "440bff95_d6667335",
+      "range": {
+        "startLine": 1099,
+        "startChar": 20,
+        "endLine": 1099,
+        "endChar": 44
+      },
+      "revId": "cc00ccf8fccd94a7838f195f40d43db6e45a3c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1930599d_2e946e39",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 2
@@ -151,6 +295,30 @@
       "writtenOn": "2017-12-27T19:41:28Z",
       "side": 1,
       "message": "If this is allDataCircuitAsynchronous, why are we using SERVICE_CLASS_DATA_SYNC instead of using SERVICE_CLASS_DATA_ASYNC ?",
+      "range": {
+        "startLine": 1102,
+        "startChar": 53,
+        "endLine": 1102,
+        "endChar": 79
+      },
+      "revId": "cc00ccf8fccd94a7838f195f40d43db6e45a3c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32218e30_143c5665",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-10T10:19:25Z",
+      "side": 1,
+      "message": "allDataCircuitAsynchronous is having the decimal value \"80\". \nThis mask is achieved by using SERVICE_CLASS_DATA_SYNC(1\u003c\u003c4) and SERVICE_CLASS_PACKET (1\u003c\u003c6) which makes the total 80.\nThis combination value is provided by modem team.\nSERVICE_CLASS_DATA_ASYNC(1\u003c\u003c5) can\u0027t be used.",
+      "parentUuid": "1930599d_2e946e39",
       "range": {
         "startLine": 1102,
         "startChar": 53,

@@ -343,6 +343,30 @@
     },
     {
       "key": {
+        "uuid": "c005fd10_0ac298da",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-10T10:19:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67ce8534_68cf5a8c",
+      "range": {
+        "startLine": 1228,
+        "startChar": 35,
+        "endLine": 1228,
+        "endChar": 81
+      },
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45e28d82_ca874f6c",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 1
@@ -390,6 +414,24 @@
       "side": 1,
       "message": "The reason we store in EFCIS is because we can retain CF status easily if user switches the SIM card to a different phone. If we do not store video call forwarding status, how will the user know that his video calls are being forwarded?\n\nCan you describe the behavior user will see after he switch the SIM to a new phone?",
       "parentUuid": "f4e525e8_73dab742",
+      "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d97c5fda_d208a966",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-10T10:19:25Z",
+      "side": 1,
+      "message": "Yes, this is a limitation that when the user will switch the SIM card, then even though video calls might be being forwarded, UI won\u0027t show it, till the time user queries for the CF info.\nBut, there is no provision to store this in EFCFIS, and querying network is not feasible.",
+      "parentUuid": "1b6e26a7_1f348d8c",
       "revId": "d02e1aeb7d1cb2cf622725b1a0623ab03ee72795",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
