@@ -36,7 +36,7 @@ import android.app.IAlarmManager;
 import android.content.Intent;
 import android.hardware.radio.V1_0.CellIdentityGsm;
 import android.hardware.radio.V1_0.CellInfoType;
-import android.hardware.radio.V1_0.VoiceRegStateResult;
+import android.hardware.radio.V1_0.DataRegStateResult;
 import android.os.AsyncResult;
 import android.os.Bundle;
 import android.os.Handler;
@@ -408,7 +408,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @MediumTest
     public void testGsmCellLocation() {
 
-        VoiceRegStateResult result = new VoiceRegStateResult();
+        DataRegStateResult result = new DataRegStateResult();
         result.cellIdentity.cellInfoType = CellInfoType.GSM;
         result.cellIdentity.cellIdentityGsm.add(new CellIdentityGsm());
         result.cellIdentity.cellIdentityGsm.get(0).lac = 2;

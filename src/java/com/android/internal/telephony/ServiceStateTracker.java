@@ -857,25 +857,25 @@ public class ServiceStateTracker extends Handler {
     }
 
     private void processCellLocationInfo(CellLocation cellLocation,
-                                         VoiceRegStateResult voiceRegStateResult) {
+                                         DataRegStateResult dataRegStateResult) {
         if (mPhone.isPhoneTypeGsm()) {
             int psc = -1;
             int cid = -1;
             int lac = -1;
-            switch(voiceRegStateResult.cellIdentity.cellInfoType) {
+            switch(dataRegStateResult.cellIdentity.cellInfoType) {
                 case CellInfoType.GSM: {
-                    if (voiceRegStateResult.cellIdentity.cellIdentityGsm.size() == 1) {
+                    if (dataRegStateResult.cellIdentity.cellIdentityGsm.size() == 1) {
                         android.hardware.radio.V1_0.CellIdentityGsm cellIdentityGsm =
-                                voiceRegStateResult.cellIdentity.cellIdentityGsm.get(0);
+                                dataRegStateResult.cellIdentity.cellIdentityGsm.get(0);
                         cid = cellIdentityGsm.cid;
                         lac = cellIdentityGsm.lac;
                     }
                     break;
                 }
                 case CellInfoType.WCDMA: {
-                    if (voiceRegStateResult.cellIdentity.cellIdentityWcdma.size() == 1) {
+                    if (dataRegStateResult.cellIdentity.cellIdentityWcdma.size() == 1) {
                         android.hardware.radio.V1_0.CellIdentityWcdma cellIdentityWcdma =
-                                voiceRegStateResult.cellIdentity.cellIdentityWcdma.get(0);
+                                dataRegStateResult.cellIdentity.cellIdentityWcdma.get(0);
                         cid = cellIdentityWcdma.cid;
                         lac = cellIdentityWcdma.lac;
                         psc = cellIdentityWcdma.psc;
@@ -883,19 +883,19 @@ public class ServiceStateTracker extends Handler {
                     break;
                 }
                 case CellInfoType.TD_SCDMA: {
-                    if (voiceRegStateResult.cellIdentity.cellIdentityTdscdma.size() == 1) {
+                    if (dataRegStateResult.cellIdentity.cellIdentityTdscdma.size() == 1) {
                         android.hardware.radio.V1_0.CellIdentityTdscdma
                                 cellIdentityTdscdma =
-                                voiceRegStateResult.cellIdentity.cellIdentityTdscdma.get(0);
+                                dataRegStateResult.cellIdentity.cellIdentityTdscdma.get(0);
                         cid = cellIdentityTdscdma.cid;
                         lac = cellIdentityTdscdma.lac;
                     }
                     break;
                 }
                 case CellInfoType.LTE: {
-                    if (voiceRegStateResult.cellIdentity.cellIdentityLte.size() == 1) {
+                    if (dataRegStateResult.cellIdentity.cellIdentityLte.size() == 1) {
                         android.hardware.radio.V1_0.CellIdentityLte cellIdentityLte =
-                                voiceRegStateResult.cellIdentity.cellIdentityLte.get(0);
+                                dataRegStateResult.cellIdentity.cellIdentityLte.get(0);
                         cid = cellIdentityLte.ci;
 
                         /* Continuing the historical behaviour of using tac as lac. */
@@ -917,11 +917,11 @@ public class ServiceStateTracker extends Handler {
             int systemId = 0;
             int networkId = 0;
 
-            switch(voiceRegStateResult.cellIdentity.cellInfoType) {
+            switch(dataRegStateResult.cellIdentity.cellInfoType) {
                 case CellInfoType.CDMA: {
-                    if (voiceRegStateResult.cellIdentity.cellIdentityCdma.size() == 1) {
+                    if (dataRegStateResult.cellIdentity.cellIdentityCdma.size() == 1) {
                         android.hardware.radio.V1_0.CellIdentityCdma cellIdentityCdma =
-                                voiceRegStateResult.cellIdentity.cellIdentityCdma.get(0);
+                                dataRegStateResult.cellIdentity.cellIdentityCdma.get(0);
                         baseStationId = cellIdentityCdma.baseStationId;
                         baseStationLatitude = cellIdentityCdma.latitude;
                         baseStationLongitude = cellIdentityCdma.longitude;
@@ -1105,7 +1105,7 @@ public class ServiceStateTracker extends Handler {
             case EVENT_GET_LOC_DONE:
                 ar = (AsyncResult) msg.obj;
                 if (ar.exception == null) {
-                    processCellLocationInfo(mCellLoc, (VoiceRegStateResult) ar.result);
+                    processCellLocationInfo(mCellLoc, (DataRegStateResult) ar.result);
                     mPhone.notifyLocationChanged();
                 }
 
@@ -1178,7 +1178,7 @@ public class ServiceStateTracker extends Handler {
                 ar = (AsyncResult) msg.obj;
 
                 if (ar.exception == null) {
-                    mCi.getVoiceRegistrationState(obtainMessage(EVENT_GET_LOC_DONE, null));
+                    mCi.getDataRegistrationState(obtainMessage(EVENT_GET_LOC_DONE, null));
                 }
                 break;
 
@@ -1830,8 +1830,6 @@ public class ServiceStateTracker extends Handler {
                     }
                 }
 
-                processCellLocationInfo(mNewCellLoc, voiceRegStateResult);
-
                 if (DBG) {
                     log("handlPollVoiceRegResultMessage: regState=" + registrationState
                             + " radioTechnology=" + voiceRegStateResult.rat);
@@ -1905,6 +1903,7 @@ public class ServiceStateTracker extends Handler {
                 }
 
                 updateServiceStateLteEarfcnBoost(mNewSS, getLteEarfcn(dataRegStateResult));
+                processCellLocationInfo(mNewCellLoc, dataRegStateResult);
                 break;
             }
 
