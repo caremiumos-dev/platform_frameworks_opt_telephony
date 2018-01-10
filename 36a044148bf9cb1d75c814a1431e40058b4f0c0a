@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "d8940f7d_609f6ee1",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-10T01:18:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fbf83c4e_95c7b3b0",
+      "range": {
+        "startLine": 85,
+        "startChar": 34,
+        "endLine": 85,
+        "endChar": 64
+      },
+      "revId": "36a044148bf9cb1d75c814a1431e40058b4f0c0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d32f2ee5_9bc26a0c",
         "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
         "patchSetId": 1
