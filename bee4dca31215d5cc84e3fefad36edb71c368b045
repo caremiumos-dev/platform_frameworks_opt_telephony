@@ -16,6 +16,24 @@
       "revId": "bee4dca31215d5cc84e3fefad36edb71c368b045",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b71170e_69f6d944",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/data/EuiccRatTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-10T23:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32ffe237_2809cb29",
+      "revId": "bee4dca31215d5cc84e3fefad36edb71c368b045",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
