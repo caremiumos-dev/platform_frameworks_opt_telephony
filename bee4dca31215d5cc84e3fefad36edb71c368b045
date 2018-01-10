@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32ffe237_2809cb29",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/data/EuiccRatTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-10T21:13:19Z",
+      "side": 1,
+      "message": "Actually please also add unit tests for the new method equals.",
+      "revId": "bee4dca31215d5cc84e3fefad36edb71c368b045",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
