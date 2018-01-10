@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab63a8b2_f433f186",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-10T19:12:19Z",
+      "side": 1,
+      "message": "Add Merged-in tag.",
+      "revId": "0915c0d6a5fcd06c398a1dbbf52c426eda1c7d37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
