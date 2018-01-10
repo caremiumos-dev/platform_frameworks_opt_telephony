@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e56d7c24_47801d12",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/data/EuiccRatTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-10T23:30:54Z",
+      "side": 1,
+      "message": "Could you also test the following two cases?\n1. Empty rules\n2. Rule with empty CarrierIdentifier",
+      "range": {
+        "startLine": 175,
+        "startChar": 16,
+        "endLine": 175,
+        "endChar": 33
+      },
+      "revId": "629880854bad91106faa357f4894e3b71f1dfe40",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
