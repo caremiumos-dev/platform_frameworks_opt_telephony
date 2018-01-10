@@ -153,6 +153,15 @@ public class CdmaInboundSmsHandler extends InboundSmsHandler {
                 // handled below, after storage check
                 break;
 
+            case SmsEnvelope.TELESERVICE_CT_WAP:
+                // China Telecom WDP header contains Message identifier
+                // and User data subparametrs extract these fields
+                if (!sms.processCdmaCTWdpHeader(sms)) {
+                    return Intents.RESULT_SMS_HANDLED;
+                }
+                teleService = SmsEnvelope.TELESERVICE_WAP;
+                break;
+
             default:
                 loge("unsupported teleservice 0x" + Integer.toHexString(teleService));
                 return Intents.RESULT_SMS_UNSUPPORTED;
