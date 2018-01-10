@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c7ba42d_462bd8c6",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccSpecVersion.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-10T19:59:16Z",
+      "side": 1,
+      "message": "just version? it\u0027s the version in byte[]?",
+      "range": {
+        "startLine": 39,
+        "startChar": 35,
+        "endLine": 39,
+        "endChar": 46
+      },
+      "revId": "7453d8707e6a183f0ae02b8bfc36cbeb0b8721e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73b88af8_cf6987f0",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccSpecVersion.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-10T19:59:16Z",
+      "side": 1,
+      "message": "If EuiccSpecVersion is not Parcelable, do we still need these?",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 5
+      },
+      "revId": "7453d8707e6a183f0ae02b8bfc36cbeb0b8721e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
