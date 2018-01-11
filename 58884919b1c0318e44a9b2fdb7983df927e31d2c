@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "51c6dee0_9bb0d630",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-11T21:36:12Z",
+      "side": 1,
+      "message": "Do we want to public this? This is the type of input of cancelSession().",
+      "range": {
+        "startLine": 126,
+        "startChar": 22,
+        "endLine": 126,
+        "endChar": 34
+      },
+      "revId": "58884919b1c0318e44a9b2fdb7983df927e31d2c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87944e06_be6d30e8",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 2
