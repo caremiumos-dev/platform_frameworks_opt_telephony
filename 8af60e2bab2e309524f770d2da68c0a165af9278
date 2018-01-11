@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33f10d4c_aaa8fbb8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-11T01:33:59Z",
+      "side": 1,
+      "message": "It think you mean \u00273gpp2 app type\u0027? It doesn\u0027t matter if it is the current app type or not.",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 15
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb8725e0_df4ebf4c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-11T01:33:59Z",
+      "side": 1,
+      "message": "This will always be true.",
+      "range": {
+        "startLine": 303,
+        "startChar": 28,
+        "endLine": 303,
+        "endChar": 69
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fc317c7_2a89daa9",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-11T01:33:59Z",
+      "side": 1,
+      "message": "Always true.",
+      "range": {
+        "startLine": 673,
+        "startChar": 12,
+        "endLine": 673,
+        "endChar": 73
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "667f764e_e5275285",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1650,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-11T01:33:59Z",
+      "side": 1,
+      "message": "always true.",
+      "range": {
+        "startLine": 1650,
+        "startChar": 12,
+        "endLine": 1650,
+        "endChar": 73
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55e223e3_79d0dd73",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2545,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-11T01:33:59Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 2545,
+        "startChar": 12,
+        "endLine": 2545,
+        "endChar": 73
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94a576fc_2c7e8f4c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4176,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-11T01:33:59Z",
+      "side": 1,
+      "message": "always true",
+      "range": {
+        "startLine": 4175,
+        "startChar": 20,
+        "endLine": 4176,
+        "endChar": 54
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
