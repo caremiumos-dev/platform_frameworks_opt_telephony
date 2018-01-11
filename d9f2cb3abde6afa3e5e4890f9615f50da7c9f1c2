@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ee2dd37_4989d6e3",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/ApduCommand.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-11T00:52:20Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "d9f2cb3abde6afa3e5e4890f9615f50da7c9f1c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b34cdf28_e5151881",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/TransmitApduLogicalChannelInvocation.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-11T00:52:20Z",
+      "side": 1,
+      "message": "I think these log methods can also be moved to the parent class AsyncMessageInvocation,",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 5
+      },
+      "revId": "d9f2cb3abde6afa3e5e4890f9615f50da7c9f1c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d8c04ba_446348a5",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/TransmitApduLogicalChannelInvocation.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-11T00:52:20Z",
+      "side": 1,
+      "message": "Log the exception?",
+      "range": {
+        "startLine": 82,
+        "startChar": 16,
+        "endLine": 82,
+        "endChar": 42
+      },
+      "revId": "d9f2cb3abde6afa3e5e4890f9615f50da7c9f1c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
