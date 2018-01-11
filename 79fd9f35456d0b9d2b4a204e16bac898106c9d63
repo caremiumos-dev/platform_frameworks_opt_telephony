@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7fdeac6_3e52bef3",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/ApduException.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-11T01:06:00Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "79fd9f35456d0b9d2b4a204e16bac898106c9d63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
