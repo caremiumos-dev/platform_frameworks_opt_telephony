@@ -22,6 +22,30 @@
       "revId": "629880854bad91106faa357f4894e3b71f1dfe40",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81daba1a_57a185d0",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/data/EuiccRatTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-11T01:22:38Z",
+      "side": 1,
+      "message": "An empty CarrierIdentifier is covered in the first item (new CarrierIdentifier[] {}). Added a null CarrierIdentifier case.",
+      "parentUuid": "e56d7c24_47801d12",
+      "range": {
+        "startLine": 175,
+        "startChar": 16,
+        "endLine": 175,
+        "endChar": 33
+      },
+      "revId": "629880854bad91106faa357f4894e3b71f1dfe40",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
