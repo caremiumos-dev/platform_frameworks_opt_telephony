@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2784a90_7325478e",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1061207
+      },
+      "writtenOn": "2018-01-11T18:27:05Z",
+      "side": 1,
+      "message": "nit: nullable.",
+      "range": {
+        "startLine": 351,
+        "startChar": 28,
+        "endLine": 351,
+        "endChar": 46
+      },
+      "revId": "42a97d8fc0995d9d3d5d9570e6278ee2499f1703",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
