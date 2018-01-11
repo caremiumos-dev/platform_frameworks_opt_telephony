@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6925e8d1_78fad3fd",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-11T00:06:23Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "58884919b1c0318e44a9b2fdb7983df927e31d2c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87944e06_be6d30e8",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-11T00:06:23Z",
+      "side": 1,
+      "message": "Move this under CANCEL_REASON_PPR_NOT_ALLOWED.",
+      "range": {
+        "startLine": 140,
+        "startChar": 4,
+        "endLine": 141,
+        "endChar": 40
+      },
+      "revId": "58884919b1c0318e44a9b2fdb7983df927e31d2c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97d8d3a9_877f0e86",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-11T00:06:23Z",
+      "side": 1,
+      "message": "why don\u0027t we keep the previous operation code? it feels a little wired that all the code are 1s.",
+      "range": {
+        "startLine": 157,
+        "startChar": 4,
+        "endLine": 164,
+        "endChar": 60
+      },
+      "revId": "58884919b1c0318e44a9b2fdb7983df927e31d2c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
