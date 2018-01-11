@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cb9b3afc_9c92ab65",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/ApduCommand.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-11T21:21:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ee2dd37_4989d6e3",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "d9f2cb3abde6afa3e5e4890f9615f50da7c9f1c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b34cdf28_e5151881",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/TransmitApduLogicalChannelInvocation.java",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "76bb98e0_7d2fbd81",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/TransmitApduLogicalChannelInvocation.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-11T21:21:22Z",
+      "side": 1,
+      "message": "The log tag is different. AsyncMessageInvocation sounds to general to have a single tag for all subclasses. Actually I change to call Rlog directly as there are not many calls and these log methods don\u0027t save much.",
+      "parentUuid": "b34cdf28_e5151881",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 5
+      },
+      "revId": "d9f2cb3abde6afa3e5e4890f9615f50da7c9f1c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d8c04ba_446348a5",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/TransmitApduLogicalChannelInvocation.java",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "d9f2cb3abde6afa3e5e4890f9615f50da7c9f1c2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb1d3e0c_4e3142c4",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/TransmitApduLogicalChannelInvocation.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-11T21:21:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d8c04ba_446348a5",
+      "range": {
+        "startLine": 82,
+        "startChar": 16,
+        "endLine": 82,
+        "endChar": 42
+      },
+      "revId": "d9f2cb3abde6afa3e5e4890f9615f50da7c9f1c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
