@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b49c9831_2f9206d6",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/RequestBuilder.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-11T01:04:33Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "93a0f45a79ef85cd7d28d6893be2e3247bb5c319",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
