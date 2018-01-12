@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 
 import android.os.Parcel;
 import android.support.test.runner.AndroidJUnit4;
-import android.telephony.ims.internal.feature.CapabilityChangeRequest;
+import android.telephony.ims.feature.CapabilityChangeRequest;
 import android.telephony.ims.internal.feature.ImsFeature;
 import android.telephony.ims.internal.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;

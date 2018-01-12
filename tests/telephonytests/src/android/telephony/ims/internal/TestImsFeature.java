@@ -17,7 +17,7 @@
 package android.telephony.ims.internal;
 
 import android.os.IInterface;
-import android.telephony.ims.internal.feature.CapabilityChangeRequest;
+import android.telephony.ims.feature.CapabilityChangeRequest;
 import android.telephony.ims.internal.feature.ImsFeature;
 
 public class TestImsFeature extends ImsFeature {
