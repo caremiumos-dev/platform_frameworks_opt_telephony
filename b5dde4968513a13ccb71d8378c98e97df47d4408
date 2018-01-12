@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc2f881e_0be20d27",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-12T19:20:07Z",
+      "side": 1,
+      "message": "Remove above two blank lines",
+      "revId": "b5dde4968513a13ccb71d8378c98e97df47d4408",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc91ca37_2b36d4ca",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-12T19:20:07Z",
+      "side": 1,
+      "message": "It\u0027s better to add a comment here to clarify when this is called and how the subclass should override this method (i.e., set mCardId).",
+      "range": {
+        "startLine": 105,
+        "startChar": 19,
+        "endLine": 105,
+        "endChar": 31
+      },
+      "revId": "b5dde4968513a13ccb71d8378c98e97df47d4408",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
