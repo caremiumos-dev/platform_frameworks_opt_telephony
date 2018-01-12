@@ -465,6 +465,15 @@ public class UiccCard {
         }
     }
 
+    /**
+     * Returns the ID of this SIM card, it is the ICCID of the active profile on the card for a UICC
+     * card or the EID of the card for an eUICC card.
+     */
+    public String getCardId() {
+        // TODO: Rebase.
+        return null;
+    }
+
     private void log(String msg) {
         Rlog.d(LOG_TAG, msg);
     }
