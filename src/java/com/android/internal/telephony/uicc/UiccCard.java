@@ -465,6 +465,15 @@ public class UiccCard {
         }
     }
 
+    /**
+     * Get card Id.
+     * @return The card Id.
+     */
+    public int getCardId() {
+        // TODO(amitmahajan): Method implementation.
+        return 0;
+    }
+
     private void log(String msg) {
         Rlog.d(LOG_TAG, msg);
     }
