@@ -22,6 +22,30 @@
       "revId": "080f7749181e581a2f853e9374a7ccd92904f9ab",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7fceabe0_575ad134",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1642,
+      "author": {
+        "id": 1097598
+      },
+      "writtenOn": "2018-01-12T14:58:29Z",
+      "side": 1,
+      "message": "Thanks for review. We have fixed this in PhoneInterface.java accordingly. Please kindly check latest patch-set, thank you.",
+      "parentUuid": "31afd611_383a4a16",
+      "range": {
+        "startLine": 1642,
+        "startChar": 8,
+        "endLine": 1642,
+        "endChar": 35
+      },
+      "revId": "080f7749181e581a2f853e9374a7ccd92904f9ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
