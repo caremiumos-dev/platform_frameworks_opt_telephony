@@ -219,6 +219,16 @@ public class UiccController extends Handler {
     }
 
     /**
+     * API to get all the UICC slots.
+     * @return UiccSlots array.
+     */
+    public UiccSlot[] getUiccSlots() {
+        synchronized (mLock) {
+            return mUiccSlots;
+        }
+    }
+
+    /**
      * API to get UiccSlot object for a specific physical slot index on the device
      * @return UiccSlot object for the given physical slot index
      */
@@ -274,6 +284,11 @@ public class UiccController extends Handler {
             }
             return INVALID_SLOT_ID;
         }
+    }
+
+    /** Map logicalSlot to physicalSlot, and activate the physicalSlot if it is inactive. */
+    public void switchSlots(int[] physicalSlots, Message response) {
+        // TODO(amitmahajan): Method implementation.
     }
 
     // Easy to use API
