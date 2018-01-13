@@ -34,6 +34,24 @@
       "revId": "ea3a4caa4fe516faceeaf47da08fad349df7eb5a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be2fb0e7_8d5e14a3",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-13T00:54:31Z",
+      "side": 1,
+      "message": "Ok, although I am not even sure why we have Context as a parameter here. I don\u0027t think it will ever change. We can clean that up separately later if we get to it.",
+      "parentUuid": "eff854ef_65970b99",
+      "revId": "ea3a4caa4fe516faceeaf47da08fad349df7eb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
