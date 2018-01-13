@@ -16,6 +16,24 @@
       "revId": "ea3a4caa4fe516faceeaf47da08fad349df7eb5a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eff854ef_65970b99",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-13T00:51:53Z",
+      "side": 1,
+      "message": "That will work too. But since mTelephonyManager is retrieved from mContext, and mContext may be updated in update(), so it makes more sense to put it here just in case mContext is updated here, right?",
+      "parentUuid": "6a6a524c_22e02daf",
+      "revId": "ea3a4caa4fe516faceeaf47da08fad349df7eb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
