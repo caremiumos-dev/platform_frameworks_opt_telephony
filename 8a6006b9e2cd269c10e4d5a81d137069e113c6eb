@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dff46c06_9795dddd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2018-01-13T00:37:43Z",
+      "side": 1,
+      "message": "b/70681555\n\nThe one you quote is for the final P solution (removing api checks) and backported security fixes to O/N/M as required.  Please fix on all commits.",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 13
+      },
+      "revId": "8a6006b9e2cd269c10e4d5a81d137069e113c6eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
