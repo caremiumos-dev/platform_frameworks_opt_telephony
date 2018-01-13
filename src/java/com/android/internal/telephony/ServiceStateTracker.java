@@ -2195,6 +2195,7 @@ public class ServiceStateTracker extends Handler {
                     // No service at all
                     plmn = Resources.getSystem().
                             getText(com.android.internal.R.string.lockscreen_carrier_default).toString();
+                    rule &= SIMRecords.SPN_RULE_SHOW_PLMN;
                 }
                 if (DBG) log("updateSpnDisplay: radio is on but out " +
                         "of service, set plmn='" + plmn + "'");
