@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a6a524c_22e02daf",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-13T00:39:56Z",
+      "side": 1,
+      "message": "Should we do this in the constructor instead?",
+      "revId": "ea3a4caa4fe516faceeaf47da08fad349df7eb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
