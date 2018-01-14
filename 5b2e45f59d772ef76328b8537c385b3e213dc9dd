@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "503e2040_68fde36e",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/RequestBuilder.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-14T22:32:02Z",
+      "side": 1,
+      "message": "Will be good to add some basic comments about the parameters for this and rest of the functions. Or spec references if you think those are enough, but I think it\u0027s better to add brief one line comments.",
+      "range": {
+        "startLine": 47,
+        "startChar": 16,
+        "endLine": 47,
+        "endChar": 23
+      },
+      "revId": "5b2e45f59d772ef76328b8537c385b3e213dc9dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b04a88f9_b2ea0ebe",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/RequestBuilder.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-14T22:32:02Z",
+      "side": 1,
+      "message": "Add a comment about the format or a spec reference for it?",
+      "range": {
+        "startLine": 69,
+        "startChar": 36,
+        "endLine": 69,
+        "endChar": 39
+      },
+      "revId": "5b2e45f59d772ef76328b8537c385b3e213dc9dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
