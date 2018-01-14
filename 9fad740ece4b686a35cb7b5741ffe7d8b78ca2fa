@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7509ba7_d7ca5854",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/ApduException.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-14T22:42:34Z",
+      "side": 1,
+      "message": "STATUS_NO_ERROR. I doubt the value will ever change, but it\u0027s better to use the constant here.",
+      "range": {
+        "startLine": 44,
+        "startChar": 68,
+        "endLine": 44,
+        "endChar": 74
+      },
+      "revId": "9fad740ece4b686a35cb7b5741ffe7d8b78ca2fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2f34d94_1282d2cc",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/ApduSender.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-14T22:42:34Z",
+      "side": 1,
+      "message": "use STATUS_NO_ERROR instead of the value here in the comment?",
+      "range": {
+        "startLine": 35,
+        "startChar": 90,
+        "endLine": 35,
+        "endChar": 94
+      },
+      "revId": "9fad740ece4b686a35cb7b5741ffe7d8b78ca2fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
