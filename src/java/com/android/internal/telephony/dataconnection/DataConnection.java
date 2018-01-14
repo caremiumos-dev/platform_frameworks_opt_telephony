@@ -1580,6 +1580,7 @@ public class DataConnection extends StateMachine {
                 misc.provisioningNotificationDisabled = true;
             }
             misc.subscriberId = mPhone.getSubscriberId();
+            misc.subId = mPhone.getSubId();
 
             setNetworkRestriction();
             mNetworkAgent = new DcNetworkAgent(getHandler().getLooper(), mPhone.getContext(),
