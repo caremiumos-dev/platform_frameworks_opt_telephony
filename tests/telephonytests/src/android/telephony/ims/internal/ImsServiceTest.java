@@ -16,7 +16,7 @@
 
 package android.telephony.ims.internal;
 
-import static com.android.internal.telephony.ims.ImsResolver.SERVICE_INTERFACE;
+import static com.android.internal.telephony.ims.ImsServiceController.SERVICE_INTERFACE;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;

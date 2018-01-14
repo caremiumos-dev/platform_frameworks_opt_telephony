@@ -41,7 +41,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Pair;
 
 import com.android.ims.internal.IImsServiceFeatureCallback;
-import com.android.internal.telephony.ims.ImsServiceController.RebindRetry;
 
 import org.junit.After;
 import org.junit.Before;
@@ -61,7 +60,8 @@ import java.util.HashSet;
 @Ignore
 public class ImsServiceControllerTest extends ImsTestBase {
 
-    private static final RebindRetry REBIND_RETRY = new RebindRetry() {
+    private static final ImsServiceController.RebindRetry REBIND_RETRY
+            = new ImsServiceController.RebindRetry() {
         @Override
         public long getStartDelay() {
             return 50;
@@ -121,7 +121,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
                 | Context.BIND_IMPORTANT;
         verify(mMockContext).bindService(intentCaptor.capture(), any(), eq(expectedFlags));
         Intent testIntent = intentCaptor.getValue();
-        assertEquals(ImsResolver.SERVICE_INTERFACE, testIntent.getAction());
+        assertEquals(ImsServiceController.SERVICE_INTERFACE, testIntent.getAction());
         assertEquals(mTestComponentName, testIntent.getComponent());
     }
 

@@ -61,6 +61,8 @@ import java.util.Set;
  */
 public class ImsServiceController {
 
+    public static final String SERVICE_INTERFACE = "android.telephony.ims.ImsService";
+
     class ImsDeathRecipient implements IBinder.DeathRecipient {
 
         private ComponentName mComponentName;
@@ -324,7 +326,7 @@ public class ImsServiceController {
             if (!mIsBound && !mIsBinding) {
                 mIsBinding = true;
                 mImsFeatures = imsFeatureSet;
-                Intent imsServiceIntent = new Intent(ImsResolver.SERVICE_INTERFACE).setComponent(
+                Intent imsServiceIntent = new Intent(getServiceInterface()).setComponent(
                         mComponentName);
                 mImsServiceConnection = new ImsServiceConnection();
                 int serviceFlags = Context.BIND_AUTO_CREATE | Context.BIND_FOREGROUND_SERVICE
@@ -472,6 +474,10 @@ public class ImsServiceController {
         synchronized (mLock) {
             return mIImsServiceController.getRegistration(slotId);
         }
+    }
+
+    protected String getServiceInterface() {
+        return SERVICE_INTERFACE;
     }
 
     private void removeImsServiceFeatureListener() {

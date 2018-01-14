@@ -72,7 +72,6 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
 
     private static final String TAG = "ImsResolver";
 
-    public static final String SERVICE_INTERFACE = "android.telephony.ims.ImsService";
     public static final String METADATA_EMERGENCY_MMTEL_FEATURE =
             "android.telephony.ims.EMERGENCY_MMTEL_FEATURE";
     public static final String METADATA_MMTEL_FEATURE = "android.telephony.ims.MMTEL_FEATURE";
@@ -93,6 +92,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     public static class ImsServiceInfo {
         public ComponentName name;
         public Set<Integer> supportedFeatures;
+        public ImsServiceControllerFactory controllerFactory;
 
         @Override
         public boolean equals(Object o) {
@@ -102,15 +102,17 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
             ImsServiceInfo that = (ImsServiceInfo) o;
 
             if (name != null ? !name.equals(that.name) : that.name != null) return false;
-            return supportedFeatures != null ? supportedFeatures.equals(that.supportedFeatures)
-                    : that.supportedFeatures == null;
-
+            if (supportedFeatures != null ? !supportedFeatures.equals(that.supportedFeatures)
+                    : that.supportedFeatures != null) return false;
+            return controllerFactory != null ? controllerFactory.equals(that.controllerFactory)
+                    : that.controllerFactory == null;
         }
 
         @Override
         public int hashCode() {
             int result = name != null ? name.hashCode() : 0;
             result = 31 * result + (supportedFeatures != null ? supportedFeatures.hashCode() : 0);
+            result = 31 * result + (controllerFactory != null ? controllerFactory.hashCode() : 0);
             return result;
         }
     }
@@ -195,14 +197,44 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     @VisibleForTesting
     public interface ImsServiceControllerFactory {
         /**
-         * Returns the ImsServiceController created usiing the context and componentName supplied.
-         * Used for DI when testing.
+         * @return the Service Interface String used for binding the ImsService.
          */
-        ImsServiceController get(Context context, ComponentName componentName);
+        String getServiceInterface();
+        /**
+         * @return the ImsServiceController created using the context and componentName supplied.
+         */
+        ImsServiceController create(Context context, ComponentName componentName,
+                ImsServiceController.ImsServiceControllerCallbacks callbacks);
     }
 
-    private ImsServiceControllerFactory mImsServiceControllerFactory = (context, componentName) ->
-            new ImsServiceController(context, componentName, this);
+    private ImsServiceControllerFactory mImsServiceControllerFactory =
+            new ImsServiceControllerFactory() {
+
+        @Override
+        public String getServiceInterface() {
+            return ImsServiceController.SERVICE_INTERFACE;
+        }
+
+        @Override
+        public ImsServiceController create(Context context, ComponentName componentName,
+                ImsServiceController.ImsServiceControllerCallbacks callbacks) {
+            return new ImsServiceController(context, componentName, callbacks);
+        }
+    };
+
+    private ImsServiceControllerFactory mImsServiceControllerFactoryCompat =
+            new ImsServiceControllerFactory() {
+                @Override
+                public String getServiceInterface() {
+                    return ImsServiceControllerCompat.SERVICE_INTERFACE;
+                }
+
+                @Override
+                public ImsServiceController create(Context context, ComponentName componentName,
+                        ImsServiceController.ImsServiceControllerCallbacks callbacks) {
+                    return new ImsServiceControllerCompat(context, componentName, callbacks);
+                }
+            };
 
     private final CarrierConfigManager mCarrierConfigManager;
     private final Context mContext;
@@ -568,7 +600,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
         if (info == null) {
             return;
         }
-        ImsServiceController controller = mImsServiceControllerFactory.get(mContext, info.name);
+        ImsServiceController controller = info.controllerFactory.create(mContext, info.name, this);
         HashSet<Pair<Integer, Integer>> features = calculateFeaturesToCreate(info);
         // Only bind if there are features that will be created by the service.
         if (features.size() > 0) {
@@ -710,8 +742,18 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     // get all packages that support ImsServices.
     private List<ImsServiceInfo> getImsServiceInfo(String packageName) {
         List<ImsServiceInfo> infos = new ArrayList<>();
+        // Search for Current ImsService implementations
+        infos.addAll(searchForImsServices(packageName, mImsServiceControllerFactory));
+        // Search for compat ImsService Implementations
+        infos.addAll(searchForImsServices(packageName, mImsServiceControllerFactoryCompat));
+        return infos;
+    }
 
-        Intent serviceIntent = new Intent(SERVICE_INTERFACE);
+    private List<ImsServiceInfo> searchForImsServices(String packageName,
+            ImsServiceControllerFactory controllerFactory) {
+        List<ImsServiceInfo> infos = new ArrayList<>();
+
+        Intent serviceIntent = new Intent(controllerFactory.getServiceInterface());
         serviceIntent.setPackage(packageName);
 
         PackageManager packageManager = mContext.getPackageManager();
@@ -725,6 +767,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
                 ImsServiceInfo info = new ImsServiceInfo();
                 info.name = new ComponentName(serviceInfo.packageName, serviceInfo.name);
                 info.supportedFeatures = new HashSet<>(ImsFeature.MAX);
+                info.controllerFactory = controllerFactory;
                 // Add all supported features
                 if (serviceInfo.metaData != null) {
                     if (serviceInfo.metaData.getBoolean(METADATA_EMERGENCY_MMTEL_FEATURE, false)) {
@@ -741,8 +784,8 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
                 // permissions.
                 if (TextUtils.equals(serviceInfo.permission,
                         Manifest.permission.BIND_IMS_SERVICE)) {
-                    Log.d(TAG, "ImsService added to cache: " + info.name + " with features: "
-                            + info.supportedFeatures);
+                    Log.d(TAG, "ImsService ("+ serviceIntent +") added to cache: " + info.name
+                            + " with features: " + info.supportedFeatures);
                     infos.add(info);
                 } else {
                     Log.w(TAG, "ImsService does not have BIND_IMS_SERVICE permission: "

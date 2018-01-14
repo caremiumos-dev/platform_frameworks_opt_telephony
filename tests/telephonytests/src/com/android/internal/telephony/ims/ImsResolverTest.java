@@ -41,6 +41,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
+
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
@@ -143,10 +146,20 @@ public class ImsResolverTest extends ImsTestBase {
         info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, features, true));
         when(mMockPM.queryIntentServicesAsUser(any(), anyInt(), anyInt())).thenReturn(info);
         ImsServiceController controller = mock(ImsServiceController.class);
-        mTestImsResolver.setImsServiceControllerFactory((context, componentName) -> {
-            when(controller.getComponentName()).thenReturn(componentName);
-            return controller;
-        });
+        mTestImsResolver.setImsServiceControllerFactory(
+                new ImsResolver.ImsServiceControllerFactory() {
+                    @Override
+                    public String getServiceInterface() {
+                        return ImsServiceController.SERVICE_INTERFACE;
+                    }
+
+                    @Override
+                    public ImsServiceController create(Context context, ComponentName componentName,
+                            ImsServiceController.ImsServiceControllerCallbacks callbacks) {
+                        when(controller.getComponentName()).thenReturn(componentName);
+                        return controller;
+                    }
+                });
 
 
         mTestImsResolver.populateCacheAndStartBind();
@@ -172,10 +185,20 @@ public class ImsResolverTest extends ImsTestBase {
         info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, features, true));
         when(mMockPM.queryIntentServicesAsUser(any(), anyInt(), anyInt())).thenReturn(info);
         ImsServiceController controller = mock(ImsServiceController.class);
-        mTestImsResolver.setImsServiceControllerFactory((context, componentName) -> {
-            when(controller.getComponentName()).thenReturn(componentName);
-            return controller;
-        });
+        mTestImsResolver.setImsServiceControllerFactory(
+                new ImsResolver.ImsServiceControllerFactory() {
+                    @Override
+                    public String getServiceInterface() {
+                        return ImsServiceController.SERVICE_INTERFACE;
+                    }
+
+                    @Override
+                    public ImsServiceController create(Context context, ComponentName componentName,
+                            ImsServiceController.ImsServiceControllerCallbacks callbacks) {
+                        when(controller.getComponentName()).thenReturn(componentName);
+                        return controller;
+                    }
+                });
 
         // Set the CarrierConfig string to null so that ImsResolver will not bind to the available
         // Services
@@ -205,10 +228,20 @@ public class ImsResolverTest extends ImsTestBase {
         info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, features, true));
         when(mMockPM.queryIntentServicesAsUser(any(), anyInt(), anyInt())).thenReturn(info);
         ImsServiceController controller = mock(ImsServiceController.class);
-        mTestImsResolver.setImsServiceControllerFactory((context, componentName) -> {
-            when(controller.getComponentName()).thenReturn(componentName);
-            return controller;
-        });
+        mTestImsResolver.setImsServiceControllerFactory(
+                new ImsResolver.ImsServiceControllerFactory() {
+                    @Override
+                    public String getServiceInterface() {
+                        return ImsServiceController.SERVICE_INTERFACE;
+                    }
+
+                    @Override
+                    public ImsServiceController create(Context context, ComponentName componentName,
+                            ImsServiceController.ImsServiceControllerCallbacks callbacks) {
+                        when(controller.getComponentName()).thenReturn(componentName);
+                        return controller;
+                    }
+                });
 
 
         mTestImsResolver.populateCacheAndStartBind();
@@ -320,12 +353,25 @@ public class ImsResolverTest extends ImsTestBase {
         features.add(ImsResolver.METADATA_MMTEL_FEATURE);
         // Doesn't include RCS feature by default
         info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, features, true));
-        when(mMockPM.queryIntentServicesAsUser(any(), anyInt(), anyInt())).thenReturn(info);
+        when(mMockPM.queryIntentServicesAsUser(
+                argThat(argument -> ImsServiceController.SERVICE_INTERFACE.equals(
+                        argument.getAction())), anyInt(), anyInt()))
+                .thenReturn(info);
         ImsServiceController controller = mock(ImsServiceController.class);
-        mTestImsResolver.setImsServiceControllerFactory((context, componentName) -> {
-            when(controller.getComponentName()).thenReturn(componentName);
-            return controller;
-        });
+        mTestImsResolver.setImsServiceControllerFactory(
+                new ImsResolver.ImsServiceControllerFactory() {
+                    @Override
+                    public String getServiceInterface() {
+                        return ImsServiceController.SERVICE_INTERFACE;
+                    }
+
+                    @Override
+                    public ImsServiceController create(Context context, ComponentName componentName,
+                            ImsServiceController.ImsServiceControllerCallbacks callbacks) {
+                        when(controller.getComponentName()).thenReturn(componentName);
+                        return controller;
+                    }
+                });
 
         // Bind using default features
         mTestImsResolver.populateCacheAndStartBind();
@@ -375,7 +421,10 @@ public class ImsResolverTest extends ImsTestBase {
         // Use device default package, which will load the ImsService that the device provides
         info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, deviceFeatures, true));
         info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, true));
-        when(mMockPM.queryIntentServicesAsUser(any(), anyInt(), anyInt())).thenReturn(info);
+        when(mMockPM.queryIntentServicesAsUser(
+                argThat(argument -> ImsServiceController.SERVICE_INTERFACE.equals(
+                        argument.getAction())), anyInt(), anyInt()))
+                .thenReturn(info);
         ImsServiceController deviceController = mock(ImsServiceController.class);
         ImsServiceController carrierController = mock(ImsServiceController.class);
         setImsServiceControllerFactory(deviceController, carrierController);
@@ -446,7 +495,10 @@ public class ImsResolverTest extends ImsTestBase {
         // Use device default package, which will load the ImsService that the device provides
         info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, deviceFeatures, true));
         info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, true));
-        when(mMockPM.queryIntentServicesAsUser(any(), anyInt(), anyInt())).thenReturn(info);
+        when(mMockPM.queryIntentServicesAsUser(
+                argThat(argument -> ImsServiceController.SERVICE_INTERFACE.equals(
+                        argument.getAction())), anyInt(), anyInt()))
+                .thenReturn(info);
         ImsServiceController deviceController = mock(ImsServiceController.class);
         ImsServiceController carrierController = mock(ImsServiceController.class);
         setImsServiceControllerFactory(deviceController, carrierController);
@@ -516,7 +568,10 @@ public class ImsResolverTest extends ImsTestBase {
         // Use device default package, which will load the ImsService that the device provides
         info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, deviceFeatures, true));
         info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, true));
-        when(mMockPM.queryIntentServicesAsUser(any(), anyInt(), anyInt())).thenReturn(info);
+        when(mMockPM.queryIntentServicesAsUser(
+                argThat(argument -> ImsServiceController.SERVICE_INTERFACE.equals(
+                        argument.getAction())), anyInt(), anyInt()))
+                .thenReturn(info);
         ImsServiceController deviceController = mock(ImsServiceController.class);
         ImsServiceController carrierController = mock(ImsServiceController.class);
         setImsServiceControllerFactory(deviceController, carrierController);
@@ -585,7 +640,10 @@ public class ImsResolverTest extends ImsTestBase {
         setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         // Use device default package, which will load the ImsService that the device provides
         info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, deviceFeatures, true));
-        when(mMockPM.queryIntentServicesAsUser(any(), anyInt(), anyInt())).thenReturn(info);
+        when(mMockPM.queryIntentServicesAsUser(
+                argThat(argument -> (argument == null || ImsServiceController.SERVICE_INTERFACE
+                        .equals(argument.getAction()))), anyInt(), anyInt()))
+                .thenReturn(info);
         ImsServiceController deviceController = mock(ImsServiceController.class);
         ImsServiceController carrierController = mock(ImsServiceController.class);
         setImsServiceControllerFactory(deviceController, carrierController);
@@ -598,7 +656,10 @@ public class ImsResolverTest extends ImsTestBase {
         carrierFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         carrierFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
         info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, true));
-        when(mMockPM.queryIntentServicesAsUser(any(), anyInt(), anyInt())).thenReturn(info);
+        when(mMockPM.queryIntentServicesAsUser(
+                argThat(argument -> (argument == null || ImsServiceController.SERVICE_INTERFACE
+                        .equals(argument.getAction()))), anyInt(), anyInt()))
+                .thenReturn(info);
 
         // Tell the package manager that a new carrier app is installed
         Intent addPackageIntent = new Intent();
@@ -803,36 +864,58 @@ public class ImsResolverTest extends ImsTestBase {
 
     private void setImsServiceControllerFactory(ImsServiceController deviceController,
             ImsServiceController carrierController) {
-        mTestImsResolver.setImsServiceControllerFactory((context, componentName) -> {
-            if (TEST_DEVICE_DEFAULT_NAME.getPackageName().equals(componentName.getPackageName())) {
-                when(deviceController.getComponentName()).thenReturn(componentName);
-                return deviceController;
-            } else if (TEST_CARRIER_DEFAULT_NAME.getPackageName().equals(
-                    componentName.getPackageName())) {
-                when(carrierController.getComponentName()).thenReturn(componentName);
-                return carrierController;
-            }
-            return null;
-        });
+        mTestImsResolver.setImsServiceControllerFactory(
+                new ImsResolver.ImsServiceControllerFactory() {
+                    @Override
+                    public String getServiceInterface() {
+                        return ImsServiceController.SERVICE_INTERFACE;
+                    }
+
+                    @Override
+                    public ImsServiceController create(Context context, ComponentName componentName,
+                            ImsServiceController.ImsServiceControllerCallbacks callbacks) {
+                        if (TEST_DEVICE_DEFAULT_NAME.getPackageName().equals(
+                                componentName.getPackageName())) {
+                            when(deviceController.getComponentName()).thenReturn(componentName);
+                            return deviceController;
+                        } else if (TEST_CARRIER_DEFAULT_NAME.getPackageName().equals(
+                                componentName.getPackageName())) {
+                            when(carrierController.getComponentName()).thenReturn(componentName);
+                            return carrierController;
+                        }
+                        return null;
+                    }
+                });
     }
 
     private void setImsServiceControllerFactory(ImsServiceController deviceController,
             ImsServiceController carrierController1, ImsServiceController carrierController2) {
-        mTestImsResolver.setImsServiceControllerFactory((context, componentName) -> {
-            if (TEST_DEVICE_DEFAULT_NAME.getPackageName().equals(componentName.getPackageName())) {
-                when(deviceController.getComponentName()).thenReturn(componentName);
-                return deviceController;
-            } else if (TEST_CARRIER_DEFAULT_NAME.getPackageName().equals(
-                    componentName.getPackageName())) {
-                when(carrierController1.getComponentName()).thenReturn(componentName);
-                return carrierController1;
-            } else if (TEST_CARRIER_2_DEFAULT_NAME.getPackageName().equals(
-                    componentName.getPackageName())) {
-                when(carrierController2.getComponentName()).thenReturn(componentName);
-                return carrierController2;
-            }
-            return null;
-        });
+        mTestImsResolver.setImsServiceControllerFactory(
+                new ImsResolver.ImsServiceControllerFactory() {
+                    @Override
+                    public String getServiceInterface() {
+                        return ImsServiceController.SERVICE_INTERFACE;
+                    }
+
+                    @Override
+                    public ImsServiceController create(Context context, ComponentName componentName,
+                            ImsServiceController.ImsServiceControllerCallbacks callbacks) {
+                        if (TEST_DEVICE_DEFAULT_NAME.getPackageName().equals(
+                                componentName.getPackageName())) {
+                            when(deviceController.getComponentName()).thenReturn(componentName);
+                            return deviceController;
+                        } else if (TEST_CARRIER_DEFAULT_NAME.getPackageName().equals(
+                                componentName.getPackageName())) {
+                            when(carrierController1.getComponentName()).thenReturn(componentName);
+                            return carrierController1;
+                        } else if (TEST_CARRIER_2_DEFAULT_NAME.getPackageName().equals(
+                                componentName.getPackageName())) {
+                            when(carrierController2.getComponentName()).thenReturn(componentName);
+                            return carrierController2;
+                        }
+                        return null;
+                    }
+                });
     }
 
 
