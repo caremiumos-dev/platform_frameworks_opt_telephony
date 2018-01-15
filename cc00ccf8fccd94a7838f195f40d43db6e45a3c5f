@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "7c3441f1_51a773a7",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1257,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-15T08:55:07Z",
+      "side": 1,
+      "message": "We are not able to access com.android.internal.telephony.CommandsInterface from frameworks/base -\u003e com.android.ims.ImsCallForwardInfo\n\nHence, have not introduced new method. \nI have updated reference to the spec in this method itself in the next patchset.",
+      "parentUuid": "0e8fc5ea_a4153a82",
+      "range": {
+        "startLine": 1257,
+        "startChar": 12,
+        "endLine": 1257,
+        "endChar": 82
+      },
+      "revId": "cc00ccf8fccd94a7838f195f40d43db6e45a3c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cad84aea_760f1953",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 2
