@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "89665164_0d15bd07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2018-01-15T10:07:53Z",
+      "side": 1,
+      "message": "Out of all available UiccCardApplication, there are cases where Modem may report some UiccCardApplication state as READY and others as NOT_READY/DETECTED.\nLike,\n- Modem may not active RUIM/CSIM app if 3GPP2 is not supported\n- Modem may active only one USIM application when card has multiple USIM applications.\n\nIn above situations, with this new change change clients would never get SIM state as LOADED.",
+      "range": {
+        "startLine": 10,
+        "startChar": 29,
+        "endLine": 11,
+        "endChar": 66
+      },
+      "revId": "ea3a4caa4fe516faceeaf47da08fad349df7eb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a6a524c_22e02daf",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 4
