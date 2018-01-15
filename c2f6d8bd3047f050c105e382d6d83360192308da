@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0c5736b7_66a721f1",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-01-15T22:02:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14a9f77a_daf24f17",
+      "range": {
+        "startLine": 372,
+        "startChar": 24,
+        "endLine": 372,
+        "endChar": 25
+      },
+      "revId": "c2f6d8bd3047f050c105e382d6d83360192308da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d816cc7_06b01a66",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-15T21:34:34Z",
       "side": 1,
       "message": "should there be a warning/debug message here?",
+      "range": {
+        "startLine": 654,
+        "startChar": 24,
+        "endLine": 654,
+        "endChar": 63
+      },
+      "revId": "c2f6d8bd3047f050c105e382d6d83360192308da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d6bff4bb_e7867053",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-01-15T22:02:29Z",
+      "side": 1,
+      "message": "the method retryGetImsService() does this",
+      "parentUuid": "5d816cc7_06b01a66",
       "range": {
         "startLine": 654,
         "startChar": 24,
