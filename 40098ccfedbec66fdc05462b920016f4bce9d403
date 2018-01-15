@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8f7a16_1d382521",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-15T07:56:59Z",
+      "side": 1,
+      "message": "Please rebase your CL on top of https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/581689",
+      "revId": "40098ccfedbec66fdc05462b920016f4bce9d403",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
