@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d4fd0be_70b1cc39",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-15T20:04:08Z",
+      "side": 1,
+      "message": "What is the best way for us to know which and how many apps to wait for? We could rely on the indices returned for gsm, cdma and isim, but they are not populated correctly in all card status responses we get from RIL.",
+      "parentUuid": "89665164_0d15bd07",
+      "range": {
+        "startLine": 10,
+        "startChar": 29,
+        "endLine": 11,
+        "endChar": 66
+      },
+      "revId": "ea3a4caa4fe516faceeaf47da08fad349df7eb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a6a524c_22e02daf",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 4
