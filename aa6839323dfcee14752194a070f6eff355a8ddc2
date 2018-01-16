@@ -22,6 +22,30 @@
       "revId": "aa6839323dfcee14752194a070f6eff355a8ddc2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92fd3ee0_4eb66a87",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-16T23:38:50Z",
+      "side": 1,
+      "message": "Yes it is EID for eSIM, but I have confirmed with the eSIM team that we can reuse the existing givePrintableIccid.givePrintableIccid() to process the EID to get a printable PII string.",
+      "parentUuid": "5e844778_ab29e284",
+      "range": {
+        "startLine": 338,
+        "startChar": 52,
+        "endLine": 338,
+        "endChar": 70
+      },
+      "revId": "aa6839323dfcee14752194a070f6eff355a8ddc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
