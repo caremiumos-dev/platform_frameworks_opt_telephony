@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "85b8d32e_60c02ffd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-16T17:09:58Z",
+      "side": 1,
+      "message": "SIMs that support multiple apps sometimes have race conditions and non-deterministic behavior as far as broadcasting SIM state changed events are concerned. Particularly in cases where there is a voice rat change during SIM loading.\n\nWe want to broadcast those events only after all supported apps are ready/loaded.",
+      "parentUuid": "b9d7bd2b_49b8e6a4",
+      "range": {
+        "startLine": 10,
+        "startChar": 29,
+        "endLine": 11,
+        "endChar": 66
+      },
+      "revId": "ea3a4caa4fe516faceeaf47da08fad349df7eb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a6a524c_22e02daf",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 4
