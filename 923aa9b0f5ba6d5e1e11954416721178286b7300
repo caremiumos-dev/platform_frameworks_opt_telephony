@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e5ffa6e_14393027",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-16T18:52:41Z",
+      "side": 1,
+      "message": "In old implementation, LOADED is broadcast but not stored in mExternalState, which means \"LOADED\" should never be returned by TelephonyManager.getSimState(), but you are changing this behavior here, is that the intention?",
+      "range": {
+        "startLine": 231,
+        "startChar": 20,
+        "endLine": 231,
+        "endChar": 36
+      },
+      "revId": "923aa9b0f5ba6d5e1e11954416721178286b7300",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
