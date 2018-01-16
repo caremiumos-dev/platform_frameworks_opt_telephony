@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d4f026a_243e633d",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/ApduCommand.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2018-01-16T23:44:57Z",
+      "side": 1,
+      "message": "Can you please document what it means or give reference ?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 31
+      },
+      "revId": "8a4017b032bafb9ea9b039c030561de691e6b8b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c164a6d2_f56666e0",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/ApduCommand.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2018-01-16T23:44:57Z",
+      "side": 1,
+      "message": "Please put it in single line. I have seen that you are using this one line per arg at lot of places in your other CLs as well but that is not followed by rest of our code.",
+      "range": {
+        "startLine": 47,
+        "startChar": 15,
+        "endLine": 60,
+        "endChar": 22
+      },
+      "revId": "8a4017b032bafb9ea9b039c030561de691e6b8b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5d958455_b82556b8",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/OpenLogicalChannelInvocation.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2018-01-16T23:44:57Z",
+      "side": 1,
+      "message": "Please be consistent. See line 89 where u are not using one arg per line for same function call.",
+      "range": {
+        "startLine": 68,
+        "startChar": 28,
+        "endLine": 69,
+        "endChar": 42
+      },
+      "revId": "8a4017b032bafb9ea9b039c030561de691e6b8b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
