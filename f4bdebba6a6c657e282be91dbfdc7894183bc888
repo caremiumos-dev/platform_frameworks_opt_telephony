@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "4460ceed_f264e80d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2295,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-01-16T22:51:40Z",
+      "side": 1,
+      "message": "why the condition is not \"imsCall \u003d\u003d mCallExpectedToResume\" ?",
+      "range": {
+        "startLine": 2295,
+        "startChar": 24,
+        "endLine": 2295,
+        "endChar": 57
+      },
+      "revId": "f4bdebba6a6c657e282be91dbfdc7894183bc888",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6f25d2a_26340812",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
         "patchSetId": 2
