@@ -170,7 +170,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         mSecondImsCall = spy(new ImsCall(mContext, mImsCallProfile));
         imsCallMocking(mImsCall);
         imsCallMocking(mSecondImsCall);
-        doReturn(ImsFeature.STATE_READY).when(mImsManager).getImsServiceStatus();
+        doReturn(ImsFeature.STATE_READY).when(mImsManager).getImsServiceState();
         doReturn(mImsCallProfile).when(mImsManager).createCallProfile(eq(mServiceId),
                 anyInt(), anyInt());
 
@@ -182,8 +182,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                         (ImsConnectionStateListener) invocation.getArguments()[2];
                 return mServiceId;
             }
-        }).when(mImsManager).open(anyInt(), (PendingIntent) any(),
-                (ImsConnectionStateListener) any());
+        }).when(mImsManager).open((ImsConnectionStateListener) any());
 
         doAnswer(new Answer<ImsCall>() {
             @Override

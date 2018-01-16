@@ -16,13 +16,13 @@
 
 package android.telephony.ims;
 
+import static org.mockito.Mockito.spy;
+
 import android.content.Context;
-import android.telephony.ims.feature.MMTelFeature;
+import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.feature.RcsFeature;
 
 import org.mockito.MockitoAnnotations;
-
-import static org.mockito.Mockito.spy;
 
 /**
  * Test ImsService used by mockito to verify functionality.
@@ -42,12 +42,12 @@ public class TestImsService extends ImsService {
     }
 
     @Override
-    public MMTelFeature onCreateEmergencyMMTelImsFeature(int slotId) {
+    public MmTelFeature onCreateEmergencyMMTelImsFeature(int slotId) {
         return null;
     }
 
     @Override
-    public MMTelFeature onCreateMMTelImsFeature(int slotId) {
+    public MmTelFeature onCreateMMTelImsFeature(int slotId) {
         return mSpyMMTelFeature;
     }
 

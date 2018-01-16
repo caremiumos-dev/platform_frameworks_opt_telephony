@@ -32,6 +32,9 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
+import android.telephony.ims.aidl.IImsMmTelFeature;
+import android.telephony.ims.aidl.IImsRcsFeature;
+import android.telephony.ims.aidl.IImsRegistration;
 import android.telephony.ims.feature.ImsFeature;
 import android.text.TextUtils;
 import android.util.ArraySet;
@@ -39,9 +42,6 @@ import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 
-import com.android.ims.internal.IImsMMTelFeature;
-import com.android.ims.internal.IImsRcsFeature;
-import com.android.ims.internal.IImsRegistration;
 import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.PhoneConstants;
@@ -93,6 +93,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     public static class ImsServiceInfo {
         public ComponentName name;
         public Set<Integer> supportedFeatures;
+        public boolean supportsEmergencyMmTel = false;
 
         @Override
         public boolean equals(Object o) {
@@ -298,51 +299,34 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     }
 
     /**
-     * Returns the {@link IImsMMTelFeature} that corresponds to the given slot Id or {@link null} if
+     * Returns the {@link IImsMmTelFeature} that corresponds to the given slot Id or {@link null} if
      * the service is not available. If an IImsMMTelFeature is available, the
      * {@link IImsServiceFeatureCallback} callback is registered as a listener for feature updates.
-     * @param slotId The SIM slot that we are requesting the {@link IImsMMTelFeature} for.
+     * @param slotId The SIM slot that we are requesting the {@link IImsMmTelFeature} for.
      * @param callback Listener that will send updates to ImsManager when there are updates to
      * the feature.
-     * @return {@link IImsMMTelFeature} interface or {@link null} if it is unavailable.
+     * @return {@link IImsMmTelFeature} interface or {@link null} if it is unavailable.
      */
-    public IImsMMTelFeature getMMTelFeatureAndListen(int slotId,
-            IImsServiceFeatureCallback callback) {
-        ImsServiceController controller = getImsServiceControllerAndListen(slotId, ImsFeature.MMTEL,
-                callback);
-        return (controller != null) ? controller.getMMTelFeature(slotId) : null;
-    }
-
-    /**
-     * Returns the {@link IImsMMTelFeature} that corresponds to the given slot Id for emergency
-     * calling or {@link null} if the service is not available. If an IImsMMTelFeature is
-     * available, the {@link IImsServiceFeatureCallback} callback is registered as a listener for
-     * feature updates.
-     * @param slotId The SIM slot that we are requesting the {@link IImsMMTelFeature} for.
-     * @param callback listener that will send updates to ImsManager when there are updates to
-     * the feature.
-     * @return {@link IImsMMTelFeature} interface or {@link null} if it is unavailable.
-     */
-    public IImsMMTelFeature getEmergencyMMTelFeatureAndListen(int slotId,
+    public IImsMmTelFeature getMmTelFeatureAndListen(int slotId,
             IImsServiceFeatureCallback callback) {
         ImsServiceController controller = getImsServiceControllerAndListen(slotId,
-                ImsFeature.EMERGENCY_MMTEL, callback);
-        return (controller != null) ? controller.getEmergencyMMTelFeature(slotId) : null;
+                ImsFeature.FEATURE_MMTEL, callback);
+        return (controller != null) ? controller.getMmTelFeature(slotId) : null;
     }
 
     /**
-     * Returns the {@link IImsMMTelFeature} that corresponds to the given slot Id for emergency
+     * Returns the {@link IImsRcsFeature} that corresponds to the given slot Id for emergency
      * calling or {@link null} if the service is not available. If an IImsMMTelFeature is
      * available, the {@link IImsServiceFeatureCallback} callback is registered as a listener for
      * feature updates.
-     * @param slotId The SIM slot that we are requesting the {@link IImsMMTelFeature} for.
+     * @param slotId The SIM slot that we are requesting the {@link IImsRcsFeature} for.
      * @param callback listener that will send updates to ImsManager when there are updates to
      * the feature.
-     * @return {@link IImsMMTelFeature} interface or {@link null} if it is unavailable.
+     * @return {@link IImsRcsFeature} interface or {@link null} if it is unavailable.
      */
     public IImsRcsFeature getRcsFeatureAndListen(int slotId, IImsServiceFeatureCallback callback) {
-        ImsServiceController controller = getImsServiceControllerAndListen(slotId, ImsFeature.RCS,
-                callback);
+        ImsServiceController controller = getImsServiceControllerAndListen(slotId,
+                ImsFeature.FEATURE_RCS, callback);
         return (controller != null) ? controller.getRcsFeature(slotId) : null;
     }
 
@@ -387,8 +371,8 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     }
 
     private void putImsController(int slotId, int feature, ImsServiceController controller) {
-        if (slotId < 0 || slotId >= mNumSlots || feature <= ImsFeature.INVALID
-                || feature >= ImsFeature.MAX) {
+        if (slotId < 0 || slotId >= mNumSlots || feature <= ImsFeature.FEATURE_INVALID
+                || feature >= ImsFeature.FEATURE_MAX) {
             Log.w(TAG, "putImsController received invalid parameters - slot: " + slotId
                     + ", feature: " + feature);
             return;
@@ -406,8 +390,8 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     }
 
     private ImsServiceController removeImsController(int slotId, int feature) {
-        if (slotId < 0 || slotId >= mNumSlots || feature <= ImsFeature.INVALID
-                || feature >= ImsFeature.MAX) {
+        if (slotId < 0 || slotId >= mNumSlots || feature <= ImsFeature.FEATURE_INVALID
+                || feature >= ImsFeature.FEATURE_MAX) {
             Log.w(TAG, "removeImsController received invalid parameters - slot: " + slotId
                     + ", feature: " + feature);
             return null;
@@ -724,17 +708,17 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
             if (serviceInfo != null) {
                 ImsServiceInfo info = new ImsServiceInfo();
                 info.name = new ComponentName(serviceInfo.packageName, serviceInfo.name);
-                info.supportedFeatures = new HashSet<>(ImsFeature.MAX);
+                info.supportedFeatures = new HashSet<>(ImsFeature.FEATURE_MAX);
                 // Add all supported features
                 if (serviceInfo.metaData != null) {
                     if (serviceInfo.metaData.getBoolean(METADATA_EMERGENCY_MMTEL_FEATURE, false)) {
-                        info.supportedFeatures.add(ImsFeature.EMERGENCY_MMTEL);
+                        info.supportsEmergencyMmTel = true;
                     }
                     if (serviceInfo.metaData.getBoolean(METADATA_MMTEL_FEATURE, false)) {
-                        info.supportedFeatures.add(ImsFeature.MMTEL);
+                        info.supportedFeatures.add(ImsFeature.FEATURE_MMTEL);
                     }
                     if (serviceInfo.metaData.getBoolean(METADATA_RCS_FEATURE, false)) {
-                        info.supportedFeatures.add(ImsFeature.RCS);
+                        info.supportedFeatures.add(ImsFeature.FEATURE_RCS);
                     }
                 }
                 // Check manifest permission to be sure that the service declares the correct

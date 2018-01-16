@@ -16,13 +16,13 @@
 
 package android.telephony.ims;
 
-import android.telephony.ims.feature.MMTelFeature;
+import android.telephony.ims.feature.MmTelFeature;
 
 /**
  * MMTelFeature implementation used by mockito to test functionality.
  */
 
-public class TestMMTelFeature extends MMTelFeature {
+public class TestMMTelFeature extends MmTelFeature {
 
     public boolean isConnectedCalled = false;
 

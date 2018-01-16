@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The Android Open Source Project
+ * Copyright (C) 2018 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.telephony.ims.internal;
+package android.telephony.ims;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -24,6 +24,7 @@ import static org.mockito.Mockito.verify;
 
 import android.os.RemoteException;
 import android.support.test.runner.AndroidJUnit4;
+import android.telephony.ims.internal.TestMmTelFeature;
 import android.telephony.ims.internal.aidl.IImsMmTelFeature;
 import android.telephony.ims.internal.feature.ImsFeature;
 import android.telephony.ims.internal.feature.MmTelFeature;
@@ -45,7 +46,7 @@ public class MmTelFeatureTests {
     private static final int TEST_CAPABILITY = 1;
     private static final int TEST_RADIO_TECH = 0;
 
-    private TestMmTelFeature mFeature;
+    private android.telephony.ims.internal.TestMmTelFeature mFeature;
     private IImsMmTelFeature mFeatureBinder;
     private ImsFeature.CapabilityCallback mCapabilityCallback;
     private MmTelFeature.Listener mListener;
