@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b9d7bd2b_49b8e6a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2018-01-16T16:03:26Z",
+      "side": 1,
+      "message": "Could you please share the motivation/reason in making this new change ?\n\nExisting code is broadcasting the SIM state as LOADED when all SIM records loaded on current active app(which picked based on current camped RAT), which we think is sufficient.",
+      "parentUuid": "6d4fd0be_70b1cc39",
+      "range": {
+        "startLine": 10,
+        "startChar": 29,
+        "endLine": 11,
+        "endChar": 66
+      },
+      "revId": "ea3a4caa4fe516faceeaf47da08fad349df7eb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a6a524c_22e02daf",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 4
