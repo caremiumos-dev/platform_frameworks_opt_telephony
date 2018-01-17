@@ -70,6 +70,30 @@
       "revId": "aa6839323dfcee14752194a070f6eff355a8ddc2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49fa4f49_c85b40ca",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-17T22:45:39Z",
+      "side": 1,
+      "message": "Maybe givePrintableIccidOrEid?  Since I am not sure this function also applies to other PII, but as you said, I think we don\u0027t need to handle it now",
+      "parentUuid": "1c93c6cb_b1b23f3c",
+      "range": {
+        "startLine": 338,
+        "startChar": 52,
+        "endLine": 338,
+        "endChar": 70
+      },
+      "revId": "aa6839323dfcee14752194a070f6eff355a8ddc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
