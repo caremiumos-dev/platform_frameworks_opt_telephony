@@ -34,6 +34,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.UserHandle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.service.euicc.EuiccProfileInfo;
@@ -109,6 +110,8 @@ public class SubscriptionInfoUpdater extends Handler {
     private static Context mContext = null;
     private static String mIccId[] = new String[PROJECT_SIM_NUM];
     private static int[] mInsertSimState = new int[PROJECT_SIM_NUM];
+    private static String[] sSimCardState = new String[PROJECT_SIM_NUM];
+    private static String[] sSimApplicationState = new String[PROJECT_SIM_NUM];
     private SubscriptionManager mSubscriptionManager = null;
     private EuiccManager mEuiccManager;
     private IPackageManager mPackageManager;
@@ -264,6 +267,9 @@ public class SubscriptionInfoUpdater extends Handler {
             case EVENT_SIM_UNKNOWN:
                 updateCarrierServices(msg.arg1, IccCardConstants.INTENT_VALUE_ICC_UNKNOWN);
                 broadcastSimStateChanged(msg.arg1, IccCardConstants.INTENT_VALUE_ICC_UNKNOWN, null);
+                broadcastSimCardStateChanged(msg.arg1, IccCardConstants.INTENT_VALUE_ICC_UNKNOWN);
+                broadcastSimApplicationStateChanged(msg.arg1,
+                        IccCardConstants.INTENT_VALUE_ICC_UNKNOWN, null);
                 break;
 
             case EVENT_SIM_IO_ERROR:
@@ -275,10 +281,17 @@ public class SubscriptionInfoUpdater extends Handler {
                 broadcastSimStateChanged(msg.arg1,
                         IccCardConstants.INTENT_VALUE_ICC_CARD_RESTRICTED,
                         IccCardConstants.INTENT_VALUE_ICC_CARD_RESTRICTED);
+                broadcastSimCardStateChanged(msg.arg1,
+                        IccCardConstants.INTENT_VALUE_ICC_CARD_RESTRICTED);
+                broadcastSimApplicationStateChanged(msg.arg1,
+                        IccCardConstants.INTENT_VALUE_ICC_NOT_READY, null);
                 break;
 
             case EVENT_SIM_READY:
                 broadcastSimStateChanged(msg.arg1, IccCardConstants.INTENT_VALUE_ICC_READY, null);
+                broadcastSimCardStateChanged(msg.arg1, IccCardConstants.INTENT_VALUE_ICC_PRESENT);
+                broadcastSimApplicationStateChanged(msg.arg1,
+                        IccCardConstants.INTENT_VALUE_ICC_NOT_READY, null);
                 break;
 
             case EVENT_SIM_IMSI:
@@ -288,6 +301,9 @@ public class SubscriptionInfoUpdater extends Handler {
             case EVENT_SIM_NOT_READY:
                 broadcastSimStateChanged(msg.arg1, IccCardConstants.INTENT_VALUE_ICC_NOT_READY,
                         null);
+                broadcastSimCardStateChanged(msg.arg1, IccCardConstants.INTENT_VALUE_ICC_PRESENT);
+                broadcastSimApplicationStateChanged(msg.arg1,
+                        IccCardConstants.INTENT_VALUE_ICC_NOT_READY, null);
                 // intentional fall through
                 // ICC_NOT_READY is a terminal state for an eSIM on the boot profile. At this
                 // phase, the subscription list is accessible.
@@ -347,6 +363,9 @@ public class SubscriptionInfoUpdater extends Handler {
 
         updateCarrierServices(slotId, IccCardConstants.INTENT_VALUE_ICC_LOCKED);
         broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_LOCKED, reason);
+        broadcastSimCardStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_PRESENT);
+        broadcastSimApplicationStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_LOCKED,
+                reason);
     }
 
     private void handleSimLoaded(int slotId) {
@@ -455,6 +474,9 @@ public class SubscriptionInfoUpdater extends Handler {
                 mContext.getContentResolver(), mCurrentlyActiveUserId);
 
         broadcastSimStateChanged(loadedSlotId, IccCardConstants.INTENT_VALUE_ICC_LOADED, null);
+        broadcastSimCardStateChanged(loadedSlotId, IccCardConstants.INTENT_VALUE_ICC_PRESENT);
+        broadcastSimApplicationStateChanged(loadedSlotId, IccCardConstants.INTENT_VALUE_ICC_LOADED,
+                null);
         updateCarrierServices(loadedSlotId, IccCardConstants.INTENT_VALUE_ICC_LOADED);
     }
 
@@ -475,6 +497,9 @@ public class SubscriptionInfoUpdater extends Handler {
         }
         updateCarrierServices(slotId, IccCardConstants.INTENT_VALUE_ICC_ABSENT);
         broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_ABSENT, null);
+        broadcastSimCardStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_ABSENT);
+        broadcastSimApplicationStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_NOT_READY,
+                null);
     }
 
     private void handleSimError(int slotId) {
@@ -488,6 +513,9 @@ public class SubscriptionInfoUpdater extends Handler {
         updateCarrierServices(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
         broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR,
                 IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
+        broadcastSimCardStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
+        broadcastSimApplicationStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_NOT_READY,
+                null);
     }
 
     /**
@@ -797,6 +825,33 @@ public class SubscriptionInfoUpdater extends Handler {
         logd("Broadcasting intent ACTION_SIM_STATE_CHANGED " + state + " reason " + reason +
              " for mCardIndex: " + slotId);
         IntentBroadcaster.getInstance().broadcastStickyIntent(i, slotId);
+    }
+
+    private void broadcastSimCardStateChanged(int phoneId, String state) {
+        if (!sSimCardState[phoneId].equals(state)) {
+            sSimCardState[phoneId] = state;
+            Intent i = new Intent(Intent.ACTION_SIM_CARD_STATE_CHANGED);
+            i.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+            i.putExtra(IccCardConstants.INTENT_KEY_ICC_STATE, state);
+            SubscriptionManager.putPhoneIdAndSubIdExtra(i, phoneId);
+            logd("Broadcasting intent ACTION_SIM_CARD_STATE_CHANGED " + state + " for phone: "
+                    + phoneId);
+            ActivityManager.broadcastStickyIntent(i, UserHandle.USER_ALL);
+        }
+    }
+
+    private void broadcastSimApplicationStateChanged(int phoneId, String state, String reason) {
+        if (!sSimApplicationState[phoneId].equals(state)) {
+            sSimApplicationState[phoneId] = state;
+            Intent i = new Intent(Intent.ACTION_SIM_APPLICATION_STATE_CHANGED);
+            i.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+            i.putExtra(IccCardConstants.INTENT_KEY_ICC_STATE, state);
+            i.putExtra(IccCardConstants.INTENT_KEY_LOCKED_REASON, reason);
+            SubscriptionManager.putPhoneIdAndSubIdExtra(i, phoneId);
+            logd("Broadcasting intent ACTION_SIM_APPLICATION_STATE_CHANGED " + state + " reason "
+                    + reason + " for phone: " + phoneId);
+            IntentBroadcaster.getInstance().broadcastStickyIntent(i, UserHandle.USER_ALL);
+        }
     }
 
     // Remove trailing F's from full hexadecimal IccId, as they should be considered padding
