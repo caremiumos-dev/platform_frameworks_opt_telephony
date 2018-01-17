@@ -22,6 +22,30 @@
       "revId": "923aa9b0f5ba6d5e1e11954416721178286b7300",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "741c88cd_e79e6a09",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-17T04:45:00Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "0e5ffa6e_14393027",
+      "range": {
+        "startLine": 231,
+        "startChar": 20,
+        "endLine": 231,
+        "endChar": 36
+      },
+      "revId": "923aa9b0f5ba6d5e1e11954416721178286b7300",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
