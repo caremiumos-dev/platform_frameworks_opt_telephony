@@ -93,6 +93,30 @@
       "revId": "d60e61445f0664aeba134a6635fce1bfd93744d4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "92805bd1_9b42ec31",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-17T21:21:31Z",
+      "side": 1,
+      "message": "Yes you are right, that is the correct way",
+      "parentUuid": "88222b27_859711ea",
+      "range": {
+        "startLine": 291,
+        "startChar": 35,
+        "endLine": 291,
+        "endChar": 36
+      },
+      "revId": "d60e61445f0664aeba134a6635fce1bfd93744d4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
