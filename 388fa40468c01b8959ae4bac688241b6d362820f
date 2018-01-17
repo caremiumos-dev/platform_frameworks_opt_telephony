@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4758608f_d7a5a1a8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/apdu/ApduSenderTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-17T01:57:16Z",
+      "side": 1,
+      "message": "Since you\u0027ve already written tests this way its ok, but otherwise we have a mocked CommandsInterface in SimulatedCommands.",
+      "revId": "388fa40468c01b8959ae4bac688241b6d362820f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
