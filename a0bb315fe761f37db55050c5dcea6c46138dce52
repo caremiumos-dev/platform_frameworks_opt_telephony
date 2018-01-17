@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "64cdee56_b29443d1",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1061212
+      },
+      "writtenOn": "2018-01-17T19:34:52Z",
+      "side": 1,
+      "message": "Why new parameter on each line ? We didn\u0027t follow this convention earlier, has anything changed ?",
+      "parentUuid": "428ecd5e_c8f4e995",
+      "range": {
+        "startLine": 291,
+        "startChar": 32,
+        "endLine": 292,
+        "endChar": 89
+      },
+      "revId": "a0bb315fe761f37db55050c5dcea6c46138dce52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1351d056_7b0f84ee",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCardErrorException.java",
         "patchSetId": 4
