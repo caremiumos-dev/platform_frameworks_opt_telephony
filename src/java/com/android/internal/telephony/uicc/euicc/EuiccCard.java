@@ -143,6 +143,94 @@ public class EuiccCard extends UiccCard {
     /** Error code for incorrect input values when getting profiles or loading profile package. */
     public static final int CODE_INCORRECT_INPUT_VALUES = 1;
 
+    // ASN.1 tags for commands
+    private static final int TAG_GET_PROFILES = 0xBF2D;
+    private static final int TAG_DISABLE_PROFILE = 0xBF32;
+    private static final int TAG_ENABLE_PROFILE = 0xBF31;
+    private static final int TAG_GET_EID = 0xBF3E;
+    private static final int TAG_SET_NICKNAME = 0xBF29;
+    private static final int TAG_DELETE_PROFILE = 0xBF33;
+    private static final int TAG_GET_CONFIGURED_ADDRESSES = 0xBF3C;
+    private static final int TAG_SET_DEFAULT_SMDP_ADDRESS = 0xBF3F;
+    private static final int TAG_GET_RAT = 0xBF43;
+    private static final int TAG_EUICC_MEMORY_RESET = 0xBF34;
+    private static final int TAG_GET_EUICC_CHALLENGE = 0xBF2E;
+    private static final int TAG_GET_EUICC_INFO_1 = 0xBF20;
+    private static final int TAG_GET_EUICC_INFO_2 = 0xBF22;
+    private static final int TAG_LIST_NOTIFICATION = 0xBF28;
+    private static final int TAG_RETRIEVE_NOTIFICATIONS_LIST = 0xBF2B;
+    private static final int TAG_REMOVE_NOTIFICATION_FROM_LIST = 0xBF30;
+    private static final int TAG_AUTHENTICATE_SERVER = 0xBF38;
+    private static final int TAG_PREPARE_DOWNLOAD = 0xBF21;
+    private static final int TAG_INITIALISE_SECURE_CHANNEL = 0xBF23;
+
+    // Universal tags
+    private static final int TAG_UNI_2 = 0x02;
+    private static final int TAG_UNI_4 = 0x04;
+    // Context tags for primitive types
+    private static final int TAG_CTX_0 = 0x80;
+    private static final int TAG_CTX_1 = 0x81;
+    private static final int TAG_CTX_2 = 0x82;
+    private static final int TAG_CTX_3 = 0x83;
+    private static final int TAG_CTX_4 = 0x84;
+    private static final int TAG_CTX_5 = 0x85;
+    private static final int TAG_CTX_6 = 0x86;
+    private static final int TAG_CTX_7 = 0x87;
+    private static final int TAG_CTX_8 = 0x88;
+    // Context tags for constructed (compound) types
+    private static final int TAG_CTX_COMP_0 = 0xA0;
+    private static final int TAG_CTX_COMP_1 = 0xA1;
+    private static final int TAG_CTX_COMP_2 = 0xA2;
+    private static final int TAG_CTX_COMP_3 = 0xA3;
+
+    // Command data tags
+    private static final int TAG_PROFILE_INSTALLATION_RESULT = 0xBF37;
+    private static final int TAG_PROFILE_INSTALLATION_RESULT_DATA = 0xBF27;
+    private static final int TAG_NOTIFICATION_METADATA = 0xBF2F;
+    private static final int TAG_SEQ = TAG_CTX_0;
+    private static final int TAG_TARGET_ADDR = 0x0C;
+    private static final int TAG_EVENT = TAG_CTX_1;
+    private static final int TAG_CANCEL_SESSION = 0xBF41;
+    private static final int TAG_PROFILE_INFO = 0xE3;
+    private static final int TAG_TAG_LIST = 0x5C;
+    private static final int TAG_EID = 0x5A;
+    private static final int TAG_NICKNAME = 0x90;
+    private static final int TAG_ICCID = 0x5A;
+    private static final int TAG_PROFILE_STATE = 0x9F70;
+    private static final int TAG_SERVICE_PROVIDER_NAME = 0x91;
+    private static final int TAG_PROFILE_CLASS = 0x95;
+    private static final int TAG_PROFILE_POLICY_RULE = 0x99;
+    private static final int TAG_PROFILE_NAME = 0x92;
+    private static final int TAG_OPERATOR_ID = 0xB7;
+    private static final int TAG_CARRIER_PRIVILEGE_RULES = 0xBF76;
+
+    // Tags from the RefArDo data standard - https://source.android.com/devices/tech/config/uicc
+    private static final int TAG_REF_AR_DO = 0xE2;
+    private static final int TAG_REF_DO = 0xE1;
+    private static final int TAG_DEVICE_APP_ID_REF_DO = 0xC1;
+    private static final int TAG_PKG_REF_DO = 0xCA;
+    private static final int TAG_AR_DO = 0xE3;
+    private static final int TAG_PERM_AR_DO = 0xDB;
+
+    // TAG list for Euicc Profile
+    private static final byte[] EUICC_PROFILE_TAGS =
+            new byte[] {
+                    TAG_ICCID,
+                    (byte) TAG_NICKNAME,
+                    (byte) TAG_SERVICE_PROVIDER_NAME,
+                    (byte) TAG_PROFILE_NAME,
+                    (byte) TAG_OPERATOR_ID,
+                    (byte) (TAG_PROFILE_STATE / 256),
+                    (byte) (TAG_PROFILE_STATE % 256),
+                    (byte) TAG_PROFILE_CLASS,
+                    (byte) TAG_PROFILE_POLICY_RULE,
+                    (byte) (TAG_CARRIER_PRIVILEGE_RULES / 256),
+                    (byte) (TAG_CARRIER_PRIVILEGE_RULES % 256)
+            };
+
+    // APDU status for SIM refresh
+    private static final int APDU_ERROR_SIM_REFRESH = 0x6F00;
+
     public EuiccCard(Context c, CommandsInterface ci, IccCardStatus ics, int phoneId) {
         super(c, ci, ics, phoneId);
     }
@@ -151,6 +239,146 @@ public class EuiccCard extends UiccCard {
     public EuiccSpecVersion getSpecVersion() {
         // TODO: to be implemented.
         return null;
+    }
+
+    @Override
+    public void buildProfile(Asn1Node profileNode, EuiccProfile.Builder profileBuilder)
+            throws TagNotFoundException, InvalidAsn1DataException {
+        String strippedIccIdString =
+                IccIdFormatter.stripTrailingFs(profileNode.getChild(TAG_ICCID).asBytes());
+        profileBuilder.setIccid(strippedIccIdString);
+
+        if (profileNode.hasChild(TAG_NICKNAME)) {
+            profileBuilder.setNickname(profileNode.getChild(TAG_NICKNAME).asString());
+        }
+
+        if (profileNode.hasChild(TAG_SERVICE_PROVIDER_NAME)) {
+            profileBuilder.setServiceProviderName(
+                    profileNode.getChild(TAG_SERVICE_PROVIDER_NAME).asString());
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_NAME)) {
+            profileBuilder.setProfileName(profileNode.getChild(TAG_PROFILE_NAME).asString());
+        }
+
+        if (profileNode.hasChild(TAG_OPERATOR_ID)) {
+            profileBuilder.setOperatorId(buildOperatorId(profileNode.getChild(TAG_OPERATOR_ID)));
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_STATE)) {
+            // noinspection WrongConstant
+            profileBuilder.setState(profileNode.getChild(TAG_PROFILE_STATE).asInteger());
+        } else {
+            profileBuilder.setState(EuiccProfile.ProfileState.DISABLED);
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_CLASS)) {
+            // noinspection WrongConstant
+            profileBuilder.setProfileClass(profileNode.getChild(TAG_PROFILE_CLASS).asInteger());
+        } else {
+            profileBuilder.setProfileClass(EuiccProfile.ProfileClass.OPERATIONAL);
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_POLICY_RULE)) {
+            // noinspection WrongConstant
+            profileBuilder.setPolicyRules(profileNode.getChild(TAG_PROFILE_POLICY_RULE).asBits());
+        }
+
+        if (profileNode.hasChild(TAG_CARRIER_PRIVILEGE_RULES)) {
+            profileBuilder.setCarrierPrivilegeRules(
+                    buildCarrierPrivilegeRules(
+                            profileNode
+                                    .getChild(TAG_CARRIER_PRIVILEGE_RULES)
+                                    .getChildren(TAG_REF_AR_DO)));
+        }
+    }
+
+    private void loadProfiles() throws UiccChannelException, EuiccCardException {
+        if (mProfiles == null) {
+            String response;
+            try (UiccLogicalChannel ch = UiccLogicalChannel.openIsdR(mTm)) {
+                String command =
+                        Asn1Node.newBuilder(TAG_GET_PROFILES)
+                                .addChildAsBytes(TAG_TAG_LIST, EUICC_PROFILE_TAGS)
+                                .build()
+                                .toHex();
+                response = ch.execStoreData(command);
+            }
+            try {
+                List<Asn1Node> profileNodes =
+                        new Asn1Decoder(response)
+                                .nextNode()
+                                .getChild(TAG_CTX_COMP_0)
+                                .getChildren(TAG_PROFILE_INFO);
+                int size = profileNodes.size();
+                EuiccProfile[] profiles = new EuiccProfile[size];
+                String enabledIccid = null;
+                int profileCount = 0;
+                for (int i = 0; i < size; i++) {
+                    Asn1Node profileNode = profileNodes.get(i);
+                    if (!profileNode.hasChild(TAG_ICCID)) {
+                        EuiccLog.get().wtf("Profile must have an ICCID.");
+                        continue;
+                    }
+                    EuiccProfile.Builder profileBuilder = new EuiccProfile.Builder();
+                    buildProfile(profileNode, profileBuilder);
+
+                    EuiccProfile profile = profileBuilder.build();
+                    String iccidStr = profile.getIccid();
+                    if (profile.getState() == EuiccProfile.ProfileState.ENABLED) {
+                        enabledIccid = iccidStr;
+                    }
+                    profiles[profileCount++] = profile;
+                }
+
+                mEnabledIccid = enabledIccid;
+                mProfiles = Arrays.copyOf(profiles, profiles.length);
+            } catch (TagNotFoundException e) {
+                throw new EuiccCardInvalidResponseException("Cannot find profile info tag.", e);
+            } catch (InvalidAsn1DataException e) {
+                throw new EuiccCardInvalidResponseException("Cannot parse profile info.", e);
+            }
+        }
+    }
+
+    private static OperatorId buildOperatorId(Asn1Node node)
+            throws InvalidAsn1DataException, TagNotFoundException {
+        byte[] gid1 = null;
+        if (node.hasChild(TAG_CTX_1)) {
+            gid1 = node.getChild(TAG_CTX_1).asBytes();
+        }
+        byte[] gid2 = null;
+        if (node.hasChild(TAG_CTX_2)) {
+            gid2 = node.getChild(TAG_CTX_2).asBytes();
+        }
+        return new OperatorId(node.getChild(TAG_CTX_0).asBytes(), gid1, gid2);
+    }
+
+    @Nullable
+    private static CarrierPrivilegeRule[] buildCarrierPrivilegeRules(List<Asn1Node> nodes)
+            throws InvalidAsn1DataException, TagNotFoundException {
+        if (nodes.isEmpty()) {
+            return null;
+        }
+        int count = nodes.size();
+        CarrierPrivilegeRule[] rules = new CarrierPrivilegeRule[count];
+        for (int i = 0; i < count; i++) {
+            Asn1Node node = nodes.get(i);
+            Asn1Node refDoNode = node.getChild(TAG_REF_DO);
+            byte[] signature = refDoNode.getChild(TAG_DEVICE_APP_ID_REF_DO).asBytes();
+
+            String packageName = null;
+            if (refDoNode.hasChild(TAG_PKG_REF_DO)) {
+                packageName = refDoNode.getChild(TAG_PKG_REF_DO).asString();
+            }
+            long accessType = 0;
+            if (node.hasChild(TAG_AR_DO, TAG_PERM_AR_DO)) {
+                Asn1Node permArDoNode = node.getChild(TAG_AR_DO, TAG_PERM_AR_DO);
+                accessType = permArDoNode.asRawLong();
+            }
+            rules[i] = new CarrierPrivilegeRule(signature, packageName, accessType);
+        }
+        return rules;
     }
 
     /**
