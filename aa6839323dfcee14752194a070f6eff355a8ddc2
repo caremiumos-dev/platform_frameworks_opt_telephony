@@ -46,6 +46,30 @@
       "revId": "aa6839323dfcee14752194a070f6eff355a8ddc2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c93c6cb_b1b23f3c",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-17T01:40:39Z",
+      "side": 1,
+      "message": "Ok. May be as a lower priority change givePrintableIccid to givePrintablePII.",
+      "parentUuid": "92fd3ee0_4eb66a87",
+      "range": {
+        "startLine": 338,
+        "startChar": 52,
+        "endLine": 338,
+        "endChar": 70
+      },
+      "revId": "aa6839323dfcee14752194a070f6eff355a8ddc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
