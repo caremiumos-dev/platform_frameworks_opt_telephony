@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5c892c3_0a5f5225",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-17T19:46:26Z",
+      "side": 1,
+      "message": "Although they are the same group, new line below?",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 41
+      },
+      "revId": "471ee873a63c98b15f80c7b433303085ae94f20a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d022d0d_5baa2f20",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-17T19:46:26Z",
+      "side": 1,
+      "message": "Add a logi() here?",
+      "range": {
+        "startLine": 518,
+        "startChar": 16,
+        "endLine": 518,
+        "endChar": 40
+      },
+      "revId": "471ee873a63c98b15f80c7b433303085ae94f20a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
