@@ -19,22 +19,36 @@ package com.android.internal.telephony.uicc.euicc;
 import android.annotation.Nullable;
 import android.content.Context;
 import android.os.Handler;
+import android.service.carrier.CarrierIdentifier;
 import android.service.euicc.EuiccProfileInfo;
+import android.telephony.Rlog;
+import android.telephony.SubscriptionInfo;
+import android.telephony.UiccAccessRule;
 import android.telephony.euicc.EuiccCardManager;
 import android.telephony.euicc.EuiccNotification;
 import android.telephony.euicc.EuiccRat;
+import android.text.TextUtils;
 
+import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.UiccCard;
+import com.android.internal.telephony.uicc.asn1.Asn1Decoder;
+import com.android.internal.telephony.uicc.asn1.Asn1Node;
 import com.android.internal.telephony.uicc.asn1.InvalidAsn1DataException;
 import com.android.internal.telephony.uicc.asn1.TagNotFoundException;
+import com.android.internal.telephony.uicc.euicc.EuiccCardErrorException.OperationCode;
+import com.android.internal.telephony.uicc.euicc.apdu.ApduException;
 import com.android.internal.telephony.uicc.euicc.apdu.ApduSender;
 import com.android.internal.telephony.uicc.euicc.apdu.RequestBuilder;
 import com.android.internal.telephony.uicc.euicc.apdu.RequestProvider;
 import com.android.internal.telephony.uicc.euicc.async.AsyncResultCallback;
 import com.android.internal.telephony.uicc.euicc.async.AsyncResultHelper;
+
+import java.util.List;
 
 /**
  * This represents an eUICC card to perform profile management operations asynchronously. This class
@@ -91,6 +105,54 @@ public class EuiccCard extends UiccCard {
      */
     public void getAllProfiles(AsyncResultCallback<EuiccProfileInfo[]> callback, Handler handler) {
         // TODO: to be implemented.
+    }
+
+    private void loadProfiles() throws UiccChannelException, EuiccCardException {
+        if (mProfiles == null) {
+            String response;
+            try (UiccLogicalChannel ch = UiccLogicalChannel.openIsdR(mTm)) {
+                String command =
+                        Asn1Node.newBuilder(TAG_GET_PROFILES)
+                                .addChildAsBytes(TAG_TAG_LIST, EUICC_PROFILE_TAGS)
+                                .build()
+                                .toHex();
+                response = ch.execStoreData(command);
+            }
+            try {
+                List<Asn1Node> profileNodes =
+                        new Asn1Decoder(response)
+                                .nextNode()
+                                .getChild(TAG_CTX_COMP_0)
+                                .getChildren(TAG_PROFILE_INFO);
+                int size = profileNodes.size();
+                EuiccProfile[] profiles = new EuiccProfile[size];
+                String enabledIccid = null;
+                int profileCount = 0;
+                for (int i = 0; i < size; i++) {
+                    Asn1Node profileNode = profileNodes.get(i);
+                    if (!profileNode.hasChild(TAG_ICCID)) {
+                        EuiccLog.get().wtf("Profile must have an ICCID.");
+                        continue;
+                    }
+                    EuiccProfile.Builder profileBuilder = new EuiccProfile.Builder();
+                    buildProfile(profileNode, profileBuilder);
+
+                    EuiccProfile profile = profileBuilder.build();
+                    String iccidStr = profile.getIccid();
+                    if (profile.getState() == EuiccProfile.ProfileState.ENABLED) {
+                        enabledIccid = iccidStr;
+                    }
+                    profiles[profileCount++] = profile;
+                }
+
+                mEnabledIccid = enabledIccid;
+                mProfiles = Arrays.copyOf(profiles, profiles.length);
+            } catch (TagNotFoundException e) {
+                throw new EuiccCardInvalidResponseException("Cannot find profile info tag.", e);
+            } catch (InvalidAsn1DataException e) {
+                throw new EuiccCardInvalidResponseException("Cannot parse profile info.", e);
+            }
+        }
     }
 
     /**
@@ -243,7 +305,7 @@ public class EuiccCard extends UiccCard {
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
-    public void getEuiccInfo1(AsyncResultCallback<byte[]> callback, Handler handler) {
+    public void getEuiccInfo1(AsyncResultCallback<Asn1Node> callback, Handler handler) {
         // TODO: to be implemented.
     }
 
@@ -255,7 +317,7 @@ public class EuiccCard extends UiccCard {
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
-    public void getEuiccInfo2(AsyncResultCallback<byte[]> callback, Handler handler) {
+    public void getEuiccInfo2(AsyncResultCallback<Asn1Node> callback, Handler handler) {
         // TODO: to be implemented.
     }
 
@@ -270,9 +332,9 @@ public class EuiccCard extends UiccCard {
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
-    public void authenticateServer(String matchingId, byte[] serverSigned1,
-            byte[] serverSignature1, byte[] euiccCiPkIdToBeUsed, byte[] serverCertificate,
-            AsyncResultCallback<byte[]> callback, Handler handler) {
+    public void authenticateServer(String matchingId, Asn1Node serverSigned1,
+            Asn1Node serverSignature1, Asn1Node euiccCiPkIdToBeUsed, Asn1Node serverCertificate,
+            AsyncResultCallback<Asn1Node> callback, Handler handler) {
         // TODO: to be implemented.
     }
 
@@ -288,8 +350,9 @@ public class EuiccCard extends UiccCard {
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
-    public void prepareDownload(@Nullable byte[] hashCc, byte[] smdpSigned2, byte[] smdpSignature2,
-            byte[] smdpCertificate, AsyncResultCallback<byte[]> callback, Handler handler) {
+    public void prepareDownload(@Nullable byte[] hashCc, Asn1Node smdpSigned2,
+            Asn1Node smdpSignature2, Asn1Node smdpCertificate,
+            AsyncResultCallback<Asn1Node> callback, Handler handler) {
         // TODO: to be implemented.
     }
 
@@ -302,8 +365,8 @@ public class EuiccCard extends UiccCard {
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
-    public void loadBoundProfilePackage(byte[] boundProfilePackage,
-            AsyncResultCallback<byte[]> callback, Handler handler) {
+    public void loadBoundProfilePackage(Asn1Node boundProfilePackage,
+            AsyncResultCallback<Asn1Node> callback, Handler handler) {
         // TODO: to be implemented.
     }
 
@@ -317,7 +380,7 @@ public class EuiccCard extends UiccCard {
      * @since 2.0.0 [GSMA SGP.22]
      */
     public void cancelSession(byte[] transactionId, @EuiccCardManager.CancelReason int reason,
-            AsyncResultCallback<byte[]> callback, Handler handler) {
+            AsyncResultCallback<Asn1Node> callback, Handler handler) {
         // TODO: to be implemented.
     }
 
@@ -436,5 +499,106 @@ public class EuiccCard extends UiccCard {
                 callback.onException(new EuiccCardException("Cannot send APDU.", e));
             }
         }, handler);
+    }
+
+    @Override
+    public void buildProfile(Asn1Node profileNode, EuiccProfile.Builder profileBuilder)
+            throws TagNotFoundException, InvalidAsn1DataException {
+        String strippedIccIdString =
+                IccIdFormatter.stripTrailingFs(profileNode.getChild(TAG_ICCID).asBytes());
+        profileBuilder.setIccid(strippedIccIdString);
+
+        if (profileNode.hasChild(TAG_NICKNAME)) {
+            profileBuilder.setNickname(profileNode.getChild(TAG_NICKNAME).asString());
+        }
+
+        if (profileNode.hasChild(TAG_SERVICE_PROVIDER_NAME)) {
+            profileBuilder.setServiceProviderName(
+                    profileNode.getChild(TAG_SERVICE_PROVIDER_NAME).asString());
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_NAME)) {
+            profileBuilder.setProfileName(profileNode.getChild(TAG_PROFILE_NAME).asString());
+        }
+
+        if (profileNode.hasChild(TAG_OPERATOR_ID)) {
+            profileBuilder.setOperatorId(buildOperatorId(profileNode.getChild(TAG_OPERATOR_ID)));
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_STATE)) {
+            // noinspection WrongConstant
+            profileBuilder.setState(profileNode.getChild(TAG_PROFILE_STATE).asInteger());
+        } else {
+            profileBuilder.setState(EuiccProfile.ProfileState.DISABLED);
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_CLASS)) {
+            // noinspection WrongConstant
+            profileBuilder.setProfileClass(profileNode.getChild(TAG_PROFILE_CLASS).asInteger());
+        } else {
+            profileBuilder.setProfileClass(EuiccProfile.ProfileClass.OPERATIONAL);
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_POLICY_RULE)) {
+            // noinspection WrongConstant
+            profileBuilder.setPolicyRules(profileNode.getChild(TAG_PROFILE_POLICY_RULE).asBits());
+        }
+
+        if (profileNode.hasChild(TAG_CARRIER_PRIVILEGE_RULES)) {
+            profileBuilder.setCarrierPrivilegeRules(
+                    buildCarrierPrivilegeRules(
+                            profileNode
+                                    .getChild(TAG_CARRIER_PRIVILEGE_RULES)
+                                    .getChildren(TAG_REF_AR_DO)));
+        }
+    }
+
+    private static OperatorId buildOperatorId(Asn1Node node)
+            throws InvalidAsn1DataException, TagNotFoundException {
+        byte[] gid1 = null;
+        if (node.hasChild(TAG_CTX_1)) {
+            gid1 = node.getChild(TAG_CTX_1).asBytes();
+        }
+        byte[] gid2 = null;
+        if (node.hasChild(TAG_CTX_2)) {
+            gid2 = node.getChild(TAG_CTX_2).asBytes();
+        }
+        return new OperatorId(node.getChild(TAG_CTX_0).asBytes(), gid1, gid2);
+    }
+
+    @Nullable
+    private static CarrierPrivilegeRule[] buildCarrierPrivilegeRules(List<Asn1Node> nodes)
+            throws InvalidAsn1DataException, TagNotFoundException {
+        if (nodes.isEmpty()) {
+            return null;
+        }
+        int count = nodes.size();
+        CarrierPrivilegeRule[] rules = new CarrierPrivilegeRule[count];
+        for (int i = 0; i < count; i++) {
+            Asn1Node node = nodes.get(i);
+            Asn1Node refDoNode = node.getChild(TAG_REF_DO);
+            byte[] signature = refDoNode.getChild(TAG_DEVICE_APP_ID_REF_DO).asBytes();
+
+            String packageName = null;
+            if (refDoNode.hasChild(TAG_PKG_REF_DO)) {
+                packageName = refDoNode.getChild(TAG_PKG_REF_DO).asString();
+            }
+            long accessType = 0;
+            if (node.hasChild(TAG_AR_DO, TAG_PERM_AR_DO)) {
+                Asn1Node permArDoNode = node.getChild(TAG_AR_DO, TAG_PERM_AR_DO);
+                accessType = permArDoNode.asRawLong();
+            }
+            rules[i] = new CarrierPrivilegeRule(signature, packageName, accessType);
+        }
+        return rules;
+    }
+
+    /** Strip all the trailing Fs of an iccId. */
+    public static String stripTrailingFs(byte[] iccId) {
+        String iccIdString = Asn1Converter.bcdBytesToString(iccId);
+        if (iccIdString.endsWith("F")) {
+            iccIdString = iccIdString.substring(0, iccIdString.indexOf('F'));
+        }
+        return iccIdString;
     }
 }
