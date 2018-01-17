@@ -16,6 +16,24 @@
       "revId": "40098ccfedbec66fdc05462b920016f4bce9d403",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f039edf_26ffd77a",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-17T02:22:39Z",
+      "side": 1,
+      "message": "Will sync after that one is merged.",
+      "parentUuid": "5a8f7a16_1d382521",
+      "revId": "40098ccfedbec66fdc05462b920016f4bce9d403",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
