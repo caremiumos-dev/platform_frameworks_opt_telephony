@@ -20,18 +20,31 @@ import android.annotation.IntDef;
 import android.annotation.Nullable;
 import android.content.Context;
 import android.os.Handler;
+import android.service.carrier.CarrierIdentifier;
 import android.service.euicc.EuiccProfileInfo;
+import android.telephony.Rlog;
+import android.telephony.UiccAccessRule;
 import android.telephony.euicc.EuiccNotification;
 import android.telephony.euicc.EuiccRat;
+import android.text.TextUtils;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.uicc.IccCardStatus;
+import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.UiccCard;
+import com.android.internal.telephony.uicc.asn1.Asn1Decoder;
 import com.android.internal.telephony.uicc.asn1.Asn1Node;
+import com.android.internal.telephony.uicc.asn1.InvalidAsn1DataException;
+import com.android.internal.telephony.uicc.asn1.TagNotFoundException;
+import com.android.internal.telephony.uicc.euicc.apdu.ApduSender;
+import com.android.internal.telephony.uicc.euicc.apdu.RequestBuilder;
+import com.android.internal.telephony.uicc.euicc.apdu.RequestProvider;
 import com.android.internal.telephony.uicc.euicc.async.AsyncResultCallback;
+import com.android.internal.telephony.uicc.euicc.async.AsyncResultHelper;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.List;
 
 /**
  * This represents an eUICC card to perform profile management operations asynchronously. This class
@@ -40,6 +53,9 @@ import java.lang.annotation.RetentionPolicy;
  * @hide
  */
 public class EuiccCard extends UiccCard {
+    private static final String LOG_TAG = "EuiccCard";
+    private static final boolean DBG = true;
+
     /** Operations */
     @Retention(RetentionPolicy.SOURCE)
     @IntDef(prefix = "OPERATION_", value = {
@@ -59,7 +75,8 @@ public class EuiccCard extends UiccCard {
             OPERATION_RESET_MEMORY,
             OPERATION_SET_DEFAULT_SMDP_ADDRESS,
     })
-    public @interface OperationCode {}
+    public @interface OperationCode {
+    }
 
     public static final int OPERATION_UNKNOWN = 0;
     public static final int OPERATION_GET_PROFILE = 1;
@@ -84,7 +101,8 @@ public class EuiccCard extends UiccCard {
             RESET_OPTION_DELETE_FIELD_LOADED_TEST_PROFILES,
             RESET_OPTION_RESET_DEFAULT_SMDP_ADDRESS,
     })
-    public @interface ResetOption {}
+    public @interface ResetOption {
+    }
 
     /** Deletes all operational profiles. */
     public static final int RESET_OPTION_DELETE_OPERATIONAL_PROFILES = 1;
@@ -103,7 +121,8 @@ public class EuiccCard extends UiccCard {
             CANCEL_REASON_TIMEOUT,
             CANCEL_REASON_PPR_NOT_ALLOWED
     })
-    public @interface CancelReason {}
+    public @interface CancelReason {
+    }
 
     /**
      * The end user has rejected the download. The profile will be put into the error state and
@@ -143,14 +162,333 @@ public class EuiccCard extends UiccCard {
     /** Error code for incorrect input values when getting profiles or loading profile package. */
     public static final int CODE_INCORRECT_INPUT_VALUES = 1;
 
-    public EuiccCard(Context c, CommandsInterface ci, IccCardStatus ics, int phoneId) {
-        super(c, ci, ics, phoneId);
+    // ASN.1 tags for commands
+    private static final int TAG_GET_PROFILES = 0xBF2D;
+    private static final int TAG_DISABLE_PROFILE = 0xBF32;
+    private static final int TAG_ENABLE_PROFILE = 0xBF31;
+    private static final int TAG_GET_EID = 0xBF3E;
+    private static final int TAG_SET_NICKNAME = 0xBF29;
+    private static final int TAG_DELETE_PROFILE = 0xBF33;
+    private static final int TAG_GET_CONFIGURED_ADDRESSES = 0xBF3C;
+    private static final int TAG_SET_DEFAULT_SMDP_ADDRESS = 0xBF3F;
+    private static final int TAG_GET_RAT = 0xBF43;
+    private static final int TAG_EUICC_MEMORY_RESET = 0xBF34;
+    private static final int TAG_GET_EUICC_CHALLENGE = 0xBF2E;
+    private static final int TAG_GET_EUICC_INFO_1 = 0xBF20;
+    private static final int TAG_GET_EUICC_INFO_2 = 0xBF22;
+    private static final int TAG_LIST_NOTIFICATION = 0xBF28;
+    private static final int TAG_RETRIEVE_NOTIFICATIONS_LIST = 0xBF2B;
+    private static final int TAG_REMOVE_NOTIFICATION_FROM_LIST = 0xBF30;
+    private static final int TAG_AUTHENTICATE_SERVER = 0xBF38;
+    private static final int TAG_PREPARE_DOWNLOAD = 0xBF21;
+    private static final int TAG_INITIALISE_SECURE_CHANNEL = 0xBF23;
+
+    // Universal tags
+    private static final int TAG_UNI_2 = 0x02;
+    private static final int TAG_UNI_4 = 0x04;
+    // Context tags for primitive types
+    private static final int TAG_CTX_0 = 0x80;
+    private static final int TAG_CTX_1 = 0x81;
+    private static final int TAG_CTX_2 = 0x82;
+    private static final int TAG_CTX_3 = 0x83;
+    private static final int TAG_CTX_4 = 0x84;
+    private static final int TAG_CTX_5 = 0x85;
+    private static final int TAG_CTX_6 = 0x86;
+    private static final int TAG_CTX_7 = 0x87;
+    private static final int TAG_CTX_8 = 0x88;
+    // Context tags for constructed (compound) types
+    private static final int TAG_CTX_COMP_0 = 0xA0;
+    private static final int TAG_CTX_COMP_1 = 0xA1;
+    private static final int TAG_CTX_COMP_2 = 0xA2;
+    private static final int TAG_CTX_COMP_3 = 0xA3;
+
+    // Command data tags
+    private static final int TAG_PROFILE_INSTALLATION_RESULT = 0xBF37;
+    private static final int TAG_PROFILE_INSTALLATION_RESULT_DATA = 0xBF27;
+    private static final int TAG_NOTIFICATION_METADATA = 0xBF2F;
+    private static final int TAG_SEQ = TAG_CTX_0;
+    private static final int TAG_TARGET_ADDR = 0x0C;
+    private static final int TAG_EVENT = TAG_CTX_1;
+    private static final int TAG_CANCEL_SESSION = 0xBF41;
+    private static final int TAG_PROFILE_INFO = 0xE3;
+    private static final int TAG_TAG_LIST = 0x5C;
+    private static final int TAG_EID = 0x5A;
+    private static final int TAG_NICKNAME = 0x90;
+    private static final int TAG_ICCID = 0x5A;
+    private static final int TAG_PROFILE_STATE = 0x9F70;
+    private static final int TAG_SERVICE_PROVIDER_NAME = 0x91;
+    private static final int TAG_PROFILE_CLASS = 0x95;
+    private static final int TAG_PROFILE_POLICY_RULE = 0x99;
+    private static final int TAG_PROFILE_NAME = 0x92;
+    private static final int TAG_OPERATOR_ID = 0xB7;
+    private static final int TAG_CARRIER_PRIVILEGE_RULES = 0xBF76;
+
+    // Tags from the RefArDo data standard - https://source.android.com/devices/tech/config/uicc
+    private static final int TAG_REF_AR_DO = 0xE2;
+    private static final int TAG_REF_DO = 0xE1;
+    private static final int TAG_DEVICE_APP_ID_REF_DO = 0xC1;
+    private static final int TAG_PKG_REF_DO = 0xCA;
+    private static final int TAG_AR_DO = 0xE3;
+    private static final int TAG_PERM_AR_DO = 0xDB;
+
+    // TAG list for Euicc Profile
+    private static final byte[] EUICC_PROFILE_TAGS =
+            new byte[]{
+                    TAG_ICCID,
+                    (byte) TAG_NICKNAME,
+                    (byte) TAG_SERVICE_PROVIDER_NAME,
+                    (byte) TAG_PROFILE_NAME,
+                    (byte) TAG_OPERATOR_ID,
+                    (byte) (TAG_PROFILE_STATE / 256),
+                    (byte) (TAG_PROFILE_STATE % 256),
+                    (byte) TAG_PROFILE_CLASS,
+                    (byte) TAG_PROFILE_POLICY_RULE,
+                    (byte) (TAG_CARRIER_PRIVILEGE_RULES / 256),
+                    (byte) (TAG_CARRIER_PRIVILEGE_RULES % 256)
+            };
+
+    // ASN.1 Tags for parsing spec version
+    private static final int TAG_ISD_R_APP_TEMPLATE = 0xE0;
+    private static final int TAG_VERSION = 0x82;
+
+    // APDU status for SIM refresh
+    private static final int APDU_ERROR_SIM_REFRESH = 0x6F00;
+
+    private static final String ISD_R_AID = "A0000005591010FFFFFFFF8900000100";
+
+    private static final EuiccSpecVersion SGP_2_0 = new EuiccSpecVersion(2, 0, 0);
+
+    private static void logd(String message) {
+        if (DBG) {
+            Rlog.d(LOG_TAG, message);
+        }
     }
 
-    /** @return The GSMA SGP.22 spec version that this card supports. */
-    public EuiccSpecVersion getSpecVersion() {
-        // TODO: to be implemented.
+    private static void loge(String message) {
+        Rlog.e(LOG_TAG, message);
+    }
+
+    private static void loge(String message, Throwable e) {
+        Rlog.e(LOG_TAG, message, e);
+    }
+
+    private static String pii(Object pii) {
+        return Rlog.pii(LOG_TAG, pii);
+    }
+
+    /** Strip all the trailing Fs of an iccId. */
+    private static String stripTrailingFs(byte[] iccId) {
+        String iccIdString = IccUtils.bcdToString(iccId);
+        if (iccIdString.endsWith("F")) {
+            iccIdString = iccIdString.substring(0, iccIdString.indexOf('F'));
+        }
+        return iccIdString;
+    }
+
+    /** Pad an iccId with trailing Fs until the length is 20. */
+    private static String padTrailingFs(String iccId) {
+        if (!TextUtils.isEmpty(iccId) && iccId.length() < 20) {
+            iccId += new String(new char[20 - iccId.length()]).replace('\0', 'F');
+        }
+        return iccId;
+    }
+
+    private interface ApduRequestBuilder {
+        void build(RequestBuilder requestBuilder)
+                throws EuiccCardException, TagNotFoundException, InvalidAsn1DataException;
+    }
+
+    private interface ApduResponseHandler<T> {
+        T handleResult(byte[] response)
+                throws EuiccCardException, TagNotFoundException, InvalidAsn1DataException;
+    }
+
+    private interface ApduExceptionHandler {
+        void handleException(Throwable e);
+    }
+
+    private final ApduSender mApduSender;
+    private final Object mLock = new Object();
+    // Cached spec version supported by the card. This is read from the response of opening a
+    // logical channel.
+    private EuiccSpecVersion mSpecVersion;
+
+    public EuiccCard(Context c, CommandsInterface ci, IccCardStatus ics, int phoneId) {
+        super(c, ci, ics, phoneId);
+        // TODO: Set supportExtendedApdu based on ATR.
+        mApduSender = new ApduSender(ci, ISD_R_AID, false /* supportExtendedApdu */);
+    }
+
+    /**
+     * Gets the GSMA RSP specification version supported by this eUICC. This may return null if the
+     * version cannot be read.
+     */
+    public void getSpecVersion(AsyncResultCallback<EuiccSpecVersion> callback, Handler handler) {
+        if (mSpecVersion != null) {
+            AsyncResultHelper.returnResult(mSpecVersion, callback, handler);
+            return;
+        }
+        sendApdu(newRequestProvider((RequestBuilder requestBuilder) -> { /* Do nothing */ }),
+                (byte[] response) -> mSpecVersion, callback, handler);
+    }
+
+    /**
+     * Creates a {@link RequestBuilder} instance. The spec version will be checked. Only eUICCs of
+     * spec version 2.0 and above are supported.
+     */
+    private RequestProvider newRequestProvider(final ApduRequestBuilder builder) {
+        return (selectResponse, requestBuilder) -> {
+            EuiccSpecVersion ver = getOrExtractSpecVersion(selectResponse);
+            if (ver == null) {
+                throw new EuiccCardException("Cannot get eUICC spec version.");
+            }
+            try {
+                if (ver.compareTo(SGP_2_0) < 0) {
+                    throw new EuiccCardException("eUICC spec version is unsupported: " + ver);
+                }
+                builder.build(requestBuilder);
+            } catch (InvalidAsn1DataException | TagNotFoundException e) {
+                throw new EuiccCardException("Cannot parse ASN1 to build request.", e);
+            }
+        };
+    }
+
+    private EuiccSpecVersion getOrExtractSpecVersion(byte[] selectResponse) {
+        // Uses the cached version.
+        if (mSpecVersion != null) {
+            return mSpecVersion;
+        }
+        // Parses and caches the version.
+        EuiccSpecVersion ver = parseSpecVersion(selectResponse);
+        if (ver != null) {
+            synchronized (mLock) {
+                if (mSpecVersion == null) {
+                    mSpecVersion = ver;
+                }
+            }
+        }
+        return ver;
+    }
+
+    private static EuiccSpecVersion parseSpecVersion(byte[] selectResponse) {
+        Asn1Node node;
+        try {
+            Asn1Decoder decoder = new Asn1Decoder(selectResponse);
+            if (!decoder.hasNextNode()) {
+                return null;
+            }
+            node = decoder.nextNode();
+        } catch (InvalidAsn1DataException e) {
+            loge("Cannot parse the select response of ISD-R.", e);
+            return null;
+        }
+        try {
+            byte[] versionType;
+            if (node.getTag() == TAG_ISD_R_APP_TEMPLATE) {
+                versionType = node.getChild(TAG_VERSION).asBytes();
+            } else {
+                versionType =
+                        node.getChild(TAG_ISD_R_APP_TEMPLATE, TAG_VERSION).asBytes();
+            }
+            if (versionType.length == 3) {
+                return new EuiccSpecVersion(versionType);
+            } else {
+                loge("Cannot parse select response of ISD-R: " + node.toHex());
+            }
+        } catch (InvalidAsn1DataException | TagNotFoundException e) {
+            loge("Cannot parse select response of ISD-R: " + node.toHex());
+        }
         return null;
+    }
+
+    /**
+     * A wrapper on {@link ApduSender#send(RequestProvider, AsyncResultCallback, Handler)} to
+     * leverage lambda to simplify the sending APDU code.
+     *
+     * @param requestBuilder Builds the request of APDU commands.
+     * @param responseHandler Converts the APDU response from bytes to expected result.
+     * @param <T> Type of the originally expected result.
+     */
+    private <T> void sendApdu(RequestProvider requestBuilder,
+            ApduResponseHandler<T> responseHandler, AsyncResultCallback<T> callback,
+            Handler handler) {
+        sendApdu(requestBuilder, responseHandler,
+                (e) -> callback.onException(new EuiccCardException("Cannot send APDU.", e)),
+                callback, handler);
+    }
+
+    private <T> void sendApdu(
+            RequestProvider requestBuilder, ApduResponseHandler<T> responseHandler,
+            ApduExceptionHandler exceptionHandler, AsyncResultCallback<T> callback,
+            Handler handler) {
+        mApduSender.send(requestBuilder, new AsyncResultCallback<byte[]>() {
+            @Override
+            public void onResult(byte[] response) {
+                try {
+                    callback.onResult(responseHandler.handleResult(response));
+                } catch (EuiccCardException e) {
+                    callback.onException(e);
+                } catch (InvalidAsn1DataException | TagNotFoundException e) {
+                    callback.onException(
+                            new EuiccCardException("Cannot parse response: "
+                                    + IccUtils.bytesToHexString(response), e));
+                }
+            }
+
+            @Override
+            public void onException(Throwable e) {
+                exceptionHandler.handleException(e);
+            }
+        }, handler);
+    }
+
+    private void buildProfile(Asn1Node profileNode, EuiccProfileInfo.Builder profileBuilder)
+            throws TagNotFoundException, InvalidAsn1DataException {
+        String strippedIccIdString = stripTrailingFs(profileNode.getChild(TAG_ICCID).asBytes());
+        profileBuilder.setIccid(strippedIccIdString);
+
+        if (profileNode.hasChild(TAG_NICKNAME)) {
+            profileBuilder.setNickname(profileNode.getChild(TAG_NICKNAME).asString());
+        }
+
+        if (profileNode.hasChild(TAG_SERVICE_PROVIDER_NAME)) {
+            profileBuilder.setServiceProviderName(
+                    profileNode.getChild(TAG_SERVICE_PROVIDER_NAME).asString());
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_NAME)) {
+            profileBuilder.setProfileName(profileNode.getChild(TAG_PROFILE_NAME).asString());
+        }
+
+        if (profileNode.hasChild(TAG_OPERATOR_ID)) {
+            profileBuilder.setCarrierIdentifier(
+                    buildCarrierIdentifier(profileNode.getChild(TAG_OPERATOR_ID)));
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_STATE)) {
+            // noinspection WrongConstant
+            profileBuilder.setState(profileNode.getChild(TAG_PROFILE_STATE).asInteger());
+        } else {
+            profileBuilder.setState(EuiccProfileInfo.PROFILE_STATE_DISABLED);
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_CLASS)) {
+            // noinspection WrongConstant
+            profileBuilder.setProfileClass(profileNode.getChild(TAG_PROFILE_CLASS).asInteger());
+        } else {
+            profileBuilder.setProfileClass(EuiccProfileInfo.PROFILE_CLASS_OPERATIONAL);
+        }
+
+        if (profileNode.hasChild(TAG_PROFILE_POLICY_RULE)) {
+            // noinspection WrongConstant
+            profileBuilder.setPolicyRules(profileNode.getChild(TAG_PROFILE_POLICY_RULE).asBits());
+        }
+
+        if (profileNode.hasChild(TAG_CARRIER_PRIVILEGE_RULES)) {
+            List<Asn1Node> refArDoNodes =
+                    profileNode.getChild(TAG_CARRIER_PRIVILEGE_RULES).getChildren(TAG_REF_AR_DO);
+            profileBuilder.setUiccAccessRule(buildUiccAccessRule(refArDoNodes));
+        }
     }
 
     /**
@@ -161,7 +499,77 @@ public class EuiccCard extends UiccCard {
      * @since 1.1.0 [GSMA SGP.22]
      */
     public void getAllProfiles(AsyncResultCallback<EuiccProfileInfo[]> callback, Handler handler) {
-        // TODO: to be implemented.
+        sendApdu(
+                newRequestProvider(
+                        (RequestBuilder requestBuilder) ->
+                                requestBuilder.addStoreData(
+                                        Asn1Node.newBuilder(TAG_GET_PROFILES)
+                                                .addChildAsBytes(TAG_TAG_LIST, EUICC_PROFILE_TAGS)
+                                                .build()
+                                                .toHex())),
+                (byte[] response) -> {
+                    List<Asn1Node> profileNodes =
+                            new Asn1Decoder(response)
+                                    .nextNode()
+                                    .getChild(TAG_CTX_COMP_0)
+                                    .getChildren(TAG_PROFILE_INFO);
+                    int size = profileNodes.size();
+                    EuiccProfileInfo[] profiles = new EuiccProfileInfo[size];
+                    int profileCount = 0;
+                    for (int i = 0; i < size; i++) {
+                        Asn1Node profileNode = profileNodes.get(i);
+                        if (!profileNode.hasChild(TAG_ICCID)) {
+                            loge("Profile must have an ICCID.");
+                            continue;
+                        }
+                        EuiccProfileInfo.Builder profileBuilder = new EuiccProfileInfo.Builder();
+                        buildProfile(profileNode, profileBuilder);
+
+                        EuiccProfileInfo profile = profileBuilder.build();
+                        profiles[profileCount++] = profile;
+                    }
+                    return profiles;
+                }, callback, handler);
+    }
+
+    private static CarrierIdentifier buildCarrierIdentifier(Asn1Node node)
+            throws InvalidAsn1DataException, TagNotFoundException {
+        String gid1 = null;
+        if (node.hasChild(TAG_CTX_1)) {
+            gid1 = IccUtils.bytesToHexString(node.getChild(TAG_CTX_1).asBytes());
+        }
+        String gid2 = null;
+        if (node.hasChild(TAG_CTX_2)) {
+            gid2 = IccUtils.bytesToHexString(node.getChild(TAG_CTX_2).asBytes());
+        }
+        return new CarrierIdentifier(node.getChild(TAG_CTX_0).asBytes(), gid1, gid2);
+    }
+
+    @Nullable
+    private static UiccAccessRule[] buildUiccAccessRule(List<Asn1Node> nodes)
+            throws InvalidAsn1DataException, TagNotFoundException {
+        if (nodes.isEmpty()) {
+            return null;
+        }
+        int count = nodes.size();
+        UiccAccessRule[] rules = new UiccAccessRule[count];
+        for (int i = 0; i < count; i++) {
+            Asn1Node node = nodes.get(i);
+            Asn1Node refDoNode = node.getChild(TAG_REF_DO);
+            byte[] signature = refDoNode.getChild(TAG_DEVICE_APP_ID_REF_DO).asBytes();
+
+            String packageName = null;
+            if (refDoNode.hasChild(TAG_PKG_REF_DO)) {
+                packageName = refDoNode.getChild(TAG_PKG_REF_DO).asString();
+            }
+            long accessType = 0;
+            if (node.hasChild(TAG_AR_DO, TAG_PERM_AR_DO)) {
+                Asn1Node permArDoNode = node.getChild(TAG_AR_DO, TAG_PERM_AR_DO);
+                accessType = permArDoNode.asRawLong();
+            }
+            rules[i] = new UiccAccessRule(signature, packageName, accessType);
+        }
+        return rules;
     }
 
     /**
@@ -240,8 +648,9 @@ public class EuiccCard extends UiccCard {
     /**
      * Resets the eUICC memory (i.e., remove all profiles).
      *
-     * @param options Bits of the options of resetting which parts of the eUICC memory. You can
-     *     check out subclasses to see details.
+     * @param options Bits of the options of resetting which parts of the eUICC memory. You
+     *         can
+     *         check out subclasses to see details.
      * @param callback The callback to get the result.
      * @param handler The handler to run the callback.
      * @since 1.1.0 [GSMA SGP.22]
@@ -310,8 +719,9 @@ public class EuiccCard extends UiccCard {
     /**
      * Gets the eUICC info1 for new profile downloading.
      *
-     * @param callback The callback to get the result, which represents an {@code EUICCInfo1}
-     *     defined in GSMA RSP v2.0+.
+     * @param callback The callback to get the result, which represents an {@code
+     *         EUICCInfo1}
+     *         defined in GSMA RSP v2.0+.
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
@@ -322,8 +732,9 @@ public class EuiccCard extends UiccCard {
     /**
      * Gets the eUICC info2 for new profile downloading.
      *
-     * @param callback The callback to get the result, which represents an {@code EUICCInfo2}
-     *     defined in GSMA RSP v2.0+.
+     * @param callback The callback to get the result, which represents an {@code
+     *         EUICCInfo2}
+     *         defined in GSMA RSP v2.0+.
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
@@ -338,7 +749,7 @@ public class EuiccCard extends UiccCard {
      *
      * @param matchingId The activation code or an empty string.
      * @param callback The callback to get the result, which represents an {@code
-     *     AuthenticateServerResponse} defined in GSMA RSP v2.0+.
+     *         AuthenticateServerResponse} defined in GSMA RSP v2.0+.
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
@@ -353,10 +764,11 @@ public class EuiccCard extends UiccCard {
      * {@code smdpSignature2}, and {@code smdpCertificate} are the ASN.1 data returned by SM-DP+
      * server.
      *
-     * @param hashCc The hash of confirmation code. It can be null if there is no confirmation code
-     *     required.
+     * @param hashCc The hash of confirmation code. It can be null if there is no
+     *         confirmation code
+     *         required.
      * @param callback The callback to get the result, which represents an {@code
-     *     PrepareDownloadResponse} defined in GSMA RSP v2.0+.
+     *         PrepareDownloadResponse} defined in GSMA RSP v2.0+.
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
@@ -371,7 +783,7 @@ public class EuiccCard extends UiccCard {
      *
      * @param boundProfilePackage The Bound Profile Package data returned by SM-DP+ server.
      * @param callback The callback to get the result, which represents an {@code
-     *     LoadBoundProfilePackageResponse} defined in GSMA RSP v2.0+.
+     *         LoadBoundProfilePackageResponse} defined in GSMA RSP v2.0+.
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
@@ -385,7 +797,7 @@ public class EuiccCard extends UiccCard {
      *
      * @param transactionId The transaction ID returned by SM-DP+ server.
      * @param callback The callback to get the result, which represents an {@code
-     *     CancelSessionResponse} defined in GSMA RSP v2.0+.
+     *         CancelSessionResponse} defined in GSMA RSP v2.0+.
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
