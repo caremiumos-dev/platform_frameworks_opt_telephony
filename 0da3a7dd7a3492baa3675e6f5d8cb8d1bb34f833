@@ -94,6 +94,54 @@
       "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "419869cb_86cf4e5a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-01-17T00:32:46Z",
+      "side": 1,
+      "message": "So why we need tow copies of PREFFERD_NETWORK_MODE? Why not just one copied. I saw your other CL stored the network mode with subId and phoneId when user set the their preference.",
+      "parentUuid": "bca8e4d6_ec98ed50",
+      "range": {
+        "startLine": 467,
+        "startChar": 19,
+        "endLine": 485,
+        "endChar": 21
+      },
+      "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "74c9fc5d_0f778b73",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-01-17T00:32:46Z",
+      "side": 1,
+      "message": "I just tested on the dual sim device, I can config the network preference for each sim. (Settings -\u003e Network \u0026 Internet -\u003e Mobile network -\u003e Preferred network type).",
+      "parentUuid": "beab6957_a5d0ea1c",
+      "range": {
+        "startLine": 467,
+        "startChar": 19,
+        "endLine": 485,
+        "endChar": 21
+      },
+      "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
