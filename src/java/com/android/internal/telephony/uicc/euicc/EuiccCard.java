@@ -149,7 +149,65 @@ public class EuiccCard extends UiccCard {
      */
     public void disableProfile(String iccid, boolean refresh, AsyncResultCallback<Void> callback,
             Handler handler) {
-        // TODO: to be implemented.
+        int profileIndex = -1;
+        if (mProfiles != null) {
+            profileIndex = indexOfProfile(iccid);
+            if (profileIndex < 0) {
+                throw new EuiccCardErrorException(
+                        OperationCode.DISABLE_PROFILE, DisableProfileCode.ICCID_OR_AID_NOT_FOUND);
+            }
+            if (!iccid.equals(mEnabledIccid)) {
+                EuiccLog.get().d("Profile is already disabled, iccid: %s", Pii.iccid(iccid));
+                return;
+            }
+        }
+
+        String command =
+                Asn1Node.newBuilder(TAG_DISABLE_PROFILE)
+                        .addChild(
+                                Asn1Node.newBuilder(TAG_CTX_COMP_0)
+                                        .addChildAsBytes(
+                                                TAG_ICCID,
+                                                Asn1Converter.bcdStringToBytes(
+                                                        IccIdFormatter.padTrailingFs(iccid))))
+                        .addChildAsBoolean(TAG_CTX_1, refresh)
+                        .build()
+                        .toHex();
+        String response;
+        int result;
+        try (UiccLogicalChannel ch = UiccLogicalChannel.openIsdR(mTm)) {
+            response = ch.execStoreData(command);
+            // SGP.22 v2.0 DisableProfileResponse
+            result = parseSimpleResult(response);
+        } catch (UiccChannelException e) {
+            // TODO(b/37688526): This is a workaround solution, remove it when final solution
+            // applied
+            if (e.getApduStatus() == APDU_ERROR_SIM_REFRESH) {
+                EuiccLog.get().i("Sim is refreshed after disabling profile, no response got.");
+                result = DisableProfileCode.OK;
+            } else {
+                throw e;
+            }
+        }
+
+        switch (result) {
+            case DisableProfileCode.OK:
+                if (profileIndex >= 0) {
+                    mEnabledIccid = null;
+                    mProfiles[profileIndex] =
+                            new EuiccProfile.Builder(mProfiles[profileIndex])
+                                    .setState(EuiccProfile.ProfileState.DISABLED)
+                                    .build();
+                }
+                break;
+            case DisableProfileCode.PROFILE_NOT_IN_ENABLED_STATE:
+                EuiccLog.get().d("Profile is already disabled, iccid: %s", Pii.iccid(iccid));
+                return;
+            case DisableProfileCode.ICCID_OR_AID_NOT_FOUND:
+                throw new EuiccCardErrorException(OperationCode.DISABLE_PROFILE, result);
+            default:
+                throw new EuiccCardErrorException(OperationCode.DISABLE_PROFILE, result);
+        }
     }
 
     /**
@@ -304,8 +362,8 @@ public class EuiccCard extends UiccCard {
      * @param handler The handler to run the callback.
      * @since 2.0.0 [GSMA SGP.22]
      */
-    public void authenticateServer(String matchingId, byte[] serverSigned1,
-            byte[] serverSignature1, byte[] euiccCiPkIdToBeUsed, byte[] serverCertificate,
+    public void authenticateServer(String matchingId, byte[] serverSigned1, byte[] serverSignature1,
+            byte[] euiccCiPkIdToBeUsed, byte[] serverCertificate,
             AsyncResultCallback<byte[]> callback, Handler handler) {
         // TODO: to be implemented.
     }
@@ -565,6 +623,27 @@ public class EuiccCard extends UiccCard {
         return rules;
     }
 
+    /** Returns the first CONTEXT [0] as an integer. */
+    private static int parseSimpleResult(String response) throws EuiccCardException {
+        try {
+            return parseResponse(response).getChild(TAG_CTX_0).asInteger();
+        } catch (TagNotFoundException | InvalidAsn1DataException e) {
+            throw new EuiccCardInvalidResponseException("Cannot parse response: " + response, e);
+        }
+    }
+
+    private static Asn1Node parseResponse(String response) throws EuiccCardException {
+        Asn1Decoder decoder = new Asn1Decoder(response);
+        if (!decoder.hasNextNode()) {
+            throw new EuiccCardInvalidResponseException("Empty response", null);
+        }
+        try {
+            return decoder.nextNode();
+        } catch (InvalidAsn1DataException e) {
+            throw new EuiccCardInvalidResponseException("Cannot parse response: " + response, e);
+        }
+    }
+
     /** Strip all the trailing 'F' characters of an iccId. */
     private static String stripTrailingFs(byte[] iccId) {
         String iccIdString = IccUtils.bcdToString(iccId);
@@ -572,6 +651,14 @@ public class EuiccCard extends UiccCard {
             iccIdString = iccIdString.substring(0, iccIdString.indexOf('F'));
         }
         return iccIdString;
+    }
+
+    /** Pad an iccId with trailing Fs until the length is 20. */
+    public static String padTrailingFs(String iccId) {
+        if (!TextUtils.isEmpty(iccId) && iccId.length() < 20) {
+            iccId += new String(new char[20 - iccId.length()]).replace('\0', 'F');
+        }
+        return iccId;
     }
 
     private static void loge(String message) {
