@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84ccb8ae_1598d5e1",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-17T19:23:29Z",
+      "side": 1,
+      "message": "Updated to EuiccRulesAuthTable. The CL will be merged soon.",
+      "range": {
+        "startLine": 223,
+        "startChar": 54,
+        "endLine": 223,
+        "endChar": 62
+      },
+      "revId": "a0bb315fe761f37db55050c5dcea6c46138dce52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1351d056_7b0f84ee",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCardErrorException.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-17T19:23:29Z",
+      "side": 1,
+      "message": "EuiccCardErrorException?",
+      "range": {
+        "startLine": 122,
+        "startChar": 16,
+        "endLine": 122,
+        "endChar": 30
+      },
+      "revId": "a0bb315fe761f37db55050c5dcea6c46138dce52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72bb129c_4e7d6fee",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccSpecVersion.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-17T19:23:29Z",
+      "side": 1,
+      "message": "EuiccSpecVersion?",
+      "range": {
+        "startLine": 35,
+        "startChar": 43,
+        "endLine": 35,
+        "endChar": 55
+      },
+      "revId": "a0bb315fe761f37db55050c5dcea6c46138dce52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
