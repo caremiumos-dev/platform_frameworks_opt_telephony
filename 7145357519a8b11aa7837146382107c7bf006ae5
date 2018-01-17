@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e358dfd_4c088698",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-17T19:34:09Z",
+      "side": 1,
+      "message": "Maybe put each dot on a new line as before to increase the readability.",
+      "range": {
+        "startLine": 104,
+        "startChar": 38,
+        "endLine": 104,
+        "endChar": 52
+      },
+      "revId": "7145357519a8b11aa7837146382107c7bf006ae5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5b68594_8cd2ec96",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-17T19:34:09Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 109,
+        "startChar": 58,
+        "endLine": 109,
+        "endChar": 70
+      },
+      "revId": "7145357519a8b11aa7837146382107c7bf006ae5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
