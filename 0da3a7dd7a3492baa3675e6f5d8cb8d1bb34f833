@@ -142,6 +142,30 @@
       "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d56d72ff_13db99a7",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2018-01-17T03:12:11Z",
+      "side": 1,
+      "message": "Basically, PREFFERD_NETWORK_MODE + subId is used. And PREFFERD_NETWORK_MODE(Slot1, Slot2) is used for a new SIM card.\n\nIf user inserts a new SIM card into a device, we can\u0027t get the setting from PREFFERD_NETWORK_MODE + subId. So, we use PREFFERD_NETWORK_MODE(Slot1, Slot2) stored user setting based on slot.\n\nWithout this, the setting will be always default if user inserts a new SIM card.\n\nFrom usability point of view, I think it is better to use the previous setting in that case.",
+      "parentUuid": "419869cb_86cf4e5a",
+      "range": {
+        "startLine": 467,
+        "startChar": 19,
+        "endLine": 485,
+        "endChar": 21
+      },
+      "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
