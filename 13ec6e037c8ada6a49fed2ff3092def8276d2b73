@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fed3501d_27dfc711",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-18T00:35:24Z",
+      "side": 1,
+      "message": "reason INTENT_VALUE_ICC_CARD_RESTRICTED?",
+      "range": {
+        "startLine": 287,
+        "startChar": 69,
+        "endLine": 287,
+        "endChar": 73
+      },
+      "revId": "13ec6e037c8ada6a49fed2ff3092def8276d2b73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bed5519c_7130b91a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-18T00:35:24Z",
+      "side": 1,
+      "message": "do we want to make the reason the same as broadcastSimStateChanged?",
+      "range": {
+        "startLine": 518,
+        "startChar": 16,
+        "endLine": 518,
+        "endChar": 20
+      },
+      "revId": "13ec6e037c8ada6a49fed2ff3092def8276d2b73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c5917349_3adef879",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-18T00:35:24Z",
+      "side": 1,
+      "message": "So the same state may be broadcast by ACTION_SIM_STATE_CHANGED multiple times but ACTION_SIM_CARD_STATE_CHANGED (ACTION_SIM_APPLICATION_STATE_CHANGED) will only broadcast once?",
+      "range": {
+        "startLine": 831,
+        "startChar": 19,
+        "endLine": 831,
+        "endChar": 25
+      },
+      "revId": "13ec6e037c8ada6a49fed2ff3092def8276d2b73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a23063e4_b51c3310",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-18T00:35:24Z",
+      "side": 1,
+      "message": "why we use ActivityManager but IntentBroadcaster.getInstance() below?",
+      "range": {
+        "startLine": 839,
+        "startChar": 12,
+        "endLine": 839,
+        "endChar": 27
+      },
+      "revId": "13ec6e037c8ada6a49fed2ff3092def8276d2b73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
