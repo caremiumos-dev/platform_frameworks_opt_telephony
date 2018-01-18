@@ -22,6 +22,30 @@
       "revId": "486a73e21a6fd1ca71aa4421330aee4c7bebdf41",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6c57919_16968b84",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-18T00:22:22Z",
+      "side": 1,
+      "message": "The enum values are mostly meaningful for LPA and the platform code actually doesn\u0027t need to use all of them, so that I only define a few values as constants which are used only in this file. I don\u0027t think we need to define all the result code for now.",
+      "parentUuid": "80a42fc0_0de29bf0",
+      "range": {
+        "startLine": 75,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 56
+      },
+      "revId": "486a73e21a6fd1ca71aa4421330aee4c7bebdf41",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
