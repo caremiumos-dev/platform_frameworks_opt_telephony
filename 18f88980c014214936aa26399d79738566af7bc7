@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19ce236e_fc12a48c",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-18T23:37:40Z",
+      "side": 1,
+      "message": "why is this necessary? The Application state should go from unknown to not ready, and loaded. if the card fails to load the IccRecords (for example eSIM default profile), then there will be no SimApplication broadcast. Broadcasting NOT READY when changed from unknown at least make the user know that the whole procedure is running.",
+      "range": {
+        "startLine": 852,
+        "startChar": 75,
+        "endLine": 852,
+        "endChar": 79
+      },
+      "revId": "18f88980c014214936aa26399d79738566af7bc7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
