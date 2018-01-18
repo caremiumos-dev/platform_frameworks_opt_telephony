@@ -22,6 +22,30 @@
       "revId": "18f88980c014214936aa26399d79738566af7bc7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a40bc255_7f5c92a9",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-18T23:42:34Z",
+      "side": 1,
+      "message": "NOT_READY is the initial state always, and it does not make sense to broadcast in cases where say the SIM is ABSENT. And even when the SIM goes to IO_ERROR or RESTRICTED or PRESENT state, without a broadcast it is understood that the application state is NOT_READY until a better state (LOCKED/LOADED) is broadcast. However going out of one of these states, we will broadcast NOT_READY, for example we may do that on SIM_REFRESH scenarios.",
+      "parentUuid": "19ce236e_fc12a48c",
+      "range": {
+        "startLine": 852,
+        "startChar": 75,
+        "endLine": 852,
+        "endChar": 79
+      },
+      "revId": "18f88980c014214936aa26399d79738566af7bc7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
