@@ -17,6 +17,7 @@
 package com.android.internal.telephony.uicc;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
@@ -107,6 +108,7 @@ public class UiccController extends Handler {
 
     private static final Object mLock = new Object();
     private static UiccController mInstance;
+    private static ArrayList<IccSlotStatus> sLastSlotStatus;
 
     private Context mContext;
 
@@ -238,6 +240,36 @@ public class UiccController extends Handler {
             int slotId = getSlotIdFromPhoneId(phoneId);
             if (isValidSlotIndex(slotId)) {
                 return mUiccSlots[slotId];
+            }
+            return null;
+        }
+    }
+
+    /**
+     * API to get UiccSlot object for a given cardId
+     * @param cardId Identifier for a SIM. This can be an ICCID, or an EID in case of an eSIM.
+     * @return UiccSlot object for the given cardId if one is found, null otherwise
+     */
+    public UiccSlot getUiccSlotForCardId(String cardId) {
+        synchronized (mLock) {
+            // first look up based on cardId
+            for (UiccSlot uiccSlot : mUiccSlots) {
+                if (uiccSlot != null) {
+                    UiccCard uiccCard = uiccSlot.getUiccCard();
+                    if (uiccCard != null) {
+                        // todo: uncomment this once getCardId() is added
+                        //if (cardId.equals(uiccCard.getCardId())) {
+                        if (false) {
+                            return uiccSlot;
+                        }
+                    }
+                }
+            }
+            // if a match is not found, do a lookup based on ICCID
+            for (UiccSlot uiccSlot : mUiccSlots) {
+                if (uiccSlot != null && cardId.equals(uiccSlot.getIccId())) {
+                    return uiccSlot;
+                }
             }
             return null;
         }
@@ -442,6 +474,11 @@ public class UiccController extends Handler {
 
         ArrayList<IccSlotStatus> status = (ArrayList<IccSlotStatus>) ar.result;
 
+        if (!slotStatusChanged(status)) {
+            log("onGetSlotStatusDone: No change in slot status");
+            return;
+        }
+
         int numActiveSlots = 0;
         for (int i = 0; i < status.size(); i++) {
             IccSlotStatus iss = status.get(i);
@@ -479,10 +516,26 @@ public class UiccController extends Handler {
         Set<Integer> slotIds = new HashSet<>();
         for (int slotId : mPhoneIdToSlotId) {
             if (slotIds.contains(slotId)) {
-                throw new RuntimeException("slotId " + slotId + " mapped to muptiple phoneIds");
+                throw new RuntimeException("slotId " + slotId + " mapped to multiple phoneIds");
             }
             slotIds.add(slotId);
         }
+
+        // broadcast slot status changed
+        Intent intent = new Intent(Intent.ACTION_SIM_SLOT_STATUS_CHANGED);
+        mContext.sendBroadcast(intent, android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
+    }
+
+    private boolean slotStatusChanged(ArrayList<IccSlotStatus> slotStatusList) {
+        if (sLastSlotStatus == null || sLastSlotStatus.size() != slotStatusList.size()) {
+            return true;
+        }
+        for (IccSlotStatus iccSlotStatus : slotStatusList) {
+            if (!sLastSlotStatus.contains(iccSlotStatus)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void logPhoneIdToSlotIdMapping() {
