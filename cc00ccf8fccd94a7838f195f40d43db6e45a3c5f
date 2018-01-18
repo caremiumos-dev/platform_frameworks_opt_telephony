@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9b251d36_540a8948",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2360,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2018-01-18T22:35:14Z",
+      "side": 1,
+      "message": "I feel that if we reset the Preference, we are actually showing wrong information to the user.",
+      "parentUuid": "43db0537_0fe28702",
+      "range": {
+        "startLine": 2360,
+        "startChar": 20,
+        "endLine": 2360,
+        "endChar": 52
+      },
+      "revId": "cc00ccf8fccd94a7838f195f40d43db6e45a3c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b4d23a5c_1c777911",
         "filename": "src/java/com/android/internal/telephony/PhoneInternalInterface.java",
         "patchSetId": 2
