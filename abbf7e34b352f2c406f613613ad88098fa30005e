@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ea252cd_b0fecee4",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-18T22:51:31Z",
+      "side": 1,
+      "message": "This is something that we can look into as an optimization. We can generate a subId as soon as ICCID is available, but we don\u0027t want to broadcast that we are ready as there may be modules trying to access SIM records which may not be ready yet.",
+      "parentUuid": "bef8f510_e7115fbb",
+      "range": {
+        "startLine": 389,
+        "startChar": 8,
+        "endLine": 390,
+        "endChar": 44
+      },
+      "revId": "abbf7e34b352f2c406f613613ad88098fa30005e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67faded1_87df3a0f",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-18T11:01:51Z",
       "side": 1,
       "message": "IntentBroadcaster.getInstance().broadcastStickyIntent() needs to be used here ?\n\nOtherwise clients may not get this sticky Intent info when device UNLOCKED.",
+      "range": {
+        "startLine": 839,
+        "startChar": 12,
+        "endLine": 839,
+        "endChar": 49
+      },
+      "revId": "abbf7e34b352f2c406f613613ad88098fa30005e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48d12772_54bdb372",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-18T22:51:31Z",
+      "side": 1,
+      "message": "No, earlier that was done for backward compatibility. Now either an app should be FBE aware, or it should query the state using the corresponding TelephonyManager API in case it missed the broadcast.",
+      "parentUuid": "67faded1_87df3a0f",
       "range": {
         "startLine": 839,
         "startChar": 12,
