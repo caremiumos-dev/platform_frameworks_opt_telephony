@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5314514e_b851f4c5",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-18T00:16:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "84ccb8ae_1598d5e1",
+      "range": {
+        "startLine": 223,
+        "startChar": 54,
+        "endLine": 223,
+        "endChar": 62
+      },
+      "revId": "a0bb315fe761f37db55050c5dcea6c46138dce52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "428ecd5e_c8f4e995",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 4
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "cb79f331_20a0a5f3",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-18T00:16:41Z",
+      "side": 1,
+      "message": "We have used google-java-formatter in the LPA app to auto-formatting. The formatter prefers to put each parameter on a new line for long parameter list according to go/rectangle-rule. But as most of the telephony code in the platform is not using this, I changed to make the style more aligned with other telephony code.",
+      "parentUuid": "64cdee56_b29443d1",
+      "range": {
+        "startLine": 291,
+        "startChar": 32,
+        "endLine": 292,
+        "endChar": 89
+      },
+      "revId": "a0bb315fe761f37db55050c5dcea6c46138dce52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1351d056_7b0f84ee",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCardErrorException.java",
         "patchSetId": 4
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "57220267_ebe2749d",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCardErrorException.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-18T00:16:41Z",
+      "side": 1,
+      "message": "It\u0027s the message. The class name will be displayed in the stack trace.",
+      "parentUuid": "1351d056_7b0f84ee",
+      "range": {
+        "startLine": 122,
+        "startChar": 16,
+        "endLine": 122,
+        "endChar": 30
+      },
+      "revId": "a0bb315fe761f37db55050c5dcea6c46138dce52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72bb129c_4e7d6fee",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccSpecVersion.java",
         "patchSetId": 4
@@ -106,6 +178,30 @@
       "writtenOn": "2018-01-17T19:23:29Z",
       "side": 1,
       "message": "EuiccSpecVersion?",
+      "range": {
+        "startLine": 35,
+        "startChar": 43,
+        "endLine": 35,
+        "endChar": 55
+      },
+      "revId": "a0bb315fe761f37db55050c5dcea6c46138dce52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a0e868e_fb79e604",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccSpecVersion.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-18T00:16:41Z",
+      "side": 1,
+      "message": "I just try to make the tag a bit shorter.",
+      "parentUuid": "72bb129c_4e7d6fee",
       "range": {
         "startLine": 35,
         "startChar": 43,
