@@ -627,7 +627,12 @@ public class UiccController extends Handler {
         return (index >= 0 && index < TelephonyManager.getDefault().getPhoneCount());
     }
 
-    private boolean isValidSlotIndex(int index) {
+    /**
+     * Checks whether the given index is a valid slot index.
+     * @param index The index of the slot.
+     * @return Return true if valid, false otherwise.
+     */
+    public boolean isValidSlotIndex(int index) {
         return (index >= 0 && index < mUiccSlots.length);
     }
 
