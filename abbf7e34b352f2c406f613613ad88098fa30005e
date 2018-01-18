@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bef8f510_e7115fbb",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2018-01-18T11:12:11Z",
+      "side": 1,
+      "message": "Below comment is not directly related to this change, but I am posting here as its related to this file and somewhat related to SIM intent handling hence posting it.\nKindly let me know your opinion on below.\n\n---------------------\nAs per existing implementation the subId getting added only after all SIM records LOADED, which generally take 20-30seconds(on multisim device it may take more).\n\nCan we modify this behavior and add the subId as soon as ICCID info available ?\nthis way the subId would be available little early and the registered clients would the same early.\n\nEx: If subId available early, preferred network can be sent to Modem early and Modem/device can camp to required network which improves boot-up camping time.",
+      "range": {
+        "startLine": 389,
+        "startChar": 8,
+        "endLine": 390,
+        "endChar": 44
+      },
+      "revId": "abbf7e34b352f2c406f613613ad88098fa30005e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67faded1_87df3a0f",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 4
