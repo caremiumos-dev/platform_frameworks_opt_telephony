@@ -21,11 +21,17 @@ import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.ComponentInfo;
 import android.os.Binder;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.ServiceManager;
+import android.service.euicc.EuiccProfileInfo;
 import android.telephony.euicc.EuiccCardManager;
 import android.telephony.euicc.EuiccNotification;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.euicc.async.AsyncResultCallback;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -33,11 +39,16 @@ import java.io.PrintWriter;
 /** Backing implementation of {@link EuiccCardManager}. */
 public class EuiccCardController extends IEuiccCardController.Stub {
     private static final String TAG = "EuiccCardController";
+    private static final int EUICC_CARD_ERROR_CODE_OPERATION_BITS_SHIFT = 8;
 
     private final Context mContext;
     private AppOpsManager mAppOps;
     private String mCallingPackage;
     private ComponentInfo mBestComponent;
+
+    private HandlerThread mEuiccThread;
+    private Handler mEuiccHandler;
+
     private static EuiccCardController sInstance;
 
     /** Initialize the instance. Should only be called once. */
@@ -68,6 +79,10 @@ public class EuiccCardController extends IEuiccCardController.Stub {
         mContext = context;
         mAppOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
 
+        mEuiccThread = new HandlerThread("EuiccCardController.Euicc");
+        mEuiccThread.start();
+        mEuiccHandler = new Handler(mEuiccThread.getLooper());
+
         ServiceManager.addService("euicc_card_controller", this);
     }
 
@@ -82,11 +97,35 @@ public class EuiccCardController extends IEuiccCardController.Stub {
         }
     }
 
+    private int getResultCode(Throwable e) {
+        if (e.getCause() instanceof EuiccCardErrorException) {
+            EuiccCardErrorException exception = (EuiccCardErrorException) e.getCause();
+            int resultCode =
+                    (exception.getOperationCode() << EUICC_CARD_ERROR_CODE_OPERATION_BITS_SHIFT)
+                            + exception.getErrorCode();
+            return resultCode;
+        }
+        return EuiccCardManager.RESULT_UNKNOWN;
+    }
+
     @Override
     public void getAllProfiles(String callingPackage, IGetAllProfilesCallback callback) {
         checkCallingPackage(callingPackage);
 
-        // TODO(b/38206971): Get EuiccCard instance from UiccController and call the API.
+        AsyncResultCallback<EuiccProfileInfo[]> cardCb =
+                new AsyncResultCallback<EuiccProfileInfo[]>() {
+            @Override
+            public void onResult(EuiccProfileInfo[] profiles) {
+                callback.onComplete(EuiccCardManager.RESULT_OK, profiles);
+            }
+
+            @Override
+            public void onException(Throwable e) {
+                callback.onComplete(getResultCode(e), null);
+            }
+        };
+
+        UiccController.getInstance().getEuiccCard().getAllProfiles(cardCb, mEuiccHandler);
     }
 
     @Override

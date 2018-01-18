@@ -217,6 +217,16 @@ public class UiccController extends Handler {
     }
 
     /**
+     * API to get the EuiccCard with slot Id.
+     * @param slotId index of physical slot on the device
+     * @return EuiccCard object.
+     */
+    public UiccCard getEuiccCard(int slotId) {
+        // TODO: Change result type to EuiccCard and return the real object.
+        return null;
+    }
+
+    /**
      * API to get UiccSlot object for a specific physical slot index on the device
      * @return UiccSlot object for the given physical slot index
      */
