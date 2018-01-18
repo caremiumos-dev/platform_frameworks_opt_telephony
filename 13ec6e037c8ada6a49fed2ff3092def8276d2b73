@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4a92b65a_cb980f15",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-18T01:27:05Z",
+      "side": 1,
+      "message": "I don\u0027t think NOT_READY needs a reason. The reason is only for LOCKED.",
+      "parentUuid": "fed3501d_27dfc711",
+      "range": {
+        "startLine": 287,
+        "startChar": 69,
+        "endLine": 287,
+        "endChar": 73
+      },
+      "revId": "13ec6e037c8ada6a49fed2ff3092def8276d2b73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bed5519c_7130b91a",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-18T00:35:24Z",
       "side": 1,
       "message": "do we want to make the reason the same as broadcastSimStateChanged?",
+      "range": {
+        "startLine": 518,
+        "startChar": 16,
+        "endLine": 518,
+        "endChar": 20
+      },
+      "revId": "13ec6e037c8ada6a49fed2ff3092def8276d2b73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfd9278b_57ab6e1f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-18T01:27:05Z",
+      "side": 1,
+      "message": "For existing intent we did not want to touch it. For new ones, we can define the behavior, and I think the right behavior is to use the reason only for LOCKED. The extra is anyway called LOCKED_REASON.",
+      "parentUuid": "bed5519c_7130b91a",
       "range": {
         "startLine": 518,
         "startChar": 16,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "cb7ab4c0_b8717d08",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-18T01:27:05Z",
+      "side": 1,
+      "message": "ACTION_SIM_STATE_CHANGED is also not broadcast multiple times. IccCardProxy takes care of that by checking mExternalState. You can see following log lines in logcat:\n\nIccCardProxy: setExternalState: !override and newstate unchanged from READY",
+      "parentUuid": "c5917349_3adef879",
+      "range": {
+        "startLine": 831,
+        "startChar": 19,
+        "endLine": 831,
+        "endChar": 25
+      },
+      "revId": "13ec6e037c8ada6a49fed2ff3092def8276d2b73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a23063e4_b51c3310",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2018-01-18T00:35:24Z",
       "side": 1,
       "message": "why we use ActivityManager but IntentBroadcaster.getInstance() below?",
+      "range": {
+        "startLine": 839,
+        "startChar": 12,
+        "endLine": 839,
+        "endChar": 27
+      },
+      "revId": "13ec6e037c8ada6a49fed2ff3092def8276d2b73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3d56a0a1_4d0e5480",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-18T01:27:05Z",
+      "side": 1,
+      "message": "Both should use ActivityManager, I will fix it.\nIntentBroadcaster is to rebroadcast intent after user unlocks the device, but for new intents since we already have APIs as well, we can define the behavior to say that they will only be broadcast once.",
+      "parentUuid": "a23063e4_b51c3310",
       "range": {
         "startLine": 839,
         "startChar": 12,
