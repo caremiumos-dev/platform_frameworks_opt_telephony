@@ -30,6 +30,7 @@ import android.text.format.Time;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.uicc.euicc.EuiccCard;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -214,6 +215,15 @@ public class UiccController extends Handler {
             }
             return null;
         }
+    }
+
+    /**
+     * API to get the EuiccCard with slot Id.
+     * @return EuiccCard object.
+     */
+    public EuiccCard getEuiccCard() {
+        // TODO: Implement the method.
+        return null;
     }
 
     /**
