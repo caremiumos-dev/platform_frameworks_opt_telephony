@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c12729fe_64b786ed",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2018-01-18T00:58:46Z",
+      "side": 1,
+      "message": "Should we throw an exception here? How will the UI/caller know that Call deflection failed if ever it gets invoked on CS ?",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 359,
+        "endChar": 44
+      },
+      "revId": "6114d044cdd5c2690ce94acfeb15c39957ceb1d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7be3d324_0d97eee3",
+        "filename": "src/java/com/android/internal/telephony/sip/SipPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2018-01-18T00:58:46Z",
+      "side": 1,
+      "message": "Shouldnt we throw an exception here? In case UI incorrectly called this API for SIP calls, the exception can be handled to tell the user that the call cannot be deflected.",
+      "range": {
+        "startLine": 1011,
+        "startChar": 18,
+        "endLine": 1011,
+        "endChar": 20
+      },
+      "revId": "6114d044cdd5c2690ce94acfeb15c39957ceb1d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
