@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67faded1_87df3a0f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2018-01-18T11:01:51Z",
+      "side": 1,
+      "message": "IntentBroadcaster.getInstance().broadcastStickyIntent() needs to be used here ?\n\nOtherwise clients may not get this sticky Intent info when device UNLOCKED.",
+      "range": {
+        "startLine": 839,
+        "startChar": 12,
+        "endLine": 839,
+        "endChar": 49
+      },
+      "revId": "abbf7e34b352f2c406f613613ad88098fa30005e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "310ca476_f20b6d88",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2018-01-18T11:01:51Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 853,
+        "startChar": 12,
+        "endLine": 853,
+        "endChar": 49
+      },
+      "revId": "abbf7e34b352f2c406f613613ad88098fa30005e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
