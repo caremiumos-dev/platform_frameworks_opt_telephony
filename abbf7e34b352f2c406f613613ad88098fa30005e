@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "402a379a_dd941021",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2018-01-19T04:30:01Z",
+      "side": 1,
+      "message": "You mean, after adding subId dont want to inform the subId info to external clients until SIM records LOADED ?\n\nCan I raise a BugId for this new enhancement ? or want to include as part of this ?",
+      "parentUuid": "9ea252cd_b0fecee4",
+      "range": {
+        "startLine": 389,
+        "startChar": 8,
+        "endLine": 390,
+        "endChar": 44
+      },
+      "revId": "abbf7e34b352f2c406f613613ad88098fa30005e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67faded1_87df3a0f",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 4
