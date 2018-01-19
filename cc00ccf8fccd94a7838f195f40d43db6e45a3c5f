@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "a18794b4_7708db50",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1786,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2018-01-19T21:27:22Z",
+      "side": 1,
+      "message": "I dont think Google is planning on adding UI for this feature. In current implementation it seems like all calls (voice and vt) are forwarded. So single seems ok. Seems like RJIL is the operator that was asking for this feature. Did they have any requirements for the UI notification to be different?",
+      "parentUuid": "6f59a5a8_a0d0562b",
+      "range": {
+        "startLine": 1786,
+        "startChar": 22,
+        "endLine": 1786,
+        "endChar": 51
+      },
+      "revId": "cc00ccf8fccd94a7838f195f40d43db6e45a3c5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30fc9d49_1d279d07",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 2
