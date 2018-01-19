@@ -5319,7 +5319,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 signalStrength.lte.rsrq,
                 signalStrength.lte.rssnr,
                 signalStrength.lte.cqi,
-                signalStrength.tdScdma.rscp,
-                false /* gsmFlag - don't care; will be changed by SST */);
+                signalStrength.tdScdma.rscp);
     }
 }
