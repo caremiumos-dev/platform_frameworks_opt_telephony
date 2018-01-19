@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a08ecec6_d9911c1f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2018-01-19T06:52:49Z",
+      "side": 1,
+      "message": "Why READY state is sent as NOT_READY ? \n\nWith this change there is no way a client can know the exact time when SIM card PRESENT and APP is in READY state.\nOnly client can know once the all records are LOADED.\n\n\n\nIn below gerrit, getSimState() is mapping LOADED to READY but here the Intent is not sending READY at all, both seems sending different values.\nhttps://android-review.googlesource.com/#/c/platform/frameworks/base/+/588167/6/telephony/java/android/telephony/TelephonyManager.java",
+      "range": {
+        "startLine": 290,
+        "startChar": 78,
+        "endLine": 290,
+        "endChar": 98
+      },
+      "revId": "94901155a856ec86b9f391a9e55a06618f33c723",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
