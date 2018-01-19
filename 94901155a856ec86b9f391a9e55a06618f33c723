@@ -22,6 +22,30 @@
       "revId": "94901155a856ec86b9f391a9e55a06618f33c723",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0b46037_45afbf31",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-19T06:57:57Z",
+      "side": 1,
+      "message": "Responded on the other CL for why READY is broadcast as NOT_READY. Basically we did not anticipate a use of READY. Please correct me if I am wrong.\n\nAre there clients that care about the APP being in READY state, without records being loaded? Similarly do they care about IMSI? We have gotten rid of that state as well.",
+      "parentUuid": "a08ecec6_d9911c1f",
+      "range": {
+        "startLine": 290,
+        "startChar": 78,
+        "endLine": 290,
+        "endChar": 98
+      },
+      "revId": "94901155a856ec86b9f391a9e55a06618f33c723",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
