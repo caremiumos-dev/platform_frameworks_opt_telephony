@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "661473d2_7f625d65",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-19T19:02:04Z",
+      "side": 1,
+      "message": "the typical scenario is that user will first query the slot with the card id, and use the switchSlots() to enable that slot if it is not active. So returning the UiccSlot obj is not quite helpful, we can either return the slot index, or add the slot index into the UiccSlot class. the index is referring to the \"private UiccSlot[] mUiccSlots\"",
+      "range": {
+        "startLine": 253,
+        "startChar": 11,
+        "endLine": 253,
+        "endChar": 19
+      },
+      "revId": "0798309c5c492e3008c2ea0a84f4b95a25abb4a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
