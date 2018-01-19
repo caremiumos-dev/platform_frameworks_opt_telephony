@@ -22,6 +22,30 @@
       "revId": "0798309c5c492e3008c2ea0a84f4b95a25abb4a3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7bf51f0f_0f4c17c2",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-19T19:16:30Z",
+      "side": 1,
+      "message": "Sure, anyway UiccSlot should be mostly internal and I guess caller would only care about the id. That makes sense, I will make the change.",
+      "parentUuid": "661473d2_7f625d65",
+      "range": {
+        "startLine": 253,
+        "startChar": 11,
+        "endLine": 253,
+        "endChar": 19
+      },
+      "revId": "0798309c5c492e3008c2ea0a84f4b95a25abb4a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
