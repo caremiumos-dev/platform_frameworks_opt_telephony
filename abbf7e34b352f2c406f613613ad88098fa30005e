@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "eb42ab71_13774434",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-19T06:21:28Z",
+      "side": 1,
+      "message": "Yes, that\u0027s what I mean.\n\nSure, please file a bug for this.",
+      "parentUuid": "402a379a_dd941021",
+      "range": {
+        "startLine": 389,
+        "startChar": 8,
+        "endLine": 390,
+        "endChar": 44
+      },
+      "revId": "abbf7e34b352f2c406f613613ad88098fa30005e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67faded1_87df3a0f",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 4
