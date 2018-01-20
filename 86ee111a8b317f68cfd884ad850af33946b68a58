@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd78bb17_482c56c4",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-20T01:02:22Z",
+      "side": 1,
+      "message": "not used? is this needed?",
+      "range": {
+        "startLine": 52,
+        "startChar": 33,
+        "endLine": 52,
+        "endChar": 37
+      },
+      "revId": "86ee111a8b317f68cfd884ad850af33946b68a58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "31b06982_2287000e",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-20T01:02:22Z",
+      "side": 1,
+      "message": "can be simplified to NetworkServiceCallback callback \u003d mCallbackMap.remove(message)",
+      "range": {
+        "startLine": 81,
+        "startChar": 20,
+        "endLine": 82,
+        "endChar": 49
+      },
+      "revId": "86ee111a8b317f68cfd884ad850af33946b68a58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d125de3_e30dc7a5",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-20T01:02:22Z",
+      "side": 1,
+      "message": "we probably want to change this back to int[]",
+      "range": {
+        "startLine": 169,
+        "startChar": 16,
+        "endLine": 169,
+        "endChar": 29
+      },
+      "revId": "86ee111a8b317f68cfd884ad850af33946b68a58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40955213_cc744ada",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-20T01:02:22Z",
+      "side": 1,
+      "message": "if this is nullable, then probably need to add @nullable in NetworkRegistrationState\u0027s constructor",
+      "range": {
+        "startLine": 231,
+        "startChar": 43,
+        "endLine": 231,
+        "endChar": 55
+      },
+      "revId": "86ee111a8b317f68cfd884ad850af33946b68a58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1dbb832b_23769ed7",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-20T01:02:22Z",
+      "side": 1,
+      "message": "need to invoke the callback with failure and then return? And no need to check message !\u003d null later",
+      "range": {
+        "startLine": 312,
+        "startChar": 16,
+        "endLine": 312,
+        "endChar": 77
+      },
+      "revId": "86ee111a8b317f68cfd884ad850af33946b68a58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cb0567db_69a772a7",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-20T01:02:22Z",
+      "side": 1,
+      "message": "no need?",
+      "range": {
+        "startLine": 321,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 5
+      },
+      "revId": "86ee111a8b317f68cfd884ad850af33946b68a58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
