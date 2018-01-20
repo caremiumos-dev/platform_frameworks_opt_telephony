@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94aada0c_799f46bb",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-20T01:30:47Z",
+      "side": 1,
+      "message": "can be a static variable",
+      "range": {
+        "startLine": 671,
+        "startChar": 58,
+        "endLine": 671,
+        "endChar": 60
+      },
+      "revId": "6761f7ca95c5687dfb665695fa4f345a76114a6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
