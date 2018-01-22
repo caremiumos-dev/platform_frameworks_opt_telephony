@@ -16,6 +16,24 @@
       "revId": "a389fcc0e4adb96c04e63efb3796750d1a373ed0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6588e6d_e786582a",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-22T23:06:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dd2430c_7bb2d2ea",
+      "revId": "a389fcc0e4adb96c04e63efb3796750d1a373ed0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
