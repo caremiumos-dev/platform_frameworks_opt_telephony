@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "6ee77d1e_ea690f96",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-01-22T11:50:16Z",
+      "side": 1,
+      "message": "If condition not required, removed it",
+      "parentUuid": "cb8725e0_df4ebf4c",
+      "range": {
+        "startLine": 303,
+        "startChar": 28,
+        "endLine": 303,
+        "endChar": 69
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fc317c7_2a89daa9",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 2
@@ -59,6 +83,30 @@
       "writtenOn": "2018-01-11T01:33:59Z",
       "side": 1,
       "message": "Always true.",
+      "range": {
+        "startLine": 673,
+        "startChar": 12,
+        "endLine": 673,
+        "endChar": 73
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d39f894b_191211b6",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-01-22T11:50:16Z",
+      "side": 1,
+      "message": "Removed if condition",
+      "parentUuid": "9fc317c7_2a89daa9",
       "range": {
         "startLine": 673,
         "startChar": 12,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "c7287bd5_2088cddb",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1650,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-01-22T11:50:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "667f764e_e5275285",
+      "range": {
+        "startLine": 1650,
+        "startChar": 12,
+        "endLine": 1650,
+        "endChar": 73
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55e223e3_79d0dd73",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 2
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "48b31bed_b5504f22",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2545,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-01-22T11:50:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55e223e3_79d0dd73",
+      "range": {
+        "startLine": 2545,
+        "startChar": 12,
+        "endLine": 2545,
+        "endChar": 73
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94a576fc_2c7e8f4c",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 2
@@ -128,6 +224,30 @@
       "writtenOn": "2018-01-11T01:33:59Z",
       "side": 1,
       "message": "always true",
+      "range": {
+        "startLine": 4175,
+        "startChar": 20,
+        "endLine": 4176,
+        "endChar": 54
+      },
+      "revId": "8af60e2bab2e309524f770d2da68c0a165af9278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ce01f8d_2f0ae9dd",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4176,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-01-22T11:50:16Z",
+      "side": 1,
+      "message": "If condition not required, removed it and deleted code under else condition",
+      "parentUuid": "94a576fc_2c7e8f4c",
       "range": {
         "startLine": 4175,
         "startChar": 20,
