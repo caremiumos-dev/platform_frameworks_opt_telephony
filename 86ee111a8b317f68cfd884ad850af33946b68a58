@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8c693efc_7b7833fc",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-22T22:41:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd78bb17_482c56c4",
+      "range": {
+        "startLine": 52,
+        "startChar": 33,
+        "endLine": 52,
+        "endChar": 37
+      },
+      "revId": "86ee111a8b317f68cfd884ad850af33946b68a58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31b06982_2287000e",
         "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-20T01:02:22Z",
       "side": 1,
       "message": "can be simplified to NetworkServiceCallback callback \u003d mCallbackMap.remove(message)",
+      "range": {
+        "startLine": 81,
+        "startChar": 20,
+        "endLine": 82,
+        "endChar": 49
+      },
+      "revId": "86ee111a8b317f68cfd884ad850af33946b68a58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "725493f0_fc517c0e",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-22T22:41:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31b06982_2287000e",
       "range": {
         "startLine": 81,
         "startChar": 20,
@@ -117,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "5dac786a_06cff13a",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-22T22:41:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dbb832b_23769ed7",
+      "range": {
+        "startLine": 312,
+        "startChar": 16,
+        "endLine": 312,
+        "endChar": 77
+      },
+      "revId": "86ee111a8b317f68cfd884ad850af33946b68a58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb0567db_69a772a7",
         "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
         "patchSetId": 1
@@ -128,6 +200,30 @@
       "writtenOn": "2018-01-20T01:02:22Z",
       "side": 1,
       "message": "no need?",
+      "range": {
+        "startLine": 321,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 5
+      },
+      "revId": "86ee111a8b317f68cfd884ad850af33946b68a58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ff708d9_96c10b11",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-22T22:41:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb0567db_69a772a7",
       "range": {
         "startLine": 321,
         "startChar": 0,
