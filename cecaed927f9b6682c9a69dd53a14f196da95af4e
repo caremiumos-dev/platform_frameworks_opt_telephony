@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0ab0bdbc_3291a30a",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-23T18:56:14Z",
+      "side": 1,
+      "message": "Done. I just followed other files, but good to know that we don\u0027t need this for every file.",
+      "parentUuid": "6c456c18_fc857a7c",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 8
+      },
+      "revId": "cecaed927f9b6682c9a69dd53a14f196da95af4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f59fafe_944556fc",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccSpecVersion.java",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-23T01:04:25Z",
       "side": 1,
       "message": "Should this be in Tags.java?",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 48
+      },
+      "revId": "cecaed927f9b6682c9a69dd53a14f196da95af4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebf5f4dc_8a7d4d6d",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccSpecVersion.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-23T18:56:14Z",
+      "side": 1,
+      "message": "I currently let Tags.java contain all tags used by eUICC requests and responses. These tags are in the select response. I actually prefer to keep them here to make EuiccSpecVersion independent to this package, so that we could expose it as an API later when we need (currently we only have to support a single spec version but may need to to support multiple ones in future).",
+      "parentUuid": "9f59fafe_944556fc",
       "range": {
         "startLine": 37,
         "startChar": 4,
