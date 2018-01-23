@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ed4aaca_d7fd5526",
+        "filename": "src/java/com/android/internal/telephony/RadioConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-23T18:26:07Z",
+      "side": 1,
+      "message": "Also add the setSimSlotsMapping()?",
+      "range": {
+        "startLine": 242,
+        "startChar": 16,
+        "endLine": 242,
+        "endChar": 33
+      },
+      "revId": "3d5de9457fe4effc269503a30fcbb59e7a494b0f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
