@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "920ad1e0_8a780b04",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2709,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-01-23T10:19:47Z",
+      "side": 1,
+      "message": "Done! I have now removed KEY_CARRIER_DEFAULT_DATA_ROAMING_ENABLED_BOOL.",
+      "parentUuid": "8d0e36a1_96cc3167",
+      "range": {
+        "startLine": 2709,
+        "startChar": 37,
+        "endLine": 2709,
+        "endChar": 82
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0074b0fb_b91db0da",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-06T00:33:18Z",
       "side": 1,
       "message": "What\u0027s the reasoning behind this?",
+      "range": {
+        "startLine": 2839,
+        "startChar": 7,
+        "endLine": 2839,
+        "endChar": 80
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cf2f4dc_ea0885cf",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2839,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-01-23T10:19:47Z",
+      "side": 1,
+      "message": "No good reasoning. The implementation has now been simplified and the function getNumericFromSim has been removed.",
+      "parentUuid": "0074b0fb_b91db0da",
       "range": {
         "startLine": 2839,
         "startChar": 7,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e49c7c6f_1b75e8cd",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2864,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-01-23T10:19:47Z",
+      "side": 1,
+      "message": "The mSubscriptionManager keeps information about if roaming is allowed or not. Previously this only changed when the user toggled the roaming switch. When we introduce national roaming this can change every time we move to a new roaming network. We therefore need to call updateRoamingSubscription here in order to potentially update mSubscriptionManager with information if roaming is allowed or not.",
+      "parentUuid": "324ddd97_21772513",
+      "range": {
+        "startLine": 2864,
+        "startChar": 8,
+        "endLine": 2864,
+        "endChar": 36
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d419639c_275d51e8",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneBase.java",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2017-12-06T00:33:18Z",
       "side": 1,
       "message": "PhoneConstants.ROAMING_OFF",
+      "range": {
+        "startLine": 469,
+        "startChar": 15,
+        "endLine": 469,
+        "endChar": 16
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d31542d8_4a60abc8",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-01-23T10:19:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d419639c_275d51e8",
       "range": {
         "startLine": 469,
         "startChar": 15,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "30a42d8c_659e1700",
+        "filename": "src/java/com/android/internal/telephony/sip/SipPhoneBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-01-23T10:19:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab540d38_ab4bacb6",
+      "range": {
+        "startLine": 440,
+        "startChar": 15,
+        "endLine": 440,
+        "endChar": 16
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d217e7a_85adbee6",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/mocks/PhoneMock.java",
         "patchSetId": 1
@@ -128,6 +248,30 @@
       "writtenOn": "2017-12-06T00:17:58Z",
       "side": 1,
       "message": "throw new RuntimeException(\"not implemented\");",
+      "range": {
+        "startLine": 1281,
+        "startChar": 8,
+        "endLine": 1281,
+        "endChar": 21
+      },
+      "revId": "01b26e3c1bfc0ec6c47ef5069faa4bc0789afc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "552d740c_b63c9d44",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/mocks/PhoneMock.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-01-23T10:19:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d217e7a_85adbee6",
       "range": {
         "startLine": 1281,
         "startChar": 8,
