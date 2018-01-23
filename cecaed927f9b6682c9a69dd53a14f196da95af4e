@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c456c18_fc857a7c",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-23T01:04:25Z",
+      "side": 1,
+      "message": "These are all internal, so you don\u0027t need @hide.",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 8
+      },
+      "revId": "cecaed927f9b6682c9a69dd53a14f196da95af4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f59fafe_944556fc",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccSpecVersion.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-23T01:04:25Z",
+      "side": 1,
+      "message": "Should this be in Tags.java?",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 48
+      },
+      "revId": "cecaed927f9b6682c9a69dd53a14f196da95af4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
