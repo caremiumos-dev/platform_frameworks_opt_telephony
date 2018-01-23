@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e36684a_c650f7aa",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-23T23:55:48Z",
+      "side": 1,
+      "message": "This will return an IccCard obj, it doesn\u0027t seem right to me to directly cast it into UiccProfile",
+      "range": {
+        "startLine": 438,
+        "startChar": 37,
+        "endLine": 438,
+        "endChar": 47
+      },
+      "revId": "e6cb87051ab09b1d5a0946fbd8fd767b453f6f65",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2daa4af_6fd0484e",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-23T23:55:48Z",
+      "side": 1,
+      "message": "Should we remove this?",
+      "range": {
+        "startLine": 109,
+        "startChar": 24,
+        "endLine": 109,
+        "endChar": 40
+      },
+      "revId": "e6cb87051ab09b1d5a0946fbd8fd767b453f6f65",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32d25dca_fa8d8bc2",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-23T23:55:48Z",
+      "side": 1,
+      "message": "I am not sure whether this is necessary. UiccProfile is different from IccCardProxy, we used to need this makeIccCardProxy because the IccCardProxy doesn\u0027t belong to any other instance, but UiccProfile always belongs to UiccCard, so it makes sense to create the UiccProfile inside UiccCard, and don\u0027t expose this method",
+      "range": {
+        "startLine": 116,
+        "startChar": 23,
+        "endLine": 116,
+        "endChar": 38
+      },
+      "revId": "e6cb87051ab09b1d5a0946fbd8fd767b453f6f65",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49c7787e_c425e0f1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-23T23:55:48Z",
+      "side": 1,
+      "message": "Like I mentioned in the other file, I don\u0027t think this is necessary.",
+      "range": {
+        "startLine": 89,
+        "startChar": 35,
+        "endLine": 89,
+        "endChar": 60
+      },
+      "revId": "e6cb87051ab09b1d5a0946fbd8fd767b453f6f65",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
