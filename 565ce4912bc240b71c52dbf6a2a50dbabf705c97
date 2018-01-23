@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "699d8761_819a0c18",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccCardController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-23T04:31:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a7a055f_dd5dfa9a",
+      "range": {
+        "startLine": 108,
+        "startChar": 25,
+        "endLine": 108,
+        "endChar": 36
+      },
+      "revId": "565ce4912bc240b71c52dbf6a2a50dbabf705c97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f0c2525_fed6b03d",
         "filename": "src/java/com/android/internal/telephony/euicc/EuiccCardController.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-23T00:00:46Z",
       "side": 1,
       "message": "nit: can be omitted and also in other methods.",
+      "range": {
+        "startLine": 122,
+        "startChar": 40,
+        "endLine": 122,
+        "endChar": 58
+      },
+      "revId": "565ce4912bc240b71c52dbf6a2a50dbabf705c97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8e4cc1e_231c3dcb",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccCardController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-23T04:31:04Z",
+      "side": 1,
+      "message": "Couldn\u0027t compile if omit the type. Got \"cannot infer type arguments for AsyncResultCallback\u003cResult\u003e\" error.",
+      "parentUuid": "7f0c2525_fed6b03d",
       "range": {
         "startLine": 122,
         "startChar": 40,
@@ -62,6 +110,24 @@
       "revId": "565ce4912bc240b71c52dbf6a2a50dbabf705c97",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bdc807d_374fde7f",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccCardController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-23T04:31:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b9d2914_79574746",
+      "revId": "565ce4912bc240b71c52dbf6a2a50dbabf705c97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
