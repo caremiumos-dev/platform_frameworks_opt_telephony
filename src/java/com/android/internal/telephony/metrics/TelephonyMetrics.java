@@ -1725,9 +1725,11 @@ public class TelephonyMetrics {
      * @param phoneId Phone id
      * @param version Carrier table version
      * @param cid Unique Carrier Id
+     * @param mccmnc MCC and MNC that map to this carrier
      * @param gid1 Group id level 1
      */
-    public void writeCarrierIdMatchingEvent(int phoneId, int version, int cid, String gid1) {
+    public void writeCarrierIdMatchingEvent(int phoneId, int version, int cid,
+                                            String mccmnc, String gid1) {
         final CarrierIdMatching carrierIdMatching = new CarrierIdMatching();
         final CarrierIdMatchingResult carrierIdMatchingResult = new CarrierIdMatchingResult();
 
@@ -1735,7 +1737,10 @@ public class TelephonyMetrics {
             carrierIdMatchingResult.carrierId = cid;
             if (gid1 != null) {
                 carrierIdMatchingResult.gid1 = gid1;
+                carrierIdMatchingResult.mccmnc = mccmnc;
             }
+        } else {
+            carrierIdMatchingResult.mccmnc = mccmnc;
         }
 
         carrierIdMatching.cidTableVersion = version;

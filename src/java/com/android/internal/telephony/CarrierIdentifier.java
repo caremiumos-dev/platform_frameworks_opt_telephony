@@ -563,10 +563,11 @@ public class CarrierIdentifier extends Handler {
          * 3) successfully found a matched carrier id in the provider.
          * 4) use carrier list version to compare the unknown carrier ratio between each version.
          */
-        String gid1ToLog = ((maxScore & CarrierMatchingRule.SCORE_GID1) == 0
+        String unknownGid1ToLog = ((maxScore & CarrierMatchingRule.SCORE_GID1) == 0
                 && !TextUtils.isEmpty(subscriptionRule.mGid1)) ? subscriptionRule.mGid1 : null;
         TelephonyMetrics.getInstance().writeCarrierIdMatchingEvent(
-                mPhone.getPhoneId(), getCarrierListVersion(), mCarrierId, gid1ToLog);
+                mPhone.getPhoneId(), getCarrierListVersion(), mCarrierId,
+                subscriptionRule.mMccMnc, unknownGid1ToLog);
     }
 
     private int getCarrierListVersion() {
