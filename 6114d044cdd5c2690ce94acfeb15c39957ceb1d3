@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8c77297e_d7699d28",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2018-01-23T22:08:38Z",
+      "side": 1,
+      "message": "As mentioned in frameworks/base change, https://android-review.googlesource.com/#/c/platform/frameworks/base/+/577942/2\nWe will parse the Uri to String nummber in packages/services/Telephony layer itself.",
+      "parentUuid": "09bbc34e_04a2be1e",
+      "range": {
+        "startLine": 490,
+        "startChar": 33,
+        "endLine": 490,
+        "endChar": 46
+      },
+      "revId": "6114d044cdd5c2690ce94acfeb15c39957ceb1d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c12729fe_64b786ed",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
         "patchSetId": 2
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "5d4b4d4f_5f61d5f1",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2018-01-23T22:08:38Z",
+      "side": 1,
+      "message": "This api throws CallStateException in case it is ever invoked for GsmCdmaConnection or SipPhone. \nSo, do you suggest we should write: \nthrow new CallStateException() in this method definition ?\n\nWe have catch clause in TelephonyConnection -\u003e\nhttps://android-review.googlesource.com/#/c/platform/packages/services/Telephony/+/577962/1/src/com/android/services/telephony/TelephonyConnection.java\n\nI had mentioned only //no-op similar to separate() API in: \nImsExternalConnection.java\n    @Override\n    public void separate() throws CallStateException {\n        // No-op - Separate is not supported for external calls.\n    }",
+      "parentUuid": "c4960fe3_359a3403",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 359,
+        "endChar": 44
+      },
+      "revId": "6114d044cdd5c2690ce94acfeb15c39957ceb1d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "934b5652_880a5b3f",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
         "patchSetId": 2
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "1cc9e438_8ebb5abb",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2018-01-23T22:08:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "934b5652_880a5b3f",
+      "range": {
+        "startLine": 347,
+        "startChar": 9,
+        "endLine": 347,
+        "endChar": 12
+      },
+      "revId": "6114d044cdd5c2690ce94acfeb15c39957ceb1d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42222584_5a409aaa",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
         "patchSetId": 2
@@ -106,6 +178,30 @@
       "writtenOn": "2018-01-18T03:48:53Z",
       "side": 1,
       "message": "Minor: space between if and brace",
+      "range": {
+        "startLine": 349,
+        "startChar": 16,
+        "endLine": 349,
+        "endChar": 20
+      },
+      "revId": "6114d044cdd5c2690ce94acfeb15c39957ceb1d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f936e24e_7dbeb738",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2018-01-23T22:08:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42222584_5a409aaa",
       "range": {
         "startLine": 349,
         "startChar": 16,
