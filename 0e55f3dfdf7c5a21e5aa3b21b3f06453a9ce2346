@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "295f55a9_1ce40954",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-23T06:15:29Z",
+      "side": 1,
+      "message": "Can there F characters in ICCID other than trailing ones?\nBtw we already have SubscriptionInfoUpdater.stripIccIdSuffix()",
+      "range": {
+        "startLine": 572,
+        "startChar": 8,
+        "endLine": 574,
+        "endChar": 9
+      },
+      "revId": "0e55f3dfdf7c5a21e5aa3b21b3f06453a9ce2346",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
