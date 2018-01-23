@@ -2428,6 +2428,13 @@ public class DcTracker extends Handler {
             sendRequestNetworkCompleteMsg(onCompleteMsg, false, mTransportType,
                     requestType, DataFailCause.NONE);
         }
+
+        if (apnContext.getState() == DctConstants.State.CONNECTED) {
+            if (DBG) log("onEnableApn: Enabled APN is already CONNECTED.");
+            mPhone.notifyDataConnection(apnContext.getApnType());
+            startNetStatPoll();
+            startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
+        }
     }
 
     public void disableApn(@ApnType int apnType, @ReleaseNetworkType int releaseType) {
