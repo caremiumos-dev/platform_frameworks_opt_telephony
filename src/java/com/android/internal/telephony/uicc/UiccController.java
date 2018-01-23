@@ -60,7 +60,13 @@ import java.util.Set;
  *                       UiccController
  *                            #
  *                            |
+ *                        UiccSlot[]
+ *                            #
+ *                            |
  *                        UiccCard
+ *                            #
+ *                            |
+ *                       UiccProfile
  *                          #   #
  *                          |   ------------------
  *                    UiccCardApplication    CatService
@@ -78,7 +84,6 @@ import java.util.Set;
  *         ^ stands for Generalization
  *
  * See also {@link com.android.internal.telephony.IccCard}
- * and {@link com.android.internal.telephony.uicc.IccCardProxy}
  */
 public class UiccController extends Handler {
     private static final boolean DBG = true;
@@ -215,6 +220,18 @@ public class UiccController extends Handler {
                 return uiccSlot.getUiccCard();
             }
             return null;
+        }
+    }
+
+    /**
+     * API to get UiccProfile corresponding to given phone id
+     * @return UiccProfile object corresponding to given phone id; null if there is no card/profile
+     * present for the phone id
+     */
+    public UiccProfile getUiccProfileForPhone(int phoneId) {
+        synchronized (mLock) {
+            UiccCard uiccCard = getUiccCardForPhone(phoneId);
+            return uiccCard != null ? uiccCard.getUiccProfile() : null;
         }
     }
 
