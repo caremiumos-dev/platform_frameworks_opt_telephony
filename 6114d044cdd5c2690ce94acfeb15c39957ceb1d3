@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "db784c13_6b6ab459",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2018-01-23T23:45:19Z",
+      "side": 1,
+      "message": "Lets say call started as ImsCall and SRVCC happened. Is it ever possible that the deflect API in this class is invoked? If yes, I think we need to throw an exception here.",
+      "parentUuid": "5d4b4d4f_5f61d5f1",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 359,
+        "endChar": 44
+      },
+      "revId": "6114d044cdd5c2690ce94acfeb15c39957ceb1d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "934b5652_880a5b3f",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
         "patchSetId": 2
