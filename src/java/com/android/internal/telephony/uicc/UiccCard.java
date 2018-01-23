@@ -77,13 +77,11 @@ public class UiccCard {
 
     public void update(Context c, CommandsInterface ci, IccCardStatus ics) {
         synchronized (mLock) {
-            CardState oldState = mCardState;
             mCardState = ics.mCardState;
             mContext = c;
             mCi = ci;
             mIccid = ics.iccid;
             updateCardId();
-
 
             if (mCardState != CardState.CARDSTATE_ABSENT) {
                 if (mUiccProfile == null) {
@@ -348,6 +346,10 @@ public class UiccCard {
 
     public int getPhoneId() {
         return mPhoneId;
+    }
+
+    public UiccProfile getUiccProfile() {
+        return mUiccProfile;
     }
 
     /**

@@ -69,6 +69,7 @@ import com.android.internal.telephony.uicc.RuimRecords;
 import com.android.internal.telephony.uicc.SIMRecords;
 import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccProfile;
 
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -103,6 +104,8 @@ public abstract class TelephonyTest {
     protected UiccController mUiccController;
     @Mock
     protected IccCardProxy mIccCardProxy;
+    @Mock
+    protected UiccProfile mUiccProfile;
     @Mock
     protected CallManager mCallManager;
     @Mock
@@ -365,7 +368,7 @@ public abstract class TelephonyTest {
         doReturn(mContext).when(mPhone).getContext();
         doReturn(mContext).when(mImsPhone).getContext();
         doReturn(true).when(mPhone).getUnitTestMode();
-        doReturn(mIccCardProxy).when(mPhone).getIccCard();
+        doReturn(mUiccProfile).when(mPhone).getIccCard();
         doReturn(mServiceState).when(mPhone).getServiceState();
         doReturn(mServiceState).when(mImsPhone).getServiceState();
         doReturn(mPhone).when(mImsPhone).getDefaultPhone();
@@ -408,12 +411,12 @@ public abstract class TelephonyTest {
         doReturn(mIsimUiccRecords).when(mUiccCardApplicationIms).getIccRecords();
 
         //mIccCardProxy
-        doReturn(mSimRecords).when(mIccCardProxy).getIccRecords();
+        doReturn(mSimRecords).when(mUiccProfile).getIccRecords();
         doAnswer(new Answer<IccRecords>() {
             public IccRecords answer(InvocationOnMock invocation) {
                 return (mPhone.isPhoneTypeGsm()) ? mSimRecords : mRuimRecords;
             }
-        }).when(mIccCardProxy).getIccRecords();
+        }).when(mUiccProfile).getIccRecords();
 
         //SMS
         doReturn(true).when(mSmsStorageMonitor).isStorageAvailable();
