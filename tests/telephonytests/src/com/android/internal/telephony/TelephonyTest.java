@@ -189,6 +189,8 @@ public abstract class TelephonyTest {
     protected NitzStateMachine mNitzStateMachine;
     @Mock
     protected TimeServiceHelper mTimeServiceHelper;
+    @Mock
+    protected RadioConfig mMockRadioConfig;
 
     protected TelephonyManager mTelephonyManager;
     protected SubscriptionManager mSubscriptionManager;
@@ -462,6 +464,7 @@ public abstract class TelephonyTest {
         replaceInstance(IntentBroadcaster.class, "sIntentBroadcaster", null, mIntentBroadcaster);
         replaceInstance(TelephonyManager.class, "sInstance", null,
                 mContext.getSystemService(Context.TELEPHONY_SERVICE));
+        replaceInstance(RadioConfig.class, "sRadioConfig", null, mMockRadioConfig);
 
         setReady(false);
     }
