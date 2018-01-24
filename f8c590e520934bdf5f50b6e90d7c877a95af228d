@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02590cec_732a4a36",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-24T01:56:59Z",
+      "side": 1,
+      "message": "No need to introduce this method. Use getUiccCardForSlot(getUiccSlotForCardId(cardId)) in EuiccCardController",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 45
+      },
+      "revId": "f8c590e520934bdf5f50b6e90d7c877a95af228d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
