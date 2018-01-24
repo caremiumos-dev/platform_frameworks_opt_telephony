@@ -1229,6 +1229,7 @@ public class DcTracker extends Handler {
         boolean attachedState = mAttached.get();
         boolean desiredPowerState = mPhone.getServiceStateTracker().getDesiredPowerState();
         boolean radioStateFromCarrier = mPhone.getServiceStateTracker().getPowerStateFromCarrier();
+        int csRegState = mPhone.getServiceState().getState();
         // TODO: Remove this hack added by ag/641832.
         int radioTech = mPhone.getServiceState().getRilDataRadioTechnology();
         if (radioTech == ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN) {
@@ -1286,7 +1287,8 @@ public class DcTracker extends Handler {
             reasons.add(DataDisallowedReasonType.IN_ECBM);
         }
 
-        if (!(attachedState || mAutoAttachOnCreation.get())) {
+        if (!(attachedState
+                || (csRegState == ServiceState.STATE_IN_SERVICE && mAutoAttachOnCreation.get()))) {
             reasons.add(DataDisallowedReasonType.NOT_ATTACHED);
         }
         if (!recordsLoaded) {
