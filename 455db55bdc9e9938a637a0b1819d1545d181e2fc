@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdda0b44_116743a7",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-24T19:43:17Z",
+      "side": 1,
+      "message": "Please use the function in SubscriptionInfoUpdater. You can move it to a util file, or make that public, but let\u0027s not duplicate the code. It may lead to inconsistencies later.",
+      "range": {
+        "startLine": 569,
+        "startChar": 59,
+        "endLine": 569,
+        "endChar": 86
+      },
+      "revId": "455db55bdc9e9938a637a0b1819d1545d181e2fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
