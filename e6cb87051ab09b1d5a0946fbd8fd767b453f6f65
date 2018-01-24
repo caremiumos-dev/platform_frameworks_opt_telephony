@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cb18b90d_e7f340fe",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-24T00:24:15Z",
+      "side": 1,
+      "message": "IccCard is an implement that UiccProfile implements.",
+      "parentUuid": "3e36684a_c650f7aa",
+      "range": {
+        "startLine": 438,
+        "startChar": 37,
+        "endLine": 438,
+        "endChar": 47
+      },
+      "revId": "e6cb87051ab09b1d5a0946fbd8fd767b453f6f65",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2daa4af_6fd0484e",
         "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-23T23:55:48Z",
       "side": 1,
       "message": "Should we remove this?",
+      "range": {
+        "startLine": 109,
+        "startChar": 24,
+        "endLine": 109,
+        "endChar": 40
+      },
+      "revId": "e6cb87051ab09b1d5a0946fbd8fd767b453f6f65",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7029c35e_6745b86e",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-24T00:24:15Z",
+      "side": 1,
+      "message": "Will remove IccCardProxy completely later. Currently I have left the class and unit tests, but I have removed its usage.",
+      "parentUuid": "a2daa4af_6fd0484e",
       "range": {
         "startLine": 109,
         "startChar": 24,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "6e367da5_b1b402ad",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-24T00:24:15Z",
+      "side": 1,
+      "message": "Actually this file is to make things testable. Otherwise it is difficult to mock UiccProfile in UiccCard tests.",
+      "parentUuid": "32d25dca_fa8d8bc2",
+      "range": {
+        "startLine": 116,
+        "startChar": 23,
+        "endLine": 116,
+        "endChar": 38
+      },
+      "revId": "e6cb87051ab09b1d5a0946fbd8fd767b453f6f65",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49c7787e_c425e0f1",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2018-01-23T23:55:48Z",
       "side": 1,
       "message": "Like I mentioned in the other file, I don\u0027t think this is necessary.",
+      "range": {
+        "startLine": 89,
+        "startChar": 35,
+        "endLine": 89,
+        "endChar": 60
+      },
+      "revId": "e6cb87051ab09b1d5a0946fbd8fd767b453f6f65",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc68fdca_60a7706e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-24T00:24:15Z",
+      "side": 1,
+      "message": "Replied in the other file.",
+      "parentUuid": "49c7787e_c425e0f1",
       "range": {
         "startLine": 89,
         "startChar": 35,
