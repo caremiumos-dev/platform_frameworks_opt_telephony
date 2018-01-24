@@ -81,12 +81,13 @@ import android.hardware.radio.V1_0.SimRefreshResult;
 import android.hardware.radio.V1_0.SsInfoData;
 import android.hardware.radio.V1_0.StkCcUnsolSsResult;
 import android.hardware.radio.V1_0.SuppSvcNotification;
+import android.hardware.radio.V1_2.CellConnectionStatus;
 import android.hardware.radio.V1_2.IRadioIndication;
-import android.hardware.radio.V1_2.PhysicalChannelConfig;
 import android.os.AsyncResult;
 import android.os.SystemProperties;
 import android.telephony.CellInfo;
 import android.telephony.PcoData;
+import android.telephony.PhysicalChannelConfig;
 import android.telephony.SignalStrength;
 import android.telephony.SmsMessage;
 import android.telephony.data.DataCallResponse;
@@ -102,6 +103,7 @@ import com.android.internal.telephony.uicc.IccRefreshResponse;
 import com.android.internal.telephony.uicc.IccUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RadioIndication extends IRadioIndication.Stub {
     RIL mRil;
@@ -247,8 +249,28 @@ public class RadioIndication extends IRadioIndication.Stub {
      * Indicates current physical channel configuration.
      */
     public void currentPhysicalChannelConfigs(int indicationType,
-                                   ArrayList<PhysicalChannelConfig> configs) {
-      // TODO(b/70638175) Implement method.
+            ArrayList<android.hardware.radio.V1_2.PhysicalChannelConfig> configs) {
+        List<PhysicalChannelConfig> response = new ArrayList<>(configs.size());
+
+        for (android.hardware.radio.V1_2.PhysicalChannelConfig config : configs) {
+            int status;
+            switch (config.status) {
+                case CellConnectionStatus.PRIMARY_SERVING:
+                    status = PhysicalChannelConfig.CONNECTION_PRIMARY_SERVING;
+                    break;
+                case CellConnectionStatus.SECONDARY_SERVING:
+                    status = PhysicalChannelConfig.CONNECTION_SECONDARY_SERVING;
+                    break;
+                default:
+                    // only PRIMARY_SERVING and SECONDARY_SERVING are supported.
+                    continue;
+            }
+
+            response.add(new PhysicalChannelConfig(status, config.cellBandwidthDownlink));
+        }
+
+        mRil.mPhysicalChannelConfigurationRegistrants.notifyRegistrants(
+                new AsyncResult(null, response, null));
     }
 
     public void dataCallListChanged(int indicationType, ArrayList<SetupDataCallResult> dcList) {
