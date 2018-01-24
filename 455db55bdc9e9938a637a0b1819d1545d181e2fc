@@ -22,6 +22,30 @@
       "revId": "455db55bdc9e9938a637a0b1819d1545d181e2fc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9ff82bd_9bcbe623",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-24T20:43:26Z",
+      "side": 1,
+      "message": "Done. The code is moved to IccUtils. And unit tests are also added in the cl 598583.",
+      "parentUuid": "bdda0b44_116743a7",
+      "range": {
+        "startLine": 569,
+        "startChar": 59,
+        "endLine": 569,
+        "endChar": 86
+      },
+      "revId": "455db55bdc9e9938a637a0b1819d1545d181e2fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
