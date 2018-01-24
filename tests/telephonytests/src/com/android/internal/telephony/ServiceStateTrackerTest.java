@@ -31,9 +31,15 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import android.Manifest;
 import android.app.IAlarmManager;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 import android.hardware.radio.V1_0.CellIdentityGsm;
 import android.hardware.radio.V1_0.CellInfoType;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
@@ -48,10 +54,13 @@ import android.os.Process;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.WorkSource;
+import android.service.euicc.EuiccService;
 import android.support.test.filters.FlakyTest;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
+import android.telephony.NetworkRegistrationState;
+import android.telephony.NetworkService;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
@@ -59,7 +68,9 @@ import android.telephony.gsm.GsmCellLocation;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Pair;
+import android.telephony.INetworkService;
 
+import com.android.internal.R;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.test.SimulatedCommands;
@@ -87,6 +98,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     private Handler mTestHandler;
     @Mock
     protected IAlarmManager mAlarmManager;
+
+    @Mock private INetworkService.Stub mNetworkService;
 
     private ServiceStateTracker sst;
     private ServiceStateTrackerTestHandler mSSTTestHandler;
@@ -117,11 +130,29 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         }
     }
 
+    private void addNetworkService() {
+        ServiceInfo serviceInfo =  new ServiceInfo();
+        serviceInfo.packageName = "com.android.phone";
+        serviceInfo.permission = "android.permission.BIND_NETWORK_SERVICE";
+        IntentFilter filter = new IntentFilter();
+        mContextFixture.addService(
+                NetworkService.NETWORK_SERVICE_INTERFACE,
+                null,
+                "com.android.phone",
+                mNetworkService,
+                serviceInfo,
+                filter);
+    }
+
     @Before
     public void setUp() throws Exception {
 
         logd("ServiceStateTrackerTest +Setup!");
         super.setUp("ServiceStateTrackerTest");
+
+        mContextFixture.putResource(R.string.config_wwan_network_service_package,
+                "com.android.phone");
+        addNetworkService();
 
         doReturn(true).when(mDct).isDisconnected();
         mPhone.mDcTracker = mDct;
@@ -134,9 +165,9 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mBundle.putStringArray(
                 CarrierConfigManager.KEY_NON_ROAMING_OPERATOR_STRING_ARRAY, new String[]{"123456"});
 
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_HOME);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.setVoiceRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_HSPA);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_HOME);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.setDataRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_HSPA);
 
         int dds = SubscriptionManager.getDefaultDataSubscriptionId();
@@ -474,8 +505,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // Enable roaming and trigger events to notify handler registered
         doReturn(true).when(mPhone).isPhoneTypeGsm();
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
@@ -486,8 +517,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_DATA_ROAMING_ON, messageArgumentCaptor.getValue().what);
 
         // Disable roaming
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_HOME);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_HOME);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_HOME);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -496,8 +527,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.unregisterForVoiceRoamingOn(mTestHandler);
 
         // Enable roaming
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
@@ -511,8 +542,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testRegAndUnregForVoiceRoamingOff() throws Exception {
         // Enable roaming
         doReturn(true).when(mPhone).isPhoneTypeGsm();
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -521,8 +552,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // Disable roaming
         doReturn(true).when(mPhone).isPhoneTypeGsm();
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_HOME);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_HOME);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_HOME);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
@@ -533,8 +564,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_DATA_ROAMING_OFF, messageArgumentCaptor.getValue().what);
 
         // Enable roaming
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -543,8 +574,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.unregisterForVoiceRoamingOff(mTestHandler);
 
         // Disable roaming
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_HOME);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_HOME);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_HOME);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -560,8 +591,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // Enable roaming and trigger events to notify handler registered
         doReturn(true).when(mPhone).isPhoneTypeGsm();
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
@@ -572,8 +603,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_DATA_ROAMING_ON, messageArgumentCaptor.getValue().what);
 
         // Disable roaming
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_HOME);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_HOME);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_HOME);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -582,8 +613,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.unregisterForDataRoamingOn(mTestHandler);
 
         // Enable roaming
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
@@ -597,8 +628,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testRegAndUnregForDataRoamingOff() throws Exception {
         // Enable roaming
         doReturn(true).when(mPhone).isPhoneTypeGsm();
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -607,8 +638,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // Disable roaming
         doReturn(true).when(mPhone).isPhoneTypeGsm();
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_HOME);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_HOME);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_HOME);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -619,8 +650,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_DATA_ROAMING_OFF, messageArgumentCaptor.getValue().what);
 
         // Enable roaming
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -629,8 +660,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.unregisterForDataRoamingOff(mTestHandler);
 
         // Disable roaming
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_HOME);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_HOME);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_HOME);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -653,8 +684,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.registerForDataConnectionAttached(mTestHandler, EVENT_DATA_CONNECTION_ATTACHED, null);
 
         // set service state in service and trigger events to post message on handler
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
@@ -675,8 +706,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.unregisterForDataConnectionAttached(mTestHandler);
 
         // set service state in service
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -690,8 +721,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testRegAndUnregForDataConnAttach() throws Exception {
         // Initially set service state out of service
         doReturn(true).when(mPhone).isPhoneTypeGsm();
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -699,8 +730,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.registerForDataConnectionAttached(mTestHandler, EVENT_DATA_CONNECTION_ATTACHED, null);
 
         // set service state in service and trigger events to post message on handler
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
@@ -711,8 +742,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_DATA_CONNECTION_ATTACHED, messageArgumentCaptor.getValue().what);
 
         // set service state out of service
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -721,8 +752,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.unregisterForDataConnectionAttached(mTestHandler);
 
         // set service state in service
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -736,15 +767,15 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testRegAndUnregForDataConnDetach() throws Exception {
         // Initially set service state in service
         doReturn(true).when(mPhone).isPhoneTypeGsm();
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         sst.registerForDataConnectionDetached(mTestHandler, EVENT_DATA_CONNECTION_DETACHED, null);
 
         // set service state out of service and trigger events to post message on handler
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
@@ -755,8 +786,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_DATA_CONNECTION_DETACHED, messageArgumentCaptor.getValue().what);
 
         // set service state in service
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -765,8 +796,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.unregisterForDataConnectionDetached(mTestHandler);
 
         // set service state out of service
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -778,7 +809,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Test
     @MediumTest
     public void testRegisterForDataRegStateOrRatChange() {
-        int drs = sst.mSS.RIL_REG_STATE_HOME;
+        int drs = NetworkRegistrationState.REG_STATE_HOME;
         int rat = sst.mSS.RIL_RADIO_TECHNOLOGY_LTE;
         sst.mSS.setRilDataRadioTechnology(rat);
         sst.mSS.setDataRegState(drs);
@@ -799,8 +830,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testRegAndUnregForNetworkAttached() throws Exception {
         // Initially set service state out of service
         doReturn(true).when(mPhone).isPhoneTypeGsm();
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -808,8 +839,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.registerForNetworkAttached(mTestHandler, EVENT_REGISTERED_TO_NETWORK, null);
 
         // set service state in service and trigger events to post message on handler
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -820,8 +851,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(EVENT_REGISTERED_TO_NETWORK, messageArgumentCaptor.getValue().what);
 
         // set service state out of service
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_UNKNOWN);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -830,8 +861,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.unregisterForNetworkAttached(mTestHandler);
 
         // set service state in service
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -854,8 +885,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.registerForNetworkAttached(mTestHandler, EVENT_REGISTERED_TO_NETWORK, null);
 
         // set service state in service and trigger events to post message on handler
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -881,8 +912,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.registerForNetworkAttached(mTestHandler, EVENT_REGISTERED_TO_NETWORK, null);
 
         // set service state in service
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(100);
@@ -1021,8 +1052,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         // Enable roaming
         doReturn(true).when(mPhone).isPhoneTypeGsm();
 
-        mSimulatedCommands.setVoiceRegState(ServiceState.RIL_REG_STATE_ROAMING);
-        mSimulatedCommands.setDataRegState(ServiceState.RIL_REG_STATE_ROAMING);
+        mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
+        mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
