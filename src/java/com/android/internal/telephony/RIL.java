@@ -78,6 +78,7 @@ import android.telephony.ModemActivityInfo;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.NetworkScanRequest;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.PhysicalChannelConfig;
 import android.telephony.RadioAccessFamily;
 import android.telephony.RadioAccessSpecifier;
 import android.telephony.Rlog;
@@ -5333,6 +5334,16 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
 
         return response;
+    }
+
+    static List<PhysicalChannelConfig> convertHalPhysicalChannelConfigs(
+            List<android.hardware.radio.V1_2.PhysicalChannelConfig> records) {
+        List<PhysicalChannelConfig> configs = new ArrayList<>();
+
+        for (android.hardware.radio.V1_2.PhysicalChannelConfig r : records) {
+            configs.add(new PhysicalChannelConfig(r.status, r.cellBandwidthDownlink));
+        }
+        return configs;
     }
 
     static SignalStrength convertHalSignalStrength(

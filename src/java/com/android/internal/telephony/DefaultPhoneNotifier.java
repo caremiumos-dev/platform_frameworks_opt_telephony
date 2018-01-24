@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.telephony.CellInfo;
+import android.telephony.PhysicalChannelConfig;
 import android.telephony.PreciseCallState;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
@@ -225,6 +226,19 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         try {
             if (mRegistry != null) {
                 mRegistry.notifyCellInfoForSubscriber(subId, cellInfo);
+            }
+        } catch (RemoteException ex) {
+
+        }
+    }
+
+    @Override
+    public void notifyPhysicalChannelConfiguration(Phone sender,
+            List<PhysicalChannelConfig> configs) {
+        int subId = sender.getSubId();
+        try {
+            if (mRegistry != null) {
+                mRegistry.notifyPhysicalChannelConfigurationForSubscriber(subId, configs);
             }
         } catch (RemoteException ex) {
 

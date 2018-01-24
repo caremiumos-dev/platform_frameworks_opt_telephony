@@ -1782,6 +1782,16 @@ public interface CommandsInterface {
     void unregisterForCellInfoList(Handler h);
 
     /**
+     * Fires when a new {@link android.telephony.PhysicalChannelConfig} list is received from the
+     * RIL.
+     */
+    void registerForPhysicalChannelConfiguration(Handler h, int what, Object obj);
+    /**
+     * Unregisters the handler for {@link android.telephony.PhysicalChannelConfig} updates.
+     */
+    void unregisterForPhysicalChannelConfiguration(Handler h);
+
+    /**
      * Set Initial Attach Apn
      *
      * @param dataProfile
