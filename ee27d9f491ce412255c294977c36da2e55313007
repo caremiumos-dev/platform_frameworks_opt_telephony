@@ -22,6 +22,30 @@
       "revId": "ee27d9f491ce412255c294977c36da2e55313007",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57261e48_956b8407",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-24T23:37:52Z",
+      "side": 1,
+      "message": "Actually this function is also called through updateExternalState() which is called in a number of places, so we do need to consider LOADED here.",
+      "parentUuid": "b0c3b280_7fc22b5e",
+      "range": {
+        "startLine": 381,
+        "startChar": 16,
+        "endLine": 381,
+        "endChar": 35
+      },
+      "revId": "ee27d9f491ce412255c294977c36da2e55313007",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
