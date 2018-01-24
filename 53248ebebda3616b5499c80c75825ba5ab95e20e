@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15770a8f_4b26c1d8",
+        "filename": "src/java/com/android/internal/telephony/DataNetworkRegistrationState.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-24T09:00:22Z",
+      "side": 1,
+      "message": "can",
+      "range": {
+        "startLine": 32,
+        "startChar": 7,
+        "endLine": 32,
+        "endChar": 11
+      },
+      "revId": "53248ebebda3616b5499c80c75825ba5ab95e20e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdb89de0_954824b7",
+        "filename": "src/java/com/android/internal/telephony/DataNetworkRegistrationState.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-24T09:00:22Z",
+      "side": 1,
+      "message": "when this goes to the parent, will other instanceof NetworkRegistrationState \u003d true?",
+      "range": {
+        "startLine": 73,
+        "startChar": 15,
+        "endLine": 73,
+        "endChar": 34
+      },
+      "revId": "53248ebebda3616b5499c80c75825ba5ab95e20e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e5d57d2_bbd03e00",
+        "filename": "src/java/com/android/internal/telephony/VoiceNetworkRegistrationState.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-24T09:00:22Z",
+      "side": 1,
+      "message": "I think there will be a problem when the system calls NetworkRegistrationState.CREATOR. The system won\u0027t be able to reconstruct a VoiceNetworkRegistrationState object from the parcel because it doesn\u0027t know what the original instance is.",
+      "range": {
+        "startLine": 121,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 5
+      },
+      "revId": "53248ebebda3616b5499c80c75825ba5ab95e20e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
