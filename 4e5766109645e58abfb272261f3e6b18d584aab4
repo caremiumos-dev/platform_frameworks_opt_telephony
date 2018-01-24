@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ac40d14_3051a98e",
+        "filename": "src/java/com/android/internal/telephony/DriverCall.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2018-01-24T05:54:12Z",
+      "side": 1,
+      "message": "Updated the name based on comments in https://android-review.googlesource.com/#/c/platform/hardware/interfaces/+/571182/4/radio/1.2/types.hal.",
+      "range": {
+        "startLine": 44,
+        "startChar": 28,
+        "endLine": 44,
+        "endChar": 53
+      },
+      "revId": "4e5766109645e58abfb272261f3e6b18d584aab4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
