@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32ec164d_60db9f3f",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-24T23:56:29Z",
+      "side": 1,
+      "message": "Use mPhoneId",
+      "range": {
+        "startLine": 821,
+        "startChar": 44,
+        "endLine": 821,
+        "endChar": 45
+      },
+      "revId": "b68aea0eaaeb9da6be096637bcecd8adc533bcae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
