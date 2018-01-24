@@ -82,11 +82,11 @@ import android.hardware.radio.V1_0.StkCcUnsolSsResult;
 import android.hardware.radio.V1_0.SuppSvcNotification;
 import android.hardware.radio.V1_1.KeepaliveStatus;
 import android.hardware.radio.V1_2.IRadioIndication;
-import android.hardware.radio.V1_2.PhysicalChannelConfig;
 import android.os.AsyncResult;
 import android.os.SystemProperties;
 import android.telephony.CellInfo;
 import android.telephony.PcoData;
+import android.telephony.PhysicalChannelConfig;
 import android.telephony.SignalStrength;
 import android.telephony.SmsMessage;
 import android.telephony.data.DataCallResponse;
@@ -101,6 +101,7 @@ import com.android.internal.telephony.uicc.IccRefreshResponse;
 import com.android.internal.telephony.uicc.IccUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RadioIndication extends IRadioIndication.Stub {
     RIL mRil;
@@ -246,8 +247,11 @@ public class RadioIndication extends IRadioIndication.Stub {
      * Indicates current physical channel configuration.
      */
     public void currentPhysicalChannelConfigs(int indicationType,
-                                   ArrayList<PhysicalChannelConfig> configs) {
-      // TODO(b/70638175) Implement method.
+            ArrayList<android.hardware.radio.V1_2.PhysicalChannelConfig> configs) {
+        List<PhysicalChannelConfig> response = RIL.convertHalPhysicalChannelConfigs(configs);
+
+        mRil.mPhysicalChannelConfigurationRegistrants.notifyRegistrants(
+                new AsyncResult(null, response, null));
     }
 
     public void dataCallListChanged(int indicationType, ArrayList<SetupDataCallResult> dcList) {
