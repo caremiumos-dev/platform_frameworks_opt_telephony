@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b87b5fb1_43b78e33",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-24T23:58:42Z",
+      "side": 1,
+      "message": "This ultimately comes from UICC. Do we need to get it through phone?",
+      "range": {
+        "startLine": 819,
+        "startChar": 21,
+        "endLine": 819,
+        "endChar": 32
+      },
+      "revId": "b68aea0eaaeb9da6be096637bcecd8adc533bcae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32ec164d_60db9f3f",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 5
