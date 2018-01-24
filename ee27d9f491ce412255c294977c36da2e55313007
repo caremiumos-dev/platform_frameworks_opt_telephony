@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0c3b280_7fc22b5e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-24T23:35:58Z",
+      "side": 1,
+      "message": "I would recommend this function setExternalStateOnReady() only handles READY and NOT_READY, and let LOADED to be handled by EVENT_RECORDS_LOADED, because we also need to check whether areCarrierPriviligeRulesLoaded() for the state LOADED.",
+      "range": {
+        "startLine": 381,
+        "startChar": 16,
+        "endLine": 381,
+        "endChar": 35
+      },
+      "revId": "ee27d9f491ce412255c294977c36da2e55313007",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
