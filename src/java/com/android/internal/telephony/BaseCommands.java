@@ -74,6 +74,7 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mCarrierInfoForImsiEncryptionRegistrants = new RegistrantList();
     protected RegistrantList mRilNetworkScanResultRegistrants = new RegistrantList();
     protected RegistrantList mModemResetRegistrants = new RegistrantList();
+    protected RegistrantList mPhysicalChannelConfigurationRegistrants = new RegistrantList();
 
 
     protected Registrant mGsmSmsRegistrant;
@@ -833,6 +834,19 @@ public abstract class BaseCommands implements CommandsInterface {
     @Override
     public void unregisterForCellInfoList(Handler h) {
         mRilCellInfoListRegistrants.remove(h);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void registerForPhysicalChannelConfiguration(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mPhysicalChannelConfigurationRegistrants.add(r);
+    }
+    @Override
+    public void unregisterForPhysicalChannelConfiguration(Handler h) {
+        mPhysicalChannelConfigurationRegistrants.remove(h);
     }
 
     @Override

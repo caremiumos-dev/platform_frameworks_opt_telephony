@@ -59,6 +59,7 @@ import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
 import android.telephony.CellInfoWcdma;
 import android.telephony.CellLocation;
+import android.telephony.PhysicalChannelConfig;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -210,6 +211,7 @@ public class ServiceStateTracker extends Handler {
     protected static final int EVENT_SIM_NOT_INSERTED                  = 52;
     protected static final int EVENT_IMS_SERVICE_STATE_CHANGED         = 53;
     protected static final int EVENT_RADIO_POWER_OFF_DONE              = 54;
+    protected static final int EVENT_PHYSICAL_CHANNEL_CONFIG = 55;
 
     private class CellInfoResult {
         List<CellInfo> list;
@@ -475,6 +477,7 @@ public class ServiceStateTracker extends Handler {
         mUiccController.registerForIccChanged(this, EVENT_ICC_CHANGED, null);
         mCi.setOnSignalStrengthUpdate(this, EVENT_SIGNAL_STRENGTH_UPDATE, null);
         mCi.registerForCellInfoList(this, EVENT_UNSOL_CELL_INFO_LIST, null);
+        mCi.registerForPhysicalChannelConfiguration(this, EVENT_PHYSICAL_CHANNEL_CONFIG, null);
 
         mSubscriptionController = SubscriptionController.getInstance();
         mSubscriptionManager = SubscriptionManager.from(phone.getContext());
@@ -627,6 +630,7 @@ public class ServiceStateTracker extends Handler {
         mCi.unSetOnSignalStrengthUpdate(this);
         mUiccController.unregisterForIccChanged(this);
         mCi.unregisterForCellInfoList(this);
+        mCi.unregisterForPhysicalChannelConfiguration(this);
         mSubscriptionManager
             .removeOnSubscriptionsChangedListener(mOnSubscriptionsChangedListener);
         mCi.unregisterForImsNetworkStateChanged(this);
@@ -1415,6 +1419,22 @@ public class ServiceStateTracker extends Handler {
                     boolean enable = (boolean) ar.result;
                     if (DBG) log("EVENT_RADIO_POWER_FROM_CARRIER: " + enable);
                     setRadioPowerFromCarrier(enable);
+                }
+                break;
+
+            case EVENT_PHYSICAL_CHANNEL_CONFIG:
+                ar = (AsyncResult) msg.obj;
+                if (ar.exception == null) {
+                    // boolean enable = (boolean) ar.result;
+                    // if (DBG) log("EVENT_RADIO_POWER_FROM_CARRIER: " + enable);
+                    // setRadioPowerFromCarrier(enable);
+
+                    List<PhysicalChannelConfig> list = (List<PhysicalChannelConfig>) ar.result;
+                    if (VDBG) {
+                        log("EVENT_PHYSICAL_CHANNEL_CONFIG: size=" + list.size() + " list="
+                                + list);
+                    }
+                    mPhone.notifyPhysicalChannelConfiguration(list);
                 }
                 break;
 
