@@ -18,7 +18,10 @@ package com.android.internal.telephony.uicc.euicc;
 
 import android.annotation.Nullable;
 import android.content.Context;
+import android.os.AsyncResult;
 import android.os.Handler;
+import android.os.Registrant;
+import android.os.RegistrantList;
 import android.service.carrier.CarrierIdentifier;
 import android.service.euicc.EuiccProfileInfo;
 import android.telephony.Rlog;
@@ -99,11 +102,46 @@ public class EuiccCard extends UiccCard {
     private final Object mLock = new Object();
     private EuiccSpecVersion mSpecVersion;
     private String mEid;
+    private RegistrantList mSimStateLoadedRegistrants = new RegistrantList();
 
     public EuiccCard(Context c, CommandsInterface ci, IccCardStatus ics, int phoneId) {
         super(c, ci, ics, phoneId);
         // TODO: Set supportExtendedApdu based on ATR.
         mApduSender = new ApduSender(ci, ISD_R_AID, false /* supportExtendedApdu */);
+
+        loadEidAndNotifyRegistrants();
+    }
+
+    /**
+     * Registers to be notified when eid is ready.
+     */
+    public void registerForEidReady(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mSimStateLoadedRegistrants.add(r);
+    }
+
+    /**
+     * Unregisters to be notified when eid is ready.
+     */
+    public void unregisterForEidReady(Handler h) {
+        mSimStateLoadedRegistrants.remove(h);
+    }
+
+    private void loadEidAndNotifyRegistrants() {
+        Handler euiccMainThreadHandler = new Handler();
+        AsyncResultCallback<String> cardCb = new AsyncResultCallback<String>() {
+            @Override
+            public void onResult(String result) {
+                mEid = result;
+                mSimStateLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
+            }
+
+            @Override
+            public void onException(Throwable e) {
+                loge("Failed loading eid");
+            }
+        };
+        getEid(cardCb, euiccMainThreadHandler);
     }
 
     /**
