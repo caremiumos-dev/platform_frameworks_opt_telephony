@@ -61,6 +61,7 @@ import com.android.internal.telephony.cat.CatService;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.IccCardStatus.PinState;
+import com.android.internal.telephony.uicc.euicc.EuiccCard;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -122,6 +123,7 @@ public class UiccProfile extends Handler implements IccCard {
     private static final int EVENT_APP_READY = 6;
     private static final int EVENT_RECORDS_LOADED = 7;
     private static final int EVENT_NETWORK_LOCKED = 9;
+    private static final int EVENT_EID_READY = 10;
 
     private static final int EVENT_ICC_RECORD_EVENTS = 500;
 
@@ -240,6 +242,7 @@ public class UiccProfile extends Handler implements IccCard {
                 if (!areAllRecordsLoaded()) {
                     break;
                 }
+
                 // Update the MCC/MNC.
                 if (mIccRecords != null) {
                     String operator = mIccRecords.getOperatorNumeric();
@@ -258,6 +261,18 @@ public class UiccProfile extends Handler implements IccCard {
                         loge("EVENT_RECORDS_LOADED Operator name is null");
                     }
                 }
+
+                if (mUiccCard instanceof EuiccCard && ((EuiccCard) mUiccCard).getEid() != null) {
+                    ((EuiccCard) mUiccCard).registerForEidReady(this, EVENT_EID_READY, null);
+                    break;
+                }
+
+                if (areCarrierPriviligeRulesLoaded()) {
+                    setExternalState(IccCardConstants.State.LOADED);
+                }
+                break;
+
+            case EVENT_EID_READY:
                 if (areCarrierPriviligeRulesLoaded()) {
                     setExternalState(IccCardConstants.State.LOADED);
                 }
@@ -891,8 +906,8 @@ public class UiccProfile extends Handler implements IccCard {
         if (VDBG) {
             log("areAllRecordsLoaded: outside loop, return " + (mUiccApplications[0] != null));
         }
-        // Returns false if there is no application in the UiccProfile.
-        return mUiccApplications[0] != null;
+        // Returns true if there is no application in the UiccProfile.
+        return mUiccApplications[0] == null;
     }
 
     private int checkIndexLocked(int index, AppType expectedAppType, AppType altExpectedAppType) {
