@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "248ccf59_5511035b",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-25T00:28:06Z",
+      "side": 1,
+      "message": "Revert the change here? Looks like you are just comparing against invalid slot id which is already public.",
+      "revId": "bbdf0dd6329b392532cfa60d253d23e097d1aa17",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
