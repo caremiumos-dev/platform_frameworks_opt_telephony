@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c0c7b4b1_560e687f",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-25T00:09:47Z",
+      "side": 1,
+      "message": "The device ID is not from UICC but from the phone device (modem). I think we should get it from phone instead of UICC card.",
+      "parentUuid": "b87b5fb1_43b78e33",
+      "range": {
+        "startLine": 819,
+        "startChar": 21,
+        "endLine": 819,
+        "endChar": 32
+      },
+      "revId": "b68aea0eaaeb9da6be096637bcecd8adc533bcae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32ec164d_60db9f3f",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "b68aea0eaaeb9da6be096637bcecd8adc533bcae",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "624da456_c3eadb02",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-25T00:09:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32ec164d_60db9f3f",
+      "range": {
+        "startLine": 821,
+        "startChar": 44,
+        "endLine": 821,
+        "endChar": 45
+      },
+      "revId": "b68aea0eaaeb9da6be096637bcecd8adc533bcae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
