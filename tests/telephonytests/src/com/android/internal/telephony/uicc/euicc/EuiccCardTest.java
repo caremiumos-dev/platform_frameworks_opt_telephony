@@ -102,6 +102,9 @@ public class EuiccCardTest extends TelephonyTest {
                         protected byte[] getDeviceId() {
                             return IccUtils.bcdToBytes("987654321012345");
                         }
+
+                        @Override
+                        protected void loadEidAndNotifyRegistrants() {}
                     };
             mHandler = new Handler(mTestHandlerThread.getLooper());
             setReady(true);
