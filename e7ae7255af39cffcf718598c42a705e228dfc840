@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "91616f45_af8323d7",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-25T01:50:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7c4cd71_bcc5fc34",
+      "range": {
+        "startLine": 214,
+        "startChar": 27,
+        "endLine": 216,
+        "endChar": 57
+      },
+      "revId": "e7ae7255af39cffcf718598c42a705e228dfc840",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03d31274_8a310c58",
         "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
         "patchSetId": 4
@@ -249,6 +273,30 @@
       "side": 1,
       "message": "line 310 will print it",
       "parentUuid": "926882fe_72064afb",
+      "range": {
+        "startLine": 300,
+        "startChar": 58,
+        "endLine": 300,
+        "endChar": 64
+      },
+      "revId": "e7ae7255af39cffcf718598c42a705e228dfc840",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5d2abdde_8644bf00",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-25T01:50:19Z",
+      "side": 1,
+      "message": "Then here you need to do\n\ndomain \u003d\u003d NetworkRegistrationState.DOMAIN_CS ? \"CS\" :\n(domain \u003d\u003d NetworkRegistrationState.DOMAIN_PS ? \"PS\" : \"unknown\")\n\nwhich i think is really ugly...",
+      "parentUuid": "dd47b394_880f3b8f",
       "range": {
         "startLine": 300,
         "startChar": 58,
