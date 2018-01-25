@@ -61,6 +61,7 @@ import com.android.internal.telephony.cat.CatService;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.IccCardStatus.PinState;
+import com.android.internal.telephony.uicc.euicc.EuiccCard;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -94,7 +95,7 @@ public class UiccProfile extends Handler implements IccCard {
     private int mCdmaSubscriptionAppIndex;
     private int mImsSubscriptionAppIndex;
     private UiccCardApplication[] mUiccApplications =
-        new UiccCardApplication[IccCardStatus.CARD_MAX_APPS];
+            new UiccCardApplication[IccCardStatus.CARD_MAX_APPS];
     private Context mContext;
     private CommandsInterface mCi;
     private UiccCard mUiccCard; //parent
@@ -122,6 +123,7 @@ public class UiccProfile extends Handler implements IccCard {
     private static final int EVENT_APP_READY = 6;
     private static final int EVENT_RECORDS_LOADED = 7;
     private static final int EVENT_NETWORK_LOCKED = 9;
+    private static final int EVENT_EID_READY = 10;
 
     private static final int EVENT_ICC_RECORD_EVENTS = 500;
 
@@ -152,6 +154,11 @@ public class UiccProfile extends Handler implements IccCard {
                 setCurrentAppType(phone.getPhoneType() == PhoneConstants.PHONE_TYPE_GSM);
             }
         }
+
+        if (mUiccCard instanceof EuiccCard) {
+            ((EuiccCard) mUiccCard).registerForEidReady(this, EVENT_EID_READY, null);
+        }
+
         update(c, ci, ics);
 
         if (ICC_CARD_PROXY_REMOVED) {
@@ -170,6 +177,10 @@ public class UiccProfile extends Handler implements IccCard {
 
             unregisterAllAppEvents();
             unregisterCurrAppEvents();
+
+            if (mUiccCard instanceof EuiccCard) {
+                ((EuiccCard) mUiccCard).unregisterForEidReady(this);
+            }
 
             if (ICC_CARD_PROXY_REMOVED) {
                 mCi.unregisterForOffOrNotAvailable(this);
@@ -229,6 +240,7 @@ public class UiccProfile extends Handler implements IccCard {
             case EVENT_ICC_LOCKED:
             case EVENT_APP_READY:
             case EVENT_RECORDS_LOADED:
+            case EVENT_EID_READY:
                 if (VDBG) log("handleMessage: Received " + msg.what);
                 updateExternalState();
                 break;
@@ -358,6 +370,10 @@ public class UiccProfile extends Handler implements IccCard {
         if (cardLocked) {
             if (mIccRecords != null && (mIccRecords.getLockedRecordsLoaded()
                     || mIccRecords.getNetworkLockedRecordsLoaded())) { // locked records loaded
+                if (mUiccCard instanceof EuiccCard && ((EuiccCard) mUiccCard).getEid() == null) {
+                    if (VDBG) log("EID is not ready yet.");
+                    return;
+                }
                 if (VDBG) {
                     log("updateExternalState: card locked and records loaded; "
                             + "setting state to locked");
@@ -394,6 +410,15 @@ public class UiccProfile extends Handler implements IccCard {
             case APPSTATE_READY:
                 if (areAllApplicationsReady()) {
                     if (areAllRecordsLoaded() && areCarrierPriviligeRulesLoaded()) {
+                        if (mUiccCard instanceof EuiccCard
+                                && ((EuiccCard) mUiccCard).getEid() == null) {
+                            if (VDBG) log("EID is not ready yet.");
+                            break;
+                        }
+                        if (mUiccApplication == null) {
+                            if (VDBG) log("The current app is null.");
+                            break;
+                        }
                         if (VDBG) log("updateExternalState: setting state to LOADED");
                         setExternalState(IccCardConstants.State.LOADED);
                     } else {
@@ -814,7 +839,7 @@ public class UiccProfile extends Handler implements IccCard {
             log("Before privilege rules: " + mCarrierPrivilegeRules + " : " + ics.mCardState);
             if (mCarrierPrivilegeRules == null && ics.mCardState == CardState.CARDSTATE_PRESENT) {
                 mCarrierPrivilegeRules = new UiccCarrierPrivilegeRules(this,
-                    obtainMessage(EVENT_CARRIER_PRIVILEGES_LOADED));
+                        obtainMessage(EVENT_CARRIER_PRIVILEGES_LOADED));
             } else if (mCarrierPrivilegeRules != null
                     && ics.mCardState != CardState.CARDSTATE_PRESENT) {
                 mCarrierPrivilegeRules = null;
