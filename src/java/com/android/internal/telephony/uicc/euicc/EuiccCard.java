@@ -18,7 +18,10 @@ package com.android.internal.telephony.uicc.euicc;
 
 import android.annotation.Nullable;
 import android.content.Context;
+import android.os.AsyncResult;
 import android.os.Handler;
+import android.os.Registrant;
+import android.os.RegistrantList;
 import android.service.carrier.CarrierIdentifier;
 import android.service.euicc.EuiccProfileInfo;
 import android.telephony.Rlog;
@@ -97,6 +100,7 @@ public class EuiccCard extends UiccCard {
 
     private final ApduSender mApduSender;
     private final Object mLock = new Object();
+    private final RegistrantList mEidReadyRegistrants = new RegistrantList();
     private EuiccSpecVersion mSpecVersion;
     private String mEid;
 
@@ -104,6 +108,45 @@ public class EuiccCard extends UiccCard {
         super(c, ci, ics, phoneId);
         // TODO: Set supportExtendedApdu based on ATR.
         mApduSender = new ApduSender(ci, ISD_R_AID, false /* supportExtendedApdu */);
+
+        loadEidAndNotifyRegistrants();
+    }
+
+    /**
+     * Registers to be notified when EID is ready. This method should be called by the caller right
+     * after getting the EuiccCard object in the same thread/looper.
+     */
+    public void registerForEidReady(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mEidReadyRegistrants.add(r);
+        if (mEid != null) {
+            r.notifyRegistrant(new AsyncResult(null, null, null));
+        }
+    }
+
+    /**
+     * Unregisters to be notified when eid is ready.
+     */
+    public void unregisterForEidReady(Handler h) {
+        mEidReadyRegistrants.remove(h);
+    }
+
+    @VisibleForTesting(visibility = VisibleForTesting.Visibility.PRIVATE)
+    protected void loadEidAndNotifyRegistrants() {
+        Handler euiccMainThreadHandler = new Handler();
+        AsyncResultCallback<String> cardCb = new AsyncResultCallback<String>() {
+            @Override
+            public void onResult(String result) {
+                mEidReadyRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
+            }
+
+            @Override
+            public void onException(Throwable e) {
+                // Not notifying registrants if getting eid fails.
+                Rlog.e(LOG_TAG, "Failed loading eid", e);
+            }
+        };
+        getEid(cardCb, euiccMainThreadHandler);
     }
 
     /**
@@ -263,7 +306,15 @@ public class EuiccCard extends UiccCard {
     }
 
     /**
-     * Gets the EID of the eUICC.
+     * Gets the EID synchronously.
+     * @return The EID string. Returns null if it is not ready yet.
+     */
+    public String getEid() {
+        return mEid;
+    }
+
+    /**
+     * Gets the EID of the eUICC and overwrites mCardId in UiccCard.
      *
      * @param callback The callback to get the result.
      * @param handler The handler to run the callback.
@@ -284,6 +335,7 @@ public class EuiccCard extends UiccCard {
                             .getChild(Tags.TAG_EID).asBytes());
                     synchronized (mLock) {
                         mEid = eid;
+                        mCardId = eid;
                     }
                     return eid;
                 },

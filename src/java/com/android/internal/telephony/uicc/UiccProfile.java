@@ -61,6 +61,7 @@ import com.android.internal.telephony.cat.CatService;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.IccCardStatus.PinState;
+import com.android.internal.telephony.uicc.euicc.EuiccCard;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -94,7 +95,7 @@ public class UiccProfile extends Handler implements IccCard {
     private int mCdmaSubscriptionAppIndex;
     private int mImsSubscriptionAppIndex;
     private UiccCardApplication[] mUiccApplications =
-        new UiccCardApplication[IccCardStatus.CARD_MAX_APPS];
+            new UiccCardApplication[IccCardStatus.CARD_MAX_APPS];
     private Context mContext;
     private CommandsInterface mCi;
     private UiccCard mUiccCard; //parent
@@ -122,6 +123,7 @@ public class UiccProfile extends Handler implements IccCard {
     private static final int EVENT_APP_READY = 6;
     private static final int EVENT_RECORDS_LOADED = 7;
     private static final int EVENT_NETWORK_LOCKED = 9;
+    private static final int EVENT_EID_READY = 10;
 
     private static final int EVENT_ICC_RECORD_EVENTS = 500;
 
@@ -170,6 +172,10 @@ public class UiccProfile extends Handler implements IccCard {
 
             unregisterAllAppEvents();
             unregisterCurrAppEvents();
+
+            if (mUiccCard instanceof EuiccCard) {
+                ((EuiccCard) mUiccCard).unregisterForEidReady(this);
+            }
 
             if (ICC_CARD_PROXY_REMOVED) {
                 mCi.unregisterForOffOrNotAvailable(this);
@@ -230,6 +236,14 @@ public class UiccProfile extends Handler implements IccCard {
             case EVENT_APP_READY:
             case EVENT_RECORDS_LOADED:
                 if (VDBG) log("handleMessage: Received " + msg.what);
+                if (mUiccCard instanceof EuiccCard && ((EuiccCard) mUiccCard).getEid() == null) {
+                    ((EuiccCard) mUiccCard).registerForEidReady(this, EVENT_EID_READY, null);
+                    break;
+                }
+                updateExternalState();
+                break;
+
+            case EVENT_EID_READY:
                 updateExternalState();
                 break;
 
@@ -816,7 +830,7 @@ public class UiccProfile extends Handler implements IccCard {
             log("Before privilege rules: " + mCarrierPrivilegeRules + " : " + ics.mCardState);
             if (mCarrierPrivilegeRules == null && ics.mCardState == CardState.CARDSTATE_PRESENT) {
                 mCarrierPrivilegeRules = new UiccCarrierPrivilegeRules(this,
-                    obtainMessage(EVENT_CARRIER_PRIVILEGES_LOADED));
+                        obtainMessage(EVENT_CARRIER_PRIVILEGES_LOADED));
             } else if (mCarrierPrivilegeRules != null
                     && ics.mCardState != CardState.CARDSTATE_PRESENT) {
                 mCarrierPrivilegeRules = null;
@@ -883,8 +897,9 @@ public class UiccProfile extends Handler implements IccCard {
         if (VDBG) {
             log("areAllApplicationsReady: outside loop, return " + (mUiccApplications[0] != null));
         }
-        // Returns false if there is no application in the UiccProfile.
-        return mUiccApplications[0] != null;
+        // Returns true even when there is no applications. When the root profile of eUICC is
+        // enabled, there will be no applications but we still want to send the READY state.
+        return true;
     }
 
     private boolean areAllRecordsLoaded() {
@@ -900,8 +915,9 @@ public class UiccProfile extends Handler implements IccCard {
         if (VDBG) {
             log("areAllRecordsLoaded: outside loop, return " + (mUiccApplications[0] != null));
         }
-        // Returns false if there is no application in the UiccProfile.
-        return mUiccApplications[0] != null;
+        // Returns true even when there is no applications. When the root profile of eUICC is
+        // enabled, there will be no applications but we still want to send the LOADED state.
+        return true;
     }
 
     private int checkIndexLocked(int index, AppType expectedAppType, AppType altExpectedAppType) {
