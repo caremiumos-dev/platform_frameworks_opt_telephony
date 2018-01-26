@@ -1,0 +1,8 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Code-Review+2: Jack Yu <jackyu@google.com>
+Verified+1: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Submitted-by: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Submitted-at: Fri, 26 Jan 2018 00:41:26 +0000
+Reviewed-on: https://android-review.googlesource.com/588169
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
