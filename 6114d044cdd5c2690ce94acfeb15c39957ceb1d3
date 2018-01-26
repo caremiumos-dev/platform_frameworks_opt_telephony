@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "18ccb58e_af819502",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2018-01-26T01:36:38Z",
+      "side": 1,
+      "message": "Ideally, it won\u0027t ever happen that just after call of \"deflect\" API from UI, and before reaching ImsPhoneConnection, SRVCC happens and it changes mOriginalConnection to GsmCdmaConnection.\n\nStill, I agree if it ever happens, currently we are not doing any op. We can throw CallStateException as you mentioned. Will update this gerrit in the next patch.",
+      "parentUuid": "db784c13_6b6ab459",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 359,
+        "endChar": 44
+      },
+      "revId": "6114d044cdd5c2690ce94acfeb15c39957ceb1d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "934b5652_880a5b3f",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
         "patchSetId": 2
