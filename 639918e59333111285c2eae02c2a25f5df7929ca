@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b78e5d3a_eefad033",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-26T00:37:11Z",
+      "side": 1,
+      "message": "final",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 11
+      },
+      "revId": "639918e59333111285c2eae02c2a25f5df7929ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9b99777_d3efada6",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-26T00:37:11Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be \"mEidReadyRegistrants\"?",
+      "range": {
+        "startLine": 105,
+        "startChar": 27,
+        "endLine": 105,
+        "endChar": 53
+      },
+      "revId": "639918e59333111285c2eae02c2a25f5df7929ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64dc0f4e_3678c955",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-26T00:37:11Z",
+      "side": 1,
+      "message": "EID\n\nAnd the comment should indicate that this method should be called right after the constructor in the same thread/looper.",
+      "range": {
+        "startLine": 116,
+        "startChar": 37,
+        "endLine": 116,
+        "endChar": 40
+      },
+      "revId": "639918e59333111285c2eae02c2a25f5df7929ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0679886c_6b4ecccc",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-26T00:37:11Z",
+      "side": 1,
+      "message": "mEid should be already set by getEid. This is unnecessary.",
+      "range": {
+        "startLine": 135,
+        "startChar": 16,
+        "endLine": 135,
+        "endChar": 30
+      },
+      "revId": "639918e59333111285c2eae02c2a25f5df7929ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a84a990_7f1d9145",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-26T00:37:11Z",
+      "side": 1,
+      "message": "add e\n\nDo we still need to notify notifyRegistrants on errors because UiccController may still wait for it? Or add a comment here to explain why we don\u0027t need to wait.",
+      "range": {
+        "startLine": 141,
+        "startChar": 16,
+        "endLine": 141,
+        "endChar": 20
+      },
+      "revId": "639918e59333111285c2eae02c2a25f5df7929ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
