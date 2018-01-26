@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "45d02663_51abad2e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-26T00:38:33Z",
+      "side": 1,
+      "message": "I think here still misses the code registering and waiting for EID ready?",
+      "range": {
+        "startLine": 124,
+        "startChar": 20,
+        "endLine": 124,
+        "endChar": 29
+      },
+      "revId": "639918e59333111285c2eae02c2a25f5df7929ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b78e5d3a_eefad033",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 1
