@@ -77,6 +77,7 @@ import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
+import com.android.internal.telephony.uicc.IccCardProxy;
 import com.android.internal.telephony.uicc.IccException;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.IccVmNotSupportedException;
@@ -87,7 +88,6 @@ import com.android.internal.telephony.uicc.SIMRecords;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
-import com.android.internal.telephony.uicc.UiccProfile;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -184,6 +184,7 @@ public class GsmCdmaPhone extends Phone {
     }
 
     private IccSmsInterfaceManager mIccSmsInterfaceManager;
+    private IccCardProxy mIccCardProxy;
 
     private boolean mResetModemOnRadioTechnologyChange = false;
 
@@ -242,6 +243,7 @@ public class GsmCdmaPhone extends Phone {
                 = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LOG_TAG);
         mIccSmsInterfaceManager = mTelephonyComponentFactory.makeIccSmsInterfaceManager(this);
+        mIccCardProxy = mTelephonyComponentFactory.makeIccCardProxy(mContext, mCi, mPhoneId);
 
         mCi.registerForAvailable(this, EVENT_RADIO_AVAILABLE, null);
         mCi.registerForOffOrNotAvailable(this, EVENT_RADIO_OFF_OR_NOT_AVAILABLE, null);
@@ -285,13 +287,10 @@ public class GsmCdmaPhone extends Phone {
         logd("Precise phone type " + mPrecisePhoneType);
 
         TelephonyManager tm = TelephonyManager.from(mContext);
-        UiccProfile uiccProfile = getUiccProfile();
         if (isPhoneTypeGsm()) {
             mCi.setPhoneType(PhoneConstants.PHONE_TYPE_GSM);
             tm.setPhoneType(getPhoneId(), PhoneConstants.PHONE_TYPE_GSM);
-            if (uiccProfile != null) {
-                uiccProfile.setVoiceRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
-            }
+            mIccCardProxy.setVoiceRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
         } else {
             mCdmaSubscriptionSource = mCdmaSSM.getCdmaSubscriptionSource();
             // This is needed to handle phone process crashes
@@ -304,9 +303,7 @@ public class GsmCdmaPhone extends Phone {
 
             mCi.setPhoneType(PhoneConstants.PHONE_TYPE_CDMA);
             tm.setPhoneType(getPhoneId(), PhoneConstants.PHONE_TYPE_CDMA);
-            if (uiccProfile != null) {
-                uiccProfile.setVoiceRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_1xRTT);
-            }
+            mIccCardProxy.setVoiceRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_1xRTT);
             // Sets operator properties by retrieving from build-time system property
             String operatorAlpha = SystemProperties.get("ro.cdma.home.operator.alpha");
             String operatorNumeric = SystemProperties.get(PROPERTY_CDMA_HOME_OPERATOR_NUMERIC);
@@ -2506,9 +2503,6 @@ public class GsmCdmaPhone extends Phone {
         }
     }
 
-    // todo: check if ICC availability needs to be handled here. mSimRecords should not be needed
-    // now because APIs can be called directly on UiccProfile, and that should handle the requests
-    // correctly based on supported apps, voice RAT, etc.
     @Override
     protected void onUpdateIccAvailability() {
         if (mUiccController == null ) {
@@ -3275,11 +3269,8 @@ public class GsmCdmaPhone extends Phone {
             mCi.setRadioPower(oldPowerState, null);
         }
 
-        // update voice radio tech in UiccProfile
-        UiccProfile uiccProfile = getUiccProfile();
-        if (uiccProfile != null) {
-            uiccProfile.setVoiceRadioTech(newVoiceRadioTech);
-        }
+        // update voice radio tech in icc card proxy
+        mIccCardProxy.setVoiceRadioTech(newVoiceRadioTech);
 
         // Send an Intent to the PhoneApp that we had a radio technology change
         Intent intent = new Intent(TelephonyIntents.ACTION_RADIO_TECHNOLOGY_CHANGED);
@@ -3330,17 +3321,12 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public boolean getIccRecordsLoaded() {
-        UiccProfile uiccProfile = getUiccProfile();
-        return uiccProfile != null && uiccProfile.getIccRecordsLoaded();
+        return mIccCardProxy.getIccRecordsLoaded();
     }
 
     @Override
     public IccCard getIccCard() {
-        return UiccController.getInstance().getUiccProfileForPhone(mPhoneId);
-    }
-
-    private UiccProfile getUiccProfile() {
-        return UiccController.getInstance().getUiccProfileForPhone(mPhoneId);
+        return mIccCardProxy;
     }
 
     @Override
@@ -3370,6 +3356,14 @@ public class GsmCdmaPhone extends Phone {
             pw.println(" isMinInfoReady()=" + isMinInfoReady());
         }
         pw.println(" isCspPlmnEnabled()=" + isCspPlmnEnabled());
+        pw.flush();
+        pw.println("++++++++++++++++++++++++++++++++");
+
+        try {
+            mIccCardProxy.dump(fd, pw, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         pw.flush();
         pw.println("++++++++++++++++++++++++++++++++");
         pw.println("DeviceStateMonitor:");

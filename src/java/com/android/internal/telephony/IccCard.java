@@ -21,6 +21,7 @@ import android.os.Message;
 
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
+import com.android.internal.telephony.uicc.IccFileHandler;
 import com.android.internal.telephony.uicc.IccRecords;
 
 /**
@@ -43,11 +44,15 @@ public interface IccCard {
      */
     public State getState();
 
-    // todo: delete
     /**
      * @return IccRecords object belonging to current UiccCardApplication
      */
     public IccRecords getIccRecords();
+
+    /**
+     * @return IccFileHandler object belonging to current UiccCardApplication
+     */
+    public IccFileHandler getIccFileHandler();
 
     /**
      * Notifies handler of any transition into IccCardConstants.State.NETWORK_LOCKED
@@ -89,6 +94,13 @@ public interface IccCard {
      * Supply the ICC PUK2 to the ICC
      */
     public void supplyPuk2 (String puk2, String newPin2, Message onComplete);
+
+    /**
+     * Check whether fdn (fixed dialing number) service is available.
+     * @return true if ICC fdn service available
+     *         false if ICC fdn service not available
+    */
+    public boolean getIccFdnAvailable();
 
     /**
      * Supply Network depersonalization code to the RIL
