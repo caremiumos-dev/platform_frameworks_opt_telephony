@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "096941fe_25c6ef1d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-27T02:42:49Z",
+      "side": 1,
+      "message": "This change can fix the \"ABSENT\" broadcast, but the \"SimState\" can never be absent now when user query the simCardState from TM since the UiccProfie.getState() will never return ABSENT",
+      "range": {
+        "startLine": 105,
+        "startChar": 28,
+        "endLine": 105,
+        "endChar": 66
+      },
+      "revId": "0cb5975d5930b0818a647a723c0cf9d5f6ffd9ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
