@@ -246,24 +246,6 @@ public class UiccProfile extends Handler implements IccCard {
                 if (!areAllRecordsLoaded()) {
                     break;
                 }
-                // Update the MCC/MNC.
-                if (mIccRecords != null) {
-                    String operator = mIccRecords.getOperatorNumeric();
-                    log("operator=" + operator + " mPhoneId=" + mPhoneId);
-
-                    if (!TextUtils.isEmpty(operator)) {
-                        mTelephonyManager.setSimOperatorNumericForPhone(mPhoneId, operator);
-                        String countryCode = operator.substring(0, 3);
-                        if (countryCode != null) {
-                            mTelephonyManager.setSimCountryIsoForPhone(mPhoneId,
-                                    MccTable.countryCodeForMcc(Integer.parseInt(countryCode)));
-                        } else {
-                            loge("EVENT_RECORDS_LOADED Country code is null");
-                        }
-                    } else {
-                        loge("EVENT_RECORDS_LOADED Operator name is null");
-                    }
-                }
                 if (areCarrierPriviligeRulesLoaded()) {
                     setExternalState(IccCardConstants.State.LOADED);
                 }
@@ -393,8 +375,6 @@ public class UiccProfile extends Handler implements IccCard {
                     } else {
                         setExternalState(IccCardConstants.State.READY);
                     }
-                } else {
-                    setExternalState(IccCardConstants.State.NOT_READY);
                 }
                 break;
         }
@@ -471,6 +451,26 @@ public class UiccProfile extends Handler implements IccCard {
                 return;
             }
             mExternalState = newState;
+            if (mExternalState == IccCardConstants.State.LOADED) {
+                // Update the MCC/MNC.
+                if (mIccRecords != null) {
+                    String operator = mIccRecords.getOperatorNumeric();
+                    log("operator=" + operator + " mPhoneId=" + mPhoneId);
+
+                    if (!TextUtils.isEmpty(operator)) {
+                        mTelephonyManager.setSimOperatorNumericForPhone(mPhoneId, operator);
+                        String countryCode = operator.substring(0, 3);
+                        if (countryCode != null) {
+                            mTelephonyManager.setSimCountryIsoForPhone(mPhoneId,
+                                    MccTable.countryCodeForMcc(Integer.parseInt(countryCode)));
+                        } else {
+                            loge("EVENT_RECORDS_LOADED Country code is null");
+                        }
+                    } else {
+                        loge("EVENT_RECORDS_LOADED Operator name is null");
+                    }
+                }
+            }
             log("setExternalState: set mPhoneId=" + mPhoneId + " mExternalState=" + mExternalState);
             mTelephonyManager.setSimStateForPhone(mPhoneId, getState().toString());
 
