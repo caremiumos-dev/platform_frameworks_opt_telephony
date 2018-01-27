@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a989aea1_2920c7c2",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-27T01:20:33Z",
+      "side": 1,
+      "message": "I dont want this file to be a part of this. Will revert this one for now and include in a different CL.",
+      "revId": "da6c07fd8217a217b87a450963978437be5bbc9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
