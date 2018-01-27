@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46a6f762_d8290f52",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-27T02:44:42Z",
+      "side": 1,
+      "message": "final",
+      "revId": "d92c5d761e525306e740dbcd64cfc97d23a7390b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "229f5c4d_a4cb5a78",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-27T02:44:42Z",
+      "side": 1,
+      "message": "Can we be consistent with how resultCode is determined and how result is converted?\nLike\ncallback.onSetDataProfileComplete(ar.exception !\u003d null\n    ? DataServiceCallback.RESULT_ERROR_ILLEGAL_STATE\n    : DataServiceCallback.RESULT_SUCCESS);",
+      "revId": "d92c5d761e525306e740dbcd64cfc97d23a7390b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9aa21fdc_f9c9f6d6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-27T02:44:42Z",
+      "side": 1,
+      "message": "Hmm... could there be an exception? I\u0027m not checking in CellularNetworkService. If yes I should fix it.",
+      "revId": "d92c5d761e525306e740dbcd64cfc97d23a7390b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cfdcefa_6606f0b1",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-27T02:44:42Z",
+      "side": 1,
+      "message": "I think we should check slotId to be valid.",
+      "revId": "d92c5d761e525306e740dbcd64cfc97d23a7390b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
