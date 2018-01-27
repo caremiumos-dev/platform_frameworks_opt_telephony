@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c1016fa6_160c226f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-27T08:16:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46a6f762_d8290f52",
+      "revId": "d92c5d761e525306e740dbcd64cfc97d23a7390b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "229f5c4d_a4cb5a78",
         "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-01-27T02:44:42Z",
       "side": 1,
       "message": "Can we be consistent with how resultCode is determined and how result is converted?\nLike\ncallback.onSetDataProfileComplete(ar.exception !\u003d null\n    ? DataServiceCallback.RESULT_ERROR_ILLEGAL_STATE\n    : DataServiceCallback.RESULT_SUCCESS);",
+      "revId": "d92c5d761e525306e740dbcd64cfc97d23a7390b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a5c9ffa_6392f9d5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-27T08:16:18Z",
+      "side": 1,
+      "message": "okay, but we\u0027ll have \"if (ar.exception !\u003d null)\" check twice.",
+      "parentUuid": "229f5c4d_a4cb5a78",
       "revId": "d92c5d761e525306e740dbcd64cfc97d23a7390b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "0b44cadb_2744ce18",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-27T08:16:18Z",
+      "side": 1,
+      "message": "No. always null.",
+      "parentUuid": "9aa21fdc_f9c9f6d6",
+      "revId": "d92c5d761e525306e740dbcd64cfc97d23a7390b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9cfdcefa_6606f0b1",
         "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "d92c5d761e525306e740dbcd64cfc97d23a7390b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "770c9ab3_b3b9402c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-27T08:16:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9cfdcefa_6606f0b1",
+      "revId": "d92c5d761e525306e740dbcd64cfc97d23a7390b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
