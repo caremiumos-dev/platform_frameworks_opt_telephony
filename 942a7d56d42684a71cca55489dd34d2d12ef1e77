@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "909c8be1_7ceb6987",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-29T22:15:17Z",
+      "side": 1,
+      "message": "Indentation. Be consistent with above.",
+      "revId": "942a7d56d42684a71cca55489dd34d2d12ef1e77",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5256fa36_77a5b184",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-01-29T22:15:17Z",
+      "side": 1,
+      "message": "Probably put a comment like \"If callback is null, client doesn\u0027t care about the result. So no callback will be sent.\" ?",
+      "revId": "942a7d56d42684a71cca55489dd34d2d12ef1e77",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
