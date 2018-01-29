@@ -878,8 +878,9 @@ public class UiccProfile extends Handler implements IccCard {
         if (VDBG) {
             log("areAllApplicationsReady: outside loop, return " + (mUiccApplications[0] != null));
         }
-        // Returns false if there is no application in the UiccProfile.
-        return mUiccApplications[0] != null;
+        // Returns true even when there is no applications. When the root profile of eUICC is
+        // enabled, there will be no applications but we still want to send the READY state.
+        return true;
     }
 
     private boolean areAllRecordsLoaded() {
@@ -895,8 +896,9 @@ public class UiccProfile extends Handler implements IccCard {
         if (VDBG) {
             log("areAllRecordsLoaded: outside loop, return " + (mUiccApplications[0] != null));
         }
-        // Returns false if there is no application in the UiccProfile.
-        return mUiccApplications[0] != null;
+        // Returns true even when there is no applications. When the root profile of eUICC is
+        // enabled, there will be no applications but we still want to send the LOADED state.
+        return true;
     }
 
     private int checkIndexLocked(int index, AppType expectedAppType, AppType altExpectedAppType) {
