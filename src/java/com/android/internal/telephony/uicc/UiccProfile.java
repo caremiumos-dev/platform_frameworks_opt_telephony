@@ -61,6 +61,7 @@ import com.android.internal.telephony.cat.CatService;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.IccCardStatus.PinState;
+import com.android.internal.telephony.uicc.euicc.EuiccCard;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -878,8 +879,9 @@ public class UiccProfile extends Handler implements IccCard {
         if (VDBG) {
             log("areAllApplicationsReady: outside loop, return " + (mUiccApplications[0] != null));
         }
-        // Returns false if there is no application in the UiccProfile.
-        return mUiccApplications[0] != null;
+        // Returns false only if there is no application in the UiccProfile and it does not belong
+        // to an EuiccCard.
+        return mUiccCard instanceof EuiccCard || mUiccApplications[0] != null;
     }
 
     private boolean areAllRecordsLoaded() {
@@ -895,8 +897,9 @@ public class UiccProfile extends Handler implements IccCard {
         if (VDBG) {
             log("areAllRecordsLoaded: outside loop, return " + (mUiccApplications[0] != null));
         }
-        // Returns false if there is no application in the UiccProfile.
-        return mUiccApplications[0] != null;
+        // Returns false only if there is no application in the UiccProfile and it does not belong
+        // to an EuiccCard.
+        return mUiccCard instanceof EuiccCard || mUiccApplications[0] != null;
     }
 
     private int checkIndexLocked(int index, AppType expectedAppType, AppType altExpectedAppType) {
