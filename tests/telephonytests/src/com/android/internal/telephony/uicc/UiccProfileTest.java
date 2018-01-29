@@ -16,7 +16,6 @@
 package com.android.internal.telephony.uicc;
 
 import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -362,6 +361,30 @@ public class UiccProfileTest extends TelephonyTest {
         waitForMs(SCARY_SLEEP_MS);
         // state is loaded as all records are loaded right away as SimulatedCommands returns
         // response for them right away. Ideally applications and records should be mocked.
+        assertEquals(State.LOADED, mUiccProfile.getState());
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateUiccProfileApplicationNoApplication() {
+        mUiccProfile.sendMessage(mUiccProfile.obtainMessage(EVENT_RADIO_ON));
+        mIccCardStatus.mApplications = new IccCardApplicationStatus[]{};
+        mIccCardStatus.mCdmaSubscriptionAppIndex = -1;
+        mIccCardStatus.mImsSubscriptionAppIndex = -1;
+        mIccCardStatus.mGsmUmtsSubscriptionAppIndex = -1;
+        Message mProfileUpdate = mHandler.obtainMessage(UICCPROFILE_UPDATE_APPLICATION_EVENT);
+        setReady(false);
+        mProfileUpdate.sendToTarget();
+
+        waitUntilReady();
+
+        /* wait for the carrier privilege rules to be loaded */
+        waitForMs(50);
+        assertEquals(0, mUiccProfile.getNumApplications());
+
+        mUiccProfile.sendMessage(mUiccProfile.obtainMessage(EVENT_APP_READY));
+        waitForMs(SCARY_SLEEP_MS);
+        // state is loaded since there is no applications.
         assertEquals(State.LOADED, mUiccProfile.getState());
     }
 }
