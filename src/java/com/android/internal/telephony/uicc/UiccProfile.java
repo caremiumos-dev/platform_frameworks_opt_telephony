@@ -304,6 +304,28 @@ public class UiccProfile extends Handler implements IccCard {
         }
     }
 
+    private void checkReadyOrLoaded() {
+        if (areAllApplicationsReady()) {
+            if (areAllRecordsLoaded() && areCarrierPriviligeRulesLoaded()) {
+                if (VDBG) log("checkReadyOrLoaded: setting state to LOADED");
+                setExternalState(IccCardConstants.State.LOADED);
+            } else {
+                if (VDBG) {
+                    log("checkReadyOrLoaded: setting state to READY; records loaded "
+                            + areAllRecordsLoaded() + ", carrier privilige rules loaded "
+                            + areCarrierPriviligeRulesLoaded());
+                }
+                setExternalState(IccCardConstants.State.READY);
+            }
+        } else {
+            if (VDBG) {
+                log("checkReadyOrLoaded: app state is READY but not for all apps; "
+                        + "setting state to NOT_READY");
+            }
+            setExternalState(IccCardConstants.State.NOT_READY);
+        }
+    }
+
     private void updateExternalState() {
         // First check if card state is IO_ERROR or RESTRICTED
         if (mUiccCard.getCardState() == IccCardStatus.CardState.CARDSTATE_ERROR) {
@@ -392,25 +414,7 @@ public class UiccProfile extends Handler implements IccCard {
                 setExternalState(IccCardConstants.State.NOT_READY);
                 break;
             case APPSTATE_READY:
-                if (areAllApplicationsReady()) {
-                    if (areAllRecordsLoaded() && areCarrierPriviligeRulesLoaded()) {
-                        if (VDBG) log("updateExternalState: setting state to LOADED");
-                        setExternalState(IccCardConstants.State.LOADED);
-                    } else {
-                        if (VDBG) {
-                            log("updateExternalState: setting state to READY; records loaded "
-                                    + areAllRecordsLoaded() + ", carrier privilige rules loaded "
-                                    + areCarrierPriviligeRulesLoaded());
-                        }
-                        setExternalState(IccCardConstants.State.READY);
-                    }
-                } else {
-                    if (VDBG) {
-                        log("updateExternalState: app state is READY but not for all apps; "
-                                + "setting state to NOT_READY");
-                    }
-                    setExternalState(IccCardConstants.State.NOT_READY);
-                }
+                checkReadyOrLoaded();
                 break;
         }
     }
@@ -872,22 +876,24 @@ public class UiccProfile extends Handler implements IccCard {
     }
 
     private boolean areAllApplicationsReady() {
+        boolean atLeastOneSupportedApp = false;
         for (UiccCardApplication app : mUiccApplications) {
-            if (app != null && isSupportedApplication(app) && !app.isReady()) {
-                if (VDBG) log("areAllApplicationsReady: return false");
-                return false;
+            if (app != null && isSupportedApplication(app)) {
+                atLeastOneSupportedApp = true;
+                if (!app.isReady()) {
+                    if (VDBG) log("areAllApplicationsReady: return false");
+                    return false;
+                }
             }
         }
-        if (VDBG) {
-            log("areAllApplicationsReady: outside loop, return " + (mUiccApplications[0] != null));
-        }
-        // Returns false if there is no application in the UiccProfile.
-        return mUiccApplications[0] != null;
+        return atLeastOneSupportedApp;
     }
 
     private boolean areAllRecordsLoaded() {
+        boolean atLeastOneSupportedApp = false;
         for (UiccCardApplication app : mUiccApplications) {
             if (app != null && isSupportedApplication(app)) {
+                atLeastOneSupportedApp = true;
                 IccRecords ir = app.getIccRecords();
                 if (ir == null || !ir.isLoaded()) {
                     if (VDBG) log("areAllRecordsLoaded: return false");
@@ -895,11 +901,7 @@ public class UiccProfile extends Handler implements IccCard {
                 }
             }
         }
-        if (VDBG) {
-            log("areAllRecordsLoaded: outside loop, return " + (mUiccApplications[0] != null));
-        }
-        // Returns false if there is no application in the UiccProfile.
-        return mUiccApplications[0] != null;
+        return atLeastOneSupportedApp;
     }
 
     private int checkIndexLocked(int index, AppType expectedAppType, AppType altExpectedAppType) {
