@@ -914,6 +914,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     /**
+     * This method is deprecated and should not be used.
      *
      * @param responseInfo Response info struct containing response type, serial no. and error
      * @param response response string of the challenge/response algo for ISIM auth in base64 format
