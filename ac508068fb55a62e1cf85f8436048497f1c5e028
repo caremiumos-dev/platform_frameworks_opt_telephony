@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd83ed12_4ef36ad0",
+        "filename": "tests/telephonytests/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2018-01-29T11:09:44Z",
+      "side": 1,
+      "message": "Consider putting an explicit reminder in that bug (or file a separate bug) to revert this CL once that bug is fixed.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 12
+      },
+      "revId": "ac508068fb55a62e1cf85f8436048497f1c5e028",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
