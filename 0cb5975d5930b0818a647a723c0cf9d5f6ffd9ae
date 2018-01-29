@@ -70,6 +70,30 @@
       "revId": "0cb5975d5930b0818a647a723c0cf9d5f6ffd9ae",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e34e50a6_aaa8b947",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-29T21:51:52Z",
+      "side": 1,
+      "message": "Yes, I noticed that and the next CL should handle that.",
+      "parentUuid": "2b0e5a18_cc9d0a52",
+      "range": {
+        "startLine": 105,
+        "startChar": 28,
+        "endLine": 105,
+        "endChar": 66
+      },
+      "revId": "0cb5975d5930b0818a647a723c0cf9d5f6ffd9ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
