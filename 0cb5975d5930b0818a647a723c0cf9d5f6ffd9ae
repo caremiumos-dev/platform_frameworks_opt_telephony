@@ -46,6 +46,30 @@
       "revId": "0cb5975d5930b0818a647a723c0cf9d5f6ffd9ae",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b0e5a18_cc9d0a52",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-29T17:41:11Z",
+      "side": 1,
+      "message": "OK, we should keep in mind one thing (which was missing in the design), We have replaced IccCardProxy with UiccProfile, but there is one fundamental difference between them, IccCardProxy will always exist even when card is removed, but UiccProfile will be disposed in that case, \"can not send ABSENT\" might be just one of the issues caused by this difference.",
+      "parentUuid": "ede68728_af720d60",
+      "range": {
+        "startLine": 105,
+        "startChar": 28,
+        "endLine": 105,
+        "endChar": 66
+      },
+      "revId": "0cb5975d5930b0818a647a723c0cf9d5f6ffd9ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
