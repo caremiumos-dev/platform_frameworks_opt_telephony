@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eed50412_ff9740c3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-01-30T06:38:23Z",
+      "side": 1,
+      "message": "I think it\u0027s better not to hard code the transport name here.\n\nHow do you think about something like this?\n\nSparseArray\u003cNetworkRegistrationManager\u003e mRegStateManagers;\nfor (int transportType : getTransportManager().getAvailableTransports()){\n    mRegStateManagers.put(transportType, new NetworkRegistrationManager(transportType));\n}",
+      "range": {
+        "startLine": 459,
+        "startChar": 12,
+        "endLine": 459,
+        "endChar": 59
+      },
+      "revId": "09fb782b27f7802b0a553f6ad15157f8213c564a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
