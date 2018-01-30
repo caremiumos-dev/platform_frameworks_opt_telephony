@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ae8217b_5834034b",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-30T18:51:30Z",
+      "side": 1,
+      "message": "The log needs to be updated too.",
+      "range": {
+        "startLine": 879,
+        "startChar": 12,
+        "endLine": 879,
+        "endChar": 99
+      },
+      "revId": "3a7f3c25083ca184d1ca2e4e8e89449b10b5df76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19cabf2c_ee61b054",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-30T18:51:30Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 897,
+        "startChar": 12,
+        "endLine": 897,
+        "endChar": 95
+      },
+      "revId": "3a7f3c25083ca184d1ca2e4e8e89449b10b5df76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
