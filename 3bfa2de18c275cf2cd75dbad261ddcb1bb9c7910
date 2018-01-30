@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4094bf9_206dabe6",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-30T00:35:46Z",
+      "side": 1,
+      "message": "The code structure can be organized better, because you are checking \"appState\" in those \"if else\" branches as well as the \"switch\" below, I think you can merge those \"if else\" into the \"switch\"",
+      "range": {
+        "startLine": 340,
+        "startChar": 21,
+        "endLine": 340,
+        "endChar": 23
+      },
+      "revId": "3bfa2de18c275cf2cd75dbad261ddcb1bb9c7910",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "33dfecb9_2f214ed6",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-30T00:35:46Z",
+      "side": 1,
+      "message": "Should we set the state to NOT_READY in this \"else\" branch?",
+      "range": {
+        "startLine": 411,
+        "startChar": 20,
+        "endLine": 411,
+        "endChar": 21
+      },
+      "revId": "3bfa2de18c275cf2cd75dbad261ddcb1bb9c7910",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
