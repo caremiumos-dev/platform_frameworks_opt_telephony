@@ -46,6 +46,30 @@
       "revId": "9107e3227fb5e8501d2ff8a012fd6c520fb7f1e1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5719e29d_21b77f0b",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-01-30T02:33:14Z",
+      "side": 1,
+      "message": "Can we set mSwitchingFgAndBgCalls to false and mCallExpectedToResume to null because we already switched the foreground and background in onCallHoldFailed. \n\nFor the scenario:\nDUT calls A\nDUT receives a call from B\nWhile DUT is trying to accept the waiting call from B, A terminates the call with the DUT and hold request for call with A is failed.\n\nThe code you pointed out are:\n\n               if (mForegroundCall.getState() \u003d\u003d ImsPhoneCall.State.HOLDING ||\n                        mRingingCall.getState() \u003d\u003d ImsPhoneCall.State.WAITING) {\n                    sendEmptyMessage(EVENT_RESUME_BACKGROUND);\n                    mSwitchingFgAndBgCalls \u003d false;\n                    mCallExpectedToResume \u003d null;\n                }\nCan we put the code out of the condition \"if (mSwitchingFgAndBgCalls) {\" \nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#2013",
+      "parentUuid": "2d071660_821f4950",
+      "range": {
+        "startLine": 2274,
+        "startChar": 0,
+        "endLine": 2276,
+        "endChar": 21
+      },
+      "revId": "9107e3227fb5e8501d2ff8a012fd6c520fb7f1e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
