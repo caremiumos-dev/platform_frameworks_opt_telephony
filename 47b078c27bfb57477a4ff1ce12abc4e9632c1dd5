@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c91b056_bf03d75c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-01-30T19:24:53Z",
+      "side": 1,
+      "message": "still needed?",
+      "range": {
+        "startLine": 585,
+        "startChar": 30,
+        "endLine": 585,
+        "endChar": 46
+      },
+      "revId": "47b078c27bfb57477a4ff1ce12abc4e9632c1dd5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
