@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbaf9cea_d64dc124",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-30T21:54:20Z",
+      "side": 1,
+      "message": "Just add this line above 243?",
+      "range": {
+        "startLine": 247,
+        "startChar": 12,
+        "endLine": 247,
+        "endChar": 33
+      },
+      "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8e80af4_c1ecdcfe",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-30T21:54:20Z",
+      "side": 1,
+      "message": "This comment is not precise anymore. It can be changed to \"If the EID is ready when this method is called, the registrant will be notified immediately.\"",
+      "range": {
+        "startLine": 116,
+        "startChar": 51,
+        "endLine": 117,
+        "endChar": 68
+      },
+      "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "720dd007_266ab280",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-30T21:54:20Z",
+      "side": 1,
+      "message": "You only need to add the new registrant into the list when EID is not ready.\n\nAnd mLock needs be used here in case this method is called from another thread.",
+      "range": {
+        "startLine": 121,
+        "startChar": 8,
+        "endLine": 121,
+        "endChar": 36
+      },
+      "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbfed0cb_742ff643",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-30T21:54:20Z",
+      "side": 1,
+      "message": "nit: EID",
+      "range": {
+        "startLine": 128,
+        "startChar": 39,
+        "endLine": 128,
+        "endChar": 42
+      },
+      "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ccf2069_2cf355ec",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/EuiccCardTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-01-30T21:54:20Z",
+      "side": 1,
+      "message": "Could you test the new methods? You can add a boolean to decide if this mock calls the real method for the tests, so that you don\u0027t need to modify existing tests.",
+      "range": {
+        "startLine": 107,
+        "startChar": 39,
+        "endLine": 107,
+        "endChar": 66
+      },
+      "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
