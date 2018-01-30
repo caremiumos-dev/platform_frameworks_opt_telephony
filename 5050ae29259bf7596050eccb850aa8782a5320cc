@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "34290a20_646250ed",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-30T20:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b31566f1_43d6699a",
+      "range": {
+        "startLine": 268,
+        "startChar": 87,
+        "endLine": 268,
+        "endChar": 89
+      },
+      "revId": "5050ae29259bf7596050eccb850aa8782a5320cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96f49e4b_42f0afbf",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 5
@@ -36,6 +60,24 @@
       "writtenOn": "2018-01-30T19:12:42Z",
       "side": 1,
       "message": "Being fixed by https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/603238",
+      "revId": "5050ae29259bf7596050eccb850aa8782a5320cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6dbfe39_76ee1ce7",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-30T20:05:34Z",
+      "side": 1,
+      "message": "Ying said I can make the changes together in this CL. I didn\u0027t include the unit test here. Will either wait for that one or just go ahead with this one.",
+      "parentUuid": "96f49e4b_42f0afbf",
       "revId": "5050ae29259bf7596050eccb850aa8782a5320cc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "934a0edb_24d5b295",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-30T20:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "685190c7_b0757962",
+      "range": {
+        "startLine": 116,
+        "startChar": 51,
+        "endLine": 117,
+        "endChar": 45
+      },
+      "revId": "5050ae29259bf7596050eccb850aa8782a5320cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd1bb001_932614f1",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 5
@@ -79,6 +145,24 @@
       "revId": "5050ae29259bf7596050eccb850aa8782a5320cc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "757c5bb3_a4422aee",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-01-30T20:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd1bb001_932614f1",
+      "revId": "5050ae29259bf7596050eccb850aa8782a5320cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
