@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c44e6b9c_93c18e6c",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-30T18:19:24Z",
+      "side": 1,
+      "message": "Throw a RuntimeException? Since the request is never called, this method should never be called either.",
+      "revId": "f11bf1bb6681bf9c6d5f2b0b1d138d308ab93368",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
