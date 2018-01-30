@@ -16,6 +16,24 @@
       "revId": "f11bf1bb6681bf9c6d5f2b0b1d138d308ab93368",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a60b8141_6d4f2c03",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-30T20:08:47Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "c44e6b9c_93c18e6c",
+      "revId": "f11bf1bb6681bf9c6d5f2b0b1d138d308ab93368",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
