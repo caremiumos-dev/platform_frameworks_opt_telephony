@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "34b4b452_9a82ca54",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-30T01:41:12Z",
+      "side": 1,
+      "message": "The switch case fall throughs would be messy. I can change the switch case below to if/else if that\u0027s easier for readability. Let me know what you think.",
+      "parentUuid": "f4094bf9_206dabe6",
+      "range": {
+        "startLine": 340,
+        "startChar": 21,
+        "endLine": 340,
+        "endChar": 23
+      },
+      "revId": "3bfa2de18c275cf2cd75dbad261ddcb1bb9c7910",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33dfecb9_2f214ed6",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-30T00:35:46Z",
       "side": 1,
       "message": "Should we set the state to NOT_READY in this \"else\" branch?",
+      "range": {
+        "startLine": 411,
+        "startChar": 20,
+        "endLine": 411,
+        "endChar": 21
+      },
+      "revId": "3bfa2de18c275cf2cd75dbad261ddcb1bb9c7910",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc382f77_ffa31d45",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-30T01:41:12Z",
+      "side": 1,
+      "message": "Was trying to keep behavior same as old, but I think it makes sense to do it now",
+      "parentUuid": "33dfecb9_2f214ed6",
       "range": {
         "startLine": 411,
         "startChar": 20,
