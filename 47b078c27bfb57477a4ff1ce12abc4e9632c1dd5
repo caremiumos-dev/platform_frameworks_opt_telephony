@@ -22,6 +22,30 @@
       "revId": "47b078c27bfb57477a4ff1ce12abc4e9632c1dd5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94f3cc30_186552f8",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-01-30T23:00:24Z",
+      "side": 1,
+      "message": "Yeah there are still some places tat use the disconnect notifier.",
+      "parentUuid": "7c91b056_bf03d75c",
+      "range": {
+        "startLine": 585,
+        "startChar": 30,
+        "endLine": 585,
+        "endChar": 46
+      },
+      "revId": "47b078c27bfb57477a4ff1ce12abc4e9632c1dd5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
