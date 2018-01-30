@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ae625d9f_30d44a5e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccProfileTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-30T19:26:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "854f8dbb_84b66f96",
+      "range": {
+        "startLine": 370,
+        "startChar": 8,
+        "endLine": 370,
+        "endChar": 77
+      },
+      "revId": "bd69ce7b32144f5a168f6e3536d4c37ddf0a62cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09fbb4b0_a814483e",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccProfileTest.java",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "87e80441_030dcccc",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccProfileTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-30T19:26:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09fbb4b0_a814483e",
+      "range": {
+        "startLine": 387,
+        "startChar": 8,
+        "endLine": 388,
+        "endChar": 91
+      },
+      "revId": "bd69ce7b32144f5a168f6e3536d4c37ddf0a62cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e674b7b_5651a13e",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccProfileTest.java",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2018-01-30T19:22:20Z",
       "side": 1,
       "message": "Should be LOADED?",
+      "range": {
+        "startLine": 389,
+        "startChar": 27,
+        "endLine": 389,
+        "endChar": 36
+      },
+      "revId": "bd69ce7b32144f5a168f6e3536d4c37ddf0a62cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a682bea_e9566686",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccProfileTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-30T19:26:46Z",
+      "side": 1,
+      "message": "I have uploaded another patch with the correct result.",
+      "parentUuid": "9e674b7b_5651a13e",
       "range": {
         "startLine": 389,
         "startChar": 27,
