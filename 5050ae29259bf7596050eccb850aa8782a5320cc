@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b31566f1_43d6699a",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-30T19:12:42Z",
+      "side": 1,
+      "message": "\u003d\u003d?\n\nAlso this code has been changed, please rebase your CL.",
+      "range": {
+        "startLine": 268,
+        "startChar": 87,
+        "endLine": 268,
+        "endChar": 89
+      },
+      "revId": "5050ae29259bf7596050eccb850aa8782a5320cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96f49e4b_42f0afbf",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-30T19:12:42Z",
+      "side": 1,
+      "message": "Being fixed by https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/603238",
+      "revId": "5050ae29259bf7596050eccb850aa8782a5320cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "685190c7_b0757962",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-30T19:12:42Z",
+      "side": 1,
+      "message": "This is a requirement for the caller? Comment doesn\u0027t seem correct.",
+      "range": {
+        "startLine": 116,
+        "startChar": 51,
+        "endLine": 117,
+        "endChar": 45
+      },
+      "revId": "5050ae29259bf7596050eccb850aa8782a5320cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd1bb001_932614f1",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-30T19:12:42Z",
+      "side": 1,
+      "message": "Also notify right away if EID is ready.",
+      "revId": "5050ae29259bf7596050eccb850aa8782a5320cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
