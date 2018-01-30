@@ -23,6 +23,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.BadParcelableException;
 import android.os.Build;
+import android.telephony.NetworkRegistrationState;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 
@@ -338,12 +339,12 @@ public class TelephonyTester {
         }
         if (mServiceStateTestIntent.hasExtra(EXTRA_VOICE_REG_STATE)) {
             ss.setVoiceRegState(mServiceStateTestIntent.getIntExtra(EXTRA_VOICE_REG_STATE,
-                    ServiceState.RIL_REG_STATE_UNKNOWN));
+                    NetworkRegistrationState.REG_STATE_UNKNOWN));
             log("Override voice reg state with " + ss.getVoiceRegState());
         }
         if (mServiceStateTestIntent.hasExtra(EXTRA_DATA_REG_STATE)) {
             ss.setDataRegState(mServiceStateTestIntent.getIntExtra(EXTRA_DATA_REG_STATE,
-                    ServiceState.RIL_REG_STATE_UNKNOWN));
+                    NetworkRegistrationState.REG_STATE_UNKNOWN));
             log("Override data reg state with " + ss.getDataRegState());
         }
         if (mServiceStateTestIntent.hasExtra(EXTRA_VOICE_RAT)) {
