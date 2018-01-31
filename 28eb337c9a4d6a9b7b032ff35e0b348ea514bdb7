@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "400b7acc_a48fde7d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-31T23:36:14Z",
+      "side": 1,
+      "message": "This title is a little bit confusing, are we fixing the issue that \"GsmCdmaPhone.getIccCard() never return null\", or we want to fix some issue so that \"GsmCdmaPhone.getIccCard() can return null\"?",
+      "range": {
+        "startLine": 7,
+        "startChar": 17,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "28eb337c9a4d6a9b7b032ff35e0b348ea514bdb7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

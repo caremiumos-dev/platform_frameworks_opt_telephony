@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b698ecea_22d6d9c7",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-31T23:36:14Z",
+      "side": 0,
+      "message": "Isn\u0027t this file deprecated? Should we modify UiccProfile?",
+      "range": {
+        "startLine": 385,
+        "startChar": 31,
+        "endLine": 385,
+        "endChar": 32
+      },
+      "revId": "4ce44fdede0fc78cf53c3803085b0bb980d5ff81",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bcb345b2_f7a12e02",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-31T23:36:14Z",
+      "side": 0,
+      "message": "So now which instance should notify the card is absent?",
+      "range": {
+        "startLine": 327,
+        "startChar": 16,
+        "endLine": 327,
+        "endChar": 33
+      },
+      "revId": "4ce44fdede0fc78cf53c3803085b0bb980d5ff81",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "147a093b_3f6bbabf",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-31T23:36:14Z",
+      "side": 0,
+      "message": "I think this unit test should be moved to some where else, we still need to test this absent case",
+      "range": {
+        "startLine": 103,
+        "startChar": 16,
+        "endLine": 103,
+        "endChar": 38
+      },
+      "revId": "4ce44fdede0fc78cf53c3803085b0bb980d5ff81",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
