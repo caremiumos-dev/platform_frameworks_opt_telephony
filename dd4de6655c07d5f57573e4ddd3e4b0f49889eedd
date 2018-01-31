@@ -187,6 +187,30 @@
       "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eab7143f_055f7050",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-01-31T23:49:32Z",
+      "side": 1,
+      "message": "For that instead of directly returning true, you should return \"mUiccApplications[0] \u003d\u003d null\".\n\nThink of the scenario where there is only 1 app which is not supported. Then this and those functions will return different values. That is not an expected scenario, but still code wise we should be consistent in the return value in that case.",
+      "parentUuid": "6d415a42_4d8e4b53",
+      "range": {
+        "startLine": 344,
+        "startChar": 16,
+        "endLine": 344,
+        "endChar": 44
+      },
+      "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
