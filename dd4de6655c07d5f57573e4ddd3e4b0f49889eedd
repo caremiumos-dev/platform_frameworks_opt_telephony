@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "54b538c5_82f3fce2",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-31T23:42:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0c52c9c_cd41e49a",
+      "range": {
+        "startLine": 310,
+        "startChar": 31,
+        "endLine": 310,
+        "endChar": 50
+      },
+      "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0b1b4364_59e9db3d",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-31T23:34:24Z",
       "side": 1,
       "message": "checkReadyOrLoaded",
+      "range": {
+        "startLine": 314,
+        "startChar": 25,
+        "endLine": 314,
+        "endChar": 44
+      },
+      "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea39f727_3a634481",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-31T23:42:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b1b4364_59e9db3d",
       "range": {
         "startLine": 314,
         "startChar": 25,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "426afcf3_7647708c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-31T23:42:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e2777d3_6401bd02",
+      "range": {
+        "startLine": 322,
+        "startChar": 21,
+        "endLine": 322,
+        "endChar": 40
+      },
+      "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6ac09909_05549f8b",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 8
@@ -82,6 +154,30 @@
       "writtenOn": "2018-01-31T23:34:24Z",
       "side": 1,
       "message": "This sort of does not match areAllApplicationsReady() and areAllRecordsLoaded(). If we feel this is the right check, then those methods should also return true only if mUiccApplications[0] \u003d\u003d null.",
+      "range": {
+        "startLine": 344,
+        "startChar": 16,
+        "endLine": 344,
+        "endChar": 44
+      },
+      "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d415a42_4d8e4b53",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-01-31T23:42:08Z",
+      "side": 1,
+      "message": "I made similar changes to areAllApplicationsReady()  and areAllRecordsLoaded(). But not exactly as \"return true only if mUiccApplications[0] \u003d\u003d null\". those methods will return true if all apps are ready, or  mUiccApplications[0] \u003d\u003d null (means no apps present).",
+      "parentUuid": "6ac09909_05549f8b",
       "range": {
         "startLine": 344,
         "startChar": 16,
