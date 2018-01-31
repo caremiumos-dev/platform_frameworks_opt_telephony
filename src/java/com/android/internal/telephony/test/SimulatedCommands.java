@@ -20,6 +20,7 @@ import android.hardware.radio.V1_0.DataRegStateResult;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
 import android.net.KeepalivePacketData;
 import android.net.LinkAddress;
+import android.net.LinkProperties;
 import android.net.NetworkUtils;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -1124,10 +1125,11 @@ public class SimulatedCommands extends BaseCommands
 
     @Override
     public void setupDataCall(int radioTechnology, DataProfile dataProfile, boolean isRoaming,
-                              boolean allowRoaming, Message result) {
+                              boolean allowRoaming, int reason, LinkProperties linkProperties,
+                              Message result) {
 
         SimulatedCommandsVerifier.getInstance().setupDataCall(radioTechnology, dataProfile,
-                isRoaming, allowRoaming, result);
+                isRoaming, allowRoaming, reason, linkProperties, result);
 
         if (mDcResponse == null) {
             try {

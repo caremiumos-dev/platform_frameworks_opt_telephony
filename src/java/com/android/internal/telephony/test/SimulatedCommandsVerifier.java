@@ -17,6 +17,7 @@
 package com.android.internal.telephony.test;
 
 import android.net.KeepalivePacketData;
+import android.net.LinkProperties;
 import android.os.Handler;
 import android.os.Message;
 import android.service.carrier.CarrierIdentifier;
@@ -1143,7 +1144,8 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
 
     @Override
     public void setupDataCall(int radioTechnology, DataProfile dataProfile, boolean isRoaming,
-                              boolean allowRoaming, Message result) {
+                              boolean allowRoaming, int reason, LinkProperties linkProperties,
+                              Message result) {
     }
 
     @Override

@@ -17,7 +17,6 @@
 package com.android.internal.telephony.metrics;
 
 import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
-
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ANSWER;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_CDMA_SEND_SMS;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_DEACTIVATE_DATA_CALL;
@@ -42,6 +41,7 @@ import android.telephony.ServiceState;
 import android.telephony.TelephonyHistogram;
 import android.telephony.TelephonyManager;
 import android.telephony.data.DataCallResponse;
+import android.telephony.data.DataService;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.SparseArray;
@@ -70,10 +70,10 @@ import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.Carrier
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.CarrierIdMatchingResult;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.ModemRestart;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.RilDeactivateDataCall;
+import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.RilDeactivateDataCall.DeactivateReason;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.RilSetupDataCall;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.RilSetupDataCallResponse;
-import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.RilSetupDataCallResponse
-        .RilDataCallFailCause;
+import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.RilSetupDataCallResponse.RilDataCallFailCause;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyLog;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyServiceState;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonySettings;
@@ -1045,6 +1045,15 @@ public class TelephonyMetrics {
 
         RilDeactivateDataCall deactivateDataCall = new RilDeactivateDataCall();
         deactivateDataCall.cid = cid;
+        switch (reason) {
+            case DataService.REQUEST_REASON_NORMAL:
+                deactivateDataCall.reason = DeactivateReason.DEACTIVATE_REASON_NONE;
+                break;
+            case DataService.REQUEST_REASON_SHUTDOWN:
+                deactivateDataCall.reason = DeactivateReason.DEACTIVATE_REASON_RADIO_OFF;
+                break;
+            case DataService.REQUEST_REASON_HANDOVER:
+        }
         deactivateDataCall.reason = reason + 1;
 
         addTelephonyEvent(new TelephonyEventBuilder(phoneId).setDeactivateDataCall(
