@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b0d3bdbe_5c25b58d",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T00:53:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a284752c_d990c304",
+      "revId": "70c781b434287a7ac54d3429e240bc08d486772f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "858fd6c2_014df1cd",
         "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "31e07e46_7df6de71",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1800,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T00:53:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "858fd6c2_014df1cd",
+      "revId": "70c781b434287a7ac54d3429e240bc08d486772f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f99a865_6ef74289",
         "filename": "src/java/com/android/internal/telephony/DefaultPhoneNotifier.java",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2018-01-25T04:40:15Z",
       "side": 1,
       "message": "nit blank line.",
+      "revId": "70c781b434287a7ac54d3429e240bc08d486772f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2b863927_2525f10e",
+        "filename": "src/java/com/android/internal/telephony/DefaultPhoneNotifier.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T00:53:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f99a865_6ef74289",
       "revId": "70c781b434287a7ac54d3429e240bc08d486772f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "6fd6431a_bd598f8e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5251,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T00:53:43Z",
+      "side": 1,
+      "message": "Deleted this method and moved the conversion inside the RadioIndication method.",
+      "parentUuid": "672683c4_fd590cd0",
+      "range": {
+        "startLine": 5251,
+        "startChar": 39,
+        "endLine": 5251,
+        "endChar": 71
+      },
+      "revId": "70c781b434287a7ac54d3429e240bc08d486772f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82bbd245_02746d15",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 2
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "c747ff70_07055837",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5253,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T00:53:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82bbd245_02746d15",
+      "revId": "70c781b434287a7ac54d3429e240bc08d486772f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4828de61_79d3e86f",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 2
@@ -104,6 +200,30 @@
       "writtenOn": "2018-01-25T04:40:15Z",
       "side": 1,
       "message": "I was recently told that we should not assume that RIL and HAL enum mappings are equivalent. Thus, please add explicit mapping logic here to take the HAL enum and convert to an AOSP enum. I know, sigh.",
+      "range": {
+        "startLine": 5256,
+        "startChar": 50,
+        "endLine": 5256,
+        "endChar": 58
+      },
+      "revId": "70c781b434287a7ac54d3429e240bc08d486772f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c46dc93_f91ae57e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5256,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T00:53:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4828de61_79d3e86f",
       "range": {
         "startLine": 5256,
         "startChar": 50,
