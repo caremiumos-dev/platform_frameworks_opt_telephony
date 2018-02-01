@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "529e68c7_4f46c6c6",
+        "filename": "src/java/com/android/internal/telephony/DefaultPhoneNotifier.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T01:34:58Z",
+      "side": 1,
+      "message": "it misses by 4 characters :/",
+      "parentUuid": "dda8567f_fb98c6f1",
+      "range": {
+        "startLine": 237,
+        "startChar": 12,
+        "endLine": 237,
+        "endChar": 50
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d199cd1_0be07bfc",
         "filename": "src/java/com/android/internal/telephony/Phone.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-01T01:19:52Z",
       "side": 1,
       "message": "nit: suggest to remove the comment. Seems like the style is to omit boilerplate comments such as this one.",
+      "range": {
+        "startLine": 2141,
+        "startChar": 4,
+        "endLine": 2141,
+        "endChar": 56
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "77f0c3ad_0a35c01d",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T01:34:58Z",
+      "side": 1,
+      "message": "repo\u0027s presubmit hooks yelled at me when I didn\u0027t have it. Same with the other useless boilerplate comments. I can skip the upload hooks if you think that\u0027s better.",
+      "parentUuid": "0d199cd1_0be07bfc",
       "range": {
         "startLine": 2141,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "654eba0d_e3a18c04",
+        "filename": "src/java/com/android/internal/telephony/PhoneNotifier.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T01:34:58Z",
+      "side": 1,
+      "message": "same as the other useless comment; upload hooks",
+      "parentUuid": "1ba20312_01c4316e",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 60
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df97e925_3daaec88",
         "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
         "patchSetId": 4
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "94f3ee14_9669078c",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T01:34:58Z",
+      "side": 1,
+      "message": "I wasn\u0027t sure about this either. I didn\u0027t even add an option in PhysicalChannelConfig\u0027s ConnectionStatus for UNKNOWN. Should I add it and then use that here?\n\nhttps://cs.corp.google.com/aosp-master/frameworks/base/telephony/java/android/telephony/PhysicalChannelConfig.java?dr\u0026q\u003dPhysicalChannelConf\u0026l\u003d31",
+      "parentUuid": "df97e925_3daaec88",
+      "range": {
+        "startLine": 266,
+        "startChar": 20,
+        "endLine": 266,
+        "endChar": 28
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "090ed395_a2bfc83b",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneStateListenerTest.java",
         "patchSetId": 4
@@ -105,6 +201,30 @@
       "writtenOn": "2018-02-01T01:19:52Z",
       "side": 1,
       "message": "does this fit on the previous line?",
+      "range": {
+        "startLine": 69,
+        "startChar": 23,
+        "endLine": 69,
+        "endChar": 62
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2556074_29915d4e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneStateListenerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T01:34:58Z",
+      "side": 1,
+      "message": "no :(",
+      "parentUuid": "090ed395_a2bfc83b",
       "range": {
         "startLine": 69,
         "startChar": 23,
