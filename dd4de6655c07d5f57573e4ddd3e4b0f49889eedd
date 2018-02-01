@@ -259,6 +259,30 @@
       "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c527a0f_ca80029f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-01T00:49:41Z",
+      "side": 1,
+      "message": "Solved offline. Return LOADED when there is no app or there is no supported app",
+      "parentUuid": "30051527_35cfe0e1",
+      "range": {
+        "startLine": 344,
+        "startChar": 16,
+        "endLine": 344,
+        "endChar": 44
+      },
+      "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
