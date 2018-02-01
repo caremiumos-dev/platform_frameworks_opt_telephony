@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "8837f035_2833d352",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-01T01:42:31Z",
+      "side": 1,
+      "message": "groan. Nah, leave it.",
+      "parentUuid": "77f0c3ad_0a35c01d",
+      "range": {
+        "startLine": 2141,
+        "startChar": 4,
+        "endLine": 2141,
+        "endChar": 56
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ba20312_01c4316e",
         "filename": "src/java/com/android/internal/telephony/PhoneNotifier.java",
         "patchSetId": 4
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "I wasn\u0027t sure about this either. I didn\u0027t even add an option in PhysicalChannelConfig\u0027s ConnectionStatus for UNKNOWN. Should I add it and then use that here?\n\nhttps://cs.corp.google.com/aosp-master/frameworks/base/telephony/java/android/telephony/PhysicalChannelConfig.java?dr\u0026q\u003dPhysicalChannelConf\u0026l\u003d31",
       "parentUuid": "df97e925_3daaec88",
+      "range": {
+        "startLine": 266,
+        "startChar": 20,
+        "endLine": 266,
+        "endChar": 28
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e33109f6_e79cd99f",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-01T01:42:31Z",
+      "side": 1,
+      "message": "The Radio API shouldn\u0027t have an Unknown, but the CellConnectionStatus probably needs one, no? Fortunately it\u0027s hidden in PhysicalChannelConfig so I think adding an IDK value is a trivial thing (no change to the public API).\n\nWe did that thing where we defined the enums twice at the higher level too... in Java can we do better than we did in the HAL and re-use the enum values or would that just wreak havoc?",
+      "parentUuid": "94f3ee14_9669078c",
       "range": {
         "startLine": 266,
         "startChar": 20,
