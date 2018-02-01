@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "e823ba68_10ddbfcf",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-01T02:21:12Z",
+      "side": 1,
+      "message": "The double enum definition was a thing I didn\u0027t really have a good answer for. Either I define them twice in separate classes, or I have PhysicalChannelConfig use CellInfo\u0027s CellConnectionStatus interface. It felt a little weird to contaminate PhysicalChannelConfig like that, especially since it can only be a subset of those enums--no CONNECTION_NONE for PhyChanConf. But I agree with you; I don\u0027t like the double definition.\n\nIs there ever a situation where someone would want to compare a PhysicalChannelConfig\u0027s ConnectionStatus with a CellInfo\u0027s ConnectionStatus? If so then we should absolutely go ahead and have PhyChanConf use CellInfo.ConnectionStatus. And it\u0027s trivial to swap out PhyChanConf\u0027s ConnectionStatus for CellInfo\u0027s since it\u0027s @hide.\n\nCellInfo, for comparison.\nhttps://cs.corp.google.com/android/frameworks/base/telephony/java/android/telephony/CellInfo.java?dr\u0026q\u003dcellinfo.jav\u0026l\u003d55",
+      "parentUuid": "e33109f6_e79cd99f",
+      "range": {
+        "startLine": 266,
+        "startChar": 20,
+        "endLine": 266,
+        "endChar": 28
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "090ed395_a2bfc83b",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneStateListenerTest.java",
         "patchSetId": 4
