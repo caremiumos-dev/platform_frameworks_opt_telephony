@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dda8567f_fb98c6f1",
+        "filename": "src/java/com/android/internal/telephony/DefaultPhoneNotifier.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-01T01:19:52Z",
+      "side": 1,
+      "message": "nit: I think this will fit on the line above.",
+      "range": {
+        "startLine": 237,
+        "startChar": 12,
+        "endLine": 237,
+        "endChar": 50
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d199cd1_0be07bfc",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-01T01:19:52Z",
+      "side": 1,
+      "message": "nit: suggest to remove the comment. Seems like the style is to omit boilerplate comments such as this one.",
+      "range": {
+        "startLine": 2141,
+        "startChar": 4,
+        "endLine": 2141,
+        "endChar": 56
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ba20312_01c4316e",
+        "filename": "src/java/com/android/internal/telephony/PhoneNotifier.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-01T01:19:52Z",
+      "side": 1,
+      "message": "This comment isn\u0027t adding value; suggest to remove.",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 60
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df97e925_3daaec88",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-01T01:19:52Z",
+      "side": 1,
+      "message": "The effect here is to drop results that are not well-formatted. Should we instead set the status to UNKNOWN and log a nasty message in the log? My concern is that if we drop the result on the floor when it\u0027s possible to continue processing it, then we\u0027ll accidentally filter this stuff without providing the possibility of failing a CTS test with invalid data with the value coerced to UNKNOWN (which we support for backwards compatibility).",
+      "range": {
+        "startLine": 266,
+        "startChar": 20,
+        "endLine": 266,
+        "endChar": 28
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "090ed395_a2bfc83b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneStateListenerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-01T01:19:52Z",
+      "side": 1,
+      "message": "does this fit on the previous line?",
+      "range": {
+        "startLine": 69,
+        "startChar": 23,
+        "endLine": 69,
+        "endChar": 62
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
