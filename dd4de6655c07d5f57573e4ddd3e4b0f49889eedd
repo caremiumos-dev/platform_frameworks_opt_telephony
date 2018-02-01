@@ -211,6 +211,30 @@
       "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3eab1b83_d0a82e05",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-01T00:01:58Z",
+      "side": 1,
+      "message": "mUiccApplications[0] \u003d\u003d null definitely won\u0027t work, in normal cases, when all apps are ready/loaded, this function will never return true.\nIf there is one app which is not supported, we should directly return true because \"all supported apps\" is ready, so the logic here is clear. As for here, the only logic has been changed is that when there is no apps, we will try different logic, this won\u0027t affect the case when there is only 1 app but not supported, because this new branch is inside mUiccApplication \u003d\u003d null, we always return NOT_READY before/after this change.",
+      "parentUuid": "eab7143f_055f7050",
+      "range": {
+        "startLine": 344,
+        "startChar": 16,
+        "endLine": 344,
+        "endChar": 44
+      },
+      "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
