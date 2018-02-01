@@ -235,6 +235,30 @@
       "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30051527_35cfe0e1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-02-01T00:19:03Z",
+      "side": 1,
+      "message": "Sure mUiccApplications[0] \u003d\u003d null won\u0027t work, and things will work fine in normal cases. But when there are only non-supported apps, or let\u0027s say just one app and it is not supported, then this code will return NOT_READY, whereas the ready/loaded functions will return true. Isn\u0027t that right, or am I missing something? I think we should not have this inconsistency.",
+      "parentUuid": "3eab1b83_d0a82e05",
+      "range": {
+        "startLine": 344,
+        "startChar": 16,
+        "endLine": 344,
+        "endChar": 44
+      },
+      "revId": "dd4de6655c07d5f57573e4ddd3e4b0f49889eedd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
