@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a36786c_57305c1c",
+        "filename": "src/java/com/android/internal/telephony/gsm/SuppServiceNotification.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-02-02T19:44:16Z",
+      "side": 1,
+      "message": "This seems less intuitive than MO/MT",
+      "range": {
+        "startLine": 45,
+        "startChar": 46,
+        "endLine": 45,
+        "endChar": 52
+      },
+      "revId": "1d9a42c24b4914af578f3acce6fbdc10a0fa63db",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
