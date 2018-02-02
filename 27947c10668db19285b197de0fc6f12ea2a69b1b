@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41d24099_a808a1f8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-02-02T22:27:36Z",
+      "side": 1,
+      "message": "Is this needed as a separate function now?",
+      "revId": "27947c10668db19285b197de0fc6f12ea2a69b1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ccb9326_4b44c675",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-02-02T22:27:36Z",
+      "side": 1,
+      "message": "Sorry for the back and forth, but should this instead be \"mUiccApplication !\u003d null\" to match updateExternalState()? Maybe that makes more sense?",
+      "range": {
+        "startLine": 889,
+        "startChar": 15,
+        "endLine": 889,
+        "endChar": 37
+      },
+      "revId": "27947c10668db19285b197de0fc6f12ea2a69b1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
