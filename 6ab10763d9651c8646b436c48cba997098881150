@@ -286,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "2e636745_d7c1ff10",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2018-02-02T00:44:45Z",
+      "side": 1,
+      "message": "Should we give an error?",
+      "parentUuid": "925a56cb_58bec9c6",
+      "range": {
+        "startLine": 266,
+        "startChar": 20,
+        "endLine": 266,
+        "endChar": 28
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "090ed395_a2bfc83b",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneStateListenerTest.java",
         "patchSetId": 4
