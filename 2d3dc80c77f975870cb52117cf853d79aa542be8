@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "35c82117_677ef1da",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-02-02T21:41:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b40c806f_c55a39d5",
+      "revId": "2d3dc80c77f975870cb52117cf853d79aa542be8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d68cef07_f1d7fa36",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "d7422caf_f26aa084",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-02-02T21:41:25Z",
+      "side": 1,
+      "message": "I actually thought about that. \"CheckService\" is not accurate but something like \"CheckServiceBoundAndRespondWithErrorIfNeeded\" is also too overkilled.",
+      "parentUuid": "d68cef07_f1d7fa36",
+      "revId": "2d3dc80c77f975870cb52117cf853d79aa542be8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "476b8fb7_d06b754c",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2018-02-02T21:24:47Z",
       "side": 1,
       "message": "Nitpick: logd?",
+      "revId": "2d3dc80c77f975870cb52117cf853d79aa542be8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "396c3307_83d7cb77",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-02-02T21:41:25Z",
+      "side": 1,
+      "message": "We have other places use log and loge. So should be fine.",
+      "parentUuid": "476b8fb7_d06b754c",
       "revId": "2d3dc80c77f975870cb52117cf853d79aa542be8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
