@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "769f6bf2_915a332e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-02-02T01:43:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbaf9cea_d64dc124",
+      "range": {
+        "startLine": 247,
+        "startChar": 12,
+        "endLine": 247,
+        "endChar": 33
+      },
+      "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8e80af4_c1ecdcfe",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "275a5089_8b53ef88",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-02-02T01:43:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8e80af4_c1ecdcfe",
+      "range": {
+        "startLine": 116,
+        "startChar": 51,
+        "endLine": 117,
+        "endChar": 68
+      },
+      "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "69cfabad_0de65225",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-02-02T01:43:40Z",
+      "side": 1,
+      "message": "Done.\nRegistrantList.add() and remove() are synchronized.",
+      "parentUuid": "720dd007_266ab280",
+      "range": {
+        "startLine": 121,
+        "startChar": 8,
+        "endLine": 121,
+        "endChar": 36
+      },
+      "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dbfed0cb_742ff643",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 7
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "efee7010_6cae5d83",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-02-02T01:43:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbfed0cb_742ff643",
+      "range": {
+        "startLine": 128,
+        "startChar": 39,
+        "endLine": 128,
+        "endChar": 42
+      },
+      "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ccf2069_2cf355ec",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/EuiccCardTest.java",
         "patchSetId": 7
@@ -114,6 +210,30 @@
       "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c538c2f8_b4b162d5",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/EuiccCardTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-02-02T01:43:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ccf2069_2cf355ec",
+      "range": {
+        "startLine": 107,
+        "startChar": 39,
+        "endLine": 107,
+        "endChar": 66
+      },
+      "revId": "a1cefb6e3c8d2abc1127ffdf2bab824529ec1592",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
