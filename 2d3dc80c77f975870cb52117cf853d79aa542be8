@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b40c806f_c55a39d5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-02-02T21:24:47Z",
+      "side": 1,
+      "message": "Remove message from mMessageMap, and send completeMessage to target.\nSame below.",
+      "revId": "2d3dc80c77f975870cb52117cf853d79aa542be8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d68cef07_f1d7fa36",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-02-02T21:24:47Z",
+      "side": 1,
+      "message": "Since all functions use the same code here, we can make it a private method in future.",
+      "revId": "2d3dc80c77f975870cb52117cf853d79aa542be8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "476b8fb7_d06b754c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-02-02T21:24:47Z",
+      "side": 1,
+      "message": "Nitpick: logd?",
+      "revId": "2d3dc80c77f975870cb52117cf853d79aa542be8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
