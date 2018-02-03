@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "d9b7b35d_ba461531",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-02-03T00:24:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5023a3a_f187dfc4",
+      "revId": "2d3dc80c77f975870cb52117cf853d79aa542be8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d68cef07_f1d7fa36",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
         "patchSetId": 2
