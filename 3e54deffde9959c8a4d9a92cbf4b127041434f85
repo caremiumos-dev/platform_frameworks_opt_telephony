@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c265026f_d48b67db",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-02-05T02:13:27Z",
+      "side": 1,
+      "message": "Instead of this move it under if (DBG)?",
+      "revId": "3e54deffde9959c8a4d9a92cbf4b127041434f85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
