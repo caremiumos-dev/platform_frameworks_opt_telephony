@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7406d2_871289b9",
+        "filename": "Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2018-02-05T18:52:53Z",
+      "side": 1,
+      "message": "Generally, a comment explaining why this has been done would be good.\n\ne.g.\n\n# This module pinned to 1.8 to decouple JarJar v53 support from other 1.9 support work. http://b/xyz",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 27
+      },
+      "revId": "8ad4c9b412d82df7488dfdff33f191f895997af2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
