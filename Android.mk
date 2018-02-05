@@ -39,6 +39,7 @@ LOCAL_MODULE := telephony-common
 LOCAL_PROTOC_OPTIMIZE_TYPE := nano
 LOCAL_PROTO_JAVA_OUTPUT_PARAMS := store_unknown_fields=true,enum_style=java
 
+LOCAL_JAVA_LANGUAGE_VERSION := 1.8
 LOCAL_JARJAR_RULES := $(LOCAL_PATH)/jarjar-rules.txt
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk $(LOCAL_PATH)/jarjar-rules.txt
 
