@@ -1,0 +1,395 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4fddfd86_b74f8e13",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "it will be initialized to 0 by default. No need to specify it here",
+      "range": {
+        "startLine": 55,
+        "startChar": 38,
+        "endLine": 55,
+        "endChar": 42
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b317f0ec_d7312648",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "nit: No need to use else.",
+      "range": {
+        "startLine": 65,
+        "startChar": 9,
+        "endLine": 65,
+        "endChar": 16
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be52f78a_d6376961",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "could be just null?",
+      "range": {
+        "startLine": 73,
+        "startChar": 28,
+        "endLine": 73,
+        "endChar": 32
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a940f4f_01493462",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "No need to call byteValue(). It will be auto-unboxed. Also in other places.",
+      "range": {
+        "startLine": 73,
+        "startChar": 56,
+        "endLine": 73,
+        "endChar": 68
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5301d91a_bd14d21f",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "this should be 2, otherwise there may be index out of bound exception",
+      "range": {
+        "startLine": 78,
+        "startChar": 53,
+        "endLine": 78,
+        "endChar": 54
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f1146a3_7f596872",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "nit: return early on error (also in some other parse methods)\n\nif (index \u003e\u003d atrBytes.length) {\n    loge(\"Failed to read the convention byte.\");\n    return -1;\n}\n\nbyte value \u003d atrBytes[index];\n...",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 9
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e93539a_bc3faf2b",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "This seems not necessary. mHistoricalBytes should be enough.",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 115,
+        "endChar": 30
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b29741e6_cb3e95a5",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "No need to use else.",
+      "range": {
+        "startLine": 174,
+        "startChar": 17,
+        "endLine": 174,
+        "endChar": 24
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "030fd356_5bccf485",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "nit: For similar code, you can put the break/return/continue as the first branch to jump out early, so that you don\u0027t need an else branch to make the code a bit simpler and also reduce the indentation.",
+      "range": {
+        "startLine": 184,
+        "startChar": 12,
+        "endLine": 186,
+        "endChar": 13
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a92753d_3046f7b8",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "Use System.arrayCopy:\n\nif (mHistoricalBytes.length + index \u003e atrBytes.length) {\n    loge(\"Failed to read the historical bytes when i \u003d \" + i);\n    return -1;\n}\nif (mHistoricalBytes \u003e 0) {\n    System.arrayCopy(atrBytes, index, mHistoricalBytes, 0, mHistoricalBytes.length);\n}\nreturn index + mHistoricalBytes.length;",
+      "range": {
+        "startLine": 192,
+        "startChar": 8,
+        "endLine": 200,
+        "endChar": 9
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffa34be1_d44710d6",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "It\u0027s better to return byte. You can have another method to return a boolean, e.g., hasTA().",
+      "range": {
+        "startLine": 278,
+        "startChar": 15,
+        "endLine": 278,
+        "endChar": 19
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91fd693b_e7b6f81f",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "Objects.hash",
+      "range": {
+        "startLine": 342,
+        "startChar": 19,
+        "endLine": 342,
+        "endChar": 64
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5834f84c_8f02305b",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "byte",
+      "range": {
+        "startLine": 366,
+        "startChar": 11,
+        "endLine": 366,
+        "endChar": 15
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "678122b3_9140c1d0",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "byte\n\nBut do we actually need to expose format byte? It contains the interface mask for the first interface bytes and the length of historical bytes, which are all exposed by other methods.",
+      "range": {
+        "startLine": 370,
+        "startChar": 11,
+        "endLine": 370,
+        "endChar": 15
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "713d0617_c00afeec",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "List",
+      "range": {
+        "startLine": 374,
+        "startChar": 11,
+        "endLine": 374,
+        "endChar": 20
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b5c8937_17fda436",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "If this can be null, add @Nullable",
+      "range": {
+        "startLine": 382,
+        "startChar": 11,
+        "endLine": 382,
+        "endChar": 15
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e089d9c_700272a0",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-02-05T22:21:44Z",
+      "side": 1,
+      "message": "getConventionByte()",
+      "range": {
+        "startLine": 397,
+        "startChar": 24,
+        "endLine": 397,
+        "endChar": 84
+      },
+      "revId": "195519376877ed09a93c4b37b2b0ea7d33c3493e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
