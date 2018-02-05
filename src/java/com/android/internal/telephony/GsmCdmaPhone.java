@@ -683,6 +683,17 @@ public class GsmCdmaPhone extends Phone {
         TelephonyManager.setTelephonyProperty(mPhoneId, property, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setGlobalSystemProperty(String property, String value) {
+        if (getUnitTestMode()) {
+            return;
+        }
+        TelephonyManager.setTelephonyProperty(property, value);
+    }
+
     @Override
     public void registerForSuppServiceNotification(
             Handler h, int what, Object obj) {

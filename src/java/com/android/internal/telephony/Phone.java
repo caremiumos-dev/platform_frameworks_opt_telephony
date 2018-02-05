@@ -408,11 +408,21 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
-     * Set a system property, unless we're in unit test mode
+     * Set a system property for the current phone, unless we're in unit test mode
      */
     // CAF_MSIM TODO this need to be replated with TelephonyManager API ?
     public void setSystemProperty(String property, String value) {
-        if(getUnitTestMode()) {
+        if (getUnitTestMode()) {
+            return;
+        }
+        SystemProperties.set(property, value);
+    }
+
+    /**
+     * Set a system property for all phones, unless we're in unit test mode
+     */
+    public void setGlobalSystemProperty(String property, String value) {
+        if (getUnitTestMode()) {
             return;
         }
         SystemProperties.set(property, value);
