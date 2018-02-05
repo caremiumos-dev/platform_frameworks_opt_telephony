@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "c18eff80_57d976d4",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2fa3e36_e536d82a",
+      "range": {
+        "startLine": 58,
+        "startChar": 32,
+        "endLine": 58,
+        "endChar": 36
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b5852f00_d3148c1f",
         "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
         "patchSetId": 1
@@ -60,6 +84,30 @@
       "writtenOn": "2018-02-02T22:49:50Z",
       "side": 1,
       "message": "consider to use byte instead of sub strings as almost all parsing work is done on single byte",
+      "range": {
+        "startLine": 69,
+        "startChar": 19,
+        "endLine": 69,
+        "endChar": 37
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d197b21_b0d4383d",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5852f00_d3148c1f",
       "range": {
         "startLine": 69,
         "startChar": 19,
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "1a3a1673_4e0d8627",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Changed to use byte arrays instead of string, so this method is no longer needed",
+      "parentUuid": "5a63686f_3b7a472d",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 55
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f1da53bc_dd50ddb5",
         "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
         "patchSetId": 1
@@ -106,6 +178,30 @@
       "writtenOn": "2018-02-02T22:49:50Z",
       "side": 1,
       "message": "It can be more clear to extract the eUICC logic into another method after we get all interface bytes.",
+      "range": {
+        "startLine": 103,
+        "startChar": 16,
+        "endLine": 103,
+        "endChar": 41
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d33d77f_60af956c",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1da53bc_dd50ddb5",
       "range": {
         "startLine": 103,
         "startChar": 16,
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "7b703a29_3b2f38eb",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "The logic of checking whether eUICC is supported has been moved out of the parsing.",
+      "parentUuid": "6b6c2e3f_756cd219",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 62
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1666858_b57fec3c",
         "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
         "patchSetId": 1
@@ -152,6 +272,30 @@
       "writtenOn": "2018-02-05T02:11:59Z",
       "side": 1,
       "message": "Increment index in this case?\n\nTo avoid such errors, would it make sense to increment index in readNextByteOrNull()?",
+      "range": {
+        "startLine": 199,
+        "startChar": 14,
+        "endLine": 199,
+        "endChar": 18
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3497f838_797c9267",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "this method is no longer needed",
+      "parentUuid": "e1666858_b57fec3c",
       "range": {
         "startLine": 199,
         "startChar": 14,
@@ -187,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "77423df7_4b7835a5",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "changed to byte arrays",
+      "parentUuid": "1720d152_9b344644",
+      "range": {
+        "startLine": 208,
+        "startChar": 42,
+        "endLine": 208,
+        "endChar": 45
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "40e3f361_8c53a9c4",
         "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
         "patchSetId": 1
@@ -198,6 +366,30 @@
       "writtenOn": "2018-02-02T22:49:50Z",
       "side": 1,
       "message": "make these final, or private and add public getters \u0026 private setters",
+      "range": {
+        "startLine": 256,
+        "startChar": 8,
+        "endLine": 260,
+        "endChar": 0
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1f19e89_1a8c358c",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40e3f361_8c53a9c4",
       "range": {
         "startLine": 256,
         "startChar": 8,
@@ -233,6 +425,30 @@
     },
     {
       "key": {
+        "uuid": "ab828fba_ea49321e",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30662537_b8a749cb",
+      "range": {
+        "startLine": 261,
+        "startChar": 8,
+        "endLine": 261,
+        "endChar": 14
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "61e078de_0de00b80",
         "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
         "patchSetId": 1
@@ -244,6 +460,30 @@
       "writtenOn": "2018-02-02T22:49:50Z",
       "side": 1,
       "message": "can be private",
+      "range": {
+        "startLine": 268,
+        "startChar": 8,
+        "endLine": 268,
+        "endChar": 14
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75c10f4c_3753d3de",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Needed by the unit test, added the annotation.",
+      "parentUuid": "61e078de_0de00b80",
       "range": {
         "startLine": 268,
         "startChar": 8,
@@ -279,6 +519,30 @@
     },
     {
       "key": {
+        "uuid": "5f0a440f_4ecc4604",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89a610f8_355c0933",
+      "range": {
+        "startLine": 276,
+        "startChar": 23,
+        "endLine": 276,
+        "endChar": 29
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "37f72d0b_972f60be",
         "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
         "patchSetId": 1
@@ -290,6 +554,30 @@
       "writtenOn": "2018-02-02T22:49:50Z",
       "side": 1,
       "message": "if (this \u003d\u003d o) {\n            return true;\n        }\n        if (o \u003d\u003d null || getClass() !\u003d obj.getClass()) {\n            return false;\n        }",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 286,
+        "endChar": 13
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "332a273c_7984a5a6",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37f72d0b_972f60be",
       "range": {
         "startLine": 277,
         "startChar": 0,
@@ -325,6 +613,30 @@
     },
     {
       "key": {
+        "uuid": "357e48a7_591b0246",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8e3cc71_e5ae65fb",
+      "range": {
+        "startLine": 287,
+        "startChar": 11,
+        "endLine": 290,
+        "endChar": 72
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb145c91_816f3a17",
         "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
         "patchSetId": 1
@@ -336,6 +648,30 @@
       "writtenOn": "2018-02-02T22:49:50Z",
       "side": 1,
       "message": "static",
+      "range": {
+        "startLine": 294,
+        "startChar": 17,
+        "endLine": 294,
+        "endChar": 20
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45ad41bf_3e5c3699",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb145c91_816f3a17",
       "range": {
         "startLine": 294,
         "startChar": 17,
@@ -371,6 +707,30 @@
     },
     {
       "key": {
+        "uuid": "36188ed6_35c55065",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2529e66_055a741b",
+      "range": {
+        "startLine": 298,
+        "startChar": 17,
+        "endLine": 298,
+        "endChar": 21
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "40cb068a_33b63435",
         "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
         "patchSetId": 1
@@ -382,6 +742,30 @@
       "writtenOn": "2018-02-02T22:49:50Z",
       "side": 1,
       "message": "this can be put into InterfaceBytes.toString()",
+      "range": {
+        "startLine": 337,
+        "startChar": 12,
+        "endLine": 342,
+        "endChar": 27
+      },
+      "revId": "9e22872832782bfe5766c83f86ec368c7446eb16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ef7d75e_ca8ab89b",
+        "filename": "src/java/com/android/internal/telephony/AnswerToReset.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-02-05T18:28:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40cb068a_33b63435",
       "range": {
         "startLine": 337,
         "startChar": 12,
