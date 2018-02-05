@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7e075e2_2cfc8ec4",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-02-05T05:50:52Z",
+      "side": 1,
+      "message": "Is this needed only for ready/loaded? I think it should be done for locked SIMs as well, assuming EID can be read for locked eSIMs and some/all of the locked states handled above are applicable to eSIMs as well.\n\nAlso I believe this check is needed in case of mUiccApplication \u003d\u003d null as well, and it should probably be added before that.",
+      "range": {
+        "startLine": 410,
+        "startChar": 35,
+        "endLine": 410,
+        "endChar": 75
+      },
+      "revId": "7801495b1f5dc82933304573526789a6185947d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23492099_d1fd0851",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-02-05T05:50:52Z",
+      "side": 1,
+      "message": "You can revert this part and rebase your CL. It has already been fixed by Ying\u0027s latest CL.",
+      "revId": "7801495b1f5dc82933304573526789a6185947d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2973dcb7_9ec033e5",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-02-05T05:50:52Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "7801495b1f5dc82933304573526789a6185947d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
