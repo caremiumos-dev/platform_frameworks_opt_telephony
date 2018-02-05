@@ -24,4 +24,5 @@ java_library_static {
     srcs: ["src/**/*.proto"],
     no_framework_libs: true,
     jarjar_rules: "jarjar-rules.txt",
+    java_version: "1.8",
 }
