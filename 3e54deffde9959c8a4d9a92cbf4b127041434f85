@@ -16,6 +16,24 @@
       "revId": "3e54deffde9959c8a4d9a92cbf4b127041434f85",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5679e548_ce745e8e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2018-02-05T19:32:02Z",
+      "side": 1,
+      "message": "Re-added a log statement under if (DBG), but I still removed the stack trace because I don\u0027t think it\u0027s helpful - it\u0027s always going to be exactly the same trace. Instead I just log the package name.",
+      "parentUuid": "c265026f_d48b67db",
+      "revId": "3e54deffde9959c8a4d9a92cbf4b127041434f85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
