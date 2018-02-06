@@ -59,6 +59,7 @@ public class UiccSlot extends Handler {
     private boolean mIsEuicc;
     private String mIccId;
     private Integer mPhoneId = null;
+    private AnswerToReset mAtr;
 
     private static final int EVENT_CARD_REMOVED = 13;
     private static final int EVENT_CARD_ADDED = 14;
@@ -161,9 +162,20 @@ public class UiccSlot extends Handler {
         }
     }
 
+    private void checkIsEuiccSupported() {
+        if (mAtr != null && mAtr.isEuiccSupported()) {
+            mIsEuicc = true;
+        } else {
+            mIsEuicc = false;
+        }
+    }
+
     private void parseAtr(String atr) {
-        // todo - parse atr and set mIsEuicc based on it
-        mIsEuicc = false;
+        mAtr = AnswerToReset.parseAtr(atr);
+        if (mAtr == null) {
+            return;
+        }
+        checkIsEuiccSupported();
     }
 
     public boolean isEuicc() {
