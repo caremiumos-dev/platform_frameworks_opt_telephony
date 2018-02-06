@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a70f5d22_7a5ed9b9",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-02-06T22:32:37Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we mock ATR in these tests, and test the actual parsing in the AtrTests?",
+      "range": {
+        "startLine": 135,
+        "startChar": 19,
+        "endLine": 135,
+        "endChar": 53
+      },
+      "revId": "3497558f195aefcfa7fa0ed14f593f8fb55247ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
