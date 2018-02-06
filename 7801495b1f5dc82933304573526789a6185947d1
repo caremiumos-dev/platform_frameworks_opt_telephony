@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3db87584_242c99d5",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-02-06T19:49:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7e075e2_2cfc8ec4",
+      "range": {
+        "startLine": 410,
+        "startChar": 35,
+        "endLine": 410,
+        "endChar": 75
+      },
+      "revId": "7801495b1f5dc82933304573526789a6185947d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23492099_d1fd0851",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 8
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "18b93fb8_b07c9012",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-02-06T19:49:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23492099_d1fd0851",
+      "revId": "7801495b1f5dc82933304573526789a6185947d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2973dcb7_9ec033e5",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 8
@@ -56,6 +98,24 @@
       "revId": "7801495b1f5dc82933304573526789a6185947d1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ace14f4_922b151f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-02-06T19:49:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2973dcb7_9ec033e5",
+      "revId": "7801495b1f5dc82933304573526789a6185947d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
