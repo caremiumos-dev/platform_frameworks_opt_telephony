@@ -334,6 +334,30 @@
     },
     {
       "key": {
+        "uuid": "0d6c7cc1_97e66152",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-06T19:23:09Z",
+      "side": 1,
+      "message": "I added a loge to the default case and filed a bug to redefine the enums in a central location. I think putting the enums in TelephonyManager is a good idea. I\u0027d prefer to add it to a follow-up CL though since it is an API change.",
+      "parentUuid": "d5de28ab_8e2cd468",
+      "range": {
+        "startLine": 266,
+        "startChar": 20,
+        "endLine": 266,
+        "endChar": 28
+      },
+      "revId": "6ab10763d9651c8646b436c48cba997098881150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "090ed395_a2bfc83b",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneStateListenerTest.java",
         "patchSetId": 4
