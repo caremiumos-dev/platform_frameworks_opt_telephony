@@ -22,6 +22,30 @@
       "revId": "ac508068fb55a62e1cf85f8436048497f1c5e028",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "05c36f60_cc7df298",
+        "filename": "tests/telephonytests/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1041833
+      },
+      "writtenOn": "2018-02-06T06:22:17Z",
+      "side": 1,
+      "message": "I was planning to use the Errorprone bug, but the filed another explicit one.",
+      "parentUuid": "dd83ed12_4ef36ad0",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 12
+      },
+      "revId": "ac508068fb55a62e1cf85f8436048497f1c5e028",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
