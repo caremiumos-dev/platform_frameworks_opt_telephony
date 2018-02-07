@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf92d138_d5daf5bb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-02-07T22:49:06Z",
+      "side": 1,
+      "message": "Why do you want to add REASON_PDP_RESET here?",
+      "revId": "53f39d0f317c4195163c0e770975460327498461",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16b34d88_a961cc05",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-02-07T22:49:06Z",
+      "side": 1,
+      "message": "In my understanding, for REASON_SINGLE_PDN_ARBITRATION, this will never be entered so we only need to check it in the \"else\" part below. Any particular reason you want to change it here?",
+      "revId": "53f39d0f317c4195163c0e770975460327498461",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
