@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a01d165e_8c684703",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-07T18:45:57Z",
+      "side": 1,
+      "message": "This function has a special requirement that bits outside the relevant bits need to be zero or it fails. Please document or remove that restriction. Also, please add a comment stating that the bits need to be the LSB of the \u0027digits\u0027 parameter.",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 207,
+        "endChar": 58
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8f127622_12801c01",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-07T18:45:57Z",
+      "side": 1,
+      "message": "I believe this can be simplified to use a single loop and eliminate the ternary operator.",
+      "range": {
+        "startLine": 208,
+        "startChar": 7,
+        "endLine": 219,
+        "endChar": 9
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bc903d69_c5258326",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-07T18:45:57Z",
+      "side": 1,
+      "message": "even though it wasn\u0027t there before, could we get a docstring explaining the format of the return value?",
+      "range": {
+        "startLine": 229,
+        "startChar": 12,
+        "endLine": 229,
+        "endChar": 18
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1be48997_095963ea",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-07T18:45:57Z",
+      "side": 1,
+      "message": "nit spelling",
+      "range": {
+        "startLine": 258,
+        "startChar": 17,
+        "endLine": 258,
+        "endChar": 24
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93e3046d_51e4340d",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-07T18:45:57Z",
+      "side": 1,
+      "message": "magic number",
+      "range": {
+        "startLine": 428,
+        "startChar": 46,
+        "endLine": 428,
+        "endChar": 48
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a633cf6a_eaf05823",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-07T18:45:57Z",
+      "side": 1,
+      "message": "since the min is just a substring of IMSI, do we actually need a separate record for the min or can getMin() just return mImsi.substring(5, 15)?",
+      "range": {
+        "startLine": 442,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 17
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfb0937b_c208b31f",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-07T18:45:57Z",
+      "side": 1,
+      "message": "If we aren\u0027t provisioned, do we need to set the mMin to null here?\n\nFollow-up question, since the min here is the same as the MSIN for 3gpp... can this function simply move to the IccRecords class? (partly a question to Amit).",
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
