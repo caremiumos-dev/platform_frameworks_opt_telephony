@@ -3384,6 +3384,14 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @Override
     public void startLceService(int reportIntervalMs, boolean pullMode, Message result) {
         IRadio radioProxy = getRadioProxy(result);
+        android.hardware.radio.V1_2.IRadio radioProxy12 =
+                android.hardware.radio.V1_1.IRadio.castFrom(radioProxy);
+        if (radioProxy12 != null) {
+            // we have a 1.2 or later radio, so the LCE 1.0 LCE service is unused. Instead
+            // instead the LCE functionality is always-on and provides unsolicited indications.
+            return;
+        }
+
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_START_LCE, result,
                     mRILDefaultWorkSource);
@@ -3404,6 +3412,14 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @Override
     public void stopLceService(Message result) {
         IRadio radioProxy = getRadioProxy(result);
+        android.hardware.radio.V1_2.IRadio radioProxy12 =
+                android.hardware.radio.V1_1.IRadio.castFrom(radioProxy);
+        if (radioProxy12 != null) {
+            // we have a 1.2 or later radio, so the LCE 1.0 LCE service control is unused;
+            // instead the LCE functionality is always-on and provides unsolicited indications.
+            return;
+        }
+
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_STOP_LCE, result,
                     mRILDefaultWorkSource);
@@ -4957,21 +4973,24 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return rc;
     }
 
-    static ArrayList<Integer> convertHalLceData(LceDataInfo lce, RIL ril) {
-        final ArrayList<Integer> capacityResponse = new ArrayList<Integer>();
-        final int capacityDownKbps = lce.lastHopCapacityKbps;
-        final int confidenceLevel = Byte.toUnsignedInt(lce.confidenceLevel);
-        final int lceSuspended = lce.lceSuspended ? 1 : 0;
+    static LinkCapacityEstimate convertHalLceData(LceDataInfo halData, RIL ril) {
+        final LinkCapacityEstimate lce = new LinkCapacityEstimate(
+                halData.lastHopCapacityKbps,
+                Byte.toUnsignedInt(halData.confidenceLevel),
+                halData.lceSuspended ? LinkCapacityEstimate.STATUS_SUSPENDED
+                        : LinkCapacityEstimate.STATUS_ACTIVE);
 
-        ril.riljLog("LCE capacity information received:" +
-                " capacity=" + capacityDownKbps +
-                " confidence=" + confidenceLevel +
-                " lceSuspended=" + lceSuspended);
+        ril.riljLog("LCE capacity information received:" + lce);
+        return lce;
+    }
 
-        capacityResponse.add(capacityDownKbps);
-        capacityResponse.add(confidenceLevel);
-        capacityResponse.add(lceSuspended);
-        return capacityResponse;
+    static LinkCapacityEstimate convertHalLceData(
+            android.hardware.radio.V1_2.LinkCapacityEstimate halData, RIL ril) {
+        final LinkCapacityEstimate lce = new LinkCapacityEstimate(
+                halData.downlinkCapacityKbps,
+                halData.uplinkCapacityKbps);
+        ril.riljLog("LCE capacity information received:" + lce);
+        return lce;
     }
 
     private static void writeToParcelForGsm(
