@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9113eb4d_ee8967fa",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-02-08T23:55:48Z",
+      "side": 1,
+      "message": "is that possible to move gsncdmaPhone\u0027s implementation to here?\n \nTelephonyManager.setTelephonyProperty(mPhoneId, property, value);",
+      "range": {
+        "startLine": 415,
+        "startChar": 1,
+        "endLine": 419,
+        "endChar": 5
+      },
+      "revId": "5f6deaafc0af61b20de90a69ea5dcb8a47c3647c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
