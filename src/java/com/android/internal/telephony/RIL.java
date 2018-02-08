@@ -4957,21 +4957,24 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return rc;
     }
 
-    static ArrayList<Integer> convertHalLceData(LceDataInfo lce, RIL ril) {
-        final ArrayList<Integer> capacityResponse = new ArrayList<Integer>();
-        final int capacityDownKbps = lce.lastHopCapacityKbps;
-        final int confidenceLevel = Byte.toUnsignedInt(lce.confidenceLevel);
-        final int lceSuspended = lce.lceSuspended ? 1 : 0;
+    static LinkCapacityEstimate convertHalLceData(LceDataInfo halData, RIL ril) {
+        final LinkCapacityEstimate lce = new LinkCapacityEstimate(
+                halData.lastHopCapacityKbps,
+                Byte.toUnsignedInt(halData.confidenceLevel),
+                halData.lceSuspended ? LinkCapacityEstimate.STATUS_SUSPENDED
+                        : LinkCapacityEstimate.STATUS_ACTIVE);
 
-        ril.riljLog("LCE capacity information received:" +
-                " capacity=" + capacityDownKbps +
-                " confidence=" + confidenceLevel +
-                " lceSuspended=" + lceSuspended);
+        ril.riljLog("LCE capacity information received:" + lce);
+        return lce;
+    }
 
-        capacityResponse.add(capacityDownKbps);
-        capacityResponse.add(confidenceLevel);
-        capacityResponse.add(lceSuspended);
-        return capacityResponse;
+    static LinkCapacityEstimate convertHalLceData(
+            android.hardware.radio.V1_2.LinkCapacityEstimate halData, RIL ril) {
+        final LinkCapacityEstimate lce = new LinkCapacityEstimate(
+                halData.downlinkCapacityKbps,
+                halData.uplinkCapacityKbps);
+        ril.riljLog("LCE capacity information received:" + lce);
+        return lce;
     }
 
     private static void writeToParcelForGsm(
