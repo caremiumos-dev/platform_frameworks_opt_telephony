@@ -22,6 +22,30 @@
       "revId": "5f6deaafc0af61b20de90a69ea5dcb8a47c3647c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "09eedf79_ff1e446f",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-02-09T00:58:15Z",
+      "side": 1,
+      "message": "seems that ImsPhone depends on this. Not sure if its okay to change, let me check with brad",
+      "parentUuid": "9113eb4d_ee8967fa",
+      "range": {
+        "startLine": 415,
+        "startChar": 1,
+        "endLine": 419,
+        "endChar": 5
+      },
+      "revId": "5f6deaafc0af61b20de90a69ea5dcb8a47c3647c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
