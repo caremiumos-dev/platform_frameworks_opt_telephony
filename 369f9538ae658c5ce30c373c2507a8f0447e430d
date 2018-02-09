@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6a4ae62_c45b0e1e",
+        "filename": "src/java/com/android/internal/telephony/LinkCapacityEstimate.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-09T00:24:45Z",
+      "side": 1,
+      "message": "nit: move to javadoc or remove",
+      "range": {
+        "startLine": 33,
+        "startChar": 40,
+        "endLine": 33,
+        "endChar": 59
+      },
+      "revId": "369f9538ae658c5ce30c373c2507a8f0447e430d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b3de939_22ef6fda",
+        "filename": "src/java/com/android/internal/telephony/LinkCapacityEstimate.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-09T00:24:45Z",
+      "side": 1,
+      "message": "s/Bandwidth/Capacity here and below",
+      "range": {
+        "startLine": 33,
+        "startChar": 29,
+        "endLine": 33,
+        "endChar": 38
+      },
+      "revId": "369f9538ae658c5ce30c373c2507a8f0447e430d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef907329_2fc85b32",
+        "filename": "src/java/com/android/internal/telephony/LinkCapacityEstimate.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-09T00:24:45Z",
+      "side": 1,
+      "message": "should we specify that it must be in the range [0,100]?",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 69
+      },
+      "revId": "369f9538ae658c5ce30c373c2507a8f0447e430d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "769efa28_8b2ff40a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3391,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-09T00:24:45Z",
+      "side": 1,
+      "message": "nit: rm",
+      "range": {
+        "startLine": 3391,
+        "startChar": 15,
+        "endLine": 3391,
+        "endChar": 22
+      },
+      "revId": "369f9538ae658c5ce30c373c2507a8f0447e430d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2356985d_33d9adc3",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-09T00:24:45Z",
+      "side": 1,
+      "message": "per offline discussion, add comment explaining that in 1.2 this code path isn\u0027t reachable because startLceService is a no-op",
+      "range": {
+        "startLine": 3440,
+        "startChar": 16,
+        "endLine": 3440,
+        "endChar": 27
+      },
+      "revId": "369f9538ae658c5ce30c373c2507a8f0447e430d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
