@@ -1736,6 +1736,7 @@ public class ServiceStateTracker extends Handler {
                 mNewSS.setVoiceRegState(regCodeToServiceState(registrationState));
                 mNewSS.setCssIndicator(cssIndicator);
                 mNewSS.setRilVoiceRadioTechnology(newVoiceRat);
+                mNewSS.addNetworkRegistrationState(regStates);
 
                 //Denial reason if registrationState = 3
                 int reasonForDenial = regStates.getReasonForDenial();
@@ -1810,6 +1811,7 @@ public class ServiceStateTracker extends Handler {
                         regStates.getAccessNetworkTechnology());
                 mNewSS.setDataRegState(serviceState);
                 mNewSS.setRilDataRadioTechnology(newDataRat);
+                mNewSS.addNetworkRegistrationState(regStates);
 
                 if (mPhone.isPhoneTypeGsm()) {
 
