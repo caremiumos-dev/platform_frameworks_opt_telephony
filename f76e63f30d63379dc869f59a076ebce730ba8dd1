@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "378ccf07_4ef1aaa7",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-02-14T23:16:38Z",
+      "side": 1,
+      "message": "If my understanding is correct, should we add a TODO comment that we should add ISIM once it\u0027s supported?",
+      "revId": "f76e63f30d63379dc869f59a076ebce730ba8dd1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
