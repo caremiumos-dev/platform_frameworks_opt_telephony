@@ -100,10 +100,12 @@ public class DcTrackerTest extends TelephonyTest {
             "mobile_supl,3,0,2,60000,true", "mobile_dun,4,0,2,60000,true",
             "mobile_hipri,5,0,3,60000,true", "mobile_fota,10,0,2,60000,true",
             "mobile_ims,11,0,2,60000,true", "mobile_cbs,12,0,2,60000,true",
-            "mobile_ia,14,0,2,-1,true", "mobile_emergency,15,0,2,-1,true"};
+            "mobile_ia,14,0,2,-1,true", "mobile_emergency,15,0,2,-1,true",
+            "mobile_ut,18,0,2,-1,true"};
 
     private final static List<String> sApnTypes = Arrays.asList(
-            "default", "mms", "cbs", "fota", "supl", "ia", "emergency", "dun", "hipri", "ims");
+            "default", "mms", "cbs", "fota", "supl", "ia", "emergency", "dun", "hipri", "ims",
+            "ut");
     private static final int LTE_BEARER_BITMASK = 1 << (ServiceState.RIL_RADIO_TECHNOLOGY_LTE - 1);
     private static final int EHRPD_BEARER_BITMASK =
             1 << (ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD - 1);
@@ -993,6 +995,26 @@ public class DcTrackerTest extends TelephonyTest {
     @SmallTest
     public void testTrySetupDataEmergencyApn() throws Exception {
         initApns(PhoneConstants.APN_TYPE_EMERGENCY, new String[]{PhoneConstants.APN_TYPE_ALL});
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_TRY_SETUP_DATA, mApnContext));
+        waitForMs(200);
+
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
+                eq(ServiceState.rilRadioTechnologyToAccessNetworkType(
+                        mServiceState.getRilDataRadioTechnology())), any(DataProfile.class),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                any(Message.class));
+    }
+
+    // Test the UT APN setup.
+    @Test
+    @SmallTest
+    public void testTrySetupDataUTApn() throws Exception {
+        initApns(PhoneConstants.APN_TYPE_UT, new String[]{PhoneConstants.APN_TYPE_ALL});
+
+        logd("Sending EVENT_DATA_CONNECTION_ATTACHED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
+        waitForMs(200);
+
         mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_TRY_SETUP_DATA, mApnContext));
         waitForMs(200);
 
