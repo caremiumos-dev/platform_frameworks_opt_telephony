@@ -659,6 +659,8 @@ public class ApnContext {
                 return DctConstants.APN_IA_ID;
             case PhoneConstants.APN_TYPE_EMERGENCY:
                 return DctConstants.APN_EMERGENCY_ID;
+            case PhoneConstants.APN_TYPE_UT:
+                return DctConstants.APN_UT_ID;
             default:
                 return DctConstants.APN_INVALID_ID;
         }
@@ -686,6 +688,8 @@ public class ApnContext {
                 return PhoneConstants.APN_TYPE_IA;
             case DctConstants.APN_EMERGENCY_ID:
                 return PhoneConstants.APN_TYPE_EMERGENCY;
+            case DctConstants.APN_UT_ID:
+                return PhoneConstants.APN_TYPE_UT;
             default:
                 Rlog.d(SLOG_TAG, "Unknown id (" + id + ") in apnIdToType");
                 return PhoneConstants.APN_TYPE_DEFAULT;
