@@ -34,6 +34,24 @@
       "revId": "43c86de4fde51c34ca4ef34c1965394c0adc3c49",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e48e59e_34fb9f11",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2162,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-02-15T19:01:02Z",
+      "side": 1,
+      "message": "Got it, you are right.\nBut let\u0027s still use a boolean, so that it\u0027s more clear.",
+      "parentUuid": "4076ceaa_ad13a190",
+      "revId": "43c86de4fde51c34ca4ef34c1965394c0adc3c49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
