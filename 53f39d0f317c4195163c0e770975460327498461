@@ -87,6 +87,24 @@
       "revId": "53f39d0f317c4195163c0e770975460327498461",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ac904ab_83a111f9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1116338
+      },
+      "writtenOn": "2018-02-16T10:21:56Z",
+      "side": 1,
+      "message": "I also agree with you guys. We don\u0027t need APN_TYPE_IMS check here.",
+      "parentUuid": "d3ec8dfe_e7534a9e",
+      "revId": "53f39d0f317c4195163c0e770975460327498461",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
