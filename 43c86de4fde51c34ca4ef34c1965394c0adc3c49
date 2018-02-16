@@ -52,6 +52,24 @@
       "revId": "43c86de4fde51c34ca4ef34c1965394c0adc3c49",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc9a02f8_0e7574ae",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2162,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2018-02-16T01:43:35Z",
+      "side": 1,
+      "message": "It\u0027s okay. I will update the patch. Thank you for your suggestion.",
+      "parentUuid": "9e48e59e_34fb9f11",
+      "revId": "43c86de4fde51c34ca4ef34c1965394c0adc3c49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
