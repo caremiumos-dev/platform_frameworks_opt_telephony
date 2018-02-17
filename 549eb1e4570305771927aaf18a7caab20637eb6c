@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3b94768_fdc05940",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1061207
+      },
+      "writtenOn": "2018-02-17T00:41:55Z",
+      "side": 1,
+      "message": "optional: switch()?",
+      "range": {
+        "startLine": 1038,
+        "startChar": 33,
+        "endLine": 1038,
+        "endChar": 45
+      },
+      "revId": "549eb1e4570305771927aaf18a7caab20637eb6c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
