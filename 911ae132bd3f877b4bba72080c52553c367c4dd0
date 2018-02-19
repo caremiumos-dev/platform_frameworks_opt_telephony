@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a8bb9ece_6d338450",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2610,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-02-19T16:20:28Z",
+      "side": 1,
+      "message": "Continuing discussion in the bug",
+      "parentUuid": "8227cbbf_3b6dcd8c",
+      "range": {
+        "startLine": 2610,
+        "startChar": 8,
+        "endLine": 2610,
+        "endChar": 79
+      },
+      "revId": "911ae132bd3f877b4bba72080c52553c367c4dd0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "458310f1_bd506a2c",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-08T22:15:44Z",
       "side": 1,
       "message": "can you unit test this + isNationalMcc logic?",
+      "range": {
+        "startLine": 2735,
+        "startChar": 19,
+        "endLine": 2735,
+        "endChar": 39
+      },
+      "revId": "911ae132bd3f877b4bba72080c52553c367c4dd0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ece518b_e75b18a2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2735,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-02-19T16:20:28Z",
+      "side": 1,
+      "message": "Done! Tests added in file tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+      "parentUuid": "458310f1_bd506a2c",
       "range": {
         "startLine": 2735,
         "startChar": 19,
