@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f186ef5d_9fe9c1eb",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-02-19T22:11:27Z",
+      "side": 1,
+      "message": "Sorry I put a wrong comment above. Don\u0027t we need to rebind the modem for the single sim case?",
+      "parentUuid": "83d8bd8f_e1abfd2b",
+      "range": {
+        "startLine": 345,
+        "startChar": 16,
+        "endLine": 345,
+        "endChar": 68
+      },
+      "revId": "11cb63b1966838a971828f1915823e7106bd7fe8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ad24ac5_af8a8908",
         "filename": "src/java/com/android/internal/telephony/ProxyController.java",
         "patchSetId": 2
