@@ -1188,4 +1188,28 @@ public class ServiceStateTrackerTest extends TelephonyTest {
             assertTrue(actualNitzSignal.mElapsedRealtime <= SystemClock.elapsedRealtime());
         }
     }
+
+    @Test
+    @SmallTest
+    public void testCarrierConfigChanged() throws Exception {
+        final int getOperatorCallCount = mSimulatedCommands.getGetOperatorCallCount();
+        final int getDataRegistrationStateCallCount =
+                mSimulatedCommands.getGetDataRegistrationStateCallCount();
+        final int getVoiceRegistrationStateCallCount =
+                mSimulatedCommands.getGetVoiceRegistrationStateCallCount();
+        final int getNetworkSelectionModeCallCount =
+                mSimulatedCommands.getGetNetworkSelectionModeCallCount();
+
+        // Send ACTION_CARRIER_CONFIG_CHANGED; this should trigger a poll state
+        mContext.sendBroadcast(new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
+        waitForMs(500);
+
+        assertEquals(getOperatorCallCount + 1, mSimulatedCommands.getGetOperatorCallCount());
+        assertEquals(getDataRegistrationStateCallCount + 1,
+                mSimulatedCommands.getGetDataRegistrationStateCallCount());
+        assertEquals(getVoiceRegistrationStateCallCount + 1,
+                mSimulatedCommands.getGetVoiceRegistrationStateCallCount());
+        assertEquals(getNetworkSelectionModeCallCount + 1,
+                mSimulatedCommands.getGetNetworkSelectionModeCallCount());
+    }
 }

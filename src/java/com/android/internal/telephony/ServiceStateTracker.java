@@ -216,6 +216,7 @@ public class ServiceStateTracker extends Handler {
     protected static final int EVENT_SIM_NOT_INSERTED                  = 52;
     protected static final int EVENT_IMS_SERVICE_STATE_CHANGED         = 53;
     protected static final int EVENT_RADIO_POWER_OFF_DONE              = 54;
+    private static final int EVENT_CARRIER_CONFIG_CHANGED              = 55;
 
     private class CellInfoResult {
         List<CellInfo> list;
@@ -408,7 +409,8 @@ public class ServiceStateTracker extends Handler {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(
                     CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED)) {
-                updateLteEarfcnLists();
+                if (VDBG) log("onReceive: ACTION_CARRIER_CONFIG_CHANGED");
+                sendMessage(obtainMessage(EVENT_CARRIER_CONFIG_CHANGED));
                 return;
             }
 
@@ -1415,6 +1417,12 @@ public class ServiceStateTracker extends Handler {
                     if (DBG) log("EVENT_RADIO_POWER_FROM_CARRIER: " + enable);
                     setRadioPowerFromCarrier(enable);
                 }
+                break;
+
+            case EVENT_CARRIER_CONFIG_CHANGED:
+                if (VDBG) log("handleMessage: Received EVENT_CARRIER_CONFIG_CHANGED");
+                updateLteEarfcnLists();
+                pollState();
                 break;
 
             default:
