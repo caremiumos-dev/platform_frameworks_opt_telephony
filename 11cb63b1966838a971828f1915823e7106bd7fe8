@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "19c18c1f_6314b9c1",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2018-02-20T04:37:14Z",
+      "side": 1,
+      "message": "No. In Single SIM there is only one logical modem exists, ideally that does not get disturbed at Modem due to flex map request hence no re-bind needed.\n\nIn DSDS case as there are two logical Modems exists and we need to send FINISH request with failure to below layers so they perform re-bind hence this fix is made.",
+      "parentUuid": "f186ef5d_9fe9c1eb",
+      "range": {
+        "startLine": 345,
+        "startChar": 16,
+        "endLine": 345,
+        "endChar": 68
+      },
+      "revId": "11cb63b1966838a971828f1915823e7106bd7fe8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ad24ac5_af8a8908",
         "filename": "src/java/com/android/internal/telephony/ProxyController.java",
         "patchSetId": 2
@@ -60,6 +84,30 @@
       "writtenOn": "2018-02-02T00:39:21Z",
       "side": 1,
       "message": "We will rebind the old logical modem in completeRadioCapabilityTransaction() if the transaction is failed, so we don\u0027t need to select the logical modem here.",
+      "range": {
+        "startLine": 533,
+        "startChar": 24,
+        "endLine": 536,
+        "endChar": 48
+      },
+      "revId": "11cb63b1966838a971828f1915823e7106bd7fe8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc0a933f_5f7c521e",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2018-02-20T04:37:14Z",
+      "side": 1,
+      "message": "I agree with your statement in failure scenario but in success scenario its appropriate to send new RAF and new Logical Modem values from here hence this change is mode.\n\n\nAlso as the FINISH interface is expecting RAF and LogicalModem values we are sending old RAF/LogicalModem values in failure case and new RAF/LogicalModem values in success case.",
+      "parentUuid": "1ad24ac5_af8a8908",
       "range": {
         "startLine": 533,
         "startChar": 24,
