@@ -22,6 +22,30 @@
       "revId": "7bc6ae44a2c2056c346753d2b5d9570d562fa65f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "59f1d324_7a25412b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1423,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-02-20T23:38:06Z",
+      "side": 1,
+      "message": "Actually removing this code, since it can be triggered from already existing code in GsmCdmaPhone.",
+      "parentUuid": "af5ac6f9_fb9089c1",
+      "range": {
+        "startLine": 1423,
+        "startChar": 13,
+        "endLine": 1423,
+        "endChar": 86
+      },
+      "revId": "7bc6ae44a2c2056c346753d2b5d9570d562fa65f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
