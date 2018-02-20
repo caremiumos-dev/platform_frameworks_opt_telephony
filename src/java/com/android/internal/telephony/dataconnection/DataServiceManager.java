@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.IPackageManager;
 import android.net.LinkProperties;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import android.os.Message;
 import android.os.PersistableBundle;
 import android.os.RegistrantList;
 import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
@@ -59,6 +61,8 @@ public class DataServiceManager {
 
     private final CarrierConfigManager mCarrierConfigManager;
 
+    private final IPackageManager mPackageManager;
+
     private final int mTransportType;
 
     private boolean mBound;
@@ -89,6 +93,21 @@ public class DataServiceManager {
         }
     }
 
+    private void grantPermissionsToService(ComponentName name) {
+        final String[] pkgToGrant = {name.getPackageName()};
+        try {
+            if (mPackageManager == null) {
+                loge("Couldn't grant permissions due to null package manager");
+                // FIXME: blow up here, WTF
+            }
+            mPackageManager.grantDefaultPermissionsToEnabledTelephonyDataServices(
+                    pkgToGrant, mPhone.getContext().getUserId());
+        } catch (RemoteException e) {
+            loge("Binder to package manager died, permission grant for DataService failed.");
+            // FIXME: blow up here, WTF
+        }
+    }
+
     private final class CellularDataServiceConnection implements ServiceConnection {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -96,6 +115,8 @@ public class DataServiceManager {
             mIDataService = IDataService.Stub.asInterface(service);
             mDeathRecipient = new DataServiceManagerDeathRecipient(name);
             mBound = true;
+
+            grantPermissionsToService(name);
 
             try {
                 service.linkToDeath(mDeathRecipient, 0);
@@ -186,6 +207,8 @@ public class DataServiceManager {
         mBound = false;
         mCarrierConfigManager = (CarrierConfigManager) phone.getContext().getSystemService(
                 Context.CARRIER_CONFIG_SERVICE);
+        // TODO: why do we use a hard-coded value to get the package manager?
+        mPackageManager = IPackageManager.Stub.asInterface(ServiceManager.getService("package"));
 
         bindDataService();
     }
