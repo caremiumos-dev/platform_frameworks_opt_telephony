@@ -2590,6 +2590,7 @@ public class ServiceStateTracker extends Handler {
         }
         useDataRegStateForDataOnlyDevices();
         resetServiceStateInIwlanMode();
+        updateChannelNumber();
 
         if (Build.IS_DEBUGGABLE && mPhone.mTelephonyTester != null) {
             mPhone.mTelephonyTester.overrideServiceState(mNewSS);
@@ -2942,6 +2943,43 @@ public class ServiceStateTracker extends Handler {
                 }
             } else {
                 mReportedGprsNoReg = false;
+            }
+        }
+    }
+
+    private void updateChannelNumber() {
+        CellInfo primaryCellInfo = null;
+        for (CellInfo cellInfo : mLastCellInfoList) {
+            if (cellInfo.getCellConnectionStatus() == CellInfo.CONNECTION_PRIMARY_SERVING) {
+                primaryCellInfo = cellInfo;
+                break;
+            }
+        }
+
+        if (primaryCellInfo instanceof CellInfoGsm) {
+            CellInfoGsm cellInfoGsm = (CellInfoGsm) primaryCellInfo;
+            int channelNumber = cellInfoGsm.getCellIdentity().getArfcn();
+            mNewSS.setChannelNumber(channelNumber);
+            if (VDBG) {
+                log("Setting channel number, ARFCN: " + channelNumber);
+            }
+        } else if (primaryCellInfo instanceof CellInfoWcdma) {
+            CellInfoWcdma cellInfoWcdma = (CellInfoWcdma) primaryCellInfo;
+            int channelNumber = cellInfoWcdma.getCellIdentity().getUarfcn();
+            mNewSS.setChannelNumber(channelNumber);
+            if (VDBG) {
+                log("Setting channel number, UARFCN: " + channelNumber);
+            }
+        } else if (primaryCellInfo instanceof CellInfoLte) {
+            CellInfoLte cellInfoLte = (CellInfoLte) primaryCellInfo;
+            int channelNumber = cellInfoLte.getCellIdentity().getEarfcn();
+            mNewSS.setChannelNumber(channelNumber);
+            if (VDBG) {
+                log("Setting channel number, EARFCN: " + channelNumber);
+            }
+        } else {
+            if (DBG) {
+                log("Could not set ServiceState channel number");
             }
         }
     }
