@@ -1430,6 +1430,15 @@ public class ServiceStateTracker extends Handler {
                                 + list);
                     }
                     mPhone.notifyPhysicalChannelConfiguration(list);
+
+                    int[] bandwidths = new int[list.size()];
+                    for (int i = 0; i < bandwidths.length; i++) {
+                        bandwidths[i] = list.get(i).getCellBandwidthDownlink();
+                    }
+                    // only notify if bandwidths changed
+                    if (RatRatcheter.updateBandwidths(bandwidths, mSS)) {
+                        mPhone.notifyServiceStateChanged(mSS);
+                    }
                 }
                 break;
 
@@ -2630,7 +2639,7 @@ public class ServiceStateTracker extends Handler {
         // until cell change or device is OOS
         boolean isDataInService = mNewSS.getDataRegState() == ServiceState.STATE_IN_SERVICE;
         if (!hasLocationChanged && isDataInService) {
-            mRatRatcheter.ratchetRat(mSS, mNewSS);
+            mRatRatcheter.ratchet(mSS, mNewSS);
         }
 
         boolean hasRilVoiceRadioTechnologyChanged =
