@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd559861_0617eb76",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-21T22:48:14Z",
+      "side": 1,
+      "message": "I\u0027m not saying you *should* but if you use the Java 8 streams stuff this is a one-liner:\n\nint ssAggregateBandwidth \u003d Arrays.stream(serviceState.getCellBandwidths()).sum();\n\nI\u0027m not a huge fan of the streams thing, but it is interesting.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 9
+      },
+      "revId": "62ec4548d40f42c6d971551db88e97383bdac9ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4bb3397b_55fd89eb",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-21T22:48:14Z",
+      "side": 1,
+      "message": "Could this be moved back underneath the other ratchetRat() function. It\u0027ll be easier to see what actually changed if the function isn\u0027t moved.",
+      "range": {
+        "startLine": 93,
+        "startChar": 3,
+        "endLine": 97,
+        "endChar": 70
+      },
+      "revId": "62ec4548d40f42c6d971551db88e97383bdac9ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b478bd24_493b3c74",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-21T22:48:14Z",
+      "side": 1,
+      "message": "I think newUsingCA should also be true if getCellBandwidths().length \u003e 1 ... at least until we remove this stuff.",
+      "range": {
+        "startLine": 99,
+        "startChar": 16,
+        "endLine": 99,
+        "endChar": 26
+      },
+      "revId": "62ec4548d40f42c6d971551db88e97383bdac9ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e08143ef_75dbb724",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-21T22:48:14Z",
+      "side": 1,
+      "message": "Even though this is currently trivial, that won\u0027t always be the case, so the conversion from List\u003cPhyChanConfig\u003e to PhyChanConfig[] or to get the Bandwidths should really be in a helper function.",
+      "range": {
+        "startLine": 1434,
+        "startChar": 0,
+        "endLine": 1437,
+        "endChar": 21
+      },
+      "revId": "62ec4548d40f42c6d971551db88e97383bdac9ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
