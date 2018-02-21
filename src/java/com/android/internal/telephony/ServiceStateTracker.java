@@ -111,7 +111,7 @@ import java.util.regex.PatternSyntaxException;
 public class ServiceStateTracker extends Handler {
     static final String LOG_TAG = "SST";
     static final boolean DBG = true;
-    private static final boolean VDBG = false;  // STOPSHIP if true
+    private static final boolean VDBG = true;  // STOPSHIP if true
 
     private static final String PROP_FORCE_ROAMING = "telephony.test.forceRoaming";
 
@@ -1753,6 +1753,7 @@ public class ServiceStateTracker extends Handler {
                 mNewSS.setCssIndicator(cssIndicator);
                 mNewSS.setRilVoiceRadioTechnology(newVoiceRat);
                 mNewSS.addNetworkRegistrationState(networkRegState);
+                setChannelNumberFromCellIdentity(mNewSS, networkRegState.getCellIdentity());
 
                 //Denial reason if registrationState = 3
                 int reasonForDenial = networkRegState.getReasonForDenial();
@@ -1828,6 +1829,7 @@ public class ServiceStateTracker extends Handler {
                 mNewSS.setDataRegState(serviceState);
                 mNewSS.setRilDataRadioTechnology(newDataRat);
                 mNewSS.addNetworkRegistrationState(networkRegState);
+                setChannelNumberFromCellIdentity(mNewSS, networkRegState.getCellIdentity());
 
                 if (mPhone.isPhoneTypeGsm()) {
 
@@ -1963,6 +1965,33 @@ public class ServiceStateTracker extends Handler {
 
             default:
                 loge("handlePollStateResultMessage: Unexpected RIL response received: " + what);
+        }
+    }
+
+    private void setChannelNumberFromCellIdentity(ServiceState ss, CellIdentity cellIdentity) {
+        if (cellIdentity instanceof CellIdentityGsm) {
+            int channelNumber = ((CellIdentityGsm) cellIdentity).getArfcn();
+            ss.setChannelNumber(channelNumber);
+            if (VDBG) {
+                log("Setting channel number, ARFCN: " + channelNumber);
+            }
+        } else if (cellIdentity instanceof CellIdentityWcdma) {
+            int channelNumber = ((CellIdentityWcdma) cellIdentity).getUarfcn();
+            ss.setChannelNumber(channelNumber);
+            if (VDBG) {
+                log("Setting channel number, UARFCN: " + channelNumber);
+            }
+        } else if (cellIdentity instanceof CellIdentityLte) {
+            int channelNumber = ((CellIdentityLte) cellIdentity).getEarfcn();
+            ss.setChannelNumber(channelNumber);
+            if (VDBG) {
+                log("Setting channel number, EARFCN: " + channelNumber);
+            }
+        } else {
+            if (DBG) {
+                log("Could not set ServiceState channel number. CellIdentity type: "
+                        + ((cellIdentity == null) ? "null" : cellIdentity.getType()));
+            }
         }
     }
 
