@@ -1753,6 +1753,7 @@ public class ServiceStateTracker extends Handler {
                 mNewSS.setCssIndicator(cssIndicator);
                 mNewSS.setRilVoiceRadioTechnology(newVoiceRat);
                 mNewSS.addNetworkRegistrationState(networkRegState);
+                setChannelNumberFromCellIdentity(mNewSS, networkRegState.getCellIdentity());
 
                 //Denial reason if registrationState = 3
                 int reasonForDenial = networkRegState.getReasonForDenial();
@@ -1828,6 +1829,7 @@ public class ServiceStateTracker extends Handler {
                 mNewSS.setDataRegState(serviceState);
                 mNewSS.setRilDataRadioTechnology(newDataRat);
                 mNewSS.addNetworkRegistrationState(networkRegState);
+                setChannelNumberFromCellIdentity(mNewSS, networkRegState.getCellIdentity());
 
                 if (mPhone.isPhoneTypeGsm()) {
 
@@ -1963,6 +1965,45 @@ public class ServiceStateTracker extends Handler {
 
             default:
                 loge("handlePollStateResultMessage: Unexpected RIL response received: " + what);
+        }
+    }
+
+    private void setChannelNumberFromCellIdentity(ServiceState ss, CellIdentity cellIdentity) {
+        if (cellIdentity == null) {
+            if (DBG) {
+                log("Could not set ServiceState channel number. CellIdentity null");
+            }
+            return;
+        }
+
+        switch (cellIdentity.getType()) {
+            case CellIdentity.TYPE_GSM:
+                int arfcn = ((CellIdentityGsm) cellIdentity).getArfcn();
+                ss.setChannelNumber(arfcn);
+                if (VDBG) {
+                    log("Setting channel number, ARFCN: " + arfcn);
+                }
+                break;
+            case CellIdentity.TYPE_WCDMA:
+                int uarfcn = ((CellIdentityWcdma) cellIdentity).getUarfcn();
+                ss.setChannelNumber(uarfcn);
+                if (VDBG) {
+                    log("Setting channel number, UARFCN: " + uarfcn);
+                }
+                break;
+            case CellIdentity.TYPE_LTE:
+                int earfcn = ((CellIdentityLte) cellIdentity).getEarfcn();
+                ss.setChannelNumber(earfcn);
+                if (VDBG) {
+                    log("Setting channel number, EARFCN: " + earfcn);
+                }
+                break;
+            default:
+                if (DBG) {
+                    log("Could not set ServiceState channel number. CellIdentity type: "
+                            + cellIdentity.getType());
+                }
+                break;
         }
     }
 
