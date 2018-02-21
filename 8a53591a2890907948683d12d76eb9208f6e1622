@@ -22,6 +22,30 @@
       "revId": "8a53591a2890907948683d12d76eb9208f6e1622",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4bc7274_d0096f21",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2018-02-21T06:38:50Z",
+      "side": 1,
+      "message": "As mentioned in patchset 1 as well, \nSERVICE_CLASS_NONE should be specified, if this API is called without any particular service class. \nThis will ensure, that CallForwardInfo for all service classes(like voice, sms, fax etc.) are queried. \nIf we mention only SERVICE_CLASS_VOICE, then we won\u0027t be able to query for all service classes through MMI code.",
+      "parentUuid": "6c21a6dc_03e262ca",
+      "range": {
+        "startLine": 1713,
+        "startChar": 34,
+        "endLine": 1713,
+        "endChar": 52
+      },
+      "revId": "8a53591a2890907948683d12d76eb9208f6e1622",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
