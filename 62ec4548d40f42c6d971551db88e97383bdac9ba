@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4f2dca14_ec8b9e6b",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-22T00:24:26Z",
+      "side": 1,
+      "message": "Done. For whatever reason, I was under the impression that we couldn\u0027t use streams in Android code. I don\u0027t know why I thought that though.",
+      "parentUuid": "cd559861_0617eb76",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 9
+      },
+      "revId": "62ec4548d40f42c6d971551db88e97383bdac9ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bb3397b_55fd89eb",
         "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-21T22:48:14Z",
       "side": 1,
       "message": "Could this be moved back underneath the other ratchetRat() function. It\u0027ll be easier to see what actually changed if the function isn\u0027t moved.",
+      "range": {
+        "startLine": 93,
+        "startChar": 3,
+        "endLine": 97,
+        "endChar": 70
+      },
+      "revId": "62ec4548d40f42c6d971551db88e97383bdac9ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "520a15ae_ae2d5850",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-22T00:24:26Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "4bb3397b_55fd89eb",
       "range": {
         "startLine": 93,
         "startChar": 3,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b93d544a_5fdca85d",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-22T00:24:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b478bd24_493b3c74",
+      "range": {
+        "startLine": 99,
+        "startChar": 16,
+        "endLine": 99,
+        "endChar": 26
+      },
+      "revId": "62ec4548d40f42c6d971551db88e97383bdac9ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e08143ef_75dbb724",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2018-02-21T22:48:14Z",
       "side": 1,
       "message": "Even though this is currently trivial, that won\u0027t always be the case, so the conversion from List\u003cPhyChanConfig\u003e to PhyChanConfig[] or to get the Bandwidths should really be in a helper function.",
+      "range": {
+        "startLine": 1434,
+        "startChar": 0,
+        "endLine": 1437,
+        "endChar": 21
+      },
+      "revId": "62ec4548d40f42c6d971551db88e97383bdac9ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2172a216_fd84ccd1",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-02-22T00:24:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e08143ef_75dbb724",
       "range": {
         "startLine": 1434,
         "startChar": 0,
