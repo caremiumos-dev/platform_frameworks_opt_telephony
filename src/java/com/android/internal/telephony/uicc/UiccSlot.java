@@ -99,12 +99,9 @@ public class UiccSlot extends Handler {
                     sendMessage(obtainMessage(EVENT_CARD_REMOVED, null));
                 }
 
-                UiccProfile.broadcastInternalIccStateChangedIntent(
-                        IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, mPhoneId);
-
-                // no card present in the slot now; dispose card and make mUiccCard null
-                mUiccCard.dispose();
-                mUiccCard = null;
+                if (mUiccCard != null) {
+                    mUiccCard.update(mContext, ci, ics);
+                }
             } else if (oldState == CardState.CARDSTATE_ABSENT
                     && mCardState != CardState.CARDSTATE_ABSENT) {
                 // No notifications while radio is off or we just powering up
@@ -127,6 +124,12 @@ public class UiccSlot extends Handler {
             } else {
                 if (mUiccCard != null) {
                     mUiccCard.update(mContext, mCi, ics);
+                } else {
+                    if (!mIsEuicc) {
+                        mUiccCard = new UiccCard(mContext, mCi, ics, mPhoneId);
+                    } else {
+                        mUiccCard = new EuiccCard(mContext, mCi, ics, phoneId);
+                    }
                 }
             }
             mLastRadioState = radioState;
