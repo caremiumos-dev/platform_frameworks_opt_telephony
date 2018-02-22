@@ -25,6 +25,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
@@ -45,19 +46,19 @@ import android.support.test.filters.FlakyTest;
 import android.telecom.VideoProfile;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.ims.ImsCallProfile;
+import android.telephony.ims.ImsCallSession;
+import android.telephony.ims.ImsReasonInfo;
+import android.telephony.ims.ImsStreamMediaProfile;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.ims.ImsCall;
-import android.telephony.ims.ImsCallProfile;
 import com.android.ims.ImsConfig;
 import com.android.ims.ImsException;
-import android.telephony.ims.ImsReasonInfo;
-import android.telephony.ims.ImsStreamMediaProfile;
 import com.android.ims.internal.IImsCallSession;
-import android.telephony.ims.ImsCallSession;
 import com.android.internal.telephony.Call;
 import com.android.internal.telephony.CallStateException;
 import com.android.internal.telephony.CommandsInterface;
@@ -210,6 +211,8 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         }).when(mImsManager).addCapabilitiesCallback(any(ImsFeature.CapabilityCallback.class));
 
         doReturn(mImsConfig).when(mImsManager).getConfigInterface();
+
+        doNothing().when(mImsManager).addNotifyStatusChangedCallbackIfAvailable(any());
 
         mImsCTHandlerThread = new ImsCTHandlerThread(this.getClass().getSimpleName());
         mImsCTHandlerThread.start();
@@ -534,7 +537,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
     public void testDialImsServiceUnavailable() throws ImsException {
         doThrow(new ImsException("Test Exception", ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN)).when(
                 mImsManager).createCallProfile(anyInt(), anyInt());
-        mCTUT.mRetryTimeout = () -> 0; //ms
+        mCTUT.setRetryTimeout(() -> 0);
         assertEquals(Call.State.IDLE, mCTUT.mForegroundCall.getState());
         assertEquals(PhoneConstants.State.IDLE, mCTUT.getState());
 
@@ -563,7 +566,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 mImsManager).setUiTTYMode(nullable(Context.class), anyInt(),
                 nullable(Message.class));
         // Remove retry timeout delay
-        mCTUT.mRetryTimeout = () -> 0; //ms
+        mCTUT.setRetryTimeout(() -> 0); //ms
 
         mCTUT.setUiTTYMode(0, new Message());
 
