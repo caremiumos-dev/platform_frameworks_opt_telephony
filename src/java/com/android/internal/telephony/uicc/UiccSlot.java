@@ -127,6 +127,12 @@ public class UiccSlot extends Handler {
             } else {
                 if (mUiccCard != null) {
                     mUiccCard.update(mContext, mCi, ics);
+                } else {
+                    if (!mIsEuicc) {
+                        mUiccCard = new UiccCard(mContext, mCi, ics, mPhoneId);
+                    } else {
+                        mUiccCard = new EuiccCard(mContext, mCi, ics, phoneId);
+                    }
                 }
             }
             mLastRadioState = radioState;
