@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9e88497_37296926",
+        "filename": "src/java/com/android/internal/telephony/PhoneSubInfoController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2018-02-22T18:56:47Z",
+      "side": 1,
+      "message": "This permission check is using enforceModifyPermission() in the internal tree which is inconsistent. I pinged the CL author to resolve the discrepancy between that and AOSP and will resync and merge if that happens to land first.",
+      "revId": "01d1fd7d4d6dc916924dff09e31c5e8789aa67bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
