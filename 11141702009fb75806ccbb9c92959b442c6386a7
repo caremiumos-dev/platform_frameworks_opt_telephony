@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1c0054dc_06c438b1",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-23T22:35:47Z",
+      "side": 1,
+      "message": "*facepalm*, done.",
+      "parentUuid": "67fbd22d_1f474d47",
+      "range": {
+        "startLine": 101,
+        "startChar": 16,
+        "endLine": 101,
+        "endChar": 43
+      },
+      "revId": "11141702009fb75806ccbb9c92959b442c6386a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d30383b5_cc582b63",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-23T19:00:51Z",
       "side": 1,
       "message": "Can we use phone.getContext().getPackageManager()?",
+      "range": {
+        "startLine": 211,
+        "startChar": 26,
+        "endLine": 211,
+        "endChar": 97
+      },
+      "revId": "11141702009fb75806ccbb9c92959b442c6386a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16c11c6d_d2859cc1",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-23T22:35:47Z",
+      "side": 1,
+      "message": "So, it turns out that package manager is special. The PackageManager is abstract, and The system just always uses IPackageManager. Applications get ApplicationPackageManager... so this is correct, though weird.",
+      "parentUuid": "d30383b5_cc582b63",
       "range": {
         "startLine": 211,
         "startChar": 26,
