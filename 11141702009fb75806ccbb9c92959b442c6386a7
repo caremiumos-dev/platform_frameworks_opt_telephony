@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67fbd22d_1f474d47",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-02-23T19:00:51Z",
+      "side": 1,
+      "message": "Before FIXME, we should return here otherwise NPE at line 103.",
+      "range": {
+        "startLine": 101,
+        "startChar": 16,
+        "endLine": 101,
+        "endChar": 43
+      },
+      "revId": "11141702009fb75806ccbb9c92959b442c6386a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d30383b5_cc582b63",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-02-23T19:00:51Z",
+      "side": 1,
+      "message": "Can we use phone.getContext().getPackageManager()?",
+      "range": {
+        "startLine": 211,
+        "startChar": 26,
+        "endLine": 211,
+        "endChar": 97
+      },
+      "revId": "11141702009fb75806ccbb9c92959b442c6386a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
