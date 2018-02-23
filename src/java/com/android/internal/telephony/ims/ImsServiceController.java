@@ -120,13 +120,28 @@ public class ImsServiceController {
             synchronized (mLock) {
                 mIsBinding = false;
             }
+            cleanupConnection();
+            Log.w(LOG_TAG, "ImsService(" + name + "): onServiceDisconnected. Waiting...");
+            // Service disconnected, but we are still technically bound. Waiting for reconnect.
+        }
+
+        @Override
+        public void onBindingDied(ComponentName name) {
+            synchronized (mLock) {
+                mIsBinding = false;
+                mIsBound = false;
+            }
+            cleanupConnection();
+            Log.w(LOG_TAG, "ImsService(" + name + "): onBindingDied. Starting rebind...");
+            startDelayedRebindToService();
+        }
+
+        private void cleanupConnection() {
             if (isServiceControllerAvailable()) {
                 mImsServiceControllerBinder.unlinkToDeath(mImsDeathRecipient, 0);
             }
             notifyAllFeaturesRemoved();
             cleanUpService();
-            Log.w(LOG_TAG, "ImsService(" + name + "): onServiceDisconnected. Rebinding...");
-            startDelayedRebindToService();
         }
     }
 
@@ -314,8 +329,8 @@ public class ImsServiceController {
     }
 
     /**
-     * Sends request to bind to ImsService designated by the {@ComponentName} with the feature set
-     * imsFeatureSet
+     * Sends request to bind to ImsService designated by the {@link ComponentName} with the feature
+     * set imsFeatureSet.
      *
      * @param imsFeatureSet a Set of Pairs that designate the slotId->featureId that need to be
      *                      created once the service is bound.
@@ -702,7 +717,6 @@ public class ImsServiceController {
             mImsServiceConnection = null;
             mImsServiceControllerBinder = null;
             setServiceController(null);
-            mIsBound = false;
         }
     }
 }

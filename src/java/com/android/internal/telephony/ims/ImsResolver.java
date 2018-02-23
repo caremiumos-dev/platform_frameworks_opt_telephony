@@ -48,6 +48,7 @@ import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.PhoneConstants;
 
+import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -93,9 +94,35 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     @VisibleForTesting
     public static class ImsServiceInfo {
         public ComponentName name;
-        public Set<Integer> supportedFeatures;
         public boolean supportsEmergencyMmTel = false;
+        // Determines if features were created from metadata in the manifest or through dynamic
+        // query.
+        public boolean featureFromMetadata = true;
         public ImsServiceControllerFactory controllerFactory;
+
+        // Map slotId->Feature
+        private final HashSet<Pair<Integer, Integer>> mSupportedFeatures;
+        private final int mNumSlots;
+
+        public ImsServiceInfo(int numSlots) {
+            mNumSlots = numSlots;
+            mSupportedFeatures = new HashSet<>();
+        }
+
+        void addFeatureForAllSlots(int feature) {
+            for(int i = 0; i < mNumSlots; i++) {
+                mSupportedFeatures.add(new Pair<>(i, feature));
+            }
+        }
+
+        void replaceFeatures(HashSet<Pair<Integer, Integer>> mNewFeatures) {
+            mSupportedFeatures.clear();
+            mSupportedFeatures.addAll(mNewFeatures);
+        }
+
+        HashSet<Pair<Integer, Integer>> getSupportedFeatures() {
+            return mSupportedFeatures;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -105,8 +132,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
             ImsServiceInfo that = (ImsServiceInfo) o;
 
             if (name != null ? !name.equals(that.name) : that.name != null) return false;
-            if (supportedFeatures != null ? !supportedFeatures.equals(that.supportedFeatures)
-                    : that.supportedFeatures != null) {
+            if (!mSupportedFeatures.equals(that.mSupportedFeatures)) {
                 return false;
             }
             return controllerFactory != null ? controllerFactory.equals(that.controllerFactory)
@@ -116,9 +142,27 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
         @Override
         public int hashCode() {
             int result = name != null ? name.hashCode() : 0;
-            result = 31 * result + (supportedFeatures != null ? supportedFeatures.hashCode() : 0);
+            result = 31 * result + mSupportedFeatures.hashCode();
             result = 31 * result + (controllerFactory != null ? controllerFactory.hashCode() : 0);
             return result;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder res = new StringBuilder();
+            res.append("[ImsServiceInfo] name=");
+            res.append(name);
+            res.append(", supportedFeatures=[ ");
+            for (Pair<Integer,Integer> feature : mSupportedFeatures) {
+                res.append("(");
+                res.append(feature.first);
+                res.append(",");
+                res.append(feature.second);
+                res.append(") ");
+            }
+            res.append("], supportsEmergency=");
+            res.append(supportsEmergencyMmTel);
+            return res.toString();
         }
     }
 
@@ -542,16 +586,28 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
             Optional<ImsServiceInfo> match = getInfoByComponentName(mInstalledServicesCache,
                     info.name);
             if (match.isPresent()) {
-                // update features in the cache
-                Log.i(TAG, "Updating features in cached ImsService: " + info.name);
-                Log.d(TAG, "Updating features - Old features: " + match.get().supportedFeatures
-                        + " new features: " + info.supportedFeatures);
-                match.get().supportedFeatures = info.supportedFeatures;
-                updateImsServiceFeatures(info);
+                // for dynamic query the new "info" will have no supported features yet. Don't wipe
+                // out the cache for the existing features or update yet. Instead start a query
+                // for features dynamically.
+                if (info.featureFromMetadata) {
+                    // update features in the cache
+                    Log.i(TAG, "Updating features in cached ImsService: " + info.name);
+                    Log.d(TAG, "Updating features - Old features: " + match.get()
+                            + " new features: " + info);
+                    match.get().replaceFeatures(info.getSupportedFeatures());
+                    updateImsServiceFeatures(info);
+                } else {
+                    // Dynamic query case: start bind and get features.
+                }
             } else {
                 Log.i(TAG, "Adding newly added ImsService to cache: " + info.name);
                 mInstalledServicesCache.add(info);
-                newlyAddedInfos.add(info);
+                if (info.featureFromMetadata) {
+                    newlyAddedInfos.add(info);
+                } else {
+                    // newly added ImsServiceInfo that has not had features queried yet. Start async
+                    // bind and query features.
+                }
             }
         }
         // Loop through the newly created ServiceInfos in a separate loop to make sure the cache
@@ -669,10 +725,11 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
         if (info == null) {
             return;
         }
-        ImsServiceController controller = info.controllerFactory.create(mContext, info.name, this);
         HashSet<Pair<Integer, Integer>> features = calculateFeaturesToCreate(info);
         // Only bind if there are features that will be created by the service.
         if (features.size() > 0) {
+            ImsServiceController controller = info.controllerFactory.create(mContext, info.name,
+                    this);
             Log.i(TAG, "Binding ImsService: " + controller.getComponentName() + " with features: "
                     + features);
             controller.bind(features);
@@ -707,8 +764,10 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
         // Check if the info is a carrier service
         int slotId = getSlotForActiveCarrierService(info);
         if (slotId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
-            imsFeaturesBySlot.addAll(info.supportedFeatures.stream().map(
-                    feature -> new Pair<>(slotId, feature)).collect(Collectors.toList()));
+            imsFeaturesBySlot.addAll(info.getSupportedFeatures().stream()
+                    // Match slotId with feature slotId.
+                    .filter(feature -> slotId == feature.first)
+                    .collect(Collectors.toList()));
         } else if (isDeviceService(info)) {
             // For all slots that are not currently using a carrier ImsService, enable all features
             // for the device default.
@@ -716,17 +775,19 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
                 final int currSlotId = i;
                 ImsServiceInfo carrierImsInfo = getImsServiceInfoFromCache(mCarrierServices[i]);
                 if (carrierImsInfo == null) {
-                    // No Carrier override, add all features
-                    imsFeaturesBySlot.addAll(info.supportedFeatures.stream().map(
-                            feature -> new Pair<>(currSlotId, feature)).collect(
-                            Collectors.toList()));
+                    // No Carrier override, add all features for this slot
+                    imsFeaturesBySlot.addAll(info.getSupportedFeatures().stream()
+                            .filter(feature -> currSlotId == feature.first)
+                            .collect(Collectors.toList()));
                 } else {
                     // Add all features to the device service that are not currently covered by
                     // the carrier ImsService.
-                    Set<Integer> deviceFeatures = new HashSet<>(info.supportedFeatures);
-                    deviceFeatures.removeAll(carrierImsInfo.supportedFeatures);
-                    imsFeaturesBySlot.addAll(deviceFeatures.stream().map(
-                            feature -> new Pair<>(currSlotId, feature)).collect(
+                    HashSet<Pair<Integer, Integer>> deviceFeatures =
+                            new HashSet<>(info.getSupportedFeatures());
+                    deviceFeatures.removeAll(carrierImsInfo.getSupportedFeatures());
+                    // only add features for current slot
+                    imsFeaturesBySlot.addAll(deviceFeatures.stream()
+                            .filter(feature -> currSlotId == feature.first).collect(
                             Collectors.toList()));
                 }
             }
@@ -782,9 +843,15 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
                 // ImsService is retrieved from the cache. If the cache hasn't been populated yet,
                 // the calls to unbind/bind will fail (intended during initial start up).
                 unbindImsService(getImsServiceInfoFromCache(oldPackageName));
-                bindNewImsService(getImsServiceInfoFromCache(newPackageName));
-                // Recalculate the device ImsService features to reflect changes.
-                updateImsServiceFeatures(getImsServiceInfoFromCache(mDeviceService));
+                ImsServiceInfo newInfo = getImsServiceInfoFromCache(newPackageName);
+                if(newInfo.featureFromMetadata) {
+                    bindNewImsService(newInfo);
+                    // Recalculate the device ImsService features to reflect changes.
+                    updateImsServiceFeatures(getImsServiceInfoFromCache(mDeviceService));
+                } else {
+                    // Dynamic query case, need to query features before deciding to bind and
+                    // update features.
+                }
             }
         }
     }
@@ -826,12 +893,11 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     private List<ImsServiceInfo> getStaticImsService() {
         List<ImsServiceInfo> infos = new ArrayList<>();
 
-        ImsServiceInfo info = new ImsServiceInfo();
+        ImsServiceInfo info = new ImsServiceInfo(mNumSlots);
         info.name = mStaticComponent;
-        info.supportedFeatures = new HashSet<>(ImsFeature.FEATURE_MAX);
         info.controllerFactory = mImsServiceControllerFactoryStaticBindingCompat;
         info.supportsEmergencyMmTel = true;
-        info.supportedFeatures.add(ImsFeature.FEATURE_MMTEL);
+        info.addFeatureForAllSlots(ImsFeature.FEATURE_MMTEL);
         infos.add(info);
         return infos;
     }
@@ -851,9 +917,8 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
             ServiceInfo serviceInfo = entry.serviceInfo;
 
             if (serviceInfo != null) {
-                ImsServiceInfo info = new ImsServiceInfo();
+                ImsServiceInfo info = new ImsServiceInfo(mNumSlots);
                 info.name = new ComponentName(serviceInfo.packageName, serviceInfo.name);
-                info.supportedFeatures = new HashSet<>(ImsFeature.FEATURE_MAX);
                 info.controllerFactory = controllerFactory;
                 // Add all supported features
                 if (serviceInfo.metaData != null) {
@@ -861,21 +926,24 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
                         info.supportsEmergencyMmTel = true;
                     }
                     if (serviceInfo.metaData.getBoolean(METADATA_MMTEL_FEATURE, false)) {
-                        info.supportedFeatures.add(ImsFeature.FEATURE_MMTEL);
+                        info.addFeatureForAllSlots(ImsFeature.FEATURE_MMTEL);
                     }
                     if (serviceInfo.metaData.getBoolean(METADATA_RCS_FEATURE, false)) {
-                        info.supportedFeatures.add(ImsFeature.FEATURE_RCS);
+                        info.addFeatureForAllSlots(ImsFeature.FEATURE_RCS);
                     }
+                }
+                if (info.getSupportedFeatures().isEmpty()) {
+                    // metadata empty, try dynamic query instead
+                    info.featureFromMetadata = false;
                 }
                 // Check manifest permission to be sure that the service declares the correct
                 // permissions.
                 if (TextUtils.equals(serviceInfo.permission,
                         Manifest.permission.BIND_IMS_SERVICE)) {
-                    Log.d(TAG, "ImsService (" + serviceIntent + ") added to cache: "
-                            + info.name + " with features: " + info.supportedFeatures);
+                    Log.d(TAG, "ImsService added to cache: " + info);
                     infos.add(info);
                 } else {
-                    Log.w(TAG, "ImsService does not have BIND_IMS_SERVICE permission: "
+                    Log.w(TAG, "ImsService is not protected with BIND_IMS_SERVICE permission: "
                             + info.name);
                 }
             }
