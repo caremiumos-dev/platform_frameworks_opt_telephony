@@ -120,13 +120,28 @@ public class ImsServiceController {
             synchronized (mLock) {
                 mIsBinding = false;
             }
+            cleanupConnection();
+            Log.w(LOG_TAG, "ImsService(" + name + "): onServiceDisconnected. Waiting...");
+            // Service disconnected, but we are still technically bound. Waiting for reconnect.
+        }
+
+        @Override
+        public void onBindingDied(ComponentName name) {
+            synchronized (mLock) {
+                mIsBinding = false;
+                mIsBound = false;
+            }
+            cleanupConnection();
+            Log.w(LOG_TAG, "ImsService(" + name + "): onBindingDied. Starting rebind...");
+            startDelayedRebindToService();
+        }
+
+        private void cleanupConnection() {
             if (isServiceControllerAvailable()) {
                 mImsServiceControllerBinder.unlinkToDeath(mImsDeathRecipient, 0);
             }
             notifyAllFeaturesRemoved();
             cleanUpService();
-            Log.w(LOG_TAG, "ImsService(" + name + "): onServiceDisconnected. Rebinding...");
-            startDelayedRebindToService();
         }
     }
 
@@ -315,8 +330,8 @@ public class ImsServiceController {
     }
 
     /**
-     * Sends request to bind to ImsService designated by the {@ComponentName} with the feature set
-     * imsFeatureSet
+     * Sends request to bind to ImsService designated by the {@link ComponentName} with the feature
+     * set imsFeatureSet.
      *
      * @param imsFeatureSet a Set of Pairs that designate the slotId->featureId that need to be
      *                      created once the service is bound.
@@ -390,6 +405,10 @@ public class ImsServiceController {
     public void changeImsServiceFeatures(HashSet<Pair<Integer, Integer>> newImsFeatures)
             throws RemoteException {
         synchronized (mLock) {
+            Log.i(LOG_TAG, "Features changed (" + mImsFeatures + "->" + newImsFeatures + ") for "
+                    + "ImsService: " + mComponentName);
+            // Set features first in case we lose binding and need to rebind later.
+            mImsFeatures = newImsFeatures;
             if (mIsBound) {
                 // add features to service.
                 HashSet<Pair<Integer, Integer>> newFeatures = new HashSet<>(newImsFeatures);
@@ -404,9 +423,6 @@ public class ImsServiceController {
                     removeImsServiceFeature(i);
                 }
             }
-            Log.i(LOG_TAG, "Features changed (" + mImsFeatures + "->" + newImsFeatures + ") for "
-                    + "ImsService: " + mComponentName);
-            mImsFeatures = newImsFeatures;
         }
     }
 
@@ -464,7 +480,11 @@ public class ImsServiceController {
 
     public void enableIms(int slotId) {
         try {
-            mIImsServiceController.enableIms(slotId);
+            synchronized (mLock) {
+                if (isServiceControllerAvailable()) {
+                    mIImsServiceController.enableIms(slotId);
+                }
+            }
         } catch (RemoteException e) {
             Log.w(LOG_TAG, "Couldn't enable IMS: " + e.getMessage());
         }
@@ -472,7 +492,11 @@ public class ImsServiceController {
 
     public void disableIms(int slotId) {
         try {
-            mIImsServiceController.disableIms(slotId);
+            synchronized (mLock) {
+                if (isServiceControllerAvailable()) {
+                    mIImsServiceController.disableIms(slotId);
+                }
+            }
         } catch (RemoteException e) {
             Log.w(LOG_TAG, "Couldn't disable IMS: " + e.getMessage());
         }
@@ -512,7 +536,8 @@ public class ImsServiceController {
      */
     public IImsRegistration getRegistration(int slotId) throws RemoteException {
         synchronized (mLock) {
-            return mIImsServiceController.getRegistration(slotId);
+                return isServiceControllerAvailable() ?
+                        mIImsServiceController.getRegistration(slotId) : null;
         }
     }
 
@@ -521,7 +546,7 @@ public class ImsServiceController {
      */
     public IImsConfig getConfig(int slotId) throws RemoteException {
         synchronized (mLock) {
-            return mIImsServiceController.getConfig(slotId);
+            return isServiceControllerAvailable() ? mIImsServiceController.getConfig(slotId) : null;
         }
     }
 
@@ -535,6 +560,15 @@ public class ImsServiceController {
      */
     protected void setServiceController(IBinder serviceController) {
         mIImsServiceController = IImsServiceController.Stub.asInterface(serviceController);
+    }
+
+    /**
+     * @return true if the controller is currently bound.
+     */
+    public boolean isBound() {
+        synchronized (mLock) {
+            return mIsBound;
+        }
     }
 
     /**
@@ -727,7 +761,6 @@ public class ImsServiceController {
             mImsServiceConnection = null;
             mImsServiceControllerBinder = null;
             setServiceController(null);
-            mIsBound = false;
         }
     }
 }
