@@ -1,0 +1,8 @@
+Verified+1: Anton Hansson <hansson@google.com>
+Code-Review+2: Jack Yu <jackyu@google.com>
+Presubmit-Verified-1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Anton Hansson <hansson@google.com>
+Submitted-at: Fri, 23 Feb 2018 16:59:38 +0000
+Reviewed-on: https://android-review.googlesource.com/624469
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
