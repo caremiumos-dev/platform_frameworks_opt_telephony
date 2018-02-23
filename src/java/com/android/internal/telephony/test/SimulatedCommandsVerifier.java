@@ -1250,16 +1250,6 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public void nvReadItem(int itemID, Message response) {
-
-    }
-
-    @Override
-    public void nvWriteItem(int itemID, String itemValue, Message response) {
-
-    }
-
-    @Override
     public void nvWriteCdmaPrl(byte[] preferredRoamingList, Message response) {
 
     }

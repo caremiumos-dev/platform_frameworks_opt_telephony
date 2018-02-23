@@ -1971,16 +1971,6 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
-    public void nvReadItem(int itemID, Message response) {
-        unimplemented(response);
-    }
-
-    @Override
-    public void nvWriteItem(int itemID, String itemValue, Message response) {
-        unimplemented(response);
-    }
-
-    @Override
     public void nvWriteCdmaPrl(byte[] preferredRoamingList, Message response) {
         unimplemented(response);
     }

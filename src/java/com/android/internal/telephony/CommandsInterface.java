@@ -1877,25 +1877,6 @@ public interface CommandsInterface {
             int p3, String data, Message response);
 
     /**
-     * Read one of the NV items defined in {@link RadioNVItems} / {@code ril_nv_items.h}.
-     * Used for device configuration by some CDMA operators.
-     *
-     * @param itemID the ID of the item to read
-     * @param response callback message with the String response in the obj field
-     */
-    void nvReadItem(int itemID, Message response);
-
-    /**
-     * Write one of the NV items defined in {@link RadioNVItems} / {@code ril_nv_items.h}.
-     * Used for device configuration by some CDMA operators.
-     *
-     * @param itemID the ID of the item to read
-     * @param itemValue the value to write, as a String
-     * @param response Callback message.
-     */
-    void nvWriteItem(int itemID, String itemValue, Message response);
-
-    /**
      * Update the CDMA Preferred Roaming List (PRL) in the radio NV storage.
      * Used for device configuration by some CDMA operators.
      *

@@ -2045,29 +2045,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
-     * Read one of the NV items defined in {@link RadioNVItems} / {@code ril_nv_items.h}.
-     * Used for device configuration by some CDMA operators.
-     *
-     * @param itemID the ID of the item to read
-     * @param response callback message with the String response in the obj field
-     */
-    public void nvReadItem(int itemID, Message response) {
-        mCi.nvReadItem(itemID, response);
-    }
-
-    /**
-     * Write one of the NV items defined in {@link RadioNVItems} / {@code ril_nv_items.h}.
-     * Used for device configuration by some CDMA operators.
-     *
-     * @param itemID the ID of the item to read
-     * @param itemValue the value to write, as a String
-     * @param response Callback message.
-     */
-    public void nvWriteItem(int itemID, String itemValue, Message response) {
-        mCi.nvWriteItem(itemID, itemValue, response);
-    }
-
-    /**
      * Update the CDMA Preferred Roaming List (PRL) in the radio NV storage.
      * Used for device configuration by some CDMA operators.
      *

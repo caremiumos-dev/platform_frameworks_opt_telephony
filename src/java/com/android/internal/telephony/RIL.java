@@ -3108,50 +3108,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void nvReadItem(int itemID, Message result) {
-        IRadio radioProxy = getRadioProxy(result);
-        if (radioProxy != null) {
-            RILRequest rr = obtainRequest(RIL_REQUEST_NV_READ_ITEM, result,
-                    mRILDefaultWorkSource);
-
-            if (RILJ_LOGD) {
-                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                        + " itemId = " + itemID);
-            }
-
-            try {
-                radioProxy.nvReadItem(rr.mSerial, itemID);
-            } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(rr, "nvReadItem", e);
-            }
-        }
-    }
-
-    @Override
-    public void nvWriteItem(int itemId, String itemValue, Message result) {
-        IRadio radioProxy = getRadioProxy(result);
-        if (radioProxy != null) {
-            RILRequest rr = obtainRequest(RIL_REQUEST_NV_WRITE_ITEM, result,
-                    mRILDefaultWorkSource);
-
-            if (RILJ_LOGD) {
-                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                        + " itemId = " + itemId + " itemValue = " + itemValue);
-            }
-
-            NvWriteItem item = new NvWriteItem();
-            item.itemId = itemId;
-            item.value = convertNullToEmptyString(itemValue);
-
-            try {
-                radioProxy.nvWriteItem(rr.mSerial, item);
-            } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(rr, "nvWriteItem", e);
-            }
-        }
-    }
-
-    @Override
     public void nvWriteCdmaPrl(byte[] preferredRoamingList, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
@@ -4633,10 +4589,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_SIM_CLOSE_CHANNEL";
             case RIL_REQUEST_SIM_TRANSMIT_APDU_CHANNEL:
                 return "RIL_REQUEST_SIM_TRANSMIT_APDU_CHANNEL";
-            case RIL_REQUEST_NV_READ_ITEM:
-                return "RIL_REQUEST_NV_READ_ITEM";
-            case RIL_REQUEST_NV_WRITE_ITEM:
-                return "RIL_REQUEST_NV_WRITE_ITEM";
             case RIL_REQUEST_NV_WRITE_CDMA_PRL:
                 return "RIL_REQUEST_NV_WRITE_CDMA_PRL";
             case RIL_REQUEST_NV_RESET_CONFIG:
