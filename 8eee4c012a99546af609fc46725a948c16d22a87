@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c65bb1af_114fb619",
+        "filename": "src/java/com/android/internal/telephony/RatRatcheter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-23T22:24:43Z",
+      "side": 1,
+      "message": "nit: blank line",
+      "revId": "8eee4c012a99546af609fc46725a948c16d22a87",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a5425b3_378f3fd5",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-23T22:24:43Z",
+      "side": 1,
+      "message": "Clever little piece of coding here.",
+      "range": {
+        "startLine": 1448,
+        "startChar": 15,
+        "endLine": 1451,
+        "endChar": 27
+      },
+      "revId": "8eee4c012a99546af609fc46725a948c16d22a87",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
