@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56025457_9f2b1e41",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1277460
+      },
+      "writtenOn": "2018-02-23T19:26:21Z",
+      "side": 0,
+      "message": "instead of creating a UiccCard when a card isn\u0027t actually present (seems to break the intention), would it be possible to investigate appropriate location in UiccSlot to broadcast: UiccProfile.broadcastInternalIccStateChangedIntent(\n103                         IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, mPhoneId);",
+      "range": {
+        "startLine": 88,
+        "startChar": 42,
+        "endLine": 88,
+        "endChar": 43
+      },
+      "revId": "7ae0ef96c1c396c48a60f4139bbb6d615e18ee33",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
