@@ -112,6 +112,7 @@ public class ImsResolverTest extends ImsTestBase {
         setupResolver(1/*numSlots*/);
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> features = new HashSet<>();
+        features.add(ImsResolver.METADATA_EMERGENCY_MMTEL_FEATURE);
         features.add(ImsResolver.METADATA_MMTEL_FEATURE);
         features.add(ImsResolver.METADATA_RCS_FEATURE);
         info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, features, true));
@@ -1041,6 +1042,8 @@ public class ImsResolverTest extends ImsTestBase {
         return -1;
     }
 
+    // Make sure the metadata provided in the service definition creates the associated features in
+    // the ImsServiceInfo. Note: this only tests for one slot.
     private boolean isImsServiceInfoEqual(ComponentName name, Set<String> features,
             ImsResolver.ImsServiceInfo sInfo) {
         if (!Objects.equals(sInfo.name, name)) {
@@ -1049,17 +1052,19 @@ public class ImsResolverTest extends ImsTestBase {
         for (String f : features) {
             switch (f) {
                 case ImsResolver.METADATA_EMERGENCY_MMTEL_FEATURE:
-                    if (!sInfo.supportedFeatures.contains(ImsFeature.FEATURE_EMERGENCY_MMTEL)) {
+                    if (!sInfo.supportsEmergencyMmTel) {
                         return false;
                     }
                     break;
                 case ImsResolver.METADATA_MMTEL_FEATURE:
-                    if (!sInfo.supportedFeatures.contains(ImsFeature.FEATURE_MMTEL)) {
+                    if (!sInfo.getSupportedFeatures().contains(
+                            new Pair<> (0, ImsFeature.FEATURE_MMTEL))) {
                         return false;
                     }
                     break;
                 case ImsResolver.METADATA_RCS_FEATURE:
-                    if (!sInfo.supportedFeatures.contains(ImsFeature.FEATURE_RCS)) {
+                    if (!sInfo.getSupportedFeatures().contains(
+                            new Pair<> (0, ImsFeature.FEATURE_RCS))) {
                         return false;
                     }
                     break;
