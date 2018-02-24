@@ -22,6 +22,30 @@
       "revId": "7ae0ef96c1c396c48a60f4139bbb6d615e18ee33",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ab806b2_2804a948",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2018-02-24T13:46:32Z",
+      "side": 0,
+      "message": "UiccCard class holds Card State, it has the state called ABSENT also, so we should be creating UiccCard when SIM is ABSENT ?\nEarlier design we were creating UiccCard object in ABSENT case as well.\n\nAlso, SubscriptionManager.getSimStateForSlotIndex() fails to report ABSENT if we do not create UiccCard in ABSENT case.",
+      "parentUuid": "56025457_9f2b1e41",
+      "range": {
+        "startLine": 88,
+        "startChar": 42,
+        "endLine": 88,
+        "endChar": 43
+      },
+      "revId": "7ae0ef96c1c396c48a60f4139bbb6d615e18ee33",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
