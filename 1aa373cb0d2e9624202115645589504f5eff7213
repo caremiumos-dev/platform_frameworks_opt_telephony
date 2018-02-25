@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8773391f_0f621adc",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-02-25T21:49:29Z",
+      "side": 1,
+      "message": "If we do decide to go with this change, this function should change as well and radioStateUnavailable should go down to UiccCard too, instead of disposing it or broadcasting the intent here.\n\nAlso GsmCdmaPhone.getIccCard() needs to be updated, as that should never return null.",
+      "revId": "1aa373cb0d2e9624202115645589504f5eff7213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
