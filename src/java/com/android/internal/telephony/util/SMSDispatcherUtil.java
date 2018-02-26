@@ -171,7 +171,7 @@ public final class SMSDispatcherUtil {
     }
 
     /**
-     * Gsm implementation for {@link #calculateLength(boolean, CharSequence, boolean)}
+     * Gsm implementation for {@link #calculateLength(boolean, CharSequence)}
      *
      * @param messageBody the message to encode
      * @param use7bitOnly ignore (but still count) illegal characters if true
@@ -179,8 +179,8 @@ public final class SMSDispatcherUtil {
      */
     public static TextEncodingDetails calculateLengthGsm(CharSequence messageBody,
             boolean use7bitOnly) {
-        return com.android.internal.telephony.cdma.SmsMessage.calculateLength(messageBody,
-                use7bitOnly, false);
+        return com.android.internal.telephony.gsm.SmsMessage.calculateLength(messageBody,
+                use7bitOnly);
 
     }
 
@@ -193,7 +193,7 @@ public final class SMSDispatcherUtil {
      */
     public static TextEncodingDetails calculateLengthCdma(CharSequence messageBody,
             boolean use7bitOnly) {
-        return com.android.internal.telephony.gsm.SmsMessage.calculateLength(messageBody,
-                use7bitOnly);
+        return com.android.internal.telephony.cdma.SmsMessage.calculateLength(messageBody,
+                use7bitOnly, false);
     }
 }
