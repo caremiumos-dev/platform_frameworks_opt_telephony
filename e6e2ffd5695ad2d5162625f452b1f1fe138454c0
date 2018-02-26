@@ -261,6 +261,30 @@
       "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4291e4f3_9a9f5eee",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2314,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-02-26T19:49:11Z",
+      "side": 1,
+      "message": "So what if we call setInitalAttachApn when records is not loaded? The emergency apn is selected. Suppose that PS attach is failed at that time.\n\nThen onRecrodsLoadedOrSubIdChanged() is called again when records is loaded, so we call setInitialAttachApn again, and then PS attach is success?",
+      "parentUuid": "7831df8a_0ac6f1e7",
+      "range": {
+        "startLine": 2312,
+        "startChar": 7,
+        "endLine": 2314,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
