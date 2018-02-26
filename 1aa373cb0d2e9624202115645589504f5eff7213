@@ -16,6 +16,24 @@
       "revId": "1aa373cb0d2e9624202115645589504f5eff7213",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1410043_9f52d3f1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2018-02-26T15:49:52Z",
+      "side": 1,
+      "message": "From our understanding RADIO UNAVAILABLE is an intermittent state which comes when Modem went to wrong state(some part of Modem crash), in this scenario we dont know the appropriate state of CARD so treating the card state as UNKNOWN is appropriate ? also, as its an intermittent state is it required to inform to CLIENTS ?\n\nTo handle GsmCdamPhone.getIccCard() not return null, we need to create UiccCard/UiccProfile object by default irrespective of SIM state, do you think the same way or any other approach you are thinking of, could you please clarify/suggest on this.",
+      "parentUuid": "8773391f_0f621adc",
+      "revId": "1aa373cb0d2e9624202115645589504f5eff7213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
