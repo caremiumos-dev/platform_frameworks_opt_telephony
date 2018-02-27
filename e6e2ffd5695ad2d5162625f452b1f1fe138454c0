@@ -285,6 +285,30 @@
       "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3099ccea_2f22f266",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2314,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-02-27T08:57:23Z",
+      "side": 1,
+      "message": "1. Unnecessary emergency apn profile entry gets created in modem database with initial attach request\n\n2. If modem attach profile is pre-configured and attach happens on powerup, this initial attach request with emergency apn will overwrite modem profile leads to ps detach. And modem tries for ps attach with emergency apn which gets rejected. Yes, ps attach gets restored once proper apn is updated, but there is a unwanted ps detach because of emergency apn which is a concern.",
+      "parentUuid": "4291e4f3_9a9f5eee",
+      "range": {
+        "startLine": 2312,
+        "startChar": 7,
+        "endLine": 2314,
+        "endChar": 9
+      },
+      "revId": "e6e2ffd5695ad2d5162625f452b1f1fe138454c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
