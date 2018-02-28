@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0a4c304_7d1656df",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-28T18:25:06Z",
+      "side": 1,
+      "message": "well in that case, I suggest 3000. TBH these should probably go in a property somewhere and be loaded when the devicestatemonitor starts. Maybe a TODO (and a bug)?",
+      "range": {
+        "startLine": 65,
+        "startChar": 7,
+        "endLine": 65,
+        "endChar": 18
+      },
+      "revId": "ab299840cd408e475d05307a75b6755b865d77a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32bb9efc_6cec0dda",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3590,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-28T18:25:06Z",
+      "side": 1,
+      "message": "Will this puke if you set bits that aren\u0027t set-able in pre 1.2 HALs? You can check the documentation and see, but my guess is it will (and should) barf.",
+      "range": {
+        "startLine": 3590,
+        "startChar": 63,
+        "endLine": 3590,
+        "endChar": 69
+      },
+      "revId": "ab299840cd408e475d05307a75b6755b865d77a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
