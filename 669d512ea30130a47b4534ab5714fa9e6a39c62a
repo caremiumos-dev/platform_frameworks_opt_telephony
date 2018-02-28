@@ -70,6 +70,30 @@
       "revId": "669d512ea30130a47b4534ab5714fa9e6a39c62a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6237cc15_57ec8147",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1699,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-02-28T19:26:56Z",
+      "side": 1,
+      "message": "Ok, so the crux of this question is whether or not data service manager should handle the Link layer. If we want to support Links (L2) that won\u0027t have their own network factory then it must go through DataService. I\u0027m trying to imagine a scenario where there is a link that doesn\u0027t register its own network factory with Connectivity, but I can\u0027t find one. OTOH I can\u0027t think of anything where having this LCE be distinct hurts anything; it might only give us flexibility.\n\nNote: for NattKeepalive it\u0027s clear - it belongs in DataService. There is a separate pending bug for that.",
+      "parentUuid": "025ba6b3_febf91fb",
+      "range": {
+        "startLine": 1696,
+        "startChar": 0,
+        "endLine": 1699,
+        "endChar": 84
+      },
+      "revId": "669d512ea30130a47b4534ab5714fa9e6a39c62a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
