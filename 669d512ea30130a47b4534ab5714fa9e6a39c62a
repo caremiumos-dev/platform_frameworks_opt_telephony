@@ -94,6 +94,30 @@
       "revId": "669d512ea30130a47b4534ab5714fa9e6a39c62a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf1a70fe_468820d9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1699,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-02-28T19:42:24Z",
+      "side": 1,
+      "message": "It will be a lot of more codes if you want it go through data service manager, data service, and cellular data service. I am fine with either.",
+      "parentUuid": "6237cc15_57ec8147",
+      "range": {
+        "startLine": 1696,
+        "startChar": 0,
+        "endLine": 1699,
+        "endChar": 84
+      },
+      "revId": "669d512ea30130a47b4534ab5714fa9e6a39c62a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
