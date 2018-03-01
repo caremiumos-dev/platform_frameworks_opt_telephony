@@ -208,6 +208,8 @@ public class DcController extends StateMachine {
 
             mDataServiceManager.registerForDataCallListChanged(getHandler(),
                     DataConnection.EVENT_DATA_STATE_CHANGED);
+            mDataServiceManager.registerForLinkCapacityEstimateChanged(getHandler(),
+                    DataConnection.EVENT_LINK_CAPACITY_ESTIMATE_CHANGED);
 
             if (mNetworkPolicyManager != null) {
                 mNetworkPolicyManager.registerListener(mListener);
@@ -220,6 +222,7 @@ public class DcController extends StateMachine {
                     == TransportType.WWAN) {
                 mPhone.mCi.unregisterForRilConnected(getHandler());
             }
+            mDataServiceManager.unregisterForLinkCapacityEstimateChanged(getHandler());
             mDataServiceManager.unregisterForDataCallListChanged(getHandler());
 
             if (mDcTesterDeactivateAll != null) {
@@ -236,11 +239,11 @@ public class DcController extends StateMachine {
 
             switch (msg.what) {
                 case DataConnection.EVENT_RIL_CONNECTED:
-                    ar = (AsyncResult)msg.obj;
+                    ar = (AsyncResult) msg.obj;
                     if (ar.exception == null) {
                         if (DBG) {
-                            log("DccDefaultState: msg.what=EVENT_RIL_CONNECTED mRilVersion=" +
-                                ar.result);
+                            log("DccDefaultState: msg.what=EVENT_RIL_CONNECTED mRilVersion="
+                                    + ar.result);
                         }
                     } else {
                         log("DccDefaultState: Unexpected exception on EVENT_RIL_CONNECTED");
@@ -248,12 +251,21 @@ public class DcController extends StateMachine {
                     break;
 
                 case DataConnection.EVENT_DATA_STATE_CHANGED:
-                    ar = (AsyncResult)msg.obj;
+                    ar = (AsyncResult) msg.obj;
                     if (ar.exception == null) {
                         onDataStateChanged((ArrayList<DataCallResponse>)ar.result);
                     } else {
-                        log("DccDefaultState: EVENT_DATA_STATE_CHANGED:" +
-                                    " exception; likely radio not available, ignore");
+                        log("DccDefaultState: EVENT_DATA_STATE_CHANGED:"
+                                    + " exception; likely radio not available, ignore");
+                    }
+                    break;
+                case DataConnection.EVENT_LINK_CAPACITY_ESTIMATE_CHANGED:
+                    ar = (AsyncResult) msg.obj;
+                    if (ar.exception == null) {
+                        onLinkCapacityEstimateChanged(ar);
+                    } else {
+                        log("DccDefaultState: EVENT_LINK_CAPACITY_ESTIMATE_CHANGED:"
+                                    + " exception; likely radio not available, ignore");
                     }
                     break;
             }
@@ -459,6 +471,19 @@ public class DcController extends StateMachine {
             }
 
             if (VDBG) log("onDataStateChanged: X");
+        }
+
+        /**
+         * Process incoming LinkCapacityEstimates when the change
+         * @param ar an AsyncResult with a LinkCapacityEstimate in the ar.obj field.
+         */
+        private void onLinkCapacityEstimateChanged(AsyncResult ar) {
+            // The LCE can only be reported via ACTIVE data connections.
+            synchronized (mDcListAll) {
+                for (DataConnection dc : mDcListActiveByCid.values()) {
+                    dc.sendMessage(DataConnection.EVENT_LINK_CAPACITY_ESTIMATE_CHANGED, ar);
+                }
+            }
         }
     }
 

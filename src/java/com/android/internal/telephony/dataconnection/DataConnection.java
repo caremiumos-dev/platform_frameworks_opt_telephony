@@ -46,6 +46,7 @@ import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
 import android.telephony.data.DataServiceCallback;
+import android.telephony.data.LinkCapacityEstimate;
 import android.text.TextUtils;
 import android.util.LocalLog;
 import android.util.Pair;
@@ -56,7 +57,6 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CallTracker;
 import com.android.internal.telephony.CarrierSignalAgent;
 import com.android.internal.telephony.DctConstants;
-import com.android.internal.telephony.LinkCapacityEstimate;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.RILConstants;
@@ -217,10 +217,10 @@ public class DataConnection extends StateMachine {
     static final int EVENT_KEEPALIVE_STOPPED = BASE + 20;
     static final int EVENT_KEEPALIVE_START_REQUEST = BASE + 21;
     static final int EVENT_KEEPALIVE_STOP_REQUEST = BASE + 22;
-    static final int EVENT_LINK_CAPACITY_CHANGED = BASE + 23;
+    static final int EVENT_LINK_CAPACITY_ESTIMATE_CHANGED = BASE + 23;
 
     private static final int CMD_TO_STRING_COUNT =
-            EVENT_LINK_CAPACITY_CHANGED - BASE + 1;
+            EVENT_LINK_CAPACITY_ESTIMATE_CHANGED - BASE + 1;
 
     private static String[] sCmdToString = new String[CMD_TO_STRING_COUNT];
     static {
@@ -250,7 +250,8 @@ public class DataConnection extends StateMachine {
         sCmdToString[EVENT_KEEPALIVE_STOPPED - BASE] = "EVENT_KEEPALIVE_STOPPED";
         sCmdToString[EVENT_KEEPALIVE_START_REQUEST - BASE] = "EVENT_KEEPALIVE_START_REQUEST";
         sCmdToString[EVENT_KEEPALIVE_STOP_REQUEST - BASE] = "EVENT_KEEPALIVE_STOP_REQUEST";
-        sCmdToString[EVENT_LINK_CAPACITY_CHANGED - BASE] = "EVENT_LINK_CAPACITY_CHANGED";
+        sCmdToString[EVENT_LINK_CAPACITY_ESTIMATE_CHANGED - BASE] =
+                "EVENT_LINK_CAPACITY_ESTIMATE_CHANGED";
     }
     // Convert cmd to string or null if unknown
     static String cmdToString(int cmd) {
@@ -1385,6 +1386,11 @@ public class DataConnection extends StateMachine {
                                 ConnectivityManager.PacketKeepalive.ERROR_INVALID_NETWORK);
                     }
                     break;
+                case EVENT_LINK_CAPACITY_ESTIMATE_CHANGED:
+                    if (DBG) {
+                        log("DcDefaultState: Discarding LINK_CAPACITY_ESTIMATE_CHANGED"
+                                + " in inactive state.");
+                    }
                 default:
                     if (DBG) {
                         log("DcDefaultState: shouldn't happen but ignore msg.what="
@@ -1695,8 +1701,6 @@ public class DataConnection extends StateMachine {
                     50, misc);
             mPhone.mCi.registerForNattKeepaliveStatus(
                     getHandler(), DataConnection.EVENT_KEEPALIVE_STATUS, null);
-            mPhone.mCi.registerForLceInfo(
-                    getHandler(), DataConnection.EVENT_LINK_CAPACITY_CHANGED, null);
         }
 
         @Override
@@ -1716,7 +1720,6 @@ public class DataConnection extends StateMachine {
             mNetworkInfo.setDetailedState(NetworkInfo.DetailedState.DISCONNECTED,
                     reason, mNetworkInfo.getExtraInfo());
             mPhone.mCi.unregisterForNattKeepaliveStatus(getHandler());
-            mPhone.mCi.unregisterForLceInfo(getHandler());
             if (mNetworkAgent != null) {
                 mNetworkAgent.sendNetworkInfo(mNetworkInfo);
                 mNetworkAgent = null;
@@ -1913,10 +1916,10 @@ public class DataConnection extends StateMachine {
                     retVal = HANDLED;
                     break;
                 }
-                case EVENT_LINK_CAPACITY_CHANGED: {
+                case EVENT_LINK_CAPACITY_ESTIMATE_CHANGED: {
                     AsyncResult ar = (AsyncResult) msg.obj;
                     if (ar.exception != null) {
-                        loge("EVENT_LINK_CAPACITY_CHANGED e=" + ar.exception);
+                        loge("EVENT_LINK_CAPACITY_ESTIMATE_CHANGED e=" + ar.exception);
                     } else {
                         LinkCapacityEstimate lce = (LinkCapacityEstimate) ar.result;
                         NetworkCapabilities nc = getNetworkCapabilities();
