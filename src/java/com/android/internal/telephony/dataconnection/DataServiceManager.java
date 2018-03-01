@@ -37,6 +37,7 @@ import android.telephony.data.DataService;
 import android.telephony.data.DataServiceCallback;
 import android.telephony.data.IDataService;
 import android.telephony.data.IDataServiceCallback;
+import android.telephony.data.LinkCapacityEstimate;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.Phone;
@@ -72,6 +73,8 @@ public class DataServiceManager {
     private final Map<IBinder, Message> mMessageMap = new ConcurrentHashMap<>();
 
     private final RegistrantList mDataCallListChangedRegistrants = new RegistrantList();
+
+    private final RegistrantList mLceChangedRegistrants = new RegistrantList();
 
     private class DataServiceManagerDeathRecipient implements IBinder.DeathRecipient {
 
@@ -170,6 +173,12 @@ public class DataServiceManager {
         public void onDataCallListChanged(List<DataCallResponse> dataCallList) {
             mDataCallListChangedRegistrants.notifyRegistrants(
                     new AsyncResult(null, dataCallList, null));
+        }
+
+        @Override
+        public void onLinkCapacityEstimateChanged(LinkCapacityEstimate lce) {
+            mLceChangedRegistrants.notifyRegistrants(
+                    new AsyncResult(null, lce, null));
         }
     }
 
@@ -453,6 +462,28 @@ public class DataServiceManager {
         }
     }
 
+    /**
+     * Register for link capacity estimate changed event.
+     *
+     * @param h The target to post the event message to.
+     * @param what The event.
+     */
+    public void registerForLinkCapacityEstimateChanged(Handler h, int what) {
+        if (h != null) {
+            mLceChangedRegistrants.addUnique(h, what, null);
+        }
+    }
+
+    /**
+     * Unregister for link capacity estimate changed event.
+     *
+     * @param h The handler
+     */
+    public void unregisterForLinkCapacityEstimateChanged(Handler h) {
+        if (h != null) {
+            mDataCallListChangedRegistrants.remove(h);
+        }
+    }
     /**
      * Register for data service binding status changed event.
      *

@@ -89,6 +89,7 @@ import android.telephony.CellInfo;
 import android.telephony.PcoData;
 import android.telephony.SignalStrength;
 import android.telephony.SmsMessage;
+import android.telephony.data.LinkCapacityEstimate;
 
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
 import com.android.internal.telephony.cdma.CdmaInformationRecords;
