@@ -86,6 +86,7 @@ import android.telephony.TelephonyHistogram;
 import android.telephony.TelephonyManager;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
+import android.telephony.data.LinkCapacityEstimate;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
