@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e00a7485_2bc7c100",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4999,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-03-02T23:43:34Z",
+      "side": 0,
+      "message": "I don\u0027t think these did anything",
+      "range": {
+        "startLine": 4998,
+        "startChar": 0,
+        "endLine": 4999,
+        "endChar": 28
+      },
+      "revId": "d8a7436fa5298dd35a1bbc787df8e862b4d0336a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
