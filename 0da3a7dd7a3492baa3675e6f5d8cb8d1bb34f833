@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8e6db25b_60b00036",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2018-03-02T14:09:47Z",
+      "side": 1,
+      "message": "Correction, we need here slot specific query as well. \n\nObserved a case, by time request reached here, N/W mode not updated by SubscriptionInfoUpdaer.java hence we need slotId specific query as well.",
+      "parentUuid": "f9533a3d_64adc514",
+      "range": {
+        "startLine": 330,
+        "startChar": 0,
+        "endLine": 341,
+        "endChar": 9
+      },
+      "revId": "0da3a7dd7a3492baa3675e6f5d8cb8d1bb34f833",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d145e4bc_45160db2",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 5
