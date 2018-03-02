@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d27a5a5e_396bfc8a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-03-02T00:16:47Z",
+      "side": 1,
+      "message": "break",
+      "range": {
+        "startLine": 1393,
+        "startChar": 20,
+        "endLine": 1393,
+        "endChar": 21
+      },
+      "revId": "49388f8a203ffe0cdd3430b9c2b4251b394b9fed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
