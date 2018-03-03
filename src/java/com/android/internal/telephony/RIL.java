@@ -5266,6 +5266,12 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     static SignalStrength convertHalSignalStrength(
             android.hardware.radio.V1_0.SignalStrength signalStrength) {
+        int tdscdmaRscp_1_2 = 255;
+        // The HAL 1.0 range is 25..120; the ASU/ HAL 1.2 range is 0..96;
+        // yes, this means the range in 1.0 cannot express -24dBm = 96
+        if (signalStrength.tdScdma.rscp >= 25 && signalStrength.tdScdma.rscp <= 120) {
+            tdscdmaRscp_1_2 = 120 - signalStrength.tdScdma.rscp;
+        }
         return new SignalStrength(
                 signalStrength.gw.signalStrength,
                 signalStrength.gw.bitErrorRate,
@@ -5279,7 +5285,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 signalStrength.lte.rsrq,
                 signalStrength.lte.rssnr,
                 signalStrength.lte.cqi,
-                signalStrength.tdScdma.rscp);
+                tdscdmaRscp_1_2);
     }
 
     static SignalStrength convertHalSignalStrength_1_2(
@@ -5298,6 +5304,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 signalStrength.lte.rsrq,
                 signalStrength.lte.rssnr,
                 signalStrength.lte.cqi,
-                signalStrength.tdScdma.rscp);
+                tdscdmaRscp_1_2);
     }
 }
