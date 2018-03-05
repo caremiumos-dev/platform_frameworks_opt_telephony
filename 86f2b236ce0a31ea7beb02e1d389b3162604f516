@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c23f8cce_9d7e67cb",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ContextFixture.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-03-05T23:06:09Z",
+      "side": 1,
+      "message": "how about using a spy instead of a new instance so that we can still apply mocks if needed?",
+      "range": {
+        "startLine": 533,
+        "startChar": 47,
+        "endLine": 533,
+        "endChar": 66
+      },
+      "revId": "86f2b236ce0a31ea7beb02e1d389b3162604f516",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
