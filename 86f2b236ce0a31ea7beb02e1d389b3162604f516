@@ -22,6 +22,30 @@
       "revId": "86f2b236ce0a31ea7beb02e1d389b3162604f516",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "83a45506_639c814f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ContextFixture.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-03-05T23:31:31Z",
+      "side": 1,
+      "message": "I don\u0027t think we can @Spy final methods (I get an error when I try saying I can\u0027t)",
+      "parentUuid": "c23f8cce_9d7e67cb",
+      "range": {
+        "startLine": 533,
+        "startChar": 47,
+        "endLine": 533,
+        "endChar": 66
+      },
+      "revId": "86f2b236ce0a31ea7beb02e1d389b3162604f516",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
