@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2b66ded_ee3ffb2e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 5273,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-03-05T23:26:15Z",
+      "side": 1,
+      "message": "can you do this in 2 steps?\n\n1. sign flip (HAL implementor reports sign-flipped dBm)\n2. range shift",
+      "range": {
+        "startLine": 5273,
+        "startChar": 30,
+        "endLine": 5273,
+        "endChar": 63
+      },
+      "revId": "fa7840bb321a38511625bdd49e76204ae79bf91d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
