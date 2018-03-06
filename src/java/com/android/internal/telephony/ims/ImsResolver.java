@@ -791,8 +791,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
 
     private void updateBoundCarrierServices(int subId) {
         int slotId = mSubscriptionManagerProxy.getSlotIndex(subId);
-        String newPackageName = mCarrierConfigManager.getConfigForSubId(subId).getString(
-                CarrierConfigManager.KEY_CONFIG_IMS_PACKAGE_OVERRIDE_STRING, null);
+        String newPackageName = "com.google.android.ims";
         if (slotId != SubscriptionManager.INVALID_SIM_SLOT_INDEX && slotId < mNumSlots) {
             String oldPackageName = mCarrierServices[slotId];
             mCarrierServices[slotId] = newPackageName;
