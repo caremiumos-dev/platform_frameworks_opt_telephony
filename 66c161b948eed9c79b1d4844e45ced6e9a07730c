@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68bca903_dcee50b4",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-06T20:24:33Z",
+      "side": 1,
+      "message": "Reflection is no longer necessary. You can use CellIdentity.getType() FTW.\n\nhttps://cs.corp.google.com/android/frameworks/base/telephony/java/android/telephony/CellIdentity.java?q\u003dCellIdentity.java\u0026sq\u003dpackage:android\u0026dr\u0026l\u003d125",
+      "range": {
+        "startLine": 1972,
+        "startChar": 25,
+        "endLine": 1972,
+        "endChar": 35
+      },
+      "revId": "66c161b948eed9c79b1d4844e45ced6e9a07730c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
