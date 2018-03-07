@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "825d9d39_dfe9551d",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-03-07T13:05:02Z",
+      "side": 1,
+      "message": "No special functionality added to this method.\nThe length was fixed to 3 digits earlier in adjstMinDigits method.\nNow the mnc length for CSIM is changed to 2.\nCode is modified to support decoding of digits taking length as input.",
+      "parentUuid": "a01d165e_8c684703",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 207,
+        "endChar": 58
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f127622_12801c01",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-07T18:45:57Z",
       "side": 1,
       "message": "I believe this can be simplified to use a single loop and eliminate the ternary operator.",
+      "range": {
+        "startLine": 208,
+        "startChar": 7,
+        "endLine": 219,
+        "endChar": 9
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ae4f16d2_d0fd3178",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-03-07T13:05:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f127622_12801c01",
       "range": {
         "startLine": 208,
         "startChar": 7,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "53bcc175_1099ba19",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-03-07T13:05:02Z",
+      "side": 1,
+      "message": "Encoding and decoding format is clearly explained in the spec shared in the method description above",
+      "parentUuid": "bc903d69_c5258326",
+      "range": {
+        "startLine": 229,
+        "startChar": 12,
+        "endLine": 229,
+        "endChar": 18
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1be48997_095963ea",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2018-02-07T18:45:57Z",
       "side": 1,
       "message": "nit spelling",
+      "range": {
+        "startLine": 258,
+        "startChar": 17,
+        "endLine": 258,
+        "endChar": 24
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6152d1d0_9f492cfd",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-03-07T13:05:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1be48997_095963ea",
       "range": {
         "startLine": 258,
         "startChar": 17,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "30475d46_1b1011a5",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-03-07T13:05:02Z",
+      "side": 1,
+      "message": "This data is being passed to decodeImsi method, which expects a 10 digit number. So before calling decodeImsi we are adding a safety check to ensure data is 10 digits.",
+      "parentUuid": "93e3046d_51e4340d",
+      "range": {
+        "startLine": 428,
+        "startChar": 46,
+        "endLine": 428,
+        "endChar": 48
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a633cf6a_eaf05823",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 1
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "4617d601_3bf06999",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-03-07T13:05:02Z",
+      "side": 1,
+      "message": "mMin is assigned only if mImsi is valid, and getMin() returns just the value set for mMin.\nThis is inline with the other fields defined in this class like mdn, where the get methods just return value without any processing logic",
+      "parentUuid": "a633cf6a_eaf05823",
+      "range": {
+        "startLine": 442,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 17
+      },
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfb0937b_c208b31f",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 1
@@ -151,6 +295,24 @@
       "writtenOn": "2018-02-07T18:45:57Z",
       "side": 1,
       "message": "If we aren\u0027t provisioned, do we need to set the mMin to null here?\n\nFollow-up question, since the min here is the same as the MSIN for 3gpp... can this function simply move to the IccRecords class? (partly a question to Amit).",
+      "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2a4502bd_c8a3a08e",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2018-03-07T13:05:02Z",
+      "side": 1,
+      "message": "Default value of mMin will be null already.\n\nAmit to answer about moving method to base class IccRecords",
+      "parentUuid": "dfb0937b_c208b31f",
       "revId": "3bf1038ef412845d05d7a9ac0629e1958f1894fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
