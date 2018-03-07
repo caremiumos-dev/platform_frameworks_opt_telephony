@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d334973f_1f574651",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-03-07T23:46:17Z",
+      "side": 1,
+      "message": "Make sense. Then please capitalize \"if\"",
+      "parentUuid": "5aa323be_8552924e",
+      "range": {
+        "startLine": 648,
+        "startChar": 18,
+        "endLine": 648,
+        "endChar": 23
+      },
+      "revId": "cbbe1b3d7b15ddc15e6c3cc49fcc4c29da311113",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43584a3a_f8e27386",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
