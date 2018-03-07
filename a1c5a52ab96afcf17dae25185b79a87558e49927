@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d1fd080_eff6e8b6",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2001,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-07T21:16:55Z",
+      "side": 1,
+      "message": "Ok, now I feel bad for not suggesting this sooner, but this should be done by creating getChannelNumber() in CellIdentity, and then overloading it in CellIdentityGsm, CellIdentityWcdma and CellIdentityLte.\n\nWe\u0027re an OO shop and going in that direction anyway for these APIs. We can just leave it as @hide now and hopefully un-hide it in Q.",
+      "range": {
+        "startLine": 1979,
+        "startChar": 9,
+        "endLine": 2001,
+        "endChar": 20
+      },
+      "revId": "a1c5a52ab96afcf17dae25185b79a87558e49927",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
