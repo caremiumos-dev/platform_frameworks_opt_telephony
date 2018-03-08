@@ -45,6 +45,7 @@ import com.android.internal.telephony.ExponentialBackoff;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Manages the Binding lifecycle of one ImsService as well as the relevant ImsFeatures that the
@@ -182,7 +183,7 @@ public class ImsServiceController {
     private IBinder mImsServiceControllerBinder;
     private ImsServiceConnection mImsServiceConnection;
     private ImsDeathRecipient mImsDeathRecipient;
-    private Set<IImsServiceFeatureCallback> mImsStatusCallbacks = new HashSet<>();
+    private Set<IImsServiceFeatureCallback> mImsStatusCallbacks = ConcurrentHashMap.newKeySet();
     // Only added or removed, never accessed on purpose.
     private Set<ImsFeatureStatusCallback> mFeatureStatusCallbacks = new HashSet<>();
     // Determines whether or not emergency calls can be placed through this ImsService.
@@ -457,9 +458,7 @@ public class ImsServiceController {
      * Add a callback to ImsManager that signals a new feature that the ImsServiceProxy can handle.
      */
     public void addImsServiceFeatureListener(IImsServiceFeatureCallback callback) {
-        synchronized (mLock) {
-            mImsStatusCallbacks.add(callback);
-        }
+        mImsStatusCallbacks.add(callback);
     }
 
     public void enableIms(int slotId) {
@@ -546,9 +545,7 @@ public class ImsServiceController {
     }
 
     private void removeImsServiceFeatureListener() {
-        synchronized (mLock) {
-            mImsStatusCallbacks.clear();
-        }
+        mImsStatusCallbacks.clear();
     }
 
     // Only add a new rebind if there are no pending rebinds waiting.
@@ -572,52 +569,46 @@ public class ImsServiceController {
     }
 
     private void sendImsFeatureCreatedCallback(int slot, int feature) {
-        synchronized (mLock) {
-            for (Iterator<IImsServiceFeatureCallback> i = mImsStatusCallbacks.iterator();
-                    i.hasNext(); ) {
-                IImsServiceFeatureCallback callbacks = i.next();
-                try {
-                    callbacks.imsFeatureCreated(slot, feature);
-                } catch (RemoteException e) {
-                    // binder died, remove callback.
-                    Log.w(LOG_TAG, "sendImsFeatureCreatedCallback: Binder died, removing "
-                            + "callback. Exception:" + e.getMessage());
-                    i.remove();
-                }
+        for (Iterator<IImsServiceFeatureCallback> i = mImsStatusCallbacks.iterator();
+                i.hasNext(); ) {
+            IImsServiceFeatureCallback callbacks = i.next();
+            try {
+                callbacks.imsFeatureCreated(slot, feature);
+            } catch (RemoteException e) {
+                // binder died, remove callback.
+                Log.w(LOG_TAG, "sendImsFeatureCreatedCallback: Binder died, removing "
+                        + "callback. Exception:" + e.getMessage());
+                i.remove();
             }
         }
     }
 
     private void sendImsFeatureRemovedCallback(int slot, int feature) {
-        synchronized (mLock) {
-            for (Iterator<IImsServiceFeatureCallback> i = mImsStatusCallbacks.iterator();
-                    i.hasNext(); ) {
-                IImsServiceFeatureCallback callbacks = i.next();
-                try {
-                    callbacks.imsFeatureRemoved(slot, feature);
-                } catch (RemoteException e) {
-                    // binder died, remove callback.
-                    Log.w(LOG_TAG, "sendImsFeatureRemovedCallback: Binder died, removing "
-                            + "callback. Exception:" + e.getMessage());
-                    i.remove();
-                }
+        for (Iterator<IImsServiceFeatureCallback> i = mImsStatusCallbacks.iterator();
+                i.hasNext(); ) {
+            IImsServiceFeatureCallback callbacks = i.next();
+            try {
+                callbacks.imsFeatureRemoved(slot, feature);
+            } catch (RemoteException e) {
+                // binder died, remove callback.
+                Log.w(LOG_TAG, "sendImsFeatureRemovedCallback: Binder died, removing "
+                        + "callback. Exception:" + e.getMessage());
+                i.remove();
             }
         }
     }
 
     private void sendImsFeatureStatusChanged(int slot, int feature, int status) {
-        synchronized (mLock) {
-            for (Iterator<IImsServiceFeatureCallback> i = mImsStatusCallbacks.iterator();
-                    i.hasNext(); ) {
-                IImsServiceFeatureCallback callbacks = i.next();
-                try {
-                    callbacks.imsStatusChanged(slot, feature, status);
-                } catch (RemoteException e) {
-                    // binder died, remove callback.
-                    Log.w(LOG_TAG, "sendImsFeatureStatusChanged: Binder died, removing "
-                            + "callback. Exception:" + e.getMessage());
-                    i.remove();
-                }
+        for (Iterator<IImsServiceFeatureCallback> i = mImsStatusCallbacks.iterator();
+                i.hasNext(); ) {
+            IImsServiceFeatureCallback callbacks = i.next();
+            try {
+                callbacks.imsStatusChanged(slot, feature, status);
+            } catch (RemoteException e) {
+                // binder died, remove callback.
+                Log.w(LOG_TAG, "sendImsFeatureStatusChanged: Binder died, removing "
+                        + "callback. Exception:" + e.getMessage());
+                i.remove();
             }
         }
     }
