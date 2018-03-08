@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b46618d4_4b0bcbee",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-03-08T23:47:22Z",
+      "side": 1,
+      "message": "Thought you added a new type for this; or is it not applicable here?",
+      "range": {
+        "startLine": 112,
+        "startChar": 30,
+        "endLine": 112,
+        "endChar": 52
+      },
+      "revId": "875fe0c4b78fb33b6ee35b9e416f856c94d9b030",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fc2865f_f187b5ff",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-03-08T23:47:22Z",
+      "side": 1,
+      "message": "newFeatures (minor)",
+      "range": {
+        "startLine": 126,
+        "startChar": 57,
+        "endLine": 126,
+        "endChar": 69
+      },
+      "revId": "875fe0c4b78fb33b6ee35b9e416f856c94d9b030",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40cc15a6_49fd53bb",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-03-08T23:47:22Z",
+      "side": 1,
+      "message": "Is there not an invalid slot index const you can use?",
+      "range": {
+        "startLine": 758,
+        "startChar": 35,
+        "endLine": 758,
+        "endChar": 54
+      },
+      "revId": "875fe0c4b78fb33b6ee35b9e416f856c94d9b030",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a056089_b82c423a",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-03-08T23:47:22Z",
+      "side": 1,
+      "message": "Its not really delaying it is it?",
+      "range": {
+        "startLine": 1019,
+        "startChar": 17,
+        "endLine": 1019,
+        "endChar": 45
+      },
+      "revId": "875fe0c4b78fb33b6ee35b9e416f856c94d9b030",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
