@@ -46,6 +46,30 @@
       "revId": "37bb4c292fafe03627d6eba9765b7aca8dfa1778",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f3f9d52b_eebfbcdf",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3453,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-03-08T23:10:53Z",
+      "side": 1,
+      "message": "if mSubId remains the same when SIM card absent, then we should be fine.",
+      "parentUuid": "f96f3713_cd9803fc",
+      "range": {
+        "startLine": 3453,
+        "startChar": 7,
+        "endLine": 3453,
+        "endChar": 78
+      },
+      "revId": "37bb4c292fafe03627d6eba9765b7aca8dfa1778",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
