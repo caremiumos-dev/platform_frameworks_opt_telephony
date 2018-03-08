@@ -34,6 +34,24 @@
       "revId": "1aa373cb0d2e9624202115645589504f5eff7213",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02b50e96_2f3d349b",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-03-08T00:12:26Z",
+      "side": 1,
+      "message": "There are 2 options as far as this is concerned.\n1. Let UiccCard/UiccProfile be null until we actually have a card present. This is the current intent, and if we go with this, we should have a different way to broadcast initial ABSENT when card is absent on bootup.\n2. Always have a non-null UiccCard/UiccProfile corresponding to a phone. This would be similar to earlier implementation that we had with IccCardProxy.\n\nWhat you have implemented is midway. UiccCard/Profile are not null after the first IccCardStatus is received, and they are also null on radio state absent. This creates these windows of null values which I feel is not ok. We should go with one of the 2 options, and I am in favor of #1 unless you see issues with that. Let me know what you think.",
+      "parentUuid": "e1410043_9f52d3f1",
+      "revId": "1aa373cb0d2e9624202115645589504f5eff7213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
