@@ -22,6 +22,30 @@
       "revId": "a1c5a52ab96afcf17dae25185b79a87558e49927",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97bdd7f1_c228bf16",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2001,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-03-08T15:44:19Z",
+      "side": 1,
+      "message": "Done. see aosp/632449 for implementation",
+      "parentUuid": "6d1fd080_eff6e8b6",
+      "range": {
+        "startLine": 1979,
+        "startChar": 9,
+        "endLine": 2001,
+        "endChar": 20
+      },
+      "revId": "a1c5a52ab96afcf17dae25185b79a87558e49927",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
