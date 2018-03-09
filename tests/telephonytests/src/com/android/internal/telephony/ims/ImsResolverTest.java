@@ -196,7 +196,6 @@ public class ImsResolverTest extends ImsTestBase {
         // Set CarrierConfig default package name and make it available to the package manager
         setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<Pair<Integer, Integer>> features = new HashSet<>();
-        features.add(new Pair<>(0, ImsFeature.FEATURE_EMERGENCY_MMTEL));
         features.add(new Pair<>(0, ImsFeature.FEATURE_MMTEL));
         features.add(new Pair<>(0, ImsFeature.FEATURE_RCS));
         setupPackageQuery(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true);
@@ -208,8 +207,6 @@ public class ImsResolverTest extends ImsTestBase {
         verify(controller).bind(features);
         verify(controller, never()).unbind();
         assertEquals(TEST_CARRIER_DEFAULT_NAME, controller.getComponentName());
-
-        verify(controller).setCanPlaceEmergencyCalls(eq(true));
     }
 
     /**
@@ -233,8 +230,6 @@ public class ImsResolverTest extends ImsTestBase {
         verify(controller).bind(features);
         verify(controller, never()).unbind();
         assertEquals(TEST_CARRIER_DEFAULT_NAME, controller.getComponentName());
-        // ensure emergency calling is disabled
-        verify(controller, never()).setCanPlaceEmergencyCalls(eq(true));
 
         packageChanged(TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<Pair<Integer, Integer>> newFeatures = new HashSet<>();
@@ -245,7 +240,6 @@ public class ImsResolverTest extends ImsTestBase {
         //Verify new feature is added to the carrier override.
         // add all features for slot 0
         verify(controller, atLeastOnce()).changeImsServiceFeatures(newFeatures);
-        verify(controller).setCanPlaceEmergencyCalls(eq(true));
     }
 
     /**
@@ -971,7 +965,8 @@ public class ImsResolverTest extends ImsTestBase {
         for (String f : features) {
             switch (f) {
                 case ImsResolver.METADATA_EMERGENCY_MMTEL_FEATURE:
-                    if (!sInfo.supportsEmergencyMmTel) {
+                    if (!sInfo.getSupportedFeatures().contains(
+                            new Pair<>(0, ImsFeature.FEATURE_EMERGENCY_MMTEL))) {
                         return false;
                     }
                     break;
