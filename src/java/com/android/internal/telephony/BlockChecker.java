@@ -13,6 +13,22 @@ public class BlockChecker {
     private static final boolean VDBG = false; // STOPSHIP if true.
 
     /**
+     * Returns {@code true} if {@code phoneNumber} is blocked.
+     * <p>
+     * This method catches all underlying exceptions to ensure that this method never throws any
+     * exception.
+     * <p>
+     * This method is equivalent to {code isBlocked(context, phoneNumber, null)}.
+     *
+     * @param context the context of the caller.
+     * @param phoneNumber the number to check.
+     * @return {@code true} if the number is blocked. {@code false} otherwise.
+     */
+    public static boolean isBlocked(Context context, String phoneNumber) {
+        return isBlocked(context, phoneNumber, null);
+    }
+
+    /**
      * Returns {@code true} if {@code phoneNumber} is blocked according to {@code extras}.
      * <p>
      * This method catches all underlying exceptions to ensure that this method never throws any
