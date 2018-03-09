@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d287472_c0db09fe",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-03-09T00:31:31Z",
+      "side": 1,
+      "message": "can we directly reuse mPreviousSubId?",
+      "range": {
+        "startLine": 247,
+        "startChar": 15,
+        "endLine": 247,
+        "endChar": 27
+      },
+      "revId": "cf28fd84d22eda70667bf3e58929694a871e6a19",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
