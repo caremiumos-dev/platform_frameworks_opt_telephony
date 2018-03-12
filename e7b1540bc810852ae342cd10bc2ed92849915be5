@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "943c7cdf_7073398a",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-03-12T22:02:41Z",
+      "side": 1,
+      "message": "Assuming CSIM in this case? Won\u0027t it be better to guess based on MCC?",
+      "range": {
+        "startLine": 288,
+        "startChar": 38,
+        "endLine": 288,
+        "endChar": 58
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1b94cc4_ed695528",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-03-12T22:02:41Z",
+      "side": 1,
+      "message": "Should probably be VDBG - IMSI is considered PII, correct?",
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfdab6ea_2f991308",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-03-12T22:02:41Z",
+      "side": 1,
+      "message": "This will be called multiple times now for cards that support both USIM and CSIM, eg. VZW.\n\nAre we assuming that the values from both apps are the same? What if they do not match?",
+      "range": {
+        "startLine": 461,
+        "startChar": 20,
+        "endLine": 461,
+        "endChar": 54
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
