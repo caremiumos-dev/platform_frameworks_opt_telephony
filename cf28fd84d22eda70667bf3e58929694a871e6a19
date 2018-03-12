@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "0dbcc44c_4564dc14",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-03-12T17:50:15Z",
+      "side": 1,
+      "message": "sounds good. That\u0027s easy to maintain",
+      "parentUuid": "fc9d8f03_748c1070",
+      "range": {
+        "startLine": 1065,
+        "startChar": 29,
+        "endLine": 1065,
+        "endChar": 31
+      },
+      "revId": "cf28fd84d22eda70667bf3e58929694a871e6a19",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64154281_4cc135b9",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 3
