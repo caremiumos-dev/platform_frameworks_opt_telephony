@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "57b462f0_894574c1",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-13T18:09:46Z",
+      "side": 1,
+      "message": "Sorry, when I said collapse the 2 loops and get rid of the ternary, I was suggesting we don\u0027t need a conditional at all, and the we can do this with one loop:\n\n\nprivate static int decodeImsiDigits(int input, int length) {\n    int output \u003d 0;\n    for (int i\u003d0, power\u003d1; i \u003c length; i++, power*\u003d10) {\n        output +\u003d ((input + 1) % 10) * power;  \n        input /\u003d 10;\n    }\n    return output;\n}",
+      "range": {
+        "startLine": 210,
+        "startChar": 0,
+        "endLine": 223,
+        "endChar": 9
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2dcb758e_e9923eb7",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-13T18:09:46Z",
+      "side": 1,
+      "message": "what you really want is unsigned integer promotion here. That should be expressed by Byte.toUnsignedInt() there are a number of these. Perhaps it would be cleaner to just convert the byte[] to int[] before starting the calculations?",
+      "range": {
+        "startLine": 235,
+        "startChar": 49,
+        "endLine": 235,
+        "endChar": 65
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "33b7ac00_1ea29fbe",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-13T18:09:46Z",
+      "side": 1,
+      "message": "I know this is copy+paste, but...\n\nreturn new StringBuilder()\n    .append()\n    .append()\n....\n    .toString();",
+      "range": {
+        "startLine": 251,
+        "startChar": 2,
+        "endLine": 258,
+        "endChar": 35
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "943c7cdf_7073398a",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 2
@@ -13,6 +82,30 @@
       "writtenOn": "2018-03-12T22:02:41Z",
       "side": 1,
       "message": "Assuming CSIM in this case? Won\u0027t it be better to guess based on MCC?",
+      "range": {
+        "startLine": 288,
+        "startChar": 38,
+        "endLine": 288,
+        "endChar": 58
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db195d1e_f48d81b3",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-13T18:09:46Z",
+      "side": 1,
+      "message": "Actually, I think this should be imsi, not mImsi.\n\nStylistically it should be in an \"else\" block or better yet the return should stay here and the logic should just conditionally calculate the length.\n\nint mncLen \u003d mMncLength !\u003d UNINIT \u0026\u0026 mMncLength !\u003d UNKNOWN ? mMncLength : CSIM_IMSI_MNC_LENGTH;\nreturn imsi.substring(0, 3 + mncLen);",
+      "parentUuid": "943c7cdf_7073398a",
       "range": {
         "startLine": 288,
         "startChar": 38,
@@ -42,6 +135,47 @@
     },
     {
       "key": {
+        "uuid": "2de7eaca_1adf8ecd",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-13T18:09:46Z",
+      "side": 1,
+      "message": "That\u0027s a good catch. We should probably flag this automatically on eng builds vs userdebug/user builds as we are doing elsewhere... Rlog.pii()",
+      "parentUuid": "f1b94cc4_ed695528",
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ca68624_550261e6",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-13T18:09:46Z",
+      "side": 1,
+      "message": "Please apply the PII comments from Amit as a general guideline.",
+      "range": {
+        "startLine": 451,
+        "startChar": 16,
+        "endLine": 451,
+        "endChar": 19
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cfdab6ea_2f991308",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 2
@@ -53,6 +187,30 @@
       "writtenOn": "2018-03-12T22:02:41Z",
       "side": 1,
       "message": "This will be called multiple times now for cards that support both USIM and CSIM, eg. VZW.\n\nAre we assuming that the values from both apps are the same? What if they do not match?",
+      "range": {
+        "startLine": 461,
+        "startChar": 20,
+        "endLine": 461,
+        "endChar": 54
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88a41dad_e5915892",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-13T18:09:46Z",
+      "side": 1,
+      "message": "I just took a look at updateMccMncConfiguration() and that function is a mess. We need to have a way to send one consolidated value from the SIM across all apps. I don\u0027t think this is a regression given the original code... but yeah.",
+      "parentUuid": "cfdab6ea_2f991308",
       "range": {
         "startLine": 461,
         "startChar": 20,
