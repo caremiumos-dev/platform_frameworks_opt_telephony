@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be51403d_7351b139",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DataConnectionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-03-14T20:57:41Z",
+      "side": 1,
+      "message": "instead of creating a method setDataServiceManager, you can use TelephonyTest\u0027s replaceInstance().",
+      "range": {
+        "startLine": 535,
+        "startChar": 8,
+        "endLine": 535,
+        "endChar": 44
+      },
+      "revId": "555550d48dac44dcaaeac4a96c66ccdb5bae2800",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
