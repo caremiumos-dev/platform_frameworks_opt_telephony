@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04eba079_b12b807c",
+        "filename": "src/java/com/android/internal/telephony/ims/MmTelFeatureCompatAdapter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-03-14T20:05:10Z",
+      "side": 1,
+      "message": "should be a constant somewhere instead of a magic string",
+      "range": {
+        "startLine": 513,
+        "startChar": 26,
+        "endLine": 513,
+        "endChar": 45
+      },
+      "revId": "5fb13c87a4ff09e36c032a5f27b96ae166c3fcb0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
