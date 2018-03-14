@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c1d850d_1ea4c48a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DataConnectionTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-03-14T23:53:22Z",
+      "side": 1,
+      "message": "This is not needed. In super.tearDown(), all the replaced stuffs are restored automatically.",
+      "range": {
+        "startLine": 558,
+        "startChar": 12,
+        "endLine": 558,
+        "endChar": 78
+      },
+      "revId": "02bc69ffa8e55457b9dc6fffc9aeaf56c31daa75",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
