@@ -510,7 +510,7 @@ public class MmTelFeatureCompatAdapter extends MmTelFeature {
 
     private PendingIntent createIncomingCallPendingIntent() {
         Intent intent = new Intent(ImsManager.ACTION_IMS_INCOMING_CALL);
-        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        intent.setPackage("com.android.phone");
         return PendingIntent.getBroadcast(mContext, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
