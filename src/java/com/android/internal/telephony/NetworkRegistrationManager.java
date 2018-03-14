@@ -220,11 +220,11 @@ public class NetworkRegistrationManager {
         return packageName;
     }
 
-    private static int logd(String msg) {
-        return Rlog.d(TAG, msg);
+    private int logd(String msg) {
+        return Rlog.d(TAG, "[" + mPhone.getPhoneId() + "] " + msg);
     }
 
-    private static int loge(String msg) {
-        return Rlog.e(TAG, msg);
+    private int loge(String msg) {
+        return Rlog.e(TAG, "[" + mPhone.getPhoneId() + "] " + msg);
     }
 }
