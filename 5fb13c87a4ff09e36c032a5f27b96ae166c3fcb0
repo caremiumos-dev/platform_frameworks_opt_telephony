@@ -46,6 +46,30 @@
       "revId": "5fb13c87a4ff09e36c032a5f27b96ae166c3fcb0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1b4b0a6_2a3aa93b",
+        "filename": "src/java/com/android/internal/telephony/ims/MmTelFeatureCompatAdapter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-03-14T23:17:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce76586e_f88661c7",
+      "range": {
+        "startLine": 513,
+        "startChar": 26,
+        "endLine": 513,
+        "endChar": 45
+      },
+      "revId": "5fb13c87a4ff09e36c032a5f27b96ae166c3fcb0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
