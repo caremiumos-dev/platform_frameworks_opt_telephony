@@ -22,6 +22,30 @@
       "revId": "5fb13c87a4ff09e36c032a5f27b96ae166c3fcb0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce76586e_f88661c7",
+        "filename": "src/java/com/android/internal/telephony/ims/MmTelFeatureCompatAdapter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-03-14T20:10:50Z",
+      "side": 1,
+      "message": "actually in codesearch I\u0027m seeing this string all over the place. We should just make a constant in TelephonyManager and use that from now on...",
+      "parentUuid": "04eba079_b12b807c",
+      "range": {
+        "startLine": 513,
+        "startChar": 26,
+        "endLine": 513,
+        "endChar": 45
+      },
+      "revId": "5fb13c87a4ff09e36c032a5f27b96ae166c3fcb0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
