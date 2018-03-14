@@ -481,6 +481,11 @@ public class DataConnection extends StateMachine {
         mApnContexts = new HashMap<>();
     }
 
+    @VisibleForTesting
+    public void setDataServiceManager(DataServiceManager m) {
+        mDataServiceManager = m;
+    }
+
     /**
      * Begin setting up a data connection, calls setupDataCall
      * and the ConnectionParams will be returned with the
