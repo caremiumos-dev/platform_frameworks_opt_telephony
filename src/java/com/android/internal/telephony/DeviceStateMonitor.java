@@ -68,6 +68,7 @@ public class DeviceStateMonitor extends Handler {
     // TODO(b/74006656) load hysteresis values from a property when DeviceStateMonitor starts
     private static final int HYSTERESIS_MILLIS = 3000;
     private static final int HYSTERESIS_DB = 2;
+    private static final int HYSTERESIS_KBPS = 50;
 
     private final Phone mPhone;
 
@@ -464,7 +465,18 @@ public class DeviceStateMonitor extends Handler {
     }
 
     private void setLinkCapacityReportingCriteria() {
-        // TODO: add criteria for link capacity reporting
+        mPhone.mCi.setLinkCapacityReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_KBPS,
+                HYSTERESIS_KBPS, LINK_CAPACITY_DOWNLINK_THRESHOLDS, LINK_CAPACITY_UPLINK_THRESHOLDS,
+                AccessNetworkType.GERAN, null);
+        mPhone.mCi.setLinkCapacityReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_KBPS,
+                HYSTERESIS_KBPS, LINK_CAPACITY_DOWNLINK_THRESHOLDS, LINK_CAPACITY_UPLINK_THRESHOLDS,
+                AccessNetworkType.UTRAN, null);
+        mPhone.mCi.setLinkCapacityReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_KBPS,
+                HYSTERESIS_KBPS, LINK_CAPACITY_DOWNLINK_THRESHOLDS, LINK_CAPACITY_UPLINK_THRESHOLDS,
+                AccessNetworkType.EUTRAN, null);
+        mPhone.mCi.setLinkCapacityReportingCriteria(HYSTERESIS_MILLIS, HYSTERESIS_KBPS,
+                HYSTERESIS_KBPS, LINK_CAPACITY_DOWNLINK_THRESHOLDS, LINK_CAPACITY_UPLINK_THRESHOLDS,
+                AccessNetworkType.CDMA2000, null);
     }
 
     /**
@@ -611,4 +623,28 @@ public class DeviceStateMonitor extends Handler {
             -65
         };
     }
+
+    /**
+     * Downlink reporting thresholds in kbps
+     *
+     * <p>Threshold values taken from FCC Speed Guide
+     * (https://www.fcc.gov/reports-research/guides/broadband-speed-guide) and Android WiFi speed
+     * labels (https://support.google.com/pixelphone/answer/2819519#strength_speed).
+     */
+    private static final int[] LINK_CAPACITY_DOWNLINK_THRESHOLDS = new int[] {
+            500,   // Web browsing
+            1000,  // SD video streaming
+            5000,  // HD video streaming
+            10000, // file downloading
+            20000, // 4K video streaming
+    };
+
+    /** Uplink reporting thresholds in kbps */
+    private static final int[] LINK_CAPACITY_UPLINK_THRESHOLDS = new int[] {
+            100,   // VoIP calls
+            500,
+            1000,
+            5000,
+            10000,
+    };
 }
