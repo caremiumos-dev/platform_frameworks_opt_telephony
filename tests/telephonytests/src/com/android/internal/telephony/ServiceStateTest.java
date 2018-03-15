@@ -200,8 +200,8 @@ public class ServiceStateTest extends TestCase {
         assertTrue(ss.getIsManualSelection());
 
         ss.setSystemAndNetworkId(123, 456);
-        assertEquals(123, ss.getSystemId());
-        assertEquals(456, ss.getNetworkId());
+        assertEquals(123, ss.getCdmaSystemId());
+        assertEquals(456, ss.getCdmaNetworkId());
 
         ss.setEmergencyOnly(true);
         assertTrue(ss.isEmergencyOnly());
