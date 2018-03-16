@@ -46,6 +46,30 @@
       "revId": "f26ffb723028a2f15f2083422771ade7b5f272eb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c75a856_c62ef2f5",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3997,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-03-16T18:16:22Z",
+      "side": 1,
+      "message": "Changed the trigger to be CARRIER_CONFIG_CHANGED.",
+      "parentUuid": "3fd30e3c_f2c57178",
+      "range": {
+        "startLine": 3994,
+        "startChar": 0,
+        "endLine": 3997,
+        "endChar": 98
+      },
+      "revId": "f26ffb723028a2f15f2083422771ade7b5f272eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
