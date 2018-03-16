@@ -48,6 +48,7 @@ import android.os.WorkSource;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.AccessNetworkConstants;
+import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellIdentity;
 import android.telephony.CellIdentityCdma;
@@ -3981,12 +3982,19 @@ public class ServiceStateTracker extends Handler {
             PersistableBundle config = getCarrierConfig();
             mSignalStrength.setUseOnlyRsrpForLteLevel(config.getBoolean(
                     CarrierConfigManager.KEY_USE_ONLY_RSRP_FOR_LTE_SIGNAL_BAR_BOOL));
-            mSignalStrength.setLteRsrpThresholds(config.getIntArray(
-                    CarrierConfigManager.KEY_LTE_RSRP_THRESHOLDS_INT_ARRAY));
+            int[] lteThresholds = config.getIntArray(
+                    CarrierConfigManager.KEY_LTE_RSRP_THRESHOLDS_INT_ARRAY);
+            mSignalStrength.setLteRsrpThresholds(lteThresholds);
             mSignalStrength.setWcdmaDefaultSignalMeasurement(config.getString(
                     CarrierConfigManager.KEY_WCDMA_DEFAULT_SIGNAL_STRENGTH_MEASUREMENT_STRING));
-            mSignalStrength.setWcdmaRscpThresholds(config.getIntArray(
-                    CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY));
+            int[] wcdmaThresholds = config.getIntArray(
+                    CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY);
+            mSignalStrength.setWcdmaRscpThresholds(wcdmaThresholds);
+
+            mCi.setSignalStrengthReportingCriteria(SignalStrength.HYSTERESIS_MILLIS,
+                    SignalStrength.HYSTERESIS_DB, lteThresholds, AccessNetworkType.EUTRAN, null);
+            mCi.setSignalStrengthReportingCriteria(SignalStrength.HYSTERESIS_MILLIS,
+                    SignalStrength.HYSTERESIS_DB, wcdmaThresholds, AccessNetworkType.UTRAN, null);
         } else {
             log("onSignalStrengthResult() Exception from RIL : " + ar.exception);
             mSignalStrength = new SignalStrength(isGsm);

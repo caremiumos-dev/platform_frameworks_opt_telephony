@@ -19,6 +19,8 @@ package com.android.internal.telephony;
 import static android.hardware.radio.V1_0.DeviceStateType.CHARGING_STATE;
 import static android.hardware.radio.V1_0.DeviceStateType.LOW_DATA_EXPECTED;
 import static android.hardware.radio.V1_0.DeviceStateType.POWER_SAVE_MODE;
+import static android.telephony.SignalStrength.HYSTERESIS_DB;
+import static android.telephony.SignalStrength.HYSTERESIS_MILLIS;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -66,8 +68,6 @@ public class DeviceStateMonitor extends Handler {
     private static final int EVENT_TETHERING_STATE_CHANGED      = 5;
 
     // TODO(b/74006656) load hysteresis values from a property when DeviceStateMonitor starts
-    private static final int HYSTERESIS_MILLIS = 3000;
-    private static final int HYSTERESIS_DB = 2;
     private static final int HYSTERESIS_KBPS = 50;
 
     private final Phone mPhone;

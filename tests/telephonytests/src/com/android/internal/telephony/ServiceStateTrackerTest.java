@@ -48,6 +48,7 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.WorkSource;
 import android.support.test.filters.FlakyTest;
+import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellIdentityGsm;
 import android.telephony.CellInfo;
@@ -77,6 +78,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -425,6 +427,55 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForMs(300);
         assertEquals(sst.getSignalStrength(), ss);
         assertEquals(sst.getSignalStrength().isGsm(), false);
+    }
+
+    @Test
+    public void testSetsNewSignalStrengthReportingCriteria() {
+        int[] wcdmaThresholds = {
+                -110, /* SIGNAL_STRENGTH_POOR */
+                -100, /* SIGNAL_STRENGTH_MODERATE */
+                -90, /* SIGNAL_STRENGTH_GOOD */
+                -80  /* SIGNAL_STRENGTH_GREAT */
+        };
+        mBundle.putIntArray(CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY,
+                wcdmaThresholds);
+
+        int[] lteThresholds = {
+                -130, /* SIGNAL_STRENGTH_POOR */
+                -120, /* SIGNAL_STRENGTH_MODERATE */
+                -110, /* SIGNAL_STRENGTH_GOOD */
+                -100,  /* SIGNAL_STRENGTH_GREAT */
+        };
+        mBundle.putIntArray(CarrierConfigManager.KEY_LTE_RSRP_THRESHOLDS_INT_ARRAY,
+                lteThresholds);
+
+        SignalStrength ss = new SignalStrength(
+                30, // gsmSignalStrength
+                0,  // gsmBitErrorRate
+                -1, // cdmaDbm
+                -1, // cdmaEcio
+                -1, // evdoDbm
+                -1, // evdoEcio
+                -1, // evdoSnr
+                99, // lteSignalStrength
+                SignalStrength.INVALID,     // lteRsrp
+                SignalStrength.INVALID,     // lteRsrq
+                SignalStrength.INVALID,     // lteRssnr
+                SignalStrength.INVALID,     // lteCqi
+                SignalStrength.INVALID,     // tdScdmaRscp
+                99,                         // wcdmaSignalStrength
+                45                         // wcdmaRscpAsu
+        );
+        mSimulatedCommands.setSignalStrength(ss);
+        mSimulatedCommands.notifySignalStrength();
+        waitForMs(300);
+
+        // ensure sets reporting criteria with new thresholds
+        assertTrue(Arrays.equals(wcdmaThresholds,
+                mSimulatedCommands.mRanSignalStrengthThresholds.get(AccessNetworkType.UTRAN)));
+        assertTrue(Arrays.equals(lteThresholds,
+                mSimulatedCommands.mRanSignalStrengthThresholds.get(AccessNetworkType.EUTRAN)));
+
     }
 
     @Test
