@@ -31,7 +31,9 @@ import android.text.format.Time;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.RadioConfig;
+import com.android.internal.telephony.SubscriptionInfoUpdater;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -451,6 +453,15 @@ public class UiccController extends Handler {
                 return uiccCard.getApplication(family);
             }
             return null;
+        }
+    }
+
+    static void updateInternalIccState(String value, String reason, int phoneId) {
+        SubscriptionInfoUpdater subInfoUpdator = PhoneFactory.getSubscriptionInfoUpdater();
+        if (subInfoUpdator != null) {
+            subInfoUpdator.updateInternalIccState(value, reason, phoneId);
+        } else {
+            Rlog.e(LOG_TAG, "subInfoUpdate is null.");
         }
     }
 
