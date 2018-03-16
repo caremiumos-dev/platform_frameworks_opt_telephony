@@ -16,6 +16,24 @@
       "revId": "1452fd68a0eeb55d2ae6cef400beda14899748e4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "34ecacd0_0c4382d9",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1244217
+      },
+      "writtenOn": "2018-03-16T18:27:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ab33a84_337e974d",
+      "revId": "1452fd68a0eeb55d2ae6cef400beda14899748e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
