@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43b4e006_39ddaadf",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3997,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-16T01:37:34Z",
+      "side": 1,
+      "message": "These really need to be loaded separately. Loading them dynamically here is bad news and super chatty.\n\nI suggest putting this logic in DeviceStateMonitor, which is actually a good home for this kind of thing. Basically, we should listen for CARRIER_CONFIG_CHANGED and cache the values in DeviceStateMonitor. Then whenever we detect a change or the RIL becomes connected, we should send them down.",
+      "range": {
+        "startLine": 3994,
+        "startChar": 0,
+        "endLine": 3997,
+        "endChar": 98
+      },
+      "revId": "f26ffb723028a2f15f2083422771ade7b5f272eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
