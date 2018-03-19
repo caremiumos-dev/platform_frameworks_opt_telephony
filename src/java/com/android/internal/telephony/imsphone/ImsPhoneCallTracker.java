@@ -45,7 +45,6 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import com.android.ims.internal.ConferenceParticipant;
 import android.telecom.TelecomManager;
 import android.telecom.VideoProfile;
 import android.telephony.AccessNetworkConstants;
@@ -84,6 +83,7 @@ import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.ims.ImsMultiEndpoint;
 import com.android.ims.ImsUtInterface;
+import com.android.ims.internal.ConferenceParticipant;
 import com.android.ims.internal.IImsCallSession;
 import com.android.ims.internal.IImsVideoCallProvider;
 import com.android.ims.internal.ImsVideoCallProviderWrapper;
@@ -1535,9 +1535,22 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         }
     }
 
-    public void
-    explicitCallTransfer() {
-        //TODO : implement
+    /**
+     * Connects the two calls and disconnects the subscriber from both calls. Throws a
+     * {@link CallStateException} if there is an issue.
+     * @throws CallStateException
+     */
+    public void explicitCallTransfer() throws CallStateException {
+        ImsCall fgImsCall = mForegroundCall.getImsCall();
+        if ((fgImsCall == null) || !canTransfer()) {
+            throw new CallStateException("cannot transfer");
+        }
+
+        try {
+            fgImsCall.explicitCallTransfer();
+        } catch (ImsException e) {
+            throw new CallStateException(e.getMessage());
+        }
     }
 
     @UnsupportedAppUsage
@@ -3095,6 +3108,13 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             }
             cqm.saveCallQuality(callQuality);
             mCallQualityMetrics.put(callId, cqm);
+        }
+
+        @Override
+        public void onCallExplicitCallTransferFailed(ImsCall call, ImsReasonInfo reasonInfo) {
+            if (DBG) log("onCallExplicitCallTransferFailed reasonInfo=" + reasonInfo);
+
+            mPhone.notifySuppServiceFailed(Phone.SuppService.TRANSFER);
         }
     };
 
