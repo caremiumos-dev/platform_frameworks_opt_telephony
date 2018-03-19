@@ -89,6 +89,8 @@ import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
+import com.android.internal.telephony.imsphone.ImsPhone;
+import com.android.internal.telephony.imsphone.ImsPhoneMmiCode;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus;
@@ -1241,12 +1243,23 @@ public class GsmCdmaPhone extends Phone {
         boolean allowWpsOverIms = configManager.getConfigForSubId(getSubId())
                 .getBoolean(CarrierConfigManager.KEY_SUPPORT_WPS_OVER_IMS_BOOL);
 
-        boolean useImsForCall = isImsUseEnabled()
-                 && imsPhone != null
-                 && (imsPhone.isVolteEnabled() || imsPhone.isWifiCallingEnabled() ||
-                 (imsPhone.isVideoEnabled() && VideoProfile.isVideo(dialArgs.videoState)))
-                 && (imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
-                 && (isWpsCall ? allowWpsOverIms : true);
+        String dialPart = PhoneNumberUtils.extractNetworkPortionAlt(PhoneNumberUtils
+                .stripSeparators(dialString));
+        boolean isMmiCode = (dialPart.startsWith("*") || dialPart.startsWith("#"))
+                && dialPart.endsWith("#");
+        boolean isSuppServiceCode = ImsPhoneMmiCode.isSuppServiceCodes(dialPart,
+                (ImsPhone) imsPhone);
+        boolean isPotentialUssdCode = isMmiCode && !isSuppServiceCode;
+
+        boolean isImsInService = isImsUseEnabled()
+                && imsPhone != null
+                && (imsPhone.isVolteEnabled() || imsPhone.isWifiCallingEnabled()
+                || (imsPhone.isVideoEnabled() && VideoProfile.isVideo(dialArgs.videoState)))
+                && (imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE);
+
+        boolean useImsForCall = isImsInService
+                && (isWpsCall ? allowWpsOverIms : true)
+                && !isMmiCode;
 
         boolean useImsForEmergency = imsPhone != null
                 && isEmergency
@@ -1254,20 +1267,21 @@ public class GsmCdmaPhone extends Phone {
                 && ImsManager.getInstance(mContext, mPhoneId).isNonTtyOrTtyOnVolteEnabled()
                 && imsPhone.isImsAvailable();
 
-        String dialPart = PhoneNumberUtils.extractNetworkPortionAlt(PhoneNumberUtils.
-                stripSeparators(dialString));
-        boolean isUt = (dialPart.startsWith("*") || dialPart.startsWith("#"))
-                && dialPart.endsWith("#");
+        boolean useImsForUt = imsPhone != null && imsPhone.isUtEnabled() && isSuppServiceCode;
 
-        boolean useImsForUt = imsPhone != null && imsPhone.isUtEnabled();
+        boolean useImsForUssd = isImsInService && isPotentialUssdCode;
 
         if (DBG) {
             logd("useImsForCall=" + useImsForCall
                     + ", useImsForEmergency=" + useImsForEmergency
                     + ", useImsForUt=" + useImsForUt
-                    + ", isUt=" + isUt
+                    + ", useImsForUssd=" + useImsForUssd
+                    + ", isMmiCode=" + isMmiCode
+                    + ", isSuppServiceCode=" + isSuppServiceCode
+                    + ", isPotentialUssdCode=" + isPotentialUssdCode
                     + ", isWpsCall=" + isWpsCall
                     + ", allowWpsOverIms=" + allowWpsOverIms
+                    + ", isImsInService=" + isImsInService
                     + ", imsPhone=" + imsPhone
                     + ", imsPhone.isVolteEnabled()="
                     + ((imsPhone != null) ? imsPhone.isVolteEnabled() : "N/A")
@@ -1281,7 +1295,7 @@ public class GsmCdmaPhone extends Phone {
 
         Phone.checkWfcWifiOnlyModeBeforeDial(mImsPhone, mPhoneId, mContext);
 
-        if ((useImsForCall && !isUt) || (isUt && useImsForUt) || useImsForEmergency) {
+        if (useImsForCall || useImsForUt || useImsForEmergency || useImsForUssd) {
             try {
                 if (DBG) logd("Trying IMS PS call");
                 return imsPhone.dial(dialString, dialArgs);
@@ -1310,20 +1324,24 @@ public class GsmCdmaPhone extends Phone {
         if (mSST != null && mSST.mSS.getState() == ServiceState.STATE_POWER_OFF /* CS POWER_OFF */
                 && !VideoProfile.isVideo(dialArgs.videoState) /* voice call */
                 && !isEmergency /* non-emergency call */
-                && !(isUt && useImsForUt) /* not UT */) {
+                /* If config_allow_ussd_over_ims is false, USSD is sent over the CS pipe instead */
+                && !useImsForUssd) {
             throw new CallStateException(
                 CallStateException.ERROR_POWER_OFF,
                 "cannot dial voice call in airplane mode");
         }
         // Check for service before placing non emergency CS voice call.
         // Allow dial only if either CS is camped on any RAT (or) PS is in LTE/NR service.
+        // (or) USSD is sent over the CS pipe instead.
         if (mSST != null
                 && mSST.mSS.getState() == ServiceState.STATE_OUT_OF_SERVICE /* CS out of service */
                 && !(mSST.mSS.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE
                 && ServiceState.isPsOnlyTech(
                         mSST.mSS.getRilDataRadioTechnology())) /* PS not in LTE/NR */
                 && !VideoProfile.isVideo(dialArgs.videoState) /* voice call */
-                && !isEmergency /* non-emergency call */) {
+                && !isEmergency /* non-emergency call */
+                /* If config_allow_ussd_over_ims is false, USSD is sent over the CS pipe instead */
+                && !useImsForUssd) {
             throw new CallStateException(
                 CallStateException.ERROR_OUT_OF_SERVICE,
                 "cannot dial voice call in out of service");
