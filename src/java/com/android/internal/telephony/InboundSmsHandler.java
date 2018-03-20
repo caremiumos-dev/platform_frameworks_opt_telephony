@@ -562,9 +562,10 @@ public abstract class InboundSmsHandler extends StateMachine {
     private void handleInjectSms(AsyncResult ar) {
         int result;
         SmsDispatchersController.SmsInjectionCallback callback = null;
+        SmsMessage sms = null;
         try {
             callback = (SmsDispatchersController.SmsInjectionCallback) ar.userObj;
-            SmsMessage sms = (SmsMessage) ar.result;
+            sms = (SmsMessage) ar.result;
             if (sms == null) {
               result = Intents.RESULT_SMS_GENERIC_ERROR;
             } else {
@@ -576,7 +577,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         }
 
         if (callback != null) {
-            callback.onSmsInjectedResult(result);
+            callback.onSmsInjectedResult(sms, result);
         }
     }
 
