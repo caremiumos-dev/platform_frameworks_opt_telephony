@@ -22,6 +22,30 @@
       "revId": "57b84a142d5fd5bf0ed8a300406ffb4792645062",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b02c958c_ff70d86a",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-03-20T20:34:49Z",
+      "side": 1,
+      "message": "Do you need to check mIsTetheringOn here?",
+      "parentUuid": "78b8b3f7_2844ac21",
+      "range": {
+        "startLine": 298,
+        "startChar": 12,
+        "endLine": 300,
+        "endChar": 76
+      },
+      "revId": "57b84a142d5fd5bf0ed8a300406ffb4792645062",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
