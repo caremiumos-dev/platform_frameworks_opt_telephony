@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1b44c4c0_05824d65",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1842,
+      "author": {
+        "id": 1135337
+      },
+      "writtenOn": "2018-03-20T10:47:24Z",
+      "side": 1,
+      "message": "will upload the patch set by removing these functions.",
+      "parentUuid": "e271472c_e924cf55",
+      "range": {
+        "startLine": 1834,
+        "startChar": 0,
+        "endLine": 1842,
+        "endChar": 5
+      },
+      "revId": "f4bdebba6a6c657e282be91dbfdc7894183bc888",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4460ceed_f264e80d",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-16T22:51:40Z",
       "side": 1,
       "message": "why the condition is not \"imsCall \u003d\u003d mCallExpectedToResume\" ?",
+      "range": {
+        "startLine": 2295,
+        "startChar": 24,
+        "endLine": 2295,
+        "endChar": 57
+      },
+      "revId": "f4bdebba6a6c657e282be91dbfdc7894183bc888",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "447770a0_19ff3cf8",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2295,
+      "author": {
+        "id": 1135337
+      },
+      "writtenOn": "2018-03-20T10:47:24Z",
+      "side": 1,
+      "message": "Here the mCallExpectedToResume will be the waiting call and imsCall will be the active call for which hold failed.\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#1131\nAfter the call hold failure, we are restoring fg and bg calls.\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#2115\nBy making mCallExpectedToResume is null we are ensuring that when the waiting call terminated, it won\u0027t switch the calls again.\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#2026.\n\nSo the next time, when the call comes the following code will be executed putting the active call on hold and answering the waiting call after the hold success.\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#1066\n\nWithout the fix, since foreground call is not alive (which is the terminated call), the below code will get executed directly answering the call without holding the active call, resulting in the issue.\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#1075",
+      "parentUuid": "4460ceed_f264e80d",
       "range": {
         "startLine": 2295,
         "startChar": 24,
