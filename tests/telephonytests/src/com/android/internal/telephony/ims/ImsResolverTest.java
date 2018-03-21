@@ -124,6 +124,7 @@ public class ImsResolverTest extends ImsTestBase {
         features.add(ImsResolver.METADATA_MMTEL_FEATURE);
         features.add(ImsResolver.METADATA_RCS_FEATURE);
         setupPackageQuery(TEST_DEVICE_DEFAULT_NAME, features, true);
+        setupController();
 
         // Complete package manager lookup and cache.
         startBind();
@@ -858,7 +859,7 @@ public class ImsResolverTest extends ImsTestBase {
         return controller;
     }
 
-    private void startBind() {
+    private void    startBind() {
         mTestImsResolver.initPopulateCacheAndStartBind();
         ArgumentCaptor<ImsServiceFeatureQueryManager.Listener> queryManagerCaptor =
                 ArgumentCaptor.forClass(ImsServiceFeatureQueryManager.Listener.class);
