@@ -3017,6 +3017,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return null;
     }
 
+    public int getCarrierIdListVersion() {
+        return TelephonyManager.UNKNOWN_CARRIER_ID_LIST_VERSION;
+    }
+
     /**
      * Return if UT capability of ImsPhone is enabled or not
      */
@@ -3585,6 +3589,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public void setRadioIndicationUpdateMode(int filters, int mode) {
         if (mDeviceStateMonitor != null) {
             mDeviceStateMonitor.setIndicationUpdateMode(filters, mode);
+        }
+    }
+
+    public void setCarrierTestOverride(String mccmnc, String imsi, String iccid, String gid1,
+            String gid2, String pnn, String spn) {
+        IccRecords r = mIccRecords.get();
+        if (r != null) {
+            r.setCarrierTestOverride(mccmnc, imsi, iccid, gid1, gid2, pnn, spn);
         }
     }
 

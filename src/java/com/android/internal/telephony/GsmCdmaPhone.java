@@ -1540,6 +1540,11 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
+    public int getCarrierIdListVersion() {
+        return mCarrerIdentifier.getCarrierListVersion();
+    }
+
+    @Override
     public String getGroupIdLevel1() {
         if (isPhoneTypeGsm()) {
             IccRecords r = mIccRecords.get();
