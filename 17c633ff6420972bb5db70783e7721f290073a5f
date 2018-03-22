@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "3b046848_d65a382e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-03-22T22:54:08Z",
+      "side": 1,
+      "message": "how about check notification.extras.getString(\"android.title\")?\nlet me if this is working",
+      "parentUuid": "22ff0e19_13a00851",
+      "range": {
+        "startLine": 1173,
+        "startChar": 37,
+        "endLine": 1173,
+        "endChar": 43
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49abbcc7_d237d996",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
         "patchSetId": 1
