@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e49ffdee_ce70c66e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3520,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-03-22T06:21:51Z",
+      "side": 1,
+      "message": "should we use TelephonyManager.getPhoneCount(). this one is based on the device config which is consistent no matter how many SIMs inserted. My concern is UI might looks inconsistent. Let\u0027s say first we only have one active SIM in a MSIM device and UI shows no SIM number. Then you insert a second SIM, the new notification will shows different UI.",
+      "range": {
+        "startLine": 3519,
+        "startChar": 8,
+        "endLine": 3520,
+        "endChar": 76
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
