@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4a95d9a7_afa09754",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3520,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-03-22T21:41:08Z",
+      "side": 1,
+      "message": "yes good point.",
+      "parentUuid": "e49ffdee_ce70c66e",
+      "range": {
+        "startLine": 3519,
+        "startChar": 8,
+        "endLine": 3520,
+        "endChar": 76
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4881938_ac13e185",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "22ff0e19_13a00851",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-03-22T21:41:08Z",
+      "side": 1,
+      "message": "I can\u0027t find any method in Notification to print the title, but I did find that Notification#toString includes \"tick\" if a title exists (https://cs.corp.google.com/android/frameworks/base/core/java/android/app/Notification.java?q\u003dnotification+tick\u0026sq\u003dpackage:android\u0026dr\u003dCSs\u0026l\u003d2828) so it\u0027s a kind of workaround",
+      "parentUuid": "c4881938_ac13e185",
+      "range": {
+        "startLine": 1173,
+        "startChar": 37,
+        "endLine": 1173,
+        "endChar": 43
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49abbcc7_d237d996",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2018-03-22T06:49:53Z",
       "side": 1,
       "message": "why not directly use sst but creating a spy instance?",
+      "range": {
+        "startLine": 1179,
+        "startChar": 28,
+        "endLine": 1179,
+        "endChar": 33
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "504bcaa6_09c3cc73",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-03-22T21:41:08Z",
+      "side": 1,
+      "message": "good point",
+      "parentUuid": "49abbcc7_d237d996",
       "range": {
         "startLine": 1179,
         "startChar": 28,
