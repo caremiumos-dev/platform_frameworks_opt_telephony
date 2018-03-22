@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6624cceb_d1431d9b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-03-22T02:59:16Z",
+      "side": 1,
+      "message": "Actually, the sim record should be loaded before you got the subId changed. \n\nYou can check the log in the bugreport:\n1. the record is loaded. \n\n01-06 23:43:32.963  1996  1996 D SIMRecords: [SIMRecords] record load complete\n\n2. the subid is generated. \n01-06 23:43:32.971  1996  2139 D SubscriptionInfoUpdater: updateSubscriptionInfoByIccId:+ Start\n\nDcTracker has the onSubscriptionChanged listener, but the listener can be triggered even there is no sim in the device.  If the subId is generated when onSubscriptionChanged is triggered by the event other than subId changed, DcTracker think the subId is changed. \n\nI think the subId can change only if the sim changed, so we listen the sim record load event and trigger setInitialAttatchApn.",
+      "range": {
+        "startLine": 2307,
+        "startChar": 8,
+        "endLine": 2307,
+        "endChar": 32
+      },
+      "revId": "f61aa21a2451403403b1c0fcad96c20ab31da971",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
