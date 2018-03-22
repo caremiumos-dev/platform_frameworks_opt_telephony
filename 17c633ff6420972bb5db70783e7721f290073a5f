@@ -22,6 +22,75 @@
       "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4881938_ac13e185",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-03-22T06:49:53Z",
+      "side": 1,
+      "message": "shouldn\u0027t title be \"X\"? did I miss anything?",
+      "range": {
+        "startLine": 1173,
+        "startChar": 37,
+        "endLine": 1173,
+        "endChar": 43
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "49abbcc7_d237d996",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-03-22T06:49:53Z",
+      "side": 1,
+      "message": "why not directly use sst but creating a spy instance?",
+      "range": {
+        "startLine": 1179,
+        "startChar": 28,
+        "endLine": 1179,
+        "endChar": 33
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e12a721d_9bf9f7a3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-03-22T06:49:53Z",
+      "side": 1,
+      "message": "I thought we already already returns a mocked notificationMgr in the contextFixture",
+      "range": {
+        "startLine": 1180,
+        "startChar": 3,
+        "endLine": 1181,
+        "endChar": 87
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
