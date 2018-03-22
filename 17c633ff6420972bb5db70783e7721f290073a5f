@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "de4c80f4_24588541",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3520,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-03-22T21:45:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a95d9a7_afa09754",
+      "range": {
+        "startLine": 3519,
+        "startChar": 8,
+        "endLine": 3520,
+        "endChar": 76
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4881938_ac13e185",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
         "patchSetId": 1
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "4dfdd2b8_306a5080",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-03-22T21:45:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "504bcaa6_09c3cc73",
+      "range": {
+        "startLine": 1179,
+        "startChar": 28,
+        "endLine": 1179,
+        "endChar": 33
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e12a721d_9bf9f7a3",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
         "patchSetId": 1
@@ -154,6 +202,30 @@
       "writtenOn": "2018-03-22T06:49:53Z",
       "side": 1,
       "message": "I thought we already already returns a mocked notificationMgr in the contextFixture",
+      "range": {
+        "startLine": 1180,
+        "startChar": 3,
+        "endLine": 1181,
+        "endChar": 87
+      },
+      "revId": "17c633ff6420972bb5db70783e7721f290073a5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2eb7a3cd_95692412",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-03-22T21:45:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e12a721d_9bf9f7a3",
       "range": {
         "startLine": 1180,
         "startChar": 3,
