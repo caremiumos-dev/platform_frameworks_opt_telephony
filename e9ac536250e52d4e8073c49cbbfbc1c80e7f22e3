@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c62aa88a_f3f74690",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 3358,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-03-23T18:24:12Z",
+      "side": 1,
+      "message": "Wondering if we really need this method here? In both DeviceStateMonitor and ServiceStateTracker (and all other places in telephony) we always directly access mPhone.mCi (which is bad). I am just wondering if we want to be consistent.",
+      "range": {
+        "startLine": 3358,
+        "startChar": 16,
+        "endLine": 3358,
+        "endChar": 50
+      },
+      "revId": "e9ac536250e52d4e8073c49cbbfbc1c80e7f22e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04647b0f_2f77868d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 3936,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-03-23T18:24:12Z",
+      "side": 1,
+      "message": "config might be null here.",
+      "range": {
+        "startLine": 3936,
+        "startChar": 28,
+        "endLine": 3936,
+        "endChar": 34
+      },
+      "revId": "e9ac536250e52d4e8073c49cbbfbc1c80e7f22e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
