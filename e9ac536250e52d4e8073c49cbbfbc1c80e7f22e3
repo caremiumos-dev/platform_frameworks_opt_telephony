@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "999d640f_c0b0b738",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 3358,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-03-23T19:03:43Z",
+      "side": 1,
+      "message": "Since the Phone is adding information that doesn\u0027t belong in the CI, I think this belongs as a \"phone-level\" call. The alternative is to stash the extra info in RIL, which doesn\u0027t seem like the right thing to do. Meanwhile I\u0027ve filed b/76210681 to see if we can do some clean up post-P to improve the layering in general to make this sort of situation clearer.",
+      "parentUuid": "5c313c52_d02e11d0",
+      "range": {
+        "startLine": 3358,
+        "startChar": 16,
+        "endLine": 3358,
+        "endChar": 50
+      },
+      "revId": "e9ac536250e52d4e8073c49cbbfbc1c80e7f22e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04647b0f_2f77868d",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 13
