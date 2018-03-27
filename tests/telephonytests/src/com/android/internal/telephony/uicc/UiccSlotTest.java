@@ -19,12 +19,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyObject;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.support.test.filters.SmallTest;
 
+import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.TelephonyTest;
 
 import org.junit.After;
@@ -74,6 +80,7 @@ public class UiccSlotTest extends TelephonyTest {
     @Before
     public void setUp() throws Exception {
         super.setUp(getClass().getSimpleName());
+        mContextFixture.putBooleanResource(com.android.internal.R.bool.config_hotswapCapable, true);
         /* initially there are no application available */
         mIccCardStatus.mApplications = new IccCardApplicationStatus[]{};
         mIccCardStatus.mCdmaSubscriptionAppIndex =
@@ -191,5 +198,36 @@ public class UiccSlotTest extends TelephonyTest {
         // assert on updated values
         assertTrue(mUiccSlot.isActive());
         assertFalse(mUiccSlot.isEuicc());
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateIccCardStatus() {
+        int phoneId = 0;
+        // Make sure when received CARDSTATE_ABSENT state in the first time,
+        mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_ABSENT;
+        mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId);
+        verify(mSubInfoRecordUpdater, times(1)).updateInternalIccState(
+                IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
+        assertEquals(IccCardStatus.CardState.CARDSTATE_ABSENT, mUiccSlot.getCardState());
+        assertEquals(null, mUiccSlot.getUiccCard());
+
+        // Simulate when SIM is added, UiccCard and UiccProfile should be created.
+        mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_PRESENT;
+        mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId);
+        verify(mTelephonyComponentFactory, times(1)).makeUiccProfile(
+                anyObject(), eq(mSimulatedCommands), eq(mIccCardStatus), anyInt(), anyObject());
+        assertEquals(IccCardStatus.CardState.CARDSTATE_PRESENT, mUiccSlot.getCardState());
+        assertTrue(mUiccSlot.getUiccCard() != null);
+
+        // Simulate when SIM is removed, UiccCard and UiccProfile should be disposed and ABSENT
+        // state is sent to SubscriptionInfoUpdater.
+        mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_ABSENT;
+        mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId);
+        verify(mSubInfoRecordUpdater, times(2)).updateInternalIccState(
+                IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
+        verify(mUiccProfile, times(1)).dispose();
+        assertEquals(IccCardStatus.CardState.CARDSTATE_ABSENT, mUiccSlot.getCardState());
+        assertEquals(null, mUiccSlot.getUiccCard());
     }
 }
