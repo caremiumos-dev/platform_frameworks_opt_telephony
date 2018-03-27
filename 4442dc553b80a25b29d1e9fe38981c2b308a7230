@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bff70dcb_9ca8fc35",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-03-27T23:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fda7d857_0717c8bf",
+      "range": {
+        "startLine": 91,
+        "startChar": 16,
+        "endLine": 91,
+        "endChar": 76
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "892b88a1_df1d07b8",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
         "patchSetId": 1
@@ -60,6 +84,30 @@
       "writtenOn": "2018-03-27T21:57:29Z",
       "side": 1,
       "message": "We don\u0027t check if mUiccCard is null before, is it a bug or we can ensure the update is never sent to a slot which mUiccCard is null?",
+      "range": {
+        "startLine": 103,
+        "startChar": 16,
+        "endLine": 106,
+        "endChar": 17
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25b8caae_56e9f8b9",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-03-27T23:27:48Z",
+      "side": 1,
+      "message": "It\u0027s not a bug. Before this change, dispose will only happen if state moved out of ABSENT and back to ABSENT. So mUiccCard is never null here. But with this change, when we first receive state update of ABSENT, mUiccCard is still null so we need to check it.",
+      "parentUuid": "892b88a1_df1d07b8",
       "range": {
         "startLine": 103,
         "startChar": 16,
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "3b104582_d54389cc",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-03-27T23:27:48Z",
+      "side": 1,
+      "message": "Split into two test cases.",
+      "parentUuid": "fe6f884e_ddcef501",
+      "range": {
+        "startLine": 205,
+        "startChar": 4,
+        "endLine": 205,
+        "endChar": 43
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50477fbc_57b4bcd8",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
         "patchSetId": 1
@@ -106,6 +178,30 @@
       "writtenOn": "2018-03-27T21:57:29Z",
       "side": 1,
       "message": "If you want to verify if a specific method is call one and only one time, you could use verify(obj).method() directly.",
+      "range": {
+        "startLine": 210,
+        "startChar": 38,
+        "endLine": 210,
+        "endChar": 46
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ecaa98df_6d33ade0",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-03-27T23:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50477fbc_57b4bcd8",
       "range": {
         "startLine": 210,
         "startChar": 38,
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "5a6b3113_cc336d84",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-03-27T23:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9087b5b1_915f06c3",
+      "range": {
+        "startLine": 213,
+        "startChar": 8,
+        "endLine": 213,
+        "endChar": 52
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13ebf6f3_cc399ad0",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
         "patchSetId": 1
@@ -152,6 +272,30 @@
       "writtenOn": "2018-03-27T21:57:29Z",
       "side": 1,
       "message": "please check the comment above.",
+      "range": {
+        "startLine": 218,
+        "startChar": 43,
+        "endLine": 218,
+        "endChar": 51
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27fe3754_a699aa4a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-03-27T23:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13ebf6f3_cc399ad0",
       "range": {
         "startLine": 218,
         "startChar": 43,
@@ -187,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "6e024705_04405c9e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-03-27T23:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0064c0d9_f8db43c3",
+      "range": {
+        "startLine": 221,
+        "startChar": 8,
+        "endLine": 221,
+        "endChar": 52
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe64d34c_4a9fa606",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
         "patchSetId": 1
@@ -210,6 +378,30 @@
     },
     {
       "key": {
+        "uuid": "482aa15a_908fc298",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-03-27T23:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe64d34c_4a9fa606",
+      "range": {
+        "startLine": 229,
+        "startChar": 29,
+        "endLine": 229,
+        "endChar": 37
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd9bb81a_1e6c852c",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
         "patchSetId": 1
@@ -221,6 +413,30 @@
       "writtenOn": "2018-03-27T21:57:29Z",
       "side": 1,
       "message": "use assertNull instead.",
+      "range": {
+        "startLine": 231,
+        "startChar": 7,
+        "endLine": 231,
+        "endChar": 52
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea0613fb_6b1b6457",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-03-27T23:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd9bb81a_1e6c852c",
       "range": {
         "startLine": 231,
         "startChar": 7,
