@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fda7d857_0717c8bf",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-03-27T21:57:29Z",
+      "side": 1,
+      "message": "if oldState \u003d\u003d null, is that mean oldState !\u003d CardState.CARDSTATE_ABSENT? If so, we don\u0027t need the null value check.",
+      "range": {
+        "startLine": 91,
+        "startChar": 16,
+        "endLine": 91,
+        "endChar": 76
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "892b88a1_df1d07b8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-03-27T21:57:29Z",
+      "side": 1,
+      "message": "We don\u0027t check if mUiccCard is null before, is it a bug or we can ensure the update is never sent to a slot which mUiccCard is null?",
+      "range": {
+        "startLine": 103,
+        "startChar": 16,
+        "endLine": 106,
+        "endChar": 17
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe6f884e_ddcef501",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-03-27T21:57:29Z",
+      "side": 1,
+      "message": "As my understand, you add three different tests in a single test case. I think we should test one situation in each test case as we are writing the unit test.",
+      "range": {
+        "startLine": 205,
+        "startChar": 4,
+        "endLine": 205,
+        "endChar": 43
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50477fbc_57b4bcd8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-03-27T21:57:29Z",
+      "side": 1,
+      "message": "If you want to verify if a specific method is call one and only one time, you could use verify(obj).method() directly.",
+      "range": {
+        "startLine": 210,
+        "startChar": 38,
+        "endLine": 210,
+        "endChar": 46
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9087b5b1_915f06c3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-03-27T21:57:29Z",
+      "side": 1,
+      "message": "use assertNull instead.",
+      "range": {
+        "startLine": 213,
+        "startChar": 8,
+        "endLine": 213,
+        "endChar": 52
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "13ebf6f3_cc399ad0",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-03-27T21:57:29Z",
+      "side": 1,
+      "message": "please check the comment above.",
+      "range": {
+        "startLine": 218,
+        "startChar": 43,
+        "endLine": 218,
+        "endChar": 51
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0064c0d9_f8db43c3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-03-27T21:57:29Z",
+      "side": 1,
+      "message": "assertNotNull(mUiccSlot.getUiccCard())",
+      "range": {
+        "startLine": 221,
+        "startChar": 8,
+        "endLine": 221,
+        "endChar": 52
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe64d34c_4a9fa606",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-03-27T21:57:29Z",
+      "side": 1,
+      "message": "please check the comment above.",
+      "range": {
+        "startLine": 229,
+        "startChar": 29,
+        "endLine": 229,
+        "endChar": 37
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bd9bb81a_1e6c852c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccSlotTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-03-27T21:57:29Z",
+      "side": 1,
+      "message": "use assertNull instead.",
+      "range": {
+        "startLine": 231,
+        "startChar": 7,
+        "endLine": 231,
+        "endChar": 52
+      },
+      "revId": "4442dc553b80a25b29d1e9fe38981c2b308a7230",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
