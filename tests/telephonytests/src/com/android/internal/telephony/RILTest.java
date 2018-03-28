@@ -199,6 +199,7 @@ public class RILTest extends TelephonyTest {
     private static final int TYPE_GSM = 1;
     private static final int TYPE_LTE = 3;
     private static final int TYPE_WCDMA = 4;
+    private static final int TYPE_TD_SCDMA = 5;
 
     private class RILTestHandler extends HandlerThread {
 
@@ -1146,6 +1147,43 @@ public class RILTest extends TelephonyTest {
         assertEquals(expected, cellInfoWcdma);
     }
 
+    /*
+    @Test
+    public void testConvertHalCellInfoListForTdscdma() throws Exception {
+        android.hardware.radio.V1_0.CellInfoTdscdma cellinfo =
+                new android.hardware.radio.V1_0.CellInfoWcdma();
+        cellinfo.cellIdentityTdscdma.lac = LAC;
+        cellinfo.cellIdentityTdscdma.cid = CID;
+        cellinfo.cellIdentityTdscdma.cpid = PSC;
+        cellinfo.cellIdentityTdscdma.mcc = MCC_STR;
+        cellinfo.cellIdentityTdscdma.mnc = MNC_STR;
+        android.hardware.radio.V1_0.CellInfo record = new android.hardware.radio.V1_0.CellInfo();
+        record.cellInfoType = TYPE_TD_SCDMA;
+        record.registered = false;
+        record.timeStampType = RIL_TIMESTAMP_TYPE_OEM_RIL;
+        record.timeStamp = TIMESTAMP;
+        record.wcdma.add(cellinfo);
+        ArrayList<android.hardware.radio.V1_0.CellInfo> records =
+                new ArrayList<android.hardware.radio.V1_0.CellInfo>();
+        records.add(record);
+
+        ArrayList<CellInfo> ret = RIL.convertHalCellInfoList(records);
+
+        assertEquals(1, ret.size());
+        CellInfoWcdma cellInfoWcdma = (CellInfoWcdma) ret.get(0);
+        CellInfoWcdma expected = new CellInfoWcdma();
+        expected.setRegistered(false);
+        expected.setTimeStamp(TIMESTAMP);
+        expected.setTimeStampType(RIL_TIMESTAMP_TYPE_OEM_RIL);
+        CellIdentityWcdma ci = new CellIdentityWcdma(
+                LAC, CID, PSC, UARFCN, MCC_STR, MNC_STR, EMPTY_ALPHA_LONG, EMPTY_ALPHA_SHORT);
+        CellSignalStrengthWcdma cs = new CellSignalStrengthWcdma(SIGNAL_STRENGTH, BIT_ERROR_RATE);
+        expected.setCellIdentity(ci);
+        expected.setCellSignalStrength(cs);
+        expected.setCellConnectionStatus(CellInfo.CONNECTION_UNKNOWN);
+        assertEquals(expected, cellInfoWcdma);
+    }
+*/
     @Test
     public void testConvertHalCellInfoListForCdma() throws Exception {
         android.hardware.radio.V1_0.CellInfoCdma cellinfo =

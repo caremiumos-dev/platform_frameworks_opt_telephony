@@ -274,7 +274,8 @@ public class CellularNetworkService extends NetworkService {
                                 cellIdentity.cellIdentityTdscdma.get(0);
                         result = new  CellIdentityTdscdma(cellIdentityTdscdma.mcc,
                                 cellIdentityTdscdma.mnc, cellIdentityTdscdma.lac,
-                                cellIdentityTdscdma.cid, cellIdentityTdscdma.cpid);
+                                cellIdentityTdscdma.cid, cellIdentityTdscdma.cpid,
+                                Integer.MAX_VALUE);
                     }
                     break;
                 }

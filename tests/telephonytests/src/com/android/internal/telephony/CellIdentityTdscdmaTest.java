@@ -33,7 +33,7 @@ public class CellIdentityTdscdmaTest extends AndroidTestCase {
     // Tracking area code ranges from 0 to 65535.
     private static final int TAC = 65535;
     // Absolute RF Channel Number ranges from 0 to 262140.
-    private static final int EARFCN = 262140;
+    private static final int UARFCN = 262140;
     private static final int MCC = 120;
     private static final int MNC = 260;
     private static final String MCC_STR = "120";
@@ -52,18 +52,19 @@ public class CellIdentityTdscdmaTest extends AndroidTestCase {
     @SmallTest
     public void testDefaultConstructor() {
         CellIdentityTdscdma ci =
-                new CellIdentityTdscdma(MCC_STR, MNC_STR, LAC, CID, CPID);
+                new CellIdentityTdscdma(MCC_STR, MNC_STR, LAC, CID, UARFCN, CPID);
 
         assertEquals(MCC_STR, ci.getMccString());
         assertEquals(MNC_STR, ci.getMncString());
         assertEquals(LAC, ci.getLac());
         assertEquals(CID, ci.getCid());
         assertEquals(CPID, ci.getCpid());
+        assertEquals(UARFCN, ci.getChannelNumber());
     }
 
     @SmallTest
     public void testConstructorWithEmptyMccMnc() {
-        CellIdentityTdscdma ci = new CellIdentityTdscdma(null, null, LAC, CID, CPID);
+        CellIdentityTdscdma ci = new CellIdentityTdscdma(null, null, LAC, CID, UARFCN, CPID);
 
         assertNull(ci.getMccString());
         assertNull(ci.getMncString());
@@ -86,7 +87,7 @@ public class CellIdentityTdscdmaTest extends AndroidTestCase {
 
     @SmallTest
     public void testParcel() {
-        CellIdentityTdscdma ci = new CellIdentityTdscdma(MCC_STR, MNC_STR, LAC, CID, CPID);
+        CellIdentityTdscdma ci = new CellIdentityTdscdma(MCC_STR, MNC_STR, LAC, CID, UARFCN, CPID);
 
         Parcel p = Parcel.obtain();
         ci.writeToParcel(p, 0);
@@ -98,7 +99,7 @@ public class CellIdentityTdscdmaTest extends AndroidTestCase {
 
     @SmallTest
     public void testParcelWithUnknowMccMnc() {
-        CellIdentityTdscdma ci = new CellIdentityTdscdma(null, null, LAC, CID, CPID);
+        CellIdentityTdscdma ci = new CellIdentityTdscdma(null, null, LAC, CID, UARFCN, CPID);
 
         Parcel p = Parcel.obtain();
         p.writeInt(CellIdentity.TYPE_TDSCDMA);
@@ -117,7 +118,7 @@ public class CellIdentityTdscdmaTest extends AndroidTestCase {
     public void testParcelWithInvalidMccMnc() {
         final String invalidMcc = "randomStuff";
         final String invalidMnc = "randomStuff";
-        CellIdentityTdscdma ci = new CellIdentityTdscdma(null, null, LAC, CID, CPID);
+        CellIdentityTdscdma ci = new CellIdentityTdscdma(null, null, LAC, CID, UARFCN, CPID);
 
         Parcel p = Parcel.obtain();
         p.writeInt(CellIdentity.TYPE_TDSCDMA);
