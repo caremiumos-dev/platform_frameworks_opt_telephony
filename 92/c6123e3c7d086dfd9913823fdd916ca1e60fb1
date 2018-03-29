@@ -1,0 +1,9 @@
+Autosubmit+1: Ian Pedowitz <ijpedowitz@google.com>
+Presubmit-Ready+1: Ian Pedowitz <ijpedowitz@google.com>
+Build-Cop-Override+1: Ian Pedowitz <ijpedowitz@google.com>
+Code-Review+2: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Submitted-by: Ian Pedowitz <ijpedowitz@google.com>
+Submitted-at: Thu, 29 Mar 2018 04:21:43 +0000
+Reviewed-on: https://android-review.googlesource.com/651801
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
