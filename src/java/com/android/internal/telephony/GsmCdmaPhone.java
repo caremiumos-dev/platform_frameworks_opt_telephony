@@ -1391,7 +1391,7 @@ public class GsmCdmaPhone extends Phone {
             PersistableBundle b = configManager.getConfig();
             if (b != null) {
                 String defaultVmNumber =
-                        b.getString(CarrierConfigManager.KEY_DEFAULT_VM_NUMBER_STRING);
+                        b.getString(CarrierConfigManager.KEY_DEFAULT_VOICEMAIL_NUMBER_STRING);
                 if (!TextUtils.isEmpty(defaultVmNumber)) {
                     number = defaultVmNumber;
                 }
