@@ -4559,6 +4559,11 @@ public class DcTracker extends Handler {
             // Go through a series of recovery steps, each action transitions to the next action
             final int recoveryAction = getRecoveryAction();
             TelephonyMetrics.getInstance().writeDataStallEvent(mPhone.getPhoneId(), recoveryAction);
+
+            Intent intent = new Intent(TelephonyIntents.ACTION_DATA_STALL_RECOVERY);
+            intent.putExtra(TelephonyIntents.EXTRA_RECOVERY_ACTION, recoveryAction);
+            mPhone.getContext().sendBroadcast(intent);
+
             switch (recoveryAction) {
                 case RecoveryAction.GET_DATA_CALL_LIST:
                     EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_GET_DATA_CALL_LIST,
