@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb7980cf_b48039f8",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4565,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-04-04T23:38:14Z",
+      "side": 1,
+      "message": "Which component will receive it? If the app that registers for this broadcast is in the background, then it is not going to receive it.",
+      "range": {
+        "startLine": 4563,
+        "startChar": 0,
+        "endLine": 4565,
+        "endChar": 54
+      },
+      "revId": "bd6e334d027d6e1fd62d3a25f7331195d9766e5c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
