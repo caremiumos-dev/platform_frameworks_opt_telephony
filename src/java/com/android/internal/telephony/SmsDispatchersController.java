@@ -451,7 +451,11 @@ public class SmsDispatchersController extends Handler {
                             PendingIntent sentIntent, PendingIntent deliveryIntent, Uri messageUri,
                             String callingPkg, boolean persistMessage, int priority,
                             boolean expectMore, int validityPeriod) {
-        if (mImsSmsDispatcher.isAvailable()) {
+        /*TODO: Need to change below condition to (isAvailable  && (isRegistered()||isEmergency...())
+                after RIL/modem has the support to send Sms/Ims capability independent of
+                its Ims registration state */
+        if ((mImsSmsDispatcher.isAvailable() && mImsSmsDispatcher.isRegistered()) ||
+                mImsSmsDispatcher.isEmergencySmsSupport(destAddr)) {
             mImsSmsDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
                     messageUri, callingPkg, persistMessage, SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
                     false /*expectMore*/, SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
