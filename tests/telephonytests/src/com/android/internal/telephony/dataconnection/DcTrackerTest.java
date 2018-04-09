@@ -63,12 +63,14 @@ import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.data.ApnSetting;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
 import android.test.mock.MockContentProvider;
 import android.test.mock.MockContentResolver;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.text.TextUtils;
 import android.util.LocalLog;
 
 import com.android.internal.R;
@@ -494,7 +496,7 @@ public class DcTrackerTest extends TelephonyTest {
         assertEquals("IP", dp.getRoamingProtocol());
         assertEquals(bearerBitmask, dp.getBearerBitmap());
         assertEquals(0, dp.getMtu());
-        assertEquals("", dp.getMvnoType());
+        assertEquals(null, dp.getMvnoType());
         assertEquals("", dp.getMvnoMatchData());
         assertFalse(dp.isModemCognitive());
     }
@@ -978,7 +980,8 @@ public class DcTrackerTest extends TelephonyTest {
     private void initApns(String targetApn, String[] canHandleTypes) {
         doReturn(targetApn).when(mApnContext).getApnType();
         doReturn(true).when(mApnContext).isConnectable();
-        ApnSetting apnSetting = createApnSetting(canHandleTypes);
+        ApnSetting apnSetting = createApnSetting(ApnSetting.parseTypes(
+                TextUtils.join(",", canHandleTypes)));
         doReturn(apnSetting).when(mApnContext).getNextApnSetting();
         doReturn(apnSetting).when(mApnContext).getApnSetting();
         doReturn(mDcac).when(mApnContext).getDcAc();
@@ -1283,7 +1286,7 @@ public class DcTrackerTest extends TelephonyTest {
                 Settings.Global.TETHER_DUN_APN, null);
         // should return APN from db
         dunApn = mDct.fetchDunApn();
-        assertEquals(FAKE_APN5, dunApn.apn);
+        assertEquals(FAKE_APN5, dunApn.getApnName());
     }
     // Test oos
     @Test
