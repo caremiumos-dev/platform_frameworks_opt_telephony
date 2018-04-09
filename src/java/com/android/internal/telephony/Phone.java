@@ -535,7 +535,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 // note this is not persisting
                 WifiManager wM = (WifiManager)
                         mContext.getSystemService(Context.WIFI_SERVICE);
-                wM.setCountryCode(country, false);
+                wM.setCountryCode(country);
             }
         }
 
@@ -3017,6 +3017,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return null;
     }
 
+    public int getCarrierIdListVersion() {
+        return TelephonyManager.UNKNOWN_CARRIER_ID_LIST_VERSION;
+    }
+
     /**
      *  Resets the Carrier Keys in the database. This involves 2 steps:
      *  1. Delete the keys from the database.
@@ -3595,6 +3599,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (mDeviceStateMonitor != null) {
             mDeviceStateMonitor.setIndicationUpdateMode(filters, mode);
         }
+    }
+
+    public void setCarrierTestOverride(String mccmnc, String imsi, String iccid, String gid1,
+            String gid2, String pnn, String spn) {
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
