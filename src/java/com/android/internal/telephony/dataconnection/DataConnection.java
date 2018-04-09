@@ -43,6 +43,7 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
+import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
@@ -431,9 +432,9 @@ public class DataConnection extends StateMachine {
             return;
         }
 
-        if (apn != null && apn.mtu != PhoneConstants.UNSET_MTU) {
-            lp.setMtu(apn.mtu);
-            if (DBG) log("MTU set by APN to: " + apn.mtu);
+        if (apn != null && apn.getMtu() != PhoneConstants.UNSET_MTU) {
+            lp.setMtu(apn.getMtu());
+            if (DBG) log("MTU set by APN to: " + apn.getMtu());
             return;
         }
 
@@ -490,9 +491,12 @@ public class DataConnection extends StateMachine {
      * @param cp is the connection parameters
      */
     private void onConnect(ConnectionParams cp) {
-        if (DBG) log("onConnect: carrier='" + mApnSetting.carrier
-                + "' APN='" + mApnSetting.apn
-                + "' proxy='" + mApnSetting.proxy + "' port='" + mApnSetting.port + "'");
+        if (DBG) {
+            log("onConnect: carrier='" + mApnSetting.getEntryName()
+                    + "' APN='" + mApnSetting.getApnName()
+                    + "' proxy='" + mApnSetting.getProxyAddress()
+                    + "' port='" + mApnSetting.getProxyPort() + "'");
+        }
         if (cp.mApnContext != null) cp.mApnContext.requestLog("DataConnection.onConnect");
 
         // Check if we should fake an error.
@@ -771,7 +775,7 @@ public class DataConnection extends StateMachine {
             // Do not apply the race condition workaround for MMS APN
             // if Proxy is an IP-address.
             // Otherwise, the default APN will not be restored anymore.
-            if (!mApnSetting.types[0].equals(PhoneConstants.APN_TYPE_MMS)
+            if ((mApnSetting.getApnTypeBitmask() & ApnSetting.TYPE_MMS) == 0
                 || !isIpAddress(mApnSetting.mmsProxy)) {
                 log(String.format(
                         "isDnsOk: return false apn.types[0]=%s APN_TYPE_MMS=%s isIpAddress(%s)=%s",
