@@ -43,6 +43,7 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
+import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
@@ -431,9 +432,9 @@ public class DataConnection extends StateMachine {
             return;
         }
 
-        if (apn != null && apn.mtu != PhoneConstants.UNSET_MTU) {
-            lp.setMtu(apn.mtu);
-            if (DBG) log("MTU set by APN to: " + apn.mtu);
+        if (apn != null && apn.getMtu() != PhoneConstants.UNSET_MTU) {
+            lp.setMtu(apn.getMtu());
+            if (DBG) log("MTU set by APN to: " + apn.getMtu());
             return;
         }
 
@@ -490,9 +491,12 @@ public class DataConnection extends StateMachine {
      * @param cp is the connection parameters
      */
     private void onConnect(ConnectionParams cp) {
-        if (DBG) log("onConnect: carrier='" + mApnSetting.carrier
-                + "' APN='" + mApnSetting.apn
-                + "' proxy='" + mApnSetting.proxy + "' port='" + mApnSetting.port + "'");
+        if (DBG) {
+            log("onConnect: carrier='" + mApnSetting.getEntryName()
+                    + "' APN='" + mApnSetting.getApnName()
+                    + "' proxy='" + mApnSetting.getProxyAddress()
+                    + "' port='" + mApnSetting.getProxyPort() + "'");
+        }
         if (cp.mApnContext != null) cp.mApnContext.requestLog("DataConnection.onConnect");
 
         // Check if we should fake an error.
@@ -771,12 +775,14 @@ public class DataConnection extends StateMachine {
             // Do not apply the race condition workaround for MMS APN
             // if Proxy is an IP-address.
             // Otherwise, the default APN will not be restored anymore.
-            if (!mApnSetting.types[0].equals(PhoneConstants.APN_TYPE_MMS)
-                || !isIpAddress(mApnSetting.mmsProxy)) {
+            if (!isIpAddress(
+                        ApnSetting.inetAddressToString(mApnSetting.getMmsProxyAddress()))) {
                 log(String.format(
-                        "isDnsOk: return false apn.types[0]=%s APN_TYPE_MMS=%s isIpAddress(%s)=%s",
-                        mApnSetting.types[0], PhoneConstants.APN_TYPE_MMS, mApnSetting.mmsProxy,
-                        isIpAddress(mApnSetting.mmsProxy)));
+                        "isDnsOk: return false apn.types=%d APN_TYPE_MMS=%s isIpAddress(%s)=%s",
+                        mApnSetting.getApnTypeBitmask(), PhoneConstants.APN_TYPE_MMS,
+                        mApnSetting.getMmsProxyAddress(),
+                        isIpAddress(ApnSetting.inetAddressToString(
+                            mApnSetting.getMmsProxyAddress()))));
                 return false;
             }
         }
@@ -910,7 +916,7 @@ public class DataConnection extends StateMachine {
 
         // Do we need a restricted network to satisfy the request?
         // Is this network metered?  If not, then don't add restricted
-        if (!mApnSetting.isMetered(mPhone)) {
+        if (!ApnSettingUtils.isMetered(mApnSetting, mPhone)) {
             return;
         }
 
@@ -924,10 +930,12 @@ public class DataConnection extends StateMachine {
 
         if (mApnSetting != null) {
             ApnSetting securedDunApn = mDct.fetchDunApn();
-            for (String type : mApnSetting.types) {
+            String[] types = ApnSetting.getApnTypesStringFromBitmask(
+                    mApnSetting.getApnTypeBitmask()).split(",");
+            for (String type : types) {
                 if (!mRestrictedNetworkOverride
                         && (mConnectionParams != null && mConnectionParams.mUnmeteredUseOnly)
-                        && ApnSetting.isMeteredApnType(type, mPhone)) {
+                        && ApnSettingUtils.isMeteredApnType(type, mPhone)) {
                     log("Dropped the metered " + type + " for the unmetered data call.");
                     continue;
                 }
@@ -994,7 +1002,7 @@ public class DataConnection extends StateMachine {
             // 2. The non-restricted data and is intended for unmetered use only.
             if (((mConnectionParams != null && mConnectionParams.mUnmeteredUseOnly)
                     && !mRestrictedNetworkOverride)
-                    || !mApnSetting.isMetered(mPhone)) {
+                    || !ApnSettingUtils.isMetered(mApnSetting, mPhone)) {
                 result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
             } else {
                 result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
@@ -1165,7 +1173,7 @@ public class DataConnection extends StateMachine {
             // only NOT be set only if we're in DcInactiveState.
             mApnSetting = apnContext.getApnSetting();
         }
-        if (mApnSetting == null || !mApnSetting.canHandleType(apnContext.getApnType())) {
+        if (mApnSetting == null || !mApnSetting.canHandleType(apnContext.getApnTypeBitmask())) {
             if (DBG) {
                 log("initConnection: incompatible apnSetting in ConnectionParams cp=" + cp
                         + " dc=" + DataConnection.this);
@@ -1678,7 +1686,7 @@ public class DataConnection extends StateMachine {
 
             mNetworkInfo.setDetailedState(NetworkInfo.DetailedState.CONNECTED,
                     mNetworkInfo.getReason(), null);
-            mNetworkInfo.setExtraInfo(mApnSetting.apn);
+            mNetworkInfo.setExtraInfo(mApnSetting.getApnName());
             updateTcpBufferSizes(mRilRat);
 
             final NetworkMisc misc = new NetworkMisc();
