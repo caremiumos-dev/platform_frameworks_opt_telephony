@@ -27,9 +27,8 @@ import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.telephony.VoLteServiceState;
-
-import com.android.internal.telephony.IOnSubscriptionsChangedListener;
 import com.android.internal.telephony.IPhoneStateListener;
+import com.android.internal.telephony.IOnSubscriptionsChangedListener;
 import com.android.internal.telephony.ITelephonyRegistry;
 
 import java.util.ArrayList;
@@ -300,6 +299,11 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
     @Override
     public void notifyVoLteServiceStateChanged(VoLteServiceState lteState) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void notifyOemHookRawEventForSubscriber(int subId, byte[] rawData) {
         throw new RuntimeException("Not implemented");
     }
 
