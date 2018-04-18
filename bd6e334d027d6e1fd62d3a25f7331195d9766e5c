@@ -45,6 +45,30 @@
       "revId": "bd6e334d027d6e1fd62d3a25f7331195d9766e5c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d171f546_a1547aec",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4565,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2018-04-18T01:20:23Z",
+      "side": 1,
+      "message": "added permission in PS2",
+      "parentUuid": "e1ca41f1_3ead542a",
+      "range": {
+        "startLine": 4565,
+        "startChar": 0,
+        "endLine": 4565,
+        "endChar": 54
+      },
+      "revId": "bd6e334d027d6e1fd62d3a25f7331195d9766e5c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
