@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a39227f1_535d6809",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4561,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-04-18T18:01:03Z",
+      "side": 1,
+      "message": "Use putPhoneIdAndSubIdExtra",
+      "range": {
+        "startLine": 4561,
+        "startChar": 8,
+        "endLine": 4561,
+        "endChar": 78
+      },
+      "revId": "4e3e15756fb9655e05dd0ad02582f7566a6686f2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
