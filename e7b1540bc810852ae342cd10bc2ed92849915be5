@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "22947fc0_83a348bd",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1299563
+      },
+      "writtenOn": "2018-04-20T12:07:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57b462f0_894574c1",
+      "range": {
+        "startLine": 210,
+        "startChar": 0,
+        "endLine": 223,
+        "endChar": 9
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dcb758e_e9923eb7",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "89ada29f_c9124d44",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1299563
+      },
+      "writtenOn": "2018-04-20T12:07:23Z",
+      "side": 1,
+      "message": "Dont see any issues with byte parsing in this method",
+      "parentUuid": "2dcb758e_e9923eb7",
+      "range": {
+        "startLine": 235,
+        "startChar": 49,
+        "endLine": 235,
+        "endChar": 65
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33b7ac00_1ea29fbe",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2018-03-13T18:09:46Z",
       "side": 1,
       "message": "I know this is copy+paste, but...\n\nreturn new StringBuilder()\n    .append()\n    .append()\n....\n    .toString();",
+      "range": {
+        "startLine": 251,
+        "startChar": 2,
+        "endLine": 258,
+        "endChar": 35
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5918d905_d5dc5ed8",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1299563
+      },
+      "writtenOn": "2018-04-20T12:07:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33b7ac00_1ea29fbe",
       "range": {
         "startLine": 251,
         "startChar": 2,
@@ -118,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "8b3566e4_30ccd4ca",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1299563
+      },
+      "writtenOn": "2018-04-20T12:07:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db195d1e_f48d81b3",
+      "range": {
+        "startLine": 288,
+        "startChar": 38,
+        "endLine": 288,
+        "endChar": 58
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1b94cc4_ed695528",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 2
@@ -153,6 +249,24 @@
     },
     {
       "key": {
+        "uuid": "82b3b0f7_599269ab",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1299563
+      },
+      "writtenOn": "2018-04-20T12:07:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2de7eaca_1adf8ecd",
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ca68624_550261e6",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 2
@@ -164,6 +278,30 @@
       "writtenOn": "2018-03-13T18:09:46Z",
       "side": 1,
       "message": "Please apply the PII comments from Amit as a general guideline.",
+      "range": {
+        "startLine": 451,
+        "startChar": 16,
+        "endLine": 451,
+        "endChar": 19
+      },
+      "revId": "e7b1540bc810852ae342cd10bc2ed92849915be5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "644883b5_9b47c993",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1299563
+      },
+      "writtenOn": "2018-04-20T12:07:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ca68624_550261e6",
       "range": {
         "startLine": 451,
         "startChar": 16,
