@@ -2510,6 +2510,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 log("onCallMerged: CurrentVideoProvider=" + conn.getVideoProvider());
                 setVideoCallProvider(conn, call);
                 log("onCallMerged: CurrentVideoProvider=" + conn.getVideoProvider());
+                // Send a merge complete notification when the connection has been merged.
+                conn.handleMergeComplete();
             } catch (Exception e) {
                 loge("onCallMerged: exception " + e);
             }
@@ -2519,6 +2521,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             processCallStateChange(mForegroundCall.getImsCall(), ImsPhoneCall.State.ACTIVE,
                     DisconnectCause.NOT_DISCONNECTED);
             if (peerConnection != null) {
+                peerConnection.handleMergeComplete();
                 processCallStateChange(mBackgroundCall.getImsCall(), ImsPhoneCall.State.HOLDING,
                     DisconnectCause.NOT_DISCONNECTED);
             }
