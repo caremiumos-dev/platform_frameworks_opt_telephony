@@ -490,8 +490,7 @@ public abstract class TelephonyTest {
                 mIActivityManager);
         replaceInstance(ServiceManager.class, "sCache", null, mServiceManagerMockedServices);
         replaceInstance(IntentBroadcaster.class, "sIntentBroadcaster", null, mIntentBroadcaster);
-        replaceInstance(TelephonyManager.class, "sInstance", null,
-                mContext.getSystemService(Context.TELEPHONY_SERVICE));
+        replaceInstance(TelephonyManager.class, "sInstance", null, mTelephonyManager);
         replaceInstance(PhoneFactory.class, "sMadeDefaults", null, true);
         replaceInstance(PhoneFactory.class, "sPhone", null, mPhone);
         replaceInstance(PhoneFactory.class, "sPhones", null, mPhones);
