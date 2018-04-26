@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "216fa969_7c7c7c82",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-04-26T18:44:47Z",
+      "side": 1,
+      "message": "Susheel, do you think you can add a unittest to verify this? From our side I don\u0027t have a valid SIM that can verify this change. So a unittest can help gain more confidence.",
+      "revId": "b57a508ce53cf34e8ea91086f37fe81d14c85cd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
