@@ -1348,12 +1348,15 @@ public class ServiceStateTracker extends Handler {
                             mMin = cdmaSubscription[3];
                             mPrlVersion = cdmaSubscription[4];
                             if (DBG) log("GET_CDMA_SUBSCRIPTION: MDN=" + mMdn);
+                            if (!mIsMinInfoReady && (!TextUtils.isEmpty(mMdn) ||
+                                    !TextUtils.isEmpty(mMin))) {
 
-                            mIsMinInfoReady = true;
+                                mIsMinInfoReady = true;
 
-                            updateOtaspState();
-                            // Notify apps subscription info is ready
-                            notifyCdmaSubscriptionInfoReady();
+                                updateOtaspState();
+                                // Notify apps subscription info is ready
+                                notifyCdmaSubscriptionInfoReady();
+                            }
 
                             if (!mIsSubscriptionFromRuim && mIccRecords != null) {
                                 if (DBG) {
@@ -1380,22 +1383,24 @@ public class ServiceStateTracker extends Handler {
                 if (!mPhone.isPhoneTypeGsm()) {
                     log("EVENT_RUIM_RECORDS_LOADED: what=" + msg.what);
                     updatePhoneObject();
+
+                    RuimRecords ruim = (RuimRecords) mIccRecords;
+                    if (ruim != null && !mIsMinInfoReady) {
+                        if (ruim.isProvisioned()) {
+                            mMdn = ruim.getMdn();
+                            mMin = ruim.getMin();
+                            parseSidNid(ruim.getSid(), ruim.getNid());
+                            mPrlVersion = ruim.getPrlVersion();
+                            mIsMinInfoReady = true;
+                        }
+                        updateOtaspState();
+                        // Notify apps subscription info is ready
+                        notifyCdmaSubscriptionInfoReady();
+                    }
+
                     if (mPhone.isPhoneTypeCdma()) {
                         updateSpnDisplay();
                     } else {
-                        RuimRecords ruim = (RuimRecords) mIccRecords;
-                        if (ruim != null) {
-                            if (ruim.isProvisioned()) {
-                                mMdn = ruim.getMdn();
-                                mMin = ruim.getMin();
-                                parseSidNid(ruim.getSid(), ruim.getNid());
-                                mPrlVersion = ruim.getPrlVersion();
-                                mIsMinInfoReady = true;
-                            }
-                            updateOtaspState();
-                            // Notify apps subscription info is ready
-                            notifyCdmaSubscriptionInfoReady();
-                        }
                         // SID/NID/PRL is loaded. Poll service state
                         // again to update to the roaming state with
                         // the latest variables.
