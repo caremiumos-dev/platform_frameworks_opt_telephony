@@ -1380,22 +1380,26 @@ public class ServiceStateTracker extends Handler {
                 if (!mPhone.isPhoneTypeGsm()) {
                     log("EVENT_RUIM_RECORDS_LOADED: what=" + msg.what);
                     updatePhoneObject();
+
+                    // Parse subscription info from RUIM
+                    // Trigger OTASP needed check for CDMA
+                    RuimRecords ruim = (RuimRecords) mIccRecords;
+                    if (ruim != null) {
+                        if (ruim.isProvisioned()) {
+                            mMdn = ruim.getMdn();
+                            mMin = ruim.getMin();
+                            parseSidNid(ruim.getSid(), ruim.getNid());
+                            mPrlVersion = ruim.getPrlVersion();
+                            mIsMinInfoReady = true;
+                        }
+                        updateOtaspState();
+                        // Notify apps subscription info is ready
+                        notifyCdmaSubscriptionInfoReady();
+                    }
+
                     if (mPhone.isPhoneTypeCdma()) {
                         updateSpnDisplay();
                     } else {
-                        RuimRecords ruim = (RuimRecords) mIccRecords;
-                        if (ruim != null) {
-                            if (ruim.isProvisioned()) {
-                                mMdn = ruim.getMdn();
-                                mMin = ruim.getMin();
-                                parseSidNid(ruim.getSid(), ruim.getNid());
-                                mPrlVersion = ruim.getPrlVersion();
-                                mIsMinInfoReady = true;
-                            }
-                            updateOtaspState();
-                            // Notify apps subscription info is ready
-                            notifyCdmaSubscriptionInfoReady();
-                        }
                         // SID/NID/PRL is loaded. Poll service state
                         // again to update to the roaming state with
                         // the latest variables.
