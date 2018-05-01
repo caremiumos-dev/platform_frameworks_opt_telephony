@@ -16,10 +16,7 @@
 
 package com.android.internal.telephony.uicc;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.AsyncResult;
 import android.os.Message;
@@ -30,7 +27,6 @@ import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionInfo;
-import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.CommandsInterface;
@@ -172,9 +168,9 @@ public class SIMRecords extends IccRecords {
 
     // TODO: Possibly move these to IccRecords.java
     private static final int SYSTEM_EVENT_BASE = 0x100;
-    private static final int EVENT_CARRIER_CONFIG_CHANGED = 1 + SYSTEM_EVENT_BASE;
     private static final int EVENT_APP_LOCKED = 2 + SYSTEM_EVENT_BASE;
-    private static final int EVENT_SIM_REFRESH = 3 + SYSTEM_EVENT_BASE;
+    private static final int EVENT_APP_NETWORK_LOCKED = 3 + SYSTEM_EVENT_BASE;
+
 
     // Lookup table for carriers known to produce SIMs which incorrectly indicate MNC length.
 
@@ -211,43 +207,29 @@ public class SIMRecords extends IccRecords {
         mVmConfig = new VoiceMailConstants();
 
         mRecordsRequested = false;  // No load request is made till SIM ready
-        mLockedRecordsRequested = false;
+        mLockedRecordsReqReason = LOCKED_RECORDS_REQ_REASON_NONE;
 
         // recordsToLoad is set to 0 because no requests are made yet
         mRecordsToLoad = 0;
 
         mCi.setOnSmsOnSim(this, EVENT_SMS_ON_SIM, null);
-        mCi.registerForIccRefresh(this, EVENT_SIM_REFRESH, null);
 
         // Start off by setting empty state
         resetRecords();
         mParentApp.registerForReady(this, EVENT_APP_READY, null);
         mParentApp.registerForLocked(this, EVENT_APP_LOCKED, null);
+        mParentApp.registerForNetworkLocked(this, EVENT_APP_NETWORK_LOCKED, null);
         if (DBG) log("SIMRecords X ctor this=" + this);
-
-        IntentFilter intentfilter = new IntentFilter();
-        intentfilter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
-        c.registerReceiver(mReceiver, intentfilter);
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED)) {
-                sendMessage(obtainMessage(EVENT_CARRIER_CONFIG_CHANGED));
-            }
-        }
-    };
 
     @Override
     public void dispose() {
         if (DBG) log("Disposing SIMRecords this=" + this);
         //Unregister for all events
-        mCi.unregisterForIccRefresh(this);
         mCi.unSetOnSmsOnSim(this);
         mParentApp.unregisterForReady(this);
         mParentApp.unregisterForLocked(this);
-        mContext.unregisterReceiver(mReceiver);
+        mParentApp.unregisterForNetworkLocked(this);
         resetRecords();
         super.dispose();
     }
@@ -291,7 +273,8 @@ public class SIMRecords extends IccRecords {
         // read requests made so far are not valid. This is set to
         // true only when fresh set of read requests are made.
         mRecordsRequested = false;
-        mLockedRecordsRequested = false;
+        mLockedRecordsReqReason = LOCKED_RECORDS_REQ_REASON_NONE;
+        mLoaded.set(false);
     }
 
     //***** Public Methods
@@ -666,7 +649,8 @@ public class SIMRecords extends IccRecords {
                     break;
 
                 case EVENT_APP_LOCKED:
-                    onLocked();
+                case EVENT_APP_NETWORK_LOCKED:
+                    onLocked(msg.what);
                     break;
 
                 /* IO events */
@@ -729,7 +713,7 @@ public class SIMRecords extends IccRecords {
                         // finally have both the imsi and the mncLength and
                         // can parse the imsi properly
                         MccTable.updateMccMncConfiguration(mContext,
-                                imsi.substring(0, 3 + mMncLength), false);
+                                imsi.substring(0, 3 + mMncLength));
                     }
                     mImsiReadyRegistrants.notifyRegistrants();
                     break;
@@ -1006,7 +990,7 @@ public class SIMRecords extends IccRecords {
                             // the imsi properly
                             log("update mccmnc=" + imsi.substring(0, 3 + mMncLength));
                             MccTable.updateMccMncConfiguration(mContext,
-                                    imsi.substring(0, 3 + mMncLength), false);
+                                    imsi.substring(0, 3 + mMncLength));
                         }
                     }
                     break;
@@ -1213,14 +1197,6 @@ public class SIMRecords extends IccRecords {
                         ((Message) ar.userObj).sendToTarget();
                     }
                     break;
-                case EVENT_SIM_REFRESH:
-                    isRecordLoadResponse = false;
-                    ar = (AsyncResult) msg.obj;
-                    if (DBG) log("Sim REFRESH with exception: " + ar.exception);
-                    if (ar.exception == null) {
-                        handleSimRefresh((IccRefreshResponse) ar.result);
-                    }
-                    break;
                 case EVENT_GET_CFIS_DONE:
                     isRecordLoadResponse = true;
 
@@ -1370,10 +1346,6 @@ public class SIMRecords extends IccRecords {
                     }
                     break;
 
-                case EVENT_CARRIER_CONFIG_CHANGED:
-                    handleCarrierNameOverride();
-                    break;
-
                 default:
                     super.handleMessage(msg);   // IccRecords handles generic record load responses
             }
@@ -1410,7 +1382,8 @@ public class SIMRecords extends IccRecords {
         }
     }
 
-    private void handleFileUpdate(int efid) {
+    @Override
+    protected void handleFileUpdate(int efid) {
         switch(efid) {
             case EF_MBDN:
                 mRecordsToLoad++;
@@ -1450,39 +1423,6 @@ public class SIMRecords extends IccRecords {
                 // TODO: Handle other cases, instead of fetching all.
                 mAdnCache.reset();
                 fetchSimRecords();
-                break;
-        }
-    }
-
-    private void handleSimRefresh(IccRefreshResponse refreshResponse){
-        if (refreshResponse == null) {
-            if (DBG) log("handleSimRefresh received without input");
-            return;
-        }
-
-        if (!TextUtils.isEmpty(refreshResponse.aid)
-                && !refreshResponse.aid.equals(mParentApp.getAid())) {
-            // This is for different app. Ignore.
-            return;
-        }
-
-        switch (refreshResponse.refreshResult) {
-            case IccRefreshResponse.REFRESH_RESULT_FILE_UPDATE:
-                if (DBG) log("handleSimRefresh with SIM_FILE_UPDATED");
-                handleFileUpdate(refreshResponse.efId);
-                break;
-            case IccRefreshResponse.REFRESH_RESULT_INIT:
-                if (DBG) log("handleSimRefresh with SIM_REFRESH_INIT");
-                // need to reload all files (that we care about)
-                onIccRefreshInit();
-                break;
-            case IccRefreshResponse.REFRESH_RESULT_RESET:
-                // Refresh reset is handled by the UiccCard object.
-                if (DBG) log("handleSimRefresh with SIM_REFRESH_RESET");
-                break;
-            default:
-                // unknown refresh operation
-                if (DBG) log("handleSimRefresh with unknown operation");
                 break;
         }
     }
@@ -1561,7 +1501,7 @@ public class SIMRecords extends IccRecords {
 
         if (getRecordsLoaded()) {
             onAllRecordsLoaded();
-        } else if (getLockedRecordsLoaded()) {
+        } else if (getLockedRecordsLoaded() || getNetworkLockedRecordsLoaded()) {
             onLockedAllRecordsLoaded();
         } else if (mRecordsToLoad < 0) {
             loge("recordsToLoad <0, programmer error suspected");
@@ -1596,7 +1536,15 @@ public class SIMRecords extends IccRecords {
 
     private void onLockedAllRecordsLoaded() {
         setSimLanguageFromEF();
-        mLockedRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
+        if (mLockedRecordsReqReason == LOCKED_RECORDS_REQ_REASON_LOCKED) {
+            mLockedRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
+        } else if (mLockedRecordsReqReason == LOCKED_RECORDS_REQ_REASON_NETWORK_LOCKED) {
+            mNetworkLockedRecordsLoadedRegistrants.notifyRegistrants(
+                    new AsyncResult(null, null, null));
+        } else {
+            loge("onLockedAllRecordsLoaded: unexpected mLockedRecordsReqReason "
+                    + mLockedRecordsReqReason);
+        }
     }
 
     @Override
@@ -1623,75 +1571,17 @@ public class SIMRecords extends IccRecords {
         if (!TextUtils.isEmpty(imsi) && imsi.length() >= 3) {
             log("onAllRecordsLoaded set mcc imsi" + (VDBG ? ("=" + imsi) : ""));
             mTelephonyManager.setSimCountryIsoForPhone(
-                    mParentApp.getPhoneId(), MccTable.countryCodeForMcc(
-                    Integer.parseInt(imsi.substring(0, 3))));
+                    mParentApp.getPhoneId(), MccTable.countryCodeForMcc(imsi.substring(0, 3)));
         } else {
             log("onAllRecordsLoaded empty imsi skipping setting mcc");
         }
 
         setVoiceMailByCountry(operator);
-
+        mLoaded.set(true);
         mRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
     }
 
     //***** Private methods
-
-    /**
-     * Override the carrier name with either carrier config or SPN
-     * if an override is provided.
-     */
-    private void handleCarrierNameOverride() {
-        final int phoneId = mParentApp.getPhoneId();
-        SubscriptionController subCon = SubscriptionController.getInstance();
-        final int subId = subCon.getSubIdUsingPhoneId(phoneId);
-        if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
-            loge("subId not valid for Phone " + phoneId);
-            return;
-        }
-
-        CarrierConfigManager configLoader = (CarrierConfigManager)
-                mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
-        if (configLoader == null) {
-            loge("Failed to load a Carrier Config");
-            return;
-        }
-
-        PersistableBundle config = configLoader.getConfigForSubId(subId);
-        boolean preferCcName = config.getBoolean(
-                CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL, false);
-        String ccName = config.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING);
-        // If carrier config is priority, use it regardless - the preference
-        // and the name were both set by the carrier, so this is safe;
-        // otherwise, if the SPN is priority but we don't have one *and* we have
-        // a name in carrier config, use the carrier config name as a backup.
-        if (preferCcName || (TextUtils.isEmpty(getServiceProviderName())
-                             && !TextUtils.isEmpty(ccName))) {
-            setServiceProviderName(ccName);
-            mTelephonyManager.setSimOperatorNameForPhone(phoneId, ccName);
-        }
-
-        updateCarrierNameForSubscription(subCon, subId);
-    }
-
-    private void updateCarrierNameForSubscription(SubscriptionController subCon, int subId) {
-        /* update display name with carrier override */
-        SubscriptionInfo subInfo = subCon.getActiveSubscriptionInfo(
-                subId, mContext.getOpPackageName());
-
-        if (subInfo == null || subInfo.getNameSource()
-                == SubscriptionManager.NAME_SOURCE_USER_INPUT) {
-            // either way, there is no subinfo to update
-            return;
-        }
-
-        CharSequence oldSubName = subInfo.getDisplayName();
-        String newCarrierName = mTelephonyManager.getSimOperatorName(subId);
-
-        if (!TextUtils.isEmpty(newCarrierName) && !newCarrierName.equals(oldSubName)) {
-            log("sim name[" + mParentApp.getPhoneId() + "] = " + newCarrierName);
-            subCon.setDisplayName(newCarrierName, subId);
-        }
-    }
 
     private void setVoiceMailByCountry (String spn) {
         if (mVmConfig.containsCarrier(spn)) {
@@ -1716,9 +1606,10 @@ public class SIMRecords extends IccRecords {
         fetchSimRecords();
     }
 
-    private void onLocked() {
+    private void onLocked(int msg) {
         if (DBG) log("only fetch EF_LI, EF_PL and EF_ICCID in locked state");
-        mLockedRecordsRequested = true;
+        mLockedRecordsReqReason = msg == EVENT_APP_LOCKED ? LOCKED_RECORDS_REQ_REASON_LOCKED :
+                LOCKED_RECORDS_REQ_REASON_NETWORK_LOCKED;
 
         loadEfLiAndEfPl();
 
@@ -1868,8 +1759,8 @@ public class SIMRecords extends IccRecords {
     public int getDisplayRule(ServiceState serviceState) {
         int rule;
 
-        if (mParentApp != null && mParentApp.getUiccCard() != null &&
-            mParentApp.getUiccCard().getOperatorBrandOverride() != null) {
+        if (mParentApp != null && mParentApp.getUiccProfile() != null
+                && mParentApp.getUiccProfile().getOperatorBrandOverride() != null) {
         // If the operator has been overridden, treat it as the SPN file on the SIM did not exist.
             rule = SPN_RULE_SHOW_PLMN;
         } else if (TextUtils.isEmpty(getServiceProviderName()) || mSpnDisplayCondition == -1) {
@@ -2239,19 +2130,18 @@ public class SIMRecords extends IccRecords {
         pw.println(" mEfCfis[]=" + Arrays.toString(mEfCfis));
         pw.println(" mSpnDisplayCondition=" + mSpnDisplayCondition);
         pw.println(" mSpdiNetworks[]=" + mSpdiNetworks);
-        pw.println(" mPnnHomeName=" + mPnnHomeName);
         pw.println(" mUsimServiceTable=" + mUsimServiceTable);
         pw.println(" mGid1=" + mGid1);
         if (mCarrierTestOverride.isInTestMode()) {
-            pw.println(" mFakeGid1=" + mFakeGid1);
+            pw.println(" mFakeGid1=" + mCarrierTestOverride.getFakeGid1());
         }
         pw.println(" mGid2=" + mGid2);
         if (mCarrierTestOverride.isInTestMode()) {
-            pw.println(" mFakeGid2=" + mFakeGid2);
+            pw.println(" mFakeGid2=" + mCarrierTestOverride.getFakeGid2());
         }
         pw.println(" mPnnHomeName=" + mPnnHomeName);
         if (mCarrierTestOverride.isInTestMode()) {
-            pw.println(" mFakePnnHomeName=" + mFakePnnHomeName);
+            pw.println(" mFakePnnHomeName=" + mCarrierTestOverride.getFakePnnHomeName());
         }
         pw.println(" mPlmnActRecords[]=" + Arrays.toString(mPlmnActRecords));
         pw.println(" mOplmnActRecords[]=" + Arrays.toString(mOplmnActRecords));
