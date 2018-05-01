@@ -124,7 +124,8 @@ public class PhoneSwitcher extends Handler {
         mCommandsInterfaces = cis;
 
         try {
-            tr.addOnSubscriptionsChangedListener("PhoneSwitcher", mSubscriptionsChangedListener);
+            tr.addOnSubscriptionsChangedListener(context.getOpPackageName(),
+                    mSubscriptionsChangedListener);
         } catch (RemoteException e) {
         }
 
@@ -145,7 +146,7 @@ public class PhoneSwitcher extends Handler {
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-        netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_PUSH_TO_TALK_VOICE);
+        netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_MCPTT);
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_PUBLIC_SAFETY_DATA);
         netCap.setNetworkSpecifier(new MatchAllNetworkSpecifier());
 

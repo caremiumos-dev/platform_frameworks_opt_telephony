@@ -23,9 +23,9 @@ import static com.android.internal.telephony.DctConstants.APN_FOTA_ID;
 import static com.android.internal.telephony.DctConstants.APN_IA_ID;
 import static com.android.internal.telephony.DctConstants.APN_IMS_ID;
 import static com.android.internal.telephony.DctConstants.APN_INVALID_ID;
+import static com.android.internal.telephony.DctConstants.APN_MCPTT_ID;
 import static com.android.internal.telephony.DctConstants.APN_MMS_ID;
 import static com.android.internal.telephony.DctConstants.APN_PUBLIC_SAFETY_DATA_ID;
-import static com.android.internal.telephony.DctConstants.APN_PUSH_TO_TALK_VOICE_ID;
 import static com.android.internal.telephony.DctConstants.APN_SUPL_ID;
 
 import android.content.Context;
@@ -128,9 +128,9 @@ public class DcRequest implements Comparable<DcRequest> {
             if (apnId != APN_INVALID_ID) error = true;
             apnId = APN_EMERGENCY_ID;
         }
-        if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_PUSH_TO_TALK_VOICE)) {
+        if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_MCPTT)) {
             if (apnId != APN_INVALID_ID) error = true;
-            apnId = APN_PUSH_TO_TALK_VOICE_ID;
+            apnId = APN_MCPTT_ID;
         }
         if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_PUBLIC_SAFETY_DATA)) {
             if (apnId != APN_INVALID_ID) error = true;
