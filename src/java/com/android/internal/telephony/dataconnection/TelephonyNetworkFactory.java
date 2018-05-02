@@ -81,6 +81,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         mPhoneId = phoneId;
         LOG_TAG = "TelephonyNetworkFactory[" + phoneId + "]";
         mDcTracker = dcTracker;
+        dcTracker.setNetworkFactory(this);
 
         mIsActive = false;
         mPhoneSwitcher.registerForActivePhoneSwitch(mPhoneId, mInternalHandler,

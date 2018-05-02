@@ -35,6 +35,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.NetworkFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -95,6 +96,7 @@ public abstract class TelephonyTest {
     protected static String TAG;
 
     private static final int MAX_INIT_WAIT_MS = 30000; // 30 seconds
+    private static final int DUMMY_NETWORK_FACTORY_SERIAL_NUMBER = 1;
 
     @Mock
     protected GsmCdmaPhone mPhone;
@@ -126,6 +128,8 @@ public abstract class TelephonyTest {
     protected ImsManager mImsManager;
     @Mock
     protected DcTracker mDcTracker;
+    @Mock
+    protected NetworkFactory mNetworkFactory;
     @Mock
     protected GsmCdmaCall mGsmCdmaCall;
     @Mock
@@ -338,6 +342,10 @@ public abstract class TelephonyTest {
                 .makeGsmCdmaCallTracker(nullable(GsmCdmaPhone.class));
         doReturn(mIccPhoneBookIntManager).when(mTelephonyComponentFactory)
                 .makeIccPhoneBookInterfaceManager(nullable(Phone.class));
+        doReturn(DUMMY_NETWORK_FACTORY_SERIAL_NUMBER).when(mNetworkFactory)
+                .getSerialNumber();
+        doReturn(mNetworkFactory).when(mDcTracker)
+                .getNetworkFactory();
         doReturn(mDcTracker).when(mTelephonyComponentFactory)
                 .makeDcTracker(nullable(Phone.class));
         doReturn(mWspTypeDecoder).when(mTelephonyComponentFactory)

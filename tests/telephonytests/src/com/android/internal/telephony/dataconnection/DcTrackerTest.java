@@ -48,6 +48,7 @@ import android.database.MatrixCursor;
 import android.hardware.radio.V1_0.SetupDataCallResult;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
+import android.net.NetworkFactory;
 import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.AsyncResult;
@@ -142,6 +143,8 @@ public class DcTrackerTest extends TelephonyTest {
     ApnSetting mApnSetting;
     @Mock
     DcAsyncChannel mDcac;
+    @Mock
+    NetworkFactory mNetworkFactory;
 
     private DcTracker mDct;
     private DcTrackerTestHandler mDcTrackerTestHandler;
@@ -179,6 +182,7 @@ public class DcTrackerTest extends TelephonyTest {
         @Override
         public void onLooperPrepared() {
             mDct = new DcTracker(mPhone, TransportType.WWAN);
+            mDct.setNetworkFactory(mNetworkFactory);
             setReady(true);
         }
     }

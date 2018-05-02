@@ -1705,7 +1705,7 @@ public class DataConnection extends StateMachine {
             if (DBG) log("mRestrictedNetworkOverride = " + mRestrictedNetworkOverride);
             mNetworkAgent = new DcNetworkAgent(getHandler().getLooper(), mPhone.getContext(),
                     "DcNetworkAgent", mNetworkInfo, getNetworkCapabilities(), mLinkProperties,
-                    50, misc);
+                    50, misc, mDct.getNetworkFactory().getSerialNumber());
             mPhone.mCi.registerForNattKeepaliveStatus(
                     getHandler(), DataConnection.EVENT_KEEPALIVE_STATUS, null);
             mPhone.mCi.registerForLceInfo(
@@ -2076,8 +2076,9 @@ public class DataConnection extends StateMachine {
         public final DcKeepaliveTracker keepaliveTracker = new DcKeepaliveTracker();
 
         public DcNetworkAgent(Looper l, Context c, String TAG, NetworkInfo ni,
-                NetworkCapabilities nc, LinkProperties lp, int score, NetworkMisc misc) {
-            super(l, c, TAG, ni, nc, lp, score, misc);
+                NetworkCapabilities nc, LinkProperties lp, int score, NetworkMisc misc,
+                int factorySerialNumber) {
+            super(l, c, TAG, ni, nc, lp, score, misc, factorySerialNumber);
             mNetCapsLocalLog.log("New network agent created. capabilities=" + nc);
             mNetworkCapabilities = nc;
         }

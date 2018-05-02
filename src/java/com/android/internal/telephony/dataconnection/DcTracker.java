@@ -35,6 +35,7 @@ import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
 import android.net.NetworkConfig;
+import android.net.NetworkFactory;
 import android.net.NetworkRequest;
 import android.net.ProxyInfo;
 import android.net.TrafficStats;
@@ -214,6 +215,8 @@ public class DcTracker extends Handler {
     private int mProvisioningApnAlarmTag = (int) SystemClock.elapsedRealtime();
 
     private AsyncChannel mReplyAc = new AsyncChannel();
+
+    private NetworkFactory mNetworkFactory;
 
     private final LocalLog mDataRoamingLeakageLog = new LocalLog(50);
 
@@ -2154,6 +2157,16 @@ public class DcTracker extends Handler {
 
         if (DBG) log("isOnlySingleDcAllowed(" + rilRadioTech + "): " + onlySingleDcAllowed);
         return onlySingleDcAllowed;
+    }
+
+    @VisibleForTesting
+    public NetworkFactory getNetworkFactory() {
+        return mNetworkFactory;
+    }
+
+    @VisibleForTesting
+    public void setNetworkFactory(NetworkFactory networkFactory) {
+        mNetworkFactory = networkFactory;
     }
 
     void sendRestartRadio() {
