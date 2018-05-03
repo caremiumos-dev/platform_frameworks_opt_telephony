@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc467c58_6352820b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-05-03T22:10:31Z",
+      "side": 1,
+      "message": "Is it a new file? Maybe change it to 2018.",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "cecc527e9f93459a36e920054ed5977a82554008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56fd2e02_30f4e452",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-05-03T22:10:31Z",
+      "side": 1,
+      "message": "nit: remove the unused variable.",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 27
+      },
+      "revId": "cecc527e9f93459a36e920054ed5977a82554008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b1b3478_b83ebd6b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-05-03T22:10:31Z",
+      "side": 1,
+      "message": "It\u0027s not necessary that imsiDB.length() \u003d\u003d imsiSIM.length()?",
+      "range": {
+        "startLine": 64,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 49
+      },
+      "revId": "cecc527e9f93459a36e920054ed5977a82554008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "547bd91e_4c35ec6c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-05-03T22:10:31Z",
+      "side": 1,
+      "message": "Do we really need to transform the String array to the HashSet? Is it because you want to remove the duplicated item?",
+      "range": {
+        "startLine": 166,
+        "startChar": 7,
+        "endLine": 166,
+        "endChar": 86
+      },
+      "revId": "cecc527e9f93459a36e920054ed5977a82554008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
