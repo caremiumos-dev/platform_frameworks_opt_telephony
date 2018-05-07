@@ -105,8 +105,9 @@ public class UiccSlot extends Handler {
                 // no card present in the slot now; dispose card and make mUiccCard null
                 if (mUiccCard != null) {
                     mUiccCard.dispose();
-                    nullifyUiccCard(false /* sim state is not unknown */);
                 }
+                nullifyUiccCard(false /* sim state is not unknown */);
+
             // Because mUiccCard may be updated in both IccCardStatus and IccSlotStatus, we need to
             // create a new UiccCard instance in two scenarios:
             //   1. mCardState is changing from ABSENT to non ABSENT.
