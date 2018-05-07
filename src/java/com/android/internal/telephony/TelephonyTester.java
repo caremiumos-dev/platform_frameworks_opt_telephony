@@ -25,12 +25,12 @@ import android.os.BadParcelableException;
 import android.os.Build;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.ims.ImsCallProfile;
+import android.telephony.ims.ImsConferenceState;
+import android.telephony.ims.ImsExternalCallState;
+import android.telephony.ims.ImsReasonInfo;
 
 import com.android.ims.ImsCall;
-import com.android.ims.ImsCallProfile;
-import com.android.ims.ImsConferenceState;
-import com.android.ims.ImsExternalCallState;
-import com.android.ims.ImsReasonInfo;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.imsphone.ImsExternalCallTracker;
 import com.android.internal.telephony.imsphone.ImsPhone;
@@ -102,7 +102,7 @@ public class TelephonyTester {
             "com.android.internal.telephony.TestSuppSrvcNotification";
 
     private static final String EXTRA_CODE = "code";
-
+    private static final String EXTRA_TYPE = "type";
 
     private static final String ACTION_TEST_SERVICE_STATE =
             "com.android.internal.telephony.TestServiceState";
@@ -114,6 +114,7 @@ public class TelephonyTester {
     private static final String EXTRA_DATA_REG_STATE = "data_reg_state";
     private static final String EXTRA_VOICE_ROAMING_TYPE = "voice_roaming_type";
     private static final String EXTRA_DATA_ROAMING_TYPE = "data_roaming_type";
+    private static final String EXTRA_OPERATOR = "operator";
 
     private static final String ACTION_RESET = "reset";
 
@@ -316,8 +317,9 @@ public class TelephonyTester {
     }
 
     private void sendTestSuppServiceNotification(Intent intent) {
-        if (intent.hasExtra(EXTRA_CODE)) {
+        if (intent.hasExtra(EXTRA_CODE) && intent.hasExtra(EXTRA_TYPE)) {
             int code = intent.getIntExtra(EXTRA_CODE, -1);
+            int type = intent.getIntExtra(EXTRA_TYPE, -1);
             ImsPhone imsPhone = (ImsPhone) mPhone;
             if (imsPhone == null) {
                 return;
@@ -325,6 +327,7 @@ public class TelephonyTester {
             log("Test supp service notification:" + code);
             SuppServiceNotification suppServiceNotification = new SuppServiceNotification();
             suppServiceNotification.code = code;
+            suppServiceNotification.notificationType = type;
             imsPhone.notifySuppSvcNotification(suppServiceNotification);
         }
     }
@@ -338,13 +341,13 @@ public class TelephonyTester {
         }
         if (mServiceStateTestIntent.hasExtra(EXTRA_VOICE_REG_STATE)) {
             ss.setVoiceRegState(mServiceStateTestIntent.getIntExtra(EXTRA_VOICE_REG_STATE,
-                    ServiceState.RIL_REG_STATE_UNKNOWN));
-            log("Override voice reg state with " + ss.getVoiceRegState());
+                    ServiceState.STATE_OUT_OF_SERVICE));
+            log("Override voice service state with " + ss.getVoiceRegState());
         }
         if (mServiceStateTestIntent.hasExtra(EXTRA_DATA_REG_STATE)) {
             ss.setDataRegState(mServiceStateTestIntent.getIntExtra(EXTRA_DATA_REG_STATE,
-                    ServiceState.RIL_REG_STATE_UNKNOWN));
-            log("Override data reg state with " + ss.getDataRegState());
+                    ServiceState.STATE_OUT_OF_SERVICE));
+            log("Override data service state with " + ss.getDataRegState());
         }
         if (mServiceStateTestIntent.hasExtra(EXTRA_VOICE_RAT)) {
             ss.setRilVoiceRadioTechnology(mServiceStateTestIntent.getIntExtra(EXTRA_VOICE_RAT,
@@ -365,6 +368,11 @@ public class TelephonyTester {
             ss.setDataRoamingType(mServiceStateTestIntent.getIntExtra(EXTRA_DATA_ROAMING_TYPE,
                     ServiceState.ROAMING_TYPE_UNKNOWN));
             log("Override data roaming type with " + ss.getDataRoamingType());
+        }
+        if (mServiceStateTestIntent.hasExtra(EXTRA_OPERATOR)) {
+            String operator = mServiceStateTestIntent.getStringExtra(EXTRA_OPERATOR);
+            ss.setOperatorName(operator, operator, "");
+            log("Override operator with " + operator);
         }
     }
 }

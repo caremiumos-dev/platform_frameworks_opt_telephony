@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony.test;
 
+import android.net.KeepalivePacketData;
+import android.net.LinkProperties;
 import android.os.Handler;
 import android.os.Message;
 import android.service.carrier.CarrierIdentifier;
@@ -132,6 +134,16 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
 
     @Override
     public void unregisterForIccStatusChanged(Handler h) {
+
+    }
+
+    @Override
+    public void registerForIccSlotStatusChanged(Handler h, int what, Object obj) {
+
+    }
+
+    @Override
+    public void unregisterForIccSlotStatusChanged(Handler h) {
 
     }
 
@@ -1046,6 +1058,26 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
+    public void invokeOemRilRequestRaw(byte[] data, Message response) {
+
+    }
+
+    @Override
+    public void invokeOemRilRequestStrings(String[] strings, Message response) {
+
+    }
+
+    @Override
+    public void setOnUnsolOemHookRaw(Handler h, int what, Object obj) {
+
+    }
+
+    @Override
+    public void unSetOnUnsolOemHookRaw(Handler h) {
+
+    }
+
+    @Override
     public void sendTerminalResponse(String contents, Message response) {
 
     }
@@ -1131,8 +1163,9 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public void setupDataCall(int radioTechnology, DataProfile dataProfile, boolean isRoaming,
-                              boolean allowRoaming, Message result) {
+    public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
+                              boolean allowRoaming, int reason, LinkProperties linkProperties,
+                              Message result) {
     }
 
     @Override
@@ -1166,13 +1199,16 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public int getLteOnCdmaMode() {
-        return 0;
+    public void getIccSlotsStatus(Message result) {
     }
 
     @Override
-    public void requestIsimAuthentication(String nonce, Message response) {
+    public void setLogicalToPhysicalSlotMapping(int[] physicalSlots, Message result) {
+    }
 
+    @Override
+    public int getLteOnCdmaMode() {
+        return 0;
     }
 
     @Override
@@ -1194,6 +1230,14 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     @Override
     public void unregisterForCellInfoList(Handler h) {
 
+    }
+
+    @Override
+    public void registerForPhysicalChannelConfiguration(Handler h, int what, Object obj) {
+    }
+
+    @Override
+    public void unregisterForPhysicalChannelConfiguration(Handler h) {
     }
 
     @Override
@@ -1370,6 +1414,17 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
+    public void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb,
+            int[] thresholdsDbm, int ran, Message result) {
+    }
+
+    @Override
+    public void setLinkCapacityReportingCriteria(int hysteresisMs, int hysteresisDlKbps,
+            int hysteresisUlKbps, int[] thresholdsDlKbps, int[] thresholdsUlKbps, int ran,
+            Message result) {
+    }
+
+    @Override
     public void setSimCardPower(int state, Message result) {
     }
 
@@ -1387,5 +1442,22 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
 
     @Override
     public void unregisterForCarrierInfoForImsiEncryption(Handler h) {
+    }
+
+    @Override
+    public void registerForNattKeepaliveStatus(Handler h, int what, Object obj) {
+    }
+
+    @Override
+    public void unregisterForNattKeepaliveStatus(Handler h) {
+    }
+
+    @Override
+    public void startNattKeepalive(
+            int contextId, KeepalivePacketData packetData, int intervalMillis, Message result) {
+    }
+
+    @Override
+    public void stopNattKeepalive(int sessionHandle, Message result)  {
     }
 }
