@@ -16,25 +16,27 @@
 
 package com.android.internal.telephony;
 
-import android.database.Cursor;
-import android.database.MatrixCursor;
-import android.net.Uri;
-import android.os.HandlerThread;
-import android.provider.Telephony.CarrierIdentification;
-import android.provider.Telephony.Carriers;
-import android.test.mock.MockContentProvider;
-import android.test.mock.MockContentResolver;
-import android.test.suitebuilder.annotation.SmallTest;
-import java.util.Arrays;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
+
+import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.net.Uri;
+import android.os.HandlerThread;
+import android.provider.Telephony.CarrierId;
+import android.provider.Telephony.Carriers;
+import android.test.mock.MockContentProvider;
+import android.test.mock.MockContentResolver;
+import android.test.suitebuilder.annotation.SmallTest;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Arrays;
 
 public class CarrierIdentifierTest extends TelephonyTest {
     private static final String MCCMNC = "311480";
@@ -81,8 +83,7 @@ public class CarrierIdentifierTest extends TelephonyTest {
         logd("CarrierIdentifierTest +Setup!");
         super.setUp(getClass().getSimpleName());
         ((MockContentResolver) mContext.getContentResolver()).addProvider(
-                CarrierIdentification.CONTENT_URI.getAuthority(),
-                new CarrierIdContentProvider());
+                CarrierId.AUTHORITY, new CarrierIdContentProvider());
         // start handler thread
         mCarrierIdentifierHandler = new CarrierIdentifierHandler(getClass().getSimpleName());
         mCarrierIdentifierHandler.start();
@@ -201,19 +202,20 @@ public class CarrierIdentifierTest extends TelephonyTest {
             logd("   selectionArgs = " + Arrays.toString(selectionArgs));
             logd("   sortOrder = " + sortOrder);
 
-            if (CarrierIdentification.CONTENT_URI.getAuthority().equals(
+            if (CarrierId.All.CONTENT_URI.getAuthority().equals(
                     uri.getAuthority())) {
                 MatrixCursor mc = new MatrixCursor(
-                        new String[]{CarrierIdentification._ID,
-                                CarrierIdentification.MCCMNC,
-                                CarrierIdentification.GID1,
-                                CarrierIdentification.GID2,
-                                CarrierIdentification.PLMN,
-                                CarrierIdentification.IMSI_PREFIX_XPATTERN,
-                                CarrierIdentification.SPN,
-                                CarrierIdentification.APN,
-                                CarrierIdentification.NAME,
-                                CarrierIdentification.CID});
+                        new String[]{CarrierId._ID,
+                                CarrierId.All.MCCMNC,
+                                CarrierId.All.GID1,
+                                CarrierId.All.GID2,
+                                CarrierId.All.PLMN,
+                                CarrierId.All.IMSI_PREFIX_XPATTERN,
+                                CarrierId.All.ICCID_PREFIX,
+                                CarrierId.All.SPN,
+                                CarrierId.All.APN,
+                                CarrierId.CARRIER_NAME,
+                                CarrierId.CARRIER_ID});
 
                 mc.addRow(new Object[] {
                         1,                      // id
@@ -222,6 +224,7 @@ public class CarrierIdentifierTest extends TelephonyTest {
                         null,                   // gid2
                         null,                   // plmn
                         null,                   // imsi_prefix
+                        null,                   // iccid_prefix
                         null,                   // spn
                         null,                   // apn
                         NAME,                   // carrier name
@@ -234,6 +237,7 @@ public class CarrierIdentifierTest extends TelephonyTest {
                         null,                   // gid2
                         null,                   // plmn
                         null,                   // imsi_prefix
+                        null,                   // iccid_prefix
                         null,                   // spn
                         null,                   // apn
                         NAME_TMO,               // carrier name
@@ -246,6 +250,7 @@ public class CarrierIdentifierTest extends TelephonyTest {
                         null,                   // gid2
                         null,                   // plmn
                         null,                   // imsi_prefix
+                        null,                   // iccid_prefix
                         SPN_FI,                 // spn
                         null,                   // apn
                         NAME_FI,                // carrier name
@@ -258,6 +263,7 @@ public class CarrierIdentifierTest extends TelephonyTest {
                         null,                   // gid2
                         null,                   // plmn
                         null,                   // imsi_prefix
+                        null,                   // iccid_prefix
                         null,                   // spn
                         APN_DOCOMO,             // apn
                         NAME_DOCOMO,            // carrier name
@@ -273,6 +279,11 @@ public class CarrierIdentifierTest extends TelephonyTest {
                 return mc;
             }
             return null;
+        }
+        @Override
+        public int update(android.net.Uri uri, android.content.ContentValues values,
+                java.lang.String selection, java.lang.String[] selectionArgs) {
+            return 0;
         }
     }
 }

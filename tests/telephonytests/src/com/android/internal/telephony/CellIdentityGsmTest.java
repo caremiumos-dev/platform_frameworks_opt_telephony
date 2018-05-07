@@ -16,11 +16,8 @@
 
 package com.android.internal.telephony;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import android.os.Parcel;
+import android.telephony.CellIdentity;
 import android.telephony.CellIdentityGsm;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -54,11 +51,12 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         assertEquals(LAC, ci.getLac());
         assertEquals(CID, ci.getCid());
         assertEquals(ARFCN, ci.getArfcn());
+        assertEquals(ARFCN, ci.getChannelNumber());
         assertEquals(BSIC, ci.getBsic());
         assertEquals(MCC, ci.getMcc());
         assertEquals(MNC, ci.getMnc());
-        assertEquals(MCC_STR, ci.getMccStr());
-        assertEquals(MNC_STR, ci.getMncStr());
+        assertEquals(MCC_STR, ci.getMccString());
+        assertEquals(MNC_STR, ci.getMncString());
         assertEquals(MCC_STR + MNC_STR, ci.getMobileNetworkOperator());
         assertEquals(ALPHA_LONG, ci.getOperatorAlphaLong());
         assertEquals(ALPHA_SHORT, ci.getOperatorAlphaShort());
@@ -73,8 +71,8 @@ public class CellIdentityGsmTest extends AndroidTestCase {
 
         assertEquals(MCC, ci.getMcc());
         assertEquals(61, ci.getMnc());
-        assertEquals(MCC_STR, ci.getMccStr());
-        assertEquals(mncWithThreeDigit, ci.getMncStr());
+        assertEquals(MCC_STR, ci.getMccString());
+        assertEquals(mncWithThreeDigit, ci.getMncString());
         assertEquals(MCC_STR + mncWithThreeDigit, ci.getMobileNetworkOperator());
     }
 
@@ -87,8 +85,8 @@ public class CellIdentityGsmTest extends AndroidTestCase {
 
         assertEquals(MCC, ci.getMcc());
         assertEquals(61, ci.getMnc());
-        assertEquals(MCC_STR, ci.getMccStr());
-        assertEquals(mncWithTwoDigit, ci.getMncStr());
+        assertEquals(MCC_STR, ci.getMccString());
+        assertEquals(mncWithTwoDigit, ci.getMncString());
         assertEquals(MCC_STR + mncWithTwoDigit, ci.getMobileNetworkOperator());
     }
 
@@ -99,32 +97,32 @@ public class CellIdentityGsmTest extends AndroidTestCase {
 
         assertEquals(Integer.MAX_VALUE, ci.getMcc());
         assertEquals(Integer.MAX_VALUE, ci.getMnc());
-        assertNull(ci.getMccStr());
-        assertNull(ci.getMncStr());
+        assertNull(ci.getMccString());
+        assertNull(ci.getMncString());
         assertNull(ci.getMobileNetworkOperator());
 
         ci = new CellIdentityGsm(LAC, CID, ARFCN, BSIC, MCC_STR, null, ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(MCC, ci.getMcc());
         assertEquals(Integer.MAX_VALUE, ci.getMnc());
-        assertEquals(MCC_STR, ci.getMccStr());
-        assertNull(ci.getMncStr());
+        assertEquals(MCC_STR, ci.getMccString());
+        assertNull(ci.getMncString());
         assertNull(ci.getMobileNetworkOperator());
 
         ci = new CellIdentityGsm(LAC, CID, ARFCN, BSIC, null, MNC_STR, ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(MNC, ci.getMnc());
         assertEquals(Integer.MAX_VALUE, ci.getMcc());
-        assertEquals(MNC_STR, ci.getMncStr());
-        assertNull(ci.getMccStr());
+        assertEquals(MNC_STR, ci.getMncString());
+        assertNull(ci.getMccString());
         assertNull(ci.getMobileNetworkOperator());
 
         ci = new CellIdentityGsm(LAC, CID, ARFCN, BSIC, "", "", ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(Integer.MAX_VALUE, ci.getMcc());
         assertEquals(Integer.MAX_VALUE, ci.getMnc());
-        assertNull(ci.getMccStr());
-        assertNull(ci.getMncStr());
+        assertNull(ci.getMccString());
+        assertNull(ci.getMncString());
         assertNull(ci.getMobileNetworkOperator());
     }
 
@@ -139,8 +137,8 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         assertEquals(Integer.MAX_VALUE, ci.getBsic());
         assertEquals(MCC, ci.getMcc());
         assertEquals(MNC, ci.getMnc());
-        assertEquals(MCC_STR, ci.getMccStr());
-        assertEquals(MNC_STR, ci.getMncStr());
+        assertEquals(MCC_STR, ci.getMccString());
+        assertEquals(MNC_STR, ci.getMncString());
         assertEquals(MCC_STR + MNC_STR, ci.getMobileNetworkOperator());
         assertNull(ci.getOperatorAlphaLong());
         assertNull(ci.getOperatorAlphaShort());
@@ -183,15 +181,19 @@ public class CellIdentityGsmTest extends AndroidTestCase {
 
     @SmallTest
     public void testParcelWithUnknowMccMnc() {
-        CellIdentityGsm ci = new CellIdentityGsm(LAC, CID, ARFCN, BSIC, null, null, null, null);
+        CellIdentityGsm ci =
+                new CellIdentityGsm(LAC, CID, ARFCN, BSIC, null, null, ALPHA_LONG, ALPHA_SHORT);
 
         Parcel p = Parcel.obtain();
+        p.writeInt(CellIdentityGsm.TYPE_GSM);
+        p.writeString(String.valueOf(Integer.MAX_VALUE));
+        p.writeString(String.valueOf(Integer.MAX_VALUE));
+        p.writeString(ALPHA_LONG);
+        p.writeString(ALPHA_SHORT);
         p.writeInt(LAC);
         p.writeInt(CID);
         p.writeInt(ARFCN);
         p.writeInt(BSIC);
-        p.writeString(String.valueOf(Integer.MAX_VALUE));
-        p.writeString(String.valueOf(Integer.MAX_VALUE));
         p.setDataPosition(0);
 
         CellIdentityGsm newCi = CellIdentityGsm.CREATOR.createFromParcel(p);
@@ -202,15 +204,19 @@ public class CellIdentityGsmTest extends AndroidTestCase {
     public void testParcelWithInvalidMccMnc() {
         final String invalidMcc = "randomStuff";
         final String invalidMnc = "randomStuff";
-        CellIdentityGsm ci = new CellIdentityGsm(LAC, CID, ARFCN, BSIC, null, null, null, null);
+        CellIdentityGsm ci =
+                new CellIdentityGsm(LAC, CID, ARFCN, BSIC, null, null, ALPHA_LONG, ALPHA_SHORT);
 
         Parcel p = Parcel.obtain();
+        p.writeInt(CellIdentity.TYPE_GSM);
+        p.writeString(invalidMcc);
+        p.writeString(invalidMnc);
+        p.writeString(ALPHA_LONG);
+        p.writeString(ALPHA_SHORT);
         p.writeInt(LAC);
         p.writeInt(CID);
         p.writeInt(ARFCN);
         p.writeInt(BSIC);
-        p.writeString(invalidMcc);
-        p.writeString(invalidMnc);
         p.setDataPosition(0);
 
         CellIdentityGsm newCi = CellIdentityGsm.CREATOR.createFromParcel(p);
