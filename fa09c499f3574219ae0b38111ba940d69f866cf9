@@ -118,6 +118,30 @@
       "revId": "fa09c499f3574219ae0b38111ba940d69f866cf9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "56496024_c021b1d4",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1010218
+      },
+      "writtenOn": "2018-05-08T11:13:12Z",
+      "side": 1,
+      "message": "Agreed Brad,\n\nWill upload a change to update mRoaming always when ever three is a ServiceState change.\n\nIN_SERVICE checks will be moved to control the setting of WFC mode as mentioned above.",
+      "parentUuid": "92b40f7c_41f414dc",
+      "range": {
+        "startLine": 1286,
+        "startChar": 27,
+        "endLine": 1287,
+        "endChar": 93
+      },
+      "revId": "fa09c499f3574219ae0b38111ba940d69f866cf9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
