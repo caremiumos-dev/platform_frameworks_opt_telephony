@@ -1,0 +1,8 @@
+Verified+1: Shuo Qian <shuoq@google.com>
+Code-Review+2: Shuo Qian <shuoq@google.com>
+Presubmit-Verified+1: android-build-prod (mdb) <android-build-team-robot@google.com>
+Submitted-by: Shuo Qian <shuoq@google.com>
+Submitted-at: Wed, 09 May 2018 19:36:53 +0000
+Reviewed-on: https://android-review.googlesource.com/681264
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
