@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "eb1a2f2b_86469937",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1247187
+      },
+      "writtenOn": "2018-05-09T17:54:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc467c58_6352820b",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "cecc527e9f93459a36e920054ed5977a82554008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56fd2e02_30f4e452",
         "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "cecc527e9f93459a36e920054ed5977a82554008",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fd47d52_2d987840",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1247187
+      },
+      "writtenOn": "2018-05-09T17:54:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56fd2e02_30f4e452",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 27
+      },
+      "revId": "cecc527e9f93459a36e920054ed5977a82554008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "035fa644_ada1296d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1247187
+      },
+      "writtenOn": "2018-05-09T17:54:05Z",
+      "side": 1,
+      "message": "I copied this method from the old ApnSetting. I didn\u0027t find anywhere in this method that indicates the length should be equal?",
+      "parentUuid": "5b1b3478_b83ebd6b",
+      "range": {
+        "startLine": 64,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 49
+      },
+      "revId": "cecc527e9f93459a36e920054ed5977a82554008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "547bd91e_4c35ec6c",
         "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2018-05-03T22:10:31Z",
       "side": 1,
       "message": "Do we really need to transform the String array to the HashSet? Is it because you want to remove the duplicated item?",
+      "range": {
+        "startLine": 166,
+        "startChar": 7,
+        "endLine": 166,
+        "endChar": 86
+      },
+      "revId": "cecc527e9f93459a36e920054ed5977a82554008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a988adaf_41994715",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1247187
+      },
+      "writtenOn": "2018-05-09T17:54:05Z",
+      "side": 1,
+      "message": "I copied this from the old ApnSetting. Can we keep this CL simple and fix stuffs like this in future CLs?",
+      "parentUuid": "547bd91e_4c35ec6c",
       "range": {
         "startLine": 166,
         "startChar": 7,
