@@ -3393,11 +3393,19 @@ public class ServiceStateTracker extends Handler {
         } else if (mPhone.isPhoneTypeCdmaLte()) {
             boolean hasBrandOverride = mUiccController.getUiccCard(getPhoneId()) != null &&
                     mUiccController.getUiccCard(getPhoneId()).getOperatorBrandOverride() != null;
+<<<<<<< HEAD
             if (!hasBrandOverride && (mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON)
                     && (mEriManager.isEriFileLoaded())
                     && (!ServiceState.isLte(mSS.getRilVoiceRadioTechnology())
                     || mPhone.getContext().getResources().getBoolean(com.android.internal.R
                     .bool.config_LTE_eri_for_network_name))) {
+=======
+            if (!hasBrandOverride && (mCi.getRadioState().isOn()) && (mPhone.isEriFileLoaded()) &&
+                    (!ServiceState.isLte(mSS.getRilVoiceRadioTechnology()) ||
+                            mPhone.getContext().getResources().getBoolean(com.android.internal.R.
+                                    bool.config_LTE_eri_for_network_name)) &&
+                                    (!mIsSubscriptionFromRuim)) {
+>>>>>>> d3755e9... Fix the RIO display in standby screen
                 // Only when CDMA is in service, ERI will take effect
                 String eriText = mSS.getOperatorAlpha();
                 // Now the Phone sees the new ServiceState so it can get the new ERI text
