@@ -40,9 +40,9 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
 import com.android.ims.ImsException;
-import com.android.ims.ImsReasonInfo;
-import com.android.ims.ImsSsData;
-import com.android.ims.ImsSsInfo;
+import android.telephony.ims.ImsReasonInfo;
+import android.telephony.ims.ImsSsData;
+import android.telephony.ims.ImsSsInfo;
 import com.android.ims.ImsUtInterface;
 import com.android.internal.telephony.CallForwardInfo;
 import com.android.internal.telephony.CallStateException;
@@ -1278,10 +1278,18 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                 sb.append(mContext.getText(
                         com.android.internal.R.string.serviceEnabled));
             }
+            // Record CLIR setting
+            if (mSc.equals(SC_CLIR)) {
+                mPhone.saveClirSetting(CommandsInterface.CLIR_INVOCATION);
+            }
         } else if (isDeactivate()) {
             mState = State.COMPLETE;
             sb.append(mContext.getText(
                     com.android.internal.R.string.serviceDisabled));
+            // Record CLIR setting
+            if (mSc.equals(SC_CLIR)) {
+                mPhone.saveClirSetting(CommandsInterface.CLIR_SUPPRESSION);
+            }
         } else if (isRegister()) {
             mState = State.COMPLETE;
             sb.append(mContext.getText(
