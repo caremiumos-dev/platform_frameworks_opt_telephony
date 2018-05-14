@@ -16,6 +16,11 @@
 
 package com.android.internal.telephony.dataconnection;
 
+import static android.net.NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED;
+import static android.net.NetworkCapabilities.NET_CAPABILITY_NOT_METERED;
+import static android.net.NetworkPolicyManager.OVERRIDE_CONGESTED;
+import static android.net.NetworkPolicyManager.OVERRIDE_UNMETERED;
+
 import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_ADDRESS;
 import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_DNS;
@@ -26,12 +31,18 @@ import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_P
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import android.content.IntentFilter;
+import android.content.pm.ServiceInfo;
+import android.net.KeepalivePacketData;
+import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -40,15 +51,18 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.telephony.AccessNetworkConstants.AccessNetworkType;
+import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
-import android.telephony.data.InterfaceAddress;
+import android.telephony.data.DataService;
+import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.android.internal.R;
 import com.android.internal.telephony.PhoneConstants;
-import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.RetryManager;
 import com.android.internal.telephony.TelephonyTest;
 import com.android.internal.telephony.dataconnection.DataConnection.ConnectionParams;
@@ -112,6 +126,34 @@ public class DataConnectionTest extends TelephonyTest {
             "",                     // mvno_type
             "");                    // mnvo_match_data
 
+    private ApnSetting mApn2 = new ApnSetting(
+            2164,                   // id
+            "44010",                // numeric
+            "sp-mode",              // name
+            "spmode.ne.jp",         // apn
+            "",                     // proxy
+            "",                     // port
+            "",                     // mmsc
+            "",                     // mmsproxy
+            "",                     // mmsport
+            "",                     // user
+            "",                     // password
+            -1,                     // authtype
+            new String[]{"default", "dun"},     // types
+            "IP",                   // protocol
+            "IP",                   // roaming_protocol
+            true,                   // carrier_enabled
+            0,                      // bearer
+            0,                      // bearer_bitmask
+            0,                      // profile_id
+            false,                  // modem_cognitive
+            0,                      // max_conns
+            0,                      // wait_time
+            0,                      // max_conns_time
+            0,                      // mtu
+            "",                     // mvno_type
+            "");                    // mnvo_match_data
+
     private class DataConnectionTestHandler extends HandlerThread {
 
         private DataConnectionTestHandler(String name) {
@@ -122,11 +164,29 @@ public class DataConnectionTest extends TelephonyTest {
         public void onLooperPrepared() {
             Handler h = new Handler();
 
-            mDcc = DcController.makeDcc(mPhone, mDcTracker, h);
-            mDc = DataConnection.makeDataConnection(mPhone, 0, mDcTracker, mDcTesterFailBringUpAll,
-                    mDcc);
+            DataServiceManager manager = new DataServiceManager(mPhone, TransportType.WWAN);
+            mDcc = DcController.makeDcc(mPhone, mDcTracker, manager, h);
+            mDcc.start();
+            mDc = DataConnection.makeDataConnection(mPhone, 0, mDcTracker, manager,
+                    mDcTesterFailBringUpAll, mDcc);
         }
     }
+
+    private void addDataService() {
+        CellularDataService cellularDataService = new CellularDataService();
+        ServiceInfo serviceInfo = new ServiceInfo();
+        serviceInfo.packageName = "com.android.phone";
+        serviceInfo.permission = "android.permission.BIND_DATA_SERVICE";
+        IntentFilter filter = new IntentFilter();
+        mContextFixture.addService(
+                DataService.DATA_SERVICE_INTERFACE,
+                null,
+                "com.android.phone",
+                cellularDataService.mBinder,
+                serviceInfo,
+                filter);
+    }
+
 
     @Before
     public void setUp() throws Exception {
@@ -139,6 +199,7 @@ public class DataConnectionTest extends TelephonyTest {
                 ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
         doReturn(mApn1).when(mApnContext).getApnSetting();
         doReturn(PhoneConstants.APN_TYPE_DEFAULT).when(mApnContext).getApnType();
+        doReturn(true).when(mDcTracker).isDataEnabled();
 
         mDcFailBringUp.saveParameters(0, 0, -2);
         doReturn(mDcFailBringUp).when(mDcTesterFailBringUpAll).getDcFailBringUp();
@@ -156,8 +217,12 @@ public class DataConnectionTest extends TelephonyTest {
                 "evdo:131072,262144,1048576,4096,16384,524288",
                 "lte:524288,1048576,8388608,262144,524288,4194304"});
 
+        mContextFixture.putResource(R.string.config_wwan_data_service_package,
+                "com.android.phone");
 
         mDcp.mApnContext = mApnContext;
+
+        addDataService();
 
         mDataConnectionTestHandler = new DataConnectionTestHandler(getClass().getSimpleName());
         mDataConnectionTestHandler.start();
@@ -181,12 +246,12 @@ public class DataConnectionTest extends TelephonyTest {
         return (IState) method.invoke(mDc);
     }
 
-    private long getSuggestedRetryDelay(AsyncResult ar) throws Exception {
+    private long getSuggestedRetryDelay(DataCallResponse response) throws Exception {
         Class[] cArgs = new Class[1];
-        cArgs[0] = AsyncResult.class;
+        cArgs[0] = DataCallResponse.class;
         Method method = DataConnection.class.getDeclaredMethod("getSuggestedRetryDelay", cArgs);
         method.setAccessible(true);
-        return (long) method.invoke(mDc, ar);
+        return (long) method.invoke(mDc, response);
     }
 
     private SetupResult setLinkProperties(DataCallResponse response,
@@ -218,11 +283,17 @@ public class DataConnectionTest extends TelephonyTest {
                 eq(DataConnection.EVENT_DATA_CONNECTION_VOICE_CALL_STARTED), eq(null));
         verify(mCT, times(1)).registerForVoiceCallEnded(any(Handler.class),
                 eq(DataConnection.EVENT_DATA_CONNECTION_VOICE_CALL_ENDED), eq(null));
+        verify(mSimulatedCommandsVerifier, times(1))
+                .registerForNattKeepaliveStatus(any(Handler.class),
+                        eq(DataConnection.EVENT_KEEPALIVE_STATUS), eq(null));
+        verify(mSimulatedCommandsVerifier, times(1))
+                .registerForLceInfo(any(Handler.class),
+                        eq(DataConnection.EVENT_LINK_CAPACITY_CHANGED), eq(null));
 
         ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
         verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
-                eq(ServiceState.RIL_RADIO_TECHNOLOGY_UMTS), dpCaptor.capture(),
-                eq(false), eq(false), any(Message.class));
+                eq(AccessNetworkType.UTRAN), dpCaptor.capture(), eq(false),
+                eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(), any(Message.class));
 
         assertEquals("spmode.ne.jp", dpCaptor.getValue().getApn());
 
@@ -237,8 +308,11 @@ public class DataConnectionTest extends TelephonyTest {
         mDc.sendMessage(DataConnection.EVENT_DISCONNECT, mDcp);
         waitForMs(100);
 
+        verify(mSimulatedCommandsVerifier, times(1)).unregisterForLceInfo(any(Handler.class));
+        verify(mSimulatedCommandsVerifier, times(1))
+                .unregisterForNattKeepaliveStatus(any(Handler.class));
         verify(mSimulatedCommandsVerifier, times(1)).deactivateDataCall(eq(1),
-                eq(RILConstants.DEACTIVATE_REASON_NONE), any(Message.class));
+                eq(DataService.REQUEST_REASON_NORMAL), any(Message.class));
 
         assertEquals("DcInactiveState", getCurrentState().getName());
     }
@@ -247,64 +321,58 @@ public class DataConnectionTest extends TelephonyTest {
     @SmallTest
     public void testModemSuggestRetry() throws Exception {
         DataCallResponse response = new DataCallResponse(0, 0, 1, 2, "IP", FAKE_IFNAME,
-                Arrays.asList(new InterfaceAddress(FAKE_ADDRESS, 0)),
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress(FAKE_ADDRESS), 0)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
                 1440);
 
-        AsyncResult ar = new AsyncResult(null, response, null);
-        assertEquals(response.getSuggestedRetryTime(), getSuggestedRetryDelay(ar));
+        assertEquals(response.getSuggestedRetryTime(), getSuggestedRetryDelay(response));
 
         response = new DataCallResponse(0, 1000, 1, 2, "IP", FAKE_IFNAME,
-                Arrays.asList(new InterfaceAddress(FAKE_ADDRESS, 0)),
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress(FAKE_ADDRESS), 0)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
                 1440);
-        ar = new AsyncResult(null, response, null);
-        assertEquals(response.getSuggestedRetryTime(), getSuggestedRetryDelay(ar));
+        assertEquals(response.getSuggestedRetryTime(), getSuggestedRetryDelay(response));
 
         response = new DataCallResponse(0, 9999, 1, 2, "IP", FAKE_IFNAME,
-                Arrays.asList(new InterfaceAddress(FAKE_ADDRESS, 0)),
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress(FAKE_ADDRESS), 0)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
                 1440);
-        ar = new AsyncResult(null, response, null);
-
-        assertEquals(response.getSuggestedRetryTime(), getSuggestedRetryDelay(ar));
+        assertEquals(response.getSuggestedRetryTime(), getSuggestedRetryDelay(response));
     }
 
     @Test
     @SmallTest
     public void testModemNotSuggestRetry() throws Exception {
         DataCallResponse response = new DataCallResponse(0, -1, 1, 2, "IP", FAKE_IFNAME,
-                Arrays.asList(new InterfaceAddress(FAKE_ADDRESS, 0)),
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress(FAKE_ADDRESS), 0)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
                 1440);
-        AsyncResult ar = new AsyncResult(null, response, null);
-        assertEquals(RetryManager.NO_SUGGESTED_RETRY_DELAY, getSuggestedRetryDelay(ar));
+
+        assertEquals(RetryManager.NO_SUGGESTED_RETRY_DELAY, getSuggestedRetryDelay(response));
 
         response = new DataCallResponse(0, -5, 1, 2, "IP", FAKE_IFNAME,
-                Arrays.asList(new InterfaceAddress(FAKE_ADDRESS, 0)),
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress(FAKE_ADDRESS), 0)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
                 1440);
-        ar = new AsyncResult(null, response, null);
-        assertEquals(RetryManager.NO_SUGGESTED_RETRY_DELAY, getSuggestedRetryDelay(ar));
+        assertEquals(RetryManager.NO_SUGGESTED_RETRY_DELAY, getSuggestedRetryDelay(response));
 
         response = new DataCallResponse(0, Integer.MIN_VALUE, 1, 2, "IP", FAKE_IFNAME,
-                Arrays.asList(new InterfaceAddress(FAKE_ADDRESS, 0)),
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress(FAKE_ADDRESS), 0)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
                 1440);
-        ar = new AsyncResult(null, response, null);
-        assertEquals(RetryManager.NO_SUGGESTED_RETRY_DELAY, getSuggestedRetryDelay(ar));
+        assertEquals(RetryManager.NO_SUGGESTED_RETRY_DELAY, getSuggestedRetryDelay(response));
     }
 
     @Test
@@ -312,13 +380,12 @@ public class DataConnectionTest extends TelephonyTest {
     public void testModemSuggestNoRetry() throws Exception {
         DataCallResponse response = new DataCallResponse(0, Integer.MAX_VALUE, 1, 2, "IP",
                 FAKE_IFNAME,
-                Arrays.asList(new InterfaceAddress(FAKE_ADDRESS, 0)),
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress(FAKE_ADDRESS), 0)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
                 1440);
-        AsyncResult ar = new AsyncResult(null, response, null);
-        assertEquals(RetryManager.NO_RETRY, getSuggestedRetryDelay(ar));
+        assertEquals(RetryManager.NO_RETRY, getSuggestedRetryDelay(response));
     }
 
     private NetworkInfo getNetworkInfo() throws Exception {
@@ -331,6 +398,36 @@ public class DataConnectionTest extends TelephonyTest {
         Method method = DataConnection.class.getDeclaredMethod("getNetworkCapabilities");
         method.setAccessible(true);
         return (NetworkCapabilities) method.invoke(mDc);
+    }
+
+    @Test
+    @SmallTest
+    public void testNetworkCapability() throws Exception {
+        mContextFixture.getCarrierConfigBundle().putStringArray(
+                CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
+                new String[] { "default" });
+        doReturn(mApn2).when(mApnContext).getApnSetting();
+        testConnectEvent();
+
+        assertTrue("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_DUN));
+        assertTrue("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
+        assertFalse("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_MMS));
+
+        mDc.sendMessage(DataConnection.EVENT_DISCONNECT, mDcp);
+        waitForMs(100);
+        doReturn(mApn1).when(mApnContext).getApnSetting();
+        mDc.sendMessage(DataConnection.EVENT_CONNECT, mCp);
+        waitForMs(200);
+
+        assertFalse("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_DUN));
+        assertTrue("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
+        assertTrue("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_SUPL));
     }
 
     @Test
@@ -362,6 +459,48 @@ public class DataConnectionTest extends TelephonyTest {
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED));
     }
 
+    @Test
+    public void testOverrideUnmetered() throws Exception {
+        mContextFixture.getCarrierConfigBundle().putStringArray(
+                CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
+                new String[] { "default" });
+        testConnectEvent();
+
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
+        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
+
+        mDc.onSubscriptionOverride(OVERRIDE_UNMETERED, OVERRIDE_UNMETERED);
+
+        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
+        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
+
+        mDc.onSubscriptionOverride(OVERRIDE_UNMETERED, 0);
+
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
+        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
+    }
+
+    @Test
+    public void testOverrideCongested() throws Exception {
+        mContextFixture.getCarrierConfigBundle().putStringArray(
+                CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
+                new String[] { "default" });
+        testConnectEvent();
+
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
+        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
+
+        mDc.onSubscriptionOverride(OVERRIDE_CONGESTED, OVERRIDE_CONGESTED);
+
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
+
+        mDc.onSubscriptionOverride(OVERRIDE_CONGESTED, 0);
+
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
+        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
+    }
+
     @SmallTest
     public void testIsIpAddress() throws Exception {
         // IPv4
@@ -378,7 +517,7 @@ public class DataConnectionTest extends TelephonyTest {
     public void testSetLinkProperties() throws Exception {
 
         DataCallResponse response = new DataCallResponse(0, -1, 1, 2, "IP", FAKE_IFNAME,
-                Arrays.asList(new InterfaceAddress(FAKE_ADDRESS, 0)),
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress(FAKE_ADDRESS), 0)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
@@ -413,18 +552,204 @@ public class DataConnectionTest extends TelephonyTest {
 
     @Test
     @SmallTest
-    public void testSetLinkPropertiesInvalidAddress() throws Exception {
+    public void testSetLinkPropertiesEmptyAddress() throws Exception {
 
         // 224.224.224.224 is an invalid address.
         DataCallResponse response = new DataCallResponse(0, -1, 1, 2, "IP", FAKE_IFNAME,
-                Arrays.asList(new InterfaceAddress("224.224.224.224", 0)),
+                null,
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
                 1440);
 
         LinkProperties linkProperties = new LinkProperties();
-        assertEquals(SetupResult.ERR_UnacceptableParameter,
+        assertEquals(SetupResult.ERROR_INVALID_ARG,
                 setLinkProperties(response, linkProperties));
+    }
+
+    @Test
+    @SmallTest
+    public void testSetLinkPropertiesEmptyDns() throws Exception {
+
+        // Empty dns entry.
+        DataCallResponse response = new DataCallResponse(0, -1, 1, 2, "IP", FAKE_IFNAME,
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress(FAKE_ADDRESS), 0)),
+                null,
+                Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
+                Arrays.asList(FAKE_PCSCF_ADDRESS),
+                1440);
+
+        // Make sure no exception was thrown
+        LinkProperties linkProperties = new LinkProperties();
+        assertEquals(SetupResult.SUCCESS, setLinkProperties(response, linkProperties));
+    }
+
+    @Test
+    @SmallTest
+    public void testStartKeepaliveWLAN() throws Exception {
+        testConnectEvent();
+        waitForMs(200);
+
+        DataServiceManager mockDsm = mock(DataServiceManager.class);
+        doReturn(TransportType.WLAN).when(mockDsm).getTransportType();
+        replaceInstance(DataConnection.class, "mDataServiceManager", mDc, mockDsm);
+
+        final int sessionHandle = 0xF00;
+        final int slotId = 3;
+        final int interval = 10; // seconds
+        // Construct a new KeepalivePacketData request as we would receive from a Network Agent,
+        // and check that the packet is sent to the RIL.
+        KeepalivePacketData kd = KeepalivePacketData.nattKeepalivePacket(
+                NetworkUtils.numericToInetAddress("1.2.3.4"),
+                1234,
+                NetworkUtils.numericToInetAddress("8.8.8.8"),
+                4500);
+        mDc.obtainMessage(
+                DataConnection.EVENT_KEEPALIVE_START_REQUEST, slotId, interval, kd).sendToTarget();
+        waitForMs(100);
+        // testStartStopNattKeepalive() verifies that this request is passed with WWAN.
+        // Thus, even though we can't see the response in NetworkAgent, we can verify that the
+        // CommandsInterface never receives a request and infer that it was dropped due to WLAN.
+        verify(mSimulatedCommandsVerifier, times(0))
+                .startNattKeepalive(anyInt(), eq(kd), eq(interval * 1000), any(Message.class));
+    }
+
+    public void checkStartStopNattKeepalive(boolean useCondensedFlow) throws Exception {
+        testConnectEvent();
+        waitForMs(200);
+
+        final int sessionHandle = 0xF00;
+        final int slotId = 3;
+        final int interval = 10; // seconds
+        // Construct a new KeepalivePacketData request as we would receive from a Network Agent,
+        // and check that the packet is sent to the RIL.
+        KeepalivePacketData kd = KeepalivePacketData.nattKeepalivePacket(
+                NetworkUtils.numericToInetAddress("1.2.3.4"),
+                1234,
+                NetworkUtils.numericToInetAddress("8.8.8.8"),
+                4500);
+        mDc.obtainMessage(
+                DataConnection.EVENT_KEEPALIVE_START_REQUEST, slotId, interval, kd).sendToTarget();
+        waitForMs(100);
+        verify(mSimulatedCommandsVerifier, times(1))
+                .startNattKeepalive(anyInt(), eq(kd), eq(interval * 1000), any(Message.class));
+
+        Message kaStarted = mDc.obtainMessage(DataConnection.EVENT_KEEPALIVE_STARTED, slotId, 0);
+        if (useCondensedFlow) {
+            // Send a singled condensed response that a keepalive have been requested and the
+            // activation is completed. This flow should be used if the keepalive offload request
+            // is handled by a high-priority signalling path.
+            AsyncResult.forMessage(
+                    kaStarted, new KeepaliveStatus(
+                            sessionHandle, KeepaliveStatus.STATUS_ACTIVE), null);
+            kaStarted.sendToTarget();
+        } else {
+            // Send the sequential responses indicating first that the request was received and
+            // then that the keepalive is running. This should create an active record of the
+            // keepalive in DataConnection while permitting the status from a low priority or other
+            // high-latency handler to activate the keepalive without blocking a request.
+            AsyncResult.forMessage(
+                    kaStarted, new KeepaliveStatus(
+                            sessionHandle, KeepaliveStatus.STATUS_PENDING), null);
+            kaStarted.sendToTarget();
+            Message kaRunning = mDc.obtainMessage(DataConnection.EVENT_KEEPALIVE_STATUS);
+            AsyncResult.forMessage(
+                    kaRunning, new KeepaliveStatus(
+                            sessionHandle, KeepaliveStatus.STATUS_ACTIVE), null);
+            kaRunning.sendToTarget();
+        }
+        waitForMs(100);
+
+        // Verify that we can stop the connection, which checks that the record in DataConnection
+        // has a valid mapping between slotId (from network agent) to sessionHandle (from Radio).
+        mDc.obtainMessage(DataConnection.EVENT_KEEPALIVE_STOP_REQUEST, slotId).sendToTarget();
+        waitForMs(100);
+        verify(mSimulatedCommandsVerifier, times(1))
+                .stopNattKeepalive(eq(sessionHandle), any(Message.class));
+
+        Message kaStopped = mDc.obtainMessage(
+                DataConnection.EVENT_KEEPALIVE_STOPPED, sessionHandle, slotId);
+        AsyncResult.forMessage(kaStopped);
+        kaStopped.sendToTarget();
+        // Verify that after the connection is stopped, the mapping for a Keepalive Session is
+        // removed. Thus, subsequent calls to stop the same keepalive are ignored.
+        mDc.obtainMessage(DataConnection.EVENT_KEEPALIVE_STOP_REQUEST, slotId).sendToTarget();
+        waitForMs(100);
+        // Check that the mock has not been called subsequent to the previous invocation
+        // while avoiding the use of reset()
+        verify(mSimulatedCommandsVerifier, times(1))
+                .stopNattKeepalive(anyInt(), any(Message.class));
+    }
+
+    @Test
+    @MediumTest
+    public void testStartStopNattKeepalive() throws Exception {
+        checkStartStopNattKeepalive(false);
+    }
+
+    @Test
+    @MediumTest
+    public void testStartStopNattKeepaliveCondensed() throws Exception {
+        checkStartStopNattKeepalive(true);
+    }
+
+    public void checkStartNattKeepaliveFail(boolean useCondensedFlow) throws Exception {
+        testConnectEvent();
+        waitForMs(200);
+
+        final int sessionHandle = 0xF00;
+        final int slotId = 3;
+        final int interval = 10; // seconds
+        // Construct a new KeepalivePacketData request as we would receive from a Network Agent,
+        // and check that the packet is sent to the RIL.
+        KeepalivePacketData kd = KeepalivePacketData.nattKeepalivePacket(
+                NetworkUtils.numericToInetAddress("1.2.3.4"),
+                1234,
+                NetworkUtils.numericToInetAddress("8.8.8.8"),
+                4500);
+        mDc.obtainMessage(
+                DataConnection.EVENT_KEEPALIVE_START_REQUEST, slotId, interval, kd).sendToTarget();
+        waitForMs(100);
+        verify(mSimulatedCommandsVerifier, times(1))
+                .startNattKeepalive(anyInt(), eq(kd), eq(interval * 1000), any(Message.class));
+
+        Message kaStarted = mDc.obtainMessage(DataConnection.EVENT_KEEPALIVE_STARTED, slotId, 0);
+        if (useCondensedFlow) {
+            // Indicate in the response that the keepalive has failed.
+            AsyncResult.forMessage(
+                    kaStarted, new KeepaliveStatus(KeepaliveStatus.ERROR_UNSUPPORTED), null);
+            kaStarted.sendToTarget();
+        } else {
+            // Indicate that the keepalive is queued, and then signal a failure from the modem
+            // such that a pending keepalive fails to activate.
+            AsyncResult.forMessage(
+                    kaStarted, new KeepaliveStatus(
+                            sessionHandle, KeepaliveStatus.STATUS_PENDING), null);
+            kaStarted.sendToTarget();
+            Message kaRunning = mDc.obtainMessage(DataConnection.EVENT_KEEPALIVE_STATUS);
+            AsyncResult.forMessage(
+                    kaRunning, new KeepaliveStatus(
+                            sessionHandle, KeepaliveStatus.STATUS_INACTIVE), null);
+            kaRunning.sendToTarget();
+        }
+        waitForMs(100);
+        // Verify that a failed connection request cannot be stopped due to no record in
+        // the DataConnection.
+        mDc.obtainMessage(DataConnection.EVENT_KEEPALIVE_STOP_REQUEST, slotId).sendToTarget();
+        waitForMs(100);
+        verify(mSimulatedCommandsVerifier, times(0))
+                .stopNattKeepalive(anyInt(), any(Message.class));
+    }
+
+    @Test
+    @SmallTest
+    public void testStartNattKeepaliveFail() throws Exception {
+        checkStartNattKeepaliveFail(false);
+    }
+
+    @Test
+    @SmallTest
+    public void testStartNattKeepaliveFailCondensed() throws Exception {
+        checkStartNattKeepaliveFail(true);
     }
 }

@@ -141,6 +141,8 @@ public class GsmCdmaConnection extends Connection {
         mParent.attach(this, dc);
 
         fetchDtmfToneDelay(phone);
+
+        setAudioQuality(getAudioQualityFromDC(dc.audioQuality));
     }
 
     /** This is an MO call, created when dialing */
@@ -355,6 +357,12 @@ public class GsmCdmaConnection extends Connection {
     }
 
     @Override
+    public void deflect(String number) throws CallStateException {
+        // Deflect is not supported.
+        throw new CallStateException ("deflect is not supported for CS");
+    }
+
+    @Override
     public void separate() throws CallStateException {
         if (!mDisconnected) {
             mOwner.separate(this);
@@ -504,6 +512,9 @@ public class GsmCdmaConnection extends Connection {
             case CallFailCause.NORMAL_UNSPECIFIED:
                 return DisconnectCause.NORMAL_UNSPECIFIED;
 
+            case CallFailCause.USER_ALERTING_NO_ANSWER:
+                return DisconnectCause.TIMED_OUT;
+
             case CallFailCause.ERROR_UNSPECIFIED:
             case CallFailCause.NORMAL_CLEARING:
             default:
@@ -580,6 +591,7 @@ public class GsmCdmaConnection extends Connection {
             if (DBG) Rlog.d(LOG_TAG, "onDisconnect: cause=" + cause);
 
             mOwner.getPhone().notifyDisconnect(this);
+            notifyDisconnect(cause);
 
             if (mParent != null) {
                 changed = mParent.connectionDisconnected(this);
@@ -629,6 +641,17 @@ public class GsmCdmaConnection extends Connection {
                 mAddress = dc.number;
                 changed = true;
             }
+        }
+
+        int newAudioQuality = getAudioQualityFromDC(dc.audioQuality);
+        if (getAudioQuality() != newAudioQuality) {
+            if (Phone.DEBUG_PHONE) {
+                log("update: audioQuality # changed!:  "
+                        + (newAudioQuality == Connection.AUDIO_QUALITY_HIGH_DEFINITION
+                        ? "high" : "standard"));
+            }
+            setAudioQuality(newAudioQuality);
+            changed = true;
         }
 
         // A null cnapName should be the same as ""
@@ -920,6 +943,16 @@ public class GsmCdmaConnection extends Connection {
 
             default:
                 throw new RuntimeException("illegal call state: " + state);
+        }
+    }
+
+    private int getAudioQualityFromDC(int audioQuality) {
+        switch (audioQuality) {
+            case DriverCall.AUDIO_QUALITY_AMR_WB:
+            case DriverCall.AUDIO_QUALITY_EVRC_NW:
+                return Connection.AUDIO_QUALITY_HIGH_DEFINITION;
+            default:
+                return Connection.AUDIO_QUALITY_STANDARD;
         }
     }
 
