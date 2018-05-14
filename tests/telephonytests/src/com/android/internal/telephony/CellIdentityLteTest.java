@@ -16,9 +16,8 @@
 
 package com.android.internal.telephony;
 
-import static org.junit.Assert.assertEquals;
-
 import android.os.Parcel;
+import android.telephony.CellIdentity;
 import android.telephony.CellIdentityLte;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -37,6 +36,7 @@ public class CellIdentityLteTest extends AndroidTestCase {
     private static final int EARFCN = 262140;
     private static final int MCC = 120;
     private static final int MNC = 260;
+    private static final int BANDWIDTH = 5000;  // kHz
     private static final String MCC_STR = "120";
     private static final String MNC_STR = "260";
     private static final String ALPHA_LONG = "long";
@@ -45,17 +45,19 @@ public class CellIdentityLteTest extends AndroidTestCase {
     @SmallTest
     public void testDefaultConstructor() {
         CellIdentityLte ci =
-                new CellIdentityLte(CI, PCI, TAC, EARFCN, MCC_STR, MNC_STR,
+                new CellIdentityLte(CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR,
                         ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(CI, ci.getCi());
         assertEquals(PCI, ci.getPci());
         assertEquals(TAC, ci.getTac());
         assertEquals(EARFCN, ci.getEarfcn());
+        assertEquals(EARFCN, ci.getChannelNumber());
+        assertEquals(BANDWIDTH, ci.getBandwidth());
         assertEquals(MCC, ci.getMcc());
         assertEquals(MNC, ci.getMnc());
-        assertEquals(MCC_STR, ci.getMccStr());
-        assertEquals(MNC_STR, ci.getMncStr());
+        assertEquals(MCC_STR, ci.getMccString());
+        assertEquals(MNC_STR, ci.getMncString());
         assertEquals(MCC_STR + MNC_STR, ci.getMobileNetworkOperator());
         assertEquals(ALPHA_LONG, ci.getOperatorAlphaLong());
         assertEquals(ALPHA_SHORT, ci.getOperatorAlphaShort());
@@ -65,13 +67,13 @@ public class CellIdentityLteTest extends AndroidTestCase {
     public void testConstructorWithThreeDigitMnc() {
         final String mncWithThreeDigit = "061";
         CellIdentityLte ci =
-                new CellIdentityLte(CI, PCI, TAC, EARFCN, MCC_STR, mncWithThreeDigit,
+                new CellIdentityLte(CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, mncWithThreeDigit,
                         ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(MCC, ci.getMcc());
         assertEquals(61, ci.getMnc());
-        assertEquals(MCC_STR, ci.getMccStr());
-        assertEquals(mncWithThreeDigit, ci.getMncStr());
+        assertEquals(MCC_STR, ci.getMccString());
+        assertEquals(mncWithThreeDigit, ci.getMncString());
         assertEquals(MCC_STR + mncWithThreeDigit, ci.getMobileNetworkOperator());
     }
 
@@ -79,49 +81,52 @@ public class CellIdentityLteTest extends AndroidTestCase {
     public void testConstructorWithTwoDigitMnc() {
         final String mncWithTwoDigit = "61";
         CellIdentityLte ci =
-                new CellIdentityLte(CI, PCI, TAC, EARFCN, MCC_STR, mncWithTwoDigit,
+                new CellIdentityLte(CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, mncWithTwoDigit,
                         ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(MCC, ci.getMcc());
         assertEquals(61, ci.getMnc());
-        assertEquals(MCC_STR, ci.getMccStr());
-        assertEquals(mncWithTwoDigit, ci.getMncStr());
+        assertEquals(MCC_STR, ci.getMccString());
+        assertEquals(mncWithTwoDigit, ci.getMncString());
         assertEquals(MCC_STR + mncWithTwoDigit, ci.getMobileNetworkOperator());
     }
 
     @SmallTest
     public void testConstructorWithEmptyMccMnc() {
-        CellIdentityLte ci =
-                new CellIdentityLte(CI, PCI, TAC, EARFCN, null, null, ALPHA_LONG, ALPHA_SHORT);
+        CellIdentityLte ci = new CellIdentityLte(
+                CI, PCI, TAC, EARFCN, BANDWIDTH, null, null, ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(Integer.MAX_VALUE, ci.getMcc());
         assertEquals(Integer.MAX_VALUE, ci.getMnc());
-        assertNull(ci.getMccStr());
-        assertNull(ci.getMncStr());
+        assertNull(ci.getMccString());
+        assertNull(ci.getMncString());
         assertNull(ci.getMobileNetworkOperator());
 
-        ci = new CellIdentityLte(CI, PCI, TAC, EARFCN, MCC_STR, null, ALPHA_LONG, ALPHA_SHORT);
+        ci = new CellIdentityLte(
+                CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, null, ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(MCC, ci.getMcc());
         assertEquals(Integer.MAX_VALUE, ci.getMnc());
-        assertEquals(MCC_STR, ci.getMccStr());
-        assertNull(ci.getMncStr());
+        assertEquals(MCC_STR, ci.getMccString());
+        assertNull(ci.getMncString());
         assertNull(ci.getMobileNetworkOperator());
 
-        ci = new CellIdentityLte(CI, PCI, TAC, EARFCN, null, MNC_STR, ALPHA_LONG, ALPHA_SHORT);
+        ci = new CellIdentityLte(
+                CI, PCI, TAC, EARFCN, BANDWIDTH, null, MNC_STR, ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(MNC, ci.getMnc());
         assertEquals(Integer.MAX_VALUE, ci.getMcc());
-        assertEquals(MNC_STR, ci.getMncStr());
-        assertNull(ci.getMccStr());
+        assertEquals(MNC_STR, ci.getMncString());
+        assertNull(ci.getMccString());
         assertNull(ci.getMobileNetworkOperator());
 
-        ci = new CellIdentityLte(CI, PCI, TAC, EARFCN, "", "", ALPHA_LONG, ALPHA_SHORT);
+        ci = new CellIdentityLte(
+                CI, PCI, TAC, EARFCN, BANDWIDTH, "", "", ALPHA_LONG, ALPHA_SHORT);
 
         assertEquals(Integer.MAX_VALUE, ci.getMcc());
         assertEquals(Integer.MAX_VALUE, ci.getMnc());
-        assertNull(ci.getMccStr());
-        assertNull(ci.getMncStr());
+        assertNull(ci.getMccString());
+        assertNull(ci.getMncString());
         assertNull(ci.getMobileNetworkOperator());
     }
 
@@ -134,10 +139,11 @@ public class CellIdentityLteTest extends AndroidTestCase {
         assertEquals(PCI, ci.getPci());
         assertEquals(TAC, ci.getTac());
         assertEquals(Integer.MAX_VALUE, ci.getEarfcn());
+        assertEquals(Integer.MAX_VALUE, ci.getBandwidth());
         assertEquals(MCC, ci.getMcc());
         assertEquals(MNC, ci.getMnc());
-        assertEquals(MCC_STR, ci.getMccStr());
-        assertEquals(MNC_STR, ci.getMncStr());
+        assertEquals(MCC_STR, ci.getMccString());
+        assertEquals(MNC_STR, ci.getMncString());
         assertEquals(MCC_STR + MNC_STR, ci.getMobileNetworkOperator());
         assertNull(ci.getOperatorAlphaLong());
         assertNull(ci.getOperatorAlphaShort());
@@ -146,19 +152,23 @@ public class CellIdentityLteTest extends AndroidTestCase {
     @SmallTest
     public void testEquals() {
         CellIdentityLte ciA = new CellIdentityLte(
-                CI, PCI, TAC, EARFCN, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT);
+                CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT);
         CellIdentityLte ciB = new CellIdentityLte(
-                CI, PCI, TAC, EARFCN, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT);
+                CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT);
 
         assertTrue(ciA.equals(ciB));
 
-        ciA = new CellIdentityLte(CI, PCI, TAC, EARFCN, null, null, ALPHA_LONG, ALPHA_SHORT);
-        ciB = new CellIdentityLte(CI, PCI, TAC, EARFCN, null, null, ALPHA_LONG, ALPHA_SHORT);
+        ciA = new CellIdentityLte(
+                CI, PCI, TAC, EARFCN, BANDWIDTH, null, null, ALPHA_LONG, ALPHA_SHORT);
+        ciB = new CellIdentityLte(
+                CI, PCI, TAC, EARFCN, BANDWIDTH, null, null, ALPHA_LONG, ALPHA_SHORT);
 
         assertTrue(ciA.equals(ciB));
 
-        ciA = new CellIdentityLte(CI, PCI, TAC, EARFCN, MCC_STR, null, ALPHA_LONG, ALPHA_SHORT);
-        ciB = new CellIdentityLte(CI, PCI, TAC, EARFCN, null, null, ALPHA_LONG, ALPHA_SHORT);
+        ciA = new CellIdentityLte(
+                CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, null, ALPHA_LONG, ALPHA_SHORT);
+        ciB = new CellIdentityLte(
+                CI, PCI, TAC, EARFCN, BANDWIDTH, null, null, ALPHA_LONG, ALPHA_SHORT);
 
         assertFalse(ciA.equals(ciB));
     }
@@ -166,7 +176,7 @@ public class CellIdentityLteTest extends AndroidTestCase {
     @SmallTest
     public void testParcel() {
         CellIdentityLte ci =
-                new CellIdentityLte(CI, PCI, TAC, EARFCN, MCC_STR, MNC_STR,
+                new CellIdentityLte(CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR,
                         ALPHA_LONG, ALPHA_SHORT);
 
         Parcel p = Parcel.obtain();
@@ -178,16 +188,21 @@ public class CellIdentityLteTest extends AndroidTestCase {
     }
 
     @SmallTest
-    public void testParcelWithUnknowMccMnc() {
-        CellIdentityLte ci = new CellIdentityLte(CI, PCI, TAC, EARFCN, null, null, null, null);
+    public void testParcelWithUnknownMccMnc() {
+        CellIdentityLte ci = new CellIdentityLte(
+                CI, PCI, TAC, EARFCN, BANDWIDTH, null, null, ALPHA_LONG, ALPHA_SHORT);
 
         Parcel p = Parcel.obtain();
+        p.writeInt(CellIdentity.TYPE_LTE);
+        p.writeString(String.valueOf(Integer.MAX_VALUE));
+        p.writeString(String.valueOf(Integer.MAX_VALUE));
+        p.writeString(ALPHA_LONG);
+        p.writeString(ALPHA_SHORT);
         p.writeInt(CI);
         p.writeInt(PCI);
         p.writeInt(TAC);
         p.writeInt(EARFCN);
-        p.writeString(String.valueOf(Integer.MAX_VALUE));
-        p.writeString(String.valueOf(Integer.MAX_VALUE));
+        p.writeInt(BANDWIDTH);
         p.setDataPosition(0);
 
         CellIdentityLte newCi = CellIdentityLte.CREATOR.createFromParcel(p);
@@ -198,15 +213,20 @@ public class CellIdentityLteTest extends AndroidTestCase {
     public void testParcelWithInvalidMccMnc() {
         final String invalidMcc = "randomStuff";
         final String invalidMnc = "randomStuff";
-        CellIdentityLte ci = new CellIdentityLte(CI, PCI, TAC, EARFCN, null, null, null, null);
+        CellIdentityLte ci = new CellIdentityLte(
+                CI, PCI, TAC, EARFCN, BANDWIDTH, null, null, ALPHA_LONG, ALPHA_SHORT);
 
         Parcel p = Parcel.obtain();
+        p.writeInt(CellIdentity.TYPE_LTE);
+        p.writeString(invalidMcc);
+        p.writeString(invalidMnc);
+        p.writeString(ALPHA_LONG);
+        p.writeString(ALPHA_SHORT);
         p.writeInt(CI);
         p.writeInt(PCI);
         p.writeInt(TAC);
         p.writeInt(EARFCN);
-        p.writeString(invalidMcc);
-        p.writeString(invalidMnc);
+        p.writeInt(BANDWIDTH);
         p.setDataPosition(0);
 
         CellIdentityLte newCi = CellIdentityLte.CREATOR.createFromParcel(p);
