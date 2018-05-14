@@ -178,7 +178,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
         }
     }
 
-    private UiccCard mUiccCard;  // Parent
+    private UiccProfile mUiccProfile;  // Parent
     private UiccPkcs15 mUiccPkcs15; // ARF fallback
     private AtomicInteger mState;
     private List<UiccAccessRule> mAccessRules;
@@ -200,13 +200,13 @@ public class UiccCarrierPrivilegeRules extends Handler {
         // Send open logical channel request.
         String aid = (aidId == ARAD) ? ARAD_AID : ARAM_AID;
         int p2 = 0x00;
-        mUiccCard.iccOpenLogicalChannel(aid, p2, /* supported p2 value */
+        mUiccProfile.iccOpenLogicalChannel(aid, p2, /* supported p2 value */
                 obtainMessage(EVENT_OPEN_LOGICAL_CHANNEL_DONE, 0, aidId, null));
     }
 
-    public UiccCarrierPrivilegeRules(UiccCard uiccCard, Message loadedCallback) {
+    public UiccCarrierPrivilegeRules(UiccProfile uiccProfile, Message loadedCallback) {
         log("Creating UiccCarrierPrivilegeRules");
-        mUiccCard = uiccCard;
+        mUiccProfile = uiccProfile;
         mState = new AtomicInteger(STATE_LOADING);
         mStatusMessage = "Not loaded.";
         mLoadedCallback = loadedCallback;
@@ -302,7 +302,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
                             | PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS);
             return getCarrierPrivilegeStatus(pInfo);
         } catch (PackageManager.NameNotFoundException ex) {
-            Rlog.e(LOG_TAG, "NameNotFoundException", ex);
+            log("Package " + packageName + " not found for carrier privilege status check");
         }
         return TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS;
     }
@@ -337,7 +337,18 @@ public class UiccCarrierPrivilegeRules extends Handler {
      * @return Access status.
      */
     public int getCarrierPrivilegeStatusForCurrentTransaction(PackageManager packageManager) {
-        String[] packages = packageManager.getPackagesForUid(Binder.getCallingUid());
+        return getCarrierPrivilegeStatusForUid(packageManager, Binder.getCallingUid());
+    }
+
+    /**
+     * Returns the status of the carrier privileges for the caller of the current transaction.
+     *
+     * @param packageManager PackageManager for getting signatures and package names.
+     * @return Access status.
+     */
+    public int getCarrierPrivilegeStatusForUid(
+            PackageManager packageManager, int uid) {
+        String[] packages = packageManager.getPackagesForUid(uid);
 
         for (String pkg : packages) {
             int accessStatus = getCarrierPrivilegeStatus(packageManager, pkg);
@@ -408,7 +419,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
                 ar = (AsyncResult) msg.obj;
                 if (ar.exception == null && ar.result != null) {
                     mChannelId = ((int[]) ar.result)[0];
-                    mUiccCard.iccTransmitApduLogicalChannel(mChannelId, CLA, COMMAND, P1, P2, P3,
+                    mUiccProfile.iccTransmitApduLogicalChannel(mChannelId, CLA, COMMAND, P1, P2, P3,
                             DATA, obtainMessage(EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE, mChannelId,
                                     mAIDInUse));
                 } else {
@@ -433,7 +444,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
                                 // if rules cannot be read from both ARA_D and ARA_M applet,
                                 // fallback to PKCS15-based ARF.
                                 log("No ARA, try ARF next.");
-                                mUiccPkcs15 = new UiccPkcs15(mUiccCard,
+                                mUiccPkcs15 = new UiccPkcs15(mUiccProfile,
                                         obtainMessage(EVENT_PKCS15_READ_DONE));
                             }
                         }
@@ -459,7 +470,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
                                     updateState(STATE_LOADED, "Success!");
                                 }
                             } else {
-                                mUiccCard.iccTransmitApduLogicalChannel(mChannelId, CLA, COMMAND,
+                                mUiccProfile.iccTransmitApduLogicalChannel(mChannelId, CLA, COMMAND,
                                         P1, P2_EXTENDED_DATA, P3, DATA,
                                         obtainMessage(EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE,
                                                 mChannelId, mAIDInUse));
@@ -483,7 +494,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
                     }
                 }
 
-                mUiccCard.iccCloseLogicalChannel(mChannelId, obtainMessage(
+                mUiccProfile.iccCloseLogicalChannel(mChannelId, obtainMessage(
                         EVENT_CLOSE_LOGICAL_CHANNEL_DONE, 0, mAIDInUse));
                 mChannelId = -1;
                 break;

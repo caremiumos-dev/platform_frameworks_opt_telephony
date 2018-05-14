@@ -21,20 +21,23 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.isA;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import android.os.AsyncResult;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.os.PersistableBundle;
+import android.support.test.filters.SmallTest;
+import android.telephony.CarrierConfigManager;
 
+import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.telephony.TelephonyTest;
 import com.android.internal.telephony.cat.CatService;
 
@@ -43,8 +46,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 public class UiccProfileTest extends TelephonyTest {
     private UiccProfile mUiccProfile;
@@ -54,6 +55,7 @@ public class UiccProfileTest extends TelephonyTest {
     }
 
     private IccIoResult mIccIoResult;
+    private static final int SCARY_SLEEP_MS = 200;
 
     private UiccProfileHandlerThread mTestHandlerThread;
     private Handler mHandler;
@@ -69,7 +71,6 @@ public class UiccProfileTest extends TelephonyTest {
     private Handler mMockedHandler;
     @Mock
     private UiccCard mUiccCard;
-
 
     private class UiccProfileHandlerThread extends HandlerThread {
 
@@ -128,12 +129,16 @@ public class UiccProfileTest extends TelephonyTest {
     @Before
     public void setUp() throws Exception {
         super.setUp(getClass().getSimpleName());
-        /* initially there are no application available */
-        mIccCardStatus.mApplications = new IccCardApplicationStatus[]{};
+         /* initially there are no application available, but the array should not be empty. */
+        IccCardApplicationStatus umtsApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_USIM,
+                IccCardApplicationStatus.AppState.APPSTATE_UNKNOWN, "0xA2");
+        mIccCardStatus.mApplications = new IccCardApplicationStatus[]{umtsApp};
         mIccCardStatus.mCdmaSubscriptionAppIndex =
                 mIccCardStatus.mImsSubscriptionAppIndex =
                         mIccCardStatus.mGsmUmtsSubscriptionAppIndex = -1;
-        testHelper("FF40");
+        mIccIoResult = new IccIoResult(0x90, 0x00, IccUtils.hexStringToBytes("FF40"));
+        mSimulatedCommands.setIccIoResultForApduLogicalChannel(mIccIoResult);
         /* starting the Handler Thread */
         mTestHandlerThread = new UiccProfileHandlerThread(TAG);
         mTestHandlerThread.start();
@@ -152,53 +157,20 @@ public class UiccProfileTest extends TelephonyTest {
         super.tearDown();
     }
 
-    private void testHelper(String hexString) {
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                logd("Open");
-                Message message = (Message) invocation.getArguments()[2];
-                AsyncResult ar = new AsyncResult(null, new int[]{0}, null);
-                message.obj = ar;
-                message.sendToTarget();
-                return null;
-            }
-        }).when(mUiccCard).iccOpenLogicalChannel(anyString(), anyInt(), any(Message.class));
-
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                logd("Transmit");
-                Message message = (Message) invocation.getArguments()[7];
-                IccIoResult iir = new IccIoResult(0x90, 0x00, IccUtils.hexStringToBytes(hexString));
-                AsyncResult ar = new AsyncResult(null, iir, null);
-                message.obj = ar;
-                message.sendToTarget();
-                return null;
-            }
-        }).when(mUiccCard).iccTransmitApduLogicalChannel(anyInt(), anyInt(), anyInt(), anyInt(),
-                anyInt(), anyInt(), anyString(), any(Message.class));
-
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                logd("Close");
-                Message message = (Message) invocation.getArguments()[1];
-                message.sendToTarget();
-                return null;
-            }
-        }).when(mUiccCard).iccCloseLogicalChannel(anyInt(), any(Message.class));
-    }
-
     @Test
     @SmallTest
     public void tesUiccProfileInfoSanity() {
-        assertEquals(0, mUiccProfile.getNumApplications());
+        assertEquals(1, mUiccProfile.getNumApplications());
         assertNull(mUiccProfile.getUniversalPinState());
         assertNull(mUiccProfile.getOperatorBrandOverride());
         for (IccCardApplicationStatus.AppType mAppType :
                 IccCardApplicationStatus.AppType.values()) {
-            assertFalse(mUiccProfile.isApplicationOnIcc(mAppType));
+            if (mAppType == IccCardApplicationStatus.AppType.APPTYPE_USIM) {
+                assertTrue(mUiccProfile.isApplicationOnIcc(mAppType));
+            } else {
+                assertFalse(mUiccProfile.isApplicationOnIcc(mAppType));
+            }
+
         }
     }
 
@@ -237,6 +209,9 @@ public class UiccProfileTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testUpdateUiccProfile() {
+        int mChannelId = 1;
+        mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_PRESENT;
+        mSimulatedCommands.setOpenChannelId(mChannelId);
         Message mCardUpdate = mHandler.obtainMessage(UICCPROFILE_UPDATE_PROFILE_EVENT);
         setReady(false);
         mCardUpdate.sendToTarget();
@@ -247,9 +222,9 @@ public class UiccProfileTest extends TelephonyTest {
         waitForMs(50);
 
         assertTrue(mUiccProfile.areCarrierPriviligeRulesLoaded());
-        verify(mUiccCard, times(2)).iccOpenLogicalChannel(isA(String.class),
+        verify(mSimulatedCommandsVerifier, times(2)).iccOpenLogicalChannel(isA(String.class),
                 anyInt(), isA(Message.class));
-        verify(mUiccCard, times(2)).iccTransmitApduLogicalChannel(
+        verify(mSimulatedCommandsVerifier, times(2)).iccTransmitApduLogicalChannel(
                 anyInt(), anyInt(), anyInt(), anyInt(), anyInt(), anyInt(), anyString(),
                 isA(Message.class)
         );
@@ -272,8 +247,223 @@ public class UiccProfileTest extends TelephonyTest {
         ArgumentCaptor<Message> mCaptorMessage = ArgumentCaptor.forClass(Message.class);
         ArgumentCaptor<Long> mCaptorLong = ArgumentCaptor.forClass(Long.class);
         testUpdateUiccProfile();
-        verify(mMockedHandler, times(1)).sendMessageDelayed(mCaptorMessage.capture(),
+        verify(mMockedHandler, atLeast(1)).sendMessageDelayed(mCaptorMessage.capture(),
                 mCaptorLong.capture());
         assertEquals(UICCPROFILE_CARRIER_PRIVILEDGE_LOADED_EVENT, mCaptorMessage.getValue().what);
+    }
+
+    @Test
+    @SmallTest
+    public void testInitialCardState() {
+        // after updateExternalState() is called, the state will not be UNKNOWN
+        assertEquals(mUiccProfile.getState(), State.NOT_READY);
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateUiccProfileApplicationNotReady() {
+        /* update app status and index */
+        IccCardApplicationStatus cdmaApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_CSIM,
+                IccCardApplicationStatus.AppState.APPSTATE_READY, "0xA0");
+        IccCardApplicationStatus imsApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_ISIM,
+                IccCardApplicationStatus.AppState.APPSTATE_READY, "0xA1");
+        IccCardApplicationStatus umtsApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_USIM,
+                IccCardApplicationStatus.AppState.APPSTATE_UNKNOWN, "0xA2");
+        mIccCardStatus.mApplications = new IccCardApplicationStatus[]{cdmaApp, imsApp, umtsApp};
+        mIccCardStatus.mCdmaSubscriptionAppIndex = 0;
+        mIccCardStatus.mImsSubscriptionAppIndex = 1;
+        mIccCardStatus.mGsmUmtsSubscriptionAppIndex = 2;
+        Message mProfileUpdate = mHandler.obtainMessage(UICCPROFILE_UPDATE_APPLICATION_EVENT);
+        setReady(false);
+        mProfileUpdate.sendToTarget();
+
+        waitUntilReady();
+
+        /* wait for the carrier privilege rules to be loaded */
+        waitForMs(50);
+        assertEquals(3, mUiccProfile.getNumApplications());
+
+        mUiccProfile.mHandler.sendMessage(
+                mUiccProfile.mHandler.obtainMessage(UiccProfile.EVENT_APP_READY));
+        waitForMs(SCARY_SLEEP_MS);
+        assertEquals(mUiccProfile.getState(), State.NOT_READY);
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateUiccProfileApplicationAllReady() {
+        /* update app status and index */
+        IccCardApplicationStatus cdmaApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_CSIM,
+                IccCardApplicationStatus.AppState.APPSTATE_READY, "0xA0");
+        IccCardApplicationStatus imsApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_ISIM,
+                IccCardApplicationStatus.AppState.APPSTATE_READY, "0xA1");
+        IccCardApplicationStatus umtsApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_USIM,
+                IccCardApplicationStatus.AppState.APPSTATE_READY, "0xA2");
+        mIccCardStatus.mApplications = new IccCardApplicationStatus[]{cdmaApp, imsApp, umtsApp};
+        mIccCardStatus.mCdmaSubscriptionAppIndex = 0;
+        mIccCardStatus.mImsSubscriptionAppIndex = 1;
+        mIccCardStatus.mGsmUmtsSubscriptionAppIndex = 2;
+        Message mProfileUpdate = mHandler.obtainMessage(UICCPROFILE_UPDATE_APPLICATION_EVENT);
+        setReady(false);
+        mProfileUpdate.sendToTarget();
+
+        waitUntilReady();
+
+        /* wait for the carrier privilege rules to be loaded */
+        waitForMs(50);
+        assertEquals(3, mUiccProfile.getNumApplications());
+
+        mUiccProfile.mHandler.sendMessage(
+                mUiccProfile.mHandler.obtainMessage(UiccProfile.EVENT_APP_READY));
+        waitForMs(SCARY_SLEEP_MS);
+        // state is loaded as all records are loaded right away as SimulatedCommands returns
+        // response for them right away. Ideally applications and records should be mocked.
+        assertEquals(State.LOADED, mUiccProfile.getState());
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateUiccProfileApplicationAllSupportedAppsReady() {
+        /* update app status and index */
+        IccCardApplicationStatus umtsApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_USIM,
+                IccCardApplicationStatus.AppState.APPSTATE_READY, "0xA2");
+        IccCardApplicationStatus imsApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_ISIM,
+                IccCardApplicationStatus.AppState.APPSTATE_READY, "0xA1");
+        IccCardApplicationStatus unknownApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_UNKNOWN,
+                IccCardApplicationStatus.AppState.APPSTATE_UNKNOWN, "0xA2");
+        mIccCardStatus.mApplications = new IccCardApplicationStatus[]{imsApp, umtsApp, unknownApp};
+        mIccCardStatus.mCdmaSubscriptionAppIndex = -1;
+        mIccCardStatus.mImsSubscriptionAppIndex = 0;
+        mIccCardStatus.mGsmUmtsSubscriptionAppIndex = 1;
+        Message mProfileUpdate = mHandler.obtainMessage(UICCPROFILE_UPDATE_APPLICATION_EVENT);
+        setReady(false);
+        mProfileUpdate.sendToTarget();
+
+        waitUntilReady();
+
+        /* wait for the carrier privilege rules to be loaded */
+        waitForMs(50);
+        assertEquals(3, mUiccProfile.getNumApplications());
+
+        mUiccProfile.mHandler.sendMessage(
+                mUiccProfile.mHandler.obtainMessage(UiccProfile.EVENT_APP_READY));
+        waitForMs(SCARY_SLEEP_MS);
+        // state is loaded as all records are loaded right away as SimulatedCommands returns
+        // response for them right away. Ideally applications and records should be mocked.
+        assertEquals(State.LOADED, mUiccProfile.getState());
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateUiccProfileApplicationNoApplication() {
+        mIccCardStatus.mApplications = new IccCardApplicationStatus[]{};
+        mIccCardStatus.mCdmaSubscriptionAppIndex = -1;
+        mIccCardStatus.mImsSubscriptionAppIndex = -1;
+        mIccCardStatus.mGsmUmtsSubscriptionAppIndex = -1;
+        Message mProfileUpdate = mHandler.obtainMessage(UICCPROFILE_UPDATE_APPLICATION_EVENT);
+        setReady(false);
+        mProfileUpdate.sendToTarget();
+
+        waitUntilReady();
+
+        /* wait for the carrier privilege rules to be loaded */
+        waitForMs(50);
+        assertEquals(0, mUiccProfile.getNumApplications());
+
+        mUiccProfile.mHandler.sendMessage(
+                mUiccProfile.mHandler.obtainMessage(UiccProfile.EVENT_APP_READY));
+        waitForMs(SCARY_SLEEP_MS);
+        // state is loaded since there is no applications.
+        assertEquals(State.NOT_READY, mUiccProfile.getState());
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateUiccProfileApplicationNoSupportApplication() {
+        IccCardApplicationStatus unknownApp = composeUiccApplicationStatus(
+                IccCardApplicationStatus.AppType.APPTYPE_UNKNOWN,
+                IccCardApplicationStatus.AppState.APPSTATE_UNKNOWN, "");
+        mIccCardStatus.mApplications = new IccCardApplicationStatus[]{unknownApp};
+        mIccCardStatus.mCdmaSubscriptionAppIndex = -1;
+        mIccCardStatus.mImsSubscriptionAppIndex = -1;
+        mIccCardStatus.mGsmUmtsSubscriptionAppIndex = -1;
+        Message mProfileUpdate = mHandler.obtainMessage(UICCPROFILE_UPDATE_APPLICATION_EVENT);
+        setReady(false);
+        mProfileUpdate.sendToTarget();
+
+        waitUntilReady();
+
+        /* wait for the carrier privilege rules to be loaded */
+        waitForMs(50);
+        assertEquals(1, mUiccProfile.getNumApplications());
+
+        mUiccProfile.mHandler.sendMessage(
+                mUiccProfile.mHandler.obtainMessage(UiccProfile.EVENT_APP_READY));
+        waitForMs(SCARY_SLEEP_MS);
+        // state is loaded since there is no applications.
+        assertEquals(State.NOT_READY, mUiccProfile.getState());
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateExternalState() {
+        // IO_ERROR
+        doReturn(IccCardStatus.CardState.CARDSTATE_ERROR).when(mUiccCard).getCardState();
+        mUiccProfile.updateExternalState();
+        assertEquals(State.CARD_IO_ERROR, mUiccProfile.getState());
+
+        // RESTRICTED
+        doReturn(IccCardStatus.CardState.CARDSTATE_RESTRICTED).when(mUiccCard).getCardState();
+        mUiccProfile.updateExternalState();
+        assertEquals(State.CARD_RESTRICTED, mUiccProfile.getState());
+
+        // CARD PRESENT; no mUiccApplication - state should be NOT_READY
+        doReturn(IccCardStatus.CardState.CARDSTATE_PRESENT).when(mUiccCard).getCardState();
+        mUiccProfile.updateExternalState();
+        assertEquals(State.NOT_READY, mUiccProfile.getState());
+
+        // set mUiccApplication
+        testUpdateUiccProfileApplicationAllReady();
+        mUiccProfile.updateExternalState();
+        assertEquals(State.LOADED, mUiccProfile.getState());
+    }
+
+    @Test
+    @SmallTest
+    public void testCarrierConfigHandling() {
+        testUpdateUiccProfileApplication();
+
+        // Fake carrier name
+        String fakeCarrierName = "fakeCarrierName";
+        PersistableBundle carrierConfigBundle = mContextFixture.getCarrierConfigBundle();
+        carrierConfigBundle.putBoolean(CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL, true);
+        carrierConfigBundle.putString(CarrierConfigManager.KEY_CARRIER_NAME_STRING,
+                fakeCarrierName);
+
+        // broadcast CARRIER_CONFIG_CHANGED
+        mContext.sendBroadcast(new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
+        waitForMs(200);
+
+        // verify that setSimOperatorNameForPhone() is called with fakeCarrierName
+        ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(mTelephonyManager, atLeast(1)).setSimOperatorNameForPhone(anyInt(),
+                stringArgumentCaptor.capture());
+        boolean carrierFound = false;
+        for (String carrierName : stringArgumentCaptor.getAllValues()) {
+            if (fakeCarrierName.equals(carrierName)) {
+                carrierFound = true;
+                break;
+            }
+        }
+        assertTrue(carrierFound);
     }
 }
