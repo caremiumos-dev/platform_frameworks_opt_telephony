@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa8773f9_1af6ff4e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3323,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-05-16T17:31:24Z",
+      "side": 1,
+      "message": "seem the logic for networkTypeBitmask is different than before, we convert the bearerBitmask to netowrkTypeBitmask if networkTypeBitmask is 0.\n\n  if (networkTypeBitmask \u003d\u003d 0) {\n            int bearerBitmask \u003d (dest.bearerBitmask \u003d\u003d 0 || src.bearerBitmask \u003d\u003d 0)\n                    ? 0 : (dest.bearerBitmask | src.bearerBitmask);\n            networkTypeBitmask \u003d ServiceState.convertBearerBitmaskToNetworkTypeBitmask(\n                    bearerBitmask);\n        }",
+      "range": {
+        "startLine": 3323,
+        "startChar": 12,
+        "endLine": 3323,
+        "endChar": 31
+      },
+      "revId": "823bbc5b197cc3ceae9404242e1f4ad9f95b2eda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
