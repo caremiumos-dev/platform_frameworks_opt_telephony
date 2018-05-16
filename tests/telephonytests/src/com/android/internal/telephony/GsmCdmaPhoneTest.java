@@ -31,6 +31,7 @@ import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -57,8 +58,11 @@ import android.telephony.gsm.GsmCellLocation;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.internal.telephony.test.SimulatedCommands;
+import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccException;
 import com.android.internal.telephony.uicc.IccRecords;
+import com.android.internal.telephony.uicc.UiccProfile;
+import com.android.internal.telephony.uicc.UiccSlot;
 
 import org.junit.After;
 import org.junit.Before;
@@ -79,6 +83,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
     private static final int EVENT_EMERGENCY_CALLBACK_MODE_EXIT = 1;
     private static final int EVENT_EMERGENCY_CALL_TOGGLE = 2;
+    private static final int EVENT_SET_ICC_LOCK_ENABLED = 3;
 
     private class GsmCdmaPhoneTestHandler extends HandlerThread {
 
@@ -149,14 +154,19 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testHandleActionCarrierConfigChanged() {
+        Intent intent = new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        mContext.sendBroadcast(intent);
+        waitForMs(50);
+        verify(mSST, times(1)).pollState();
+
         // set voice radio tech in RIL to 1xRTT. ACTION_CARRIER_CONFIG_CHANGED should trigger a
         // query and change phone type
         mSimulatedCommands.setVoiceRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_1xRTT);
         assertTrue(mPhoneUT.isPhoneTypeGsm());
-        Intent intent = new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         mContext.sendBroadcast(intent);
         waitForMs(50);
         assertTrue(mPhoneUT.isPhoneTypeCdmaLte());
+        verify(mSST, times(2)).pollState();
     }
 
     @Test
@@ -298,7 +308,8 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
             mCT.mRingingCall = mGsmCdmaCall;
             doReturn(GsmCdmaCall.State.IDLE).when(mGsmCdmaCall).getState();
 
-            Connection connection = mPhoneUT.dial("1234567890", 0);
+            Connection connection = mPhoneUT.dial("1234567890",
+                    new PhoneInternalInterface.DialArgs.Builder().build());
             verify(mCT).dial("1234567890", null, null);
         } catch (CallStateException e) {
             fail();
@@ -377,8 +388,9 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertEquals("*86", mPhoneUT.getVoiceMailNumber());
 
         // config_telephony_use_own_number_for_voicemail
-        mContextFixture.putBooleanResource(
-                com.android.internal.R.bool.config_telephony_use_own_number_for_voicemail, true);
+        mContextFixture.getCarrierConfigBundle()
+                .putBoolean(CarrierConfigManager
+                                .KEY_CONFIG_TELEPHONY_USE_OWN_NUMBER_FOR_VOICEMAIL_BOOL, true);
         doReturn(voiceMailNumber).when(mSST).getMdnNumber();
         assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
 
@@ -468,8 +480,8 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         doReturn(imsi).when(mSimRecords).getIMSI();
         mPhoneUT.getCallForwardingOption(CF_REASON_UNCONDITIONAL, null);
         verify(mSimulatedCommandsVerifier).queryCallForwardStatus(
-                eq(CF_REASON_UNCONDITIONAL), anyInt(), nullable(String.class),
-                nullable(Message.class));
+                eq(CF_REASON_UNCONDITIONAL), eq(CommandsInterface.SERVICE_CLASS_VOICE),
+                nullable(String.class), nullable(Message.class));
         waitForMs(50);
         verify(mSimRecords).setVoiceCallForwardingFlag(anyInt(), anyBoolean(),
                 nullable(String.class));
@@ -804,5 +816,61 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
                 null));
         waitForMs(100);
         verify(mEriManager, times(1)).loadEriFile();
+    }
+
+    @Test
+    @SmallTest
+    public void testGetIccCardUnknownAndAbsent() {
+        // If UiccSlot.isStateUnknown is true, we should return a dummy IccCard with the state
+        // set to UNKNOWN
+        doReturn(null).when(mUiccController).getUiccProfileForPhone(anyInt());
+        UiccSlot mockSlot = mock(UiccSlot.class);
+        doReturn(mockSlot).when(mUiccController).getUiccSlotForPhone(anyInt());
+        doReturn(true).when(mockSlot).isStateUnknown();
+
+        IccCard iccCard = mPhoneUT.getIccCard();
+        assertEquals(IccCardConstants.State.UNKNOWN, iccCard.getState());
+
+        // if isStateUnknown is false, we should return a dummy IccCard with the state set to
+        // ABSENT
+        doReturn(false).when(mockSlot).isStateUnknown();
+        iccCard = mPhoneUT.getIccCard();
+        assertEquals(IccCardConstants.State.ABSENT, iccCard.getState());
+    }
+
+    @Test
+    @SmallTest
+    public void testGetEmptyIccCard() {
+        doReturn(null).when(mUiccController).getUiccProfileForPhone(anyInt());
+
+        IccCard iccCard = mPhoneUT.getIccCard();
+
+        // The iccCard should be a dummy object, not null.
+        assertTrue(!(iccCard instanceof UiccProfile));
+
+        assertTrue(iccCard != null);
+        assertEquals(IccCardConstants.State.UNKNOWN, iccCard.getState());
+        assertEquals(null, iccCard.getIccRecords());
+        assertEquals(false, iccCard.getIccLockEnabled());
+        assertEquals(false, iccCard.getIccFdnEnabled());
+        assertEquals(false, iccCard.isApplicationOnIcc(
+                IccCardApplicationStatus.AppType.APPTYPE_SIM));
+        assertEquals(false, iccCard.hasIccCard());
+        assertEquals(false, iccCard.getIccPin2Blocked());
+        assertEquals(false, iccCard.getIccPuk2Blocked());
+
+        Message onComplete = mTestHandler.obtainMessage(EVENT_SET_ICC_LOCK_ENABLED);
+        iccCard.setIccLockEnabled(true, "password", onComplete);
+
+        waitForMs(100);
+
+        ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
+        // Verify that message is sent back with exception.
+        verify(mTestHandler, times(1)).sendMessageAtTime(messageArgumentCaptor.capture(),
+                anyLong());
+        Message message = messageArgumentCaptor.getAllValues().get(0);
+        AsyncResult ret = (AsyncResult) message.obj;
+        assertEquals(EVENT_SET_ICC_LOCK_ENABLED, message.what);
+        assertTrue(ret.exception != null);
     }
 }
