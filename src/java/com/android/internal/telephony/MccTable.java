@@ -17,14 +17,11 @@
 package com.android.internal.telephony;
 
 import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.RemoteException;
 import android.os.SystemProperties;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Slog;
 
@@ -32,7 +29,7 @@ import com.android.internal.app.LocaleStore;
 import com.android.internal.app.LocaleStore.LocaleInfo;
 
 import libcore.icu.ICU;
-import libcore.icu.TimeZoneNames;
+import libcore.util.TimeZoneFinder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,24 +91,8 @@ public final class MccTable {
         if (entry == null) {
             return null;
         }
-        Locale locale = new Locale("", entry.mIso);
-        String[] tz = TimeZoneNames.forLocale(locale);
-        if (tz.length == 0) return null;
-
-        String zoneName = tz[0];
-
-        /* Use Australia/Sydney instead of Australia/Lord_Howe for Australia.
-         * http://b/33228250
-         * Todo: remove the code, see b/62418027
-         */
-        if (mcc == 505  /* Australia / Norfolk Island */) {
-            for (String zone : tz) {
-                if (zone.contains("Sydney")) {
-                    zoneName = zone;
-                }
-            }
-        }
-        return zoneName;
+        final String lowerCaseCountryCode = entry.mIso;
+        return TimeZoneFinder.getInstance().lookupDefaultTimeZoneIdByCountry(lowerCaseCountryCode);
     }
 
     /**
@@ -126,6 +107,19 @@ public final class MccTable {
             return "";
         } else {
             return entry.mIso;
+        }
+    }
+
+    /**
+     * Given a GSM Mobile Country Code, returns
+     * an ISO two-character country code if available.
+     * Returns empty string if unavailable.
+     */
+    public static String countryCodeForMcc(String mcc) {
+        try {
+            return countryCodeForMcc(Integer.parseInt(mcc));
+        } catch (NumberFormatException ex) {
+            return "";
         }
     }
 
@@ -176,11 +170,9 @@ public final class MccTable {
      * correct version of resources.  If MCC is 0, MCC and MNC will be ignored (not set).
      * @param context Context to act on.
      * @param mccmnc truncated imsi with just the MCC and MNC - MNC assumed to be from 4th to end
-     * @param fromServiceState true if coming from the radio service state, false if from SIM
      */
-    public static void updateMccMncConfiguration(Context context, String mccmnc,
-            boolean fromServiceState) {
-        Slog.d(LOG_TAG, "updateMccMncConfiguration mccmnc='" + mccmnc + "' fromServiceState=" + fromServiceState);
+    public static void updateMccMncConfiguration(Context context, String mccmnc) {
+        Slog.d(LOG_TAG, "updateMccMncConfiguration mccmnc='" + mccmnc);
 
         if (Build.IS_DEBUGGABLE) {
             String overrideMcc = SystemProperties.get("persist.sys.override_mcc");
@@ -193,19 +185,11 @@ public final class MccTable {
         if (!TextUtils.isEmpty(mccmnc)) {
             int mcc, mnc;
 
-            String defaultMccMnc = TelephonyManager.getDefault().getSimOperatorNumeric();
-            Slog.d(LOG_TAG, "updateMccMncConfiguration defaultMccMnc=" + defaultMccMnc);
-            //Update mccmnc only for default subscription in case of MultiSim.
-//            if (!defaultMccMnc.equals(mccmnc)) {
-//                Slog.d(LOG_TAG, "Not a Default subscription, ignoring mccmnc config update.");
-//                return;
-//            }
-
             try {
-                mcc = Integer.parseInt(mccmnc.substring(0,3));
+                mcc = Integer.parseInt(mccmnc.substring(0, 3));
                 mnc = Integer.parseInt(mccmnc.substring(3));
-            } catch (NumberFormatException e) {
-                Slog.e(LOG_TAG, "Error parsing IMSI: " + mccmnc);
+            } catch (NumberFormatException | StringIndexOutOfBoundsException ex) {
+                Slog.e(LOG_TAG, "Error parsing IMSI: " + mccmnc + ". ex=" + ex);
                 return;
             }
 
@@ -213,33 +197,24 @@ public final class MccTable {
             if (mcc != 0) {
                 setTimezoneFromMccIfNeeded(context, mcc);
             }
-            if (fromServiceState) {
-                setWifiCountryCodeFromMcc(context, mcc);
-            } else {
-                // from SIM
-                try {
-                    Configuration config = new Configuration();
-                    boolean updateConfig = false;
-                    if (mcc != 0) {
-                        config.mcc = mcc;
-                        config.mnc = mnc == 0 ? Configuration.MNC_ZERO : mnc;
-                        updateConfig = true;
-                    }
 
-                    if (updateConfig) {
-                        Slog.d(LOG_TAG, "updateMccMncConfiguration updateConfig config=" + config);
-                        ActivityManager.getService().updateConfiguration(config);
-                    } else {
-                        Slog.d(LOG_TAG, "updateMccMncConfiguration nothing to update");
-                    }
-                } catch (RemoteException e) {
-                    Slog.e(LOG_TAG, "Can't update configuration", e);
+            try {
+                Configuration config = new Configuration();
+                boolean updateConfig = false;
+                if (mcc != 0) {
+                    config.mcc = mcc;
+                    config.mnc = mnc == 0 ? Configuration.MNC_ZERO : mnc;
+                    updateConfig = true;
                 }
-            }
-        } else {
-            if (fromServiceState) {
-                // an empty mccmnc means no signal - tell wifi we don't know
-                setWifiCountryCodeFromMcc(context, 0);
+
+                if (updateConfig) {
+                    Slog.d(LOG_TAG, "updateMccMncConfiguration updateConfig config=" + config);
+                    ActivityManager.getService().updateConfiguration(config);
+                } else {
+                    Slog.d(LOG_TAG, "updateMccMncConfiguration nothing to update");
+                }
+            } catch (RemoteException e) {
+                Slog.e(LOG_TAG, "Can't update configuration", e);
             }
         }
     }
@@ -375,21 +350,11 @@ public final class MccTable {
      * @param mcc Mobile Country Code of the SIM or SIM-like entity (build prop on CDMA)
      */
     private static void setTimezoneFromMccIfNeeded(Context context, int mcc) {
-        String timezone = SystemProperties.get(ServiceStateTracker.TIMEZONE_PROPERTY);
-        // timezone.equals("GMT") will be true and only true if the timezone was
-        // set to a default value by the system server (when starting, system server.
-        // sets the persist.sys.timezone to "GMT" if it's not set)."GMT" is not used by
-        // any code that sets it explicitly (in case where something sets GMT explicitly,
-        // "Etc/GMT" Olsen ID would be used).
-        // TODO(b/64056758): Remove "timezone.equals("GMT")" hack when there's a
-        // better way of telling if the value has been defaulted.
-        if (timezone == null || timezone.length() == 0 || timezone.equals("GMT")) {
+        if (!TimeServiceHelper.isTimeZoneSettingInitializedStatic()) {
             String zoneId = defaultTimeZoneForMcc(mcc);
             if (zoneId != null && zoneId.length() > 0) {
                 // Set time zone based on MCC
-                AlarmManager alarm =
-                        (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                alarm.setTimeZone(zoneId);
+                TimeServiceHelper.setDeviceTimeZoneStatic(context, zoneId);
                 Slog.d(LOG_TAG, "timezone set to " + zoneId);
             }
         }
@@ -421,20 +386,6 @@ public final class MccTable {
         }
 
         return locale;
-    }
-
-    /**
-     * Set the country code for wifi.  This sets allowed wifi channels based on the
-     * country of the carrier we see.  If we can't see any, reset to 0 so we don't
-     * broadcast on forbidden channels.
-     * @param context Context to act on.
-     * @param mcc Mobile Country Code of the operator.  0 if not known
-     */
-    private static void setWifiCountryCodeFromMcc(Context context, int mcc) {
-        String country = MccTable.countryCodeForMcc(mcc);
-        Slog.d(LOG_TAG, "WIFI_COUNTRY_CODE set to " + country);
-        WifiManager wM = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        wM.setCountryCode(country, false);
     }
 
     static {
