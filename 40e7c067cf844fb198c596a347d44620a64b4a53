@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7309b47_b161a40e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1247187
+      },
+      "writtenOn": "2018-05-17T16:26:26Z",
+      "side": 1,
+      "message": "to my understanding we don\u0027t need to check apn type here any more, it that correct?",
+      "range": {
+        "startLine": 777,
+        "startChar": 16,
+        "endLine": 779,
+        "endChar": 91
+      },
+      "revId": "40e7c067cf844fb198c596a347d44620a64b4a53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

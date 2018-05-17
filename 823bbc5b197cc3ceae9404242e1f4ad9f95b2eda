@@ -22,6 +22,30 @@
       "revId": "823bbc5b197cc3ceae9404242e1f4ad9f95b2eda",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49b859b2_264e0338",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3323,
+      "author": {
+        "id": 1247187
+      },
+      "writtenOn": "2018-05-17T16:26:26Z",
+      "side": 1,
+      "message": "I feel like this is not necessary. In makeApnSetting(cursor) we convert bearerbitmask to networktypebitmask when networktypebitmask \u003d 0. So here networkTypeBitmask implies dest.networkTypeBitmask\u003d0 or src.networkTypeBitmask\u003d0, which means dest.bearerbitmask\u003d0 or src.bearerbitmask \u003d 0. Then the result of this code block is networkTypeBitmask still\u003d0?",
+      "parentUuid": "fa8773f9_1af6ff4e",
+      "range": {
+        "startLine": 3323,
+        "startChar": 12,
+        "endLine": 3323,
+        "endChar": 31
+      },
+      "revId": "823bbc5b197cc3ceae9404242e1f4ad9f95b2eda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
