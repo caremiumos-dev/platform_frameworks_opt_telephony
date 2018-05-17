@@ -466,8 +466,10 @@ public class UiccCarrierPrivilegeRules extends Handler {
                                 mAccessRules.addAll(parseRules(mRules));
                                 if (mAIDInUse == ARAD) {
                                     mCheckedRules = true;
-                                } else {
+                                } else if (mAccessRules.size() > 0){
                                     updateState(STATE_LOADED, "Success!");
+                                  } else {
+                                    updateState(STATE_ERROR, "Error parsing rules: no access rules");
                                 }
                             } else {
                                 mUiccProfile.iccTransmitApduLogicalChannel(mChannelId, CLA, COMMAND,
@@ -562,13 +564,23 @@ public class UiccCarrierPrivilegeRules extends Handler {
         String arDos = allRefArDo.value;
         List<UiccAccessRule> accessRules = new ArrayList<>();
         while (!arDos.isEmpty()) {
-            TLV refArDo = new TLV(TAG_REF_AR_DO); //E2
-            arDos = refArDo.parse(arDos, false);
-            UiccAccessRule accessRule = parseRefArdo(refArDo.value);
-            if (accessRule != null) {
-                accessRules.add(accessRule);
+            if (arDos.startsWith(TAG_REF_AR_DO)) {
+                TLV refArDo = new TLV(TAG_REF_AR_DO); //E2
+                arDos = refArDo.parse(arDos, false);
+                try {
+                    UiccAccessRule accessRule = parseRefArdo(refArDo.value);
+                    if (accessRule != null) {
+                        accessRules.add(accessRule);
+                    } else {
+                        Rlog.e(LOG_TAG, "Skip unrecognized rule." + refArDo.value);
+                    }
+                } catch (IllegalArgumentException | IndexOutOfBoundsException ex) {
+                    Rlog.e(LOG_TAG, "Error parsing rules: " + ex);
+                }
             } else {
-                Rlog.e(LOG_TAG, "Skip unrecognized rule." + refArDo.value);
+                String otherTag = arDos.substring(0, 2);
+                TLV otherTagDo = new TLV(otherTag);
+                arDos = otherTagDo.parse(arDos, false);
             }
         }
         return accessRules;
@@ -589,36 +601,35 @@ public class UiccCarrierPrivilegeRules extends Handler {
             if (rule.startsWith(TAG_REF_DO)) {
                 TLV refDo = new TLV(TAG_REF_DO); //E1
                 rule = refDo.parse(rule, false);
-                // Allow 4F tag with a default value "FF FF FF FF FF FF" to be compatible with
-                // devices having GP access control enforcer:
-                //  - If no 4F tag is present, it's a CP rule.
-                //  - If 4F tag has value "FF FF FF FF FF FF", it's a CP rule.
-                //  - If 4F tag has other values, it's not a CP rule and Android should ignore it.
-                TLV deviceDo = new TLV(TAG_DEVICE_APP_ID_REF_DO); //C1
-                if (refDo.value.startsWith(TAG_AID_REF_DO)) {
-                    TLV cpDo = new TLV(TAG_AID_REF_DO); //4F
-                    String remain = cpDo.parse(refDo.value, false);
-                    if (!cpDo.lengthBytes.equals("06") || !cpDo.value.equals(CARRIER_PRIVILEGE_AID)
-                            || remain.isEmpty() || !remain.startsWith(TAG_DEVICE_APP_ID_REF_DO)) {
-                        return null;
+                String value = refDo.value;
+                while(!value.isEmpty()){
+                    if (value.startsWith(TAG_AID_REF_DO)) {
+                        // Allow 4F tag with a default value "FF FF FF FF FF FF" to be compatible with
+                        // devices having GP access control enforcer:
+                        //  - If no 4F tag is present, it's a CP rule.
+                        //  - If 4F tag has value "FF FF FF FF FF FF", it's a CP rule.
+                        //  - If 4F tag has other values, it's not a CP rule and Android should ignore it.
+                        TLV cpDo = new TLV(TAG_AID_REF_DO); //4F
+                        value = cpDo.parse(value, false);
+                        if (cpDo.lengthBytes.equals("06") && cpDo.value.equals(CARRIER_PRIVILEGE_AID)
+                                && !value.isEmpty() && value.startsWith(TAG_DEVICE_APP_ID_REF_DO)) {
+                            TLV deviceDo = new TLV(TAG_DEVICE_APP_ID_REF_DO);
+                            value = deviceDo.parse(value, false);
+                            certificateHash = deviceDo.value;
+                        }
+                    } else if (value.startsWith(TAG_DEVICE_APP_ID_REF_DO)) {  //C1
+                        TLV deviceDo = new TLV(TAG_DEVICE_APP_ID_REF_DO);
+                        value = deviceDo.parse(value, false);
+                        certificateHash = deviceDo.value;
+                    } else if (value.startsWith(TAG_PKG_REF_DO)) {
+                        TLV pkgDo = new TLV(TAG_PKG_REF_DO); //CA
+                        value = pkgDo.parse(value, false);
+                        packageName = new String(IccUtils.hexStringToBytes(pkgDo.value));
+                    } else {
+                        String otherTag = value.substring(0, 2);
+                        TLV otherTagDo = new TLV(otherTag);
+                        value = otherTagDo.parse (value, false);
                     }
-                    tmp = deviceDo.parse(remain, false);
-                    certificateHash = deviceDo.value;
-                } else if (refDo.value.startsWith(TAG_DEVICE_APP_ID_REF_DO)) {
-                    tmp = deviceDo.parse(refDo.value, false);
-                    certificateHash = deviceDo.value;
-                } else {
-                    return null;
-                }
-                if (!tmp.isEmpty()) {
-                    if (!tmp.startsWith(TAG_PKG_REF_DO)) {
-                        return null;
-                    }
-                    TLV pkgDo = new TLV(TAG_PKG_REF_DO); //CA
-                    pkgDo.parse(tmp, true);
-                    packageName = new String(IccUtils.hexStringToBytes(pkgDo.value));
-                } else {
-                    packageName = null;
                 }
             } else if (rule.startsWith(TAG_AR_DO)) {
                 TLV arDo = new TLV(TAG_AR_DO); //E3
@@ -636,13 +647,20 @@ public class UiccCarrierPrivilegeRules extends Handler {
                 TLV permDo = new TLV(TAG_PERM_AR_DO); //DB
                 permDo.parse(remain, true);
             } else  {
-                // Spec requires it must be either TAG_REF_DO or TAG_AR_DO.
-                throw new RuntimeException("Invalid Rule type");
+                String otherTag = rule.substring(0, 2);
+                TLV otherTagDo = new TLV(otherTag);
+                rule = otherTagDo.parse (rule, false);
             }
         }
 
-        UiccAccessRule accessRule = new UiccAccessRule(
-                IccUtils.hexStringToBytes(certificateHash), packageName, accessType);
+
+        UiccAccessRule accessRule = null;
+
+        if (certificateHash != null) {
+            accessRule = new UiccAccessRule(IccUtils.hexStringToBytes(certificateHash),
+                    packageName, accessType);
+        }
+
         return accessRule;
     }
 
