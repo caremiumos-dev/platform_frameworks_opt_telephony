@@ -287,7 +287,6 @@ public class UiccPkcs15 extends Handler {
                         ret = tlvPath.getValue();
                     }
                 }
-                continue; // skip current rule as it doesn't have expected TAG
             } catch (IllegalArgumentException|IndexOutOfBoundsException ex) {
                 log("Error: " + ex);
                 break; // Bad data, ignore all remaining ACRules
