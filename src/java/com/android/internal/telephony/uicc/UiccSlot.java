@@ -26,16 +26,15 @@ import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
-import android.os.Registrant;
-import android.os.RegistrantList;
 import android.telephony.Rlog;
-import android.util.LocalLog;
 import android.view.WindowManager;
 
 import com.android.internal.R;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.CommandsInterface.RadioState;
+import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
+import com.android.internal.telephony.uicc.euicc.EuiccCard;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -43,69 +42,67 @@ import java.io.PrintWriter;
 /**
  * This class represents a physical slot on the device.
  */
-public class UiccSlot {
+public class UiccSlot extends Handler {
     private static final String TAG = "UiccSlot";
     private static final boolean DBG = true;
 
     public static final String EXTRA_ICC_CARD_ADDED =
             "com.android.internal.telephony.uicc.ICC_CARD_ADDED";
+    public static final int INVALID_PHONE_ID = -1;
 
     private final Object mLock = new Object();
     private boolean mActive;
+    private boolean mStateIsUnknown = true;
     private CardState mCardState;
     private Context mContext;
     private CommandsInterface mCi;
     private UiccCard mUiccCard;
     private RadioState mLastRadioState = RadioState.RADIO_UNAVAILABLE;
-
-    private RegistrantList mAbsentRegistrants = new RegistrantList();
+    private boolean mIsEuicc;
+    private String mIccId;
+    private AnswerToReset mAtr;
+    private int mPhoneId = INVALID_PHONE_ID;
 
     private static final int EVENT_CARD_REMOVED = 13;
     private static final int EVENT_CARD_ADDED = 14;
 
-    private static final LocalLog sLocalLog = new LocalLog(100);
-
-    public UiccSlot(Context c, CommandsInterface ci, boolean isActive) {
+    public UiccSlot(Context c, boolean isActive) {
         if (DBG) log("Creating");
-        mCi = ci;
+        mContext = c;
         mActive = isActive;
-        mCardState = CardState.CARDSTATE_ABSENT;
+        mCardState = null;
     }
 
     /**
      * Update slot. The main trigger for this is a change in the ICC Card status.
      */
-    public void update(Context c, CommandsInterface ci, IccCardStatus ics, int phoneId) {
+    public void update(CommandsInterface ci, IccCardStatus ics, int phoneId) {
+        if (DBG) log("cardStatus update: " + ics.toString());
         synchronized (mLock) {
             CardState oldState = mCardState;
             mCardState = ics.mCardState;
+            mIccId = ics.iccid;
+            mPhoneId = phoneId;
+            parseAtr(ics.atr);
             mCi = ci;
-            mContext = c;
 
             RadioState radioState = mCi.getRadioState();
             if (DBG) {
                 log("update: radioState=" + radioState + " mLastRadioState=" + mLastRadioState);
             }
 
-            if (oldState != CardState.CARDSTATE_ABSENT
-                    && mCardState == CardState.CARDSTATE_ABSENT) {
-                // No notifications while radio is off or we just powering up
-                if (radioState == RadioState.RADIO_ON && mLastRadioState == RadioState.RADIO_ON) {
-                    if (DBG) log("update: notify card removed");
-                    // todo - move registrant to uicccontroller
-                    mAbsentRegistrants.notifyRegistrants();
-                    mHandler.sendMessage(mHandler.obtainMessage(EVENT_CARD_REMOVED, null));
-                }
-
-                // no card present in the slot now; dispose card and make mUiccCard null
-                mUiccCard.dispose();
-                mUiccCard = null;
-            } else if (oldState == CardState.CARDSTATE_ABSENT
-                    && mCardState != CardState.CARDSTATE_ABSENT) {
+            if (absentStateUpdateNeeded(oldState)) {
+                updateCardStateAbsent();
+            // Because mUiccCard may be updated in both IccCardStatus and IccSlotStatus, we need to
+            // create a new UiccCard instance in two scenarios:
+            //   1. mCardState is changing from ABSENT to non ABSENT.
+            //   2. The latest mCardState is not ABSENT, but there is no UiccCard instance.
+            } else if ((oldState == null || oldState == CardState.CARDSTATE_ABSENT
+                    || mUiccCard == null) && mCardState != CardState.CARDSTATE_ABSENT) {
                 // No notifications while radio is off or we just powering up
                 if (radioState == RadioState.RADIO_ON && mLastRadioState == RadioState.RADIO_ON) {
                     if (DBG) log("update: notify card added");
-                    mHandler.sendMessage(mHandler.obtainMessage(EVENT_CARD_ADDED, null));
+                    sendMessage(obtainMessage(EVENT_CARD_ADDED, null));
                 }
 
                 // card is present in the slot now; create new mUiccCard
@@ -114,10 +111,131 @@ public class UiccSlot {
                     mUiccCard.dispose();
                 }
 
-                mUiccCard = new UiccCard(mContext, mCi, ics, phoneId);
+                if (!mIsEuicc) {
+                    mUiccCard = new UiccCard(mContext, mCi, ics, mPhoneId);
+                } else {
+                    mUiccCard = new EuiccCard(mContext, mCi, ics, phoneId);
+                }
+            } else {
+                if (mUiccCard != null) {
+                    mUiccCard.update(mContext, mCi, ics);
+                }
             }
             mLastRadioState = radioState;
         }
+    }
+
+    /**
+     * Update slot based on IccSlotStatus.
+     */
+    public void update(CommandsInterface ci, IccSlotStatus iss) {
+        if (DBG) log("slotStatus update: " + iss.toString());
+        synchronized (mLock) {
+            CardState oldState = mCardState;
+            mCi = ci;
+            parseAtr(iss.atr);
+            mCardState = iss.cardState;
+            mIccId = iss.iccid;
+            if (iss.slotState == IccSlotStatus.SlotState.SLOTSTATE_INACTIVE) {
+                // TODO: (b/79432584) evaluate whether should broadcast card state change
+                // even if it's inactive.
+                if (mActive) {
+                    mActive = false;
+                    mLastRadioState = RadioState.RADIO_UNAVAILABLE;
+                    mPhoneId = INVALID_PHONE_ID;
+                    if (mUiccCard != null) mUiccCard.dispose();
+                    nullifyUiccCard(true /* sim state is unknown */);
+                }
+            } else {
+                mActive = true;
+                mPhoneId = iss.logicalSlotIndex;
+                if (absentStateUpdateNeeded(oldState)) {
+                    updateCardStateAbsent();
+                }
+                // TODO: (b/79432584) Create UiccCard or EuiccCard object here.
+                // Right now It's OK not creating it because Card status update will do it.
+                // But we should really make them symmetric.
+            }
+        }
+    }
+
+    private boolean absentStateUpdateNeeded(CardState oldState) {
+        return (oldState != CardState.CARDSTATE_ABSENT || mUiccCard != null)
+                && mCardState == CardState.CARDSTATE_ABSENT;
+    }
+
+    private void updateCardStateAbsent() {
+        RadioState radioState =
+                (mCi == null) ? RadioState.RADIO_UNAVAILABLE : mCi.getRadioState();
+        // No notifications while radio is off or we just powering up
+        if (radioState == RadioState.RADIO_ON && mLastRadioState == RadioState.RADIO_ON) {
+            if (DBG) log("update: notify card removed");
+            sendMessage(obtainMessage(EVENT_CARD_REMOVED, null));
+        }
+
+        UiccController.updateInternalIccState(
+                IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, mPhoneId);
+
+        // no card present in the slot now; dispose card and make mUiccCard null
+        if (mUiccCard != null) {
+            mUiccCard.dispose();
+        }
+        nullifyUiccCard(false /* sim state is not unknown */);
+        mLastRadioState = radioState;
+    }
+
+    // whenever we set mUiccCard to null, we lose the ability to differentiate between absent and
+    // unknown states. To mitigate this, we will us mStateIsUnknown to keep track. The sim is only
+    // unknown if we haven't heard from the radio or if the radio has become unavailable.
+    private void nullifyUiccCard(boolean stateUnknown) {
+        mStateIsUnknown = stateUnknown;
+        mUiccCard = null;
+    }
+
+    public boolean isStateUnknown() {
+        return (mCardState == null || mCardState == CardState.CARDSTATE_ABSENT) && mStateIsUnknown;
+    }
+
+    private void checkIsEuiccSupported() {
+        if (mAtr != null && mAtr.isEuiccSupported()) {
+            mIsEuicc = true;
+        } else {
+            mIsEuicc = false;
+        }
+    }
+
+    private void parseAtr(String atr) {
+        mAtr = AnswerToReset.parseAtr(atr);
+        if (mAtr == null) {
+            return;
+        }
+        checkIsEuiccSupported();
+    }
+
+    public boolean isEuicc() {
+        return mIsEuicc;
+    }
+
+    public boolean isActive() {
+        return mActive;
+    }
+
+    public int getPhoneId() {
+        return mPhoneId;
+    }
+
+    public String getIccId() {
+        if (mIccId != null) {
+            return mIccId;
+        } else if (mUiccCard != null) {
+            return mUiccCard.getIccId();
+        } else {
+            return null;
+        }
+    }
+
+    public boolean isExtendedApduSupported() {
+        return  (mAtr != null && mAtr.isExtendedApduSupported());
     }
 
     @Override
@@ -199,21 +317,19 @@ public class UiccSlot {
         }
     }
 
-    protected Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case EVENT_CARD_REMOVED:
-                    onIccSwap(false);
-                    break;
-                case EVENT_CARD_ADDED:
-                    onIccSwap(true);
-                    break;
-                default:
-                    loge("Unknown Event " + msg.what);
-            }
+    @Override
+    public void handleMessage(Message msg) {
+        switch (msg.what) {
+            case EVENT_CARD_REMOVED:
+                onIccSwap(false);
+                break;
+            case EVENT_CARD_ADDED:
+                onIccSwap(true);
+                break;
+            default:
+                loge("Unknown Event " + msg.what);
         }
-    };
+    }
 
     /**
      * Returns the state of the UiccCard in the slot.
@@ -221,8 +337,39 @@ public class UiccSlot {
      */
     public CardState getCardState() {
         synchronized (mLock) {
-            return mCardState;
+            if (mCardState == null) {
+                return CardState.CARDSTATE_ABSENT;
+            } else {
+                return mCardState;
+            }
         }
+    }
+
+    /**
+     * Returns the UiccCard in the slot.
+     */
+    public UiccCard getUiccCard() {
+        synchronized (mLock) {
+            return mUiccCard;
+        }
+    }
+
+    /**
+     * Processes radio state unavailable event
+     */
+    public void onRadioStateUnavailable() {
+        if (mUiccCard != null) {
+            mUiccCard.dispose();
+        }
+        nullifyUiccCard(true /* sim state is unknown */);
+
+        if (mPhoneId != INVALID_PHONE_ID) {
+            UiccController.updateInternalIccState(
+                    IccCardConstants.INTENT_VALUE_ICC_UNKNOWN, null, mPhoneId);
+        }
+
+        mCardState = CardState.CARDSTATE_ABSENT;
+        mLastRadioState = RadioState.RADIO_UNAVAILABLE;
     }
 
     private void log(String msg) {
@@ -233,10 +380,6 @@ public class UiccSlot {
         Rlog.e(TAG, msg);
     }
 
-    private void loglocal(String msg) {
-        if (DBG) sLocalLog.log(msg);
-    }
-
     /**
      * Dump
      */
@@ -245,17 +388,15 @@ public class UiccSlot {
         pw.println(" mCi=" + mCi);
         pw.println(" mActive=" + mActive);
         pw.println(" mLastRadioState=" + mLastRadioState);
-        pw.println(" mAbsentRegistrants: size=" + mAbsentRegistrants.size());
-        for (int i = 0; i < mAbsentRegistrants.size(); i++) {
-            pw.println("  mAbsentRegistrants[" + i + "]="
-                    + ((Registrant) mAbsentRegistrants.get(i)).getHandler());
-        }
         pw.println(" mCardState=" + mCardState);
-        if (mUiccCard != null) mUiccCard.dump(fd, pw, args);
+        if (mUiccCard != null) {
+            pw.println(" mUiccCard=" + mUiccCard);
+            mUiccCard.dump(fd, pw, args);
+        } else {
+            pw.println(" mUiccCard=null");
+        }
         pw.println();
         pw.flush();
-        pw.println("sLocalLog:");
-        sLocalLog.dump(fd, pw, args);
         pw.flush();
     }
 }

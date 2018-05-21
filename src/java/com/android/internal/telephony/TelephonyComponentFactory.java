@@ -20,7 +20,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Handler;
 import android.os.IDeviceIdleController;
+import android.os.Looper;
 import android.os.ServiceManager;
+import android.telephony.AccessNetworkConstants.TransportType;
 
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriManager;
@@ -28,7 +30,9 @@ import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.imsphone.ImsExternalCallTracker;
 import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
-import com.android.internal.telephony.uicc.IccCardProxy;
+import com.android.internal.telephony.uicc.IccCardStatus;
+import com.android.internal.telephony.uicc.UiccCard;
+import com.android.internal.telephony.uicc.UiccProfile;
 
 /**
  * This class has one-line methods to instantiate objects only. The purpose is to make code
@@ -61,12 +65,19 @@ public class TelephonyComponentFactory {
         return new ServiceStateTracker(phone, ci);
     }
 
+    /**
+     * Returns a new {@link NitzStateMachine} instance.
+     */
+    public NitzStateMachine makeNitzStateMachine(GsmCdmaPhone phone) {
+        return new OldNitzStateMachine(phone);
+    }
+
     public SimActivationTracker makeSimActivationTracker(Phone phone) {
         return new SimActivationTracker(phone);
     }
 
     public DcTracker makeDcTracker(Phone phone) {
-        return new DcTracker(phone);
+        return new DcTracker(phone, TransportType.WWAN);
     }
 
     public CarrierSignalAgent makeCarrierSignalAgent(Phone phone) {
@@ -89,8 +100,12 @@ public class TelephonyComponentFactory {
         return new IccSmsInterfaceManager(phone);
     }
 
-    public IccCardProxy makeIccCardProxy(Context context, CommandsInterface ci, int phoneId) {
-        return new IccCardProxy(context, ci, phoneId);
+    /**
+     * Create a new UiccProfile object.
+     */
+    public UiccProfile makeUiccProfile(Context context, CommandsInterface ci, IccCardStatus ics,
+                                       int phoneId, UiccCard uiccCard) {
+        return new UiccProfile(context, ci, ics, phoneId, uiccCard);
     }
 
     public EriManager makeEriManager(Phone phone, Context context, int eriFileSource) {
@@ -157,5 +172,8 @@ public class TelephonyComponentFactory {
     public IDeviceIdleController getIDeviceIdleController() {
         return IDeviceIdleController.Stub.asInterface(
                 ServiceManager.getService(Context.DEVICE_IDLE_CONTROLLER));
+    }
+    public LocaleTracker makeLocaleTracker(Phone phone, Looper looper) {
+        return new LocaleTracker(phone, looper);
     }
 }
