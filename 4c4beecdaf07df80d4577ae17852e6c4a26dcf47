@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "c49a43b4_40092e47",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1439,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-05-23T21:23:09Z",
+      "side": 1,
+      "message": "change to isInService",
+      "range": {
+        "startLine": 1439,
+        "startChar": 28,
+        "endLine": 1439,
+        "endChar": 40
+      },
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e526124_69347c79",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 3
@@ -41,6 +64,53 @@
         "startChar": 20,
         "endLine": 1442,
         "endChar": 38
+      },
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35c2784c_c375b1a6",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1442,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-05-23T21:23:09Z",
+      "side": 1,
+      "message": "Actually this will not work in the case below, where the entire ServiceState is not available. Never mind! :)",
+      "parentUuid": "2e526124_69347c79",
+      "range": {
+        "startLine": 1442,
+        "startChar": 20,
+        "endLine": 1442,
+        "endChar": 38
+      },
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7b35539_e5873f07",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-05-23T21:23:09Z",
+      "side": 1,
+      "message": "Change name to isInService",
+      "range": {
+        "startLine": 1813,
+        "startChar": 64,
+        "endLine": 1813,
+        "endChar": 76
       },
       "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
