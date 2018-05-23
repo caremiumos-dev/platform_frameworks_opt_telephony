@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d688fcd6_a665c6a2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1438,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-05-23T20:51:39Z",
+      "side": 1,
+      "message": "is this a bad line wrap? can you fix?",
+      "range": {
+        "startLine": 1436,
+        "startChar": 20,
+        "endLine": 1438,
+        "endChar": 56
+      },
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e526124_69347c79",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1442,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-05-23T20:51:39Z",
+      "side": 1,
+      "message": "Can you pass the entire service state into the method and do the IN_SERVICE check there instead of doing it here inside of the method?",
+      "range": {
+        "startLine": 1442,
+        "startChar": 20,
+        "endLine": 1442,
+        "endChar": 38
+      },
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95348437_bdedff2c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1821,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-05-23T20:51:39Z",
+      "side": 1,
+      "message": "nit: OUT_OF_SERVICE",
+      "range": {
+        "startLine": 1821,
+        "startChar": 78,
+        "endLine": 1821,
+        "endChar": 92
+      },
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
