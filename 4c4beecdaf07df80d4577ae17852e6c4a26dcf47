@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f8632d95_7dfc34d3",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1438,
+      "author": {
+        "id": 1010218
+      },
+      "writtenOn": "2018-05-24T06:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d688fcd6_a665c6a2",
+      "range": {
+        "startLine": 1436,
+        "startChar": 20,
+        "endLine": 1438,
+        "endChar": 56
+      },
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c49a43b4_40092e47",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aa9ad44_e3641552",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1439,
+      "author": {
+        "id": 1010218
+      },
+      "writtenOn": "2018-05-24T06:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c49a43b4_40092e47",
+      "range": {
+        "startLine": 1439,
+        "startChar": 28,
+        "endLine": 1439,
+        "endChar": 40
+      },
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -118,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "cdb9a8b9_07aa1c83",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1010218
+      },
+      "writtenOn": "2018-05-24T06:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7b35539_e5873f07",
+      "range": {
+        "startLine": 1813,
+        "startChar": 64,
+        "endLine": 1813,
+        "endChar": 76
+      },
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95348437_bdedff2c",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 3
@@ -138,6 +210,47 @@
       "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8397b6a3_3ee43682",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1821,
+      "author": {
+        "id": 1010218
+      },
+      "writtenOn": "2018-05-24T06:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95348437_bdedff2c",
+      "range": {
+        "startLine": 1821,
+        "startChar": 78,
+        "endLine": 1821,
+        "endChar": 92
+      },
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c34ef56_224556b2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1010218
+      },
+      "writtenOn": "2018-05-24T06:05:34Z",
+      "side": 1,
+      "message": "This will return roaming status always based on default SubId.\nUpdated calling this API passing subId.",
+      "revId": "4c4beecdaf07df80d4577ae17852e6c4a26dcf47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
