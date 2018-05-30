@@ -90,6 +90,7 @@ import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.uicc.UiccSlot;
+import com.android.internal.util.ArrayUtils;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -228,6 +229,8 @@ public class GsmCdmaPhone extends Phone {
 
         mSST.registerForNetworkAttached(this, EVENT_REGISTERED_TO_NETWORK, null);
         mDeviceStateMonitor = mTelephonyComponentFactory.makeDeviceStateMonitor(this);
+
+        mSST.registerForVoiceRegStateOrRatChanged(this, EVENT_VRS_OR_RAT_CHANGED, null);
         logd("GsmCdmaPhone: constructor: sub = " + mPhoneId);
     }
 
@@ -2555,6 +2558,9 @@ public class GsmCdmaPhone extends Phone {
                 }
                 Rlog.d(LOG_TAG, "EVENT_GET_RADIO_CAPABILITY: phone rc: " + rc);
                 break;
+            case EVENT_VRS_OR_RAT_CHANGED:
+                onVoiceRegStateOrRatChanged();
+                break;
 
             default:
                 super.handleMessage(msg);
@@ -3551,6 +3557,54 @@ public class GsmCdmaPhone extends Phone {
 
     public void notifyEcbmTimerReset(Boolean flag) {
         mEcmTimerResetRegistrants.notifyResult(flag);
+    }
+
+    private static final int[] VOICE_PS_CALL_RADIO_TECHNOLOGY = {
+            ServiceState.RIL_RADIO_TECHNOLOGY_LTE,
+            ServiceState.RIL_RADIO_TECHNOLOGY_LTE_CA,
+            ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN
+    };
+
+    /**
+     * Calculates current RIL voice radio technology for CS calls.
+     *
+     * This function should only be used in {@link com.android.internal.telephony.GsmCdmaConnection}
+     * to indicate current CS call radio technology.
+     *
+     * Mark current RIL voice radio technology as unknow when any of below condtion is met:
+     *  1) Current RIL voice registration state is not in-service.
+     *  2) Current RIL voice radio technology is PS call technology, which means CSFB will
+     *     happen later after call connection is established.
+     *     It is inappropriate to notify upper layer the PS call technology while current call
+     *     is CS call, so before CSFB happens, mark voice radio technology as unknow.
+     *     After CSFB happens, {@link #onVoiceRegStateOrRatChanged} will update voice call radio
+     *     technology with correct value.
+     *
+     * @return the RIL voice radio technology used for CS calls,
+     *         see {@code RIL_RADIO_TECHNOLOGY_*} in {@link android.telephony.ServiceState}.
+     */
+    public @ServiceState.RilRadioTechnology int getCsCallRadioTech() {
+        int vrat = ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
+        if (mSST != null) {
+            int vrs = mSST.mSS.getVoiceRegState();
+            vrat = mSST.mSS.getRilVoiceRadioTechnology();
+            logd("getCsCallRadioTech, current vrs=" + vrs + ", vrat=" + vrat);
+            if (vrs != ServiceState.STATE_IN_SERVICE
+                    || ArrayUtils.contains(VOICE_PS_CALL_RADIO_TECHNOLOGY, vrat)) {
+                vrat = ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
+            }
+        }
+
+        logd("getCsCallRadioTech, result vrat=" + vrat);
+        return vrat;
+    }
+
+    /**
+     * Handler of RIL Voice Radio Technology changed event.
+     */
+    private void onVoiceRegStateOrRatChanged() {
+        logd("onVoiceRegStateOrRatChanged");
+        mCT.dispatchCsCallRadioTech(getCsCallRadioTech());
     }
 
     /**
