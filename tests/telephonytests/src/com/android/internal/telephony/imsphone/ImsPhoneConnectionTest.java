@@ -265,6 +265,34 @@ public class ImsPhoneConnectionTest extends TelephonyTest {
         assertTrue(mConnectionUT.isWifi());
     }
 
+    @Test
+    @SmallTest
+    public void testSetLTE() {
+        mConnectionUT = new ImsPhoneConnection(mImsPhone, mImsCall, mImsCT, mForeGroundCall, false);
+        assertFalse(mConnectionUT.getCallRadioTech() == ServiceState.RIL_RADIO_TECHNOLOGY_LTE);
+        // ImsCall.getRadioTechnology is tested elsewhere
+        doReturn(ServiceState.RIL_RADIO_TECHNOLOGY_LTE).when(mImsCall).getRadioTechnology();
+        mBundle.putString(ImsCallProfile.EXTRA_CALL_RAT_TYPE,
+                ServiceState.RIL_RADIO_TECHNOLOGY_LTE + "");
+        assertTrue(mConnectionUT.update(mImsCall, Call.State.ACTIVE));
+        assertTrue(mConnectionUT.getCallRadioTech() == ServiceState.RIL_RADIO_TECHNOLOGY_LTE);
+    }
+
+    @Test
+    @SmallTest
+    public void testSetLTE2() {
+        mConnectionUT = new ImsPhoneConnection(mImsPhone, mImsCall, mImsCT, mForeGroundCall, false);
+        assertFalse(mConnectionUT.getCallRadioTech() == ServiceState.RIL_RADIO_TECHNOLOGY_LTE);
+        // ImsCall.getRadioTechnology is tested elsewhere
+        doReturn(ServiceState.RIL_RADIO_TECHNOLOGY_LTE).when(mImsCall).getRadioTechnology();
+        // Tests to make sure that the EXTRA_CALL_RAT_TYPE_ALT string is set correctly for newer
+        // devices.
+        mBundle.putString(ImsCallProfile.EXTRA_CALL_RAT_TYPE_ALT,
+                ServiceState.RIL_RADIO_TECHNOLOGY_LTE + "");
+        assertTrue(mConnectionUT.update(mImsCall, Call.State.ACTIVE));
+        assertTrue(mConnectionUT.getCallRadioTech() == ServiceState.RIL_RADIO_TECHNOLOGY_LTE);
+    }
+
     /**
      * Test updates to address for incoming calls.
      */
