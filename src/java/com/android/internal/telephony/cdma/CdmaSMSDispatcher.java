@@ -78,11 +78,23 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
     }
 
     @Override
-    protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            String message, boolean statusReportRequested, SmsHeader smsHeader, int priority,
-            int validityPeriod) {
-        return SMSDispatcherUtil.getSubmitPduCdma(scAddr, destAddr, message,
-                statusReportRequested, smsHeader, priority);
+    protected SmsMessageBase.SubmitPduBase getSubmitPdu(
+            String scAddr,
+            String destAddr,
+            String message,
+            boolean statusReportRequested,
+            SmsHeader smsHeader,
+            int priority,
+            int validityPeriod,
+            String callbackNumber) {
+        return SMSDispatcherUtil.getSubmitPduCdma(
+                scAddr,
+                destAddr,
+                message,
+                statusReportRequested,
+                smsHeader,
+                priority,
+                callbackNumber);
     }
 
     @Override

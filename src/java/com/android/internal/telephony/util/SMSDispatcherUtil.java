@@ -80,14 +80,28 @@ public final class SMSDispatcherUtil {
      *  Validity Period(Minimum) -> 5 mins
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values included Negative considered as Invalid Validity Period of the message.
+     * @param callbackNumber call back number used for CDMA message, NULL in case of GSM message
      * @return the submit pdu.
      */
-    public static SmsMessageBase.SubmitPduBase getSubmitPdu(boolean isCdma, String scAddr,
-            String destAddr, String message, boolean statusReportRequested, SmsHeader smsHeader,
-            int priority, int validityPeriod) {
+    public static SmsMessageBase.SubmitPduBase getSubmitPdu(
+            boolean isCdma,
+            String scAddr,
+            String destAddr,
+            String message,
+            boolean statusReportRequested,
+            SmsHeader smsHeader,
+            int priority,
+            int validityPeriod,
+            String callbackNumber) {
         if (isCdma) {
-            return getSubmitPduCdma(scAddr, destAddr, message, statusReportRequested, smsHeader,
-                    priority);
+            return getSubmitPduCdma(
+                    scAddr,
+                    destAddr,
+                    message,
+                    statusReportRequested,
+                    smsHeader,
+                    priority,
+                    callbackNumber);
         } else {
             return getSubmitPduGsm(scAddr, destAddr, message, statusReportRequested,
                     validityPeriod);
@@ -152,7 +166,7 @@ public final class SMSDispatcherUtil {
      * Cdma implementation for
      * {@link #getSubmitPdu(boolean, String, String, String, boolean, SmsHeader)}
      *
-     *  @param scAddr is the service center address or null to use the current default SMSC
+     * @param scAddr is the service center address or null to use the current default SMSC
      * @param destAddr the address to send the message to
      * @param message the body of the message.
      * @param statusReportRequested whether or not a status report is requested.
@@ -168,12 +182,25 @@ public final class SMSDispatcherUtil {
      *      '11'      |     Emergency
      *  ----------------------------------
      *  Any Other values included Negative considered as Invalid Priority Indicator of the message.
+     * @param callbackNumber call back number used for CDMA message, NULL in case of GSM message
      * @return the submit pdu.
      */
-    public static SmsMessageBase.SubmitPduBase getSubmitPduCdma(String scAddr, String destAddr,
-            String message, boolean statusReportRequested, SmsHeader smsHeader, int priority) {
-        return com.android.internal.telephony.cdma.SmsMessage.getSubmitPdu(scAddr, destAddr,
-                message, statusReportRequested, smsHeader, priority);
+    public static SmsMessageBase.SubmitPduBase getSubmitPduCdma(
+            String scAddr,
+            String destAddr,
+            String message,
+            boolean statusReportRequested,
+            SmsHeader smsHeader,
+            int priority,
+            String callbackNumber) {
+        return com.android.internal.telephony.cdma.SmsMessage.getSubmitPdu(
+                scAddr,
+                destAddr,
+                message,
+                statusReportRequested,
+                smsHeader,
+                priority,
+                callbackNumber);
     }
 
     /**
