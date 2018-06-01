@@ -495,9 +495,95 @@ public class IccSmsInterfaceManager {
         }
         notifyIfOutgoingEmergencySms(destAddr);
         destAddr = filterDestAddress(destAddr);
-        mDispatchersController.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
-                null/*messageUri*/, callingPackage, persistMessageForNonDefaultSmsApp,
-                priority, expectMore, validityPeriod, isForVvm);
+        mDispatchersController.sendText(
+                destAddr,
+                scAddr,
+                text,
+                sentIntent,
+                deliveryIntent,
+                null /*messageUri*/,
+                callingPackage,
+                persistMessageForNonDefaultSmsApp,
+                priority,
+                expectMore,
+                validityPeriod,
+                isForVvm,
+                null /* callbacknumber*/);
+    }
+
+    /**
+     * Send a text based SMS with cdma options.
+     *
+     * @param destAddr the address to send the message to
+     * @param scAddr is the service center address or null to use
+     *  the current default SMSC
+     * @param text the body of the message to send
+     * @param sentIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is successfully sent, or failed.
+     *  The result code will be <code>Activity.RESULT_OK<code> for success,
+     *  or one of these errors:<br>
+     *  <code>RESULT_ERROR_GENERIC_FAILURE</code><br>
+     *  <code>RESULT_ERROR_RADIO_OFF</code><br>
+     *  <code>RESULT_ERROR_NULL_PDU</code><br>
+     *  For <code>RESULT_ERROR_GENERIC_FAILURE</code> the sentIntent may include
+     *  the extra "errorCode" containing a radio technology specific value,
+     *  generally only useful for troubleshooting.<br>
+     *  The per-application based SMS control checks sentIntent. If sentIntent
+     *  is NULL the caller will be checked against all unknown applications,
+     *  which cause smaller number of SMS to be sent in checking period.
+     * @param deliveryIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is delivered to the recipient.  The
+     *  raw pdu of the status report is in the extended data ("pdu").
+     * @param persistMessageForNonDefaultSmsApp whether the sent message should
+     *  be automatically persisted in the SMS db. It only affects messages sent
+     *  by a non-default SMS app. Currently only the carrier app can set this
+     *  parameter to false to skip auto message persistence.
+     * @param priority Priority level of the message
+     *  Refer specification See 3GPP2 C.S0015-B, v2.0, table 4.5.9-1
+     *  ---------------------------------
+     *  PRIORITY      | Level of Priority
+     *  ---------------------------------
+     *      '00'      |     Normal
+     *      '01'      |     Interactive
+     *      '10'      |     Urgent
+     *      '11'      |     Emergency
+     *  ----------------------------------
+     *  Any Other values including negative considered as Invalid Priority Indicator of the message.
+     * @param callbacknumber callback number for the message
+     */
+
+    private void sendTextInternal(
+            String callingPackage,
+            String destAddr,
+            String scAddr,
+            String text,
+            PendingIntent sentIntent,
+            PendingIntent deliveryIntent,
+            boolean persistMessageForNonDefaultSmsApp,
+            int priority,
+            String callbackNumber) {
+        if (Rlog.isLoggable("SMS", Log.VERBOSE)) {
+            log("sendText: destAddr=" + destAddr + " scAddr=" + scAddr +
+                " text='"+ text + "' sentIntent=" +
+                sentIntent + " deliveryIntent=" + deliveryIntent
+                + " priority=" + priority + " callbackNumber=" + callbackNumber);
+        }
+        notifyIfOutgoingEmergencySms(destAddr);
+        destAddr = filterDestAddress(destAddr);
+        mDispatchersController.sendText(
+                destAddr,
+                scAddr,
+                text,
+                sentIntent,
+                deliveryIntent,
+                null /*messageUri*/,
+                callingPackage,
+                persistMessageForNonDefaultSmsApp,
+                priority,
+                false /* expectMore */,
+                SMS_MESSAGE_PERIOD_NOT_SPECIFIED,
+                false /* isForVvm */,
+                callbackNumber);
     }
 
     /**
@@ -557,6 +643,72 @@ public class IccSmsInterfaceManager {
         sendTextInternal(callingPackage, destAddr, scAddr, text, sentIntent, deliveryIntent,
                 persistMessageForNonDefaultSmsApp, priority, expectMore, validityPeriod,
                 false /* isForVvm */);
+    }
+
+    /**
+     * Send a text based SMS with Cdma Messaging Options.
+     *
+     * @param destAddr the address to send the message to
+     * @param scAddr is the service center address or null to use
+     *  the current default SMSC
+     * @param text the body of the message to send
+     * @param sentIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is successfully sent, or failed.
+     *  The result code will be <code>Activity.RESULT_OK<code> for success,
+     *  or one of these errors:<br>
+     *  <code>RESULT_ERROR_GENERIC_FAILURE</code><br>
+     *  <code>RESULT_ERROR_RADIO_OFF</code><br>
+     *  <code>RESULT_ERROR_NULL_PDU</code><br>
+     *  For <code>RESULT_ERROR_GENERIC_FAILURE</code> the sentIntent may include
+     *  the extra "errorCode" containing a radio technology specific value,
+     *  generally only useful for troubleshooting.<br>
+     *  The per-application based SMS control checks sentIntent. If sentIntent
+     *  is NULL the caller will be checked against all unknown applications,
+     *  which cause smaller number of SMS to be sent in checking period.
+     * @param deliveryIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is delivered to the recipient.  The
+     *  raw pdu of the status report is in the extended data ("pdu").
+     * @param persistMessageForNonDefaultSmsApp whether the sent message should
+     *  be automatically persisted in the SMS db. It only affects messages sent
+     *  by a non-default SMS app. Currently only the carrier app can set this
+     *  parameter to false to skip auto message persistence.
+     * @param priority Priority level of the message
+     *  Refer specification See 3GPP2 C.S0015-B, v2.0, table 4.5.9-1
+     *  ---------------------------------
+     *  PRIORITY      | Level of Priority
+     *  ---------------------------------
+     *      '00'      |     Normal
+     *      '01'      |     Interactive
+     *      '10'      |     Urgent
+     *      '11'      |     Emergency
+     *  ----------------------------------
+     *  Any Other values including negative considered as Invalid Priority Indicator of the message.
+     * @param callbacknumber callback number for the message
+     */
+    public void sendTextWithCdmaOptions(
+            String callingPackage,
+            String destAddr,
+            String scAddr,
+            String text,
+            PendingIntent sentIntent,
+            PendingIntent deliveryIntent,
+            boolean persistMessageForNonDefaultSmsApp,
+            int priority,
+            String callbackNumber) {
+        if (!mSmsPermissions.checkCallingOrSelfCanSendSms(callingPackage, "Sending SMS message")) {
+            returnUnspecifiedFailure(sentIntent);
+            return;
+        }
+        sendTextInternal(
+                callingPackage,
+                destAddr,
+                scAddr,
+                text,
+                sentIntent,
+                deliveryIntent,
+                persistMessageForNonDefaultSmsApp,
+                priority,
+                callbackNumber);
     }
 
     /**
@@ -688,7 +840,7 @@ public class IccSmsInterfaceManager {
         if (Rlog.isLoggable("SMS", Log.VERBOSE)) {
             int i = 0;
             for (String part : parts) {
-                log("sendMultipartTextWithOptions: destAddr=" + destAddr + ", srAddr=" + scAddr +
+                log("sendMultipartTextWithOptions: destAddr=" + destAddr + ", scAddr=" + scAddr +
                         ", part[" + (i++) + "]=" + part);
             }
         }
@@ -717,22 +869,159 @@ public class IccSmsInterfaceManager {
                     singleDeliveryIntent = deliveryIntents.get(i);
                 }
 
-                mDispatchersController.sendText(destAddr, scAddr, singlePart, singleSentIntent,
-                        singleDeliveryIntent, null /* messageUri */, callingPackage,
-                        persistMessageForNonDefaultSmsApp, priority, expectMore, validityPeriod,
-                        false /* isForVvm */);
+                mDispatchersController.sendText(
+                        destAddr,
+                        scAddr,
+                        singlePart,
+                        singleSentIntent,
+                        singleDeliveryIntent,
+                        null /*messageUri*/,
+                        callingPackage,
+                        persistMessageForNonDefaultSmsApp,
+                        priority,
+                        expectMore,
+                        validityPeriod,
+                        false /* isForVvm */,
+                        null /* callbacknumber*/);
             }
             return;
         }
 
-        mDispatchersController.sendMultipartText(destAddr,
-                                      scAddr,
-                                      (ArrayList<String>) parts,
-                                      (ArrayList<PendingIntent>) sentIntents,
-                                      (ArrayList<PendingIntent>) deliveryIntents,
-                                      null, callingPackage, persistMessageForNonDefaultSmsApp,
-                                          priority, expectMore, validityPeriod);
+        mDispatchersController.sendMultipartText(
+                destAddr,
+                scAddr,
+                (ArrayList<String>) parts,
+                (ArrayList<PendingIntent>) sentIntents,
+                (ArrayList<PendingIntent>) deliveryIntents,
+                null,
+                callingPackage,
+                persistMessageForNonDefaultSmsApp,
+                priority,
+                expectMore,
+                validityPeriod,
+                null /* callbacknumber*/);
+    }
 
+    /**
+     * Send a multi-part text based SMS with Cdma Messaging Options.
+     *
+     * @param destAddr the address to send the message to
+     * @param scAddr is the service center address or null to use
+     *   the current default SMSC
+     * @param parts an <code>ArrayList</code> of strings that, in order,
+     *   comprise the original message
+     * @param sentIntents if not null, an <code>ArrayList</code> of
+     *   <code>PendingIntent</code>s (one for each message part) that is
+     *   broadcast when the corresponding message part has been sent.
+     *   The result code will be <code>Activity.RESULT_OK<code> for success,
+     *   or one of these errors:
+     *   <code>RESULT_ERROR_GENERIC_FAILURE</code>
+     *   <code>RESULT_ERROR_RADIO_OFF</code>
+     *   <code>RESULT_ERROR_NULL_PDU</code>.
+     *  The per-application based SMS control checks sentIntent. If sentIntent
+     *  is NULL the caller will be checked against all unknown applications,
+     *  which cause smaller number of SMS to be sent in checking period.
+     * @param deliveryIntents if not null, an <code>ArrayList</code> of
+     *   <code>PendingIntent</code>s (one for each message part) that is
+     *   broadcast when the corresponding message part has been delivered
+     *   to the recipient.  The raw pdu of the status report is in the
+     *   extended data ("pdu").
+     * @param persistMessageForNonDefaultSmsApp whether the sent message should
+     *   be automatically persisted in the SMS db. It only affects messages sent
+     *   by a non-default SMS app. Currently only the carrier app can set this
+     *   parameter to false to skip auto message persistence.
+     * @param priority Priority level of the message
+     *  Refer specification See 3GPP2 C.S0015-B, v2.0, table 4.5.9-1
+     *  ---------------------------------
+     *  PRIORITY      | Level of Priority
+     *  ---------------------------------
+     *      '00'      |     Normal
+     *      '01'      |     Interactive
+     *      '10'      |     Urgent
+     *      '11'      |     Emergency
+     *  ----------------------------------
+     *  Any Other values including negative considered as Invalid Priority Indicator of the message.
+     * @param callbacknumber callback number for the message
+     */
+    public void sendMultipartTextWithCdmaOptions(
+            String callingPackage,
+            String destAddr,
+            String scAddr,
+            List<String> parts,
+            List<PendingIntent> sentIntents,
+            List<PendingIntent> deliveryIntents,
+            boolean persistMessageForNonDefaultSmsApp,
+            int priority,
+            String callbackNumber) {
+
+        if (!mSmsPermissions.checkCallingCanSendText(
+                persistMessageForNonDefaultSmsApp, callingPackage, "Sending SMS message")) {
+            returnUnspecifiedFailure(sentIntents);
+            return;
+        }
+        if (Rlog.isLoggable("SMS", Log.VERBOSE)) {
+            int i = 0;
+            for (String part : parts) {
+                log("sendMultipartTextWithOptions: destAddr=" + destAddr + ", scAddr=" + scAddr +
+                        ", part[" + (i++) + "]=" + part);
+            }
+        }
+        notifyIfOutgoingEmergencySms(destAddr);
+        destAddr = filterDestAddress(destAddr);
+
+        if (parts.size() > 1 && parts.size() < 10 && !SmsMessage.hasEmsSupport()) {
+            for (int i = 0; i < parts.size(); i++) {
+                // If EMS is not supported, we have to break down EMS into single segment SMS
+                // and add page info " x/y".
+                String singlePart = parts.get(i);
+                if (SmsMessage.shouldAppendPageNumberAsPrefix()) {
+                    singlePart = String.valueOf(i + 1) + '/' + parts.size() + ' ' + singlePart;
+                } else {
+                    singlePart =
+                            singlePart.concat(' ' + String.valueOf(i + 1) + '/' + parts.size());
+                }
+
+                PendingIntent singleSentIntent = null;
+                if (sentIntents != null && sentIntents.size() > i) {
+                    singleSentIntent = sentIntents.get(i);
+                }
+
+                PendingIntent singleDeliveryIntent = null;
+                if (deliveryIntents != null && deliveryIntents.size() > i) {
+                    singleDeliveryIntent = deliveryIntents.get(i);
+                }
+
+                mDispatchersController.sendText(
+                        destAddr,
+                        scAddr,
+                        singlePart,
+                        singleSentIntent,
+                        singleDeliveryIntent,
+                        null /*messageUri*/,
+                        callingPackage,
+                        persistMessageForNonDefaultSmsApp,
+                        priority,
+                        false /* expectMore */,
+                        SMS_MESSAGE_PERIOD_NOT_SPECIFIED,
+                        false /* isForVvm */,
+                        callbackNumber);
+            }
+            return;
+        }
+
+        mDispatchersController.sendMultipartText(
+                destAddr,
+                scAddr,
+                (ArrayList<String>) parts,
+                (ArrayList<PendingIntent>) sentIntents,
+                (ArrayList<PendingIntent>) deliveryIntents,
+                null,
+                callingPackage,
+                persistMessageForNonDefaultSmsApp,
+                priority,
+                false /* expectMore */,
+                SMS_MESSAGE_PERIOD_NOT_SPECIFIED,
+                callbackNumber);
     }
 
     @UnsupportedAppUsage
@@ -1157,10 +1446,20 @@ public class IccSmsInterfaceManager {
         }
         notifyIfOutgoingEmergencySms(textAndAddress[1]);
         textAndAddress[1] = filterDestAddress(textAndAddress[1]);
-        mDispatchersController.sendText(textAndAddress[1], scAddress, textAndAddress[0],
-                sentIntent, deliveryIntent, messageUri, callingPkg,
-                true /* persistMessageForNonDefaultSmsApp */, SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
-                false /* expectMore */, SMS_MESSAGE_PERIOD_NOT_SPECIFIED, false /* isForVvm */);
+        mDispatchersController.sendText(
+                textAndAddress[1],
+                scAddress,
+                textAndAddress[0],
+                sentIntent,
+                deliveryIntent,
+                messageUri,
+                callingPkg,
+                true /* persistMessageForNonDefaultSmsApp */,
+                SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
+                false /* expectMore */,
+                SMS_MESSAGE_PERIOD_NOT_SPECIFIED,
+                false /* isForVvm */,
+                null /* callbacknumber*/);
     }
 
     @UnsupportedAppUsage
@@ -1214,12 +1513,19 @@ public class IccSmsInterfaceManager {
                     singleDeliveryIntent = deliveryIntents.get(i);
                 }
 
-                mDispatchersController.sendText(textAndAddress[1], scAddress, singlePart,
-                        singleSentIntent, singleDeliveryIntent, messageUri, callingPkg,
-                        true  /* persistMessageForNonDefaultSmsApp */,
+                mDispatchersController.sendText(
+                        textAndAddress[1],
+                        scAddress,
+                        singlePart,
+                        singleSentIntent,
+                        singleDeliveryIntent,
+                        messageUri,
+                        callingPkg,
+                        true /* persistMessageForNonDefaultSmsApp */,
                         SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
                         false /* expectMore */, SMS_MESSAGE_PERIOD_NOT_SPECIFIED,
-                        false /* isForVvm */);
+                        false /* isForVvm */,
+                        null /* callbacknumber*/);
             }
             return;
         }
@@ -1232,10 +1538,11 @@ public class IccSmsInterfaceManager {
                 (ArrayList<PendingIntent>) deliveryIntents,
                 messageUri,
                 callingPkg,
-                true  /* persistMessageForNonDefaultSmsApp */,
+                true /* persistMessageForNonDefaultSmsApp */,
                 SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
                 false /* expectMore */,
-                SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
+                SMS_MESSAGE_PERIOD_NOT_SPECIFIED,
+                null /* callbacknumber*/);
     }
 
     private boolean isFailedOrDraft(ContentResolver resolver, Uri messageUri) {

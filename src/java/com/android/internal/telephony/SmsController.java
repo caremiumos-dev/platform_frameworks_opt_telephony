@@ -238,8 +238,39 @@ public class SmsController extends ISmsImplBase {
             iccSmsIntMgr.sendTextWithOptions(callingPackage, destAddr, scAddr, parts, sentIntent,
                     deliveryIntent, persistMessage, priority, expectMore, validityPeriod);
         } else {
-            Rlog.e(LOG_TAG, "sendTextWithOptions iccSmsIntMgr is null for"
-                    + " Subscription: " + subId);
+            Rlog.e(LOG_TAG,"sendTextWithOptions iccSmsIntMgr is null for"
+                          + " Subscription: " + subId);
+            sendErrorInPendingIntent(sentIntent, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
+        }
+    }
+
+    @Override
+    public void sendTextForSubscriberWithCdmaOptions(
+            int subId,
+            String callingPackage,
+            String destAddr,
+            String scAddr,
+            String parts,
+            PendingIntent sentIntent,
+            PendingIntent deliveryIntents,
+            boolean persistMessage,
+            int priority,
+            String callbackNumber) {
+        IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
+        if (iccSmsIntMgr != null) {
+            iccSmsIntMgr.sendTextWithCdmaOptions(
+                    callingPackage,
+                    destAddr,
+                    scAddr,
+                    parts,
+                    sentIntent,
+                    deliveryIntents,
+                    persistMessage,
+                    priority,
+                    callbackNumber);
+        } else {
+            Rlog.e(LOG_TAG, "sendTextForSubscriberWithCdmaOptions iccSmsIntMgr is null for"
+                            + " Subscription: " + subId);
             sendErrorInPendingIntent(sentIntent, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
         }
     }
@@ -270,8 +301,39 @@ public class SmsController extends ISmsImplBase {
                     sentIntents, deliveryIntents, persistMessage, priority, expectMore,
                     validityPeriod);
         } else {
-            Rlog.e(LOG_TAG, "sendMultipartTextWithOptions iccSmsIntMgr is null for"
-                    + " Subscription: " + subId);
+            Rlog.e(LOG_TAG,"sendMultipartTextWithOptions iccSmsIntMgr is null for"
+                          + " Subscription: " + subId);
+            sendErrorInPendingIntents(sentIntents, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
+        }
+    }
+
+    @Override
+    public void sendMultipartTextForSubscriberWithCdmaOptions(
+            int subId,
+            String callingPackage,
+            String destAddr,
+            String scAddr,
+            List<String> parts,
+            List<PendingIntent> sentIntents,
+            List<PendingIntent> deliveryIntents,
+            boolean persistMessage,
+            int priority,
+            String callbackNumber) {
+        IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
+        if (iccSmsIntMgr != null) {
+            iccSmsIntMgr.sendMultipartTextWithCdmaOptions(
+                    callingPackage,
+                    destAddr,
+                    scAddr,
+                    parts,
+                    sentIntents,
+                    deliveryIntents,
+                    persistMessage,
+                    priority,
+                    callbackNumber);
+        } else {
+            Rlog.e(LOG_TAG, "sendMultipartTextForSubscriberWithCdmaOptions iccSmsIntMgr is null for"
+                            + " Subscription: " + subId);
             sendErrorInPendingIntents(sentIntents, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
         }
     }

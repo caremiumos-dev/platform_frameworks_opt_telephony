@@ -630,22 +630,66 @@ public class SmsDispatchersController extends Handler {
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values included Negative considered as Invalid Validity Period of the message.
      */
-    public void sendText(String destAddr, String scAddr, String text, PendingIntent sentIntent,
-            PendingIntent deliveryIntent, Uri messageUri, String callingPkg, boolean persistMessage,
-            int priority, boolean expectMore, int validityPeriod, boolean isForVvm) {
+    public void sendText(
+            String destAddr,
+            String scAddr,
+            String text,
+            PendingIntent sentIntent,
+            PendingIntent deliveryIntent,
+            Uri messageUri,
+            String callingPkg,
+            boolean persistMessage,
+            int priority,
+            boolean expectMore,
+            int validityPeriod,
+            boolean isForVvm,
+            String callbackNumber) {
         if (mImsSmsDispatcher.isAvailable() || mImsSmsDispatcher.isEmergencySmsSupport(destAddr)) {
-            mImsSmsDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
-                    messageUri, callingPkg, persistMessage, SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
-                    false /*expectMore*/, SMS_MESSAGE_PERIOD_NOT_SPECIFIED, isForVvm);
+            mImsSmsDispatcher.sendText(
+                    destAddr,
+                    scAddr,
+                    text,
+                    sentIntent,
+                    deliveryIntent,
+                    messageUri,
+                    callingPkg,
+                    persistMessage,
+                    SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
+                    false /*expectMore*/,
+                    SMS_MESSAGE_PERIOD_NOT_SPECIFIED,
+                    isForVvm,
+                    callbackNumber);
         } else {
             if (isCdmaMo()) {
-                mCdmaDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
-                        messageUri, callingPkg, persistMessage, priority, expectMore,
-                        validityPeriod, isForVvm);
+                mCdmaDispatcher.sendText(
+                        destAddr,
+                        scAddr,
+                        text,
+                        sentIntent,
+                        deliveryIntent,
+                        messageUri,
+                        callingPkg,
+                        persistMessage,
+                        priority,
+                        expectMore,
+                        validityPeriod,
+                        isForVvm,
+                        callbackNumber);
             } else {
-                mGsmDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
-                        messageUri, callingPkg, persistMessage, priority, expectMore,
-                        validityPeriod, isForVvm);
+                mGsmDispatcher.sendText(
+                        destAddr,
+                        scAddr,
+                        text,
+                        sentIntent,
+                        deliveryIntent,
+                        messageUri,
+                        callingPkg,
+                        persistMessage,
+                        priority,
+                        expectMore,
+                        validityPeriod,
+                        isForVvm,
+                        callbackNumber);
             }
         }
     }
@@ -694,26 +738,64 @@ public class SmsDispatchersController extends Handler {
      *  Validity Period(Minimum) -> 5 mins
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values included Negative considered as Invalid Validity Period of the message.
-
+     * @param callbacknumber callback number for the message
      */
-    protected void sendMultipartText(String destAddr, String scAddr,
-            ArrayList<String> parts, ArrayList<PendingIntent> sentIntents,
-            ArrayList<PendingIntent> deliveryIntents, Uri messageUri, String callingPkg,
-            boolean persistMessage, int priority, boolean expectMore, int validityPeriod) {
+    protected void sendMultipartText(
+            String destAddr,
+            String scAddr,
+            ArrayList<String> parts,
+            ArrayList<PendingIntent> sentIntents,
+            ArrayList<PendingIntent> deliveryIntents,
+            Uri messageUri,
+            String callingPkg,
+            boolean persistMessage,
+            int priority,
+            boolean expectMore,
+            int validityPeriod,
+            String callbackNumber) {
         if (mImsSmsDispatcher.isAvailable()) {
-            mImsSmsDispatcher.sendMultipartText(destAddr, scAddr, parts, sentIntents,
-                    deliveryIntents, messageUri, callingPkg, persistMessage,
+            mImsSmsDispatcher.sendMultipartText(
+                    destAddr,
+                    scAddr,
+                    parts,
+                    sentIntents,
+                    deliveryIntents,
+                    messageUri,
+                    callingPkg,
+                    persistMessage,
                     SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
-                    false /*expectMore*/, SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
+                    false /*expectMore*/,
+                    SMS_MESSAGE_PERIOD_NOT_SPECIFIED,
+                    callbackNumber);
         } else {
             if (isCdmaMo()) {
-                mCdmaDispatcher.sendMultipartText(destAddr, scAddr, parts, sentIntents,
-                        deliveryIntents, messageUri, callingPkg, persistMessage, priority,
-                        expectMore, validityPeriod);
+                mCdmaDispatcher.sendMultipartText(
+                        destAddr,
+                        scAddr,
+                        parts,
+                        sentIntents,
+                        deliveryIntents,
+                        messageUri,
+                        callingPkg,
+                        persistMessage,
+                        priority,
+                        expectMore,
+                        validityPeriod,
+                        callbackNumber);
             } else {
-                mGsmDispatcher.sendMultipartText(destAddr, scAddr, parts, sentIntents,
-                        deliveryIntents, messageUri, callingPkg, persistMessage, priority,
-                        expectMore, validityPeriod);
+                mGsmDispatcher.sendMultipartText(
+                        destAddr,
+                        scAddr,
+                        parts,
+                        sentIntents,
+                        deliveryIntents,
+                        messageUri,
+                        callingPkg,
+                        persistMessage,
+                        priority,
+                        expectMore,
+                        validityPeriod,
+                        callbackNumber);
             }
         }
     }

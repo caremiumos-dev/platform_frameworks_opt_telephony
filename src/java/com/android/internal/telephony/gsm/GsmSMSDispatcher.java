@@ -109,9 +109,15 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
     }
 
     @Override
-    protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            String message, boolean statusReportRequested, SmsHeader smsHeader, int priority,
-            int validityPeriod) {
+    protected SmsMessageBase.SubmitPduBase getSubmitPdu(
+            String scAddr,
+            String destAddr,
+            String message,
+            boolean statusReportRequested,
+            SmsHeader smsHeader,
+            int priority,
+            int validityPeriod,
+            String callbackNumber) {
         return SMSDispatcherUtil.getSubmitPduGsm(scAddr, destAddr, message, statusReportRequested,
                 validityPeriod);
     }

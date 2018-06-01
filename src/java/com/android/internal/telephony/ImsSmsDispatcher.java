@@ -338,11 +338,25 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     }
 
     @Override
-    protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            String message, boolean statusReportRequested, SmsHeader smsHeader, int priority,
-            int validityPeriod) {
-        return SMSDispatcherUtil.getSubmitPdu(isCdmaMo(), scAddr, destAddr, message,
-                statusReportRequested, smsHeader, priority, validityPeriod);
+    protected SmsMessageBase.SubmitPduBase getSubmitPdu(
+            String scAddr,
+            String destAddr,
+            String message,
+            boolean statusReportRequested,
+            SmsHeader smsHeader,
+            int priority,
+            int validityPeriod,
+            String callbackNumber) {
+        return SMSDispatcherUtil.getSubmitPdu(
+                isCdmaMo(),
+                scAddr,
+                destAddr,
+                message,
+                statusReportRequested,
+                smsHeader,
+                priority,
+                validityPeriod,
+                callbackNumber);
     }
 
     @Override
