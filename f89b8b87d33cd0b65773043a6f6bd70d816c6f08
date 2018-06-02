@@ -22,6 +22,30 @@
       "revId": "f89b8b87d33cd0b65773043a6f6bd70d816c6f08",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5dcfb150_3b472990",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-06-02T02:17:43Z",
+      "side": 1,
+      "message": "I removed the constructor that this was using (as per your other request). Hopefully that addresses the comment? Yes, there are many constructors. People say we construct the best Objects.",
+      "parentUuid": "11894d0d_e5063abe",
+      "range": {
+        "startLine": 331,
+        "startChar": 38,
+        "endLine": 331,
+        "endChar": 57
+      },
+      "revId": "f89b8b87d33cd0b65773043a6f6bd70d816c6f08",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
