@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ffbd864_7cd58482",
+        "filename": "src/java/com/android/internal/telephony/DefaultPhoneNotifier.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1165283
+      },
+      "writtenOn": "2018-06-05T20:51:53Z",
+      "side": 1,
+      "message": "Is this what you were advising in your comment in ag/4230695?\nAnd is it cheap enough to call?",
+      "range": {
+        "startLine": 84,
+        "startChar": 19,
+        "endLine": 84,
+        "endChar": 93
+      },
+      "revId": "1d5072234ea105779246d36c36e348d4dd343c49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
