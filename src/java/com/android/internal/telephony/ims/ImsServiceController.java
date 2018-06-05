@@ -74,11 +74,22 @@ public class ImsServiceController {
         @Override
         public void binderDied() {
             Log.e(LOG_TAG, "ImsService(" + mComponentName + ") died. Restarting...");
+            /// M: remove all old features due to binder died
             synchronized (mLock) {
                 mIsBinding = false;
                 mIsBound = false;
+                try {
+                    for (ImsFeatureConfiguration.FeatureSlotPair i : mImsFeatures) {
+                        removeImsServiceFeature(i);
+                    }
+                } catch (RemoteException e) {
+                    Log.e(LOG_TAG, "Exception happened when binderDied remove feature: "
+                            + e.toString());
+                }
+                // remove old status callbacks, to avoid some zombie callback, since new
+                // MmTelFeatureConnection will add new callbacks.
+                removeImsServiceFeatureCallbacks();
             }
-            notifyAllFeaturesRemoved();
             cleanUpService();
             startDelayedRebindToService();
         }
@@ -373,6 +384,7 @@ public class ImsServiceController {
                     boolean bindSucceeded = startBindToService(imsServiceIntent,
                             mImsServiceConnection, serviceFlags);
                     if (!bindSucceeded) {
+                        mIsBinding = false;
                         mBackoff.notifyFailed();
                     }
                     return bindSucceeded;
