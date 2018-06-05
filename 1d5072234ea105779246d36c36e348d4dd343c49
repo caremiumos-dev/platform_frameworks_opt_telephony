@@ -22,6 +22,30 @@
       "revId": "1d5072234ea105779246d36c36e348d4dd343c49",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89b2e1cd_c1d9dfa1",
+        "filename": "src/java/com/android/internal/telephony/DefaultPhoneNotifier.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-06-05T21:14:12Z",
+      "side": 1,
+      "message": "Yeah it\u0027s pretty cheap. If you\u0027re concerned you can use TelephonyManager.getDefault().getSimState(SubscriptionManager.getSlotIndex(subId))",
+      "parentUuid": "4ffbd864_7cd58482",
+      "range": {
+        "startLine": 84,
+        "startChar": 19,
+        "endLine": 84,
+        "endChar": 93
+      },
+      "revId": "1d5072234ea105779246d36c36e348d4dd343c49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
