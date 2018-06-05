@@ -155,7 +155,9 @@ public class ImsServiceControllerCompat extends ImsServiceController {
             mRegCompatAdapters.remove(slotId);
             mConfigCompatAdapters.remove(slotId);
         }
-        mServiceController.removeImsFeature(slotId, featureType, c);
+        if (isServiceControllerAvailable()) {
+            mServiceController.removeImsFeature(slotId, featureType, c);
+        }
     }
 
     @Override
