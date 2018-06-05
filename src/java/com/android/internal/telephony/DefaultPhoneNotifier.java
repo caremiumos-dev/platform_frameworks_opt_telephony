@@ -26,9 +26,11 @@ import android.telephony.PhysicalChannelConfig;
 import android.telephony.PreciseCallState;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.VoLteServiceState;
+import android.util.StatsLog;
 
 import java.util.List;
 
@@ -78,6 +80,12 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
             ss = new ServiceState();
             ss.setStateOutOfService();
         }
+        if (ss.getState() == ServiceState.STATE_OUT_OF_SERVICE
+                && TelephonyManager.getDefault().createForSubscriptionId(subId).getSimState()
+                        != TelephonyManager.SIM_STATE_ABSENT) {
+            StatsLog.write(StatsLog.PHONE_SIGNAL_STRENGTH_CHANGED,
+                    SignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN, phoneId);
+        }
         try {
             if (mRegistry != null) {
                 mRegistry.notifyServiceStateForPhoneId(phoneId, subId, ss);
@@ -91,15 +99,16 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     public void notifySignalStrength(Phone sender) {
         int phoneId = sender.getPhoneId();
         int subId = sender.getSubId();
+        SignalStrength signalStrength = sender.getSignalStrength();
         if (DBG) {
             // too chatty to log constantly
             Rlog.d(LOG_TAG, "notifySignalStrength: mRegistry=" + mRegistry
-                    + " ss=" + sender.getSignalStrength() + " sender=" + sender);
+                    + " ss=" + signalStrength + " sender=" + sender);
         }
+        StatsLog.write(StatsLog.PHONE_SIGNAL_STRENGTH_CHANGED, signalStrength.getLevel(), phoneId);
         try {
             if (mRegistry != null) {
-                mRegistry.notifySignalStrengthForPhoneId(phoneId, subId,
-                        sender.getSignalStrength());
+                mRegistry.notifySignalStrengthForPhoneId(phoneId, subId, signalStrength);
             }
         } catch (RemoteException ex) {
             // system process is dead
