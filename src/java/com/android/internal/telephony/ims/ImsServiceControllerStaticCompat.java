@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.telephony.ims.compat.feature.ImsFeature;
 import android.util.Log;
 
 import com.android.ims.internal.IImsFeatureStatusCallback;
@@ -44,6 +45,17 @@ public class ImsServiceControllerStaticCompat extends ImsServiceControllerCompat
             ImsServiceController.ImsServiceControllerCallbacks callbacks) {
         super(context, componentName, callbacks);
     }
+
+    /// M: Fix AOSP NPE.
+    @Override
+    protected void removeImsFeature(int slotId, int featureType, IImsFeatureStatusCallback c)
+            throws RemoteException {
+        if (featureType == ImsFeature.MMTEL) {
+            mMmTelCompatAdapters.remove(slotId);
+            mRegCompatAdapters.remove(slotId);
+            mConfigCompatAdapters.remove(slotId);
+        }
+    };
 
     @Override
     public boolean startBindToService(Intent intent, ImsServiceConnection connection, int flags) {
