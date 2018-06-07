@@ -226,24 +226,6 @@ public class UiccCard {
     }
 
     /**
-     * Resets the application with the input AID. Returns true if any changes were made.
-     *
-     * A null aid implies a card level reset - all applications must be reset.
-     *
-     * @deprecated Please use {@link UiccProfile#resetAppWithAid(String)} instead.
-     */
-    @Deprecated
-    public boolean resetAppWithAid(String aid) {
-        synchronized (mLock) {
-            if (mUiccProfile != null) {
-                return mUiccProfile.resetAppWithAid(aid);
-            } else {
-                return false;
-            }
-        }
-    }
-
-    /**
      * Exposes {@link CommandsInterface#iccOpenLogicalChannel}
      * @deprecated Please use
      * {@link UiccProfile#iccOpenLogicalChannel(String, int, Message)} instead.

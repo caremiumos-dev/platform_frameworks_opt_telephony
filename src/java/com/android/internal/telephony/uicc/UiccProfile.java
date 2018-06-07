@@ -1241,30 +1241,37 @@ public class UiccProfile extends IccCard {
      *
      * A null aid implies a card level reset - all applications must be reset.
      */
-    public boolean resetAppWithAid(String aid) {
+    public void resetAppWithAid(String aid) {
         synchronized (mLock) {
-            boolean changed = false;
             for (int i = 0; i < mUiccApplications.length; i++) {
                 if (mUiccApplications[i] != null
                         && (TextUtils.isEmpty(aid) || aid.equals(mUiccApplications[i].getAid()))) {
                     // Delete removed applications
                     mUiccApplications[i].dispose();
                     mUiccApplications[i] = null;
-                    changed = true;
                 }
             }
-            if (TextUtils.isEmpty(aid)) {
-                if (mCarrierPrivilegeRules != null) {
-                    mCarrierPrivilegeRules = null;
-                    changed = true;
-                }
-                if (mCatService != null) {
-                    mCatService.dispose();
-                    mCatService = null;
-                    changed = true;
+        }
+    }
+
+    /**
+     * Resets the applications.
+     */
+    public void reset() {
+        synchronized (mLock) {
+            for (int i = 0; i < mUiccApplications.length; i++) {
+                if (mUiccApplications[i] != null) {
+                    mUiccApplications[i].dispose();
+                    mUiccApplications[i] = null;
                 }
             }
-            return changed;
+            if (mCarrierPrivilegeRules != null) {
+                mCarrierPrivilegeRules = null;
+            }
+            if (mCatService != null) {
+                mCatService.dispose();
+                mCatService = null;
+            }
         }
     }
 
