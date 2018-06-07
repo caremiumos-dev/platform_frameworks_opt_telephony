@@ -1238,11 +1238,17 @@ public class UiccProfile extends IccCard {
 
     /**
      * Resets the application with the input AID. Returns true if any changes were made.
-     *
-     * A null aid implies a card level reset - all applications must be reset.
      */
     public boolean resetAppWithAid(String aid) {
         synchronized (mLock) {
+            // The terminal shall assume the REFRESH applies to the NAA application
+            // currently selected on the basic logical channel if no AID is indicated.
+            if (aid == null) {
+                UiccCardApplication current = getApplication(mCurrentAppType);
+                if (current != null) {
+                    aid = current.getAid();
+                }
+            }
             boolean changed = false;
             for (int i = 0; i < mUiccApplications.length; i++) {
                 if (mUiccApplications[i] != null
