@@ -634,25 +634,25 @@ public class UiccController extends Handler {
             return;
         }
 
-        UiccCard uiccCard = getUiccCardForPhone(index);
-        if (uiccCard == null) {
-            Rlog.e(LOG_TAG,"onSimRefresh: refresh on null card : " + index);
+        UiccProfile profile = getUiccProfileForPhone(index);
+        if (profile == null) {
+            Rlog.e(LOG_TAG, "onSimRefresh: refresh on null profile : " + index);
             return;
         }
 
         boolean changed = false;
-        switch(resp.refreshResult) {
+        switch (resp.refreshResult) {
             case IccRefreshResponse.REFRESH_RESULT_RESET:
+                 changed = profile.reset(resp.aid);
+                 break;
             case IccRefreshResponse.REFRESH_RESULT_INIT:
-                 // Reset the required apps when we know about the refresh so that
-                 // anyone interested does not get stale state.
-                 changed = uiccCard.resetAppWithAid(resp.aid);
+                 profile.initialize(resp.aid);
                  break;
             default:
                  return;
         }
 
-        if (changed && resp.refreshResult == IccRefreshResponse.REFRESH_RESULT_RESET) {
+        if (changed) {
             // If there is any change on RESET, reset carrier config as well. From carrier config
             // perspective, this is treated the same as sim state unknown
             CarrierConfigManager configManager = (CarrierConfigManager)
