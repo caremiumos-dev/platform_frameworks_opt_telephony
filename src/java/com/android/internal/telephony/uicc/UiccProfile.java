@@ -1253,18 +1253,28 @@ public class UiccProfile extends IccCard {
                     changed = true;
                 }
             }
-            if (TextUtils.isEmpty(aid)) {
-                if (mCarrierPrivilegeRules != null) {
-                    mCarrierPrivilegeRules = null;
-                    changed = true;
-                }
-                if (mCatService != null) {
-                    mCatService.dispose();
-                    mCatService = null;
-                    changed = true;
+            return changed;
+        }
+    }
+
+    /**
+     * Resets the applications.
+     */
+    public void reset() {
+        synchronized (mLock) {
+            for (int i = 0; i < mUiccApplications.length; i++) {
+                if (mUiccApplications[i] != null) {
+                    mUiccApplications[i].dispose();
+                    mUiccApplications[i] = null;
                 }
             }
-            return changed;
+            if (mCarrierPrivilegeRules != null) {
+                mCarrierPrivilegeRules = null;
+            }
+            if (mCatService != null) {
+                mCatService.dispose();
+                mCatService = null;
+            }
         }
     }
 

@@ -634,19 +634,22 @@ public class UiccController extends Handler {
             return;
         }
 
-        UiccCard uiccCard = getUiccCardForPhone(index);
-        if (uiccCard == null) {
-            Rlog.e(LOG_TAG,"onSimRefresh: refresh on null card : " + index);
+        UiccProfile profile = getUiccProfileForPhone(index);
+        if (profile == null) {
+            Rlog.e(LOG_TAG, "onSimRefresh: refresh on null profile : " + index);
             return;
         }
 
         boolean changed = false;
         switch(resp.refreshResult) {
             case IccRefreshResponse.REFRESH_RESULT_RESET:
+                 profile.reset();
+                 changed = true;
+                 break;
             case IccRefreshResponse.REFRESH_RESULT_INIT:
                  // Reset the required apps when we know about the refresh so that
                  // anyone interested does not get stale state.
-                 changed = uiccCard.resetAppWithAid(resp.aid);
+                 changed = profile.resetAppWithAid(resp.aid);
                  break;
             default:
                  return;

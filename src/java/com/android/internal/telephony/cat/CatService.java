@@ -86,7 +86,6 @@ public class CatService extends Handler implements AppInterface {
 
     // Class members
     private static IccRecords mIccRecords;
-    private static UiccCardApplication mUiccApplication;
 
     // Service members.
     // Protects singleton instance lazy initialization.
@@ -135,10 +134,9 @@ public class CatService extends Handler implements AppInterface {
     private int mSlotId;
 
     /* For multisim catservice should not be singleton */
-    private CatService(CommandsInterface ci, UiccCardApplication ca, IccRecords ir,
-            Context context, IccFileHandler fh, UiccProfile uiccProfile, int slotId) {
-        if (ci == null || ca == null || ir == null || context == null || fh == null
-                || uiccProfile == null) {
+    private CatService(CommandsInterface ci, IccRecords ir, Context context, IccFileHandler fh,
+            UiccProfile uiccProfile, int slotId) {
+        if (ci == null || ir == null || context == null || fh == null || uiccProfile == null) {
             throw new NullPointerException(
                     "Service: Input parameters must not be null");
         }
@@ -167,7 +165,6 @@ public class CatService extends Handler implements AppInterface {
         mCmdIf.setOnCatCcAlphaNotify(this, MSG_ID_ALPHA_NOTIFY, null);
 
         mIccRecords = ir;
-        mUiccApplication = ca;
 
         // Register for SIM ready event.
         mIccRecords.registerForRecordsLoaded(this, MSG_ID_ICC_RECORDS_LOADED, null);
@@ -218,19 +215,18 @@ public class CatService extends Handler implements AppInterface {
                 }
             }
             if (sInstance[slotId] == null) {
-                if (ci == null || ca == null || ir == null || context == null || fh == null
+                if (ci == null || ir == null || context == null || fh == null
                         || uiccProfile == null) {
                     return null;
                 }
 
-                sInstance[slotId] = new CatService(ci, ca, ir, context, fh, uiccProfile, slotId);
+                sInstance[slotId] = new CatService(ci, ir, context, fh, uiccProfile, slotId);
             } else if ((ir != null) && (mIccRecords != ir)) {
                 if (mIccRecords != null) {
                     mIccRecords.unregisterForRecordsLoaded(sInstance[slotId]);
                 }
 
                 mIccRecords = ir;
-                mUiccApplication = ca;
 
                 mIccRecords.registerForRecordsLoaded(sInstance[slotId],
                         MSG_ID_ICC_RECORDS_LOADED, null);
@@ -1130,7 +1126,6 @@ public class CatService extends Handler implements AppInterface {
                 CatLog.d(this,
                         "Reinitialize the Service with SIMRecords and UiccCardApplication");
                 mIccRecords = ir;
-                mUiccApplication = ca;
 
                 // re-Register for SIM ready event.
                 mIccRecords.registerForRecordsLoaded(this, MSG_ID_ICC_RECORDS_LOADED, null);
