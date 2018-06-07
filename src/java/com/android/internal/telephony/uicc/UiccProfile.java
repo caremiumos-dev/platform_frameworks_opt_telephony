@@ -1237,11 +1237,15 @@ public class UiccProfile extends IccCard {
     }
 
     /**
-     * Resets the application with the input AID. Returns true if any changes were made.
+     * Disposes the application with the AID specified.
      *
-     * A null aid implies a card level reset - all applications must be reset.
+     * @param aid AID for the application to be disposed.
+     *            This can be empty or null only in 2G case or if the refresh mode is UICC Reset.
+     *            Even if no AID is specified in REFRESH command,
+     *            the AID of the current NAA must be specified instead except for UICC Reset.
+     * @return true if any change was made.
      */
-    public boolean resetAppWithAid(String aid) {
+    public boolean initialize(String aid) {
         synchronized (mLock) {
             boolean changed = false;
             for (int i = 0; i < mUiccApplications.length; i++) {
@@ -1253,6 +1257,24 @@ public class UiccProfile extends IccCard {
                     changed = true;
                 }
             }
+            return changed;
+        }
+    }
+
+    /**
+     * Disposes the applications.
+     *
+     * Access rules cache and CAT service are also be released if the refresh mode is UICC Reset.
+     *
+     * @param aid AID for the application to be disposed.
+     *            This can be empty or null only if the refresh mode is UICC Reset.
+     *            Even if no AID is specified in REFRESH command,
+     *            the AID of the current NAA must be specified instead except for UICC Reset.
+     * @return true if any change was made.
+     */
+    public boolean reset(String aid) {
+        synchronized (mLock) {
+            boolean changed = initialize(aid);
             if (TextUtils.isEmpty(aid)) {
                 if (mCarrierPrivilegeRules != null) {
                     mCarrierPrivilegeRules = null;
