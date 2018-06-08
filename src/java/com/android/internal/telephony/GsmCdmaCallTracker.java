@@ -68,6 +68,8 @@ public class GsmCdmaCallTracker extends CallTracker {
     private static final int MAX_CONNECTIONS_CDMA = 8;
     private static final int MAX_CONNECTIONS_PER_CALL_CDMA = 1; //only 1 connection allowed per call
 
+    private static final int DELAY_DIAL_OUT_AFTER_EXIT_ECBM = 5000;
+
     //***** Instance Variables
     @VisibleForTesting
     public GsmCdmaConnection[] mConnections;
@@ -101,6 +103,7 @@ public class GsmCdmaCallTracker extends CallTracker {
     private int mPendingCallClirMode;
     private boolean mIsEcmTimerCanceled;
     private int m3WayCallFlashDelay;
+    private boolean mHasPendingMoCallAfterExitEcbm;
 
     /**
      * Listens for Emergency Callback Mode state change intents
@@ -134,6 +137,23 @@ public class GsmCdmaCallTracker extends CallTracker {
                         }
                     }
                 }
+            }
+        }
+    };
+
+    // After exiting ECBM, maybe the delay is needed
+    private Runnable mPendingMoCallRunable = new Runnable() {
+        public void run() {
+            if (mPendingMO != null) {
+                if (mHasPendingMoCallAfterExitEcbm) {
+                    mCi.dial(mPendingMO.getAddress(), mPendingCallClirMode,
+                            obtainCompleteMessage());
+                } else {
+                    mPendingMO.onDisconnect(DisconnectCause.ERROR_UNSPECIFIED);
+                    mPendingMO.dispose();
+                    mPendingMO = null;
+                }
+                mHasPendingMoCallAfterExitEcbm = false;
             }
         }
     };
@@ -175,6 +195,10 @@ public class GsmCdmaCallTracker extends CallTracker {
             if (mIsInEmergencyCall) {
                 mPhone.mDcTracker.setInternalDataEnabled(true);
             }
+            if (mHasPendingMoCallAfterExitEcbm && mPendingMO != null) {
+                removeCallbacks(mPendingMoCallRunable);
+                post(mPendingMoCallRunable);
+            }
         } else {
             mConnections = new GsmCdmaConnection[MAX_CONNECTIONS_CDMA];
             mPendingCallInEcm = false;
@@ -182,6 +206,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             mPendingCallClirMode = CommandsInterface.CLIR_DEFAULT;
             mIsEcmTimerCanceled = false;
             m3WayCallFlashDelay = 0;
+            mHasPendingMoCallAfterExitEcbm = false;
             mCi.registerForCallWaitingInfo(this, EVENT_CALL_WAITING_INFO_CDMA, null);
         }
     }
@@ -196,12 +221,12 @@ public class GsmCdmaCallTracker extends CallTracker {
             }
         }
 
-        if (mPendingMO != null) {
+        if (mPendingMO != null && !mHasPendingMoCallAfterExitEcbm) {
             mPendingMO.dispose();
+            mPendingMO = null;
         }
 
         mConnections = null;
-        mPendingMO = null;
         clearDisconnected();
     }
 
@@ -313,6 +338,7 @@ public class GsmCdmaCallTracker extends CallTracker {
         mPendingMO = new GsmCdmaConnection(mPhone, checkForTestEmergencyNumber(dialString),
                 this, mForegroundCall, isEmergencyCall);
         mHangupPendingMO = false;
+        mHasPendingMoCallAfterExitEcbm = false;
         mMetrics.writeRilDial(mPhone.getPhoneId(), mPendingMO, clirMode, uusInfo);
 
 
@@ -425,6 +451,7 @@ public class GsmCdmaCallTracker extends CallTracker {
         mPendingMO = new GsmCdmaConnection(mPhone, checkForTestEmergencyNumber(dialString),
                 this, mForegroundCall, isEmergencyCall);
         mHangupPendingMO = false;
+        mHasPendingMoCallAfterExitEcbm = false;
 
         if ( mPendingMO.getAddress() == null || mPendingMO.getAddress().length() == 0
                 || mPendingMO.getAddress().indexOf(PhoneNumberUtils.WILD) >= 0 ) {
@@ -1493,8 +1520,17 @@ public class GsmCdmaCallTracker extends CallTracker {
                 if (!isPhoneTypeGsm()) {
                     // no matter the result, we still do the same here
                     if (mPendingCallInEcm) {
-                        mCi.dial(mPendingMO.getAddress(), mPendingCallClirMode, obtainCompleteMessage());
+                        if (mPhone.hasCdmaCapacityFromNetworkMode()) {
+                            mCi.dial(mPendingMO.getAddress(), mPendingCallClirMode,
+                                    obtainCompleteMessage());
+                            mHasPendingMoCallAfterExitEcbm = false;
+                        } else {
+                            postDelayed(mPendingMoCallRunable, DELAY_DIAL_OUT_AFTER_EXIT_ECBM);
+                            mHasPendingMoCallAfterExitEcbm = true;
+                        }
                         mPendingCallInEcm = false;
+                        log("Exited ECM,mHasPendingMoCallAfterExitEcbm = "
+                                + mHasPendingMoCallAfterExitEcbm);
                     }
                     mPhone.unsetOnEcbModeExitResponse(this);
                 } else {
