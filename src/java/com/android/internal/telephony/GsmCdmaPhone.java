@@ -59,6 +59,7 @@ import android.telephony.CellLocation;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.RadioAccessFamily;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
@@ -3642,5 +3643,22 @@ public class GsmCdmaPhone extends Phone {
             }
         }
         return currentConfig;
+    }
+
+    public boolean hasCdmaCapacityFromNetworkMode() {
+        int nwMode = Phone.PREFERRED_NT_MODE;
+        int subId = getSubId();
+
+        // If it's invalid subId, mean its SUB is not ready, straight return no CDMA capacity
+        if (!SubscriptionManager.isValidSubscriptionId(subId)) {
+            return false;
+        }
+
+        nwMode = android.provider.Settings.Global.getInt(mContext.getContentResolver(),
+                    android.provider.Settings.Global.PREFERRED_NETWORK_MODE + subId, nwMode);
+        final int cdmaRafGroup = RadioAccessFamily.RAF_IS95A | RadioAccessFamily.RAF_IS95B
+                | RadioAccessFamily.RAF_1xRTT;
+        final int rafFromNwMode = RadioAccessFamily.getRafFromNetworkType(nwMode);
+        return (cdmaRafGroup & rafFromNwMode) > 0;
     }
 }
