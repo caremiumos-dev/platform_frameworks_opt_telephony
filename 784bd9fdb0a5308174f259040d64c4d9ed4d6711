@@ -22,6 +22,30 @@
       "revId": "784bd9fdb0a5308174f259040d64c4d9ed4d6711",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "329f6bc4_3c1cbc0e",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1277460
+      },
+      "writtenOn": "2018-06-13T16:56:41Z",
+      "side": 1,
+      "message": "currently other APIs such as updateMessageOnIccEfForSubscriber use the whole namespace android.os.RemoteException, which this gerrit doesn\u0027t modify. Would you want me to change for all or only the ones in this gerrit?",
+      "parentUuid": "05ee5da4_99f5fd52",
+      "range": {
+        "startLine": 102,
+        "startChar": 60,
+        "endLine": 102,
+        "endChar": 75
+      },
+      "revId": "784bd9fdb0a5308174f259040d64c4d9ed4d6711",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
