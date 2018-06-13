@@ -46,6 +46,30 @@
       "revId": "784bd9fdb0a5308174f259040d64c4d9ed4d6711",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "728db046_0df26269",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-13T17:27:40Z",
+      "side": 1,
+      "message": "Looks like there are other places where only \"RemoteException\" is used... Would it be possible to change all to using \"RemoteException\", since it is only a find/replace? :)",
+      "parentUuid": "329f6bc4_3c1cbc0e",
+      "range": {
+        "startLine": 102,
+        "startChar": 60,
+        "endLine": 102,
+        "endChar": 75
+      },
+      "revId": "784bd9fdb0a5308174f259040d64c4d9ed4d6711",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
