@@ -2639,6 +2639,14 @@ public class GsmCdmaPhone extends Phone {
                 mIccRecords.set(newUiccApplication.getIccRecords());
                 registerForIccRecordEvents();
                 mIccPhoneBookIntManager.updateIccRecords(mIccRecords.get());
+                final String simOperatorNumberic = mIccRecords.getOperatorNumeric();
+                if (DBG) {
+                    logd("New simOperatorNumberic = " + simOperatorNumberic);
+                }
+                if (!TextUtils.isEmpty(simOperatorNumberic)) {
+                    TelephonyManager.from(mContext).setSimOperatorNumericForPhone(mPhoneId,
+                            simOperatorNumberic);
+                }
             }
         }
     }
