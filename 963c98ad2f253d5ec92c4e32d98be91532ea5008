@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b904dbac_8c5cf26c",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-06-14T21:28:31Z",
+      "side": 1,
+      "message": "Consider making this a system property -- you\u0027d be able to compare against the old implementation by using adb and setting a property rather than rebuilding and reflashing",
+      "range": {
+        "startLine": 72,
+        "startChar": 54,
+        "endLine": 72,
+        "endChar": 58
+      },
+      "revId": "963c98ad2f253d5ec92c4e32d98be91532ea5008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
