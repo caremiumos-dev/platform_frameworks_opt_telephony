@@ -2656,6 +2656,15 @@ public class GsmCdmaPhone extends Phone {
                 mIccRecords.set(newUiccApplication.getIccRecords());
                 registerForIccRecordEvents();
                 mIccPhoneBookIntManager.updateIccRecords(mIccRecords.get());
+                final String simOperatorNumeric =
+                        newUiccApplication.getIccRecords().getOperatorNumeric();
+                if (DBG) {
+                    logd("New simOperatorNumeric = " + simOperatorNumeric);
+                }
+                if (!TextUtils.isEmpty(simOperatorNumeric)) {
+                    TelephonyManager.from(mContext).setSimOperatorNumericForPhone(mPhoneId,
+                            simOperatorNumeric);
+                }
             }
         }
     }
