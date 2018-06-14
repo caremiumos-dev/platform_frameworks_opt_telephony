@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9210ee63_2725370f",
+        "filename": "src/java/com/android/internal/telephony/UiccSmsController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-14T20:30:20Z",
+      "side": 1,
+      "message": "You need this \"throws\" exception in the subclass signature. We are not throwing this exception anywhere in the implementation, so please remove the \"throws UnsupportedOperationException\" for all methods below.",
+      "range": {
+        "startLine": 62,
+        "startChar": 35,
+        "endLine": 62,
+        "endChar": 64
+      },
+      "revId": "304b3bb4f9f3b838a698151787206842104b6ae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
