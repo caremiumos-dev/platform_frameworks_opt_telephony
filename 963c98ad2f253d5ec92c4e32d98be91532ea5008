@@ -22,6 +22,30 @@
       "revId": "963c98ad2f253d5ec92c4e32d98be91532ea5008",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a95dd96_71c34195",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2018-06-15T07:32:30Z",
+      "side": 1,
+      "message": "Good idea. I\u0027ll produce a follow-up.",
+      "parentUuid": "b904dbac_8c5cf26c",
+      "range": {
+        "startLine": 72,
+        "startChar": 54,
+        "endLine": 72,
+        "endChar": 58
+      },
+      "revId": "963c98ad2f253d5ec92c4e32d98be91532ea5008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
