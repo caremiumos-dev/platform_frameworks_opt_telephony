@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "54565458_a5ccd918",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-06-15T02:27:43Z",
+      "side": 1,
+      "message": "after about 4s, phone switch occurred",
+      "parentUuid": "3593425b_1638e99c",
+      "range": {
+        "startLine": 71,
+        "startChar": 29,
+        "endLine": 71,
+        "endChar": 59
+      },
+      "revId": "e16fea2f3e1b4b266f56656b73ee330d04730be2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1f43932_900fcf0f",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
         "patchSetId": 1
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "687d8f7f_ad3a22d3",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3658,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-06-15T02:27:43Z",
+      "side": 1,
+      "message": "good idea",
+      "parentUuid": "b09c6b38_338f66d4",
+      "range": {
+        "startLine": 3657,
+        "startChar": 17,
+        "endLine": 3658,
+        "endChar": 93
+      },
+      "revId": "e16fea2f3e1b4b266f56656b73ee330d04730be2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0cfabe4_d8b77740",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 1
@@ -91,6 +139,30 @@
       "revId": "e16fea2f3e1b4b266f56656b73ee330d04730be2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "683051db_e2d1db1b",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-06-15T02:27:43Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "f0cfabe4_d8b77740",
+      "range": {
+        "startLine": 3659,
+        "startChar": 18,
+        "endLine": 3659,
+        "endChar": 30
+      },
+      "revId": "e16fea2f3e1b4b266f56656b73ee330d04730be2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
