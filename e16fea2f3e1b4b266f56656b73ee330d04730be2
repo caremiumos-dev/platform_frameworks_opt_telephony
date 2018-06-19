@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "a247dd49_21c62474",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-19T21:07:01Z",
+      "side": 1,
+      "message": "Any objections to this? If we dispose of the mPendingMO but do not disconnect it, it will just generate a UI issue",
+      "parentUuid": "b1f43932_900fcf0f",
+      "range": {
+        "startLine": 224,
+        "startChar": 11,
+        "endLine": 224,
+        "endChar": 66
+      },
+      "revId": "e16fea2f3e1b4b266f56656b73ee330d04730be2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b09c6b38_338f66d4",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 1
