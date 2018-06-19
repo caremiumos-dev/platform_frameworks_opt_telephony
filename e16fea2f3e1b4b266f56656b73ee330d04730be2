@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "4fe68bd4_d7f47bd5",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-06-19T07:07:27Z",
+      "side": 1,
+      "message": "increase to 6s, about 1-2s to acquire UMTS, in worst case, 4s will be used for service report if not found",
+      "parentUuid": "d14ed651_7a75f46c",
+      "range": {
+        "startLine": 71,
+        "startChar": 29,
+        "endLine": 71,
+        "endChar": 59
+      },
+      "revId": "e16fea2f3e1b4b266f56656b73ee330d04730be2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1f43932_900fcf0f",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
         "patchSetId": 1
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "So getRadioAccessFamily will not work? Can you explain the difference between the PREFERRED_NETWORK_MODE and the radio access families returned by the modem and why the RadioCapabilities are not sufficient?",
       "parentUuid": "ac8e6e86_c135e688",
+      "range": {
+        "startLine": 3657,
+        "startChar": 17,
+        "endLine": 3658,
+        "endChar": 93
+      },
+      "revId": "e16fea2f3e1b4b266f56656b73ee330d04730be2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "31fc5721_d0444328",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3658,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-06-19T07:07:27Z",
+      "side": 1,
+      "message": "yes, it not works, getRadioAccessFamily return modem\u0027s radio capacity, even we change network mode, it cannot be changed.\n\nbut user change network mode to limit the UE RADIO acquuiestion",
+      "parentUuid": "1449ad42_909e9513",
       "range": {
         "startLine": 3657,
         "startChar": 17,
