@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8da9adf0_13a481ae",
+        "filename": "src/java/com/android/internal/telephony/NewTimeServiceHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1006166
+      },
+      "writtenOn": "2018-06-20T18:18:55Z",
+      "side": 1,
+      "message": "Random thought; what happens on dual-SIM devices when we get multiple conflicting NITZ\u0027es?",
+      "range": {
+        "startLine": 135,
+        "startChar": 47,
+        "endLine": 135,
+        "endChar": 72
+      },
+      "revId": "19ea73e6b4b3a31f6e0b63f04a00d599c5392c1f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
