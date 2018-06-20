@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79e33621_ed48a36e",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-20T18:57:01Z",
+      "side": 1,
+      "message": "We have had problems relying on this indicator for emergency status in the past. My understanding is that this can return false even in the case that emergency calls are possible because the modem will not do a full scan until we place the request to do the emergency SMS. This will also not work for a phone without a SIM.\n\nFor emergency calling, we will only check to make sure that the modem is on before trying to send the emergency SMS.\n\nAlso, what happens if we are in APM?",
+      "range": {
+        "startLine": 244,
+        "startChar": 54,
+        "endLine": 244,
+        "endChar": 98
+      },
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
