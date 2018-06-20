@@ -1650,9 +1650,9 @@ public class ServiceStateTracker extends Handler {
         mPollingContext[0]--;
 
         if (mPollingContext[0] == 0) {
+            mNewSS.setEmergencyOnly(mEmergencyOnly);
             if (mPhone.isPhoneTypeGsm()) {
                 updateRoamingState();
-                mNewSS.setEmergencyOnly(mEmergencyOnly);
             } else {
                 boolean namMatch = false;
                 if (!isSidsAllZeros() && isHomeSid(mNewSS.getCdmaSystemId())) {
