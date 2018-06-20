@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "05180b3a_fb7323a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-20T22:33:04Z",
+      "side": 1,
+      "message": "Please add bug id to Commit message as:\n\nBug: XXXXX",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "972b072e_4f599602",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-20T22:33:04Z",
+      "side": 1,
+      "message": "I think this can be summed up as isAvailable()?",
+      "range": {
+        "startLine": 237,
+        "startChar": 8,
+        "endLine": 239,
+        "endChar": 62
+      },
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79e33621_ed48a36e",
         "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
         "patchSetId": 1
@@ -42,6 +88,70 @@
         "startChar": 54,
         "endLine": 244,
         "endChar": 98
+      },
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa4d3a36_094f5b6c",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-20T22:33:04Z",
+      "side": 1,
+      "message": "Okay, sounds good.\n\nI do not want to rely on LTE for voice ServiceState here (SMS over IWLAN?), Can we instead check signalling from ImsService, such as mImsServiceUp \u0026\u0026 mIsSmsCapable?",
+      "parentUuid": "c9768686_be0cc6e7",
+      "range": {
+        "startLine": 244,
+        "startChar": 54,
+        "endLine": 244,
+        "endChar": 98
+      },
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "265e3ceb_b5bd3684",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-20T22:33:04Z",
+      "side": 1,
+      "message": "Please add CarrierConfig change as topic.",
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "218d2152_02deec4d",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-20T22:33:04Z",
+      "side": 1,
+      "message": "Two things here:\n1) Do we only want to support emergency SMS on the new ImsService API? If we want to be able to send the e911 text on the old RIL API, we will have to also change the GSM/CDMA dispatcher.\n\n2) We shouldn\u0027t shortcut the isAvailable check fully, we should still check to make sure that the ImsService is connected and that the ImsService is SMS capable. Suggest splitting up isAvailable() to two checks: isAvailable (ImsService is connected and SMS capable) and isRegistered(is IMS registered) and then change this check to:\nif (mImsSmsDispatcher.isAvailable() \u0026\u0026 (mImsSmsDispatcher.isRegistered() || mImsSmsDispatcher.isEmergencySmsSupport(destAddr))).",
+      "range": {
+        "startLine": 454,
+        "startChar": 30,
+        "endLine": 454,
+        "endChar": 41
       },
       "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
