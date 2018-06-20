@@ -22,6 +22,30 @@
       "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9768686_be0cc6e7",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2018-06-20T22:12:57Z",
+      "side": 1,
+      "message": "QCRIL recently fixed the bug to send emergecny voice registration state(Ex: NOT_REG_MT_SEARCHING_OP_EM). So it should return true for gsm in emergency case.\nFor cdma, I have the fix here https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/707379.\n\nAnd this feature is to send emergency SMS only in LTE or limited LTE so we met modem check condition here.\n\nAnd also Verizon has no requirement of sending this 911 SMS over IMS without SIM.\n\nWe can enhance this feature later when we get more requirements from different operators",
+      "parentUuid": "79e33621_ed48a36e",
+      "range": {
+        "startLine": 244,
+        "startChar": 54,
+        "endLine": 244,
+        "endChar": 98
+      },
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
