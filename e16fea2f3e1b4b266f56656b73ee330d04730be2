@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "d168428b_752fb5d1",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-06-20T01:48:22Z",
+      "side": 1,
+      "message": "if disconnect here, may cause UI flash issue, when you make a emergency call, during the time, phone switch from UMTS to CDMA, the call will be ended, and UI will disappear, after get_current_call lists the call, notify as unknown call, UI appears again.\n\nin this case, lower layer must ensure the dial request is successful, so do not suggest disconnecting here, so that user has bad experience, the progress should be silent.",
+      "parentUuid": "a247dd49_21c62474",
+      "range": {
+        "startLine": 224,
+        "startChar": 11,
+        "endLine": 224,
+        "endChar": 66
+      },
+      "revId": "e16fea2f3e1b4b266f56656b73ee330d04730be2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b09c6b38_338f66d4",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 1
