@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4cb4b4d_100e508e",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-20T17:40:32Z",
+      "side": 1,
+      "message": "I just got another bug about a phone switch during a non-emergency MO dialing call causing it to be stuck forever... Why don\u0027t we just remove the dependency on EVENT_EXIT_ECM_RESPONSE_CDMA and post a redial to occur after a phone switch if there is a pending MO call (independent of whether it is emergency)?\n\nThat will solve non-emergency and emergency CDMA-\u003eUMTS and UMTS-\u003eCDMA cases.",
+      "range": {
+        "startLine": 198,
+        "startChar": 12,
+        "endLine": 201,
+        "endChar": 13
+      },
+      "revId": "8df99e609de311048110da2a77ce986d1de3d130",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
