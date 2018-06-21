@@ -22,6 +22,30 @@
       "revId": "19ea73e6b4b3a31f6e0b63f04a00d599c5392c1f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e777ff40_d8d0a118",
+        "filename": "src/java/com/android/internal/telephony/NewTimeServiceHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2018-06-21T09:14:32Z",
+      "side": 1,
+      "message": "I don\u0027t know if the stock platform supports multiple sim devices. I can see two possibilities before my change:\n\n1) The time / time zone code is run for both, leading to flip-flopping if the two carriers disagree.\n2) The time / time zone code is run for only one of them.\n\nI don\u0027t think anything I\u0027m doing here will change the behavior but that\u0027s mostly a guess.\n\nhallliu@ - do we have any insight into dual sim devices or is it all managed by OEM-level customization?\n\nFTR - if it\u0027s something we need to deal with my thought was to have separate sources (NITZ_SIM1 / NITZ_SIM2), or add metadata to the TimeSignal to indicate the sim ID. Either way, once the information is there the time detector service can decide what to do once we know: prioritize one over the other, ignore sim 2, etc.",
+      "parentUuid": "8da9adf0_13a481ae",
+      "range": {
+        "startLine": 135,
+        "startChar": 47,
+        "endLine": 135,
+        "endChar": 72
+      },
+      "revId": "19ea73e6b4b3a31f6e0b63f04a00d599c5392c1f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
