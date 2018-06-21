@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4af259c5_76b574f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2018-06-21T00:20:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05180b3a_fb7323a9",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "972b072e_4f599602",
         "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-06-20T22:33:04Z",
       "side": 1,
       "message": "I think this can be summed up as isAvailable()?",
+      "range": {
+        "startLine": 237,
+        "startChar": 8,
+        "endLine": 239,
+        "endChar": 62
+      },
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a4f6c37_9b831a5d",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2018-06-21T00:20:51Z",
+      "side": 1,
+      "message": "I want them to be separate coz modem need not to notify sms capabilities if its ready to send sms over emergency pdn.",
+      "parentUuid": "972b072e_4f599602",
       "range": {
         "startLine": 237,
         "startChar": 8,
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "4e32297a_99b83488",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2018-06-21T00:20:51Z",
+      "side": 1,
+      "message": "\"mImsServiceUp \u0026\u0026 mIsSmsCapable\" these two cases will be checked as part of the existing code, our new change will come into picture when regular IMS is not registered(above conditions are not met).\n\n \"mImsSmsDispatcher.isAvailable() || mImsSmsDispatcher.isEmergencySmsSupport(destAddr) \"\n\nAnd also, I dont think modem will update emergency IMS details to Android.",
+      "parentUuid": "fa4d3a36_094f5b6c",
+      "range": {
+        "startLine": 244,
+        "startChar": 54,
+        "endLine": 244,
+        "endChar": 98
+      },
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "265e3ceb_b5bd3684",
         "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
         "patchSetId": 1
@@ -136,6 +208,24 @@
     },
     {
       "key": {
+        "uuid": "b5a4dde4_68f10c70",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2018-06-21T00:20:51Z",
+      "side": 1,
+      "message": "I can not add Topic. Its not editable for me.",
+      "parentUuid": "265e3ceb_b5bd3684",
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "218d2152_02deec4d",
         "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
         "patchSetId": 1
@@ -147,6 +237,30 @@
       "writtenOn": "2018-06-20T22:33:04Z",
       "side": 1,
       "message": "Two things here:\n1) Do we only want to support emergency SMS on the new ImsService API? If we want to be able to send the e911 text on the old RIL API, we will have to also change the GSM/CDMA dispatcher.\n\n2) We shouldn\u0027t shortcut the isAvailable check fully, we should still check to make sure that the ImsService is connected and that the ImsService is SMS capable. Suggest splitting up isAvailable() to two checks: isAvailable (ImsService is connected and SMS capable) and isRegistered(is IMS registered) and then change this check to:\nif (mImsSmsDispatcher.isAvailable() \u0026\u0026 (mImsSmsDispatcher.isRegistered() || mImsSmsDispatcher.isEmergencySmsSupport(destAddr))).",
+      "range": {
+        "startLine": 454,
+        "startChar": 30,
+        "endLine": 454,
+        "endChar": 41
+      },
+      "revId": "3a483e54b834b46d143a74fbb1585e74b6be53dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4506fdc_7ab5f744",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2018-06-21T00:20:51Z",
+      "side": 1,
+      "message": "#1) If its not harm in adding to old RIL API, then we can add with GSM/CDMA dispatcher changes.\nDo you want me to add it now or we can take it up as a separate task after current changes on new Imsservice API tested thoroughly??\n \n#2) Done.",
+      "parentUuid": "218d2152_02deec4d",
       "range": {
         "startLine": 454,
         "startChar": 30,
