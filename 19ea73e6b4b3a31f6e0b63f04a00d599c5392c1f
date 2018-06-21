@@ -46,6 +46,30 @@
       "revId": "19ea73e6b4b3a31f6e0b63f04a00d599c5392c1f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "739e04e3_c557d992",
+        "filename": "src/java/com/android/internal/telephony/NewTimeServiceHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-06-21T21:16:59Z",
+      "side": 1,
+      "message": "The stock platform does support multi-SIM. It\u0027s something that should be accounted for in the NITZ-handling code. If you want to add meta-data to the TimeSignal, the subscriptionId is the thing that you\u0027d want to attach -- it\u0027s a per-device unique identifier for the SIM card, starting at 1 and incrementing for each new SIM the device sees.",
+      "parentUuid": "e777ff40_d8d0a118",
+      "range": {
+        "startLine": 135,
+        "startChar": 47,
+        "endLine": 135,
+        "endChar": 72
+      },
+      "revId": "19ea73e6b4b3a31f6e0b63f04a00d599c5392c1f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
