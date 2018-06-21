@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f36cdde4_7b32938d",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-21T16:25:55Z",
+      "side": 1,
+      "message": "this should be isAvailable  \u0026\u0026 (isRegistered()||isEmergency...())",
+      "range": {
+        "startLine": 454,
+        "startChar": 11,
+        "endLine": 455,
+        "endChar": 66
+      },
+      "revId": "e456fc84f52dd3da693139c9ec59decd7620386c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
