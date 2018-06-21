@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.IDeviceIdleController;
 import android.os.Looper;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.telephony.AccessNetworkConstants.TransportType;
 
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
@@ -66,10 +67,12 @@ public class TelephonyComponentFactory {
     }
 
     /**
-     * Sets the NitzStateMachine implementation to use during implementation. This boolean
-     * should be removed once the new implementation is stable.
+     * Sets the NitzStateMachine implementation to use. This boolean should be removed once the new
+     * time / time zone detection implementation is stable / the old implementation is not needed
+     * as a fallback. http://b/78217059
      */
-    static final boolean USE_NEW_NITZ_STATE_MACHINE = true;
+    static final boolean USE_NEW_NITZ_STATE_MACHINE =
+            SystemProperties.getBoolean("sys.time.new_service_impl", true);
 
     /**
      * Returns a new {@link NitzStateMachine} instance.
