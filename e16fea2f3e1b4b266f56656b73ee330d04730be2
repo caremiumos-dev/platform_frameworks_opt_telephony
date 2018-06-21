@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "90c0f0eb_87158d7a",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-06-21T03:24:25Z",
+      "side": 1,
+      "message": "in UMTS to CDMA case, the call request can be sent out successfully, modem acquires CDMA for emergency call under UMTS, so phone has to change as CMDA, because Modem ensures the emergency call successfully, in this case, even pending MO call is disposed, the unknown call will be notified, Telecom will take this case.\n\notherwise, the ecall may be sent out over IMS pipe, after handover to CS, then follow by handover case.\n\nin a word, the progress is silent if we did not disconnect the pending mo call.\n\nwe do not need to redial.\n\n\nin CDMA to UMTS case, after exiting ECBM, lower layer needs to take some times to acquire UMTS, unfortunately RIL sends the request with the preference CDMA_AUTOMATIC because lower layer does not report UMTS in time. because the voice call cannot be dialed out over CDMA, it is failed always, internally we have asked RIL to resolve this, but they think this is a hack, not follow by design.\n\nso Telephony has to make a change to delay the dial request.\n\n\nfor redial, if report generic error, Telecom can redial out over other SUB if it is emergency all. redial just is used for emergency call, of course, QC support redial based on emergency temp/perm failure for ecall also.\n\n\nhere the normal voice call is failed, so we make a 6s delay on this.",
+      "parentUuid": "c699e368_55e7dba0",
+      "range": {
+        "startLine": 224,
+        "startChar": 11,
+        "endLine": 224,
+        "endChar": 66
+      },
+      "revId": "e16fea2f3e1b4b266f56656b73ee330d04730be2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b09c6b38_338f66d4",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 1
