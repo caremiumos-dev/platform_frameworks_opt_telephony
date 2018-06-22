@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99a57929_a1c37459",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-06-22T00:56:10Z",
+      "side": 1,
+      "message": "CDMA_LTE behaves similarly to LTE phones for calling. Is there a reason you included this phone type here?",
+      "range": {
+        "startLine": 1059,
+        "startChar": 41,
+        "endLine": 1059,
+        "endChar": 60
+      },
+      "revId": "76299d96e2ff08ccfa6f52dc66dc27078a8c31ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
