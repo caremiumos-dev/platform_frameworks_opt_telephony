@@ -22,6 +22,30 @@
       "revId": "e456fc84f52dd3da693139c9ec59decd7620386c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db939dcc_d4176912",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2018-06-22T00:40:22Z",
+      "side": 1,
+      "message": "platform may not be notified with sms capability if IMS is not registered but platform still needs to send sms over emergency Ims pdn in lte. So it can not be (isAvailable  \u0026\u0026 (isRegistered()||isEmergency...())",
+      "parentUuid": "f36cdde4_7b32938d",
+      "range": {
+        "startLine": 454,
+        "startChar": 11,
+        "endLine": 455,
+        "endChar": 66
+      },
+      "revId": "e456fc84f52dd3da693139c9ec59decd7620386c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
