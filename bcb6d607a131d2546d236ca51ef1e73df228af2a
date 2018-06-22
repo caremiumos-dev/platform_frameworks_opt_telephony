@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81ee1cf6_92360ad9",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-22T21:52:38Z",
+      "side": 1,
+      "message": "moving to notifyAllFeaturesRemoved() because this code should also be executed for other failure conditions",
+      "range": {
+        "startLine": 81,
+        "startChar": 16,
+        "endLine": 91,
+        "endChar": 51
+      },
+      "revId": "bcb6d607a131d2546d236ca51ef1e73df228af2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98afafa7_9f95ebb9",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceControllerStaticCompat.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-22T21:52:38Z",
+      "side": 1,
+      "message": "not going to put this in here, instead I will do the null check in ImsServiceControllerCompat. Don\u0027t want to expose this state in here if it isn\u0027t necessary.",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 5
+      },
+      "revId": "bcb6d607a131d2546d236ca51ef1e73df228af2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
