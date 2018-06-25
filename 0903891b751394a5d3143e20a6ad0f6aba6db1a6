@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1836033_30917dc3",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceControllerCompat.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1333993
+      },
+      "writtenOn": "2018-06-25T02:38:41Z",
+      "side": 1,
+      "message": "But actually it can’t prevent NPE completely, ie. Sub class ImsServiceCompatController override isServiceControllerAvailable(),Which in normal case return true, but it doesn\u0027t override the removeImsFeature , then NPE still happens, so override of removeImsFeature is necessary.",
+      "revId": "0903891b751394a5d3143e20a6ad0f6aba6db1a6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
