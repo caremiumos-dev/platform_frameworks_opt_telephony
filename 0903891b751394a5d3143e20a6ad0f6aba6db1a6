@@ -16,6 +16,24 @@
       "revId": "0903891b751394a5d3143e20a6ad0f6aba6db1a6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95eaf184_fef0667a",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceControllerCompat.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-25T17:32:45Z",
+      "side": 1,
+      "message": "mServiceController will be null in the case that ImsServiceControllerStaticCompat is used because mServiceController is never set. So, when isServiceControllerAvailable is called, mServiceController will be null and it will return false in the ImsServiceControllerStaticCompat case.\n\nI can make removeImsFeature and isServiceControllerAvailable final so that these methods are not accidentally extended in the future.",
+      "parentUuid": "c1836033_30917dc3",
+      "revId": "0903891b751394a5d3143e20a6ad0f6aba6db1a6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
