@@ -34,6 +34,24 @@
       "revId": "0903891b751394a5d3143e20a6ad0f6aba6db1a6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4565e0b0_822ac26a",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceControllerCompat.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1333993
+      },
+      "writtenOn": "2018-06-26T06:13:42Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s a good solution to make removeImsFeature and isServiceControllerAvailable final.\nSince isServiceControllerAvailable will be called to do some check, ie. whether the binding with ims service is ready, before we do some operations, eg. enableIms/disableIms etc. Even for ImsServiceControllerStaticCompat, we still need it. So ImsServiceControllerStaticCompat should override its own removeImsFeature and isServiceControllerAvailable, just like other functions.",
+      "parentUuid": "95eaf184_fef0667a",
+      "revId": "0903891b751394a5d3143e20a6ad0f6aba6db1a6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
