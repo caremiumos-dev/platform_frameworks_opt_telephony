@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bac68dd_dd75539a",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-06-26T22:36:03Z",
+      "side": 1,
+      "message": "If this condition is true, we\u0027ll never get here. Control flow would go into the if-block at line 1090 above and return from this method.",
+      "range": {
+        "startLine": 1118,
+        "startChar": 20,
+        "endLine": 1118,
+        "endChar": 41
+      },
+      "revId": "9e4d76bfe51ba0d0811033a55f96ff7730a162e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
