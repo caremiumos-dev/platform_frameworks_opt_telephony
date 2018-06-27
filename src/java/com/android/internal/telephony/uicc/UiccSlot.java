@@ -96,6 +96,7 @@ public class UiccSlot extends Handler {
 
             if (absentStateUpdateNeeded(oldState)) {
                 updateCardStateAbsent();
+                resetProperties();
             // Because mUiccCard may be updated in both IccCardStatus and IccSlotStatus, we need to
             // create a new UiccCard instance in two scenarios:
             //   1. mCardState is changing from ABSENT to non ABSENT.
@@ -404,6 +405,16 @@ public class UiccSlot extends Handler {
 
         mCardState = null;
         mLastRadioState = TelephonyManager.RADIO_POWER_UNAVAILABLE;
+    }
+
+    void resetProperties() {
+        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(
+                Context.TELEPHONY_SERVICE);
+
+        log("update icc_operator_numeric=" + "");
+        telephonyManager.setSimOperatorNumericForPhone(mPhoneId, "");
+        telephonyManager.setSimCountryIsoForPhone(mPhoneId, "");
+        telephonyManager.setSimOperatorNameForPhone(mPhoneId, "");
     }
 
     private void log(String msg) {

@@ -229,12 +229,6 @@ public class SIMRecords extends IccRecords {
 
         mAdnCache.reset();
 
-        log("SIMRecords: onRadioOffOrNotAvailable set 'gsm.sim.operator.numeric' to operator=null");
-        log("update icc_operator_numeric=" + null);
-        mTelephonyManager.setSimOperatorNumericForPhone(mParentApp.getPhoneId(), "");
-        mTelephonyManager.setSimOperatorNameForPhone(mParentApp.getPhoneId(), "");
-        mTelephonyManager.setSimCountryIsoForPhone(mParentApp.getPhoneId(), "");
-
         // recordsRequested is set to false indicating that the SIM
         // read requests made so far are not valid. This is set to
         // true only when fresh set of read requests are made.
