@@ -1800,6 +1800,9 @@ public class ServiceStateTracker extends Handler {
                     mGsmRoaming = regCodeIsRoaming(registrationState);
                     mNewRejectCode = reasonForDenial;
 
+                    // Cause code is only valid for 3gpp RATs, and only if registration fails.
+                    if (registrationState == 3) mNewSS.setCsRegistrationCauseCode(reasonForDenial);
+
                     boolean isVoiceCapable = mPhone.getContext().getResources()
                             .getBoolean(com.android.internal.R.bool.config_voice_capable);
                 } else {
@@ -1883,6 +1886,11 @@ public class ServiceStateTracker extends Handler {
                     // Save the data roaming state reported by modem registration before resource
                     // overlay or carrier config possibly overrides it.
                     mNewSS.setDataRoamingFromRegistration(mDataRoaming);
+
+                    // Cause code is only valid for 3gpp RATs, and only if registration fails.
+                    if (registrationState == 3) {
+                        mNewSS.setPsRegistrationCauseCode(mNewReasonDataDenied);
+                    }
 
                     if (DBG) {
                         log("handlPollStateResultMessage: GsmSST dataServiceState=" + serviceState

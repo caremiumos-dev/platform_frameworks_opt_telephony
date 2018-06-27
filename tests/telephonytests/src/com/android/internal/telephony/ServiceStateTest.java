@@ -72,6 +72,17 @@ public class ServiceStateTest extends TestCase {
     }
 
     @SmallTest
+    public void testRegReasonCode() {
+        ServiceState ss = new ServiceState();
+        assertEquals(-1, ss.getCsRegistrationCauseCode());
+        assertEquals(-1, ss.getPsRegistrationCauseCode());
+        ss.setCsRegistrationCauseCode(10);
+        ss.setPsRegistrationCauseCode(11);
+        assertEquals(10, ss.getCsRegistrationCauseCode());
+        assertEquals(11, ss.getPsRegistrationCauseCode());
+    }
+
+    @SmallTest
     public void testBitmaskFromString() {
         String networkTypeList = "4|7|5|6|12|13|14|19";
         int networkTypeBitmask = 1 << (4 - 1) | 1 << (7 - 1) | 1 << (5 - 1) | 1 << (6 - 1)
@@ -241,6 +252,8 @@ public class ServiceStateTest extends TestCase {
         ss.setDataRoamingFromRegistration(true);
         ss.setChannelNumber(2100);
         ss.setCellBandwidths(new int[]{1400, 5000, 10000});
+        ss.setPsRegistrationCauseCode(25);
+        ss.setCsRegistrationCauseCode(35);
 
         Parcel p = Parcel.obtain();
         ss.writeToParcel(p, 0);
@@ -271,6 +284,8 @@ public class ServiceStateTest extends TestCase {
         ss.setDataRoamingFromRegistration(true);
         ss.setChannelNumber(2100);
         ss.setCellBandwidths(new int[]{3, 4, 10});
+        ss.setPsRegistrationCauseCode(20);
+        ss.setCsRegistrationCauseCode(30);
 
         Bundle b = new Bundle();
         ss.fillInNotifierBundle(b);
