@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4b0cce36_540279e1",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-27T17:56:40Z",
+      "side": 1,
+      "message": "Sorry for the confusion on this issue! Can you revert this change and recombine these two to isAvailable?",
+      "range": {
+        "startLine": 279,
+        "startChar": 0,
+        "endLine": 292,
+        "endChar": 0
+      },
+      "revId": "fe4ef8a5de932360b21ff20a7d654a161dfa18d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e663e7f9_15562baa",
         "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
         "patchSetId": 4
