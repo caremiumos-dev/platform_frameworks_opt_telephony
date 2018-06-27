@@ -52,6 +52,24 @@
       "revId": "0903891b751394a5d3143e20a6ad0f6aba6db1a6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33d1c031_b02b1580",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceControllerCompat.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-27T16:43:34Z",
+      "side": 1,
+      "message": "isServiceControllerAvailable is not needed for most operations, but it is checked by ImsServiceController in cleanup and addImsServiceFeature and removeImsServiceFeature, so I have added it there. \n\nI am still keeping removeImsFeature final, but not gating it on isServiceControllerAvailable anymore. I do not want to expose external state to ImsServiceControllerStaticCompat just for remove (especially since it is just duplicating code).",
+      "parentUuid": "4565e0b0_822ac26a",
+      "revId": "0903891b751394a5d3143e20a6ad0f6aba6db1a6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
