@@ -22,6 +22,30 @@
       "revId": "9e4d76bfe51ba0d0811033a55f96ff7730a162e3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ef43c23_a2de4c06",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1010218
+      },
+      "writtenOn": "2018-06-27T06:11:41Z",
+      "side": 1,
+      "message": "Yes control flow will hit @1090 and imsPhone.dial will be called but USSD code will not be handled in ImsPhone so it will fallback to CS.\nHence code will come to line 1115 and will throw exception which i am fixing with this change.",
+      "parentUuid": "6bac68dd_dd75539a",
+      "range": {
+        "startLine": 1118,
+        "startChar": 20,
+        "endLine": 1118,
+        "endChar": 41
+      },
+      "revId": "9e4d76bfe51ba0d0811033a55f96ff7730a162e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
