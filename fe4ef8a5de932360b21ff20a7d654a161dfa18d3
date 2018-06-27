@@ -46,6 +46,30 @@
       "revId": "fe4ef8a5de932360b21ff20a7d654a161dfa18d3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23d800d0_e7cee107",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2018-06-27T17:56:11Z",
+      "side": 1,
+      "message": "I am not sure I understand your comment \"This is assuming that all vendor implementations will eventually get the patch to move to separating capability and registration, but we already have devices that do not have this support and will not be back-ported. :(\" \n\nI am okay to not have separate capability feature as emergency SMS feature does not care about registration and capability at all(modem creates IMS emergency PDN). For normal sms over ims, existing solution works. \n\n\"Since we have some time, we should try to fix this bug in the implementation and then put this code in once it is complete and all devices support the separateion\"\n   --What are all the other vendors who need to support this separation? Any one already supported?",
+      "parentUuid": "e663e7f9_15562baa",
+      "range": {
+        "startLine": 454,
+        "startChar": 8,
+        "endLine": 456,
+        "endChar": 55
+      },
+      "revId": "fe4ef8a5de932360b21ff20a7d654a161dfa18d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
