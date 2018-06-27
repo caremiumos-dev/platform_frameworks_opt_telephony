@@ -22,6 +22,30 @@
       "revId": "fe4ef8a5de932360b21ff20a7d654a161dfa18d3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf82b2d7_5e3a528d",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-27T17:55:03Z",
+      "side": 1,
+      "message": "Actually, I confused myself! :( The capabilities are sent after IMS has been registered to tell the framework which of the services are available with the registration. This is the correct operation. You can remove the TODO.",
+      "parentUuid": "e663e7f9_15562baa",
+      "range": {
+        "startLine": 454,
+        "startChar": 8,
+        "endLine": 456,
+        "endChar": 55
+      },
+      "revId": "fe4ef8a5de932360b21ff20a7d654a161dfa18d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
