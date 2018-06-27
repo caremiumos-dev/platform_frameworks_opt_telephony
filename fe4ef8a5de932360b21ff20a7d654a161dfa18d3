@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e663e7f9_15562baa",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-27T17:29:07Z",
+      "side": 1,
+      "message": "I don\u0027t think this TODO is possible in the current state. This is assuming that all vendor implementations will eventually get the patch to move to separating capability and registration, but we already have devices that do not have this support and will not be back-ported. :(\n\nThe framework should not be written (as much as possible) to have to work around implementation details of a specific ImsService or need switch statements for devices that support one or the other implementation.\n\nMy suggestion is the following: Since we have some time, we should try to fix this bug in the implementation and then put this code in once it is complete and all devices support the separateion. I can create a bug to track this and gate this upstream on that if you would like?",
+      "range": {
+        "startLine": 454,
+        "startChar": 8,
+        "endLine": 456,
+        "endChar": 55
+      },
+      "revId": "fe4ef8a5de932360b21ff20a7d654a161dfa18d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
