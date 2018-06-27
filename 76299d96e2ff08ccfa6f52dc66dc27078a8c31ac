@@ -22,6 +22,30 @@
       "revId": "76299d96e2ff08ccfa6f52dc66dc27078a8c31ac",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4f78072_3424cc67",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-06-27T02:07:49Z",
+      "side": 1,
+      "message": "as you know, we have acrh 1x + lte with multi-mode sim (RUIM app + USIM app), in this case,\nPhone works in CDMA LTE, voice call is placed over cdma",
+      "parentUuid": "99a57929_a1c37459",
+      "range": {
+        "startLine": 1059,
+        "startChar": 41,
+        "endLine": 1059,
+        "endChar": 60
+      },
+      "revId": "76299d96e2ff08ccfa6f52dc66dc27078a8c31ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
