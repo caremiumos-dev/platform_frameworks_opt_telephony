@@ -22,6 +22,30 @@
       "revId": "807f2577f774e94046d4b0009f8687c82105d5b4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2520ef38_84d2fc86",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-06-28T02:15:37Z",
+      "side": 1,
+      "message": "YES, just reflect current the SIM count capacity only",
+      "parentUuid": "3c144fc7_aafe4df8",
+      "range": {
+        "startLine": 763,
+        "startChar": 8,
+        "endLine": 763,
+        "endChar": 30
+      },
+      "revId": "807f2577f774e94046d4b0009f8687c82105d5b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
