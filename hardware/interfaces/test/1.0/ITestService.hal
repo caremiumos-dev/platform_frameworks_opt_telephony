@@ -1,0 +1,5 @@
+package android.telephony.test@1.0;
+
+interface ITestService {
+    getString() generates (string s);
+};

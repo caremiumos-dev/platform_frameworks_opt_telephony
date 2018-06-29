@@ -26,3 +26,8 @@ filegroup {
         "src/java/android/telephony/**/*.html",
     ],
 }
+
+hidl_package_root {
+    name: "android.telephony",
+    path: "frameworks/opt/telephony/hardware/interfaces"
+}
