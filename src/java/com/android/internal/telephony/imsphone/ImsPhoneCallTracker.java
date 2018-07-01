@@ -2914,10 +2914,17 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         }
 
         @Override
+<<<<<<< HEAD
         public void onRttAudioIndicatorChanged(ImsCall imsCall, ImsStreamMediaProfile profile) {
           ImsPhoneConnection conn = findConnection(imsCall);
             if (conn != null) {
                 conn.onRttAudioIndicatorChanged(profile);
+=======
+        public void onCallSessionPropertyChanged(ImsCall imsCall, int property) {
+          ImsPhoneConnection conn = findConnection(imsCall);
+            if (conn != null) {
+                conn.onCallSessionPropertyChanged(property);
+>>>>>>> e7eebdb... IMS: Propagate call session property changed message
             }
         }
 
