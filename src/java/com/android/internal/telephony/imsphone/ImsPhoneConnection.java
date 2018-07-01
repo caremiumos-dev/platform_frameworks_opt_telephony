@@ -1011,6 +1011,12 @@ public class ImsPhoneConnection extends Connection implements
         mRttTextHandler.sendToInCall(message);
     }
 
+    public void onCallSessionPropertyChanged(int property) {
+        Bundle extras = new Bundle();
+        extras.putInt(android.telecom.Connection.EXTRA_RTT_AUDIO_INDICATION, property);
+        onConnectionEvent(android.telecom.Connection.EVENT_RTT_AUDIO_INDICATION, extras);
+    }
+
     public void setCurrentRttTextStream(android.telecom.Connection.RttTextStream rttTextStream) {
         synchronized (this) {
             mRttTextStream = rttTextStream;
