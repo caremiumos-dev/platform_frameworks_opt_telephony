@@ -1066,12 +1066,22 @@ public class ImsPhoneConnection extends Connection implements
         mRttTextHandler.sendToInCall(message);
     }
 
+<<<<<<< HEAD
     public void onRttAudioIndicatorChanged(ImsStreamMediaProfile profile) {
         Bundle extras = new Bundle();
         extras.putBoolean(android.telecom.Connection.EXTRA_IS_RTT_AUDIO_PRESENT,
                 profile.isReceivingRttAudio());
         onConnectionEvent(android.telecom.Connection.EVENT_RTT_AUDIO_INDICATION_CHANGED,
                 extras);
+=======
+    public void onCallSessionPropertyChanged(int property) {
+        Bundle extras = new Bundle();
+        final int isRttAudioPresent =
+                property & android.telecom.Connection.PROPERTY_RTT_AUDIO_SPEECH;
+        extras.putBoolean(android.telecom.Connection.EXTRA_IS_RTT_AUDIO_PRESENT,
+                (isRttAudioPresent == android.telecom.Connection.PROPERTY_RTT_AUDIO_SPEECH));
+        onConnectionEvent(android.telecom.Connection.EVENT_RTT_AUDIO_INDICATION_CHANGED, extras);
+>>>>>>> e7eebdb... IMS: Propagate call session property changed message
     }
 
     public void setCurrentRttTextStream(android.telecom.Connection.RttTextStream rttTextStream) {
