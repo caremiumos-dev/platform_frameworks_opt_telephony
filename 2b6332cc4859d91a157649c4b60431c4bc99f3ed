@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73b21ee0_2a4c4c15",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-07-03T16:42:23Z",
+      "side": 1,
+      "message": "Please update this in UiccCard as well.",
+      "range": {
+        "startLine": 1248,
+        "startChar": 55,
+        "endLine": 1248,
+        "endChar": 60
+      },
+      "revId": "2b6332cc4859d91a157649c4b60431c4bc99f3ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
