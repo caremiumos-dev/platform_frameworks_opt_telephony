@@ -1,0 +1,9 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Code-Review+2: Lorenzo Colitti <lorenzo@google.com>
+Code-Review+2: Chen Xu <fionaxu@google.com>
+Verified+1: Junyu Lai <junyulai@google.com>
+Submitted-by: Lorenzo Colitti <lorenzo@google.com>
+Submitted-at: Tue, 03 Jul 2018 03:09:57 +0000
+Reviewed-on: https://android-review.googlesource.com/712098
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
