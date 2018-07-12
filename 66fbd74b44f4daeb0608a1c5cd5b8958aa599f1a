@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a0fa91e_c8945a79",
+        "filename": "src/java/com/android/internal/telephony/uicc/PlmnActRecord.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-07-12T02:50:54Z",
+      "side": 1,
+      "message": "no change to this code... just moved it.",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 6
+      },
+      "revId": "66fbd74b44f4daeb0608a1c5cd5b8958aa599f1a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
