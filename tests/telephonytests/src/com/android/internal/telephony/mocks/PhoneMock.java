@@ -20,7 +20,6 @@ import android.content.Context;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
 import android.os.AsyncResult;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Registrant;
@@ -1245,10 +1244,6 @@ public class PhoneMock extends Phone {
     }
 
     public void stopNetworkScan(Message response) {
-        throw new RuntimeException("not implemented");
-    }
-
-    public void getNeighboringCids(Message response) {
         throw new RuntimeException("not implemented");
     }
 
