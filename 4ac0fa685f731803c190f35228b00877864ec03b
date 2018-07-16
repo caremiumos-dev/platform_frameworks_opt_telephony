@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad494c80_d6fa2c9a",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-07-16T23:49:54Z",
+      "side": 1,
+      "message": "What about the case when there is a single call that is active and this hangup method is called? In this case, we will call hangupForegroundResumeBackground instead of hangupForegroundResumeBackground. In fact, when a call is hung up it is usually hung up through hangup(Connection), not hangup(Call) (a little confusing).",
+      "range": {
+        "startLine": 1248,
+        "startChar": 14,
+        "endLine": 1250,
+        "endChar": 44
+      },
+      "revId": "4ac0fa685f731803c190f35228b00877864ec03b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
