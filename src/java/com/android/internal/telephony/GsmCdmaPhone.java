@@ -432,24 +432,7 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public CellLocation getCellLocation(WorkSource workSource) {
-        if (isPhoneTypeGsm()) {
-            return mSST.getCellLocation(workSource);
-        } else {
-            CdmaCellLocation loc = (CdmaCellLocation)mSST.mCellLoc;
-
-            int mode = Settings.Secure.getInt(getContext().getContentResolver(),
-                    Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
-            if (mode == Settings.Secure.LOCATION_MODE_OFF) {
-                // clear lat/long values for location privacy
-                CdmaCellLocation privateLoc = new CdmaCellLocation();
-                privateLoc.setCellLocationData(loc.getBaseStationId(),
-                        CdmaCellLocation.INVALID_LAT_LONG,
-                        CdmaCellLocation.INVALID_LAT_LONG,
-                        loc.getSystemId(), loc.getNetworkId());
-                loc = privateLoc;
-            }
-            return loc;
-        }
+        return mSST.getCellLocation(workSource);
     }
 
     @Override
