@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d937bcf5_8f1d4e40",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2730,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-07-19T19:22:52Z",
+      "side": 1,
+      "message": "This can be triggered by RADIO_UNAVAILABLE. I don\u0027t think it is safe to always set the flag to false here.",
+      "range": {
+        "startLine": 2730,
+        "startChar": 17,
+        "endLine": 2730,
+        "endChar": 30
+      },
+      "revId": "3ef884c6117d8d8a417c852068c95ec249c9e027",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
