@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b7a50b4_53e1a422",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-07-19T23:30:15Z",
+      "side": 1,
+      "message": "Does that rely on some hal change? If yes, what about backward compatibility? Do we still need CellLocation for older hals?",
+      "range": {
+        "startLine": 9,
+        "startChar": 8,
+        "endLine": 9,
+        "endChar": 11
+      },
+      "revId": "b7a2055c57d3fd06fe36c483d91477eb28849df3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
