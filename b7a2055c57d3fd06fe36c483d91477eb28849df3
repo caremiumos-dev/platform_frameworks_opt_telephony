@@ -22,6 +22,30 @@
       "revId": "b7a2055c57d3fd06fe36c483d91477eb28849df3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e31ca28c_305b3c1a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-07-19T23:36:28Z",
+      "side": 1,
+      "message": "Fortunately no, we switched to CellIdentity before HAL1.0. :-)\n\nhttps://android.googlesource.com/platform/hardware/interfaces/+/master/radio/1.0/types.hal#1682\n\nBut, when the RIL code was updated, someone wrote code in the SST to convert backwards from CellIdentity to CellLocation. This is brings SST up to match what the HAL does (at the same time as it does other stuff). No HAL changes needed.",
+      "parentUuid": "1b7a50b4_53e1a422",
+      "range": {
+        "startLine": 9,
+        "startChar": 8,
+        "endLine": 9,
+        "endChar": 11
+      },
+      "revId": "b7a2055c57d3fd06fe36c483d91477eb28849df3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
