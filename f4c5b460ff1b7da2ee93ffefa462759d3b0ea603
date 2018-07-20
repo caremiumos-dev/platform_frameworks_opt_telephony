@@ -22,6 +22,30 @@
       "revId": "f4c5b460ff1b7da2ee93ffefa462759d3b0ea603",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0da01ad_7f1696bc",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierServiceStateTrackerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2018-07-20T05:19:24Z",
+      "side": 1,
+      "message": "I\u0027m sorry, I uploaded old version by mistake. I have updated it.",
+      "parentUuid": "baa63215_f542421f",
+      "range": {
+        "startLine": 207,
+        "startChar": 34,
+        "endLine": 207,
+        "endChar": 45
+      },
+      "revId": "f4c5b460ff1b7da2ee93ffefa462759d3b0ea603",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
