@@ -317,7 +317,7 @@ public class DcTracker extends Handler {
                 DctConstants.EVENT_DEVICE_PROVISIONED_CHANGE);
         mSettingsObserver.observe(
                 Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONING_MOBILE_DATA_ENABLED),
-                DctConstants.EVENT_DEVICE_PROVISIONED_CHANGE);
+                DctConstants.EVENT_DEVICE_PROVISIONING_DATA_SETTING_CHANGE);
     }
 
     /**
@@ -856,6 +856,9 @@ public class DcTracker extends Handler {
     }
 
     private void onDeviceProvisionedChange() {
+        mDataEnabledSettings.onDeviceProvisionedChange();
+        // TODO: We should register for DataEnabledSetting's data enabled/disabled event and
+        // handle the rest from there.
         if (isDataEnabled()) {
             reevaluateDataConnections();
             onTrySetupData(Phone.REASON_DATA_ENABLED);
@@ -864,6 +867,17 @@ public class DcTracker extends Handler {
         }
     }
 
+    private void onDeviceProvisioningDataChange() {
+        mDataEnabledSettings.onDeviceProvisioningDataChange();
+        // TODO: We should register for DataEnabledSetting's data enabled/disabled event and
+        // handle the rest from there.
+        if (isDataEnabled()) {
+            reevaluateDataConnections();
+            onTrySetupData(Phone.REASON_DATA_ENABLED);
+        } else {
+            onCleanUpAllConnections(Phone.REASON_DATA_SPECIFIC_DISABLED);
+        }
+    }
 
     public long getSubId() {
         return mPhone.getSubId();
@@ -3737,6 +3751,10 @@ public class DcTracker extends Handler {
 
             case DctConstants.EVENT_DEVICE_PROVISIONED_CHANGE:
                 onDeviceProvisionedChange();
+                break;
+
+            case DctConstants.EVENT_DEVICE_PROVISIONING_DATA_SETTING_CHANGE:
+                onDeviceProvisioningDataChange();
                 break;
 
             case DctConstants.EVENT_REDIRECTION_DETECTED:

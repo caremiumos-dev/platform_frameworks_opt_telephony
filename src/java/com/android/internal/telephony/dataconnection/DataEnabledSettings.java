@@ -52,6 +52,10 @@ public class DataEnabledSettings {
 
     public static final int REASON_DATA_ENABLED_BY_CARRIER = 4;
 
+    public static final int REASON_DATA_ENABLED_BY_DEVICE_PROVISIONED = 5;
+
+    public static final int REASON_DEVICE_PROVISIONING_DATA_ENABLED = 6;
+
     /**
      * responds to the setInternalDataEnabled call - used internally to turn off data.
      * For example during emergency calls
@@ -187,6 +191,29 @@ public class DataEnabledSettings {
                 + ", " + prov_mobile_data + ")");
 
         return retVal;
+    }
+
+    /**
+     * Called when the device provisioning state is changed.
+     * Notifies the data enabled changed for registrants if the mobile data state is different
+     * before and after device provisioned.
+     */
+    public synchronized void onDeviceProvisionedChange() {
+        boolean isDataEnabled = isDataEnabled();
+        if (isDataEnabled != isProvisioningDataEnabled()) {
+            notifyDataEnabledChanged(isDataEnabled, REASON_DATA_ENABLED_BY_DEVICE_PROVISIONED);
+        }
+    }
+
+    /**
+     * Called when the value of Settings.Global.DEVICE_PROVISIONING_MOBILE_DATA_ENABLED is changed.
+     * Notifies the data enabled changed for registrants if device is in the provisioning.
+     */
+    public synchronized void onDeviceProvisioningDataChange() {
+        if (isProvisioning()) {
+            notifyDataEnabledChanged(isProvisioningDataEnabled(),
+                    REASON_DEVICE_PROVISIONING_DATA_ENABLED);
+        }
     }
 
     private void notifyDataEnabledChanged(boolean enabled, int reason) {
