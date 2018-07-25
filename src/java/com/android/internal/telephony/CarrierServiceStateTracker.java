@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PersistableBundle;
@@ -30,12 +31,15 @@ import android.provider.Settings;
 import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.SubscriptionManager;
+import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.util.NotificationChannelController;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 
 /**
@@ -50,21 +54,75 @@ public class CarrierServiceStateTracker extends Handler {
     protected static final int CARRIER_EVENT_VOICE_DEREGISTRATION = CARRIER_EVENT_BASE + 2;
     protected static final int CARRIER_EVENT_DATA_REGISTRATION = CARRIER_EVENT_BASE + 3;
     protected static final int CARRIER_EVENT_DATA_DEREGISTRATION = CARRIER_EVENT_BASE + 4;
+    protected static final int CARRIER_EVENT_IMS_CAPABILITIES_CHANGED = CARRIER_EVENT_BASE + 5;
+
     private static final int UNINITIALIZED_DELAY_VALUE = -1;
     private Phone mPhone;
     private ServiceStateTracker mSST;
-
+    private final Map<Integer, NotificationType> mNotificationTypeMap = new HashMap<>();
+    private int mPreviousSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
     public static final int NOTIFICATION_PREF_NETWORK = 1000;
     public static final int NOTIFICATION_EMERGENCY_NETWORK = 1001;
-
-    private final Map<Integer, NotificationType> mNotificationTypeMap = new HashMap<>();
 
     public CarrierServiceStateTracker(Phone phone, ServiceStateTracker sst) {
         this.mPhone = phone;
         this.mSST = sst;
         phone.getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(
                 CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
+        // Listen for subscriber changes
+        SubscriptionManager.from(mPhone.getContext()).addOnSubscriptionsChangedListener(
+                new OnSubscriptionsChangedListener(this.getLooper()) {
+                    @Override
+                    public void onSubscriptionsChanged() {
+                        int subId = mPhone.getSubId();
+                        if (mPreviousSubId != subId) {
+                            mPreviousSubId = subId;
+                            registerPrefNetworkModeObserver();
+                        }
+                    }
+                });
+
         registerNotificationTypes();
+        registerPrefNetworkModeObserver();
+    }
+
+    private ContentObserver mPrefNetworkModeObserver = new ContentObserver(this) {
+        @Override
+        public void onChange(boolean selfChange) {
+            handlePrefNetworkModeChanged();
+        }
+    };
+
+    /**
+     * Return preferred network mode observer
+     */
+    @VisibleForTesting
+    public ContentObserver getContentObserver() {
+        return mPrefNetworkModeObserver;
+    }
+
+    private void registerPrefNetworkModeObserver() {
+        int subId = mPhone.getSubId();
+        unregisterPrefNetworkModeObserver();
+        if (SubscriptionManager.isValidSubscriptionId(subId)) {
+            mPhone.getContext().getContentResolver().registerContentObserver(
+                    Settings.Global.getUriFor(Settings.Global.PREFERRED_NETWORK_MODE + subId),
+                    true,
+                    mPrefNetworkModeObserver);
+        }
+    }
+
+    private void unregisterPrefNetworkModeObserver() {
+        mPhone.getContext().getContentResolver().unregisterContentObserver(
+                mPrefNetworkModeObserver);
+    }
+
+    /**
+     * Returns mNotificationTypeMap
+     */
+    @VisibleForTesting
+    public Map<Integer, NotificationType> getNotificationTypeMap() {
+        return mNotificationTypeMap;
     }
 
     private void registerNotificationTypes() {
@@ -82,6 +140,9 @@ public class CarrierServiceStateTracker extends Handler {
             case CARRIER_EVENT_VOICE_DEREGISTRATION:
             case CARRIER_EVENT_DATA_DEREGISTRATION:
                 handleConfigChanges();
+                break;
+            case CARRIER_EVENT_IMS_CAPABILITIES_CHANGED:
+                handleImsCapabilitiesChanged();
                 break;
             case NOTIFICATION_EMERGENCY_NETWORK:
             case NOTIFICATION_PREF_NETWORK:
@@ -152,14 +213,33 @@ public class CarrierServiceStateTracker extends Handler {
     private void handleConfigChanges() {
         for (Map.Entry<Integer, NotificationType> entry : mNotificationTypeMap.entrySet()) {
             NotificationType notificationType = entry.getValue();
-            if (evaluateSendingMessage(notificationType)) {
-                Message notificationMsg = obtainMessage(notificationType.getTypeId(), null);
-                Rlog.i(LOG_TAG, "starting timer for notifications." + notificationType.getTypeId());
-                sendMessageDelayed(notificationMsg, getDelay(notificationType));
-            } else {
-                cancelNotification(notificationType.getTypeId());
-                Rlog.i(LOG_TAG, "canceling notifications: " + notificationType.getTypeId());
-            }
+            evaluateSendingMessageOrCancelNotification(notificationType);
+        }
+    }
+
+    private void handlePrefNetworkModeChanged() {
+        NotificationType notificationType = mNotificationTypeMap.get(NOTIFICATION_PREF_NETWORK);
+        if (notificationType != null) {
+            evaluateSendingMessageOrCancelNotification(notificationType);
+        }
+    }
+
+    private void handleImsCapabilitiesChanged() {
+        NotificationType notificationType = mNotificationTypeMap
+                .get(NOTIFICATION_EMERGENCY_NETWORK);
+        if (notificationType != null) {
+            evaluateSendingMessageOrCancelNotification(notificationType);
+        }
+    }
+
+    private void evaluateSendingMessageOrCancelNotification(NotificationType notificationType) {
+        if (evaluateSendingMessage(notificationType)) {
+            Message notificationMsg = obtainMessage(notificationType.getTypeId(), null);
+            Rlog.i(LOG_TAG, "starting timer for notifications." + notificationType.getTypeId());
+            sendMessageDelayed(notificationMsg, getDelay(notificationType));
+        } else {
+            cancelNotification(notificationType.getTypeId());
+            Rlog.i(LOG_TAG, "canceling notifications: " + notificationType.getTypeId());
         }
     }
 
@@ -240,6 +320,13 @@ public class CarrierServiceStateTracker extends Handler {
     }
 
     /**
+     * Dispose the CarrierServiceStateTracker.
+     */
+    public void dispose() {
+        unregisterPrefNetworkModeObserver();
+    }
+
+    /**
      * Class that defines the different types of notifications.
      */
     public interface NotificationType {
@@ -293,7 +380,7 @@ public class CarrierServiceStateTracker extends Handler {
             }
             this.mDelay = bundle.getInt(
                     CarrierConfigManager.KEY_PREF_NETWORK_NOTIFICATION_DELAY_INT);
-            Rlog.i(LOG_TAG, "reading time to delay notification emergency: " + mDelay);
+            Rlog.i(LOG_TAG, "reading time to delay notification pref network: " + mDelay);
         }
 
         public int getDelay() {
@@ -311,7 +398,7 @@ public class CarrierServiceStateTracker extends Handler {
             Rlog.i(LOG_TAG, "PrefNetworkNotification: sendMessage() w/values: "
                     + "," + isPhoneStillRegistered() + "," + mDelay + "," + isGlobalMode()
                     + "," + mSST.isRadioOn());
-            if (mDelay == UNINITIALIZED_DELAY_VALUE ||  isPhoneStillRegistered() || isGlobalMode()
+            if (mDelay == UNINITIALIZED_DELAY_VALUE || isPhoneStillRegistered() || isGlobalMode()
                     || isRadioOffOrAirplaneMode()) {
                 return false;
             }

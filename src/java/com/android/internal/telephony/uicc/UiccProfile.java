@@ -88,7 +88,9 @@ public class UiccProfile extends IccCard {
 
     private static final String OPERATOR_BRAND_OVERRIDE_PREFIX = "operator_branding_";
 
-    private final Object mLock = new Object();
+    // The lock object is created by UiccSlot that owns the UiccCard that owns this UiccProfile.
+    // This is to share the lock between UiccSlot, UiccCard and UiccProfile for now.
+    private final Object mLock;
     private PinState mUniversalPinState;
     private int mGsmUmtsSubscriptionAppIndex;
     private int mCdmaSubscriptionAppIndex;
@@ -214,8 +216,9 @@ public class UiccProfile extends IccCard {
     };
 
     public UiccProfile(Context c, CommandsInterface ci, IccCardStatus ics, int phoneId,
-            UiccCard uiccCard) {
+            UiccCard uiccCard, Object lock) {
         if (DBG) log("Creating profile");
+        mLock = lock;
         mUiccCard = uiccCard;
         mPhoneId = phoneId;
         // set current app type based on phone type - do this before calling update() as that
@@ -484,6 +487,7 @@ public class UiccProfile extends IccCard {
                 setExternalState(IccCardConstants.State.NOT_READY);
                 break;
             case APPSTATE_READY:
+                checkAndUpdateIfAnyAppToBeIgnored();
                 if (areAllApplicationsReady()) {
                     if (areAllRecordsLoaded() && areCarrierPriviligeRulesLoaded()) {
                         if (VDBG) log("updateExternalState: setting state to LOADED");
@@ -952,24 +956,48 @@ public class UiccProfile extends IccCard {
      * this only checks for SIM/USIM and CSIM/RUIM apps. ISIM is considered not supported for this
      * purpose as there are cards that have ISIM app that is never read (there are SIMs for which
      * the state of ISIM goes to DETECTED but never to READY).
+     * CSIM/RUIM apps are considered not supported if CDMA is not supported.
      */
     private boolean isSupportedApplication(UiccCardApplication app) {
         // TODO: 2/15/18 Add check to see if ISIM app will go to READY state, and if yes, check for
         // ISIM also (currently ISIM is considered as not supported in this function)
-        if (app.getType() != AppType.APPTYPE_USIM && app.getType() != AppType.APPTYPE_CSIM
-                && app.getType() != AppType.APPTYPE_SIM && app.getType() != AppType.APPTYPE_RUIM) {
-            return false;
+        if (app.getType() == AppType.APPTYPE_USIM || app.getType() == AppType.APPTYPE_SIM
+                || (UiccController.getInstance().isCdmaSupported()
+                && (app.getType() == AppType.APPTYPE_CSIM
+                || app.getType() == AppType.APPTYPE_RUIM))) {
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    private void checkAndUpdateIfAnyAppToBeIgnored() {
+        boolean[] appReadyStateTracker = new boolean[AppType.APPTYPE_ISIM.ordinal() + 1];
+        for (UiccCardApplication app : mUiccApplications) {
+            if (app != null && isSupportedApplication(app) && app.isReady()) {
+                appReadyStateTracker[app.getType().ordinal()] = true;
+            }
+        }
+
+        for (UiccCardApplication app : mUiccApplications) {
+            if (app != null && isSupportedApplication(app) && !app.isReady()) {
+                /* Checks if the  appReadyStateTracker has already an entry in ready state
+                   with same type as app */
+                if (appReadyStateTracker[app.getType().ordinal()]) {
+                    app.setAppIgnoreState(true);
+                }
+            }
+        }
     }
 
     private boolean areAllApplicationsReady() {
         for (UiccCardApplication app : mUiccApplications) {
-            if (app != null && isSupportedApplication(app) && !app.isReady()) {
+            if (app != null && isSupportedApplication(app) && !app.isReady()
+                    && !app.isAppIgnored()) {
                 if (VDBG) log("areAllApplicationsReady: return false");
                 return false;
             }
         }
+
         if (VDBG) {
             log("areAllApplicationsReady: outside loop, return " + (mUiccApplication != null));
         }
@@ -978,7 +1006,7 @@ public class UiccProfile extends IccCard {
 
     private boolean areAllRecordsLoaded() {
         for (UiccCardApplication app : mUiccApplications) {
-            if (app != null && isSupportedApplication(app)) {
+            if (app != null && isSupportedApplication(app) && !app.isAppIgnored()) {
                 IccRecords ir = app.getIccRecords();
                 if (ir == null || !ir.isLoaded()) {
                     if (VDBG) log("areAllRecordsLoaded: return false");
@@ -1237,8 +1265,12 @@ public class UiccProfile extends IccCard {
      * Resets the application with the input AID. Returns true if any changes were made.
      *
      * A null aid implies a card level reset - all applications must be reset.
+     *
+     * @param aid aid of the application which should be reset; null imples all applications
+     * @param reset true if reset is required. false for initialization.
+     * @return boolean indicating if there was any change made as part of the reset
      */
-    public boolean resetAppWithAid(String aid) {
+    public boolean resetAppWithAid(String aid, boolean reset) {
         synchronized (mLock) {
             boolean changed = false;
             for (int i = 0; i < mUiccApplications.length; i++) {
@@ -1250,11 +1282,12 @@ public class UiccProfile extends IccCard {
                     changed = true;
                 }
             }
-            if (TextUtils.isEmpty(aid)) {
+            if (reset && TextUtils.isEmpty(aid)) {
                 if (mCarrierPrivilegeRules != null) {
                     mCarrierPrivilegeRules = null;
                     changed = true;
                 }
+                // CatService shall be disposed only when a card level reset happens.
                 if (mCatService != null) {
                     mCatService.dispose();
                     mCatService = null;

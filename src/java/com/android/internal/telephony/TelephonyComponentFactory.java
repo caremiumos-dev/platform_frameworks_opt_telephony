@@ -66,10 +66,18 @@ public class TelephonyComponentFactory {
     }
 
     /**
+     * Sets the NitzStateMachine implementation to use during implementation. This boolean
+     * should be removed once the new implementation is stable.
+     */
+    static final boolean USE_NEW_NITZ_STATE_MACHINE = true;
+
+    /**
      * Returns a new {@link NitzStateMachine} instance.
      */
     public NitzStateMachine makeNitzStateMachine(GsmCdmaPhone phone) {
-        return new OldNitzStateMachine(phone);
+        return USE_NEW_NITZ_STATE_MACHINE
+                ? new NewNitzStateMachine(phone)
+                : new OldNitzStateMachine(phone);
     }
 
     public SimActivationTracker makeSimActivationTracker(Phone phone) {
@@ -104,8 +112,8 @@ public class TelephonyComponentFactory {
      * Create a new UiccProfile object.
      */
     public UiccProfile makeUiccProfile(Context context, CommandsInterface ci, IccCardStatus ics,
-                                       int phoneId, UiccCard uiccCard) {
-        return new UiccProfile(context, ci, ics, phoneId, uiccCard);
+                                       int phoneId, UiccCard uiccCard, Object lock) {
+        return new UiccProfile(context, ci, ics, phoneId, uiccCard, lock);
     }
 
     public EriManager makeEriManager(Phone phone, Context context, int eriFileSource) {

@@ -41,6 +41,8 @@ import com.android.internal.telephony.cdma.CdmaSMSDispatcher;
 import com.android.internal.telephony.gsm.GsmInboundSmsHandler;
 import com.android.internal.telephony.gsm.GsmSMSDispatcher;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -449,7 +451,7 @@ public class SmsDispatchersController extends Handler {
                             PendingIntent sentIntent, PendingIntent deliveryIntent, Uri messageUri,
                             String callingPkg, boolean persistMessage, int priority,
                             boolean expectMore, int validityPeriod) {
-        if (mImsSmsDispatcher.isAvailable()) {
+        if (mImsSmsDispatcher.isAvailable() || mImsSmsDispatcher.isEmergencySmsSupport(destAddr)) {
             mImsSmsDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
                     messageUri, callingPkg, persistMessage, SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
                     false /*expectMore*/, SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
@@ -626,5 +628,10 @@ public class SmsDispatchersController extends Handler {
 
     public interface SmsInjectionCallback {
         void onSmsInjectedResult(int result);
+    }
+
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        mGsmInboundSmsHandler.dump(fd, pw, args);
+        mCdmaInboundSmsHandler.dump(fd, pw, args);
     }
 }

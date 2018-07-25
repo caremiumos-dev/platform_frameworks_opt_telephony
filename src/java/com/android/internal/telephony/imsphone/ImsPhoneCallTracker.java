@@ -1537,6 +1537,16 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         return mDesiredMute;
     }
 
+    /**
+     * Sends a DTMF code. According to <a href="http://tools.ietf.org/html/rfc2833">RFC 2833</a>,
+     * event 0 ~ 9 maps to decimal value 0 ~ 9, '*' to 10, '#' to 11, event 'A' ~ 'D' to 12 ~ 15,
+     * and event flash to 16. Currently, event flash is not supported.
+     *
+     * @param c that represents the DTMF to send. '0' ~ '9', 'A' ~ 'D', '*', '#' are valid inputs.
+     * @param result the result message to send when done. If non-null, the {@link Message} must
+     *         contain a valid {@link android.os.Messenger} in the {@link Message#replyTo} field,
+     *         since this can be used across IPC boundaries.
+     */
     public void sendDtmf(char c, Message result) {
         if (DBG) log("sendDtmf");
 
@@ -2258,7 +2268,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 if (mRingingCall.getState().isRinging()) {
                     // Drop pending MO. We should address incoming call first
                     mPendingMO = null;
-                } else if (mPendingMO != null) {
+                } else if (mPendingMO != null
+                        && mPendingMO.getDisconnectCause() == DisconnectCause.NOT_DISCONNECTED) {
                     sendEmptyMessage(EVENT_DIAL_PENDINGMO);
                 }
             }
@@ -2372,6 +2383,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     if (mPendingMO != null) {
                         mPendingMO.setDisconnectCause(DisconnectCause.ERROR_UNSPECIFIED);
                         sendEmptyMessageDelayed(EVENT_HANGUP_PENDINGMO, TIMEOUT_HANGUP_PENDINGMO);
+                    }
+                    if (imsCall != mCallExpectedToResume) {
+                        mCallExpectedToResume = null;
                     }
                 }
                 mPhone.notifySuppServiceFailed(Phone.SuppService.HOLD);
@@ -2789,7 +2803,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 @Override
                 public void onDeregistered(ImsReasonInfo imsReasonInfo) {
                     if (DBG) log("onImsDisconnected imsReasonInfo=" + imsReasonInfo);
-                    resetImsCapabilities();
                     mPhone.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
                     mPhone.setImsRegistered(false);
                     mPhone.processDisconnectReason(imsReasonInfo);
@@ -3576,7 +3589,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         if (imsCall != null) {
             if (conn.hasCapabilities(
                     Connection.Capability.SUPPORTS_DOWNGRADE_TO_VOICE_LOCAL |
-                            Connection.Capability.SUPPORTS_DOWNGRADE_TO_VOICE_REMOTE)) {
+                            Connection.Capability.SUPPORTS_DOWNGRADE_TO_VOICE_REMOTE)
+                            && !mSupportPauseVideo) {
 
                 // If the carrier supports downgrading to voice, then we can simply issue a
                 // downgrade to voice instead of terminating the call.

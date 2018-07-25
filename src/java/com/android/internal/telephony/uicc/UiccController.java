@@ -18,6 +18,7 @@ package com.android.internal.telephony.uicc;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +30,7 @@ import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.util.LocalLog;
 
+import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccCardConstants;
@@ -114,6 +116,7 @@ public class UiccController extends Handler {
     private UiccSlot[] mUiccSlots;
     private int[] mPhoneIdToSlotId;
     private boolean mIsSlotStatusSupported = true;
+    private boolean mIsCdmaSupported = true;
 
     private static final Object mLock = new Object();
     private static UiccController mInstance;
@@ -181,6 +184,11 @@ public class UiccController extends Handler {
         }
 
         mLauncher = new UiccStateChangedLauncher(c, this);
+
+        // set mIsCdmaSupported based on PackageManager.FEATURE_TELEPHONY_CDMA
+        PackageManager packageManager = c.getPackageManager();
+        mIsCdmaSupported =
+                packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY_CDMA);
     }
 
     private int getSlotIdFromPhoneId(int phoneId) {
@@ -642,14 +650,17 @@ public class UiccController extends Handler {
 
         boolean changed = false;
         switch(resp.refreshResult) {
+            // Reset the required apps when we know about the refresh so that
+            // anyone interested does not get stale state.
             case IccRefreshResponse.REFRESH_RESULT_RESET:
+                changed = uiccCard.resetAppWithAid(resp.aid, true /* reset */);
+                break;
             case IccRefreshResponse.REFRESH_RESULT_INIT:
-                 // Reset the required apps when we know about the refresh so that
-                 // anyone interested does not get stale state.
-                 changed = uiccCard.resetAppWithAid(resp.aid);
-                 break;
+                // don't dispose CatService on SIM REFRESH of type INIT
+                changed = uiccCard.resetAppWithAid(resp.aid, false /* initialize */);
+                break;
             default:
-                 return;
+                return;
         }
 
         if (changed && resp.refreshResult == IccRefreshResponse.REFRESH_RESULT_RESET) {
@@ -668,6 +679,10 @@ public class UiccController extends Handler {
 
         // The card status could have changed. Get the latest state.
         mCis[index].getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE, index));
+    }
+
+    public boolean isCdmaSupported() {
+        return mIsCdmaSupported;
     }
 
     private boolean isValidPhoneIndex(int index) {
@@ -697,6 +712,7 @@ public class UiccController extends Handler {
         }
         pw.println();
         pw.flush();
+        pw.println(" mIsCdmaSupported=" + mIsCdmaSupported);
         pw.println(" mUiccSlots: size=" + mUiccSlots.length);
         for (int i = 0; i < mUiccSlots.length; i++) {
             if (mUiccSlots[i] == null) {

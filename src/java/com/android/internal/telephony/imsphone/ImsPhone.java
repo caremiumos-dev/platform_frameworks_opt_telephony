@@ -1279,12 +1279,12 @@ public class ImsPhone extends ImsPhoneBase {
 
     private CallForwardInfo getCallForwardInfo(ImsCallForwardInfo info) {
         CallForwardInfo cfInfo = new CallForwardInfo();
-        cfInfo.status = info.mStatus;
-        cfInfo.reason = getCFReasonFromCondition(info.mCondition);
+        cfInfo.status = info.getStatus();
+        cfInfo.reason = getCFReasonFromCondition(info.getCondition());
         cfInfo.serviceClass = SERVICE_CLASS_VOICE;
-        cfInfo.toa = info.mToA;
-        cfInfo.number = info.mNumber;
-        cfInfo.timeSeconds = info.mTimeSeconds;
+        cfInfo.toa = info.getToA();
+        cfInfo.number = info.getNumber();
+        cfInfo.timeSeconds = info.getTimeSeconds();
         return cfInfo;
     }
 
@@ -1308,10 +1308,10 @@ public class ImsPhone extends ImsPhoneBase {
             }
         } else {
             for (int i = 0, s = infos.length; i < s; i++) {
-                if (infos[i].mCondition == ImsUtInterface.CDIV_CF_UNCONDITIONAL) {
+                if (infos[i].getCondition() == ImsUtInterface.CDIV_CF_UNCONDITIONAL) {
                     if (r != null) {
-                        setVoiceCallForwardingFlag(r, 1, (infos[i].mStatus == 1),
-                            infos[i].mNumber);
+                        setVoiceCallForwardingFlag(r, 1, (infos[i].getStatus() == 1),
+                                infos[i].getNumber());
                     }
                 }
                 cfInfos[i] = getCallForwardInfo(infos[i]);
@@ -1325,7 +1325,7 @@ public class ImsPhone extends ImsPhoneBase {
         int[] cbInfos = new int[1];
         cbInfos[0] = SERVICE_CLASS_NONE;
 
-        if (infos[0].mStatus == 1) {
+        if (infos[0].getStatus() == 1) {
             cbInfos[0] = SERVICE_CLASS_VOICE;
         }
 
@@ -1336,7 +1336,7 @@ public class ImsPhone extends ImsPhoneBase {
         int[] cwInfos = new int[2];
         cwInfos[0] = 0;
 
-        if (infos[0].mStatus == 1) {
+        if (infos[0].getStatus() == 1) {
             cwInfos[0] = 1;
             cwInfos[1] = SERVICE_CLASS_VOICE;
         }
@@ -1432,8 +1432,14 @@ public class ImsPhone extends ImsPhoneBase {
                 ServiceState newServiceState = (ServiceState) ar.result;
                 // only update if roaming status changed
                 if (mRoaming != newServiceState.getRoaming()) {
-                    if (DBG) logd("Roaming state changed");
-                    updateRoamingState(newServiceState.getRoaming());
+                    if (DBG) logd("Roaming state changed - " + mRoaming);
+                    // Update WFC mode only if voice or data is in service.
+                    // The STATE_IN_SERVICE is checked to prevent wifi calling mode change
+                    // when phone moves from roaming to no service.
+                    boolean isInService =
+                            (newServiceState.getVoiceRegState() == ServiceState.STATE_IN_SERVICE ||
+                            newServiceState.getDataRegState() == ServiceState.STATE_IN_SERVICE);
+                    updateRoamingState(newServiceState.getRoaming(), isInService);
                 }
                 break;
             case EVENT_VOICE_CALL_ENDED:
@@ -1442,7 +1448,7 @@ public class ImsPhone extends ImsPhoneBase {
                 // only update if roaming status changed
                 boolean newRoaming = getCurrentRoaming();
                 if (mRoaming != newRoaming) {
-                    updateRoamingState(newRoaming);
+                    updateRoamingState(newRoaming, true);
                 }
                 break;
 
@@ -1804,12 +1810,16 @@ public class ImsPhone extends ImsPhoneBase {
         return mCT.getVtDataUsage(perUidStats);
     }
 
-    private void updateRoamingState(boolean newRoaming) {
+    private void updateRoamingState(boolean newRoaming, boolean isInService) {
         if (mCT.getState() == PhoneConstants.State.IDLE) {
             if (DBG) logd("updateRoamingState now: " + newRoaming);
             mRoaming = newRoaming;
-            ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
-            imsManager.setWfcMode(imsManager.getWfcMode(newRoaming), newRoaming);
+            if (isInService) {
+                ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
+                imsManager.setWfcMode(imsManager.getWfcMode(newRoaming), newRoaming);
+            } else {
+                if (DBG) Rlog.d(LOG_TAG, "updateRoamingState service state is OUT_OF_SERVICE");
+            }
         } else {
             if (DBG) logd("updateRoamingState postponed: " + newRoaming);
             mCT.registerForVoiceCallEnded(this,
@@ -1820,7 +1830,7 @@ public class ImsPhone extends ImsPhoneBase {
     private boolean getCurrentRoaming() {
         TelephonyManager tm = (TelephonyManager) mContext
                 .getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.isNetworkRoaming();
+        return tm.isNetworkRoaming(getSubId());
     }
 
     @Override

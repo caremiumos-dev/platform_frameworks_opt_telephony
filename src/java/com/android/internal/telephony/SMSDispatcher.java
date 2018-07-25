@@ -628,7 +628,7 @@ public abstract class SMSDispatcher extends Handler {
      * Send an SMS PDU. Usually just calls {@link sendRawPdu}.
      */
     private void sendSubmitPdu(SmsTracker tracker) {
-        if (shouldBlockSms()) {
+        if (shouldBlockSmsForEcbm()) {
             Rlog.d(TAG, "Block SMS in Emergency Callback mode");
             tracker.onFailed(mContext, SmsManager.RESULT_ERROR_NO_SERVICE, 0/*errorCode*/);
         } else {
@@ -637,9 +637,9 @@ public abstract class SMSDispatcher extends Handler {
     }
 
     /**
-     * @return true if MO SMS should be blocked.
+     * @return true if MO SMS should be blocked for Emergency Callback Mode.
      */
-    protected abstract boolean shouldBlockSms();
+    protected abstract boolean shouldBlockSmsForEcbm();
 
     /**
      * Called when SMS send completes. Broadcasts a sentIntent on success.
@@ -1454,7 +1454,13 @@ public abstract class SMSDispatcher extends Handler {
         // fields need to be public for derived SmsDispatchers
         private final HashMap<String, Object> mData;
         public int mRetryCount;
-        public int mImsRetry; // nonzero indicates initial message was sent over Ims
+        // IMS retry counter. Nonzero indicates initial message was sent over IMS channel in RIL and
+        // counts how many retries have been made on the IMS channel.
+        // Used in older implementations where the message is sent over IMS using the RIL.
+        public int mImsRetry;
+        // Tag indicating that this SMS is being handled by the ImsSmsDispatcher. This tracker
+        // should not try to use SMS over IMS over the RIL interface in this case when falling back.
+        public boolean mUsesImsServiceForIms;
         public int mMessageRef;
         public boolean mExpectMore;
         public int mValidityPeriod;
@@ -1504,6 +1510,7 @@ public abstract class SMSDispatcher extends Handler {
             mFormat = format;
             mExpectMore = expectMore;
             mImsRetry = 0;
+            mUsesImsServiceForIms = false;
             mMessageRef = 0;
             mUnsentPartCount = unsentPartCount;
             mAnyPartFailed = anyPartFailed;
