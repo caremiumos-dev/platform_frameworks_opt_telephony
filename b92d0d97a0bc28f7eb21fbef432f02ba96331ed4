@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad304bcd_b8382c69",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2169,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-07-26T18:16:06Z",
+      "side": 1,
+      "message": "This is an interesting way to detect this... I was just registering for ServiceStateChanged. Maybe i will refactor that as well to detect this. I don\u0027t know if you want to do this, but you could also refactor RadioOnStateListener to use this signal and use that class instead duplicating logic here.",
+      "range": {
+        "startLine": 2169,
+        "startChar": 70,
+        "endLine": 2169,
+        "endChar": 96
+      },
+      "revId": "b92d0d97a0bc28f7eb21fbef432f02ba96331ed4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
