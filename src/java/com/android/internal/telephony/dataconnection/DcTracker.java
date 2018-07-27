@@ -293,8 +293,8 @@ public class DcTracker extends Handler {
                     if (SubscriptionManager.isValidSubscriptionId(subId)) {
                         registerSettingsObserver();
                     }
-                    if (mPreviousSubId.getAndSet(subId) != subId &&
-                            SubscriptionManager.isValidSubscriptionId(subId)) {
+                    if (SubscriptionManager.isValidSubscriptionId(subId) &&
+                            mPreviousSubId.getAndSet(subId) != subId) {
                         onRecordsLoadedOrSubIdChanged();
                     }
                 }
