@@ -112,9 +112,8 @@ public class RILRequest {
      * @return a RILRequest instance from the pool.
      */
     static RILRequest obtain(int request, Message result, WorkSource workSource) {
-        RILRequest rr = null;
+        RILRequest rr = obtain(request, result);
 
-        rr = obtain(request, result);
         if (workSource != null) {
             rr.mWorkSource = workSource;
             rr.mClientId = String.valueOf(workSource.get(0)) + ":" + workSource.getName(0);
