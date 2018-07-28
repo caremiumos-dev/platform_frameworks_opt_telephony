@@ -16,6 +16,24 @@
       "revId": "3319bd86d1f6156f8620c9dccd7edc187f32b7fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93e64165_5e2fabc7",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4357,
+      "author": {
+        "id": 1283499
+      },
+      "writtenOn": "2018-07-28T00:08:42Z",
+      "side": 1,
+      "message": "No, removed.",
+      "parentUuid": "9b42b7e0_ba9d49ba",
+      "revId": "3319bd86d1f6156f8620c9dccd7edc187f32b7fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
