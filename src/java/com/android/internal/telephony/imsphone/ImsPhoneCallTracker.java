@@ -2066,14 +2066,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 return DisconnectCause.NORMAL;
 
             case ImsReasonInfo.CODE_SIP_FORBIDDEN:
-                return DisconnectCause.SERVER_ERROR;
-
             case ImsReasonInfo.CODE_SIP_REDIRECTED:
             case ImsReasonInfo.CODE_SIP_BAD_REQUEST:
             case ImsReasonInfo.CODE_SIP_NOT_ACCEPTABLE:
-            case ImsReasonInfo.CODE_SIP_USER_REJECTED:
             case ImsReasonInfo.CODE_SIP_GLOBAL_ERROR:
                 return DisconnectCause.SERVER_ERROR;
+
+            case ImsReasonInfo.CODE_SIP_USER_REJECTED:
+                return DisconnectCause.BUSY;
 
             case ImsReasonInfo.CODE_SIP_SERVICE_UNAVAILABLE:
             case ImsReasonInfo.CODE_SIP_SERVER_ERROR:
