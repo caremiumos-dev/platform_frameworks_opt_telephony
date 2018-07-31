@@ -22,6 +22,30 @@
       "revId": "4ac0fa685f731803c190f35228b00877864ec03b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcf2b610_dd838407",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-07-31T06:42:17Z",
+      "side": 1,
+      "message": "yes, it is active before moving to hold as background call, in this case, user quickly hang up the call after requesting hold.\n\nso, if not get callback for hold request from lower layer, current call is active, we expect to call hangupwaitingOrBackground to end the call straight instead of hangupForegroundResumeBackground.\n\nof course, if user wait for some times, the call can be hung up, else hangupForegroundResumeBackground cannot end the call.\n\n\nuser mainly hangup call, the hangup(call) will be called from call instance\n\n1453    protected void hangup(int telephonyDisconnectCode) {\n1454        if (mOriginalConnection !\u003d null) {\n1455            try {\n1456                // Hanging up a ringing call requires that we invoke call.hangup() as opposed to\n1457                // connection.hangup(). Without this change, the party originating the call\n1458                // will not get sent to voicemail if the user opts to reject the call.\n1459                if (isValidRingingCall()) {\n1460                    Call call \u003d getCall();\n1461                    if (call !\u003d null) {\n1462                        call.hangup();\n1463                    }",
+      "parentUuid": "ad494c80_d6fa2c9a",
+      "range": {
+        "startLine": 1248,
+        "startChar": 14,
+        "endLine": 1250,
+        "endChar": 44
+      },
+      "revId": "4ac0fa685f731803c190f35228b00877864ec03b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
