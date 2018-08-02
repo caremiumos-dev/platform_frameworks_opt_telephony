@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class UiccCarrierPrivilegeRules extends Handler {
     private static final String LOG_TAG = "UiccCarrierPrivilegeRules";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
     private static final String ARAM_AID = "A00000015141434C00";
     private static final String ARAD_AID = "A00000015144414300";
@@ -435,7 +435,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
                         if (mAIDInUse == ARAD) {
                             // Open logical channel with ARA_M.
                             mRules = "";
-                            openChannel(1);
+                            openChannel(ARAM);
                         }
                         if (mAIDInUse == ARAM) {
                             if (mCheckedRules) {
@@ -444,6 +444,13 @@ public class UiccCarrierPrivilegeRules extends Handler {
                                 // if rules cannot be read from both ARA_D and ARA_M applet,
                                 // fallback to PKCS15-based ARF.
                                 log("No ARA, try ARF next.");
+                                if (ar.exception instanceof CommandException
+                                        && ((CommandException) (ar.exception)).getCommandError()
+                                        != CommandException.Error.NO_SUCH_ELEMENT) {
+                                    updateStatusMessage("No ARA due to "
+                                            +
+                                            ((CommandException) (ar.exception)).getCommandError());
+                                }
                                 mUiccPkcs15 = new UiccPkcs15(mUiccProfile,
                                         obtainMessage(EVENT_PKCS15_READ_DONE));
                             }
@@ -489,9 +496,26 @@ public class UiccCarrierPrivilegeRules extends Handler {
                         }
                     }
                 } else {
-                    if (mAIDInUse == ARAM) {
-                        updateState(STATE_ERROR, "Error reading value from SIM.");
+                    if (ar.exception instanceof CommandException) {
+                        CommandException.Error errorCode =
+                                ((CommandException) (ar.exception)).getCommandError();
+                        updateStatusMessage(
+                                "Error reading value from SIM via ARAD due to the error code: "
+                                        + errorCode);
+                        if (mAIDInUse == ARAM) {
+                            updateState(STATE_ERROR,
+                                    "Error reading value from SIM via ARAM due to the error code: "
+                                            + errorCode);
+                        }
+                    } else {
+                        updateStatusMessage(
+                                "Error reading value from SIM via ARAD: Unknown exception");
+                        if (mAIDInUse == ARAM) {
+                            updateState(STATE_ERROR,
+                                    "Error reading value from SIM via ARAM: Unknown exception");
+                        }
                     }
+
                 }
 
                 mUiccProfile.iccCloseLogicalChannel(mChannelId, obtainMessage(
@@ -504,7 +528,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
                 if (mAIDInUse == ARAD) {
                     // Close logical channel with ARA_D and then open logical channel with ARA_M.
                     mRules = "";
-                    openChannel(1);
+                    openChannel(ARAM);
                 }
                 break;
 
@@ -650,12 +674,15 @@ public class UiccCarrierPrivilegeRules extends Handler {
      * Updates the state and notifies the UiccCard that the rules have finished loading.
      */
     private void updateState(int newState, String statusMessage) {
-        mState.set(newState);
         if (mLoadedCallback != null) {
             mLoadedCallback.sendToTarget();
         }
 
-        mStatusMessage = statusMessage;
+        updateStatusMessage(statusMessage);
+    }
+
+    private void updateStatusMessage(String statusMessage) {
+        mStatusMessage += " -> " + statusMessage;
     }
 
     private static void log(String msg) {
