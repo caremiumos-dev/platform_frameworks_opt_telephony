@@ -435,7 +435,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
                         if (mAIDInUse == ARAD) {
                             // Open logical channel with ARA_M.
                             mRules = "";
-                            openChannel(1);
+                            openChannel(ARAM);
                         }
                         if (mAIDInUse == ARAM) {
                             if (mCheckedRules) {
@@ -444,6 +444,13 @@ public class UiccCarrierPrivilegeRules extends Handler {
                                 // if rules cannot be read from both ARA_D and ARA_M applet,
                                 // fallback to PKCS15-based ARF.
                                 log("No ARA, try ARF next.");
+                                if (ar.exception instanceof CommandException
+                                        && ((CommandException) (ar.exception)).getCommandError()
+                                        != CommandException.Error.NO_SUCH_ELEMENT) {
+                                    updateStatusMessage("No ARA due to "
+                                            +
+                                            ((CommandException) (ar.exception)).getCommandError());
+                                }
                                 mUiccPkcs15 = new UiccPkcs15(mUiccProfile,
                                         obtainMessage(EVENT_PKCS15_READ_DONE));
                             }
@@ -489,8 +496,19 @@ public class UiccCarrierPrivilegeRules extends Handler {
                         }
                     }
                 } else {
-                    if (mAIDInUse == ARAM) {
-                        updateState(STATE_ERROR, "Error reading value from SIM.");
+                    String errorMsg =  "Error reading value from SIM via "
+                            + ((mAIDInUse == ARAD) ? "ARAD" : "ARAM") + " due to ";
+                    if (ar.exception instanceof CommandException) {
+                        CommandException.Error errorCode =
+                                ((CommandException) (ar.exception)).getCommandError();
+                        errorMsg += "error code : " + errorCode;
+                    } else {
+                        errorMsg += "unknown exception : " + ar.exception.getMessage();
+                    }
+                    if (mAIDInUse == ARAD) {
+                        updateStatusMessage(errorMsg);
+                    } else {
+                        updateState(STATE_ERROR, errorMsg);
                     }
                 }
 
@@ -504,7 +522,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
                 if (mAIDInUse == ARAD) {
                     // Close logical channel with ARA_D and then open logical channel with ARA_M.
                     mRules = "";
-                    openChannel(1);
+                    openChannel(ARAM);
                 }
                 break;
 
@@ -650,12 +668,15 @@ public class UiccCarrierPrivilegeRules extends Handler {
      * Updates the state and notifies the UiccCard that the rules have finished loading.
      */
     private void updateState(int newState, String statusMessage) {
-        mState.set(newState);
         if (mLoadedCallback != null) {
             mLoadedCallback.sendToTarget();
         }
 
-        mStatusMessage = statusMessage;
+        updateStatusMessage(statusMessage);
+    }
+
+    private void updateStatusMessage(String statusMessage) {
+        mStatusMessage += " -> " + statusMessage;
     }
 
     private static void log(String msg) {
