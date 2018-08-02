@@ -16,6 +16,24 @@
       "revId": "8d94b2999e017c13520bd738172051033700e011",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "619d027b_43b403c3",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3070,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-08-02T21:13:37Z",
+      "side": 1,
+      "message": "In the code path through onCallStartFailed, mPendingMO still refers to the existing connection. Now that we\u0027re doing it through onCallTerminated, we have to go find the old com.android.internal.telephony.Connection and remove it from the call tracker in preparation for the redial",
+      "parentUuid": "7bd20943_5507e21f",
+      "revId": "8d94b2999e017c13520bd738172051033700e011",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
