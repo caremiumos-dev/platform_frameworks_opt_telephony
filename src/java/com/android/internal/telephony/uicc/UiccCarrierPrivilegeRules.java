@@ -104,6 +104,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
     private static final int EVENT_PKCS15_READ_DONE = 4;
 
     // State of the object.
+    private static final int STATE_NOT_CHANGE = -1;
     private static final int STATE_LOADING  = 0;
     private static final int STATE_LOADED   = 1;
     private static final int STATE_ERROR    = 2;
@@ -184,7 +185,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
     private List<UiccAccessRule> mAccessRules;
     private String mRules;
     private Message mLoadedCallback;
-    private String mStatusMessage;  // Only used for debugging.
+    private StringBuilder mStatusMessage;  // Only used for debugging.
     private int mChannelId; // Channel Id for communicating with UICC.
     private int mRetryCount;  // Number of retries for open logical channel.
     private boolean mCheckedRules = false;  // Flag that used to mark whether get rules from ARA-D.
@@ -208,7 +209,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
         log("Creating UiccCarrierPrivilegeRules");
         mUiccProfile = uiccProfile;
         mState = new AtomicInteger(STATE_LOADING);
-        mStatusMessage = "Not loaded.";
+        mStatusMessage = new StringBuilder("Not loaded.");
         mLoadedCallback = loadedCallback;
         mRules = "";
         mAccessRules = new ArrayList<>();
@@ -423,11 +424,12 @@ public class UiccCarrierPrivilegeRules extends Handler {
                             DATA, obtainMessage(EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE, mChannelId,
                                     mAIDInUse));
                 } else {
+                    CommandException.Error errorCode =
+                            ((CommandException) (ar.exception)).getCommandError();
                     // MISSING_RESOURCE could be due to logical channels temporarily unavailable,
                     // so we retry up to MAX_RETRY times, with an interval of RETRY_INTERVAL_MS.
                     if (ar.exception instanceof CommandException && mRetryCount < MAX_RETRY
-                            && ((CommandException) (ar.exception)).getCommandError()
-                            == CommandException.Error.MISSING_RESOURCE) {
+                            && errorCode == CommandException.Error.MISSING_RESOURCE) {
                         mRetryCount++;
                         removeCallbacks(mRetryRunnable);
                         postDelayed(mRetryRunnable, RETRY_INTERVAL_MS);
@@ -444,6 +446,11 @@ public class UiccCarrierPrivilegeRules extends Handler {
                                 // if rules cannot be read from both ARA_D and ARA_M applet,
                                 // fallback to PKCS15-based ARF.
                                 log("No ARA, try ARF next.");
+                                if (ar.exception instanceof CommandException
+                                        && errorCode != CommandException.Error.NO_SUCH_ELEMENT) {
+                                    updateState(STATE_NOT_CHANGE,
+                                            "No ARA due to " + errorCode + ", try ARF next.");
+                                }
                                 mUiccPkcs15 = new UiccPkcs15(mUiccProfile,
                                         obtainMessage(EVENT_PKCS15_READ_DONE));
                             }
@@ -650,12 +657,14 @@ public class UiccCarrierPrivilegeRules extends Handler {
      * Updates the state and notifies the UiccCard that the rules have finished loading.
      */
     private void updateState(int newState, String statusMessage) {
-        mState.set(newState);
+        if (newState != STATE_NOT_CHANGE) {
+            mState.set(newState);
+        }
         if (mLoadedCallback != null) {
             mLoadedCallback.sendToTarget();
         }
 
-        mStatusMessage = statusMessage;
+        mStatusMessage.append("|").append(statusMessage);
     }
 
     private static void log(String msg) {
@@ -668,7 +677,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("UiccCarrierPrivilegeRules: " + this);
         pw.println(" mState=" + getStateString(mState.get()));
-        pw.println(" mStatusMessage='" + mStatusMessage + "'");
+        pw.println(" mStatusMessage='" + mStatusMessage.toString() + "'");
         if (mAccessRules != null) {
             pw.println(" mAccessRules: ");
             for (UiccAccessRule ar : mAccessRules) {
