@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e33cabe_6da624c6",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-08-02T22:45:30Z",
+      "side": 1,
+      "message": "It\u0027d be good to have a second argument with a bitmask indicating which properties changed. That way, if you add a new property later on, we won\u0027t have to process its change every time the audio bit flips.",
+      "range": {
+        "startLine": 1014,
+        "startChar": 45,
+        "endLine": 1014,
+        "endChar": 57
+      },
+      "revId": "e7eebdbc6ab88e233b9be64dc1dd4c589882bbc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
