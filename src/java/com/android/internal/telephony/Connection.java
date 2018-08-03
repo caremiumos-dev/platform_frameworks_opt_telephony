@@ -107,6 +107,7 @@ public abstract class Connection {
         public void onDisconnect(int cause);
         public void onRttInitiated();
         public void onRttTerminated();
+        public void onOriginalConnectionReplaced(Connection newConnection);
     }
 
     /**
@@ -152,6 +153,8 @@ public abstract class Connection {
         public void onRttInitiated() {}
         @Override
         public void onRttTerminated() {}
+        @Override
+        public void onOriginalConnectionReplaced(Connection newConnection) {}
     }
 
     public static final int AUDIO_QUALITY_STANDARD = 1;
@@ -1022,6 +1025,11 @@ public abstract class Connection {
         }
     }
 
+    public void onOriginalConnectionReplaced(Connection newConnection) {
+        for (Listener l : mListeners) {
+            l.onOriginalConnectionReplaced(newConnection);
+        }
+    }
     /**
      * Notifies the connection that there was a failure while handing over to WIFI.
      */
@@ -1096,6 +1104,18 @@ public abstract class Connection {
      */
     public int getPhoneType() {
         return mPhoneType;
+    }
+
+    /**
+     * Reset the Connection time and Duration
+     */
+    public void resetConnectionTime() {
+        if (mPhoneType == PhoneConstants.PHONE_TYPE_CDMA_LTE ||
+                mPhoneType == PhoneConstants.PHONE_TYPE_CDMA) {
+            mConnectTime = System.currentTimeMillis();
+            mConnectTimeReal = SystemClock.elapsedRealtime();
+            mDuration = 0;
+        }
     }
 
     /**
