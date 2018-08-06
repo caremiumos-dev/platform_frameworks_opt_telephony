@@ -46,6 +46,30 @@
       "revId": "4ac0fa685f731803c190f35228b00877864ec03b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f15a56ce_d64b2d84",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-06T23:30:12Z",
+      "side": 1,
+      "message": "There are some cases where there is an active call and we are not trying to hold where this method is called, for example:\n1) An active call and the radio is turned off (Call#hangupIfAlive)\n2) Hang up an active call using an In Call supp code \"1X\".\n\nIn these cases, \"mBackgroundCall.mConnections.size() \u003d\u003d 0\" is true, so hangupWaitingOrBackground() will be called, even though hangupForegroundResumeBackground should be called instead.\n\nHave these cases been checked for regressions?\n\nby the way, this new if statement really doesn\u0027t read well because it says (if there are no background connections, then hangup the waiting or background connection)... I wonder if there is another way to do this. Perhaps we can store the intermediate \"trying to hold\" state in the call instance. This is how we handle this problem in the IMS portion of the code.",
+      "parentUuid": "dcf2b610_dd838407",
+      "range": {
+        "startLine": 1248,
+        "startChar": 14,
+        "endLine": 1250,
+        "endChar": 44
+      },
+      "revId": "4ac0fa685f731803c190f35228b00877864ec03b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
