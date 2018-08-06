@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00f5bb77_e3d8d46a",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-08-06T16:48:42Z",
+      "side": 1,
+      "message": "This doesn\u0027t sound a state, but just an instruction. You don\u0027t need to use it.",
+      "range": {
+        "startLine": 107,
+        "startChar": 29,
+        "endLine": 107,
+        "endChar": 45
+      },
+      "revId": "78cea96d1a23474ff99eae5aae274d56558818a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75a37a06_4cdb881a",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-08-06T16:48:42Z",
+      "side": 1,
+      "message": "This is not necessary. If the exception is not CommandException, the casting above may fail with a runtime exception and the code here won\u0027t be executed.",
+      "range": {
+        "startLine": 449,
+        "startChar": 36,
+        "endLine": 449,
+        "endChar": 76
+      },
+      "revId": "78cea96d1a23474ff99eae5aae274d56558818a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d684a151_a63496b9",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-08-06T16:48:42Z",
+      "side": 1,
+      "message": "This can be omitted.",
+      "range": {
+        "startLine": 452,
+        "startChar": 72,
+        "endLine": 452,
+        "endChar": 92
+      },
+      "revId": "78cea96d1a23474ff99eae5aae274d56558818a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d4f0094_8ae959d5",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-08-06T16:48:42Z",
+      "side": 1,
+      "message": "Also log the transmit error of ARA-D here?",
+      "range": {
+        "startLine": 498,
+        "startChar": 18,
+        "endLine": 498,
+        "endChar": 24
+      },
+      "revId": "78cea96d1a23474ff99eae5aae274d56558818a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05c4eb14_9ad7e815",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-08-06T16:48:42Z",
+      "side": 1,
+      "message": "Add the error code",
+      "range": {
+        "startLine": 500,
+        "startChar": 50,
+        "endLine": 500,
+        "endChar": 79
+      },
+      "revId": "78cea96d1a23474ff99eae5aae274d56558818a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4476aedb_8a7f1923",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-08-06T16:48:42Z",
+      "side": 1,
+      "message": "Make a new private method to wrap this updateStatusMessage logic.",
+      "range": {
+        "startLine": 667,
+        "startChar": 8,
+        "endLine": 667,
+        "endChar": 57
+      },
+      "revId": "78cea96d1a23474ff99eae5aae274d56558818a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
