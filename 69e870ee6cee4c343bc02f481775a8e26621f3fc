@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a97e7e70_cebc8fbe",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-06T21:30:08Z",
+      "side": 1,
+      "message": "mPhone.getIccRecordsLoaded() instead?",
+      "range": {
+        "startLine": 1377,
+        "startChar": 12,
+        "endLine": 1377,
+        "endChar": 22
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2236c7ee_0c56da85",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-06T21:30:08Z",
+      "side": 1,
+      "message": "I do not see this in Phone base class. Forgot to add method to Phone?",
+      "range": {
+        "startLine": 1378,
+        "startChar": 29,
+        "endLine": 1378,
+        "endChar": 48
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97d9fb01_4eec96eb",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-06T21:30:08Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "range": {
+        "startLine": 1285,
+        "startChar": 22,
+        "endLine": 1285,
+        "endChar": 35
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ad33ae9_7ebe5a59",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-06T21:30:08Z",
+      "side": 1,
+      "message": "why are you moving this to protected?",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 13
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d803e0c_2d198d35",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-06T21:30:08Z",
+      "side": 1,
+      "message": "I am hesitant about this because one day someone is going to modify RuimRecords or SIMRecords with an event constant of 28 and not realize that it is defined here, which will accidentally break this functionality...\n\nSo, lets do this:\n1) In SIMRecords, move SIM_RECORD_EVENT_BASE to some large number (1000 or something similar), so there is no clash.\n2) In RuimRecords, add a SIM_RECORD_EVENT_BASE and base the events off of this number (like SIMRecords), and set the offset to some other number (such as 2000).",
+      "range": {
+        "startLine": 148,
+        "startChar": 31,
+        "endLine": 148,
+        "endChar": 61
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3503efc8_5e6c8e1e",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-06T21:30:08Z",
+      "side": 1,
+      "message": "Also should reset mSmsCountOnIcc to -1 here (in case they were previously populated).",
+      "range": {
+        "startLine": 697,
+        "startChar": 19,
+        "endLine": 698,
+        "endChar": 46
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dc24564_c578e9af",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-06T21:30:08Z",
+      "side": 1,
+      "message": "this should include \"mRecordsToLoad++;\" in the next line, like the previous entries in the list.",
+      "range": {
+        "startLine": 885,
+        "startChar": 7,
+        "endLine": 885,
+        "endChar": 89
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde82fdb_313bf1f1",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-06T21:30:08Z",
+      "side": 1,
+      "message": "this should include \"mRecordsToLoad++;\" in the next line, like the previous entries in the list.",
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "367be39c_a44b5662",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccRecordsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-06T21:30:08Z",
+      "side": 1,
+      "message": "Yay tests! :)",
+      "range": {
+        "startLine": 86,
+        "startChar": 16,
+        "endLine": 86,
+        "endChar": 39
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
