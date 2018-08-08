@@ -22,6 +22,30 @@
       "revId": "e5bf4e57b5507bf49cc905df605282c512eec66d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "416c2f6e_d8ec3c06",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4380,
+      "author": {
+        "id": 1283499
+      },
+      "writtenOn": "2018-08-08T20:58:15Z",
+      "side": 1,
+      "message": "clear() does not clear mUids, and so is not the functionality we are interested in.",
+      "parentUuid": "b289fe25_c3ce3924",
+      "range": {
+        "startLine": 4380,
+        "startChar": 42,
+        "endLine": 4380,
+        "endChar": 61
+      },
+      "revId": "e5bf4e57b5507bf49cc905df605282c512eec66d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
