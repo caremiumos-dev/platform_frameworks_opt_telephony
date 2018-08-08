@@ -288,6 +288,13 @@ public class ContextFixture implements TestFixture<Context> {
             return "com.android.internal.telephony";
         }
 
+        /**
+         * Manually set the ContentResolver for testing.
+         */
+        public void setContentResolver(ContentResolver contentResolver) {
+            mContentResolver = contentResolver;
+        }
+
         @Override
         public ContentResolver getContentResolver() {
             return mContentResolver;

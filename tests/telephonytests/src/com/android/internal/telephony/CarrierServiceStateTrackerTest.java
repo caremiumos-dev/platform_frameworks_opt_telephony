@@ -100,7 +100,7 @@ public class CarrierServiceStateTrackerTest extends TelephonyTest {
         mCarrierServiceStateTrackerTestHandler.start();
         mFakeContentResolver = new CarrierServiceStateTrackerTest.FakeContentResolver();
 
-        when(mPhone.getContext().getContentResolver()).thenReturn(mFakeContentResolver);
+        mPhone.getContext().setContentResolver(mFakeContentResolver);
 
         mNotificationManager = (NotificationManager) mContext.getSystemService(
                 Context.NOTIFICATION_SERVICE);
