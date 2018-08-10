@@ -4005,9 +4005,8 @@ public class ServiceStateTracker extends Handler {
                         mPhone.mCT.mForegroundCall.hangupIfAlive();
                     }
                     dcTracker.cleanUpAllConnections(Phone.REASON_RADIO_TURNED_OFF);
-                    if (dds != mPhone.getSubId()
-                            && !ProxyController.getInstance().isDataDisconnected(dds)) {
-                        if (DBG) log("Data is active on DDS.  Wait for all data disconnect");
+                    if (!ProxyController.getInstance().isDataDisconnected(mPhone.getSubId())) {
+                        if (DBG) log("Wait for all data disconnect");
                         // Data is not disconnected on DDS. Wait for the data disconnect complete
                         // before sending the RADIO_POWER off.
                         ProxyController.getInstance().registerForAllDataDisconnected(dds, this,
