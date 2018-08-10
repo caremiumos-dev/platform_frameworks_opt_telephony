@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f60636de_0c976dd2",
+        "filename": "src/java/com/android/internal/telephony/CarrierSignalAgent.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-08-10T20:27:50Z",
+      "side": 1,
+      "message": "you dont need to set this flag. This broadcast is dedicated to the specific receiver (setPackageName) thus it should always wake up receiver with background restriction",
+      "range": {
+        "startLine": 319,
+        "startChar": 29,
+        "endLine": 319,
+        "endChar": 68
+      },
+      "revId": "7fb47bc8e52dc1e20f39f76a41c40de1e9654aab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
