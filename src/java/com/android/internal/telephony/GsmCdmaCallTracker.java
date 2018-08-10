@@ -33,7 +33,6 @@ import android.telephony.CellLocation;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
-import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
@@ -613,11 +612,10 @@ public class GsmCdmaCallTracker extends CallTracker {
 
     private boolean canDial() {
         boolean ret;
-        int serviceState = mPhone.getServiceState().getState();
         String disableCall = SystemProperties.get(
                 TelephonyProperties.PROPERTY_DISABLE_CALL, "false");
 
-        ret = (serviceState != ServiceState.STATE_POWER_OFF)
+        ret = mCi.getRadioState().isOn()
                 && mPendingMO == null
                 && !mRingingCall.isRinging()
                 && !disableCall.equals("true")
@@ -628,15 +626,14 @@ public class GsmCdmaCallTracker extends CallTracker {
 
         if (!ret) {
             log(String.format("canDial is false\n" +
-                            "((serviceState=%d) != ServiceState.STATE_POWER_OFF)::=%s\n" +
+                            "(radio isOn ::=%s\n" +
                             "&& pendingMO == null::=%s\n" +
                             "&& !ringingCall.isRinging()::=%s\n" +
                             "&& !disableCall.equals(\"true\")::=%s\n" +
                             "&& (!foregroundCall.getState().isAlive()::=%s\n" +
                             "   || foregroundCall.getState() == GsmCdmaCall.State.ACTIVE::=%s\n" +
                             "   ||!backgroundCall.getState().isAlive())::=%s)",
-                    serviceState,
-                    serviceState != ServiceState.STATE_POWER_OFF,
+                    mCi.getRadioState().isOn(),
                     mPendingMO == null,
                     !mRingingCall.isRinging(),
                     !disableCall.equals("true"),
