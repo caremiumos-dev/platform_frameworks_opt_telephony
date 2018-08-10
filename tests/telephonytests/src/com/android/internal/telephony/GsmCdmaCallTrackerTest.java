@@ -96,7 +96,6 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testMOCallDial() {
-        doReturn(ServiceState.STATE_IN_SERVICE).when(mServiceState).getState();
         assertEquals(PhoneConstants.State.IDLE, mCTUT.getState());
         assertEquals(GsmCdmaCall.State.IDLE, mCTUT.mForegroundCall.getState());
         assertEquals(GsmCdmaCall.State.IDLE, mCTUT.mBackgroundCall.getState());
