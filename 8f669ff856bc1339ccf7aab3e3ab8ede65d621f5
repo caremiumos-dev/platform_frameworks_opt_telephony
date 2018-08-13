@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7bd12437_ff4bb853",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-08-13T18:28:28Z",
+      "side": 1,
+      "message": "How do you know it is ARAD?",
+      "range": {
+        "startLine": 503,
+        "startChar": 66,
+        "endLine": 503,
+        "endChar": 70
+      },
+      "revId": "8f669ff856bc1339ccf7aab3e3ab8ede65d621f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
