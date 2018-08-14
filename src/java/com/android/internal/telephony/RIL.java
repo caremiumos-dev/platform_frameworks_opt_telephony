@@ -3087,10 +3087,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
-    void setCellInfoListRate() {
-        setCellInfoListRate(Integer.MAX_VALUE, null, mRILDefaultWorkSource);
-    }
-
     @Override
     public void setInitialAttachApn(DataProfile dataProfile, boolean isRoaming, Message result) {
 
