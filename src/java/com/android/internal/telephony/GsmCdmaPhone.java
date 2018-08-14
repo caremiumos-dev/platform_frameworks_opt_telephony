@@ -433,11 +433,8 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
-    public CellLocation getCellLocation(WorkSource workSource) {
-        CellLocation l = mSST.getCellLocation(workSource);
-        if (l != null) return l;
-        if (getPhoneType() == PhoneConstants.PHONE_TYPE_CDMA) return new CdmaCellLocation();
-        return new GsmCellLocation();
+    public void getCellLocation(WorkSource workSource, Message rspMsg) {
+        mSST.getCellLocation(workSource, rspMsg);
     }
 
     @Override
@@ -652,8 +649,8 @@ public class GsmCdmaPhone extends Phone {
         super.notifyServiceStateChangedP(ss);
     }
 
-    public void notifyLocationChanged() {
-        mNotifier.notifyCellLocation(this);
+    public void notifyLocationChanged(CellLocation cl) {
+        mNotifier.notifyCellLocation(this, cl);
     }
 
     @Override
