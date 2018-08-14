@@ -145,19 +145,6 @@ abstract class ImsPhoneBase extends Phone {
         return s;
     }
 
-    /**
-     * @return all available cell information or null if none.
-     */
-    @Override
-    public List<CellInfo> getAllCellInfo(WorkSource workSource) {
-        return getServiceStateTracker().getAllCellInfo(workSource);
-    }
-
-    @Override
-    public CellLocation getCellLocation(WorkSource workSource) {
-        return null;
-    }
-
     @Override
     public PhoneConstants.State getState() {
         return mState;

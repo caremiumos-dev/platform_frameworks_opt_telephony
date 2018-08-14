@@ -256,12 +256,6 @@ public interface PhoneInternalInterface {
     ServiceState getServiceState();
 
     /**
-     * Get the current CellLocation.
-     * @param workSource calling WorkSource
-     */
-    CellLocation getCellLocation(WorkSource workSource);
-
-    /**
      * Get the current DataState. No change notification exists at this
      * interface -- use
      * {@link android.telephony.PhoneStateListener} instead.

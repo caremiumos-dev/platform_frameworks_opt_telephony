@@ -105,11 +105,6 @@ abstract class SipPhoneBase extends Phone {
     }
 
     @Override
-    public CellLocation getCellLocation(WorkSource workSource) {
-        return null;
-    }
-
-    @Override
     public PhoneConstants.State getState() {
         return mState;
     }
