@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "886cf9f6_84fc5226",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1128278
+      },
+      "writtenOn": "2018-08-14T17:06:57Z",
+      "side": 1,
+      "message": "With logs in status message, you probably don\u0027t need to set DBG?",
+      "range": {
+        "startLine": 55,
+        "startChar": 39,
+        "endLine": 55,
+        "endChar": 43
+      },
+      "revId": "7d0cc6c08b96eef579a32c8a52b7506d469a76b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
