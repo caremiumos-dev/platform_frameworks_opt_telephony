@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 The Android Open Source Project
+ * Copyright (C) 2006 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,6 @@ import android.os.SystemProperties;
 import android.os.WorkSource;
 import android.service.carrier.CarrierIdentifier;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
-import android.telephony.CellIdentity;
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellInfo;
 import android.telephony.CellSignalStrengthCdma;
@@ -127,6 +126,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class RIL extends BaseCommands implements CommandsInterface {
     static final String RILJ_LOG_TAG = "RILJ";
+    static final String RILJ_WAKELOCK_TAG = "*telephony-radio*";
     // Have a separate wakelock instance for Ack
     static final String RILJ_ACK_WAKELOCK_NAME = "RILJ_ACK_WL";
     static final boolean RILJ_LOGD = true;
@@ -168,7 +168,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     static SparseArray<TelephonyHistogram> mRilTimeHistograms = new
             SparseArray<TelephonyHistogram>();
 
-    Object[]     mLastNITZTimeInfo;
+    Object[] mLastNITZTimeInfo;
 
     // When we are testing emergency calls
     AtomicBoolean mTestingEmergencyCall = new AtomicBoolean(false);
@@ -468,7 +468,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         mRadioProxyDeathRecipient = new RadioProxyDeathRecipient();
 
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, RILJ_LOG_TAG);
+        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, RILJ_WAKELOCK_TAG);
         mWakeLock.setReferenceCounted(false);
         mAckWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, RILJ_ACK_WAKELOCK_NAME);
         mAckWakeLock.setReferenceCounted(false);
@@ -479,6 +479,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         mWakeLockCount = 0;
         mRILDefaultWorkSource = new WorkSource(context.getApplicationInfo().uid,
                 context.getPackageName());
+        mActiveWakelockWorkSource = new WorkSource();
 
         TelephonyDevController tdc = TelephonyDevController.getInstance();
         tdc.registerRIL(this);
@@ -2290,24 +2291,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 radioProxy.getPreferredNetworkType(rr.mSerial);
             } catch (RemoteException | RuntimeException e) {
                 handleRadioProxyExceptionForRR(rr, "getPreferredNetworkType", e);
-            }
-        }
-    }
-
-    @Override
-    public void getNeighboringCids(Message result, WorkSource workSource) {
-        workSource = getDeafultWorkSourceIfInvalid(workSource);
-        IRadio radioProxy = getRadioProxy(result);
-        if (radioProxy != null) {
-            RILRequest rr = obtainRequest(RIL_REQUEST_GET_NEIGHBORING_CELL_IDS, result,
-                    workSource);
-
-            if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-            try {
-                radioProxy.getNeighboringCids(rr.mSerial);
-            } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(rr, "getNeighboringCids", e);
             }
         }
     }
@@ -4259,13 +4242,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return workSource;
     }
 
-    private String getWorkSourceClientId(WorkSource workSource) {
-        if (workSource != null) {
-            return String.valueOf(workSource.get(0)) + ":" + workSource.getName(0);
-        }
-
-        return null;
-    }
 
     /**
      * Holds a PARTIAL_WAKE_LOCK whenever
@@ -4289,13 +4265,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
                         mWakeLockCount++;
                         mWlSequenceNum++;
 
-                        String clientId = getWorkSourceClientId(rr.mWorkSource);
+                        String clientId = rr.getWorkSourceClientId();
                         if (!mClientWakelockTracker.isClientActive(clientId)) {
-                            if (mActiveWakelockWorkSource != null) {
-                                mActiveWakelockWorkSource.add(rr.mWorkSource);
-                            } else {
-                                mActiveWakelockWorkSource = rr.mWorkSource;
-                            }
+                            mActiveWakelockWorkSource.add(rr.mWorkSource);
                             mWakeLock.setWorkSource(mActiveWakelockWorkSource);
                         }
 
@@ -4351,13 +4323,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
                         mClientWakelockTracker.stopTracking(rr.mClientId,
                                 rr.mRequest, rr.mSerial,
                                 (mWakeLockCount > 1) ? mWakeLockCount - 1 : 0);
-                        String clientId = getWorkSourceClientId(rr.mWorkSource);;
-                        if (!mClientWakelockTracker.isClientActive(clientId)
-                                && (mActiveWakelockWorkSource != null)) {
+                        String clientId = rr.getWorkSourceClientId();
+                        if (!mClientWakelockTracker.isClientActive(clientId)) {
                             mActiveWakelockWorkSource.remove(rr.mWorkSource);
-                            if (mActiveWakelockWorkSource.size() == 0) {
-                                mActiveWakelockWorkSource = null;
-                            }
                             mWakeLock.setWorkSource(mActiveWakelockWorkSource);
                         }
 
@@ -4390,7 +4358,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 mWakeLockCount = 0;
                 mWakeLock.release();
                 mClientWakelockTracker.stopTrackingAll();
-                mActiveWakelockWorkSource = null;
+                mActiveWakelockWorkSource = new WorkSource();
                 return true;
             }
         } else {
@@ -5236,7 +5204,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     private static void writeToParcelForGsm(
             Parcel p, int lac, int cid, int arfcn, int bsic, String mcc, String mnc,
             String al, String as, int ss, int ber, int ta) {
-        p.writeInt(CellIdentity.TYPE_GSM);
+        p.writeInt(CellInfo.TYPE_GSM);
         p.writeString(mcc);
         p.writeString(mnc);
         p.writeString(al);
@@ -5260,7 +5228,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     private static void writeToParcelForLte(
             Parcel p, int ci, int pci, int tac, int earfcn, int bandwidth, String mcc, String mnc,
             String al, String as, int ss, int rsrp, int rsrq, int rssnr, int cqi, int ta) {
-        p.writeInt(CellIdentity.TYPE_LTE);
+        p.writeInt(CellInfo.TYPE_LTE);
         p.writeString(mcc);
         p.writeString(mnc);
         p.writeString(al);
@@ -5281,7 +5249,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     private static void writeToParcelForWcdma(
             Parcel p, int lac, int cid, int psc, int uarfcn, String mcc, String mnc,
             String al, String as, int ss, int ber, int rscp, int ecno) {
-        p.writeInt(CellIdentity.TYPE_WCDMA);
+        p.writeInt(CellInfo.TYPE_WCDMA);
         p.writeString(mcc);
         p.writeString(mnc);
         p.writeString(al);
@@ -5299,7 +5267,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     private static void writeToParcelForTdscdma(
             Parcel p, int lac, int cid, int cpid, int uarfcn, String mcc, String mnc,
             String al, String as, int ss, int ber, int rscp) {
-        p.writeInt(CellIdentity.TYPE_TDSCDMA);
+        p.writeInt(CellInfo.TYPE_TDSCDMA);
         p.writeString(mcc);
         p.writeString(mnc);
         p.writeString(al);

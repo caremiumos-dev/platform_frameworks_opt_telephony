@@ -22,14 +22,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ResultReceiver;
 import android.os.WorkSource;
-import android.telephony.CarrierConfigManager;
 import android.telecom.VideoProfile;
 import android.telephony.CellLocation;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
 import android.telephony.ServiceState;
+import android.telephony.TelephonyManager;
 
-import com.android.internal.telephony.PhoneConstants.*; // ????
+import com.android.internal.telephony.PhoneConstants.DataState;
 
 import java.util.List;
 
@@ -212,11 +212,11 @@ public interface PhoneInternalInterface {
 
     // Used for CDMA roaming mode
     // Home Networks only, as defined in PRL
-    static final int CDMA_RM_HOME        = CarrierConfigManager.CDMA_ROAMING_MODE_HOME;
+    int CDMA_RM_HOME        = TelephonyManager.CDMA_ROAMING_MODE_HOME;
     // Roaming an Affiliated networks, as defined in PRL
-    static final int CDMA_RM_AFFILIATED  = CarrierConfigManager.CDMA_ROAMING_MODE_AFFILIATED;
+    int CDMA_RM_AFFILIATED  = TelephonyManager.CDMA_ROAMING_MODE_AFFILIATED;
     // Roaming on Any Network, as defined in PRL
-    static final int CDMA_RM_ANY         = CarrierConfigManager.CDMA_ROAMING_MODE_ANY;
+    int CDMA_RM_ANY         = TelephonyManager.CDMA_ROAMING_MODE_ANY;
 
     // Used for CDMA subscription mode
     static final int CDMA_SUBSCRIPTION_UNKNOWN  =-1; // Unknown
@@ -724,20 +724,6 @@ public interface PhoneInternalInterface {
      * </ul>
      */
     void stopNetworkScan(Message response);
-
-    /**
-     * Query neighboring cell IDs.  <code>response</code> is dispatched when
-     * this is complete.  <code>response.obj</code> will be an AsyncResult,
-     * and <code>response.obj.exception</code> will be non-null on failure.
-     * On success, <code>AsyncResult.result</code> will be a <code>String[]</code>
-     * containing the neighboring cell IDs.  Index 0 will contain the count
-     * of available cell IDs.  Cell IDs are in hexadecimal format.
-     *
-     * @param response callback message that is dispatched when the query
-     * completes.
-     * @param workSource calling WorkSource
-     */
-    default void getNeighboringCids(Message response, WorkSource workSource){}
 
     /**
      * Mutes or unmutes the microphone for the active call. The microphone
