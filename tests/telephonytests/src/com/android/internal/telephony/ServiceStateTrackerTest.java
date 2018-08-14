@@ -356,7 +356,11 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         WorkSource workSource = new WorkSource(Process.myUid(),
                 mContext.getPackageName());
-        assertEquals(sst.getAllCellInfo(workSource), list);
+
+        // null worksource and no response message will update the writethrough cache
+        sst.getAllCellInfo(null, null);
+        waitForMs(200);
+        assertEquals(sst.getAllCellInfo(), list);
     }
 
     @Test
@@ -639,7 +643,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         waitForMs(200);
         WorkSource workSource = new WorkSource(Process.myUid(), mContext.getPackageName());
-        GsmCellLocation cl = (GsmCellLocation) sst.getCellLocation(workSource);
+        GsmCellLocation cl = (GsmCellLocation) sst.getCellLocation();
         assertEquals(2, cl.getLac());
         assertEquals(3, cl.getCid());
     }
@@ -658,7 +662,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         waitForMs(200);
         WorkSource workSource = new WorkSource(Process.myUid(), mContext.getPackageName());
-        CdmaCellLocation cl = (CdmaCellLocation) sst.getCellLocation(workSource);
+        CdmaCellLocation cl = (CdmaCellLocation) sst.getCellLocation();
         assertEquals(5, cl.getBaseStationLatitude());
         assertEquals(4, cl.getBaseStationLongitude());
     }
