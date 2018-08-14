@@ -340,7 +340,7 @@ public class LocaleTracker extends Handler {
 
         // Get all cell info. Passing null to use default worksource, which indicates the original
         // request is from telephony internally.
-        mCellInfo = mPhone.getAllCellInfo(null);
+        mCellInfo = mPhone.getAllCellInfo();
         msg = "getCellInfo: cell info=" + mCellInfo;
         if (DBG) log(msg);
         mLocalLog.log(msg);

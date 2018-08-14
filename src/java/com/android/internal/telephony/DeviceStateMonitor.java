@@ -27,6 +27,9 @@ import android.content.IntentFilter;
 import android.hardware.display.DisplayManager;
 import android.hardware.radio.V1_2.IndicationFilter;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Message;
@@ -44,6 +47,8 @@ import com.android.internal.util.IndentingPrintWriter;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The device state monitor monitors the device state such as charging state, power saving sate,
@@ -64,6 +69,7 @@ public class DeviceStateMonitor extends Handler {
     private static final int EVENT_POWER_SAVE_MODE_CHANGED      = 3;
     private static final int EVENT_CHARGING_STATE_CHANGED       = 4;
     private static final int EVENT_TETHERING_STATE_CHANGED      = 5;
+    private static final int EVENT_WIFI_CONNECTION_CHANGED      = 6;
 
     // TODO(b/74006656) load hysteresis values from a property when DeviceStateMonitor starts
     private static final int HYSTERESIS_KBPS = 50;
@@ -71,6 +77,37 @@ public class DeviceStateMonitor extends Handler {
     private final Phone mPhone;
 
     private final LocalLog mLocalLog = new LocalLog(100);
+
+    private final NetworkRequest mWifiNetworkRequest =
+            new NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+            .build();
+
+    private final ConnectivityManager.NetworkCallback mNetworkCallback =
+            new ConnectivityManager.NetworkCallback() {
+        Set<Network> mWifiNetworks = new HashSet<>();
+
+        public void onAvailable(Network network) {
+            synchronized (mWifiNetworks) {
+                if (mWifiNetworks.size() == 0) {
+                    // we just connected to Wifi, do a thing passing connected as arg1
+                    obtainMessage(EVENT_WIFI_CONNECTION_CHANGED, 1, 0).sendToTarget();
+                }
+                mWifiNetworks.add(network);
+            }
+        }
+
+        public void onLost(Network network) {
+            synchronized (mWifiNetworks) {
+                mWifiNetworks.remove(network);
+                if (mWifiNetworks.size() == 0) {
+                    // we just disconnected from the last wifi, do a thing
+                    obtainMessage(EVENT_WIFI_CONNECTION_CHANGED, 0, 0).sendToTarget();
+                }
+            }
+        }
+    };
 
     /**
      * Flag for wifi/usb/bluetooth tethering turned on or not
@@ -103,6 +140,15 @@ public class DeviceStateMonitor extends Handler {
      * doesn't mean no data is expected.
      */
     private boolean mIsLowDataExpected;
+
+    /**
+     * Wifi is connected, which means both that cellular is likely to be asleep when the screen is
+     * on and that in most cases the device location is relatively close to the WiFi AP. This means
+     * that fewer location updates should be provided by cellular.
+     */
+    private boolean mIsWifiConnected;
+    private int mCellInfoUnsolRate = Integer.MAX_VALUE;
+
 
     private SparseIntArray mUpdateModes = new SparseIntArray();
 
@@ -200,6 +246,10 @@ public class DeviceStateMonitor extends Handler {
         mPhone.getContext().registerReceiver(mBroadcastReceiver, filter, null, mPhone);
 
         mPhone.mCi.registerForRilConnected(this, EVENT_RIL_CONNECTED, null);
+
+        ConnectivityManager cm = (ConnectivityManager) phone.getContext().getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        cm.registerNetworkCallback(mWifiNetworkRequest, mNetworkCallback);
     }
 
     /**
@@ -207,6 +257,20 @@ public class DeviceStateMonitor extends Handler {
      */
     private boolean isLowDataExpected() {
         return !mIsCharging && !mIsTetheringOn && !mIsScreenOn;
+    }
+
+    /**
+     * @return The preferred cell info unsol rate
+     */
+    private int getCellInfoUnsolRate() {
+        // The screen is on and we're either on cellular or charging. Screen on + Charging is
+        // a likely vehicular scenario, even if there is a nomadic AP.
+        if (mIsScreenOn && (!mIsWifiConnected || mIsCharging)) {
+            // TODO: should this be an automatic value or a fixed periodic value
+            return 0;
+        }
+        // if the screen is off, or the screen is on and connected to wifi and not charging
+        return Integer.MAX_VALUE;
     }
 
     /**
@@ -353,6 +417,7 @@ public class DeviceStateMonitor extends Handler {
             case EVENT_POWER_SAVE_MODE_CHANGED:
             case EVENT_CHARGING_STATE_CHANGED:
             case EVENT_TETHERING_STATE_CHANGED:
+            case EVENT_WIFI_CONNECTION_CHANGED:
                 onUpdateDeviceState(msg.what, msg.arg1 != 0);
                 break;
             default:
@@ -386,8 +451,19 @@ public class DeviceStateMonitor extends Handler {
                 mIsPowerSaveOn = state;
                 sendDeviceState(POWER_SAVE_MODE, mIsPowerSaveOn);
                 break;
+            case EVENT_WIFI_CONNECTION_CHANGED:
+                if (mIsWifiConnected == state) return;
+                mIsWifiConnected = state;
+
+                break;
             default:
                 return;
+        }
+
+        final int newCellInfoUnsolRate = getCellInfoUnsolRate();
+        if (mCellInfoUnsolRate != newCellInfoUnsolRate) {
+            mCellInfoUnsolRate = newCellInfoUnsolRate;
+            setCellInfoReportingCriteria(mCellInfoUnsolRate);
         }
 
         if (mIsLowDataExpected != isLowDataExpected()) {
@@ -434,6 +510,7 @@ public class DeviceStateMonitor extends Handler {
         setUnsolResponseFilter(mUnsolicitedResponseFilter, true);
         setSignalStrengthReportingCriteria();
         setLinkCapacityReportingCriteria();
+        setCellInfoReportingCriteria(mCellInfoUnsolRate);
     }
 
     /**
@@ -496,6 +573,11 @@ public class DeviceStateMonitor extends Handler {
                 LINK_CAPACITY_UPLINK_THRESHOLDS, AccessNetworkType.EUTRAN);
         mPhone.setLinkCapacityReportingCriteria(LINK_CAPACITY_DOWNLINK_THRESHOLDS,
                 LINK_CAPACITY_UPLINK_THRESHOLDS, AccessNetworkType.CDMA2000);
+    }
+
+    private void setCellInfoReportingCriteria(int rate) {
+        // Use default worksource
+        mPhone.setCellInfoListRate(rate, null);
     }
 
     /**
