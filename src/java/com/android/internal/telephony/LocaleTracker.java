@@ -126,6 +126,54 @@ public class LocaleTracker extends Handler {
     };
 
     /**
+     * Constructor
+     *
+     * @param phone The phone object
+     * @param looper The looper message handler
+     */
+    public LocaleTracker(Phone phone, Looper looper)  {
+        super(looper);
+        mPhone = phone;
+        mSimState = TelephonyManager.SIM_STATE_UNKNOWN;
+
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
+        mPhone.getContext().registerReceiver(mBroadcastReceiver, filter);
+
+        mPhone.registerForServiceStateChanged(this, EVENT_SERVICE_STATE_CHANGED, null);
+        mPhone.registerForCellInfo(this, EVENT_UNSOL_CELL_INFO, null);
+    }
+
+    /**
+     * Get the device's current country.
+     *
+     * @return The device's current country. Empty string if the information is not available.
+     */
+    @NonNull
+    public synchronized String getCurrentCountry() {
+        return (mCurrentCountryIso != null) ? mCurrentCountryIso : "";
+    }
+
+    /**
+     * Update MCC/MNC from network service state synchronously. Note if this is called from phone
+     * process's main thread and if the update operation requires getting cell info from the modem,
+     * the cached cell info will be used to determine the locale. If the cached cell info is not
+     * acceptable, use {@link #updateOperatorNumeric(String)} instead.
+     *
+     * @param operatorNumeric MCC/MNC of the operator
+     */
+    public void updateOperatorNumeric(String operatorNumeric) {
+        // Check if the operator numeric changes.
+        if (!Objects.equals(mOperatorNumeric, operatorNumeric)) {
+            String msg = "Operator numeric changes to " + operatorNumeric;
+            if (DBG) log(msg);
+            mLocalLog.log(msg);
+            mOperatorNumeric = operatorNumeric;
+            updateLocale();
+        }
+    }
+
+    /**
      * Message handler
      *
      * @param msg The message
@@ -158,116 +206,6 @@ public class LocaleTracker extends Handler {
                 onSimCardStateChanged(msg.arg1);
             default:
                 throw new IllegalStateException("Unexpected message arrives. msg = " + msg.what);
-        }
-    }
-
-    /**
-     * Constructor
-     *
-     * @param phone The phone object
-     * @param looper The looper message handler
-     */
-    public LocaleTracker(Phone phone, Looper looper)  {
-        super(looper);
-        mPhone = phone;
-        mSimState = TelephonyManager.SIM_STATE_UNKNOWN;
-
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
-        mPhone.getContext().registerReceiver(mBroadcastReceiver, filter);
-
-        mPhone.registerForServiceStateChanged(this, EVENT_SERVICE_STATE_CHANGED, null);
-        mPhone.registerForCellInfo(this, EVENT_UNSOL_CELL_INFO, null);
-    }
-
-    /**
-     * Get the device's current country.
-     *
-     * @return The device's current country. Empty string if the information is not available.
-     */
-    @NonNull
-    public synchronized String getCurrentCountry() {
-        return (mCurrentCountryIso != null) ? mCurrentCountryIso : "";
-    }
-
-    /**
-     * Get the MCC from cell tower information.
-     *
-     * @return MCC in string format. Null if the information is not available.
-     */
-    @Nullable
-    private String getMccFromCellInfo() {
-        String selectedMcc = null;
-        if (mCellInfo != null) {
-            Map<String, Integer> countryCodeMap = new HashMap<>();
-            int maxCount = 0;
-            for (CellInfo cellInfo : mCellInfo) {
-                String mcc = null;
-                if (cellInfo instanceof CellInfoGsm) {
-                    mcc = ((CellInfoGsm) cellInfo).getCellIdentity().getMccString();
-                } else if (cellInfo instanceof CellInfoLte) {
-                    mcc = ((CellInfoLte) cellInfo).getCellIdentity().getMccString();
-                } else if (cellInfo instanceof CellInfoWcdma) {
-                    mcc = ((CellInfoWcdma) cellInfo).getCellIdentity().getMccString();
-                }
-                if (mcc != null) {
-                    int count = 1;
-                    if (countryCodeMap.containsKey(mcc)) {
-                        count = countryCodeMap.get(mcc) + 1;
-                    }
-                    countryCodeMap.put(mcc, count);
-                    // This is unlikely, but if MCC from cell info looks different, we choose the
-                    // MCC that occurs most.
-                    if (count > maxCount) {
-                        maxCount = count;
-                        selectedMcc = mcc;
-                    }
-                }
-            }
-        }
-        return selectedMcc;
-    }
-
-    /**
-     * Called when SIM card state changed. Only when we absolutely know the SIM is absent, we get
-     * cell info from the network. Other SIM states like NOT_READY might be just a transitioning
-     * state.
-     *
-     * @param state SIM card state. Must be one of TelephonyManager.SIM_STATE_XXX.
-     */
-    private synchronized void onSimCardStateChanged(int state) {
-        mSimState = state;
-        updateLocale();
-        updateTrackingStatus(null);
-    }
-
-    /**
-     * Called when service state changed.
-     *
-     * @param serviceState Service state
-     */
-    private void onServiceStateChanged(ServiceState serviceState) {
-        mLastServiceState = serviceState.getState();
-        updateLocale();
-        updateTrackingStatus(null);
-    }
-
-    /**
-     * Update MCC/MNC from network service state synchronously. Note if this is called from phone
-     * process's main thread and if the update operation requires getting cell info from the modem,
-     * the cached cell info will be used to determine the locale. If the cached cell info is not
-     * acceptable, use {@link #updateOperatorNumeric(String)} instead.
-     *
-     * @param operatorNumeric MCC/MNC of the operator
-     */
-    public void updateOperatorNumeric(String operatorNumeric) {
-        // Check if the operator numeric changes.
-        if (!Objects.equals(mOperatorNumeric, operatorNumeric)) {
-            String msg = "Operator numeric changes to " + operatorNumeric;
-            if (DBG) log(msg);
-            mLocalLog.log(msg);
-            mOperatorNumeric = operatorNumeric;
-            updateLocale();
         }
     }
 
@@ -328,6 +266,30 @@ public class LocaleTracker extends Handler {
     private void resetCellInfoRetry() {
         mFailCellInfoCount = 0;
         removeMessages(EVENT_REQUEST_CELL_INFO);
+    }
+
+    /**
+     * Called when SIM card state changed. Only when we absolutely know the SIM is absent, we get
+     * cell info from the network. Other SIM states like NOT_READY might be just a transitioning
+     * state.
+     *
+     * @param state SIM card state. Must be one of TelephonyManager.SIM_STATE_XXX.
+     */
+    private synchronized void onSimCardStateChanged(int state) {
+        mSimState = state;
+        updateLocale();
+        updateTrackingStatus(null);
+    }
+
+    /**
+     * Called when service state changed.
+     *
+     * @param serviceState Service state
+     */
+    private void onServiceStateChanged(ServiceState serviceState) {
+        mLastServiceState = serviceState.getState();
+        updateLocale();
+        updateTrackingStatus(null);
     }
 
     void updateTrackingStatus(String reason) {
@@ -403,6 +365,44 @@ public class LocaleTracker extends Handler {
             ((WifiManager) mPhone.getContext().getSystemService(Context.WIFI_SERVICE))
                     .setCountryCode(countryIso);
         }
+    }
+
+    /**
+     * Get the MCC from cell tower information.
+     *
+     * @return MCC in string format. Null if the information is not available.
+     */
+    @Nullable
+    private String getMccFromCellInfo() {
+        String selectedMcc = null;
+        if (mCellInfo != null) {
+            Map<String, Integer> countryCodeMap = new HashMap<>();
+            int maxCount = 0;
+            for (CellInfo cellInfo : mCellInfo) {
+                String mcc = null;
+                if (cellInfo instanceof CellInfoGsm) {
+                    mcc = ((CellInfoGsm) cellInfo).getCellIdentity().getMccString();
+                } else if (cellInfo instanceof CellInfoLte) {
+                    mcc = ((CellInfoLte) cellInfo).getCellIdentity().getMccString();
+                } else if (cellInfo instanceof CellInfoWcdma) {
+                    mcc = ((CellInfoWcdma) cellInfo).getCellIdentity().getMccString();
+                }
+                if (mcc != null) {
+                    int count = 1;
+                    if (countryCodeMap.containsKey(mcc)) {
+                        count = countryCodeMap.get(mcc) + 1;
+                    }
+                    countryCodeMap.put(mcc, count);
+                    // This is unlikely, but if MCC from cell info looks different, we choose the
+                    // MCC that occurs most.
+                    if (count > maxCount) {
+                        maxCount = count;
+                        selectedMcc = mcc;
+                    }
+                }
+            }
+        }
+        return selectedMcc;
     }
 
     private void log(String msg) {
