@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc1965d8_0d1c36de",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-15T23:04:11Z",
+      "side": 1,
+      "message": "this should also be SERVICE_CLASS_NONE for the same reasoning as GsmCdmaPhone, right?",
+      "range": {
+        "startLine": 898,
+        "startChar": 16,
+        "endLine": 898,
+        "endChar": 35
+      },
+      "revId": "55931235e0ebee8c9f2e79a09aea92046d1a3dff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cf03045_f085e584",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1316,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-15T23:04:11Z",
+      "side": 1,
+      "message": "this should just be \"cfInfo.serviceClass \u003d info.mServiceClass\". Not sure why we are overridding the service class here, especially if we are changing the get CF query to SERVICE_CLASS_NONE by default.",
+      "range": {
+        "startLine": 1312,
+        "startChar": 8,
+        "endLine": 1316,
+        "endChar": 9
+      },
+      "revId": "55931235e0ebee8c9f2e79a09aea92046d1a3dff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
