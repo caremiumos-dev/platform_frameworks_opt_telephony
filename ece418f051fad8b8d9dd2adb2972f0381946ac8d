@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aafa4323_fc38f10b",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3479,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-15T17:55:42Z",
+      "side": 1,
+      "message": "isLocalVideoCapable",
+      "range": {
+        "startLine": 3479,
+        "startChar": 20,
+        "endLine": 3479,
+        "endChar": 34
+      },
+      "revId": "ece418f051fad8b8d9dd2adb2972f0381946ac8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e179bae_fb7ed4fa",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-15T17:55:42Z",
+      "side": 1,
+      "message": "rename to setLocalVideoCapable",
+      "range": {
+        "startLine": 1295,
+        "startChar": 16,
+        "endLine": 1295,
+        "endChar": 31
+      },
+      "revId": "ece418f051fad8b8d9dd2adb2972f0381946ac8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3998368_91448cd1",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-15T17:55:42Z",
+      "side": 1,
+      "message": "rename to mIsLocalVideoCapable",
+      "range": {
+        "startLine": 1296,
+        "startChar": 8,
+        "endLine": 1296,
+        "endChar": 23
+      },
+      "revId": "ece418f051fad8b8d9dd2adb2972f0381946ac8d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
