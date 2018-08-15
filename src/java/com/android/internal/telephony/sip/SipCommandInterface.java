@@ -21,6 +21,7 @@ import android.net.KeepalivePacketData;
 import android.net.LinkProperties;
 import android.os.Handler;
 import android.os.Message;
+import android.os.WorkSource;
 import android.service.carrier.CarrierIdentifier;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
@@ -594,11 +595,12 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void nvReadItem(int itemID, Message response) {
+    public void nvReadItem(int itemID, Message response, WorkSource workSource) {
     }
 
     @Override
-    public void nvWriteItem(int itemID, String itemValue, Message response) {
+    public void nvWriteItem(int itemID, String itemValue, Message response,
+                            WorkSource workSource) {
     }
 
     @Override
@@ -630,7 +632,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void getModemActivityInfo(Message result) {
+    public void getModemActivityInfo(Message result, WorkSource workSource) {
     }
 
     @Override
@@ -639,11 +641,12 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void setAllowedCarriers(List<CarrierIdentifier> carriers, Message result) {
+    public void setAllowedCarriers(List<CarrierIdentifier> carriers, Message result,
+            WorkSource workSource) {
     }
 
     @Override
-    public void getAllowedCarriers(Message result) {
+    public void getAllowedCarriers(Message result, WorkSource workSource) {
     }
 
     @Override
@@ -666,7 +669,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void setSimCardPower(int state, Message result) {
+    public void setSimCardPower(int state, Message result, WorkSource workSource) {
     }
 
     @Override
