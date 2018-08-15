@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0ab7a67_4bc26088",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1974,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-15T23:13:29Z",
+      "side": 1,
+      "message": "Why are you doing this? We want to keep the Phone\u0027s calling identity here.\n\nYou can also use \"PhoneGlobals.getInstance().getCarrierConfigForSubId(mPhone.getSubId());\" instead here.",
+      "range": {
+        "startLine": 1974,
+        "startChar": 34,
+        "endLine": 1974,
+        "endChar": 54
+      },
+      "revId": "4d4f6f6abe4fb7b1a094c288f80f1b84b1d52c64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6293c53_ff0fee5d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1981,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-15T23:13:29Z",
+      "side": 1,
+      "message": "Need a proper key defined in CarrierConfigManager for this",
+      "range": {
+        "startLine": 1981,
+        "startChar": 34,
+        "endLine": 1981,
+        "endChar": 70
+      },
+      "revId": "4d4f6f6abe4fb7b1a094c288f80f1b84b1d52c64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
