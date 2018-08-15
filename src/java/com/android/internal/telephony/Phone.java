@@ -347,6 +347,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected final RegistrantList mEmergencyCallToggledRegistrants
             = new RegistrantList();
 
+    private final RegistrantList mCellInfoRegistrants
+            = new RegistrantList();
+
     protected Registrant mPostDialHandler;
 
     private Looper mLooper; /* to insure registrants are in correct thread*/
@@ -872,6 +875,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         migrate(mMmiRegistrants, from.mMmiRegistrants);
         migrate(mUnknownConnectionRegistrants, from.mUnknownConnectionRegistrants);
         migrate(mSuppServiceFailedRegistrants, from.mSuppServiceFailedRegistrants);
+        migrate(mCellInfoRegistrants, from.mCellInfoRegistrants);
         if (from.isInEmergencyCall()) {
             setIsInEmergencyCall();
         }
@@ -1482,6 +1486,24 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public void unregisterForResendIncallMute(Handler h) {
         mCi.unregisterForResendIncallMute(h);
+    }
+
+    /**
+     * Register for CellInfo changed.
+     * Message.obj will contain an AsyncResult.
+     * AsyncResult.result will be a List<CellInfo> instance
+     */
+    public void registerForCellInfo(
+            Handler h, int what, Object obj) {
+        mCellInfoRegistrants.add(h, what, obj);
+    }
+
+    /**
+     * Unregisters for CellInfo notification.
+     * Extraneous calls are tolerated silently
+     */
+    public void unregisterForCellInfo(Handler h) {
+        mCellInfoRegistrants.remove(h);
     }
 
     /**
@@ -2174,7 +2196,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     public void notifyCellInfo(List<CellInfo> cellInfo) {
-        // FIXME: we need to validate that individual callers can receive location info
+        AsyncResult ar = new AsyncResult(null, cellInfo, null);
+        mServiceStateRegistrants.notifyRegistrants(ar);
+
         mNotifier.notifyCellInfo(this, cellInfo);
     }
 
