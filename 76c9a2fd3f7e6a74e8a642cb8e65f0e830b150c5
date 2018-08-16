@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbf53dea_ed6a6dd7",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRules.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-08-16T18:09:37Z",
+      "side": 0,
+      "message": "Is removing this intentional?",
+      "range": {
+        "startLine": 653,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 29
+      },
+      "revId": "76c9a2fd3f7e6a74e8a642cb8e65f0e830b150c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
