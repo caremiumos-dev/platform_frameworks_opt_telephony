@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e68fb0f_d2e992ff",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2852,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-08-16T18:33:36Z",
+      "side": 1,
+      "message": "I guess it was temp cell location.",
+      "range": {
+        "startLine": 2852,
+        "startChar": 21,
+        "endLine": 2852,
+        "endChar": 24
+      },
+      "revId": "1498b183ffff3109b947470c552794de0affccc9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
