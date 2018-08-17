@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a8b36d8_dae6e179",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-08-17T23:16:25Z",
+      "side": 1,
+      "message": "What\u0027s the reason behind making this a named class instead of leaving it as a anonymous inner class?",
+      "range": {
+        "startLine": 282,
+        "startChar": 4,
+        "endLine": 282,
+        "endChar": 51
+      },
+      "revId": "2d9c2f2585a422dd45d8442d7dcba4c8cc0d1619",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "300fee56_586b58de",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-08-17T23:16:25Z",
+      "side": 1,
+      "message": "Keep this as a static invocation",
+      "range": {
+        "startLine": 295,
+        "startChar": 16,
+        "endLine": 295,
+        "endChar": 17
+      },
+      "revId": "2d9c2f2585a422dd45d8442d7dcba4c8cc0d1619",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27f49e9b_4f47c17f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-08-17T23:16:25Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 298,
+        "startChar": 16,
+        "endLine": 298,
+        "endChar": 17
+      },
+      "revId": "2d9c2f2585a422dd45d8442d7dcba4c8cc0d1619",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
