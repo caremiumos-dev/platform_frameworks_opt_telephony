@@ -502,6 +502,8 @@ public abstract class TelephonyTest {
 
         assertNotNull("Failed to set up SubscriptionController singleton",
                 SubscriptionController.getInstance());
+        assertNotNull("Failed to set up UiccController singleton",
+                UiccController.getInstance());
         setReady(false);
     }
 
