@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "95d66ab1_345f1e42",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1974,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-20T08:11:02Z",
+      "side": 1,
+      "message": "3rd-party APK might not add the reading phone permission, so we must make this",
+      "parentUuid": "d0ab7a67_4bc26088",
+      "range": {
+        "startLine": 1974,
+        "startChar": 34,
+        "endLine": 1974,
+        "endChar": 54
+      },
+      "revId": "4d4f6f6abe4fb7b1a094c288f80f1b84b1d52c64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6293c53_ff0fee5d",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "4d4f6f6abe4fb7b1a094c288f80f1b84b1d52c64",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7115027f_515c4f87",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1981,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-20T08:11:02Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "b6293c53_ff0fee5d",
+      "range": {
+        "startLine": 1981,
+        "startChar": 34,
+        "endLine": 1981,
+        "endChar": 70
+      },
+      "revId": "4d4f6f6abe4fb7b1a094c288f80f1b84b1d52c64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
