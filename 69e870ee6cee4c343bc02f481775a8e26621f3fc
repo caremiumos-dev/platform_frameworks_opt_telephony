@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ccf63cd2_8e388c35",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-20T09:02:19Z",
+      "side": 1,
+      "message": "fine, done",
+      "parentUuid": "a97e7e70_cebc8fbe",
+      "range": {
+        "startLine": 1377,
+        "startChar": 12,
+        "endLine": 1377,
+        "endChar": 22
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2236c7ee_0c56da85",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74abaf24_91724f8c",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-20T09:02:19Z",
+      "side": 1,
+      "message": "API is not used in phone, so not need to add\n\nSmsManager-\u003eUiccController-\u003eIccSmsInterfaceManager-\u003eiccrecords",
+      "parentUuid": "2236c7ee_0c56da85",
+      "range": {
+        "startLine": 1378,
+        "startChar": 29,
+        "endLine": 1378,
+        "endChar": 48
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d23545fc_c5bdd840",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-20T09:02:19Z",
+      "side": 1,
+      "message": "not need anymore",
+      "parentUuid": "97d9fb01_4eec96eb",
+      "range": {
+        "startLine": 1285,
+        "startChar": 22,
+        "endLine": 1285,
+        "endChar": 35
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ad33ae9_7ebe5a59",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30b5866f_abfd112f",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-20T09:02:19Z",
+      "side": 1,
+      "message": "sorry, wrong resolve conflicts",
+      "parentUuid": "1ad33ae9_7ebe5a59",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 13
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "93885ce1_2ade0741",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-20T09:02:19Z",
+      "side": 1,
+      "message": "yes, such definition might let us confused, for example\n\nhttp://androidxref.com/9.0.0_r3/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java#48\n\nhttp://androidxref.com/9.0.0_r3/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/uicc/IccRecords.java#145\n\n\ndo you agree to create a new ticket to refactor? not invoke in this change",
+      "parentUuid": "2d803e0c_2d198d35",
+      "range": {
+        "startLine": 148,
+        "startChar": 31,
+        "endLine": 148,
+        "endChar": 61
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3503efc8_5e6c8e1e",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 5
@@ -137,6 +257,30 @@
       "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7052ddd_f4bc8921",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-20T09:02:19Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "3503efc8_5e6c8e1e",
+      "range": {
+        "startLine": 697,
+        "startChar": 19,
+        "endLine": 698,
+        "endChar": 46
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "15add35a_9cf26b18",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-20T09:02:19Z",
+      "side": 1,
+      "message": "yes, it can",
+      "parentUuid": "2dc24564_c578e9af",
+      "range": {
+        "startLine": 885,
+        "startChar": 7,
+        "endLine": 885,
+        "endChar": 89
+      },
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cde82fdb_313bf1f1",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 5
@@ -177,6 +345,24 @@
       "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de996174_bc4b30b9",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-20T09:02:19Z",
+      "side": 1,
+      "message": "yes, it can",
+      "parentUuid": "cde82fdb_313bf1f1",
+      "revId": "69e870ee6cee4c343bc02f481775a8e26621f3fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
