@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c779660_2aa428e7",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-08-21T21:49:11Z",
+      "side": 1,
+      "message": "so we\u0027re no longer returning SystemId and NetworkId?",
+      "range": {
+        "startLine": 439,
+        "startChar": 69,
+        "endLine": 439,
+        "endChar": 89
+      },
+      "revId": "19642e416b01b6364f734b53442a61f17841323c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1952f9fc_f9eea6d5",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 3442,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-08-21T21:49:11Z",
+      "side": 1,
+      "message": "maybe we can add that it also returns null now?",
+      "range": {
+        "startLine": 3442,
+        "startChar": 8,
+        "endLine": 3442,
+        "endChar": 14
+      },
+      "revId": "19642e416b01b6364f734b53442a61f17841323c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
