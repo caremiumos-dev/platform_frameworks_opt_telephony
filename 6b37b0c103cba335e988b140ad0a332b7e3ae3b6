@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33523f62_e2a1bd60",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2725,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-08-21T20:24:50Z",
+      "side": 1,
+      "message": "Can we extract location from both old and new identity and do a comparison on those?",
+      "revId": "6b37b0c103cba335e988b140ad0a332b7e3ae3b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
