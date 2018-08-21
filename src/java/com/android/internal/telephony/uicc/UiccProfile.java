@@ -603,9 +603,8 @@ public class UiccProfile extends IccCard {
                 }
             }
             log("setExternalState: set mPhoneId=" + mPhoneId + " mExternalState=" + mExternalState);
-            mTelephonyManager.setSimStateForPhone(mPhoneId, getState().toString());
 
-            UiccController.updateInternalIccState(getIccStateIntentString(mExternalState),
+            UiccController.updateInternalIccState(mContext, mExternalState,
                     getIccStateReason(mExternalState), mPhoneId);
         }
     }
@@ -627,7 +626,7 @@ public class UiccProfile extends IccCard {
         }
     }
 
-    private String getIccStateIntentString(IccCardConstants.State state) {
+    static String getIccStateIntentString(IccCardConstants.State state) {
         switch (state) {
             case ABSENT: return IccCardConstants.INTENT_VALUE_ICC_ABSENT;
             case PIN_REQUIRED: return IccCardConstants.INTENT_VALUE_ICC_LOCKED;

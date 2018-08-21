@@ -30,7 +30,6 @@ import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.util.LocalLog;
 
-import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccCardConstants;
@@ -471,10 +470,16 @@ public class UiccController extends Handler {
         }
     }
 
-    static void updateInternalIccState(String value, String reason, int phoneId) {
+    static void updateInternalIccState(Context context, IccCardConstants.State state, String reason,
+            int phoneId) {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(
+                Context.TELEPHONY_SERVICE);
+        telephonyManager.setSimStateForPhone(phoneId, state.toString());
+
         SubscriptionInfoUpdater subInfoUpdator = PhoneFactory.getSubscriptionInfoUpdater();
         if (subInfoUpdator != null) {
-            subInfoUpdator.updateInternalIccState(value, reason, phoneId);
+            subInfoUpdator.updateInternalIccState(UiccProfile.getIccStateIntentString(state),
+                    reason, phoneId);
         } else {
             Rlog.e(LOG_TAG, "subInfoUpdate is null.");
         }
