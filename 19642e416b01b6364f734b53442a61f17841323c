@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a4da3b84_5e939903",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-08-21T22:05:28Z",
+      "side": 1,
+      "message": "makes sense, thanks for the code ref",
+      "parentUuid": "0c32a697_273436e8",
+      "range": {
+        "startLine": 439,
+        "startChar": 69,
+        "endLine": 439,
+        "endChar": 89
+      },
+      "revId": "19642e416b01b6364f734b53442a61f17841323c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1952f9fc_f9eea6d5",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 9
