@@ -16,6 +16,24 @@
       "revId": "6b37b0c103cba335e988b140ad0a332b7e3ae3b6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff374cac_f8e7ff4f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2725,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-08-21T20:34:04Z",
+      "side": 1,
+      "message": "We can but that\u0027s also not quite right since the old CellLocation version is buggy. Using equals() is a step forward... just not all the way there. I need to write a new method called something like isSameCell() to do the logically correct AND optimal comparison. I put the TODO because I want to leave that for a separate patch (with its own tests and all that).",
+      "parentUuid": "33523f62_e2a1bd60",
+      "revId": "6b37b0c103cba335e988b140ad0a332b7e3ae3b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
