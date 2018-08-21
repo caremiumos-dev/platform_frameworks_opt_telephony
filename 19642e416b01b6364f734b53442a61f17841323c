@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0c32a697_273436e8",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-08-21T22:01:43Z",
+      "side": 1,
+      "message": "Not sure I understand, so maybe I\u0027ll tell you what I think changed and you can tell me if you agree or if I\u0027m missing something.\n\nIn the old code, there were 2 cases: GSM and CDMA, and in the CDMA case, there was special location-hiding code that scrubbed lat/long from the CdmaCellLocation. All of that special location-scrubbing logic is obsolete because it wasn\u0027t sufficient, so Svet \u0026 Co replaced it with a much more stringent check at the binder level:\n\nhttps://android.googlesource.com/platform/packages/services/Telephony/+/master/src/com/android/phone/PhoneInterfaceManager.java#1825\n\nSo if Location is off, the user just doesn\u0027t get here. Thus, in addition to removing the special scrubbing logic (which is obsolete), I collapsed the Gsm and Cdma cases. Now, if we get here, and if there\u0027s a valid location, I just return it at line 438. If there *isn\u0027t* a valid location (the value we got is Null), then to preserve the NonNull behavior of the API, we now return invalid locations of the type that are correct for the Phone type. So, AFAICT, we always return a valid SID/NID if we have it... we only return an invalid blob when we\u0027ve got nuthin\u0027.",
+      "parentUuid": "2c779660_2aa428e7",
+      "range": {
+        "startLine": 439,
+        "startChar": 69,
+        "endLine": 439,
+        "endChar": 89
+      },
+      "revId": "19642e416b01b6364f734b53442a61f17841323c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1952f9fc_f9eea6d5",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 9
@@ -36,6 +60,30 @@
       "writtenOn": "2018-08-21T21:49:11Z",
       "side": 1,
       "message": "maybe we can add that it also returns null now?",
+      "range": {
+        "startLine": 3442,
+        "startChar": 8,
+        "endLine": 3442,
+        "endChar": 14
+      },
+      "revId": "19642e416b01b6364f734b53442a61f17841323c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0f88b3d_5cdfa332",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 3442,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-08-21T22:01:43Z",
+      "side": 1,
+      "message": "Sure.",
+      "parentUuid": "1952f9fc_f9eea6d5",
       "range": {
         "startLine": 3442,
         "startChar": 8,
