@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60436e47_a49f6507",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-08-22T21:51:06Z",
+      "side": 1,
+      "message": "how about letting checkSimAbsent return absent or not.\nand move those actions out of this function to the handler of EVENT_ICC_CHANGED?",
+      "range": {
+        "startLine": 1481,
+        "startChar": 7,
+        "endLine": 1489,
+        "endChar": 9
+      },
+      "revId": "5880115c6fcd8e9ded905fb36895d8285ac328ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
