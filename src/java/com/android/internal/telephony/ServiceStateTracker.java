@@ -222,7 +222,6 @@ public class ServiceStateTracker extends Handler {
     protected static final int EVENT_ALL_DATA_DISCONNECTED             = 49;
     protected static final int EVENT_PHONE_TYPE_SWITCHED               = 50;
     protected static final int EVENT_RADIO_POWER_FROM_CARRIER          = 51;
-    protected static final int EVENT_SIM_NOT_INSERTED                  = 52;
     protected static final int EVENT_IMS_SERVICE_STATE_CHANGED         = 53;
     protected static final int EVENT_RADIO_POWER_OFF_DONE              = 54;
     protected static final int EVENT_PHYSICAL_CHANNEL_CONFIG           = 55;
@@ -343,14 +342,6 @@ public class ServiceStateTracker extends Handler {
                 }
                 // update voicemail count and notify message waiting changed
                 mPhone.updateVoiceMail();
-
-                // cancel notifications if we see SIM_NOT_INSERTED (This happens on bootup before
-                // the SIM is first detected and then subsequently on SIM removals)
-                if (mSubscriptionController.getSlotIndex(subId)
-                        == SubscriptionManager.SIM_NOT_INSERTED) {
-                    // this is handled on the main thread to mitigate racing with setNotification().
-                    sendMessage(obtainMessage(EVENT_SIM_NOT_INSERTED));
-                }
             }
         }
     };
@@ -1021,6 +1012,7 @@ public class ServiceStateTracker extends Handler {
                 break;
 
             case EVENT_ICC_CHANGED:
+                checkSimAbsent();
                 onUpdateIccAvailability();
                 if (mUiccApplcation != null
                         && mUiccApplcation.getState() != AppState.APPSTATE_READY) {
@@ -1278,14 +1270,6 @@ public class ServiceStateTracker extends Handler {
                 }
                 break;
 
-            case EVENT_SIM_NOT_INSERTED:
-                if (DBG) log("EVENT_SIM_NOT_INSERTED");
-                cancelAllNotifications();
-                mMdn = null;
-                mMin = null;
-                mIsMinInfoReady = false;
-                break;
-
             case EVENT_ALL_DATA_DISCONNECTED:
                 int dds = SubscriptionManager.getDefaultDataSubscriptionId();
                 ProxyController.getInstance().unregisterForAllDataDisconnected(dds, this);
@@ -1479,6 +1463,29 @@ public class ServiceStateTracker extends Handler {
             default:
                 log("Unhandled message with number: " + msg.what);
                 break;
+        }
+    }
+
+    private void checkSimAbsent() {
+        boolean simAbsent;
+        if (mUiccController == null) {
+            simAbsent = true;
+        } else {
+            UiccCard uiccCard = mUiccController.getUiccCard(mPhone.getPhoneId());
+            if (uiccCard == null) {
+                simAbsent = true;
+            } else {
+                simAbsent = (uiccCard.getCardState() == CardState.CARDSTATE_ABSENT);
+            }
+        }
+        if (simAbsent) {
+            if (DBG) log("SIM absent");
+            // cancel notifications if SIM is removed/absent
+            cancelAllNotifications();
+            // clear cached values on SIM removal
+            mMdn = null;
+            mMin = null;
+            mIsMinInfoReady = false;
         }
     }
 
