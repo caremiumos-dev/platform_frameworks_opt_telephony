@@ -23,6 +23,7 @@ import static com.android.internal.telephony.cat.CatCmdMessage.SetupEventListCon
 import static com.android.internal.telephony.cat.CatCmdMessage.SetupEventListConstants
         .USER_ACTIVITY_EVENT;
 
+import android.Manifest;
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.app.backup.BackupManager;
@@ -123,6 +124,9 @@ public class CatService extends Handler implements AppInterface {
     //Events to signal SIM REFRESH notificatations
     private static final int MSG_ID_ICC_REFRESH  = 30;
 
+    // Command Qualifier values for REFRESH command (see ETSI TS 102 223 clause 8.6)
+    private static final int REFRESH_FILE_CHANGE = 0x01;
+
     private static final int DEV_ID_KEYPAD      = 0x01;
     private static final int DEV_ID_DISPLAY     = 0x02;
     private static final int DEV_ID_UICC        = 0x81;
@@ -132,6 +136,7 @@ public class CatService extends Handler implements AppInterface {
     static final String STK_DEFAULT = "Default Message";
 
     private HandlerThread mHandlerThread;
+    private int mPhoneId;
     private int mSlotId;
 
     /* For multisim catservice should not be singleton */
@@ -144,6 +149,7 @@ public class CatService extends Handler implements AppInterface {
         }
         mCmdIf = ci;
         mContext = context;
+        mPhoneId = uiccProfile.getPhoneId();
         mSlotId = slotId;
         mHandlerThread = new HandlerThread("Cat Telephony service" + slotId);
         mHandlerThread.start();
@@ -368,6 +374,7 @@ public class CatService extends Handler implements AppInterface {
      * RIL_REQUEST_STK_SEND_TERMINAL_RESPONSE will be send back if the command is
      * from RIL_UNSOL_STK_PROACTIVE_COMMAND.
      */
+    @SuppressWarnings("FallThrough")
     private void handleCommand(CommandParams cmdParams, boolean isProactiveCmd) {
         CatLog.d(this, cmdParams.getCommandType().name());
 
@@ -436,6 +443,13 @@ public class CatService extends Handler implements AppInterface {
             case GET_INKEY:
                 break;
             case REFRESH:
+                if (cmdParams.mCmdDet.commandQualifier == REFRESH_FILE_CHANGE) {
+                    // Only File Change Notification without NAA Initialization must be the trigger
+                    // to broadcast ACTION_SIM_FILE_CHANGED. ACTION_SIM_APPLICATION_STATE_CHANGED
+                    // shall also be observed by application for other refresh modes.
+                    broadcastSimFileChanged();
+                }
+                // Fall through
             case RUN_AT:
                 if (STK_DEFAULT.equals(((DisplayTextParams)cmdParams).mTextMsg.text)) {
                     // Remove the default text which was temporarily added and shall not be shown
@@ -531,6 +545,14 @@ public class CatService extends Handler implements AppInterface {
         broadcastCatCmdIntent(cmdMsg);
     }
 
+    private void broadcastSimFileChanged() {
+        Intent intent = new Intent(TelephonyManager.ACTION_SIM_FILE_CHANGED);
+        intent.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
+        intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+        SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhoneId);
+        CatLog.d(this, "Broadcasting intent ACTION_SIM_FILE_CHANGED for phone: " + mPhoneId);
+        mContext.sendBroadcast(intent, Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
+    }
 
     private void broadcastCatCmdIntent(CatCmdMessage cmdMsg) {
         Intent intent = new Intent(AppInterface.CAT_CMD_ACTION);
