@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9587cecd_6a1203ba",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcFailCause.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2018-08-22T17:02:24Z",
+      "side": 1,
+      "message": "I prefer the old method name as its explicitly says radio restart... these are not really fatal cause codes\n\nFrom modem perspective Permanent Failure cause codes are called as fatal cause code",
+      "range": {
+        "startLine": 155,
+        "startChar": 19,
+        "endLine": 155,
+        "endChar": 26
+      },
+      "revId": "fe29c15874bdf60c0cf592fea180a3cb11309b22",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
