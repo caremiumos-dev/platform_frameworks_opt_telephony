@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9f537a9c_28500225",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1974,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-23T23:33:38Z",
+      "side": 1,
+      "message": "Yes, this is true. This check should be at the boundary between manager/service, however, so the clearing of calling identity should be in IccSmsInterfaceManager after the permission check.",
+      "parentUuid": "95d66ab1_345f1e42",
+      "range": {
+        "startLine": 1974,
+        "startChar": 34,
+        "endLine": 1974,
+        "endChar": 54
+      },
+      "revId": "4d4f6f6abe4fb7b1a094c288f80f1b84b1d52c64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6293c53_ff0fee5d",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 3
