@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40503dfc_afde046a",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaInboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2018-08-23T04:12:49Z",
+      "side": 1,
+      "message": "How about updating teleService as TELESERVIC_WAP after processing CT WDP header here?\n\n+            case SmsEnvelope.TELESERVICE_CT_WAP:\n+                if (!sms.processCdmaCTWdpHeader(sms)) {\n+                    return Intents.RESULT_SMS_HANDLED;\n+                }\n+                teleService \u003d SmsEnvelope.TELESERVICE_WAP;\n+                // fall through",
+      "revId": "1116e154ecc56b1bdf27b2003513d95237680061",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
