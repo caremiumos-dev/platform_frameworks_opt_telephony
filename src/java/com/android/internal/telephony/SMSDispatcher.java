@@ -17,8 +17,6 @@
 package com.android.internal.telephony;
 
 import static android.Manifest.permission.SEND_SMS_NO_CONFIRMATION;
-import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PERIOD_NOT_SPECIFIED;
-import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PRIORITY_NOT_SPECIFIED;
 import static android.telephony.SmsManager.RESULT_ERROR_FDN_CHECK_FAILURE;
 import static android.telephony.SmsManager.RESULT_ERROR_GENERIC_FAILURE;
 import static android.telephony.SmsManager.RESULT_ERROR_LIMIT_EXCEEDED;
@@ -27,6 +25,9 @@ import static android.telephony.SmsManager.RESULT_ERROR_NULL_PDU;
 import static android.telephony.SmsManager.RESULT_ERROR_RADIO_OFF;
 import static android.telephony.SmsManager.RESULT_ERROR_SHORT_CODE_NEVER_ALLOWED;
 import static android.telephony.SmsManager.RESULT_ERROR_SHORT_CODE_NOT_ALLOWED;
+
+import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PERIOD_NOT_SPECIFIED;
+import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PRIORITY_NOT_SPECIFIED;
 
 import android.annotation.Nullable;
 import android.annotation.UserIdInt;
@@ -80,8 +81,8 @@ import android.widget.TextView;
 
 import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.telephony.cdma.sms.UserData;
 import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
+import com.android.internal.telephony.cdma.sms.UserData;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccController;
 
@@ -187,15 +188,15 @@ public abstract class SMSDispatcher extends Handler {
         mContext = phone.getContext();
         mResolver = mContext.getContentResolver();
         mCi = phone.mCi;
-        mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        mTelephonyManager = ((TelephonyManager) mContext.getSystemService(
+                Context.TELEPHONY_SERVICE)).createForSubscriptionId(mPhone.getSubId());
         mSettingsObserver = new SettingsObserver(this, mPremiumSmsRule, mContext);
         mContext.getContentResolver().registerContentObserver(Settings.Global.getUriFor(
                 Settings.Global.SMS_SHORT_CODE_RULE), false, mSettingsObserver);
 
         mSmsCapable = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_sms_capable);
-        mSmsSendDisabled = !mTelephonyManager.getSmsSendCapableForPhone(
-                mPhone.getPhoneId(), mSmsCapable);
+        mSmsSendDisabled = !mTelephonyManager.getSmsSendCapable(mSmsCapable);
         Rlog.d(TAG, "SMSDispatcher: ctor mSmsCapable=" + mSmsCapable + " format=" + getFormat()
                 + " mSmsSendDisabled=" + mSmsSendDisabled);
     }
