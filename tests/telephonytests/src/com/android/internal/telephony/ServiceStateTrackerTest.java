@@ -200,6 +200,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testSetRadioPower() {
         boolean oldState = mSimulatedCommands.getRadioState().isOn();
@@ -209,6 +210,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testSetRadioPowerFromCarrier() {
         // Carrier disable radio power
@@ -242,6 +244,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRilTrafficAfterSetRadioPower() {
         sst.setRadioPower(true);
@@ -330,6 +333,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testCellInfoList() {
         Parcel p = Parcel.obtain();
@@ -357,6 +361,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testImsRegState() {
         // Simulate IMS registered
@@ -377,6 +382,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     public void testOnImsServiceStateChanged() {
         // The service state of GsmCdmaPhone is STATE_OUT_OF_SERVICE, and IMS is unregistered.
         ServiceState ss = new ServiceState();
@@ -402,6 +408,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testSignalStrength() {
         SignalStrength ss = new SignalStrength(
@@ -447,6 +454,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     public void testSetsNewSignalStrengthReportingCriteria() {
         int[] wcdmaThresholds = {
                 -110, /* SIGNAL_STRENGTH_POOR */
@@ -482,6 +490,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testSignalLevelWithWcdmaRscpThresholds() {
         mBundle.putIntArray(CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY,
@@ -624,6 +633,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testGsmCellLocation() {
         CellIdentityGsm cellIdentityGsm = new CellIdentityGsm(0, 0, 2, 3);
@@ -686,6 +696,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegAndUnregForVoiceRoamingOn() throws Exception {
         sst.registerForVoiceRoamingOn(mTestHandler, EVENT_DATA_ROAMING_ON, null);
@@ -725,6 +736,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegAndUnregForVoiceRoamingOff() throws Exception {
         // Enable roaming
@@ -772,6 +784,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegAndUnregForDataRoamingOn() throws Exception {
         sst.registerForDataRoamingOn(mTestHandler, EVENT_DATA_ROAMING_ON, null);
@@ -811,6 +824,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegAndUnregForDataRoamingOff() throws Exception {
         // Enable roaming
@@ -858,6 +872,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegAndInvalidregForDataConnAttach() throws Exception {
         // Initially set service state out of service
@@ -904,6 +919,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegAndUnregForDataConnAttach() throws Exception {
         // Initially set service state out of service
@@ -950,6 +966,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegAndUnregForDataConnDetach() throws Exception {
         // Initially set service state in service
@@ -994,6 +1011,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegisterForDataRegStateOrRatChange() {
         int drs = NetworkRegistrationState.REG_STATE_HOME;
@@ -1060,6 +1078,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegAndInvalidRegForNetworkAttached() throws Exception {
         // Initially set service state out of service
@@ -1114,6 +1133,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegisterForPsRestrictedEnabled() throws Exception {
         sst.mRestrictedState.setPsRestricted(true);
@@ -1130,6 +1150,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegisterForPsRestrictedDisabled() throws Exception {
         sst.mRestrictedState.setPsRestricted(true);
@@ -1146,6 +1167,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testOnRestrictedStateChanged() throws Exception {
         ServiceStateTracker spySst = spy(sst);
@@ -1227,6 +1249,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testSetPsNotifications() {
         sst.mSubId = 1;
@@ -1254,6 +1277,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testSetCsNotifications() {
         sst.mSubId = 1;
@@ -1282,6 +1306,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testSetCsNormalNotifications() {
         sst.mSubId = 1;
@@ -1309,6 +1334,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testSetCsEmergencyNotifications() {
         sst.mSubId = 1;
@@ -1338,6 +1364,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRegisterForSubscriptionInfoReady() {
         sst.registerForSubscriptionInfoReady(mTestHandler, EVENT_SUBSCRIPTION_INFO_READY, null);
@@ -1356,6 +1383,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testRoamingPhoneTypeSwitch() {
         // Enable roaming
@@ -1390,6 +1418,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testGetDesiredPowerState() {
         sst.setRadioPower(true);
@@ -1397,6 +1426,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testEnableLocationUpdates() throws Exception {
         sst.enableLocationUpdates();
@@ -1405,6 +1435,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testDisableLocationUpdates() throws Exception {
         sst.disableLocationUpdates();
@@ -1413,6 +1444,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testGetCurrentDataRegState() throws Exception {
         sst.mSS.setDataRegState(ServiceState.STATE_OUT_OF_SERVICE);
@@ -1420,6 +1452,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testIsConcurrentVoiceAndDataAllowed() {
         doReturn(false).when(mPhone).isPhoneTypeGsm();
@@ -1438,6 +1471,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @MediumTest
     public void testIsImsRegistered() throws Exception {
         mSimulatedCommands.setImsRegistrationState(new int[]{1, PhoneConstants.PHONE_TYPE_GSM});
@@ -1447,6 +1481,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testIsDeviceShuttingDown() throws Exception {
         sst.requestShutdown();
@@ -1454,6 +1489,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testShuttingDownRequest() throws Exception {
         sst.setRadioPower(true);
@@ -1465,6 +1501,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testShuttingDownRequestWithRadioPowerFailResponse() throws Exception {
         sst.setRadioPower(true);
@@ -1481,6 +1518,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     @SmallTest
     public void testSetTimeFromNITZStr() throws Exception {
         {
@@ -1511,6 +1549,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     // Edge and GPRS are grouped under the same family and Edge has higher rate than GPRS.
     // Expect no rat update when move from E to G.
     @Test
+    @FlakyTest(bugId = 78357839)
     public void testRatRatchet() throws Exception {
         CellIdentityGsm cellIdentity = new CellIdentityGsm(-1, -1, -1, -1, -1, -1);
         NetworkRegistrationState dataResult = new NetworkRegistrationState(
@@ -1548,6 +1587,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     // Edge and GPRS are grouped under the same family and Edge has higher rate than GPRS.
     // Bypass rat rachet when cell id changed. Expect rat update from E to G
     @Test
+    @FlakyTest(bugId = 78357839)
     public void testRatRatchetWithCellChange() throws Exception {
         CellIdentityGsm cellIdentity = new CellIdentityGsm(-1, -1, -1, -1, -1, -1);
         NetworkRegistrationState dataResult = new NetworkRegistrationState(
@@ -1586,6 +1626,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     // Expect no rat update from E to G immediately following cell id change.
     // Expect ratratchet (from G to UMTS) for the following rat update within the cell location.
     @Test
+    @FlakyTest(bugId = 78357839)
     public void testRatRatchetWithCellChangeBeforeRatChange() throws Exception {
         // cell ID update
         CellIdentityGsm cellIdentity = new CellIdentityGsm(-1, -1, -1, 5, -1, -1);
@@ -1665,6 +1706,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     public void testPhyChanBandwidthUpdatedOnDataRegState() throws Exception {
         // Cell ID change should trigger hasLocationChanged.
         CellIdentityLte cellIdentity5 =
@@ -1676,6 +1718,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     public void testPhyChanBandwidthNotUpdatedWhenInvalidInCellIdentity() throws Exception {
         // Cell ID change should trigger hasLocationChanged.
         CellIdentityLte cellIdentityInv =
@@ -1687,6 +1730,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     public void testPhyChanBandwidthPrefersCarrierAggregationReport() throws Exception {
         // Cell ID change should trigger hasLocationChanged.
         CellIdentityLte cellIdentity10 =
@@ -1698,6 +1742,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     public void testPhyChanBandwidthRatchetedOnPhyChanBandwidth() throws Exception {
         // LTE Cell with bandwidth = 10000
         CellIdentityLte cellIdentity10 =
@@ -1710,6 +1755,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    @FlakyTest(bugId = 78357839)
     public void testPhyChanBandwidthResetsOnOos() throws Exception {
         testPhyChanBandwidthRatchetedOnPhyChanBandwidth();
         NetworkRegistrationState dataResult = new NetworkRegistrationState(
