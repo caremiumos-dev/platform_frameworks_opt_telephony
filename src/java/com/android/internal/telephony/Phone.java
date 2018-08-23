@@ -2363,6 +2363,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                     Uri.parse("android_secret_code://" + code));
             intent.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
             mContext.sendBroadcast(intent);
+
+            // {@link TelephonyManager.SECRET_CODE_ACTION} will replace {@link
+            // TelephonyIntents#SECRET_CODE_ACTION} in the next Android version. Before
+            // that both of these two actions will be broadcast.
+            Intent secrectCodeintent = new Intent(TelephonyManager.SECRET_CODE_ACTION,
+                    Uri.parse("android_secret_code://" + code));
+            intent.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
+            mContext.sendBroadcast(secrectCodeintent);
         }
     }
 
