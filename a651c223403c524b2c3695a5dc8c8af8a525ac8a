@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd3992a3_927c4694",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2018-08-23T00:54:11Z",
+      "side": 0,
+      "message": "+        mTelephonyManager \u003d\n+                ((TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE))\n+                        .createForSubscriptionId(mPhone.getSubId());",
+      "revId": "a651c223403c524b2c3695a5dc8c8af8a525ac8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2fc7e85_5b986a72",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2018-08-23T00:54:11Z",
+      "side": 0,
+      "message": "+    mSmsSendDisabled \u003d !mTelephonyManager.getSmsSendCapable(mSmsCapable);",
+      "revId": "a651c223403c524b2c3695a5dc8c8af8a525ac8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
