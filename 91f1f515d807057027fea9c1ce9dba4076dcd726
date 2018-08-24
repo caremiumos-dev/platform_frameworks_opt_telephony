@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "146e91e3_b20b960a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-08-24T02:18:50Z",
+      "side": 1,
+      "message": "better do some manual testing to see if new and old intent can be received by Tycho app for example. otherwise LGTM",
+      "range": {
+        "startLine": 10,
+        "startChar": 7,
+        "endLine": 10,
+        "endChar": 15
+      },
+      "revId": "91f1f515d807057027fea9c1ce9dba4076dcd726",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
