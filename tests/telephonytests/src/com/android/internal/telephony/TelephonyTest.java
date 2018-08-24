@@ -528,10 +528,8 @@ public abstract class TelephonyTest {
             switch (method) {
                 case BlockedNumberContract.SystemContract.METHOD_SHOULD_SYSTEM_BLOCK_NUMBER:
                     Bundle bundle = new Bundle();
-                    int blockStatus = mBlockedNumbers.contains(arg)
-                            ? BlockedNumberContract.STATUS_BLOCKED_IN_LIST
-                            : BlockedNumberContract.STATUS_NOT_BLOCKED;
-                    bundle.putInt(BlockedNumberContract.RES_BLOCK_STATUS, blockStatus);
+                    bundle.putBoolean(BlockedNumberContract.RES_NUMBER_IS_BLOCKED,
+                            mBlockedNumbers.contains(arg));
                     return bundle;
                 case BlockedNumberContract.SystemContract.METHOD_NOTIFY_EMERGENCY_CONTACT:
                     mNumEmergencyContactNotifications++;
