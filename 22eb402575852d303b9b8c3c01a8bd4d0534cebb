@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3204f412_61020d18",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-08-25T04:19:14Z",
+      "side": 1,
+      "message": "Could you write up a unit test for this one? If applicable.",
+      "revId": "22eb402575852d303b9b8c3c01a8bd4d0534cebb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5a9bfd9_a3db06b5",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-08-25T04:19:14Z",
+      "side": 1,
+      "message": "The \"||\" belongs to (!mForegroundCall.getState().isAlive() || ... ) clause, and should be indented correctly.",
+      "revId": "22eb402575852d303b9b8c3c01a8bd4d0534cebb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbda5a85_650e4bf0",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-08-25T04:19:14Z",
+      "side": 1,
+      "message": "So does the \"\u0026\u0026\".",
+      "revId": "22eb402575852d303b9b8c3c01a8bd4d0534cebb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

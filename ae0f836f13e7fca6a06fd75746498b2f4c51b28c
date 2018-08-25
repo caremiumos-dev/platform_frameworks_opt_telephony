@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d13a4e86_da709cb2",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-08-25T04:19:14Z",
+      "side": 1,
+      "message": "This line belongs to (!mForegroundCall.. clause and should indent correctly.",
+      "revId": "ae0f836f13e7fca6a06fd75746498b2f4c51b28c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a21e7ff3_a28a7df7",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-08-25T04:19:14Z",
+      "side": 1,
+      "message": "So do the following 2 lines.",
+      "revId": "ae0f836f13e7fca6a06fd75746498b2f4c51b28c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fa7eac7_f272a3f3",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-08-25T04:19:14Z",
+      "side": 1,
+      "message": "Line 629 to line 635 should follow original indentation.",
+      "revId": "ae0f836f13e7fca6a06fd75746498b2f4c51b28c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
