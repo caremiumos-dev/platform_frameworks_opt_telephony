@@ -73,6 +73,23 @@
     },
     {
       "key": {
+        "uuid": "cd822229_cd4fb3dc",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1974,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-27T07:19:26Z",
+      "side": 1,
+      "message": "if we move it into IccSmsInterfaceManager, must add new parameter \"boolean isAscii7BitSpported\" into the API, because SMSDispatcher does not have the reference of IccSmsInterfaceManager instance.\n\ndo you think we really need to move this method to IccSmsInterfaceManager?",
+      "revId": "4d4f6f6abe4fb7b1a094c288f80f1b84b1d52c64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6293c53_ff0fee5d",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 3
