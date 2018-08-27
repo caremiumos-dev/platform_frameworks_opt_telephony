@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "9a88b18b_8f7b5d92",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1974,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-27T17:37:18Z",
+      "side": 1,
+      "message": "Not the entire method, only clear the calling identity in IccSmsInterfaceManager.",
+      "parentUuid": "cd822229_cd4fb3dc",
+      "revId": "4d4f6f6abe4fb7b1a094c288f80f1b84b1d52c64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6293c53_ff0fee5d",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 3
