@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db58e5e3_230cbe9a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccRecordsTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-27T20:12:15Z",
+      "side": 1,
+      "message": "Please add import for this, currently it doesn\u0027t build",
+      "range": {
+        "startLine": 97,
+        "startChar": 8,
+        "endLine": 97,
+        "endChar": 20
+      },
+      "revId": "ab2265ad5d659f7d130623eec9f5d59b21221b34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
