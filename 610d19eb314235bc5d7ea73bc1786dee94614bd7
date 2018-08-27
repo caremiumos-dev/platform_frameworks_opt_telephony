@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14d18305_04c52b62",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-08-27T23:12:16Z",
+      "side": 1,
+      "message": "The unit test failed because the radio hasn\u0027t been turned off correctly. Seems the EVENT_ALL_DATA_DISCONNECTED not handled in the test.",
+      "revId": "610d19eb314235bc5d7ea73bc1786dee94614bd7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
