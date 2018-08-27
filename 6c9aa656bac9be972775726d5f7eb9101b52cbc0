@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccbf1f4e_782d92c7",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-08-27T22:48:35Z",
+      "side": 1,
+      "message": "Send corresponding sendIntent?",
+      "range": {
+        "startLine": 1053,
+        "startChar": 18,
+        "endLine": 1053,
+        "endChar": 22
+      },
+      "revId": "6c9aa656bac9be972775726d5f7eb9101b52cbc0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
