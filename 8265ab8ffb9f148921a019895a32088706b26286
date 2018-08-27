@@ -22,6 +22,30 @@
       "revId": "8265ab8ffb9f148921a019895a32088706b26286",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecb79926_7efcdf43",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/mocks/OWNERS",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1052399
+      },
+      "writtenOn": "2018-08-27T22:27:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "579367e2_e274ab00",
+      "range": {
+        "startLine": 6,
+        "startChar": 52,
+        "endLine": 6,
+        "endChar": 74
+      },
+      "revId": "8265ab8ffb9f148921a019895a32088706b26286",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
