@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "a615f919_5b0398ed",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1974,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-27T17:38:41Z",
+      "side": 1,
+      "message": "See other examples of this in PhoneInterfaceManager, for example.",
+      "parentUuid": "9a88b18b_8f7b5d92",
+      "revId": "4d4f6f6abe4fb7b1a094c288f80f1b84b1d52c64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b6293c53_ff0fee5d",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 3
