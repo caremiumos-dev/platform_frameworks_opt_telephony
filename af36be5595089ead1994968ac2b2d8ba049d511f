@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0bdc613_755c0504",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-08-28T22:46:05Z",
+      "side": 0,
+      "message": "can we at least have a Log.e here?",
+      "range": {
+        "startLine": 202,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 84
+      },
+      "revId": "af36be5595089ead1994968ac2b2d8ba049d511f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
