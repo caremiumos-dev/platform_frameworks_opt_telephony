@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21cd5c82_af2a59e0",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-28T17:46:46Z",
+      "side": 1,
+      "message": "The calling identity should also be cleared in sendStoredMultipartText below.",
+      "range": {
+        "startLine": 711,
+        "startChar": 34,
+        "endLine": 711,
+        "endChar": 54
+      },
+      "revId": "58f5e617e974004d64e48c784c92aec6da8c9030",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
