@@ -22,6 +22,30 @@
       "revId": "6c9aa656bac9be972775726d5f7eb9101b52cbc0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44ca4b44_d44072a7",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-08-28T01:57:03Z",
+      "side": 1,
+      "message": "Hi Amit,\n\nThis problem will be improved at below item in my cleanup SMS memo,\nI will have another change for it.\n\n    14. Gracefully handle pdu null case in SMSDispatcher.sendMultipartText",
+      "parentUuid": "ccbf1f4e_782d92c7",
+      "range": {
+        "startLine": 1053,
+        "startChar": 18,
+        "endLine": 1053,
+        "endChar": 22
+      },
+      "revId": "6c9aa656bac9be972775726d5f7eb9101b52cbc0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
