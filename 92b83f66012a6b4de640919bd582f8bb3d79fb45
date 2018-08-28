@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f7979c24_f062be39",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-08-28T20:25:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a156d9b2_8230943f",
+      "range": {
+        "startLine": 68,
+        "startChar": 12,
+        "endLine": 68,
+        "endChar": 30
+      },
+      "revId": "92b83f66012a6b4de640919bd582f8bb3d79fb45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8b9ce91_c1af4753",
         "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "609f77e7_aa0a8537",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-08-28T20:25:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8b9ce91_c1af4753",
+      "range": {
+        "startLine": 102,
+        "startChar": 53,
+        "endLine": 102,
+        "endChar": 54
+      },
+      "revId": "92b83f66012a6b4de640919bd582f8bb3d79fb45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce58a070_080a4243",
         "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "92b83f66012a6b4de640919bd582f8bb3d79fb45",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7567a86_22937a4b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-08-28T20:25:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce58a070_080a4243",
+      "range": {
+        "startLine": 141,
+        "startChar": 4,
+        "endLine": 141,
+        "endChar": 12
+      },
+      "revId": "92b83f66012a6b4de640919bd582f8bb3d79fb45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
