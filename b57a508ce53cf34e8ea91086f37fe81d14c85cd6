@@ -16,6 +16,24 @@
       "revId": "b57a508ce53cf34e8ea91086f37fe81d14c85cd6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55f308ea_cb69a859",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1305827
+      },
+      "writtenOn": "2018-08-28T15:22:24Z",
+      "side": 1,
+      "message": "We have verified with a China operator sim with SIM and RUIM apps.\nAlso, i have added a unit test to verify this change",
+      "parentUuid": "216fa969_7c7c7c82",
+      "revId": "b57a508ce53cf34e8ea91086f37fe81d14c85cd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
