@@ -480,19 +480,6 @@ public class DcController extends StateMachine {
         Rlog.e(getName(), s);
     }
 
-    /**
-     * @return the string for msg.what as our info.
-     */
-    @Override
-    protected String getWhatToString(int what) {
-        String info = null;
-        info = DataConnection.cmdToString(what);
-        if (info == null) {
-            info = DcAsyncChannel.cmdToString(what);
-        }
-        return info;
-    }
-
     @Override
     public String toString() {
         synchronized (mDcListAll) {
