@@ -16,6 +16,24 @@
       "revId": "610d19eb314235bc5d7ea73bc1786dee94614bd7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1e7e8c8_dad35a24",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-08-30T08:25:11Z",
+      "side": 1,
+      "message": "yes, it is mock",
+      "parentUuid": "14d18305_04c52b62",
+      "revId": "610d19eb314235bc5d7ea73bc1786dee94614bd7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
