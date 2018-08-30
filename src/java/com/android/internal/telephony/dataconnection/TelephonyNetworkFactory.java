@@ -31,15 +31,20 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.Rlog;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.ApnSetting.ApnType;
+import android.telephony.TelephonyManager;
 import android.util.LocalLog;
 
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.PhoneSwitcher;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.SubscriptionMonitor;
 import com.android.internal.telephony.dataconnection.DcTracker.ReleaseNetworkType;
 import com.android.internal.telephony.dataconnection.DcTracker.RequestNetworkType;
 import com.android.internal.telephony.dataconnection.TransportManager.HandoverParams;
+import com.android.internal.telephony.uicc.IccCardStatus.CardState;
+import com.android.internal.telephony.uicc.UiccCard;
+import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.util.IndentingPrintWriter;
 
 import java.io.FileDescriptor;
@@ -71,6 +76,8 @@ public class TelephonyNetworkFactory extends NetworkFactory {
     private final TransportManager mTransportManager;
 
     private int mSubscriptionId;
+
+    private UiccController mUiccController;
 
     private final static int TELEPHONY_NETWORK_SCORE = 50;
 
@@ -272,11 +279,44 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         msg.sendToTarget();
     }
 
+    private boolean isNetworkCapabilityEims(NetworkRequest networkRequest) {
+        return networkRequest.networkCapabilities.hasCapability(
+            android.net.NetworkCapabilities.NET_CAPABILITY_EIMS);
+    }
+
+    private boolean isSimInserted() {
+        mUiccController = UiccController.getInstance();
+        for(int i=0; i < TelephonyManager.getDefault().getPhoneCount(); i++){
+            UiccCard uiccCard = mUiccController.getUiccCard(i);
+            if (uiccCard != null) {
+                if(uiccCard.getCardState() == CardState.CARDSTATE_PRESENT) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void onNeedNetworkFor(Message msg) {
         NetworkRequest networkRequest = (NetworkRequest)msg.obj;
-        boolean shouldApply = mPhoneSwitcher.shouldApplyNetworkRequest(
-                networkRequest, mPhone.getPhoneId());
-
+        boolean shouldApply = false;
+        if(mPhoneSwitcher.shouldApplyNetworkRequest(networkRequest, mPhone.getPhoneId())) {
+            shouldApply = true;
+        } else {
+            if(isNetworkCapabilityEims(networkRequest)) {
+                if(isSimInserted()) {
+                    //If SIM is inserted, allow EIMS NetworkRequest goes
+                    //on the slot with subscription enabled.
+                    shouldApply = false;
+                } else {
+                    //if SIM is NOT inserted, allow EIMS NetworkRequest goes only on the
+                    //default subscription.
+                    if(PhoneFactory.getDefaultPhone().getPhoneId() == mPhone.getPhoneId()) {
+                        shouldApply = true;
+                    }
+                }
+            }
+        }
         mNetworkRequests.put(networkRequest, shouldApply
                 ? getTransportTypeFromNetworkRequest(networkRequest)
                 : AccessNetworkConstants.TRANSPORT_TYPE_INVALID);
