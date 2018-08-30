@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b047a9f_dbfd7f88",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-08-30T23:01:58Z",
+      "side": 1,
+      "message": "Seems to be a typo, ss is not defined.",
+      "revId": "3f8dfba121bde5adddfc3d4d53cdf217f17a5e74",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
