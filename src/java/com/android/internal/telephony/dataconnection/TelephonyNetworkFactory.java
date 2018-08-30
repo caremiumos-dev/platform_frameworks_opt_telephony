@@ -31,9 +31,11 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.Rlog;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.ApnSetting.ApnType;
+import android.telephony.TelephonyManager;
 import android.util.LocalLog;
 
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.PhoneSwitcher;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.SubscriptionMonitor;
@@ -81,6 +83,9 @@ public class TelephonyNetworkFactory extends NetworkFactory {
     private static final int EVENT_NETWORK_RELEASE                  = 4;
     private static final int EVENT_DATA_HANDOVER_NEEDED             = 5;
     private static final int EVENT_DATA_HANDOVER_COMPLETED          = 6;
+
+    private static final int PRIMARY_SLOT = 0;
+    private static final int SECONDARY_SLOT = 1;
 
     public TelephonyNetworkFactory(SubscriptionMonitor subscriptionMonitor, Looper looper,
                                    Phone phone) {
@@ -272,10 +277,22 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         msg.sendToTarget();
     }
 
+    private boolean isNetworkCapabilityEims(NetworkRequest networkRequest) {
+        return networkRequest.networkCapabilities.hasCapability(
+            android.net.NetworkCapabilities.NET_CAPABILITY_EIMS);
+    }
+
+    private boolean isSimPresentInSecondarySlot() {
+        return TelephonyManager.getDefault().hasIccCard(SECONDARY_SLOT);
+    }
+
     private void onNeedNetworkFor(Message msg) {
         NetworkRequest networkRequest = (NetworkRequest)msg.obj;
+        //Allow EIMS networkrequest on default slot in SIM less case.
         boolean shouldApply = mPhoneSwitcher.shouldApplyNetworkRequest(
-                networkRequest, mPhone.getPhoneId());
+                networkRequest, mPhone.getPhoneId()) || (isNetworkCapabilityEims(
+                networkRequest) && PhoneFactory.getDefaultPhone().getPhoneId() ==
+                mPhoneId && !isSimPresentInSecondarySlot());
 
         mNetworkRequests.put(networkRequest, shouldApply
                 ? getTransportTypeFromNetworkRequest(networkRequest)
