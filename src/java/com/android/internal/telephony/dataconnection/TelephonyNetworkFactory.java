@@ -276,7 +276,6 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         NetworkRequest networkRequest = (NetworkRequest)msg.obj;
         boolean shouldApply = mPhoneSwitcher.shouldApplyNetworkRequest(
                 networkRequest, mPhone.getPhoneId());
-
         mNetworkRequests.put(networkRequest, shouldApply
                 ? getTransportTypeFromNetworkRequest(networkRequest)
                 : AccessNetworkConstants.TRANSPORT_TYPE_INVALID);

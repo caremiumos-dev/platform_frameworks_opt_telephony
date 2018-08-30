@@ -799,15 +799,24 @@ public class PhoneSwitcher extends Handler {
         mPreferredDataSubId = mSubscriptionController.getSubIdUsingPhoneId(mPreferredDataPhoneId);
     }
 
+    private boolean isNetworkCapabilityEims(NetworkRequest networkRequest) {
+        return networkRequest.networkCapabilities.hasCapability(
+                android.net.NetworkCapabilities.NET_CAPABILITY_EIMS);
+    }
+
     public boolean shouldApplyNetworkRequest(NetworkRequest networkRequest, int phoneId) {
         validatePhoneId(phoneId);
 
-        // In any case, if phone state is inactive, don't apply the network request.
-        if (!isPhoneActive(phoneId)) return false;
-
-        int phoneIdToHandle = phoneIdForRequest(networkRequest);
-
-        return phoneId == phoneIdToHandle;
+        if (isPhoneActive(phoneId) && (phoneId == phoneIdForRequest(networkRequest))) {
+            return true;
+        } else {
+            if(isNetworkCapabilityEims(networkRequest) && (mPreferredDataPhoneId ==
+                    SubscriptionManager.INVALID_PHONE_INDEX) && (PhoneFactory.
+                    getDefaultPhone().getPhoneId() == phoneId)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @VisibleForTesting
