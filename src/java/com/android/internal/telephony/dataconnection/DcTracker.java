@@ -349,8 +349,19 @@ public class DcTracker extends Handler {
                 if (DBG) log("Provisioning apn alarm");
                 onActionIntentProvisioningApnAlarm(intent);
             } else if (action.equals(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED)) {
-                if (mIccRecords.get() != null && mIccRecords.get().getRecordsLoaded()) {
+                if (DBG) log("received carrier config change");
+                if (intent.getIntExtra(CarrierConfigManager.EXTRA_SLOT_INDEX,
+                        SubscriptionManager.INVALID_SIM_SLOT_INDEX) != mPhone.getPhoneId()) {
+                    if (DBG) log("carrier config changed not for this phone.");
+                    return;
+                }
+                if (intent.getIntExtra(SubscriptionManager.EXTRA_SUBSCRIPTION_INDEX,
+                        SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+                        != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
                     setDefaultDataRoamingEnabled();
+                } else {
+                    // SIM is absent
+                    onSimNotReady();
                 }
             } else {
                 if (DBG) log("onReceive: Unknown action=" + action);
@@ -3811,8 +3822,6 @@ public class DcTracker extends Handler {
                     newIccRecords.registerForRecordsLoaded(
                             this, DctConstants.EVENT_RECORDS_LOADED, null);
                 }
-            } else {
-                onSimNotReady();
             }
         }
     }
