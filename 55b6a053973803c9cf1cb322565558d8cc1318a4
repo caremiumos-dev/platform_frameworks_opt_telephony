@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6fde4ffa_9040e124",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1864,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-08-30T00:53:30Z",
+      "side": 1,
+      "message": "maybe just print the log here and return the result?",
+      "range": {
+        "startLine": 1863,
+        "startChar": 20,
+        "endLine": 1864,
+        "endChar": 26
+      },
+      "revId": "55b6a053973803c9cf1cb322565558d8cc1318a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
