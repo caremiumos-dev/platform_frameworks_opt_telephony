@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84a1c46b_43519610",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2018-08-30T12:50:27Z",
+      "side": 1,
+      "message": "Keeping CS behavior unchanged.",
+      "range": {
+        "startLine": 1749,
+        "startChar": 42,
+        "endLine": 1749,
+        "endChar": 61
+      },
+      "revId": "63e3d70449350886659c6590447fbade9dd01660",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
