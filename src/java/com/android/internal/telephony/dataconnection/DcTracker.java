@@ -2279,6 +2279,8 @@ public class DcTracker extends Handler {
 
         cleanUpAllConnections(true, Phone.REASON_SIM_NOT_READY);
         mAllApnSettings = null;
+        //Support emergency pdn after SIM is removed also.
+        addEmergencyApnSetting();
         mAutoAttachOnCreationConfig = false;
         // Clear auto attach as modem is expected to do a new attach once SIM is ready
         mAutoAttachOnCreation.set(false);
@@ -4248,6 +4250,7 @@ public class DcTracker extends Handler {
         if(mEmergencyApn != null) {
             if(mAllApnSettings == null) {
                 mAllApnSettings = new ArrayList<ApnSetting>();
+                mAllApnSettings.add(mEmergencyApn);
             } else {
                 boolean hasEmergencyApn = false;
                 for (ApnSetting apn : mAllApnSettings) {
