@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "557f6c74_690b0cf9",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-08-31T21:10:33Z",
+      "side": 1,
+      "message": "Got the error: there were zero interactions with this mock.",
+      "revId": "e9c3ee32773cc63c60f324dd9877f3119b0f263a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
