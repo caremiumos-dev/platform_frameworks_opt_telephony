@@ -52,6 +52,24 @@
       "revId": "f3a5580b1b5e9097bb3c5e1d22f395999df67360",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61e8be1b_a45fed9d",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-08-31T23:55:27Z",
+      "side": 0,
+      "message": "SmsManager \u0026 IccSmsInterfaceManager check parts size, parts size should not be 0 here.\nIf parts size is 0 here, trackers size is also 0, then\n\n    if carrierPackage is null\n        this method will not sendSubmitPdu, it\u0027s as expected\n    if carrierPackage is \u0027not\u0027 null\n        If carrierPackage checks null \u0026 size of parts before sending, I think the change\n                will be harmless. I think carrierPackage should do.\n\nIf you think the change is a risk to carrierPackage, tell me and I will modify code to check size and return here.",
+      "parentUuid": "592680f8_1ea79b4d",
+      "revId": "f3a5580b1b5e9097bb3c5e1d22f395999df67360",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
