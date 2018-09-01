@@ -88,6 +88,24 @@
       "revId": "f3a5580b1b5e9097bb3c5e1d22f395999df67360",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "38fe1503_5c9883de",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-09-01T01:26:31Z",
+      "side": 0,
+      "message": "I agree with you, I will check it and modify code if it\u0027s necessary.",
+      "parentUuid": "259999a7_ed88088b",
+      "revId": "f3a5580b1b5e9097bb3c5e1d22f395999df67360",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
