@@ -106,6 +106,24 @@
       "revId": "f3a5580b1b5e9097bb3c5e1d22f395999df67360",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f8ef5ca_a69935b2",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-09-03T03:08:00Z",
+      "side": 0,
+      "message": "I upload patch set 4 to check parts size.\n\nTo Prevent bad parameters from direct binding, we should review design of SmsManager \u0026 UiccSmsController and use another CL to check parameters in UiccSmsController.",
+      "parentUuid": "38fe1503_5c9883de",
+      "revId": "f3a5580b1b5e9097bb3c5e1d22f395999df67360",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
