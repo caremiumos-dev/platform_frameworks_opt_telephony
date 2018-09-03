@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14375aa1_cf4b20e6",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-03T20:43:40Z",
+      "side": 1,
+      "message": "I agree this is invalid, but since you\u0027re anyway touching this code I don\u0027t think there\u0027s any harm in sending the sentIntents here.",
+      "revId": "99930d8afa1637a19ef1e8212c1d245a7a7f9d34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44cdd0f8_ea972692",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-03T20:43:40Z",
+      "side": 1,
+      "message": "Generally the convention is \"\u003cfunction name\u003e: \u003cmessage\u003e\"\nSo I think it should be \"GsmSMSDispatcher.getNewSubmitPduTracker(): getSubmitPdu() returned null\"\n\nAnd similar above.",
+      "revId": "99930d8afa1637a19ef1e8212c1d245a7a7f9d34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
