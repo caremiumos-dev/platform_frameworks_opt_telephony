@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "223ce28f_00dd515f",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-09-03T03:12:38Z",
+      "side": 1,
+      "message": "When msgCount \u003c 1, I think it\u0027s no meaning to trigger sentIntents even if it\u0027s not empty.",
+      "revId": "50d18f5700067facbbc80791b84dd43029962409",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
