@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "525c3ece_f656274b",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-09-04T02:32:07Z",
+      "side": 1,
+      "message": "I agree it\u0027s no harm to trigger sentItent here, I add it.",
+      "revId": "7e8cf77d27eb48b7373d82845ffc58489dc28610",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ac2e0ee_b6679d0c",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-09-04T02:32:07Z",
+      "side": 1,
+      "message": "I modify the log to follow format.",
+      "revId": "7e8cf77d27eb48b7373d82845ffc58489dc28610",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
