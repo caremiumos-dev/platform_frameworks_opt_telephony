@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "bd0fe05c_bc739c85",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-05T22:01:01Z",
+      "side": 1,
+      "message": "Sounds good.",
+      "parentUuid": "0da915bc_006d2e9d",
+      "range": {
+        "startLine": 983,
+        "startChar": 35,
+        "endLine": 983,
+        "endChar": 56
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "812f3c9e_a3807053",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 13
@@ -83,6 +107,30 @@
       "writtenOn": "2018-09-05T20:20:00Z",
       "side": 1,
       "message": "last cell info should still be valid right? Just that it does not really correspond to mLastCellInfoListTime anymore.",
+      "range": {
+        "startLine": 986,
+        "startChar": 20,
+        "endLine": 987,
+        "endChar": 79
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "170f0d90_755a8b2a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-05T22:01:01Z",
+      "side": 1,
+      "message": "Well... it\u0027s valid for a little while, but if we hit this condition the modem has crashed/hung, so I think the safer thing to do is to set it to null so that it doesn\u0027t mislead some other component that didn\u0027t check the (currently ill-defined) timestamp. The question is: would you rather have stale info or a clear signal that something is wrong?",
+      "parentUuid": "812f3c9e_a3807053",
       "range": {
         "startLine": 986,
         "startChar": 20,
@@ -118,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "be1bf2f4_a74c83b0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 3503,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-05T22:01:01Z",
+      "side": 1,
+      "message": "Not at all... if we go OOS it\u0027s set to null, but CellLocation is just \"current camped cell identity\", so if it\u0027s valid it\u0027s valid - nothing more to do.",
+      "parentUuid": "7ed7c63c_49e60b98",
+      "range": {
+        "startLine": 3503,
+        "startChar": 12,
+        "endLine": 3503,
+        "endChar": 25
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08c34bdb_6cb1df5b",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 13
@@ -129,6 +201,30 @@
       "writtenOn": "2018-09-05T20:20:00Z",
       "side": 1,
       "message": "It\u0027s weird that timeout uses the same message, although I see that makes the handleMessage code simpler.",
+      "range": {
+        "startLine": 4295,
+        "startChar": 34,
+        "endLine": 4295,
+        "endChar": 58
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11927416_ed039e34",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 4295,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-05T22:01:01Z",
+      "side": 1,
+      "message": "I thought it was cheeky. That\u0027s why I added a comment on 4291 explaining that I send the request and then send a chaser. If you\u0027d like me to add more comments (or if you think it\u0027s too hard to understand and I should take a different approach) I can fiddle with it. LMK.",
+      "parentUuid": "08c34bdb_6cb1df5b",
       "range": {
         "startLine": 4295,
         "startChar": 34,
