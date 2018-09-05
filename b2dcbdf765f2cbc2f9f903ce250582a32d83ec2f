@@ -46,6 +46,98 @@
       "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0da915bc_006d2e9d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-05T20:20:00Z",
+      "side": 1,
+      "message": "To make it clear that this is the time last req was sent, add \u0027Req\u0027 to the name?",
+      "range": {
+        "startLine": 983,
+        "startChar": 35,
+        "endLine": 983,
+        "endChar": 56
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "812f3c9e_a3807053",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-05T20:20:00Z",
+      "side": 1,
+      "message": "last cell info should still be valid right? Just that it does not really correspond to mLastCellInfoListTime anymore.",
+      "range": {
+        "startLine": 986,
+        "startChar": 20,
+        "endLine": 987,
+        "endChar": 79
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ed7c63c_49e60b98",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 3503,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-05T20:20:00Z",
+      "side": 1,
+      "message": "We don\u0027t care how old it is in this case?",
+      "range": {
+        "startLine": 3503,
+        "startChar": 12,
+        "endLine": 3503,
+        "endChar": 25
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08c34bdb_6cb1df5b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 4295,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-05T20:20:00Z",
+      "side": 1,
+      "message": "It\u0027s weird that timeout uses the same message, although I see that makes the handleMessage code simpler.",
+      "range": {
+        "startLine": 4295,
+        "startChar": 34,
+        "endLine": 4295,
+        "endChar": 58
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }

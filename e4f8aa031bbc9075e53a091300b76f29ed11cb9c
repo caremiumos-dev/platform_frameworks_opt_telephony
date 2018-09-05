@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e27dafd3_1c88474b",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-05T20:20:00Z",
+      "side": 0,
+      "message": "Why is this not needed anymore?",
+      "range": {
+        "startLine": 1707,
+        "startChar": 7,
+        "endLine": 1707,
+        "endChar": 79
+      },
+      "revId": "e4f8aa031bbc9075e53a091300b76f29ed11cb9c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
