@@ -22,6 +22,30 @@
       "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b435b99_206442b2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-05T00:09:24Z",
+      "side": 1,
+      "message": "Well, a LL is memory and time efficient if you don\u0027t ever need to access elements in the middle. This thing functions as a queue where requests are pushed to the back and then the whole list is cleared out \"in order\". This means we don\u0027t ever end up with a data structure that has grown beyond its need... the average case is that it has 0 elements in it, so keeping it small is nice.",
+      "parentUuid": "bd4d0c75_353406b2",
+      "range": {
+        "startLine": 231,
+        "startChar": 57,
+        "endLine": 231,
+        "endChar": 67
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
