@@ -1659,6 +1659,11 @@ public class DataConnection extends StateMachine {
             }
             misc.subscriberId = mPhone.getSubscriberId();
 
+            NetworkCapabilities nc = getNetworkCapabilities();
+            if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_IMS)) {
+                misc.disable464xlat = true;
+            }
+
             setNetworkRestriction();
             if (DBG) log("mRestrictedNetworkOverride = " + mRestrictedNetworkOverride);
             mNetworkAgent = new DcNetworkAgent(getHandler().getLooper(), mPhone.getContext(),
