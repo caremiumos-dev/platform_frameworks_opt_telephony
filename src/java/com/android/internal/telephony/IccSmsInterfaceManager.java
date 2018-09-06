@@ -151,6 +151,10 @@ public class IccSmsInterfaceManager {
         mDispatchersController = dispatchersController;
     }
 
+    public void listenSubChanged(SubscriptionMonitor subMonitor) {
+        mDispatchersController.listenSubChanged(subMonitor);
+    }
+
     protected void markMessagesAsRead(ArrayList<byte[]> messages) {
         if (messages == null) {
             return;

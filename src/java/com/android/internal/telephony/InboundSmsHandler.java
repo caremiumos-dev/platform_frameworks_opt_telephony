@@ -816,7 +816,7 @@ public abstract class InboundSmsHandler extends StateMachine {
 
                 // query for all segments and broadcast message if we have all the parts
                 String[] whereArgs = {address, refNumber, count};
-                cursor = mResolver.query(sRawUri, PDU_SEQUENCE_PORT_PROJECTION,
+                cursor = mResolver.query(getRawUri(), PDU_SEQUENCE_PORT_PROJECTION,
                         tracker.getQueryForSegments(), whereArgs, null);
 
                 int cursorCount = cursor.getCount();
@@ -1117,7 +1117,7 @@ public abstract class InboundSmsHandler extends StateMachine {
      */
     private void deleteFromRawTable(String deleteWhere, String[] deleteWhereArgs,
                                     int deleteType) {
-        Uri uri = deleteType == DELETE_PERMANENTLY ? sRawUriPermanentDelete : sRawUri;
+        Uri uri = deleteType == DELETE_PERMANENTLY ? sRawUriPermanentDelete : getRawUri();
         int rows = mResolver.delete(uri, deleteWhere, deleteWhereArgs);
         if (rows == 0) {
             loge("No rows were deleted from raw table!");
@@ -1239,7 +1239,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         Cursor cursor = null;
         try {
             // Check for duplicate message segments
-            cursor = mResolver.query(sRawUri, PDU_PROJECTION, where,
+            cursor = mResolver.query(getRawUri(), PDU_PROJECTION, where,
                     new String[]{address, refNumber, count, seqNumber, date, messageBody},
                     null);
 
@@ -1299,7 +1299,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         ContentValues values = tracker.getContentValues();
 
         if (VDBG) log("adding content values to raw table: " + values.toString());
-        Uri newUri = mResolver.insert(sRawUri, values);
+        Uri newUri = mResolver.insert(getRawUri(), values);
         if (DBG) log("URI of new row -> " + newUri);
 
         try {
@@ -1614,6 +1614,19 @@ public abstract class InboundSmsHandler extends StateMachine {
     */
     private void setWakeLockTimeout(int timeOut) {
         mWakeLockTimeout = timeOut;
+    }
+
+    public Uri getRawUri() {
+        if (SubscriptionController.getInstance().isActiveSubId(mPhone.getSubId())) {
+            return Uri.withAppendedPath(Telephony.Sms.CONTENT_URI, "raw/" + mPhone.getSubId());
+        } else {
+            return sRawUri;
+        }
+    }
+
+    public boolean isProgressing() {
+        return getCurrentState() instanceof DeliveringState
+                || getCurrentState() instanceof WaitingState;
     }
 
     /**

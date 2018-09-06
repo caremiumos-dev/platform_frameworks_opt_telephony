@@ -725,7 +725,6 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
     @Test
     @MediumTest
     public void testBroadcastUndeliveredUserLocked() throws Exception {
-        replaceInstance(SmsBroadcastUndelivered.class, "instance", null, null);
         doReturn(0).when(mInboundSmsTracker).getDestPort();
 
         // add a fake entry to db
@@ -738,7 +737,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         UserManager userManager = (UserManager)mContext.getSystemService(Context.USER_SERVICE);
         doReturn(false).when(userManager).isUserUnlocked();
 
-        SmsBroadcastUndelivered.initialize(mContext, mGsmInboundSmsHandler, mCdmaInboundSmsHandler);
+        new SmsBroadcastUndelivered(mContext, mGsmInboundSmsHandler, mCdmaInboundSmsHandler);
 
         // verify that a broadcast receiver is registered for current user (user == null) based on
         // implementation in ContextFixture
@@ -761,7 +760,6 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
     @Test
     @MediumTest
     public void testBroadcastUndeliveredUserUnlocked() throws Exception {
-        replaceInstance(SmsBroadcastUndelivered.class, "instance", null, null);
         doReturn(0).when(mInboundSmsTracker).getDestPort();
 
         // add a fake entry to db
@@ -770,7 +768,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         // make it a single-part message
         doReturn(1).when(mInboundSmsTracker).getMessageCount();
 
-        SmsBroadcastUndelivered.initialize(mContext, mGsmInboundSmsHandler, mCdmaInboundSmsHandler);
+        new SmsBroadcastUndelivered(mContext, mGsmInboundSmsHandler, mCdmaInboundSmsHandler);
         waitForMs(100);
 
         // user is unlocked; intent should be broadcast right away
@@ -780,8 +778,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
     @Test
     @MediumTest
     public void testBroadcastUndeliveredDeleted() throws Exception {
-        replaceInstance(SmsBroadcastUndelivered.class, "instance", null, null);
-        SmsBroadcastUndelivered.initialize(mContext, mGsmInboundSmsHandler, mCdmaInboundSmsHandler);
+        new SmsBroadcastUndelivered(mContext, mGsmInboundSmsHandler, mCdmaInboundSmsHandler);
         doReturn(0).when(mInboundSmsTracker).getDestPort();
 
         //add a fake entry to db
@@ -806,8 +803,6 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
     @Test
     @MediumTest
     public void testBroadcastUndeliveredMultiPart() throws Exception {
-        replaceInstance(SmsBroadcastUndelivered.class, "instance", null, null);
-
         // prepare SMS part 1 and part 2
         prepareMultiPartSms(false);
 
@@ -820,7 +815,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
                 when(mTelephonyComponentFactory).makeInboundSmsTracker(any(Cursor.class),
                 anyBoolean());
 
-        SmsBroadcastUndelivered.initialize(mContext, mGsmInboundSmsHandler, mCdmaInboundSmsHandler);
+        new SmsBroadcastUndelivered(mContext, mGsmInboundSmsHandler, mCdmaInboundSmsHandler);
         waitForMs(100);
 
         verifySmsIntentBroadcasts(0);

@@ -61,6 +61,8 @@ public class SmsDispatchersController extends Handler {
     /** Callback from RIL_REQUEST_IMS_REGISTRATION_STATE */
     private static final int EVENT_IMS_STATE_DONE = 13;
 
+    private static final int EVENT_SUBSCRIPTION_CHANGED = 14;
+
     private SMSDispatcher mCdmaDispatcher;
     private SMSDispatcher mGsmDispatcher;
     private ImsSmsDispatcher mImsSmsDispatcher;
@@ -73,6 +75,7 @@ public class SmsDispatchersController extends Handler {
     private final SmsUsageMonitor mUsageMonitor;
     private final CommandsInterface mCi;
     private final Context mContext;
+    private final SmsBroadcastUndelivered mSmsBroadcastUndelivered;
 
     /** true if IMS is registered and sms is supported, false otherwise.*/
     private boolean mIms = false;
@@ -96,7 +99,7 @@ public class SmsDispatchersController extends Handler {
         mCdmaInboundSmsHandler = CdmaInboundSmsHandler.makeInboundSmsHandler(phone.getContext(),
                 storageMonitor, phone, (CdmaSMSDispatcher) mCdmaDispatcher);
         mGsmDispatcher = new GsmSMSDispatcher(phone, this, mGsmInboundSmsHandler);
-        SmsBroadcastUndelivered.initialize(phone.getContext(),
+        mSmsBroadcastUndelivered = new SmsBroadcastUndelivered(phone.getContext(),
                 mGsmInboundSmsHandler, mCdmaInboundSmsHandler);
         InboundSmsHandler.registerNewMessageNotificationActionHandler(phone.getContext());
 
@@ -122,6 +125,13 @@ public class SmsDispatchersController extends Handler {
         mCdmaInboundSmsHandler.dispose();
     }
 
+    public void listenSubChanged(SubscriptionMonitor subMonitor) {
+        if (subMonitor != null) {
+            subMonitor.registerForSubscriptionChanged(mPhone.getPhoneId(), this,
+                    EVENT_SUBSCRIPTION_CHANGED, null);
+        }
+    }
+
     /**
      * Handles events coming from the phone stack. Overridden from handler.
      *
@@ -145,6 +155,16 @@ public class SmsDispatchersController extends Handler {
                 } else {
                     Rlog.e(TAG, "IMS State query failed with exp "
                             + ar.exception);
+                }
+                break;
+            case EVENT_SUBSCRIPTION_CHANGED:
+                if (SubscriptionController.getInstance().isActiveSubId(mPhone.getSubId())) {
+                    Rlog.d(TAG, "EVENT_IMS_STATE_CHANGED: start accepting SMS");
+                    mSmsBroadcastUndelivered.startAcceptingSms();
+                    mSmsBroadcastUndelivered.setScannable(true);
+                } else {
+                    Rlog.d(TAG, "EVENT_IMS_STATE_CHANGED: SUB is not ready");
+                    mSmsBroadcastUndelivered.setScannable(false);
                 }
                 break;
 

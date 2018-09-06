@@ -262,6 +262,7 @@ public class PhoneFactory {
                     sTelephonyNetworkFactories[i] = new TelephonyNetworkFactory(
                             sPhoneSwitcher, sc, sSubscriptionMonitor, Looper.myLooper(),
                             sContext, i, sPhones[i].mDcTracker);
+                    sPhones[i].getIccSmsInterfaceManager().listenSubChanged(sSubscriptionMonitor);
                 }
             }
         }

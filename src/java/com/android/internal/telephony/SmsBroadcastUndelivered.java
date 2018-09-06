@@ -77,6 +77,8 @@ public class SmsBroadcastUndelivered {
     /** Handler for 3GPP2-format messages (may be null). */
     private final CdmaInboundSmsHandler mCdmaInboundSmsHandler;
 
+    private boolean mCanSan = false;
+
     /** Broadcast receiver that processes the raw table when the user unlocks the phone for the
      *  first time after reboot and the credential-encrypted storage is available.
      */
@@ -84,8 +86,11 @@ public class SmsBroadcastUndelivered {
         @Override
         public void onReceive(final Context context, Intent intent) {
             Rlog.d(TAG, "Received broadcast " + intent.getAction());
-            if (Intent.ACTION_USER_UNLOCKED.equals(intent.getAction())) {
-                new ScanRawTableThread(context).start();
+            if (Intent.ACTION_USER_UNLOCKED.equals(intent.getAction()) && mCanSan) {
+                if (mGsmInboundSmsHandler != null && !mGsmInboundSmsHandler.isProgressing() &&
+                        mCdmaInboundSmsHandler != null && !mCdmaInboundSmsHandler.isProgressing()) {
+                    new ScanRawTableThread(context).start();
+                }
             }
         }
     };
@@ -104,25 +109,24 @@ public class SmsBroadcastUndelivered {
         }
     }
 
-    public static void initialize(Context context, GsmInboundSmsHandler gsmInboundSmsHandler,
-        CdmaInboundSmsHandler cdmaInboundSmsHandler) {
-        if (instance == null) {
-            instance = new SmsBroadcastUndelivered(
-                context, gsmInboundSmsHandler, cdmaInboundSmsHandler);
-        }
+    public void startAcceptingSms() {
 
         // Tell handlers to start processing new messages and transit from the startup state to the
         // idle state. This method may be called multiple times for multi-sim devices. We must make
         // sure the state transition happen to all inbound sms handlers.
-        if (gsmInboundSmsHandler != null) {
-            gsmInboundSmsHandler.sendMessage(InboundSmsHandler.EVENT_START_ACCEPTING_SMS);
+        if (mGsmInboundSmsHandler != null) {
+            mGsmInboundSmsHandler.sendMessage(InboundSmsHandler.EVENT_START_ACCEPTING_SMS);
         }
-        if (cdmaInboundSmsHandler != null) {
-            cdmaInboundSmsHandler.sendMessage(InboundSmsHandler.EVENT_START_ACCEPTING_SMS);
+        if (mCdmaInboundSmsHandler != null) {
+            mCdmaInboundSmsHandler.sendMessage(InboundSmsHandler.EVENT_START_ACCEPTING_SMS);
         }
     }
 
-    private SmsBroadcastUndelivered(Context context, GsmInboundSmsHandler gsmInboundSmsHandler,
+    public void setScannable(boolean scannable) {
+        mCanSan = scannable;
+    }
+
+    public SmsBroadcastUndelivered(Context context, GsmInboundSmsHandler gsmInboundSmsHandler,
             CdmaInboundSmsHandler cdmaInboundSmsHandler) {
         mResolver = context.getContentResolver();
         mGsmInboundSmsHandler = gsmInboundSmsHandler;
@@ -151,7 +155,7 @@ public class SmsBroadcastUndelivered {
         Cursor cursor = null;
         try {
             // query only non-deleted ones
-            cursor = mResolver.query(InboundSmsHandler.sRawUri, PDU_PENDING_MESSAGE_PROJECTION,
+            cursor = mResolver.query(mGsmInboundSmsHandler.getRawUri(), PDU_PENDING_MESSAGE_PROJECTION,
                     "deleted = 0", null,
                     null);
             if (cursor == null) {
