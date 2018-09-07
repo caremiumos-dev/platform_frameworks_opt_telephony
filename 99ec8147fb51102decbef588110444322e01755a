@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e53c5554_b73af875",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3584,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-09-07T01:21:19Z",
+      "side": 1,
+      "message": "Looks like you\u0027re sending the reg state and the voice technology in the EVENT_VRS_OR_RAT_CHANGED message. Can you use them here?",
+      "range": {
+        "startLine": 3583,
+        "startChar": 12,
+        "endLine": 3584,
+        "endChar": 57
+      },
+      "revId": "99ec8147fb51102decbef588110444322e01755a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d4b1b0a_7ca36b23",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-09-07T01:21:19Z",
+      "side": 1,
+      "message": "use waitForHandlerAction(mTestHandler, \u003csome timeout\u003e)",
+      "range": {
+        "startLine": 1029,
+        "startChar": 8,
+        "endLine": 1029,
+        "endChar": 23
+      },
+      "revId": "99ec8147fb51102decbef588110444322e01755a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "246d7499_c3687b49",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsCallTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-09-07T01:21:19Z",
+      "side": 1,
+      "message": "assertNotEquals",
+      "range": {
+        "startLine": 58,
+        "startChar": 8,
+        "endLine": 58,
+        "endChar": 19
+      },
+      "revId": "99ec8147fb51102decbef588110444322e01755a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49a9eb70_2063ac0e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsCallTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-09-07T01:21:19Z",
+      "side": 1,
+      "message": "assertEquals",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 18
+      },
+      "revId": "99ec8147fb51102decbef588110444322e01755a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe204b88_e28742b8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneConnectionTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-09-07T01:21:19Z",
+      "side": 1,
+      "message": "Don\u0027t use m-prefixed names for local variables -- name this connectionUt or imsPhoneConnection",
+      "range": {
+        "startLine": 271,
+        "startChar": 8,
+        "endLine": 271,
+        "endChar": 21
+      },
+      "revId": "99ec8147fb51102decbef588110444322e01755a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
