@@ -174,7 +174,7 @@ public class DcTracker extends Handler {
             } );
 
     /** allApns holds all apns */
-    private ArrayList<ApnSetting> mAllApnSettings = null;
+    private ArrayList<ApnSetting> mAllApnSettings = new ArrayList<>();
 
     /** preferred apn */
     private ApnSetting mPreferredApn = null;
@@ -518,19 +518,7 @@ public class DcTracker extends Handler {
 
     private int mDisconnectPendingCount = 0;
 
-    /** Indicate if metered APNs are disabled.
-     *  set to block all the metered APNs from continuously sending requests, which causes
-     *  undesired network load */
-    private boolean mMeteredApnDisabled = false;
-
-    /**
-     * int to remember whether has setDataProfiles and with roaming or not.
-     * 0: default, has never set data profile
-     * 1: has set data profile with home protocol
-     * 2: has set data profile with roaming protocol
-     * This is not needed once RIL command is updated to support both home and roaming protocol.
-     */
-    private int mSetDataProfileStatus = 0;
+    private ArrayList<DataProfile> mLastDataProfileList = new ArrayList<>();
 
     /**
      * Handles changes to the APN db.
@@ -1985,7 +1973,7 @@ public class DcTracker extends Handler {
 
         if (mPreferredApn != null && mPreferredApn.canHandleType(ApnSetting.TYPE_IA)) {
               iaApnSetting = mPreferredApn;
-        } else if (mAllApnSettings != null && !mAllApnSettings.isEmpty()) {
+        } else if (!mAllApnSettings.isEmpty()) {
             firstApnSetting = mAllApnSettings.get(0);
             log("setInitialApn: firstApnSetting=" + firstApnSetting);
 
@@ -2254,7 +2242,7 @@ public class DcTracker extends Handler {
         if (DBG) log("onSimNotReady");
 
         cleanUpAllConnections(true, Phone.REASON_SIM_NOT_READY);
-        mAllApnSettings = null;
+        mAllApnSettings.clear();
         mAutoAttachOnCreationConfig = false;
         // Clear auto attach as modem is expected to do a new attach once SIM is ready
         mAutoAttachOnCreation.set(false);
@@ -3192,20 +3180,23 @@ public class DcTracker extends Handler {
 
     private void setDataProfilesAsNeeded() {
         if (DBG) log("setDataProfilesAsNeeded");
-        if (mAllApnSettings != null && !mAllApnSettings.isEmpty()) {
-            ArrayList<DataProfile> dps = new ArrayList<DataProfile>();
-            for (ApnSetting apn : mAllApnSettings) {
-                if (apn.getModemCognitive()) {
-                    DataProfile dp = createDataProfile(apn);
-                    if (!dps.contains(dp)) {
-                        dps.add(dp);
-                    }
-                }
+
+        ArrayList<DataProfile> dataProfileList = new ArrayList<>();
+        for (ApnSetting apn : mAllApnSettings) {
+            DataProfile dp = createDataProfile(apn);
+            if (!dataProfileList.contains(dp)) {
+                dataProfileList.add(dp);
             }
-            if (dps.size() > 0) {
-                mDataServiceManager.setDataProfile(dps,
-                        mPhone.getServiceState().getDataRoamingFromRegistration(), null);
-            }
+        }
+
+        // Check if the data profiles we are sending are same as we did last time. We don't want to
+        // send the redundant profiles to the modem. Also note that when no data profiles are
+        // available, for example when SIM is not present, we send the empty list to the modem.
+        if (dataProfileList.size() != mLastDataProfileList.size()
+                || !mLastDataProfileList.containsAll(dataProfileList)) {
+            mDataServiceManager.setDataProfile(dataProfileList,
+                    mPhone.getServiceState().getDataRoamingFromRegistration(), null);
+            mLastDataProfileList = dataProfileList;
         }
     }
 
@@ -3215,7 +3206,7 @@ public class DcTracker extends Handler {
      */
     private void createAllApnList() {
         mMvnoMatched = false;
-        mAllApnSettings = new ArrayList<>();
+        mAllApnSettings.clear();
         IccRecords r = mIccRecords.get();
         String operator = (r != null) ? r.getOperatorNumeric() : "";
         if (operator != null) {
@@ -3416,28 +3407,25 @@ public class DcTracker extends Handler {
                 mPreferredApn = null;
             }
         }
-        if (mAllApnSettings != null) {
-            if (DBG) log("buildWaitingApns: mAllApnSettings=" + mAllApnSettings);
-            for (ApnSetting apn : mAllApnSettings) {
-                if (apn.canHandleType(requestedApnTypeBitmask)) {
-                    if (ServiceState.bitmaskHasTech(apn.getNetworkTypeBitmask(),
-                            ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
-                        if (DBG) log("buildWaitingApns: adding apn=" + apn);
-                        apnList.add(apn);
-                    } else {
-                        if (DBG) {
-                            log("buildWaitingApns: networkTypeBitmask:"
-                                    + apn.getNetworkTypeBitmask()
-                                    + "do not include radioTech:" + radioTech);
-                        }
+
+        if (DBG) log("buildWaitingApns: mAllApnSettings=" + mAllApnSettings);
+        for (ApnSetting apn : mAllApnSettings) {
+            if (apn.canHandleType(requestedApnTypeBitmask)) {
+                if (ServiceState.bitmaskHasTech(apn.getNetworkTypeBitmask(),
+                        ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
+                    if (DBG) log("buildWaitingApns: adding apn=" + apn);
+                    apnList.add(apn);
+                } else {
+                    if (DBG) {
+                        log("buildWaitingApns: networkTypeBitmask:"
+                                + apn.getNetworkTypeBitmask()
+                                + "do not include radioTech:" + radioTech);
                     }
-                } else if (DBG) {
-                    log("buildWaitingApns: couldn't handle requested ApnType="
-                            + requestedApnType);
                 }
+            } else if (DBG) {
+                log("buildWaitingApns: couldn't handle requested ApnType="
+                        + requestedApnType);
             }
-        } else {
-            loge("mAllApnSettings is null!");
         }
 
         apnList = sortApnListByPreferred(apnList);
@@ -3509,8 +3497,8 @@ public class DcTracker extends Handler {
     }
 
     private ApnSetting getPreferredApn() {
-        if (mAllApnSettings == null || mAllApnSettings.isEmpty()) {
-            log("getPreferredApn: mAllApnSettings is " + ((mAllApnSettings == null)?"null":"empty"));
+        if (mAllApnSettings.isEmpty()) {
+            log("getPreferredApn: mAllApnSettings is empty");
             return null;
         }
 
@@ -4222,22 +4210,18 @@ public class DcTracker extends Handler {
      */
     private void addEmergencyApnSetting() {
         if(mEmergencyApn != null) {
-            if(mAllApnSettings == null) {
-                mAllApnSettings = new ArrayList<ApnSetting>();
-            } else {
-                boolean hasEmergencyApn = false;
-                for (ApnSetting apn : mAllApnSettings) {
-                    if ((apn.getApnTypeBitmask() & ApnSetting.TYPE_EMERGENCY) > 0) {
-                        hasEmergencyApn = true;
-                        break;
-                    }
+            boolean hasEmergencyApn = false;
+            for (ApnSetting apn : mAllApnSettings) {
+                if ((apn.getApnTypeBitmask() & ApnSetting.TYPE_EMERGENCY) > 0) {
+                    hasEmergencyApn = true;
+                    break;
                 }
+            }
 
-                if(hasEmergencyApn == false) {
-                    mAllApnSettings.add(mEmergencyApn);
-                } else {
-                    log("addEmergencyApnSetting - E-APN setting is already present");
-                }
+            if (!hasEmergencyApn) {
+                mAllApnSettings.add(mEmergencyApn);
+            } else {
+                log("addEmergencyApnSetting - E-APN setting is already present");
             }
         }
     }
@@ -4261,7 +4245,7 @@ public class DcTracker extends Handler {
 
     private void cleanUpConnectionsOnUpdatedApns(boolean tearDown, String reason) {
         if (DBG) log("cleanUpConnectionsOnUpdatedApns: tearDown=" + tearDown);
-        if (mAllApnSettings != null && mAllApnSettings.isEmpty()) {
+        if (mAllApnSettings.isEmpty()) {
             cleanUpAllConnections(tearDown, Phone.REASON_APN_CHANGED);
         } else {
             int radioTech = mPhone.getServiceState().getRilDataRadioTechnology();
