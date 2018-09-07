@@ -46,6 +46,30 @@
       "revId": "e4f8aa031bbc9075e53a091300b76f29ed11cb9c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "310a2b76_066870c7",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-07T00:00:26Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "943bfbcb_a3a5273a",
+      "range": {
+        "startLine": 1707,
+        "startChar": 7,
+        "endLine": 1707,
+        "endChar": 79
+      },
+      "revId": "e4f8aa031bbc9075e53a091300b76f29ed11cb9c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

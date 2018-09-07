@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "ea57dd1c_08c45adb",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-07T00:00:26Z",
+      "side": 1,
+      "message": "It may be only 2-10 seconds old depending on the timeout value. Modem crashing does not mean the stale value is not good; the sync API can still return that. I would keep the value around except for the incorrect/misleading mLastCellInfoListTime. If that is the reason I guess this is ok, but should be mentioned in addition to this comment.",
+      "parentUuid": "170f0d90_755a8b2a",
+      "range": {
+        "startLine": 986,
+        "startChar": 20,
+        "endLine": 987,
+        "endChar": 79
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ed7c63c_49e60b98",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 13
@@ -190,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "7b8ecac3_db272cc6",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 3503,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-07T00:00:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "be1bf2f4_a74c83b0",
+      "range": {
+        "startLine": 3503,
+        "startChar": 12,
+        "endLine": 3503,
+        "endChar": 25
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08c34bdb_6cb1df5b",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 13
@@ -225,6 +273,30 @@
       "side": 1,
       "message": "I thought it was cheeky. That\u0027s why I added a comment on 4291 explaining that I send the request and then send a chaser. If you\u0027d like me to add more comments (or if you think it\u0027s too hard to understand and I should take a different approach) I can fiddle with it. LMK.",
       "parentUuid": "08c34bdb_6cb1df5b",
+      "range": {
+        "startLine": 4295,
+        "startChar": 34,
+        "endLine": 4295,
+        "endChar": 58
+      },
+      "revId": "b2dcbdf765f2cbc2f9f903ce250582a32d83ec2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "594d719c_8af55186",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 4295,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-07T00:00:26Z",
+      "side": 1,
+      "message": "Yeah I guess it\u0027s ok. May be good to add a clear comment here as well, otherwise it\u0027s easy to assume that this is by accident.",
+      "parentUuid": "11927416_ed039e34",
       "range": {
         "startLine": 4295,
         "startChar": 34,
