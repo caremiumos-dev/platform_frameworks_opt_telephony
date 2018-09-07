@@ -518,19 +518,7 @@ public class DcTracker extends Handler {
 
     private int mDisconnectPendingCount = 0;
 
-    /** Indicate if metered APNs are disabled.
-     *  set to block all the metered APNs from continuously sending requests, which causes
-     *  undesired network load */
-    private boolean mMeteredApnDisabled = false;
-
-    /**
-     * int to remember whether has setDataProfiles and with roaming or not.
-     * 0: default, has never set data profile
-     * 1: has set data profile with home protocol
-     * 2: has set data profile with roaming protocol
-     * This is not needed once RIL command is updated to support both home and roaming protocol.
-     */
-    private int mSetDataProfileStatus = 0;
+    private ArrayList<DataProfile> mLastDataProfileList = new ArrayList<>();
 
     /**
      * Handles changes to the APN db.
@@ -3192,20 +3180,31 @@ public class DcTracker extends Handler {
 
     private void setDataProfilesAsNeeded() {
         if (DBG) log("setDataProfilesAsNeeded");
-        if (mAllApnSettings != null && !mAllApnSettings.isEmpty()) {
-            ArrayList<DataProfile> dps = new ArrayList<DataProfile>();
-            for (ApnSetting apn : mAllApnSettings) {
-                if (apn.getModemCognitive()) {
-                    DataProfile dp = createDataProfile(apn);
-                    if (!dps.contains(dp)) {
-                        dps.add(dp);
-                    }
+        if (mAllApnSettings != null || mPreferredApn != null) {
+            ArrayList<DataProfile> dataProfileList = new ArrayList<>();
+            DataProfile dp;
+
+            ArrayList<ApnSetting> allApnSettings = new ArrayList<>(mAllApnSettings);
+            // The preferred APN might be an user-input APN, we need to send it to the modem as
+            // well.
+            if (mPreferredApn != null) {
+                allApnSettings.add(mPreferredApn);
+            }
+
+            for (ApnSetting apn : allApnSettings) {
+                dp = createDataProfile(apn);
+                if (!dataProfileList.contains(dp)) {
+                    dataProfileList.add(dp);
                 }
             }
-            if (dps.size() > 0) {
-                mDataServiceManager.setDataProfile(dps,
+
+            if (dataProfileList.size() > 0
+                    && (dataProfileList.size() != mLastDataProfileList.size()
+                    || !mLastDataProfileList.containsAll(dataProfileList))) {
+                mDataServiceManager.setDataProfile(dataProfileList,
                         mPhone.getServiceState().getDataRoamingFromRegistration(), null);
             }
+            mLastDataProfileList = dataProfileList;
         }
     }
 
