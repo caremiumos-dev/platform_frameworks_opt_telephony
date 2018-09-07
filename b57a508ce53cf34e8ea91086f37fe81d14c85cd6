@@ -34,6 +34,24 @@
       "revId": "b57a508ce53cf34e8ea91086f37fe81d14c85cd6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34eafef7_08ca2f6d",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1305827
+      },
+      "writtenOn": "2018-09-07T10:08:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55f308ea_cb69a859",
+      "revId": "b57a508ce53cf34e8ea91086f37fe81d14c85cd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
