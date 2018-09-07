@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cc39cde_eb227f25",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2018-09-07T19:18:40Z",
+      "side": 1,
+      "message": "log on else rather than silently dropping the ia.",
+      "range": {
+        "startLine": 1147,
+        "startChar": 25,
+        "endLine": 1147,
+        "endChar": 0
+      },
+      "revId": "0065473e9ccd32d9836a319ec9aa6d51a1d088a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
