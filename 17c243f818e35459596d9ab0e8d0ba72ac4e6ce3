@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d1f1ad4f_e1069351",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-10T17:30:59Z",
+      "side": 1,
+      "message": "I dont think there\u0027s any extra space here.",
+      "parentUuid": "e380d0bd_98f41121",
+      "range": {
+        "startLine": 482,
+        "startChar": 19,
+        "endLine": 482,
+        "endChar": 20
+      },
+      "revId": "17c243f818e35459596d9ab0e8d0ba72ac4e6ce3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a9bc50ea_a2923ede",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "17c243f818e35459596d9ab0e8d0ba72ac4e6ce3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bef59a62_8c84dfcb",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-10T17:30:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9bc50ea_a2923ede",
+      "revId": "17c243f818e35459596d9ab0e8d0ba72ac4e6ce3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
