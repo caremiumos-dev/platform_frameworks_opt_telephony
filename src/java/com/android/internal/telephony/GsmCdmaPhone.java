@@ -1420,8 +1420,14 @@ public class GsmCdmaPhone extends Phone {
                         b.getString(CarrierConfigManager.KEY_DEFAULT_VM_NUMBER_STRING);
                 String defaultVmNumberRoaming =
                         b.getString(CarrierConfigManager.KEY_DEFAULT_VM_NUMBER_ROAMING_STRING);
+                String defaultVmNumberImsUnregistered = b.getString(
+                        CarrierConfigManager.KEY_DEFAULT_VM_NUMBER_IMS_UNREGISTERED_STRING);
+                TelephonyManager telephonyManager = TelephonyManager.from(mContext);
                 if (!TextUtils.isEmpty(defaultVmNumberRoaming) && mSST.mSS.getRoaming()) {
                     number = defaultVmNumberRoaming;
+                } else if (!TextUtils.isEmpty(defaultVmNumberImsUnregistered)
+                            && !telephonyManager.isImsRegistered()) {
+                    number = defaultVmNumberImsUnregistered;
                 } else {
                     number = defaultVmNumber;
                 }
