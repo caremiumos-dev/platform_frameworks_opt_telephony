@@ -4743,6 +4743,19 @@ public class ServiceStateTracker extends Handler {
                 AccessNetworkType.GERAN, true);
 
         if (mPhone.getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_5)) {
+            boolean useRsrpOnlyBool = config.getBoolean(CarrierConfigManager
+                    .KEY_USE_ONLY_RSRP_FOR_LTE_SIGNAL_BAR_BOOL, false);
+            boolean useRsrpAndRsrqBool = config.getBoolean(CarrierConfigManager
+                    .KEY_USE_RSRP_AND_RSRQ_FOR_LTE_SIGNAL_BAR_BOOL, false);
+            mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSRQ,
+                    config.getIntArray(CarrierConfigManager.KEY_LTE_RSRQ_THRESHOLDS_INT_ARRAY),
+                    AccessNetworkType.EUTRAN,
+                    !useRsrpOnlyBool && useRsrpAndRsrqBool);
+            mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSSNR,
+                    config.getIntArray(CarrierConfigManager.KEY_LTE_RSSNR_THRESHOLDS_INT_ARRAY),
+                    AccessNetworkType.EUTRAN,
+                    !useRsrpOnlyBool && !useRsrpAndRsrqBool);
+
             int measurementEnabled = config.getInt(CarrierConfigManager
                     .KEY_PARAMETERS_USE_FOR_5G_NR_SIGNAL_BAR_INT, CellSignalStrengthNr.USE_SSRSRP);
             mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_SSRSRP,

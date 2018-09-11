@@ -4583,6 +4583,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         signalThresholdInfoHal.hysteresisDb = signalThresholdInfo.getHysteresisDb();
         signalThresholdInfoHal.thresholds = primitiveArrayToArrayList(
                 signalThresholdInfo.getThresholds());
+        signalThresholdInfoHal.isEnabled = signalThresholdInfo.isEnabled();
         return signalThresholdInfoHal;
     }
 
