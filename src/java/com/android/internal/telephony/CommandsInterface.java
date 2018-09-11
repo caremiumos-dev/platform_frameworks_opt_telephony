@@ -26,6 +26,7 @@ import android.telephony.CarrierRestrictionRules;
 import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.data.DataProfile;
 import android.telephony.emergency.EmergencyNumber;
 
@@ -2232,15 +2233,12 @@ public interface CommandsInterface {
     /**
      * Send the signal strength reporting criteria to the modem.
      *
-     * @param hysteresisMs A hysteresis time in milliseconds. A value of 0 disables hysteresis.
-     * @param hysteresisDb An interval in dB defining the required magnitude change between reports.
-     *     A value of 0 disables hysteresis.
-     * @param thresholdsDbm An array of trigger thresholds in dBm. A size of 0 disables thresholds.
+     * @param signalThresholdInfo The threshold values for which to apply criteria.
      * @param ran RadioAccessNetwork for which to apply criteria.
      * @param result callback message contains the information of SUCCESS/FAILURE
      */
-    void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb, int[] thresholdsDbm,
-            int ran, Message result);
+    void setSignalStrengthReportingCriteria(SignalThresholdInfo signalThresholdInfo, int ran,
+            Message result);
 
     /**
      * Send the link capacity reporting criteria to the modem

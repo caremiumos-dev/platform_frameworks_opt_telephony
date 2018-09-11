@@ -37,6 +37,7 @@ import android.os.PowerManager;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.TelephonyManager;
 import android.util.LocalLog;
 import android.util.SparseIntArray;
@@ -588,13 +589,21 @@ public class DeviceStateMonitor extends Handler {
 
     private void setSignalStrengthReportingCriteria() {
         mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.GERAN, AccessNetworkType.GERAN);
+                new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSI,
+                        AccessNetworkThresholds.GERAN),
+                AccessNetworkType.GERAN);
         mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.UTRAN, AccessNetworkType.UTRAN);
+                new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSCP,
+                        AccessNetworkThresholds.UTRAN),
+                AccessNetworkType.UTRAN);
         mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.EUTRAN, AccessNetworkType.EUTRAN);
+                new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSRP,
+                        AccessNetworkThresholds.EUTRAN),
+                AccessNetworkType.EUTRAN);
         mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.CDMA2000, AccessNetworkType.CDMA2000);
+                new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSI,
+                        AccessNetworkThresholds.CDMA2000),
+                AccessNetworkType.CDMA2000);
     }
 
     private void setLinkCapacityReportingCriteria() {

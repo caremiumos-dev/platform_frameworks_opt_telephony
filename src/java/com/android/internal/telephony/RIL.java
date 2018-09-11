@@ -90,6 +90,7 @@ import android.telephony.RadioAccessSpecifier;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyHistogram;
@@ -179,6 +180,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     /** @hide */
     public static final HalVersion RADIO_HAL_VERSION_1_4 = new HalVersion(1, 4);
+
+    /** @hide */
+    public static final HalVersion RADIO_HAL_VERSION_1_5 = new HalVersion(1, 5);
 
     // IRadio version
     private HalVersion mRadioVersion = RADIO_HAL_VERSION_UNKNOWN;
@@ -435,10 +439,19 @@ public class RIL extends BaseCommands implements CommandsInterface {
                         + " is disabled");
             } else {
                 try {
-                    mRadioProxy = android.hardware.radio.V1_4.IRadio.getService(
+                    mRadioProxy = android.hardware.radio.V1_5.IRadio.getService(
                             HIDL_SERVICE_NAME[mPhoneId], true);
-                    mRadioVersion = RADIO_HAL_VERSION_1_4;
+                    mRadioVersion = RADIO_HAL_VERSION_1_5;
                 } catch (NoSuchElementException e) {
+                }
+
+                if (mRadioProxy == null) {
+                    try {
+                        mRadioProxy = android.hardware.radio.V1_4.IRadio.getService(
+                                HIDL_SERVICE_NAME[mPhoneId], true);
+                        mRadioVersion = RADIO_HAL_VERSION_1_4;
+                    } catch (NoSuchElementException e) {
+                    }
                 }
 
                 if (mRadioProxy == null) {
@@ -4358,8 +4371,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb,
-            int[] thresholdsDbm, int ran, Message result) {
+    public void setSignalStrengthReportingCriteria(SignalThresholdInfo thresholdInfo, int ran,
+            Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             if (mRadioVersion.less(RADIO_HAL_VERSION_1_2)) {
@@ -4375,16 +4388,81 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
             }
 
-            try {
-                android.hardware.radio.V1_2.IRadio radioProxy12 =
-                        (android.hardware.radio.V1_2.IRadio) radioProxy;
-                radioProxy12.setSignalStrengthReportingCriteria(rr.mSerial, hysteresisMs,
-                        hysteresisDb, primitiveArrayToArrayList(thresholdsDbm),
-                        convertRanToHalRan(ran));
-            } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(rr, "setSignalStrengthReportingCriteria", e);
+            if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
+                android.hardware.radio.V1_5.IRadio radioProxy15 =
+                        (android.hardware.radio.V1_5.IRadio) radioProxy;
+                try {
+                    radioProxy15.setSignalStrengthReportingCriteria_1_5(rr.mSerial,
+                            convertToHalSignalThresholdInfo15(thresholdInfo),
+                            convertRanToHalRan(ran));
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "setSignalStrengthReportingCriteria", e);
+                }
+            } else {
+                if (isSupportedSignalStrengthReportingCriteria_1_2(thresholdInfo
+                        .getSignalMeasurement(), ran)) {
+                    try {
+                        android.hardware.radio.V1_2.IRadio radioProxy12 =
+                                (android.hardware.radio.V1_2.IRadio) radioProxy;
+                        radioProxy12.setSignalStrengthReportingCriteria(rr.mSerial,
+                                thresholdInfo.getHysteresisMs(), thresholdInfo.getHysteresisDb(),
+                                primitiveArrayToArrayList(thresholdInfo.getThresholds()),
+                                convertRanToHalRan(ran));
+                    } catch (RemoteException | RuntimeException e) {
+                        handleRadioProxyExceptionForRR(rr, "setSignalStrengthReportingCriteria", e);
+                    }
+                }
             }
         }
+    }
+
+    private boolean isSupportedSignalStrengthReportingCriteria_1_2(int signalMeasurement, int ran) {
+        boolean isSupported = false;
+
+        /**
+         * setSignalStrengthReportingCriteria in IRadio V1.2 only supports the following
+         * combinations of accessNetwork and SignalMeasurementType.
+         *
+         * GERAN    - RSSI
+         * CDMA2000 - RSSI
+         * UTRAN    - RSCP
+         * EUTRAN   - RSRP
+         */
+        switch (signalMeasurement) {
+            case SignalThresholdInfo.SIGNAL_RSSI:
+                if ((ran == AccessNetworkType.GERAN) || (ran == AccessNetworkType.CDMA2000)) {
+                    isSupported = true;
+                }
+                break;
+            case SignalThresholdInfo.SIGNAL_RSCP:
+                if (ran == AccessNetworkType.UTRAN) {
+                    isSupported = true;
+                }
+                break;
+            case SignalThresholdInfo.SIGNAL_RSRP:
+                if (ran == AccessNetworkType.EUTRAN) {
+                    isSupported = true;
+                }
+                break;
+        }
+        return isSupported;
+    }
+
+    private static android.hardware.radio.V1_5.SignalThresholdInfo
+            convertToHalSignalThresholdInfo15(SignalThresholdInfo thresholdInfo) {
+        android.hardware.radio.V1_5.SignalThresholdInfo sti =
+                new android.hardware.radio.V1_5.SignalThresholdInfo();
+        sti.signalMeasurement = thresholdInfo.getSignalMeasurement();
+        sti.hysteresisMs = thresholdInfo.getHysteresisMs();
+        sti.hysteresisDb = thresholdInfo.getHysteresisDb();
+
+        ArrayList<Integer> thresholdList = new ArrayList<>();
+        for (Integer threshold : thresholdInfo.getThresholds()) {
+            thresholdList.add(threshold);
+        }
+        sti.thresholds = thresholdList;
+
+        return sti;
     }
 
     @Override
