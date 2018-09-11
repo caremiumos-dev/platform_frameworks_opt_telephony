@@ -21,7 +21,9 @@ import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.CarrierConfigManager;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
+import android.telephony.ServiceState;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.aidl.IImsSmsListener;
 import android.telephony.ims.feature.ImsFeature;
@@ -29,8 +31,6 @@ import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.telephony.ims.stub.ImsSmsImplBase;
 import android.telephony.ims.stub.ImsSmsImplBase.SendStatusResult;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.ServiceState;
 import android.util.Pair;
 
 import com.android.ims.ImsException;
@@ -130,6 +130,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     sendSms(tracker);
                     break;
                 case ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK:
+                    tracker.mRetryCount += 1;
                     fallbackToPstn(token, tracker);
                     break;
                 default:
