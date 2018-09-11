@@ -73,6 +73,7 @@ import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SignalStrength;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
@@ -4708,12 +4709,32 @@ public class ServiceStateTracker extends Handler {
     }
 
     private void updateReportingCriteria(PersistableBundle config) {
-        mPhone.setSignalStrengthReportingCriteria(
-                config.getIntArray(CarrierConfigManager.KEY_LTE_RSRP_THRESHOLDS_INT_ARRAY),
-                AccessNetworkType.EUTRAN);
-        mPhone.setSignalStrengthReportingCriteria(
-                config.getIntArray(CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY),
-                AccessNetworkType.UTRAN);
+        List<SignalThresholdInfo> lteThresholds = new ArrayList<>();
+
+        boolean useRsrpOnlyBool = config.getBoolean(
+                CarrierConfigManager.KEY_USE_ONLY_RSRP_FOR_LTE_SIGNAL_BAR_BOOL, false);
+        boolean useRsrpAndRsrqBool = config.getBoolean(
+                CarrierConfigManager.KEY_USE_RSRP_AND_RSRQ_FOR_LTE_SIGNAL_BAR_BOOL, false);
+
+        lteThresholds.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSRP,
+                config.getIntArray(CarrierConfigManager.KEY_LTE_RSRP_THRESHOLDS_INT_ARRAY)));
+        if (!useRsrpOnlyBool) {
+            if (useRsrpAndRsrqBool) {
+                lteThresholds.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSRQ,
+                        config.getIntArray(
+                                CarrierConfigManager.KEY_LTE_RSRQ_THRESHOLDS_INT_ARRAY)));
+            } else {
+                lteThresholds.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSNR,
+                        config.getIntArray(
+                                CarrierConfigManager.KEY_LTE_RSSNR_THRESHOLDS_INT_ARRAY)));
+            }
+        }
+        mPhone.setSignalStrengthReportingCriteria(lteThresholds, AccessNetworkType.EUTRAN);
+
+        List<SignalThresholdInfo> wcdmaThresholds = new ArrayList<>();
+        wcdmaThresholds.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSCP,
+                config.getIntArray(CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY)));
+        mPhone.setSignalStrengthReportingCriteria(wcdmaThresholds, AccessNetworkType.UTRAN);
     }
 
     private void updateServiceStateLteEarfcnBoost(ServiceState serviceState, int lteEarfcn) {

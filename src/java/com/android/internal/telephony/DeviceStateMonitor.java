@@ -37,6 +37,7 @@ import android.os.PowerManager;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.TelephonyManager;
 import android.util.LocalLog;
 import android.util.SparseIntArray;
@@ -49,6 +50,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -587,14 +589,25 @@ public class DeviceStateMonitor extends Handler {
     }
 
     private void setSignalStrengthReportingCriteria() {
-        mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.GERAN, AccessNetworkType.GERAN);
-        mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.UTRAN, AccessNetworkType.UTRAN);
-        mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.EUTRAN, AccessNetworkType.EUTRAN);
-        mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.CDMA2000, AccessNetworkType.CDMA2000);
+        List<SignalThresholdInfo> gsmThreshold = new ArrayList<>();
+        gsmThreshold.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSI,
+                AccessNetworkThresholds.GERAN));
+        mPhone.setSignalStrengthReportingCriteria(gsmThreshold, AccessNetworkType.GERAN);
+
+        List<SignalThresholdInfo> wcdmaThreshold = new ArrayList<>();
+        wcdmaThreshold.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSCP,
+                AccessNetworkThresholds.UTRAN));
+        mPhone.setSignalStrengthReportingCriteria(wcdmaThreshold, AccessNetworkType.UTRAN);
+
+        List<SignalThresholdInfo> lteThreshold = new ArrayList<>();
+        lteThreshold.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSRP,
+                AccessNetworkThresholds.EUTRAN));
+        mPhone.setSignalStrengthReportingCriteria(lteThreshold, AccessNetworkType.EUTRAN);
+
+        List<SignalThresholdInfo> cdmaThreshold = new ArrayList<>();
+        cdmaThreshold.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSI,
+                AccessNetworkThresholds.CDMA2000));
+        mPhone.setSignalStrengthReportingCriteria(cdmaThreshold, AccessNetworkType.CDMA2000);
     }
 
     private void setLinkCapacityReportingCriteria() {

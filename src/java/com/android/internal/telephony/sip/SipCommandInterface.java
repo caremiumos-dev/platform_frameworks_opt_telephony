@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.data.DataProfile;
 import android.telephony.emergency.EmergencyNumber;
 
@@ -31,6 +32,8 @@ import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
+
+import java.util.List;
 
 /**
  * SIP doesn't need CommandsInterface. The class does nothing but made to work
@@ -636,7 +639,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 
     @Override
     public void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb,
-            int[] thresholdsDbm, int ran, Message result) {
+            List<SignalThresholdInfo> thresholds, int ran, Message result) {
     }
 
     @Override

@@ -90,6 +90,7 @@ import android.telephony.RadioAccessSpecifier;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyHistogram;
 import android.telephony.TelephonyManager;
@@ -4356,7 +4357,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     @Override
     public void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb,
-            int[] thresholdsDbm, int ran, Message result) {
+            List<SignalThresholdInfo> thresholds, int ran, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             if (mRadioVersion.less(RADIO_HAL_VERSION_1_2)) {
@@ -4372,16 +4373,60 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
             }
 
-            try {
-                android.hardware.radio.V1_2.IRadio radioProxy12 =
-                        (android.hardware.radio.V1_2.IRadio) radioProxy;
-                radioProxy12.setSignalStrengthReportingCriteria(rr.mSerial, hysteresisMs,
-                        hysteresisDb, primitiveArrayToArrayList(thresholdsDbm),
-                        convertRanToHalRan(ran));
-            } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(rr, "setSignalStrengthReportingCriteria", e);
+            if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_4)) {
+                ArrayList<android.hardware.radio.V1_4.SignalThresholdInfo> stis = new ArrayList<>();
+                for (SignalThresholdInfo sti : thresholds) {
+                    stis.add(convertToHalSignalThresholdInfo14(sti));
+                }
+
+                try {
+                    android.hardware.radio.V1_4.IRadio radioProxy14 =
+                            (android.hardware.radio.V1_4.IRadio) radioProxy;
+                    radioProxy14.setSignalStrengthReportingCriteria_1_4(rr.mSerial, hysteresisMs,
+                            hysteresisDb, stis, convertRanToHalRan(ran));
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "setSignalStrengthReportingCriteria", e);
+                }
+            } else {
+                int [] threshold = null;
+                for (SignalThresholdInfo sti : thresholds) {
+                    if (ran == AccessNetworkType.EUTRAN) {
+                        if (sti.getSignalMeasurement() == SignalThresholdInfo.SIGNAL_RSRP) {
+                            threshold = sti.getThresholds();
+                            break;
+                        }
+                    } else {
+                        threshold = sti.getThresholds();
+                        break;
+                    }
+                }
+
+                try {
+                    android.hardware.radio.V1_2.IRadio radioProxy12 =
+                            (android.hardware.radio.V1_2.IRadio) radioProxy;
+                    radioProxy12.setSignalStrengthReportingCriteria(rr.mSerial, hysteresisMs,
+                            hysteresisDb, primitiveArrayToArrayList(threshold),
+                            convertRanToHalRan(ran));
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "setSignalStrengthReportingCriteria", e);
+                }
             }
         }
+    }
+
+    private static android.hardware.radio.V1_4.SignalThresholdInfo
+            convertToHalSignalThresholdInfo14(SignalThresholdInfo thresholdInfo) {
+        android.hardware.radio.V1_4.SignalThresholdInfo sti =
+                new android.hardware.radio.V1_4.SignalThresholdInfo();
+
+        sti.signalMeasurement = thresholdInfo.getSignalMeasurement();
+        ArrayList<Integer> thresholdList = new ArrayList<>();
+        for (Integer threshold : thresholdInfo.getThresholds()) {
+            thresholdList.add(threshold);
+        }
+        sti.thresholds = thresholdList;
+
+        return sti;
     }
 
     @Override
