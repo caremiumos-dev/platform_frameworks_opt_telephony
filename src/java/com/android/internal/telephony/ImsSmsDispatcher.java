@@ -21,16 +21,15 @@ import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.CarrierConfigManager;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
+import android.telephony.ServiceState;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.aidl.IImsSmsListener;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
-import android.telephony.ims.stub.ImsSmsImplBase;
 import android.telephony.ims.stub.ImsSmsImplBase.SendStatusResult;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.ServiceState;
 import android.util.Pair;
 
 import com.android.ims.ImsException;
@@ -106,6 +105,27 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                 }
     };
 
+    private ImsManager.Connector.Listener mImsManagerListener =
+            new ImsManager.Connector.Listener() {
+
+        @Override
+        public void connectionReady(ImsManager manager) throws ImsException {
+            Rlog.d(TAG, "ImsManager: connection ready.");
+            synchronized (mLock) {
+                setListeners();
+                mIsImsServiceUp = true;
+            }
+        }
+
+        @Override
+        public void connectionUnavailable() {
+            Rlog.d(TAG, "ImsManager: connection unavailable.");
+            synchronized (mLock) {
+                mIsImsServiceUp = false;
+            }
+        }
+    };
+
     private final IImsSmsListener mImsSmsListener = new IImsSmsListener.Stub() {
         @Override
         public void onSendSmsResult(int token, int messageRef, @SendStatusResult int status,
@@ -130,6 +150,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     sendSms(tracker);
                     break;
                 case ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK:
+                    tracker.mRetryCount += 1;
                     fallbackToPstn(token, tracker);
                     break;
                 default:
@@ -205,31 +226,14 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         super(phone, smsDispatchersController);
 
         mImsManagerConnector = new ImsManager.Connector(mContext, mPhone.getPhoneId(),
-                new ImsManager.Connector.Listener() {
-                    @Override
-                    public void connectionReady(ImsManager manager) throws ImsException {
-                        Rlog.d(TAG, "ImsManager: connection ready.");
-                        synchronized (mLock) {
-                            setListeners();
-                            mIsImsServiceUp = true;
-                        }
-                    }
-
-                    @Override
-                    public void connectionUnavailable() {
-                        Rlog.d(TAG, "ImsManager: connection unavailable.");
-                        synchronized (mLock) {
-                            mIsImsServiceUp = false;
-                        }
-                    }
-                });
+                mImsManagerListener);
         mImsManagerConnector.connect();
     }
 
     private void setListeners() throws ImsException {
         getImsManager().addRegistrationCallback(mRegistrationCallback);
         getImsManager().addCapabilitiesCallback(mCapabilityCallback);
-        getImsManager().setSmsListener(mImsSmsListener);
+        getImsManager().setSmsListener(getSmsListener());
         getImsManager().onSmsReady();
     }
 
@@ -286,7 +290,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     }
 
     @Override
-    protected String getFormat() {
+    public String getFormat() {
         try {
             return getImsManager().getSmsFormat();
         } catch (ImsException e) {
@@ -378,5 +382,10 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     @Override
     protected boolean isCdmaMo() {
         return mSmsDispatchersController.isCdmaFormat(getFormat());
+    }
+
+    @VisibleForTesting
+    public IImsSmsListener getSmsListener() {
+        return mImsSmsListener;
     }
 }
