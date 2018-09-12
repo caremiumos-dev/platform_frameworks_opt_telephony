@@ -68,6 +68,7 @@ import android.telephony.TelephonyManager;
 import android.telephony.UssdResponse;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
+import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -419,9 +420,8 @@ public class GsmCdmaPhone extends Phone {
     public ServiceState getServiceState() {
         if (mSST == null || mSST.mSS.getState() != ServiceState.STATE_IN_SERVICE) {
             if (mImsPhone != null) {
-                return ServiceState.mergeServiceStates(
-                        (mSST == null) ? new ServiceState() : mSST.mSS,
-                        mImsPhone.getServiceState());
+                return mergeServiceStates((mSST == null) ? new ServiceState() : mSST.mSS,
+                        mImsPhone.getServiceState(), mImsPhone.getImsRegistrationTech());
             }
         }
 
@@ -823,6 +823,26 @@ public class GsmCdmaPhone extends Phone {
             return imsPhone.getRingingCall();
         }
         return mCT.mRingingCall;
+    }
+
+    private ServiceState mergeServiceStates(ServiceState baseSs, ServiceState imsSs,
+            @ImsRegistrationImplBase.ImsRegistrationTech int imsRegTech) {
+        // "IN_SERVICE" in this case means IMS is registered.
+        if (imsSs.getVoiceRegState() != ServiceState.STATE_IN_SERVICE) {
+            return baseSs;
+        }
+
+        if (imsRegTech == ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN) {
+            ServiceState newSs = new ServiceState(baseSs);
+            // Voice override for IWLAN. In this case, voice registration is OUT_OF_SERVICE, but
+            // the data RAT is IWLAN, so use that as a basis for determining whether or not the
+            // physical link is available.
+            newSs.setVoiceRegState(baseSs.getDataRegState());
+            newSs.setEmergencyOnly(false); // only get here if voice is IN_SERVICE
+            return newSs;
+        }
+
+        return baseSs;
     }
 
     private boolean handleCallDeflectionIncallSupplementaryService(
