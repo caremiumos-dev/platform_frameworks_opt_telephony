@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac494f77_b99bd8d8",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3192,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-12T18:46:03Z",
+      "side": 1,
+      "message": "will the preferred APN never be a duplicate?",
+      "range": {
+        "startLine": 3190,
+        "startChar": 12,
+        "endLine": 3192,
+        "endChar": 13
+      },
+      "revId": "94e452b4f3cf16acd05ee0059db0b57a49d96a98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "663841b9_78aadb90",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3202,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-12T18:46:03Z",
+      "side": 1,
+      "message": "Can you check for the lists to see if they are simply unequal? It might be easier if we used Set\u003c\u003e instead of List\u003c\u003e.",
+      "range": {
+        "startLine": 3202,
+        "startChar": 23,
+        "endLine": 3202,
+        "endChar": 77
+      },
+      "revId": "94e452b4f3cf16acd05ee0059db0b57a49d96a98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
