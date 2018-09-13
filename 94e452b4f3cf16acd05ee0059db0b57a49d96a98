@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "494d1378_817eba5f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3192,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-13T17:33:59Z",
+      "side": 1,
+      "message": "I\u0027m still not clear on the PreferredApn as a concept and why it wouldn\u0027t already be in the ApnSettings... I\u0027d like Amit to weigh in here since he understands this part of the code, and I most certainly don\u0027t.",
+      "parentUuid": "a90e54b4_19c4245f",
+      "range": {
+        "startLine": 3190,
+        "startChar": 12,
+        "endLine": 3192,
+        "endChar": 13
+      },
+      "revId": "94e452b4f3cf16acd05ee0059db0b57a49d96a98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "663841b9_78aadb90",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "1. List.equals cares the order, but we don\u0027t care the order here.\n2. The @SystemApi AIDL setDataProfile takes list.\n3. Why bother converting them to set and then converting them back to list when most of the carriers only have 1 or 2 APN settings? I think the performance will be even worse.",
       "parentUuid": "663841b9_78aadb90",
+      "range": {
+        "startLine": 3202,
+        "startChar": 23,
+        "endLine": 3202,
+        "endChar": 77
+      },
+      "revId": "94e452b4f3cf16acd05ee0059db0b57a49d96a98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "498815d3_a1152805",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3202,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-13T17:33:59Z",
+      "side": 1,
+      "message": "As per our discussion yesterday, I appreciate that you don\u0027t want to convert from list\u003c\u003e to set\u003c\u003e. Even if we do that, it\u0027s beyond the scope of this change, and I believe the logic here is correct.",
+      "parentUuid": "55566a35_5abd817f",
       "range": {
         "startLine": 3202,
         "startChar": 23,
