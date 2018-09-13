@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0cae9e80_09f60bbd",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-09-13T08:02:45Z",
+      "side": 1,
+      "message": "I think the code for CDMA status report is strange, it will be much reasonable to check ERROR_CLASS for temporary errors or permanent errors.\n\nHowever, many CDMA SMS related designs are not transparent to framework/app developers, I\u0027m\nnot sure is it really an improvement to modify it. I skip it.",
+      "revId": "e4fe27ad4855d68647c090f1cd0a5c1dec4a92a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
