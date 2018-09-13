@@ -97,6 +97,29 @@
     },
     {
       "key": {
+        "uuid": "45a7e431_63fa21f7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3221,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-13T22:41:47Z",
+      "side": 1,
+      "message": "Should this also be initialized to null for now? Otherwise on boot up without SIM (or when mAllApnSettings is null), you won\u0027t send down the profiles assuming there is no change.",
+      "range": {
+        "startLine": 3221,
+        "startChar": 38,
+        "endLine": 3221,
+        "endChar": 58
+      },
+      "revId": "7949f77f549db510065e49312666cd7c9f6031a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45d6d138_62006a87",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 3
