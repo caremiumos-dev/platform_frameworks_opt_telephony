@@ -16,6 +16,24 @@
       "revId": "8ff89cc520d2e8ea15c1ecd2fc60367d64b348d7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0082f676_166e2f98",
+        "filename": "README.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-09-13T21:51:11Z",
+      "side": 0,
+      "message": "Info on com.android.internal.telephony.dataconnection.action_fail_bringup is also found at:\nhttps://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/dataconnection/DcTesterFailBringUpAll.java?q\u003dcom.android.internal.telephony.dataconnection.action_fail_bringup\u0026sq\u003dpackage:android\u0026g\u003d0\u0026l\u003d32\n\nSame with action_deactivate_all at: https://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/dataconnection/DcTesterDeactivateAll.java?type\u003dcs\u0026q\u003dcom.android.internal.telephony.dataconnection.action_deactivate_all\u0026sq\u003dpackage:android\u0026g\u003d0\u0026l\u003d32\n\nFor action_detached and action_attached these are used in DataConnection related classes, but don\u0027t seem relevant for most manual tests.\n\nMaybe we should move this README to the src/java/com/android/internal/telephony/dataconnection directory, so it\u0027s not lost?",
+      "parentUuid": "e0009da4_ac7e13c3",
+      "revId": "8ff89cc520d2e8ea15c1ecd2fc60367d64b348d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
