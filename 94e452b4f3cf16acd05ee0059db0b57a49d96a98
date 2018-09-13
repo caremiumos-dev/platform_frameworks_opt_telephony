@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "736507bf_e29715cf",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3192,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-13T17:45:52Z",
+      "side": 1,
+      "message": "We discussed offline yesterday and conclude that prefer apn doesn\u0027t need to be added here. mAllApnSettings should be enough.",
+      "parentUuid": "494d1378_817eba5f",
+      "range": {
+        "startLine": 3190,
+        "startChar": 12,
+        "endLine": 3192,
+        "endChar": 13
+      },
+      "revId": "94e452b4f3cf16acd05ee0059db0b57a49d96a98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "663841b9_78aadb90",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
