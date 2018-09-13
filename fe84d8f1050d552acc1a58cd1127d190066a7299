@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbd0a997_1768d271",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-13T21:10:08Z",
+      "side": 1,
+      "message": "As discussed offline, better to discuss this separately as this leads to change in behavior for addEmergencyApnSetting().",
+      "revId": "fe84d8f1050d552acc1a58cd1127d190066a7299",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
