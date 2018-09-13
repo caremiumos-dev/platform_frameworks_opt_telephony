@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0009da4_ac7e13c3",
+        "filename": "README.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-09-13T07:19:06Z",
+      "side": 0,
+      "message": "Can I find these adb shell parts somewhere else, are they just not relevant (relatively) to the opt/telephony package any more? Thanks.",
+      "revId": "8ff89cc520d2e8ea15c1ecd2fc60367d64b348d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
