@@ -604,9 +604,9 @@ public class SmsDispatchersController extends Handler {
             if(tpStatus >= Sms.STATUS_FAILED || tpStatus < Sms.STATUS_PENDING ) {
                 // Update the message status (COMPLETE or FAILED)
                 tracker.updateSentMessageStatus(mContext, tpStatus);
+                success = triggerDeliveryIntent(tracker, format, pdu);
                 complete = true;
             }
-            success = triggerDeliveryIntent(tracker, format, pdu);
         }
         return new Pair(success, complete);
     }
