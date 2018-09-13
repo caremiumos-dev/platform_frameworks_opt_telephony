@@ -92,7 +92,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected String mNewVoiceMailNum = null;
     protected String mNewVoiceMailTag = null;
     protected boolean mIsVoiceMailFixed = false;
-    protected String mImsi;
+    protected String mImsi; // IMSI must be only valid numeric characters 0-9 without padding 'f's
     private IccIoResult auth_rsp;
 
     protected int mMncLength = UNINITIALIZED;
@@ -459,7 +459,11 @@ public abstract class IccRecords extends Handler implements IccConstants {
      * @param imsi
      */
     public void setImsi(String imsi) {
-        mImsi = imsi;
+        // Remove trailing F's if present in IMSI.
+        mImsi = IccUtils.stripTrailingFs(imsi);
+        // By convention, an invalid IMSI (all Fs) is represented as null.
+        if (TextUtils.isEmpty(mImsi)) mImsi = null;
+
         mImsiReadyRegistrants.notifyRegistrants();
     }
 

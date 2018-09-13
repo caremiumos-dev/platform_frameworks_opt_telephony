@@ -198,7 +198,15 @@ public class RadioResponse extends IRadioResponse.Stub {
      * @param imsi String containing the IMSI
      */
     public void getIMSIForAppResponse(RadioResponseInfo responseInfo, String imsi) {
-        responseString(responseInfo, imsi);
+        String trimsi = IccUtils.stripTrailingFs(imsi);
+        // Strip trailing "f" characters from IMSI shorter than 15 digits
+        if (trimsi != null && !trimsi.equals(imsi)) {
+            mRil.riljLog("Invalid IMSI Digits received from IRadio!");
+        }
+        // By convention, return null if IMSI is empty
+        if (TextUtils.isEmpty(trimsi)) trimsi = null;
+
+        responseString(responseInfo, trimsi);
     }
 
     /**
