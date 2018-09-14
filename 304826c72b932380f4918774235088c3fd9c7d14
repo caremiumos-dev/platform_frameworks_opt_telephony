@@ -34,6 +34,24 @@
       "revId": "304826c72b932380f4918774235088c3fd9c7d14",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "911904bc_eabb2b7c",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-14T20:21:05Z",
+      "side": 1,
+      "message": "The bug is about invalid IMSI and NumberFormatException. Maybe it\u0027s only due to Fs, but to really fix the issue completely we should check for other non-digits too. Doing it in this CL is ok, just that it may have to be done in 2 places. But otherwise I don\u0027t have a strong preference on which CL you do it in.",
+      "parentUuid": "7800086f_3cfaa5c7",
+      "revId": "304826c72b932380f4918774235088c3fd9c7d14",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
