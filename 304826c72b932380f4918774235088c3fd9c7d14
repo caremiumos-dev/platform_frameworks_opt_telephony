@@ -16,6 +16,24 @@
       "revId": "304826c72b932380f4918774235088c3fd9c7d14",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7800086f_3cfaa5c7",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-14T19:33:32Z",
+      "side": 1,
+      "message": "That\u0027s a slightly different bug if IMSI digits are not of the format [0-9]*[fF]*, but if we want to do that, then I think the better approach is to validate all the IMSI digits up front when we get it. This wouldn\u0027t catch, for instance broken IMSI\u003d310456ABCDEFGHI.\n\nShould I do that?\n1) in this change?\n2) in the larger follow-up change?\n3) in a separate change?",
+      "parentUuid": "124e4ff9_aa93b344",
+      "revId": "304826c72b932380f4918774235088c3fd9c7d14",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
