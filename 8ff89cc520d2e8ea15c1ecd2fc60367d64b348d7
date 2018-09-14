@@ -52,6 +52,24 @@
       "revId": "8ff89cc520d2e8ea15c1ecd2fc60367d64b348d7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51a02804_68113708",
+        "filename": "README.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-14T00:08:55Z",
+      "side": 0,
+      "message": "I though that info is already in the java file?",
+      "parentUuid": "9ce1faa8_e41a97e4",
+      "revId": "8ff89cc520d2e8ea15c1ecd2fc60367d64b348d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
