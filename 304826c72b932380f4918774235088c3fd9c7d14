@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "124e4ff9_aa93b344",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-14T19:28:01Z",
+      "side": 1,
+      "message": "Should we also set mImsi to null here? We are just assuming that other than trailing Fs, it is all digits. Maybe we need to add a check for that.",
+      "revId": "304826c72b932380f4918774235088c3fd9c7d14",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
