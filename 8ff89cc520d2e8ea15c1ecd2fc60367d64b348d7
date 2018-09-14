@@ -70,6 +70,24 @@
       "revId": "8ff89cc520d2e8ea15c1ecd2fc60367d64b348d7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e34dabc_e2e8dad3",
+        "filename": "README.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-09-14T00:21:37Z",
+      "side": 0,
+      "message": "action_fail_bringup and action_deactivate_all are, but action_detached and action_attached are not",
+      "parentUuid": "51a02804_68113708",
+      "revId": "8ff89cc520d2e8ea15c1ecd2fc60367d64b348d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
