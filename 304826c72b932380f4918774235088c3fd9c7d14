@@ -70,6 +70,24 @@
       "revId": "304826c72b932380f4918774235088c3fd9c7d14",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40343630_b9da7280",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-14T20:35:40Z",
+      "side": 1,
+      "message": "Well, it\u0027s already done.",
+      "parentUuid": "128aab33_f09d3920",
+      "revId": "304826c72b932380f4918774235088c3fd9c7d14",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
