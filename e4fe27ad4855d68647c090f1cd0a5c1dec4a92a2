@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "07ef5c8f_b5679f61",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-09-14T06:59:11Z",
+      "side": 1,
+      "message": "I give up my change of GSM SMS and will not modify it for CDMA SMS.\nBecause I afraid there is a SMSC which does not send a status report of success/permanent error after status reports of temporary error.\n\nTo your idea, there may be some APPs which store GSM/CDMA SMS status field in sms table and manipulate it perfectly according to GSM/CDMA SMS SPECs. There may be compatibility problems if we store GSM status value for CDMA SMS.\n\nHowever, thank you for your idea.",
+      "parentUuid": "c12fc6f6_15d1887b",
+      "revId": "e4fe27ad4855d68647c090f1cd0a5c1dec4a92a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90882d1f_cc23e028",
         "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
         "patchSetId": 1
@@ -57,6 +75,30 @@
       "revId": "e4fe27ad4855d68647c090f1cd0a5c1dec4a92a2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f3277eb_7aca89f8",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-09-14T06:59:11Z",
+      "side": 1,
+      "message": "I agree with you, I give up this change.\nThank you.",
+      "parentUuid": "90882d1f_cc23e028",
+      "range": {
+        "startLine": 607,
+        "startChar": 16,
+        "endLine": 607,
+        "endChar": 24
+      },
+      "revId": "e4fe27ad4855d68647c090f1cd0a5c1dec4a92a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
