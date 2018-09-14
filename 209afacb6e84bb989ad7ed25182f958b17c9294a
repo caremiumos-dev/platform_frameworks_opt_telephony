@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a94dd2a_308abefa",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-09-14T18:20:57Z",
+      "side": 1,
+      "message": "If line 2250 is after line 2249 in:\n\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/750531/2/src/java/com/android/internal/telephony/ServiceStateTracker.java\n\nwhen merged, wfcSpnFormats would be an unknown reference. Would you be able to pull down the CL above (if merged), and update this CL?",
+      "revId": "209afacb6e84bb989ad7ed25182f958b17c9294a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
