@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76c82ea3_990cf6f0",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-14T21:01:59Z",
+      "side": 0,
+      "message": "Note here that any values aside from 2,3,and 15 resulted in UNINITIALIZED instead of UNKNOWN. This is why the logic below needed to handle UNINITIALIZED even though it always at least set the value to UNKNOWN due to lines 983, 988, and 993. Both of those code blocks allowed UNINITIALIZED to enter, so it was useless. *sigh*",
+      "range": {
+        "startLine": 954,
+        "startChar": 24,
+        "endLine": 960,
+        "endChar": 25
+      },
+      "revId": "40a551065a834a7935bbcd1fc2e60d1d16dc84d6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
