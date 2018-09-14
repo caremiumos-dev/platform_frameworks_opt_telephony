@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10952e4a_5ab16a97",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4253,
+      "author": {
+        "id": 1305827
+      },
+      "writtenOn": "2018-09-14T11:04:06Z",
+      "side": 1,
+      "message": "This would add emergency apn to apns list on powerup always, set with method: initEmergencyApnSetting (the first matching emergency apn from apn database is returned). \n\nThis may cause issues for operators having emergency apn configured specifically for its mcc/mnc. For such operator sims, there will be two emergency apns in apns list, one added on powerup with this change and the other read with mcc/mnc matching. And i think the first emergency apn will be used for pdn setup.",
+      "range": {
+        "startLine": 4253,
+        "startChar": 35,
+        "endLine": 4253,
+        "endChar": 36
+      },
+      "revId": "862cbad146b17a6810e4133887a12b756e1ea82f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "814d52c3_d5b9dcd8",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1305827
+      },
+      "writtenOn": "2018-09-14T11:04:06Z",
+      "side": 1,
+      "message": "Should isNetworkCapabilityEims be checked first, as other requests are also possible on default phone?",
+      "range": {
+        "startLine": 264,
+        "startChar": 53,
+        "endLine": 264,
+        "endChar": 67
+      },
+      "revId": "862cbad146b17a6810e4133887a12b756e1ea82f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c04bee21_72bdf402",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1305827
+      },
+      "writtenOn": "2018-09-14T11:04:06Z",
+      "side": 1,
+      "message": "Should there be a check for Primary slot as per below requirements when Slot0 is empty and Slot1 has sim:\n\n•\tIn multiSIM configuration , When SIM is present only in Slot0, telephony should not send EIMS pdn request on slot1. \n•\tIn multiSIM configuration , When SIM is present only in Slot1, telephony should not send EIMS pdn request on slot0.",
+      "range": {
+        "startLine": 265,
+        "startChar": 44,
+        "endLine": 265,
+        "endChar": 45
+      },
+      "revId": "862cbad146b17a6810e4133887a12b756e1ea82f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
