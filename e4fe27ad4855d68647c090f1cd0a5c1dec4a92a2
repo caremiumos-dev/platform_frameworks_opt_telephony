@@ -16,6 +16,47 @@
       "revId": "e4fe27ad4855d68647c090f1cd0a5c1dec4a92a2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c12fc6f6_15d1887b",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2018-09-14T04:35:40Z",
+      "side": 1,
+      "message": "How about applying simple matching up CDMA status with GSM TP-Status as follows.\n\n+        com.android.internal.telephony.cdma.SmsMessage sms \u003d\n+                com.android.internal.telephony.cdma.SmsMessage.createFromPdu(pdu);\n+        boolean complete \u003d false;\n+        boolean success \u003d false;\n+        if (sms !\u003d null) {\n+            int errorClass \u003d (sms.getStatus() \u003e\u003e 24) \u0026 0x03;\n+            // TODO: CDMA status:ERROR_TEMPORARY is same with GSM TP-Status:Temporary error?\n+            if (errorClass !\u003d ERROR_TEMPORARY) {\n+                // Update the message status (COMPLETE or FAILED)\n+                tracker.updateSentMessageStatus(\n+                        mContext,\n+                        (errorClass \u003d\u003d ERROR_NONE) ? Sms.STATUS_COMPLETE : Sms.STATUS_FAILED);\n+                complete \u003d true;\n+            }\n+            success \u003d triggerDeliveryIntent(tracker, format, pdu);\n+        }\n+        return new Pair(success, complete);",
+      "parentUuid": "0cae9e80_09f60bbd",
+      "revId": "e4fe27ad4855d68647c090f1cd0a5c1dec4a92a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90882d1f_cc23e028",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2018-09-14T04:35:40Z",
+      "side": 1,
+      "message": "I think F/W should deliver the intent to a message APP always regardless of error type.\nIf the error type is temporary error, APP should update UI properly to let user knows the current status. It depends on the APP(Just ignoring the temporary error in the APP will be fine I think)",
+      "range": {
+        "startLine": 607,
+        "startChar": 16,
+        "endLine": 607,
+        "endChar": 24
+      },
+      "revId": "e4fe27ad4855d68647c090f1cd0a5c1dec4a92a2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
