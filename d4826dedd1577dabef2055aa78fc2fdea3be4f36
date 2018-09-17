@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6341e011_273616ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-17T17:39:30Z",
+      "side": 1,
+      "message": "Null SmsMessage will result in NPE and that should make us return null. I am not sure why this change is needed.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 121
+      },
+      "revId": "d4826dedd1577dabef2055aa78fc2fdea3be4f36",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
