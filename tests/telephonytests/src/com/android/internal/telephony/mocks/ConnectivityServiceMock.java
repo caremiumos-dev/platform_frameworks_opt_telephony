@@ -985,5 +985,10 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
         defaultRequest = null;
     }
 
+    @Override
+    public int getConnectionOwnerUid(ConnectionInfo connectionInfo) {
+        throw new RuntimeException("not implemented");
+    }
+
 
 }
