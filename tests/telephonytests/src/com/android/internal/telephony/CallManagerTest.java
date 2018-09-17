@@ -274,28 +274,6 @@ public class CallManagerTest extends TelephonyTest {
         verify(mPhone, times(1)).switchHoldingAndActive();
     }
 
-    @SmallTest @Test
-    public void testFgCallActiveDial() throws Exception {
-        /* set Fg/Bg Call state to active, verify CallManager Logical */
-        doReturn(false).when(mFgCall).isIdle();
-        doReturn(false).when(mBgCall).isIdle();
-        assertTrue(CallManager.getInstance().hasActiveFgCall());
-        assertTrue(CallManager.getInstance().hasActiveBgCall());
-        assertTrue(CallManager.getInstance().hasActiveFgCall(mPhone.getSubId()));
-        assertFalse(CallManager.getInstance().hasDisconnectedFgCall());
-        /* try dial with non-idle foreground call and background call */
-        CallManager.getInstance().dial(mPhone,
-                PhoneNumberUtils.stripSeparators("+17005554141"), 0);
-        ArgumentCaptor<String> mCaptorString = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<PhoneInternalInterface.DialArgs> dialArgsCaptor =
-                ArgumentCaptor.forClass(PhoneInternalInterface.DialArgs.class);
-
-        verify(mPhone, times(1)).dial(mCaptorString.capture(), dialArgsCaptor.capture());
-        assertEquals(PhoneNumberUtils.stripSeparators("+17005554141"),
-                mCaptorString.getValue());
-        assertEquals(0, dialArgsCaptor.getValue().videoState);
-    }
-
     @Test @SmallTest
     public void testRegisterEvent() throws Exception {
         Field field = CallManager.class.getDeclaredField("EVENT_CALL_WAITING");
