@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b6fb6a80_fb080a08",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-17T22:14:45Z",
+      "side": 1,
+      "message": "Yes, the modem didn\u0027t respond. Since the timeout is quite generous, it means the modem probably crashed or hung.",
+      "parentUuid": "5e98b004_d4ddb04a",
+      "range": {
+        "startLine": 998,
+        "startChar": 20,
+        "endLine": 998,
+        "endChar": 97
+      },
+      "revId": "457a84b2db65d318c43bd83a022f525b3deb1b5e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7eba79a8_c8864039",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 16
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b9687eb4_0b0f0113",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 3488,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-17T22:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7eba79a8_c8864039",
+      "range": {
+        "startLine": 3485,
+        "startChar": 30,
+        "endLine": 3488,
+        "endChar": 50
+      },
+      "revId": "457a84b2db65d318c43bd83a022f525b3deb1b5e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e49d471_8ce3d71c",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 16
@@ -59,6 +107,30 @@
       "writtenOn": "2018-09-17T17:51:43Z",
       "side": 1,
       "message": "why do we continue work here? The description suggests we would only query AllCellInfo if we didn\u0027t have mCellIdentity",
+      "range": {
+        "startLine": 3518,
+        "startChar": 8,
+        "endLine": 3518,
+        "endChar": 9
+      },
+      "revId": "457a84b2db65d318c43bd83a022f525b3deb1b5e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddbba66d_27db7163",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 3518,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-17T22:14:45Z",
+      "side": 1,
+      "message": "You are correct! Good catch.",
+      "parentUuid": "3e49d471_8ce3d71c",
       "range": {
         "startLine": 3518,
         "startChar": 8,
@@ -91,6 +163,30 @@
       "revId": "457a84b2db65d318c43bd83a022f525b3deb1b5e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "475520f1_a7abf250",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 4272,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-17T22:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c70bb9b7_05d800d0",
+      "range": {
+        "startLine": 4269,
+        "startChar": 4,
+        "endLine": 4272,
+        "endChar": 71
+      },
+      "revId": "457a84b2db65d318c43bd83a022f525b3deb1b5e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
