@@ -1954,7 +1954,15 @@ public class SubscriptionController extends ISub.Stub {
     }
 
     @Override
-    public boolean isActiveSubId(int subId) {
+    public boolean isActiveSubId(int subId, String callingPackage) {
+        if (!TelephonyPermissions.checkCallingOrSelfReadPhoneState(mContext, subId, callingPackage,
+              "isActiveSubId")) {
+            return false;
+        }
+        return isActiveSubId(subId);
+    }
+
+    protected boolean isActiveSubId(int subId) {
         boolean retVal = SubscriptionManager.isValidSubscriptionId(subId)
                 && getActiveSubIdArrayList().contains(subId);
 
