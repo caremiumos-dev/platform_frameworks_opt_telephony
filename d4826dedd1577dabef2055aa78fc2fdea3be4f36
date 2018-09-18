@@ -22,6 +22,30 @@
       "revId": "d4826dedd1577dabef2055aa78fc2fdea3be4f36",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "283af67b_15cda374",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-09-18T01:22:53Z",
+      "side": 1,
+      "message": "This change is to simplify the code and comment, I know original code works but someone may think it\u0027s strange if he does not know the history.",
+      "parentUuid": "6341e011_273616ad",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 121
+      },
+      "revId": "d4826dedd1577dabef2055aa78fc2fdea3be4f36",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
