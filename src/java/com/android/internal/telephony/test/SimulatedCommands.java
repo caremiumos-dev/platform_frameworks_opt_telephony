@@ -1876,10 +1876,6 @@ public class SimulatedCommands extends BaseCommands
         mCellInfoList = list;
     }
 
-    public void setCellInfoListBehavior(boolean shouldReturn) {
-        mShouldReturnCellInfo = shouldReturn;
-    }
-
     private CellInfoGsm getCellInfoGsm() {
         Parcel p = Parcel.obtain();
         // CellInfo
@@ -1908,8 +1904,12 @@ public class SimulatedCommands extends BaseCommands
         return CellInfoGsm.CREATOR.createFromParcel(p);
     }
 
+    public synchronized void setCellInfoListBehavior(boolean shouldReturn) {
+        mShouldReturnCellInfo = shouldReturn;
+    }
+
     @Override
-    public void getCellInfoList(Message response, WorkSource WorkSource) {
+    public synchronized void getCellInfoList(Message response, WorkSource WorkSource) {
         if (!mShouldReturnCellInfo) return;
 
         if (mCellInfoList == null) {

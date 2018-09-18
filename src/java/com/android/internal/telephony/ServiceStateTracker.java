@@ -989,8 +989,11 @@ public class ServiceStateTracker extends Handler {
                         }
                     }
                 } else {
-                    // If we receive an empty message, it's probably a timeout, so we need to see
-                    // if the timeout is for the current request or cruft from a previous request.
+                    // If we receive an empty message, it's probably a timeout; if there is no
+                    // pending request, drop it.
+                    if (!mIsPendingCellInfoRequest) break;
+                    // If there is a request pending, we still need to check whether it's a timeout
+                    // for the current request of whether it's leftover from a previous request.
                     final long curTime = SystemClock.elapsedRealtime();
                     if ((curTime - mLastCellInfoReqTime) <  CELL_INFO_LIST_QUERY_TIMEOUT) {
                         break;

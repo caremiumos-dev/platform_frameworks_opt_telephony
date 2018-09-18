@@ -49,6 +49,7 @@ import android.os.AsyncResult;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.PersistableBundle;
@@ -377,84 +378,62 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(sst.getAllCellInfo(), list);
     }
 
-    private class CellInfoTestHandler {
+    private static class CellInfoHandler extends Handler {
+        // Need to define this here so that it's accessible
+        public List<CellInfo> cellInfoResult;
 
-        public final Handler realTestHandler;
-
-        private final HandlerThread mRealTestHandlerThread;
-        private boolean mTestPrepared = false;
-
-        CellInfoTestHandler() throws InterruptedException {
-            mRealTestHandlerThread = new HandlerThread("RealTestHandler") {
-                @Override
-                public void onLooperPrepared() {
-                    synchronized (this) {
-                        mTestPrepared = true;
-                        this.notifyAll();
-                    }
-                };
-            };
-            mRealTestHandlerThread.start();
-            realTestHandler = new Handler(mRealTestHandlerThread.getLooper()) {
-                @Override
-                public void handleMessage(Message msg) {
-                    synchronized (msg) {
-                        msg.notifyAll();
-                    }
-                }
-            };
-            synchronized (mRealTestHandlerThread) {
-                while (!mTestPrepared) mRealTestHandlerThread.wait(2000);
-            }
+        CellInfoHandler(Looper l) {
+            super(l);
         }
 
-        void shutdown() throws InterruptedException {
-            mRealTestHandlerThread.quit();
-            mRealTestHandlerThread.join();
+        @Override
+        public void handleMessage(Message msg) {
+            synchronized (msg) {
+                assertTrue("handler received null message", msg.obj != null);
+                AsyncResult ar = (AsyncResult) msg.obj;
+                cellInfoResult = (List<CellInfo>) ar.result;
+                msg.notifyAll();
+            }
         }
     }
 
     @Test
     @MediumTest
     public void testGetCellInfoResponse() throws InterruptedException {
+        mSimulatedCommands.setCellInfoListBehavior(true);
         ArrayList<CellInfo> list = new ArrayList();
         list.add(getCellInfoGsm());
         mSimulatedCommands.setCellInfoList(list);
+        CellInfoHandler cih = new CellInfoHandler(mSSTTestHandler.getLooper());
 
-        CellInfoTestHandler cith = new CellInfoTestHandler();
-
-        Message rsp = cith.realTestHandler.obtainMessage(0x7357);
+        Message rsp = cih.obtainMessage(0x7357);
 
         sst.requestAllCellInfo(null, rsp);
 
         synchronized (rsp) {
-            if (rsp.obj == null) rsp.wait(2000);
+            if (cih.cellInfoResult == null) rsp.wait(5000);
         }
 
         AsyncResult ar = (AsyncResult) rsp.obj;
-        assertTrue("CellInfo Response Not Received", rsp.obj != null);
-        CellInfoGsm cig = (CellInfoGsm) ((List<CellInfo>) ar.result).get(0);
-        assertEquals(getCellInfoGsm(), cig);
-        cith.shutdown();
+        assertTrue("CellInfo Response Not Received", cih.cellInfoResult != null);
+        assertEquals(getCellInfoGsm(), cih.cellInfoResult.get(0));
     }
 
     @Test
     @MediumTest
     public void testGetCellInfoResponseTimeout() throws InterruptedException {
         mSimulatedCommands.setCellInfoListBehavior(false);
-        CellInfoTestHandler cith = new CellInfoTestHandler();
+        CellInfoHandler cih = new CellInfoHandler(mSSTTestHandler.getLooper());
 
-        Message rsp = cith.realTestHandler.obtainMessage(0x7357);
+        Message rsp = cih.obtainMessage(0x7357);
 
         sst.requestAllCellInfo(null, rsp);
 
         synchronized (rsp) {
-            if (rsp.obj == null) rsp.wait(2000);
+            if (cih.cellInfoResult == null) rsp.wait(5000);
         }
 
-        AsyncResult ar = (AsyncResult) rsp.obj;
-        assertTrue("Spurious CellInfo Response Received", rsp.obj == null);
-        cith.shutdown();
+        assertTrue("Spurious CellInfo Response Received", cih == null);
     }
 
     @Test
