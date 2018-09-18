@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ccf8be4a_045aa119",
+        "filename": "src/java/com/android/internal/telephony/uicc/PlmnActRecord.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-18T17:38:12Z",
+      "side": 1,
+      "message": "Yes, the rest is all boilerplate.",
+      "parentUuid": "7692024f_e0983ba7",
+      "range": {
+        "startLine": 78,
+        "startChar": 18,
+        "endLine": 78,
+        "endChar": 26
+      },
+      "revId": "66fbd74b44f4daeb0608a1c5cd5b8958aa599f1a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a0fa91e_c8945a79",
         "filename": "src/java/com/android/internal/telephony/uicc/PlmnActRecord.java",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "66fbd74b44f4daeb0608a1c5cd5b8958aa599f1a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b21a079_2bcd3e50",
+        "filename": "src/java/com/android/internal/telephony/uicc/PlmnActRecord.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-18T17:38:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1a0fa91e_c8945a79",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 6
+      },
+      "revId": "66fbd74b44f4daeb0608a1c5cd5b8958aa599f1a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
