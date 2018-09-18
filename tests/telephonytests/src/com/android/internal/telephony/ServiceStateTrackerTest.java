@@ -417,6 +417,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Test
     @MediumTest
     public void testGetCellInfoResponse() throws InterruptedException {
+        mSimulatedCommands.setCellInfoListBehavior(true);
         ArrayList<CellInfo> list = new ArrayList();
         list.add(getCellInfoGsm());
         mSimulatedCommands.setCellInfoList(list);
@@ -428,7 +429,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.requestAllCellInfo(null, rsp);
 
         synchronized (rsp) {
-            if (rsp.obj == null) rsp.wait(2000);
+            if (rsp.obj == null) rsp.wait(5000);
         }
 
         AsyncResult ar = (AsyncResult) rsp.obj;
@@ -449,7 +450,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.requestAllCellInfo(null, rsp);
 
         synchronized (rsp) {
-            if (rsp.obj == null) rsp.wait(2000);
+            if (rsp.obj == null) rsp.wait(5000);
         }
 
         AsyncResult ar = (AsyncResult) rsp.obj;
