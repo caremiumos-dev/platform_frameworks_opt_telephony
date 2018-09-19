@@ -234,6 +234,30 @@
       "revId": "99ec8147fb51102decbef588110444322e01755a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3681d3f_e0ce166c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneConnectionTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-09-19T21:30:14Z",
+      "side": 1,
+      "message": "ack",
+      "parentUuid": "a67de14e_6ba6c901",
+      "range": {
+        "startLine": 271,
+        "startChar": 8,
+        "endLine": 271,
+        "endChar": 21
+      },
+      "revId": "99ec8147fb51102decbef588110444322e01755a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
