@@ -70,6 +70,30 @@
       "revId": "d4826dedd1577dabef2055aa78fc2fdea3be4f36",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b2e46b7_d26f6f6a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-09-19T01:55:57Z",
+      "side": 1,
+      "message": "In SmsMessage.createFRomPdu, if wrappedMessage is null, it returns a null SmsMessage instead of a SmsMessage with a null mWrappedSmsMessage. \n\nI do not find the possibility that we get a non-null SmsMessage with null mWrappedSmsMessage from Telephony.Sms.Intents.getMessagesFromIntent.\n\nPlease tell me if you find something wrong. Thank you.\n\n//InboundSmsHandler.java \n   private Uri writeInboxMessage(Intent intent) {\n        final SmsMessage[] messages \u003d Telephony.Sms.Intents.getMessagesFromIntent(intent);\n        if (messages \u003d\u003d null || messages.length \u003c 1) {\n            loge(\"Failed to parse SMS pdu\");\n            return null;\n        }\n        for (final SmsMessage sms : messages) {\n\n//Telephony.java\n    public static SmsMessage[] getMessagesFromIntent(Intent intent) {\n        ......\n        SmsMessage[] msgs \u003d new SmsMessage[pduCount];\n\n        for (int i \u003d 0; i \u003c pduCount; i++) {\n            byte[] pdu \u003d (byte[]) messages[i];\n            msgs[i] \u003d SmsMessage.createFromPdu(pdu, format);\n            if (msgs[i] !\u003d null) msgs[i].setSubId(subId);\n        }\n        return msgs;\n\n//SmsMessage.java\n    public static SmsMessage createFromPdu(byte[] pdu, String format) {\n        SmsMessageBase wrappedMessage;\n        if (pdu \u003d\u003d null) {\n            Rlog.i(LOG_TAG, \"createFromPdu(): pdu is null\");\n            return null;\n        }\n        if (SmsConstants.FORMAT_3GPP2.equals(format)) {\n            wrappedMessage \u003d com.android.internal.telephony.cdma.SmsMessage.createFromPdu(pdu);\n        } else if (SmsConstants.FORMAT_3GPP.equals(format)) {\n            wrappedMessage \u003d com.android.internal.telephony.gsm.SmsMessage.createFromPdu(pdu);\n        } else {\n            Rlog.e(LOG_TAG, \"createFromPdu(): unsupported message format \" + format);\n            return null;\n        }\n\n        if (wrappedMessage !\u003d null) {\n            return new SmsMessage(wrappedMessage);\n        } else {\n            Rlog.e(LOG_TAG, \"createFromPdu(): wrappedMessage is null\");\n            return null;\n        }\n    }",
+      "parentUuid": "131b595a_058470eb",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 121
+      },
+      "revId": "d4826dedd1577dabef2055aa78fc2fdea3be4f36",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
