@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e54daf5_9faf54f9",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-20T21:10:03Z",
+      "side": 1,
+      "message": "Since you have a EVENT_REQUEST_, maybe consider rename this to EVENT_RESPONSE_CELL_INFO",
+      "range": {
+        "startLine": 72,
+        "startChar": 29,
+        "endLine": 72,
+        "endChar": 44
+      },
+      "revId": "5c9c7c30a5a252646f87d156a8dc740bf642c97d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08e3984f_022d06a6",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-20T21:10:03Z",
+      "side": 1,
+      "message": "why null? It looks like the reason is always null for all updateTrackingStatus calls",
+      "range": {
+        "startLine": 244,
+        "startChar": 29,
+        "endLine": 244,
+        "endChar": 33
+      },
+      "revId": "5c9c7c30a5a252646f87d156a8dc740bf642c97d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fef4c54_542da3ef",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-20T21:10:03Z",
+      "side": 1,
+      "message": "If we keep tracking the location, does the top level API requires some permission like android.Manifest.permission.ACCESS_COARSE_LOCATION? Should this still do the polling if the user disabled the location service?",
+      "range": {
+        "startLine": 292,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 78
+      },
+      "revId": "5c9c7c30a5a252646f87d156a8dc740bf642c97d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

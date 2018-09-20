@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c5d7ed0_07003ffa",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1491,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-20T21:10:03Z",
+      "side": 1,
+      "message": "nit: Registers. To be consistent with others.",
+      "range": {
+        "startLine": 1491,
+        "startChar": 7,
+        "endLine": 1491,
+        "endChar": 15
+      },
+      "revId": "5fb16368aa40e55fe1b1ad9d7ba51849ae10053c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
