@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5fb040b7_d93677a3",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-09-20T21:53:54Z",
+      "side": 1,
+      "message": "Is there any message or hint from android studio or compiler if we use this annotation?\n\nIf no, I don\u0027t think we need to add this annotation as we all know this is not null when see the declaration.",
+      "range": {
+        "startLine": 184,
+        "startChar": 4,
+        "endLine": 184,
+        "endChar": 12
+      },
+      "revId": "20ab7e6c5076171efeb83fe6fd351603d9d9b6a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b4704f2_177be258",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-09-20T21:53:54Z",
+      "side": 1,
+      "message": "hmm, why you move this after setDataProfilesAsNeeded()?",
+      "range": {
+        "startLine": 2644,
+        "startChar": 12,
+        "endLine": 2644,
+        "endChar": 31
+      },
+      "revId": "20ab7e6c5076171efeb83fe6fd351603d9d9b6a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f31bb62_1b95bf8d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4241,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-09-20T21:53:54Z",
+      "side": 1,
+      "message": "use ApnSetting#canHandleType for convenience.",
+      "range": {
+        "startLine": 4241,
+        "startChar": 21,
+        "endLine": 4241,
+        "endChar": 77
+      },
+      "revId": "20ab7e6c5076171efeb83fe6fd351603d9d9b6a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
