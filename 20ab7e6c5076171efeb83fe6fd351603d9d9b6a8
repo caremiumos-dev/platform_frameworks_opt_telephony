@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "dafe096e_74d64d5f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-20T22:57:07Z",
+      "side": 1,
+      "message": "The data profile is needed for modem to do the LTE initial attach (using the IA APN). So we need to send it before initial attach. Seems we didn\u0027t do it right in ag/2047439.",
+      "parentUuid": "6b4704f2_177be258",
+      "range": {
+        "startLine": 2644,
+        "startChar": 12,
+        "endLine": 2644,
+        "endChar": 31
+      },
+      "revId": "20ab7e6c5076171efeb83fe6fd351603d9d9b6a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f31bb62_1b95bf8d",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
@@ -68,6 +92,30 @@
       "revId": "20ab7e6c5076171efeb83fe6fd351603d9d9b6a8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c00cf182_ab9ece34",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4241,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-20T22:57:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f31bb62_1b95bf8d",
+      "range": {
+        "startLine": 4241,
+        "startChar": 21,
+        "endLine": 4241,
+        "endChar": 77
+      },
+      "revId": "20ab7e6c5076171efeb83fe6fd351603d9d9b6a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
