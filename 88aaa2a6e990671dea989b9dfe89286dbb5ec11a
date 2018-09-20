@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e13c885_bc63a21a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1960,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-09-20T20:14:13Z",
+      "side": 1,
+      "message": "Should throw a security exception with a message such as \"READ_PHONE_STATE required.\"",
+      "range": {
+        "startLine": 1960,
+        "startChar": 12,
+        "endLine": 1960,
+        "endChar": 25
+      },
+      "revId": "88aaa2a6e990671dea989b9dfe89286dbb5ec11a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
