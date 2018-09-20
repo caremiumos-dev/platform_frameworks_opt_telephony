@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31ba0461_760db8ec",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcFailCause.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2018-09-20T21:11:24Z",
+      "side": 1,
+      "message": "This should only be used if the current failure code is REGULAR_DEACTIVATION.  This plus the previous change stripped out that comparison so this is broken.",
+      "revId": "4a06f7984d4091b987dbf755a0448191596b5620",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
