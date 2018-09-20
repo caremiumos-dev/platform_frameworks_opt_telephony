@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09a35d99_30b7665a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3286,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-20T21:12:52Z",
+      "side": 0,
+      "message": "What\u0027s the reason to remove this from here and call it separately?",
+      "revId": "62de98e13f4b45b085df16ebf3d7ec01ffe44ec5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
