@@ -70,6 +70,30 @@
       "revId": "88aaa2a6e990671dea989b9dfe89286dbb5ec11a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf89eb03_b72a53ab",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1960,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-21T23:14:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2c7ea738_221b9320",
+      "range": {
+        "startLine": 1960,
+        "startChar": 12,
+        "endLine": 1960,
+        "endChar": 25
+      },
+      "revId": "88aaa2a6e990671dea989b9dfe89286dbb5ec11a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
