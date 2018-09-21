@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8b13db40_b8e04aba",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-21T04:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e54daf5_9faf54f9",
+      "range": {
+        "startLine": 72,
+        "startChar": 29,
+        "endLine": 72,
+        "endChar": 44
+      },
+      "revId": "5c9c7c30a5a252646f87d156a8dc740bf642c97d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08e3984f_022d06a6",
         "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
         "patchSetId": 13
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "f56a436b_0815fd64",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-21T04:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08e3984f_022d06a6",
+      "range": {
+        "startLine": 244,
+        "startChar": 29,
+        "endLine": 244,
+        "endChar": 33
+      },
+      "revId": "5c9c7c30a5a252646f87d156a8dc740bf642c97d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fef4c54_542da3ef",
         "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
         "patchSetId": 13
@@ -59,6 +107,30 @@
       "writtenOn": "2018-09-20T21:10:03Z",
       "side": 1,
       "message": "If we keep tracking the location, does the top level API requires some permission like android.Manifest.permission.ACCESS_COARSE_LOCATION? Should this still do the polling if the user disabled the location service?",
+      "range": {
+        "startLine": 292,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 78
+      },
+      "revId": "5c9c7c30a5a252646f87d156a8dc740bf642c97d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d4e9ec8_479e4b3a",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-21T04:55:22Z",
+      "side": 1,
+      "message": "I don\u0027t think there\u0027s a problem since this won\u0027t allow API-level access to the location (other than the country, which is needed for regulatory reasons / possibly things like emergency calling); however, bug filed.",
+      "parentUuid": "2fef4c54_542da3ef",
       "range": {
         "startLine": 292,
         "startChar": 0,
