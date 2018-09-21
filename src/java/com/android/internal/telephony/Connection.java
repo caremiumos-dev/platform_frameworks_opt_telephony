@@ -108,6 +108,7 @@ public abstract class Connection {
         public void onRttInitiated();
         public void onRttTerminated();
         public void onOriginalConnectionReplaced(Connection newConnection);
+        public void onIsNetworkEmergencyCallChanged(boolean isEmergencyCall);
     }
 
     /**
@@ -155,6 +156,8 @@ public abstract class Connection {
         public void onRttTerminated() {}
         @Override
         public void onOriginalConnectionReplaced(Connection newConnection) {}
+        @Override
+        public void onIsNetworkEmergencyCallChanged(boolean isEmergencyCall) {}
     }
 
     public static final int AUDIO_QUALITY_STANDARD = 1;
@@ -216,6 +219,11 @@ public abstract class Connection {
     private int mPhoneType;
     private boolean mAnsweringDisconnectsActiveCall;
     private boolean mAllowAddCallDuringVideoCall;
+
+    /**
+     * When {@code true}, the network has indicated that this is an emergency call.
+     */
+    private boolean mIsNetworkIdentifiedEmergencyCall;
 
     /**
      * Used to indicate that this originated from pulling a {@link android.telecom.Connection} with
@@ -1116,6 +1124,25 @@ public abstract class Connection {
             mConnectTimeReal = SystemClock.elapsedRealtime();
             mDuration = 0;
         }
+    }
+
+    /**
+     * Sets whether this {@link Connection} has been identified by the network as an emergency call.
+     * @param isNetworkIdentifiedEmergencyCall {@code true} if ecall, {@code false} otherwise.
+     */
+    public void setIsNetworkIdentifiedEmergencyCall(boolean isNetworkIdentifiedEmergencyCall) {
+        mIsNetworkIdentifiedEmergencyCall = isNetworkIdentifiedEmergencyCall;
+        for (Listener l : mListeners) {
+            l.onIsNetworkEmergencyCallChanged(isNetworkIdentifiedEmergencyCall);
+        }
+    }
+
+    /**
+     * @return Whether this {@link Connection} has been identified by the network as an emergency
+     * call.
+     */
+    public boolean isNetworkIdentifiedEmergencyCall() {
+        return mIsNetworkIdentifiedEmergencyCall;
     }
 
     /**
