@@ -46,6 +46,30 @@
       "revId": "88aaa2a6e990671dea989b9dfe89286dbb5ec11a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c7ea738_221b9320",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1960,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2018-09-21T21:12:10Z",
+      "side": 1,
+      "message": "https://cs.corp.google.com/android/frameworks/base/telephony/java/com/android/internal/telephony/TelephonyPermissions.java?q\u003dTelephonyPermission\u0026g\u003d0\u0026l\u003d126 \nThis throws security exception for permission.",
+      "parentUuid": "1b05a40d_21c74d72",
+      "range": {
+        "startLine": 1960,
+        "startChar": 12,
+        "endLine": 1960,
+        "endChar": 25
+      },
+      "revId": "88aaa2a6e990671dea989b9dfe89286dbb5ec11a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
