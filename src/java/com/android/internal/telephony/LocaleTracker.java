@@ -83,6 +83,9 @@ public class LocaleTracker extends Handler {
     /** The delay for periodically getting cell info from the modem */
     private static final long CELL_INFO_PERIODIC_POLLING_DELAY_MS = 10 * MINUTE_IN_MILLIS;
 
+    /** The maximum fail count to prevent delay time overflow */
+    private static final int MAX_FAIL_COUNT = 30;
+
     private final Phone mPhone;
 
     /** SIM card state. Must be one of TelephonyManager.SIM_STATE_XXX */
@@ -311,6 +314,11 @@ public class LocaleTracker extends Handler {
      * @return The delay time for next get cell info
      */
     private long getCellInfoDelayTime(int failCount) {
+        // This is to prevent the delay time overflow when fail count is large.
+        if (failCount >= MAX_FAIL_COUNT) {
+            failCount = MAX_FAIL_COUNT;
+        }
+
         // Exponentially grow the delay time
         long delay = CELL_INFO_MIN_DELAY_MS * (long) Math.pow(2, failCount - 1);
         if (delay < CELL_INFO_MIN_DELAY_MS) {
