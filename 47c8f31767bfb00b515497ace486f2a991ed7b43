@@ -22,6 +22,30 @@
       "revId": "47c8f31767bfb00b515497ace486f2a991ed7b43",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd4e7182_45d058d1",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcFailCause.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-09-24T23:48:36Z",
+      "side": 1,
+      "message": "I see. Yet, it won\u0027t read new config just for the case REGULAR_DEACTIVATION, because we don\u0027t want to restart radio on REGULAR_DEACTIVATION. (which is causing the issue)\n\nIf we do:\nif (causeCodes !\u003d null) {\n    return Arrays.stream(causeCodes).anyMatch(i -\u003e i \u003d\u003d getErrorCode());\n}\nfirst, then REGULAR_DEACTIVATION would be in one of the enums (array values), and always return true.\n\nAlternatively I could remove REGULAR_DEACTIVATION from enums. Please let me know your thoughts.",
+      "parentUuid": "9a52a561_4e9f5a0d",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 17
+      },
+      "revId": "47c8f31767bfb00b515497ace486f2a991ed7b43",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
