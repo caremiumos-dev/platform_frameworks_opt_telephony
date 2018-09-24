@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11389fe0_f6605dd9",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-24T23:05:31Z",
+      "side": 1,
+      "message": "nit, I would have used Math.min()",
+      "range": {
+        "startLine": 318,
+        "startChar": 12,
+        "endLine": 318,
+        "endChar": 21
+      },
+      "revId": "64da6881836e5be68fe3b4e91632ef9e65b3bd18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
