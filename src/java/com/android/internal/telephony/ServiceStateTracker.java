@@ -2633,6 +2633,8 @@ public class ServiceStateTracker extends Handler {
             // mOperatorAlpha contains the ERI text
             String plmn = mSS.getOperatorAlpha();
             boolean showPlmn = false;
+            boolean showSpn = (iccRecords != null) ? iccRecords.getDisplayRule(mSS) : 0;
+            String spn = (iccRecords != null) ? iccRecords.getServiceProviderName() : "";
 
             showPlmn = plmn != null;
 
@@ -2660,33 +2662,35 @@ public class ServiceStateTracker extends Handler {
                 }
             }
 
-            if (mSubId != subId || !TextUtils.equals(plmn, mCurPlmn)) {
+            if (mSubId != subId || !TextUtils.equals(plmn, mCurPlmn)
+                    || !TextUtils.equals(spn, mCurSpn)) {
                 // Allow A blank plmn, "" to set showPlmn to true. Previously, we
                 // would set showPlmn to true only if plmn was not empty, i.e. was not
                 // null and not blank. But this would cause us to incorrectly display
                 // "No Service". Now showPlmn is set to true for any non null string.
                 if (DBG) {
                     log(String.format("updateSpnDisplay: changed sending intent" +
-                            " showPlmn='%b' plmn='%s' subId='%d'", showPlmn, plmn, subId));
+                            " showPlmn='%b' plmn='%s' subId='%d' showSpn='%b' spn='%s'",
+                            showPlmn, plmn, subId, showSpn, spn));
                 }
                 Intent intent = new Intent(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION);
-                intent.putExtra(TelephonyIntents.EXTRA_SHOW_SPN, false);
-                intent.putExtra(TelephonyIntents.EXTRA_SPN, "");
+                intent.putExtra(TelephonyIntents.EXTRA_SHOW_SPN, showSpn);
+                intent.putExtra(TelephonyIntents.EXTRA_SPN, spn);
                 intent.putExtra(TelephonyIntents.EXTRA_SHOW_PLMN, showPlmn);
                 intent.putExtra(TelephonyIntents.EXTRA_PLMN, plmn);
                 SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhone.getPhoneId());
                 mPhone.getContext().sendStickyBroadcastAsUser(intent, UserHandle.ALL);
 
                 if (!mSubscriptionController.setPlmnSpn(mPhone.getPhoneId(),
-                        showPlmn, plmn, false, "")) {
+                        showPlmn, plmn, showSpn, spn)) {
                     mSpnUpdatePending = true;
                 }
             }
 
             mSubId = subId;
-            mCurShowSpn = false;
+            mCurShowSpn = showSpn;
             mCurShowPlmn = showPlmn;
-            mCurSpn = "";
+            mCurSpn = spn;
             mCurPlmn = plmn;
         }
     }
