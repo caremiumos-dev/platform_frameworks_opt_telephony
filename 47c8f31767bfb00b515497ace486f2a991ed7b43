@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a52a561_4e9f5a0d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcFailCause.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-24T22:58:58Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we check the new config first? I\u0027ve already migrated the old config to the new config in another CL. \n\nIf the new config does not exist, then check the old configuration. We want to deprecate the old configuration. Something like this,\n\nif (causeCodes !\u003d null) {\n    return Arrays.stream(causeCodes).anyMatch(i -\u003e i \u003d\u003d getErrorCode());\n} \n\nif (this \u003d\u003d REGULAR_DEACTIVATION) {\n}\n\nOtherwise we\u0027ll never read the new config if the fail cause \u003d\u003d REGULAR_DEACTIVATION.",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 17
+      },
+      "revId": "47c8f31767bfb00b515497ace486f2a991ed7b43",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
