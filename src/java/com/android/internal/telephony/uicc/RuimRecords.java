@@ -890,12 +890,14 @@ public class RuimRecords extends IccRecords {
     /**
      * {@inheritDoc}
      *
-     * No Display rule for RUIMs yet.
+     * As per C.S0065 5.2.32, the first bit of EF-SPN contains
+     * the display condition.
+     * 0 - Display of SPN info is not required.
+     * 1 - Display of SPN info is required.
      */
     @Override
     public int getDisplayRule(ServiceState serviceState) {
-        // TODO together with spn
-        return 0;
+        return mCsimSpnDisplayCondition;
     }
 
     @Override
