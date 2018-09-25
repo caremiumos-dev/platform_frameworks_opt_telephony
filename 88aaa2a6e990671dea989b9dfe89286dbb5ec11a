@@ -94,6 +94,29 @@
       "revId": "88aaa2a6e990671dea989b9dfe89286dbb5ec11a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "abe1f5a4_e0c81f1a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1960,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-09-25T22:48:33Z",
+      "side": 1,
+      "message": "The docs for checkCallingOrSelfReadPhoneState indicates there are some cases where it won\u0027t throw an exception; should throw the security exception here as well since it can return false if the user has no permission.",
+      "range": {
+        "startLine": 1960,
+        "startChar": 12,
+        "endLine": 1960,
+        "endChar": 25
+      },
+      "revId": "88aaa2a6e990671dea989b9dfe89286dbb5ec11a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
