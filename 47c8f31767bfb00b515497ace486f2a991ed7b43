@@ -46,6 +46,30 @@
       "revId": "47c8f31767bfb00b515497ace486f2a991ed7b43",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e0c576b_f1b65ea1",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcFailCause.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-25T00:34:10Z",
+      "side": 1,
+      "message": "The behavior before https://android-review.googlesource.com/c/platform/packages/apps/CarrierConfig/+/735829/3/assets/carrier_config_310410.xml was already to reset modem when receiving REGULAR_DEACTIVATION on ATT.\n\nIn fact, in today\u0027s implementation, causeCodes will never be null (because carrier config\u0027s default value is an empty int array). So the code added in aosp/737068 is actually the dead code.\n\nI think we probably should do this.\n\nif (this \u003d\u003d REGULAR_DEACTIVATION \u0026\u0026 b.getBoolean(CarrierConfigManager                            .KEY_RESTART_RADIO_ON_PDP_FAIL_REGULAR_DEACTIVATION_BOOL) {\n    return true;\n}\n\nreturn Arrays.stream(causeCodes).anyMatch(i -\u003e i \u003d\u003d getErrorCode());\n\nIn the other hand, we need to check why regular deactivation resets the modem. Or Paris/AOSP are out of sync?",
+      "parentUuid": "fd4e7182_45d058d1",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 17
+      },
+      "revId": "47c8f31767bfb00b515497ace486f2a991ed7b43",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
