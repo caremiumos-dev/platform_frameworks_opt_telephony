@@ -110,7 +110,7 @@ public class DataProfileTest extends TestCase {
 
     @SmallTest
     public void testCreateFromApnSetting() throws Exception {
-        DataProfile dp = DcTracker.createDataProfile(mApn1, mApn1.getProfileId());
+        DataProfile dp = DcTracker.createDataProfile(mApn1, mApn1.getProfileId(), false);
         assertEquals(mApn1.getProfileId(), dp.getProfileId());
         assertEquals(mApn1.getApnName(), dp.getApn());
         assertEquals(ApnSetting.getProtocolStringFromInt(mApn1.getProtocol()), dp.getProtocol());
@@ -126,7 +126,7 @@ public class DataProfileTest extends TestCase {
 
     @SmallTest
     public void testCreateFromApnSettingWithNetworkTypeBitmask() throws Exception {
-        DataProfile dp = DcTracker.createDataProfile(mApn3, mApn3.getProfileId());
+        DataProfile dp = DcTracker.createDataProfile(mApn3, mApn3.getProfileId(), false);
         assertEquals(mApn3.getProfileId(), dp.getProfileId());
         assertEquals(mApn3.getApnName(), dp.getApn());
         assertEquals(ApnSetting.getProtocolStringFromInt(mApn3.getProtocol()), dp.getProtocol());
@@ -146,11 +146,11 @@ public class DataProfileTest extends TestCase {
 
     @SmallTest
     public void testEquals() throws Exception {
-        DataProfile dp1 = DcTracker.createDataProfile(mApn1, mApn1.getProfileId());
-        DataProfile dp2 = DcTracker.createDataProfile(mApn1, mApn1.getProfileId());
+        DataProfile dp1 = DcTracker.createDataProfile(mApn1, mApn1.getProfileId(), false);
+        DataProfile dp2 = DcTracker.createDataProfile(mApn1, mApn1.getProfileId(), false);
         assertEquals(dp1, dp2);
 
-        dp2 = DcTracker.createDataProfile(mApn2, mApn2.getProfileId());
+        dp2 = DcTracker.createDataProfile(mApn2, mApn2.getProfileId(), false);
         assertFalse(dp1.equals(dp2));
     }
 }
