@@ -219,8 +219,6 @@ public class RILTest extends TelephonyTest {
     private static final String USER_NAME = "username";
     private static final String PASSWORD = "password";
     private static final int TYPE = 0;
-    private static final int MAX_CONNS_TIME = 1;
-    private static final int MAX_CONNS = 3;
     private static final int WAIT_TIME = 10;
     private static final boolean APN_ENABLED = true;
     private static final int SUPPORTED_APNT_YPES_BITMAP = 123456;
@@ -229,7 +227,7 @@ public class RILTest extends TelephonyTest {
     private static final int MTU = 1234;
     private static final String MVNO_TYPE = "";
     private static final String MVNO_MATCH_DATA = "";
-    private static final boolean MODEM_COGNITIVE = true;
+    private static final boolean PERSISTENT = true;
 
     private class RILTestHandler extends HandlerThread {
 
@@ -704,7 +702,7 @@ public class RILTest extends TelephonyTest {
                 null, null, -1, "", "", 0, ApnSetting.TYPE_DUN, ApnSetting.PROTOCOL_IP,
                 ApnSetting.PROTOCOL_IP, true, 0, 0, false, 0, 0, 0, 0, -1, "");
         DataProfile dataProfile = DcTracker.createDataProfile(
-                apnSetting, apnSetting.getProfileId());
+                apnSetting, apnSetting.getProfileId(), false);
         boolean isRoaming = false;
 
         mRILUnderTest.setInitialAttachApn(dataProfile, isRoaming, obtainMessage());
@@ -715,7 +713,7 @@ public class RILTest extends TelephonyTest {
                         "convertToHalDataProfile",
                         new Class<?>[] {DataProfile.class},
                         new Object[] {dataProfile})),
-                eq(dataProfile.isModemCognitive()),
+                eq(dataProfile.isPersistent()),
                 eq(isRoaming));
         verifyRILResponse(
                 mRILUnderTest, mSerialNumberCaptor.getValue(), RIL_REQUEST_SET_INITIAL_ATTACH_APN);
@@ -1726,8 +1724,8 @@ public class RILTest extends TelephonyTest {
     public void testSetupDataCall() throws Exception {
 
         DataProfile dp = new DataProfile(PROFILE_ID, APN, PROTOCOL, AUTH_TYPE, USER_NAME, PASSWORD,
-                TYPE, MAX_CONNS_TIME, MAX_CONNS, WAIT_TIME, APN_ENABLED, SUPPORTED_APNT_YPES_BITMAP,
-                ROAMING_PROTOCOL, BEARER_BITMAP, MTU, MVNO_TYPE, MVNO_MATCH_DATA, MODEM_COGNITIVE);
+                TYPE, WAIT_TIME, APN_ENABLED, SUPPORTED_APNT_YPES_BITMAP, ROAMING_PROTOCOL,
+                BEARER_BITMAP, MTU, PERSISTENT, false);
         mRILUnderTest.setupDataCall(AccessNetworkConstants.AccessNetworkType.EUTRAN, dp, false,
                 false, 0, null, obtainMessage());
         ArgumentCaptor<DataProfileInfo> dpiCaptor = ArgumentCaptor.forClass(DataProfileInfo.class);
@@ -1744,8 +1742,6 @@ public class RILTest extends TelephonyTest {
         assertEquals(USER_NAME, dpi.user);
         assertEquals(PASSWORD, dpi.password);
         assertEquals(TYPE, dpi.type);
-        assertEquals(MAX_CONNS_TIME, dpi.maxConnsTime);
-        assertEquals(MAX_CONNS, dpi.maxConns);
         assertEquals(WAIT_TIME, dpi.waitTime);
         assertEquals(APN_ENABLED, dpi.enabled);
         assertEquals(SUPPORTED_APNT_YPES_BITMAP, dpi.supportedApnTypesBitmap);
