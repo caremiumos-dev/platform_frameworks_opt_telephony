@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c484365_22361c14",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/gsm/GsmInboundSmsHandlerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-09-26T22:01:22Z",
+      "side": 1,
+      "message": "just to confirm that there is no handler event for scanRowTable?",
+      "range": {
+        "startLine": 777,
+        "startChar": 7,
+        "endLine": 777,
+        "endChar": 23
+      },
+      "revId": "d15860bc07d9768f919b4c118d77a2776880f6e9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
