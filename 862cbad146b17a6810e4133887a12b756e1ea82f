@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f7e767da_dbab07f9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4253,
+      "author": {
+        "id": 1254195
+      },
+      "writtenOn": "2018-09-26T23:00:24Z",
+      "side": 1,
+      "message": "Changed the code. please review the latest patchset.",
+      "parentUuid": "10952e4a_5ab16a97",
+      "range": {
+        "startLine": 4253,
+        "startChar": 35,
+        "endLine": 4253,
+        "endChar": 36
+      },
+      "revId": "862cbad146b17a6810e4133887a12b756e1ea82f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "814d52c3_d5b9dcd8",
         "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "0687d33a_494162b5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1254195
+      },
+      "writtenOn": "2018-09-26T23:00:24Z",
+      "side": 1,
+      "message": "Done. Please review latest patch set.",
+      "parentUuid": "814d52c3_d5b9dcd8",
+      "range": {
+        "startLine": 264,
+        "startChar": 53,
+        "endLine": 264,
+        "endChar": 67
+      },
+      "revId": "862cbad146b17a6810e4133887a12b756e1ea82f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c04bee21_72bdf402",
         "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "862cbad146b17a6810e4133887a12b756e1ea82f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2427e07_a60a682d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1254195
+      },
+      "writtenOn": "2018-09-26T23:00:24Z",
+      "side": 1,
+      "message": "No Need. Existing checks cover all the above conditions.",
+      "parentUuid": "c04bee21_72bdf402",
+      "range": {
+        "startLine": 265,
+        "startChar": 44,
+        "endLine": 265,
+        "endChar": 45
+      },
+      "revId": "862cbad146b17a6810e4133887a12b756e1ea82f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
