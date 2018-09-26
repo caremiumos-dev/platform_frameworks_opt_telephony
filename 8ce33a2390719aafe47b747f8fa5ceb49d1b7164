@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6fbd255b_fedd1419",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-26T18:27:27Z",
+      "side": 1,
+      "message": "Remove",
+      "range": {
+        "startLine": 533,
+        "startChar": 24,
+        "endLine": 533,
+        "endChar": 29
+      },
+      "revId": "8ce33a2390719aafe47b747f8fa5ceb49d1b7164",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68f2da13_e27fffa4",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-26T18:27:27Z",
+      "side": 1,
+      "message": "Is this needed? Its already unknown.",
+      "range": {
+        "startLine": 545,
+        "startChar": 20,
+        "endLine": 545,
+        "endChar": 41
+      },
+      "revId": "8ce33a2390719aafe47b747f8fa5ceb49d1b7164",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78ffb8c8_94338632",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-26T18:27:27Z",
+      "side": 1,
+      "message": "Why does IMSI have to be non null for this?",
+      "range": {
+        "startLine": 831,
+        "startChar": 68,
+        "endLine": 831,
+        "endChar": 85
+      },
+      "revId": "8ce33a2390719aafe47b747f8fa5ceb49d1b7164",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ff16a90_818a903a",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-26T18:27:27Z",
+      "side": 1,
+      "message": "mMncLength can be UNINITIALIZED here. updateOperatorPlmn does not update it if it is UNINITIALIZED.",
+      "range": {
+        "startLine": 860,
+        "startChar": 24,
+        "endLine": 860,
+        "endChar": 42
+      },
+      "revId": "8ce33a2390719aafe47b747f8fa5ceb49d1b7164",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
