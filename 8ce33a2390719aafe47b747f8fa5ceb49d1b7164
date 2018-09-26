@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8c5505cf_151a29a1",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-26T23:01:07Z",
+      "side": 1,
+      "message": "Oh missed that.",
+      "parentUuid": "d862551f_77de4a57",
+      "range": {
+        "startLine": 533,
+        "startChar": 24,
+        "endLine": 533,
+        "endChar": 29
+      },
+      "revId": "8ce33a2390719aafe47b747f8fa5ceb49d1b7164",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68f2da13_e27fffa4",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 5
