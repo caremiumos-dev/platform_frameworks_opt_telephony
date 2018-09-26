@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d862551f_77de4a57",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-26T22:27:10Z",
+      "side": 1,
+      "message": "This \"break\" exists the \"for\" loop. A lesser-used instance, but valid nonetheless.",
+      "parentUuid": "6fbd255b_fedd1419",
+      "range": {
+        "startLine": 533,
+        "startChar": 24,
+        "endLine": 533,
+        "endChar": 29
+      },
+      "revId": "8ce33a2390719aafe47b747f8fa5ceb49d1b7164",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "68f2da13_e27fffa4",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "8c8a3425_7fe4fa97",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-26T22:27:10Z",
+      "side": 1,
+      "message": "Removed (Done).",
+      "parentUuid": "68f2da13_e27fffa4",
+      "range": {
+        "startLine": 545,
+        "startChar": 20,
+        "endLine": 545,
+        "endChar": 41
+      },
+      "revId": "8ce33a2390719aafe47b747f8fa5ceb49d1b7164",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78ffb8c8_94338632",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 5
@@ -59,6 +107,30 @@
       "writtenOn": "2018-09-26T18:27:27Z",
       "side": 1,
       "message": "Why does IMSI have to be non null for this?",
+      "range": {
+        "startLine": 831,
+        "startChar": 68,
+        "endLine": 831,
+        "endChar": 85
+      },
+      "revId": "8ce33a2390719aafe47b747f8fa5ceb49d1b7164",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9506bb8b_efb06c5c",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-26T22:27:10Z",
+      "side": 1,
+      "message": "I think it\u0027s just crufty and should be removed. It\u0027s a relic at this point.",
+      "parentUuid": "78ffb8c8_94338632",
       "range": {
         "startLine": 831,
         "startChar": 68,
@@ -91,6 +163,30 @@
       "revId": "8ce33a2390719aafe47b747f8fa5ceb49d1b7164",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c614ef49_1b9715c2",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-26T22:27:10Z",
+      "side": 1,
+      "message": "Done. That shouldn\u0027t be possible but it looks like it\u0027s still possible in error conditions. Fixed since it should be unconditional.",
+      "parentUuid": "8ff16a90_818a903a",
+      "range": {
+        "startLine": 860,
+        "startChar": 24,
+        "endLine": 860,
+        "endChar": 42
+      },
+      "revId": "8ce33a2390719aafe47b747f8fa5ceb49d1b7164",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
