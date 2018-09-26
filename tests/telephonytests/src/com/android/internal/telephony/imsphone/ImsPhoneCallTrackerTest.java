@@ -515,6 +515,13 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testImsMOCallDial() {
+        startOutoingCall();
+        //call established
+        mImsCallListener.onCallProgressing(mSecondImsCall);
+        assertEquals(Call.State.ALERTING, mCTUT.mForegroundCall.getState());
+    }
+
+    private void startOutoingCall() {
         assertEquals(Call.State.IDLE, mCTUT.mForegroundCall.getState());
         assertEquals(PhoneConstants.State.IDLE, mCTUT.getState());
         try {
@@ -527,9 +534,6 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         }
         assertEquals(PhoneConstants.State.OFFHOOK, mCTUT.getState());
         assertEquals(Call.State.DIALING, mCTUT.mForegroundCall.getState());
-        //call established
-        mImsCallListener.onCallProgressing(mSecondImsCall);
-        assertEquals(Call.State.ALERTING, mCTUT.mForegroundCall.getState());
     }
 
     @FlakyTest
@@ -845,6 +849,49 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         assertEquals(DisconnectCause.INVALID_NUMBER,
                 mCTUT.getDisconnectCauseFromReasonInfo(
                         new ImsReasonInfo(ImsReasonInfo.CODE_SIP_NOT_FOUND, 0), Call.State.ACTIVE));
+    }
+
+    @Test
+    @SmallTest
+    public void testCantMakeCallWhileRinging() {
+        testImsMTCall();
+        try {
+            mCTUT.dial("6505551212", VideoProfile.STATE_AUDIO_ONLY, new Bundle());
+        } catch (CallStateException e) {
+            // We expect a call state exception!
+            assertEquals(CallStateException.ERROR_CALL_RINGING, e.getError());
+            return;
+        }
+        Assert.fail("Expected CallStateException");
+    }
+
+    @Test
+    @SmallTest
+    public void testCantMakeCallWhileDialing() {
+        startOutoingCall();
+        try {
+            mCTUT.dial("6505551212", VideoProfile.STATE_AUDIO_ONLY, new Bundle());
+        } catch (CallStateException e) {
+            // We expect a call state exception!
+            assertEquals(CallStateException.ERROR_ALREADY_DIALING, e.getError());
+            return;
+        }
+        Assert.fail("Expected CallStateException");
+    }
+
+    @Test
+    @SmallTest
+    public void testCantMakeCallTooMany() {
+        testImsMOCallDial();
+        testImsMOCallDial();
+        try {
+            mCTUT.dial("6505551212", VideoProfile.STATE_AUDIO_ONLY, new Bundle());
+        } catch (CallStateException e) {
+            // We expect a call state exception!
+            assertEquals(CallStateException.ERROR_TOO_MANY_CALLS, e.getError());
+            return;
+        }
+        Assert.fail("Expected CallStateException");
     }
 }
 
