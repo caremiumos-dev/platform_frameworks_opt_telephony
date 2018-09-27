@@ -16,6 +16,24 @@
       "revId": "53180e05bc378d6f972f471d83772448d19aaa33",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8be9e4c6_cce517c7",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2018-09-27T01:19:53Z",
+      "side": 1,
+      "message": "Speaking of our specific case, it is a pre-installed system application which works with the shared system UID.\n\nOnly limited number of application will be able to receive this new broadcast as it is protected by the permission \"READ_PRIVILEGED_PHONE_STATE\".\n\n    \u003c!-- @SystemApi Allows read access to privileged phone state.\n         @hide Used internally. --\u003e\n    \u003cpermission android:name\u003d\"android.permission.READ_PRIVILEGED_PHONE_STATE\"\n        android:protectionLevel\u003d\"signature|privileged\" /\u003e\n\nThe characteristic of the new broadcast follows the existing broadcast \"ACTION_SIM_APPLICATION_STATE_CHANGED\".\n\n    private void broadcastSimApplicationStateChanged(int phoneId, int state) {\n    ...\n            Intent i \u003d new Intent(TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED);\n            i.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);\n            i.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);\n    ...\n            mContext.sendBroadcast(i, Manifest.permission.READ_PRIVILEGED_PHONE_STATE);",
+      "parentUuid": "cafe50b2_0e6a8a02",
+      "revId": "53180e05bc378d6f972f471d83772448d19aaa33",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
