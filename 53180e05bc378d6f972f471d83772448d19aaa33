@@ -34,6 +34,24 @@
       "revId": "53180e05bc378d6f972f471d83772448d19aaa33",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61777e79_0e2e3e64",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-09-27T17:16:06Z",
+      "side": 1,
+      "message": "If it is a system app, could it be done by specifying package name or component name, instead of using FLAG_RECEIVER_INCLUDE_BACKGROUND?",
+      "parentUuid": "8be9e4c6_cce517c7",
+      "revId": "53180e05bc378d6f972f471d83772448d19aaa33",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
