@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "afdf6755_afaca8f7",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-27T21:37:22Z",
+      "side": 1,
+      "message": "Ack. Can you file a bug for this? (low priority) Or separate CL for the current bug?",
+      "parentUuid": "95cdb803_ee49e723",
+      "range": {
+        "startLine": 423,
+        "startChar": 80,
+        "endLine": 423,
+        "endChar": 88
+      },
+      "revId": "2d492f5228b1502d456445d3248eac860f650777",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54f1a235_662a6a8c",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 2
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "I do not know the WCDMA case... You are saying that voice registration will not be OOS with WCDMA and IWLAN?",
       "parentUuid": "52c376b9_024d8027",
+      "range": {
+        "startLine": 832,
+        "startChar": 88,
+        "endLine": 834,
+        "endChar": 59
+      },
+      "revId": "2d492f5228b1502d456445d3248eac860f650777",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d936e3ea_89d05ba4",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-09-27T21:37:22Z",
+      "side": 1,
+      "message": "Yes, there\u0027s no such thing as registration on WCDMA (or 1x for that matter) that doesn\u0027t provide CS voice service. Thus the voice service state should be IN_SERVICE with technology UMTS.",
+      "parentUuid": "f3745c30_bb2ef6c1",
       "range": {
         "startLine": 832,
         "startChar": 88,
