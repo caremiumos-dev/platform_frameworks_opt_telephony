@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba92790a_69ae1f87",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-09-28T22:18:29Z",
+      "side": 1,
+      "message": "nit: change this to isValidSlotIndex(), assuming we have an API of that sort. If not, this is ok I guess.",
+      "range": {
+        "startLine": 2375,
+        "startChar": 12,
+        "endLine": 2375,
+        "endChar": 25
+      },
+      "revId": "dd97eb5b27bf72a1b2032bc4cbb549fa2183ed94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
