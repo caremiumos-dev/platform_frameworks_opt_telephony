@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "e4e6d2ba_c4ae1044",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1003771
+      },
+      "writtenOn": "2018-09-28T22:54:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5e42896_5aeac0ac",
+      "range": {
+        "startLine": 2375,
+        "startChar": 12,
+        "endLine": 2375,
+        "endChar": 25
+      },
+      "revId": "dd97eb5b27bf72a1b2032bc4cbb549fa2183ed94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09b2cda7_21e1e4b4",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 2
@@ -93,6 +117,30 @@
       "revId": "dd97eb5b27bf72a1b2032bc4cbb549fa2183ed94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2da9813_6147fb22",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2376,
+      "author": {
+        "id": 1003771
+      },
+      "writtenOn": "2018-09-28T22:54:41Z",
+      "side": 1,
+      "message": "I will let Amit comment on the aspect of this looking like a hack/workaround.\n\nupdated the CL description to include the observation that multiple-SIMs per slot are at this point in time limited to negative slotIndex values only.",
+      "parentUuid": "09b2cda7_21e1e4b4",
+      "range": {
+        "startLine": 2376,
+        "startChar": 12,
+        "endLine": 2376,
+        "endChar": 81
+      },
+      "revId": "dd97eb5b27bf72a1b2032bc4cbb549fa2183ed94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
