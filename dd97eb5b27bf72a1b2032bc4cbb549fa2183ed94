@@ -141,6 +141,30 @@
       "revId": "dd97eb5b27bf72a1b2032bc4cbb549fa2183ed94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f39d7ca4_5fd1d39f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2376,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-09-28T22:56:55Z",
+      "side": 1,
+      "message": "I mean \"Slots with non-negative slotIndex value can only have one sim in them.\" is not enough. We would like to have more comments here why we are doing this.",
+      "parentUuid": "e2da9813_6147fb22",
+      "range": {
+        "startLine": 2376,
+        "startChar": 12,
+        "endLine": 2376,
+        "endChar": 81
+      },
+      "revId": "dd97eb5b27bf72a1b2032bc4cbb549fa2183ed94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
