@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0d6a4bb_1ad7367c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-09-29T01:59:34Z",
+      "side": 0,
+      "message": "What happened to this case?",
+      "range": {
+        "startLine": 628,
+        "startChar": 24,
+        "endLine": 629,
+        "endChar": 81
+      },
+      "revId": "8e8156c6d7931c9ed26485867a3eccacf514e225",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
