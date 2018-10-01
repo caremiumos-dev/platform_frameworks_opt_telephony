@@ -22,6 +22,30 @@
       "revId": "8e8156c6d7931c9ed26485867a3eccacf514e225",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb237dca_1405bcb9",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-10-01T16:25:18Z",
+      "side": 0,
+      "message": "The old logic was to prevent dialing if:\n!(Falive \u0026\u0026 Balive \u0026\u0026 !(!Gsm \u0026\u0026 Factive))\n!(Falive \u0026\u0026 Balive \u0026\u0026 (Gsm || !Factive))\n!((Falive \u0026\u0026 Balive \u0026\u0026 Gsm) || (Falive \u0026\u0026 Balive \u0026\u0026 !Factive ))\n                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nYeah, guess its missing the case above.  Basically for CDMA its okay for the foreground call to be active and the background call active.  Guess that makes sense since the calls are in a \"generic conference\".",
+      "parentUuid": "b0d6a4bb_1ad7367c",
+      "range": {
+        "startLine": 628,
+        "startChar": 24,
+        "endLine": 629,
+        "endChar": 81
+      },
+      "revId": "8e8156c6d7931c9ed26485867a3eccacf514e225",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
