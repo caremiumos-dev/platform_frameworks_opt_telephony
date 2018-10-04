@@ -42,7 +42,6 @@ import android.hardware.radio.V1_0.IccIo;
 import android.hardware.radio.V1_0.ImsSmsMessage;
 import android.hardware.radio.V1_0.IndicationFilter;
 import android.hardware.radio.V1_0.LceDataInfo;
-import android.hardware.radio.V1_0.MvnoType;
 import android.hardware.radio.V1_0.NvWriteItem;
 import android.hardware.radio.V1_0.RadioError;
 import android.hardware.radio.V1_0.RadioIndicationType;
@@ -1142,20 +1141,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     /**
-     * Convert MVNO type string into MvnoType defined in types.hal.
-     * @param mvnoType MVNO type
-     * @return MVNO type in integer
-     */
-    private static int convertToHalMvnoType(String mvnoType) {
-        switch (mvnoType) {
-            case "imsi" : return MvnoType.IMSI;
-            case "gid" : return MvnoType.GID;
-            case "spn" : return MvnoType.SPN;
-            default: return MvnoType.NONE;
-        }
-    }
-
-    /**
      * Convert to DataProfileInfo defined in types.hal
      * @param dp Data profile
      * @return A converted data profile
@@ -1178,8 +1163,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
         dpi.supportedApnTypesBitmap = dp.getSupportedApnTypesBitmap();
         dpi.bearerBitmap = dp.getBearerBitmap();
         dpi.mtu = dp.getMtu();
-        dpi.mvnoType = convertToHalMvnoType(dp.getMvnoType());
-        dpi.mvnoMatchData = dp.getMvnoMatchData();
 
         return dpi;
     }

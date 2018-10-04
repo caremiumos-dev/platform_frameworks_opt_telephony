@@ -526,8 +526,6 @@ public class DcTrackerTest extends TelephonyTest {
         assertEquals("IP", dp.getRoamingProtocol());
         assertEquals(bearerBitmask, dp.getBearerBitmap());
         assertEquals(0, dp.getMtu());
-        assertEquals("", dp.getMvnoType());
-        assertEquals("", dp.getMvnoMatchData());
         assertFalse(dp.isModemCognitive());
     }
 

@@ -1727,7 +1727,7 @@ public class RILTest extends TelephonyTest {
 
         DataProfile dp = new DataProfile(PROFILE_ID, APN, PROTOCOL, AUTH_TYPE, USER_NAME, PASSWORD,
                 TYPE, MAX_CONNS_TIME, MAX_CONNS, WAIT_TIME, APN_ENABLED, SUPPORTED_APNT_YPES_BITMAP,
-                ROAMING_PROTOCOL, BEARER_BITMAP, MTU, MVNO_TYPE, MVNO_MATCH_DATA, MODEM_COGNITIVE);
+                ROAMING_PROTOCOL, BEARER_BITMAP, MTU, MODEM_COGNITIVE);
         mRILUnderTest.setupDataCall(AccessNetworkConstants.AccessNetworkType.EUTRAN, dp, false,
                 false, 0, null, obtainMessage());
         ArgumentCaptor<DataProfileInfo> dpiCaptor = ArgumentCaptor.forClass(DataProfileInfo.class);

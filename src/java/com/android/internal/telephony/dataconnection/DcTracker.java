@@ -4777,8 +4777,7 @@ public class DcTracker extends Handler {
             apn.getUser(), apn.getPassword(), profileType, apn.getMaxConnsTime(),
             apn.getMaxConns(), apn.getWaitTime(), apn.isEnabled(), apn.getApnTypeBitmask(),
             ApnSetting.getProtocolStringFromInt(apn.getRoamingProtocol()), bearerBitmap,
-            apn.getMtu(), ApnSetting.getMvnoTypeStringFromInt(apn.getMvnoType()),
-            apn.getMvnoMatchData(), apn.getModemCognitive());
+            apn.getMtu(), apn.getModemCognitive());
     }
 
     private void onDataServiceBindingChanged(boolean bound) {
