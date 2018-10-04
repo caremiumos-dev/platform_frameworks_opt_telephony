@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b877fe68_0550c2c7",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-10-04T08:25:19Z",
+      "side": 1,
+      "message": "duplicateExists only discards the SMS which has a duplicate SMS of deleted\u003d1 in raw table.\n\nIf a device receives 2 single segment SMS of the same pdu and the 1st SMS is not dispatched completely, duplicateExists does not work for the 2nd SMS.",
+      "revId": "e6910a9582f25e018012d3f4e4f3a1891d667b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
