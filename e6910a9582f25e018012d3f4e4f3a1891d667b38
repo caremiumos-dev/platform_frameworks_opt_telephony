@@ -16,6 +16,24 @@
       "revId": "e6910a9582f25e018012d3f4e4f3a1891d667b38",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21f9e03b_111bd94a",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-04T19:32:02Z",
+      "side": 1,
+      "message": "That\u0027s a valid point. I did not realize that we add new SMS to db while old is still being processed. Let me add the handling for that.",
+      "parentUuid": "b877fe68_0550c2c7",
+      "revId": "e6910a9582f25e018012d3f4e4f3a1891d667b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
