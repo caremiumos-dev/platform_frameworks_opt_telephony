@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44ce54f1_5f43346e",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-10-04T03:28:23Z",
+      "side": 0,
+      "message": "In C.S0015-B,Originating Address of SMS Point-to-Point MT messages is a mandatory data field.\n\nHowever, in cdma/SmsMessage, parseSms() checks mOriginatingAddress null or not, is it means framework may get a null mOriginatingAddress?\n\n//cdma/SmsMessage.java\n    public void parseSms() {\n    ......\n        if (mOriginatingAddress !\u003d null) {\n            mOriginatingAddress.address \u003d new String(mOriginatingAddress.origBytes);\n\n//SmsMessageBase.java\n    /**\n     * Returns the originating address (sender) of this SMS message in String\n     * form or null if unavailable\n     */\n    @UnsupportedAppUsage\n    public String getOriginatingAddress() {\n        if (mOriginatingAddress \u003d\u003d null) {\n            return null;\n        }\n\n        return mOriginatingAddress.getAddressString();\n    }\n\n//InboundSmsHandler.java\nprotected int dispatchNormalMessage(SmsMessageBase sms) {\n......\n    tracker \u003d TelephonyComponentFactory.getInstance().makeInboundSmsTracker(sms.getPdu(),\n        sms.getTimestampMillis(), destPort, is3gpp2(), sms.getOriginatingAddress(),\n        sms.getDisplayOriginatingAddress(), concatRef.refNumber, concatRef.seqNumber,\n        concatRef.msgCount, false, sms.getMessageBody());",
+      "revId": "954e4c54d278188ed9d8b9fc9c0f7fa20c788a4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
