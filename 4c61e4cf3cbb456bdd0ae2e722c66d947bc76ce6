@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9786c092_4f40bb7f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/EuiccCardTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-10-04T00:04:59Z",
+      "side": 1,
+      "message": "Do you need this type convert?",
+      "range": {
+        "startLine": 991,
+        "startChar": 46,
+        "endLine": 991,
+        "endChar": 52
+      },
+      "revId": "4c61e4cf3cbb456bdd0ae2e722c66d947bc76ce6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
