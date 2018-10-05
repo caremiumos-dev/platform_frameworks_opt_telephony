@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8aea5d4c_d7fa2770",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-05T05:33:18Z",
+      "side": 1,
+      "message": "Duplicate are better than missing, but we get a lot more reports of duplicate. Re-transmits are a much more common scenario, and the assumption is that some times the pdu may change for a retransmit, due to change in SMSC or timestamp or one of the fields in the pdu.",
+      "parentUuid": "40ac2918_57f1a435",
+      "revId": "e6910a9582f25e018012d3f4e4f3a1891d667b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b877fe68_0550c2c7",
         "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
         "patchSetId": 1
