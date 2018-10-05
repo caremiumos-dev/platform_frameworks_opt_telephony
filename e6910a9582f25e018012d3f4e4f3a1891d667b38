@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "40ac2918_57f1a435",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2018-10-05T01:49:28Z",
+      "side": 1,
+      "message": "How about comparing the PDU directly to find the exact same single message because duplicate messages are better than missing.",
+      "revId": "e6910a9582f25e018012d3f4e4f3a1891d667b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b877fe68_0550c2c7",
         "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
         "patchSetId": 1
