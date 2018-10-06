@@ -5335,8 +5335,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             Parcel p = Parcel.obtain();
             p.writeInt(record.cellInfoType);
             p.writeInt(record.registered ? 1 : 0);
-            p.writeInt(record.timeStampType);
-            p.writeLong(record.timeStamp);
+            p.writeLong(SystemClock.elapsedRealtimeNanos());
             p.writeInt(CellInfo.CONNECTION_UNKNOWN);
             switch (record.cellInfoType) {
                 case CellInfoType.GSM: {
@@ -5462,8 +5461,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             Parcel p = Parcel.obtain();
             p.writeInt(record.cellInfoType);
             p.writeInt(record.registered ? 1 : 0);
-            p.writeInt(record.timeStampType);
-            p.writeLong(record.timeStamp);
+            p.writeLong(SystemClock.elapsedRealtimeNanos());
             p.writeInt(record.connectionStatus);
             switch (record.cellInfoType) {
                 case CellInfoType.GSM: {
