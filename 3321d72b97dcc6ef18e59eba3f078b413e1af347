@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3efd152_90189dd8",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-10-08T20:23:45Z",
+      "side": 0,
+      "message": "The ServiceState is used around line 1598, @ServiceState. Plz add the import back.",
+      "revId": "3321d72b97dcc6ef18e59eba3f078b413e1af347",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
