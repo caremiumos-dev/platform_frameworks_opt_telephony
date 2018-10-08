@@ -69,6 +69,24 @@
       "revId": "e6910a9582f25e018012d3f4e4f3a1891d667b38",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "274ab809_fd5715de",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-08T17:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21f9e03b_111bd94a",
+      "revId": "e6910a9582f25e018012d3f4e4f3a1891d667b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
