@@ -22,6 +22,30 @@
       "revId": "c5af1e2487c9302af9c3d47e8e540e9d19bf316f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d91b91db_5c3f46cf",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-10-08T22:16:29Z",
+      "side": 1,
+      "message": "hmm, this method will return false if there is a duplicated message... It\u0027s weird, and doesn\u0027t make sense for the comment of this method. \n\nCan we separate the logic \"check duplidate\" and \"delete duplicated message\" to two functions?",
+      "parentUuid": "290a4622_ba7a43cf",
+      "range": {
+        "startLine": 1201,
+        "startChar": 3,
+        "endLine": 1201,
+        "endChar": 84
+      },
+      "revId": "c5af1e2487c9302af9c3d47e8e540e9d19bf316f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
