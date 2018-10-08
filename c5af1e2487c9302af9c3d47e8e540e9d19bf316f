@@ -46,6 +46,30 @@
       "revId": "c5af1e2487c9302af9c3d47e8e540e9d19bf316f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71602c40_dcd06964",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-08T22:50:59Z",
+      "side": 1,
+      "message": "Let me update the comment and see if that makes it clearer.",
+      "parentUuid": "d91b91db_5c3f46cf",
+      "range": {
+        "startLine": 1201,
+        "startChar": 3,
+        "endLine": 1201,
+        "endChar": 84
+      },
+      "revId": "c5af1e2487c9302af9c3d47e8e540e9d19bf316f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
