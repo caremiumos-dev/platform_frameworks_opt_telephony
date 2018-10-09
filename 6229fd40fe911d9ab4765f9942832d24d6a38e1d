@@ -34,6 +34,24 @@
       "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "012f0dc4_02c88e5b",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-10-09T07:13:27Z",
+      "side": 1,
+      "message": "I agree with you, we should drop new single segment message if getExactMatchDupDetectQuery gets matching segment.",
+      "parentUuid": "bdbcaae4_8c341065",
+      "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
