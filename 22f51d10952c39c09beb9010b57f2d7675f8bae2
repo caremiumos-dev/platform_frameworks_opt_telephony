@@ -16,6 +16,24 @@
       "revId": "22f51d10952c39c09beb9010b57f2d7675f8bae2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cace7617_d897d7ee",
+        "filename": "src/java/com/android/internal/telephony/SmsBroadcastUndelivered.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-09T22:48:27Z",
+      "side": 1,
+      "message": "Using oldMessageTimestamp now.\n\nThe 3 points that you have mentioned they are all related to multi-sim support in rawDb. That is currently not supported and is sort of independent of the change I am making here. Multi-sim support for rawDb needs to be added separately.",
+      "parentUuid": "defc940d_e9104cdd",
+      "revId": "22f51d10952c39c09beb9010b57f2d7675f8bae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
