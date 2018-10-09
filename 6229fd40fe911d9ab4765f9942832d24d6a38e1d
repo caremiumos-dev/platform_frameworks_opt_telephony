@@ -52,6 +52,24 @@
       "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1102e69_640cb0c4",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-09T20:31:48Z",
+      "side": 1,
+      "message": "Actually I take that back. This code is executed only from DeliveringState, so a message broadcast is not in progress at this time. It should be safe to delete any messages from the raw db as they are not being processed currently. I think this looks good. Sorry for the back and forth; let me know what you think.",
+      "parentUuid": "012f0dc4_02c88e5b",
+      "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
