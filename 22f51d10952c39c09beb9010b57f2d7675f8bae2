@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "defc940d_e9104cdd",
+        "filename": "src/java/com/android/internal/telephony/SmsBroadcastUndelivered.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-10-09T10:06:58Z",
+      "side": 1,
+      "message": "The parameter oldMessageTimestamp is not used. Since it\u0027s WIP, I think you will use it to discard the segments of 1 day in-service in the future revision.\n\nYou should also take care of\n\n    1. scanRawTable should only query SMS of the right sub_id.\n    2. Since addTrackerToRawTable does not write SMS to raw table with sub_id, we should add it for 1.\n    3. How to manipulate the the SMS without a valid sub_id?",
+      "revId": "22f51d10952c39c09beb9010b57f2d7675f8bae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
