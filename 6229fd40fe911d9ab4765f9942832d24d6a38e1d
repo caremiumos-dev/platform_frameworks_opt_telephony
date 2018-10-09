@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1d1868d_56ab6c9c",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-10-09T02:58:05Z",
+      "side": 1,
+      "message": "We can not stop the dispatching intent of the old SMS by deleting the old SMS in raw table.\nWe do not return true in the block, the new SMS will be dispatched.\n\nIt seems that the user may still receive duplicate SMS in this change revision.",
+      "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
