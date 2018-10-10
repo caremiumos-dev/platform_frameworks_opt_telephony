@@ -34,6 +34,24 @@
       "revId": "22f51d10952c39c09beb9010b57f2d7675f8bae2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ddd2d62_095e59b5",
+        "filename": "src/java/com/android/internal/telephony/SmsBroadcastUndelivered.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1356080
+      },
+      "writtenOn": "2018-10-10T04:21:08Z",
+      "side": 1,
+      "message": "There is a SmsDispatchersController working for a phone instance, when a SmsDispatchersController  execute one day in-service purge, SMS of all phones will be purged if we do not implement sub_id for raw table.",
+      "parentUuid": "cace7617_d897d7ee",
+      "revId": "22f51d10952c39c09beb9010b57f2d7675f8bae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
