@@ -88,6 +88,29 @@
       "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21e81273_5964f7e2",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2018-10-10T02:10:00Z",
+      "side": 1,
+      "message": "DELETED_FLAG_COLUMN can be 0 for single part message?\nIt will return false after deleteFromRawTable(). Does it mean the deleted message is not delivered to the app yet?",
+      "range": {
+        "startLine": 1232,
+        "startChar": 32,
+        "endLine": 1232,
+        "endChar": 50
+      },
+      "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
