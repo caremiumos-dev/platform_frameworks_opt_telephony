@@ -22,6 +22,30 @@
       "revId": "0fa5073752066dbcb29e7e896d7110d5c37f8972",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af1cf935_543ab154",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/FakeTelephonyProvider.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-10-10T01:44:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a2e005d_e58c27b2",
+      "range": {
+        "startLine": 145,
+        "startChar": 12,
+        "endLine": 145,
+        "endChar": 28
+      },
+      "revId": "0fa5073752066dbcb29e7e896d7110d5c37f8972",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
