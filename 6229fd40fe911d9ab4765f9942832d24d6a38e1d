@@ -135,6 +135,30 @@
       "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de52cf1f_aabf3447",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2018-10-10T09:09:36Z",
+      "side": 1,
+      "message": "Thank you.",
+      "parentUuid": "a411d81f_e0a4034e",
+      "range": {
+        "startLine": 1232,
+        "startChar": 32,
+        "endLine": 1232,
+        "endChar": 50
+      },
+      "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
