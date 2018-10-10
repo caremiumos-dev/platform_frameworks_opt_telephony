@@ -22,6 +22,30 @@
       "revId": "1d7891307357ff05e65265d730ff2aa5de31f579",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5e0b286_a61828d9",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-10T21:22:37Z",
+      "side": 1,
+      "message": "Will do it in a follow up CL? Removing it was an unrelated cleanup anyway.",
+      "parentUuid": "efc910b4_aee0959f",
+      "range": {
+        "startLine": 145,
+        "startChar": 64,
+        "endLine": 145,
+        "endChar": 87
+      },
+      "revId": "1d7891307357ff05e65265d730ff2aa5de31f579",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
