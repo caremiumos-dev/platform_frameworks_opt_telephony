@@ -111,6 +111,30 @@
       "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a411d81f_e0a4034e",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-10T06:31:25Z",
+      "side": 1,
+      "message": "You are correct. Generally that would not happen, but this can happen when the device is still locked. During that time messages are only added to raw table but are not broadcast to apps.",
+      "parentUuid": "21e81273_5964f7e2",
+      "range": {
+        "startLine": 1232,
+        "startChar": 32,
+        "endLine": 1232,
+        "endChar": 50
+      },
+      "revId": "6229fd40fe911d9ab4765f9942832d24d6a38e1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
