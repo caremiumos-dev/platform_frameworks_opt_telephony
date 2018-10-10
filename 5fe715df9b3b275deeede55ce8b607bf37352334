@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10dac529_c12b4979",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-10-10T21:40:08Z",
+      "side": 1,
+      "message": "The original code checks if packageNames is null or empty. Could you add the null \u0026 length checks back in case pacageNames is null or empty?",
+      "revId": "5fe715df9b3b275deeede55ce8b607bf37352334",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

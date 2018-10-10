@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e017aa40_a929a6c8",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-10-10T21:40:08Z",
+      "side": 0,
+      "message": "In case of multiple packageNames returned, isn\u0027t the message persisted only once in the first package? Regardless what the package is. (e.g. either com.android.bluetooth\" or telephony framework)",
+      "revId": "954e4c54d278188ed9d8b9fc9c0f7fa20c788a4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
