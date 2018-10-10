@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7acafb4d_68ad1bab",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1918,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-10-10T18:16:51Z",
+      "side": 1,
+      "message": "using DATA_PROFILE_DEFAULT?",
+      "range": {
+        "startLine": 1918,
+        "startChar": 29,
+        "endLine": 1918,
+        "endChar": 30
+      },
+      "revId": "33c7f38d3c6a87626638d8b01942a14cb1d4d387",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c0dcb45_842c2e66",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2053,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-10-10T18:16:51Z",
+      "side": 1,
+      "message": "during bootup, will this always return empty?",
+      "range": {
+        "startLine": 2053,
+        "startChar": 59,
+        "endLine": 2053,
+        "endChar": 76
+      },
+      "revId": "33c7f38d3c6a87626638d8b01942a14cb1d4d387",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
