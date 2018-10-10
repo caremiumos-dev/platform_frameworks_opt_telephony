@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a963c1a_caf25905",
+        "filename": "src/java/com/android/internal/telephony/SmsBroadcastUndelivered.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-10-10T00:02:08Z",
+      "side": 1,
+      "message": "Please update the comment because we don\u0027t use 30 days as the criteria now.",
+      "range": {
+        "startLine": 185,
+        "startChar": 27,
+        "endLine": 185,
+        "endChar": 91
+      },
+      "revId": "289bac9da308097989852421d30ac405749e3bd1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
