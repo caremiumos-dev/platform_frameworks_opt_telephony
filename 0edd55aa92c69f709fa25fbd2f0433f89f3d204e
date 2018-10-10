@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb7316a0_1f470cb6",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-10-10T21:25:43Z",
+      "side": 1,
+      "message": "This looks like stuff changed, but it didn\u0027t... mostly just whitespace. If you set your diff to ignore all whitespace then suddenly the change is really really small.",
+      "range": {
+        "startLine": 1325,
+        "startChar": 18,
+        "endLine": 1327,
+        "endChar": 21
+      },
+      "revId": "0edd55aa92c69f709fa25fbd2f0433f89f3d204e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
