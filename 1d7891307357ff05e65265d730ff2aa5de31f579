@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efc910b4_aee0959f",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-10-10T21:01:27Z",
+      "side": 1,
+      "message": "Can we also remove this parameter if it\u0027s not used?",
+      "range": {
+        "startLine": 145,
+        "startChar": 64,
+        "endLine": 145,
+        "endChar": 87
+      },
+      "revId": "1d7891307357ff05e65265d730ff2aa5de31f579",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
