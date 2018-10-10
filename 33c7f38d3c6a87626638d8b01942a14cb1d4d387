@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "9f90e948_4d3a2b82",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1918,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-10T21:46:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7acafb4d_68ad1bab",
+      "range": {
+        "startLine": 1918,
+        "startChar": 29,
+        "endLine": 1918,
+        "endChar": 30
+      },
+      "revId": "33c7f38d3c6a87626638d8b01942a14cb1d4d387",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c0dcb45_842c2e66",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 2
@@ -59,6 +83,30 @@
       "writtenOn": "2018-10-10T18:16:51Z",
       "side": 1,
       "message": "during bootup, will this always return empty?",
+      "range": {
+        "startLine": 2053,
+        "startChar": 59,
+        "endLine": 2053,
+        "endChar": 76
+      },
+      "revId": "33c7f38d3c6a87626638d8b01942a14cb1d4d387",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e012a16_c7994f00",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2053,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-10T21:46:06Z",
+      "side": 1,
+      "message": "preferred apn is stored in the db. So it will be available as soon as sub id is available. I tested it several times and can it\u0027s available when we set initial attach apn.",
+      "parentUuid": "9c0dcb45_842c2e66",
       "range": {
         "startLine": 2053,
         "startChar": 59,
