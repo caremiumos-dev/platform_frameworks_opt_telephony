@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eeaf1965_3331fae2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-10-11T00:04:14Z",
+      "side": 0,
+      "message": "any reason to remove this line? it might break VZW PCO test",
+      "range": {
+        "startLine": 719,
+        "startChar": 8,
+        "endLine": 719,
+        "endChar": 88
+      },
+      "revId": "8b29c93756caf0a91f6c7d0ec210875c98caa5ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
