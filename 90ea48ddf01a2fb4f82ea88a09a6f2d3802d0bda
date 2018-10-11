@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "080c1aad_1420f7aa",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-10-11T01:23:20Z",
+      "side": 1,
+      "message": "nit: combine into one if (... \u0026\u0026 ...) ?",
+      "range": {
+        "startLine": 2087,
+        "startChar": 0,
+        "endLine": 2088,
+        "endChar": 83
+      },
+      "revId": "90ea48ddf01a2fb4f82ea88a09a6f2d3802d0bda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
