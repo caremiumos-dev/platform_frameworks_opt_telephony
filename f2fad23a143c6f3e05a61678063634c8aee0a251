@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6dc9f7b0_0ce3db36",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2018-10-11T21:55:31Z",
+      "side": 1,
+      "message": "why are these 0 ? This will break Vzw",
+      "range": {
+        "startLine": 1176,
+        "startChar": 0,
+        "endLine": 1177,
+        "endChar": 25
+      },
+      "revId": "f2fad23a143c6f3e05a61678063634c8aee0a251",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf357e3a_566bf6c8",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2018-10-11T21:55:31Z",
+      "side": 1,
+      "message": "Looks like you have removed maxConnsTime and maxConns ? Vzw needs it and they can configure through OMADM",
+      "revId": "f2fad23a143c6f3e05a61678063634c8aee0a251",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
