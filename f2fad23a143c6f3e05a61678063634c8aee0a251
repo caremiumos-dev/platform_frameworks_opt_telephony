@@ -81,6 +81,24 @@
       "revId": "f2fad23a143c6f3e05a61678063634c8aee0a251",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44747fcb_0a0bffde",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2018-10-11T22:32:20Z",
+      "side": 1,
+      "message": "Is there a communication from QC about this ? I still see these requirements\n\nVZ_REQ_LTEDATARETRY_23899\n\n1.4.5.2.4 UE MAKES EXCESSIVE PDN CONNECTION REQUESTS TO\nTHE NETWORK",
+      "parentUuid": "5ec4a51a_be717aaa",
+      "revId": "f2fad23a143c6f3e05a61678063634c8aee0a251",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
