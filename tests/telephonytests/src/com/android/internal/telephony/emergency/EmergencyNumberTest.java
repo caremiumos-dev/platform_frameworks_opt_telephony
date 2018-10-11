@@ -37,15 +37,20 @@ public class EmergencyNumberTest extends TestCase {
         assertEquals(number.getCountryIso(), "us");
         assertTrue(number.isInEmergencyServiceCategories(
                 EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_UNSPECIFIED));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_POLICE));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AMBULANCE));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE));
-        assertFalse(number.isInEmergencyServiceCategories(
+        assertTrue(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_POLICE));
+        assertTrue(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AMBULANCE));
+        assertTrue(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE));
+        assertTrue(number.isInEmergencyServiceCategories(
                 EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MARINE_GUARD));
-        assertFalse(number.isInEmergencyServiceCategories(
+        assertTrue(number.isInEmergencyServiceCategories(
                 EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MOUNTAIN_RESCUE));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC));
+        assertTrue(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC));
+        assertTrue(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC));
         assertEquals(0, number.getEmergencyServiceCategoryBitmask());
 
         List<Integer> categories = number.getEmergencyServiceCategories();
@@ -78,15 +83,20 @@ public class EmergencyNumberTest extends TestCase {
         assertEquals(number.getCountryIso(), "us");
         assertFalse(number.isInEmergencyServiceCategories(
                 EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_UNSPECIFIED));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_POLICE));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AMBULANCE));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE));
+        assertFalse(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_POLICE));
+        assertFalse(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AMBULANCE));
+        assertFalse(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE));
         assertTrue(number.isInEmergencyServiceCategories(
                 EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MARINE_GUARD));
         assertFalse(number.isInEmergencyServiceCategories(
                 EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MOUNTAIN_RESCUE));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC));
+        assertFalse(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC));
+        assertFalse(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC));
         assertEquals(8, number.getEmergencyServiceCategoryBitmask());
 
         List<Integer> categories = number.getEmergencyServiceCategories();
@@ -126,15 +136,20 @@ public class EmergencyNumberTest extends TestCase {
         assertEquals(number.getCountryIso(), "jp");
         assertFalse(number.isInEmergencyServiceCategories(
                 EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_UNSPECIFIED));
-        assertTrue(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_POLICE));
-        assertTrue(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AMBULANCE));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE));
+        assertTrue(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_POLICE));
+        assertTrue(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AMBULANCE));
+        assertFalse(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE));
         assertFalse(number.isInEmergencyServiceCategories(
                 EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MARINE_GUARD));
         assertFalse(number.isInEmergencyServiceCategories(
                 EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MOUNTAIN_RESCUE));
-        assertTrue(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC));
-        assertFalse(number.isInEmergencyServiceCategories(EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC));
+        assertTrue(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC));
+        assertFalse(number.isInEmergencyServiceCategories(
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC));
         assertEquals(35, number.getEmergencyServiceCategoryBitmask());
 
         List<Integer> categories = number.getEmergencyServiceCategories();
@@ -162,5 +177,41 @@ public class EmergencyNumberTest extends TestCase {
         sourcesToVerify.add(EmergencyNumber.EMERGENCY_NUMBER_SOURCE_DEFAULT);
         Collections.sort(sourcesToVerify);
         assertTrue(sourcesToVerify.equals(sources));
+    }
+
+    public void testEmergencyNumberDisplayPriority() throws Exception {
+        EmergencyNumber numberHighestDisplayPriority = new EmergencyNumber(
+                "911",
+                "us",
+                // EMERGENCY_SERVICE_CATEGORY_UNSPECIFIED
+                0,
+                // EMERGENCY_NUMBER_SOURCE_NETWORK_SIGNALLING
+                1);
+
+        EmergencyNumber numberHigherDisplayPriority = new EmergencyNumber(
+                "922",
+                "us",
+                // EMERGENCY_SERVICE_CATEGORY_POLICE
+                // EMERGENCY_SERVICE_CATEGORY_AMBULANCE
+                // EMERGENCY_SERVICE_CATEGORY_MIEC
+                35,
+                // EMERGENCY_NUMBER_SOURCE_SIM
+                2);
+
+        EmergencyNumber numberLowestDisplayPriority = new EmergencyNumber(
+                "110",
+                "us",
+                // EMERGENCY_SERVICE_CATEGORY_POLICE
+                // EMERGENCY_SERVICE_CATEGORY_AMBULANCE
+                // EMERGENCY_SERVICE_CATEGORY_MIEC
+                35,
+                // EMERGENCY_NUMBER_SOURCE_MODEM_CONFIG
+                // EMERGENCY_NUMBER_SOURCE_DEFAULT
+                12);
+
+        assertTrue(numberHighestDisplayPriority.compareTo(
+                numberHigherDisplayPriority) < 0);
+        assertTrue(numberHigherDisplayPriority.compareTo(
+                numberLowestDisplayPriority) < 0);
     }
 }
