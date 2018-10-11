@@ -57,6 +57,7 @@ import android.os.Process;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.WorkSource;
+import android.provider.Telephony;
 import android.support.test.filters.FlakyTest;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
@@ -208,10 +209,11 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Test
     @MediumTest
     public void testSetRadioPower() {
-        boolean oldState = mSimulatedCommands.getRadioState().isOn();
+        boolean oldState = (mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON);
         sst.setRadioPower(!oldState);
         waitForMs(100);
-        assertTrue(oldState != mSimulatedCommands.getRadioState().isOn());
+        assertTrue(oldState
+                != (mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON));
     }
 
     @Test
@@ -220,21 +222,23 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         // Carrier disable radio power
         sst.setRadioPowerFromCarrier(false);
         waitForMs(100);
-        assertFalse(mSimulatedCommands.getRadioState().isOn());
+        assertFalse(mSimulatedCommands.getRadioState()
+                == TelephonyManager.RADIO_POWER_ON);
         assertTrue(sst.getDesiredPowerState());
         assertFalse(sst.getPowerStateFromCarrier());
 
         // User toggle radio power will not overrides carrier settings
         sst.setRadioPower(true);
         waitForMs(100);
-        assertFalse(mSimulatedCommands.getRadioState().isOn());
+        assertFalse(mSimulatedCommands.getRadioState()
+                == TelephonyManager.RADIO_POWER_ON);
         assertTrue(sst.getDesiredPowerState());
         assertFalse(sst.getPowerStateFromCarrier());
 
         // Carrier re-enable radio power
         sst.setRadioPowerFromCarrier(true);
         waitForMs(100);
-        assertTrue(mSimulatedCommands.getRadioState().isOn());
+        assertTrue(mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON);
         assertTrue(sst.getDesiredPowerState());
         assertTrue(sst.getPowerStateFromCarrier());
 
@@ -242,7 +246,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.setRadioPower(false);
         sst.setRadioPowerFromCarrier(true);
         waitForMs(100);
-        assertFalse(mSimulatedCommands.getRadioState().isOn());
+        assertFalse(mSimulatedCommands.getRadioState()
+                == TelephonyManager.RADIO_POWER_ON);
         assertFalse(sst.getDesiredPowerState());
         assertTrue(sst.getPowerStateFromCarrier());
     }
@@ -1580,7 +1585,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         sst.requestShutdown();
         waitForMs(100);
-        assertFalse(mSimulatedCommands.getRadioState().isAvailable());
+        assertFalse(mSimulatedCommands.getRadioState()
+                != TelephonyManager.RADIO_POWER_UNAVAILABLE);
     }
 
     @Test
@@ -1593,10 +1599,11 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setRadioPowerFailResponse(true);
         sst.setRadioPower(false);
         waitForMs(100);
-        assertTrue(mSimulatedCommands.getRadioState().isOn());
+        assertTrue(mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON);
         sst.requestShutdown();
         waitForMs(100);
-        assertFalse(mSimulatedCommands.getRadioState().isAvailable());
+        assertFalse(mSimulatedCommands.getRadioState()
+                != TelephonyManager.RADIO_POWER_UNAVAILABLE);
     }
 
     @Test
