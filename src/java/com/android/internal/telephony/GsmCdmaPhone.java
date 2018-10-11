@@ -396,14 +396,14 @@ public class GsmCdmaPhone extends Phone {
         onUpdateIccAvailability();
         mCT.updatePhoneType();
 
-        CommandsInterface.RadioState radioState = mCi.getRadioState();
-        if (radioState.isAvailable()) {
+        int radioState = mCi.getRadioState();
+        if (radioState != TelephonyManager.RADIO_POWER_UNAVAILABLE) {
             handleRadioAvailable();
-            if (radioState.isOn()) {
+            if (radioState == TelephonyManager.RADIO_POWER_ON) {
                 handleRadioOn();
             }
         }
-        if (!radioState.isAvailable() || !radioState.isOn()) {
+        if (radioState != TelephonyManager.RADIO_POWER_ON) {
             handleRadioOffOrNotAvailable();
         }
     }
@@ -3354,7 +3354,7 @@ public class GsmCdmaPhone extends Phone {
 
         boolean oldPowerState = false; // old power state to off
         if (mResetModemOnRadioTechnologyChange) {
-            if (mCi.getRadioState().isOn()) {
+            if (mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON) {
                 oldPowerState = true;
                 logd("phoneObjectUpdater: Setting Radio Power to Off");
                 mCi.setRadioPower(false, null);

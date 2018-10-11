@@ -3317,17 +3317,24 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
+     * @return returns the latest radio state from the modem
+     */
+    public int getRadioPowerState() {
+        return mCi.getRadioState();
+    }
+
+    /**
      * Is Radio Present on the device and is it accessible
      */
     public boolean isRadioAvailable() {
-        return mCi.getRadioState().isAvailable();
+        return mCi.getRadioState() != TelephonyManager.RADIO_POWER_UNKNOWN;
     }
 
     /**
      * Is Radio turned on
      */
     public boolean isRadioOn() {
-        return mCi.getRadioState().isOn();
+        return mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON;
     }
 
     /**
