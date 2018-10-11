@@ -22,6 +22,30 @@
       "revId": "8b29c93756caf0a91f6c7d0ec210875c98caa5ea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee53ca08_f49e37c4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-11T00:35:48Z",
+      "side": 0,
+      "message": "it\u0027s a redundant one so can be removed.",
+      "parentUuid": "eeaf1965_3331fae2",
+      "range": {
+        "startLine": 719,
+        "startChar": 8,
+        "endLine": 719,
+        "endChar": 88
+      },
+      "revId": "8b29c93756caf0a91f6c7d0ec210875c98caa5ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
