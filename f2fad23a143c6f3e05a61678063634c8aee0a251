@@ -99,6 +99,24 @@
       "revId": "f2fad23a143c6f3e05a61678063634c8aee0a251",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fcc2b7f_2ac5c069",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2018-10-11T22:46:44Z",
+      "side": 1,
+      "message": "I sent an email to Shalin to clarify the same.. could you pls hold the CL till that?",
+      "parentUuid": "44747fcb_0a0bffde",
+      "revId": "f2fad23a143c6f3e05a61678063634c8aee0a251",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
