@@ -22,6 +22,7 @@ import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -29,6 +30,7 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.Settings;
 import android.sysprop.TelephonyProperties;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
@@ -41,6 +43,7 @@ import android.text.TextUtils;
 import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.app.LocalePicker;
 import com.android.internal.telephony.MccTable.MccMnc;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.IndentingPrintWriter;
@@ -129,6 +132,7 @@ public class LocaleTracker extends Handler {
     private String mTag;
 
     private final Phone mPhone;
+    private final ContentResolver mCr;
 
     private final NitzStateMachine mNitzStateMachine;
 
@@ -255,6 +259,8 @@ public class LocaleTracker extends Handler {
 
         mPhone.registerForServiceStateChanged(this, EVENT_SERVICE_STATE_CHANGED, null);
         mPhone.registerForCellInfo(this, EVENT_UNSOL_CELL_INFO, null);
+
+        mCr = mPhone.getContext().getContentResolver();
     }
 
     private @NonNull String getCarrierCountry() {
@@ -616,6 +622,13 @@ public class LocaleTracker extends Handler {
             mNitzStateMachine.handleCountryUnavailable();
         } else {
             mNitzStateMachine.handleCountryDetected(timeZoneCountryIso);
+            if (Settings.Global.getInt(mCr, Settings.Global.DEVICE_PROVISIONED, 1) == 0) {
+                final Locale locale = mPhone.mContext.getResources().getConfiguration()
+                        .getLocales().get(0);
+                final String lang = locale.getLanguage().isEmpty() ? "en" : locale.getLanguage();
+                // Set system locale's country if Setup Wizard hasn't run yet
+                LocalePicker.updateLocale(new Locale(lang, countryIso.toUpperCase()));
+            }
         }
     }
 
