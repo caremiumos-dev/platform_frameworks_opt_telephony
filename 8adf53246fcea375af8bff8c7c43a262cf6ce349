@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c5f8b44_a5bdca43",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-12T06:05:01Z",
+      "side": 1,
+      "message": "typo\n\nAlso ideally you want the basic description to be just on one line. In certain cases only the first line is visible so we prefer that to be a short summary.",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "8adf53246fcea375af8bff8c7c43a262cf6ce349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "388ad63a_b1d99829",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-12T06:05:01Z",
+      "side": 1,
+      "message": "Not needed I think.",
+      "revId": "8adf53246fcea375af8bff8c7c43a262cf6ce349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d12f5cf6_c222db89",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-12T06:05:01Z",
+      "side": 1,
+      "message": "whether?",
+      "range": {
+        "startLine": 703,
+        "startChar": 31,
+        "endLine": 703,
+        "endChar": 36
+      },
+      "revId": "8adf53246fcea375af8bff8c7c43a262cf6ce349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbf40fd7_8146664e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-12T06:05:01Z",
+      "side": 1,
+      "message": "device",
+      "range": {
+        "startLine": 703,
+        "startChar": 62,
+        "endLine": 703,
+        "endChar": 73
+      },
+      "revId": "8adf53246fcea375af8bff8c7c43a262cf6ce349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a096571d_bccbed5d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-12T06:05:01Z",
+      "side": 1,
+      "message": "is supported by the device",
+      "range": {
+        "startLine": 705,
+        "startChar": 28,
+        "endLine": 705,
+        "endChar": 69
+      },
+      "revId": "8adf53246fcea375af8bff8c7c43a262cf6ce349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e82ffec5_e5809dd7",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-12T06:05:01Z",
+      "side": 1,
+      "message": "Why does this have to be static?",
+      "revId": "8adf53246fcea375af8bff8c7c43a262cf6ce349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6690dafc_6dfa3843",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-12T06:05:01Z",
+      "side": 1,
+      "message": "Use mContext instead.",
+      "range": {
+        "startLine": 963,
+        "startChar": 51,
+        "endLine": 963,
+        "endChar": 68
+      },
+      "revId": "8adf53246fcea375af8bff8c7c43a262cf6ce349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
