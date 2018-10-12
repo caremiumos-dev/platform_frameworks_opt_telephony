@@ -115,7 +115,7 @@ public class UiccController extends Handler {
     private UiccSlot[] mUiccSlots;
     private int[] mPhoneIdToSlotId;
     private boolean mIsSlotStatusSupported = true;
-    private boolean mIsCdmaSupported = true;
+    private boolean mIsCdmaSupported;
 
     private static final Object mLock = new Object();
     private static UiccController mInstance;
@@ -125,7 +125,6 @@ public class UiccController extends Handler {
 
     protected RegistrantList mIccChangedRegistrants = new RegistrantList();
 
-    private UiccStateChangedLauncher mLauncher;
     private RadioConfig mRadioConfig;
 
     // LocalLog buffer to hold important SIM related events for debugging
@@ -181,8 +180,6 @@ public class UiccController extends Handler {
             mCis[i].registerForNotAvailable(this, EVENT_RADIO_UNAVAILABLE, i);
             mCis[i].registerForIccRefresh(this, EVENT_SIM_REFRESH, i);
         }
-
-        mLauncher = new UiccStateChangedLauncher(c, this);
 
         // set mIsCdmaSupported based on PackageManager.FEATURE_TELEPHONY_CDMA
         PackageManager packageManager = c.getPackageManager();
@@ -702,8 +699,16 @@ public class UiccController extends Handler {
         mCis[index].getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE, index));
     }
 
-    public boolean isCdmaSupported() {
-        return mIsCdmaSupported;
+    /**
+     * static method to return where CDMA is supported on the application
+     * @param context object representative of the application that is calling this method
+     * @return true if CDMA feature is set on the application context
+     */
+    public static boolean isCdmaSupported(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        boolean isCdmaSupported =
+                packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY_CDMA);
+        return isCdmaSupported;
     }
 
     private boolean isValidPhoneIndex(int index) {

@@ -890,6 +890,10 @@ public class UiccCardApplication {
         return mUiccProfile;
     }
 
+    protected Context getmContext() {
+        return mContext;
+    }
+
     private void log(String msg) {
         Rlog.d(LOG_TAG, msg);
     }
