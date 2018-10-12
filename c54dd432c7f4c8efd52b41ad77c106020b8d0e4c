@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "491632e1_4994cfe8",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-10-12T23:40:38Z",
+      "side": 1,
+      "message": "does it even make sense to do this here if we\u0027re going to do it onSubscriptionsChanged?",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 0
+      },
+      "revId": "c54dd432c7f4c8efd52b41ad77c106020b8d0e4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
