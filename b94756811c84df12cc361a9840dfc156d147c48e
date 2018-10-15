@@ -22,6 +22,30 @@
       "revId": "b94756811c84df12cc361a9840dfc156d147c48e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "263f3cdc_134df4f7",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/euicc/EuiccCardTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2018-10-15T23:35:42Z",
+      "side": 1,
+      "message": "It touches the sign bit. Java won\u0027t compile without this cast.",
+      "parentUuid": "e5141341_553d0b7b",
+      "range": {
+        "startLine": 991,
+        "startChar": 46,
+        "endLine": 991,
+        "endChar": 52
+      },
+      "revId": "b94756811c84df12cc361a9840dfc156d147c48e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
