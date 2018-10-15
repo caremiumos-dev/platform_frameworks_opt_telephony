@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c3563d8_de91eeda",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-15T23:24:08Z",
+      "side": 1,
+      "message": "no RadioState anymore",
+      "range": {
+        "startLine": 795,
+        "startChar": 27,
+        "endLine": 795,
+        "endChar": 37
+      },
+      "revId": "9f65aec67dfcd914de6286b9b590a3bebe362447",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90444313_88ef8fd1",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-15T23:24:08Z",
+      "side": 1,
+      "message": "adding annotation",
+      "range": {
+        "startLine": 799,
+        "startChar": 36,
+        "endLine": 799,
+        "endChar": 37
+      },
+      "revId": "9f65aec67dfcd914de6286b9b590a3bebe362447",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ee3e5ca_ef813ab3",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-15T23:24:08Z",
+      "side": 1,
+      "message": "Adding @TelephonyManager.RadioState",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 24
+      },
+      "revId": "9f65aec67dfcd914de6286b9b590a3bebe362447",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
