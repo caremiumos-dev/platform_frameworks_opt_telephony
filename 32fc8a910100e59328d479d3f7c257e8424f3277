@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec30506f_96738cf2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4030,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-10-15T20:46:08Z",
+      "side": 0,
+      "message": "This doesn\u0027t check if it is MSIM or SS any more. What if it\u0027s the case of MSIM and dds still connected? Shouldn\u0027t it wait for 30 sec?",
+      "range": {
+        "startLine": 4029,
+        "startChar": 28,
+        "endLine": 4030,
+        "endChar": 81
+      },
+      "revId": "32fc8a910100e59328d479d3f7c257e8424f3277",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
