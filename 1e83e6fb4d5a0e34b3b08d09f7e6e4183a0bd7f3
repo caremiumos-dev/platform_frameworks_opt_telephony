@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1958609_00620444",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-15T17:45:55Z",
+      "side": 1,
+      "message": "Get rid of mIsCdmaSupported",
+      "revId": "1e83e6fb4d5a0e34b3b08d09f7e6e4183a0bd7f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73102695_f944b783",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccProfileTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-15T17:45:55Z",
+      "side": 1,
+      "message": "I believe there is a subtle difference between doReturn().when() and when().thenReturn() and we use the former in most if not all places. Is there a reason you chose the latter?",
+      "revId": "1e83e6fb4d5a0e34b3b08d09f7e6e4183a0bd7f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1eee65e5_45ae6776",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-15T17:45:55Z",
+      "side": 0,
+      "message": "Leave this as is. It looks like it is not used, but this is used only to instantiate the object, and it does something on its own later.",
+      "revId": "8b29c93756caf0a91f6c7d0ec210875c98caa5ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
