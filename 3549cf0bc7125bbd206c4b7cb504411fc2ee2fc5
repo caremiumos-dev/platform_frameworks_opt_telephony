@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fcd1af9_da831b08",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-10-16T23:11:29Z",
+      "side": 1,
+      "message": "this is a rather strange pattern to try all the casts and then do the guess-and-check below.\n\nCan you try each case and then proceed only if the next one is unsuccessful?",
+      "range": {
+        "startLine": 1247,
+        "startChar": 2,
+        "endLine": 1258,
+        "endChar": 78
+      },
+      "revId": "3549cf0bc7125bbd206c4b7cb504411fc2ee2fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
