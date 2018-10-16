@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a8621c3_0101c61f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-16T05:30:43Z",
+      "side": 1,
+      "message": "Delete comment",
+      "revId": "d3aba8d6d2aaf50e7d45224d37cc6b066f35237a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07602afc_3e1f7aa6",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccProfileTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-16T05:30:43Z",
+      "side": 1,
+      "message": "This is already done through TelephonyTest and ContextFixture.",
+      "range": {
+        "startLine": 555,
+        "startChar": 8,
+        "endLine": 555,
+        "endChar": 69
+      },
+      "revId": "d3aba8d6d2aaf50e7d45224d37cc6b066f35237a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
