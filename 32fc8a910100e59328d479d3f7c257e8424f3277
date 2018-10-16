@@ -22,6 +22,30 @@
       "revId": "32fc8a910100e59328d479d3f7c257e8424f3277",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "266fb459_84c107e2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4030,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-10-16T02:19:28Z",
+      "side": 0,
+      "message": "Hi Youming,\n\non MSIM device, the power status of both SUBs is isolated, we can make power off as per its own data connected state, and currently, due bot SUBs might have IMS connection, so not need to check DDS sub for making power off on non-DDS sub.\n\nin SS mode, this modification does not impact the original behavior.\n\nin MSIM mode, we should expect making power off in time for non-DDS sub when its data is disconnected and the data of DDS sub is connected.",
+      "parentUuid": "ec30506f_96738cf2",
+      "range": {
+        "startLine": 4029,
+        "startChar": 28,
+        "endLine": 4030,
+        "endChar": 81
+      },
+      "revId": "32fc8a910100e59328d479d3f7c257e8424f3277",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
