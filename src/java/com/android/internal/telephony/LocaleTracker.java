@@ -46,6 +46,9 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.app.LocalePicker;
 import com.android.internal.util.IndentingPrintWriter;
 
+import libcore.util.CountryTimeZones;
+import libcore.util.TimeZoneFinder;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -421,6 +424,18 @@ public class LocaleTracker extends Handler {
 
                 // Set system locale's country if Setup Wizard hasn't run yet
                 LocalePicker.updateLocale(new Locale(lang, countryIso.toUpperCase()));
+
+                final CountryTimeZones tz = TimeZoneFinder.getInstance()
+                        .lookupCountryTimeZones(countryIso);
+
+                // Set system timezone, default zone for the big countries with several
+                // different timezones is a better choice than GMT
+                if (tz != null) {
+                    final String zoneId = tz.getDefaultTimeZoneId();
+                    if (!TextUtils.isEmpty(zoneId)) {
+                        NewTimeServiceHelper.setDeviceTimeZoneStatic(mPhone.getContext(), zoneId);
+                    }
+                }
             }
         }
     }
