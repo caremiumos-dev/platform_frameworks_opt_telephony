@@ -19,6 +19,7 @@ package com.android.internal.telephony;
 import android.content.Context;
 import android.os.PowerManager;
 import android.telephony.Rlog;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.LocalLog;
 import android.util.TimestampedValue;
@@ -196,6 +197,9 @@ public final class NewNitzStateMachine implements NitzStateMachine {
 
                 zoneId = null;
             } else {
+                isoCountryCode = checkIsoCountryCodeForNitz(
+                        TelephonyManager.from(mPhone.getContext())
+                        .getNetworkOperatorForPhone(mPhone.getPhoneId()), isoCountryCode);
                 OffsetResult lookupResult = mTimeZoneLookupHelper.lookupByNitzCountry(
                         nitzData, isoCountryCode);
                 if (DBG) {
@@ -486,6 +490,33 @@ public final class NewNitzStateMachine implements NitzStateMachine {
     @Override
     public String getSavedTimeZoneId() {
         return mSavedTimeZoneId;
+    }
+
+    /**
+     * Returns the country code for NITZ.
+     *
+     * @param operatorNumeric the numeric name (MCC+MNC) of current registered operator.
+     * @param isoCountryCode Country code from network MCC.
+     * @return Country code
+     * If network is specific area which has mismatch between NetworkCountryIso
+     * and actual NITZ(Timezone), it's converted value based on resource table.
+     * Otherwise, return original country code.
+     */
+    private String checkIsoCountryCodeForNitz(String operatorNumeric, String isoCountryCode) {
+        String[] convertIsoConfig = mPhone.getContext().getResources().getStringArray(
+                com.android.internal.R.array.config_convert_iso_country_code);
+
+        // Check operatorNumeric whether it's specific area which has mismatch
+        // between NetworkCountryIso and actual NITZ(Timezone).
+        for (String config : convertIsoConfig) {
+            String[] element = config.split(",");
+            if (element.length == 2) {
+                if (operatorNumeric.equals(element[0])) {
+                    return element[1];
+                }
+            }
+        }
+        return isoCountryCode;
     }
 
 }
