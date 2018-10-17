@@ -943,9 +943,26 @@ public abstract class InboundSmsHandler extends StateMachine {
     private boolean processMessagePartWithUserLocked(InboundSmsTracker tracker,
             byte[][] pdus, int destPort, SmsBroadcastReceiver resultReceiver) {
         log("Credential-encrypted storage not available. Port: " + destPort);
-        if (destPort == SmsHeader.PORT_WAP_PUSH && mWapPush.isWapPushForMms(pdus[0], this)) {
-            showNewMessageNotification();
-            return false;
+        if (destPort == SmsHeader.PORT_WAP_PUSH) {
+            // Build up the data stream
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            for (byte[] pdu : pdus) {
+                // 3GPP needs to extract the User Data from the PDU; 3GPP2 has already done this
+                if (!tracker.is3gpp2()) {
+                    SmsMessage msg = SmsMessage.createFromPdu(pdu, SmsConstants.FORMAT_3GPP);
+                    if (msg != null) {
+                        pdu = msg.getUserData();
+                    } else {
+                        loge("SmsMessage.createFromPdu returned null");
+                        return false;
+                    }
+                }
+                output.write(pdu, 0, pdu.length);
+            }
+            if (mWapPush.isWapPushForMms(output.toByteArray(), this)) {
+                showNewMessageNotification();
+                return false;
+            }
         }
         if (destPort == -1) {
             // This is a regular SMS - hand it to the carrier or system app for filtering.
