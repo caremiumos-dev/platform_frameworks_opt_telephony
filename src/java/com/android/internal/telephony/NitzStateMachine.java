@@ -134,7 +134,7 @@ public interface NitzStateMachine {
         }
 
         public String getNetworkCountryIsoForPhone() {
-            return mTelephonyManager.getNetworkCountryIsoForPhone(mPhone.getPhoneId());
+            return mTelephonyManager.getNetworkCountryIsoForNitz(mPhone.getPhoneId());
         }
     }
 }
