@@ -1,0 +1,11 @@
+Verified+1: Andy Chou <andychou@google.com>
+Code-Review+1: Andy Chou <andychou@google.com>
+Code-Review+2: Ian Kasprzak <iankaz@google.com>
+Code-Review+2: Pengquan Meng <mpq@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Autosubmit+1: Mavis Hsu <mavishsu@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Wed, 17 Oct 2018 06:28:22 +0000
+Reviewed-on: https://android-review.googlesource.com/779556
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
