@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67f8cd6e_d18b5502",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/emergency/EmergencyNumberTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-10-17T01:02:03Z",
+      "side": 1,
+      "message": "why did these change from false to true?",
+      "range": {
+        "startLine": 40,
+        "startChar": 14,
+        "endLine": 40,
+        "endChar": 18
+      },
+      "revId": "963ea6da0b1938a0ac996d0e5192ee44d96e81ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0912e80b_a47f2011",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/emergency/EmergencyNumberTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-10-17T01:02:03Z",
+      "side": 1,
+      "message": "Any reason you can\u0027t use the constants themselves instead of leaving a comment with the constant?",
+      "range": {
+        "startLine": 188,
+        "startChar": 19,
+        "endLine": 188,
+        "endChar": 61
+      },
+      "revId": "963ea6da0b1938a0ac996d0e5192ee44d96e81ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d67367ba_527e45c2",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/emergency/EmergencyNumberTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-10-17T01:02:03Z",
+      "side": 1,
+      "message": "why not just numberHigherDisplayPriority \u003c numberHighestDisplayPriority?",
+      "range": {
+        "startLine": 212,
+        "startChar": 19,
+        "endLine": 213,
+        "endChar": 48
+      },
+      "revId": "963ea6da0b1938a0ac996d0e5192ee44d96e81ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
