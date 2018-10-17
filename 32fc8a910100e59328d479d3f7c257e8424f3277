@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "4a7db01e_74511d29",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4030,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-10-17T06:03:23Z",
+      "side": 0,
+      "message": "..\ndcTracker.isDisconnected() is checking if its own Sub has data connections,\nmeans it checks data connection status of DDS sub in DDS SUB phone instance, else check for non-dds SUB, every phone instance has its own dcTracker instance.\n\nin cases of power off, the same logic is used to both SUB. each SUBs are isolated\n\nin ss mode, dds \u003d\u003d mPhone.getSubId is always true in the single own phone instance, so no impact.\n\nin MSIM mode, in non-DDS case, we do not need to check if DDS sub has data connections,\nas per itself\u0027s data connected state to make power off in time, for example, IMS connection is there in 7 + 7 platform.\n\nin earlier 7 + 5/ 7 +1 platform, generally, just DDS has default data connection and IMS connection. even though other demand PDN connections are there, i think we do not check DDS data connection to determine how to make power off.\nbecause both SUB are independent, so we can determine if power off can be sent out as per its own data connection state.\n\n1) phone.SubId !\u003d dds (non-dds)\n2) data is disconnected (dcTracker.isDisconnected, of mPhone.subId)\n3) data of dds still connected.  (!ProxyController.getInstance().isDataDisconnected(dds))\n\nin above conditions, will enter into else case, but previous change just checks its own data connection status in Line#4042 (return false, not 3) anymore), so that needs to wait 30s\n\n\ntake this change, we can see simple code logic to be easy for understanding from Telephony",
+      "parentUuid": "67654a3a_9d27f01c",
+      "range": {
+        "startLine": 4029,
+        "startChar": 28,
+        "endLine": 4030,
+        "endChar": 81
+      },
+      "revId": "32fc8a910100e59328d479d3f7c257e8424f3277",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ccb510c_31dba3d8",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 3
@@ -93,6 +117,30 @@
       "revId": "32fc8a910100e59328d479d3f7c257e8424f3277",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "738465f2_03a58f17",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4032,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-10-17T06:03:23Z",
+      "side": 0,
+      "message": "if its own data is disconnected, not need to invoke any data connections",
+      "parentUuid": "3ccb510c_31dba3d8",
+      "range": {
+        "startLine": 4032,
+        "startChar": 20,
+        "endLine": 4032,
+        "endChar": 83
+      },
+      "revId": "32fc8a910100e59328d479d3f7c257e8424f3277",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
