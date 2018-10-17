@@ -1,0 +1,108 @@
+diff --git a/src/java/com/android/internal/telephony/LocaleTracker.java b/src/java/com/android/internal/telephony/LocaleTracker.java
+old mode 100644
+new mode 100755
+index a18e90f..dcb503f
+--- a/src/java/com/android/internal/telephony/LocaleTracker.java
++++ b/src/java/com/android/internal/telephony/LocaleTracker.java
+@@ -77,6 +77,9 @@ public class LocaleTracker extends Handler {
+     /** The delay for periodically getting cell info from the modem */
+     private static final long CELL_INFO_PERIODIC_POLLING_DELAY_MS = 10 * MINUTE_IN_MILLIS;
+ 
++    /** The max fail count, avoid to beyond Long.MAX_VALUE */
++    private static final int MAX_FAIL_COUNT = 30;
++
+     private final Phone mPhone;
+ 
+     /** SIM card state. Must be one of TelephonyManager.SIM_STATE_XXX */
+@@ -306,6 +309,11 @@ public class LocaleTracker extends Handler {
+      */
+     private long getCellInfoDelayTime(int failCount) {
+         // Exponentially grow the delay time
++        // Avoid "delay" to beyond Long.MAX_VALUE, clear the count.
++        if (failCount >= MAX_FAIL_COUNT) {
++            failCount = MAX_FAIL_COUNT;
++            mFailCellInfoCount = 0;
++        }
+         long delay = CELL_INFO_MIN_DELAY_MS * (long) Math.pow(2, failCount - 1);
+         if (delay < CELL_INFO_MIN_DELAY_MS) {
+             delay = CELL_INFO_MIN_DELAY_MS;
+@@ -329,7 +337,7 @@ public class LocaleTracker extends Handler {
+      */
+     private void getCellInfo() {
+         String msg;
+-        if (!mPhone.getServiceStateTracker().getDesiredPowerState()) {
++        if (mPhone.mCi.getRadioState() == CommandsInterface.RadioState.RADIO_OFF) {
+             msg = "Radio is off. Stopped cell info retry. Cleared the previous cached cell info.";
+             if (mCellInfo != null) mCellInfo.clear();
+             if (DBG) log(msg);
+diff --git a/tests/telephonytests/AndroidManifest.xml b/tests/telephonytests/AndroidManifest.xml
+index 35ed2fb..9131ec1 100644
+--- a/tests/telephonytests/AndroidManifest.xml
++++ b/tests/telephonytests/AndroidManifest.xml
+@@ -40,4 +40,7 @@
+     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"/>
+     <uses-permission android:name="android.permission.BIND_TELEPHONY_NETWORK_SERVICE"/>
+     <uses-permission android:name="android.permission.BIND_TELEPHONY_DATA_SERVICE" />
++    <uses-sdk
++        android:minSdkVersion="24"
++        android:targetSdkVersion="26" />
+ </manifest>
+diff --git a/tests/telephonytests/src/com/android/internal/telephony/LocaleTrackerTest.java b/tests/telephonytests/src/com/android/internal/telephony/LocaleTrackerTest.java
+old mode 100644
+new mode 100755
+index 02f78ab..04f9259
+--- a/tests/telephonytests/src/com/android/internal/telephony/LocaleTrackerTest.java
++++ b/tests/telephonytests/src/com/android/internal/telephony/LocaleTrackerTest.java
+@@ -37,6 +37,7 @@ import org.junit.After;
+ import org.junit.Before;
+ import org.junit.Test;
+ 
++import java.lang.reflect.Method;
+ import java.util.Arrays;
+ 
+ public class LocaleTrackerTest extends TelephonyTest {
+@@ -181,4 +182,44 @@ public class LocaleTrackerTest extends TelephonyTest {
+         assertEquals(US_COUNTRY_CODE, mLocaleTracker.getCurrentCountry());
+         verify(mWifiManager).setCountryCode(US_COUNTRY_CODE);
+     }
++
++    @Test
++    @SmallTest
++    public void testGetCellInfoDelayTime() throws Exception {
++        logd("testLocaleTracker");
++        long delay = getCellInfoDelayTime(0);
++        assertEquals(CELL_INFO_MIN_DELAY_MS, delay);
++        delay = getCellInfoDelayTime(100);
++        assertEquals(CELL_INFO_MAX_DELAY_MS, delay);
++    }
++
++    @Test
++    @SmallTest
++    public void test1() {
++        for (int i = 0; i < 100; i ++) {
++            logd("i =" + i + "res =" + getCellInfoDelayTime2(i));
++        }
++    }
++
++    private static final long CELL_INFO_MIN_DELAY_MS = 2 * 1000;
++    private static final long CELL_INFO_MAX_DELAY_MS = 10 * 1000 * 60;
++    private long getCellInfoDelayTime2(int failCount) {
++        // Exponentially grow the delay time
++        long delay = CELL_INFO_MIN_DELAY_MS * (long) Math.pow(2, failCount - 1);
++        logd("failCount = " + failCount + ", delay = " + delay);
++        if (delay < CELL_INFO_MIN_DELAY_MS) {
++            delay = CELL_INFO_MIN_DELAY_MS;
++        } else if (delay > CELL_INFO_MAX_DELAY_MS) {
++            delay = CELL_INFO_MAX_DELAY_MS;
++        }
++        return delay;
++    }
++
++    private long getCellInfoDelayTime(int failCount) throws Exception {
++        Class[] cArgs = new Class[1];
++        cArgs[0] = long.class;
++        Method method = LocaleTracker.class.getDeclaredMethod("getCellInfoDelayTime", cArgs);
++        method.setAccessible(true);
++        return (long) method.invoke(mLocaleTracker, failCount);
++    }
+ }
