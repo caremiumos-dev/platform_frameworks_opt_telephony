@@ -39,6 +39,30 @@
       "revId": "c54dd432c7f4c8efd52b41ad77c106020b8d0e4c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebb0337c_028d8a0c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-10-18T06:31:45Z",
+      "side": 1,
+      "message": "yes, if sub is ready, later get carrier config ready then, it works",
+      "parentUuid": "491632e1_4994cfe8",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 0
+      },
+      "revId": "c54dd432c7f4c8efd52b41ad77c106020b8d0e4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
