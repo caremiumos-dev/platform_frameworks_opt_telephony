@@ -3289,6 +3289,9 @@ public class ServiceStateTracker extends Handler {
             case NetworkRegistrationState.REG_STATE_ROAMING:
                 return ServiceState.STATE_IN_SERVICE;
             default:
+                if (mEmergencyOnly) {
+                    return ServiceState.STATE_EMERGENCY_ONLY;
+                }
                 return ServiceState.STATE_OUT_OF_SERVICE;
         }
     }
