@@ -16,8 +16,6 @@
 
 package com.android.internal.telephony.uicc;
 
-import java.util.ArrayList;
-
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,6 +23,8 @@ import android.os.Message;
 import android.telephony.Rlog;
 
 import com.android.internal.telephony.uicc.IccConstants;
+
+import java.util.ArrayList;
 
 public class AdnRecordLoader extends Handler {
     final static String LOG_TAG = "AdnRecordLoader";
@@ -241,8 +241,8 @@ public class AdnRecordLoader extends Handler {
                         // dialable anyway. Do not throw exception here otherwise the rest
                         // of the good records will be dropped.
 
-                        Rlog.e(LOG_TAG, "Failed to read ext record. Clear the number now.");
-                        adn.setNumber("");
+                        Rlog.e(LOG_TAG, "Failed to read ext record. Do Not clear the number.");
+                        //adn.setNumber("");
                     }
 
                     mPendingExtLoads--;

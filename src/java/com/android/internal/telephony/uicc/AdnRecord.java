@@ -318,9 +318,8 @@ public class AdnRecord implements Parcelable {
             int numberLength = 0xff & record[footerOffset];
 
             if (numberLength > MAX_NUMBER_SIZE_BYTES) {
-                // Invalid number length
-                mNumber = "";
-                return;
+                // MAX number length
+                numberLength = MAX_NUMBER_SIZE_BYTES;
             }
 
             // Please note 51.011 10.5.1:
