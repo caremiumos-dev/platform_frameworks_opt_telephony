@@ -24,7 +24,6 @@ import android.content.Context;
 import android.hardware.radio.V1_0.RadioResponseInfo;
 import android.hardware.radio.V1_0.RadioResponseType;
 import android.hardware.radio.config.V1_0.IRadioConfig;
-import android.hardware.radio.config.V1_0.SimSlotStatus;
 import android.net.ConnectivityManager;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -34,6 +33,7 @@ import android.os.Registrant;
 import android.os.RemoteException;
 import android.os.WorkSource;
 import android.telephony.Rlog;
+import android.text.TextUtils;
 import android.util.SparseArray;
 
 import com.android.internal.telephony.uicc.IccSlotStatus;
@@ -317,9 +317,27 @@ public class RadioConfig extends Handler {
     }
 
     static ArrayList<IccSlotStatus> convertHalSlotStatus(
-            ArrayList<SimSlotStatus> halSlotStatusList) {
+            ArrayList<android.hardware.radio.config.V1_0.SimSlotStatus> halSlotStatusList) {
         ArrayList<IccSlotStatus> response = new ArrayList<IccSlotStatus>(halSlotStatusList.size());
-        for (SimSlotStatus slotStatus : halSlotStatusList) {
+        for (android.hardware.radio.config.V1_0.SimSlotStatus slotStatus : halSlotStatusList) {
+            IccSlotStatus iccSlotStatus = new IccSlotStatus();
+            iccSlotStatus.setCardState(slotStatus.cardState);
+            iccSlotStatus.setSlotState(slotStatus.slotState);
+            iccSlotStatus.logicalSlotIndex = slotStatus.logicalSlotId;
+            iccSlotStatus.atr = slotStatus.atr;
+            iccSlotStatus.iccid = slotStatus.iccid;
+            if (!TextUtils.isEmpty(eid)) {
+                iccSlotStatus.eid = slotStatus.eid;
+            }
+            response.add(iccSlotStatus);
+        }
+        return response;
+    }
+
+    static ArrayList<IccSlotStatus> convertHalSlotStatus_1_1(
+            ArrayList<android.hardware.radio.config.V1_1.SimSlotStatus> halSlotStatusList) {
+        ArrayList<IccSlotStatus> response = new ArrayList<IccSlotStatus>(halSlotStatusList.size());
+        for (android.hardware.radio.config.V1_1.SimSlotStatus slotStatus : halSlotStatusList) {
             IccSlotStatus iccSlotStatus = new IccSlotStatus();
             iccSlotStatus.setCardState(slotStatus.cardState);
             iccSlotStatus.setSlotState(slotStatus.slotState);
