@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81bdf1c8_66aa5056",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-10-19T23:01:08Z",
+      "side": 1,
+      "message": "nit: for legacy mode, all data requests go to cellelur data service, maybe a breif description where data goes for non-legacy mode as well?",
+      "range": {
+        "startLine": 49,
+        "startChar": 90,
+        "endLine": 50,
+        "endChar": 11
+      },
+      "revId": "ceb130fa4674945c741a95501238d7144ce9853e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e2175da_00ad9456",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-10-19T23:01:08Z",
+      "side": 1,
+      "message": "nit: @link CarrierConfigManager#KEY\n\nbtw, why there is three resource config and only one carrier config?",
+      "range": {
+        "startLine": 51,
+        "startChar": 10,
+        "endLine": 51,
+        "endChar": 83
+      },
+      "revId": "ceb130fa4674945c741a95501238d7144ce9853e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
