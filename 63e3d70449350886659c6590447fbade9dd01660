@@ -22,6 +22,29 @@
       "revId": "63e3d70449350886659c6590447fbade9dd01660",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5024076e_81c25b0d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2018-10-21T01:47:07Z",
+      "side": 1,
+      "message": "I dont see the implementation of this API. Can you point me to the implementation of this API?\n\nAlso, is there any place where the spec reference for the following comment that was present in PS5\n\n\n        \"//As per 3GPP TS 29002 MAP Specification : Section 17.7.10, the BearerServiceCode for\n        //\"allDataCircuitAsynchronous\" is \u002701010000\u0027 ( i.e. 80).\n        //Hence, SERVICE_CLASS_DATA_SYNC (1\u003c\u003c4) and SERVICE_CLASS_PACKET (1\u003c\u003c6)\n        //together make video service class.\"",
+      "range": {
+        "startLine": 1313,
+        "startChar": 35,
+        "endLine": 1313,
+        "endChar": 50
+      },
+      "revId": "63e3d70449350886659c6590447fbade9dd01660",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
