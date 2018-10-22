@@ -201,6 +201,12 @@ public class UiccSlot extends Handler {
     }
 
     public boolean isStateUnknown() {
+        if (mCardState == CardState.CARDSTATE_PRESENT && mUiccCard == null) {
+            // It is possible that the new card state 'PRESENT' is notified
+            // but new ICC state is not notified yet.
+            // 'UNKNOWN' is the appropriate state in that scenario.
+            return true;
+        }
         return (mCardState == null || mCardState == CardState.CARDSTATE_ABSENT) && mStateIsUnknown;
     }
 
