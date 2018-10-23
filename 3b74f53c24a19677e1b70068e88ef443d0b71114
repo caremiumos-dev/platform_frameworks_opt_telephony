@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af943e15_9245996a",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-10-23T23:11:57Z",
+      "side": 1,
+      "message": "maybe intdef?",
+      "range": {
+        "startLine": 44,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 65
+      },
+      "revId": "3b74f53c24a19677e1b70068e88ef443d0b71114",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78227aee_b9337c37",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-10-23T23:11:57Z",
+      "side": 1,
+      "message": "where do you read the system prop?",
+      "range": {
+        "startLine": 86,
+        "startChar": 16,
+        "endLine": 86,
+        "endChar": 83
+      },
+      "revId": "3b74f53c24a19677e1b70068e88ef443d0b71114",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
