@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f7d4746f_c665cb54",
+        "filename": "src/java/com/android/internal/telephony/HalVersion.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-23T22:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d09c0c9e_5671330d",
+      "range": {
+        "startLine": 37,
+        "startChar": 36,
+        "endLine": 37,
+        "endChar": 37
+      },
+      "revId": "2757287c0c65deb9b76592f5183000ee339ab2b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c42fc0c4_25d522e4",
         "filename": "src/java/com/android/internal/telephony/HalVersion.java",
         "patchSetId": 2
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "2e46a01f_dcf4b950",
+        "filename": "src/java/com/android/internal/telephony/HalVersion.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-23T22:17:50Z",
+      "side": 1,
+      "message": "I think \"o instanceof HalVersion\" is enough",
+      "parentUuid": "c42fc0c4_25d522e4",
+      "revId": "2757287c0c65deb9b76592f5183000ee339ab2b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "486efbda_b803bdd0",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 2
@@ -53,6 +95,30 @@
       "writtenOn": "2018-10-23T21:30:14Z",
       "side": 1,
       "message": "I think this should be combined with getRadioProxy() and in the same function we should update new member variables mRadioProxy10, mRadioProxy11, mRadioProxy12, etc. Also getRadioProxy() should return the latest version, and caller can check which version it is by checking getRadioHalVersion().",
+      "range": {
+        "startLine": 5774,
+        "startChar": 8,
+        "endLine": 5794,
+        "endChar": 9
+      },
+      "revId": "2757287c0c65deb9b76592f5183000ee339ab2b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e822db6d_c6bc1a70",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5794,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-23T22:17:50Z",
+      "side": 1,
+      "message": "As discussed offline, we\u0027ll do another approach in a separate CL.",
+      "parentUuid": "486efbda_b803bdd0",
       "range": {
         "startLine": 5774,
         "startChar": 8,
