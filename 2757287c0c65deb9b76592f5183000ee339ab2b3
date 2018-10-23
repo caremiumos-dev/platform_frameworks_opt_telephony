@@ -2,6 +2,69 @@
   "comments": [
     {
       "key": {
+        "uuid": "d09c0c9e_5671330d",
+        "filename": "src/java/com/android/internal/telephony/HalVersion.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-23T21:30:14Z",
+      "side": 1,
+      "message": "Check for null?",
+      "range": {
+        "startLine": 37,
+        "startChar": 36,
+        "endLine": 37,
+        "endChar": 37
+      },
+      "revId": "2757287c0c65deb9b76592f5183000ee339ab2b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c42fc0c4_25d522e4",
+        "filename": "src/java/com/android/internal/telephony/HalVersion.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-23T21:30:14Z",
+      "side": 1,
+      "message": "check for o \u003d\u003d null as well?",
+      "revId": "2757287c0c65deb9b76592f5183000ee339ab2b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "486efbda_b803bdd0",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5794,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-10-23T21:30:14Z",
+      "side": 1,
+      "message": "I think this should be combined with getRadioProxy() and in the same function we should update new member variables mRadioProxy10, mRadioProxy11, mRadioProxy12, etc. Also getRadioProxy() should return the latest version, and caller can check which version it is by checking getRadioHalVersion().",
+      "range": {
+        "startLine": 5774,
+        "startChar": 8,
+        "endLine": 5794,
+        "endChar": 9
+      },
+      "revId": "2757287c0c65deb9b76592f5183000ee339ab2b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "878986a1_4386bd08",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 2
