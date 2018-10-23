@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "878986a1_4386bd08",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5802,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-23T19:05:56Z",
+      "side": 1,
+      "message": "Amit, please let me know if you think we should expose the version and move this logic to the upper layer.",
+      "range": {
+        "startLine": 5802,
+        "startChar": 4,
+        "endLine": 5802,
+        "endChar": 40
+      },
+      "revId": "2757287c0c65deb9b76592f5183000ee339ab2b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
