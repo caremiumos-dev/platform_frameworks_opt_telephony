@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "65376a59_19015848",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-23T18:58:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81bdf1c8_66aa5056",
+      "range": {
+        "startLine": 49,
+        "startChar": 90,
+        "endLine": 50,
+        "endChar": 11
+      },
+      "revId": "ceb130fa4674945c741a95501238d7144ce9853e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e2175da_00ad9456",
         "filename": "src/java/com/android/internal/telephony/TransportManager.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "ceb130fa4674945c741a95501238d7144ce9853e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f94c2f01_9b2a709d",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-23T18:58:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e2175da_00ad9456",
+      "range": {
+        "startLine": 51,
+        "startChar": 10,
+        "endLine": 51,
+        "endChar": 83
+      },
+      "revId": "ceb130fa4674945c741a95501238d7144ce9853e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
