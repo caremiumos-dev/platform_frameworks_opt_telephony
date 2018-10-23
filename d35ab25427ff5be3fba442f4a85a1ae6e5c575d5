@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ae4d92b_87db4ada",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3294,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-10-23T23:10:10Z",
+      "side": 1,
+      "message": "I thought for a long time STATE_EMERGENCY_ONLY is a dead code and nowhere actually set service state to STATE_EMERGENCY_ONLY. I don\u0027t think it\u0027s a good idea to change the behavior at this point.",
+      "range": {
+        "startLine": 3292,
+        "startChar": 0,
+        "endLine": 3294,
+        "endChar": 17
+      },
+      "revId": "d35ab25427ff5be3fba442f4a85a1ae6e5c575d5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
