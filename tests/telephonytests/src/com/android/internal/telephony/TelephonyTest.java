@@ -60,6 +60,7 @@ import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriManager;
 import com.android.internal.telephony.dataconnection.AccessNetworksManager;
 import com.android.internal.telephony.dataconnection.DcTracker;
+import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.imsphone.ImsExternalCallTracker;
 import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
@@ -190,6 +191,8 @@ public abstract class TelephonyTest {
     protected SmsDispatchersController mSmsDispatchersController;
     @Mock
     protected DeviceStateMonitor mDeviceStateMonitor;
+    @Mock
+    protected TransportManager mTransportManager;
     @Mock
     protected AccessNetworksManager mAccessNetworksManager;
     @Mock
@@ -368,6 +371,8 @@ public abstract class TelephonyTest {
                 .makeCarrierActionAgent(nullable(Phone.class));
         doReturn(mDeviceStateMonitor).when(mTelephonyComponentFactory)
                 .makeDeviceStateMonitor(nullable(Phone.class));
+        doReturn(mTransportManager).when(mTelephonyComponentFactory)
+                .makeTransportManager(nullable(Phone.class));
         doReturn(mAccessNetworksManager).when(mTelephonyComponentFactory)
                 .makeAccessNetworksManager(nullable(Phone.class));
         doReturn(mNitzStateMachine).when(mTelephonyComponentFactory)
