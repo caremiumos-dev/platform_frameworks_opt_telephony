@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccffc862_5dbbcee5",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-10-24T00:24:07Z",
+      "side": 1,
+      "message": "nit:",
+      "range": {
+        "startLine": 58,
+        "startChar": 26,
+        "endLine": 58,
+        "endChar": 28
+      },
+      "revId": "5eeb6cb29e348f3d082f61f91a40ea824de5eead",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
