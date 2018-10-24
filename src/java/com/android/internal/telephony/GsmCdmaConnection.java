@@ -533,11 +533,10 @@ public class GsmCdmaConnection extends Connection {
                 }
                 if (!mIsEmergencyCall) {
                     // Only send OUT_OF_SERVICE if it is not an emergency call. We can still
-                    // technically be in STATE_OUT_OF_SERVICE or STATE_EMERGENCY_ONLY during
+                    // technically be in STATE_OUT_OF_SERVICE during
                     // an emergency call and when it ends, we do not want to mistakenly generate
                     // an OUT_OF_SERVICE disconnect cause during normal call ending.
-                    if ((serviceState == ServiceState.STATE_OUT_OF_SERVICE
-                            || serviceState == ServiceState.STATE_EMERGENCY_ONLY)) {
+                    if (serviceState == ServiceState.STATE_OUT_OF_SERVICE) {
                         return DisconnectCause.OUT_OF_SERVICE;
                     }
                     // If we are placing an emergency call and the SIM is currently PIN/PUK
