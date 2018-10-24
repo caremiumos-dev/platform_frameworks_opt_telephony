@@ -46,6 +46,30 @@
       "revId": "d35ab25427ff5be3fba442f4a85a1ae6e5c575d5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ded07d39_78c0a791",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3294,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-10-24T01:57:17Z",
+      "side": 1,
+      "message": "agree, and we should probably mark that as deprecated and use servicestate.isEmergencyOnly as the alternative though the latter is not public yet.",
+      "parentUuid": "8a3be643_5e07e83c",
+      "range": {
+        "startLine": 3292,
+        "startChar": 0,
+        "endLine": 3294,
+        "endChar": 17
+      },
+      "revId": "d35ab25427ff5be3fba442f4a85a1ae6e5c575d5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
