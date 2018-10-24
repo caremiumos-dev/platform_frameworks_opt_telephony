@@ -132,7 +132,7 @@ public class LocaleTrackerTest extends TelephonyTest {
     public void testNoSim() throws Exception {
         mLocaleTracker.updateOperatorNumeric("");
         sendGsmCellInfo();
-        sendServiceState(ServiceState.STATE_EMERGENCY_ONLY);
+        sendServiceState(ServiceState.STATE_OUT_OF_SERVICE);
         assertEquals(US_COUNTRY_CODE, mLocaleTracker.getCurrentCountry());
         verify(mWifiManager).setCountryCode(US_COUNTRY_CODE);
         assertTrue(mLocaleTracker.isTracking());

@@ -97,14 +97,14 @@ public class PhoneStateListenerTest extends TelephonyTest {
 
         ServiceState ss = new ServiceState();
         ss.setDataRegState(ServiceState.STATE_IN_SERVICE);
-        ss.setVoiceRegState(ServiceState.STATE_EMERGENCY_ONLY);
+        ss.setVoiceRegState(ServiceState.STATE_OUT_OF_SERVICE);
 
         setReady(false);
         ((IPhoneStateListener) field.get(mPhoneStateListenerUT)).onServiceStateChanged(ss);
         waitUntilReady();
 
         verify(mServiceState).setDataRegState(ServiceState.STATE_IN_SERVICE);
-        verify(mServiceState).setVoiceRegState(ServiceState.STATE_EMERGENCY_ONLY);
+        verify(mServiceState).setVoiceRegState(ServiceState.STATE_OUT_OF_SERVICE);
     }
 
     @Test @SmallTest

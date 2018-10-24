@@ -755,7 +755,7 @@ public class ServiceStateTracker extends Handler {
                 getBoolean(com.android.internal.R.bool.config_switch_phone_on_voice_reg_state_change)) {
             // If the phone is not registered on a network, no need to update.
             boolean isRegistered = mSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE ||
-                    mSS.getVoiceRegState() == ServiceState.STATE_EMERGENCY_ONLY;
+                    mSS.isEmergencyOnly();
             if (!isRegistered) {
                 log("updatePhoneObject: Ignore update");
                 return;
@@ -2333,8 +2333,7 @@ public class ServiceStateTracker extends Handler {
             boolean showPlmn = false;
             int rule = (iccRecords != null) ? iccRecords.getDisplayRule(mSS) : 0;
             boolean noService = false;
-            if (combinedRegState == ServiceState.STATE_OUT_OF_SERVICE
-                    || combinedRegState == ServiceState.STATE_EMERGENCY_ONLY) {
+            if (combinedRegState == ServiceState.STATE_OUT_OF_SERVICE) {
                 showPlmn = true;
 
                 // Force display no service

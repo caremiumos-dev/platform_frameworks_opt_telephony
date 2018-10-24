@@ -336,8 +336,7 @@ public class LocaleTracker extends Handler {
         boolean shouldTrackLocale =
                 (mSimState == TelephonyManager.SIM_STATE_ABSENT
                         || TextUtils.isEmpty(mOperatorNumeric))
-                && (mLastServiceState == ServiceState.STATE_OUT_OF_SERVICE
-                        || mLastServiceState == ServiceState.STATE_EMERGENCY_ONLY);
+                && mLastServiceState == ServiceState.STATE_OUT_OF_SERVICE;
         if (shouldTrackLocale) {
             startTracking();
         } else {
