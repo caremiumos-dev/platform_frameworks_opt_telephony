@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d5c54674_a2dbd913",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-10-26T22:02:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "619d8d1c_4ff5746c",
+      "revId": "c54dd432c7f4c8efd52b41ad77c106020b8d0e4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "491632e1_4994cfe8",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 2
