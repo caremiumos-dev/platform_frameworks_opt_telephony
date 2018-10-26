@@ -22,6 +22,30 @@
       "revId": "31faabc3f5f33adb49504ce366542f7407fd44c9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31b8afce_53b7aaf1",
+        "filename": "src/java/com/android/internal/telephony/CallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1136608
+      },
+      "writtenOn": "2018-10-26T06:26:40Z",
+      "side": 1,
+      "message": "It has been fixed at PatchSet#3",
+      "parentUuid": "6c4256e9_a538031b",
+      "range": {
+        "startLine": 212,
+        "startChar": 67,
+        "endLine": 212,
+        "endChar": 77
+      },
+      "revId": "31faabc3f5f33adb49504ce366542f7407fd44c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
