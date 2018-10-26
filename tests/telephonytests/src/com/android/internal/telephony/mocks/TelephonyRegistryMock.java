@@ -389,6 +389,11 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
     }
 
     @Override
+    public void notifySrvccStateChanged(int subId, int state) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
     public void notifyOemHookRawEventForSubscriber(int subId, byte[] rawData) {
         throw new RuntimeException("Not implemented");
     }

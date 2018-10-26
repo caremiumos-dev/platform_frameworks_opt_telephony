@@ -67,6 +67,9 @@ public interface PhoneNotifier {
 
     public void notifyVoLteServiceStateChanged(Phone sender, VoLteServiceState lteState);
 
+    /** send a notification that the SRVCC state has changed.*/
+    void notifySrvccStateChanged(Phone sender, @TelephonyManager.SrvccState int state);
+
     public void notifyVoiceActivationStateChanged(Phone sender, int activationState);
 
     public void notifyDataActivationStateChanged(Phone sender, int activationState);

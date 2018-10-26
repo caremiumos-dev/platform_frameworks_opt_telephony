@@ -743,7 +743,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (ret != null && ret.length != 0) {
             int state = ret[0];
             switch(state) {
-                case VoLteServiceState.HANDOVER_STARTED:
+                case TelephonyManager.SRVCC_STATE_HANDOVER_STARTED:
                     srvccState = Call.SrvccState.STARTED;
                     if (imsPhone != null) {
                         conn = imsPhone.getHandoverConnection();
@@ -752,7 +752,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                         Rlog.d(LOG_TAG, "HANDOVER_STARTED: mImsPhone null");
                     }
                     break;
-                case VoLteServiceState.HANDOVER_COMPLETED:
+                case TelephonyManager.SRVCC_STATE_HANDOVER_COMPLETED:
                     srvccState = Call.SrvccState.COMPLETED;
                     if (imsPhone != null) {
                         imsPhone.notifySrvccState(srvccState);
@@ -760,8 +760,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                         Rlog.d(LOG_TAG, "HANDOVER_COMPLETED: mImsPhone null");
                     }
                     break;
-                case VoLteServiceState.HANDOVER_FAILED:
-                case VoLteServiceState.HANDOVER_CANCELED:
+                case TelephonyManager.SRVCC_STATE_HANDOVER_FAILED:
+                case TelephonyManager.SRVCC_STATE_HANDOVER_CANCELED:
                     srvccState = Call.SrvccState.FAILED;
                     break;
 
@@ -772,6 +772,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
             getCallTracker().notifySrvccState(srvccState, conn);
 
+            notifySrvccStateChanged(state);
+            // Support deprecated APIs
             VoLteServiceState lteState = new VoLteServiceState(state);
             notifyVoLteServiceStateChanged(lteState);
         }
@@ -2221,8 +2223,20 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mNotifier.notifyPhysicalChannelConfiguration(this, configs);
     }
 
+    /**
+     * @deprecated sends deprecated PhoneStateListener notification for
+     * {@link PhoneStateListener#onVoiceActivationStateChanged(int)}.
+     */
+    @Deprecated
     public void notifyVoLteServiceStateChanged(VoLteServiceState lteState) {
         mNotifier.notifyVoLteServiceStateChanged(this, lteState);
+    }
+
+    /**
+     * Notify listeners that SRVCC state has changed.
+     */
+    public void notifySrvccStateChanged(int state) {
+        mNotifier.notifySrvccStateChanged(this, state);
     }
 
     /**

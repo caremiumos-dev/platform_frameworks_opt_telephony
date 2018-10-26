@@ -306,6 +306,15 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     @Override
+    public void notifySrvccStateChanged(Phone sender, @TelephonyManager.SrvccState int state) {
+        try {
+            mRegistry.notifySrvccStateChanged(sender.getSubId(), state);
+        } catch (RemoteException ex) {
+            // system process is dead
+        }
+    }
+
+    @Override
     public void notifyDataActivationStateChanged(Phone sender, int activationState) {
         try {
             mRegistry.notifySimActivationStateChangedForPhoneId(sender.getPhoneId(),
