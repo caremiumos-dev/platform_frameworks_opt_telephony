@@ -22,6 +22,30 @@
       "revId": "f841995f7dcecc9669ea8b51054cdaa1d34c8fd8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05c778d4_5618ce06",
+        "filename": "src/java/com/android/internal/telephony/TelephonyTester.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-10-29T23:29:31Z",
+      "side": 1,
+      "message": "Diamonds aren\u0027t forever, but logcat messages are.",
+      "parentUuid": "76e21132_febded6d",
+      "range": {
+        "startLine": 441,
+        "startChar": 20,
+        "endLine": 441,
+        "endChar": 66
+      },
+      "revId": "f841995f7dcecc9669ea8b51054cdaa1d34c8fd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
