@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0a75b97e_6a49d9fe",
+        "filename": "src/java/com/android/internal/telephony/TelephonyTester.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-10-29T17:22:30Z",
+      "side": 1,
+      "message": "Derp.  Yup, that works.",
+      "parentUuid": "79f09179_7d653819",
+      "range": {
+        "startLine": 213,
+        "startChar": 33,
+        "endLine": 213,
+        "endChar": 58
+      },
+      "revId": "1e0e7dd5a90915ea503e29bf6055027ecb255c6c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f4f226d_ba67ba38",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaCallTrackerTest.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-22T21:47:00Z",
       "side": 1,
       "message": "is there a way to waitForHandlerAction() here? It looks like there is a handler thread in SimulatedCommands you can use.",
+      "range": {
+        "startLine": 466,
+        "startChar": 7,
+        "endLine": 466,
+        "endChar": 23
+      },
+      "revId": "1e0e7dd5a90915ea503e29bf6055027ecb255c6c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbaa807c_45aa78e8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaCallTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-10-29T17:22:30Z",
+      "side": 1,
+      "message": "I think so.",
+      "parentUuid": "3f4f226d_ba67ba38",
       "range": {
         "startLine": 466,
         "startChar": 7,
