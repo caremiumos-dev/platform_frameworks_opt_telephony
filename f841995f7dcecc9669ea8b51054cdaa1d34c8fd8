@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76e21132_febded6d",
+        "filename": "src/java/com/android/internal/telephony/TelephonyTester.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-10-29T17:31:41Z",
+      "side": 1,
+      "message": "Do we want a \"TYLER\" log here?",
+      "range": {
+        "startLine": 441,
+        "startChar": 20,
+        "endLine": 441,
+        "endChar": 66
+      },
+      "revId": "f841995f7dcecc9669ea8b51054cdaa1d34c8fd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
