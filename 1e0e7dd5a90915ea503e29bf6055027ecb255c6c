@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7acf4d05_a5273788",
+        "filename": "src/java/com/android/internal/telephony/TelephonyTester.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-10-29T17:23:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a75b97e_6a49d9fe",
+      "range": {
+        "startLine": 213,
+        "startChar": 33,
+        "endLine": 213,
+        "endChar": 58
+      },
+      "revId": "1e0e7dd5a90915ea503e29bf6055027ecb255c6c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f4f226d_ba67ba38",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaCallTrackerTest.java",
         "patchSetId": 1
@@ -93,6 +117,30 @@
       "revId": "1e0e7dd5a90915ea503e29bf6055027ecb255c6c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3c71289_7d13523b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaCallTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-10-29T17:23:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbaa807c_45aa78e8",
+      "range": {
+        "startLine": 466,
+        "startChar": 7,
+        "endLine": 466,
+        "endChar": 23
+      },
+      "revId": "1e0e7dd5a90915ea503e29bf6055027ecb255c6c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
