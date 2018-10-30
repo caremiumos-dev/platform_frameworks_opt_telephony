@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e01b7a5e_ad190101",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-10-30T20:43:25Z",
+      "side": 1,
+      "message": "I think this has caused a crash.\nWe assume when calling sendToTarget that AsyncResult.forMessage was called.\nIts now possible for that not to be the case.\nI\u0027ll put up a patch.",
+      "range": {
+        "startLine": 1044,
+        "startChar": 32,
+        "endLine": 1044,
+        "endChar": 33
+      },
+      "revId": "bc7f2413213b54f729e59f74393a44068a06a49e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
