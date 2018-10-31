@@ -1799,7 +1799,7 @@ public class DcTracker extends Handler {
                         new String[] {Telephony.Carriers.APN_SET_ID}, null, null, null);
         if (c.getCount() < 1) {
             loge("getPreferredApnSetId: no APNs found");
-            return Telephony.Carriers.NO_SET_SET;
+            return Telephony.Carriers.NO_ID_SET;
         } else {
             c.moveToFirst();
             return c.getInt(0 /* index of Telephony.Carriers.APN_SET_ID */);
@@ -3495,7 +3495,7 @@ public class DcTracker extends Handler {
     public ArrayList<ApnSetting> sortApnListByPreferred(ArrayList<ApnSetting> list) {
         if (list == null || list.size() <= 1) return list;
         int preferredApnSetId = getPreferredApnSetId();
-        if (preferredApnSetId != Telephony.Carriers.NO_SET_SET) {
+        if (preferredApnSetId != Telephony.Carriers.NO_ID_SET) {
             list.sort(new Comparator<ApnSetting>() {
                 @Override
                 public int compare(ApnSetting apn1, ApnSetting apn2) {
