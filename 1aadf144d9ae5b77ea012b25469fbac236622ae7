@@ -46,6 +46,30 @@
       "revId": "1aadf144d9ae5b77ea012b25469fbac236622ae7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faf11e57_a38a3f36",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-10-31T23:04:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e6adaf0e_6fdd4c4f",
+      "range": {
+        "startLine": 39,
+        "startChar": 21,
+        "endLine": 39,
+        "endChar": 23
+      },
+      "revId": "1aadf144d9ae5b77ea012b25469fbac236622ae7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
