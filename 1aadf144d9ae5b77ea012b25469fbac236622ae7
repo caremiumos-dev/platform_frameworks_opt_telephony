@@ -22,6 +22,30 @@
       "revId": "1aadf144d9ae5b77ea012b25469fbac236622ae7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6adaf0e_6fdd4c4f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2018-10-31T22:36:08Z",
+      "side": 1,
+      "message": "This CL is mainly for carrier apps\u0027 usage (https://cs.corp.google.com/android/vendor/verizon/OMA-DM/DiagMon/src/com/android/sdm/plugins/diagmon/DiagmonPlugin.java?type\u003dcs\u0026q\u003dsignalRSSI+%3D+signal.getEvdoDbm()\u0026g\u003d0\u0026l\u003d541)\n, where they are using SignalStrength.INVALID for all kinds of RSSI. The bug is b/118460482. There are several flaws of this SignalStrength (such as value hard-coding) due to the previous design/implementation, but I think they are out of scope of what this CL wants to solve.\n\n-1 may be OK for those parameters because -1 is not a valid value of them.",
+      "parentUuid": "f37a16c9_5711548d",
+      "range": {
+        "startLine": 39,
+        "startChar": 21,
+        "endLine": 39,
+        "endChar": 23
+      },
+      "revId": "1aadf144d9ae5b77ea012b25469fbac236622ae7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
