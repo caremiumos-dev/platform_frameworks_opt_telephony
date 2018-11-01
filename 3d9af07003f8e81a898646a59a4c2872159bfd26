@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5580edaa_c66272db",
+        "filename": "src/java/com/android/internal/telephony/NewNitzStateMachine.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2018-11-01T12:59:03Z",
+      "side": 1,
+      "message": "This seems like a bug in OldNitzStateMachine too. The main difference between Old and New should be around time detection, so the time zone detection code should be adjusted for both if we believe this is correct.",
+      "range": {
+        "startLine": 39,
+        "startChar": 19,
+        "endLine": 39,
+        "endChar": 38
+      },
+      "revId": "3d9af07003f8e81a898646a59a4c2872159bfd26",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e551aa4_a86435fb",
+        "filename": "src/java/com/android/internal/telephony/NewNitzStateMachine.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2018-11-01T12:59:03Z",
+      "side": 1,
+      "message": "Can we just fix mDeviceState.getNetworkCountryIsoForPhone() to return Guam?\n\nOr provide a new dependency interface for this class instead of DeviceState that can be asked for the country and do the right thing.\n\nNitzStateMachine should just ask for the country and get it (or be told the country and use it, as per prior discussions, if that is safe). It should happen consistently, too.\n\nTying this class to TelephonyManager, Android resources, etc. is just going to make testing harder.",
+      "range": {
+        "startLine": 202,
+        "startChar": 25,
+        "endLine": 202,
+        "endChar": 51
+      },
+      "revId": "3d9af07003f8e81a898646a59a4c2872159bfd26",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
