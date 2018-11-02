@@ -1429,4 +1429,12 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     @Override
     public void stopNattKeepalive(int sessionHandle, Message result)  {
     }
+
+    @Override
+    public void registerForRilHealthStatus(Handler h, int what, Object obj) {
+    }
+
+    @Override
+    public void unregisterForRilHealthStatus(Handler h) {
+    }
 }
