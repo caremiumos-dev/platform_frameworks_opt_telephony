@@ -225,6 +225,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
     final RadioProxyDeathRecipient mRadioProxyDeathRecipient;
     final RilHandler mRilHandler;
 
+    private int mContinuousWakelockTimoutCount = 0;
+    private int mContinuousSysErrCount = 0;
+    private int mRilHealthStatus = RILConstants.RIL_HEALTH_NORMAL;
+
     //***** Events
     static final int EVENT_WAKE_LOCK_TIMEOUT    = 2;
     static final int EVENT_ACK_WAKE_LOCK_TIMEOUT    = 4;
@@ -239,6 +243,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     static final String EMPTY_ALPHA_LONG = "";
     static final String EMPTY_ALPHA_SHORT = "";
+
+    static final int RIL_HEALTH_THRESHOLD_WAKELOCK_TIMEOUT = 3;
+    static final int RIL_HEALTH_THRESHOLD_SYSTEM_ERR = 15;
 
     public static List<TelephonyHistogram> getTelephonyRILTimingHistograms() {
         List<TelephonyHistogram> list;
@@ -273,8 +280,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     //
                     // Note: Keep mRequestList so that delayed response
                     // can still be handled when response finally comes.
-
                     synchronized (mRequestList) {
+                        mContinuousWakelockTimoutCount++;
                         if (msg.arg1 == mWlSequenceNum && clearWakeLock(FOR_WAKELOCK)) {
                             if (RILJ_LOGD) {
                                 int count = mRequestList.size();
@@ -286,6 +293,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                                             + requestToString(rr.mRequest));
                                 }
                             }
+                            notifyRilError(false);
                         }
                     }
                     break;
@@ -327,6 +335,60 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     break;
             }
         }
+    }
+
+    private void notifyRilNormal() {
+        mContinuousSysErrCount = 0;
+        mContinuousWakelockTimoutCount = 0;
+        if (mRilHealthStatus != RILConstants.RIL_HEALTH_NORMAL) {
+            mRilHealthStatus = RILConstants.RIL_HEALTH_NORMAL;
+            int[] response = new int[1];
+            response[0] = RILConstants.RIL_HEALTH_NORMAL;
+            AsyncResult ar = new AsyncResult(null, response, null);
+            mRilHealthStatusRegistrants.notifyRegistrants(ar);
+        }
+    }
+
+    private void notifyRilError(boolean isSystemError) {
+        if (isSystemError) {
+            mContinuousSysErrCount++;
+            if (mContinuousSysErrCount < RIL_HEALTH_THRESHOLD_SYSTEM_ERR) {
+                //only notify RIL stuck if we continously receive SYSTEM_ERR and the number
+                // larger than RIL_HEALTH_THRESHOLD_SYSTEM_ERR
+                return;
+            }
+        } else {
+            if (mContinuousWakelockTimoutCount < RIL_HEALTH_THRESHOLD_WAKELOCK_TIMEOUT) {
+                //only notify RIL stuck if we continously receive WAKELOCK TIMEOUT and the number
+                // larger than RIL_HEALTH_THRESHOLD_WAKELOCK_TIMEOUT
+                return;
+            }
+        }
+        int[] response = new int[1];
+        boolean changed = false;
+        if (isSystemError) {
+            response[0] = RILConstants.RIL_HEALTH_CONSTANT_SYSTEM_ERR;
+            if ((mRilHealthStatus & RILConstants.RIL_HEALTH_CONSTANT_SYSTEM_ERR) == 0) {
+                changed = true;
+                mRilHealthStatus |= RILConstants.RIL_HEALTH_CONSTANT_SYSTEM_ERR;
+            }
+        } else {
+            response[0] = RILConstants.RIL_HEALTH_STUCK;
+            if ((mRilHealthStatus & RILConstants.RIL_HEALTH_STUCK) == 0) {
+                changed = true;
+                mRilHealthStatus |= RILConstants.RIL_HEALTH_STUCK;
+            }
+        }
+        if (changed) {
+            AsyncResult ar = new AsyncResult(null, response, null);
+            mRilHealthStatusRegistrants.notifyRegistrants(ar);
+        }
+    }
+
+    @VisibleForTesting
+    @Override
+    public void registerForRilHealthStatus(Handler h, int what, Object obj) {
+        super.registerForRilHealthStatus(h, what, obj);
     }
 
     /**
@@ -4254,6 +4316,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
         } else {
             // ack is not expected to be sent back. Nothing is required to be done here.
         }
+
+        //If we can get unsolicit command from low layer, it means RIL is not stuck or error
+        //So notify RIL is still alive. So notify RIL is normal.
+        notifyRilNormal();
     }
 
     void processRequestAck(int serial) {
@@ -4286,6 +4352,15 @@ public class RIL extends BaseCommands implements CommandsInterface {
         int type = responseInfo.type;
 
         RILRequest rr = null;
+
+        //If we can get response, it means RIL is still alive
+        //But we may get SYSTEM_ERR if the connection with modem is broken
+        //So notify RIL is still alive if error is not SYSTEM_ERR
+        if (error == RadioError.SYSTEM_ERR) {
+            notifyRilError(true);
+        } else {
+            notifyRilNormal();
+        }
 
         if (type == RadioResponseType.SOLICITED_ACK) {
             synchronized (mRequestList) {
