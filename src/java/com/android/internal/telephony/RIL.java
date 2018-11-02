@@ -225,6 +225,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
     final RadioProxyDeathRecipient mRadioProxyDeathRecipient;
     final RilHandler mRilHandler;
 
+    private RadioErrorDetector mRadioErrorDetector;
+
     //***** Events
     static final int EVENT_WAKE_LOCK_TIMEOUT    = 2;
     static final int EVENT_ACK_WAKE_LOCK_TIMEOUT    = 4;
@@ -275,6 +277,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     // can still be handled when response finally comes.
 
                     synchronized (mRequestList) {
+                        mRadioErrorDetector.processWakelockTimeout();
                         if (msg.arg1 == mWlSequenceNum && clearWakeLock(FOR_WAKELOCK)) {
                             if (RILJ_LOGD) {
                                 int count = mRequestList.size();
@@ -327,6 +330,11 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     break;
             }
         }
+    }
+
+    @VisibleForTesting
+    public RadioErrorDetector getRadioErrorDetector() {
+        return mRadioErrorDetector;
     }
 
     /**
@@ -533,6 +541,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         mPreferredNetworkType = preferredNetworkType;
         mPhoneType = RILConstants.NO_PHONE;
         mPhoneId = instanceId == null ? 0 : instanceId;
+        mRadioErrorDetector = new RadioErrorDetector(context, mPhoneId);
 
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
@@ -4295,6 +4304,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 Rlog.w(RILJ_LOG_TAG, "Unexpected solicited ack response! sn: " + serial);
             } else {
                 decrementWakeLock(rr);
+                mRadioErrorDetector.processResponse(rr.mRequest, error);
                 if (RILJ_LOGD) {
                     riljLog(rr.serialString() + " Ack < " + requestToString(rr.mRequest));
                 }
@@ -4312,6 +4322,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         // Time logging for RIL command and storing it in TelephonyHistogram.
         addToRilHistogram(rr);
 
+        mRadioErrorDetector.processResponse(rr.mRequest, error);
         if (type == RadioResponseType.SOLICITED_ACK_EXP) {
             sendAck();
             if (RIL.RILJ_LOGD) {
@@ -5800,5 +5811,11 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
 
         return mode;
+    }
+
+    @Override
+    protected void setRadioState(int newState, boolean forceNotifyRegistrants) {
+        super.setRadioState(newState, forceNotifyRegistrants);
+        mRadioErrorDetector.processRadioStateChanged(newState);
     }
 }

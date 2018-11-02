@@ -84,6 +84,7 @@ import static junit.framework.Assert.assertTrue;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -287,6 +288,53 @@ public class RILTest extends TelephonyTest {
         mTestHandler.quit();
         mTestHandler.join();
         super.tearDown();
+    }
+
+    @FlakyTest
+    @Test
+    public void testRadioErrorWithWakelockTimeout() throws Exception {
+        RadioErrorDetector detector = mRILInstance.getRadioErrorDetector();
+        detector.processRadioStateChanged(TelephonyManager.RADIO_POWER_OFF);
+        for (int i = 0; i < RadioErrorDetector.THRESHOLD_WAKELOCK_TIMEOUT; i++) {
+            invokeMethod(
+                    mRILInstance,
+                    "obtainRequest",
+                    new Class<?>[] {Integer.TYPE, Message.class, WorkSource.class},
+                    new Object[] {RIL_REQUEST_GET_SIM_STATUS, obtainMessage(), new WorkSource()});
+        }
+
+        waitForHandlerActionDelayed(mRilHandler, 10, DEFAULT_WAKE_LOCK_TIMEOUT_MS);
+
+        int status = detector.getRadioErrorStatus();
+        assertTrue(status == RadioErrorDetector.RADIO_ERROR_UNKNOWN_ERROR);
+    }
+
+    @FlakyTest
+    @Test
+    public void testRadioErrorWithContinuousSystemErr() throws Exception {
+        RadioErrorDetector detector = mRILInstance.getRadioErrorDetector();
+        detector.processRadioStateChanged(TelephonyManager.RADIO_POWER_UNAVAILABLE);
+        for (int i = 0; i < RadioErrorDetector.THRESHOLD_SYSTEM_ERR; i++) {
+            mRILUnderTest.getIccCardStatus(obtainMessage());
+            verify(mRadioProxy, atLeast(1)).getIccCardStatus(mSerialNumberCaptor.capture());
+            verifyRILErrorResponse(mRILUnderTest, mSerialNumberCaptor.getValue(),
+                    RIL_REQUEST_GET_SIM_STATUS, RadioError.SYSTEM_ERR);
+        }
+
+        int status = detector.getRadioErrorStatus();
+        assertFalse(status == RadioErrorDetector.RADIO_ERROR_UNKNOWN_ERROR);
+
+        detector.processRadioStateChanged(TelephonyManager.RADIO_POWER_OFF);
+
+        for (int i = 0; i < RadioErrorDetector.THRESHOLD_SYSTEM_ERR; i++) {
+            mRILUnderTest.getIccCardStatus(obtainMessage());
+            verify(mRadioProxy, atLeast(1)).getIccCardStatus(mSerialNumberCaptor.capture());
+            verifyRILErrorResponse(mRILUnderTest, mSerialNumberCaptor.getValue(),
+                    RIL_REQUEST_GET_SIM_STATUS, RadioError.SYSTEM_ERR);
+        }
+
+        status = detector.getRadioErrorStatus();
+        assertTrue(status == RadioErrorDetector.RADIO_ERROR_UNKNOWN_ERROR);
     }
 
     @FlakyTest
@@ -1057,6 +1105,22 @@ public class RILTest extends TelephonyTest {
     private static void verifyRILResponse(RIL ril, int serial, int requestType) {
         RadioResponseInfo responseInfo =
                 createFakeRadioResponseInfo(serial, RadioError.NONE, RadioResponseType.SOLICITED);
+
+        RILRequest rr = ril.processResponse(responseInfo);
+        assertNotNull(rr);
+
+        assertEquals(serial, rr.getSerial());
+        assertEquals(requestType, rr.getRequest());
+        assertTrue(ril.getWakeLock(RIL.FOR_WAKELOCK).isHeld());
+
+        ril.processResponseDone(rr, responseInfo, null);
+        assertEquals(0, ril.getRilRequestList().size());
+        assertFalse(ril.getWakeLock(RIL.FOR_WAKELOCK).isHeld());
+    }
+
+    private static void verifyRILErrorResponse(RIL ril, int serial, int requestType, int error) {
+        RadioResponseInfo responseInfo =
+                createFakeRadioResponseInfo(serial, error, RadioResponseType.SOLICITED);
 
         RILRequest rr = ril.processResponse(responseInfo);
         assertNotNull(rr);
