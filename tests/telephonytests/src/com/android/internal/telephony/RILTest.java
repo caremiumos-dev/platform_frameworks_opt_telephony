@@ -84,6 +84,8 @@ import static junit.framework.Assert.assertTrue;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.anyObject;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -287,6 +289,49 @@ public class RILTest extends TelephonyTest {
         mTestHandler.quit();
         mTestHandler.join();
         super.tearDown();
+    }
+
+    @FlakyTest
+    @Test
+    public void testRilHealthWithWakelockTimeout() throws Exception {
+        for (int i = 0; i < RILHealthDetector.RIL_HEALTH_THRESHOLD_WAKELOCK_TIMEOUT; i++) {
+            invokeMethod(
+                    mRILInstance,
+                    "obtainRequest",
+                    new Class<?>[] {Integer.TYPE, Message.class, WorkSource.class},
+                    new Object[] {RIL_REQUEST_GET_SIM_STATUS, obtainMessage(), new WorkSource()});
+        }
+
+        int status = ((RILHealthDetector) mRILInstance.getRILHealthDetector()).getRilHealthStatus();
+        assertTrue(status == RILConstants.RIL_HEALTH_STUCK);
+    }
+
+    @FlakyTest
+    @Test
+    public void testRilHealthWithContinuousSystemErr() throws Exception {
+        for (int i = 0; i < RILHealthDetector.RIL_HEALTH_THRESHOLD_SYSTEM_ERR; i++) {
+            mRILUnderTest.getIccCardStatus(obtainMessage());
+            verify(mRadioProxy, atLeast(1)).getIccCardStatus(mSerialNumberCaptor.capture());
+            verifyRILErrorResponse(mRILUnderTest, mSerialNumberCaptor.getValue(),
+                    RIL_REQUEST_GET_SIM_STATUS, RadioError.SYSTEM_ERR);
+        }
+
+        int status =
+                ((RILHealthDetector) mRILUnderTest.getRILHealthDetector()).getRilHealthStatus();
+        assertFalse(status == RILConstants.RIL_HEALTH_CONSTANT_SYSTEM_ERR);
+
+        mRILUnderTest.getIMSIForApp(null, obtainMessage());
+        verify(mRadioProxy, atLeast(1)).getImsiForApp(mSerialNumberCaptor.capture(), anyObject());
+        verifyRILErrorResponse(mRILUnderTest, mSerialNumberCaptor.getValue(),
+                RIL_REQUEST_GET_IMSI, RadioError.SYSTEM_ERR);
+
+        mRILUnderTest.getHardwareConfig(obtainMessage());
+        verify(mRadioProxy, atLeast(1)).getHardwareConfig(mSerialNumberCaptor.capture());
+        verifyRILErrorResponse(mRILUnderTest, mSerialNumberCaptor.getValue(),
+                RIL_REQUEST_GET_HARDWARE_CONFIG, RadioError.SYSTEM_ERR);
+
+        status = ((RILHealthDetector) mRILUnderTest.getRILHealthDetector()).getRilHealthStatus();
+        assertTrue(status == RILConstants.RIL_HEALTH_CONSTANT_SYSTEM_ERR);
     }
 
     @FlakyTest
@@ -1057,6 +1102,22 @@ public class RILTest extends TelephonyTest {
     private static void verifyRILResponse(RIL ril, int serial, int requestType) {
         RadioResponseInfo responseInfo =
                 createFakeRadioResponseInfo(serial, RadioError.NONE, RadioResponseType.SOLICITED);
+
+        RILRequest rr = ril.processResponse(responseInfo);
+        assertNotNull(rr);
+
+        assertEquals(serial, rr.getSerial());
+        assertEquals(requestType, rr.getRequest());
+        assertTrue(ril.getWakeLock(RIL.FOR_WAKELOCK).isHeld());
+
+        ril.processResponseDone(rr, responseInfo, null);
+        assertEquals(0, ril.getRilRequestList().size());
+        assertFalse(ril.getWakeLock(RIL.FOR_WAKELOCK).isHeld());
+    }
+
+    private static void verifyRILErrorResponse(RIL ril, int serial, int requestType, int error) {
+        RadioResponseInfo responseInfo =
+                createFakeRadioResponseInfo(serial, error, RadioResponseType.SOLICITED);
 
         RILRequest rr = ril.processResponse(responseInfo);
         assertNotNull(rr);

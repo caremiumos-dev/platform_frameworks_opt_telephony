@@ -716,6 +716,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 onCheckForNetworkSelectionModeAutomatic(msg);
                 break;
             }
+
+
             default:
                 throw new RuntimeException("unexpected event not handled");
         }
@@ -776,6 +778,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             notifyVoLteServiceStateChanged(lteState);
         }
     }
+
 
     /**
      * Gets the context for the phone, as set at initialization time.
