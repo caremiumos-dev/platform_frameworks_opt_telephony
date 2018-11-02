@@ -84,6 +84,7 @@ import static junit.framework.Assert.assertTrue;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -104,9 +105,11 @@ import android.hardware.radio.V1_0.RadioResponseType;
 import android.hardware.radio.V1_0.SmsWriteArgs;
 import android.hardware.radio.deprecated.V1_0.IOemHook;
 import android.net.ConnectivityManager;
+import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IPowerManager;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.WorkSource;
@@ -231,6 +234,31 @@ public class RILTest extends TelephonyTest {
     private static final String MVNO_MATCH_DATA = "";
     private static final boolean PERSISTENT = true;
 
+    private static final int EVENT_RIL_HEALTH_STATUS = 10;
+
+
+    private class RilHealthTestHandler extends Handler {
+        private int mRilHealthStatus = RILConstants.RIL_HEALTH_NORMAL;
+
+        RilHealthTestHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case EVENT_RIL_HEALTH_STATUS:
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    mRilHealthStatus = ((int[]) ar.result)[0];
+                    break;
+            }
+        }
+
+        public int getRilHealthStatus() {
+            return mRilHealthStatus;
+        }
+    }
+
     private class RILTestHandler extends HandlerThread {
 
         RILTestHandler(String name) {
@@ -287,6 +315,42 @@ public class RILTest extends TelephonyTest {
         mTestHandler.quit();
         mTestHandler.join();
         super.tearDown();
+    }
+
+    @FlakyTest
+    @Test
+    public void testRilHealthWithWakelockTimeout() throws Exception {
+        RilHealthTestHandler h = new RilHealthTestHandler(mTestHandler.getLooper());
+        mRILInstance.registerForRilHealthStatus(h, EVENT_RIL_HEALTH_STATUS, null);
+        invokeMethod(
+                mRILInstance,
+                "obtainRequest",
+                new Class<?>[] {Integer.TYPE, Message.class, WorkSource.class},
+                new Object[] {RIL_REQUEST_GET_SIM_STATUS, obtainMessage(), new WorkSource()});
+
+        //Wait DEFAULT_WAKE_LOCK_TIMEOUT_MS + 100ms to make sure handler message is handled
+        waitForHandlerActionDelayed(mRilHandler, 10, DEFAULT_WAKE_LOCK_TIMEOUT_MS + 100);
+
+        assertTrue(h.getRilHealthStatus() == RILConstants.RIL_HEALTH_STUCK);
+    }
+
+    @FlakyTest
+    @Test
+    public void testRilHealthWithContinuousSystemErr() throws Exception {
+        RilHealthTestHandler h = new RilHealthTestHandler(mTestHandler.getLooper());
+        mRILUnderTest.registerForRilHealthStatus(h, EVENT_RIL_HEALTH_STATUS, null);
+
+        for (int i = 0; i < RIL.RIL_HEALTH_THRESHOLD_SYSTEM_ERR; i++) {
+            mRILUnderTest.getIccCardStatus(obtainMessage());
+            verify(mRadioProxy, atLeast(1)).getIccCardStatus(mSerialNumberCaptor.capture());
+            verifyRILErrorResponse(mRILUnderTest, mSerialNumberCaptor.getValue(),
+                    RIL_REQUEST_GET_SIM_STATUS, RadioError.SYSTEM_ERR);
+        }
+
+        //Wait 100ms to make sure handler message is handled
+        waitForHandlerActionDelayed(mRilHandler, 10, 100);
+
+        assertTrue(h.getRilHealthStatus() == RILConstants.RIL_HEALTH_CONSTANT_SYSTEM_ERR);
     }
 
     @FlakyTest
@@ -1057,6 +1121,22 @@ public class RILTest extends TelephonyTest {
     private static void verifyRILResponse(RIL ril, int serial, int requestType) {
         RadioResponseInfo responseInfo =
                 createFakeRadioResponseInfo(serial, RadioError.NONE, RadioResponseType.SOLICITED);
+
+        RILRequest rr = ril.processResponse(responseInfo);
+        assertNotNull(rr);
+
+        assertEquals(serial, rr.getSerial());
+        assertEquals(requestType, rr.getRequest());
+        assertTrue(ril.getWakeLock(RIL.FOR_WAKELOCK).isHeld());
+
+        ril.processResponseDone(rr, responseInfo, null);
+        assertEquals(0, ril.getRilRequestList().size());
+        assertFalse(ril.getWakeLock(RIL.FOR_WAKELOCK).isHeld());
+    }
+
+    private static void verifyRILErrorResponse(RIL ril, int serial, int requestType, int error) {
+        RadioResponseInfo responseInfo =
+                createFakeRadioResponseInfo(serial, error, RadioResponseType.SOLICITED);
 
         RILRequest rr = ril.processResponse(responseInfo);
         assertNotNull(rr);

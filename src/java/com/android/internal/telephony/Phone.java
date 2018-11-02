@@ -202,8 +202,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected static final int EVENT_VRS_OR_RAT_CHANGED             = 46;
     // Radio state change
     protected static final int EVENT_RADIO_STATE_CHANGED            = 47;
+    // Event for RIL Health status
+    protected static final int EVENT_RIL_HEALTH_STATUS              = 48;
 
-    protected static final int EVENT_LAST                       = EVENT_RADIO_STATE_CHANGED;
+    protected static final int EVENT_LAST                       = EVENT_RIL_HEALTH_STATUS;
 
     // For shared prefs.
     private static final String GSM_ROAMING_LIST_OVERRIDE_PREFIX = "gsm_roaming_list_";
@@ -560,6 +562,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mCi.setOnUnsolOemHookRaw(this, EVENT_UNSOL_OEM_HOOK_RAW, null);
         mCi.startLceService(DEFAULT_REPORT_INTERVAL_MS, LCE_PULL_MODE,
                 obtainMessage(EVENT_CONFIG_LCE));
+        mCi.registerForRilHealthStatus(this, EVENT_RIL_HEALTH_STATUS, null);
     }
 
     /**
@@ -716,6 +719,16 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 onCheckForNetworkSelectionModeAutomatic(msg);
                 break;
             }
+
+            case EVENT_RIL_HEALTH_STATUS:
+                ar = (AsyncResult) msg.obj;
+                if (ar.exception == null) {
+                    handleRilHealthStatus((int[]) ar.result);
+                } else {
+                    Rlog.e(LOG_TAG, "RIL Health Status exception: " + ar.exception);
+                }
+                break;
+
             default:
                 throw new RuntimeException("unexpected event not handled");
         }
@@ -774,6 +787,15 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
             VoLteServiceState lteState = new VoLteServiceState(state);
             notifyVoLteServiceStateChanged(lteState);
+        }
+    }
+
+    private void handleRilHealthStatus(int[] ret) {
+        if (ret != null && ret.length != 0) {
+            int status = ret[0];
+            Intent intent = new Intent(TelephonyIntents.ACTION_RIL_HEALTH_STATUS);
+            intent.putExtra("rilhealth", status);
+            mContext.sendBroadcast(intent);
         }
     }
 

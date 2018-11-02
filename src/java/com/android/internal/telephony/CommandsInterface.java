@@ -2239,6 +2239,22 @@ public interface CommandsInterface {
      */
     void stopNattKeepalive(int sessionHandle, Message result);
 
+    /**
+     * Register for RIL Health Status Indication
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    void registerForRilHealthStatus(Handler h, int what, Object obj);
+
+    /**
+     * Deregister for RIL Health Status Indication.
+     *
+     * @param h Handler for notification message.
+     */
+    void unregisterForRilHealthStatus(Handler h);
+
     default List<ClientRequestStats> getClientRequestStats() {
         return null;
     }
