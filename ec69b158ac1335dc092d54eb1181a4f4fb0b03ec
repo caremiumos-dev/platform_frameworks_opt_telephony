@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33e8c8fb_0404f75e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-02T21:19:21Z",
+      "side": 1,
+      "message": "nit: should be in one line.",
+      "range": {
+        "startLine": 172,
+        "startChar": 24,
+        "endLine": 173,
+        "endChar": 62
+      },
+      "revId": "ec69b158ac1335dc092d54eb1181a4f4fb0b03ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
