@@ -45,6 +45,30 @@
       "revId": "3d9af07003f8e81a898646a59a4c2872159bfd26",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4268c804_850df33d",
+        "filename": "src/java/com/android/internal/telephony/NewNitzStateMachine.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-11-05T21:48:46Z",
+      "side": 1,
+      "message": "I agree with Neil. We should fix in getNetworkCountryIsoForPhone().\n\nhttps://android.googlesource.com/platform/frameworks/opt/telephony/+/master/src/java/com/android/internal/telephony/LocaleTracker.java#381\n\nThis is the place where we get the country code. It is a MCC-\u003ecountry table. Maybe we should extend the table to MCC+MNC-\u003ecountry table there.\n\nCurrently the table is in the Java file, but in the future we should consider moving them into configuration such as resources.",
+      "parentUuid": "5e551aa4_a86435fb",
+      "range": {
+        "startLine": 202,
+        "startChar": 25,
+        "endLine": 202,
+        "endChar": 51
+      },
+      "revId": "3d9af07003f8e81a898646a59a4c2872159bfd26",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
