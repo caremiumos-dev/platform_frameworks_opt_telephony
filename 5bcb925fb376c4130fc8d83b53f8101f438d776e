@@ -22,6 +22,30 @@
       "revId": "5bcb925fb376c4130fc8d83b53f8101f438d776e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0ffd5af_20c8d009",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-11-06T18:46:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "351fca9c_8c020898",
+      "range": {
+        "startLine": 108,
+        "startChar": 16,
+        "endLine": 108,
+        "endChar": 37
+      },
+      "revId": "5bcb925fb376c4130fc8d83b53f8101f438d776e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
