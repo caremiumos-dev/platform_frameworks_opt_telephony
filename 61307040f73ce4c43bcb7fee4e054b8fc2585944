@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81715c56_8a56688f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-06T02:31:13Z",
+      "side": 0,
+      "message": "So we don\u0027t need this method anymore? Please also remove the register method if we don\u0027t need them.",
+      "range": {
+        "startLine": 283,
+        "startChar": 4,
+        "endLine": 283,
+        "endChar": 66
+      },
+      "revId": "61307040f73ce4c43bcb7fee4e054b8fc2585944",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "351fca9c_8c020898",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-06T02:31:13Z",
+      "side": 1,
+      "message": "Why not use the synchronized in updateAvailableNetworks?",
+      "range": {
+        "startLine": 108,
+        "startChar": 16,
+        "endLine": 108,
+        "endChar": 37
+      },
+      "revId": "5bcb925fb376c4130fc8d83b53f8101f438d776e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
