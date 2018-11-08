@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2df44200_d6f71ee7",
+        "filename": "src/java/com/android/internal/telephony/RadioConfig.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-08T00:46:39Z",
+      "side": 1,
+      "message": "It look like slotStatus.eid can be an empty string, and you want iccslotStatus.eid to be null in this case. Otherwise, we can set iccSlotStatus.eid \u003d slotStatus.eid without checking slotStatus.eid.",
+      "range": {
+        "startLine": 344,
+        "startChar": 12,
+        "endLine": 346,
+        "endChar": 13
+      },
+      "revId": "a07779bdc6e852e4c2751e18d538742f8d6ad478",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36e04f6b_25b105de",
+        "filename": "src/java/com/android/internal/telephony/RadioConfigResponse.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-08T00:46:39Z",
+      "side": 1,
+      "message": "nit: remove the extra line.",
+      "revId": "a07779bdc6e852e4c2751e18d538742f8d6ad478",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
