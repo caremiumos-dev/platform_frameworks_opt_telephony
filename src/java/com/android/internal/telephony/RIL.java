@@ -75,6 +75,7 @@ import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellInfo;
 import android.telephony.CellSignalStrengthCdma;
+import android.telephony.CellSignalStrengthLte;
 import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.ModemActivityInfo;
@@ -5539,7 +5540,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoLte.cellIdentityLte.mnc,
                             EMPTY_ALPHA_LONG,
                             EMPTY_ALPHA_SHORT,
-                            cellInfoLte.signalStrengthLte.signalStrength,
+                            convertRssiAsuToDBm(cellInfoLte.signalStrengthLte.signalStrength),
                             cellInfoLte.signalStrengthLte.rsrp,
                             cellInfoLte.signalStrengthLte.rsrq,
                             cellInfoLte.signalStrengthLte.rssnr,
@@ -5665,7 +5666,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoLte.cellIdentityLte.base.mnc,
                             cellInfoLte.cellIdentityLte.operatorNames.alphaLong,
                             cellInfoLte.cellIdentityLte.operatorNames.alphaShort,
-                            cellInfoLte.signalStrengthLte.signalStrength,
+                            convertRssiAsuToDBm(cellInfoLte.signalStrengthLte.signalStrength),
                             cellInfoLte.signalStrengthLte.rsrp,
                             cellInfoLte.signalStrengthLte.rsrq,
                             cellInfoLte.signalStrengthLte.rssnr,
@@ -5800,5 +5801,17 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
 
         return mode;
+
+    private static int convertRssiAsuToDBm(int rssiAsu) {
+        if (rssiAsu != CellSignalStrengthLte.SIGNAL_STRENGTH_LTE_RSSI_ASU_UNKNOWN
+                && (rssiAsu < CellSignalStrengthLte.SIGNAL_STRENGTH_LTE_RSSI_VALID_ASU_MIN_VALUE
+                || rssiAsu > CellSignalStrengthLte.SIGNAL_STRENGTH_LTE_RSSI_VALID_ASU_MAX_VALUE)) {
+            Rlog.e(LOG_TAG, "convertRssiAsuToDBm: invalid RSSI in ASU=" + rssiAsu);
+            return CellInfo.UNAVAILABLE;
+        }
+        if (rssiAsu == CellSignalStrengthLte.SIGNAL_STRENGTH_LTE_RSSI_ASU_UNKNOWN) {
+            return CellInfo.UNAVAILABLE;
+        }
+        return -113 + (2 * rssiAsu);
     }
 }
