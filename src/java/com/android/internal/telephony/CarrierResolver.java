@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +32,7 @@ import android.service.carrier.CarrierIdentifier;
 import android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.data.ApnSetting;
 import android.text.TextUtils;
 import android.util.LocalLog;
 import android.util.Log;
@@ -44,6 +46,8 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -711,28 +715,28 @@ public class CarrierResolver extends Handler {
     }
 
     /**
-     * a util function to convert {mccmnc, mvno_type, mvno_data} to all matching carrier ids.
+     * A util function to convert {mccmnc, mvno_type, mvno_data} from APN selection to all matching
+     * carrier ids. This is used to handle APN query backward compatibility, will be removed when
+     * APN db completely get rid of {mccmnc, mvno_type and mvno_data}.
      *
-     * @return a list of id with matching {mccmnc, mvno_type, mvno_data}
+     * @return a list of carrier id with a MatrixCursor containing matching tuples of
+     * {mccmnc, mvno_type, mvno_data}.
      */
-    public static List<Integer> getCarrierIdsFromApnQuery(@NonNull Context context,
-                                                          String mccmnc, String mvnoCase,
-                                                          String mvnoData) {
+    public static HashMap<Integer, MatrixCursor> getCarrierIdsFromApnSelection(
+            @NonNull Context context, String mccmnc, String mvnoCase, String mvnoData) {
         String selection = CarrierId.All.MCCMNC + "=" + mccmnc;
         // build the proper query
         if ("spn".equals(mvnoCase) && mvnoData != null) {
             selection += " AND " + CarrierId.All.SPN + "='" + mvnoData + "'";
         } else if ("imsi".equals(mvnoCase) && mvnoData != null) {
             selection += " AND " + CarrierId.All.IMSI_PREFIX_XPATTERN + "='" + mvnoData + "'";
-        } else if ("gid1".equals(mvnoCase) && mvnoData != null) {
+        } else if ("gid".equals(mvnoCase) && mvnoData != null) {
             selection += " AND " + CarrierId.All.GID1 + "='" + mvnoData + "'";
-        } else if ("gid2".equals(mvnoCase) && mvnoData != null) {
-            selection += " AND " + CarrierId.All.GID2 + "='" + mvnoData +"'";
         } else {
             logd("mvno case empty or other invalid values");
         }
 
-        List<Integer> ids = new ArrayList<>();
+        HashMap<Integer, HashSet<ArrayList<String>>> carrier_list = new HashMap<>();
         try {
             Cursor cursor = context.getContentResolver().query(
                     CarrierId.All.CONTENT_URI,
@@ -742,14 +746,13 @@ public class CarrierResolver extends Handler {
             try {
                 if (cursor != null) {
                     if (VDBG) {
-                        logd("[getCarrierIdsFromApnQuery]- " + cursor.getCount()
+                        logd("[getCarrierIdsFromApnSelection]- " + cursor.getCount()
                                 + " Records(s) in DB");
                     }
                     while (cursor.moveToNext()) {
                         int cid = cursor.getInt(cursor.getColumnIndex(CarrierId.CARRIER_ID));
-                        if (!ids.contains(cid)) {
-                            ids.add(cid);
-                        }
+                        carrier_list.put(cid,
+                                getApnCarrierMatchingResult(cursor, carrier_list.get(cid)));
                     }
                 }
             } finally {
@@ -758,10 +761,68 @@ public class CarrierResolver extends Handler {
                 }
             }
         } catch (Exception ex) {
-            loge("[getCarrierIdsFromApnQuery]- ex: " + ex);
+            loge("[getCarrierIdsFromApnSelection]- ex: " + ex);
         }
-        logd(selection + " " + ids);
-        return ids;
+        // convert to matrix cursor
+        final HashMap<Integer, MatrixCursor> result = new HashMap<>();
+        for (int cid : carrier_list.keySet()) {
+            MatrixCursor cursor = new MatrixCursor(new String[] {Telephony.Carriers.NUMERIC,
+                    Telephony.Carriers.MVNO_TYPE, Telephony.Carriers.MVNO_MATCH_DATA},
+                    carrier_list.get(cid).size());
+            for (ArrayList<String> apnCarrier : carrier_list.get(cid)) {
+                cursor.addRow(apnCarrier.toArray());
+            }
+            result.put(cid, cursor);
+        }
+        return result;
+    }
+
+
+    /**
+     * Util API to convert input cursor from carrierID database to APN carrier matching results in
+     * the format of NUMERIC, MVNO_TYPE, MVNO_MATCH_DATA. Note, this can be one-to-many mapping as
+     * carrier id supports multiple mvno data while APN only supports one-of mvno data.
+     */
+    private static HashSet<ArrayList<String>> getApnCarrierMatchingResult(
+            Cursor input, HashSet<ArrayList<String>> base) {
+        boolean match = false;
+        if (base == null) {
+            base = new HashSet<>();
+        }
+        if (input != null) {
+            // loop through each supported matching attribute: SPN, IMSI, GID1
+            ArrayList<String> row;
+            if (input.getString(input.getColumnIndex(CarrierId.All.GID1)) != null) {
+                row = new ArrayList<>(Arrays.asList(
+                        input.getString(input.getColumnIndex(CarrierId.All.MCCMNC)),
+                        ApnSetting.getMvnoTypeStringFromInt(ApnSetting.MVNO_TYPE_GID),
+                        input.getString(input.getColumnIndex(CarrierId.All.GID1))));
+                base.add(row);
+                match = true;
+            }
+            if (input.getString(input.getColumnIndex(CarrierId.All.SPN)) != null) {
+                row = new ArrayList<>(Arrays.asList(
+                        input.getString(input.getColumnIndex(CarrierId.All.MCCMNC)),
+                        ApnSetting.getMvnoTypeStringFromInt(ApnSetting.MVNO_TYPE_SPN),
+                        input.getString(input.getColumnIndex(CarrierId.All.SPN))));
+                base.add(row);
+                match = true;
+            }
+            if (input.getString(input.getColumnIndex(CarrierId.All.IMSI_PREFIX_XPATTERN)) != null) {
+                row = new ArrayList<>(Arrays.asList(
+                        input.getString(input.getColumnIndex(CarrierId.All.MCCMNC)),
+                        ApnSetting.getMvnoTypeStringFromInt(ApnSetting.MVNO_TYPE_IMSI),
+                        input.getString(input.getColumnIndex(CarrierId.All.IMSI_PREFIX_XPATTERN))));
+                base.add(row);
+                match = true;
+            }
+            if (!match) {
+                row = new ArrayList<>(Arrays.asList(
+                        input.getString(input.getColumnIndex(CarrierId.All.MCCMNC)), "", ""));
+                base.add(row);
+            }
+        }
+        return base;
     }
 
     private static boolean equals(String a, String b, boolean ignoreCase) {
