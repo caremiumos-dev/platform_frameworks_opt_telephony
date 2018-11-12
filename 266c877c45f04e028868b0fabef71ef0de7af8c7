@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "030459f3_e8593d71",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-11-12T23:32:32Z",
+      "side": 0,
+      "message": "same, to \u0026\u0026.",
+      "range": {
+        "startLine": 1789,
+        "startChar": 19,
+        "endLine": 1789,
+        "endChar": 23
+      },
+      "revId": "266c877c45f04e028868b0fabef71ef0de7af8c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deb87a82_86caf541",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1806,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-11-12T23:32:32Z",
+      "side": 0,
+      "message": "It\u0027s probably not a good idea removing the service state check here. Does it make sense changing || to \u0026\u0026 here?",
+      "range": {
+        "startLine": 1806,
+        "startChar": 20,
+        "endLine": 1806,
+        "endChar": 22
+      },
+      "revId": "266c877c45f04e028868b0fabef71ef0de7af8c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
