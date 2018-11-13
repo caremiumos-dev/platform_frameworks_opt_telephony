@@ -3633,6 +3633,8 @@ public class ServiceStateTracker extends Handler {
 
         Context context = mPhone.getContext();
 
+        boolean autoCancelCsRejectNotification = false;
+
         CarrierConfigManager configManager = (CarrierConfigManager)
                 context.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         if (configManager != null) {
@@ -3646,6 +3648,8 @@ public class ServiceStateTracker extends Handler {
                     if (DBG) log("Voice/emergency call barred notification disabled");
                     return;
                 }
+                autoCancelCsRejectNotification = bundle.getBoolean(
+                        CarrierConfigManager.KEY_AUTO_CANCEL_CS_REJECT_NOTIFICATION, false);
             }
         }
 
@@ -3657,6 +3661,9 @@ public class ServiceStateTracker extends Handler {
         final boolean multipleSubscriptions = (((TelephonyManager) mPhone.getContext()
                   .getSystemService(Context.TELEPHONY_SERVICE)).getPhoneCount() > 1);
         final int simNumber = mSubscriptionController.getSlotIndex(mSubId) + 1;
+
+        NotificationManager notificationManager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         switch (notifyType) {
             case PS_ENABLED:
@@ -3706,6 +3713,10 @@ public class ServiceStateTracker extends Handler {
                 notificationId = CS_REJECT_CAUSE_NOTIFICATION;
                 int resId = selectResourceForRejectCode(mRejectCode, multipleSubscriptions);
                 if (0 == resId) {
+                    if (autoCancelCsRejectNotification) {
+                        if (DBG) log("Cancel the previous notification");
+                        notificationManager.cancel(Integer.toString(mSubId), notificationId);
+                    }
                     loge("setNotification: mRejectCode=" + mRejectCode + " is not handled.");
                     return;
                 } else {
@@ -3734,9 +3745,6 @@ public class ServiceStateTracker extends Handler {
                 .setContentText(details)
                 .setChannel(NotificationChannelController.CHANNEL_ID_ALERT)
                 .build();
-
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notifyType == PS_DISABLED || notifyType == CS_DISABLED) {
             // cancel previous post notification
