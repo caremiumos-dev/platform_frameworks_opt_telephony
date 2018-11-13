@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f106ee32_90732121",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1135341
+      },
+      "writtenOn": "2018-11-13T10:29:26Z",
+      "side": 0,
+      "message": "Networks do support UT without IMS. So UT and IMS service state are independent. If we put \u0026\u0026, then request will not be sent over UT when IMS is not in service even when UT is enabled. So we should only check if UT is enabled or not.",
+      "parentUuid": "030459f3_e8593d71",
+      "range": {
+        "startLine": 1789,
+        "startChar": 19,
+        "endLine": 1789,
+        "endChar": 23
+      },
+      "revId": "266c877c45f04e028868b0fabef71ef0de7af8c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "deb87a82_86caf541",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-11-12T23:32:32Z",
       "side": 0,
       "message": "It\u0027s probably not a good idea removing the service state check here. Does it make sense changing || to \u0026\u0026 here?",
+      "range": {
+        "startLine": 1806,
+        "startChar": 20,
+        "endLine": 1806,
+        "endChar": 22
+      },
+      "revId": "266c877c45f04e028868b0fabef71ef0de7af8c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64067431_4000e345",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1806,
+      "author": {
+        "id": 1135341
+      },
+      "writtenOn": "2018-11-13T10:29:26Z",
+      "side": 0,
+      "message": "Networks do support UT without IMS. So UT and IMS service state are independent. If we put \u0026\u0026, then request will not be sent over UT when IMS is not in service even when UT is enabled. So we should only check if UT is enabled or not.",
+      "parentUuid": "deb87a82_86caf541",
       "range": {
         "startLine": 1806,
         "startChar": 20,
