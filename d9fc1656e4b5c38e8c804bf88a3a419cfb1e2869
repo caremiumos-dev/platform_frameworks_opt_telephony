@@ -16,6 +16,24 @@
       "revId": "d9fc1656e4b5c38e8c804bf88a3a419cfb1e2869",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "107b166c_4ff1904b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/cdma/CdmaInboundSmsHandlerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2018-11-13T06:36:16Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "d3551e38_8a1c6d08",
+      "revId": "d9fc1656e4b5c38e8c804bf88a3a419cfb1e2869",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
