@@ -152,8 +152,9 @@ public class ImsManagerTest extends TelephonyTest {
     }
 
     @Test @SmallTest
-    public void testSetValues() {
+    public void testSetValues() throws Exception {
         ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
+        initializeProvisionedValues();
 
         imsManager.setWfcMode(ImsConfig.WfcModeFeatureValueConstants.CELLULAR_PREFERRED);
         verify(mSubscriptionController, times(1)).setSubscriptionProperty(
