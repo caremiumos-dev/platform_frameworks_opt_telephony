@@ -21,6 +21,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Binder;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.RemoteException;
 import android.service.carrier.CarrierMessagingService;
 import android.service.carrier.ICarrierMessagingCallback;
@@ -28,15 +31,19 @@ import android.service.carrier.ICarrierMessagingService;
 import android.service.carrier.MessagePdu;
 import android.telephony.CarrierMessagingServiceManager;
 import android.telephony.Rlog;
+import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.os.BackgroundThread;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Filters incoming SMS with carrier services.
@@ -44,6 +51,17 @@ import java.util.Optional;
  */
 public class CarrierServicesSmsFilter {
     protected static final boolean DBG = true;
+    /** onFilterComplete is not called. */
+    public static final int EVENT_ON_FILTER_COMPLETE_NOT_CALLED = 1;
+
+    /** onFilterComplete timeout. */
+    public static final int FILTER_COMPLETE_TIMEOUT_MS = 5000;
+
+    /**
+     * Used to set the flag in the bitmask passed to the callback to indicate that timeout for
+     * filtering the message has triggered
+     */
+    private static final int RECEIVE_OPTIONS_TIMEOUT_TRIGGERED = 0x4;
 
     private final Context mContext;
     private final Phone mPhone;
@@ -87,6 +105,14 @@ public class CarrierServicesSmsFilter {
             smsFilterPackages.add(carrierImsPackage);
         }
         FilterAggregator filterAggregator = new FilterAggregator(smsFilterPackages.size());
+        //start the timer
+        CallbackTimeoutHandler mCallbackTimeoutHandler = new CallbackTimeoutHandler(
+                BackgroundThread.get().getLooper(), filterAggregator);
+        filterAggregator.setTimeoutHandler(mCallbackTimeoutHandler);
+
+        Message delayMsg = Message.obtain();
+        delayMsg.what = EVENT_ON_FILTER_COMPLETE_NOT_CALLED;
+        mCallbackTimeoutHandler.sendMessageDelayed(delayMsg, FILTER_COMPLETE_TIMEOUT_MS);
         for (String smsFilterPackage : smsFilterPackages) {
             filterWithPackage(smsFilterPackage, filterAggregator);
         }
@@ -127,6 +153,8 @@ public class CarrierServicesSmsFilter {
         CarrierSmsFilter smsFilter = new CarrierSmsFilter(mPdus, mDestPort, mPduFormat);
         CarrierSmsFilterCallback smsFilterCallback =
                 new CarrierSmsFilterCallback(filterAggregator, smsFilter);
+        filterAggregator.addToCallbacks(smsFilterCallback);
+
         smsFilter.filterSms(packageName, smsFilterCallback);
     }
 
@@ -228,11 +256,13 @@ public class CarrierServicesSmsFilter {
     private final class CarrierSmsFilterCallback extends ICarrierMessagingCallback.Stub {
         private final FilterAggregator mFilterAggregator;
         private final CarrierMessagingServiceManager mCarrierMessagingServiceManager;
+        private boolean mIsOnFilterCompleteCalled;
 
         CarrierSmsFilterCallback(FilterAggregator filterAggregator,
-                                 CarrierMessagingServiceManager carrierMessagingServiceManager) {
+                CarrierMessagingServiceManager carrierMessagingServiceManager) {
             mFilterAggregator = filterAggregator;
             mCarrierMessagingServiceManager = carrierMessagingServiceManager;
+            mIsOnFilterCompleteCalled = false;
         }
 
         /**
@@ -240,6 +270,7 @@ public class CarrierServicesSmsFilter {
          */
         @Override
         public void onFilterComplete(int result) {
+            mIsOnFilterCompleteCalled = true;
             mCarrierMessagingServiceManager.disposeConnection(mContext);
             mFilterAggregator.onFilterComplete(result);
         }
@@ -263,19 +294,44 @@ public class CarrierServicesSmsFilter {
         public void onDownloadMmsComplete(int result) {
             loge("Unexpected onDownloadMmsComplete call with result: " + result);
         }
+
+        public boolean isOnFilterCompleteCalled() {
+            return mIsOnFilterCompleteCalled;
+        }
     }
 
     private final class FilterAggregator {
         private final Object mFilterLock = new Object();
         private int mNumPendingFilters;
+        private final Set<CarrierSmsFilterCallback> mCallbacks;
         private int mFilterResult;
+        private CallbackTimeoutHandler mTimeoutHandler;
 
         FilterAggregator(int numFilters) {
             mNumPendingFilters = numFilters;
+            mCallbacks = new HashSet<>();
             mFilterResult = CarrierMessagingService.RECEIVE_OPTIONS_DEFAULT;
         }
 
         void onFilterComplete(int result) {
+            if (result == RECEIVE_OPTIONS_TIMEOUT_TRIGGERED) {
+                //called because timeout has triggered
+                for (CarrierSmsFilterCallback callback : mCallbacks) {
+                    if (!callback.isOnFilterCompleteCalled()) {
+                        callback.onFilterComplete(CarrierMessagingService.RECEIVE_OPTIONS_DEFAULT);
+                    }
+                }
+            } else if (!mTimeoutHandler.hasMessages(EVENT_ON_FILTER_COMPLETE_NOT_CALLED)) {
+                // the case that timeout has already passed and trigger, but the initial callback is
+                // run afterwards. In this case, we should not follow through
+                for (CarrierSmsFilterCallback callback : mCallbacks) {
+                    if (!callback.isOnFilterCompleteCalled()) {
+                        callback.mCarrierMessagingServiceManager.disposeConnection(mContext);
+                    }
+                }
+                return;
+            }
+
             synchronized (mFilterLock) {
                 mNumPendingFilters--;
                 combine(result);
@@ -289,12 +345,51 @@ public class CarrierServicesSmsFilter {
                         // return back to the CarrierMessagingService, restore the calling identity.
                         Binder.restoreCallingIdentity(token);
                     }
+                    //remove the pending message
+                    if (mTimeoutHandler.hasMessages(EVENT_ON_FILTER_COMPLETE_NOT_CALLED)) {
+                        //all onFilterCompletes called before timeout has triggered
+                        mTimeoutHandler.removeMessages(EVENT_ON_FILTER_COMPLETE_NOT_CALLED);
+                    }
                 }
             }
         }
 
         private void combine(int result) {
             mFilterResult = mFilterResult | result;
+        }
+
+        private void addToCallbacks(CarrierSmsFilterCallback callback) {
+            mCallbacks.add(callback);
+        }
+
+        private void setTimeoutHandler(CallbackTimeoutHandler handler) {
+            mTimeoutHandler = handler;
+        }
+    }
+
+    private final class CallbackTimeoutHandler extends Handler {
+
+        private static final boolean DBG = true;
+        private static final String LOG_TAG = "CallbackTimeoutHandler";
+
+        private FilterAggregator mFilterAggregator;
+
+        private CallbackTimeoutHandler(Looper looper, FilterAggregator filterAggregator) {
+            super(looper);
+            mFilterAggregator = filterAggregator;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (DBG) {
+                Log.d(LOG_TAG, "handleMessage(" + msg.what + ")");
+            }
+
+            switch(msg.what) {
+                case EVENT_ON_FILTER_COMPLETE_NOT_CALLED:
+                    mFilterAggregator.onFilterComplete(RECEIVE_OPTIONS_TIMEOUT_TRIGGERED);
+                    break;
+            }
         }
     }
 }
