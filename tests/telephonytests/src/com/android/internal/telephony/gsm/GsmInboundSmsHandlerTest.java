@@ -157,7 +157,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         doReturn(mInboundSmsTrackerCV).when(mMockInboundSmsTracker).getContentValues();
 
         doReturn(mMockInboundSmsTracker).when(mTelephonyComponentFactory)
-            .makeInboundSmsTracker(nullable(Cursor.class), anyBoolean());
+                .makeInboundSmsTracker(nullable(Cursor.class), anyBoolean());
     }
 
     @Before
@@ -179,18 +179,18 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         mSmsMessage.mWrappedSmsMessage = mGsmSmsMessage;
 
         mInboundSmsTracker = new InboundSmsTracker(
-            mSmsPdu, /* pdu */
-            System.currentTimeMillis(), /* timestamp */
-            -1, /* destPort */
-            false, /* is3gpp2 */
-            false, /* is3gpp2WapPdu */
-            "1234567890", /* address */
-            "1234567890", /* displayAddress */
-            mMessageBody /* messageBody */);
+                mSmsPdu, /* pdu */
+                System.currentTimeMillis(), /* timestamp */
+                -1, /* destPort */
+                false, /* is3gpp2 */
+                false, /* is3gpp2WapPdu */
+                "1234567890", /* address */
+                "1234567890", /* displayAddress */
+                mMessageBody /* messageBody */);
         doReturn(mInboundSmsTracker).when(mTelephonyComponentFactory)
                 .makeInboundSmsTracker(nullable(byte[].class), anyLong(), anyInt(), anyBoolean(),
-                anyBoolean(), nullable(String.class), nullable(String.class),
-                nullable(String.class));
+                        anyBoolean(), nullable(String.class), nullable(String.class),
+                        nullable(String.class));
 
         createMockInboundSmsTracker();
 
@@ -201,6 +201,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         mGsmInboundSmsHandlerTestHandler = new GsmInboundSmsHandlerTestHandler(TAG);
         mGsmInboundSmsHandlerTestHandler.start();
         waitUntilReady();
+
     }
 
     @After
@@ -333,8 +334,8 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
                 mMessageBody /* messageBody */);
         doReturn(mInboundSmsTracker).when(mTelephonyComponentFactory)
                 .makeInboundSmsTracker(nullable(byte[].class), anyLong(), anyInt(), anyBoolean(),
-                anyBoolean(), nullable(String.class), nullable(String.class),
-                nullable(String.class));
+                        anyBoolean(), nullable(String.class), nullable(String.class),
+                        nullable(String.class));
         mGsmInboundSmsHandler.sendMessage(InboundSmsHandler.EVENT_BROADCAST_SMS,
                 mInboundSmsTracker);
         waitForHandlerAction(mGsmInboundSmsHandler.getHandler(), TEST_TIMEOUT);
@@ -377,31 +378,31 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
     private void prepareMultiPartSms(boolean is3gpp2WapPush) {
         // Part 1
         mInboundSmsTrackerPart1 = new InboundSmsTracker(
-            mSmsPdu, /* pdu */
-            System.currentTimeMillis(), /* timestamp */
-            -1, /* destPort */
-            is3gpp2WapPush, /* is3gpp2 */
-            "1234567890", /* address */
-            "1234567890", /* displayAddress */
-            1, /* referenceNumber */
-            1, /* sequenceNumber */
-            2, /* messageCount */
-            is3gpp2WapPush, /* is3gpp2WapPdu */
-            mMessageBodyPart1 /* messageBody */);
+                mSmsPdu, /* pdu */
+                System.currentTimeMillis(), /* timestamp */
+                -1, /* destPort */
+                is3gpp2WapPush, /* is3gpp2 */
+                "1234567890", /* address */
+                "1234567890", /* displayAddress */
+                1, /* referenceNumber */
+                1, /* sequenceNumber */
+                2, /* messageCount */
+                is3gpp2WapPush, /* is3gpp2WapPdu */
+                mMessageBodyPart1 /* messageBody */);
 
         // Part 2
         mInboundSmsTrackerPart2 = new InboundSmsTracker(
-            mSmsPdu, /* pdu */
-            System.currentTimeMillis(), /* timestamp */
-            -1, /* destPort */
-            is3gpp2WapPush, /* is3gpp2 */
-            "1234567890", /* address */
-            "1234567890", /* displayAddress */
-            1, /* referenceNumber */
-            2, /* sequenceNumber */
-            2, /* messageCount */
-            is3gpp2WapPush, /* is3gpp2WapPdu */
-            mMessageBodyPart2 /* messageBody */);
+                mSmsPdu, /* pdu */
+                System.currentTimeMillis(), /* timestamp */
+                -1, /* destPort */
+                is3gpp2WapPush, /* is3gpp2 */
+                "1234567890", /* address */
+                "1234567890", /* displayAddress */
+                1, /* referenceNumber */
+                2, /* sequenceNumber */
+                2, /* messageCount */
+                is3gpp2WapPush, /* is3gpp2WapPdu */
+                mMessageBodyPart2 /* messageBody */);
     }
 
     @Test
@@ -536,17 +537,17 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         prepareMultiPartSms(false);
         // change seqNumber in part 2 to 1
         mInboundSmsTrackerPart2 = new InboundSmsTracker(
-            mSmsPdu, /* pdu */
-            System.currentTimeMillis(), /* timestamp */
-            -1, /* destPort */
-            false, /* is3gpp2 */
-            "1234567890", /* address */
-            "1234567890", /* displayAddress */
-            1, /* referenceNumber */
-            1, /* sequenceNumber */
-            2, /* messageCount */
-            false, /* is3gpp2WapPdu */
-            mMessageBodyPart2 /* messageBody */);
+                mSmsPdu, /* pdu */
+                System.currentTimeMillis(), /* timestamp */
+                -1, /* destPort */
+                false, /* is3gpp2 */
+                "1234567890", /* address */
+                "1234567890", /* displayAddress */
+                1, /* referenceNumber */
+                1, /* sequenceNumber */
+                2, /* messageCount */
+                false, /* is3gpp2WapPdu */
+                mMessageBodyPart2 /* messageBody */);
 
         mSmsHeader.concatRef = new SmsHeader.ConcatRef();
         doReturn(mSmsHeader).when(mGsmSmsMessage).getUserDataHeader();
@@ -604,17 +605,17 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         // change seqNumber in part 2 to an invalid value
         int invalidSeqNumber = -1;
         mInboundSmsTrackerPart2 = new InboundSmsTracker(
-            mSmsPdu, /* pdu */
-            System.currentTimeMillis(), /* timestamp */
-            -1, /* destPort */
-            false, /* is3gpp2 */
-            "1234567890", /* address */
-            "1234567890", /* displayAddress */
-            1, /* referenceNumber */
-            invalidSeqNumber, /* sequenceNumber */
-            2, /* messageCount */
-            false, /* is3gpp2WapPdu */
-            mMessageBodyPart2 /* messageBody */);
+                mSmsPdu, /* pdu */
+                System.currentTimeMillis(), /* timestamp */
+                -1, /* destPort */
+                false, /* is3gpp2 */
+                "1234567890", /* address */
+                "1234567890", /* displayAddress */
+                1, /* referenceNumber */
+                invalidSeqNumber, /* sequenceNumber */
+                2, /* messageCount */
+                false, /* is3gpp2WapPdu */
+                mMessageBodyPart2 /* messageBody */);
 
         doReturn(mInboundSmsTrackerPart2).when(mTelephonyComponentFactory)
                 .makeInboundSmsTracker(nullable(byte[].class), anyLong(), anyInt(), anyBoolean(),
@@ -671,17 +672,17 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         prepareMultiPartSms(false);
         // only the first SMS is configured with the display originating email address
         mInboundSmsTrackerPart1 = new InboundSmsTracker(
-            mSmsPdu, /* pdu */
-            System.currentTimeMillis(), /* timestamp */
-            -1, /* destPort */
-            false, /* is3gpp2 */
-            "1234567890", /* address */
-            "1234567890@test.com", /* displayAddress */
-            1, /* referenceNumber */
-            1, /* sequenceNumber */
-            2, /* messageCount */
-            false, /* is3gpp2WapPdu */
-            mMessageBodyPart1 /* messageBody */);
+                mSmsPdu, /* pdu */
+                System.currentTimeMillis(), /* timestamp */
+                -1, /* destPort */
+                false, /* is3gpp2 */
+                "1234567890", /* address */
+                "1234567890@test.com", /* displayAddress */
+                1, /* referenceNumber */
+                1, /* sequenceNumber */
+                2, /* messageCount */
+                false, /* is3gpp2WapPdu */
+                mMessageBodyPart1 /* messageBody */);
 
         mSmsHeader.concatRef = new SmsHeader.ConcatRef();
         doReturn(mSmsHeader).when(mGsmSmsMessage).getUserDataHeader();
@@ -764,18 +765,18 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         replaceInstance(SmsBroadcastUndelivered.class, "instance", null, null);
         SmsBroadcastUndelivered.initialize(mContext, mGsmInboundSmsHandler, mCdmaInboundSmsHandler);
         mInboundSmsTracker = new InboundSmsTracker(
-            mSmsPdu, /* pdu */
-            System.currentTimeMillis(), /* timestamp */
-            0, /* destPort */
-            false, /* is3gpp2 */
-            false, /* is3gpp2WapPdu */
-            "1234567890", /* address */
-            "1234567890", /* displayAddress */
-            mMessageBody /* messageBody */);
+                mSmsPdu, /* pdu */
+                System.currentTimeMillis(), /* timestamp */
+                0, /* destPort */
+                false, /* is3gpp2 */
+                false, /* is3gpp2WapPdu */
+                "1234567890", /* address */
+                "1234567890", /* displayAddress */
+                mMessageBody /* messageBody */);
         doReturn(mInboundSmsTracker).when(mTelephonyComponentFactory)
                 .makeInboundSmsTracker(nullable(byte[].class), anyLong(), anyInt(), anyBoolean(),
-                anyBoolean(), nullable(String.class), nullable(String.class),
-                nullable(String.class));
+                        anyBoolean(), nullable(String.class), nullable(String.class),
+                        nullable(String.class));
 
         //add a fake entry to db
         ContentValues rawSms = new ContentValues();

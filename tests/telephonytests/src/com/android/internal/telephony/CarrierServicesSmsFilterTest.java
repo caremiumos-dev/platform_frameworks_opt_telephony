@@ -24,6 +24,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -92,7 +93,8 @@ public class CarrierServicesSmsFilterTest extends TelephonyTest {
     public void testFilter_carrierAppPresent_handled() throws Exception {
         mockCarrierApp();
         mockCarrierAppStubResults(
-                CarrierMessagingService.RECEIVE_OPTIONS_DROP, mICarrierAppMessagingService);
+                CarrierMessagingService.RECEIVE_OPTIONS_DROP, mICarrierAppMessagingService,
+                true);
         assertTrue(mCarrierServicesSmsFilterUT.filter());
 
         verify(mFilterCallback, timeout(100))
@@ -104,7 +106,8 @@ public class CarrierServicesSmsFilterTest extends TelephonyTest {
     public void testFilter_systemAppPresent_handled() throws Exception {
         mockSystemApp();
         mockCarrierAppStubResults(
-                CarrierMessagingService.RECEIVE_OPTIONS_DROP, mISystemCarrierMessagingService);
+                CarrierMessagingService.RECEIVE_OPTIONS_DROP, mISystemCarrierMessagingService,
+                true);
 
         assertTrue(mCarrierServicesSmsFilterUT.filter());
 
@@ -118,14 +121,48 @@ public class CarrierServicesSmsFilterTest extends TelephonyTest {
         mockCarrierApp();
         mockSystemApp();
         mockCarrierAppStubResults(
-                CarrierMessagingService.RECEIVE_OPTIONS_DEFAULT, mICarrierAppMessagingService);
+                CarrierMessagingService.RECEIVE_OPTIONS_DEFAULT, mICarrierAppMessagingService,
+                true);
         mockCarrierAppStubResults(
-                CarrierMessagingService.RECEIVE_OPTIONS_DROP, mISystemCarrierMessagingService);
+                CarrierMessagingService.RECEIVE_OPTIONS_DROP, mISystemCarrierMessagingService,
+                true);
 
         assertTrue(mCarrierServicesSmsFilterUT.filter());
 
         verify(mFilterCallback, timeout(100))
                 .onFilterComplete(eq(CarrierMessagingService.RECEIVE_OPTIONS_DEFAULT));
+    }
+
+    @Test
+    public void testFilterSmsShouldNotTimeout_whenOnFilterCompleteCalled() throws Exception {
+        //This will make sure mCarrierServicesSmsFilterUT.filter() will return true, and therefore
+        // filterSms() will return true
+        mockCarrierApp();
+        mockCarrierAppStubResults(
+                CarrierMessagingService.RECEIVE_OPTIONS_DEFAULT, mICarrierAppMessagingService,
+                true);
+        assertTrue(mCarrierServicesSmsFilterUT.filter());
+
+        verify(mFilterCallback, times(1))
+                .onFilterComplete(eq(CarrierMessagingService.RECEIVE_OPTIONS_DEFAULT));
+    }
+
+    @Test
+    public void testFilterSmsShouldTimeout_whenOnFilterCompleteNotCalled() throws Exception {
+        //This will make sure mCarrierServicesSmsFilterUT.filter() will return true, and therefore
+        // filterSms() will return true
+        mockCarrierApp();
+        mockCarrierAppStubResults(
+                CarrierMessagingService.RECEIVE_OPTIONS_DEFAULT, mICarrierAppMessagingService,
+                false);
+        assertTrue(mCarrierServicesSmsFilterUT.filter());
+
+        verify(mFilterCallback, times(0))
+                .onFilterComplete(anyInt());
+
+        Thread.sleep(CarrierServicesSmsFilter.FILTER_COMPLETE_TIMEOUT_MS + 500);
+        verify(mFilterCallback, times(1))
+                .onFilterComplete(anyInt());
     }
 
     private void mockCarrierApp()
@@ -158,7 +195,8 @@ public class CarrierServicesSmsFilterTest extends TelephonyTest {
                 serviceInfo);
     }
 
-    private void mockCarrierAppStubResults(final int result, ICarrierMessagingService.Stub stub)
+    private void mockCarrierAppStubResults(final int result, ICarrierMessagingService.Stub stub,
+            boolean callOnFilterComplete)
             throws RemoteException {
         when(stub.queryLocalInterface(anyString())).thenReturn(stub);
         when(stub.asBinder()).thenReturn(stub);
@@ -167,7 +205,9 @@ public class CarrierServicesSmsFilterTest extends TelephonyTest {
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
                 ICarrierMessagingCallback callback = (ICarrierMessagingCallback) args[4];
-                callback.onFilterComplete(result);
+                if (callOnFilterComplete) {
+                    callback.onFilterComplete(result);
+                }
                 return null;
             }
         }).when(stub).filterSms(
