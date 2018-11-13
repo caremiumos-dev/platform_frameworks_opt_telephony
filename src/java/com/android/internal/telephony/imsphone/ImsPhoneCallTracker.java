@@ -3131,6 +3131,27 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         @Override
         public void onProvisioningIntChanged(int item, int value) {
             sendConfigChangedIntent(item, Integer.toString(value));
+
+            if (mImsManager != null && value == ImsConfig.FeatureValueConstants.OFF) {
+                if ((item == ImsConfig.ConfigConstants.VOICE_OVER_WIFI_SETTING_ENABLED
+                        || item == ImsConfig.ConfigConstants.VLT_SETTING_ENABLED)
+                        && !mImsManager.isWfcProvisionedOnDevice()) {
+                    if (DBG) log("onConfigChanged: Disabling WFC due to provisioning policy.");
+                    mImsManager.setWfcSetting(false);
+                }
+
+                if (item == ImsConfig.ConfigConstants.VLT_SETTING_ENABLED
+                        && !mImsManager.isVolteProvisionedOnDevice()) {
+                    if (DBG) log("onConfigChanged: Disabling VoLTE due to provisioning policy.");
+                    mImsManager.setEnhanced4gLteModeSetting(false);
+                }
+
+                if (item == ImsConfig.ConfigConstants.LVC_SETTING_ENABLED
+                        && !mImsManager.isVtProvisionedOnDevice()) {
+                    if (DBG) log("onConfigChanged: Disabling VT due to provisioning policy.");
+                    mImsManager.setVtSetting(false);
+                }
+            }
         }
 
         @Override
