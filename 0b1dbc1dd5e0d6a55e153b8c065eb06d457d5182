@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7e90e02_f01b49b8",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3715,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-14T23:35:03Z",
+      "side": 1,
+      "message": "Instead of triggering the logic here, could we try something like the hold behavior (https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/516237)",
+      "range": {
+        "startLine": 3715,
+        "startChar": 16,
+        "endLine": 3715,
+        "endChar": 17
+      },
+      "revId": "0b1dbc1dd5e0d6a55e153b8c065eb06d457d5182",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
