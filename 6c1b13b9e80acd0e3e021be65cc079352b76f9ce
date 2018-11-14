@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c48be32_49ddf334",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-14T00:41:35Z",
+      "side": 1,
+      "message": "Why not the default looper?",
+      "range": {
+        "startLine": 110,
+        "startChar": 16,
+        "endLine": 110,
+        "endChar": 50
+      },
+      "revId": "6c1b13b9e80acd0e3e021be65cc079352b76f9ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71281ac1_b6d938f2",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-14T00:41:35Z",
+      "side": 1,
+      "message": "you can instead do mCallbackTimeoutHandler.obtainMessage(EVENT_ON_FILTER_COMPLETE_NOT_CALLED)",
+      "range": {
+        "startLine": 115,
+        "startChar": 51,
+        "endLine": 115,
+        "endChar": 59
+      },
+      "revId": "6c1b13b9e80acd0e3e021be65cc079352b76f9ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1764f43b_c9bba1c1",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-14T00:41:35Z",
+      "side": 1,
+      "message": "Move this under if (!mIsOnFilterCompleteCalled)",
+      "range": {
+        "startLine": 273,
+        "startChar": 12,
+        "endLine": 275,
+        "endChar": 55
+      },
+      "revId": "6c1b13b9e80acd0e3e021be65cc079352b76f9ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69ac9a9d_043a26d4",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-14T00:41:35Z",
+      "side": 1,
+      "message": "This won\u0027t be needed based on the other 2 comments.",
+      "range": {
+        "startLine": 317,
+        "startChar": 12,
+        "endLine": 334,
+        "endChar": 0
+      },
+      "revId": "6c1b13b9e80acd0e3e021be65cc079352b76f9ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60b8d0b7_7664225f",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-14T00:41:35Z",
+      "side": 1,
+      "message": "Create a new function instead. That way you don\u0027t need RECEIVE_OPTIONS_TIMEOUT_TRIGGERED. That function should just call the pending callbacks.",
+      "range": {
+        "startLine": 390,
+        "startChar": 38,
+        "endLine": 390,
+        "endChar": 54
+      },
+      "revId": "6c1b13b9e80acd0e3e021be65cc079352b76f9ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
