@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "3323759d_e7fa25fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-15T19:49:20Z",
+      "side": 1,
+      "message": "Modify the code to keep a counter in the callback, and if it is 0 don\u0027t do anything in onFilterComplete (instead just increment it). Or something of that sort.",
+      "parentUuid": "3a4e0d02_e22ec815",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33737972_def75d00",
         "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
         "patchSetId": 2
