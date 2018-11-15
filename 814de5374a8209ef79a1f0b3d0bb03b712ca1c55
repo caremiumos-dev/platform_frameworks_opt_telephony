@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "3a4e0d02_e22ec815",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1377475
+      },
+      "writtenOn": "2018-11-15T19:40:04Z",
+      "side": 1,
+      "message": "How can I hack it to bypass the first call?",
+      "parentUuid": "7a0c516e_20ace4c9",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33737972_def75d00",
         "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
         "patchSetId": 2
