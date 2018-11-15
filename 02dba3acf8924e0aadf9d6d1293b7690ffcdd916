@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "6d7bc99a_85d8238e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-15T23:37:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3cffa3ed_27441a65",
+      "range": {
+        "startLine": 66,
+        "startChar": 19,
+        "endLine": 66,
+        "endChar": 23
+      },
+      "revId": "02dba3acf8924e0aadf9d6d1293b7690ffcdd916",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ed05e8d_bd1b040b",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "I think this would happen if the vendor implements the new RadioConfig but not the new RIL, or else if their implementation is wrong somehow. If this isn\u0027t a case we need to worry about then I can remove this.",
       "parentUuid": "5ed05e8d_bd1b040b",
+      "range": {
+        "startLine": 121,
+        "startChar": 23,
+        "endLine": 122,
+        "endChar": 67
+      },
+      "revId": "02dba3acf8924e0aadf9d6d1293b7690ffcdd916",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "585196fe_2e107eab",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-15T23:37:57Z",
+      "side": 1,
+      "message": "This is ok as a fail-safe I guess, but we should instead catch it at least initially instead of trying to correct it. Implementing new RadioConfig but not new RIL seems very unlikely, because RIL is a mandatory interface.",
+      "parentUuid": "5f70a493_bca116cd",
       "range": {
         "startLine": 121,
         "startChar": 23,
