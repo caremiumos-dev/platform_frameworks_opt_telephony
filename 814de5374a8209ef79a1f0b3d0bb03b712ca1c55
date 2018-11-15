@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "af84533a_a46fcc19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-15T18:58:49Z",
+      "side": 1,
+      "message": "Bug",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 6
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a0c516e_20ace4c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-15T18:58:49Z",
+      "side": 1,
+      "message": "It would be good to test it in a real scenario as well. You can hack the code to ignore the first call to onFilterComplete so that the timeout code path can be exercised. You can try that with a VZW SIM.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33737972_def75d00",
         "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
         "patchSetId": 2
