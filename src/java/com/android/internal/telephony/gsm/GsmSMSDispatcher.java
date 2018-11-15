@@ -108,7 +108,8 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
 
     @Override
     protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            String message, boolean statusReportRequested, SmsHeader smsHeader, int priority,
+            String message, String format, boolean statusReportRequested,
+            SmsHeader smsHeader, int priority,
             int validityPeriod) {
         return SMSDispatcherUtil.getSubmitPduGsm(scAddr, destAddr, message, statusReportRequested,
                 validityPeriod);
@@ -116,13 +117,14 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
 
     @Override
     protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            int destPort, byte[] message, boolean statusReportRequested) {
+            String format, int destPort, byte[] message, boolean statusReportRequested) {
         return SMSDispatcherUtil.getSubmitPduGsm(scAddr, destAddr, destPort, message,
                 statusReportRequested);
     }
 
     @Override
-    protected TextEncodingDetails calculateLength(CharSequence messageBody, boolean use7bitOnly) {
+    protected TextEncodingDetails calculateLength(CharSequence messageBody, String format,
+            boolean use7bitOnly) {
         return SMSDispatcherUtil.calculateLengthGsm(messageBody, use7bitOnly);
     }
 

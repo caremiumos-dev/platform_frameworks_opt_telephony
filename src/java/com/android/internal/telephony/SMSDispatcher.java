@@ -65,6 +65,7 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SmsManager;
+import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.Spanned;
@@ -777,11 +778,15 @@ public abstract class SMSDispatcher extends Handler {
      */
     protected void sendData(String destAddr, String scAddr, int destPort,
             byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        // Do not perform multiple getFormat queries because it will result in multiple queries
+        // to the ImsService and we do not want the format to change after the SMS has been
+        // encoded.
+        String format = getFormat();
         SmsMessageBase.SubmitPduBase pdu = getSubmitPdu(
-                scAddr, destAddr, destPort, data, (deliveryIntent != null));
+                scAddr, destAddr, format, destPort, data, (deliveryIntent != null));
         if (pdu != null) {
             HashMap map = getSmsTrackerMap(destAddr, scAddr, destPort, data, pdu);
-            SmsTracker tracker = getSmsTracker(map, sentIntent, deliveryIntent, getFormat(),
+            SmsTracker tracker = getSmsTracker(map, sentIntent, deliveryIntent, format,
                     null /*messageUri*/, false /*expectMore*/,
                     null /*fullMessageText*/, false /*isText*/,
                     true /*persistMessage*/);
@@ -845,11 +850,15 @@ public abstract class SMSDispatcher extends Handler {
                          String callingPkg, boolean persistMessage, int priority,
                          boolean expectMore, int validityPeriod) {
         Rlog.d(TAG, "sendText");
-        SmsMessageBase.SubmitPduBase pdu = getSubmitPdu(
-                scAddr, destAddr, text, (deliveryIntent != null), null, priority, validityPeriod);
+        // Do not query the foramt multiple times, since it can cause multiple queries to the
+        // ImsService and we do not want the format changing after the SMS has already been
+        // encoded.
+        String format = getFormat();
+        SmsMessageBase.SubmitPduBase pdu = getSubmitPdu(scAddr, destAddr, text, format,
+                (deliveryIntent != null), null, priority, validityPeriod);
         if (pdu != null) {
             HashMap map = getSmsTrackerMap(destAddr, scAddr, text, pdu);
-            SmsTracker tracker = getSmsTracker(map, sentIntent, deliveryIntent, getFormat(),
+            SmsTracker tracker = getSmsTracker(map, sentIntent, deliveryIntent, format,
                     messageUri, expectMore, text, true /*isText*/,
                     persistMessage, priority, validityPeriod);
 
@@ -900,11 +909,11 @@ public abstract class SMSDispatcher extends Handler {
     }
 
     protected abstract SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            String message, boolean statusReportRequested, SmsHeader smsHeader,
+            String message, String format, boolean statusReportRequested, SmsHeader smsHeader,
             int priority, int validityPeriod);
 
     protected abstract SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            int destPort, byte[] message, boolean statusReportRequested);
+            String format, int destPort, byte[] message, boolean statusReportRequested);
 
     /**
      * Calculate the number of septets needed to encode the message. This function should only be
@@ -914,7 +923,7 @@ public abstract class SMSDispatcher extends Handler {
      * @param use7bitOnly ignore (but still count) illegal characters if true
      * @return TextEncodingDetails
      */
-    protected abstract TextEncodingDetails calculateLength(CharSequence messageBody,
+    protected abstract TextEncodingDetails calculateLength(CharSequence messageBody, String format,
             boolean use7bitOnly);
 
     /**
@@ -975,10 +984,10 @@ public abstract class SMSDispatcher extends Handler {
             triggerSentIntentForFailure(sentIntents);
             return;
         }
-
+        String format = getFormat();
         TextEncodingDetails[] encodingForParts = new TextEncodingDetails[msgCount];
         for (int i = 0; i < msgCount; i++) {
-            TextEncodingDetails details = calculateLength(parts.get(i), false);
+            TextEncodingDetails details = calculateLength(parts.get(i), format, false);
             if (encoding != details.codeUnitSize
                     && (encoding == SmsConstants.ENCODING_UNKNOWN
                             || encoding == SmsConstants.ENCODING_7BIT)) {
@@ -1024,11 +1033,14 @@ public abstract class SMSDispatcher extends Handler {
                 deliveryIntent = deliveryIntents.get(i);
             }
 
+            // We want to ensure that this format check is only queried once per multipart SMS so we
+            // do not end up with a subset of these SMS messages being encoded differently.
+            boolean isCdmaMo = isCdmaMo(format);
             trackers[i] =
                 getNewSubmitPduTracker(destAddr, scAddr, parts.get(i), smsHeader, encoding,
                         sentIntent, deliveryIntent, (i == (msgCount - 1)),
                         unsentPartCount, anyPartFailed, messageUri,
-                        fullMessageText, priority, expectMore, validityPeriod);
+                        fullMessageText, priority, expectMore, validityPeriod, isCdmaMo);
             if (trackers[i] == null) {
                 triggerSentIntentForFailure(sentIntents);
                 return;
@@ -1057,8 +1069,9 @@ public abstract class SMSDispatcher extends Handler {
             String message, SmsHeader smsHeader, int encoding,
             PendingIntent sentIntent, PendingIntent deliveryIntent, boolean lastPart,
             AtomicInteger unsentPartCount, AtomicBoolean anyPartFailed, Uri messageUri,
-            String fullMessageText, int priority, boolean expectMore, int validityPeriod) {
-        if (isCdmaMo()) {
+            String fullMessageText, int priority, boolean expectMore, int validityPeriod,
+            boolean isCdmaMo) {
+        if (isCdmaMo) {
             UserData uData = new UserData();
             uData.payloadStr = message;
             uData.userDataHeader = smsHeader;
@@ -1082,8 +1095,8 @@ public abstract class SMSDispatcher extends Handler {
                 HashMap map = getSmsTrackerMap(destinationAddress, scAddress,
                         message, submitPdu);
                 return getSmsTracker(map, sentIntent, deliveryIntent,
-                        getFormat(), unsentPartCount, anyPartFailed, messageUri, smsHeader,
-                        (!lastPart || expectMore), fullMessageText, true /*isText*/,
+                        SmsMessage.FORMAT_3GPP2, unsentPartCount, anyPartFailed, messageUri,
+                        smsHeader, (!lastPart || expectMore), fullMessageText, true /*isText*/,
                         true /*persistMessage*/, priority, validityPeriod);
             } else {
                 Rlog.e(TAG, "CdmaSMSDispatcher.getNewSubmitPduTracker(): getSubmitPdu() returned "
@@ -1100,9 +1113,9 @@ public abstract class SMSDispatcher extends Handler {
                 HashMap map =  getSmsTrackerMap(destinationAddress, scAddress,
                         message, pdu);
                 return getSmsTracker(map, sentIntent,
-                        deliveryIntent, getFormat(), unsentPartCount, anyPartFailed, messageUri,
-                        smsHeader, (!lastPart || expectMore), fullMessageText, true /*isText*/,
-                        false /*persistMessage*/, priority, validityPeriod);
+                        deliveryIntent, SmsMessage.FORMAT_3GPP, unsentPartCount, anyPartFailed,
+                        messageUri, smsHeader, (!lastPart || expectMore), fullMessageText,
+                        true /*isText*/, false /*persistMessage*/, priority, validityPeriod);
             } else {
                 Rlog.e(TAG, "GsmSMSDispatcher.getNewSubmitPduTracker(): getSubmitPdu() returned "
                         + "null");
@@ -1974,7 +1987,7 @@ public abstract class SMSDispatcher extends Handler {
         }
     }
 
-    protected boolean isCdmaMo() {
+    protected boolean isCdmaMo(String format) {
         return mSmsDispatchersController.isCdmaMo();
     }
 }
