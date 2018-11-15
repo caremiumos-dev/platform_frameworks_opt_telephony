@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "f15977ab_f6792517",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-15T19:14:11Z",
+      "side": 1,
+      "message": "Oh, that\u0027s probably an issue only on unit tests. In real code this is called through InboundSmsHandler which is itself a handler so has a looper associated with it, and you don\u0027t need to do anything, as in not even call super(). Unit tests on the other hand do not have a looper associated with them I believe, so in several tests we create a separate HandlerThread. See GsmCdmaPhoneTest.java for example that has a GsmCdmaPhoneTestHandler.\n\nSeparately, do make sure (maybe from logcat), that both this handler and the onFilterCallback are called on the same thread.",
+      "parentUuid": "e5fefde8_ce702ae7",
+      "range": {
+        "startLine": 356,
+        "startChar": 20,
+        "endLine": 356,
+        "endChar": 37
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09e9de85_ed0d8658",
         "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
         "patchSetId": 2
