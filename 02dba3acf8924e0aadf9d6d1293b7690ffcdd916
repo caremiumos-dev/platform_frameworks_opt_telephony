@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3cffa3ed_27441a65",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-15T18:22:56Z",
+      "side": 1,
+      "message": "Since we only construct the EuiccCard when the eUICC is active, I think it might be nice to be able to get the EID from the slot so we can find things like \"does this cardId correspond to an eUICC.\"\n\nThere\u0027s also the case below where we might want the slot to be able to populate the eid in the IccCardStatus.",
+      "parentUuid": "8e4bbc9f_dd31fbfb",
+      "range": {
+        "startLine": 66,
+        "startChar": 19,
+        "endLine": 66,
+        "endChar": 23
+      },
+      "revId": "02dba3acf8924e0aadf9d6d1293b7690ffcdd916",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5ed05e8d_bd1b040b",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-11-15T02:19:10Z",
       "side": 1,
       "message": "Is that even possible?",
+      "range": {
+        "startLine": 121,
+        "startChar": 23,
+        "endLine": 122,
+        "endChar": 67
+      },
+      "revId": "02dba3acf8924e0aadf9d6d1293b7690ffcdd916",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f70a493_bca116cd",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-15T18:22:56Z",
+      "side": 1,
+      "message": "I think this would happen if the vendor implements the new RadioConfig but not the new RIL, or else if their implementation is wrong somehow. If this isn\u0027t a case we need to worry about then I can remove this.",
+      "parentUuid": "5ed05e8d_bd1b040b",
       "range": {
         "startLine": 121,
         "startChar": 23,
