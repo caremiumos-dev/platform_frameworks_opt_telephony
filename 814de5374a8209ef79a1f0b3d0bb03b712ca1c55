@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33737972_def75d00",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-15T18:57:21Z",
+      "side": 1,
+      "message": "Did this not work? And is a super() call even needed? I would have assumed it would use Looper.myLooper() by default and that\u0027s what we should use I think. It would be good to confirm that the handler and callback are on the same thread, that is there aren\u0027t different threads calling callback.onFilterComplete, otherwise we need some synchronization in that function.",
+      "range": {
+        "startLine": 356,
+        "startChar": 20,
+        "endLine": 356,
+        "endChar": 37
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09e9de85_ed0d8658",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-15T18:57:21Z",
+      "side": 1,
+      "message": "The check is not needed I guess, since onFilterComplete already checks that.",
+      "range": {
+        "startLine": 376,
+        "startChar": 20,
+        "endLine": 376,
+        "endChar": 56
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e0e0e10_fbf7c256",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-15T18:57:21Z",
+      "side": 1,
+      "message": "not needed?",
+      "range": {
+        "startLine": 382,
+        "startChar": 21,
+        "endLine": 382,
+        "endChar": 54
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
