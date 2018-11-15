@@ -70,12 +70,13 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
     @Override
     protected boolean shouldBlockSmsForEcbm() {
         // We only block outgoing SMS during ECBM when using CDMA.
-        return mPhone.isInEcm() && isCdmaMo() && !isIms();
+        return mPhone.isInEcm() && isCdmaMo(getFormat()) && !isIms();
     }
 
     @Override
     protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            String message, boolean statusReportRequested, SmsHeader smsHeader, int priority,
+            String message, String format, boolean statusReportRequested,
+            SmsHeader smsHeader, int priority,
             int validityPeriod) {
         return SMSDispatcherUtil.getSubmitPduCdma(scAddr, destAddr, message,
                 statusReportRequested, smsHeader, priority);
@@ -83,13 +84,14 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
 
     @Override
     protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            int destPort, byte[] message, boolean statusReportRequested) {
+            String format, int destPort, byte[] message, boolean statusReportRequested) {
         return SMSDispatcherUtil.getSubmitPduCdma(scAddr, destAddr, destPort, message,
                 statusReportRequested);
     }
 
     @Override
-    protected TextEncodingDetails calculateLength(CharSequence messageBody, boolean use7bitOnly) {
+    protected TextEncodingDetails calculateLength(CharSequence messageBody, String format,
+            boolean use7bitOnly) {
         return SMSDispatcherUtil.calculateLengthCdma(messageBody, use7bitOnly);
     }
     /**

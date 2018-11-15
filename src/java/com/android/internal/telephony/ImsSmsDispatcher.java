@@ -288,11 +288,27 @@ public class ImsSmsDispatcher extends SMSDispatcher {
 
     @Override
     protected String getFormat() {
+        String format = getDefaultSmsFormatType();
         try {
-            return getImsManager().getSmsFormat();
+            format = getImsManager().getSmsFormat();
+            if (SmsConstants.FORMAT_UNKNOWN.equals(format)) {
+                format = getDefaultSmsFormatType();
+                Rlog.e(TAG, "Failed to get sms format. Error: unknown format, returning " + format);
+            }
         } catch (ImsException e) {
-            Rlog.e(TAG, "Failed to get sms format. Error: " + e.getMessage());
-            return SmsConstants.FORMAT_UNKNOWN;
+            Rlog.e(TAG, "Failed to get sms format. Error: " + e.getMessage() + ", returning "
+                    + format);
+        }
+        return format;
+    }
+
+    private String getDefaultSmsFormatType() {
+        // The ImsService does not know what the IMS format should be right now... use the
+        // phone type to guess.
+        if (PhoneConstants.PHONE_TYPE_CDMA == mPhone.getPhoneType()) {
+            return SmsConstants.FORMAT_3GPP2;
+        } else {
+            return SmsConstants.FORMAT_3GPP;
         }
     }
 
@@ -305,22 +321,24 @@ public class ImsSmsDispatcher extends SMSDispatcher {
 
     @Override
     protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            String message, boolean statusReportRequested, SmsHeader smsHeader, int priority,
+            String message, String format, boolean statusReportRequested,
+            SmsHeader smsHeader, int priority,
             int validityPeriod) {
-        return SMSDispatcherUtil.getSubmitPdu(isCdmaMo(), scAddr, destAddr, message,
+        return SMSDispatcherUtil.getSubmitPdu(isCdmaMo(format), scAddr, destAddr, message,
                 statusReportRequested, smsHeader, priority, validityPeriod);
     }
 
     @Override
     protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
-            int destPort, byte[] message, boolean statusReportRequested) {
-        return SMSDispatcherUtil.getSubmitPdu(isCdmaMo(), scAddr, destAddr, destPort, message,
+            String format, int destPort, byte[] message, boolean statusReportRequested) {
+        return SMSDispatcherUtil.getSubmitPdu(isCdmaMo(format), scAddr, destAddr, destPort, message,
                 statusReportRequested);
     }
 
     @Override
-    protected TextEncodingDetails calculateLength(CharSequence messageBody, boolean use7bitOnly) {
-        return SMSDispatcherUtil.calculateLength(isCdmaMo(), messageBody, use7bitOnly);
+    protected TextEncodingDetails calculateLength(CharSequence messageBody, String format,
+            boolean use7bitOnly) {
+        return SMSDispatcherUtil.calculateLength(isCdmaMo(format), messageBody, use7bitOnly);
     }
 
     @Override
@@ -340,7 +358,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         byte smsc[] = (byte[]) map.get(MAP_KEY_SMSC);
         boolean isRetry = tracker.mRetryCount > 0;
 
-        if (SmsConstants.FORMAT_3GPP.equals(getFormat()) && tracker.mRetryCount > 0) {
+        if (SmsConstants.FORMAT_3GPP.equals(tracker.mFormat) && tracker.mRetryCount > 0) {
             // per TS 23.040 Section 9.2.3.6:  If TP-MTI SMS-SUBMIT (0x01) type
             //   TP-RD (bit 2) is 1 for retry
             //   and TP-MR is set to previously failed sms TP-MR
@@ -356,7 +374,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
             getImsManager().sendSms(
                     token,
                     tracker.mMessageRef,
-                    getFormat(),
+                    tracker.mFormat,
                     smsc != null ? new String(smsc) : null,
                     isRetry,
                     pdu);
@@ -377,8 +395,8 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     }
 
     @Override
-    protected boolean isCdmaMo() {
-        return mSmsDispatchersController.isCdmaFormat(getFormat());
+    protected boolean isCdmaMo(String format) {
+        return mSmsDispatchersController.isCdmaFormat(format);
     }
 
     @VisibleForTesting
