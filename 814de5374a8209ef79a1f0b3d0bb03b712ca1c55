@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "e5fefde8_ce702ae7",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1377475
+      },
+      "writtenOn": "2018-11-15T19:08:20Z",
+      "side": 1,
+      "message": "This threw NPE when running the tests, apparently the mQueue was null in this case",
+      "parentUuid": "33737972_def75d00",
+      "range": {
+        "startLine": 356,
+        "startChar": 20,
+        "endLine": 356,
+        "endChar": 37
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09e9de85_ed0d8658",
         "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
         "patchSetId": 2
@@ -82,6 +106,30 @@
       "writtenOn": "2018-11-15T18:57:21Z",
       "side": 1,
       "message": "The check is not needed I guess, since onFilterComplete already checks that.",
+      "range": {
+        "startLine": 376,
+        "startChar": 20,
+        "endLine": 376,
+        "endChar": 56
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94845c0f_e7d24302",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1377475
+      },
+      "writtenOn": "2018-11-15T19:08:20Z",
+      "side": 1,
+      "message": "good point",
+      "parentUuid": "09e9de85_ed0d8658",
       "range": {
         "startLine": 376,
         "startChar": 20,
@@ -114,6 +162,30 @@
       "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e48a7cb_add9f238",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1377475
+      },
+      "writtenOn": "2018-11-15T19:08:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0e0e0e10_fbf7c256",
+      "range": {
+        "startLine": 382,
+        "startChar": 21,
+        "endLine": 382,
+        "endChar": 54
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
