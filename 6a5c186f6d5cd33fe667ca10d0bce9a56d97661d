@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d15d924_7fb5954c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3136,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-11-15T15:08:15Z",
+      "side": 1,
+      "message": "This code does not consider the implementation of isWfcProvisionedOnDevice:\n\n654    public boolean isWfcProvisionedOnDevice() {\n655        if (getBooleanCarrierConfig(\n656                CarrierConfigManager.KEY_CARRIER_VOLTE_OVERRIDE_WFC_PROVISIONING_BOOL)) {\n657            if (!isVolteProvisionedOnDevice()) {\n658                return false;\n659            }\n660        }\n661\n662        if (getBooleanCarrierConfig(\n663                CarrierConfigManager.KEY_CARRIER_VOLTE_PROVISIONING_REQUIRED_BOOL)) {\n664            return isWfcProvisioned();\n665        }\n666\n667        return true;\n668    }\n\nisWfcProvisionedOnDevice might call isVolteProvisionedOnDevice if KEY_CARRIER_VOLTE_OVERRIDE_WFC_PROVISIONING_BOOL is TRUE. \n\nThis means that the result of isWfcProvisionedOnDevice might change even if we get a new onConfigChanged for VLT_SETTING_ENABLED, not just when we get a onConfigChanged for VOICE_OVER_WIFI_SETTING_ENABLED as the current patchset assumes.",
+      "range": {
+        "startLine": 3135,
+        "startChar": 20,
+        "endLine": 3136,
+        "endChar": 66
+      },
+      "revId": "6a5c186f6d5cd33fe667ca10d0bce9a56d97661d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
