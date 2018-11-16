@@ -141,6 +141,30 @@
       "revId": "02dba3acf8924e0aadf9d6d1293b7690ffcdd916",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ce443a0_6bac16db",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-16T00:19:26Z",
+      "side": 1,
+      "message": "Okay, I can just print an error log and leave the value empty for now, then if we see the issue in the future we can consider this as a workaround",
+      "parentUuid": "585196fe_2e107eab",
+      "range": {
+        "startLine": 121,
+        "startChar": 23,
+        "endLine": 122,
+        "endChar": 67
+      },
+      "revId": "02dba3acf8924e0aadf9d6d1293b7690ffcdd916",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
