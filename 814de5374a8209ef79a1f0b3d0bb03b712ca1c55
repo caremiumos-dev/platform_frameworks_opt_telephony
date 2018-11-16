@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "675be7e2_a929003d",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-11-16T21:15:16Z",
+      "side": 1,
+      "message": "Also, you can do the following during the setup of your unit tests:\nif(Looper.myLooper() \u003d\u003d null) {\n    Looper.prepare();\n}\n\nThis will create a looper for the thread. It is a little easier to manage than a async handler thread.",
+      "parentUuid": "f15977ab_f6792517",
+      "range": {
+        "startLine": 356,
+        "startChar": 20,
+        "endLine": 356,
+        "endChar": 37
+      },
+      "revId": "814de5374a8209ef79a1f0b3d0bb03b712ca1c55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09e9de85_ed0d8658",
         "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
         "patchSetId": 2
