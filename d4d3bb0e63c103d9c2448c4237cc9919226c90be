@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e94badb_6a82d121",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-19T20:30:34Z",
+      "side": 1,
+      "message": "This name is a little misleading, sounds like it should return mCellInfoMinInternal. Can we change this to determine/compute or something?",
+      "range": {
+        "startLine": 291,
+        "startChar": 15,
+        "endLine": 291,
+        "endChar": 18
+      },
+      "revId": "d4d3bb0e63c103d9c2448c4237cc9919226c90be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
