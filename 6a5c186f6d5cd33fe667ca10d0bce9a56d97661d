@@ -22,6 +22,30 @@
       "revId": "6a5c186f6d5cd33fe667ca10d0bce9a56d97661d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99cee184_fffcce18",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3136,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-11-19T16:37:11Z",
+      "side": 1,
+      "message": "Done!\n\nIn patchset 2 I now check the WFC provisioning policy also if volte provisioning has changed.",
+      "parentUuid": "2d15d924_7fb5954c",
+      "range": {
+        "startLine": 3135,
+        "startChar": 20,
+        "endLine": 3136,
+        "endChar": 66
+      },
+      "revId": "6a5c186f6d5cd33fe667ca10d0bce9a56d97661d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
