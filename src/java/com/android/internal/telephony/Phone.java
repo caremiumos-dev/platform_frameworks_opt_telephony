@@ -459,7 +459,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected Phone(String name, PhoneNotifier notifier, Context context, CommandsInterface ci,
                     boolean unitTestMode) {
         this(name, notifier, context, ci, unitTestMode, SubscriptionManager.DEFAULT_PHONE_INDEX,
-                TelephonyComponentFactory.getInstance());
+                TelephonyComponentFactory.getInstance().inject(Phone.class.getName()));
     }
 
     /**
