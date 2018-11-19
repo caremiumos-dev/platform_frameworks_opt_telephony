@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "908ba5cb_2e5f6d90",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierServicesSmsFilterTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1377475
+      },
+      "writtenOn": "2018-11-19T21:01:03Z",
+      "side": 1,
+      "message": "I also verified on the phone, that they are in the same thread. the Handler and the filter.",
+      "revId": "be9f89aa077e53381a2f9545b299c6bd69780963",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
