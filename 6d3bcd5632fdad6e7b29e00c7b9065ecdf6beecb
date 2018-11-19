@@ -22,6 +22,53 @@
       "revId": "6d3bcd5632fdad6e7b29e00c7b9065ecdf6beecb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53c62280_c2b3d474",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-19T23:28:14Z",
+      "side": 1,
+      "message": "I don\u0027t think its necessary here, since registerForEidReady() already notifies right away if the mEid is populated.\n\nFor the caller:\n1. construct EuiccCard (eid is populated)\n2. register for changes\n3. receive notification because eid is populated already",
+      "parentUuid": "890db2c2_fa039af3",
+      "range": {
+        "startLine": 127,
+        "startChar": 12,
+        "endLine": 127,
+        "endChar": 42
+      },
+      "revId": "6d3bcd5632fdad6e7b29e00c7b9065ecdf6beecb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a50f942_d8c387bb",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-19T23:28:14Z",
+      "side": 1,
+      "message": "This is null when the super constructor runs and calls update(), so we have to put an extra check here.",
+      "range": {
+        "startLine": 202,
+        "startChar": 22,
+        "endLine": 202,
+        "endChar": 27
+      },
+      "revId": "6d3bcd5632fdad6e7b29e00c7b9065ecdf6beecb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
