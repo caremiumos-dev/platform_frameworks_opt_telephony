@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "890db2c2_fa039af3",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-11-19T19:58:20Z",
+      "side": 1,
+      "message": "You should notify registrants for both the success and error cases, right?",
+      "range": {
+        "startLine": 127,
+        "startChar": 12,
+        "endLine": 127,
+        "endChar": 42
+      },
+      "revId": "6d3bcd5632fdad6e7b29e00c7b9065ecdf6beecb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
