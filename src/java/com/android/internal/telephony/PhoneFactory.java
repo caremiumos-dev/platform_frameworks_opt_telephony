@@ -188,12 +188,12 @@ public class PhoneFactory {
                         phone = new GsmCdmaPhone(context,
                                 sCommandsInterfaces[i], sPhoneNotifier, i,
                                 PhoneConstants.PHONE_TYPE_GSM,
-                                TelephonyComponentFactory.getInstance());
+                                TelephonyComponentFactory.getInstance().inject(GsmCdmaPhone.class));
                     } else if (phoneType == PhoneConstants.PHONE_TYPE_CDMA) {
                         phone = new GsmCdmaPhone(context,
                                 sCommandsInterfaces[i], sPhoneNotifier, i,
                                 PhoneConstants.PHONE_TYPE_CDMA_LTE,
-                                TelephonyComponentFactory.getInstance());
+                                TelephonyComponentFactory.getInstance().inject(GsmCdmaPhone.class));
                     }
                     Rlog.i(LOG_TAG, "Creating Phone with type = " + phoneType + " sub = " + i);
 

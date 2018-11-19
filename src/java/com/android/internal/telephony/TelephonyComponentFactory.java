@@ -16,13 +16,17 @@
 
 package com.android.internal.telephony;
 
+import android.annotation.NonNull;
 import android.content.Context;
+import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.os.Handler;
 import android.os.IDeviceIdleController;
 import android.os.Looper;
 import android.os.ServiceManager;
 import android.telephony.AccessNetworkConstants.TransportType;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriManager;
@@ -35,6 +39,17 @@ import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccProfile;
 
+import dalvik.system.PathClassLoader;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
+
 /**
  * This class has one-line methods to instantiate objects only. The purpose is to make code
  * unit-test friendly and use this class as a way to do dependency injection. Instantiating objects
@@ -42,10 +57,163 @@ import com.android.internal.telephony.uicc.UiccProfile;
  */
 public class TelephonyComponentFactory {
     private static TelephonyComponentFactory sInstance;
+    private static TelephonyComponentFactory sInjectedInstance;
+
+    private static Set<String> sInjectedComponents;
+    private static String sInjectedPackage;
+    private static String sInjectedJarPath;
+
+    private static final String TAG = TelephonyComponentFactory.class.getSimpleName();
+
+    private static final String TAG_INJECTION = "injection";
+    private static final String ATTRIBUTE_JAR = "jar";
+    private static final String ATTRIBUTE_PACKAGE = "package";
+    private static final String TAG_COMPONENTS = "components";
+    private static final String TAG_COMPONENT = "component";
 
     public static TelephonyComponentFactory getInstance() {
         if (sInstance == null) {
             sInstance = new TelephonyComponentFactory();
+            if (!TextUtils.isEmpty(sInjectedPackage)) {
+                PathClassLoader classLoader = new PathClassLoader(sInjectedJarPath,
+                        ClassLoader.getSystemClassLoader());
+                try {
+                    Class<?> cls = classLoader.loadClass(sInjectedPackage);
+                    sInjectedInstance = (TelephonyComponentFactory) cls.newInstance();
+                } catch (ClassNotFoundException e) {
+                    Log.e(TAG, "failed: " + e.getMessage());
+                } catch (IllegalAccessException | InstantiationException e) {
+                    Log.e(TAG, "injection failed: " + e.getMessage());
+                }
+            }
+        }
+        return sInstance;
+    }
+
+    /**
+     * Inject TelephonyComponentFactory using a xml config file.
+     * @param parser
+     */
+    public static void injectTheComponentFactory(XmlResourceParser parser) {
+        if (sInjectedPackage != null && sInjectedJarPath != null) {
+            Log.i(TAG, "already injected.");
+            return;
+        }
+
+        if (parser != null) {
+            parseXml(parser);
+            if (sInjectedComponents != null) {
+                Log.i(TAG, "total components injected: " + sInjectedComponents.size());
+            }
+        }
+    }
+
+    /**
+     * Find the injection tag, assign injected package name and jar path. Then parse the injection.
+     * @param parser
+     * @throws IOException
+     * @throws XmlPullParserException
+     */
+    private static void parseXml(@NonNull XmlPullParser parser) {
+        parseXmlByTag(parser, p -> {
+            for (int ii = 0; ii < parser.getAttributeCount(); ii++) {
+                String name = parser.getAttributeName(ii);
+                String value = parser.getAttributeValue(ii);
+                if (ATTRIBUTE_PACKAGE.equals(name)) {
+                    sInjectedPackage = value;
+                } else if (ATTRIBUTE_JAR.equals(name)) {
+                    sInjectedJarPath = value;
+                }
+            }
+            parseInjection(p);
+        }, TAG_INJECTION);
+    }
+
+    /**
+     * Find the components tag, then parse components.
+     * @param parser
+     */
+    private static void parseInjection(@NonNull XmlPullParser parser) {
+        parseXmlByTag(parser, p -> parseComponents(p), TAG_COMPONENTS);
+    }
+
+    /**
+     * Find the component tag, then parse each component.
+     * @param parser
+     */
+    private static void parseComponents(@NonNull XmlPullParser parser) {
+        parseXmlByTag(parser, p -> parseComponent(p), TAG_COMPONENT);
+    }
+
+    /**
+     * Extract text values from component.
+     * @param parser
+     */
+    private static void parseComponent(@NonNull XmlPullParser parser) {
+        try {
+            int outerDepth = parser.getDepth();
+            int type;
+            while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
+                    && (type != XmlPullParser.END_TAG || parser.getDepth() > outerDepth)) {
+                if (type == XmlPullParser.END_TAG) {
+                    continue;
+                }
+                if (type == XmlPullParser.TEXT) {
+                    if (sInjectedComponents == null) {
+                        sInjectedComponents = Collections.newSetFromMap(new ConcurrentHashMap<>());
+                    }
+                    sInjectedComponents.add(parser.getText());
+                }
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Iterates the tags, finds the corresponding tag and then applies the consumer.
+     * @param parser
+     * @param consumer
+     * @param tag
+     */
+    private static void parseXmlByTag(@NonNull XmlPullParser parser,
+            @NonNull Consumer<XmlPullParser> consumer, @NonNull final String tag) {
+        try {
+            int outerDepth = parser.getDepth();
+            int type;
+            while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
+                    && (type != XmlPullParser.END_TAG || parser.getDepth() > outerDepth)) {
+                if (type == XmlPullParser.END_TAG || type == XmlPullParser.TEXT) {
+                    continue;
+                }
+                if (tag.equals(parser.getName())) {
+                    consumer.accept(parser);
+                }
+            }
+        } catch (XmlPullParserException | IOException e) {
+            Log.e(TAG, "Failed to parse or find tag: " + tag, e);
+        }
+    }
+
+    private <T> boolean isFactoryInjectedForComponent(T type) {
+        if (sInjectedInstance == null || sInjectedComponents == null) {
+            return false;
+        }
+        String pkgName = type.getClass().getPackageName$();
+        return sInjectedComponents.contains(pkgName);
+    }
+
+    /**
+     * Use the injected TelephonyComponentFactory if configured. Otherwise, use the default.
+     * @param type
+     * @param <T>
+     * @return
+     */
+    public <T> TelephonyComponentFactory inject(T type) {
+        if (isFactoryInjectedForComponent(type)) {
+            return sInjectedInstance;
         }
         return sInstance;
     }
