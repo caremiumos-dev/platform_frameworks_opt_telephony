@@ -22,6 +22,30 @@
       "revId": "8f80ce8b9729c3366d43f2d5d7bd5f62ac7b115f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "887ce11c_6faf0bbd",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-11-19T23:01:29Z",
+      "side": 0,
+      "message": "That\u0027s ok, all the other tests are marked with @FlakyTest. The new test I wrote shouldn\u0027t fail because it directly injects screen state. At some point, we can redo the other tests to do something similar.",
+      "parentUuid": "fc14e068_9d02dee8",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 7
+      },
+      "revId": "8f80ce8b9729c3366d43f2d5d7bd5f62ac7b115f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
