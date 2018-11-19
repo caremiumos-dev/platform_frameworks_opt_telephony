@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc14e068_9d02dee8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-11-19T22:37:24Z",
+      "side": 0,
+      "message": "The TH environment seems to have display always turned on. Therefore all the assumptions we made in the test are not accurate. So tests were always failed. We can\u0027t mock display manager because it\u0027s final.\n\nNot sure if it\u0027s working again.",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 7
+      },
+      "revId": "8f80ce8b9729c3366d43f2d5d7bd5f62ac7b115f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
