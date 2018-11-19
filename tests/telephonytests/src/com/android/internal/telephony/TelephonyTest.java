@@ -512,7 +512,7 @@ public abstract class TelephonyTest {
         setReady(false);
     }
 
-    protected void tearDown() throws Exception {
+    protected void  tearDown() throws Exception {
 
         mSimulatedCommands.dispose();
 
