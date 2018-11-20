@@ -18,6 +18,7 @@ package com.android.internal.telephony.uicc;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -25,11 +26,14 @@ import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.storage.StorageManager;
+import android.preference.PreferenceManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.LocalLog;
 
+import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccCardConstants;
@@ -37,6 +41,7 @@ import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.RadioConfig;
 import com.android.internal.telephony.SubscriptionInfoUpdater;
+import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -112,15 +117,30 @@ public class UiccController extends Handler {
 
     // this needs to be here, because on bootup we dont know which index maps to which UiccSlot
     private CommandsInterface[] mCis;
-    private UiccSlot[] mUiccSlots;
+    @VisibleForTesting
+    public UiccSlot[] mUiccSlots;
     private int[] mPhoneIdToSlotId;
     private boolean mIsSlotStatusSupported = true;
+
+    // This maps the externally exposed card ID (int) to the internal card ID string (ICCID/EID).
+    // The array index is the card ID (int).
+    // This mapping exists to expose card-based functionality without exposing the EID, which is
+    // considered sensetive information.
+    private ArrayList<String> mCardStrings;
+
+    // SharedPreference key for saving the known card strings (ICCIDs and EIDs) ordered by card ID
+    private static final String CARD_STRINGS = "card_strings";
+
+    // This is a list of the card IDs for currently inserted UICCs. This includes both active and
+    // inactive eUICCs.
+    private Set<Integer> mInsertedCardIds;
 
     private static final Object mLock = new Object();
     private static UiccController mInstance;
     private static ArrayList<IccSlotStatus> sLastSlotStatus;
 
-    private Context mContext;
+    @VisibleForTesting
+    public Context mContext;
 
     protected RegistrantList mIccChangedRegistrants = new RegistrantList();
 
@@ -182,6 +202,8 @@ public class UiccController extends Handler {
         }
 
         mLauncher = new UiccStateChangedLauncher(c, this);
+        mCardStrings = loadCardStrings();
+        mInsertedCardIds = new HashSet<Integer>();
     }
 
     private int getSlotIdFromPhoneId(int phoneId) {
@@ -530,8 +552,58 @@ public class UiccController extends Handler {
 
         mUiccSlots[slotId].update(mCis[index], status, index);
 
+        UiccCard card = mUiccSlots[slotId].getUiccCard();
+        if (card != null && (card.getCardState() == CardState.CARDSTATE_PRESENT)) {
+            // Card.getCardId returns the cardString, not the public card ID int
+            String cardString = card.getCardId();
+            addCardId(cardString);
+            mInsertedCardIds.add(convertToPublicCardId(cardString));
+        } else {
+            mInsertedCardIds.remove(convertToPublicCardId(card.getCardId()));
+        }
+
         if (DBG) log("Notifying IccChangedRegistrants");
         mIccChangedRegistrants.notifyRegistrants(new AsyncResult(null, index, null));
+    }
+
+    /**
+     * API to return the card IDs of the currently inserted UICCs. This includes both active and
+     * inactive eUICCs.
+     */
+    public int[] getCardIds() {
+        return mInsertedCardIds.stream().mapToInt(val -> val).toArray();
+    }
+
+    private void addCardId(String cardString) {
+        if (TextUtils.isEmpty(cardString)) {
+            return;
+        }
+        if (!mCardStrings.contains(cardString)) {
+            mCardStrings.add(cardString);
+            saveCardStrings();
+        }
+    }
+
+    // returns -1 if not found
+    private int convertToPublicCardId(String cardString) {
+        return mCardStrings.indexOf(cardString);
+    }
+
+    private ArrayList<String> loadCardStrings() {
+        String cardStrings =
+                PreferenceManager.getDefaultSharedPreferences(mContext).getString(CARD_STRINGS, "");
+        if (TextUtils.isEmpty(cardStrings)) {
+            // just return an empty list, since String.split would return the list { "" }
+            return new ArrayList<String>();
+        }
+        return new ArrayList<String>(Arrays.asList(cardStrings.split(",")));
+    }
+
+    private void saveCardStrings() {
+        SharedPreferences.Editor editor =
+                PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+        editor.putString(CARD_STRINGS, TextUtils.join(",", mCardStrings));
+        editor.commit();
     }
 
     private synchronized void onGetSlotStatusDone(AsyncResult ar) {
@@ -592,6 +664,12 @@ public class UiccController extends Handler {
             }
 
             mUiccSlots[i].update(isActive ? mCis[iss.logicalSlotIndex] : null, iss);
+
+            if (mUiccSlots[i].isEuicc()) {
+                String eid = iss.eid;
+                addCardId(eid);
+                mInsertedCardIds.add(convertToPublicCardId(eid));
+            }
         }
 
         if (VDBG) logPhoneIdToSlotIdMapping();
