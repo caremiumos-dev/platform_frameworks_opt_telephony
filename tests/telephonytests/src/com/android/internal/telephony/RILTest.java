@@ -1679,9 +1679,7 @@ public class RILTest extends TelephonyTest {
         halSs.evdo.ecio = ECIO;
         halSs.evdo.signalNoiseRatio = SIGNAL_NOISE_RATIO;
         halSs.tdScdma.rscp = tdscdmaNegDbm;
-        android.telephony.SignalStrength ss = RIL.convertHalSignalStrength(halSs);
-        // FIXME: We should not need to call validateInput here b/74115980.
-        ss.validateInput();
+        android.telephony.SignalStrength ss = new android.telephony.SignalStrength(halSs);
         return ss;
     }
 
@@ -1702,12 +1700,7 @@ public class RILTest extends TelephonyTest {
         halSs.wcdma.base.signalStrength = 99;
         halSs.wcdma.rscp = 255;
         halSs.tdScdma.rscp = tdscdmaAsu;
-        android.telephony.SignalStrength ss = RIL.convertHalSignalStrength_1_2(halSs);
-        // FIXME: We should not need to call validateInput here b/74115980
-        // but unless we call it, we have to pass Integer.MAX_VALUE for wcdma RSCP,
-        // which is outside the allowable range for the HAL. This value is being
-        // coerced inside SignalStrength.validateInput().
-        ss.validateInput();
+        android.telephony.SignalStrength ss = new android.telephony.SignalStrength(halSs);
         return ss;
     }
 
