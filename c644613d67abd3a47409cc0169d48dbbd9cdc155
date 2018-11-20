@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7331455f_d91270c6",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-11-20T23:31:06Z",
+      "side": 1,
+      "message": "I understand your intention to include the eid in UICC slot, but I still have the concern. EID is different from ICCID, ICCID is available in both slot / card status, so the ICCID will be updated in both Slot and Card, whenever there is status update. But for EID, when HAL \u003c 1.3, it is not available in slot / card status, we can only read it inside EuiccCard. So for all the devices running on HAL 1.2 and earlier, the eid in UiccSlot is always null but in EuiccCard it is not null, no matter the eUICC is enabled or not. How are you going to handle this inconsistency?",
+      "parentUuid": "843e5b19_b5c5d0d3",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 24
+      },
+      "revId": "c644613d67abd3a47409cc0169d48dbbd9cdc155",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a1c951b_f9461f20",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 3
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "On old devices we get the EID from getEid. On new devices, we populate it in the constructor from IccCardStatus or in update() using IccCardStatus, so its okay, right? If the IccCardStatus contains EID on bootup then it should continue to contain EID when we request updates.",
       "parentUuid": "ccd34d70_51cd8e95",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 9
+      },
+      "revId": "c644613d67abd3a47409cc0169d48dbbd9cdc155",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45661ba9_0090c4fd",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-11-20T23:31:06Z",
+      "side": 1,
+      "message": "For all devices, we get EID from getEid(), and getEid() will be called only once. Later when there is IccCardStatus update, you will override the eid with null. I think you should check whether the ics.eid and iss.eid is null before you use them.",
+      "parentUuid": "62c157d1_0edc2151",
       "range": {
         "startLine": 200,
         "startChar": 0,
