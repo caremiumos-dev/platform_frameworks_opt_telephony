@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "87f000c0_b2790e99",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-20T23:50:21Z",
+      "side": 1,
+      "message": "Good point. The only way to do that would be to have the card update the slot in that case, but this seems wrong.\n\nI think it will be simpler to just nix the isEuicc(cardId) api, and if it becomes necessary we could always do it by checking if the card exists and is non-Euicc, and returning true otherwise.\n\nI\u0027ll remove this from UiccSlot in the next patch",
+      "parentUuid": "7331455f_d91270c6",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 24
+      },
+      "revId": "c644613d67abd3a47409cc0169d48dbbd9cdc155",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a1c951b_f9461f20",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 3
@@ -188,6 +212,30 @@
       "revId": "c644613d67abd3a47409cc0169d48dbbd9cdc155",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "999c38cd_040a22e2",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-20T23:50:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "45661ba9_0090c4fd",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 9
+      },
+      "revId": "c644613d67abd3a47409cc0169d48dbbd9cdc155",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
