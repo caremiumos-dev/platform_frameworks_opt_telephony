@@ -5750,48 +5750,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return Integer.MAX_VALUE;
     }
 
-    /** Convert HAL 1.0 Signal Strength to android SignalStrength */
-    @VisibleForTesting
-    public static SignalStrength convertHalSignalStrength(
-            android.hardware.radio.V1_0.SignalStrength signalStrength) {
-        return new SignalStrength(
-                signalStrength.gw.signalStrength,
-                signalStrength.gw.bitErrorRate,
-                signalStrength.cdma.dbm,
-                signalStrength.cdma.ecio,
-                signalStrength.evdo.dbm,
-                signalStrength.evdo.ecio,
-                signalStrength.evdo.signalNoiseRatio,
-                signalStrength.lte.signalStrength,
-                signalStrength.lte.rsrp,
-                signalStrength.lte.rsrq,
-                signalStrength.lte.rssnr,
-                signalStrength.lte.cqi,
-                convertTdscdmaRscpTo1_2(signalStrength.tdScdma.rscp));
-    }
-
-    /** Convert HAL 1.2 Signal Strength to android SignalStrength */
-    @VisibleForTesting
-    public static SignalStrength convertHalSignalStrength_1_2(
-            android.hardware.radio.V1_2.SignalStrength signalStrength) {
-        return new SignalStrength(
-                signalStrength.gsm.signalStrength,
-                signalStrength.gsm.bitErrorRate,
-                signalStrength.cdma.dbm,
-                signalStrength.cdma.ecio,
-                signalStrength.evdo.dbm,
-                signalStrength.evdo.ecio,
-                signalStrength.evdo.signalNoiseRatio,
-                signalStrength.lte.signalStrength,
-                signalStrength.lte.rsrp,
-                signalStrength.lte.rsrq,
-                signalStrength.lte.rssnr,
-                signalStrength.lte.cqi,
-                signalStrength.tdScdma.rscp,
-                signalStrength.wcdma.base.signalStrength,
-                signalStrength.wcdma.rscp);
-    }
-
     /**
      * @return The {@link IwlanOperationMode IWLAN operation mode}
      */
