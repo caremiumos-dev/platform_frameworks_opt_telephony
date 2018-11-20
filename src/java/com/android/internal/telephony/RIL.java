@@ -75,6 +75,10 @@ import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellInfo;
 import android.telephony.CellSignalStrengthCdma;
+import android.telephony.CellSignalStrengthGsm;
+import android.telephony.CellSignalStrengthLte;
+import android.telephony.CellSignalStrengthTdscdma;
+import android.telephony.CellSignalStrengthWcdma;
 import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.ModemActivityInfo;
@@ -85,7 +89,6 @@ import android.telephony.RadioAccessFamily;
 import android.telephony.RadioAccessSpecifier;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
-import android.telephony.SignalStrength;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyHistogram;
 import android.telephony.TelephonyManager;
@@ -135,7 +138,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     // Have a separate wakelock instance for Ack
     static final String RILJ_ACK_WAKELOCK_NAME = "RILJ_ACK_WL";
     static final boolean RILJ_LOGD = true;
-    static final boolean RILJ_LOGV = false; // STOPSHIP if true
+    static final boolean RILJ_LOGV = true; // STOPSHIP if true
     static final int RIL_HISTOGRAM_BUCKET_COUNT = 5;
 
     /**
@@ -5390,7 +5393,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     // TODO(b/119224773) refactor the converter of CellInfo.
     private static void writeToParcelForGsm(
             Parcel p, int lac, int cid, int arfcn, int bsic, String mcc, String mnc,
-            String al, String as, int ss, int ber, int ta) {
+            String al, String as, CellSignalStrengthGsm ss) {
         p.writeInt(CellInfo.TYPE_GSM);
         p.writeString(mcc);
         p.writeString(mnc);
@@ -5400,23 +5403,21 @@ public class RIL extends BaseCommands implements CommandsInterface {
         p.writeInt(cid);
         p.writeInt(arfcn);
         p.writeInt(bsic);
-        p.writeInt(ss);
-        p.writeInt(ber);
-        p.writeInt(ta);
+        ss.writeToParcel(p, 0);
     }
 
     // TODO(b/119224773) refactor the converter of CellInfo.
     private static void writeToParcelForCdma(
             Parcel p, int ni, int si, int bsi, int lon, int lat, String al, String as,
-            int dbm, int ecio, int eDbm, int eEcio, int eSnr) {
+            CellSignalStrengthCdma ss) {
         new CellIdentityCdma(ni, si, bsi, lon, lat, al, as).writeToParcel(p, 0);
-        new CellSignalStrengthCdma(dbm, ecio, eDbm, eEcio, eSnr).writeToParcel(p, 0);
+        ss.writeToParcel(p, 0);
     }
 
     // TODO(b/119224773) refactor the converter of CellInfo.
     private static void writeToParcelForLte(
             Parcel p, int ci, int pci, int tac, int earfcn, int bandwidth, String mcc, String mnc,
-            String al, String as, int ss, int rsrp, int rsrq, int rssnr, int cqi, int ta,
+            String al, String as, CellSignalStrengthLte ss,
             boolean isEndcAvailable) {
 
         // General CellInfo
@@ -5434,12 +5435,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         p.writeInt(bandwidth);
 
         // CellSignalStrength
-        p.writeInt(ss);
-        p.writeInt(rsrp);
-        p.writeInt(rsrq);
-        p.writeInt(rssnr);
-        p.writeInt(cqi);
-        p.writeInt(ta);
+        ss.writeToParcel(p, 0);
 
         // CellConfigLte
         p.writeBoolean(isEndcAvailable);
@@ -5448,7 +5444,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     // TODO(b/119224773) refactor the converter of CellInfo.
     private static void writeToParcelForWcdma(
             Parcel p, int lac, int cid, int psc, int uarfcn, String mcc, String mnc,
-            String al, String as, int ss, int ber, int rscp, int ecno) {
+            String al, String as, CellSignalStrengthWcdma ss) {
         p.writeInt(CellInfo.TYPE_WCDMA);
         p.writeString(mcc);
         p.writeString(mnc);
@@ -5458,16 +5454,13 @@ public class RIL extends BaseCommands implements CommandsInterface {
         p.writeInt(cid);
         p.writeInt(psc);
         p.writeInt(uarfcn);
-        p.writeInt(ss);
-        p.writeInt(ber);
-        p.writeInt(rscp);
-        p.writeInt(ecno);
+        ss.writeToParcel(p, 0);
     }
 
     // TODO(b/119224773) refactor the converter of CellInfo.
     private static void writeToParcelForTdscdma(
             Parcel p, int lac, int cid, int cpid, int uarfcn, String mcc, String mnc,
-            String al, String as, int ss, int ber, int rscp) {
+            String al, String as, CellSignalStrengthTdscdma ss) {
         p.writeInt(CellInfo.TYPE_TDSCDMA);
         p.writeString(mcc);
         p.writeString(mnc);
@@ -5477,9 +5470,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         p.writeInt(cid);
         p.writeInt(cpid);
         p.writeInt(uarfcn);
-        p.writeInt(ss);
-        p.writeInt(ber);
-        p.writeInt(rscp);
+        ss.writeToParcel(p, 0);
     }
 
     /**
@@ -5512,9 +5503,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoGsm.cellIdentityGsm.mnc,
                             EMPTY_ALPHA_LONG,
                             EMPTY_ALPHA_SHORT,
-                            cellInfoGsm.signalStrengthGsm.signalStrength,
-                            cellInfoGsm.signalStrengthGsm.bitErrorRate,
-                            cellInfoGsm.signalStrengthGsm.timingAdvance);
+                            new CellSignalStrengthGsm(cellInfoGsm.signalStrengthGsm));
                     break;
                 }
 
@@ -5529,11 +5518,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoCdma.cellIdentityCdma.latitude,
                             EMPTY_ALPHA_LONG,
                             EMPTY_ALPHA_SHORT,
-                            cellInfoCdma.signalStrengthCdma.dbm,
-                            cellInfoCdma.signalStrengthCdma.ecio,
-                            cellInfoCdma.signalStrengthEvdo.dbm,
-                            cellInfoCdma.signalStrengthEvdo.ecio,
-                            cellInfoCdma.signalStrengthEvdo.signalNoiseRatio);
+                            new CellSignalStrengthCdma(
+                                    cellInfoCdma.signalStrengthCdma,
+                                    cellInfoCdma.signalStrengthEvdo));
                     break;
                 }
 
@@ -5550,12 +5537,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoLte.cellIdentityLte.mnc,
                             EMPTY_ALPHA_LONG,
                             EMPTY_ALPHA_SHORT,
-                            cellInfoLte.signalStrengthLte.signalStrength,
-                            cellInfoLte.signalStrengthLte.rsrp,
-                            cellInfoLte.signalStrengthLte.rsrq,
-                            cellInfoLte.signalStrengthLte.rssnr,
-                            cellInfoLte.signalStrengthLte.cqi,
-                            cellInfoLte.signalStrengthLte.timingAdvance,
+                            new CellSignalStrengthLte(cellInfoLte.signalStrengthLte),
                             false /* isEndcAvailable */);
                     break;
                 }
@@ -5572,10 +5554,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoWcdma.cellIdentityWcdma.mnc,
                             EMPTY_ALPHA_LONG,
                             EMPTY_ALPHA_SHORT,
-                            cellInfoWcdma.signalStrengthWcdma.signalStrength,
-                            cellInfoWcdma.signalStrengthWcdma.bitErrorRate,
-                            Integer.MAX_VALUE,
-                            Integer.MAX_VALUE);
+                            new CellSignalStrengthWcdma(cellInfoWcdma.signalStrengthWcdma));
                     break;
                 }
 
@@ -5591,9 +5570,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoTdscdma.cellIdentityTdscdma.mnc,
                             EMPTY_ALPHA_LONG,
                             EMPTY_ALPHA_SHORT,
-                            Integer.MAX_VALUE,
-                            Integer.MAX_VALUE,
-                            convertTdscdmaRscpTo1_2(cellInfoTdscdma.signalStrengthTdscdma.rscp));
+                            new CellSignalStrengthTdscdma(cellInfoTdscdma.signalStrengthTdscdma));
                     break;
                 }
                 default:
@@ -5639,9 +5616,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoGsm.cellIdentityGsm.base.mnc,
                             cellInfoGsm.cellIdentityGsm.operatorNames.alphaLong,
                             cellInfoGsm.cellIdentityGsm.operatorNames.alphaShort,
-                            cellInfoGsm.signalStrengthGsm.signalStrength,
-                            cellInfoGsm.signalStrengthGsm.bitErrorRate,
-                            cellInfoGsm.signalStrengthGsm.timingAdvance);
+                            new CellSignalStrengthGsm(cellInfoGsm.signalStrengthGsm));
                     break;
                 }
 
@@ -5656,11 +5631,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoCdma.cellIdentityCdma.base.latitude,
                             cellInfoCdma.cellIdentityCdma.operatorNames.alphaLong,
                             cellInfoCdma.cellIdentityCdma.operatorNames.alphaShort,
-                            cellInfoCdma.signalStrengthCdma.dbm,
-                            cellInfoCdma.signalStrengthCdma.ecio,
-                            cellInfoCdma.signalStrengthEvdo.dbm,
-                            cellInfoCdma.signalStrengthEvdo.ecio,
-                            cellInfoCdma.signalStrengthEvdo.signalNoiseRatio);
+                            new CellSignalStrengthCdma(
+                                cellInfoCdma.signalStrengthCdma,
+                                cellInfoCdma.signalStrengthEvdo));
                     break;
                 }
 
@@ -5677,12 +5650,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoLte.cellIdentityLte.base.mnc,
                             cellInfoLte.cellIdentityLte.operatorNames.alphaLong,
                             cellInfoLte.cellIdentityLte.operatorNames.alphaShort,
-                            cellInfoLte.signalStrengthLte.signalStrength,
-                            cellInfoLte.signalStrengthLte.rsrp,
-                            cellInfoLte.signalStrengthLte.rsrq,
-                            cellInfoLte.signalStrengthLte.rssnr,
-                            cellInfoLte.signalStrengthLte.cqi,
-                            cellInfoLte.signalStrengthLte.timingAdvance,
+                            new CellSignalStrengthLte(cellInfoLte.signalStrengthLte),
                             false /* isEndcAvailable */);
                     break;
                 }
@@ -5699,10 +5667,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoWcdma.cellIdentityWcdma.base.mnc,
                             cellInfoWcdma.cellIdentityWcdma.operatorNames.alphaLong,
                             cellInfoWcdma.cellIdentityWcdma.operatorNames.alphaShort,
-                            cellInfoWcdma.signalStrengthWcdma.base.signalStrength,
-                            cellInfoWcdma.signalStrengthWcdma.base.bitErrorRate,
-                            cellInfoWcdma.signalStrengthWcdma.rscp,
-                            cellInfoWcdma.signalStrengthWcdma.ecno);
+                            new CellSignalStrengthWcdma(cellInfoWcdma.signalStrengthWcdma));
                     break;
                 }
 
@@ -5719,9 +5684,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             cellInfoTdscdma.cellIdentityTdscdma.base.mnc,
                             cellInfoTdscdma.cellIdentityTdscdma.operatorNames.alphaLong,
                             cellInfoTdscdma.cellIdentityTdscdma.operatorNames.alphaShort,
-                            cellInfoTdscdma.signalStrengthTdscdma.signalStrength,
-                            cellInfoTdscdma.signalStrengthTdscdma.bitErrorRate,
-                            cellInfoTdscdma.signalStrengthTdscdma.rscp);
+                            new CellSignalStrengthTdscdma(cellInfoTdscdma.signalStrengthTdscdma));
                     break;
                 }
 
@@ -5748,48 +5711,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
             return rscpDbm + 120;
         }
         return Integer.MAX_VALUE;
-    }
-
-    /** Convert HAL 1.0 Signal Strength to android SignalStrength */
-    @VisibleForTesting
-    public static SignalStrength convertHalSignalStrength(
-            android.hardware.radio.V1_0.SignalStrength signalStrength) {
-        return new SignalStrength(
-                signalStrength.gw.signalStrength,
-                signalStrength.gw.bitErrorRate,
-                signalStrength.cdma.dbm,
-                signalStrength.cdma.ecio,
-                signalStrength.evdo.dbm,
-                signalStrength.evdo.ecio,
-                signalStrength.evdo.signalNoiseRatio,
-                signalStrength.lte.signalStrength,
-                signalStrength.lte.rsrp,
-                signalStrength.lte.rsrq,
-                signalStrength.lte.rssnr,
-                signalStrength.lte.cqi,
-                convertTdscdmaRscpTo1_2(signalStrength.tdScdma.rscp));
-    }
-
-    /** Convert HAL 1.2 Signal Strength to android SignalStrength */
-    @VisibleForTesting
-    public static SignalStrength convertHalSignalStrength_1_2(
-            android.hardware.radio.V1_2.SignalStrength signalStrength) {
-        return new SignalStrength(
-                signalStrength.gsm.signalStrength,
-                signalStrength.gsm.bitErrorRate,
-                signalStrength.cdma.dbm,
-                signalStrength.cdma.ecio,
-                signalStrength.evdo.dbm,
-                signalStrength.evdo.ecio,
-                signalStrength.evdo.signalNoiseRatio,
-                signalStrength.lte.signalStrength,
-                signalStrength.lte.rsrp,
-                signalStrength.lte.rsrq,
-                signalStrength.lte.rssnr,
-                signalStrength.lte.cqi,
-                signalStrength.tdScdma.rscp,
-                signalStrength.wcdma.base.signalStrength,
-                signalStrength.wcdma.rscp);
     }
 
     /**
