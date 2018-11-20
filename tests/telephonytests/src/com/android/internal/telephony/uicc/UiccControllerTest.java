@@ -26,10 +26,12 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.support.test.filters.SmallTest;
+import android.support.test.InstrumentationRegistry;
 import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.CommandsInterface;
@@ -40,6 +42,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+
+import java.util.ArrayList;
 
 public class UiccControllerTest extends TelephonyTest {
     private UiccController mUiccControllerUT;
@@ -147,7 +151,7 @@ public class UiccControllerTest extends TelephonyTest {
         assertEquals(TelephonyManager.RADIO_POWER_UNAVAILABLE, mSimulatedCommands.getRadioState());
     }
 
-    @Test@SmallTest
+    @Test @SmallTest
     public void testPowerOn() {
         mSimulatedCommands.setRadioPower(true, null);
         waitForMs(500);
@@ -199,5 +203,25 @@ public class UiccControllerTest extends TelephonyTest {
         verify(mMockedHandler, atLeast(1)).sendMessageDelayed(mCaptorMessage.capture(),
                 mCaptorLong.capture());
         assertEquals(ICC_CHANGED_EVENT, mCaptorMessage.getValue().what);
+    }
+
+    @Test
+    public void testCardIds() {
+        // Give UiccController a real context so it can use shared preferences
+        mUiccControllerUT.mContext = InstrumentationRegistry.getContext();
+
+        // simulate slot status loaded
+        int EVENT_GET_SLOT_STATUS_DONE = 4;
+        ArrayList<IccSlotStatus> status = new ArrayList<IccSlotStatus>();
+        IccSlotStatus iss = new IccSlotStatus();
+        iss.setSlotState(1 /* active */);
+        iss.eid = "A1B2C3D4";
+        status.add(iss);
+        AsyncResult ar = new AsyncResult(null, status, null);
+        Message msg = Message.obtain(mUiccControllerUT, EVENT_GET_SLOT_STATUS_DONE, ar);
+        mUiccControllerUT.handleMessage(msg);
+
+        // assert that the card ID was created
+        assertEquals(0, mUiccControllerUT.getCardIds()[0]);
     }
 }

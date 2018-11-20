@@ -169,6 +169,10 @@ public class UiccSlot extends Handler {
         }
     }
 
+    public String getEid() {
+        return mEid;
+    }
+
     private boolean absentStateUpdateNeeded(CardState oldState) {
         return (oldState != CardState.CARDSTATE_ABSENT || mUiccCard != null)
                 && mCardState == CardState.CARDSTATE_ABSENT;
