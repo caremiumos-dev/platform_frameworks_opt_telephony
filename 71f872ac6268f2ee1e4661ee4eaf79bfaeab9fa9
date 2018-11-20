@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66fe561a_29b02a41",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-20T19:17:03Z",
+      "side": 1,
+      "message": "maybe throw a runtimeexception if mFilterAggregator is not null before this?",
+      "revId": "71f872ac6268f2ee1e4661ee4eaf79bfaeab9fa9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70cdebf9_56f7d31e",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-20T19:17:03Z",
+      "side": 1,
+      "message": "Not used?",
+      "revId": "71f872ac6268f2ee1e4661ee4eaf79bfaeab9fa9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f65d5f6_596b6291",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-20T19:17:03Z",
+      "side": 1,
+      "message": "Do we need to check first, or can removeMessages() be called directly?",
+      "revId": "71f872ac6268f2ee1e4661ee4eaf79bfaeab9fa9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
