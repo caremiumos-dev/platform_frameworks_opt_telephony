@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a1c951b_f9461f20",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-20T19:01:21Z",
+      "side": 1,
+      "message": "spoke offline, Amit recommends sharing mLock with the UiccCard mLock, so I\u0027ll make that protected and remove the mLock in this class.",
+      "range": {
+        "startLine": 202,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 87
+      },
+      "revId": "c644613d67abd3a47409cc0169d48dbbd9cdc155",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
