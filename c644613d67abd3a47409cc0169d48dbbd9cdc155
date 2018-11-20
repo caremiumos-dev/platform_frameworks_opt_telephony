@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "843e5b19_b5c5d0d3",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-20T19:36:59Z",
+      "side": 1,
+      "message": "EuiccCard is only created when we have cardstate, which I believe means that for an inactive eUICC we don\u0027t create an EuiccCard. However, we\u0027d like to be able to know whether a cardId corresponds to an eUICC even if the eUICC isn\u0027t active currently, so if we store the EID in UiccSlot, which always exists, we can do the lookup easily.\n\nAlso, though EID isn\u0027t always known, neither is ICCID and we already have mIccId in UiccSlot.\n\nAlternatively, if we really can\u0027t have EID here, we could not offer the ability to know if a cardId corresponds to an eUICC.\n\nWDYT?",
+      "parentUuid": "7bdf4527_c7435a7e",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 24
+      },
+      "revId": "c644613d67abd3a47409cc0169d48dbbd9cdc155",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a1c951b_f9461f20",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "497aecd7_0e7de1e5",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-20T19:36:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a1c951b_f9461f20",
+      "range": {
+        "startLine": 202,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 87
+      },
+      "revId": "c644613d67abd3a47409cc0169d48dbbd9cdc155",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ccd34d70_51cd8e95",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2018-11-20T19:12:29Z",
       "side": 1,
       "message": "This will cause issues on old devices, because EuiccCard will load the eid once when it is constructed, but later the eid will be overridden by the null values in the card status",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 9
+      },
+      "revId": "c644613d67abd3a47409cc0169d48dbbd9cdc155",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62c157d1_0edc2151",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-20T19:36:59Z",
+      "side": 1,
+      "message": "On old devices we get the EID from getEid. On new devices, we populate it in the constructor from IccCardStatus or in update() using IccCardStatus, so its okay, right? If the IccCardStatus contains EID on bootup then it should continue to contain EID when we request updates.",
+      "parentUuid": "ccd34d70_51cd8e95",
       "range": {
         "startLine": 200,
         "startChar": 0,
