@@ -129,6 +129,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         String disName = "TESTING";
         String disNum = "12345";
         boolean isOpportunistic = true;
+        boolean isMetered = true;
 
         testInsertSim();
         /* Get SUB ID */
@@ -142,6 +143,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mSubscriptionControllerUT.setDisplayNumber(disNum, subID);
         mSubscriptionControllerUT.setIconTint(iconTint, subID);
         mSubscriptionControllerUT.setOpportunistic(isOpportunistic, subID);
+        mSubscriptionControllerUT.setOpportunistic(isMetered, subID);
 
         /* Getting, there is no direct getter function for each fields of property */
         SubscriptionInfo subInfo = mSubscriptionControllerUT
@@ -152,6 +154,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         assertEquals(iconTint, subInfo.getIconTint());
         assertEquals(disNum, subInfo.getNumber());
         assertEquals(isOpportunistic, subInfo.isOpportunistic());
+        assertEquals(isMetered, subInfo.isMetered());
 
         /* verify broadcast intent */
         ArgumentCaptor<Intent> captorIntent = ArgumentCaptor.forClass(Intent.class);
