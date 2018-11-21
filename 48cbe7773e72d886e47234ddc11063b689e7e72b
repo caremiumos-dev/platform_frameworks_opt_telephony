@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35ebf1fc_f61a3929",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-21T01:11:00Z",
+      "side": 1,
+      "message": "Actually we don\u0027t know if this is called by the carrier service or due to timeout.",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 326,
+        "endChar": 79
+      },
+      "revId": "48cbe7773e72d886e47234ddc11063b689e7e72b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
