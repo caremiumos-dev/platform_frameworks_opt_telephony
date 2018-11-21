@@ -22,6 +22,30 @@
       "revId": "f0f6409aabd651cb23e577041a702c03343fda0a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7a29259_3066e892",
+        "filename": "src/java/com/android/internal/telephony/uicc/AnswerToReset.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-11-21T19:14:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a75ca6f9_296620c2",
+      "range": {
+        "startLine": 156,
+        "startChar": 70,
+        "endLine": 156,
+        "endChar": 73
+      },
+      "revId": "f0f6409aabd651cb23e577041a702c03343fda0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
