@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d85d5915_e5976c6d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2018-11-21T20:24:20Z",
+      "side": 1,
+      "message": "How are these numbers decided?",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 58
+      },
+      "revId": "416c060238edec1052716121be18c52adfb07f43",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac2739df_2abb3795",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2018-11-21T20:24:20Z",
+      "side": 1,
+      "message": "What if QC changes the behavior? Then would this detection algorithm work?",
+      "range": {
+        "startLine": 353,
+        "startChar": 12,
+        "endLine": 353,
+        "endChar": 25
+      },
+      "revId": "416c060238edec1052716121be18c52adfb07f43",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
