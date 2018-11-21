@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "1ca088ea_e9a9d88d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-21T00:26:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87f000c0_b2790e99",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 24
+      },
+      "revId": "c644613d67abd3a47409cc0169d48dbbd9cdc155",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a1c951b_f9461f20",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 3
