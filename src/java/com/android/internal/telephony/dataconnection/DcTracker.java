@@ -511,10 +511,6 @@ public class DcTracker extends Handler {
     //        really a lower power mode")
     private boolean mIsScreenOn = true;
 
-    // Indicates if we found mvno-specific APNs in the full APN list.
-    // used to determine if we can accept mno-specific APN for tethering.
-    private boolean mMvnoMatched = false;
-
     /** Allows the generation of unique Id's for DataConnection objects */
     private AtomicInteger mUniqueIdGenerator = new AtomicInteger(0);
 
@@ -1709,8 +1705,6 @@ public class DcTracker extends Handler {
             return new ArrayList<ApnSetting>(0);
         }
         int bearer = mPhone.getServiceState().getRilDataRadioTechnology();
-        IccRecords r = mIccRecords.get();
-        String operator = (r != null) ? r.getOperatorNumeric() : "";
         ArrayList<ApnSetting> dunCandidates = new ArrayList<ApnSetting>();
         ArrayList<ApnSetting> retDunSettings = new ArrayList<ApnSetting>();
 
@@ -1738,16 +1732,7 @@ public class DcTracker extends Handler {
                     ServiceState.rilRadioTechnologyToNetworkType(bearer))) {
                 continue;
             }
-            if (dunSetting.getOperatorNumeric().equals(operator)) {
-                if (dunSetting.hasMvnoParams()) {
-                    if (r != null && ApnSettingUtils.mvnoMatches(r, dunSetting.getMvnoType(),
-                            dunSetting.getMvnoMatchData())) {
-                        retDunSettings.add(dunSetting);
-                    }
-                } else if (mMvnoMatched == false) {
-                    retDunSettings.add(dunSetting);
-                }
-            }
+            retDunSettings.add(dunSetting);
         }
 
         if (VDBG) log("fetchDunApns: dunSettings=" + retDunSettings);
@@ -1818,41 +1803,6 @@ public class DcTracker extends Handler {
     boolean isPermanentFailure(DcFailCause dcFailCause) {
         return (dcFailCause.isPermanentFailure(mPhone.getContext(), mPhone.getSubId()) &&
                 (mAttached.get() == false || dcFailCause != DcFailCause.SIGNAL_LOST));
-    }
-
-    private ArrayList<ApnSetting> createApnList(Cursor cursor) {
-        ArrayList<ApnSetting> mnoApns = new ArrayList<ApnSetting>();
-        ArrayList<ApnSetting> mvnoApns = new ArrayList<ApnSetting>();
-        IccRecords r = mIccRecords.get();
-
-        if (cursor.moveToFirst()) {
-            do {
-                ApnSetting apn = ApnSetting.makeApnSetting(cursor);
-                if (apn == null) {
-                    continue;
-                }
-
-                if (apn.hasMvnoParams()) {
-                    if (r != null && ApnSettingUtils.mvnoMatches(r, apn.getMvnoType(),
-                            apn.getMvnoMatchData())) {
-                        mvnoApns.add(apn);
-                    }
-                } else {
-                    mnoApns.add(apn);
-                }
-            } while (cursor.moveToNext());
-        }
-
-        ArrayList<ApnSetting> result;
-        if (mvnoApns.isEmpty()) {
-            result = mnoApns;
-            mMvnoMatched = false;
-        } else {
-            result = mvnoApns;
-            mMvnoMatched = true;
-        }
-        if (DBG) log("createApnList: X result=" + result);
-        return result;
     }
 
     private DataConnection findFreeDataConnection() {
@@ -3232,10 +3182,10 @@ public class DcTracker extends Handler {
      * Data Connections and setup the preferredApn.
      */
     private void createAllApnList() {
-        mMvnoMatched = false;
         mAllApnSettings.clear();
         IccRecords r = mIccRecords.get();
         String operator = (r != null) ? r.getOperatorNumeric() : "";
+
         if (operator != null) {
             String selection = Telephony.Carriers.NUMERIC + " = '" + operator + "'";
             // query only enabled apn.
@@ -3255,11 +3205,13 @@ public class DcTracker extends Handler {
                     if (DBG) log("createAllApnList: cursor count is 0");
                     mApnSettingsInitializationLog.log("no APN in db for carrier: " + operator);
                 }
-                cursor.close();
-            } else {
-                if (DBG) log("createAllApnList: cursor is null");
-                mApnSettingsInitializationLog.log("cursor is null for carrier: " + operator);
+                mAllApnSettings.add(apn);
             }
+            cursor.close();
+        } else {
+            if (DBG) log("createAllApnList: cursor is null");
+            mApnSettingsInitializationLog.log("cursor is null for carrier, operator: "
+                    + operator);
         }
 
         addEmergencyApnSetting();
@@ -3267,8 +3219,9 @@ public class DcTracker extends Handler {
         dedupeApnSettings();
 
         if (mAllApnSettings.isEmpty()) {
-            if (DBG) log("createAllApnList: No APN found for carrier: " + operator);
-            mApnSettingsInitializationLog.log("no APN found for carrier: " + operator);
+            log("createAllApnList: No APN found for carrier, operator: " + operator);
+            mApnSettingsInitializationLog.log("no APN found for carrier, operator: "
+                    + operator);
             mPreferredApn = null;
             // TODO: What is the right behavior?
             //notifyNoData(DataConnection.FailCause.MISSING_UNKNOWN_APN);
