@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2f780378_c8c1dab6",
+        "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2018-11-21T00:28:17Z",
+      "side": 1,
+      "message": "We do, but the assumption is that a new CarrierServicesSmsFilter will be instantiated for each filterSms call. So if we throw an exception, we will catch if that assumption is ever invalid.",
+      "parentUuid": "6d29b5e6_4da37c04",
+      "revId": "71f872ac6268f2ee1e4661ee4eaf79bfaeab9fa9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70cdebf9_56f7d31e",
         "filename": "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java",
         "patchSetId": 6
