@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a586d15f_8e267270",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-21T00:28:27Z",
+      "side": 1,
+      "message": "nit: one \"i\" is enough P",
+      "range": {
+        "startLine": 119,
+        "startChar": 21,
+        "endLine": 119,
+        "endChar": 23
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c87cce8_fac7fe11",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-21T00:28:27Z",
+      "side": 1,
+      "message": "Same question below.",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 17
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f5e5974_7b6af262",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-21T00:28:27Z",
+      "side": 1,
+      "message": "Maybe assign an empty when declare sInjectedComponents, then you don\u0027t need to do the null pointer check here.",
+      "range": {
+        "startLine": 162,
+        "startChar": 20,
+        "endLine": 164,
+        "endChar": 21
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31fa4f59_261de597",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-21T00:28:27Z",
+      "side": 1,
+      "message": "What if the same tag appear in the nested XML recursively. In that case, the same xml element will be parsed many times. \n\nFor example, TAG_COMPONENT2 will be parsed twice. \n \n\u003cTAG_COMPONENT1\u003e\n    \u003cTAG_COMPONENT2\u003e\n        \u003cTAG_COMPONENT3\u003e\n        \u003c/TAG_COMPONENT3\u003e\n    \u003c/TAG_COMPONENT2\u003e\n\u003c/TAG_COMPONENT1\u003e",
+      "range": {
+        "startLine": 186,
+        "startChar": 12,
+        "endLine": 186,
+        "endChar": 71
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "461f88f4_27b141ca",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-21T00:28:27Z",
+      "side": 1,
+      "message": "Can we just check the deepth here?\n\nIf the xml is valid and the parser is start with the start_tag, we can simplify the code like that:\n\nint type \u003d parser.next();\nwhile (parser.getDepth() \u003e outerDepth) {\n    ...\n    ...\n    type \u003d parser.next();\n}",
+      "range": {
+        "startLine": 186,
+        "startChar": 12,
+        "endLine": 187,
+        "endChar": 91
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c799056b_d411f95d",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-21T00:28:27Z",
+      "side": 1,
+      "message": "hmm, I\u0027m not sure why you check the end tag and text here. I guess you want the item with the given tag name, is that equivalent to check if the event is START_TAG and the name is equal to the given tag name?\n\nif (type \u003d\u003d XmlPullParser.START_TAG \u0026\u0026 tag.equals(parser.getName())) {\n    consumer.accept(parser);\n}",
+      "range": {
+        "startLine": 188,
+        "startChar": 16,
+        "endLine": 193,
+        "endChar": 17
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "390c647a_43731641",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-21T00:28:27Z",
+      "side": 1,
+      "message": "What does this parameter mean? Could you please add some comment to the javadoc.",
+      "range": {
+        "startLine": 210,
+        "startChar": 7,
+        "endLine": 210,
+        "endChar": 18
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
