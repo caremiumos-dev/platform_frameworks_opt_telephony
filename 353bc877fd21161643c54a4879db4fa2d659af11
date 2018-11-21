@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "2f0db9ca_96668aa2",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-11-21T02:23:09Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "7f5e5974_7b6af262",
+      "range": {
+        "startLine": 162,
+        "startChar": 20,
+        "endLine": 164,
+        "endChar": 21
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31fa4f59_261de597",
         "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
         "patchSetId": 1
@@ -82,6 +106,30 @@
       "writtenOn": "2018-11-21T00:28:27Z",
       "side": 1,
       "message": "What if the same tag appear in the nested XML recursively. In that case, the same xml element will be parsed many times. \n\nFor example, TAG_COMPONENT2 will be parsed twice. \n \n\u003cTAG_COMPONENT1\u003e\n    \u003cTAG_COMPONENT2\u003e\n        \u003cTAG_COMPONENT3\u003e\n        \u003c/TAG_COMPONENT3\u003e\n    \u003c/TAG_COMPONENT2\u003e\n\u003c/TAG_COMPONENT1\u003e",
+      "range": {
+        "startLine": 186,
+        "startChar": 12,
+        "endLine": 186,
+        "endChar": 71
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a5214f5_013f2899",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-11-21T02:23:09Z",
+      "side": 1,
+      "message": "Right, if same tag appears like: \n\u003ctagA\u003e\n  \u003ctagA\u003e\n    \u003ctagA\u003e\n      \u003ctagB\u003e\n\nand same target tag is passed in with consumer functions multiple times, then it would be parsed multiple times. E.g\ngiven consumer function \u003d parseTagA(parser), and parseTagA \u003d {\n   parseXmlByTag(parser, parseTagA, tagA);\n}\nit will parse tagA multiple times until tagB doesn\u0027t match. (cuz now it creates an infinite loop). But since tagB doesn\u0027t match, so it would end up with doing nothing. The bottom line is that everytime it\u0027s one lvl deeper and looping a different tagA, so vertical duplication is okay.\n\nHorizontally, if it has:\n  \u003ctagA/\u003e\n  \u003ctagA/\u003e\nit will parse twice for sure. And no validation is defending it. Would add some validations if required.",
+      "parentUuid": "31fa4f59_261de597",
       "range": {
         "startLine": 186,
         "startChar": 12,
@@ -117,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "ab2829ce_66df54b0",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-11-21T02:23:09Z",
+      "side": 1,
+      "message": "A little skeptical about simply relying on depth.",
+      "parentUuid": "461f88f4_27b141ca",
+      "range": {
+        "startLine": 186,
+        "startChar": 12,
+        "endLine": 187,
+        "endChar": 91
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c799056b_d411f95d",
         "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
         "patchSetId": 1
@@ -140,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "05a7a86d_70b100d5",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-11-21T02:23:09Z",
+      "side": 1,
+      "message": "Indeed changing to look for start tag would be simpler. Will make a patch on it.",
+      "parentUuid": "c799056b_d411f95d",
+      "range": {
+        "startLine": 188,
+        "startChar": 16,
+        "endLine": 193,
+        "endChar": 17
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "390c647a_43731641",
         "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
         "patchSetId": 1
@@ -151,6 +247,30 @@
       "writtenOn": "2018-11-21T00:28:27Z",
       "side": 1,
       "message": "What does this parameter mean? Could you please add some comment to the javadoc.",
+      "range": {
+        "startLine": 210,
+        "startChar": 7,
+        "endLine": 210,
+        "endChar": 18
+      },
+      "revId": "353bc877fd21161643c54a4879db4fa2d659af11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a43f196_5210a3eb",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-11-21T02:23:09Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "390c647a_43731641",
       "range": {
         "startLine": 210,
         "startChar": 7,
