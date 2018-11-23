@@ -55,7 +55,7 @@ import org.mockito.Mock;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DcControllerTest extends TelephonyTest {
 
@@ -65,7 +65,7 @@ public class DcControllerTest extends TelephonyTest {
     @Mock
     DataConnection mDc;
     @Mock
-    HashMap<ApnContext, ConnectionParams> mApnContexts;
+    ConcurrentHashMap<ApnContext, ConnectionParams> mApnContexts;
     @Mock
     DataServiceManager mDataServiceManager;
 
