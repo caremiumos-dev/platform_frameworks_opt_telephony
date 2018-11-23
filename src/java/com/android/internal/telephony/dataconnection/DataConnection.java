@@ -79,8 +79,8 @@ import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -193,7 +193,7 @@ public class DataConnection extends StateMachine {
 
     int mTag;
     public int mCid;
-    public HashMap<ApnContext, ConnectionParams> mApnContexts = null;
+    public ConcurrentHashMap<ApnContext, ConnectionParams> mApnContexts = null;
     PendingIntent mReconnectIntent = null;
 
 
@@ -491,7 +491,7 @@ public class DataConnection extends StateMachine {
             addState(mDisconnectingErrorCreatingConnection, mDefaultState);
         setInitialState(mInactiveState);
 
-        mApnContexts = new HashMap<>();
+        mApnContexts = new ConcurrentHashMap<>();
     }
 
     /**
