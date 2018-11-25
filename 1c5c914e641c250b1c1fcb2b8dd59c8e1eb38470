@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3196fad1_b8ed3342",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2018-11-25T23:51:17Z",
+      "side": 1,
+      "message": "you need to update the file TelephonyProvider.java which is the one that creates or update database table to have the column.",
+      "revId": "1c5c914e641c250b1c1fcb2b8dd59c8e1eb38470",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
