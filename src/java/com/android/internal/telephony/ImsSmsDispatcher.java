@@ -36,7 +36,11 @@ import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
+<<<<<<< HEAD
 import com.android.internal.telephony.metrics.TelephonyMetrics;
+=======
+import com.android.internal.telephony.uicc.IccUtils;
+>>>>>>> 924b356... Fix failing to send SMS with SMSC over IMS
 import com.android.internal.telephony.util.SMSDispatcherUtil;
 
 import java.util.HashMap;
@@ -362,8 +366,13 @@ public class ImsSmsDispatcher extends SMSDispatcher {
             getImsManager().sendSms(
                     token,
                     tracker.mMessageRef,
+<<<<<<< HEAD
                     format,
                     smsc != null ? new String(smsc) : null,
+=======
+                    getFormat(),
+                    smsc != null ? IccUtils.bytesToHexString(smsc) : null,
+>>>>>>> 924b356... Fix failing to send SMS with SMSC over IMS
                     isRetry,
                     pdu);
             mMetrics.writeImsServiceSendSms(mPhone.getPhoneId(), format,
