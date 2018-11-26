@@ -22,6 +22,30 @@
       "revId": "13ed879b62b63c7232b63c3b4a9c3694327fc406",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "632d01c6_9f69d445",
+        "filename": "src/java/com/android/internal/telephony/RadioConfigIndication.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-26T19:22:58Z",
+      "side": 1,
+      "message": "good catch!",
+      "parentUuid": "f7ef7707_0b824ca9",
+      "range": {
+        "startLine": 19,
+        "startChar": 30,
+        "endLine": 19,
+        "endChar": 36
+      },
+      "revId": "13ed879b62b63c7232b63c3b4a9c3694327fc406",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
