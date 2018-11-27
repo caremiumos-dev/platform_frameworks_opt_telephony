@@ -31,6 +31,7 @@ import android.os.Messenger;
 import android.os.Process;
 import android.os.RemoteException;
 import android.telephony.CellInfo;
+import android.telephony.LocationAccessPolicy;
 import android.telephony.NetworkScan;
 import android.telephony.NetworkScanRequest;
 import android.telephony.RadioAccessSpecifier;
@@ -194,9 +195,11 @@ public final class NetworkScanRequestTracker {
         private final int mScanId;
         private final int mUid;
         private final int mPid;
+        private final String mCallingPackage;
         private boolean mIsBinderDead;
 
-        NetworkScanRequestInfo(NetworkScanRequest r, Messenger m, IBinder b, int id, Phone phone) {
+        NetworkScanRequestInfo(NetworkScanRequest r, Messenger m, IBinder b, int id, Phone phone,
+                String callingPackage) {
             super();
             mRequest = r;
             mMessenger = m;
@@ -205,6 +208,7 @@ public final class NetworkScanRequestTracker {
             mPhone = phone;
             mUid = Binder.getCallingUid();
             mPid = Binder.getCallingPid();
+            mCallingPackage = callingPackage;
             mIsBinderDead = false;
 
             try {
@@ -375,16 +379,22 @@ public final class NetworkScanRequestTracker {
             if (ar.exception == null && ar.result != null) {
                 NetworkScanResult nsr = (NetworkScanResult) ar.result;
                 if (nsr.scanError == NetworkScan.SUCCESS) {
-                    notifyMessenger(nsri, TelephonyScanManager.CALLBACK_SCAN_RESULTS,
-                            rilErrorToScanError(nsr.scanError), nsr.networkInfos);
+                    if (LocationAccessPolicy.canAccessFineLocation(nsri.mPhone.getContext(),
+                            nsri.mCallingPackage, nsri.mUid, nsri.mPid, false)) {
+                        notifyMessenger(nsri, TelephonyScanManager.CALLBACK_SCAN_RESULTS,
+                                rilErrorToScanError(nsr.scanError), nsr.networkInfos);
+                    }
                     if (nsr.scanStatus == NetworkScanResult.SCAN_STATUS_COMPLETE) {
                         deleteScanAndMayNotify(nsri, NetworkScan.SUCCESS, true);
                         nsri.mPhone.mCi.unregisterForNetworkScanResult(mHandler);
                     }
                 } else {
                     if (nsr.networkInfos != null) {
-                        notifyMessenger(nsri, TelephonyScanManager.CALLBACK_SCAN_RESULTS,
-                                NetworkScan.SUCCESS, nsr.networkInfos);
+                        if (LocationAccessPolicy.canAccessFineLocation(nsri.mPhone.getContext(),
+                                nsri.mCallingPackage, nsri.mUid, nsri.mPid, false)) {
+                            notifyMessenger(nsri, TelephonyScanManager.CALLBACK_SCAN_RESULTS,
+                                    NetworkScan.SUCCESS, nsr.networkInfos);
+                        }
                     }
                     deleteScanAndMayNotify(nsri, rilErrorToScanError(nsr.scanError), true);
                     nsri.mPhone.mCi.unregisterForNetworkScanResult(mHandler);
@@ -535,10 +545,12 @@ public final class NetworkScanRequestTracker {
      * returned to the user, no matter how this scan will be actually handled.
      */
     public int startNetworkScan(
-            NetworkScanRequest request, Messenger messenger, IBinder binder, Phone phone) {
+            NetworkScanRequest request, Messenger messenger, IBinder binder, Phone phone,
+            String callingPackage) {
         int scanId = mNextNetworkScanRequestId.getAndIncrement();
         NetworkScanRequestInfo nsri =
-                new NetworkScanRequestInfo(request, messenger, binder, scanId, phone);
+                new NetworkScanRequestInfo(request, messenger, binder, scanId, phone,
+                        callingPackage);
         // nsri will be stored as Message.obj
         mHandler.obtainMessage(CMD_START_NETWORK_SCAN, nsri).sendToTarget();
         return scanId;
