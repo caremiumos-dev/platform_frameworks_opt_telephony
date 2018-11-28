@@ -563,8 +563,8 @@ public class UiccController extends Handler {
             mInsertedCardIds.clear();
             for (int i = 0; i < mUiccSlots.length; i++) {
                 card = mUiccSlots[i].getUiccCard();
-                String cardString = card.getCardId();
                 if (card != null) {
+                    String cardString = card.getCardId();
                     mInsertedCardIds.add(convertToPublicCardId(cardString));
                 }
             }

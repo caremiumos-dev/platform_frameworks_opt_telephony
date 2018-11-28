@@ -298,8 +298,11 @@ public class SubscriptionController extends ISub.Stub {
                 SubscriptionManager.MCC_STRING));
         String mnc = cursor.getString(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.MNC_STRING));
+        // cardId is the private ICCID/EID string, also known as the card string
         String cardId = cursor.getString(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.CARD_ID));
+        // publicCardId is the publicly exposed int card ID
+        int publicCardId = UiccController.getInstance().convertToPublicCardId(cardId);
         // FIXME: consider stick this into database too
         String countryIso = getSubscriptionCountryIso(id);
         boolean isEmbedded = cursor.getInt(cursor.getColumnIndexOrThrow(
@@ -324,8 +327,8 @@ public class SubscriptionController extends ISub.Stub {
                     + " iconTint:" + iconTint + " dataRoaming:" + dataRoaming
                     + " mcc:" + mcc + " mnc:" + mnc + " countIso:" + countryIso + " isEmbedded:"
                     + isEmbedded + " accessRules:" + Arrays.toString(accessRules)
-                    + " cardId:" + cardIdToPrint + " isOpportunistic:" + isOpportunistic
-                    + " parentSubId:" + parentSubId);
+                    + " cardId:" + cardIdToPrint + " publicCardId:" + publicCardId
+                    + " isOpportunistic:" + isOpportunistic + " parentSubId:" + parentSubId);
         }
 
         // If line1number has been set to a different number, use it instead.
@@ -335,7 +338,7 @@ public class SubscriptionController extends ISub.Stub {
         }
         return new SubscriptionInfo(id, iccId, simSlotIndex, displayName, carrierName,
                 nameSource, iconTint, number, dataRoaming, iconBitmap, mcc, mnc, countryIso,
-                isEmbedded, accessRules, cardId, isOpportunistic, parentSubId);
+                isEmbedded, accessRules, cardId, publicCardId, isOpportunistic, parentSubId);
     }
 
     /**
