@@ -40,6 +40,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.SmsMessage;
 import android.telephony.TelephonyHistogram;
 import android.telephony.TelephonyManager;
 import android.telephony.data.DataCallResponse;
@@ -1451,6 +1452,37 @@ public class TelephonyMetrics {
     }
 
     /**
+     * Write SMS related solicited response event
+     *
+     * @param phoneId Phone id
+     * @param rilSerial RIL request serial number
+     * @param rilError RIL error
+     * @param response SMS response
+     */
+    private synchronized void writeOnImsServiceSmsSolicitedResponse(int phoneId, int imsError,
+            SmsResponse response) {
+
+        InProgressSmsSession smsSession = mInProgressSmsSessions.get(phoneId);
+        if (smsSession == null) {
+            Rlog.e(TAG, "SMS session is missing");
+        } else {
+
+            int errorCode = 0;
+            if (response != null) {
+                errorCode = response.mErrorCode;
+            }
+
+            smsSession.addEvent(new SmsSessionEventBuilder(
+                    SmsSession.Event.Type.SMS_SEND_RESULT)
+                    .setErrorCode(errorCode)
+            );
+
+            smsSession.decreaseExpectedResponse();
+            finishSmsSessionIfNeeded(smsSession);
+        }
+    }
+
+    /**
      * Write deactivate data call response event
      *
      * @param phoneId Phone id
@@ -1729,6 +1761,36 @@ public class TelephonyMetrics {
                 .setTech(tech)
                 .setRilRequestId(rilSerial)
                 .setFormat(format)
+        );
+
+        smsSession.increaseExpectedResponse();
+    }
+
+    /**
+     * Write Send SMS event using ImsService. Expecting response from
+     * {@link #writeOnSmsSolicitedResponse}.
+     *
+     * @param phoneId Phone id
+     * @param tech SMS RAT
+     * @param format SMS format. Either {@link SmsMessage.FORMAT_3GPP} or
+     * {@link SmsMessage.FORMAT_3GPP2}.
+     */
+    public synchronized void writeImsServiceSendSms(int phoneId, int tech, String format) {
+        InProgressSmsSession smsSession = startNewSmsSessionIfNeeded(phoneId);
+        int formatCode = SmsSession.Event.Format.SMS_FORMAT_UNKNOWN;
+        switch (format) {
+            case SmsMessage.FORMAT_3GPP : {
+                formatCode = SmsSession.Event.Format.SMS_FORMAT_3GPP;
+                break;
+            }
+            case SmsMessage.FORMAT_3GPP2: {
+                formatCode = SmsSession.Event.Format.SMS_FORMAT_3GPP2;
+                break;
+            }
+        }
+        smsSession.addEvent(new SmsSessionEventBuilder(SmsSession.Event.Type.SMS_SEND)
+                .setTech(tech)
+                .setFormat(formatCode)
         );
 
         smsSession.increaseExpectedResponse();
