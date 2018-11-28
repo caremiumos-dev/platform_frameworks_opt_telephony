@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "f7052467_59e3606c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-28T20:09:27Z",
+      "side": 1,
+      "message": "sorry for my unclear comment, if card is null, card.getCardId() will cause a null pointer exception.",
+      "parentUuid": "e953f652_b5ed4590",
+      "range": {
+        "startLine": 562,
+        "startChar": 12,
+        "endLine": 562,
+        "endChar": 77
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4699942d_ad07634f",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 2
@@ -210,6 +234,30 @@
       "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a0bba2e_2dfec948",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-28T20:09:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "43028d23_f7ae44e8",
+      "range": {
+        "startLine": 593,
+        "startChar": 16,
+        "endLine": 593,
+        "endChar": 37
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
