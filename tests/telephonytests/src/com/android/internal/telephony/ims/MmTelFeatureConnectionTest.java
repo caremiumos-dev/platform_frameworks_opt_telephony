@@ -287,7 +287,7 @@ public class MmTelFeatureConnectionTest extends TelephonyTest {
         List<SubscriptionInfo> infos = new ArrayList<>();
         for (int i = 0; i < subIds.length; i++) {
             SubscriptionInfo info = new SubscriptionInfo(subIds[i], null, -1, null, null, -1, -1,
-                    null, -1, null, null, null, null, false, null, null);
+                    null, -1, null, null, null, null, false, null, null, 0);
             infos.add(info);
         }
         return infos;

@@ -36,7 +36,7 @@ public class SubscriptionInfoTest {
     @Before
     public void setUp() throws Exception {
         mSubscriptionInfoUT = new SubscriptionInfo(1, "890126042XXXXXXXXXXX", 0, "T-mobile",
-                "T-mobile", 0, 255, "12345", 0, null, "310", "260", "156", false, null, null);
+                "T-mobile", 0, 255, "12345", 0, null, "310", "260", "156", false, null, null, 0);
     }
 
     @Test
@@ -85,13 +85,13 @@ public class SubscriptionInfoTest {
     public void testEquals() {
         SubscriptionInfo copiedInfo = new SubscriptionInfo(1, "890126042XXXXXXXXXXX", 0,
                 "T-mobile", "T-mobile", 0, 255, "12345", 0, null,
-                "310", "260", "156", false, null, null);
+                "310", "260", "156", false, null, null, 0);
         SubscriptionInfo differentDisplayName = new SubscriptionInfo(1, "890126042XXXXXXXXXXX", 0,
                 "AT&T", "T-mobile", 0, 255, "12345", 0, null,
-                "310", "260", "156", false, null, null);
+                "310", "260", "156", false, null, null, 0);
         SubscriptionInfo differentSubId = new SubscriptionInfo(2, "890126042XXXXXXXXXXX", 0,
                 "AT&T", "T-mobile", 0, 255, "12345", 0, null,
-                "310", "260", "156", false, null, null);
+                "310", "260", "156", false, null, null, 0);
 
         assertEquals(mSubscriptionInfoUT, copiedInfo);
         assertNotEquals(mSubscriptionInfoUT, differentDisplayName);
