@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "418cce30_219d41a3",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardStatus.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-28T19:52:52Z",
+      "side": 1,
+      "message": "Sure, lets print \"mApplications is null,\"",
+      "parentUuid": "bd28154d_48aaa984",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 127,
+        "endChar": 9
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fb0b962_7964401c",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e953f652_b5ed4590",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-28T19:52:52Z",
+      "side": 1,
+      "message": "UiccCard could be null if we haven\u0027t yet received CardStatus from the radio",
+      "parentUuid": "2fb0b962_7964401c",
+      "range": {
+        "startLine": 562,
+        "startChar": 12,
+        "endLine": 562,
+        "endChar": 77
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,53 @@
     },
     {
       "key": {
+        "uuid": "02d1e247_3975ab2f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-28T19:52:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4699942d_ad07634f",
+      "range": {
+        "startLine": 574,
+        "startChar": 0,
+        "endLine": 579,
+        "endChar": 19
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "413aed88_5e41e43c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-28T19:52:52Z",
+      "side": 1,
+      "message": "We only need to save if we made changes, moving this to inside the if statement.",
+      "range": {
+        "startLine": 589,
+        "startChar": 0,
+        "endLine": 589,
+        "endChar": 26
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d11670e_486266a9",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 2
@@ -82,6 +177,30 @@
       "writtenOn": "2018-11-28T01:59:43Z",
       "side": 1,
       "message": "Look like the public card id can be different even if the cardString is the same, is this WAI?",
+      "range": {
+        "startLine": 593,
+        "startChar": 16,
+        "endLine": 593,
+        "endChar": 37
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43028d23_f7ae44e8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-11-28T19:52:52Z",
+      "side": 1,
+      "message": "No that\u0027s not WAI. How could that happen?",
+      "parentUuid": "3d11670e_486266a9",
       "range": {
         "startLine": 593,
         "startChar": 16,
