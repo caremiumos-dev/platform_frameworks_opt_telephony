@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd28154d_48aaa984",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardStatus.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-28T01:59:43Z",
+      "side": 1,
+      "message": "Should we print num_apps \u003d 0 when mApplication is null?",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 127,
+        "endChar": 9
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fb0b962_7964401c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-28T01:59:43Z",
+      "side": 1,
+      "message": "Is this possible that the card is null?(As you check in the if statement).",
+      "range": {
+        "startLine": 562,
+        "startChar": 12,
+        "endLine": 562,
+        "endChar": 77
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4699942d_ad07634f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-28T01:59:43Z",
+      "side": 1,
+      "message": "We can use the Java8 feature to simplify the code:\n\nreturn mInsertedCardIds.stream().mapToInt(val -\u003e val).toArray();",
+      "range": {
+        "startLine": 574,
+        "startChar": 0,
+        "endLine": 579,
+        "endChar": 19
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d11670e_486266a9",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-28T01:59:43Z",
+      "side": 1,
+      "message": "Look like the public card id can be different even if the cardString is the same, is this WAI?",
+      "range": {
+        "startLine": 593,
+        "startChar": 16,
+        "endLine": 593,
+        "endChar": 37
+      },
+      "revId": "f7b4e925e1cab45917eded764bb3cd3b0688583c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
