@@ -234,6 +234,7 @@ public class UiccControllerTest extends TelephonyTest {
         mUiccControllerUT.handleMessage(msg);
 
         // assert that the card ID was created
+        assertEquals(0, mUiccControllerUT.convertToPublicCardId(ics.eid));
         assertEquals(0, mUiccControllerUT.getCardIds()[0]);
     }
 
@@ -257,6 +258,7 @@ public class UiccControllerTest extends TelephonyTest {
         mUiccControllerUT.handleMessage(msg);
 
         // assert that the card ID was created
+        assertEquals(0, mUiccControllerUT.convertToPublicCardId(iss.eid));
         assertEquals(0, mUiccControllerUT.getCardIds()[0]);
     }
 }

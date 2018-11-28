@@ -557,15 +557,14 @@ public class UiccController extends Handler {
             // Card.getCardId returns the cardString, not the public card ID int
             String cardString = card.getCardId();
             addCardId(cardString);
-            mInsertedCardIds.add(convertToPublicCardId(cardString));
         } else {
             // repopulate cardIds
             mInsertedCardIds.clear();
             for (int i = 0; i < mUiccSlots.length; i++) {
                 card = mUiccSlots[i].getUiccCard();
-                String cardString = card.getCardId();
                 if (card != null) {
-                    mInsertedCardIds.add(convertToPublicCardId(cardString));
+                    String cardString = card.getCardId();
+                    addCardId(cardString);
                 }
             }
         }
@@ -590,6 +589,7 @@ public class UiccController extends Handler {
             mCardStrings.add(cardString);
             saveCardStrings();
         }
+        mInsertedCardIds.add(convertToPublicCardId(cardString));
     }
 
     /**
@@ -679,7 +679,6 @@ public class UiccController extends Handler {
             if (mUiccSlots[i].isEuicc()) {
                 String eid = iss.eid;
                 addCardId(eid);
-                mInsertedCardIds.add(convertToPublicCardId(eid));
             }
         }
 
