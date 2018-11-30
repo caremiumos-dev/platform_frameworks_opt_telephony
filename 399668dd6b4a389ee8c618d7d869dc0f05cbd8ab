@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1cd3967_5f9411da",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-11-30T23:31:13Z",
+      "side": 1,
+      "message": "So this ArrayList stores all the card IDs that have been seen?  It will always grow and never clear?  Why we need this if we have the mInsertedCardIds?  In what circumstances the user needs to query a card that is not inserted? From the comment, \"This mapping exists to expose card-based functionality without exposing the EID\", but why we need to expose any card that is not inserted?",
+      "range": {
+        "startLine": 129,
+        "startChar": 30,
+        "endLine": 129,
+        "endChar": 42
+      },
+      "revId": "399668dd6b4a389ee8c618d7d869dc0f05cbd8ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

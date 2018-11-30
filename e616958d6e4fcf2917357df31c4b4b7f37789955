@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49afe3b3_0a562e82",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-11-30T23:31:13Z",
+      "side": 1,
+      "message": "You only refresh the mInsertedCardIds in the else branch, so in normal cases, the else branch will not be executed, and mInsertedCardIds only holds the card id of the inserted card, right?",
+      "range": {
+        "startLine": 562,
+        "startChar": 1,
+        "endLine": 569,
+        "endChar": 13
+      },
+      "revId": "e616958d6e4fcf2917357df31c4b4b7f37789955",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
