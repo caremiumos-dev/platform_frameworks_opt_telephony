@@ -45,6 +45,30 @@
       "revId": "416c060238edec1052716121be18c52adfb07f43",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bb74b30_9e332b13",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1316472
+      },
+      "writtenOn": "2018-11-30T13:29:32Z",
+      "side": 1,
+      "message": "per RadioError definition, system error means \"platform or system error\". It is definitely still an error of RIL. This condition should be detected and file bugreport for checking.",
+      "parentUuid": "ac2739df_2abb3795",
+      "range": {
+        "startLine": 353,
+        "startChar": 12,
+        "endLine": 353,
+        "endChar": 25
+      },
+      "revId": "416c060238edec1052716121be18c52adfb07f43",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
