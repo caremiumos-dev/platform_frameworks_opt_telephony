@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bebb7279_0f3c3a2a",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-30T23:06:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8ba31617_249adc28",
+      "range": {
+        "startLine": 63,
+        "startChar": 12,
+        "endLine": 63,
+        "endChar": 65
+      },
+      "revId": "bdc7d3fb4ba7191567011528d5904e4e96f7a204",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d9497b0_8c491e11",
         "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
         "patchSetId": 2
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "c1dd3000_8115d423",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-30T23:06:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7d9497b0_8c491e11",
+      "range": {
+        "startLine": 160,
+        "startChar": 24,
+        "endLine": 160,
+        "endChar": 53
+      },
+      "revId": "bdc7d3fb4ba7191567011528d5904e4e96f7a204",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8526340_3f881061",
         "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
         "patchSetId": 2
@@ -92,6 +140,30 @@
       "revId": "bdc7d3fb4ba7191567011528d5904e4e96f7a204",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96dc5b28_c6e5b41a",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-11-30T23:06:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c8526340_3f881061",
+      "range": {
+        "startLine": 181,
+        "startChar": 24,
+        "endLine": 181,
+        "endChar": 54
+      },
+      "revId": "bdc7d3fb4ba7191567011528d5904e4e96f7a204",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
