@@ -17,10 +17,14 @@
 package com.android.internal.telephony;
 
 import android.test.AndroidTestCase;
+import android.test.suitebuilder.annotation.Ignore;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import java.util.Locale;
 
+@Ignore
+// TODO try using InstrumentationRegistry.getContext() instead of the default
+// AndroidTestCase context
 public class MccTableTest extends AndroidTestCase {
     private final static String LOG_TAG = "GSM";
 
