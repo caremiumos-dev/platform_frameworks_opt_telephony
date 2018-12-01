@@ -22,6 +22,30 @@
       "revId": "399668dd6b4a389ee8c618d7d869dc0f05cbd8ab",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adc427af_cf397459",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-01T00:05:07Z",
+      "side": 1,
+      "message": "This mapping exists so we can remember that a certain card had a certain card ID. For example if a device has 2 eUICC chips, they shouldn\u0027t switch card IDs after a reboot.\n\nmCardStrings is like a persistent map from cardString -\u003e card ID int.\nmInsertedCardIds is just a list of what is currently inserted, which can be used in the future as the backing logic to an API call like getCardIds().",
+      "parentUuid": "d1cd3967_5f9411da",
+      "range": {
+        "startLine": 129,
+        "startChar": 30,
+        "endLine": 129,
+        "endChar": 42
+      },
+      "revId": "399668dd6b4a389ee8c618d7d869dc0f05cbd8ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }

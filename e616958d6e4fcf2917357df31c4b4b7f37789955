@@ -22,6 +22,30 @@
       "revId": "e616958d6e4fcf2917357df31c4b4b7f37789955",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "879a1497_3558453a",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-01T00:05:07Z",
+      "side": 1,
+      "message": "mInsertedCardIds should always hold the currently inserted card Ids (inserted UICC and active+inactive eUICC).\n\nThe reason the logic is different in this else branch is because when a card is removed, we can\u0027t read it\u0027s cardId to remove it because the UiccCard object may no longer exist. For that reason, we clear the list and repopulate it from scratch.",
+      "parentUuid": "49afe3b3_0a562e82",
+      "range": {
+        "startLine": 562,
+        "startChar": 1,
+        "endLine": 569,
+        "endChar": 13
+      },
+      "revId": "e616958d6e4fcf2917357df31c4b4b7f37789955",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
