@@ -22,6 +22,30 @@
       "revId": "14e36f68edb8f0674c9a965cc4488fc193480a02",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47fc49af_1b131db8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-03T23:41:41Z",
+      "side": 1,
+      "message": "Eventually I think the public API will look like this:\nThe user can:\n1. Get the cardId int from SubscriptionInfo\n2. Get the cardId of the \"default\" eUICC\n3. Potentially get an array of all the inserted cardIds\n\nSo I created this conversion function so for case #1. Since the SubscriptionInfo currently uses the cardString, we can populate it with the cardId by using the convertToPublicCardId function. The reason we just store this as a map instead of altering the database schema is to keep the change smaller scale.",
+      "parentUuid": "d579400c_9a606a72",
+      "range": {
+        "startLine": 575,
+        "startChar": 15,
+        "endLine": 575,
+        "endChar": 36
+      },
+      "revId": "14e36f68edb8f0674c9a965cc4488fc193480a02",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
