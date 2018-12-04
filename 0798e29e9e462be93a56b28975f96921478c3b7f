@@ -22,6 +22,30 @@
       "revId": "0798e29e9e462be93a56b28975f96921478c3b7f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab2b5e80_ebeca25e",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-12-04T18:29:38Z",
+      "side": 1,
+      "message": "You are right it doesn\u0027t really help create XYZGsmPhone directly. And there\u0027s no existing method in current component factory for creating XYZGsmPhone, so this is not the use case.\n\nBut inside GsmCdmaPhone constructor, mTelephonyComponentFactory help create carrier action/signal agent, transport manager, and service state tracker, etc. We want to provide this flexibility that OEMs can choose whether to use their customized classes inside GsmCdmaPhone as well, such as service state tracker.",
+      "parentUuid": "0b267199_a2e38a98",
+      "range": {
+        "startLine": 192,
+        "startChar": 40,
+        "endLine": 192,
+        "endChar": 77
+      },
+      "revId": "0798e29e9e462be93a56b28975f96921478c3b7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
