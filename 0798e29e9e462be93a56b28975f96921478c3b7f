@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b267199_a2e38a98",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2018-12-04T11:23:34Z",
+      "side": 1,
+      "message": "Can you help me understand why this change made ?\n\nFrom my understanding this does not help to inject/create XYZGsmPhone in such case why we are sending class name as GsmCdmaPhone ?",
+      "range": {
+        "startLine": 192,
+        "startChar": 40,
+        "endLine": 192,
+        "endChar": 77
+      },
+      "revId": "0798e29e9e462be93a56b28975f96921478c3b7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
