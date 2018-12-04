@@ -46,6 +46,30 @@
       "revId": "0798e29e9e462be93a56b28975f96921478c3b7f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4abdb42_51defc75",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1019829
+      },
+      "writtenOn": "2018-12-04T19:30:58Z",
+      "side": 1,
+      "message": "If i understand it correctly, having GsmCdmaPhone component name in the telephony_injection.xml file would help OEMs to create their own transportManager, Cattier action/signal agent, service state tracker ?\nKindly help confirm.\n\nIf above understanding it correct, why inject is called for GsmCdmaCallTracker explicitly ? at @ https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/831840/5/src/java/com/android/internal/telephony/GsmCdmaPhone.java#256",
+      "parentUuid": "ab2b5e80_ebeca25e",
+      "range": {
+        "startLine": 192,
+        "startChar": 40,
+        "endLine": 192,
+        "endChar": 77
+      },
+      "revId": "0798e29e9e462be93a56b28975f96921478c3b7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
