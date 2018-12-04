@@ -433,6 +433,11 @@ public class TelephonyMetrics {
         pw.println("Amount of time modem is in idle (ms): " + s.idleTimeMs);
         pw.println("Amount of time modem is in rx (ms): " + s.rxTimeMs);
         pw.println("Amount of time modem is in tx (ms): " + Arrays.toString(s.txTimeMs));
+        pw.println("Amount of time phone spent in various Radio Access Technologies (ms): "
+                + Arrays.toString(s.timeInRatMs));
+        pw.println("Amount of time phone spent in various cellular "
+                + "rx signal strength levels (ms): "
+                + Arrays.toString(s.timeInRxSignalStrengthLevelMs));
         pw.decreaseIndent();
     }
 
