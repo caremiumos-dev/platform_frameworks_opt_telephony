@@ -1076,14 +1076,11 @@ public class DcTracker extends Handler {
         for (DataConnection dc : mDataConnections.values()) {
             ApnSetting apnSetting = dc.getApnSetting();
             if (apnSetting != null && apnSetting.canHandleType(apnTypeBitmask)) {
-                if (dc.isActive()) {
-                    return DctConstants.State.CONNECTED;
-                } else if (dc.isActivating()) {
-                    return DctConstants.State.CONNECTING;
-                } else if (dc.isInactive()) {
-                    return DctConstants.State.IDLE;
-                } else if (dc.isDisconnecting()) {
-                    return DctConstants.State.DISCONNECTING;
+                for (ApnContext apnContext : dc.mApnContexts.keySet()) {
+                    String apnTypeFromDc = apnContext.getApnType();
+                    if (TextUtils.equals(apnTypeFromDc, apnType)) {
+                        return apnContext.getState();
+                    }
                 }
             }
         }

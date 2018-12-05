@@ -192,7 +192,7 @@ public class DataConnection extends StateMachine {
 
     int mTag;
     public int mCid;
-    private final Map<ApnContext, ConnectionParams> mApnContexts = new ConcurrentHashMap<>();
+    public final Map<ApnContext, ConnectionParams> mApnContexts = new ConcurrentHashMap<>();
     PendingIntent mReconnectIntent = null;
 
 
