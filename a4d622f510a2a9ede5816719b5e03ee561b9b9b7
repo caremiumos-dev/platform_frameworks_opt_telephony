@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d23144a_f33df734",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-05T20:43:07Z",
+      "side": 0,
+      "message": "Do you know why these were disabled? Maybe flaky?",
+      "revId": "a4d622f510a2a9ede5816719b5e03ee561b9b9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

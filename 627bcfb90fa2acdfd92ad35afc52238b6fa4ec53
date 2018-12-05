@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fcf2408_5ad6d2e8",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-05T20:43:07Z",
+      "side": 1,
+      "message": "@VisibleForTesting and private?",
+      "range": {
+        "startLine": 79,
+        "startChar": 5,
+        "endLine": 80,
+        "endChar": 11
+      },
+      "revId": "627bcfb90fa2acdfd92ad35afc52238b6fa4ec53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dcbd1e5_82dda914",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-05T20:43:07Z",
+      "side": 1,
+      "message": "is this called when wifi is available or when it is connected?",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 50
+      },
+      "revId": "627bcfb90fa2acdfd92ad35afc52238b6fa4ec53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af1f0983_bfaf7c16",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-05T20:43:07Z",
+      "side": 1,
+      "message": "Screen on + charging could also mean the device is being charged by a portable power brick. Would we still want to allow the short interval in that case?",
+      "range": {
+        "startLine": 292,
+        "startChar": 70,
+        "endLine": 292,
+        "endChar": 23
+      },
+      "revId": "627bcfb90fa2acdfd92ad35afc52238b6fa4ec53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "651df7c0_c54d8a75",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-05T20:43:07Z",
+      "side": 1,
+      "message": "Could you maybe split this into two in blocks?\n\nif (mIsScreenOn \u0026\u0026 !mIsWifiConnected) {\n    // Screen on + no wifi means the device is on the go\n    return CELL_INFO_INTERVAL_SHORT_MS;\n} else if (mIsScreenOn \u0026\u0026 mIsCharging) {\n    // Screen on + charging means the device is probably in a car or at home\n    return CELL_INFO_INTERVAL_SHORT_MS;\n} else {\n    return CELL_INFO_INTERVAL_LONG_MS;\n}",
+      "range": {
+        "startLine": 294,
+        "startChar": 0,
+        "endLine": 294,
+        "endChar": 64
+      },
+      "revId": "627bcfb90fa2acdfd92ad35afc52238b6fa4ec53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
