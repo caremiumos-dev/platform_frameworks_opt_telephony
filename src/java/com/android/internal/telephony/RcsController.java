@@ -19,12 +19,13 @@ package com.android.internal.telephony;
 import android.content.Context;
 import android.os.ServiceManager;
 import android.telephony.Rlog;
-import android.telephony.rcs.RcsManager;
+import android.telephony.ims.RcsMessageStore;
+import android.telephony.ims.aidl.IRcs;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.telephony.rcs.IRcs;
 
-/** Backing implementation of {@link RcsManager}. */
+
+/** Backing implementation of {@link RcsMessageStore}. */
 public class RcsController extends IRcs.Stub {
     private static final String TAG = "RcsController";
     private static final String RCS_SERVICE_NAME = "ircs";
