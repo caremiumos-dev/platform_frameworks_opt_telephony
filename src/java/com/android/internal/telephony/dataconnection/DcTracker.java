@@ -492,7 +492,7 @@ public class DcTracker extends Handler {
     // Reference counter for enabling fail fast
     private static int sEnableFailFastRefCounter = 0;
     // True if data stall detection is enabled
-    private volatile boolean mDataStallDetectionEnabled = true;
+    private volatile boolean mDataStallNoRxEnabled = true;
 
     private volatile boolean mFailFast = false;
 
@@ -578,6 +578,8 @@ public class DcTracker extends Handler {
 
     private final int mTransportType;
 
+    private RecoveryHandler mRecoveryHandler;
+
     //***** Constructor
     public DcTracker(Phone phone, int transportType) {
         super();
@@ -601,6 +603,8 @@ public class DcTracker extends Handler {
         mUiccController.registerForIccChanged(this, DctConstants.EVENT_ICC_CHANGED, null);
         mAlarmManager =
                 (AlarmManager) mPhone.getContext().getSystemService(Context.ALARM_SERVICE);
+
+        mRecoveryHandler = new RecoveryHandler();
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_ON);
@@ -2085,7 +2089,11 @@ public class DcTracker extends Handler {
          */
 
         int reset = Integer.parseInt(SystemProperties.get("net.ppp.reset-by-timeout", "0"));
-        SystemProperties.set("net.ppp.reset-by-timeout", String.valueOf(reset + 1));
+        try {
+            SystemProperties.set("net.ppp.reset-by-timeout", String.valueOf(reset + 1));
+        } catch (RuntimeException ex) {
+            log("Failed to set net.ppp.reset-by-timeout");
+        }
     }
 
     /**
@@ -2977,6 +2985,18 @@ public class DcTracker extends Handler {
     }
 
     /**
+     * Called when EVENT_NETWORK_STATUS_CHANGED is received.
+     */
+    private void onNetworkStatusChanged(boolean isValid) {
+        if (!mRecoveryHandler.isRecoveryOnBadNetworkEnabled()) {
+            return;
+        }
+
+        mRecoveryHandler.processNetworkStatusChanged(isValid);
+    }
+
+
+    /**
      * Called when EVENT_DISCONNECT_DONE is received.
      */
     private void onDisconnectDone(AsyncResult ar) {
@@ -3519,7 +3539,7 @@ public class DcTracker extends Handler {
                 break;
 
             case DctConstants.EVENT_DO_RECOVERY:
-                doRecovery();
+                mRecoveryHandler.doRecovery();
                 break;
 
             case DctConstants.EVENT_APN_CHANGED:
@@ -3647,6 +3667,11 @@ public class DcTracker extends Handler {
                 onDataConnectionRedirected(url);
                 break;
 
+            case DctConstants.EVENT_NETWORK_STATUS_CHANGED:
+                boolean isValid = (boolean) msg.obj;
+                onNetworkStatusChanged(isValid);
+                break;
+
             case DctConstants.EVENT_RADIO_AVAILABLE:
                 onRadioAvailable();
                 break;
@@ -3711,8 +3736,8 @@ public class DcTracker extends Handler {
                 if (mFailFast != enabled) {
                     mFailFast = enabled;
 
-                    mDataStallDetectionEnabled = !enabled;
-                    if (mDataStallDetectionEnabled
+                    mDataStallNoRxEnabled = !enabled;
+                    if (mRecoveryHandler.isNoRxDataStallDetectionEnabled()
                             && (getOverallState() == DctConstants.State.CONNECTED)
                             && (!mInVoiceCall ||
                                     mPhone.getServiceStateTracker()
@@ -3980,7 +4005,7 @@ public class DcTracker extends Handler {
         pw.println(" mNetStatPollEnabled=" + mNetStatPollEnabled);
         pw.println(" mDataStallTxRxSum=" + mDataStallTxRxSum);
         pw.println(" mDataStallAlarmTag=" + mDataStallAlarmTag);
-        pw.println(" mDataStallDetectionEnabled=" + mDataStallDetectionEnabled);
+        pw.println(" mDataStallNoRxEnabled=" + mDataStallNoRxEnabled);
         pw.println(" mSentSinceLastRecv=" + mSentSinceLastRecv);
         pw.println(" mNoRecvPollCount=" + mNoRecvPollCount);
         pw.println(" mResolver=" + mResolver);
@@ -4368,80 +4393,156 @@ public class DcTracker extends Handler {
     /**
      * Data-Stall
      */
-    // Recovery action taken in case of data stall
-    private static class RecoveryAction {
-        public static final int GET_DATA_CALL_LIST      = 0;
-        public static final int CLEANUP                 = 1;
-        public static final int REREGISTER              = 2;
-        public static final int RADIO_RESTART           = 3;
 
-        private static boolean isAggressiveRecovery(int value) {
-            return ((value == RecoveryAction.CLEANUP) ||
-                    (value == RecoveryAction.REREGISTER) ||
-                    (value == RecoveryAction.RADIO_RESTART));
+    // Recovery handler class for data stall
+    public class RecoveryHandler {
+        // Recovery action taken in case of data stall
+        private static final int RECOVERY_ACTION_GET_DATA_CALL_LIST      = 0;
+        private static final int RECOVERY_ACTION_CLEANUP                 = 1;
+        private static final int RECOVERY_ACTION_REREGISTER              = 2;
+        private static final int RECOVERY_ACTION_RADIO_RESTART           = 3;
+
+        // Default minimum duration between each recovery steps
+        private static final int
+                MIN_DURATION_BETWEEN_RECOVERY_STEPS_IN_MS = (3 * 60 * 1000); // 3 mins
+
+        // The elapsed real time of last recovery attempted
+        private long mTimeLastRecoveryStartMs;
+        // Whether current network good or not
+        private boolean mIsValidNetwork;
+
+        public RecoveryHandler() {
+            init();
         }
-    }
 
-    private int getRecoveryAction() {
-        int action = Settings.System.getInt(mResolver,
-                "radio.data.stall.recovery.action", RecoveryAction.GET_DATA_CALL_LIST);
-        if (VDBG_STALL) log("getRecoveryAction: " + action);
-        return action;
-    }
+        public void init() {
+            mTimeLastRecoveryStartMs = 0;
+            putRecoveryAction(RECOVERY_ACTION_GET_DATA_CALL_LIST);
+        }
 
-    private void putRecoveryAction(int action) {
-        Settings.System.putInt(mResolver, "radio.data.stall.recovery.action", action);
-        if (VDBG_STALL) log("putRecoveryAction: " + action);
-    }
+        public boolean isAggressiveRecovery() {
+            int recoveryAction = getRecoveryAction();
 
-    private void broadcastDataStallDetected(int recoveryAction) {
-        Intent intent = new Intent(TelephonyManager.ACTION_DATA_STALL_DETECTED);
-        SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhone.getPhoneId());
-        intent.putExtra(TelephonyManager.EXTRA_RECOVERY_ACTION, recoveryAction);
-        mPhone.getContext().sendBroadcast(intent, READ_PHONE_STATE);
-    }
+            return ((recoveryAction == RECOVERY_ACTION_CLEANUP)
+                    || (recoveryAction == RECOVERY_ACTION_REREGISTER)
+                    || (recoveryAction == RECOVERY_ACTION_RADIO_RESTART));
+        }
 
-    private void doRecovery() {
-        if (getOverallState() == DctConstants.State.CONNECTED) {
-            // Go through a series of recovery steps, each action transitions to the next action
-            final int recoveryAction = getRecoveryAction();
-            TelephonyMetrics.getInstance().writeDataStallEvent(mPhone.getPhoneId(), recoveryAction);
-            broadcastDataStallDetected(recoveryAction);
+        private long getMinDurationBetweenRecovery() {
+            return Settings.Global.getLong(mResolver,
+                Settings.Global.MIN_DURATION_BETWEEN_RECOVERY_STEPS,
+                MIN_DURATION_BETWEEN_RECOVERY_STEPS_IN_MS);
+        }
 
-            switch (recoveryAction) {
-                case RecoveryAction.GET_DATA_CALL_LIST:
-                    EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_GET_DATA_CALL_LIST,
-                            mSentSinceLastRecv);
-                    if (DBG) log("doRecovery() get data call list");
-                    mDataServiceManager.getDataCallList(obtainMessage());
-                    putRecoveryAction(RecoveryAction.CLEANUP);
-                    break;
-                case RecoveryAction.CLEANUP:
-                    EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_CLEANUP,
-                            mSentSinceLastRecv);
-                    if (DBG) log("doRecovery() cleanup all connections");
-                    cleanUpAllConnectionsInternal(true, Phone.REASON_PDP_RESET);
-                    putRecoveryAction(RecoveryAction.REREGISTER);
-                    break;
-                case RecoveryAction.REREGISTER:
-                    EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_REREGISTER,
-                            mSentSinceLastRecv);
-                    if (DBG) log("doRecovery() re-register");
-                    mPhone.getServiceStateTracker().reRegisterNetwork(null);
-                    putRecoveryAction(RecoveryAction.RADIO_RESTART);
-                    break;
-                case RecoveryAction.RADIO_RESTART:
-                    EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_RADIO_RESTART,
-                            mSentSinceLastRecv);
-                    if (DBG) log("restarting radio");
-                    restartRadio();
-                    putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
-                    break;
-                default:
-                    throw new RuntimeException("doRecovery: Invalid recoveryAction="
-                            + recoveryAction);
+        private long getElapsedTimeSinceRecoveryMs() {
+            return (SystemClock.elapsedRealtime() - mTimeLastRecoveryStartMs);
+        }
+
+        private int getRecoveryAction() {
+            int action = Settings.System.getInt(mResolver,
+                    "radio.data.stall.recovery.action", RECOVERY_ACTION_GET_DATA_CALL_LIST);
+            if (VDBG_STALL) log("getRecoveryAction: " + action);
+            return action;
+        }
+
+        private void putRecoveryAction(int action) {
+            Settings.System.putInt(mResolver, "radio.data.stall.recovery.action", action);
+            if (VDBG_STALL) log("putRecoveryAction: " + action);
+        }
+
+        private void broadcastDataStallDetected(int recoveryAction) {
+            Intent intent = new Intent(TelephonyManager.ACTION_DATA_STALL_DETECTED);
+            SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhone.getPhoneId());
+            intent.putExtra(TelephonyManager.EXTRA_RECOVERY_ACTION, recoveryAction);
+            mPhone.getContext().sendBroadcast(intent, READ_PHONE_STATE);
+        }
+
+        private boolean isRecoveryAlreadyStarted() {
+            return getRecoveryAction() != RECOVERY_ACTION_GET_DATA_CALL_LIST;
+        }
+
+        private void checkAndPerformRecovery() {
+            // To avoid back to back recovery wait for a grace period
+            if (getElapsedTimeSinceRecoveryMs() < getMinDurationBetweenRecovery()) {
+                return;
             }
-            mSentSinceLastRecv = 0;
+
+            // Data is not allowed due to voice call or PS restriction
+            if (mInVoiceCall && !mPhone.getServiceStateTracker()
+                    .isConcurrentVoiceAndDataAllowed() || mIsPsRestricted) {
+                return;
+            }
+
+            sendMessage(obtainMessage(DctConstants.EVENT_DO_RECOVERY));
+        }
+
+        public void doRecovery() {
+            if (getOverallState() == DctConstants.State.CONNECTED) {
+                // Go through a series of recovery steps, each action transitions to the next action
+                final int recoveryAction = getRecoveryAction();
+                TelephonyMetrics.getInstance().writeDataStallEvent(
+                        mPhone.getPhoneId(), recoveryAction);
+                broadcastDataStallDetected(recoveryAction);
+
+                switch (recoveryAction) {
+                    case RECOVERY_ACTION_GET_DATA_CALL_LIST:
+                        EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_GET_DATA_CALL_LIST,
+                            mSentSinceLastRecv);
+                        if (DBG) log("doRecovery() get data call list");
+                        mDataServiceManager.getDataCallList(obtainMessage());
+                        putRecoveryAction(RECOVERY_ACTION_CLEANUP);
+                        break;
+                    case RECOVERY_ACTION_CLEANUP:
+                        EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_CLEANUP,
+                            mSentSinceLastRecv);
+                        if (DBG) log("doRecovery() cleanup all connections");
+                        cleanUpAllConnections(Phone.REASON_PDP_RESET);
+                        putRecoveryAction(RECOVERY_ACTION_REREGISTER);
+                        break;
+                    case RECOVERY_ACTION_REREGISTER:
+                        EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_REREGISTER,
+                            mSentSinceLastRecv);
+                        if (DBG) log("doRecovery() re-register");
+                        mPhone.getServiceStateTracker().reRegisterNetwork(null);
+                        putRecoveryAction(RECOVERY_ACTION_RADIO_RESTART);
+                        break;
+                    case RECOVERY_ACTION_RADIO_RESTART:
+                        EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_RADIO_RESTART,
+                            mSentSinceLastRecv);
+                        if (DBG) log("restarting radio");
+                        restartRadio();
+                        init();
+                        break;
+                    default:
+                        throw new RuntimeException("doRecovery: Invalid recoveryAction="
+                            + recoveryAction);
+                }
+                mSentSinceLastRecv = 0;
+                mTimeLastRecoveryStartMs = SystemClock.elapsedRealtime();
+            }
+        }
+
+        public void processNetworkStatusChanged(boolean isValid) {
+            if (isValid) {
+                mIsValidNetwork = true;
+                init();
+            } else {
+                if (mIsValidNetwork || isRecoveryAlreadyStarted()) {
+                    mIsValidNetwork = false;
+                    // Check and perform a recovery if network switched from good
+                    // to bad or recovery is already started before.
+                    checkAndPerformRecovery();
+                }
+            }
+        }
+
+        public boolean isRecoveryOnBadNetworkEnabled() {
+            return Settings.Global.getInt(mResolver,
+                    Settings.Global.RECOVER_ON_BAD_NETWORK, 0) == 1;
+        }
+
+        public boolean isNoRxDataStallDetectionEnabled() {
+            return mDataStallNoRxEnabled && !isRecoveryOnBadNetworkEnabled();
         }
     }
 
@@ -4468,7 +4569,7 @@ public class DcTracker extends Handler {
         if ( sent > 0 && received > 0 ) {
             if (VDBG_STALL) log("updateDataStallInfo: IN/OUT");
             mSentSinceLastRecv = 0;
-            putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
+            mRecoveryHandler.init();
         } else if (sent > 0 && received == 0) {
             if (isPhoneStateIdle()) {
                 mSentSinceLastRecv += sent;
@@ -4482,7 +4583,7 @@ public class DcTracker extends Handler {
         } else if (sent == 0 && received > 0) {
             if (VDBG_STALL) log("updateDataStallInfo: IN");
             mSentSinceLastRecv = 0;
-            putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
+            mRecoveryHandler.init();
         } else {
             if (VDBG_STALL) log("updateDataStallInfo: NONE");
         }
@@ -4517,7 +4618,8 @@ public class DcTracker extends Handler {
         boolean suspectedStall = DATA_STALL_NOT_SUSPECTED;
         if (mSentSinceLastRecv >= hangWatchdogTrigger) {
             if (DBG) {
-                log("onDataStallAlarm: tag=" + tag + " do recovery action=" + getRecoveryAction());
+                log("onDataStallAlarm: tag=" + tag + " do recovery action="
+                        + mRecoveryHandler.getRecoveryAction());
             }
             suspectedStall = DATA_STALL_SUSPECTED;
             sendMessage(obtainMessage(DctConstants.EVENT_DO_RECOVERY));
@@ -4531,13 +4633,13 @@ public class DcTracker extends Handler {
     }
 
     private void startDataStallAlarm(boolean suspectedStall) {
-        int nextAction = getRecoveryAction();
         int delayInMs;
 
-        if (mDataStallDetectionEnabled && getOverallState() == DctConstants.State.CONNECTED) {
+        if (mRecoveryHandler.isNoRxDataStallDetectionEnabled()
+                && getOverallState() == DctConstants.State.CONNECTED) {
             // If screen is on or data stall is currently suspected, set the alarm
             // with an aggressive timeout.
-            if (mIsScreenOn || suspectedStall || RecoveryAction.isAggressiveRecovery(nextAction)) {
+            if (mIsScreenOn || suspectedStall || mRecoveryHandler.isAggressiveRecovery()) {
                 delayInMs = Settings.Global.getInt(mResolver,
                         Settings.Global.DATA_STALL_ALARM_AGGRESSIVE_DELAY_IN_MS,
                         DATA_STALL_ALARM_AGGRESSIVE_DELAY_IN_MS_DEFAULT);
@@ -4583,9 +4685,7 @@ public class DcTracker extends Handler {
         if (isConnected() == false) return;
         // To be called on screen status change.
         // Do not cancel the alarm if it is set with aggressive timeout.
-        int nextAction = getRecoveryAction();
-
-        if (RecoveryAction.isAggressiveRecovery(nextAction)) {
+        if (mRecoveryHandler.isAggressiveRecovery()) {
             if (DBG) log("restartDataStallAlarm: action is pending. not resetting the alarm.");
             return;
         }
