@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a31784a7_f2a20d3c",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-06T19:01:14Z",
+      "side": 1,
+      "message": "Sure, or you could make it package private even though its not currently used. Either is fine with me",
+      "parentUuid": "6a122c45_d15cc5ec",
+      "range": {
+        "startLine": 79,
+        "startChar": 5,
+        "endLine": 80,
+        "endChar": 11
+      },
+      "revId": "627bcfb90fa2acdfd92ad35afc52238b6fa4ec53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dcbd1e5_82dda914",
         "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
         "patchSetId": 16
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "13400307_50ba9265",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-06T19:01:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9db268e2_77b45b3c",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 50
+      },
+      "revId": "627bcfb90fa2acdfd92ad35afc52238b6fa4ec53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af1f0983_bfaf7c16",
         "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
         "patchSetId": 16
@@ -131,6 +179,30 @@
       "side": 1,
       "message": "I think so? It\u0027s really hard to make the 100% correct guess, but I think in general we don\u0027t try to differentiate why the thing is charging: all we know is that it has external power.",
       "parentUuid": "af1f0983_bfaf7c16",
+      "range": {
+        "startLine": 292,
+        "startChar": 70,
+        "endLine": 292,
+        "endChar": 23
+      },
+      "revId": "627bcfb90fa2acdfd92ad35afc52238b6fa4ec53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5bda48f4_b5ba4315",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-06T19:01:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5c5651c8_782d920f",
       "range": {
         "startLine": 292,
         "startChar": 70,

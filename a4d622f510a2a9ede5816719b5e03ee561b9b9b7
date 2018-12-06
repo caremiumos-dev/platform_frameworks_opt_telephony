@@ -70,6 +70,24 @@
       "revId": "a4d622f510a2a9ede5816719b5e03ee561b9b9b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f047c957_914aa78a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-06T19:01:14Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "b0be1a5f_4851022f",
+      "revId": "a4d622f510a2a9ede5816719b5e03ee561b9b9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
