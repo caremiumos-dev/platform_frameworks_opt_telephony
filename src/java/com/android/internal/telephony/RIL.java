@@ -57,7 +57,9 @@ import android.hardware.radio.V1_2.AccessNetwork;
 import android.hardware.radio.deprecated.V1_0.IOemHook;
 import android.net.ConnectivityManager;
 import android.net.KeepalivePacketData;
+import android.net.LinkAddress;
 import android.net.LinkProperties;
+import android.net.NetworkUtils;
 import android.os.AsyncResult;
 import android.os.Build;
 import android.os.Handler;
@@ -89,6 +91,8 @@ import android.telephony.SignalStrength;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyHistogram;
 import android.telephony.TelephonyManager;
+import android.telephony.data.ApnSetting;
+import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
 import android.text.TextUtils;
@@ -1256,8 +1260,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 new android.hardware.radio.V1_4.DataProfileInfo();
 
         dpi.apn = dp.getApn();
-        dpi.protocol = dp.getProtocol();
-        dpi.roamingProtocol = dp.getRoamingProtocol();
+        dpi.protocol = ApnSetting.getProtocolIntFromString(dp.getProtocol());
+        dpi.roamingProtocol = ApnSetting.getProtocolIntFromString(dp.getRoamingProtocol());
         dpi.authType = dp.getAuthType();
         dpi.user = dp.getUserName();
         dpi.password = dp.getPassword();
@@ -1359,7 +1363,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     radioProxy12.setupDataCall_1_2(rr.mSerial, accessNetworkType, dpi,
                             dataProfile.isPersistent(), allowRoaming, isRoaming, reason,
                             addresses, dnses);
-                } else if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_0)) {
+                } else {
                     // IRadio V1.0 and IRadio V1.1
 
                     // Convert to HAL data profile
@@ -5805,6 +5809,213 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 signalStrength.tdScdma.rscp,
                 signalStrength.wcdma.base.signalStrength,
                 signalStrength.wcdma.rscp);
+    }
+
+    /**
+     * Convert SetupDataCallResult defined in 1.0/types.hal into DataCallResponse
+     * @param dcResult setup data call result
+     * @return converted DataCallResponse object
+     */
+    @VisibleForTesting
+    public static DataCallResponse convertDataCallResult(
+            android.hardware.radio.V1_0.SetupDataCallResult dcResult) {
+        if (dcResult == null) return null;
+
+        // Process address
+        String[] addresses = null;
+        if (!TextUtils.isEmpty(dcResult.addresses)) {
+            addresses = dcResult.addresses.split("\\s+");
+        }
+
+        List<LinkAddress> laList = new ArrayList<>();
+        if (addresses != null) {
+            for (String address : addresses) {
+                address = address.trim();
+                if (address.isEmpty()) continue;
+
+                try {
+                    LinkAddress la;
+                    // Check if the address contains prefix length. If yes, LinkAddress
+                    // can parse that.
+                    if (address.split("/").length == 2) {
+                        la = new LinkAddress(address);
+                    } else {
+                        InetAddress ia = NetworkUtils.numericToInetAddress(address);
+                        la = new LinkAddress(ia, (ia instanceof Inet4Address) ? 32 : 128);
+                    }
+
+                    laList.add(la);
+                } catch (IllegalArgumentException e) {
+                    Rlog.e(RILJ_LOG_TAG, "Unknown address: " + address, e);
+                }
+            }
+        }
+
+        // Process dns
+        String[] dnses = null;
+        if (!TextUtils.isEmpty(dcResult.dnses)) {
+            dnses = dcResult.dnses.split("\\s+");
+        }
+
+        List<InetAddress> dnsList = new ArrayList<>();
+        if (dnses != null) {
+            for (String dns : dnses) {
+                dns = dns.trim();
+                InetAddress ia;
+                try {
+                    ia = NetworkUtils.numericToInetAddress(dns);
+                    dnsList.add(ia);
+                } catch (IllegalArgumentException e) {
+                    Rlog.e(RILJ_LOG_TAG, "Unknown dns: " + dns, e);
+                }
+            }
+        }
+
+        // Process gateway
+        String[] gateways = null;
+        if (!TextUtils.isEmpty(dcResult.gateways)) {
+            gateways = dcResult.gateways.split("\\s+");
+        }
+
+        List<InetAddress> gatewayList = new ArrayList<>();
+        if (gateways != null) {
+            for (String gateway : gateways) {
+                gateway = gateway.trim();
+                InetAddress ia;
+                try {
+                    ia = NetworkUtils.numericToInetAddress(gateway);
+                    gatewayList.add(ia);
+                } catch (IllegalArgumentException e) {
+                    Rlog.e(RILJ_LOG_TAG, "Unknown gateway: " + gateway, e);
+                }
+            }
+        }
+
+        return new DataCallResponse(dcResult.status,
+                dcResult.suggestedRetryTime,
+                dcResult.cid,
+                dcResult.active,
+                dcResult.type,
+                dcResult.ifname,
+                laList,
+                dnsList,
+                gatewayList,
+                new ArrayList<>(Arrays.asList(dcResult.pcscf.trim().split("\\s+"))),
+                dcResult.mtu
+        );
+    }
+
+    /**
+     * Convert SetupDataCallResult defined in 1.4/types.hal into DataCallResponse
+     * @param dcResult setup data call result
+     * @return converted DataCallResponse object
+     */
+    @VisibleForTesting
+    public static DataCallResponse convertDataCallResult_1_4(
+            android.hardware.radio.V1_4.SetupDataCallResult dcResult) {
+        if (dcResult == null) return null;
+
+        // Process address
+        List<LinkAddress> laList = new ArrayList<>();
+        if (dcResult.addresses != null) {
+            for (String address : dcResult.addresses) {
+                address = address.trim();
+                if (address.isEmpty()) continue;
+
+                try {
+                    LinkAddress la;
+                    // Check if the address contains prefix length. If yes, LinkAddress
+                    // can parse that.
+                    if (address.split("/").length == 2) {
+                        la = new LinkAddress(address);
+                    } else {
+                        InetAddress ia = NetworkUtils.numericToInetAddress(address);
+                        la = new LinkAddress(ia, (ia instanceof Inet4Address) ? 32 : 128);
+                    }
+
+                    laList.add(la);
+                } catch (IllegalArgumentException e) {
+                    Rlog.e(RILJ_LOG_TAG, "Unknown address: " + address, e);
+                }
+            }
+        }
+
+        // Process dns
+        List<InetAddress> dnsList = new ArrayList<>();
+        if (dcResult.dnses != null) {
+            for (String dns : dcResult.dnses) {
+                dns = dns.trim();
+                InetAddress ia;
+                try {
+                    ia = NetworkUtils.numericToInetAddress(dns);
+                    dnsList.add(ia);
+                } catch (IllegalArgumentException e) {
+                    Rlog.e(RILJ_LOG_TAG, "Unknown dns: " + dns, e);
+                }
+            }
+        }
+
+        // Process gateway
+        List<InetAddress> gatewayList = new ArrayList<>();
+        if (dcResult.gateways != null) {
+            for (String gateway : dcResult.gateways) {
+                gateway = gateway.trim();
+                InetAddress ia;
+                try {
+                    ia = NetworkUtils.numericToInetAddress(gateway);
+                    gatewayList.add(ia);
+                } catch (IllegalArgumentException e) {
+                    Rlog.e(RILJ_LOG_TAG, "Unknown gateway: " + gateway, e);
+                }
+            }
+        }
+
+        return new DataCallResponse(dcResult.cause,
+                dcResult.suggestedRetryTime,
+                dcResult.cid,
+                dcResult.active,
+                ApnSetting.getProtocolStringFromInt(dcResult.type),
+                dcResult.ifname,
+                laList,
+                dnsList,
+                gatewayList,
+                dcResult.pcscf,
+                dcResult.mtu
+        );
+    }
+
+    /**
+     * Convert SetupDataCallResult defined in 1.0/types.hal into DataCallResponse
+     * @param dataCallResultList List of SetupDataCallResult defined in 1.0/types.hal
+     * @return List of converted DataCallResponse object
+     */
+    @VisibleForTesting
+    public static ArrayList<DataCallResponse> convertDataCallResultList(
+            ArrayList<android.hardware.radio.V1_0.SetupDataCallResult> dataCallResultList) {
+        ArrayList<DataCallResponse> response =
+                new ArrayList<DataCallResponse>(dataCallResultList.size());
+
+        for (android.hardware.radio.V1_0.SetupDataCallResult dcResult : dataCallResultList) {
+            response.add(convertDataCallResult(dcResult));
+        }
+        return response;
+    }
+
+    /**
+     * Convert SetupDataCallResult defined in 1.4/types.hal into DataCallResponse
+     * @param dataCallResultList List of SetupDataCallResult defined in 1.4/types.hal
+     * @return List of converted DataCallResponse object
+     */
+    @VisibleForTesting
+    public static ArrayList<DataCallResponse> convertDataCallResultList_1_4(
+            ArrayList<android.hardware.radio.V1_4.SetupDataCallResult> dataCallResultList) {
+        ArrayList<DataCallResponse> response =
+                new ArrayList<DataCallResponse>(dataCallResultList.size());
+
+        for (android.hardware.radio.V1_4.SetupDataCallResult dcResult : dataCallResultList) {
+            response.add(convertDataCallResult_1_4(dcResult));
+        }
+        return response;
     }
 
     /**
