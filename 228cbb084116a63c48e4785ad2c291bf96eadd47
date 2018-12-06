@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "579ba1c9_35cf7c22",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-12-06T23:21:01Z",
+      "side": 1,
+      "message": "The name is a bit confused. \n\nFirstly, publicCardId !\u003d Integer.valueOf(cardId) as your description \"cardId is the private ICCID/EID string\". Can we rename the cardId to ICCID/EID string and use cardId as the public int id?",
+      "range": {
+        "startLine": 347,
+        "startChar": 41,
+        "endLine": 347,
+        "endChar": 61
+      },
+      "revId": "228cbb084116a63c48e4785ad2c291bf96eadd47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
