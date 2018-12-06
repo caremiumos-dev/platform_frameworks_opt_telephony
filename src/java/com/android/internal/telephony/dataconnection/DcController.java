@@ -71,10 +71,10 @@ public class DcController extends StateMachine {
      *
      * TODO: Move to RILConstants.java
      */
-    static final int DATA_CONNECTION_ACTIVE_PH_LINK_INACTIVE = 0;
-    static final int DATA_CONNECTION_ACTIVE_PH_LINK_DORMANT = 1;
-    static final int DATA_CONNECTION_ACTIVE_PH_LINK_UP = 2;
-    static final int DATA_CONNECTION_ACTIVE_UNKNOWN = Integer.MAX_VALUE;
+    static final int DATA_CONNECTION_INACTIVE = 0;
+    static final int DATA_CONNECTION_DORMANT = 1;
+    static final int DATA_CONNECTION_ACTIVE = 2;
+    static final int DATA_CONNECTION_UNKNOWN = Integer.MAX_VALUE;
 
     private DccDefaultState mDccDefaultState = new DccDefaultState();
 
@@ -325,7 +325,7 @@ public class DcController extends StateMachine {
                         log("onDataStateChanged: Found ConnId=" + newState.getCallId()
                                 + " newState=" + newState.toString());
                     }
-                    if (newState.getActive() == DATA_CONNECTION_ACTIVE_PH_LINK_INACTIVE) {
+                    if (newState.getActive() == DATA_CONNECTION_INACTIVE) {
                         if (mDct.isCleanupRequired.get()) {
                             apnsToCleanup.addAll(apnContexts);
                             mDct.isCleanupRequired.set(false);
@@ -415,10 +415,10 @@ public class DcController extends StateMachine {
                     }
                 }
 
-                if (newState.getActive() == DATA_CONNECTION_ACTIVE_PH_LINK_UP) {
+                if (newState.getActive() == DATA_CONNECTION_ACTIVE) {
                     isAnyDataCallActive = true;
                 }
-                if (newState.getActive() == DATA_CONNECTION_ACTIVE_PH_LINK_DORMANT) {
+                if (newState.getActive() == DATA_CONNECTION_DORMANT) {
                     isAnyDataCallDormant = true;
                 }
             }

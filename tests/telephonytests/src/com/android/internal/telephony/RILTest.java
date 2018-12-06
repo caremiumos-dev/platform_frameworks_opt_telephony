@@ -104,6 +104,8 @@ import android.hardware.radio.V1_0.RadioResponseType;
 import android.hardware.radio.V1_0.SmsWriteArgs;
 import android.hardware.radio.deprecated.V1_0.IOemHook;
 import android.net.ConnectivityManager;
+import android.net.LinkAddress;
+import android.net.NetworkUtils;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IPowerManager;
@@ -131,6 +133,7 @@ import android.telephony.CellSignalStrengthWcdma;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.telephony.data.ApnSetting;
+import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 
 import com.android.internal.telephony.RIL.RilHandler;
@@ -712,7 +715,7 @@ public class RILTest extends TelephonyTest {
                 mSerialNumberCaptor.capture(),
                 eq((DataProfileInfo) invokeMethod(
                         mRILInstance,
-                        "convertToHalDataProfile",
+                        "convertToHalDataProfile10",
                         new Class<?>[] {DataProfile.class},
                         new Object[] {dataProfile})),
                 eq(dataProfile.isPersistent()),
@@ -1023,7 +1026,7 @@ public class RILTest extends TelephonyTest {
                 mRILInstance,
                 "obtainRequest",
                 new Class<?>[] {Integer.TYPE, Message.class, WorkSource.class},
-                new Object[] {RIL_REQUEST_GET_SIM_STATUS, obtainMessage(), null});
+                new Object[] {RIL_REQUEST_GET_SIM_STATUS, obtainMessage(), new WorkSource()});
 
         // The wake lock should be held when obtain a RIL request.
         assertTrue(mRILInstance.getWakeLock(RIL.FOR_WAKELOCK).isHeld());
@@ -1519,6 +1522,118 @@ public class RILTest extends TelephonyTest {
         expected.setCellConnectionStatus(CellInfo.CONNECTION_NONE);
         cellInfoCdma.setTimeStamp(TIMESTAMP); // override the timestamp
         assertEquals(expected, cellInfoCdma);
+    }
+
+    @Test
+    public void testConvertDataCallResult() throws Exception {
+
+        android.hardware.radio.V1_0.SetupDataCallResult result =
+                new android.hardware.radio.V1_0.SetupDataCallResult();
+        result.status = android.hardware.radio.V1_0.DataCallFailCause.NONE;
+        result.suggestedRetryTime = -1;
+        result.cid = 1;
+        result.active = 1;
+        result.type = "IP";
+        result.ifname = "eth0";
+        result.addresses = "10.0.2.15";
+        result.dnses = "10.0.2.3";
+        result.gateways = "10.0.2.15 fe80::2";
+        result.pcscf = "";
+        result.mtu = 1500;
+
+        DataCallResponse response = new DataCallResponse(0, -1, 1, 1, "IP",
+                "eth0",
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress("10.0.2.15"), 32)),
+                Arrays.asList(NetworkUtils.numericToInetAddress("10.0.2.3")),
+                Arrays.asList(NetworkUtils.numericToInetAddress("10.0.2.15"),
+                        NetworkUtils.numericToInetAddress("fe80::2")),
+                Arrays.asList(""),
+                1500);
+
+        assertEquals(response, RIL.convertDataCallResult(result));
+
+        result.status = android.hardware.radio.V1_0.DataCallFailCause.NONE;
+        result.suggestedRetryTime = -1;
+        result.cid = 0;
+        result.active = 2;
+        result.type = "IPV4V6";
+        result.ifname = "ifname";
+        result.addresses = "2607:fb90:a620:651d:eabe:f8da:c107:44be/64";
+        result.dnses = "fd00:976a::9      fd00:976a::10";
+        result.gateways = "fe80::4c61:1832:7b28:d36c    1.2.3.4";
+        result.pcscf = "fd00:976a:c206:20::6   fd00:976a:c206:20::9    fd00:976a:c202:1d::9";
+        result.mtu = 1500;
+
+        response = new DataCallResponse(0, -1, 0, 2, "IPV4V6",
+                "ifname",
+                Arrays.asList(new LinkAddress("2607:fb90:a620:651d:eabe:f8da:c107:44be/64")),
+                Arrays.asList(NetworkUtils.numericToInetAddress("fd00:976a::9"),
+                        NetworkUtils.numericToInetAddress("fd00:976a::10")),
+                Arrays.asList(NetworkUtils.numericToInetAddress("fe80::4c61:1832:7b28:d36c"),
+                        NetworkUtils.numericToInetAddress("1.2.3.4")),
+                Arrays.asList("fd00:976a:c206:20::6", "fd00:976a:c206:20::9",
+                        "fd00:976a:c202:1d::9"),
+                1500);
+
+        assertEquals(response, RIL.convertDataCallResult(result));
+    }
+
+    @Test
+    public void testConvertDataCallResult_1_4() throws Exception {
+
+        android.hardware.radio.V1_4.SetupDataCallResult result =
+                new android.hardware.radio.V1_4.SetupDataCallResult();
+        result.cause = android.hardware.radio.V1_4.DataCallFailCause.NONE;
+        result.suggestedRetryTime = -1;
+        result.cid = 1;
+        result.active = android.hardware.radio.V1_4.DataConnActiveStatus.DORMANT;
+        result.type = android.hardware.radio.V1_4.PdpProtocolType.IP;
+        result.ifname = "eth0";
+        result.addresses = new ArrayList<>(Arrays.asList("10.0.2.15"));
+        result.dnses = new ArrayList<>(Arrays.asList("10.0.2.3"));
+        result.gateways = new ArrayList<>(Arrays.asList("10.0.2.15", "fe80::2"));
+        result.pcscf = new ArrayList<>(Arrays.asList(""));
+        result.mtu = 1500;
+
+        DataCallResponse response = new DataCallResponse(0, -1, 1, 1, "IP",
+                "eth0",
+                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress("10.0.2.15"), 32)),
+                Arrays.asList(NetworkUtils.numericToInetAddress("10.0.2.3")),
+                Arrays.asList(NetworkUtils.numericToInetAddress("10.0.2.15"),
+                        NetworkUtils.numericToInetAddress("fe80::2")),
+                Arrays.asList(""),
+                1500);
+
+        assertEquals(response, RIL.convertDataCallResult_1_4(result));
+
+        result.cause = android.hardware.radio.V1_4.DataCallFailCause.NONE;
+        result.suggestedRetryTime = -1;
+        result.cid = 0;
+        result.active = android.hardware.radio.V1_4.DataConnActiveStatus.ACTIVE;
+        result.type = android.hardware.radio.V1_4.PdpProtocolType.IPV4V6;
+        result.ifname = "ifname";
+        result.addresses = new ArrayList<>(
+                Arrays.asList("2607:fb90:a620:651d:eabe:f8da:c107:44be/64"));
+        result.dnses = new ArrayList<>(
+                Arrays.asList("fd00:976a::9", "fd00:976a::10"));
+        result.gateways = new ArrayList<>(
+                Arrays.asList("fe80::4c61:1832:7b28:d36c", "1.2.3.4"));
+        result.pcscf = new ArrayList<>(Arrays.asList(
+                "fd00:976a:c206:20::6", "fd00:976a:c206:20::9", "fd00:976a:c202:1d::9"));
+        result.mtu = 1500;
+
+        response = new DataCallResponse(0, -1, 0, 2, "IPV4V6",
+                "ifname",
+                Arrays.asList(new LinkAddress("2607:fb90:a620:651d:eabe:f8da:c107:44be/64")),
+                Arrays.asList(NetworkUtils.numericToInetAddress("fd00:976a::9"),
+                        NetworkUtils.numericToInetAddress("fd00:976a::10")),
+                Arrays.asList(NetworkUtils.numericToInetAddress("fe80::4c61:1832:7b28:d36c"),
+                        NetworkUtils.numericToInetAddress("1.2.3.4")),
+                Arrays.asList("fd00:976a:c206:20::6", "fd00:976a:c206:20::9",
+                        "fd00:976a:c202:1d::9"),
+                1500);
+
+        assertEquals(response, RIL.convertDataCallResult_1_4(result));
     }
 
     @Test
