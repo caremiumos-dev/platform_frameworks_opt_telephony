@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee5f36df_46e538ce",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-12-06T22:38:07Z",
+      "side": 1,
+      "message": "No cs/ links in public code",
+      "range": {
+        "startLine": 1437,
+        "startChar": 7,
+        "endLine": 1437,
+        "endChar": 106
+      },
+      "revId": "cd155c7da9bb3fd636b4ba9377f23fa2871bb763",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "035f51ca_1d5ed441",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2018-12-06T22:38:07Z",
+      "side": 1,
+      "message": "Do you want to write an error in this catch block as well?",
+      "range": {
+        "startLine": 203,
+        "startChar": 18,
+        "endLine": 205,
+        "endChar": 17
+      },
+      "revId": "cd155c7da9bb3fd636b4ba9377f23fa2871bb763",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
