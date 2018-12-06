@@ -16,6 +16,24 @@
       "revId": "a4d622f510a2a9ede5816719b5e03ee561b9b9b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3968b94_88655b23",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-12-06T01:32:20Z",
+      "side": 0,
+      "message": "Yes, they were flaky IIRC from a conversation with Jack about the system broadcast part. I changed the way my test works so they aren\u0027t flaky, but I didn\u0027t rewrite the other ones. Avoiding the flakiness is why I exposed the Message IDs.",
+      "parentUuid": "4d23144a_f33df734",
+      "revId": "a4d622f510a2a9ede5816719b5e03ee561b9b9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
