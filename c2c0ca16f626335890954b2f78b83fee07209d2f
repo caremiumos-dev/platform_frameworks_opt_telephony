@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6fdaaa60_49015a7d",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-06T00:59:06Z",
+      "side": 1,
+      "message": "Done\n\nI decided to go with \"codec\" because the enum really indicates the codec, and not the quality (which is either HIGH_DEFINITION or STANDARD in the code)",
+      "parentUuid": "2bca5f08_c368c61d",
+      "range": {
+        "startLine": 1184,
+        "startChar": 1,
+        "endLine": 1186,
+        "endChar": 28
+      },
+      "revId": "c2c0ca16f626335890954b2f78b83fee07209d2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d79434e1_dd6ba03e",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "c2c0ca16f626335890954b2f78b83fee07209d2f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b551948_e63f4863",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-06T00:59:06Z",
+      "side": 1,
+      "message": "This is an issue in existing code. The class DriverCall uses audioQuality to identify the codec. And this leads to strange code... for example line 659:\n  int newAudioQuality \u003d getAudioQualityFromDC(dc.audioQuality);\n\nAs part of this change, I did not want to modify the DriverCall to avoid larger impact.\nSo, this mismatch is intentional.",
+      "parentUuid": "d79434e1_dd6ba03e",
+      "range": {
+        "startLine": 672,
+        "startChar": 12,
+        "endLine": 672,
+        "endChar": 42
+      },
+      "revId": "c2c0ca16f626335890954b2f78b83fee07209d2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
