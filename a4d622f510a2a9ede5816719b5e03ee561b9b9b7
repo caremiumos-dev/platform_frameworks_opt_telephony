@@ -52,6 +52,24 @@
       "revId": "a4d622f510a2a9ede5816719b5e03ee561b9b9b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0be1a5f_4851022f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-12-06T02:21:04Z",
+      "side": 0,
+      "message": "Ah! That\u0027s right! Thanks for the reminder Jack. My memory isn\u0027t what I wish it were.",
+      "parentUuid": "24cc535f_680f5972",
+      "revId": "a4d622f510a2a9ede5816719b5e03ee561b9b9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
