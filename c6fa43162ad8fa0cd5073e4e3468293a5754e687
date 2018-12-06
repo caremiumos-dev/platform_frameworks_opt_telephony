@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "843815ff_86da6e47",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-12-06T23:19:45Z",
+      "side": 1,
+      "message": "nit: spent",
+      "range": {
+        "startLine": 439,
+        "startChar": 41,
+        "endLine": 439,
+        "endChar": 47
+      },
+      "revId": "c6fa43162ad8fa0cd5073e4e3468293a5754e687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7f77dd8_7301e382",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-12-06T23:19:45Z",
+      "side": 1,
+      "message": "nit: spent",
+      "range": {
+        "startLine": 441,
+        "startChar": 41,
+        "endLine": 441,
+        "endChar": 47
+      },
+      "revId": "c6fa43162ad8fa0cd5073e4e3468293a5754e687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
