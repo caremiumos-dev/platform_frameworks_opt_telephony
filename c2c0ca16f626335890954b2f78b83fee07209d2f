@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bca5f08_c368c61d",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-12-06T00:20:28Z",
+      "side": 1,
+      "message": "probably should be consistent. Either codec or quality.",
+      "range": {
+        "startLine": 1184,
+        "startChar": 1,
+        "endLine": 1186,
+        "endChar": 28
+      },
+      "revId": "c2c0ca16f626335890954b2f78b83fee07209d2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d79434e1_dd6ba03e",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-12-06T00:20:28Z",
+      "side": 1,
+      "message": "should we use the same term here? Either using codec or quality.",
+      "range": {
+        "startLine": 672,
+        "startChar": 12,
+        "endLine": 672,
+        "endChar": 42
+      },
+      "revId": "c2c0ca16f626335890954b2f78b83fee07209d2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
