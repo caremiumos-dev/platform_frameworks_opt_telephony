@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "053dacac_44f0b70e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2018-12-07T00:07:09Z",
+      "side": 1,
+      "message": "\u0027{\u0027 instead of \u0027(\u0027\n\nI\u0027d appreciate it if you\u0027d compile CLs before requesting review.",
+      "range": {
+        "startLine": 1147,
+        "startChar": 31,
+        "endLine": 1147,
+        "endChar": 32
+      },
+      "revId": "63d529e7229e89b3afedb3810a21c5be1f9a6141",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
