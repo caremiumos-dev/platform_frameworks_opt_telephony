@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f87fc37d_240f1825",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-12-07T21:53:52Z",
+      "side": 1,
+      "message": "Put a small comment here about why we should do this instead of hanging up, for example \"if the conference is in the process of being put on hold when disconnected, it is waiting, so hang up that call instead.\"\n\nor something similar",
+      "range": {
+        "startLine": 1253,
+        "startChar": 16,
+        "endLine": 1253,
+        "endChar": 44
+      },
+      "revId": "3d62482d9bb3190083ab5cdb4f51744d77ca1500",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
