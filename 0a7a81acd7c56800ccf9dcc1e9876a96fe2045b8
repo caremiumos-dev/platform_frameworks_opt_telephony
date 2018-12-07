@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc58d6d0_8cb61ca9",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1403772
+      },
+      "writtenOn": "2018-12-07T23:18:08Z",
+      "side": 1,
+      "message": "incorrect conflict resolution?isImsUtEnabledOverCdma",
+      "range": {
+        "startLine": 1810,
+        "startChar": 28,
+        "endLine": 1810,
+        "endChar": 29
+      },
+      "revId": "0a7a81acd7c56800ccf9dcc1e9876a96fe2045b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6967645e_fd60a6b2",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1403772
+      },
+      "writtenOn": "2018-12-07T23:18:08Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 1856,
+        "startChar": 28,
+        "endLine": 1856,
+        "endChar": 29
+      },
+      "revId": "0a7a81acd7c56800ccf9dcc1e9876a96fe2045b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
