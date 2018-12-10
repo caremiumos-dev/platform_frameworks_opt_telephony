@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9c2f6e5_977d7ab9",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-12-10T23:20:36Z",
+      "side": 1,
+      "message": "Move to line 678, before \"destAddr \u003d filterDestAddress(destAddr);\"",
+      "range": {
+        "startLine": 711,
+        "startChar": 8,
+        "endLine": 712,
+        "endChar": 13
+      },
+      "revId": "74816f3d19bbc18f91b4bf024f1b9f093946bbf9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d6ffda3_3d7264b1",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1193,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-12-10T23:20:36Z",
+      "side": 1,
+      "message": "Move to line 1160 before \" textAndAddress[1] \u003d filterDestAddress(textAndAddress[1]);\"",
+      "range": {
+        "startLine": 1192,
+        "startChar": 8,
+        "endLine": 1193,
+        "endChar": 13
+      },
+      "revId": "74816f3d19bbc18f91b4bf024f1b9f093946bbf9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
