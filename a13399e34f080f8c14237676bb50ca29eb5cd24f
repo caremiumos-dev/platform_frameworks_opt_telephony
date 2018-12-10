@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdcc63a1_4071dae5",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-10T11:41:32Z",
+      "side": 1,
+      "message": "Do we not need this if() check anymore?",
+      "range": {
+        "startLine": 1366,
+        "startChar": 22,
+        "endLine": 1366,
+        "endChar": 24
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40135cb9_7eb49fd7",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-10T11:41:32Z",
+      "side": 1,
+      "message": "Do we need to test something invalid to verify the functionality?",
+      "range": {
+        "startLine": 1528,
+        "startChar": 16,
+        "endLine": 1528,
+        "endChar": 41
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "717976d0_193d1890",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/metrics/TelephonyMetricsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-10T11:41:32Z",
+      "side": 1,
+      "message": "Could you have comment inside for better readability?\ne.g. \nDataCallResponse(5 /* status */, 6 /* suggestedRetryTime */, 7/* cid */, 8/* active */,",
+      "range": {
+        "startLine": 396,
+        "startChar": 40,
+        "endLine": 396,
+        "endChar": 68
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "077c6b1e_3d914d70",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/metrics/TelephonyMetricsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-10T11:41:32Z",
+      "side": 1,
+      "message": "the same as above",
+      "range": {
+        "startLine": 401,
+        "startChar": 16,
+        "endLine": 401,
+        "endChar": 20
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
