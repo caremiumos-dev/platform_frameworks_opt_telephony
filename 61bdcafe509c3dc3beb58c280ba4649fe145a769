@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db212aad_aced8b04",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-12-10T21:52:42Z",
+      "side": 1,
+      "message": "Need to also check for the appropriate permission here. Since we are reading phone state in a @SystemApi, we need to check for READ_PRIVILEGED_PHONE_STATE and then clear the Binder calling identity (see PhoneInterfaceManager#enforceReadPrivilegedPermission and users of that method for how to do this). Probably best to copy that method here and use in this method to check permission.\n\nAlso, from a style perspective, can you move this up to underneath sendStoredMultipartText?",
+      "range": {
+        "startLine": 1376,
+        "startChar": 15,
+        "endLine": 1376,
+        "endChar": 34
+      },
+      "revId": "61bdcafe509c3dc3beb58c280ba4649fe145a769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfadf964_2cfa9280",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-12-10T21:52:42Z",
+      "side": 1,
+      "message": "Something in here can definitely return null. Separate \"numberOnIcc \u003d UiccController.getInstance().getUiccProfileForPhone(mPhone.getPhoneId())\" and check to make sure the profile !\u003d null and IccRecords !\u003d null before calling getSmsCapacityOnIcc.",
+      "range": {
+        "startLine": 1380,
+        "startChar": 26,
+        "endLine": 1381,
+        "endChar": 59
+      },
+      "revId": "61bdcafe509c3dc3beb58c280ba4649fe145a769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8274a92_d65c06a9",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-12-10T21:52:42Z",
+      "side": 1,
+      "message": "\"onRecordLoaded()\" should be called too here.",
+      "range": {
+        "startLine": 794,
+        "startChar": 20,
+        "endLine": 794,
+        "endChar": 40
+      },
+      "revId": "61bdcafe509c3dc3beb58c280ba4649fe145a769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
