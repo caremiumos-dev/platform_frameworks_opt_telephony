@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3929e70_7484c69b",
+        "filename": "src/java/com/android/internal/telephony/RadioConfigIndication.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1387771
+      },
+      "writtenOn": "2018-12-11T06:37:22Z",
+      "side": 1,
+      "message": "This need to be changed to V1_2",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 2
+      },
+      "revId": "4277311a9b5a6a91050e41c5fd629cc935ee814a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
