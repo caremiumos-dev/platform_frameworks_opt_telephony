@@ -108,7 +108,10 @@ public abstract class Connection {
         public void onRttInitiated();
         public void onRttTerminated();
         public void onOriginalConnectionReplaced(Connection newConnection);
+<<<<<<< HEAD   (477570 Merge "Refine APN fetching logic")
         public void onIsNetworkEmergencyCallChanged(boolean isEmergencyCall);
+=======
+>>>>>>> BRANCH (e78d74 Merge pi-qpr1-release PQ1A.181105.017.A1 to pi-platform-rele)
     }
 
     /**
@@ -156,8 +159,11 @@ public abstract class Connection {
         public void onRttTerminated() {}
         @Override
         public void onOriginalConnectionReplaced(Connection newConnection) {}
+<<<<<<< HEAD   (477570 Merge "Refine APN fetching logic")
         @Override
         public void onIsNetworkEmergencyCallChanged(boolean isEmergencyCall) {}
+=======
+>>>>>>> BRANCH (e78d74 Merge pi-qpr1-release PQ1A.181105.017.A1 to pi-platform-rele)
     }
 
     public static final int AUDIO_QUALITY_STANDARD = 1;

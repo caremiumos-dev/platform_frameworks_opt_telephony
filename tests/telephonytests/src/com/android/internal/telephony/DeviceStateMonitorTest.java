@@ -133,6 +133,7 @@ public class DeviceStateMonitorTest extends TelephonyTest {
         verify(mSimulatedCommandsVerifier, times(1)).setUnsolResponseFilter(eq(-1),
                 nullable(Message.class));
     }
+<<<<<<< HEAD   (477570 Merge "Refine APN fetching logic")
 
     private void sendStates(int screenState, int chargingState, int wifiState) {
         setReady(false);
@@ -170,4 +171,6 @@ public class DeviceStateMonitorTest extends TelephonyTest {
         assertEquals(
                 DeviceStateMonitor.CELL_INFO_INTERVAL_SHORT_MS, mDSM.computeCellInfoMinInterval());
     }
+=======
+>>>>>>> BRANCH (e78d74 Merge pi-qpr1-release PQ1A.181105.017.A1 to pi-platform-rele)
 }

@@ -281,8 +281,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private static final int EVENT_SUPP_SERVICE_INDICATION = 27;
     private static final int EVENT_REDIAL_WIFI_E911_CALL = 28;
     private static final int EVENT_REDIAL_WIFI_E911_TIMEOUT = 29;
+<<<<<<< HEAD   (477570 Merge "Refine APN fetching logic")
     private static final int EVENT_ANSWER_WAITING_CALL = 30;
     private static final int EVENT_RESUME_NOW_FOREGROUND_CALL = 31;
+=======
+>>>>>>> BRANCH (e78d74 Merge pi-qpr1-release PQ1A.181105.017.A1 to pi-platform-rele)
 
     private static final int TIMEOUT_HANGUP_PENDINGMO = 500;
 
@@ -290,6 +293,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     private static final int TIMEOUT_REDIAL_WIFI_E911_MS = 10000;
 
+<<<<<<< HEAD   (477570 Merge "Refine APN fetching logic")
     // Following values are for mHoldSwitchingState
     private enum HoldSwapState {
         // Not in the middle of a hold/swap operation
@@ -308,6 +312,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         HOLDING_TO_DIAL_OUTGOING,
     }
 
+=======
+>>>>>>> BRANCH (e78d74 Merge pi-qpr1-release PQ1A.181105.017.A1 to pi-platform-rele)
     //***** Instance Variables
     private ArrayList<ImsPhoneConnection> mConnections = new ArrayList<ImsPhoneConnection>();
     private RegistrantList mVoiceCallEndedRegistrants = new RegistrantList();
@@ -363,9 +369,12 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private boolean mIsViLteDataMetered = false;
     private boolean mAlwaysPlayRemoteHoldTone = false;
     private boolean mAutoRetryFailedWifiEmergencyCall = false;
+<<<<<<< HEAD   (477570 Merge "Refine APN fetching logic")
     // Tracks the state of our background/foreground calls while a call hold/swap operation is
     // in progress. Values listed above.
     private HoldSwapState mHoldSwitchingState = HoldSwapState.INACTIVE;
+=======
+>>>>>>> BRANCH (e78d74 Merge pi-qpr1-release PQ1A.181105.017.A1 to pi-platform-rele)
 
     private String mLastDialString = null;
     private PhoneInternalInterface.DialArgs mLastDialArgs = null;

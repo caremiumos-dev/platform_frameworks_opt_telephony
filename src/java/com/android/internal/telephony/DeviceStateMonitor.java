@@ -64,6 +64,7 @@ public class DeviceStateMonitor extends Handler {
     protected static final boolean DBG = false;      /* STOPSHIP if true */
     protected static final String TAG = DeviceStateMonitor.class.getSimpleName();
 
+<<<<<<< HEAD   (477570 Merge "Refine APN fetching logic")
     static final int EVENT_RIL_CONNECTED                = 0;
     static final int EVENT_UPDATE_MODE_CHANGED          = 1;
     @VisibleForTesting
@@ -75,6 +76,15 @@ public class DeviceStateMonitor extends Handler {
     static final int EVENT_RADIO_AVAILABLE              = 6;
     @VisibleForTesting
     static final int EVENT_WIFI_CONNECTION_CHANGED      = 7;
+=======
+    private static final int EVENT_RIL_CONNECTED                = 0;
+    private static final int EVENT_UPDATE_MODE_CHANGED          = 1;
+    private static final int EVENT_SCREEN_STATE_CHANGED         = 2;
+    private static final int EVENT_POWER_SAVE_MODE_CHANGED      = 3;
+    private static final int EVENT_CHARGING_STATE_CHANGED       = 4;
+    private static final int EVENT_TETHERING_STATE_CHANGED      = 5;
+    private static final int EVENT_RADIO_AVAILABLE              = 6;
+>>>>>>> BRANCH (e78d74 Merge pi-qpr1-release PQ1A.181105.017.A1 to pi-platform-rele)
 
     // TODO(b/74006656) load hysteresis values from a property when DeviceStateMonitor starts
     private static final int HYSTERESIS_KBPS = 50;
@@ -268,10 +278,13 @@ public class DeviceStateMonitor extends Handler {
 
         mPhone.mCi.registerForRilConnected(this, EVENT_RIL_CONNECTED, null);
         mPhone.mCi.registerForAvailable(this, EVENT_RADIO_AVAILABLE, null);
+<<<<<<< HEAD   (477570 Merge "Refine APN fetching logic")
 
         ConnectivityManager cm = (ConnectivityManager) phone.getContext().getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         cm.registerNetworkCallback(mWifiNetworkRequest, mNetworkCallback);
+=======
+>>>>>>> BRANCH (e78d74 Merge pi-qpr1-release PQ1A.181105.017.A1 to pi-platform-rele)
     }
 
     /**
