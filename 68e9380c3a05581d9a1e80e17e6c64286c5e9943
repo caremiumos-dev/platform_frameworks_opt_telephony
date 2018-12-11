@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a36de30_b86e4e10",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-12-11T01:59:14Z",
+      "side": 1,
+      "message": "add /* arg2 */ ?",
+      "range": {
+        "startLine": 395,
+        "startChar": 41,
+        "endLine": 395,
+        "endChar": 43
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdfbe1ce_4f801704",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-12-11T01:59:14Z",
+      "side": 1,
+      "message": "I think we can remove this TODO now.",
+      "range": {
+        "startLine": 671,
+        "startChar": 16,
+        "endLine": 671,
+        "endChar": 73
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49c3d765_436c75e5",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-12-11T01:59:14Z",
+      "side": 1,
+      "message": "Move this after switch so all the cases can share the cardId.",
+      "range": {
+        "startLine": 676,
+        "startChar": 28,
+        "endLine": 676,
+        "endChar": 54
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "022ff50d_ae13633c",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-12-11T01:59:14Z",
+      "side": 1,
+      "message": "It seems like mpq@ reverted this part in ag/5655974. I think you can just fill in this part since it\u0027s just renaming here?",
+      "range": {
+        "startLine": 729,
+        "startChar": 66,
+        "endLine": 729,
+        "endChar": 72
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7de5c17a_04924274",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-12-11T01:59:14Z",
+      "side": 1,
+      "message": "Just to confirm - the cardId for startOtaUpdatingIfNecessary() is something we can get from the platform itself (through the broadcast thing you mentioned)?",
+      "range": {
+        "startLine": 210,
+        "startChar": 8,
+        "endLine": 211,
+        "endChar": 81
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42d70884_a72f4289",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-12-11T01:59:14Z",
+      "side": 1,
+      "message": "You also need the cardId here right? Does make just pass?",
+      "range": {
+        "startLine": 413,
+        "startChar": 24,
+        "endLine": 413,
+        "endChar": 54
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1665fa88_3fcddf10",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-12-11T01:59:14Z",
+      "side": 1,
+      "message": "Need to pass in the cardId",
+      "range": {
+        "startLine": 1063,
+        "startChar": 19,
+        "endLine": 1063,
+        "endChar": 31
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
