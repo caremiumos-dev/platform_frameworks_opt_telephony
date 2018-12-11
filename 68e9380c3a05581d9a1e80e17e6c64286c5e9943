@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "174c3829_fdd2d2c7",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-11T22:55:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a36de30_b86e4e10",
+      "range": {
+        "startLine": 395,
+        "startChar": 41,
+        "endLine": 395,
+        "endChar": 43
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fdfbe1ce_4f801704",
         "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-12-11T01:59:14Z",
       "side": 1,
       "message": "I think we can remove this TODO now.",
+      "range": {
+        "startLine": 671,
+        "startChar": 16,
+        "endLine": 671,
+        "endChar": 73
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcc4841b_0a7bbeab",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-11T22:55:51Z",
+      "side": 1,
+      "message": "Let\u0027s wait to do this until after mpq@\u0027s CL",
+      "parentUuid": "fdfbe1ce_4f801704",
       "range": {
         "startLine": 671,
         "startChar": 16,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "70b0ef9d_5ca8226b",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-11T22:55:51Z",
+      "side": 1,
+      "message": "same, let\u0027s wait to do this",
+      "parentUuid": "49c3d765_436c75e5",
+      "range": {
+        "startLine": 676,
+        "startChar": 28,
+        "endLine": 676,
+        "endChar": 54
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "022ff50d_ae13633c",
         "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2018-12-11T01:59:14Z",
       "side": 1,
       "message": "It seems like mpq@ reverted this part in ag/5655974. I think you can just fill in this part since it\u0027s just renaming here?",
+      "range": {
+        "startLine": 729,
+        "startChar": 66,
+        "endLine": 729,
+        "endChar": 72
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e78c244_f931b2e8",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-11T22:55:51Z",
+      "side": 1,
+      "message": "Can\u0027t get the cardId until we change getEuiccProfileInfoList(), and we can\u0027t change that without changing the callsite in EuiccController. To keep this change isolated, I\u0027d rather leave this for now and handle it in mpq@\u0027s CL.",
+      "parentUuid": "022ff50d_ae13633c",
       "range": {
         "startLine": 729,
         "startChar": 66,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "a3ff51b3_73a99824",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-11T22:55:51Z",
+      "side": 1,
+      "message": "Yes. We might have to do it in a slightly roundabout way, but the platform will be able to decide what cardId to pass in.",
+      "parentUuid": "7de5c17a_04924274",
+      "range": {
+        "startLine": 210,
+        "startChar": 8,
+        "endLine": 211,
+        "endChar": 81
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42d70884_a72f4289",
         "filename": "src/java/com/android/internal/telephony/euicc/EuiccController.java",
         "patchSetId": 1
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "6b241642_bfde967a",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-11T22:55:51Z",
+      "side": 1,
+      "message": "Good catch. I\u0027ll add an arg to the callback.",
+      "parentUuid": "42d70884_a72f4289",
+      "range": {
+        "startLine": 413,
+        "startChar": 24,
+        "endLine": 413,
+        "endChar": 54
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1665fa88_3fcddf10",
         "filename": "src/java/com/android/internal/telephony/euicc/EuiccController.java",
         "patchSetId": 1
@@ -160,6 +304,30 @@
       "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "856d0d3e_a5f9f3a0",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-11T22:55:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1665fa88_3fcddf10",
+      "range": {
+        "startLine": 1063,
+        "startChar": 19,
+        "endLine": 1063,
+        "endChar": 31
+      },
+      "revId": "68e9380c3a05581d9a1e80e17e6c64286c5e9943",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
