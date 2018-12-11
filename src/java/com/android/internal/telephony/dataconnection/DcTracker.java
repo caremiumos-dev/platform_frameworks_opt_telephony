@@ -1065,17 +1065,16 @@ public class DcTracker extends Handler {
     }
 
     /**
-     * Returns {@link DctConstants.State} based on the state of the {@link DataConnection} that
-     * contains a {@link ApnSetting} that supported the given apn type {@code anpType}.
+     * Get the data connection state based on the APN type.
      *
-     * <p>
-     * Assumes there is less than one {@link ApnSetting} can support the given apn type.
+     * @param apnType APN type
+     * @return The data connection state
      */
     public DctConstants.State getState(String apnType) {
-        final int apnTypeBitmask = ApnSetting.getApnTypesBitmaskFromString(apnType);
-        for (DataConnection dc : mDataConnections.values()) {
-            ApnSetting apnSetting = dc.getApnSetting();
-            if (apnSetting != null && apnSetting.canHandleType(apnTypeBitmask)) {
+        ApnContext apnContext = mApnContexts.get(apnType);
+        if (apnContext != null) {
+            DataConnection dc = apnContext.getDataConnection();
+            if (dc != null) {
                 if (dc.isActive()) {
                     return DctConstants.State.CONNECTED;
                 } else if (dc.isActivating()) {
@@ -1087,7 +1086,6 @@ public class DcTracker extends Handler {
                 }
             }
         }
-
         return DctConstants.State.IDLE;
     }
 
