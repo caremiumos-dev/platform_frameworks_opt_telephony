@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d40a4fea_9c210b21",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-12-11T19:24:07Z",
+      "side": 1,
+      "message": "is this needed? its possible that an apn type can be supported by multiple APN settings but only only map to a single data connection which are actively handle this apn type?",
+      "range": {
+        "startLine": 1068,
+        "startChar": 60,
+        "endLine": 1070,
+        "endChar": 6
+      },
+      "revId": "84d3bbed8ae93f449f5197fd06ac88384dcb9aed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
