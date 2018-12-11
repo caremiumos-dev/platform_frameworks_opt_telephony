@@ -69,6 +69,30 @@
       "revId": "3d9af07003f8e81a898646a59a4c2872159bfd26",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c156090e_75effd89",
+        "filename": "src/java/com/android/internal/telephony/NewNitzStateMachine.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2018-12-11T12:31:49Z",
+      "side": 1,
+      "message": "Thank you for your comment. As little improvement, I\u0027ve moved the logic from NitsStateMachine to Telephony side as new getNetworkCountryIsoForNitz.\n\n\u003eThis is the place where we get the country code. It is a MCC-\u003ecountry table. Maybe we should extend the table to MCC+MNC-\u003ecountry table there.\n\u003eCurrently the table is in the Java file, but in the future we should consider moving them into configuration such as resources.\n\nYes, I agree with your suggestion as ideal(long-term) solution.\nCurrent getNetworkCountryIsoForPhone() refers to only MCC-\u003ecountry table, but a MCC might have multiple geographical areas like this case. (MCC310 has U.S. and Guam). In other word, it\u0027s insufficient to decide appropriate ISO Country code with mobile networks.\n\nBut if we implement the ideal solution, it will be so big change with new MCC+MNC-\u003ecountry table.(probably over thousand line)\nAnd before implementing it, we need to clarify and agree which specification/table should be referred to and how to update it, so on.\n(For specification point of view, I\u0027ve updated some information in b/117863016)\n\nSo in short-term, I\u0027d like to suggest this CLs as one of workaround.",
+      "parentUuid": "4268c804_850df33d",
+      "range": {
+        "startLine": 202,
+        "startChar": 25,
+        "endLine": 202,
+        "endChar": 51
+      },
+      "revId": "3d9af07003f8e81a898646a59a4c2872159bfd26",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
