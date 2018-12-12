@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38377efd_03dd51b9",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-12-12T19:23:17Z",
+      "side": 1,
+      "message": "Also need to update the invoke to EuiccController in EuiccOperation.\nhttps://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/euicc/EuiccOperation.java",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 2
+      },
+      "revId": "c4167cec68b009a87676735a7533b224015488ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
