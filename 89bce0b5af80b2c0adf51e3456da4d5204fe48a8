@@ -22,6 +22,30 @@
       "revId": "89bce0b5af80b2c0adf51e3456da4d5204fe48a8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d01b5893_578a6827",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-12-12T04:44:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b558b656_ae4eccae",
+      "range": {
+        "startLine": 121,
+        "startChar": 11,
+        "endLine": 124,
+        "endChar": 54
+      },
+      "revId": "89bce0b5af80b2c0adf51e3456da4d5204fe48a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
