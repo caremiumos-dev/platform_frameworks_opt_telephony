@@ -39,8 +39,7 @@ import java.util.List;
 
 /** Backing implementation of {@link RcsMessageStore}. */
 public class RcsMessageStoreController extends IRcs.Stub {
-    public static final String PARTICIPANT_ADDRESS_KEY = "participant_address";
-    private static final String TAG = "RcsMessageStoreController";
+    private static final String TAG = "RcsStoreController";
     private static final String RCS_SERVICE_NAME = "ircs";
 
     private static RcsMessageStoreController sInstance;
@@ -113,7 +112,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public Rcs1To1Thread createRcs1To1Thread(RcsParticipant recipient) {
-        ContentValues contentValues = new ContentValues();
+        ContentValues contentValues = new ContentValues(0);
         mContentResolver.insert(RcsThreadQueryHelper.THREADS_URI, contentValues);
 
         return null;
@@ -121,12 +120,97 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public RcsParticipant createRcsParticipant(String canonicalAddress) {
-        // TODO - refine implementation to disallow duplicate participants
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(PARTICIPANT_ADDRESS_KEY, canonicalAddress);
-        mContentResolver.insert(RcsThreadQueryHelper.PARTICIPANTS_URI, contentValues);
+        // Lookup the participant in RcsProvider to get the canonical row id in MmsSmsProvider
+        int rowInCanonicalAddressesTable = Integer.MIN_VALUE;
+        try (Cursor cursor = mContentResolver.query(
+                RcsParticipantQueryHelper.CANONICAL_ADDRESSES_URI,
+                new String[]{RcsThreadQueryHelper._ID}, "address=" + canonicalAddress, null,
+                null)) {
+            if (cursor != null && cursor.getCount() == 1 && cursor.moveToNext()) {
+                rowInCanonicalAddressesTable = cursor.getInt(0);
+            }
+        }
 
-        // TODO - return the newly created participant
-        return null;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("address", canonicalAddress);
+
+        if (rowInCanonicalAddressesTable == Integer.MIN_VALUE) {
+            // We couldn't find any existing canonical addresses. Add a new one.
+            Uri newCanonicalAddress = mContentResolver.insert(
+                    RcsParticipantQueryHelper.CANONICAL_ADDRESSES_URI, contentValues);
+            if (newCanonicalAddress != null) {
+                try {
+                    rowInCanonicalAddressesTable = Integer.parseInt(
+                            newCanonicalAddress.getLastPathSegment());
+                } catch (NumberFormatException e) {
+                    Log.e(TAG, "Uri returned after canonical address insertion is malformed: "
+                            + newCanonicalAddress, e);
+                    return null;
+                }
+            }
+        }
+
+        contentValues.clear();
+        contentValues.put(RcsParticipantQueryHelper.RCS_CANONICAL_ADDRESS_ID,
+                rowInCanonicalAddressesTable);
+
+        Uri newParticipantUri = mContentResolver.insert(RcsParticipantQueryHelper.PARTICIPANTS_URI,
+                contentValues);
+        int newParticipantRowId;
+
+        try {
+            if (newParticipantUri != null) {
+                newParticipantRowId = Integer.parseInt(newParticipantUri.getLastPathSegment());
+            } else {
+                Log.e(TAG, "Error inserting new participant into RcsProvider");
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            Log.e(TAG,
+                    "Uri returned after creating a participant is malformed: " + newParticipantUri);
+            return null;
+        }
+
+        return new RcsParticipant(newParticipantRowId, canonicalAddress);
+    }
+
+    /**
+     * TODO(sahinc) Instead of sending the update query directly to RcsProvider, this function
+     * orchestrates between RcsProvider and MmsSmsProvider. This is because we are not fully decided
+     * on whether we should have RCS storage in a separate database file.
+     */
+    @Override
+    public void updateRcsParticipantCanonicalAddress(int id, String canonicalAddress) {
+        // Lookup the participant in RcsProvider to get the canonical row id in MmsSmsProvider
+        int rowInCanonicalAddressesTable;
+        try (Cursor cursor = mContentResolver.query(RcsParticipantQueryHelper.PARTICIPANTS_URI,
+                new String[]{RcsParticipantQueryHelper.RCS_CANONICAL_ADDRESS_ID}, "id=" + id, null,
+                null)) {
+            if (cursor != null && cursor.getCount() == 1 && cursor.moveToNext()) {
+                rowInCanonicalAddressesTable = cursor.getInt(0);
+            } else {
+                Log.e(TAG,
+                        "RcsMessageStoreController: Could not find canonical address for "
+                                + "participant "
+                                + "id: "
+                                + id);
+                return;
+            }
+        }
+
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(RcsParticipantQueryHelper.CANONICAL_ADDRESS_COLUMN, canonicalAddress);
+        mContentResolver.update(Uri.parse(
+                RcsParticipantQueryHelper.INDIVIDUAL_CANONICAL_ADDRESS_URI_AS_STRING
+                        + rowInCanonicalAddressesTable), contentValues, null, null);
+    }
+
+    @Override
+    public void updateRcsParticipantAlias(int id, String alias) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(RcsParticipantQueryHelper.RCS_ALIAS_COLUMN, alias);
+
+        mContentResolver.update(RcsParticipantQueryHelper.PARTICIPANTS_URI, contentValues,
+                "_id=" + id, null);
     }
 }
