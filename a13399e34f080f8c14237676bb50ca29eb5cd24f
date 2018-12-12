@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2c80533a_c20df4f3",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1308473
+      },
+      "writtenOn": "2018-12-12T07:56:19Z",
+      "side": 1,
+      "message": "We don\u0027t need V1.0 check here due to adding this condition would result RILTest#testSetupDataCall\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 failed. Because mRadioVersion wasn\u0027t assigned a valid value but we still need to run at least one version setupDataCall method.",
+      "parentUuid": "fdcc63a1_4071dae5",
+      "range": {
+        "startLine": 1366,
+        "startChar": 22,
+        "endLine": 1366,
+        "endChar": 24
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "40135cb9_7eb49fd7",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5925efea_0e6f223f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1308473
+      },
+      "writtenOn": "2018-12-12T07:56:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "40135cb9_7eb49fd7",
+      "range": {
+        "startLine": 1528,
+        "startChar": 16,
+        "endLine": 1528,
+        "endChar": 41
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "779d1bc9_09447dfe",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/metrics/TelephonyMetricsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1308473
+      },
+      "writtenOn": "2018-12-12T07:56:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "717976d0_193d1890",
+      "range": {
+        "startLine": 396,
+        "startChar": 40,
+        "endLine": 396,
+        "endChar": 68
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "077c6b1e_3d914d70",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/metrics/TelephonyMetricsTest.java",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "519949e7_0c673f1d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/metrics/TelephonyMetricsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1308473
+      },
+      "writtenOn": "2018-12-12T07:56:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "077c6b1e_3d914d70",
+      "range": {
+        "startLine": 401,
+        "startChar": 16,
+        "endLine": 401,
+        "endChar": 20
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
