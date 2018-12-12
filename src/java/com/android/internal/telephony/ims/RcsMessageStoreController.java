@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The Android Open Source Project
+ * Copyright (C) 2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.ServiceManager;
 import android.telephony.Rlog;
 import android.telephony.ims.Rcs1To1Thread;
@@ -30,6 +31,7 @@ import android.telephony.ims.RcsThreadQueryContinuationToken;
 import android.telephony.ims.RcsThreadQueryParameters;
 import android.telephony.ims.RcsThreadQueryResult;
 import android.telephony.ims.aidl.IRcs;
+import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
 
@@ -114,7 +116,6 @@ public class RcsMessageStoreController extends IRcs.Stub {
     @Override
     public Rcs1To1Thread createRcs1To1Thread(RcsParticipant recipient) {
         // TODO - use recipient to add a thread
-
         ContentValues contentValues = new ContentValues(0);
         mContentResolver.insert(RcsThreadQueryHelper.THREADS_URI, contentValues);
 
@@ -123,12 +124,97 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public RcsParticipant createRcsParticipant(String canonicalAddress) {
-        // TODO - refine implementation to disallow duplicate participants
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(PARTICIPANT_ADDRESS_KEY, canonicalAddress);
-        mContentResolver.insert(RcsThreadQueryHelper.PARTICIPANTS_URI, contentValues);
+        // Lookup the participant in RcsProvider to get the canonical row id in MmsSmsProvider
+        int rowInCanonicalAddressesTable = Integer.MIN_VALUE;
+        try (Cursor cursor = mContentResolver.query(
+                RcsParticipantQueryHelper.CANONICAL_ADDRESSES_URI,
+                new String[]{RcsThreadQueryHelper.THREAD_ID}, "address=" + canonicalAddress, null,
+                null)) {
+            if (cursor != null && cursor.getCount() == 1 && cursor.moveToNext()) {
+                rowInCanonicalAddressesTable = cursor.getInt(0);
+            }
+        }
 
-        // TODO - return the newly created participant
-        return null;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("address", canonicalAddress);
+
+        if (rowInCanonicalAddressesTable == Integer.MIN_VALUE) {
+            // We couldn't find any existing canonical addresses. Add a new one.
+            Uri newCanonicalAddress = mContentResolver.insert(
+                    RcsParticipantQueryHelper.CANONICAL_ADDRESSES_URI, contentValues);
+            if (newCanonicalAddress != null) {
+                try {
+                    rowInCanonicalAddressesTable = Integer.parseInt(
+                            newCanonicalAddress.getLastPathSegment());
+                } catch (NumberFormatException e) {
+                    Log.e(TAG, "Uri returned after canonical address insertion is malformed: "
+                            + newCanonicalAddress, e);
+                    return null;
+                }
+            }
+        }
+
+        contentValues.clear();
+        contentValues.put(RcsParticipantQueryHelper.RCS_CANONICAL_ADDRESS_ID,
+                rowInCanonicalAddressesTable);
+
+        Uri newParticipantUri = mContentResolver.insert(RcsParticipantQueryHelper.PARTICIPANTS_URI,
+                contentValues);
+        int newParticipantRowId;
+
+        try {
+            if (newParticipantUri != null) {
+                newParticipantRowId = Integer.parseInt(newParticipantUri.getLastPathSegment());
+            } else {
+                Log.e(TAG, "Error inserting new participant into RcsProvider");
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            Log.e(TAG,
+                    "Uri returned after creating a participant is malformed: " + newParticipantUri);
+            return null;
+        }
+
+        return new RcsParticipant(newParticipantRowId, canonicalAddress);
+    }
+
+    /**
+     * TODO(sahinc) Instead of sending the update query directly to RcsProvider, this function
+     * orchestrates between RcsProvider and MmsSmsProvider. This is because we are not fully decided
+     * on whether we should have RCS storage in a separate database file.
+     */
+    @Override
+    public void updateRcsParticipantCanonicalAddress(int id, String canonicalAddress) {
+        // Lookup the participant in RcsProvider to get the canonical row id in MmsSmsProvider
+        int rowInCanonicalAddressesTable;
+        try (Cursor cursor = mContentResolver.query(RcsParticipantQueryHelper.PARTICIPANTS_URI,
+                new String[]{RcsParticipantQueryHelper.RCS_CANONICAL_ADDRESS_ID}, "id=" + id, null,
+                null)) {
+            if (cursor != null && cursor.getCount() == 1 && cursor.moveToNext()) {
+                rowInCanonicalAddressesTable = cursor.getInt(0);
+            } else {
+                Log.e(TAG,
+                        "RcsMessageStoreController: Could not find canonical address for "
+                                + "participant "
+                                + "id: "
+                                + id);
+                return;
+            }
+        }
+
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(RcsParticipantQueryHelper.CANONICAL_ADDRESS_COLUMN, canonicalAddress);
+        mContentResolver.update(Uri.parse(
+                RcsParticipantQueryHelper.INDIVIDUAL_CANONICAL_ADDRESS_URI_AS_STRING
+                        + rowInCanonicalAddressesTable), contentValues, null, null);
+    }
+
+    @Override
+    public void updateRcsParticipantAlias(int id, String alias) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(RcsParticipantQueryHelper.RCS_ALIAS_COLUMN, alias);
+
+        mContentResolver.update(RcsParticipantQueryHelper.PARTICIPANTS_URI, contentValues,
+                "_id=" + id, null);
     }
 }
