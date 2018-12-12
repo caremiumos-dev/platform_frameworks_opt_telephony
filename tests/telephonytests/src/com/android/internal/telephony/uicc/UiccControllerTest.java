@@ -73,6 +73,7 @@ public class UiccControllerTest extends TelephonyTest {
             /* create a new UICC Controller associated with the simulated Commands */
             mUiccControllerUT = UiccController.make(mContext,
                     new CommandsInterface[]{mSimulatedCommands});
+            mUiccControllerUT.sLastSlotStatus = null;
             setReady(true);
         }
     }
@@ -343,5 +344,53 @@ public class UiccControllerTest extends TelephonyTest {
 
         // assert that the getAllUiccCardInfos returns an empty list without crashing
         assertEquals(0, mUiccControllerUT.getAllUiccCardInfos().size());
+    }
+
+    @Test
+    public void testEidFromEuiccCardId() {
+        // Give UiccController a real context so it can use shared preferences
+        mUiccControllerUT.mContext = InstrumentationRegistry.getContext();
+
+        // Mock out UiccSlots
+        mUiccControllerUT.mUiccSlots[0] = mMockSlot;
+        doReturn(true).when(mMockSlot).isEuicc();
+
+        // simulate slot status loaded
+        IccSlotStatus iss = new IccSlotStatus();
+        iss.setSlotState(1 /* active */);
+        iss.eid = "ABADACB";
+        ArrayList<IccSlotStatus> status = new ArrayList<IccSlotStatus>();
+        status.add(iss);
+        AsyncResult ar = new AsyncResult(null, status, null);
+        Message msg = Message.obtain(mUiccControllerUT, EVENT_GET_SLOT_STATUS_DONE, ar);
+        mUiccControllerUT.handleMessage(msg);
+
+        // assert that we can get EID from eUICC cardId
+        int cardId = mUiccControllerUT.convertToPublicCardId(iss.eid);
+        assertEquals(iss.eid, mUiccControllerUT.getEidFromCardId(cardId));
+    }
+
+    @Test
+    public void testEidFromUiccCardId() {
+        // Give UiccController a real context so it can use shared preferences
+        mUiccControllerUT.mContext = InstrumentationRegistry.getContext();
+
+        // Mock out UiccSlots
+        mUiccControllerUT.mUiccSlots[0] = mMockSlot;
+        doReturn(false).when(mMockSlot).isEuicc();
+
+        // simulate slot status loaded
+        IccSlotStatus iss = new IccSlotStatus();
+        iss.setSlotState(1 /* active */);
+        iss.eid = "ABADACB";
+        ArrayList<IccSlotStatus> status = new ArrayList<IccSlotStatus>();
+        status.add(iss);
+        AsyncResult ar = new AsyncResult(null, status, null);
+        Message msg = Message.obtain(mUiccControllerUT, EVENT_GET_SLOT_STATUS_DONE, ar);
+        mUiccControllerUT.handleMessage(msg);
+
+        // assert that we can't get EID from UICC cardId
+        int cardId = mUiccControllerUT.convertToPublicCardId(iss.eid);
+        assertEquals(null, mUiccControllerUT.getEidFromCardId(cardId));
     }
 }

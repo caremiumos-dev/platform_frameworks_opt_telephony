@@ -141,9 +141,17 @@ public class UiccController extends Handler {
     // SharedPreferences key for saving the default euicc card ID
     private static final String DEFAULT_CARD = "default_card";
 
+    // This is the set of cardIds which correspond to eUICCs
+    private HashSet<Integer> mEuiccCardIds;
+
+    // SharedPreference key for saving the cardIDs which correspond to eUICCs
+    private static final String EUICC_IDS = "euicc_ids";
+
     private static final Object mLock = new Object();
     private static UiccController mInstance;
-    private static ArrayList<IccSlotStatus> sLastSlotStatus;
+
+    @VisibleForTesting
+    public static ArrayList<IccSlotStatus> sLastSlotStatus;
 
     @VisibleForTesting
     public Context mContext;
@@ -210,6 +218,7 @@ public class UiccController extends Handler {
         mLauncher = new UiccStateChangedLauncher(c, this);
         mCardStrings = loadCardStrings();
         mDefaultEuiccCardId = INVALID_CARD_ID;
+        mEuiccCardIds = loadEuiccCardIds();
     }
 
     private int getSlotIdFromPhoneId(int phoneId) {
@@ -572,6 +581,11 @@ public class UiccController extends Handler {
         mIccChangedRegistrants.notifyRegistrants(new AsyncResult(null, index, null));
     }
 
+    private void addEuiccCardId(int cardId) {
+        mEuiccCardIds.add(cardId);
+        saveEuiccCardIds();
+    }
+
     private void addCardId(String cardString) {
         if (TextUtils.isEmpty(cardString)) {
             return;
@@ -630,6 +644,17 @@ public class UiccController extends Handler {
         return mDefaultEuiccCardId;
     }
 
+    /**
+     * Returns the EID from the card ID, or null if the card ID does not correspond to an eUICC.
+     */
+    public String getEidFromCardId(int cardId) {
+        if (mEuiccCardIds.contains(cardId)) {
+            return mCardStrings.get(cardId);
+        }
+        // If not an eUICC, just return null.
+        return null;
+    }
+
     private ArrayList<String> loadCardStrings() {
         String cardStrings =
                 PreferenceManager.getDefaultSharedPreferences(mContext).getString(CARD_STRINGS, "");
@@ -644,6 +669,27 @@ public class UiccController extends Handler {
         SharedPreferences.Editor editor =
                 PreferenceManager.getDefaultSharedPreferences(mContext).edit();
         editor.putString(CARD_STRINGS, TextUtils.join(",", mCardStrings));
+        editor.commit();
+    }
+
+    private HashSet<Integer> loadEuiccCardIds() {
+        String ids =
+                PreferenceManager.getDefaultSharedPreferences(mContext).getString(EUICC_IDS, "");
+        HashSet<Integer> euiccCardIds = new HashSet<>();
+        if (TextUtils.isEmpty(ids)) {
+            // just return an empty set, since String.split would return the list { "" }
+            return euiccCardIds;
+        }
+        for (String id : ids.split(",")) {
+            euiccCardIds.add(Integer.parseInt(id));
+        }
+        return euiccCardIds;
+    }
+
+    private void saveEuiccCardIds() {
+        SharedPreferences.Editor editor =
+                PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+        editor.putString(EUICC_IDS, TextUtils.join(",", mEuiccCardIds));
         editor.commit();
     }
 
@@ -716,6 +762,9 @@ public class UiccController extends Handler {
             if (mUiccSlots[i].isEuicc()) {
                 String eid = iss.eid;
                 addCardId(eid);
+
+                int cardId = convertToPublicCardId(eid);
+                addEuiccCardId(cardId);
 
                 // whenever slot status is received, set default card to the eUICC with the
                 // lowest slot index.
