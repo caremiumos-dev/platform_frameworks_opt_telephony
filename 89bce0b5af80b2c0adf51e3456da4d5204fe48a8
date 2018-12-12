@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b558b656_ae4eccae",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2018-12-12T01:03:30Z",
+      "side": 1,
+      "message": "ideally this should be move to the handler which DCT. but I think its fine to move here given this code might be deprecated I saw SuW is using a new API to detect OTASP status",
+      "range": {
+        "startLine": 121,
+        "startChar": 11,
+        "endLine": 124,
+        "endChar": 54
+      },
+      "revId": "89bce0b5af80b2c0adf51e3456da4d5204fe48a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
