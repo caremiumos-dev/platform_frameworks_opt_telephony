@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11ca915c_ac0dc81d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "Should we just replace the design with the new event and check portal or invalid case in DcTracker?\nIt will have the design cleaner in DataConnection. Afterall, we will always need to check redirect and stall in DcTracker separately.\n\nThen it could simplify to:\n\nMessage msg \u003d mDct.obtainMessage(DctConstants.EVENT_NETWORK_STATUS_CHANGED, status, 0, redirectUrl);\nmsg.sendToTarget();",
+      "range": {
+        "startLine": 2175,
+        "startChar": 0,
+        "endLine": 2189,
+        "endChar": 13
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14922a6e_9713be50",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "Shall we not name it as a handler since it\u0027s not actually a handler class? The naming is a little confusing. Name it something like RecoveryImpl, RecoveryController or other?",
+      "range": {
+        "startLine": 4398,
+        "startChar": 17,
+        "endLine": 4398,
+        "endChar": 32
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d256d813_9cc413dd",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4474,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "How about OOS? I think the status will be suspended and we shall also stop the recovery.",
+      "range": {
+        "startLine": 4471,
+        "startChar": 11,
+        "endLine": 4474,
+        "endChar": 13
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8050c801_373f9bc9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4541,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "Are we not going to enable it by default?",
+      "range": {
+        "startLine": 4541,
+        "startChar": 60,
+        "endLine": 4541,
+        "endChar": 61
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3221298_346e530e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "We do not really care about which type is metered or not here, right?\nWe may skip this configuration",
+      "range": {
+        "startLine": 1524,
+        "startChar": 8,
+        "endLine": 1525,
+        "endChar": 92
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a14d81f5_a9d9ee2e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "It may not a big deal. Why do we need to bring up multiple data call here?\nCould we just bring up only default data call like testRecoveryStepReRegister?\nIt looks not necessary here. Do I miss anything?",
+      "range": {
+        "startLine": 1526,
+        "startChar": 8,
+        "endLine": 1526,
+        "endChar": 51
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d66eeb4f_dabe8d4a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "May I know why we need to waitfor 200ms in the end of every test?",
+      "range": {
+        "startLine": 1562,
+        "startChar": 8,
+        "endLine": 1562,
+        "endChar": 23
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bdcf479_db692457",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1567,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "Shall we also have test to verify the logic for skipping recovery in suspended/restricted network?",
+      "range": {
+        "startLine": 1567,
+        "startChar": 16,
+        "endLine": 1567,
+        "endChar": 50
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16786656_496bb2f5",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1576,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "the same comment as testNetworkStatusChangedRecoveryOFF",
+      "range": {
+        "startLine": 1576,
+        "startChar": 8,
+        "endLine": 1576,
+        "endChar": 51
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26d7dd98_36147f82",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "If it actually changes the setting value, should we restore it to previous value instead of always change to 0? The value in the setting might not be 0.",
+      "range": {
+        "startLine": 1611,
+        "startChar": 8,
+        "endLine": 1611,
+        "endChar": 84
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "298ab3c9_f4b58a62",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1627,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "the same comment as testNetworkStatusChangedRecoveryOFF",
+      "range": {
+        "startLine": 1627,
+        "startChar": 8,
+        "endLine": 1627,
+        "endChar": 51
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15a70529_04bcfa08",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1709,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2018-12-13T06:19:03Z",
+      "side": 1,
+      "message": "I understand that it\u0027s used in current DcTrackerTest to really update the setting but I think should be better to use a mock one instead of update the setting?\n\nBut I do not have strong option for this part in this commit.",
+      "range": {
+        "startLine": 1709,
+        "startChar": 8,
+        "endLine": 1709,
+        "endChar": 84
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
