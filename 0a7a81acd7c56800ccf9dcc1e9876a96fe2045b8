@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bac336ac_a31db216",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1358617
+      },
+      "writtenOn": "2018-12-13T01:11:17Z",
+      "side": 1,
+      "message": "Merge is correct. Patch ( https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/520096/6/src/java/com/android/internal/telephony/GsmCdmaPhone.java ) doesn\u0027t include isImsUtEnabledOverCdma check in if-statement.",
+      "parentUuid": "cc58d6d0_8cb61ca9",
+      "range": {
+        "startLine": 1810,
+        "startChar": 28,
+        "endLine": 1810,
+        "endChar": 29
+      },
+      "revId": "0a7a81acd7c56800ccf9dcc1e9876a96fe2045b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6967645e_fd60a6b2",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "0a7a81acd7c56800ccf9dcc1e9876a96fe2045b8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45bdd830_dfadffc6",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1358617
+      },
+      "writtenOn": "2018-12-13T01:11:17Z",
+      "side": 1,
+      "message": "Same as above.",
+      "parentUuid": "6967645e_fd60a6b2",
+      "range": {
+        "startLine": 1856,
+        "startChar": 28,
+        "endLine": 1856,
+        "endChar": 29
+      },
+      "revId": "0a7a81acd7c56800ccf9dcc1e9876a96fe2045b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
