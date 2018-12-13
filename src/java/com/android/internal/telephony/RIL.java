@@ -71,6 +71,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.WorkSource;
 import android.service.carrier.CarrierIdentifier;
+import android.sysprop.TelephonyProperties;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellInfo;
@@ -561,10 +562,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
         mWakeLock.setReferenceCounted(false);
         mAckWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, RILJ_ACK_WAKELOCK_NAME);
         mAckWakeLock.setReferenceCounted(false);
-        mWakeLockTimeout = SystemProperties.getInt(TelephonyProperties.PROPERTY_WAKE_LOCK_TIMEOUT,
-                DEFAULT_WAKE_LOCK_TIMEOUT_MS);
-        mAckWakeLockTimeout = SystemProperties.getInt(
-                TelephonyProperties.PROPERTY_WAKE_LOCK_TIMEOUT, DEFAULT_ACK_WAKE_LOCK_TIMEOUT_MS);
+        mWakeLockTimeout = TelephonyProperties.wake_lock_timeout()
+                .orElse(DEFAULT_WAKE_LOCK_TIMEOUT_MS);
+        mAckWakeLockTimeout = TelephonyProperties.wake_lock_timeout()
+                .orElse(DEFAULT_ACK_WAKE_LOCK_TIMEOUT_MS);
         mWakeLockCount = 0;
         mRILDefaultWorkSource = new WorkSource(context.getApplicationInfo().uid,
                 context.getPackageName());

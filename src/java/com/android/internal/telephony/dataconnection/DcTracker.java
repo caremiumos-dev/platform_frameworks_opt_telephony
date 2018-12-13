@@ -59,6 +59,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.provider.Telephony;
+import android.sysprop.TelephonyProperties;
 import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
@@ -2498,13 +2499,13 @@ public class DcTracker extends Handler {
      * get default values for {@link Settings.Global#DATA_ROAMING}
      * return {@code true} if either
      * {@link CarrierConfigManager#KEY_CARRIER_DEFAULT_DATA_ROAMING_ENABLED_BOOL} or
-     * system property ro.com.android.dataroaming is set to true. otherwise return {@code false}
+     * system property TelephonyProperties.data_roaming is set to true.
+     * otherwise return {@code false}
      */
     private boolean getDefaultDataRoamingEnabled() {
         final CarrierConfigManager configMgr = (CarrierConfigManager)
                 mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
-        boolean isDataRoamingEnabled = "true".equalsIgnoreCase(SystemProperties.get(
-                "ro.com.android.dataroaming", "false"));
+        boolean isDataRoamingEnabled = TelephonyProperties.data_roaming().orElse(false);
         isDataRoamingEnabled |= configMgr.getConfigForSubId(mPhone.getSubId()).getBoolean(
                 CarrierConfigManager.KEY_CARRIER_DEFAULT_DATA_ROAMING_ENABLED_BOOL);
         return isDataRoamingEnabled;

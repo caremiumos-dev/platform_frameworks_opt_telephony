@@ -30,12 +30,14 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.sysprop.TelephonyProperties;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
 import android.telephony.CellInfoWcdma;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.LocalLog;
@@ -45,6 +47,7 @@ import com.android.internal.util.IndentingPrintWriter;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -416,8 +419,14 @@ public class LocaleTracker extends Handler {
             mLocalLog.log(msg);
             mCurrentCountryIso = countryIso;
 
-            TelephonyManager.setTelephonyProperty(mPhone.getPhoneId(),
-                    TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, mCurrentCountryIso);
+            int phoneId = mPhone.getPhoneId();
+            if (SubscriptionManager.isValidPhoneId(phoneId)) {
+                List<String> newProp = new ArrayList<>(
+                        TelephonyProperties.operator_iso_country());
+                while (newProp.size() <= phoneId) newProp.add(null);
+                newProp.set(phoneId, mCurrentCountryIso);
+                TelephonyProperties.operator_iso_country(newProp);
+            }
 
             // Set the country code for wifi. This sets allowed wifi channels based on the
             // country of the carrier we see. If we can't see any, reset to 0 so we don't
