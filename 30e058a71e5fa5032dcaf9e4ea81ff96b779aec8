@@ -22,6 +22,30 @@
       "revId": "30e058a71e5fa5032dcaf9e4ea81ff96b779aec8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f74a5c9c_c4d359aa",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 5422,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-12-13T19:54:31Z",
+      "side": 1,
+      "message": "Yes... CellIdentity stuff is done in https://android-review.googlesource.com/q/topic:%22refactor-cellinfo-constructors%22+(status:open%20OR%20status:merged)\n\nSplitting CellInfo and CellIdentity to a different set of gerrits was the smallest reasonable way I could cleave this to multiple sets of CLs.",
+      "parentUuid": "5b229208_76e13b0f",
+      "range": {
+        "startLine": 5422,
+        "startChar": 22,
+        "endLine": 5422,
+        "endChar": 85
+      },
+      "revId": "30e058a71e5fa5032dcaf9e4ea81ff96b779aec8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
