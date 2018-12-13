@@ -48,6 +48,7 @@ import android.os.UserHandle;
 import android.os.WorkSource;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.sysprop.TelephonyProperties;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
@@ -289,6 +290,14 @@ public class ServiceStateTracker extends Handler {
     private final LocalLog mRadioPowerLog = new LocalLog(20);
     private final LocalLog mMdnLog = new LocalLog(20);
 
+    private static void updateDataNetworkType(int phoneId, int value) {
+        List<Integer> newList = new ArrayList<>(
+                TelephonyProperties.data_network_type());
+        while (newList.size() <= phoneId) newList.add(null);
+        newList.set(phoneId, value);
+        TelephonyProperties.data_network_type(newList);
+    }
+
     private class SstSubscriptionsChangedListener extends OnSubscriptionsChangedListener {
         public final AtomicInteger mPreviousSubId =
                 new AtomicInteger(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
@@ -314,9 +323,7 @@ public class ServiceStateTracker extends Handler {
                             com.android.internal.R.bool.skip_restoring_network_selection);
                     mPhone.sendSubscriptionSettings(restoreSelection);
 
-                    mPhone.setSystemProperty(TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE,
-                            ServiceState.rilRadioTechnologyToString(
-                                    mSS.getRilDataRadioTechnology()));
+                    updateDataNetworkType(mPhone.getPhoneId(), mSS.getRilDataRadioTechnology());
 
                     if (mSpnUpdatePending) {
                         mSubscriptionController.setPlmnSpn(mPhone.getPhoneId(), mCurShowPlmn,
@@ -653,8 +660,7 @@ public class ServiceStateTracker extends Handler {
         // on fields like mIsSubscriptionFromRuim (which is updated above)
         onUpdateIccAvailability();
 
-        mPhone.setSystemProperty(TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE,
-                ServiceState.rilRadioTechnologyToString(ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN));
+        updateDataNetworkType(mPhone.getPhoneId(), ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN);
         // Query signal strength from the modem after service tracker is created (i.e. boot up,
         // switching between GSM and CDMA phone), because the unsolicited signal strength
         // information might come late or even never come. This will get the accurate signal
@@ -737,8 +743,7 @@ public class ServiceStateTracker extends Handler {
         int drs = mSS.getDataRegState();
         if (DBG) log("notifyDataRegStateRilRadioTechnologyChanged: drs=" + drs + " rat=" + rat);
 
-        mPhone.setSystemProperty(TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE,
-                ServiceState.rilRadioTechnologyToString(rat));
+        updateDataNetworkType(mPhone.getPhoneId(), rat);
         mDataRegStateOrRatChangedRegistrants.notifyResult(new Pair<Integer, Integer>(drs, rat));
     }
 
@@ -3252,11 +3257,10 @@ public class ServiceStateTracker extends Handler {
         String idd = mHbpcdUtils.getIddByMcc(
                 Integer.parseInt(operatorNumeric.substring(0,3)));
         if (idd != null && !idd.isEmpty()) {
-            mPhone.setGlobalSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_IDP_STRING,
-                    idd);
+            TelephonyProperties.operator_idp_string(idd);
         } else {
             // use default "+", since we don't know the current IDP
-            mPhone.setGlobalSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_IDP_STRING, "+");
+            TelephonyProperties.operator_idp_string("+");
         }
     }
 

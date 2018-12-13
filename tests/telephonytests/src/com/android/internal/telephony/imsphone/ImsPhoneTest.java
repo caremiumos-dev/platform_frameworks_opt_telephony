@@ -48,8 +48,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.os.PersistableBundle;
-import android.os.SystemProperties;
 import android.support.test.filters.FlakyTest;
+import android.sysprop.TelephonyProperties;
 import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
 import android.telephony.ims.ImsCallProfile;
@@ -66,7 +66,6 @@ import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyIntents;
-import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.TelephonyTest;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 
@@ -131,8 +130,8 @@ public class ImsPhoneTest extends TelephonyTest {
         mImsPhoneTestHandler.start();
         waitUntilReady();
 
-        mDoesRilSendMultipleCallRing = SystemProperties.getBoolean(
-                TelephonyProperties.PROPERTY_RIL_SENDS_MULTIPLE_CALL_RING, true);
+        mDoesRilSendMultipleCallRing = TelephonyProperties.ril_sends_multiple_call_ring()
+                .orElse(true);
         replaceInstance(Handler.class, "mLooper", mTestHandler, mImsPhoneUT.getLooper());
         replaceInstance(Phone.class, "mLooper", mPhone, mImsPhoneUT.getLooper());
         mImsPhoneUT.registerForSuppServiceNotification(mTestHandler,

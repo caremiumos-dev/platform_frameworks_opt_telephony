@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.RegistrantList;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.sysprop.TelephonyProperties;
 import android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -115,8 +116,7 @@ public class DataEnabledSettings {
     }
 
     public synchronized boolean isUserDataEnabled() {
-        boolean defaultVal = "true".equalsIgnoreCase(SystemProperties.get(
-                "ro.com.android.mobiledata", "true"));
+        boolean defaultVal = TelephonyProperties.mobile_data().orElse(true);
 
         return (Settings.Global.getInt(mResolver, getMobileDataSettingName(),
                 defaultVal ? 1 : 0) != 0);
