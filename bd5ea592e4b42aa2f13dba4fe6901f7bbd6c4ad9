@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "807f18a6_c5e01308",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3899,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2018-12-13T17:35:52Z",
+      "side": 1,
+      "message": "Please add a } to close the previous function.\n\nPlease compile and test your changes before you upload.",
+      "revId": "bd5ea592e4b42aa2f13dba4fe6901f7bbd6c4ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
