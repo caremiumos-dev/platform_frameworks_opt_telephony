@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b229208_76e13b0f",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 5422,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-13T19:41:14Z",
+      "side": 1,
+      "message": "Is the plan to do the same with CellIdentityCdma?",
+      "range": {
+        "startLine": 5422,
+        "startChar": 22,
+        "endLine": 5422,
+        "endChar": 85
+      },
+      "revId": "30e058a71e5fa5032dcaf9e4ea81ff96b779aec8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
