@@ -1,0 +1,372 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db910463_fd3ad34c",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Why is the \":\" used to split ANR?",
+      "range": {
+        "startLine": 429,
+        "startChar": 23,
+        "endLine": 429,
+        "endChar": 40
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f49d83f_52d5d8e7",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Does not seem to match implementation below.",
+      "range": {
+        "startLine": 439,
+        "startChar": 16,
+        "endLine": 439,
+        "endChar": 22
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7185980_36f89a98",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Should this be STR_EMAILS ?\nSame applies to other similar cases above and below.",
+      "range": {
+        "startLine": 206,
+        "startChar": 50,
+        "endLine": 206,
+        "endChar": 58
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdb0c6ec_4a56c4fe",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Do we need to add these empty strings?",
+      "range": {
+        "startLine": 210,
+        "startChar": 8,
+        "endLine": 210,
+        "endChar": 31
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49f0a1b5_033d93c4",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Space after comma",
+      "range": {
+        "startLine": 345,
+        "startChar": 26,
+        "endLine": 345,
+        "endChar": 27
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c677b3ff_f0832e05",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Same as above. Do we need these?",
+      "range": {
+        "startLine": 349,
+        "startChar": 8,
+        "endLine": 349,
+        "endChar": 27
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2c7b3d9_06033c8d",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Can this check be performed before the creation of values?\nNo point in creating values, if we are going to return 0 before using it.",
+      "range": {
+        "startLine": 353,
+        "startChar": 8,
+        "endLine": 353,
+        "endChar": 57
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f1e903b_a1e5f7d8",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Use braces for if conditions",
+      "range": {
+        "startLine": 357,
+        "startChar": 8,
+        "endLine": 357,
+        "endChar": 17
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b5ed1a4_c85c00ec",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Can we use STR_TAG here and similar cases below?",
+      "range": {
+        "startLine": 404,
+        "startChar": 40,
+        "endLine": 404,
+        "endChar": 45
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6d3e216_39b13f1c",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "The line to retrieve emails (String[] emails \u003d record.getEmails()) is below, right where it\u0027s used.\nI think both approaches are ok, but it would be best to be consistent, either moving the line to retrieve emails here or moving the command to retrieve additional numbers below.",
+      "range": {
+        "startLine": 543,
+        "startChar": 12,
+        "endLine": 543,
+        "endChar": 55
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ed27bbc_9e61fef9",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Indentation should be 1 level only",
+      "range": {
+        "startLine": 153,
+        "startChar": 12,
+        "endLine": 153,
+        "endChar": 18
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85b8b55a_bb836caa",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Can this constructor be implemented with the new one, adding one extra parameter as null?",
+      "range": {
+        "startLine": 126,
+        "startChar": 8,
+        "endLine": 126,
+        "endChar": 26
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9d6d0a0_3c8059d0",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Looking at code, I see that this method makes sure that all entries in s1 are present in s2, and vice-versa, regardless of order, but also regardless of duplicates.\nIs that the intention?\nMaybe it could be good to clarify it in the comment if that is the goal.\n\nThis issue did not exist with previous stringCompareNullEqualsEmpty(), which only compared strings.",
+      "range": {
+        "startLine": 229,
+        "startChar": 42,
+        "endLine": 229,
+        "endChar": 49
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "381cbf4d_5852374f",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "We can add initialization here directly, so we can skip the next line.",
+      "range": {
+        "startLine": 236,
+        "startChar": 17,
+        "endLine": 236,
+        "endChar": 14
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "939ca871_f40f2fd0",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 241,
+        "startChar": 17,
+        "endLine": 241,
+        "endChar": 30
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc5802f4_63f3d49b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccPhoneBookInterfaceManagerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T22:30:37Z",
+      "side": 1,
+      "message": "Can you use Strings defined in IccProvider?",
+      "range": {
+        "startLine": 139,
+        "startChar": 19,
+        "endLine": 139,
+        "endChar": 24
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
