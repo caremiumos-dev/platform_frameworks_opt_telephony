@@ -49,6 +49,52 @@
     },
     {
       "key": {
+        "uuid": "0edc5df7_423fb807",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5914,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-12-14T01:32:08Z",
+      "side": 1,
+      "message": "If the method is short, then it\u0027s fine to duplicate it. But this method is too long, we should not have duplicate for such a long method. You can pass in dcResult as an Object, and dynamically cast it back to either 1.0 or 1.4 depends on the original instance. Check physicalChannelConfigsIndication() to see how we handle this kind of case.",
+      "range": {
+        "startLine": 5914,
+        "startChar": 35,
+        "endLine": 5914,
+        "endChar": 60
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a837e61a_e7860dc2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-12-14T01:32:08Z",
+      "side": 1,
+      "message": "Probably can directly use the values from HAL instead of defining our owns here.",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 65
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "40135cb9_7eb49fd7",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
         "patchSetId": 2
