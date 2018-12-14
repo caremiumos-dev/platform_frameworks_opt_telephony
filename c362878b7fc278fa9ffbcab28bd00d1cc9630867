@@ -1,0 +1,1171 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "485703d2_02dc4a84",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "See general comment in other files about opportunity to avoid reference to ADN directly, as the fetched record contains more than just ADN.",
+      "range": {
+        "startLine": 2151,
+        "startChar": 19,
+        "endLine": 2151,
+        "endChar": 22
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d6a2e56_f0aadd34",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "General question to understand the complete proposal. Is the legacy mechanism to access the phonebook still there? Is there a risk of conflicts when these new commands are used?",
+      "range": {
+        "startLine": 139,
+        "startChar": 23,
+        "endLine": 139,
+        "endChar": 39
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d0d1d92_5d3deaf7",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5177,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Add check radioProxy12 !\u003d null, as it might be null if the device does not support IRadio 1.2",
+      "range": {
+        "startLine": 5177,
+        "startChar": 47,
+        "endLine": 5177,
+        "endChar": 59
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c7dec94_049723b2",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5182,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "It\u0027s true that many cases have it on a single line, but best practice is to avoid it.\nCan you add braces for the logging?",
+      "range": {
+        "startLine": 5182,
+        "startChar": 12,
+        "endLine": 5182,
+        "endChar": 26
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b285027_39578f9b",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5196,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 5196,
+        "startChar": 47,
+        "endLine": 5196,
+        "endChar": 59
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d39c2f36_4bca4262",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5214,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Why j here? Normally, j is used for nested loop.\nCan we use i here?",
+      "range": {
+        "startLine": 5214,
+        "startChar": 21,
+        "endLine": 5214,
+        "endChar": 22
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "276304c8_6c98074c",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Use braces for all if conditions.",
+      "range": {
+        "startLine": 830,
+        "startChar": 8,
+        "endLine": 830,
+        "endChar": 27
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "777dc6a9_9bb3f525",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Can this be a List?",
+      "range": {
+        "startLine": 839,
+        "startChar": 8,
+        "endLine": 839,
+        "endChar": 31
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2754574d_40de7ac2",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 852,
+        "startChar": 8,
+        "endLine": 852,
+        "endChar": 27
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79f370b8_d7fae4ea",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "How many items to we expect from modem?\nI\u0027m wondering if it really makes sense to log all of those.\nAlso, I assume that these contains sensitive data (e.g. phone numbers), and so it might be preferable to avoid logging here.",
+      "range": {
+        "startLine": 853,
+        "startChar": 32,
+        "endLine": 853,
+        "endChar": 51
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d565246_079e6a32",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1858,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Why was the empty line above added?",
+      "range": {
+        "startLine": 1857,
+        "startChar": 0,
+        "endLine": 1858,
+        "endChar": 0
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61a757bf_c3b2de6b",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Update",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "228d3f14_8ec587b2",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "See comment below on the fact that it does not store only ADNs",
+      "range": {
+        "startLine": 28,
+        "startChar": 17,
+        "endLine": 28,
+        "endChar": 21
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26cb1515_b1af26c7",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "General comment. This class stores more than just the ADN.\nFor example, it contains the additional numbers and the email addresses.\n\nSo, it seems reasonable to avoid reference to ADN in it, but rather have a more generic name. SimPhonebookRecord",
+      "range": {
+        "startLine": 33,
+        "startChar": 13,
+        "endLine": 33,
+        "endChar": 34
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "254637bf_e469f2d2",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Why does this need to be public?",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 10
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d4e3acf_f2548efa",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "See comment in getAlphaTag() about the name",
+      "range": {
+        "startLine": 39,
+        "startChar": 19,
+        "endLine": 39,
+        "endChar": 28
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "846190ae_f3f71303",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Can we use a List?",
+      "range": {
+        "startLine": 43,
+        "startChar": 12,
+        "endLine": 43,
+        "endChar": 20
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49afc33e_8ff7aeee",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 46,
+        "startChar": 12,
+        "endLine": 46,
+        "endChar": 20
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7621864f_3934fe14",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "AdditionalNumbers",
+      "range": {
+        "startLine": 46,
+        "startChar": 22,
+        "endLine": 46,
+        "endChar": 31
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a0e775e_ef426c96",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Can be removed",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 21
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3f2995a_67a0e75f",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Why Tag? Does it return the alpha associated with a contact or the tag?\nI assume the alpha.",
+      "range": {
+        "startLine": 66,
+        "startChar": 26,
+        "endLine": 66,
+        "endChar": 29
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b413897_2afab37d",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Can you add a comment that describe what this method does?",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 60
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3bb9464_36a11131",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Is this a standard defined somewhere? If so, can you please add the reference?\nOtherwise, can you add a description of these substitutions in the class description?",
+      "range": {
+        "startLine": 91,
+        "startChar": 53,
+        "endLine": 91,
+        "endChar": 56
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c960a01f_61a4db5f",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecord.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "RecordNumber seems to imply the record index.\nCan we use ConvertNumberToRecordFormat?\n\nSimilarly, the previous one can be ConvertRecordFormatToNumber",
+      "range": {
+        "startLine": 96,
+        "startChar": 25,
+        "endLine": 96,
+        "endChar": 46
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0141b36_11f6c917",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Update",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "524364e5_ed69a8fb",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Can you expand the comment with description of this class?",
+      "range": {
+        "startLine": 41,
+        "startChar": 3,
+        "endLine": 41,
+        "endChar": 10
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5ea2035_694c2ce7",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "See comment in SimPhoneBookAdnRecord, about opportunity to remove ADN from the name",
+      "range": {
+        "startLine": 43,
+        "startChar": 31,
+        "endLine": 43,
+        "endChar": 34
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01c652fd_0eeb78e8",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Can you add more comments on the meaning of each?\nFor example, what is the difference between mEmailCount and mValidEmailCount?\n\nIt seems that mEmailCount is the maximum number of emails that can be stored, while mValidEmailCount is the actual number of stored emails.\n\nSo, maybe these names would be more appropriate:\n - mMaxEmailCount or mMaxEmailCapacity\n - mEmailUsed or mEmailCount",
+      "range": {
+        "startLine": 53,
+        "startChar": 6,
+        "endLine": 53,
+        "endChar": 21
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25b9d626_6fd47f51",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "What is the meaning of mRecCount and how is that different than mSimPbRecords.size()?",
+      "range": {
+        "startLine": 59,
+        "startChar": 16,
+        "endLine": 59,
+        "endChar": 25
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e3492ed_b4838ed8",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "What does it mean ADN-like?",
+      "range": {
+        "startLine": 64,
+        "startChar": 26,
+        "endLine": 64,
+        "endChar": 34
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fabdccb_157850c8",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "This can be removed. new ArrayList\u003c\u003e();",
+      "range": {
+        "startLine": 65,
+        "startChar": 58,
+        "endLine": 65,
+        "endChar": 65
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2c8dd13_8040f24c",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "The comment does not seem to be correct, as there is a single Message.",
+      "range": {
+        "startLine": 67,
+        "startChar": 7,
+        "endLine": 67,
+        "endChar": 13
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "965e8129_6102831a",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "I don\u0027t see this used.",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 61
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "288ca74f_42b3d446",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "See generic comment to avoid reference to ADN.",
+      "range": {
+        "startLine": 81,
+        "startChar": 77,
+        "endLine": 81,
+        "endChar": 80
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31e1495a_bb1e9806",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Do we need to reset also other variables, such as email count, ad count?",
+      "range": {
+        "startLine": 101,
+        "startChar": 8,
+        "endLine": 101,
+        "endChar": 17
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b3e5374_86d9170b",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Any reason to have the method name on new line? Especially as this is inconsistent with rest of code.\nSame applies to other methods below.",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 25
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69227ede_e4a203ec",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "for (Message response : mAdnLoadingWaiters)",
+      "range": {
+        "startLine": 124,
+        "startChar": 13,
+        "endLine": 124,
+        "endChar": 67
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "950fedfe_04337f75",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Do we need to clear mSimPbRecords?\n\nIt might be good to have a common method for this, invoked from here and from reset().",
+      "range": {
+        "startLine": 137,
+        "startChar": 8,
+        "endLine": 137,
+        "endChar": 17
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "364e61af_34f3e4e5",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Is there a possibility of race condition where result for getAdnRecord() is available before registration is done?\nDoes it make sense to swap the order of these two lines?",
+      "range": {
+        "startLine": 146,
+        "startChar": 8,
+        "endLine": 146,
+        "endChar": 37
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44f54a94_268f7f19",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "What\u0027s \"Like\"?",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 25
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f5efb7e_3d7d62fe",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "count is used only in the else block. Can you move the declaration there?",
+      "range": {
+        "startLine": 202,
+        "startChar": 8,
+        "endLine": 202,
+        "endChar": 17
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a784bac7_91b50310",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Space before ?\nThe same applies to cases below.",
+      "range": {
+        "startLine": 232,
+        "startChar": 44,
+        "endLine": 232,
+        "endChar": 45
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab631352_6616d299",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "It seems to me that this check should be done at the beginning of the method, as there is no point in executing the code above, if this condition is not satisfied anyway.",
+      "range": {
+        "startLine": 237,
+        "startChar": 8,
+        "endLine": 237,
+        "endChar": 38
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f221cfc8_55cfefc0",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Since this is a variable of the class, can you move it up, before declaration of methods?",
+      "range": {
+        "startLine": 248,
+        "startChar": 4,
+        "endLine": 248,
+        "endChar": 45
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cb814af_f7eff13f",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Indentation",
+      "range": {
+        "startLine": 256,
+        "startChar": 16,
+        "endLine": 256,
+        "endChar": 18
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f2d58f7_f577a7c8",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "I don\u0027t see this used anywhere",
+      "range": {
+        "startLine": 270,
+        "startChar": 8,
+        "endLine": 270,
+        "endChar": 16
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbc0f104_b82d7fa9",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Remove empty line",
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aff84a0_4cfa5cde",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "What happens in mRecCount \u003e mValidAdnCount ?",
+      "range": {
+        "startLine": 339,
+        "startChar": 29,
+        "endLine": 339,
+        "endChar": 31
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aeef84c_de4ac962",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Add space after if.\nI see a few other instances as well (e.g. line 362 or line 383)",
+      "range": {
+        "startLine": 372,
+        "startChar": 24,
+        "endLine": 372,
+        "endChar": 27
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "723d1ecf_de3d4d9f",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "The method log() already has the check of DBG. So, it can be removed from here.",
+      "range": {
+        "startLine": 409,
+        "startChar": 24,
+        "endLine": 409,
+        "endChar": 32
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cef7744_0268164f",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookAdnRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2018-12-14T19:31:31Z",
+      "side": 1,
+      "message": "Use braces, even if the condition contains a single instruction.",
+      "range": {
+        "startLine": 450,
+        "startChar": 8,
+        "endLine": 450,
+        "endChar": 37
+      },
+      "revId": "c362878b7fc278fa9ffbcab28bd00d1cc9630867",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
