@@ -16,6 +16,23 @@
 
 package com.android.internal.telephony.ims;
 
+import static com.android.internal.telephony.ims.RcsParticipantQueryHelper.getUriForParticipant;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.FALLBACK_ID;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.GROUP_ICON;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.GROUP_NAME;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.OWNER_PARTICIPANT;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.THREADS_URI;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_CONFERENCE_URI_INDEX;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_FALLBACK_THREAD_ID_INDEX;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_GROUP_ICON_INDEX;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_GROUP_NAME_INDEX;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_IS_GROUP_INDEX;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_OWNER_PARTICIPANT_INDEX;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_THREAD_ID_INDEX;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.get1To1ThreadUri;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.getGroupThreadUri;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.getParticipantInThreadUri;
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -26,6 +43,7 @@ import android.provider.BaseColumns;
 import android.provider.Telephony;
 import android.telephony.Rlog;
 import android.telephony.ims.Rcs1To1Thread;
+import android.telephony.ims.RcsGroupThread;
 import android.telephony.ims.RcsMessageStore;
 import android.telephony.ims.RcsParticipant;
 import android.telephony.ims.RcsThread;
@@ -33,6 +51,7 @@ import android.telephony.ims.RcsThreadQueryContinuationToken;
 import android.telephony.ims.RcsThreadQueryParameters;
 import android.telephony.ims.RcsThreadQueryResult;
 import android.telephony.ims.aidl.IRcs;
+import android.text.TextUtils;
 
 import com.android.internal.annotations.VisibleForTesting;
 
@@ -49,6 +68,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     private static RcsMessageStoreController sInstance;
 
     private final ContentResolver mContentResolver;
+    private final RcsParticipantQueryHelper mParticipantQueryHelper;
 
     /** Initialize the instance. Should only be called once. */
     public static RcsMessageStoreController init(Context context) {
@@ -64,6 +84,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     private RcsMessageStoreController(ContentResolver contentResolver) {
         mContentResolver = contentResolver;
+        mParticipantQueryHelper = new RcsParticipantQueryHelper(contentResolver);
         if (ServiceManager.getService(RCS_SERVICE_NAME) == null) {
             ServiceManager.addService(RCS_SERVICE_NAME, this);
         }
@@ -72,45 +93,63 @@ public class RcsMessageStoreController extends IRcs.Stub {
     @VisibleForTesting
     public RcsMessageStoreController(ContentResolver contentResolver, Void unused) {
         mContentResolver = contentResolver;
+        mParticipantQueryHelper = new RcsParticipantQueryHelper(contentResolver);
     }
 
     @Override
     public void deleteThread(int threadId) {
-        // TODO - add implementation
+        mContentResolver.delete(THREADS_URI, BaseColumns._ID + "=?", threadId);
     }
 
     @Override
     public int getMessageCount(int rcsThreadId) {
-        // TODO - add implementation. Return a magic number for now to test the RPC calls
+        // TODO(109759350) - add implementation. Return a magic number for now to test the RPC calls
         return 1018;
     }
 
     @Override
     public RcsThreadQueryResult getRcsThreads(RcsThreadQueryParameters queryParameters) {
-        // TODO - refine implementation to include tokens for the next query
-        Cursor rcsThreadsCursor = mContentResolver.query(
-                RcsThreadQueryHelper.THREADS_URI,
-                RcsThreadQueryHelper.THREAD_PROJECTION,
-                RcsThreadQueryHelper.buildWhereClause(queryParameters),
-                null,
-                queryParameters.isAscending()
-                        ? RcsThreadQueryHelper.ASCENDING : RcsThreadQueryHelper.DESCENDING);
-
         List<RcsThread> rcsThreadList = new ArrayList<>();
+        try (Cursor cursor = mContentResolver.query(THREADS_URI, null, null, null, null)) {
+            while (cursor != null && cursor.moveToNext()) {
+                // TODO(109759350) - limit the query as per queryParameters
+                boolean isGroup = cursor.getInt(UNIFIED_QUERY_IS_GROUP_INDEX) == 1;
 
-        // TODO - currently this only creates 1 to 1 threads - fix this
-        while (rcsThreadsCursor != null && rcsThreadsCursor.moveToNext()) {
-            Rcs1To1Thread rcs1To1Thread = new Rcs1To1Thread(rcsThreadsCursor.getInt(0));
-            rcsThreadList.add(rcs1To1Thread);
+                int ownerParticipantId = cursor.getInt(UNIFIED_QUERY_OWNER_PARTICIPANT_INDEX);
+                RcsParticipant ownerParticipant = mParticipantQueryHelper.getParticipantFromId(
+                        ownerParticipantId);
+
+                if (isGroup) {
+                    Uri iconUri = null;
+                    String iconUriAsString = cursor.getString(UNIFIED_QUERY_GROUP_ICON_INDEX);
+                    if (!TextUtils.isEmpty(iconUriAsString)) {
+                        iconUri = Uri.parse(iconUriAsString);
+                    }
+
+                    RcsGroupThread rcsGroupThread = new RcsGroupThread(
+                            cursor.getInt(UNIFIED_QUERY_THREAD_ID_INDEX),
+                            ownerParticipant,
+                            cursor.getString(UNIFIED_QUERY_GROUP_NAME_INDEX),
+                            iconUri,
+                            cursor.getString(UNIFIED_QUERY_CONFERENCE_URI_INDEX));
+                    rcsThreadList.add(rcsGroupThread);
+
+                    // TODO(109759350) - load group participants
+                } else {
+                    Rcs1To1Thread rcs1To1Thread = new Rcs1To1Thread(
+                            cursor.getInt(UNIFIED_QUERY_THREAD_ID_INDEX), ownerParticipant,
+                            cursor.getInt(UNIFIED_QUERY_FALLBACK_THREAD_ID_INDEX));
+                    rcsThreadList.add(rcs1To1Thread);
+                }
+            }
         }
-
         return new RcsThreadQueryResult(null, rcsThreadList);
     }
 
     @Override
     public RcsThreadQueryResult getRcsThreadsWithToken(
             RcsThreadQueryContinuationToken continuationToken) {
-        // TODO - implement
+        // TODO(109759350) - implement
         return null;
     }
 
@@ -123,6 +162,11 @@ public class RcsMessageStoreController extends IRcs.Stub {
         return null;
     }
 
+    /**
+     * TODO(109759350) Instead of sending the update query directly to RcsProvider, this function
+     * orchestrates between RcsProvider and MmsSmsProvider. This is because we are not fully decided
+     * on whether we should have RCS storage in a separate database file.
+     */
     @Override
     public RcsParticipant createRcsParticipant(String canonicalAddress) {
         // Lookup the participant in RcsProvider to get the canonical row id in MmsSmsProvider
@@ -130,7 +174,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
         try (Cursor cursor = mContentResolver.query(
                 RcsParticipantQueryHelper.CANONICAL_ADDRESSES_URI,
                 new String[]{BaseColumns._ID}, Telephony.CanonicalAddressesColumns.ADDRESS + "=?",
-                new String[] {canonicalAddress}, null)) {
+                new String[]{canonicalAddress}, null)) {
             if (cursor != null && cursor.getCount() == 1 && cursor.moveToNext()) {
                 rowInCanonicalAddressesTable = cursor.getInt(0);
             }
@@ -182,7 +226,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     /**
-     * TODO(sahinc) Instead of sending the update query directly to RcsProvider, this function
+     * TODO(109759350) Instead of sending the update query directly to RcsProvider, this function
      * orchestrates between RcsProvider and MmsSmsProvider. This is because we are not fully decided
      * on whether we should have RCS storage in a separate database file.
      */
@@ -195,8 +239,45 @@ public class RcsMessageStoreController extends IRcs.Stub {
     public void updateRcsParticipantAlias(int id, String alias) {
         ContentValues contentValues = new ContentValues(1);
         contentValues.put(RcsParticipantQueryHelper.RCS_ALIAS_COLUMN, alias);
+        mContentResolver.update(getUriForParticipant(id), contentValues, null, null);
+    }
 
-        mContentResolver.update(RcsParticipantQueryHelper.PARTICIPANTS_URI, contentValues,
-                BaseColumns._ID + "=?", new String[] {Integer.toString(id)});
+    @Override
+    public void set1To1ThreadFallbackThreadId(int rcsThreadId, int fallbackId) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(FALLBACK_ID, fallbackId);
+        mContentResolver.update(get1To1ThreadUri(rcsThreadId), contentValues, null, null);
+    }
+
+    @Override
+    public void setGroupThreadName(int rcsThreadId, String groupName) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(GROUP_NAME, groupName);
+        mContentResolver.update(getGroupThreadUri(rcsThreadId), contentValues, null, null);
+    }
+
+    @Override
+    public void setGroupThreadIcon(int rcsThreadId, Uri groupIcon) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(GROUP_ICON, groupIcon.toString());
+        mContentResolver.update(getGroupThreadUri(rcsThreadId), contentValues, null, null);
+    }
+
+    @Override
+    public void setGroupThreadOwner(int rcsThreadId, int participantId) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(OWNER_PARTICIPANT, participantId);
+        mContentResolver.update(getGroupThreadUri(rcsThreadId), contentValues, null, null);
+    }
+
+    @Override
+    public void addParticipantToGroupThread(int rcsThreadId, int participantId) {
+        // TODO(109759350) - Implement
+    }
+
+    @Override
+    public void removeParticipantFromGroupThread(int rcsThreadId, int participantId) {
+        mContentResolver.delete(getParticipantInThreadUri(rcsThreadId, participantId), null,
+                null);
     }
 }
