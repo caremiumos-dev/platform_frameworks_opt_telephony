@@ -71,8 +71,9 @@ public class RcsMessageStoreControllerTest extends TelephonyTest {
                 RcsThreadQueryParameters.builder().withParticipant(mMockParticipant).isGroupThread(
                         true).limitResultsTo(30).sort(true).build();
 
-        mFakeRcsProvider.setExpectedQueryParameters(Uri.parse("content://rcs/thread"),
-                new String[]{"_id"}, null, null, "ASCENDING");
+        // TODO - limit the query as per queryParameters. This will change how the query is executed
+        mFakeRcsProvider.setExpectedQueryParameters(Uri.parse("content://rcs/thread"), null, null,
+                null, null);
         mRcsMessageStoreController.getRcsThreads(queryParameters);
     }
 
@@ -108,10 +109,48 @@ public class RcsMessageStoreControllerTest extends TelephonyTest {
     public void testUpdateRcsParticipantAlias() {
         ContentValues contentValues = new ContentValues(1);
         contentValues.put("rcs_alias", "New Alias");
-        mFakeRcsProvider.setExpectedUpdateParameters(Uri.parse("content://rcs/participant"),
-                contentValues, "_id=?", new String[]{"551"});
+        mFakeRcsProvider.setExpectedUpdateParameters(Uri.parse("content://rcs/participant/551"),
+                contentValues, null, null);
 
         mRcsMessageStoreController.updateRcsParticipantAlias(551, "New Alias");
+    }
+
+    @Test
+    public void testSet1To1ThreadFallbackThreadId() {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(RcsThreadQueryHelper.FALLBACK_ID, 456);
+        mFakeRcsProvider.setExpectedUpdateParameters(Uri.parse("content://rcs/p2p_thread/123"),
+                contentValues, null, null);
+        mRcsMessageStoreController.set1To1ThreadFallbackThreadId(123, 456);
+    }
+
+    @Test
+    public void testSetGroupThreadName() {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(RcsThreadQueryHelper.GROUP_NAME, "new name");
+        mFakeRcsProvider.setExpectedUpdateParameters(Uri.parse("content://rcs/group_thread/345"),
+                contentValues, null, null);
+        mRcsMessageStoreController.setGroupThreadName(345, "new name");
+    }
+
+    @Test
+    public void testSetGroupThreadIcon() {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(RcsThreadQueryHelper.GROUP_ICON, "newIcon");
+        mFakeRcsProvider.setExpectedUpdateParameters(Uri.parse("content://rcs/group_thread/345"),
+                contentValues, null, null);
+        mRcsMessageStoreController.setGroupThreadIcon(345, Uri.parse("newIcon"));
+    }
+
+    @Test
+    public void testSetGroupThreadOwner() {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(RcsThreadQueryHelper.OWNER_PARTICIPANT, 9);
+        mFakeRcsProvider.setExpectedUpdateParameters(Uri.parse("content://rcs/group_thread/454"),
+                contentValues, null, null);
+
+        RcsParticipant participant = new RcsParticipant(9, "+5551114455");
+        mRcsMessageStoreController.setGroupThreadOwner(454, participant);
     }
 
     /**
