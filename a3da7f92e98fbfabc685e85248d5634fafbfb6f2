@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12dfe34a_58cd9199",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2018-12-17T18:09:10Z",
+      "side": 0,
+      "message": "Is this not important for the CDMA case?  That is the default number for CDMA if I understand correctly.",
+      "range": {
+        "startLine": 1474,
+        "startChar": 14,
+        "endLine": 1476,
+        "endChar": 13
+      },
+      "revId": "a3da7f92e98fbfabc685e85248d5634fafbfb6f2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
