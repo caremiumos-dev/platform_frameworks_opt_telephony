@@ -16,8 +16,6 @@
 package com.android.internal.telephony.ims;
 
 import android.net.Uri;
-import android.telephony.ims.RcsParticipant;
-import android.telephony.ims.RcsThreadQueryParameters;
 
 /**
  * A helper class focused on querying RCS threads from the
@@ -26,22 +24,45 @@ import android.telephony.ims.RcsThreadQueryParameters;
 class RcsThreadQueryHelper {
     static final String ASCENDING = "ASCENDING";
     static final String DESCENDING = "DESCENDING";
+
+    private static final String URI_AND_AUTHORITHY = "content://rcs/";
+
+    static final Uri THREADS_URI = Uri.parse(URI_AND_AUTHORITHY + "thread");
     static final String THREAD_ID = "_id";
 
-    static final Uri THREADS_URI = Uri.parse("content://rcs/thread");
-    static final String[] THREAD_PROJECTION = new String[]{THREAD_ID};
+    private static final Uri RCS_1_TO_1_THREADS_URI = Uri.parse(URI_AND_AUTHORITHY + "p2p_thread");
+    static final String FALLBACK_ID = "rcs_fallback_thread_id";
 
-    static String buildWhereClause(RcsThreadQueryParameters queryParameters) {
-        StringBuilder stringBuilder = new StringBuilder();
+    private static final Uri GROUP_THREADS_URI = Uri.parse(URI_AND_AUTHORITHY + "group_thread");
+    static final String GROUP_NAME = "group_name";
+    static final String GROUP_ICON = "group_icon";
+    static final String OWNER_PARTICIPANT = "owner_participant";
+    static final String PARTICIPANT_IN_THREAD = "participant";
 
-        stringBuilder.append("isGroup=").append(queryParameters.isGroupThread()).append("&");
-        stringBuilder.append("limit=").append(queryParameters.getLimit());
+    /**
+     * Please see {@link com.android.providers.telephony.RcsProviderThreadHelper} for the unified
+     * view's schema
+     */
+    static final int UNIFIED_QUERY_THREAD_ID_INDEX = 0;
+    static final int UNIFIED_QUERY_FALLBACK_THREAD_ID_INDEX = 1;
+    static final int UNIFIED_QUERY_OWNER_PARTICIPANT_INDEX = 2;
+    static final int UNIFIED_QUERY_GROUP_NAME_INDEX = 3;
+    static final int UNIFIED_QUERY_GROUP_ICON_INDEX = 4;
+    static final int UNIFIED_QUERY_CONFERENCE_URI_INDEX = 5;
+    static final int UNIFIED_QUERY_IS_GROUP_INDEX = 6;
 
-        for (RcsParticipant participant : queryParameters.getRcsParticipants()) {
-            stringBuilder.append("&").append("participant=")
-                    .append(participant.getId());
-        }
+    static Uri get1To1ThreadUri(int rcsThreadId) {
+        return RcsThreadQueryHelper.RCS_1_TO_1_THREADS_URI.buildUpon().appendPath(
+                Integer.toString(rcsThreadId)).build();
+    }
 
-        return stringBuilder.toString();
+    static Uri getGroupThreadUri(int rcsThreadId) {
+        return GROUP_THREADS_URI.buildUpon().appendPath(Integer.toString(rcsThreadId)).build();
+    }
+
+    static Uri getParticipantInThreadUri(int rcsThreadId, int participantId) {
+        return GROUP_THREADS_URI.buildUpon().appendPath(
+                Integer.toString(rcsThreadId)).appendPath(PARTICIPANT_IN_THREAD).appendPath(
+                Integer.toString(participantId)).build();
     }
 }

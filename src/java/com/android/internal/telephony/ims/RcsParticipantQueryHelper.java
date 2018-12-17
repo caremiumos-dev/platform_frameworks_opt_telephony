@@ -15,7 +15,10 @@
  */
 package com.android.internal.telephony.ims;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.net.Uri;
+import android.telephony.ims.RcsParticipant;
 
 class RcsParticipantQueryHelper {
     // Note: row Id needs to be appended to this URI to modify the canonical address
@@ -27,4 +30,26 @@ class RcsParticipantQueryHelper {
     static final Uri PARTICIPANTS_URI = Uri.parse("content://rcs/participant");
     static final String RCS_ALIAS_COLUMN = "rcs_alias";
     static final String RCS_CANONICAL_ADDRESS_ID = "canonical_address_id";
+
+    private final ContentResolver mContentResolver;
+
+    RcsParticipantQueryHelper(ContentResolver contentResolver) {
+        mContentResolver = contentResolver;
+    }
+
+    RcsParticipant getParticipantFromId(int participantId) {
+        RcsParticipant participant = null;
+        try (Cursor cursor = mContentResolver.query(
+                PARTICIPANTS_URI.buildUpon().appendPath(Integer.toString(participantId)).build(),
+                null, null, null)) {
+            if (cursor != null && cursor.moveToNext()) {
+                participant = new RcsParticipant(cursor.getInt(0), cursor.getString(1));
+            }
+        }
+        return participant;
+    }
+
+    static Uri getUriForParticipant(int participantId) {
+        return PARTICIPANTS_URI.buildUpon().appendPath(Integer.toString(participantId)).build();
+    }
 }
