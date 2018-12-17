@@ -22,6 +22,30 @@
       "revId": "774d84aae7f5a3d5181cc6701f21e564c674193a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fc6f66c_2d942936",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-17T22:54:56Z",
+      "side": 1,
+      "message": "This is so getEidFromCardId(cardId) can return null for non-eUICC cardIds. Another way we could potentially do it is by length-checking the card string to determine if it\u0027s an EID or an ICCID but this seems safer, even though its more computation. WDYT?",
+      "parentUuid": "dd3154e0_0c2f7d63",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 43
+      },
+      "revId": "774d84aae7f5a3d5181cc6701f21e564c674193a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
