@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd3154e0_0c2f7d63",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-12-17T21:41:47Z",
+      "side": 1,
+      "message": "Could you please explain the purpose of this CL? It seems that this CL is to implement the new method getEidFromCardId().  Since you already have the ArrayList\u003cString\u003e mCardStrings, I assume the values in ArrayList\u003cString\u003e mCardStrings should be actually some of the indexes of ArrayList\u003cString\u003e mCardStrings, why do we want to maintain another HashSet\u003cInteger\u003e mEuiccCardIds if we already have the mCardStrings? According to my understanding, you can directly return mCardStrings.get(int cardId) in  getEidFromCardId?",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 43
+      },
+      "revId": "774d84aae7f5a3d5181cc6701f21e564c674193a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
