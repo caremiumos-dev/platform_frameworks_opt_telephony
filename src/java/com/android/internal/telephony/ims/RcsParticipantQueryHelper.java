@@ -15,15 +15,39 @@
  */
 package com.android.internal.telephony.ims;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.net.Uri;
+import android.telephony.ims.RcsParticipant;
 
 class RcsParticipantQueryHelper {
-    // Note: row Id needs to be appended to this URI to modify the canonical address
-    static final String INDIVIDUAL_CANONICAL_ADDRESS_URI_AS_STRING =
-            "content://mms-sms/canonical-address/";
     static final Uri CANONICAL_ADDRESSES_URI = Uri.parse("content://mms-sms/canonical-addresses");
 
     static final Uri PARTICIPANTS_URI = Uri.parse("content://rcs/participant");
+    static final String RCS_PARTICIPANT_ID_COLUMN = "rcs_participant_id";
     static final String RCS_ALIAS_COLUMN = "rcs_alias";
     static final String RCS_CANONICAL_ADDRESS_ID = "canonical_address_id";
+
+    private final ContentResolver mContentResolver;
+
+    RcsParticipantQueryHelper(ContentResolver contentResolver) {
+        mContentResolver = contentResolver;
+    }
+
+    RcsParticipant getParticipantFromId(int participantId) {
+        RcsParticipant participant = null;
+        try (Cursor cursor = mContentResolver.query(getUriForParticipant(participantId), null, null,
+                null)) {
+            if (cursor != null && cursor.moveToNext()) {
+                participant = new RcsParticipant(
+                        cursor.getInt(cursor.getColumnIndex(RCS_PARTICIPANT_ID_COLUMN)),
+                        cursor.getString(cursor.getColumnIndex(RCS_CANONICAL_ADDRESS_ID)));
+            }
+        }
+        return participant;
+    }
+
+    static Uri getUriForParticipant(int participantId) {
+        return PARTICIPANTS_URI.buildUpon().appendPath(Integer.toString(participantId)).build();
+    }
 }
