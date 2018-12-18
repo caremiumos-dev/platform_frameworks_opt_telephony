@@ -46,6 +46,30 @@
       "revId": "774d84aae7f5a3d5181cc6701f21e564c674193a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0806f3b7_72be70c9",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2018-12-18T18:53:55Z",
+      "side": 1,
+      "message": "OK, make sense. I am not sure whether you only did this for eSIM, or both eSIM and pSIM. It seems that you saved all the card Ids (both pSIM and eSIM) in  mCardStrings, but you only provide methods to return EID (card id of eSIM), and that is why you are using mCardStrings to store eSIM card IDs.  If this logic is only for eSIM, you may only store eSIM card Ids in mCardStrings, then you don\u0027t need the extra logic to handle mCardStrings. However, if you believe storing pSIM card ID is also important, this CL looks good to me",
+      "parentUuid": "3fc6f66c_2d942936",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 43
+      },
+      "revId": "774d84aae7f5a3d5181cc6701f21e564c674193a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
