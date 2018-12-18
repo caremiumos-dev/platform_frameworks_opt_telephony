@@ -22,6 +22,30 @@
       "revId": "1542b3d035a558fdf18a0122eb76c04871f9da1b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c763d40f_d4761917",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-12-18T08:26:36Z",
+      "side": 1,
+      "message": "That is a good point. We have not seen this problem. It appears that sSlotIndexToSubId.entrySet() by chance have been given the items in the expected order.\n\nThe solution you provided is more robust and will work regardless of how the items is ordered in sSlotIndexToSubId:\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/853149",
+      "parentUuid": "20ca52e8_e0b3df71",
+      "range": {
+        "startLine": 1929,
+        "startChar": 70,
+        "endLine": 1929,
+        "endChar": 87
+      },
+      "revId": "1542b3d035a558fdf18a0122eb76c04871f9da1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
