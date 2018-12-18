@@ -1503,9 +1503,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         // Open the shared preferences editor, and write the value.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
-        editor.putInt(CLIR_KEY + getPhoneId(), commandInterfaceCLIRMode);
-        Rlog.i(LOG_TAG, "saveClirSetting: " + CLIR_KEY + getPhoneId() + "=" +
-                commandInterfaceCLIRMode);
+        editor.putInt(CLIR_KEY + getSubId(), commandInterfaceCLIRMode);
+        Rlog.i(LOG_TAG, "saveClirSetting: " + CLIR_KEY + getSubId() + "="
+                + commandInterfaceCLIRMode);
 
         // Commit and log the result.
         if (!editor.commit()) {
