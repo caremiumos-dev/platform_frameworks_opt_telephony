@@ -17,10 +17,13 @@
 package com.android.internal.telephony.ims;
 
 import static com.android.internal.telephony.ims.RcsParticipantQueryHelper.getUriForParticipant;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.CONFERENCE_URI;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.FALLBACK_ID;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.GROUP_ICON;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.GROUP_NAME;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.OWNER_PARTICIPANT;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.RCS_PARTICIPANT_ID;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.RCS_THREAD_ID;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.THREADS_URI;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_CONFERENCE_URI_INDEX;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_FALLBACK_THREAD_ID_INDEX;
@@ -30,6 +33,7 @@ import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QU
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_OWNER_PARTICIPANT_INDEX;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.UNIFIED_QUERY_THREAD_ID_INDEX;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.get1To1ThreadUri;
+import static com.android.internal.telephony.ims.RcsThreadQueryHelper.getAllParticipantsInThreadUri;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.getGroupThreadUri;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.getParticipantInThreadUri;
 
@@ -287,8 +291,19 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
+    public void setGroupThreadConferenceUri(int rcsThreadId, String uri) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(CONFERENCE_URI, uri);
+        mContentResolver.update(getGroupThreadUri(rcsThreadId), contentValues, null, null);
+    }
+
+    @Override
     public void addParticipantToGroupThread(int rcsThreadId, RcsParticipant participant) {
-        // TODO(109759350) - Implement
+        ContentValues contentValues = new ContentValues(2);
+        contentValues.put(RCS_THREAD_ID, rcsThreadId);
+        contentValues.put(RCS_PARTICIPANT_ID, participant.getId());
+
+        mContentResolver.insert(getAllParticipantsInThreadUri(rcsThreadId), contentValues);
     }
 
     @Override
