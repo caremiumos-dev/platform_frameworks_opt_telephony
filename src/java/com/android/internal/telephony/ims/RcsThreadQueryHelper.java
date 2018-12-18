@@ -34,7 +34,11 @@ class RcsThreadQueryHelper {
     static final String GROUP_NAME = "group_name";
     static final String GROUP_ICON = "group_icon";
     static final String OWNER_PARTICIPANT = "owner_participant";
+    static final String CONFERENCE_URI = "conference_uri";
     static final String PARTICIPANT_IN_THREAD = "participant";
+
+    static final String RCS_THREAD_ID = "rcs_thread_id";
+    static final String RCS_PARTICIPANT_ID = "rcs_participant_id";
 
     /**
      * RcsThread's can be accessed using queries on an SQL view that unifies 1 to 1 threads and
@@ -56,6 +60,11 @@ class RcsThreadQueryHelper {
 
     static Uri getGroupThreadUri(int rcsThreadId) {
         return GROUP_THREADS_URI.buildUpon().appendPath(Integer.toString(rcsThreadId)).build();
+    }
+
+    static Uri getAllParticipantsInThreadUri(int rcsThreadId) {
+        return GROUP_THREADS_URI.buildUpon().appendPath(Integer.toString(rcsThreadId)).appendPath(
+                PARTICIPANT_IN_THREAD).build();
     }
 
     static Uri getParticipantInThreadUri(int rcsThreadId, int participantId) {
