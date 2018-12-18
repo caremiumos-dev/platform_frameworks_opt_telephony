@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e76f2bdc_3c5f31c0",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-12-18T03:42:32Z",
+      "side": 1,
+      "message": "agree",
+      "parentUuid": "db212aad_aced8b04",
+      "range": {
+        "startLine": 1376,
+        "startChar": 15,
+        "endLine": 1376,
+        "endChar": 34
+      },
+      "revId": "61bdcafe509c3dc3beb58c280ba4649fe145a769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cfadf964_2cfa9280",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "01a937d4_8b6ac9f4",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-12-18T03:42:32Z",
+      "side": 1,
+      "message": "getIccRecordsLoaded reflects if profile is null, right",
+      "parentUuid": "cfadf964_2cfa9280",
+      "range": {
+        "startLine": 1380,
+        "startChar": 26,
+        "endLine": 1381,
+        "endChar": 59
+      },
+      "revId": "61bdcafe509c3dc3beb58c280ba4649fe145a769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8274a92_d65c06a9",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "61bdcafe509c3dc3beb58c280ba4649fe145a769",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60c5499f_fcab7b1d",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1157922
+      },
+      "writtenOn": "2018-12-18T03:42:32Z",
+      "side": 1,
+      "message": "arleady call it in finally block",
+      "parentUuid": "c8274a92_d65c06a9",
+      "range": {
+        "startLine": 794,
+        "startChar": 20,
+        "endLine": 794,
+        "endChar": 40
+      },
+      "revId": "61bdcafe509c3dc3beb58c280ba4649fe145a769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
