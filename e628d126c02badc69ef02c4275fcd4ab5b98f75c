@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "725a49a1_8f0bb042",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2018-12-18T19:12:38Z",
+      "side": 1,
+      "message": "Talked in meeting - \nActually, is that possible to convert from cardId to slotId here, and still pass the slotId to EuiccService? LPA still needs slotId to switch slot, and we don\u0027t want to deprecate all the EuiccService APIs just for a parameter rename.\nWe can keep the cardId elsewhere, and only use slotId for EuiccService.",
+      "range": {
+        "startLine": 677,
+        "startChar": 28,
+        "endLine": 677,
+        "endChar": 54
+      },
+      "revId": "e628d126c02badc69ef02c4275fcd4ab5b98f75c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
