@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "8a087843_db495d4a",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-12-18T17:58:33Z",
+      "side": 1,
+      "message": "I agree, however potential race conditions may cause this to fail in rare cases (this is executed on a binder thread). Lets split this up and log as a warning in the case that we get an NPE. I\u0027d rather be safe and not crash if possible.",
+      "parentUuid": "01a937d4_8b6ac9f4",
+      "range": {
+        "startLine": 1380,
+        "startChar": 26,
+        "endLine": 1381,
+        "endChar": 59
+      },
+      "revId": "61bdcafe509c3dc3beb58c280ba4649fe145a769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8274a92_d65c06a9",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 1
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "arleady call it in finally block",
       "parentUuid": "c8274a92_d65c06a9",
+      "range": {
+        "startLine": 794,
+        "startChar": 20,
+        "endLine": 794,
+        "endChar": 40
+      },
+      "revId": "61bdcafe509c3dc3beb58c280ba4649fe145a769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f3667807_bd5f2d2f",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-12-18T17:58:33Z",
+      "side": 1,
+      "message": "This isn\u0027t inside the try block, so it will not be called.",
+      "parentUuid": "60c5499f_fcab7b1d",
       "range": {
         "startLine": 794,
         "startChar": 20,
