@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20ca52e8_e0b3df71",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-12-18T00:32:51Z",
+      "side": 1,
+      "message": "Even though LinkedHashSet is ordered, but sSlotIndexToSubId is a ConcurrentHashMap, which is not ordered, how can we guarantee the new set is ordered?",
+      "range": {
+        "startLine": 1929,
+        "startChar": 70,
+        "endLine": 1929,
+        "endChar": 87
+      },
+      "revId": "1542b3d035a558fdf18a0122eb76c04871f9da1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
