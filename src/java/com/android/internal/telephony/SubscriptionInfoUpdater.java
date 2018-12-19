@@ -52,11 +52,14 @@ import android.text.TextUtils;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.euicc.EuiccController;
 import com.android.internal.telephony.uicc.IccRecords;
+import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.UiccSlot;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -689,8 +692,15 @@ public class SubscriptionInfoUpdater extends Handler {
         mSubscriptionManager.setDefaultDataSubId(
                 mSubscriptionManager.getDefaultDataSubscriptionId());
 
-        // No need to check return value here as we notify for the above changes anyway.
-        updateEmbeddedSubscriptions();
+        UiccController uiccController = UiccController.getInstance();
+        UiccSlot[] uiccSlots = uiccController.getUiccSlots();
+        if (uiccSlots != null) {
+            Arrays.stream(uiccSlots)
+                .filter(uiccSlot -> uiccSlot.isEuicc() && uiccSlot.getUiccCard() != null)
+                .map(uiccSlot -> uiccController.convertToPublicCardId(
+                            uiccSlot.getUiccCard().getCardId()))
+                .forEach(cardId -> updateEmbeddedSubscriptions(cardId));
+        }
 
         SubscriptionController.getInstance().notifySubscriptionInfoChanged();
         logd("updateSubscriptionInfoByIccId:- SubscriptionInfo update complete");
