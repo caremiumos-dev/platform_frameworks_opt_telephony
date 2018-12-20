@@ -265,6 +265,16 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
                 sender.getSubId(), linkCapacityEstimateList);
     }
 
+    @Override
+    public void notifyVideoCallForwardingChanged(Phone sender) {
+        int subId = sender.getSubId();
+        Rlog.d(LOG_TAG, "notifyVideoCallForwardingChanged: subId=" + subId + ", isCFVideoActive="
+            + sender.getVideoCallForwardingPreference());
+
+        mTelephonyRegistryMgr.notifyVideoCallForwardingChanged(subId,
+            sender.getVideoCallForwardingPreference());
+    }
+
     /**
      * Convert the {@link DataActivityState} enum into the TelephonyManager.DATA_* constants for the
      * public API.
