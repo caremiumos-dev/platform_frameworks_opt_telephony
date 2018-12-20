@@ -132,4 +132,7 @@ public interface PhoneNotifier {
     /** Notify link capacity estimate has changed. */
     void notifyLinkCapacityEstimateChanged(Phone sender,
             List<LinkCapacityEstimate> linkCapacityEstimateList);
+
+    /** Notify video call forwarding has changed. */
+    void notifyVideoCallForwardingChanged(Phone sender);
 }
