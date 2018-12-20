@@ -558,8 +558,11 @@ public class UiccController extends Handler {
 
         UiccCard card = mUiccSlots[slotId].getUiccCard();
         if (card != null && (card.getCardState() == CardState.CARDSTATE_PRESENT)) {
-            // Card.getCardId returns the cardString, not the public card ID int
-            String cardString = card.getCardId();
+            String cardString = card.getCardString();
+            if (!mUiccSlots[slotId].isEuicc()) {
+                // getCardString() uses the raw ICCID, so we strip it manually
+                cardString = IccUtils.stripTrailingFs(cardString);
+            }
             addCardId(cardString);
         }
 
