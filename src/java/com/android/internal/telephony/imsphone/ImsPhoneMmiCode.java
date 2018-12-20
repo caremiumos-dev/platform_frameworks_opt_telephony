@@ -791,7 +791,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                 int time = siToTime(mSic);
 
                 if (isInterrogate()) {
-                    mPhone.getCallForwardingOption(reason,
+                    mPhone.getCallForwardingOption(reason, serviceClass,
                             obtainMessage(EVENT_QUERY_CF_COMPLETE, this));
                 } else {
                     int cfAction;
@@ -1091,12 +1091,22 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                 ar = (AsyncResult) (msg.obj);
 
                 /*
-                * msg.arg1 = 1 means to set unconditional voice call forwarding
-                * msg.arg2 = 1 means to enable voice call forwarding
+                * msg.arg1 = 1 means to set unconditional voice/video call forwarding
+                * msg.arg2 = 1 means to enable voice/video call forwarding
                 */
                 if ((ar.exception == null) && (msg.arg1 == 1)) {
                     boolean cffEnabled = (msg.arg2 == 1);
-                    if (mIccRecords != null) {
+                    /*
+                    * As per 3GPP TS 29002 MAP Specification : Section 17.7.10,
+                    * the BearerServiceCode for "allDataCircuitAsynchronous" is '01010000'.
+                    * Hence, SERVICE_CLASS_DATA_SYNC (1<<4) and SERVICE_CLASS_PACKET (1<<6)
+                    * together make video service class.
+                    */
+                    if (siToServiceClass(mSib) == (SERVICE_CLASS_PACKET
+                            + SERVICE_CLASS_DATA_SYNC)) {
+                        mPhone.setVideoCallForwardingPreference(cffEnabled);
+                        mPhone.notifyCallForwardingIndicator();
+                    } else if (mIccRecords != null) {
                         mPhone.setVoiceCallForwardingFlag(1, cffEnabled, mDialingNumber);
                     }
                 }
