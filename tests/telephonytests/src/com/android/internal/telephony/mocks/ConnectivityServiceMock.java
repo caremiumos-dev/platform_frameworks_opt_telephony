@@ -991,5 +991,8 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
         throw new RuntimeException("not implemented");
     }
 
-
+    @Override
+    public IBinder getTestNetworkService(String callingPackage) {
+        throw new RuntimeException("not implemented");
+    }
 }
