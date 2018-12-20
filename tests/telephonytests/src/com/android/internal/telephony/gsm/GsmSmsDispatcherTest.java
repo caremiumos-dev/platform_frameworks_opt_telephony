@@ -41,10 +41,10 @@ import android.location.Country;
 import android.location.CountryDetector;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.os.SystemProperties;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.support.test.filters.FlakyTest;
+import android.sysprop.RadioProperties;
 import android.telephony.SmsManager;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -67,6 +67,7 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GsmSmsDispatcherTest extends TelephonyTest {
 
@@ -194,12 +195,9 @@ public class GsmSmsDispatcherTest extends TelephonyTest {
     }
 
     private String getEmergencyNumberFromSystemPropertiesOrDefault() {
-        String systemEmergencyNumbers = SystemProperties.get("ril.ecclist");
-        if (systemEmergencyNumbers == null) {
-            return "911";
-        } else {
-            return systemEmergencyNumbers.split(",")[0];
-        }
+        List<String> list = RadioProperties.ril_ecclist();
+        if (list.isEmpty() || list.get(0) == null) return "911";
+        return list.get(0);
     }
 
     @Test
