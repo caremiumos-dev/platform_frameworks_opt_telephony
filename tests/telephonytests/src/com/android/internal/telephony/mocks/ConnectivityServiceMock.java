@@ -605,4 +605,9 @@ public class ConnectivityServiceMock {
         releaseNetworkRequest(defaultRequest);
         defaultRequest = null;
     }
+
+    @Override
+    public IBinder getTestNetworkService(String callingPackage) {
+        throw new RuntimeException("not implemented");
+    }
 }
