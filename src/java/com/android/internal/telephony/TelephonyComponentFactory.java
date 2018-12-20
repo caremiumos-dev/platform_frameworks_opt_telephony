@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2018 The Linux Foundation. All rights reserved.
+ *
  * Copyright (C) 2015 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -374,5 +376,33 @@ public class TelephonyComponentFactory {
     public LocaleTracker makeLocaleTracker(Phone phone, NitzStateMachine nitzStateMachine,
                                            Looper looper) {
         return new LocaleTracker(phone, nitzStateMachine, looper);
+    }
+
+    public Phone makePhone(Context context, CommandsInterface ci, PhoneNotifier notifier,
+            int phoneId, int precisePhoneType,
+            TelephonyComponentFactory telephonyComponentFactory) {
+        Rlog.i(TAG, "makePhone");
+        return new GsmCdmaPhone(context, ci, notifier, phoneId, precisePhoneType,
+                telephonyComponentFactory);
+    }
+
+    public SubscriptionController initSubscriptionController(Context c, CommandsInterface[] ci) {
+        Rlog.i(TAG, "initSubscriptionController");
+        return SubscriptionController.init(c, ci);
+    }
+
+    public SubscriptionInfoUpdater makeSubscriptionInfoUpdater(Looper looper, Context context,
+            Phone[] phones, CommandsInterface[] ci) {
+        Rlog.i(TAG, "makeSubscriptionInfoUpdater");
+        return new SubscriptionInfoUpdater(looper, context, phones, ci);
+    }
+
+    public PhoneSwitcher makePhoneSwitcher(int maxActivePhones, int numPhones, Context context,
+            SubscriptionController subscriptionController, Looper looper, ITelephonyRegistry tr,
+            CommandsInterface[] cis, Phone[] phones) {
+        Rlog.i(TAG, "makePhoneSwitcher");
+        return new PhoneSwitcher(maxActivePhones,numPhones,
+                context, subscriptionController, looper, tr, cis,
+                phones);
     }
 }
