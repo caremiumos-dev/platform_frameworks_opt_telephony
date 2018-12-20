@@ -67,7 +67,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         replaceInstance(SubscriptionController.class, "sInstance", null, null);
 
-        SubscriptionController.init(mContext, null);
+        TelephonyComponentFactory.getInstance().inject(SubscriptionController.class.
+                                getName()).initSubscriptionController(mContext, null);
         mSubscriptionControllerUT = SubscriptionController.getInstance();
         mCallingPackage = mContext.getOpPackageName();
 
@@ -79,7 +80,6 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mFakeTelephonyProvider = new FakeTelephonyProvider();
         mMockContentResolver.addProvider(SubscriptionManager.CONTENT_URI.getAuthority(),
                 mFakeTelephonyProvider);
-
     }
 
     @After
