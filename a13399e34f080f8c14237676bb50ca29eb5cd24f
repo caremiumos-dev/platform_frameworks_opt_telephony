@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "025c9daa_3faa4484",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5914,
+      "author": {
+        "id": 1308473
+      },
+      "writtenOn": "2018-12-20T02:23:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0edc5df7_423fb807",
+      "range": {
+        "startLine": 5914,
+        "startChar": 35,
+        "endLine": 5914,
+        "endChar": 60
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a837e61a_e7860dc2",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcController.java",
         "patchSetId": 2
@@ -92,6 +116,30 @@
       "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17a85038_0a18a661",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1308473
+      },
+      "writtenOn": "2018-12-20T02:23:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a837e61a_e7860dc2",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 65
+      },
+      "revId": "a13399e34f080f8c14237676bb50ca29eb5cd24f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
