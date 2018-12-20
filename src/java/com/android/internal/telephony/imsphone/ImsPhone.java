@@ -38,7 +38,9 @@ import static com.android.internal.telephony.CommandsInterface.CF_REASON_BUSY;
 import static com.android.internal.telephony.CommandsInterface.CF_REASON_NOT_REACHABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_REASON_NO_REPLY;
 import static com.android.internal.telephony.CommandsInterface.CF_REASON_UNCONDITIONAL;
+import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_DATA_SYNC;
 import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_NONE;
+import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_PACKET;
 import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
 
 import android.app.Activity;
@@ -289,6 +291,10 @@ public class ImsPhone extends ImsPhoneBase {
     public Uri[] getCurrentSubscriberUris() {
         return mCurrentSubscriberUris;
     }
+    
+    public void notifyCallForwardingIndicator() {
+        mDefaultPhone.notifyCallForwardingIndicator();
+    }
 
     /** Set call composer status from users for the current subscription */
     public void setCallComposerStatus(int status) {
@@ -325,12 +331,18 @@ public class ImsPhone extends ImsPhoneBase {
         final String mSetCfNumber;
         final Message mOnComplete;
         final boolean mIsCfu;
+        final int mServiceClass;
 
         @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
         Cf(String cfNumber, boolean isCfu, Message onComplete) {
+            this(cfNumber, isCfu, onComplete, SERVICE_CLASS_NONE);
+        }
+
+        Cf(String cfNumber, boolean isCfu, Message onComplete, int serviceClass) {
             mSetCfNumber = cfNumber;
             mIsCfu = isCfu;
             mOnComplete = onComplete;
+            mServiceClass = serviceClass;
         }
     }
 
@@ -526,6 +538,13 @@ public class ImsPhone extends ImsPhoneBase {
     @Override
     public CallTracker getCallTracker() {
         return mCT;
+    }
+
+    public void setVoiceCallForwardingFlag(int line, boolean enable, String number) {
+        IccRecords r = mDefaultPhone.getIccRecords();
+        if (r != null) {
+            setVoiceCallForwardingFlag(r, line, enable, number);
+        }
     }
 
     public ImsExternalCallTracker getExternalCallTracker() {
@@ -1179,7 +1198,8 @@ public class ImsPhone extends ImsPhoneBase {
 
             try {
                 ImsUtInterface ut = mCT.getUtInterface();
-                ut.queryCallForward(getConditionFromCFReason(commandInterfaceCFReason), null, resp);
+                ut.queryCallForward(getConditionFromCFReason(commandInterfaceCFReason), null,
+                        serviceClass, resp);
             } catch (ImsException e) {
                 sendErrorResponse(onComplete, e);
             }
@@ -1601,7 +1621,7 @@ public class ImsPhone extends ImsPhoneBase {
         CallForwardInfo cfInfo = new CallForwardInfo();
         cfInfo.status = info.getStatus();
         cfInfo.reason = getCFReasonFromCondition(info.getCondition());
-        cfInfo.serviceClass = SERVICE_CLASS_VOICE;
+        cfInfo.serviceClass = info.getServiceClass();
         cfInfo.toa = info.getToA();
         cfInfo.number = info.getNumber();
         cfInfo.timeSeconds = info.getTimeSeconds();
