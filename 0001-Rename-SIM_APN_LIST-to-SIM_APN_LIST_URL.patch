@@ -1,0 +1,30 @@
+From 4650dc0a8a1176f191f0c3c0ea510caf0d0f31c7 Mon Sep 17 00:00:00 2001
+From: calvinpan <calvinpan@google.com>
+Date: Thu, 20 Dec 2018 11:28:25 +0800
+Subject: [PATCH] Rename SIM_APN_LIST to SIM_APN_LIST_URL
+
+In Telephony SIM_APN_LIST had been rename to SIM_APN_LIST_URL.
+
+Bug: 120031619
+Test: Build pass.
+Change-Id: Iff591434b522483abeaed33cbdb09992ab1f0166
+---
+ .../android/internal/telephony/dataconnection/DcTracker.java    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/java/com/android/internal/telephony/dataconnection/DcTracker.java b/src/java/com/android/internal/telephony/dataconnection/DcTracker.java
+index f22acc0d2..a48b537af 100755
+--- a/src/java/com/android/internal/telephony/dataconnection/DcTracker.java
++++ b/src/java/com/android/internal/telephony/dataconnection/DcTracker.java
+@@ -3182,7 +3182,7 @@ public class DcTracker extends Handler {
+ 
+         // ORDER BY Telephony.Carriers._ID ("_id")
+         Cursor cursor = mPhone.getContext().getContentResolver().query(
+-                Uri.withAppendedPath(Telephony.Carriers.SIM_APN_LIST, "filtered/subId/"
++                Uri.withAppendedPath(Telephony.Carriers.SIM_APN_LIST_URL, "filtered/subId/"
+                         + mPhone.getSubId()), null, null, null, Telephony.Carriers._ID);
+ 
+         if (cursor != null) {
+-- 
+2.20.1.415.g653613c723-goog
+
