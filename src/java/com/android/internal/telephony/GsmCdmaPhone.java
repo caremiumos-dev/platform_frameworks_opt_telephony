@@ -3026,6 +3026,7 @@ public class GsmCdmaPhone extends Phone {
                         && !imsiFromSIM.equals(imsi)) {
                     storeVoiceMailNumber(null);
                     setVmSimImsi(null);
+                    setVideoCallForwardingPreference(false);
                 }
 
                 updateVoiceMail();
