@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a6ca464_9eebf660",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2018-12-20T23:42:43Z",
+      "side": 1,
+      "message": "Do you mean all esim iccid has an appended \"F\"?",
+      "range": {
+        "startLine": 562,
+        "startChar": 17,
+        "endLine": 562,
+        "endChar": 45
+      },
+      "revId": "c9afc2002b2a246ac6e9df7dc8f186f9ae993cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
