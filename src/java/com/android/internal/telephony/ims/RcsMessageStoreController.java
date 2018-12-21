@@ -46,7 +46,9 @@ import android.os.ServiceManager;
 import android.telephony.Rlog;
 import android.telephony.ims.Rcs1To1Thread;
 import android.telephony.ims.RcsGroupThread;
+import android.telephony.ims.RcsMessage;
 import android.telephony.ims.RcsMessageStore;
+import android.telephony.ims.RcsPart;
 import android.telephony.ims.RcsParticipant;
 import android.telephony.ims.RcsThread;
 import android.telephony.ims.RcsThreadQueryContinuationToken;
@@ -312,5 +314,55 @@ public class RcsMessageStoreController extends IRcs.Stub {
                 null);
     }
 
+    @Override
+    public void setMessageSubId(int messageId, int subId) {
+        // TODO(109759350) - implement
+    }
 
+    @Override
+    public void setMessageStatus(int messageId, int status) {
+        // TODO(109759350) - implement
+    }
+
+    @Override
+    public void setMessageOriginationTimestamp(int messageId, long originationTimestamp) {
+        // TODO(109759350) - implement
+    }
+
+    @Override
+    public void setGlobalMessageIdForMessage(int messageId, String globalId) {
+        // TODO(109759350) - implement
+    }
+
+    @Override
+    public void addPartToMessage(int messageId, RcsPart rcsPart) {
+        // TODO(109759350) - implement
+    }
+
+    @Override
+    public void removePartFromMessage(int messageId, RcsPart rcsPart) {
+        // TODO(109759350) - implement
+    }
+
+    @Override
+    public void setMessageArrivalTimestamp(int messageId, long arrivalTimestamp) {
+        // TODO(109759350) - implement
+    }
+
+    @Override
+    public void setMessageNotifiedTimestamp(int messageId, long notifiedTimestamp) {
+        // TODO(109759350) - implement
+    }
+
+    @Override
+    public void setOutgoingDeliveryDeliveredTimestamp(RcsMessage message, RcsParticipant recipient,
+            long deliveredTimestamp) {
+        // TODO(109759350) - implement
+    }
+
+    @Override
+    public void setOutgoingDeliverySeenTimestamp(RcsMessage message, RcsParticipant recipient,
+            long seenTimestamp) {
+        // TODO(109759350) - implement
+    }
 }
