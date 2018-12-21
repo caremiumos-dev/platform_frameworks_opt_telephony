@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aaf9a9ea_c4fe291b",
+        "filename": "src/java/com/android/internal/telephony/CarrierResolver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2018-12-21T01:43:17Z",
+      "side": 1,
+      "message": "Do you need an else to print error debug message?",
+      "range": {
+        "startLine": 390,
+        "startChar": 12,
+        "endLine": 390,
+        "endChar": 13
+      },
+      "revId": "9df0f15b65673062886093bb27605fd013ac4423",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
