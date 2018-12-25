@@ -364,7 +364,7 @@ public class RuimRecords extends IccRecords {
             if (DBG) log("CSIM_MDN=" + IccUtils.bytesToHexString(data));
             // Refer to C.S0065 5.2.35
             int mdnDigitsNum = 0x0F & data[0];
-            mMdn = IccUtils.cdmaBcdToString(data, 1, mdnDigitsNum);
+            mMdn = IccUtils.cdmaBcdToStringEx(data, 1, mdnDigitsNum);
             if (DBG) log("CSIM MDN=" + mMdn);
         }
     }
