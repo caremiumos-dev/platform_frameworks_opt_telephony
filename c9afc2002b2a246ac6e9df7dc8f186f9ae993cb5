@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "761a582a_4d6e2313",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-27T18:17:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e522a8fd_c87306a3",
+      "range": {
+        "startLine": 561,
+        "startChar": 37,
+        "endLine": 561,
+        "endChar": 50
+      },
+      "revId": "c9afc2002b2a246ac6e9df7dc8f186f9ae993cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a6ca464_9eebf660",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
@@ -60,6 +84,30 @@
       "side": 1,
       "message": "+1 probably always strip Trailing Fs",
       "parentUuid": "2a6ca464_9eebf660",
+      "range": {
+        "startLine": 562,
+        "startChar": 17,
+        "endLine": 562,
+        "endChar": 45
+      },
+      "revId": "c9afc2002b2a246ac6e9df7dc8f186f9ae993cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b47e4ea_3c37f338",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2018-12-27T18:17:05Z",
+      "side": 1,
+      "message": "The problem is that getCardId returns the ICCID of a UICC or the EID of an eUICC. If we get the EID we don\u0027t really want to strip trailing Fs",
+      "parentUuid": "8dcae7a8_dcfbf395",
       "range": {
         "startLine": 562,
         "startChar": 17,
