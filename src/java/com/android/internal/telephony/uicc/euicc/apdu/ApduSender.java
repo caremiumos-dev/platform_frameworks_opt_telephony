@@ -18,6 +18,7 @@ package com.android.internal.telephony.uicc.euicc.apdu;
 
 import android.annotation.Nullable;
 import android.os.Handler;
+import android.os.Looper;
 import android.telephony.IccOpenLogicalChannelResponse;
 import android.telephony.Rlog;
 
@@ -49,8 +50,14 @@ public class ApduSender {
     // Status code of APDU response
     private static final int STATUS_NO_ERROR = 0x9000;
 
+    private static final int WAIT_TIME_MS = 0x2000;
+
     private static void logv(String msg) {
         Rlog.v(LOG_TAG, msg);
+    }
+
+    private static void logd(String msg) {
+        Rlog.d(LOG_TAG, msg);
     }
 
     private final String mAid;
@@ -93,10 +100,25 @@ public class ApduSender {
             Handler handler) {
         synchronized (mChannelLock) {
             if (mChannelOpened) {
-                AsyncResultHelper.throwException(
-                        new ApduException("Logical channel has already been opened."),
-                        resultCallback, handler);
-                return;
+                if (!Looper.getMainLooper().equals(Looper.myLooper())) {
+                    logd("Logical channel has already been opened. Wait.");
+                    try {
+                        mChannelLock.wait(WAIT_TIME_MS);
+                    } catch (InterruptedException e) {
+                        // nothing to do
+                    }
+                    if (mChannelOpened) {
+                        AsyncResultHelper.throwException(
+                                new ApduException("The logical channel is still in use."),
+                                resultCallback, handler);
+                        return;
+                    }
+                } else {
+                    AsyncResultHelper.throwException(
+                            new ApduException("The logical channel is in use."),
+                            resultCallback, handler);
+                    return;
+                }
             }
             mChannelOpened = true;
         }
@@ -110,6 +132,7 @@ public class ApduSender {
                         || status != IccOpenLogicalChannelResponse.STATUS_NO_ERROR) {
                     synchronized (mChannelLock) {
                         mChannelOpened = false;
+                        mChannelLock.notify();
                     }
                     resultCallback.onException(
                             new ApduException("Failed to open logical channel opened for AID: "
@@ -242,6 +265,7 @@ public class ApduSender {
             public void onResult(Boolean aBoolean) {
                 synchronized (mChannelLock) {
                     mChannelOpened = false;
+                    mChannelLock.notify();
                 }
 
                 if (exception == null) {
