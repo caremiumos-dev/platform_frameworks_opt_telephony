@@ -37,6 +37,8 @@ import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
 import com.android.internal.telephony.uicc.UiccCardApplication;
 
+import java.util.regex.PatternSyntaxException;
+
 /**
  * {@hide}
  */
@@ -77,6 +79,8 @@ public class GsmCdmaConnection extends Connection {
     private int mDtmfToneDelay = 0;
 
     private TelephonyMetrics mMetrics = TelephonyMetrics.getInstance();
+
+    private String[] mIncomingNumberConvertMaps;
 
     //***** Event Constants
     static final int EVENT_DTMF_DONE = 1;
@@ -142,6 +146,8 @@ public class GsmCdmaConnection extends Connection {
         setAudioQuality(getAudioQualityFromDC(dc.audioQuality));
 
         setCallRadioTech(mOwner.getPhone().getCsCallRadioTech());
+
+        mIncomingNumberConvertMaps = getIncomingNumberConvertMaps(phone);
     }
 
     /** This is an MO call, created when dialing */
@@ -195,6 +201,8 @@ public class GsmCdmaConnection extends Connection {
         fetchDtmfToneDelay(phone);
 
         setCallRadioTech(mOwner.getPhone().getCsCallRadioTech());
+
+        mIncomingNumberConvertMaps = getIncomingNumberConvertMaps(phone);
     }
 
     //CDMA
@@ -217,6 +225,8 @@ public class GsmCdmaConnection extends Connection {
         parent.attachFake(this, GsmCdmaCall.State.WAITING);
 
         setCallRadioTech(mOwner.getPhone().getCsCallRadioTech());
+
+        mIncomingNumberConvertMaps = getIncomingNumberConvertMaps(mOwner.getPhone());
     }
 
 
@@ -1068,6 +1078,43 @@ public class GsmCdmaConnection extends Connection {
     @UnsupportedAppUsage
     private void log(String msg) {
         Rlog.d(LOG_TAG, "[GsmCdmaConn] " + msg);
+    }
+
+    private String convertIncomingNumberIfNecessary(String number) {
+        if (mIncomingNumberConvertMaps != null && mIsIncoming) {
+            for (String convertNumber : mIncomingNumberConvertMaps) {
+                String[] entry = convertNumber.split(":");
+                if (entry != null && entry.length > 1) {
+                    String replace = entry[0];
+                    String replacement = entry[1];
+                    if (!TextUtils.isEmpty(replace) && !TextUtils.isEmpty(replacement)
+                            && number.startsWith(replace)) {
+                        try {
+                            return number.replaceFirst("\\" + replace, replacement);
+                        } catch (PatternSyntaxException e) {
+                            Rlog.e(LOG_TAG, "PatternSyntaxException: " + e);
+                        }
+                    }
+                }
+            }
+        }
+        return number;
+    }
+
+    private String[] getIncomingNumberConvertMaps(GsmCdmaPhone phone) {
+        CarrierConfigManager configMgr = (CarrierConfigManager)
+                phone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle b = configMgr.getConfigForSubId(phone.getSubId());
+        if (b != null) {
+            return b.getStringArray(CarrierConfigManager
+                    .KEY_CONVERT_INCOMING_NUMBER_TO_NATIONAL_FORMAT_STRING_ARRAY);
+        }
+        return null;
+    }
+
+    @Override
+    public String getAddress() {
+        return convertIncomingNumberIfNecessary(mAddress);
     }
 
     @Override

@@ -16,7 +16,17 @@
 
 package com.android.internal.telephony.imsphone;
 
-import com.android.internal.R;
+import android.annotation.UnsupportedAppUsage;
+import android.content.Context;
+import android.net.Uri;
+import android.os.PersistableBundle;
+import android.telecom.PhoneAccount;
+import android.telephony.CarrierConfigManager;
+import android.telephony.PhoneNumberUtils;
+import android.telephony.Rlog;
+import android.telephony.ims.ImsExternalCallState;
+import android.text.TextUtils;
+
 import com.android.internal.telephony.Call;
 import com.android.internal.telephony.CallStateException;
 import com.android.internal.telephony.Connection;
@@ -24,16 +34,10 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.UUSInfo;
 
-import android.annotation.UnsupportedAppUsage;
-import android.content.Context;
-import android.net.Uri;
-import android.telecom.PhoneAccount;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.ims.ImsExternalCallState;
-
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Represents an IMS call external to the device.  This class is used to represent a call which
@@ -47,6 +51,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ImsExternalConnection extends Connection {
 
+    private static final String LOG_TAG = "ImsExternalConnection";
     private static final String CONFERENCE_PREFIX = "conf";
     private final Context mContext;
 
@@ -82,6 +87,8 @@ public class ImsExternalConnection extends Connection {
      */
     private boolean mIsPullable;
 
+    private String[] mIncomingNumberConvertMaps;
+
     protected ImsExternalConnection(Phone phone, int callId, Uri address, boolean isPullable) {
         super(phone.getPhoneType());
         mContext = phone.getContext();
@@ -93,6 +100,7 @@ public class ImsExternalConnection extends Connection {
 
         rebuildCapabilities();
         setActive();
+        mIncomingNumberConvertMaps = getIncomingNumberConvertMaps(phone);
     }
 
     /**
@@ -100,6 +108,11 @@ public class ImsExternalConnection extends Connection {
      */
     public int getCallId() {
         return mCallId;
+    }
+
+    @Override
+    public String getAddress() {
+        return convertIncomingNumberIfNecessary(mAddress);
     }
 
     @Override
@@ -279,5 +292,37 @@ public class ImsExternalConnection extends Connection {
         }
 
         setConnectionCapabilities(capabilities);
+    }
+
+    private String convertIncomingNumberIfNecessary(String number) {
+        if (mIncomingNumberConvertMaps != null && mIsIncoming) {
+            for (String convertNumber : mIncomingNumberConvertMaps) {
+                String[] entry = convertNumber.split(":");
+                if (entry != null && entry.length > 1) {
+                    String replace = entry[0];
+                    String replacement = entry[1];
+                    if (!TextUtils.isEmpty(replace) && !TextUtils.isEmpty(replacement)
+                            && number.startsWith(replace)) {
+                        try {
+                            return number.replaceFirst("\\" + replace, replacement);
+                        } catch (PatternSyntaxException e) {
+                            Rlog.e(LOG_TAG, "PatternSyntaxException: " + e);
+                        }
+                    }
+                }
+            }
+        }
+        return number;
+    }
+
+    private String[] getIncomingNumberConvertMaps(Phone phone) {
+        CarrierConfigManager configMgr = (CarrierConfigManager)
+                phone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle b = configMgr.getConfigForSubId(phone.getSubId());
+        if (b != null) {
+            return b.getStringArray(CarrierConfigManager
+                    .KEY_CONVERT_INCOMING_NUMBER_TO_NATIONAL_FORMAT_STRING_ARRAY);
+        }
+        return null;
     }
 }

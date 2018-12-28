@@ -30,11 +30,14 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import android.content.pm.PackageManager;
 import android.os.AsyncResult;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PersistableBundle;
+import android.telephony.CarrierConfigManager;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
@@ -345,5 +348,35 @@ public class ImsPhoneConnectionTest extends TelephonyTest {
         mImsCallProfile.setCallExtra(ImsCallProfile.EXTRA_OI, updateAddress);
         mConnectionUT.updateAddressDisplay(mImsCall);
         assertEquals(inputAddress, mConnectionUT.getAddress());
+    }
+
+    /**
+     * Test converts to address for incoming calls.
+     */
+    @Test
+    @SmallTest
+    public void testAddressConvert() {
+        String[] testAddressMappingSet = {
+                /* {"inputAddress", "ExpectResult"} */
+                {"+11234567890", "01234567890"},
+                {"+201234567890", "01234567890"},
+                {"+811234567890", "01234567890"},
+                {"+3541234567890", "01234567890"},
+                {"1234567890", "1234567890"},
+                {"+01234567890", "+01234567890"}};
+        String[] testConvertAddressMappingSet = {"+1:0", "+20:0", "+81:0", "+354:0"};
+        for (String[] testAddress : testAddressMappingSet) {
+            PersistableBundle bundle = mContextFixture.getCarrierConfigBundle();
+            mContextFixture.addSystemFeature(PackageManager.FEATURE_TELEPHONY_IMS);
+            bundle.putStringArray(CarrierConfigManager
+                    .KEY_CONVERT_INCOMING_NUMBER_TO_NATIONAL_FORMAT_STRING_ARRAY,
+                    testConvertAddressMappingSet);
+
+            mConnectionUT = new ImsPhoneConnection(mImsPhone, testAddress[0], mImsCT,
+                    mForeGroundCall, false);
+            mConnectionUT.setIsIncoming(true);
+            mConnectionUT.updateAddressDisplay(mImsCall);
+            assertEquals(testAddress[1], mConnectionUT.getAddress());
+        }
     }
 }

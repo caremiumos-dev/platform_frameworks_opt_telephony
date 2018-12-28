@@ -21,8 +21,11 @@ import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PersistableBundle;
+import android.telephony.CarrierConfigManager;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.test.suitebuilder.annotation.MediumTest;
@@ -248,5 +251,33 @@ public class GsmCdmaConnectionTest extends TelephonyTest {
         mDC.number = "678";
         connection.update(mDC);
         assertEquals("12345", connection.getAddress());
+    }
+
+    /**
+     * Test converts to address for incoming calls.
+     */
+    @Test @SmallTest
+    public void testAddressConvert() {
+        String[] testAddressMappingSet = {
+                /* {"inputAddress", "ExpectResult"} */
+                {"+11234567890", "01234567890"},
+                {"+201234567890", "01234567890"},
+                {"+811234567890", "01234567890"},
+                {"+3541234567890", "01234567890"},
+                {"1234567890", "1234567890"},
+                {"+01234567890", "+01234567890"}};
+        String[] testConvertAddressMappingSet = {"+1:0", "+20:0", "+81:0", "+354:0"};
+        mDC.state = DriverCall.State.ALERTING;
+        for (String[] testAddress : testAddressMappingSet) {
+            PersistableBundle bundle = mContextFixture.getCarrierConfigBundle();
+            mContextFixture.addSystemFeature(PackageManager.FEATURE_TELEPHONY_IMS);
+            bundle.putStringArray(CarrierConfigManager
+                    .KEY_CONVERT_INCOMING_NUMBER_TO_NATIONAL_FORMAT_STRING_ARRAY,
+                    testConvertAddressMappingSet);
+
+            connection = new GsmCdmaConnection(mPhone, testAddress[0], mCT, null, false);
+            connection.setIsIncoming(true);
+            assertEquals(testAddress[1], connection.getAddress());
+        }
     }
 }

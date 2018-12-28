@@ -50,6 +50,7 @@ import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 
 import java.util.Objects;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * {@hide}
@@ -131,6 +132,8 @@ public class ImsPhoneConnection extends Connection implements
      * calls.
      */
     private boolean mIsLocalVideoCapable = true;
+
+    private String[] mIncomingNumberConvertMaps;
 
     //***** Event Constants
     private static final int EVENT_DTMF_DONE = 1;
@@ -217,6 +220,8 @@ public class ImsPhoneConnection extends Connection implements
                 com.android.internal.R.bool.config_use_voip_mode_for_ims)) {
             setAudioModeIsVoip(true);
         }
+
+        mIncomingNumberConvertMaps = getIncomingNumberConvertMaps(phone);
     }
 
     /** This is an MO call, created when dialing */
@@ -257,6 +262,8 @@ public class ImsPhoneConnection extends Connection implements
                 com.android.internal.R.bool.config_use_voip_mode_for_ims)) {
             setAudioModeIsVoip(true);
         }
+
+        mIncomingNumberConvertMaps = getIncomingNumberConvertMaps(phone);
     }
 
     public void dispose() {
@@ -360,6 +367,11 @@ public class ImsPhoneConnection extends Connection implements
         } else {
             return super.getState();
         }
+    }
+
+    @Override
+    public String getAddress() {
+        return convertIncomingNumberIfNecessary(mAddress);
     }
 
     @Override
@@ -1235,6 +1247,38 @@ public class ImsPhoneConnection extends Connection implements
                 || isEvsCodecHighDef)
                 && remoteCallProfile.getRestrictCause() == ImsCallProfile.CALL_RESTRICT_CAUSE_NONE;
         return isHighDef ? AUDIO_QUALITY_HIGH_DEFINITION : AUDIO_QUALITY_STANDARD;
+    }
+
+    private String convertIncomingNumberIfNecessary(String number) {
+        if (mIncomingNumberConvertMaps != null && mIsIncoming) {
+            for (String convertNumber : mIncomingNumberConvertMaps) {
+                String[] entry = convertNumber.split(":");
+                if (entry != null && entry.length > 1) {
+                    String replace = entry[0];
+                    String replacement = entry[1];
+                    if (!TextUtils.isEmpty(replace) && !TextUtils.isEmpty(replacement)
+                            && number.startsWith(replace)) {
+                        try {
+                            return number.replaceFirst("\\" + replace, replacement);
+                        } catch (PatternSyntaxException e) {
+                            Rlog.e(LOG_TAG, "PatternSyntaxException: " + e);
+                        }
+                    }
+                }
+            }
+        }
+        return number;
+    }
+
+    private String[] getIncomingNumberConvertMaps(Phone phone) {
+        CarrierConfigManager configMgr = (CarrierConfigManager)
+                phone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle b = configMgr.getConfigForSubId(phone.getSubId());
+        if (b != null) {
+            return b.getStringArray(CarrierConfigManager
+                    .KEY_CONVERT_INCOMING_NUMBER_TO_NATIONAL_FORMAT_STRING_ARRAY);
+        }
+        return null;
     }
 
     /**
