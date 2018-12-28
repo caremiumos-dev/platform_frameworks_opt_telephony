@@ -41,6 +41,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.provider.Telephony;
 import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.DataFailCause;
 import android.telephony.Rlog;
@@ -1191,6 +1192,15 @@ public class DataConnection extends StateMachine {
     }
 
     /**
+     * @return True if a given NetworkCapabilities is ims and no internet
+     */
+    @VisibleForTesting
+    public boolean isSkip464XlatCapabilities(NetworkCapabilities nc) {
+        return nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_IMS) && !nc.hasCapability(
+                NetworkCapabilities.NET_CAPABILITY_INTERNET);
+    }
+
+    /**
      * @return {@code} true iff. {@code address} is a literal IPv4 or IPv6 address.
      */
     @VisibleForTesting
@@ -1802,6 +1812,15 @@ public class DataConnection extends StateMachine {
                 misc.provisioningNotificationDisabled = true;
             }
             misc.subscriberId = mPhone.getSubscriberId();
+
+            // set skip464xlat if it is not default otherwise
+            final int skip464xlat = mApnSetting.getSkip464Xlat();
+            if (skip464xlat == Telephony.Carriers.SKIP464XLAT_ENABLE) {
+                misc.skip464xlat = true;
+            } else {
+                misc.skip464xlat = skip464xlat == Telephony.Carriers.SKIP464XLAT_DISABLE ? false
+                        : isSkip464XlatCapabilities(getNetworkCapabilities());
+            }
 
             mRestrictedNetworkOverride = shouldRestrictNetwork();
             mUnmeteredUseOnly = isUnmeteredUseOnly();
