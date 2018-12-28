@@ -38,9 +38,11 @@ import android.net.StringNetworkSpecifier;
 import android.os.AsyncResult;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.telephony.AccessNetworkConstants.TransportType;
+import android.telephony.CarrierConfigManager;
 import android.telephony.DataFailCause;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
@@ -71,6 +73,7 @@ import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.dataconnection.DcTracker.ReleaseNetworkType;
 import com.android.internal.telephony.dataconnection.DcTracker.RequestNetworkType;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
+import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.AsyncChannel;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.Protocol;
@@ -1174,6 +1177,70 @@ public class DataConnection extends StateMachine {
     }
 
     /**
+     * @return True if a given NetworkCapabilities has to skip 464xlat.
+     */
+    @VisibleForTesting
+    public boolean isSkip464XlatCapabilities(NetworkCapabilities nc) {
+        CarrierConfigManager configManager = (CarrierConfigManager)
+                mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        String[] capabilitiesArray = null;
+
+        if (configManager != null) {
+            PersistableBundle bundle = configManager.getConfigForSubId(mPhone.getSubId());
+            if (bundle != null) {
+                capabilitiesArray = bundle.getStringArray(
+                        CarrierConfigManager.KEY_SKIP_464XLAT_CAPABILITIES_STRING_ARRAY);
+            }
+        }
+
+        // Ignore empty list
+        if (ArrayUtils.isEmpty(capabilitiesArray)) {
+            return false;
+        }
+
+        for (int i = 0; i < capabilitiesArray.length; i++) {
+            String[] caps = capabilitiesArray[i].split(",");
+
+            // If one of conditions is satisfied, skip 464xlat.
+            if (checkCaps(nc, caps)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+     /**
+     * @return True if nc satisfies all caps as condition.
+     */
+    private boolean checkCaps(NetworkCapabilities nc, String[] caps) {
+        for (String capStr : caps) {
+            capStr = capStr.trim();
+
+            try {
+                if (capStr.startsWith("!")) {
+                    // If current NetworkCapabilities does not have a given capability.
+                    if (!nc.hasCapability(Integer.parseInt(capStr.substring(1)))) {
+                        continue;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    // If NetworkCapabilities has given capability
+                    if (nc.hasCapability(Integer.parseInt(capStr))) {
+                        continue;
+                    } else {
+                        return false;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                loge("isSkip464XlatCapabilities: e=" + e);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * @return {@code} true iff. {@code address} is a literal IPv4 or IPv6 address.
      */
     @VisibleForTesting
@@ -1785,6 +1852,8 @@ public class DataConnection extends StateMachine {
                 misc.provisioningNotificationDisabled = true;
             }
             misc.subscriberId = mPhone.getSubscriberId();
+
+            misc.skip464xlat = isSkip464XlatCapabilities(getNetworkCapabilities());
 
             mRestrictedNetworkOverride = shouldRestrictNetwork();
             mUnmeteredUseOnly = isUnmeteredUseOnly();
