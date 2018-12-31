@@ -16,6 +16,15 @@
 
 package com.android.internal.telephony.ims;
 
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.ARRIVAL_TIMESTAMP;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.DELIVERED_TIMESTAMP_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.GLOBAL_ID_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.NOTIFIED_TIMESTAMP;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.ORIGINATION_TIMESTAMP_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.RCS_PARTICIPANT_ID_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.SEEN_TIMESTAMP_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.STATUS_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.SUB_ID_COLUMN;
 import static com.android.internal.telephony.ims.RcsParticipantQueryHelper.getUriForParticipant;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.CONFERENCE_URI;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.FALLBACK_ID;
@@ -73,6 +82,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     private final ContentResolver mContentResolver;
     private final RcsParticipantQueryHelper mParticipantQueryHelper;
+    private final RcsMessageQueryHelper mMessageQueryHelper;
 
     /** Initialize the instance. Should only be called once. */
     public static RcsMessageStoreController init(Context context) {
@@ -89,6 +99,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     private RcsMessageStoreController(ContentResolver contentResolver) {
         mContentResolver = contentResolver;
         mParticipantQueryHelper = new RcsParticipantQueryHelper(contentResolver);
+        mMessageQueryHelper = new RcsMessageQueryHelper();
         if (ServiceManager.getService(RCS_SERVICE_NAME) == null) {
             ServiceManager.addService(RCS_SERVICE_NAME, this);
         }
@@ -98,6 +109,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     public RcsMessageStoreController(ContentResolver contentResolver, Void unused) {
         mContentResolver = contentResolver;
         mParticipantQueryHelper = new RcsParticipantQueryHelper(contentResolver);
+        mMessageQueryHelper = new RcsMessageQueryHelper();
     }
 
     @Override
@@ -315,54 +327,123 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public void setMessageSubId(int messageId, int subId) {
+    public void addMessage(RcsMessage rcsMessage, int rcsThreadId) {
+        ContentValues contentValues =
+                mMessageQueryHelper.createContentValuesForMessage(rcsMessage, rcsThreadId);
+        mContentResolver.insert(mMessageQueryHelper.getMessageInsertionUri(rcsMessage.isIncoming()),
+                contentValues);
+    }
+
+    @Override
+    public void deleteMessage(int messageId, boolean isIncoming, int rcsThreadId, boolean isGroup) {
+        mContentResolver.delete(
+                mMessageQueryHelper.getMessageDeletionUri(messageId, isIncoming, rcsThreadId,
+                        isGroup),
+                null, null);
+    }
+
+    @Override
+    public void setMessageSubId(int messageId, boolean isIncoming, int subId) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(SUB_ID_COLUMN, subId);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
+                contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setMessageStatus(int messageId, boolean isIncoming, int status) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(STATUS_COLUMN, status);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
+                contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setMessageOriginationTimestamp(int messageId, boolean isIncoming,
+            long originationTimestamp) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(ORIGINATION_TIMESTAMP_COLUMN, originationTimestamp);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
+                contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setGlobalMessageIdForMessage(int messageId, boolean isIncoming, String globalId) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(GLOBAL_ID_COLUMN, globalId);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
+                contentValues,
+                null, null);
+    }
+
+    @Override
+    public void addPartToMessage(int messageId, boolean isIncoming, RcsPart rcsPart) {
         // TODO(109759350) - implement
     }
 
     @Override
-    public void setMessageStatus(int messageId, int status) {
+    public void removePartFromMessage(int messageId, boolean isIncoming, RcsPart rcsPart) {
         // TODO(109759350) - implement
     }
 
     @Override
-    public void setMessageOriginationTimestamp(int messageId, long originationTimestamp) {
-        // TODO(109759350) - implement
+    public void setMessageArrivalTimestamp(int messageId, boolean isIncoming,
+            long arrivalTimestamp) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(ARRIVAL_TIMESTAMP, arrivalTimestamp);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
+                contentValues,
+                null, null);
     }
 
     @Override
-    public void setGlobalMessageIdForMessage(int messageId, String globalId) {
-        // TODO(109759350) - implement
+    public void setMessageNotifiedTimestamp(int messageId, boolean isIncoming,
+            long notifiedTimestamp) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(NOTIFIED_TIMESTAMP, notifiedTimestamp);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
+                contentValues,
+                null, null);
     }
 
     @Override
-    public void addPartToMessage(int messageId, RcsPart rcsPart) {
-        // TODO(109759350) - implement
-    }
-
-    @Override
-    public void removePartFromMessage(int messageId, RcsPart rcsPart) {
-        // TODO(109759350) - implement
-    }
-
-    @Override
-    public void setMessageArrivalTimestamp(int messageId, long arrivalTimestamp) {
-        // TODO(109759350) - implement
-    }
-
-    @Override
-    public void setMessageNotifiedTimestamp(int messageId, long notifiedTimestamp) {
-        // TODO(109759350) - implement
-    }
-
-    @Override
-    public void setOutgoingDeliveryDeliveredTimestamp(RcsMessage message, RcsParticipant recipient,
+    public void createOutgoingDelivery(int messageId, int participantId, long seenTimestamp,
             long deliveredTimestamp) {
-        // TODO(109759350) - implement
+        ContentValues contentValues = new ContentValues(3);
+        contentValues.put(RCS_PARTICIPANT_ID_COLUMN, participantId);
+        contentValues.put(DELIVERED_TIMESTAMP_COLUMN, deliveredTimestamp);
+        contentValues.put(SEEN_TIMESTAMP_COLUMN, seenTimestamp);
+
+        mContentResolver.insert(mMessageQueryHelper.getMessageDeliveryUri(messageId, participantId),
+                contentValues);
     }
 
     @Override
-    public void setOutgoingDeliverySeenTimestamp(RcsMessage message, RcsParticipant recipient,
+    public void setOutgoingDeliveryDeliveredTimestamp(int messageId, int participantId,
+            long deliveredTimestamp) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(DELIVERED_TIMESTAMP_COLUMN, deliveredTimestamp);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageDeliveryUri(messageId, participantId),
+                contentValues, null, null);
+    }
+
+    @Override
+    public void setOutgoingDeliverySeenTimestamp(int messageId, int participantId,
             long seenTimestamp) {
-        // TODO(109759350) - implement
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(DELIVERED_TIMESTAMP_COLUMN, seenTimestamp);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageDeliveryUri(messageId, participantId),
+                contentValues, null, null);
     }
 }
