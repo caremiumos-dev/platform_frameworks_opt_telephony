@@ -17,14 +17,28 @@
 package com.android.internal.telephony.ims;
 
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.ARRIVAL_TIMESTAMP;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.CONTENT_TYPE;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.CONTENT_URI;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.DELIVERED_TIMESTAMP_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.FILE_SIZE;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.GLOBAL_ID_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.HEIGHT;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.LATITUDE_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.LENGTH;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.LONGITUDE_COLUMN;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.NOTIFIED_TIMESTAMP;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.ORIGINATION_TIMESTAMP_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.PREVIEW_TYPE;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.PREVIEW_URI;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.RCS_PARTICIPANT_ID_COLUMN;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.SEEN_TIMESTAMP_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.SESSION_ID;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.STATUS_COLUMN;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.SUB_ID_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.TEXT_COLUMN;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.TRANSFER_OFFSET;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.TRANSFER_STATUS;
+import static com.android.internal.telephony.ims.RcsMessageQueryHelper.WIDTH;
 import static com.android.internal.telephony.ims.RcsParticipantQueryHelper.getUriForParticipant;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.CONFERENCE_URI;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.FALLBACK_ID;
@@ -54,10 +68,10 @@ import android.net.Uri;
 import android.os.ServiceManager;
 import android.telephony.Rlog;
 import android.telephony.ims.Rcs1To1Thread;
+import android.telephony.ims.RcsFileTransferPart;
 import android.telephony.ims.RcsGroupThread;
 import android.telephony.ims.RcsMessage;
 import android.telephony.ims.RcsMessageStore;
-import android.telephony.ims.RcsPart;
 import android.telephony.ims.RcsParticipant;
 import android.telephony.ims.RcsThread;
 import android.telephony.ims.RcsThreadQueryContinuationToken;
@@ -384,16 +398,6 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public void addPartToMessage(int messageId, boolean isIncoming, RcsPart rcsPart) {
-        // TODO(109759350) - implement
-    }
-
-    @Override
-    public void removePartFromMessage(int messageId, boolean isIncoming, RcsPart rcsPart) {
-        // TODO(109759350) - implement
-    }
-
-    @Override
     public void setMessageArrivalTimestamp(int messageId, boolean isIncoming,
             long arrivalTimestamp) {
         ContentValues contentValues = new ContentValues(1);
@@ -445,5 +449,134 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
         mContentResolver.update(mMessageQueryHelper.getMessageDeliveryUri(messageId, participantId),
                 contentValues, null, null);
+    }
+
+    @Override
+    public void setTextForMessage(int messageId, boolean isIncoming, String text) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(TEXT_COLUMN, text);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
+                contentValues, null, null);
+    }
+
+    @Override
+    public void setLatitudeForMessage(int messageId, boolean isIncoming, double latitude) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(LATITUDE_COLUMN, latitude);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
+                contentValues, null, null);
+    }
+
+    @Override
+    public void setLongitudeForMessage(int messageId, boolean isIncoming, double longitude) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(LONGITUDE_COLUMN, longitude);
+
+        mContentResolver.update(mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
+                contentValues, null, null);
+    }
+
+    @Override
+    public void deleteFileTransfer(int partId) {
+        mContentResolver.delete(mMessageQueryHelper.getFileTransferUpdateUri(partId), null, null);
+    }
+
+    @Override
+    public Uri storeFileTransfer(int messageId, boolean isIncoming,
+            RcsFileTransferPart fileTransferPart) {
+        ContentValues contentValues = mMessageQueryHelper.getContentValuesForFileTransfer(
+                fileTransferPart);
+        return mContentResolver.insert(mMessageQueryHelper.getFileTransferInsertionUri(messageId),
+                contentValues);
+    }
+
+    @Override
+    public void setFileTransferSessionId(int partId, String sessionId) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(SESSION_ID, sessionId);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setFileTransferContentUri(int partId, String contentUri) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(CONTENT_URI, contentUri);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setFileTransferContentType(int partId, String contentType) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(CONTENT_TYPE, contentType);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setFileTransferFileSize(int partId, long fileSize) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(FILE_SIZE, fileSize);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setFileTransferTransferOffset(int partId, long transferOffset) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(TRANSFER_OFFSET, transferOffset);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setFileTransferStatus(int partId, int transferStatus) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(TRANSFER_STATUS, transferStatus);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setFileTransferWidth(int partId, int width) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(WIDTH, width);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setFileTransferHeight(int partId, int height) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(HEIGHT, height);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setFileTransferLength(int partId, long length) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(LENGTH, length);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setFileTransferPreviewUri(int partId, String uri) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(PREVIEW_URI, uri);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
+    }
+
+    @Override
+    public void setFileTransferPreviewType(int partId, String type) {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(PREVIEW_TYPE, type);
+        mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
+                null, null);
     }
 }
