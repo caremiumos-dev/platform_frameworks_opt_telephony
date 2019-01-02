@@ -17,6 +17,7 @@ package com.android.internal.telephony.ims;
 
 import android.content.ContentValues;
 import android.net.Uri;
+import android.telephony.ims.RcsFileTransferPart;
 import android.telephony.ims.RcsIncomingMessage;
 import android.telephony.ims.RcsMessage;
 
@@ -38,6 +39,21 @@ public class RcsMessageQueryHelper {
     static final String RCS_PARTICIPANT_ID_COLUMN = "rcs_participant_id";
     static final String DELIVERED_TIMESTAMP_COLUMN = "delivered_timestamp";
     static final String SEEN_TIMESTAMP_COLUMN = "seen_timestamp";
+    static final String TEXT_COLUMN = "rcs_text";
+    static final String LATITUDE_COLUMN = "latitude";
+    static final String LONGITUDE_COLUMN = "longitude";
+
+    static final String SESSION_ID = "session_id";
+    static final String CONTENT_URI = "content_uri";
+    static final String CONTENT_TYPE = "content_type";
+    static final String FILE_SIZE = "file_size";
+    static final String TRANSFER_OFFSET = "transfer_offset";
+    static final String TRANSFER_STATUS = "transfer_status";
+    static final String WIDTH = "width";
+    static final String HEIGHT = "height";
+    static final String LENGTH = "length";
+    static final String PREVIEW_URI = "preview_uri";
+    static final String PREVIEW_TYPE = "preview_type";
 
     RcsMessageQueryHelper() {
 
@@ -84,5 +100,30 @@ public class RcsMessageQueryHelper {
 
     private String getMessagePathSegment(boolean isIncoming) {
         return isIncoming ? "incoming_message" : "outgoing_message";
+    }
+
+    ContentValues getContentValuesForFileTransfer(RcsFileTransferPart fileTransferPart) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SESSION_ID, fileTransferPart.getFileTransferSessionId());
+        contentValues.put(CONTENT_URI, fileTransferPart.getContentUri().toString());
+        contentValues.put(CONTENT_TYPE, fileTransferPart.getContentType());
+        contentValues.put(FILE_SIZE, fileTransferPart.getFileSize());
+        contentValues.put(TRANSFER_OFFSET, fileTransferPart.getTransferOffset());
+        contentValues.put(TRANSFER_STATUS, fileTransferPart.getFileTransferStatus());
+        contentValues.put(WIDTH, fileTransferPart.getWidth());
+        contentValues.put(HEIGHT, fileTransferPart.getHeight());
+        contentValues.put(LENGTH, fileTransferPart.getLength());
+        contentValues.put(PREVIEW_URI, fileTransferPart.getPreviewUri().toString());
+        contentValues.put(PREVIEW_TYPE, fileTransferPart.getPreviewType());
+
+        return contentValues;
+    }
+
+    Uri getFileTransferInsertionUri(int messageId) {
+        return Uri.parse(AUTHORITY + "message/" + messageId + "/file_transfer");
+    }
+
+    Uri getFileTransferUpdateUri(int partId) {
+        return Uri.parse(AUTHORITY + "file_transfer/" + partId);
     }
 }
