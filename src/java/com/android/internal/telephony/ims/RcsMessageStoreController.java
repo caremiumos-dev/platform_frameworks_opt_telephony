@@ -16,6 +16,9 @@
 
 package com.android.internal.telephony.ims;
 
+import static com.android.internal.telephony.ims.RcsEventQueryHelper.NEW_ALIAS;
+import static com.android.internal.telephony.ims.RcsEventQueryHelper.OLD_ALIAS;
+import static com.android.internal.telephony.ims.RcsEventQueryHelper.TIMESTAMP;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.ARRIVAL_TIMESTAMP;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.CONTENT_TYPE;
 import static com.android.internal.telephony.ims.RcsMessageQueryHelper.CONTENT_URI;
@@ -97,6 +100,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     private final ContentResolver mContentResolver;
     private final RcsParticipantQueryHelper mParticipantQueryHelper;
     private final RcsMessageQueryHelper mMessageQueryHelper;
+    private final RcsEventQueryHelper mEventQueryHelper;
 
     /** Initialize the instance. Should only be called once. */
     public static RcsMessageStoreController init(Context context) {
@@ -114,6 +118,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
         mContentResolver = contentResolver;
         mParticipantQueryHelper = new RcsParticipantQueryHelper(contentResolver);
         mMessageQueryHelper = new RcsMessageQueryHelper();
+        mEventQueryHelper = new RcsEventQueryHelper();
         if (ServiceManager.getService(RCS_SERVICE_NAME) == null) {
             ServiceManager.addService(RCS_SERVICE_NAME, this);
         }
@@ -124,6 +129,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
         mContentResolver = contentResolver;
         mParticipantQueryHelper = new RcsParticipantQueryHelper(contentResolver);
         mMessageQueryHelper = new RcsMessageQueryHelper();
+        mEventQueryHelper = new RcsEventQueryHelper();
     }
 
     @Override
@@ -578,5 +584,43 @@ public class RcsMessageStoreController extends IRcs.Stub {
         contentValues.put(PREVIEW_TYPE, type);
         mContentResolver.update(mMessageQueryHelper.getFileTransferUpdateUri(partId), contentValues,
                 null, null);
+    }
+
+    @Override
+    public int createGroupThreadNameChangedEvent(long timestamp, int threadId,
+            int originationParticipantId, String oldName, String newName) {
+        return 0;
+    }
+
+    @Override
+    public int createGroupThreadIconChangedEvent(long timestamp, int threadId,
+            int originationParticipantId, Uri oldIcon, Uri newIcon) {
+        return 0;
+    }
+
+    @Override
+    public int createGroupThreadParticipantJoinedEvent(long timestamp, int threadId,
+            int originationParticipantId, int participantId) {
+        return 0;
+    }
+
+    @Override
+    public int createGroupThreadParticipantLeftEvent(long timestamp, int threadId,
+            int originationParticipantId, int participantId) {
+        return 0;
+    }
+
+    @Override
+    public int createParticipantAliasChangedEvent(long timestamp, int participantId,
+            String oldAlias, String newAlias) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TIMESTAMP, timestamp);
+        contentValues.put(RCS_PARTICIPANT_ID_COLUMN, participantId);
+        contentValues.put(OLD_ALIAS, oldAlias);
+        contentValues.put(NEW_ALIAS, newAlias);
+
+        mContentResolver.insert(mEventQueryHelper.getParticipantEventInsertionUri(participantId),
+                contentValues);
+        return 0;
     }
 }
