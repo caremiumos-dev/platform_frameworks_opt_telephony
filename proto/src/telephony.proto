@@ -1526,6 +1526,23 @@ message SmsSession {
   optional bool events_dropped = 4;
 }
 
+// Temperature histogram stats for modem.
+message TemperatureHistogram {
+
+  // Min temperature bucket in celsius.
+  optional int32 min_temp_c = 1;
+
+  // Max temperature bucket in celsius.
+  optional int32 max_temp_c = 2;
+
+  // Temperature bucket span range in celsius.
+  optional int32 bucket_span_c = 3;
+
+  // Array storing counts for each temperature range
+  // starting from smallest value range.
+  repeated int64 bucket_counters = 4;
+}
+
 // Power stats for modem
 message ModemPowerStats {
 
@@ -1572,4 +1589,7 @@ message ModemPowerStats {
   // Amount of time phone spends in various cellular
   // rx signal strength levels (ms)
   repeated int64 time_in_rx_signal_strength_level_ms = 14;
+
+  // Thermal skin temperature histogram
+  optional TemperatureHistogram skinTemperature = 15;
 }
