@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ff9f39fa_5d83d685",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-04T18:30:12Z",
+      "side": 1,
+      "message": "Added TODO, thanks!",
+      "parentUuid": "6b924423_f64bd643",
+      "range": {
+        "startLine": 115,
+        "startChar": 60,
+        "endLine": 115,
+        "endChar": 69
+      },
+      "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e208a8b_a1322f1b",
         "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
         "patchSetId": 2
@@ -68,6 +92,54 @@
       "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77b325c7_9f554ccd",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-04T18:30:12Z",
+      "side": 1,
+      "message": "Ditto",
+      "parentUuid": "3e208a8b_a1322f1b",
+      "range": {
+        "startLine": 38,
+        "startChar": 88,
+        "endLine": 38,
+        "endChar": 91
+      },
+      "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d68862d5_83766656",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-04T18:30:12Z",
+      "side": 1,
+      "message": "Noted. I am reworking all the querying stuff so these should be fixed in CL-9. Removed the code in the mean-time.",
+      "parentUuid": "583c1926_fe4551cf",
+      "range": {
+        "startLine": 38,
+        "startChar": 48,
+        "endLine": 38,
+        "endChar": 79
+      },
+      "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -115,6 +187,30 @@
       "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41e0869b_d067c92c",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-04T18:30:12Z",
+      "side": 1,
+      "message": "Ditto",
+      "parentUuid": "a8b58c48_804bf6de",
+      "range": {
+        "startLine": 42,
+        "startChar": 12,
+        "endLine": 43,
+        "endChar": 49
+      },
+      "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
