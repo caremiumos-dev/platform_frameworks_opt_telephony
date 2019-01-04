@@ -91,6 +91,30 @@
       "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44e2d4a2_f4550bf4",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-01-04T18:29:31Z",
+      "side": 1,
+      "message": "Yeah, this seems to be creating query parameters for a URI, which is how content://mms-sms/threadID receives its participants, but here we are using it as a selection string for the query.\n\nThis currently also seems unused by the content provider, which is probably why this wouldn\u0027t be caught. I assume there is a follow up that uses this, may consider putting a TODO comment somewhere that this is a currently unused code.\n\nAlso, I don\u0027t see any integration testing (which might also be provided by CTS testing). Is that something that is addressed in a follow up? That might help catch some errors around things like this as well.",
+      "parentUuid": "a8b58c48_804bf6de",
+      "range": {
+        "startLine": 42,
+        "startChar": 12,
+        "endLine": 43,
+        "endChar": 49
+      },
+      "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
