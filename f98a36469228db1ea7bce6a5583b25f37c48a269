@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b924423_f64bd643",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-04T01:15:18Z",
+      "side": 1,
+      "message": "unused? Either add a TODO or use it.",
+      "range": {
+        "startLine": 115,
+        "startChar": 60,
+        "endLine": 115,
+        "endChar": 69
+      },
+      "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e208a8b_a1322f1b",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-04T01:15:18Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be \" and \"?",
+      "range": {
+        "startLine": 38,
+        "startChar": 88,
+        "endLine": 38,
+        "endChar": 91
+      },
+      "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "583c1926_fe4551cf",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-04T01:15:18Z",
+      "side": 1,
+      "message": "Needs to be converted to int.",
+      "range": {
+        "startLine": 38,
+        "startChar": 48,
+        "endLine": 38,
+        "endChar": 79
+      },
+      "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8b58c48_804bf6de",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-04T01:15:18Z",
+      "side": 1,
+      "message": "This query doesn\u0027t seem correct. \"\u0026participant\u003dxyz\u0026participant\u003dabc\u0026participant\u003d...\"",
+      "range": {
+        "startLine": 42,
+        "startChar": 12,
+        "endLine": 43,
+        "endChar": 49
+      },
+      "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
