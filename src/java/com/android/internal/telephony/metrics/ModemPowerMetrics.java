@@ -69,7 +69,8 @@ public class ModemPowerMetrics {
             System.arraycopy(tr, 0, m.timeInRatMs, 0, tr.length);
             long[] trx = stats.getTimeInRxSignalStrengthLevelMs();
             m.timeInRxSignalStrengthLevelMs = new long[trx.length];
-            System.arraycopy(trx, 0, m.timeInRxSignalStrengthLevelMs, 0, trx.length);
+            System.arraycopy(trx, 0, m.timeInRxSignalStrengthLevelMs, 0,
+                    trx.length);
         }
         return m;
     }

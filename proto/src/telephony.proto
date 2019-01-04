@@ -48,8 +48,11 @@ message TelephonyLog {
   // Modem power stats
   optional ModemPowerStats modem_power_stats = 8;
 
+  // Thermal stats
+  optional ThermalStats thermal_stats = 9;
+
   // Hardware revision (EVT, DVT, PVT etc.)
-  optional string hardware_revision = 9;
+  optional string hardware_revision = 10;
 }
 
 // The time information
@@ -2052,6 +2055,35 @@ message SmsSession {
 
   // Indicating some sms session events are dropped
   optional bool events_dropped = 4;
+}
+
+// Temperature histogram stats for modem.
+message TemperatureHistogram {
+
+  // Min temperature bucket in celsius.
+  optional int32 min_temp_c = 1;
+
+  // Max temperature bucket in celsius.
+  optional int32 max_temp_c = 2;
+
+  // Temperature bucket span range in celsius.
+  optional int32 bucket_span_c = 3;
+
+  // Array storing counts for each temperature range
+  // starting from smallest value range.
+  repeated int64 bucket_counters = 4;
+}
+
+// Thermal stats for modem
+message ThermalStats {
+
+  // Thermal skin temperature histogram
+  optional TemperatureHistogram skin_temperature = 1;
+
+  // Device specific temperature that the device will shutdown at when reached.
+  // First index indicates pre-production device shutdown temperature.
+  // Second index indicates production device shutdown temperature.
+  repeated int64 device_shutdown_temperature_c = 2;
 }
 
 // Power stats for modem
