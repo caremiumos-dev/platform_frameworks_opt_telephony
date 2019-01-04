@@ -90,6 +90,7 @@ import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.RilSetu
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyLog;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyServiceState;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonySettings;
+import com.android.internal.telephony.nano.TelephonyProto.ThermalStats;
 import com.android.internal.telephony.nano.TelephonyProto.TimeInterval;
 import com.android.internal.util.IndentingPrintWriter;
 
@@ -180,7 +181,11 @@ public class TelephonyMetrics {
     /** Indicating if some of the telephony events are dropped in this log */
     private boolean mTelephonyEventsDropped = false;
 
+    /** Broadcast receiver for the temperature alarms */
+    private final ThermalMetrics mThermalMetrics;
+
     public TelephonyMetrics() {
+        mThermalMetrics = new ThermalMetrics();
         reset();
     }
 
@@ -470,6 +475,22 @@ public class TelephonyMetrics {
                 + "rx signal strength levels (ms): "
                 + Arrays.toString(s.timeInRxSignalStrengthLevelMs));
         pw.decreaseIndent();
+
+        pw.decreaseIndent();
+        pw.println("Thermal stats:");
+        pw.increaseIndent();
+        ThermalStats ts = mThermalMetrics.buildProto();
+        pw.println("Skin Temperature Histogram:");
+        pw.increaseIndent();
+        pw.println("Min bucket histogram temperature (C): " + ts.skinTemperature.minTempC);
+        pw.println("Max bucket histogram temperature (C): " + ts.skinTemperature.maxTempC);
+        pw.println("Temperature bucket span (C): " + ts.skinTemperature.bucketSpanC);
+        pw.println("Total number of samples of each temperature range bucket (samples): "
+                + Arrays.toString(ts.skinTemperature.bucketCounters));
+        pw.decreaseIndent();
+        pw.println("Device Shutdown Temperatures (C) [Pre-production, Production]: "
+                + Arrays.toString(ts.deviceShutdownTemperatureC));
+        pw.decreaseIndent();
         pw.println("Hardware Version: " + SystemProperties.get("ro.boot.revision", ""));
     }
 
@@ -522,13 +543,13 @@ public class TelephonyMetrics {
                     .setImsConnectionState(mLastImsConnectionState.get(key)).build();
             addTelephonyEvent(event);
         }
-
         for (int i = 0; i < mLastCarrierId.size(); i++) {
             final int key = mLastCarrierId.keyAt(i);
             TelephonyEvent event = new TelephonyEventBuilder(mStartElapsedTimeMs, key)
                     .setCarrierIdMatching(mLastCarrierId.get(key)).build();
             addTelephonyEvent(event);
         }
+        mThermalMetrics.reset();
     }
 
     /**
@@ -573,6 +594,9 @@ public class TelephonyMetrics {
 
         // Build modem power metrics
         log.modemPowerStats = new ModemPowerMetrics().buildProto();
+
+        // Build thermal metrics
+        log.thermalStats = mThermalMetrics.buildProto();
 
         // Log the hardware revision
         log.hardwareRevision = SystemProperties.get("ro.boot.revision", "");
