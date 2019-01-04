@@ -211,6 +211,30 @@
       "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d8337548_85a91fdc",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-01-04T18:43:19Z",
+      "side": 1,
+      "message": "Though, never mind on that it is currently not used, I misread the content provider code the first time through, I see where it is used.",
+      "parentUuid": "41e0869b_d067c92c",
+      "range": {
+        "startLine": 42,
+        "startChar": 12,
+        "endLine": 43,
+        "endChar": 49
+      },
+      "revId": "f98a36469228db1ea7bce6a5583b25f37c48a269",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
