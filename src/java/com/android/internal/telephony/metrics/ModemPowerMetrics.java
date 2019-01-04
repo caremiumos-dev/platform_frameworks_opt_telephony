@@ -23,6 +23,7 @@ import android.text.format.DateUtils;
 
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.telephony.nano.TelephonyProto.ModemPowerStats;
+import com.android.internal.telephony.nano.TelephonyProto.TemperatureHistogram;
 
 /**
  * ModemPowerMetrics holds the modem power metrics and converts them to ModemPowerStats proto buf.
@@ -33,9 +34,13 @@ public class ModemPowerMetrics {
     /* BatteryStats API */
     private final IBatteryStats mBatteryStats;
 
-    public ModemPowerMetrics() {
+    /* Temperature Collection */
+    private final ThermalMetrics mThermalMetrics;
+
+    public ModemPowerMetrics(ThermalMetrics thermalMetrics) {
         mBatteryStats = IBatteryStats.Stub.asInterface(ServiceManager.getService(
             BatteryStats.SERVICE_NAME));
+        this.mThermalMetrics = thermalMetrics;
     }
 
     /**
@@ -69,7 +74,12 @@ public class ModemPowerMetrics {
             System.arraycopy(tr, 0, m.timeInRatMs, 0, tr.length);
             long[] trx = stats.getTimeInRxSignalStrengthLevelMs();
             m.timeInRxSignalStrengthLevelMs = new long[trx.length];
-            System.arraycopy(trx, 0, m.timeInRxSignalStrengthLevelMs, 0, trx.length);
+            System.arraycopy(trx, 0, m.timeInRxSignalStrengthLevelMs, 0,
+                    trx.length);
+        }
+        TemperatureHistogram tempHis = mThermalMetrics.getStats();
+        if (tempHis != null) {
+            m.skinTemperature = tempHis;
         }
         return m;
     }

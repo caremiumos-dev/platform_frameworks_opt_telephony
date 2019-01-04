@@ -179,7 +179,11 @@ public class TelephonyMetrics {
     /** Indicating if some of the telephony events are dropped in this log */
     private boolean mTelephonyEventsDropped = false;
 
+    /** Broadcast receiver for the temperature alarms */
+    private final ThermalMetrics mThermalMetrics;
+
     public TelephonyMetrics() {
+        mThermalMetrics = new ThermalMetrics();
         reset();
     }
 
@@ -448,7 +452,7 @@ public class TelephonyMetrics {
         pw.decreaseIndent();
         pw.println("Modem power stats:");
         pw.increaseIndent();
-        ModemPowerStats s = new ModemPowerMetrics().buildProto();
+        ModemPowerStats s = new ModemPowerMetrics(mThermalMetrics).buildProto();
         pw.println("Power log duration (battery time) (ms): " + s.loggingDurationMs);
         pw.println("Energy consumed by modem (mAh): " + s.energyConsumedMah);
         pw.println("Number of packets sent (tx): " + s.numPacketsTx);
@@ -468,6 +472,14 @@ public class TelephonyMetrics {
         pw.println("Amount of time phone spent in various cellular "
                 + "rx signal strength levels (ms): "
                 + Arrays.toString(s.timeInRxSignalStrengthLevelMs));
+        pw.println("Skin Temperature Histogram:");
+        pw.increaseIndent();
+        pw.println("Min bucket histogram temperature (C): " + s.skinTemperature.minTempC);
+        pw.println("Max bucket histogram temperature (C): " + s.skinTemperature.maxTempC);
+        pw.println("Temperature bucket span (C): " + s.skinTemperature.bucketSpanC);
+        pw.println("Total number of samples of each temperature range bucket (samples): "
+                + Arrays.toString(s.skinTemperature.bucketCounters));
+        pw.decreaseIndent();
         pw.decreaseIndent();
         pw.println("Hardware Version: " + SystemProperties.get("ro.boot.revision", ""));
     }
@@ -521,13 +533,13 @@ public class TelephonyMetrics {
                     .setImsConnectionState(mLastImsConnectionState.get(key)).build();
             addTelephonyEvent(event);
         }
-
         for (int i = 0; i < mLastCarrierId.size(); i++) {
             final int key = mLastCarrierId.keyAt(i);
             TelephonyEvent event = new TelephonyEventBuilder(mStartElapsedTimeMs, key)
                     .setCarrierIdMatching(mLastCarrierId.get(key)).build();
             addTelephonyEvent(event);
         }
+        mThermalMetrics.reset();
     }
 
     /**
@@ -571,7 +583,7 @@ public class TelephonyMetrics {
         }
 
         // Build modem power metrics
-        log.modemPowerStats = new ModemPowerMetrics().buildProto();
+        log.modemPowerStats = new ModemPowerMetrics(mThermalMetrics).buildProto();
 
         // Log the hardware revision
         log.hardwareRevision = SystemProperties.get("ro.boot.revision", "");
