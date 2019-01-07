@@ -128,6 +128,11 @@ public class UiccSlot extends Handler {
                     mUiccCard.update(mContext, mCi, ics);
                 }
             }
+            //When IccId has been fetched,go to create SubscriptionInfo
+            if (mUiccCard != null && !TextUtils.isEmpty(mIccId)) {
+                UiccController.updateInternalIccState(IccCardConstants.INTENT_VALUE_ICCID_LOADED,
+                        null, mPhoneId);
+            }
             mLastRadioState = radioState;
         }
     }

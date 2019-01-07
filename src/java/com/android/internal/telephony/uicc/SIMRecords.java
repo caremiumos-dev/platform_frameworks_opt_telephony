@@ -1485,7 +1485,6 @@ public class SIMRecords extends IccRecords {
                 LOCKED_RECORDS_REQ_REASON_NETWORK_LOCKED;
 
         loadEfLiAndEfPl();
-
         mFh.loadEFTransparent(EF_ICCID, obtainMessage(EVENT_GET_ICCID_DONE));
         mRecordsToLoad++;
     }
