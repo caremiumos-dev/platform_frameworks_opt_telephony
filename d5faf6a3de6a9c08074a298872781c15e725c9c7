@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "8a97ac77_400ff75b",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-07T21:15:14Z",
+      "side": 1,
+      "message": "Use Rlog instead.",
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "19f35e82_58cd87e9",
         "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
         "patchSetId": 6
@@ -42,6 +59,46 @@
         "endLine": 131,
         "endChar": 70
       },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57c7fac8_b4156369",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-07T21:15:14Z",
+      "side": 1,
+      "message": "This is the projection, right? Does this table contain thread_id, and is it really what you want here?",
+      "range": {
+        "startLine": 131,
+        "startChar": 16,
+        "endLine": 131,
+        "endChar": 60
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21477e0c_903c20ec",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-07T21:15:14Z",
+      "side": 1,
+      "message": "Why does a new participant need to be added twice, as a canonical address and as a participant?",
       "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
@@ -151,6 +208,30 @@
       "writtenOn": "2019-01-07T19:36:56Z",
       "side": 1,
       "message": "May consider passing ID as an argument.",
+      "range": {
+        "startLine": 218,
+        "startChar": 16,
+        "endLine": 218,
+        "endChar": 27
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "960de054_2436e8bf",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-07T21:15:14Z",
+      "side": 1,
+      "message": "Also, it will be better to use constants for column names in all queries instead of literals.",
+      "parentUuid": "dec66864_93b26779",
       "range": {
         "startLine": 218,
         "startChar": 16,
