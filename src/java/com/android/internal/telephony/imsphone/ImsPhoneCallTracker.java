@@ -2526,12 +2526,26 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
             call.resetIsMergeRequestedByConf(false);
 
-            // Start plumbing this even through Telecom so other components can take
-            // appropriate action.
-            ImsPhoneConnection conn = findConnection(call);
+            ImsCall unmergedCall = call;
+
+            // If the merge failure is reported on the conference host, report the failure via the
+            // peer instead.  This way we report the failure on the call which actually failed to
+            // merge.
+            if (call.isConferenceHost()) {
+                logi("onCallMergeFailed - merge failure reported on conference host; reporting on "
+                        + "the peer instead.");
+                unmergedCall = call.getMergePeer();
+            }
+
+            ImsPhoneConnection conn = findConnection(unmergedCall);
             if (conn != null) {
+                logi("onCallMergeFailed reasonInfo=" + reasonInfo + "; callId="
+                        + conn.getTelecomCallId());
                 conn.onConferenceMergeFailed();
                 conn.handleMergeComplete();
+            } else {
+                if (DBG) logi("onCallMergeFailed reasonInfo=" + reasonInfo + " (not reported to "
+                        + "telecom as connection coudln't be found)");
             }
         }
 
@@ -3923,5 +3937,25 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     @VisibleForTesting
     public void setAlwaysPlayRemoteHoldTone(boolean shouldPlayRemoteHoldTone) {
         mAlwaysPlayRemoteHoldTone = shouldPlayRemoteHoldTone;
+    }
+
+    @VisibleForTesting
+    public ImsCall.Listener getImsCallListener() {
+        return mImsCallListener;
+    }
+
+    /**
+     * Test method used to inject a call into the {@link ImsPhoneCallTracker} for the
+     * purpose of testing.
+     * @param call The call to inject.
+     * @param isForeground {@code true} if this is a mock foreground call, {@code false} if its a
+     *                                 mock background call.
+     */
+    @VisibleForTesting
+    public ImsPhoneConnection addMockImsCall(ImsCall call, boolean isForeground) {
+        ImsPhoneConnection connection = new ImsPhoneConnection(mPhone, call, this,
+                isForeground ? mForegroundCall : mBackgroundCall, false);
+        mConnections.add(connection);
+        return connection;
     }
 }
