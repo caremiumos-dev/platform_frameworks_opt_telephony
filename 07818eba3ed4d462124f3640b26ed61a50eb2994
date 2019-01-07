@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8a009180_a154a7bb",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-07T23:20:52Z",
+      "side": 1,
+      "message": "If you are making GsmCdmaPhone using your own TelephonyComponentFactory, please notice this still passes in the original TelephonyComponentFactory, especially when you are also using your own GsmCdmaPhone and constructors.",
+      "range": {
+        "startLine": 201,
+        "startChar": 32,
+        "endLine": 201,
+        "endChar": 71
+      },
+      "revId": "07818eba3ed4d462124f3640b26ed61a50eb2994",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8eee5eb_38b54834",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/SubscriptionInfoUpdaterTest.java",
         "patchSetId": 2

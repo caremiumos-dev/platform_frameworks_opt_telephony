@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "789791e3_f6af0cb0",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-07T23:20:52Z",
+      "side": 0,
+      "message": "Why removing the array init? It\u0027s used, e.g. in line 206.",
+      "range": {
+        "startLine": 200,
+        "startChar": 20,
+        "endLine": 200,
+        "endChar": 39
+      },
+      "revId": "cbe0de99f376dc7d5d4738371b7a919ae9e87716",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
