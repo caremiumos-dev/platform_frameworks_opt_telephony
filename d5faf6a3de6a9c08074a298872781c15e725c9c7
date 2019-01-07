@@ -183,6 +183,75 @@
       "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72aa9d97_b5ad698d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/RcsMessageStoreControllerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-01-07T20:05:54Z",
+      "side": 1,
+      "message": "Is this correct format?",
+      "range": {
+        "startLine": 78,
+        "startChar": 37,
+        "endLine": 78,
+        "endChar": 76
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5c48a52_cc5abb74",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/RcsMessageStoreControllerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-01-07T20:05:54Z",
+      "side": 1,
+      "message": "Should this be the string \"+5551234566\"?",
+      "range": {
+        "startLine": 87,
+        "startChar": 25,
+        "endLine": 87,
+        "endChar": 36
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9ba1c93_4a4e3871",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/RcsMessageStoreControllerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-01-07T20:05:54Z",
+      "side": 1,
+      "message": "May want to consider breaking this out into a separate class. If not, may want to consider making static if state is not shared with outer class.",
+      "range": {
+        "startLine": 156,
+        "startChar": 10,
+        "endLine": 156,
+        "endChar": 33
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
