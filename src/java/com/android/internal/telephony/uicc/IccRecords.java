@@ -89,6 +89,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected RegistrantList mNetworkSelectionModeAutomaticRegistrants = new RegistrantList();
     protected RegistrantList mSpnUpdatedRegistrants = new RegistrantList();
     protected RegistrantList mRecordsOverrideRegistrants = new RegistrantList();
+    protected RegistrantList mIccIdLoadedRegistrants = new RegistrantList();
 
     protected int mRecordsToLoad;  // number of pending load requests
 
@@ -418,6 +419,24 @@ public abstract class IccRecords extends Handler implements IccConstants {
     public void unregisterForImsiReady(Handler h) {
         mImsiReadyRegistrants.remove(h);
     }
+
+    /* UNISOC:When IccId has been fetched,go to create SubscriptionInfo @{*/
+    public void registerForIccIdReady(Handler h, int what, Object obj) {
+        if (mDestroyed.get()) {
+            return;
+        }
+
+        Registrant r = new Registrant(h, what, obj);
+        mIccIdLoadedRegistrants.add(r);
+
+        if (getIccId() != null) {
+            r.notifyRegistrant(new AsyncResult(null, null, null));
+        }
+    }
+    public void unregisterForIccIdReady(Handler h) {
+        mIccIdLoadedRegistrants.remove(h);
+    }
+    /* @} */
 
     public void registerForSpnUpdate(Handler h, int what, Object obj) {
         if (mDestroyed.get()) {
