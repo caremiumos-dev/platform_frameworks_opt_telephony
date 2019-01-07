@@ -105,6 +105,7 @@ public class UiccProfile extends IccCard {
     private CatService mCatService;
     private UiccCarrierPrivilegeRules mCarrierPrivilegeRules;
     private boolean mDisposed = false;
+    private boolean mIccReadyNotify = true;
 
     private RegistrantList mCarrierPrivilegeRegistrants = new RegistrantList();
     private RegistrantList mOperatorBrandOverrideRegistrants = new RegistrantList();
@@ -126,6 +127,7 @@ public class UiccProfile extends IccCard {
     private static final int EVENT_SIM_IO_DONE = 12;
     private static final int EVENT_CARRIER_PRIVILEGES_LOADED = 13;
     private static final int EVENT_CARRIER_CONFIG_CHANGED = 14;
+    private static final int EVENT_ICCID_LOADED_EVENTS = 15;
 
     private TelephonyManager mTelephonyManager;
 
@@ -221,7 +223,15 @@ public class UiccProfile extends IccCard {
                     AsyncResult.forMessage((Message) ar.userObj, ar.result, ar.exception);
                     ((Message) ar.userObj).sendToTarget();
                     break;
-
+                /* UNISOC:When IccId has been fetched,go to create SubscriptionInfo @{*/
+                case EVENT_ICCID_LOADED_EVENTS:
+                    if (mIccReadyNotify) {
+                        mIccReadyNotify = false;
+                        UiccController.updateInternalIccState(IccCardConstants.INTENT_VALUE_ICCID_LOADED,
+                                null, mPhoneId);
+                    }
+                    break;
+                /* @} */
                 default:
                     loge("handleMessage: Unhandled message with number: " + msg.what);
                     break;
@@ -287,6 +297,7 @@ public class UiccProfile extends IccCard {
             mUiccApplications = null;
             mCarrierPrivilegeRules = null;
             mDisposed = true;
+            mIccReadyNotify = true;
         }
     }
 
@@ -576,6 +587,7 @@ public class UiccProfile extends IccCard {
                     if (VDBG) log("registerUiccCardEvents: registering for EVENT_RECORDS_LOADED");
                     ir.registerForRecordsLoaded(mHandler, EVENT_RECORDS_LOADED, null);
                     ir.registerForRecordsEvents(mHandler, EVENT_ICC_RECORD_EVENTS, null);
+                    ir.registerForIccIdReady(mHandler, EVENT_ICCID_LOADED_EVENTS, null);
                 }
             }
         }
@@ -589,6 +601,7 @@ public class UiccProfile extends IccCard {
                 if (ir != null) {
                     ir.unregisterForRecordsLoaded(mHandler);
                     ir.unregisterForRecordsEvents(mHandler);
+                    ir.unregisterForIccIdReady(mHandler);
                 }
             }
         }
