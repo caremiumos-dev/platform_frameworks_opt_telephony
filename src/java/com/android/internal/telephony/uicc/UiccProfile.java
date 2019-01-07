@@ -221,7 +221,6 @@ public class UiccProfile extends IccCard {
                     AsyncResult.forMessage((Message) ar.userObj, ar.result, ar.exception);
                     ((Message) ar.userObj).sendToTarget();
                     break;
-
                 default:
                     loge("handleMessage: Unhandled message with number: " + msg.what);
                     break;
@@ -287,6 +286,7 @@ public class UiccProfile extends IccCard {
             mUiccApplications = null;
             mCarrierPrivilegeRules = null;
             mDisposed = true;
+            mIccReadyNotify = true;
         }
     }
 

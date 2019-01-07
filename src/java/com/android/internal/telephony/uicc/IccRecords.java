@@ -89,6 +89,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected RegistrantList mNetworkSelectionModeAutomaticRegistrants = new RegistrantList();
     protected RegistrantList mSpnUpdatedRegistrants = new RegistrantList();
     protected RegistrantList mRecordsOverrideRegistrants = new RegistrantList();
+    protected RegistrantList mIccIdLoadedRegistrants = new RegistrantList();
 
     protected int mRecordsToLoad;  // number of pending load requests
 

@@ -818,9 +818,10 @@ public class SIMRecords extends IccRecords {
                         break;
                     }
 
-                    mIccId = IccUtils.bcdToString(data, 0, data.length);
+                    /* UNISOC:When IccId has been fetched,go to create SubscriptionInfo @{*/
                     mFullIccId = IccUtils.bchToString(data, 0, data.length);
-
+                    mIccId = mFullIccId;
+                    /* @} */
                     log("iccid: " + SubscriptionInfo.givePrintableIccid(mFullIccId));
                     break;
 
@@ -1485,7 +1486,6 @@ public class SIMRecords extends IccRecords {
                 LOCKED_RECORDS_REQ_REASON_NETWORK_LOCKED;
 
         loadEfLiAndEfPl();
-
         mFh.loadEFTransparent(EF_ICCID, obtainMessage(EVENT_GET_ICCID_DONE));
         mRecordsToLoad++;
     }
