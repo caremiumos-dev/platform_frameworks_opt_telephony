@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "db6401e6_afa97db1",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "Fixed, thanks!",
+      "parentUuid": "8a97ac77_400ff75b",
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19f35e82_58cd87e9",
         "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
         "patchSetId": 6
@@ -88,6 +106,78 @@
     },
     {
       "key": {
+        "uuid": "5abc15b7_22f212cb",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "Fixed, thanks!",
+      "parentUuid": "19f35e82_58cd87e9",
+      "range": {
+        "startLine": 131,
+        "startChar": 62,
+        "endLine": 131,
+        "endChar": 91
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "821f60e0_dc635bf2",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "Fixed, thanks! It was working because both had the value \"_id\"",
+      "parentUuid": "57c7fac8_b4156369",
+      "range": {
+        "startLine": 131,
+        "startChar": 16,
+        "endLine": 131,
+        "endChar": 60
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "514b16b9_f8effb7a",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "Fixed, thanks!",
+      "parentUuid": "3b6fddb4_750588c2",
+      "range": {
+        "startLine": 131,
+        "startChar": 63,
+        "endLine": 131,
+        "endChar": 70
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "21477e0c_903c20ec",
         "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
         "patchSetId": 6
@@ -102,6 +192,24 @@
       "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8ff9a8a_c7b94229",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "The rcs_participant table doesn\u0027t store phone numbers, instead links to the canonical_address table. We first add the phone number to canonical_address, then put its row id in rcs_participant table.",
+      "parentUuid": "21477e0c_903c20ec",
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -125,6 +233,30 @@
       "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "345a5e63_e3a42399",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "You are right. Deleted the implementation, will fix after initial CLs go in.",
+      "parentUuid": "733b5f02_f768428a",
+      "range": {
+        "startLine": 187,
+        "startChar": 16,
+        "endLine": 187,
+        "endChar": 52
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +306,54 @@
     },
     {
       "key": {
+        "uuid": "6f1a6f7b_604c890e",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "Deleted, thanks!",
+      "parentUuid": "1a64dbce_b3da1aec",
+      "range": {
+        "startLine": 191,
+        "startChar": 83,
+        "endLine": 191,
+        "endChar": 85
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7feabc2f_3bc6364e",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "Deleted, thanks!",
+      "parentUuid": "90f90622_14c00c4e",
+      "range": {
+        "startLine": 191,
+        "startChar": 82,
+        "endLine": 191,
+        "endChar": 92
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec7df68b_4f2df4f6",
         "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
         "patchSetId": 6
@@ -194,6 +374,30 @@
       "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dae2f3b_579b01a7",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "Deleted, thanks!",
+      "parentUuid": "ec7df68b_4f2df4f6",
+      "range": {
+        "startLine": 208,
+        "startChar": 42,
+        "endLine": 208,
+        "endChar": 84
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -244,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "33d11fc1_ae262991",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "fixed, thanks!",
+      "parentUuid": "960de054_2436e8bf",
+      "range": {
+        "startLine": 218,
+        "startChar": 16,
+        "endLine": 218,
+        "endChar": 27
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6c443c1_ac5248c9",
         "filename": "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java",
         "patchSetId": 6
@@ -264,6 +492,30 @@
       "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63c38102_b632b3f7",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "It was already there, thanks! I updated its usage to the existing value.",
+      "parentUuid": "f6c443c1_ac5248c9",
+      "range": {
+        "startLine": 25,
+        "startChar": 52,
+        "endLine": 25,
+        "endChar": 59
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -290,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "d05d0018_20326ff9",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/RcsMessageStoreControllerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "Nope, this is an incorrect rebase. Fixed, thanks!",
+      "parentUuid": "72aa9d97_b5ad698d",
+      "range": {
+        "startLine": 78,
+        "startChar": 37,
+        "endLine": 78,
+        "endChar": 76
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5c48a52_cc5abb74",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/RcsMessageStoreControllerTest.java",
         "patchSetId": 6
@@ -313,6 +589,30 @@
     },
     {
       "key": {
+        "uuid": "42d83728_7e9d2a2c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/RcsMessageStoreControllerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "Added quotes, thanks!",
+      "parentUuid": "a5c48a52_cc5abb74",
+      "range": {
+        "startLine": 87,
+        "startChar": 25,
+        "endLine": 87,
+        "endChar": 36
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9ba1c93_4a4e3871",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/RcsMessageStoreControllerTest.java",
         "patchSetId": 6
@@ -333,6 +633,30 @@
       "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6e5c8e1_73f3605a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/RcsMessageStoreControllerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-07T22:41:37Z",
+      "side": 1,
+      "message": "Moved to a new file, thanks!",
+      "parentUuid": "c9ba1c93_4a4e3871",
+      "range": {
+        "startLine": 156,
+        "startChar": 10,
+        "endLine": 156,
+        "endChar": 33
+      },
+      "revId": "d5faf6a3de6a9c08074a298872781c15e725c9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
