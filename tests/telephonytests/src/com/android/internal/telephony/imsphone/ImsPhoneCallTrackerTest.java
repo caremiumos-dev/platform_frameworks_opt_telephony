@@ -948,5 +948,90 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         imsCall.getImsCallSessionListenerProxy().callSessionStarted(imsCall.getSession(),
                 new ImsCallProfile());
     }
+
+    /**
+     * Tracks merge failure status for {@link #testMergeFailReportedOnHost()}.
+     */
+    private class MergeFailStatus {
+        public boolean isHostMergeFailed = false;
+        public ImsCall hostImsCall;
+        public boolean isPeerMergeFailed = false;
+        public ImsCall peerImsCall;
+    }
+
+    /**
+     * Test the case where a merge failure is reported on the conference host; expect we get the
+     * merge failure callback reported on the peer instead.
+     */
+    @Test
+    @SmallTest
+    public void testMergeFailReportedOnHost() {
+        ImsCall.Listener listener = mCTUT.getImsCallListener();
+        final MergeFailStatus mergeStatus = setupMergeFailureCalls();
+
+        // Report merge failure on the host.
+        listener.onCallMergeFailed(mergeStatus.hostImsCall, new ImsReasonInfo(0, 0));
+
+        // Expect the failure to be reported on the peer.
+        assertFalse(mergeStatus.isHostMergeFailed);
+        assertTrue(mergeStatus.isPeerMergeFailed);
+    }
+
+    /**
+     * Test the case where a merge failure is reported on the merge peer; we should see the failure
+     * reported on the merge peer callback.
+     */
+    @Test
+    @SmallTest
+    public void testMergeFailReportedOnPeer() {
+        ImsCall.Listener listener = mCTUT.getImsCallListener();
+        final MergeFailStatus mergeStatus = setupMergeFailureCalls();
+
+        // Report merge failure on the peer.
+        listener.onCallMergeFailed(mergeStatus.peerImsCall, new ImsReasonInfo(0, 0));
+
+        // Expect the failure to be reported on the peer.
+        assertFalse(mergeStatus.isHostMergeFailed);
+        assertTrue(mergeStatus.isPeerMergeFailed);
+    }
+
+    /**
+     * Setup mock calls to test {@link #testMergeFailReportedOnHost()} and
+     * {@link #testMergeFailReportedOnPeer()}.
+     * @return The configured test mocks and status variables.
+     */
+    private MergeFailStatus setupMergeFailureCalls() {
+        // Make some mock calls.
+        ImsCall mergeHost = mock(ImsCall.class);
+        ImsCall mergePeer = mock(ImsCall.class);
+        doReturn(mergePeer).when(mergeHost).getMergePeer();
+        doReturn(true).when(mergeHost).isConferenceHost();
+        doNothing().when(mergeHost).resetIsMergeRequestedByConf(anyBoolean());
+
+        // Add them to tracker.
+        ImsPhoneConnection hostConnection = mCTUT.addMockImsCall(mergeHost, true);
+        ImsPhoneConnection peerConnection = mCTUT.addMockImsCall(mergePeer, true);
+
+        // Setup listeners to merge failure on the connections
+        final MergeFailStatus mergeStatus = new MergeFailStatus();
+        mergeStatus.hostImsCall = mergeHost;
+        mergeStatus.peerImsCall = mergePeer;
+        Connection.ListenerBase hostListener = new Connection.ListenerBase() {
+            @Override
+            public void onConferenceMergedFailed() {
+                mergeStatus.isHostMergeFailed = true;
+            }
+        };
+        Connection.ListenerBase peerListener = new Connection.ListenerBase() {
+            @Override
+            public void onConferenceMergedFailed() {
+                mergeStatus.isPeerMergeFailed = true;
+            }
+        };
+        hostConnection.addListener(hostListener);
+        peerConnection.addListener(peerListener);
+
+        return mergeStatus;
+    }
 }
 

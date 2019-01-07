@@ -1135,7 +1135,7 @@ public class ImsPhoneConnection extends Connection implements
         }
 
         final ImsCallProfile callProfile = imsCall.getCallProfile();
-        final Bundle extras = callProfile != null ? callProfile.mCallExtras : null;
+        final Bundle extras = callProfile != null ? callProfile.mCallExtras : new Bundle();
         if (extras == null && DBG) {
             Rlog.d(LOG_TAG, "Call profile extras are null.");
         }
