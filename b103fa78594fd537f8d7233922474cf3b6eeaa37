@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fddeaf9c_e6149220",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-07T18:49:28Z",
+      "side": 1,
+      "message": "Should we also make sure the service class here \u003d\u003d SERVICE_CLASS_VOICE? Since we are querying with SERVICE_CLASS_NONE, the result will contain an array with multiple ImsCallForwardInfos, which may contain more than video/voice.",
+      "range": {
+        "startLine": 1375,
+        "startChar": 31,
+        "endLine": 1375,
+        "endChar": 40
+      },
+      "revId": "b103fa78594fd537f8d7233922474cf3b6eeaa37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f454fd4_274157be",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaPhoneTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-07T18:49:28Z",
+      "side": 1,
+      "message": "Also add @SmallTest here",
+      "range": {
+        "startLine": 591,
+        "startChar": 5,
+        "endLine": 591,
+        "endChar": 9
+      },
+      "revId": "b103fa78594fd537f8d7233922474cf3b6eeaa37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
