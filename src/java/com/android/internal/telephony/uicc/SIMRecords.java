@@ -572,7 +572,10 @@ public class SIMRecords extends IccRecords {
             // A future optimization would be to inspect fileList and
             // only reload those files that we care about.  For now,
             // just re-fetch all SIM records that we cache.
-            fetchSimRecords();
+            /* UNISOC:Loading ICCID by CRSM takes too long@{*/
+            //fetchSimRecords();
+            loadIccId();
+            /* @} */
         }
     }
 
@@ -818,9 +821,15 @@ public class SIMRecords extends IccRecords {
                         break;
                     }
 
-                    mIccId = IccUtils.bcdToString(data, 0, data.length);
+                    /* UNISOC:When IccId has been fetched,go to create SubscriptionInfo @{*/
                     mFullIccId = IccUtils.bchToString(data, 0, data.length);
-
+                    mIccId = mFullIccId;
+                    mIccIdLoadedRegistrants.notifyRegistrants();
+                    if (mParentApp.getState() ==
+                            IccCardApplicationStatus.AppState.APPSTATE_READY) {
+                        fetchSimRecords();
+                    }
+                    /* @} */
                     log("iccid: " + SubscriptionInfo.givePrintableIccid(mFullIccId));
                     break;
 
@@ -1476,8 +1485,16 @@ public class SIMRecords extends IccRecords {
 
     @Override
     public void onReady() {
-        fetchSimRecords();
+        /* UNISOC:Loading ICCID by CRSM takes too long@{*/
+        //fetchSimRecords();
+        loadIccId();
     }
+
+    private void loadIccId() {
+        mFh.loadEFTransparent(EF_ICCID, obtainMessage(EVENT_GET_ICCID_DONE));
+        mRecordsToLoad++;
+    }
+    /* @} */
 
     private void onLocked(int msg) {
         if (DBG) log("only fetch EF_LI, EF_PL and EF_ICCID in locked state");
@@ -1485,7 +1502,6 @@ public class SIMRecords extends IccRecords {
                 LOCKED_RECORDS_REQ_REASON_NETWORK_LOCKED;
 
         loadEfLiAndEfPl();
-
         mFh.loadEFTransparent(EF_ICCID, obtainMessage(EVENT_GET_ICCID_DONE));
         mRecordsToLoad++;
     }
@@ -1518,8 +1534,9 @@ public class SIMRecords extends IccRecords {
         mCi.getIMSIForApp(mParentApp.getAid(), obtainMessage(EVENT_GET_IMSI_DONE));
         mRecordsToLoad++;
 
-        mFh.loadEFTransparent(EF_ICCID, obtainMessage(EVENT_GET_ICCID_DONE));
-        mRecordsToLoad++;
+        //UNISOC:Loading ICCID by CRSM takes too long
+        //mFh.loadEFTransparent(EF_ICCID, obtainMessage(EVENT_GET_ICCID_DONE));
+        //mRecordsToLoad++;
 
         // FIXME should examine EF[MSISDN]'s capability configuration
         // to determine which is the voice/data/fax line
