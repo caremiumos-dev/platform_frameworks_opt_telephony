@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import android.telephony.CallQuality;
 import android.telephony.CellInfo;
 import android.telephony.CellLocation;
 import android.telephony.PhoneCapability;
@@ -79,4 +80,7 @@ public interface PhoneNotifier {
 
     /** Notify of change to EmergencyNumberList. */
     void notifyEmergencyNumberList();
+
+    /** Notify of a change to the call quality of an active foreground call. */
+    void notifyCallQualityChanged(Phone sender, CallQuality callQuality);
 }
