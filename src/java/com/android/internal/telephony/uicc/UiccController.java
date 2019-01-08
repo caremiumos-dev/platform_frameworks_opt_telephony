@@ -727,8 +727,11 @@ public class UiccController extends Handler {
 
         // sanity check: number of active slots should be valid
         if (numActiveSlots != mPhoneIdToSlotId.length) {
-            throw new RuntimeException("Number of active slots " + numActiveSlots
-                    + " does not match the expected value " + mPhoneIdToSlotId.length);
+            log("Number of active slots " + numActiveSlots
+                    + " does not match the expected value " + mPhoneIdToSlotId.length
+                    + ". This may happen in DSDS mode on boot before the modem reads the config"
+                    + " file.");
+            return;
         }
 
         // sanity check: slotIds should be unique in mPhoneIdToSlotId
