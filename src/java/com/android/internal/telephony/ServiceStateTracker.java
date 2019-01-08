@@ -91,6 +91,7 @@ import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.IccRecords;
+import com.android.internal.telephony.uicc.IccRecords.OpList;
 import com.android.internal.telephony.uicc.RuimRecords;
 import com.android.internal.telephony.uicc.SIMRecords;
 import com.android.internal.telephony.uicc.UiccCard;
@@ -2492,7 +2493,11 @@ public class ServiceStateTracker extends Handler {
                         "of service, set plmn='" + plmn + "'");
             } else if (combinedRegState == ServiceState.STATE_IN_SERVICE) {
                 // In either home or roaming service
-                plmn = mSS.getOperatorAlpha();
+
+                // PLMN long alphanumeric format shall be different based on TAC. - AT&T requirement
+                plmn = getOperatorAlphaLongBasedOnTac();
+                if(plmn == null) plmn = mSS.getOperatorAlpha();
+
                 showPlmn = !TextUtils.isEmpty(plmn) &&
                         ((rule & SIMRecords.SPN_RULE_SHOW_PLMN)
                                 == SIMRecords.SPN_RULE_SHOW_PLMN);
@@ -3117,7 +3122,7 @@ public class ServiceStateTracker extends Handler {
             setNotification(CS_REJECT_CAUSE_ENABLED);
         }
 
-        if (hasChanged) {
+        if (hasChanged || hasLocationChanged) {
             updateSpnDisplay();
 
             tm.setNetworkOperatorNameForPhone(mPhone.getPhoneId(), mSS.getOperatorAlpha());
@@ -4963,5 +4968,82 @@ public class ServiceStateTracker extends Handler {
 
     public LocaleTracker getLocaleTracker() {
         return mLocaleTracker;
+    }
+
+    /**
+     * Get the PNN string(alpha tag) based cell ID
+     * It is valid for GSM phone only.
+     *
+     */
+    private String getOperatorAlphaLongBasedOnTac() {
+        int lac = -1;
+        String plmn = null;
+        String operatorNumeric = mSS.getOperatorNumeric();
+        IccRecords iccRecords = mIccRecords;
+        ArrayList<String> pnnList = (iccRecords != null) ? iccRecords.getPnnList() : null;
+        ArrayList<OpList> opList = (iccRecords != null) ? iccRecords.getOpList() : null;
+
+        CellLocation cellLoc = getCellLocation();
+
+        if (cellLoc != null) {
+            if (cellLoc instanceof GsmCellLocation) {
+                if (((GsmCellLocation)cellLoc).getLac() >= 0 && ((GsmCellLocation)cellLoc).getCid() >= 0) {
+                    lac = ((GsmCellLocation)cellLoc).getLac();
+                }
+            }
+        }
+
+        if(lac != -1 && pnnList != null && opList != null){
+            int ii, oplistSize, isFound;
+            char curOp, tarOp;
+
+            oplistSize = opList.size();
+            isFound = 0;
+
+            for(ii = 0; ii < oplistSize; ii++){
+                int jj;
+                OpList tarOpList = opList.get(ii);
+                String tarPlmn = (tarOpList != null) ? (tarOpList.getMcc() + tarOpList.getMnc()) : null;
+
+                if(tarPlmn == null) continue;
+
+                //log("Target list :=" + tarOpList + ", tarPlmn = " + tarPlmn);
+
+                // MCC & MNC check
+                for(jj=0;jj<6;jj++){
+                    tarOp = tarPlmn.charAt(jj);
+                    if(jj < operatorNumeric.length() && tarOp == 'd') continue;
+                    if(jj == operatorNumeric.length()&& tarOp == 'f') continue;
+                    if(jj == operatorNumeric.length()) break;
+
+                    curOp = operatorNumeric.charAt(jj);
+                    if(tarOp != curOp) break;
+                }
+                if(jj<6) continue;
+
+                // check LAC range
+                int start = tarOpList.getStartLac();
+                int end = tarOpList.getEndLac();
+                //log("PLMN matched : start = " +start + " end = " + end);
+                if(lac >= start && lac <= end) {
+                    isFound = 1;
+                    break;
+                }
+            }
+
+            if(isFound == 1) {
+                OpList candiOpList = opList.get(ii);
+                int pnnIndex = (candiOpList != null) ? candiOpList.getPnnId() : -1;
+
+                //log("Candidate list :=" + candiOpList + ", pnnIndex = " + pnnIndex);
+                if(pnnIndex > 0 && pnnIndex <= pnnList.size()) plmn = pnnList.get(pnnIndex-1);
+            }
+        }
+
+        if (DBG) {
+            log("["+mPhone.getSubId()+"] Final: lac:" + lac + " operatorNumeric:" + operatorNumeric + " PNN:" + plmn);
+        }
+
+        return plmn;
     }
 }
