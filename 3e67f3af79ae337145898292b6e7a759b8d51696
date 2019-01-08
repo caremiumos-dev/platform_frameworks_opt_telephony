@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4af1a5f2_be249b1e",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2548,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-01-08T01:46:09Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 2548,
+        "startChar": 49,
+        "endLine": 2548,
+        "endChar": 57
+      },
+      "revId": "3e67f3af79ae337145898292b6e7a759b8d51696",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13dea999_926bfa62",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-01-08T01:46:09Z",
+      "side": 1,
+      "message": "is this a config or a status?",
+      "range": {
+        "startLine": 955,
+        "startChar": 27,
+        "endLine": 955,
+        "endChar": 33
+      },
+      "revId": "3e67f3af79ae337145898292b6e7a759b8d51696",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
