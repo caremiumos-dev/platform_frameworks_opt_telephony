@@ -46,11 +46,10 @@ import android.provider.Settings;
 import android.telecom.ConferenceParticipant;
 import android.telecom.TelecomManager;
 import android.telecom.VideoProfile;
-import android.telephony.AccessNetworkConstants.TransportType;
+import android.telephony.CallQuality;
 import android.telephony.CarrierConfigManager;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.PreciseDisconnectCause;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
@@ -2753,6 +2752,15 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             if (conn != null) {
                 conn.updateMultipartyState(isMultiParty);
             }
+        }
+
+        /**
+         * TODO
+         */
+        @Override
+        public void onCallQualityChanged(ImsCall imsCall, CallQuality callQuality) {
+            // TODO populate callQuality fully
+            mPhone.onCallQualityChanged(callQuality);
         }
     };
 
