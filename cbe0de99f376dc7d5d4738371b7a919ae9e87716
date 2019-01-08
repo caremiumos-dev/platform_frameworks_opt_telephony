@@ -22,6 +22,30 @@
       "revId": "cbe0de99f376dc7d5d4738371b7a919ae9e87716",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9692a81e_a6a6aea8",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1403772
+      },
+      "writtenOn": "2019-01-08T23:47:24Z",
+      "side": 0,
+      "message": "Was an auto conflict resolution. Brought it back in latest patch",
+      "parentUuid": "789791e3_f6af0cb0",
+      "range": {
+        "startLine": 200,
+        "startChar": 20,
+        "endLine": 200,
+        "endChar": 39
+      },
+      "revId": "cbe0de99f376dc7d5d4738371b7a919ae9e87716",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

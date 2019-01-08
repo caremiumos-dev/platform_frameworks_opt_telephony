@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9e476950_6a1e336c",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1403772
+      },
+      "writtenOn": "2019-01-08T23:47:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a009180_a154a7bb",
+      "range": {
+        "startLine": 201,
+        "startChar": 32,
+        "endLine": 201,
+        "endChar": 71
+      },
+      "revId": "07818eba3ed4d462124f3640b26ed61a50eb2994",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8eee5eb_38b54834",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/SubscriptionInfoUpdaterTest.java",
         "patchSetId": 2
