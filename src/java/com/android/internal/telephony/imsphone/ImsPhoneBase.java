@@ -133,6 +133,10 @@ abstract class ImsPhoneBase extends Phone {
         mTtyModeReceivedRegistrants.notifyRegistrants(result);
     }
 
+    public void onCallQualityChanged(CallQuality callQuality) {
+        mNotifier.notifyCallQualityChanged(this, callQuality);
+    }
+
     @Override
     public ServiceState getServiceState() {
         // FIXME: we may need to provide this when data connectivity is lost

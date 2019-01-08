@@ -269,7 +269,8 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
                 mRegistry.notifyPreciseCallState(
                         convertPreciseCallState(ringingCall.getState()),
                         convertPreciseCallState(foregroundCall.getState()),
-                        convertPreciseCallState(backgroundCall.getState()));
+                        convertPreciseCallState(backgroundCall.getState()),
+                        sender.getPhoneId());
             } catch (RemoteException ex) {
                 // system process is dead
             }
@@ -366,6 +367,17 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         try {
             if (mRegistry != null) {
                 mRegistry.notifyEmergencyNumberList();
+            }
+        } catch (RemoteException ex) {
+            // system process is dead
+        }
+    }
+
+    @Override
+    public void notifyCallQualityChanged(Phone sender, CallQuality callQuality) {
+        try {
+            if (mRegistry != null) {
+                mRegistry.notifyCallQualityChanged(callQuality, sender.getPhoneId());
             }
         } catch (RemoteException ex) {
             // system process is dead
