@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7967f597_1c55a296",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-09T00:45:40Z",
+      "side": 1,
+      "message": "I would prefer this since card state can be something other than absent/present:\n\nif (mCardState \u003d\u003d null || mCardState \u003d\u003d ABSENT) {\n    // mStateIsUnknown is valid only in this scenario\n    return mStateIsUnknown;\n} else {\n    // if mUiccCard is null, assume the state to be UNKNOWN for now. The state may be known but since the actual card object is not available, it is safer to return UNKNOWN.\n    return mUiccCard \u003d\u003d null;\n}",
+      "range": {
+        "startLine": 204,
+        "startChar": 8,
+        "endLine": 210,
+        "endChar": 99
+      },
+      "revId": "a0f9fe6980a2bdec7b9eea3fb36cf312b89e8150",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
