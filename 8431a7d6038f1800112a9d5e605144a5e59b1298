@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "410c8fb6_93b5f83b",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-09T23:21:23Z",
+      "side": 1,
+      "message": "Should the original mContext be deleted and only use mContextWrapper from now on? Also, why is this being changed?",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 23
+      },
+      "revId": "8431a7d6038f1800112a9d5e605144a5e59b1298",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13a24235_9eb46d3e",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-09T23:21:23Z",
+      "side": 1,
+      "message": "this can cause an NPE if null, please move \"uiccProfile !\u003d null\" check to above.",
+      "range": {
+        "startLine": 1214,
+        "startChar": 42,
+        "endLine": 1214,
+        "endChar": 53
+      },
+      "revId": "8431a7d6038f1800112a9d5e605144a5e59b1298",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5dd4b70_c71d96cb",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-09T23:21:23Z",
+      "side": 1,
+      "message": "\u003e 100 lines, please split to 2 lines. The pattern has also included a String containing the method name so that the user of the API can diagnose which method caused the SecurityException.",
+      "range": {
+        "startLine": 1389,
+        "startChar": 55,
+        "endLine": 1389,
+        "endChar": 118
+      },
+      "revId": "8431a7d6038f1800112a9d5e605144a5e59b1298",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
