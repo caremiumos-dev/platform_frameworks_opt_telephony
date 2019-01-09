@@ -22,6 +22,30 @@
       "revId": "857e2d04879ff985c179bb3c443a3c2a7caf7840",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55aa3ab7_0b4a9026",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1403772
+      },
+      "writtenOn": "2019-01-09T02:24:04Z",
+      "side": 1,
+      "message": "Makes sense since the class name doesn\u0027t matter. Updated in latest patch",
+      "parentUuid": "af7c62b7_69a5576c",
+      "range": {
+        "startLine": 195,
+        "startChar": 39,
+        "endLine": 195,
+        "endChar": 64
+      },
+      "revId": "857e2d04879ff985c179bb3c443a3c2a7caf7840",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
