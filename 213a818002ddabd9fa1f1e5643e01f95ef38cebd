@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20a9ab28_d42cd6dd",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-09T19:53:36Z",
+      "side": 1,
+      "message": "getUriForParticipant?",
+      "range": {
+        "startLine": 39,
+        "startChar": 16,
+        "endLine": 39,
+        "endChar": 96
+      },
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4a5cd51_d2aa82df",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-09T19:53:36Z",
+      "side": 1,
+      "message": "Can we get this from column name instead of assuming the index?",
+      "range": {
+        "startLine": 42,
+        "startChar": 63,
+        "endLine": 42,
+        "endChar": 64
+      },
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b309894_7aab2e40",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-09T19:53:36Z",
+      "side": 1,
+      "message": "What is the unified view?",
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
