@@ -1057,6 +1057,41 @@ public class SubscriptionController extends ISub.Stub {
     }
 
     /**
+     * Clear an SubscriptionInfo to subinfo database if needed by updating slot index to invalid
+     * @param slotIndex the slot which the SIM is removed
+     */
+    @Override
+    public void clearSubInfoRecord(int slotIndex) {
+        if (DBG) logdl("[clearSubInfoRecord]+ iccId:" + " slotIndex:" + slotIndex);
+
+        enforceModifyPhoneState("clearSubInfoRecord");
+
+        // Now that all security checks passes, perform the operation as ourselves.
+        final long identity = Binder.clearCallingIdentity();
+        try {
+            // update simInfo db with invalid slot index
+            List<SubscriptionInfo> oldSubInfo = getSubInfoUsingSlotIndexPrivileged(slotIndex, false);
+            ContentResolver resolver = mContext.getContentResolver();
+            ContentValues value = new ContentValues(1);
+            value.put(SubscriptionManager.SIM_SLOT_INDEX,
+                    SubscriptionManager.INVALID_SIM_SLOT_INDEX);
+            resolver.update(SubscriptionManager.getUriForSubscriptionId(
+                    oldSubInfo.get(0).getSubscriptionId()), value, null, null);
+            // Refresh the Cache of Active Subscription Info List
+            refreshCachedActiveSubscriptionInfoList();
+
+            sSlotIndexToSubId.remove(slotIndex);
+
+            // update default subId
+            clearDefaultsForInactiveSubIds();
+
+            // TODO for msim we should fallback to another SIM as default sub?
+        } finally {
+            Binder.restoreCallingIdentity(identity);
+        }
+    }
+
+    /**
      * Insert an empty SubInfo record into the database.
      *
      * <p>NOTE: This is not accessible to external processes, so it does not need a permission

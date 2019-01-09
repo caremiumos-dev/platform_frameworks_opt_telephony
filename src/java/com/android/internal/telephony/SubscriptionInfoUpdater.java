@@ -57,6 +57,7 @@ import com.android.internal.telephony.uicc.IccUtils;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -95,8 +96,6 @@ public class SubscriptionInfoUpdater extends Handler {
      */
     public static final int SIM_NOT_CHANGE = 0;
     public static final int SIM_CHANGED    = -1;
-    public static final int SIM_NEW        = -2;
-    public static final int SIM_REPOSITION = -3;
     public static final int SIM_NOT_INSERT = -99;
 
     public static final int STATUS_NO_SIM_INSERTED = 0x00;
@@ -111,7 +110,6 @@ public class SubscriptionInfoUpdater extends Handler {
     private static Phone[] mPhone;
     private static Context mContext = null;
     private static String mIccId[] = new String[PROJECT_SIM_NUM];
-    private static int[] mInsertSimState = new int[PROJECT_SIM_NUM];
     private static int[] sSimCardState = new int[PROJECT_SIM_NUM];
     private static int[] sSimApplicationState = new int[PROJECT_SIM_NUM];
     private SubscriptionManager mSubscriptionManager = null;
@@ -326,9 +324,7 @@ public class SubscriptionInfoUpdater extends Handler {
             logd("NOT Querying IccId its already set sIccid[" + slotId + "]=" + iccId);
         }
 
-        if (isAllIccIdQueryDone()) {
-            updateSubscriptionInfoByIccId();
-        }
+        updateSubscriptionInfoByIccId(slotId);
 
         broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_LOCKED, reason);
         broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_PRESENT);
@@ -362,9 +358,7 @@ public class SubscriptionInfoUpdater extends Handler {
             // phase, the subscription list is accessible. Treating NOT_READY
             // as equivalent to ABSENT, once the rest of the system can handle it.
             mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
-            if (isAllIccIdQueryDone()) {
-                updateSubscriptionInfoByIccId();
-            }
+            updateSubscriptionInfoByIccId(slotId);
         }
 
         broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_NOT_READY,
@@ -396,8 +390,8 @@ public class SubscriptionInfoUpdater extends Handler {
         }
         mIccId[slotId] = IccUtils.stripTrailingFs(records.getFullIccId());
 
+        updateSubscriptionInfoByIccId(slotId);
         if (isAllIccIdQueryDone()) {
-            updateSubscriptionInfoByIccId();
             int[] subIds = mSubscriptionManager.getActiveSubscriptionIdList();
             for (int subId : subIds) {
                 TelephonyManager tm = TelephonyManager.getDefault();
@@ -526,9 +520,7 @@ public class SubscriptionInfoUpdater extends Handler {
             logd("SIM" + (slotId + 1) + " hot plug out");
         }
         mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
-        if (isAllIccIdQueryDone()) {
-            updateSubscriptionInfoByIccId();
-        }
+        updateSubscriptionInfoByIccId(slotId);
         broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_ABSENT, null);
         broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_ABSENT);
         broadcastSimApplicationStateChanged(slotId, TelephonyManager.SIM_STATE_NOT_READY);
@@ -541,9 +533,7 @@ public class SubscriptionInfoUpdater extends Handler {
             logd("SIM" + (slotId + 1) + " Error ");
         }
         mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
-        if (isAllIccIdQueryDone()) {
-            updateSubscriptionInfoByIccId();
-        }
+        updateSubscriptionInfoByIccId(slotId);
         broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR,
                 IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
         broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_CARD_IO_ERROR);
@@ -552,132 +542,47 @@ public class SubscriptionInfoUpdater extends Handler {
         updateCarrierServices(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
     }
 
-    /**
-     * TODO: Simplify more, as no one is interested in what happened
-     * only what the current list contains.
-     */
-    synchronized private void updateSubscriptionInfoByIccId() {
+    synchronized private void updateSubscriptionInfoByIccId(int slotIndex) {
         logd("updateSubscriptionInfoByIccId:+ Start");
-
-        for (int i = 0; i < PROJECT_SIM_NUM; i++) {
-            mInsertSimState[i] = SIM_NOT_CHANGE;
+        if (!SubscriptionManager.isValidSlotIndex(slotIndex)) {
+            logd("[updateSubscriptionInfoByIccId]- invalid slotIndex=" + slotIndex);
+            return;
         }
 
-        int insertedSimCount = PROJECT_SIM_NUM;
-        for (int i = 0; i < PROJECT_SIM_NUM; i++) {
-            if (ICCID_STRING_FOR_NO_SIM.equals(mIccId[i])) {
-                insertedSimCount--;
-                mInsertSimState[i] = SIM_NOT_INSERT;
-            }
-        }
-        logd("insertedSimCount = " + insertedSimCount);
-
-        // We only clear the slot-to-sub map when one/some SIM was removed. Note this is a
-        // workaround for some race conditions that the empty map was accessed while we are
-        // rebuilding the map.
-        if (SubscriptionController.getInstance().getActiveSubIdList().length > insertedSimCount) {
-            SubscriptionController.getInstance().clearSubInfo();
+        boolean absent = false;
+        // check slot range to avoid NPE
+        if (ICCID_STRING_FOR_NO_SIM.equals(mIccId[slotIndex])) {
+           absent = true;
         }
 
-        int index = 0;
-        for (int i = 0; i < PROJECT_SIM_NUM; i++) {
-            if (mInsertSimState[i] == SIM_NOT_INSERT) {
-                continue;
-            }
-            index = 2;
-            for (int j = i + 1; j < PROJECT_SIM_NUM; j++) {
-                if (mInsertSimState[j] == SIM_NOT_CHANGE && mIccId[i].equals(mIccId[j])) {
-                    mInsertSimState[i] = 1;
-                    mInsertSimState[j] = index;
-                    index++;
-                }
+        List<SubscriptionInfo> oldSubInfo = SubscriptionController.getInstance()
+                .getSubInfoUsingSlotIndexPrivileged(slotIndex, false);
+        if (oldSubInfo != null && oldSubInfo.size() > 0) {
+            // SIM inserted last time but no SIM inserted now.
+            if (absent) {
+                logd("updateSubscriptionInfoByIccId: removing subscription info record: slotIndex "
+                        + slotIndex);
+                SubscriptionController.getInstance().clearSubInfoRecord(slotIndex);
             }
         }
 
-        ContentResolver contentResolver = mContext.getContentResolver();
-        String[] oldIccId = new String[PROJECT_SIM_NUM];
-        String[] decIccId = new String[PROJECT_SIM_NUM];
-        for (int i = 0; i < PROJECT_SIM_NUM; i++) {
-            oldIccId[i] = null;
-            List<SubscriptionInfo> oldSubInfo = SubscriptionController.getInstance()
-                    .getSubInfoUsingSlotIndexPrivileged(i, false);
-            decIccId[i] = IccUtils.getDecimalSubstring(mIccId[i]);
-            if (oldSubInfo != null && oldSubInfo.size() > 0) {
-                oldIccId[i] = oldSubInfo.get(0).getIccId();
-                logd("updateSubscriptionInfoByIccId: oldSubId = "
-                        + oldSubInfo.get(0).getSubscriptionId());
-                if (mInsertSimState[i] == SIM_NOT_CHANGE && !(mIccId[i].equals(oldIccId[i])
-                            || (decIccId[i] != null && decIccId[i].equals(oldIccId[i])))) {
-                    mInsertSimState[i] = SIM_CHANGED;
-                }
-                if (mInsertSimState[i] != SIM_NOT_CHANGE) {
-                    ContentValues value = new ContentValues(1);
-                    value.put(SubscriptionManager.SIM_SLOT_INDEX,
-                            SubscriptionManager.INVALID_SIM_SLOT_INDEX);
-                    contentResolver.update(SubscriptionManager.getUriForSubscriptionId(
-                            oldSubInfo.get(0).getSubscriptionId()), value, null, null);
-
-                    // refresh Cached Active Subscription Info List
-                    SubscriptionController.getInstance().refreshCachedActiveSubscriptionInfoList();
-                }
-            } else {
-                if (mInsertSimState[i] == SIM_NOT_CHANGE) {
-                    // no SIM inserted last time, but there is one SIM inserted now
-                    mInsertSimState[i] = SIM_CHANGED;
-                }
-                oldIccId[i] = ICCID_STRING_FOR_NO_SIM;
-                logd("updateSubscriptionInfoByIccId: No SIM in slot " + i + " last time");
-            }
+       if (!absent) {
+           logd("updateSubscriptionInfoByIccId: adding subscription info record: iccid: "
+                    + mIccId[slotIndex] + "slot: " + slotIndex);
+           mSubscriptionManager.addSubscriptionInfoRecord(mIccId[slotIndex], slotIndex);
         }
 
-        for (int i = 0; i < PROJECT_SIM_NUM; i++) {
-            logd("updateSubscriptionInfoByIccId: oldIccId[" + i + "] = " + oldIccId[i] +
-                    ", sIccId[" + i + "] = " + mIccId[i]);
-        }
-
-        //check if the inserted SIM is new SIM
-        for (int i = 0; i < PROJECT_SIM_NUM; i++) {
-            if (mInsertSimState[i] == SIM_NOT_INSERT) {
-                logd("updateSubscriptionInfoByIccId: No SIM inserted in slot " + i + " this time");
-            } else {
-                if (mInsertSimState[i] > 0) {
-                    //some special SIMs may have the same IccIds, add suffix to distinguish them
-                    //FIXME: addSubInfoRecord can return an error.
-                    mSubscriptionManager.addSubscriptionInfoRecord(mIccId[i]
-                            + Integer.toString(mInsertSimState[i]), i);
-                    logd("SUB" + (i + 1) + " has invalid IccId");
-                } else /*if (sInsertSimState[i] != SIM_NOT_INSERT)*/ {
-                    logd("updateSubscriptionInfoByIccId: adding subscription info record: iccid: "
-                            + mIccId[i] + "slot: " + i);
-                    mSubscriptionManager.addSubscriptionInfoRecord(mIccId[i], i);
-                }
-                if (isNewSim(mIccId[i], decIccId[i], oldIccId)) {
-                    mInsertSimState[i] = SIM_NEW;
-                }
-            }
-        }
-
-        for (int i = 0; i < PROJECT_SIM_NUM; i++) {
-            if (mInsertSimState[i] == SIM_CHANGED) {
-                mInsertSimState[i] = SIM_REPOSITION;
-            }
-            logd("updateSubscriptionInfoByIccId: sInsertSimState[" + i + "] = "
-                    + mInsertSimState[i]);
-        }
-
-        List<SubscriptionInfo> subInfos = mSubscriptionManager.getActiveSubscriptionInfoList();
-        int nSubCount = (subInfos == null) ? 0 : subInfos.size();
-        logd("updateSubscriptionInfoByIccId: nSubCount = " + nSubCount);
-        for (int i=0; i < nSubCount; i++) {
+        List<SubscriptionInfo> subInfos = SubscriptionController.getInstance()
+                .getSubInfoUsingSlotIndexPrivileged(slotIndex, false);
+        for (int i=0; i < subInfos.size(); i++) {
             SubscriptionInfo temp = subInfos.get(i);
 
-            String msisdn = TelephonyManager.getDefault().getLine1Number(
-                    temp.getSubscriptionId());
+            String msisdn = TelephonyManager.getDefault().getLine1Number(temp.getSubscriptionId());
 
             if (msisdn != null) {
                 ContentValues value = new ContentValues(1);
                 value.put(SubscriptionManager.NUMBER, msisdn);
-                contentResolver.update(SubscriptionManager.getUriForSubscriptionId(
+                mContext.getContentResolver().update(SubscriptionManager.getUriForSubscriptionId(
                         temp.getSubscriptionId()), value, null, null);
 
                 // refresh Cached Active Subscription Info List
@@ -685,12 +590,15 @@ public class SubscriptionInfoUpdater extends Handler {
             }
         }
 
-        // Ensure the modems are mapped correctly
-        mSubscriptionManager.setDefaultDataSubId(
-                mSubscriptionManager.getDefaultDataSubscriptionId());
+        if (isAllIccIdQueryDone()) {
+            // Ensure the modems are mapped correctly
+            mSubscriptionManager.setDefaultDataSubId(
+                    mSubscriptionManager.getDefaultDataSubscriptionId());
 
-        // No need to check return value here as we notify for the above changes anyway.
-        updateEmbeddedSubscriptions();
+            // No need to check return value here as we notify for the above changes anyway.
+            // TODO investigate if we can do embedded update for each slot separately.
+            updateEmbeddedSubscriptions();
+        }
 
         SubscriptionController.getInstance().notifySubscriptionInfoChanged();
         logd("updateSubscriptionInfoByIccId:- SubscriptionInfo update complete");
