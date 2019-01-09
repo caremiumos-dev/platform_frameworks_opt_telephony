@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "29497014_3ccbc391",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-09T20:03:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "11ca915c_ac0dc81d",
+      "range": {
+        "startLine": 2175,
+        "startChar": 0,
+        "endLine": 2189,
+        "endChar": 13
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14922a6e_9713be50",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "2fb03c63_00ce84bc",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4474,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-09T20:03:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d256d813_9cc413dd",
+      "range": {
+        "startLine": 4471,
+        "startChar": 11,
+        "endLine": 4474,
+        "endChar": 13
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8050c801_373f9bc9",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
@@ -82,6 +130,30 @@
       "writtenOn": "2018-12-13T06:19:03Z",
       "side": 1,
       "message": "Are we not going to enable it by default?",
+      "range": {
+        "startLine": 4541,
+        "startChar": 60,
+        "endLine": 4541,
+        "endChar": 61
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "070f7a32_2aff64e9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4541,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-09T20:03:16Z",
+      "side": 1,
+      "message": "Yes, in initially, based on the test results will change it",
+      "parentUuid": "8050c801_373f9bc9",
       "range": {
         "startLine": 4541,
         "startChar": 60,
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "3fab4bfc_85378aea",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-09T20:03:16Z",
+      "side": 1,
+      "message": "wanted to keep some cases with multiple and some with default alone",
+      "parentUuid": "b3221298_346e530e",
+      "range": {
+        "startLine": 1524,
+        "startChar": 8,
+        "endLine": 1525,
+        "endChar": 92
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a14d81f5_a9d9ee2e",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
         "patchSetId": 1
@@ -137,6 +233,30 @@
       "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7e65ecc_c225c4f6",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-09T20:03:16Z",
+      "side": 1,
+      "message": "No, just wanted to have some cases with multiple some with default alone",
+      "parentUuid": "a14d81f5_a9d9ee2e",
+      "range": {
+        "startLine": 1526,
+        "startChar": 8,
+        "endLine": 1526,
+        "endChar": 51
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "4b243f58_11ef9982",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-09T20:03:16Z",
+      "side": 1,
+      "message": "ok can be cleaned up",
+      "parentUuid": "d66eeb4f_dabe8d4a",
+      "range": {
+        "startLine": 1562,
+        "startChar": 8,
+        "endLine": 1562,
+        "endChar": 23
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3bdcf479_db692457",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
         "patchSetId": 1
@@ -174,6 +318,30 @@
       "writtenOn": "2018-12-13T06:19:03Z",
       "side": 1,
       "message": "Shall we also have test to verify the logic for skipping recovery in suspended/restricted network?",
+      "range": {
+        "startLine": 1567,
+        "startChar": 16,
+        "endLine": 1567,
+        "endChar": 50
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3008eca0_bb0ebab5",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1567,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-09T20:03:16Z",
+      "side": 1,
+      "message": "will add more cases",
+      "parentUuid": "3bdcf479_db692457",
       "range": {
         "startLine": 1567,
         "startChar": 16,
@@ -220,6 +388,30 @@
       "writtenOn": "2018-12-13T06:19:03Z",
       "side": 1,
       "message": "If it actually changes the setting value, should we restore it to previous value instead of always change to 0? The value in the setting might not be 0.",
+      "range": {
+        "startLine": 1611,
+        "startChar": 8,
+        "endLine": 1611,
+        "endChar": 84
+      },
+      "revId": "7f0f2189619886c664b5d29652c97097c9e8c563",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37ada33e_b45ac1af",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-09T20:03:16Z",
+      "side": 1,
+      "message": "I wanted it to be explicit so setting this value",
+      "parentUuid": "26d7dd98_36147f82",
       "range": {
         "startLine": 1611,
         "startChar": 8,
