@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a83b7fd9_1727d02f",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-01-09T22:36:30Z",
+      "side": 1,
+      "message": "May want to consider using a constant and separating out the selection argument from the string.",
+      "range": {
+        "startLine": 101,
+        "startChar": 45,
+        "endLine": 101,
+        "endChar": 62
+      },
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "20a9ab28_d42cd6dd",
         "filename": "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java",
         "patchSetId": 4
@@ -48,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "c1772b89_699d8780",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-01-09T22:36:30Z",
+      "side": 1,
+      "message": "Assuming these will also move to the contract class eventually.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 0
+      },
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b309894_7aab2e40",
         "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
         "patchSetId": 4
@@ -59,6 +105,29 @@
       "writtenOn": "2019-01-09T19:53:36Z",
       "side": 1,
       "message": "What is the unified view?",
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c96a3c7b_b88af31a",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-01-09T22:36:30Z",
+      "side": 1,
+      "message": "I am assuming that this will move to the contract class eventually, but you may want to consider using column names here instead of the index. Column names may be more useful in general, easier to read (and therefore update), and they will match that the telephony provider contract class has already.",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 54
+      },
       "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
