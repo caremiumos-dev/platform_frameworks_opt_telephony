@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af7c62b7_69a5576c",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-09T00:20:28Z",
+      "side": 1,
+      "message": "You might want to use GsmCdmaPhone.class.getName() here, i.e. use injected factory when using your own makePhone(). Otherwise, you have to config an additional entry in your xml.",
+      "range": {
+        "startLine": 195,
+        "startChar": 39,
+        "endLine": 195,
+        "endChar": 64
+      },
+      "revId": "857e2d04879ff985c179bb3c443a3c2a7caf7840",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
