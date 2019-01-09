@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4f0d48e9_78f7a520",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-09T22:51:47Z",
+      "side": 1,
+      "message": "Fixed, thanks!",
+      "parentUuid": "a83b7fd9_1727d02f",
+      "range": {
+        "startLine": 101,
+        "startChar": 45,
+        "endLine": 101,
+        "endChar": 62
+      },
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20a9ab28_d42cd6dd",
         "filename": "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "909739c1_ba554452",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-09T22:51:47Z",
+      "side": 1,
+      "message": "Fixed, thanks!",
+      "parentUuid": "20a9ab28_d42cd6dd",
+      "range": {
+        "startLine": 39,
+        "startChar": 16,
+        "endLine": 39,
+        "endChar": 96
+      },
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4a5cd51_d2aa82df",
         "filename": "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java",
         "patchSetId": 4
@@ -68,6 +116,30 @@
       "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc03bef0_cfec1693",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-09T22:51:47Z",
+      "side": 1,
+      "message": "Fixed, thanks!",
+      "parentUuid": "b4a5cd51_d2aa82df",
+      "range": {
+        "startLine": 42,
+        "startChar": 63,
+        "endLine": 42,
+        "endChar": 64
+      },
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "76201114_7d4aa6a0",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-09T22:51:47Z",
+      "side": 1,
+      "message": "Clarified the comment, thanks!",
+      "parentUuid": "6b309894_7aab2e40",
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c96a3c7b_b88af31a",
         "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
         "patchSetId": 4
@@ -131,6 +221,30 @@
       "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd6e5b40_2cbb7f28",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-01-09T22:51:47Z",
+      "side": 1,
+      "message": "Noted and will move, but the upcoming commits make heavy use of these so I\u0027d rather not do it now to prevent introducing bugs while rebasing.",
+      "parentUuid": "c96a3c7b_b88af31a",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 54
+      },
+      "revId": "213a818002ddabd9fa1f1e5643e01f95ef38cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
