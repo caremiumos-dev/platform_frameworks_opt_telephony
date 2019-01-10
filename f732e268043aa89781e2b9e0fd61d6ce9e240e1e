@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8339af9b_17a8af64",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-10T18:33:02Z",
+      "side": 1,
+      "message": "@Override? Or has this not been added to aidl yet?",
+      "revId": "f732e268043aa89781e2b9e0fd61d6ce9e240e1e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
