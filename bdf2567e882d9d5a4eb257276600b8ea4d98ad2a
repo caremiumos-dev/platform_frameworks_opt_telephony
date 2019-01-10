@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a417a25_33675657",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1819,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-10T18:21:27Z",
+      "side": 1,
+      "message": "nit: \u003e 100 Lines",
+      "range": {
+        "startLine": 1819,
+        "startChar": 82,
+        "endLine": 1819,
+        "endChar": 103
+      },
+      "revId": "bdf2567e882d9d5a4eb257276600b8ea4d98ad2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdaeb0b6_3d6ceb4e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-10T18:21:27Z",
+      "side": 1,
+      "message": "nit: \u003e 100 lines",
+      "range": {
+        "startLine": 1830,
+        "startChar": 82,
+        "endLine": 1830,
+        "endChar": 103
+      },
+      "revId": "bdf2567e882d9d5a4eb257276600b8ea4d98ad2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
