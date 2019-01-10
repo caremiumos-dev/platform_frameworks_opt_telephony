@@ -262,7 +262,7 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
             //notifyNetworkCallbacks(nai, ConnectivityManager.CALLBACK_LOST);
             //mKeepaliveTracker.handleStopAllKeepalives(nai,
             //       ConnectivityManager.PacketKeepalive.ERROR_INVALID_NETWORK);
-            nai.networkMonitor.sendMessage(NetworkMonitor.CMD_NETWORK_DISCONNECTED);
+            // nai.networkMonitor.sendMessage(NetworkMonitor.CMD_NETWORK_DISCONNECTED);
             mNetworkAgentInfos.remove(msg.replyTo);
             //updateClat(null, nai.linkProperties, nai);
             //synchronized (mNetworkForNetId) {
