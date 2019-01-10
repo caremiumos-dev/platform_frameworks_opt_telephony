@@ -33,7 +33,7 @@ import android.hardware.radio.V1_0.RadioResponseInfo;
 import android.hardware.radio.V1_0.SendSmsResult;
 import android.hardware.radio.V1_0.SetupDataCallResult;
 import android.hardware.radio.V1_0.VoiceRegStateResult;
-import android.hardware.radio.V1_2.IRadioResponse;
+import android.hardware.radio.V1_4.IRadioResponse;
 import android.os.AsyncResult;
 import android.os.Message;
 import android.os.SystemClock;
@@ -398,8 +398,18 @@ public class RadioResponse extends IRadioResponse.Stub {
      *                            types.hal
      */
     public void setupDataCallResponse(RadioResponseInfo responseInfo,
-                                      SetupDataCallResult setupDataCallResult) {
+            SetupDataCallResult setupDataCallResult) {
         responseSetupDataCall(responseInfo, setupDataCallResult);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param setupDataCallResult Response to data call setup as defined by setupDataCallResult in
+     *                            types.hal
+     */
+    public void setupDataCallResponse_1_4(RadioResponseInfo responseInfo,
+            android.hardware.radio.V1_4.SetupDataCallResult setupDataCallResult) {
+        responseSetupDataCall_1_4(responseInfo, setupDataCallResult);
     }
 
     /**
@@ -1763,6 +1773,18 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     private void responseSetupDataCall(RadioResponseInfo responseInfo,
                                        SetupDataCallResult setupDataCallResult) {
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr != null) {
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, setupDataCallResult);
+            }
+            mRil.processResponseDone(rr, responseInfo, setupDataCallResult);
+        }
+    }
+
+    private void responseSetupDataCall_1_4(RadioResponseInfo responseInfo,
+            android.hardware.radio.V1_4.SetupDataCallResult setupDataCallResult) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
