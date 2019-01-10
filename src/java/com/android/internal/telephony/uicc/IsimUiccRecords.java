@@ -25,6 +25,7 @@ import android.telephony.Rlog;
 import android.telephony.ServiceState;
 
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.gsm.SimTlv;
 //import com.android.internal.telephony.gsm.VoiceMailConstants;
 
@@ -108,6 +109,7 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
     // ***** Overridden from Handler
     public void handleMessage(Message msg) {
         AsyncResult ar;
+        Integer phoneId = getCiIndex(msg);
 
         if (mDestroyed.get()) {
             Rlog.e(LOG_TAG, "Received message " + msg +
@@ -123,7 +125,7 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
                     break;
 
                 case EVENT_REFRESH:
-                    broadcastRefresh();
+                    broadcastRefresh(phoneId);
                     super.handleMessage(msg);
                     break;
 
@@ -359,9 +361,31 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
         }
     }
 
-    private void broadcastRefresh() {
+    private Integer getCiIndex(Message msg) {
+        Integer index = new Integer(PhoneConstants.DEFAULT_CARD_INDEX);
+
+        /*
+         * The events can be come in two ways. By explicitly sending it using
+         * sendMessage, in this case the user object passed is msg.obj and from
+         * the CommandsInterface, in this case the user object is msg.obj.userObj
+         */
+        if (msg != null) {
+            if (msg.obj != null && msg.obj instanceof Integer) {
+                index = (Integer) msg.obj;
+            } else if (msg.obj != null && msg.obj instanceof AsyncResult) {
+                AsyncResult ar = (AsyncResult) msg.obj;
+                if (ar.userObj != null && ar.userObj instanceof Integer) {
+                    index = (Integer) ar.userObj;
+                }
+            }
+        }
+        return index;
+    }
+
+    private void broadcastRefresh(Integer index) {
         Intent intent = new Intent(INTENT_ISIM_REFRESH);
         log("send ISim REFRESH: " + INTENT_ISIM_REFRESH);
+        intent.putExtra("PHONE_ID", index);
         mContext.sendBroadcast(intent);
     }
 
