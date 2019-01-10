@@ -55,7 +55,6 @@ import com.android.internal.net.VpnInfo;
 import com.android.internal.net.VpnProfile;
 import com.android.internal.util.AsyncChannel;
 import com.android.server.connectivity.NetworkAgentInfo;
-import com.android.server.connectivity.NetworkMonitor;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -262,7 +261,7 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
             //notifyNetworkCallbacks(nai, ConnectivityManager.CALLBACK_LOST);
             //mKeepaliveTracker.handleStopAllKeepalives(nai,
             //       ConnectivityManager.PacketKeepalive.ERROR_INVALID_NETWORK);
-            nai.networkMonitor.sendMessage(NetworkMonitor.CMD_NETWORK_DISCONNECTED);
+            // nai.networkMonitor.sendMessage(NetworkMonitor.CMD_NETWORK_DISCONNECTED);
             mNetworkAgentInfos.remove(msg.replyTo);
             //updateClat(null, nai.linkProperties, nai);
             //synchronized (mNetworkForNetId) {
@@ -953,12 +952,6 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
 
     @Override
     public void factoryReset() {
-        throw new RuntimeException("not implemented");
-    }
-
-    @VisibleForTesting
-    public NetworkMonitor createNetworkMonitor(Context context, Handler handler,
-            NetworkAgentInfo nai, NetworkRequest defaultRequest) {
         throw new RuntimeException("not implemented");
     }
 
