@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d403aeb9_8aa59e9c",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2019-01-10T01:44:29Z",
+      "side": 1,
+      "message": "Move all the  slotId \u003d getSlotIdFromCardId(message.arg1);  outside switch, and this can be fixed and removed.",
+      "range": {
+        "startLine": 673,
+        "startChar": 16,
+        "endLine": 674,
+        "endChar": 73
+      },
+      "revId": "32f8032c42739e5c7f0e38b5e4d57d53c0f6ff18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88194c86_407ef1a3",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2019-01-10T01:44:29Z",
+      "side": 1,
+      "message": "Also here :)",
+      "range": {
+        "startLine": 735,
+        "startChar": 66,
+        "endLine": 735,
+        "endChar": 72
+      },
+      "revId": "32f8032c42739e5c7f0e38b5e4d57d53c0f6ff18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
