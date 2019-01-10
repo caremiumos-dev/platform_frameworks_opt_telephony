@@ -93,6 +93,30 @@
       "revId": "32f8032c42739e5c7f0e38b5e4d57d53c0f6ff18",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3827bb43_38325ee7",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2019-01-10T18:55:21Z",
+      "side": 1,
+      "message": "I thought that was already fixed by mpq@, no? The code is already merged: https://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/euicc/EuiccConnector.java?l\u003d440",
+      "parentUuid": "344a9e82_94f40f7a",
+      "range": {
+        "startLine": 735,
+        "startChar": 66,
+        "endLine": 735,
+        "endChar": 72
+      },
+      "revId": "32f8032c42739e5c7f0e38b5e4d57d53c0f6ff18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
