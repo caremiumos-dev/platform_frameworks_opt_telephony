@@ -22,6 +22,30 @@
       "revId": "e628d126c02badc69ef02c4275fcd4ab5b98f75c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2b7d1a2_1e2064bb",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-10T01:14:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "725a49a1_8f0bb042",
+      "range": {
+        "startLine": 677,
+        "startChar": 28,
+        "endLine": 677,
+        "endChar": 54
+      },
+      "revId": "e628d126c02badc69ef02c4275fcd4ab5b98f75c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
