@@ -18,6 +18,7 @@ package com.android.internal.telephony.imsphone;
 
 import static com.android.internal.telephony.Phone.CS_FALLBACK;
 
+import android.annotation.NonNull;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -108,6 +109,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -289,6 +293,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     private static final int TIMEOUT_REDIAL_WIFI_E911_MS = 10000;
 
+    private static final int TIMEOUT_PARTICIPANT_CONNECT_TIME_CACHE_MS = 60000; //ms
+
     // Following values are for mHoldSwitchingState
     private enum HoldSwapState {
         // Not in the middle of a hold/swap operation
@@ -322,6 +328,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     // Hold aggregated video call data usage for each video call since boot.
     // The ImsCall's call id is the key of the map.
     private final HashMap<Integer, Long> mVtDataUsageMap = new HashMap<>();
+    private final Map<String, Pair<Long, Long>> mPhoneNumAndConnTime = new ConcurrentHashMap<>();
+    private final Queue<Pair<Long, Long>> mUnknownPeerConnTime = new LinkedBlockingQueue<>();
 
     private volatile NetworkStats mVtDataUsageSnapshot = null;
     private volatile NetworkStats mVtDataUsageUidSnapshot = null;
@@ -1254,6 +1262,49 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         }
     }
 
+    // Phone number must be digits only, but there might start with +[country code].
+    private boolean isValidPhoneNumberToCache(String phoneNumber) {
+        return phoneNumber.length() > 1 && TextUtils.isDigitsOnly(phoneNumber.substring(1));
+    }
+
+    // Clean up expired connect time.
+    private void maintainConnectTimeCache() {
+        long threshold = System.currentTimeMillis() - TIMEOUT_PARTICIPANT_CONNECT_TIME_CACHE_MS;
+        // The second member of the pair is cached millisecond.
+        mPhoneNumAndConnTime.entrySet().removeIf(e -> e.getValue().second < threshold);
+        while (!mUnknownPeerConnTime.isEmpty() && mUnknownPeerConnTime.peek().second < threshold) {
+            mUnknownPeerConnTime.poll();
+        }
+    }
+
+    private void cacheConnectionTimeWithPhoneNumber(@NonNull String phoneNumber, long connectTime) {
+        Pair<Long, Long> connectTimeAndUpdateTime =
+                new Pair<>(connectTime, System.currentTimeMillis());
+        maintainConnectTimeCache();
+        if (isValidPhoneNumberToCache(phoneNumber)) {
+            // In case of merging calls with the same number, use the latest connect time. Since
+            // that call might be dropped and re-connected. So if the connectTime is earlier than
+            // the cache, skip.
+            if (mPhoneNumAndConnTime.containsKey(phoneNumber)
+                    && connectTime <= mPhoneNumAndConnTime.get(phoneNumber).first) {
+                // Use the latest connect time.
+                return;
+            }
+            mPhoneNumAndConnTime.put(phoneNumber, connectTimeAndUpdateTime);
+        } else {
+            mUnknownPeerConnTime.add(connectTimeAndUpdateTime);
+        }
+    }
+
+    private Pair<Long, Long> findConnectionTimeUsePhoneNumber(@NonNull String phoneNumber) {
+        maintainConnectTimeCache();
+        if (isValidPhoneNumberToCache(phoneNumber)) {
+            return mPhoneNumAndConnTime.get(phoneNumber);
+        } else {
+            return mUnknownPeerConnTime.isEmpty() ? null : mUnknownPeerConnTime.poll();
+        }
+    }
+
     public void
     conference() {
         ImsCall fgImsCall = mForegroundCall.getImsCall();
@@ -1301,12 +1352,16 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             foregroundConnection.setConferenceConnectTime(conferenceConnectTime);
             foregroundConnection.handleMergeStart();
             foregroundId = foregroundConnection.getTelecomCallId();
+            cacheConnectionTimeWithPhoneNumber(foregroundConnection.getAddress(),
+                    foregroundConnectTime);
         }
         String backgroundId = "";
         ImsPhoneConnection backgroundConnection = findConnection(bgImsCall);
         if (backgroundConnection != null) {
             backgroundConnection.handleMergeStart();
             backgroundId = backgroundConnection.getTelecomCallId();
+            cacheConnectionTimeWithPhoneNumber(backgroundConnection.getAddress(),
+                    backgroundConnectTime);
         }
         log("conference: fgCallId=" + foregroundId + ", bgCallId=" + backgroundId);
 
@@ -2557,6 +2612,18 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             }
         }
 
+        private void updateConferenceParticipantsTiming(List<ConferenceParticipant> participants) {
+            for (ConferenceParticipant participant : participants) {
+                // Every time participants are newly created from parcel, update their connect time.
+                String [] schemes =
+                        participant.getHandle().getSchemeSpecificPart().split("@|;|,|:");
+                Pair<Long, Long> cachedConnectTIme = findConnectionTimeUsePhoneNumber(schemes[0]);
+                if (cachedConnectTIme != null) {
+                    participant.setConnectTime(cachedConnectTIme.first);
+                }
+            }
+        }
+
         /**
          * Called when the state of IMS conference participant(s) has changed.
          *
@@ -2570,6 +2637,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
             ImsPhoneConnection conn = findConnection(call);
             if (conn != null) {
+                updateConferenceParticipantsTiming(participants);
                 conn.updateConferenceParticipants(participants);
             }
         }
