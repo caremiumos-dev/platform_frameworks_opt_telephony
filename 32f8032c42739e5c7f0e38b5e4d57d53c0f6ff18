@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a7851f7_a60107e4",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-10T18:47:21Z",
+      "side": 1,
+      "message": "(see below, we can do this once all cases get the cardId but they don\u0027t yet)",
+      "parentUuid": "d403aeb9_8aa59e9c",
+      "range": {
+        "startLine": 673,
+        "startChar": 16,
+        "endLine": 674,
+        "endChar": 73
+      },
+      "revId": "32f8032c42739e5c7f0e38b5e4d57d53c0f6ff18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "88194c86_407ef1a3",
         "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "32f8032c42739e5c7f0e38b5e4d57d53c0f6ff18",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "344a9e82_94f40f7a",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-10T18:47:21Z",
+      "side": 1,
+      "message": "You can see at 439 that we don\u0027t yet send the cardId along in the message for CMD_GET_EUICC_PROFILE_INFO_LIST, which is why we don\u0027t try to get arg1 here, and its also why we can\u0027t move this outside the switch statement yet",
+      "parentUuid": "88194c86_407ef1a3",
+      "range": {
+        "startLine": 735,
+        "startChar": 66,
+        "endLine": 735,
+        "endChar": 72
+      },
+      "revId": "32f8032c42739e5c7f0e38b5e4d57d53c0f6ff18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
