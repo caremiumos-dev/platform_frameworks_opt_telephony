@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "e1322d5a_5eb35a92",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-11T00:49:50Z",
+      "side": 1,
+      "message": "It\u0027s merged internally but not in AOSP :(. Also, I have to do the manual merge so lets continue review on ag/6000426",
+      "parentUuid": "3827bb43_38325ee7",
+      "range": {
+        "startLine": 735,
+        "startChar": 66,
+        "endLine": 735,
+        "endChar": 72
+      },
+      "revId": "32f8032c42739e5c7f0e38b5e4d57d53c0f6ff18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "37f47b9f_2553c0f5",
         "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
         "patchSetId": 4
@@ -140,6 +164,30 @@
       "revId": "32f8032c42739e5c7f0e38b5e4d57d53c0f6ff18",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eddaaf0_422e11a6",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 969,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-11T00:49:50Z",
+      "side": 1,
+      "message": "Yes, but only if there\u0027s no sim card status received yet, in which case we wouldn\u0027t be able to get the slotId anyway, and should return INVALID_SIM_SLOT_INDEX",
+      "parentUuid": "37f47b9f_2553c0f5",
+      "range": {
+        "startLine": 969,
+        "startChar": 23,
+        "endLine": 969,
+        "endChar": 28
+      },
+      "revId": "32f8032c42739e5c7f0e38b5e4d57d53c0f6ff18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
