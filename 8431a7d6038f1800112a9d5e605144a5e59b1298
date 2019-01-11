@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "4e470ce4_1c7582d4",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-11T00:20:52Z",
+      "side": 1,
+      "message": "enforceCallingOrSelfPermission is also in Context.java(https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/content/Context.java#4412). The only advantage to ContextWrapper is that it is a testable adapter, so we can extend it for testing.\n\nmContext should be fine for this.",
+      "parentUuid": "ef4364b4_408e9106",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 23
+      },
+      "revId": "8431a7d6038f1800112a9d5e605144a5e59b1298",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "13a24235_9eb46d3e",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 2
