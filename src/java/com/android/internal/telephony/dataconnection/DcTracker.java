@@ -127,7 +127,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -281,13 +280,7 @@ public class DcTracker extends Handler {
 
     /** kept in sync with mApnContexts
      * Higher numbers are higher priority and sorted so highest priority is first */
-    private final PriorityQueue<ApnContext>mPrioritySortedApnContexts =
-            new PriorityQueue<ApnContext>(5,
-            new Comparator<ApnContext>() {
-                public int compare(ApnContext c1, ApnContext c2) {
-                    return c2.priority - c1.priority;
-                }
-            } );
+    private final ArrayList<ApnContext> mPrioritySortedApnContexts = new ArrayList<>();
 
     /** all APN settings applicable to the current carrier */
     private ArrayList<ApnSetting> mAllApnSettings = new ArrayList<>();
@@ -1022,6 +1015,7 @@ public class DcTracker extends Handler {
         mApnContexts.put(type, apnContext);
         mApnContextsByType.put(ApnSetting.getApnTypesBitmaskFromString(type), apnContext);
         mPrioritySortedApnContexts.add(apnContext);
+        mPrioritySortedApnContexts.sort((c1, c2) -> c2.priority - c1.priority);
         return apnContext;
     }
 

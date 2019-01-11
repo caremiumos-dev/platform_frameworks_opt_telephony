@@ -114,10 +114,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DcTrackerTest extends TelephonyTest {
 
     private final static String[] sNetworkAttributes = new String[]{
-            "mobile,0,0,0,-1,true", "mobile_mms,2,0,2,60000,true",
-            "mobile_supl,3,0,2,60000,true", "mobile_dun,4,0,2,60000,true",
-            "mobile_hipri,5,0,3,60000,true", "mobile_fota,10,0,2,60000,true",
-            "mobile_ims,11,0,2,60000,true", "mobile_cbs,12,0,2,60000,true",
+            "mobile,0,0,0,-1,true", "mobile_mms,2,0,7,60000,true",
+            "mobile_supl,3,0,4,60000,true", "mobile_dun,4,0,3,60000,true",
+            "mobile_hipri,5,0,5,60000,true", "mobile_fota,10,0,6,60000,true",
+            "mobile_ims,11,0,8,60000,true", "mobile_cbs,12,0,9,60000,true",
             "mobile_ia,14,0,2,-1,true", "mobile_emergency,15,0,2,-1,true",
             "mobile_xcap,18,0,2,-1,true"};
 
@@ -1382,8 +1382,6 @@ public class DcTrackerTest extends TelephonyTest {
         verify(mSimulatedCommandsVerifier, times(1)).deactivateDataCall(
                 eq(DataService.REQUEST_REASON_NORMAL), anyInt(),
                 any(Message.class));
-        verify(mAlarmManager, times(1)).setExact(eq(AlarmManager.ELAPSED_REALTIME_WAKEUP),
-                anyLong(), any(PendingIntent.class));
 
         //Send event for reconnecting data
         initApns(PhoneConstants.APN_TYPE_DEFAULT, new String[]{PhoneConstants.APN_TYPE_ALL});
@@ -2040,5 +2038,63 @@ public class DcTrackerTest extends TelephonyTest {
         }
 
         return true;
+    }
+
+    @Test
+    public void testTrySetupDataLowerPriorityWhenSinglePDN() throws Exception {
+        mBundle.putIntArray(CarrierConfigManager.KEY_ONLY_SINGLE_DC_ALLOWED_INT_ARRAY,
+                new int[]{
+                        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20});
+
+        mDct.enableApn(ApnSetting.TYPE_SUPL, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForMs(200);
+
+        logd("Sending EVENT_RECORDS_LOADED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_DATA_CONNECTION_ATTACHED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
+        waitForMs(200);
+
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(anyInt(), any(DataProfile.class),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                any(Message.class));
+        clearInvocations(mSimulatedCommandsVerifier);
+
+        mDct.enableApn(ApnSetting.TYPE_DUN, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForMs(200);
+        verify(mSimulatedCommandsVerifier, times(0)).setupDataCall(anyInt(), any(DataProfile.class),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                any(Message.class));
+    }
+
+    @Test
+    public void testTrySetupDataHigherPriorityWhenSinglePDN() throws Exception {
+        mBundle.putIntArray(CarrierConfigManager.KEY_ONLY_SINGLE_DC_ALLOWED_INT_ARRAY,
+                new int[]{
+                        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20});
+
+        mDct.enableApn(ApnSetting.TYPE_DUN, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForMs(200);
+
+        logd("Sending EVENT_RECORDS_LOADED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_DATA_CONNECTION_ATTACHED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
+        waitForMs(200);
+
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(anyInt(), any(DataProfile.class),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                any(Message.class));
+        clearInvocations(mSimulatedCommandsVerifier);
+
+        mDct.enableApn(ApnSetting.TYPE_SUPL, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForMs(200);
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(anyInt(), any(DataProfile.class),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                any(Message.class));
     }
 }
