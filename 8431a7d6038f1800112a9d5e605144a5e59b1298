@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ef4364b4_408e9106",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1358617
+      },
+      "writtenOn": "2019-01-11T00:02:20Z",
+      "side": 1,
+      "message": "ContextWrapper class contains the method enforceCallingOrSelfPermission() which is needed to check the permission in getSmsCapacityOnIcc(). Other than that ContextWrapper isn\u0027t used.",
+      "parentUuid": "410c8fb6_93b5f83b",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 23
+      },
+      "revId": "8431a7d6038f1800112a9d5e605144a5e59b1298",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "13a24235_9eb46d3e",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b54e7bc5_71f140d2",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1358617
+      },
+      "writtenOn": "2019-01-11T00:02:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13a24235_9eb46d3e",
+      "range": {
+        "startLine": 1214,
+        "startChar": 42,
+        "endLine": 1214,
+        "endChar": 53
+      },
+      "revId": "8431a7d6038f1800112a9d5e605144a5e59b1298",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5dd4b70_c71d96cb",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "8431a7d6038f1800112a9d5e605144a5e59b1298",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14c3c0cd_08cba780",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1358617
+      },
+      "writtenOn": "2019-01-11T00:02:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5dd4b70_c71d96cb",
+      "range": {
+        "startLine": 1389,
+        "startChar": 55,
+        "endLine": 1389,
+        "endChar": 118
+      },
+      "revId": "8431a7d6038f1800112a9d5e605144a5e59b1298",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
