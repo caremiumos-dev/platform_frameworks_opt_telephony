@@ -1369,8 +1369,6 @@ public class DcTrackerTest extends TelephonyTest {
         verify(mSimulatedCommandsVerifier, times(1)).deactivateDataCall(
                 eq(DataService.REQUEST_REASON_NORMAL), anyInt(),
                 any(Message.class));
-        verify(mAlarmManager, times(1)).setExact(eq(AlarmManager.ELAPSED_REALTIME_WAKEUP),
-                anyLong(), any(PendingIntent.class));
 
         //Send event for reconnecting data
         initApns(PhoneConstants.APN_TYPE_DEFAULT, new String[]{PhoneConstants.APN_TYPE_ALL});
