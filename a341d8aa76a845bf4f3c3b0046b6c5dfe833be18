@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b16cbe47_8cecf51f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2191,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-11T23:32:03Z",
+      "side": 1,
+      "message": "Do we need to check if the this url is not empty as we check it before?",
+      "range": {
+        "startLine": 2191,
+        "startChar": 49,
+        "endLine": 2191,
+        "endChar": 67
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae0e4d43_738c154a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2193,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-11T23:32:03Z",
+      "side": 1,
+      "message": "nit: add a comment for the constant value. like 0 /* asdf */",
+      "range": {
+        "startLine": 2193,
+        "startChar": 28,
+        "endLine": 2193,
+        "endChar": 29
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "744ef301_db4e7ca4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2835,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-11T23:32:03Z",
+      "side": 1,
+      "message": "nit: final boolean isValid \u003d status \u003d\u003d NetworkAgent.VALID_NETWORK.",
+      "range": {
+        "startLine": 2835,
+        "startChar": 12,
+        "endLine": 2835,
+        "endChar": 90
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "573dfc71_eda22bc3",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4205,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-11T23:32:03Z",
+      "side": 1,
+      "message": "mIsNetowrkAvailable maybe better? It\u0027s hard to define what is a valid network..",
+      "range": {
+        "startLine": 4205,
+        "startChar": 24,
+        "endLine": 4205,
+        "endChar": 39
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e6f2e64_0c7f5d8f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4257,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-11T23:32:03Z",
+      "side": 1,
+      "message": "Please separate the check \u0026 perform recovery logic,",
+      "range": {
+        "startLine": 4257,
+        "startChar": 21,
+        "endLine": 4257,
+        "endChar": 44
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "990b9d9f_b0e9b996",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4338,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-11T23:32:03Z",
+      "side": 1,
+      "message": "why do we need two metric to determine if the data stall detection is need?",
+      "range": {
+        "startLine": 4338,
+        "startChar": 19,
+        "endLine": 4338,
+        "endChar": 76
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
