@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6e136986_229c6ef2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "Its only for WWAN, i will add a check",
+      "parentUuid": "2e3c78ba_35df625d",
+      "range": {
+        "startLine": 603,
+        "startChar": 8,
+        "endLine": 603,
+        "endChar": 49
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4a492df_fe4f6d7e",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac97d31e_bfb5ef13",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d4a492df_fe4f6d7e",
+      "range": {
+        "startLine": 2783,
+        "startChar": 0,
+        "endLine": 2786,
+        "endChar": 72
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "303db1c5_c41a3cc9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4186,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d5593b4c_e6b434a5",
+      "range": {
+        "startLine": 4186,
+        "startChar": 4,
+        "endLine": 4186,
+        "endChar": 10
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e415e42b_3dd354a4",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d157ab81_06aef7bc",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4191,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e415e42b_3dd354a4",
+      "range": {
+        "startLine": 4188,
+        "startChar": 0,
+        "endLine": 4191,
+        "endChar": 77
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "1ee2f074_c9079e6e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4195,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "This is the default value in case android global settings is not defined",
+      "parentUuid": "e2e4bc89_2e3d99bf",
+      "range": {
+        "startLine": 4195,
+        "startChar": 16,
+        "endLine": 4195,
+        "endChar": 57
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56caba3a_5585b834",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 7
@@ -137,6 +257,30 @@
       "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0b1395b_ad0633d2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4206,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "56caba3a_5585b834",
+      "range": {
+        "startLine": 4206,
+        "startChar": 20,
+        "endLine": 4206,
+        "endChar": 24
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,53 @@
     },
     {
       "key": {
+        "uuid": "713bcc8b_f764ed86",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4239,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "This is actually an existing code, i guess the reason originally it uses settings is to remember across phone process crash etc.. now if we make it in memory without enough testing then it might be a problem",
+      "parentUuid": "e6ac3142_8c0303bc",
+      "range": {
+        "startLine": 4229,
+        "startChar": 0,
+        "endLine": 4239,
+        "endChar": 9
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98820b6c_44e86ad6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4245,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "privileged",
+      "range": {
+        "startLine": 4245,
+        "startChar": 54,
+        "endLine": 4245,
+        "endChar": 70
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4cb2091f_650be1f7",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 7
@@ -180,6 +371,24 @@
     },
     {
       "key": {
+        "uuid": "4d1102bd_963cbd10",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4246,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "existing code to signal connectivitymonitor, another option is to expose system API to connectivity monitor but i am not sure that is ok with you",
+      "parentUuid": "4cb2091f_650be1f7",
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33eccf88_2fc67710",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 7
@@ -194,6 +403,24 @@
       "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55e27d5e_d431e4ed",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4255,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "33eccf88_2fc67710",
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -220,6 +447,30 @@
     },
     {
       "key": {
+        "uuid": "2750ab1f_bb4ebe3c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4260,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "be636a8b_5c2de938",
+      "range": {
+        "startLine": 4259,
+        "startChar": 16,
+        "endLine": 4260,
+        "endChar": 93
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd65b6c9_e55f4637",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 7
@@ -240,6 +491,30 @@
       "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d352f8ef_5d303993",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4261,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cd65b6c9_e55f4637",
+      "range": {
+        "startLine": 4261,
+        "startChar": 16,
+        "endLine": 4261,
+        "endChar": 22
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

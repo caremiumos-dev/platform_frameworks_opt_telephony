@@ -22,6 +22,30 @@
       "revId": "b4f3759b1b8f4f6de35e6318b3915005430cca0b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3758f9a1_2fa7e1d2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2204,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T22:16:40Z",
+      "side": 0,
+      "message": "I think its redundant as we have the same logging in DcTracker",
+      "parentUuid": "7e712a59_902513c0",
+      "range": {
+        "startLine": 2204,
+        "startChar": 16,
+        "endLine": 2204,
+        "endChar": 94
+      },
+      "revId": "b4f3759b1b8f4f6de35e6318b3915005430cca0b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
