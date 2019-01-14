@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b5008854_3faf5ccc",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2191,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T19:57:06Z",
+      "side": 1,
+      "message": "The check is moved to DcTracker",
+      "parentUuid": "b16cbe47_8cecf51f",
+      "range": {
+        "startLine": 2191,
+        "startChar": 49,
+        "endLine": 2191,
+        "endChar": 67
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae0e4d43_738c154a",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41eae6f1_b7ad7d1c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2193,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T19:57:06Z",
+      "side": 1,
+      "message": "Actually we are not using the parameter i.e arg2, so i am passing 0 to avoid compilation error",
+      "parentUuid": "ae0e4d43_738c154a",
+      "range": {
+        "startLine": 2193,
+        "startChar": 28,
+        "endLine": 2193,
+        "endChar": 29
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f8c77f7e_b6071c20",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2835,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T19:57:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "744ef301_db4e7ca4",
+      "range": {
+        "startLine": 2835,
+        "startChar": 12,
+        "endLine": 2835,
+        "endChar": 90
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "573dfc71_eda22bc3",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b88d0104_444939c8",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4205,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T19:57:06Z",
+      "side": 1,
+      "message": "My intention was to identify whether this network is successfully validated or not. If network validation fails due to data stall then i would like store true here. mIsNetowrkAvailable might  not suit here because there could be invalid network (i.e network validation failed) available.",
+      "parentUuid": "573dfc71_eda22bc3",
+      "range": {
+        "startLine": 4205,
+        "startChar": 24,
+        "endLine": 4205,
+        "endChar": 39
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "56c2d5ff_8695e50e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4257,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T19:57:06Z",
+      "side": 1,
+      "message": "Sorry, i can split something like checkRecovery() and PerformRecovery() but if you see the method below, its a one line sendMessage() to trigger the Recovery? Do you think it adds more value to split just for the sendMessage() ? Should i rename the method something like checkAndTriggerRecovery()instead ?",
+      "parentUuid": "7e6f2e64_0c7f5d8f",
+      "range": {
+        "startLine": 4257,
+        "startChar": 21,
+        "endLine": 4257,
+        "endChar": 44
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "990b9d9f_b0e9b996",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
@@ -137,6 +257,30 @@
       "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0752718d_8286f78f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4338,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-14T19:57:06Z",
+      "side": 1,
+      "message": "mDataStallNoRxEnabled is the old recovery logic which will be removed later\n\nJack wanted me to perform AB experiment so i am keeping both method but at any given point in time only one will be enable to compare",
+      "parentUuid": "990b9d9f_b0e9b996",
+      "range": {
+        "startLine": 4338,
+        "startChar": 19,
+        "endLine": 4338,
+        "endChar": 76
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
