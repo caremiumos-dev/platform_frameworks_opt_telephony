@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aca332ad_044fdd49",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-14T21:21:00Z",
+      "side": 1,
+      "message": "line 166 seems to be extra.",
+      "revId": "739892ac5a1c2d0c67120446f8c58bf6d3653f2f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
