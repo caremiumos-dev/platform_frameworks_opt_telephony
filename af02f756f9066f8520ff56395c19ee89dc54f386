@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9419ea09_cd79b383",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-14T18:47:23Z",
+      "side": 1,
+      "message": "Instead of this shouldn\u0027t we check if this is the first time we are hitting this in the loop? Otherwise default will not change on subsequent slot status changes.",
+      "range": {
+        "startLine": 709,
+        "startChar": 20,
+        "endLine": 709,
+        "endChar": 58
+      },
+      "revId": "af02f756f9066f8520ff56395c19ee89dc54f386",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
