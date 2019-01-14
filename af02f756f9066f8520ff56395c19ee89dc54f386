@@ -22,6 +22,30 @@
       "revId": "af02f756f9066f8520ff56395c19ee89dc54f386",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdabcc7e_41093d1c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-14T18:50:03Z",
+      "side": 1,
+      "message": "at line 679 we set mDefaultEuiccCardId \u003d INVALID_CARD_ID, so I think on subsequent slot status changes this should still set mDefaultEuiccCardId.",
+      "parentUuid": "9419ea09_cd79b383",
+      "range": {
+        "startLine": 709,
+        "startChar": 20,
+        "endLine": 709,
+        "endChar": 58
+      },
+      "revId": "af02f756f9066f8520ff56395c19ee89dc54f386",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
