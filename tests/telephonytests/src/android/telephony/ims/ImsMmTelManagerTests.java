@@ -75,7 +75,11 @@ public class ImsMmTelManagerTests extends TelephonyTest {
     public void testCallbackValues() throws RemoteException {
         LocalCallback cb = new LocalCallback();
         ImsMmTelManager managerUT = new ImsMmTelManager(0);
-        managerUT.registerImsRegistrationCallback(Runnable::run, cb);
+        try {
+            managerUT.registerImsRegistrationCallback(Runnable::run, cb);
+        } catch (ImsException e) {
+            throw new RemoteException(e.getMessage());
+        }
         // Capture the RegistrationCallback that was registered.
         ArgumentCaptor<IImsRegistrationCallback> callbackCaptor =
                 ArgumentCaptor.forClass(IImsRegistrationCallback.class);
