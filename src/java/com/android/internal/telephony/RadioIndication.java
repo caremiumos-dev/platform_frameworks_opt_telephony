@@ -736,6 +736,18 @@ public class RadioIndication extends IRadioIndication.Stub {
         mRil.mRilCellInfoListRegistrants.notifyRegistrants(new AsyncResult(null, response, null));
     }
 
+    /** Get unsolicited message for cellInfoList using HAL V1_4 */
+    public void cellInfoList_1_4(int indicationType,
+            ArrayList<android.hardware.radio.V1_4.CellInfo> records) {
+        mRil.processIndication(indicationType);
+
+        ArrayList<CellInfo> response = RIL.convertHalCellInfoList_1_4(records);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_CELL_INFO_LIST, response);
+
+        mRil.mRilCellInfoListRegistrants.notifyRegistrants(new AsyncResult(null, response, null));
+    }
+
     /** Incremental network scan results */
     public void networkScanResult(int indicationType,
                                   android.hardware.radio.V1_1.NetworkScanResult result) {
