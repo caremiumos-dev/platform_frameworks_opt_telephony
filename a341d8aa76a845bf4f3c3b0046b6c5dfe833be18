@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "003fb799_77b374e8",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4205,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-15T23:52:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b88d0104_444939c8",
+      "range": {
+        "startLine": 4205,
+        "startChar": 24,
+        "endLine": 4205,
+        "endChar": 39
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e6f2e64_0c7f5d8f",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
@@ -237,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "e249d61c_926de9ed",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4257,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-15T23:52:06Z",
+      "side": 1,
+      "message": "It would be confused if the name is \"checkAnd**\", it look like we always perform the recovery, but actually we don\u0027t.\n\nAdd a method to trigger/perform the recovery will be better, and also extendable if we want to add something to before we trigger/perform the recovery.\n\nI would prefer the check method return a boolean indicate whether we should perform the recovery.",
+      "parentUuid": "56c2d5ff_8695e50e",
+      "range": {
+        "startLine": 4257,
+        "startChar": 21,
+        "endLine": 4257,
+        "endChar": 44
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "990b9d9f_b0e9b996",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
@@ -272,6 +320,30 @@
       "side": 1,
       "message": "mDataStallNoRxEnabled is the old recovery logic which will be removed later\n\nJack wanted me to perform AB experiment so i am keeping both method but at any given point in time only one will be enable to compare",
       "parentUuid": "990b9d9f_b0e9b996",
+      "range": {
+        "startLine": 4338,
+        "startChar": 19,
+        "endLine": 4338,
+        "endChar": 76
+      },
+      "revId": "a341d8aa76a845bf4f3c3b0046b6c5dfe833be18",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4157e3db_de25340f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4338,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-15T23:52:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0752718d_8286f78f",
       "range": {
         "startLine": 4338,
         "startChar": 19,

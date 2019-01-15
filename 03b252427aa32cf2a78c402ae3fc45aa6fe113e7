@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee0b44dc_8edb2d97",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 4200,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-15T23:52:06Z",
+      "side": 1,
+      "message": "nit: add a prefix RecoveryAction to each action, i.e RECOVERY_ACTION_GET_DATA_CALL_LIST.",
+      "range": {
+        "startLine": 4194,
+        "startChar": 0,
+        "endLine": 4200,
+        "endChar": 57
+      },
+      "revId": "03b252427aa32cf2a78c402ae3fc45aa6fe113e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
