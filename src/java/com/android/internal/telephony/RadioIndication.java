@@ -107,6 +107,7 @@ import com.android.internal.telephony.uicc.IccUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RadioIndication extends IRadioIndication.Stub {
     RIL mRil;
@@ -730,6 +731,20 @@ public class RadioIndication extends IRadioIndication.Stub {
         mRil.processIndication(indicationType);
 
         ArrayList<CellInfo> response = RIL.convertHalCellInfoList_1_2(records);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_CELL_INFO_LIST, response);
+
+        mRil.mRilCellInfoListRegistrants.notifyRegistrants(new AsyncResult(null, response, null));
+    }
+
+    /** Get unsolicited message for cellInfoList using HAL V1_4 */
+    public void cellInfoList_1_4(int indicationType,
+            ArrayList<android.hardware.radio.V1_4.CellInfo> records) {
+        mRil.processIndication(indicationType);
+
+        ArrayList<CellInfo> response = records.stream()
+                .map(halCellInfo -> CellInfo.create(halCellInfo))
+                .collect(Collectors.toCollection(ArrayList::new));
 
         if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_CELL_INFO_LIST, response);
 
