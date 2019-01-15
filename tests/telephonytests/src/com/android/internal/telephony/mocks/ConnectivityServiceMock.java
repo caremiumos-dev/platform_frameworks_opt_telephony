@@ -666,6 +666,11 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
     }
 
     @Override
+    public List<String> getVpnLockdownWhitelist(int userId) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
     public int checkMobileProvisioning(int suggestedTimeOutMs) {
         throw new RuntimeException("not implemented");
     }
