@@ -32,6 +32,11 @@ import android.os.WorkSource;
 import android.service.carrier.CarrierIdentifier;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
+import android.telephony.CellSignalStrengthCdma;
+import android.telephony.CellSignalStrengthGsm;
+import android.telephony.CellSignalStrengthLte;
+import android.telephony.CellSignalStrengthTdscdma;
+import android.telephony.CellSignalStrengthWcdma;
 import android.telephony.IccOpenLogicalChannelResponse;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkRegistrationState;
@@ -39,6 +44,7 @@ import android.telephony.NetworkScanRequest;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 
@@ -131,7 +137,8 @@ public class SimulatedCommands extends BaseCommands
     public int mMaxDataCalls;
 
     private SignalStrength mSignalStrength;
-    private List<CellInfo> mCellInfoList;
+    private List<CellInfo> mCellInfoList = null;
+    private boolean mShouldReturnCellInfo = true;
     private int[] mImsRegState;
     private IccCardStatus mIccCardStatus;
     private IccSlotStatus mIccSlotStatus;
@@ -157,7 +164,7 @@ public class SimulatedCommands extends BaseCommands
 
         simulatedCallState = new SimulatedGsmCallState(looper);
 
-        setRadioState(RadioState.RADIO_ON);
+        setRadioState(TelephonyManager.RADIO_POWER_ON, false /* forceNotifyRegistrants */);
         mSimLockedState = INITIAL_LOCK_STATE;
         mSimLockEnabled = (mSimLockedState != SimLockState.NONE);
         mPinCode = DEFAULT_SIM_PIN_CODE;
@@ -504,7 +511,7 @@ public class SimulatedCommands extends BaseCommands
     @Override
     public void getCurrentCalls (Message result) {
         SimulatedCommandsVerifier.getInstance().getCurrentCalls(result);
-        if ((mState == RadioState.RADIO_ON) && !isSimLocked()) {
+        if ((mState == TelephonyManager.RADIO_POWER_ON) && !isSimLocked()) {
             //Rlog.i("GSM", "[SimCmds] getCurrentCalls");
             resultSuccess(result, simulatedCallState.getDriverCalls());
         } else {
@@ -547,8 +554,10 @@ public class SimulatedCommands extends BaseCommands
      * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
      */
     @Override
-    public void dial (String address, int clirMode, Message result) {
-        SimulatedCommandsVerifier.getInstance().dial(address, clirMode, result);
+    public void dial(String address, boolean isEmergencyCall, int emergencyServiceCategories,
+                      int clirMode, Message result) {
+        SimulatedCommandsVerifier.getInstance().dial(address, isEmergencyCall,
+                emergencyServiceCategories, clirMode, result);
         simulatedCallState.onDial(address);
 
         resultSuccess(result, null);
@@ -566,8 +575,10 @@ public class SimulatedCommands extends BaseCommands
      * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
      */
     @Override
-    public void dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
-        SimulatedCommandsVerifier.getInstance().dial(address, clirMode, uusInfo, result);
+    public void dial(String address, boolean isEmergencyCall, int emergencyServiceCategories,
+                     int clirMode, UUSInfo uusInfo, Message result) {
+        SimulatedCommandsVerifier.getInstance().dial(address, isEmergencyCall,
+                emergencyServiceCategories, clirMode, uusInfo, result);
         simulatedCallState.onDial(address);
 
         resultSuccess(result, null);
@@ -856,25 +867,14 @@ public class SimulatedCommands extends BaseCommands
 
     @Override
     public void getSignalStrength (Message result) {
-
         if (mSignalStrength == null) {
             mSignalStrength = new SignalStrength(
-                20, // gsmSignalStrength
-                0,  // gsmBitErrorRate
-                -1, // cdmaDbm
-                -1, // cdmaEcio
-                -1, // evdoDbm
-                -1, // evdoEcio
-                -1, // evdoSnr
-                99, // lteSignalStrength
-                SignalStrength.INVALID,     // lteRsrp
-                SignalStrength.INVALID,     // lteRsrq
-                SignalStrength.INVALID,     // lteRssnr
-                SignalStrength.INVALID,     // lteCqi
-                SignalStrength.INVALID      // tdScdmaRscp
-            );
+                    new CellSignalStrengthCdma(),
+                    new CellSignalStrengthGsm(20, 0, CellInfo.UNAVAILABLE),
+                    new CellSignalStrengthWcdma(),
+                    new CellSignalStrengthTdscdma(),
+                    new CellSignalStrengthLte());
         }
-
         resultSuccess(result, mSignalStrength);
     }
 
@@ -1240,9 +1240,9 @@ public class SimulatedCommands extends BaseCommands
         }
 
         if(on) {
-            setRadioState(RadioState.RADIO_ON);
+            setRadioState(TelephonyManager.RADIO_POWER_ON, false /* forceNotifyRegistrants */);
         } else {
-            setRadioState(RadioState.RADIO_OFF);
+            setRadioState(TelephonyManager.RADIO_POWER_OFF, false /* forceNotifyRegistrants */);
         }
         resultSuccess(result, null);
     }
@@ -1598,7 +1598,7 @@ public class SimulatedCommands extends BaseCommands
     @Override
     public void
     shutdown() {
-        setRadioState(RadioState.RADIO_UNAVAILABLE);
+        setRadioState(TelephonyManager.RADIO_POWER_UNAVAILABLE, false /* forceNotifyRegistrants */);
         Looper looper = mHandlerThread.getLooper();
         if (looper != null) {
             looper.quit();
@@ -1875,26 +1875,45 @@ public class SimulatedCommands extends BaseCommands
         mCellInfoList = list;
     }
 
+    private CellInfoGsm getCellInfoGsm() {
+        Parcel p = Parcel.obtain();
+        // CellInfo
+        p.writeInt(1);
+        p.writeInt(1);
+        p.writeInt(2);
+        p.writeLong(1453510289108L);
+        p.writeInt(0);
+        // CellIdentity
+        p.writeInt(1);
+        p.writeString("310");
+        p.writeString("260");
+        p.writeString("long");
+        p.writeString("short");
+        // CellIdentityGsm
+        p.writeInt(123);
+        p.writeInt(456);
+        p.writeInt(950);
+        p.writeInt(27);
+        // CellSignalStrength
+        p.writeInt(99);
+        p.writeInt(0);
+        p.writeInt(3);
+        p.setDataPosition(0);
+
+        return CellInfoGsm.CREATOR.createFromParcel(p);
+    }
+
+    public synchronized void setCellInfoListBehavior(boolean shouldReturn) {
+        mShouldReturnCellInfo = shouldReturn;
+    }
+
     @Override
-    public void getCellInfoList(Message response, WorkSource WorkSource) {
+    public synchronized void getCellInfoList(Message response, WorkSource workSource) {
+        if (!mShouldReturnCellInfo) return;
+
         if (mCellInfoList == null) {
-            Parcel p = Parcel.obtain();
-            p.writeInt(1);
-            p.writeInt(1);
-            p.writeInt(2);
-            p.writeLong(1453510289108L);
-            p.writeInt(310);
-            p.writeInt(260);
-            p.writeInt(123);
-            p.writeInt(456);
-            p.writeInt(99);
-            p.writeInt(3);
-            p.setDataPosition(0);
-
-            CellInfoGsm cellInfo = CellInfoGsm.CREATOR.createFromParcel(p);
-
             ArrayList<CellInfo> mCellInfoList = new ArrayList();
-            mCellInfoList.add(cellInfo);
+            mCellInfoList.add(getCellInfoGsm());
         }
 
         resultSuccess(response, mCellInfoList);
@@ -1978,12 +1997,12 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
-    public void nvReadItem(int itemID, Message response) {
+    public void nvReadItem(int itemID, Message response, WorkSource workSource) {
         unimplemented(response);
     }
 
     @Override
-    public void nvWriteItem(int itemID, String itemValue, Message response) {
+    public void nvWriteItem(int itemID, String itemValue, Message response, WorkSource workSource) {
         unimplemented(response);
     }
 
@@ -2004,7 +2023,7 @@ public class SimulatedCommands extends BaseCommands
 
     @Override
     public void requestShutdown(Message result) {
-        setRadioState(RadioState.RADIO_UNAVAILABLE);
+        setRadioState(TelephonyManager.RADIO_POWER_UNAVAILABLE, false /* forceNotifyRegistrants */);
     }
 
     @Override
@@ -2034,17 +2053,18 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
-    public void getModemActivityInfo(Message result) {
+    public void getModemActivityInfo(Message result, WorkSource workSource) {
         unimplemented(result);
     }
 
     @Override
-    public void setAllowedCarriers(List<CarrierIdentifier> carriers, Message result) {
+    public void setAllowedCarriers(List<CarrierIdentifier> carriers, Message result,
+            WorkSource workSource) {
         unimplemented(result);
     }
 
     @Override
-    public void getAllowedCarriers(Message result) {
+    public void getAllowedCarriers(Message result, WorkSource workSource) {
         unimplemented(result);
     }
 
@@ -2129,20 +2149,11 @@ public class SimulatedCommands extends BaseCommands
     public void notifySignalStrength() {
         if (mSignalStrength == null) {
             mSignalStrength = new SignalStrength(
-                    20, // gsmSignalStrength
-                    0,  // gsmBitErrorRate
-                    -1, // cdmaDbm
-                    -1, // cdmaEcio
-                    -1, // evdoDbm
-                    -1, // evdoEcio
-                    -1, // evdoSnr
-                    99, // lteSignalStrength
-                    SignalStrength.INVALID,     // lteRsrp
-                    SignalStrength.INVALID,     // lteRsrq
-                    SignalStrength.INVALID,     // lteRssnr
-                    SignalStrength.INVALID,     // lteCqi
-                    SignalStrength.INVALID      // tdScdmaRscp
-            );
+                    new CellSignalStrengthCdma(),
+                    new CellSignalStrengthGsm(20, 0, CellInfo.UNAVAILABLE),
+                    new CellSignalStrengthWcdma(),
+                    new CellSignalStrengthTdscdma(),
+                    new CellSignalStrengthLte());
         }
 
         if (mSignalStrengthRegistrant != null) {
@@ -2219,7 +2230,7 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
-    public void setSimCardPower(int state, Message result) {
+    public void setSimCardPower(int state, Message result, WorkSource workSource) {
     }
 
     @VisibleForTesting
@@ -2272,5 +2283,9 @@ public class SimulatedCommands extends BaseCommands
     @Override
     public void stopNattKeepalive(int sessionHandle, Message result) {
         SimulatedCommandsVerifier.getInstance().stopNattKeepalive(sessionHandle, result);
+    }
+
+    public Handler getHandler() {
+        return mHandlerThread.getThreadHandler();
     }
 }

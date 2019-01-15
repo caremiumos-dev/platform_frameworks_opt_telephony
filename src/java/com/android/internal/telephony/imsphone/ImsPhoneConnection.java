@@ -46,6 +46,7 @@ import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.UUSInfo;
+import com.android.internal.telephony.metrics.TelephonyMetrics;
 
 import java.util.Objects;
 
@@ -64,6 +65,7 @@ public class ImsPhoneConnection extends Connection implements
     private ImsPhoneCall mParent;
     private ImsCall mImsCall;
     private Bundle mExtras = new Bundle();
+    private TelephonyMetrics mMetrics = TelephonyMetrics.getInstance();
 
     private boolean mDisconnected;
 
@@ -121,7 +123,10 @@ public class ImsPhoneConnection extends Connection implements
      * currently available, but mobile data is off and the carrier is metering data for video
      * calls.
      */
-    private boolean mIsVideoEnabled = true;
+    private boolean mIsLocalVideoCapable = true;
+
+    // Store the current audio codec
+    private int mAudioCodec = ImsStreamMediaProfile.AUDIO_QUALITY_NONE;
 
     //***** Event Constants
     private static final int EVENT_DTMF_DONE = 1;
@@ -264,7 +269,7 @@ public class ImsPhoneConnection extends Connection implements
         capabilities = removeCapability(capabilities,
                 Connection.Capability.SUPPORTS_VT_LOCAL_BIDIRECTIONAL);
 
-        if (!mIsVideoEnabled) {
+        if (!mIsLocalVideoCapable) {
             Rlog.i(LOG_TAG, "applyLocalCallCapabilities - disabling video (overidden)");
             return capabilities;
         }
@@ -458,6 +463,9 @@ public class ImsPhoneConnection extends Connection implements
                 Rlog.d(LOG_TAG, "onDisconnect: no parent");
             }
             synchronized (this) {
+                if (mRttTextHandler != null) {
+                    mRttTextHandler.tearDown();
+                }
                 if (mImsCall != null) mImsCall.close();
                 mImsCall = null;
             }
@@ -961,6 +969,13 @@ public class ImsPhoneConnection extends Connection implements
                 }
             }
 
+            // Metrics for audio codec
+            if (localCallProfile != null
+                    && localCallProfile.mMediaProfile.mAudioQuality != mAudioCodec) {
+                mAudioCodec = localCallProfile.mMediaProfile.mAudioQuality;
+                mMetrics.writeAudioCodecIms(mOwner.mPhone.getPhoneId(), imsCall.getCallSession());
+            }
+
             int newAudioQuality =
                     getAudioQualityFromCallProfile(localCallProfile, remoteCallProfile);
             if (getAudioQuality() != newAudioQuality) {
@@ -981,9 +996,24 @@ public class ImsPhoneConnection extends Connection implements
         setVideoState(newVideoState);
     }
 
-    public void sendRttModifyRequest(android.telecom.Connection.RttTextStream textStream) {
-        getImsCall().sendRttModifyRequest();
-        setCurrentRttTextStream(textStream);
+
+    /**
+     * Send a RTT upgrade request to the remote party.
+     * @param textStream RTT text stream to use
+     */
+    public void startRtt(android.telecom.Connection.RttTextStream textStream) {
+        ImsCall imsCall = getImsCall();
+        if (imsCall != null) {
+            getImsCall().sendRttModifyRequest(true);
+            setCurrentRttTextStream(textStream);
+        }
+    }
+
+    /**
+     * Terminate the current RTT session.
+     */
+    public void stopRtt() {
+        getImsCall().sendRttModifyRequest(false);
     }
 
     /**
@@ -996,11 +1026,13 @@ public class ImsPhoneConnection extends Connection implements
         boolean accept = textStream != null;
         ImsCall imsCall = getImsCall();
 
-        imsCall.sendRttModifyResponse(accept);
-        if (accept) {
-            setCurrentRttTextStream(textStream);
-        } else {
-            Rlog.e(LOG_TAG, "sendRttModifyResponse: foreground call has no connections");
+        if (imsCall != null) {
+            imsCall.sendRttModifyResponse(accept);
+            if (accept) {
+                setCurrentRttTextStream(textStream);
+            } else {
+                Rlog.e(LOG_TAG, "sendRttModifyResponse: foreground call has no connections");
+            }
         }
     }
 
@@ -1018,6 +1050,14 @@ public class ImsPhoneConnection extends Connection implements
             }
         }
         mRttTextHandler.sendToInCall(message);
+    }
+
+    public void onRttAudioIndicatorChanged(ImsStreamMediaProfile profile) {
+        Bundle extras = new Bundle();
+        extras.putBoolean(android.telecom.Connection.EXTRA_IS_RTT_AUDIO_PRESENT,
+                profile.getRttAudioSpeech());
+        onConnectionEvent(android.telecom.Connection.EVENT_RTT_AUDIO_INDICATION_CHANGED,
+                extras);
     }
 
     public void setCurrentRttTextStream(android.telecom.Connection.RttTextStream rttTextStream) {
@@ -1055,31 +1095,38 @@ public class ImsPhoneConnection extends Connection implements
     // Make sure to synchronize on ImsPhoneConnection.this before calling.
     private void createRttTextHandler() {
         mRttTextHandler = new ImsRttTextHandler(Looper.getMainLooper(),
-                (message) -> getImsCall().sendRttMessage(message));
+                (message) -> {
+                    ImsCall imsCall = getImsCall();
+                    if (imsCall != null) {
+                        imsCall.sendRttMessage(message);
+                    }
+                });
         mRttTextHandler.initialize(mRttTextStream);
     }
 
     /**
-     * Updates the wifi state based on the {@link ImsCallProfile#EXTRA_CALL_RAT_TYPE}.
-     * The call is considered to be a WIFI call if the extra value is
-     * {@link ServiceState#RIL_RADIO_TECHNOLOGY_IWLAN}.
+     * Updates the IMS call rat based on the {@link ImsCallProfile#EXTRA_CALL_RAT_TYPE}.
      *
      * @param extras The ImsCallProfile extras.
      */
-    private void updateWifiStateFromExtras(Bundle extras) {
+    private void updateImsCallRatFromExtras(Bundle extras) {
         if (extras.containsKey(ImsCallProfile.EXTRA_CALL_RAT_TYPE) ||
                 extras.containsKey(ImsCallProfile.EXTRA_CALL_RAT_TYPE_ALT)) {
 
             ImsCall call = getImsCall();
-            boolean isWifi = false;
+            int callTech = ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
             if (call != null) {
-                isWifi = call.isWifiCall();
+                callTech = call.getRadioTechnology();
             }
 
-            // Report any changes
-            if (isWifi() != isWifi) {
-                setWifi(isWifi);
-            }
+            // Report any changes for call tech change
+            setCallRadioTech(callTech);
+        }
+    }
+
+    private void updateEmergencyCallFromExtras(Bundle extras) {
+        if (extras.getBoolean(ImsCallProfile.EXTRA_EMERGENCY_CALL)) {
+            setIsNetworkIdentifiedEmergencyCall(true);
         }
     }
 
@@ -1103,8 +1150,8 @@ public class ImsPhoneConnection extends Connection implements
 
         final boolean changed = !areBundlesEqual(extras, mExtras);
         if (changed) {
-            updateWifiStateFromExtras(extras);
-
+            updateImsCallRatFromExtras(extras);
+            updateEmergencyCallFromExtras(extras);
             mExtras.clear();
             mExtras.putAll(extras);
             setConnectionExtras(mExtras);
@@ -1162,7 +1209,7 @@ public class ImsPhoneConnection extends Connection implements
                 || localCallProfile.mMediaProfile.mAudioQuality
                         == ImsStreamMediaProfile.AUDIO_QUALITY_EVRC_WB
                 || isEvsCodecHighDef)
-                && remoteCallProfile.mRestrictCause == ImsCallProfile.CALL_RESTRICT_CAUSE_NONE;
+                && remoteCallProfile.getRestrictCause() == ImsCallProfile.CALL_RESTRICT_CAUSE_NONE;
         return isHighDef ? AUDIO_QUALITY_HIGH_DEFINITION : AUDIO_QUALITY_STANDARD;
     }
 
@@ -1328,9 +1375,9 @@ public class ImsPhoneConnection extends Connection implements
         mShouldIgnoreVideoStateChanges = false;
     }
 
-    public void handleDataEnabledChange(boolean isDataEnabled) {
-        mIsVideoEnabled = isDataEnabled;
-        Rlog.i(LOG_TAG, "handleDataEnabledChange: isDataEnabled=" + isDataEnabled
+    public void setLocalVideoCapable(boolean isVideoEnabled) {
+        mIsLocalVideoCapable = isVideoEnabled;
+        Rlog.i(LOG_TAG, "setLocalVideoCapable: mIsLocalVideoCapable = " + mIsLocalVideoCapable
                 + "; updating local video availability.");
         updateMediaCapabilities(getImsCall());
     }

@@ -18,8 +18,8 @@ package com.android.internal.telephony;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.nullable;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.doAnswer;
@@ -35,7 +35,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -45,6 +44,7 @@ import android.os.RegistrantList;
 import android.os.ServiceManager;
 import android.provider.BlockedNumberContract;
 import android.provider.Settings;
+import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -60,7 +60,10 @@ import com.android.ims.ImsEcbm;
 import com.android.ims.ImsManager;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriManager;
+import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DcTracker;
+import com.android.internal.telephony.dataconnection.TransportManager;
+import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.imsphone.ImsExternalCallTracker;
 import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
@@ -103,6 +106,8 @@ public abstract class TelephonyTest {
     protected ImsPhone mImsPhone;
     @Mock
     protected ServiceStateTracker mSST;
+    @Mock
+    protected EmergencyNumberTracker mEmergencyNumberTracker;
     @Mock
     protected GsmCdmaCallTracker mCT;
     @Mock
@@ -164,8 +169,6 @@ public abstract class TelephonyTest {
     @Mock
     protected IActivityManager mIActivityManager;
     @Mock
-    protected InboundSmsTracker mInboundSmsTracker;
-    @Mock
     protected IIntentSender mIIntentSender;
     @Mock
     protected IBinder mIBinder;
@@ -188,7 +191,13 @@ public abstract class TelephonyTest {
     @Mock
     protected AppSmsManager mAppSmsManager;
     @Mock
+    protected IccSmsInterfaceManager mIccSmsInterfaceManager;
+    @Mock
+    protected SmsDispatchersController mSmsDispatchersController;
+    @Mock
     protected DeviceStateMonitor mDeviceStateMonitor;
+    @Mock
+    protected TransportManager mTransportManager;
     @Mock
     protected IntentBroadcaster mIntentBroadcaster;
     @Mock
@@ -199,6 +208,10 @@ public abstract class TelephonyTest {
     protected SubscriptionInfoUpdater mSubInfoRecordUpdater;
     @Mock
     protected LocaleTracker mLocaleTracker;
+    @Mock
+    protected RestrictedState mRestrictedState;
+    @Mock
+    protected DataEnabledSettings mDataEnabledSettings;
 
     protected ImsCallProfile mImsCallProfile;
     protected TelephonyManager mTelephonyManager;
@@ -212,7 +225,7 @@ public abstract class TelephonyTest {
     private Object mLock = new Object();
     private boolean mReady;
     protected HashMap<String, IBinder> mServiceManagerMockedServices = new HashMap<>();
-    private Phone[] mPhones;
+    protected Phone[] mPhones;
 
 
     protected HashMap<Integer, ImsManager> mImsManagerInstances = new HashMap<>();
@@ -249,13 +262,15 @@ public abstract class TelephonyTest {
 
     protected void waitUntilReady() {
         synchronized (mLock) {
-            try {
-                mLock.wait(MAX_INIT_WAIT_MS);
-            } catch (InterruptedException ie) {
-            }
-
             if (!mReady) {
-                fail("Telephony tests failed to initialize");
+                try {
+                    mLock.wait(MAX_INIT_WAIT_MS);
+                } catch (InterruptedException ie) {
+                }
+
+                if (!mReady) {
+                    fail("Telephony tests failed to initialize");
+                }
             }
         }
     }
@@ -328,8 +343,12 @@ public abstract class TelephonyTest {
         mPackageManager = mContext.getPackageManager();
 
         //mTelephonyComponentFactory
+        doReturn(mTelephonyComponentFactory).when(mTelephonyComponentFactory).inject(anyString());
         doReturn(mSST).when(mTelephonyComponentFactory)
                 .makeServiceStateTracker(nullable(GsmCdmaPhone.class),
+                        nullable(CommandsInterface.class));
+        doReturn(mEmergencyNumberTracker).when(mTelephonyComponentFactory)
+                .makeEmergencyNumberTracker(nullable(Phone.class),
                         nullable(CommandsInterface.class));
         doReturn(mUiccProfile).when(mTelephonyComponentFactory)
                 .makeUiccProfile(nullable(Context.class), nullable(CommandsInterface.class),
@@ -340,19 +359,9 @@ public abstract class TelephonyTest {
         doReturn(mIccPhoneBookIntManager).when(mTelephonyComponentFactory)
                 .makeIccPhoneBookInterfaceManager(nullable(Phone.class));
         doReturn(mDcTracker).when(mTelephonyComponentFactory)
-                .makeDcTracker(nullable(Phone.class));
+                .makeDcTracker(nullable(Phone.class), anyInt());
         doReturn(mWspTypeDecoder).when(mTelephonyComponentFactory)
                 .makeWspTypeDecoder(nullable(byte[].class));
-        doReturn(mInboundSmsTracker).when(mTelephonyComponentFactory)
-                .makeInboundSmsTracker(nullable(byte[].class), anyLong(), anyInt(), anyBoolean(),
-                        anyBoolean(), nullable(String.class), nullable(String.class),
-                        nullable(String.class));
-        doReturn(mInboundSmsTracker).when(mTelephonyComponentFactory)
-                .makeInboundSmsTracker(nullable(byte[].class), anyLong(), anyInt(), anyBoolean(),
-                        nullable(String.class), nullable(String.class), anyInt(), anyInt(),
-                        anyInt(), anyBoolean(), nullable(String.class));
-        doReturn(mInboundSmsTracker).when(mTelephonyComponentFactory)
-                .makeInboundSmsTracker(nullable(Cursor.class), anyBoolean());
         doReturn(mImsCT).when(mTelephonyComponentFactory)
                 .makeImsPhoneCallTracker(nullable(ImsPhone.class));
         doReturn(mCdmaSSM).when(mTelephonyComponentFactory)
@@ -371,10 +380,15 @@ public abstract class TelephonyTest {
                 .makeCarrierActionAgent(nullable(Phone.class));
         doReturn(mDeviceStateMonitor).when(mTelephonyComponentFactory)
                 .makeDeviceStateMonitor(nullable(Phone.class));
+        doReturn(mTransportManager).when(mTelephonyComponentFactory)
+                .makeTransportManager(nullable(Phone.class));
         doReturn(mNitzStateMachine).when(mTelephonyComponentFactory)
                 .makeNitzStateMachine(nullable(GsmCdmaPhone.class));
         doReturn(mLocaleTracker).when(mTelephonyComponentFactory)
-                .makeLocaleTracker(nullable(Phone.class), nullable(Looper.class));
+                .makeLocaleTracker(nullable(Phone.class), nullable(NitzStateMachine.class),
+                        nullable(Looper.class));
+        doReturn(mDataEnabledSettings).when(mTelephonyComponentFactory)
+                .makeDataEnabledSettings(nullable(Phone.class));
 
         //mPhone
         doReturn(mContext).when(mPhone).getContext();
@@ -388,9 +402,15 @@ public abstract class TelephonyTest {
         doReturn(PhoneConstants.PHONE_TYPE_GSM).when(mPhone).getPhoneType();
         doReturn(mCT).when(mPhone).getCallTracker();
         doReturn(mSST).when(mPhone).getServiceStateTracker();
+        doReturn(mEmergencyNumberTracker).when(mPhone).getEmergencyNumberTracker();
         doReturn(mCarrierSignalAgent).when(mPhone).getCarrierSignalAgent();
         doReturn(mCarrierActionAgent).when(mPhone).getCarrierActionAgent();
         doReturn(mAppSmsManager).when(mPhone).getAppSmsManager();
+        doReturn(mIccSmsInterfaceManager).when(mPhone).getIccSmsInterfaceManager();
+        doReturn(mTransportManager).when(mPhone).getTransportManager();
+        doReturn(mDataEnabledSettings).when(mPhone).getDataEnabledSettings();
+        doReturn(mDcTracker).when(mPhone).getDcTracker(anyInt());
+        mIccSmsInterfaceManager.mDispatchersController = mSmsDispatchersController;
         mPhone.mEriManager = mEriManager;
 
         //mUiccController
@@ -458,8 +478,15 @@ public abstract class TelephonyTest {
                 nullable(String.class), nullable(IBinder.class), nullable(String.class), anyInt(),
                 nullable(Intent[].class), nullable(String[].class), anyInt(),
                 nullable(Bundle.class), anyInt());
+        doReturn(mTelephonyManager).when(mTelephonyManager).createForSubscriptionId(anyInt());
         mSST.mSS = mServiceState;
+        mSST.mRestrictedState = mRestrictedState;
         mServiceManagerMockedServices.put("connectivity_metrics_logger", mConnMetLoggerBinder);
+        doReturn(new int[]{TransportType.WWAN, TransportType.WLAN})
+                .when(mTransportManager).getAvailableTransports();
+        doReturn(TransportType.WWAN).when(mTransportManager).getCurrentTransport(anyInt());
+        doReturn(true).when(mDataEnabledSettings).isDataEnabled();
+        doReturn(true).when(mDataEnabledSettings).isInternalDataEnabled();
 
         //SIM
         doReturn(1).when(mTelephonyManager).getSimCount();
@@ -528,8 +555,10 @@ public abstract class TelephonyTest {
             switch (method) {
                 case BlockedNumberContract.SystemContract.METHOD_SHOULD_SYSTEM_BLOCK_NUMBER:
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(BlockedNumberContract.RES_NUMBER_IS_BLOCKED,
-                            mBlockedNumbers.contains(arg));
+                    int blockStatus = mBlockedNumbers.contains(arg)
+                            ? BlockedNumberContract.STATUS_BLOCKED_IN_LIST
+                            : BlockedNumberContract.STATUS_NOT_BLOCKED;
+                    bundle.putInt(BlockedNumberContract.RES_BLOCK_STATUS, blockStatus);
                     return bundle;
                 case BlockedNumberContract.SystemContract.METHOD_NOTIFY_EMERGENCY_CONTACT:
                     mNumEmergencyContactNotifications++;

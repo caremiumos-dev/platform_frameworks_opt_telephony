@@ -40,6 +40,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.LocalLog;
 
+import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.IndentingPrintWriter;
 
 import java.io.FileDescriptor;
@@ -57,13 +58,19 @@ public class LocaleTracker extends Handler {
     private static final String TAG = LocaleTracker.class.getSimpleName();
 
     /** Event for getting cell info from the modem */
-    private static final int EVENT_GET_CELL_INFO                = 1;
-
-    /** Event for operator numeric update */
-    private static final int EVENT_UPDATE_OPERATOR_NUMERIC      = 2;
+    private static final int EVENT_REQUEST_CELL_INFO = 1;
 
     /** Event for service state changed */
-    private static final int EVENT_SERVICE_STATE_CHANGED        = 3;
+    private static final int EVENT_SERVICE_STATE_CHANGED = 2;
+
+    /** Event for sim state changed */
+    private static final int EVENT_SIM_STATE_CHANGED = 3;
+
+    /** Event for incoming unsolicited cell info */
+    private static final int EVENT_UNSOL_CELL_INFO = 4;
+
+    /** Event for incoming cell info */
+    private static final int EVENT_RESPONSE_CELL_INFO = 5;
 
     // Todo: Read this from Settings.
     /** The minimum delay to get cell info from the modem */
@@ -77,7 +84,12 @@ public class LocaleTracker extends Handler {
     /** The delay for periodically getting cell info from the modem */
     private static final long CELL_INFO_PERIODIC_POLLING_DELAY_MS = 10 * MINUTE_IN_MILLIS;
 
+    /** The maximum fail count to prevent delay time overflow */
+    private static final int MAX_FAIL_COUNT = 30;
+
     private final Phone mPhone;
+
+    private final NitzStateMachine mNitzStateMachine;
 
     /** SIM card state. Must be one of TelephonyManager.SIM_STATE_XXX */
     private int mSimState;
@@ -88,7 +100,7 @@ public class LocaleTracker extends Handler {
 
     /** Current cell tower information */
     @Nullable
-    private List<CellInfo> mCellInfo;
+    private List<CellInfo> mCellInfoList;
 
     /** Count of invalid cell info we've got so far. Will reset once we get a successful one */
     private int mFailCellInfoCount;
@@ -98,7 +110,9 @@ public class LocaleTracker extends Handler {
     private String mCurrentCountryIso;
 
     /** Current service state. Must be one of ServiceState.STATE_XXX. */
-    private int mLastServiceState = -1;
+    private int mLastServiceState = ServiceState.STATE_POWER_OFF;
+
+    private boolean mIsTracking = false;
 
     private final LocalLog mLocalLog = new LocalLog(50);
 
@@ -109,8 +123,9 @@ public class LocaleTracker extends Handler {
             if (TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED.equals(intent.getAction())) {
                 int phoneId = intent.getIntExtra(PhoneConstants.PHONE_KEY, 0);
                 if (phoneId == mPhone.getPhoneId()) {
-                    onSimCardStateChanged(intent.getIntExtra(TelephonyManager.EXTRA_SIM_STATE,
-                            TelephonyManager.SIM_STATE_UNKNOWN));
+                    obtainMessage(EVENT_SIM_STATE_CHANGED,
+                            intent.getIntExtra(TelephonyManager.EXTRA_SIM_STATE,
+                                    TelephonyManager.SIM_STATE_UNKNOWN), 0).sendToTarget();
                 }
             }
         }
@@ -124,19 +139,32 @@ public class LocaleTracker extends Handler {
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
-            case EVENT_GET_CELL_INFO:
-                synchronized (this) {
-                    getCellInfo();
-                    updateLocale();
-                }
+            case EVENT_REQUEST_CELL_INFO:
+                mPhone.requestCellInfoUpdate(null, obtainMessage(EVENT_RESPONSE_CELL_INFO));
                 break;
-            case EVENT_UPDATE_OPERATOR_NUMERIC:
-                updateOperatorNumericSync((String) msg.obj);
+
+            case EVENT_UNSOL_CELL_INFO:
+                processCellInfo((AsyncResult) msg.obj);
+                // If the unsol happened to be useful, use it; otherwise, pretend it didn't happen.
+                if (mCellInfoList != null && mCellInfoList.size() > 0) requestNextCellInfo(true);
                 break;
+
+            case EVENT_RESPONSE_CELL_INFO:
+                processCellInfo((AsyncResult) msg.obj);
+                // If the cellInfo was non-empty then it's business as usual. Either way, this
+                // cell info was requested by us, so it's our trigger to schedule another one.
+                requestNextCellInfo(mCellInfoList != null && mCellInfoList.size() > 0);
+                break;
+
             case EVENT_SERVICE_STATE_CHANGED:
                 AsyncResult ar = (AsyncResult) msg.obj;
                 onServiceStateChanged((ServiceState) ar.result);
                 break;
+
+            case EVENT_SIM_STATE_CHANGED:
+                onSimCardStateChanged(msg.arg1);
+                break;
+
             default:
                 throw new IllegalStateException("Unexpected message arrives. msg = " + msg.what);
         }
@@ -146,11 +174,13 @@ public class LocaleTracker extends Handler {
      * Constructor
      *
      * @param phone The phone object
+     * @param nitzStateMachine NITZ state machine
      * @param looper The looper message handler
      */
-    public LocaleTracker(Phone phone, Looper looper)  {
+    public LocaleTracker(Phone phone, NitzStateMachine nitzStateMachine, Looper looper)  {
         super(looper);
         mPhone = phone;
+        mNitzStateMachine = nitzStateMachine;
         mSimState = TelephonyManager.SIM_STATE_UNKNOWN;
 
         final IntentFilter filter = new IntentFilter();
@@ -158,6 +188,7 @@ public class LocaleTracker extends Handler {
         mPhone.getContext().registerReceiver(mBroadcastReceiver, filter);
 
         mPhone.registerForServiceStateChanged(this, EVENT_SERVICE_STATE_CHANGED, null);
+        mPhone.registerForCellInfo(this, EVENT_UNSOL_CELL_INFO, null);
     }
 
     /**
@@ -166,7 +197,7 @@ public class LocaleTracker extends Handler {
      * @return The device's current country. Empty string if the information is not available.
      */
     @NonNull
-    public synchronized String getCurrentCountry() {
+    public String getCurrentCountry() {
         return (mCurrentCountryIso != null) ? mCurrentCountryIso : "";
     }
 
@@ -178,10 +209,10 @@ public class LocaleTracker extends Handler {
     @Nullable
     private String getMccFromCellInfo() {
         String selectedMcc = null;
-        if (mCellInfo != null) {
+        if (mCellInfoList != null) {
             Map<String, Integer> countryCodeMap = new HashMap<>();
             int maxCount = 0;
-            for (CellInfo cellInfo : mCellInfo) {
+            for (CellInfo cellInfo : mCellInfoList) {
                 String mcc = null;
                 if (cellInfo instanceof CellInfoGsm) {
                     mcc = ((CellInfoGsm) cellInfo).getCellIdentity().getMccString();
@@ -216,12 +247,9 @@ public class LocaleTracker extends Handler {
      * @param state SIM card state. Must be one of TelephonyManager.SIM_STATE_XXX.
      */
     private synchronized void onSimCardStateChanged(int state) {
-        if (mSimState != state && state == TelephonyManager.SIM_STATE_ABSENT) {
-            if (DBG) log("Sim absent. Get latest cell info from the modem.");
-            getCellInfo();
-            updateLocale();
-        }
         mSimState = state;
+        updateLocale();
+        updateTrackingStatus();
     }
 
     /**
@@ -230,71 +258,72 @@ public class LocaleTracker extends Handler {
      * @param serviceState Service state
      */
     private void onServiceStateChanged(ServiceState serviceState) {
-        int state = serviceState.getState();
-        if (state != mLastServiceState) {
-            if (state != ServiceState.STATE_POWER_OFF && TextUtils.isEmpty(mOperatorNumeric)) {
-                // When the device is out of airplane mode or powered on, and network's MCC/MNC is
-                // not available, we get cell info from the modem.
-                String msg = "Service state " + ServiceState.rilServiceStateToString(state)
-                        + ". Get cell info now.";
-                if (DBG) log(msg);
-                mLocalLog.log(msg);
-                getCellInfo();
-            } else if (state == ServiceState.STATE_POWER_OFF) {
-                // Clear the cell info when the device is in airplane mode.
-                if (mCellInfo != null) mCellInfo.clear();
-                stopCellInfoRetry();
-            }
-            updateLocale();
-            mLastServiceState = state;
-        }
+        mLastServiceState = serviceState.getState();
+        updateLocale();
+        updateTrackingStatus();
     }
 
     /**
-     * Update MCC/MNC from network service state synchronously. Note if this is called from phone
-     * process's main thread and if the update operation requires getting cell info from the modem,
-     * the cached cell info will be used to determine the locale. If the cached cell info is not
-     * acceptable, use {@link #updateOperatorNumericAsync(String)} instead.
+     * Update MCC/MNC from network service state.
      *
      * @param operatorNumeric MCC/MNC of the operator
      */
-    public synchronized void updateOperatorNumericSync(String operatorNumeric) {
+    public void updateOperatorNumeric(String operatorNumeric) {
         // Check if the operator numeric changes.
-        if (DBG) log("updateOperatorNumericSync. mcc/mnc=" + operatorNumeric);
         if (!Objects.equals(mOperatorNumeric, operatorNumeric)) {
             String msg = "Operator numeric changes to " + operatorNumeric;
             if (DBG) log(msg);
             mLocalLog.log(msg);
             mOperatorNumeric = operatorNumeric;
-
-            // If the operator numeric becomes unavailable, we need to get the latest cell info so
-            // that we can get MCC from it.
-            if (TextUtils.isEmpty(mOperatorNumeric)) {
-                if (DBG) {
-                    log("Operator numeric unavailable. Get latest cell info from the modem.");
-                }
-                getCellInfo();
-            } else {
-                // If operator numeric is available, that means we camp on network. So we should
-                // clear the cell info and stop cell info retry.
-                if (mCellInfo != null) mCellInfo.clear();
-                stopCellInfoRetry();
-            }
             updateLocale();
         }
     }
 
-    /**
-     * Update MCC/MNC from network service state asynchronously. The update operation will run
-     * in locale tracker's handler's thread, which can get cell info synchronously from service
-     * state tracker. Note that the country code will not be available immediately after calling
-     * this method.
-     *
-     * @param operatorNumeric MCC/MNC of the operator
-     */
-    public void updateOperatorNumericAsync(String operatorNumeric) {
-        if (DBG) log("updateOperatorNumericAsync. mcc/mnc=" + operatorNumeric);
-        sendMessage(obtainMessage(EVENT_UPDATE_OPERATOR_NUMERIC, operatorNumeric));
+    private void processCellInfo(AsyncResult ar) {
+        if (ar == null || ar.exception != null) {
+            mCellInfoList = null;
+            return;
+        }
+        List<CellInfo> cellInfoList = (List<CellInfo>) ar.result;
+        String msg = "getCellInfo: cell info=" + cellInfoList;
+        if (DBG) log(msg);
+        if (cellInfoList != null) {
+            // We only log when cell identity changes, otherwise the local log is flooded with cell
+            // info.
+            if (mCellInfoList == null || cellInfoList.size() != mCellInfoList.size()) {
+                mLocalLog.log(msg);
+            } else {
+                for (int i = 0; i < cellInfoList.size(); i++) {
+                    if (!Objects.equals(mCellInfoList.get(i).getCellIdentity(),
+                            cellInfoList.get(i).getCellIdentity())) {
+                        mLocalLog.log(msg);
+                        break;
+                    }
+                }
+            }
+        }
+        mCellInfoList = cellInfoList;
+        updateLocale();
+    }
+
+    private void requestNextCellInfo(boolean succeeded) {
+        if (!mIsTracking) return;
+
+        removeMessages(EVENT_REQUEST_CELL_INFO);
+        if (succeeded) {
+            resetCellInfoRetry();
+            // Now we need to get the cell info from the modem periodically
+            // even if we already got the cell info because the user can move.
+            removeMessages(EVENT_UNSOL_CELL_INFO);
+            removeMessages(EVENT_RESPONSE_CELL_INFO);
+            sendMessageDelayed(obtainMessage(EVENT_REQUEST_CELL_INFO),
+                    CELL_INFO_PERIODIC_POLLING_DELAY_MS);
+        } else {
+            // If we can't get a valid cell info. Try it again later.
+            long delay = getCellInfoDelayTime(++mFailCellInfoCount);
+            if (DBG) log("Can't get cell info. Try again in " + delay / 1000 + " secs.");
+            sendMessageDelayed(obtainMessage(EVENT_REQUEST_CELL_INFO), delay);
+        }
     }
 
     /**
@@ -304,68 +333,60 @@ public class LocaleTracker extends Handler {
      * @param failCount Count of invalid cell info we've got so far.
      * @return The delay time for next get cell info
      */
-    private long getCellInfoDelayTime(int failCount) {
-        // Exponentially grow the delay time
-        long delay = CELL_INFO_MIN_DELAY_MS * (long) Math.pow(2, failCount - 1);
-        if (delay < CELL_INFO_MIN_DELAY_MS) {
-            delay = CELL_INFO_MIN_DELAY_MS;
-        } else if (delay > CELL_INFO_MAX_DELAY_MS) {
-            delay = CELL_INFO_MAX_DELAY_MS;
-        }
-        return delay;
+    @VisibleForTesting
+    public static long getCellInfoDelayTime(int failCount) {
+        // Exponentially grow the delay time. Note we limit the fail count to MAX_FAIL_COUNT to
+        // prevent overflow in Math.pow().
+        long delay = CELL_INFO_MIN_DELAY_MS
+                * (long) Math.pow(2, Math.min(failCount, MAX_FAIL_COUNT) - 1);
+        return Math.min(Math.max(delay, CELL_INFO_MIN_DELAY_MS), CELL_INFO_MAX_DELAY_MS);
     }
 
     /**
      * Stop retrying getting cell info from the modem. It cancels any scheduled cell info retrieving
      * request.
      */
-    private void stopCellInfoRetry() {
+    private void resetCellInfoRetry() {
         mFailCellInfoCount = 0;
-        removeMessages(EVENT_GET_CELL_INFO);
+        removeMessages(EVENT_REQUEST_CELL_INFO);
     }
 
-    /**
-     * Get cell info from the modem.
-     */
-    private void getCellInfo() {
-        String msg;
-        if (!mPhone.getServiceStateTracker().getDesiredPowerState()) {
-            msg = "Radio is off. Stopped cell info retry. Cleared the previous cached cell info.";
-            if (mCellInfo != null) mCellInfo.clear();
-            if (DBG) log(msg);
-            mLocalLog.log(msg);
-            stopCellInfoRetry();
-            return;
+    private void updateTrackingStatus() {
+        boolean shouldTrackLocale =
+                (mSimState == TelephonyManager.SIM_STATE_ABSENT
+                        || TextUtils.isEmpty(mOperatorNumeric))
+                && (mLastServiceState == ServiceState.STATE_OUT_OF_SERVICE
+                        || mLastServiceState == ServiceState.STATE_EMERGENCY_ONLY);
+        if (shouldTrackLocale) {
+            startTracking();
+        } else {
+            stopTracking();
         }
+    }
 
-        // Get all cell info. Passing null to use default worksource, which indicates the original
-        // request is from telephony internally.
-        mCellInfo = mPhone.getAllCellInfo(null);
-        msg = "getCellInfo: cell info=" + mCellInfo;
+    private void stopTracking() {
+        if (!mIsTracking) return;
+        mIsTracking = false;
+        String msg = "Stopping LocaleTracker";
         if (DBG) log(msg);
         mLocalLog.log(msg);
+        mCellInfoList = null;
+        resetCellInfoRetry();
+    }
 
-        if (mCellInfo == null || mCellInfo.size() == 0) {
-            // If we can't get a valid cell info. Try it again later.
-            long delay = getCellInfoDelayTime(++mFailCellInfoCount);
-            if (DBG) log("Can't get cell info. Try again in " + delay / 1000 + " secs.");
-            removeMessages(EVENT_GET_CELL_INFO);
-            sendMessageDelayed(obtainMessage(EVENT_GET_CELL_INFO), delay);
-        } else {
-            // We successfully got cell info from the modem. We should stop cell info retry.
-            stopCellInfoRetry();
-
-            // Now we need to get the cell info from the modem periodically even if we already got
-            // the cell info because the user can move.
-            sendMessageDelayed(obtainMessage(EVENT_GET_CELL_INFO),
-                    CELL_INFO_PERIODIC_POLLING_DELAY_MS);
-        }
+    private void startTracking() {
+        if (mIsTracking) return;
+        String msg = "Starting LocaleTracker";
+        mLocalLog.log(msg);
+        if (DBG) log(msg);
+        mIsTracking = true;
+        sendMessage(obtainMessage(EVENT_REQUEST_CELL_INFO));
     }
 
     /**
      * Update the device's current locale
      */
-    private void updateLocale() {
+    private synchronized void updateLocale() {
         // If MCC is available from network service state, use it first.
         String mcc = null;
         String countryIso = "";
@@ -386,14 +407,24 @@ public class LocaleTracker extends Handler {
             countryIso = MccTable.countryCodeForMcc(mcc);
         }
 
-        String msg = "updateLocale: mcc = " + mcc + ", country = " + countryIso;
-        log(msg);
-        mLocalLog.log(msg);
+        log("updateLocale: mcc = " + mcc + ", country = " + countryIso);
+        boolean countryChanged = false;
         if (!Objects.equals(countryIso, mCurrentCountryIso)) {
-            msg = "updateLocale: Change the current country to " + countryIso;
+            String msg = "updateLocale: Change the current country to \"" + countryIso
+                    + "\", mcc = " + mcc;
             log(msg);
             mLocalLog.log(msg);
             mCurrentCountryIso = countryIso;
+
+            // Inform EmergencyNumberTrack with the change of current Country ISO
+            if (mPhone != null && mPhone.getEmergencyNumberTracker() != null) {
+                mPhone.getEmergencyNumberTracker().updateEmergencyNumberDatabaseCountryChange(
+                        getCurrentCountry());
+                log("Notified EmergencyNumberTracker");
+            } else {
+                loge("Cannot notify EmergencyNumberTracker. Phone is null? "
+                        + Boolean.toString(mPhone == null));
+            }
 
             TelephonyManager.setTelephonyProperty(mPhone.getPhoneId(),
                     TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, mCurrentCountryIso);
@@ -403,7 +434,19 @@ public class LocaleTracker extends Handler {
             // broadcast on forbidden channels.
             ((WifiManager) mPhone.getContext().getSystemService(Context.WIFI_SERVICE))
                     .setCountryCode(countryIso);
+            countryChanged = true;
         }
+
+        if (TextUtils.isEmpty(countryIso)) {
+            mNitzStateMachine.handleNetworkCountryCodeUnavailable();
+        } else {
+            mNitzStateMachine.handleNetworkCountryCodeSet(countryChanged);
+        }
+    }
+
+    /** Exposed for testing purposes */
+    public boolean isTracking() {
+        return mIsTracking;
     }
 
     private void log(String msg) {
@@ -425,9 +468,10 @@ public class LocaleTracker extends Handler {
         final IndentingPrintWriter ipw = new IndentingPrintWriter(pw, "  ");
         pw.println("LocaleTracker:");
         ipw.increaseIndent();
+        ipw.println("mIsTracking = " + mIsTracking);
         ipw.println("mOperatorNumeric = " + mOperatorNumeric);
         ipw.println("mSimState = " + mSimState);
-        ipw.println("mCellInfo = " + mCellInfo);
+        ipw.println("mCellInfoList = " + mCellInfoList);
         ipw.println("mCurrentCountryIso = " + mCurrentCountryIso);
         ipw.println("mFailCellInfoCount = " + mFailCellInfoCount);
         ipw.println("Local logs:");

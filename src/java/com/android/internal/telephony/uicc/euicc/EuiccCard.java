@@ -83,7 +83,8 @@ public class EuiccCard extends UiccCard {
     // Error code for no result available when retrieving notifications.
     private static final int CODE_NO_RESULT_AVAILABLE = 1;
 
-    private static final EuiccSpecVersion SGP_2_0 = new EuiccSpecVersion(2, 0, 0);
+    private static final EuiccSpecVersion SGP22_V_2_0 = new EuiccSpecVersion(2, 0, 0);
+    private static final EuiccSpecVersion SGP22_V_2_1 = new EuiccSpecVersion(2, 1, 0);
 
     // Device capabilities.
     private static final String DEV_CAP_GSM = "gsm";
@@ -111,7 +112,6 @@ public class EuiccCard extends UiccCard {
     }
 
     private final ApduSender mApduSender;
-    private final Object mLock = new Object();
     private RegistrantList mEidReadyRegistrants;
     private EuiccSpecVersion mSpecVersion;
     private volatile String mEid;
@@ -121,7 +121,13 @@ public class EuiccCard extends UiccCard {
         // TODO: Set supportExtendedApdu based on ATR.
         mApduSender = new ApduSender(ci, ISD_R_AID, false /* supportExtendedApdu */);
 
-        loadEidAndNotifyRegistrants();
+        if (TextUtils.isEmpty(ics.eid)) {
+            loge("no eid given in constructor for phone " + phoneId);
+            loadEidAndNotifyRegistrants();
+        } else {
+            mEid = ics.eid;
+            mCardId = ics.eid;
+        }
     }
 
     /**
@@ -149,6 +155,8 @@ public class EuiccCard extends UiccCard {
         }
     }
 
+    // For RadioConfig<1.1 we don't know the EID when constructing the EuiccCard, so callers may
+    // need to register to be notified when we have the EID
     @VisibleForTesting(visibility = VisibleForTesting.Visibility.PRIVATE)
     protected void loadEidAndNotifyRegistrants() {
         Handler euiccMainThreadHandler = new Handler();
@@ -186,6 +194,16 @@ public class EuiccCard extends UiccCard {
 
         sendApdu(newRequestProvider((RequestBuilder requestBuilder) -> { /* Do nothing */ }),
                 (byte[] response) -> mSpecVersion, callback, handler);
+    }
+
+    @Override
+    public void update(Context c, CommandsInterface ci, IccCardStatus ics) {
+        synchronized (mLock) {
+            if (!TextUtils.isEmpty(ics.eid)) {
+                mEid = ics.eid;
+            }
+            super.update(c, ci, ics);
+        }
     }
 
     @Override
@@ -548,14 +566,16 @@ public class EuiccCard extends UiccCard {
                     int size = nodes.size();
                     for (int i = 0; i < size; i++) {
                         Asn1Node node = nodes.get(i);
-                        List<Asn1Node> opIdNodes = node.getChild(Tags.TAG_CTX_COMP_1).getChildren();
+                        List<Asn1Node> opIdNodes =
+                                node.getChild(Tags.TAG_SEQUENCE, Tags.TAG_CTX_COMP_1).getChildren();
                         int opIdSize = opIdNodes.size();
                         CarrierIdentifier[] opIds = new CarrierIdentifier[opIdSize];
                         for (int j = 0; j < opIdSize; j++) {
                             opIds[j] = buildCarrierIdentifier(opIdNodes.get(j));
                         }
-                        builder.add(node.getChild(Tags.TAG_CTX_0).asBits(), Arrays.asList(opIds),
-                                node.getChild(Tags.TAG_CTX_2).asBits());
+                        builder.add(node.getChild(Tags.TAG_SEQUENCE, Tags.TAG_CTX_0).asBits(),
+                                Arrays.asList(opIds), node.getChild(Tags.TAG_SEQUENCE,
+                                Tags.TAG_CTX_2).asBits());
                     }
                     return builder.build();
                 },
@@ -660,9 +680,15 @@ public class EuiccCard extends UiccCard {
                             .addChild(ctxParams1Builder)
                             .build().toHex());
                 }),
-                (byte[] response) ->
-                        parseResponseAndCheckSimpleError(response,
-                                EuiccCardErrorException.OPERATION_AUTHENTICATE_SERVER).toBytes(),
+                (byte[] response) -> {
+                    Asn1Node root = parseResponse(response);
+                    if (root.hasChild(Tags.TAG_CTX_COMP_1, Tags.TAG_UNI_2)) {
+                        throw new EuiccCardErrorException(
+                                EuiccCardErrorException.OPERATION_AUTHENTICATE_SERVER,
+                                root.getChild(Tags.TAG_CTX_COMP_1, Tags.TAG_UNI_2).asInteger());
+                    }
+                    return root.toBytes();
+                },
                 callback, handler);
     }
 
@@ -976,10 +1002,69 @@ public class EuiccCard extends UiccCard {
 
     @VisibleForTesting(visibility = VisibleForTesting.Visibility.PRIVATE)
     protected byte[] getDeviceId() {
-        byte[] imeiBytes = new byte[8];
         Phone phone = PhoneFactory.getPhone(getPhoneId());
-        if (phone != null) {
-            IccUtils.bcdToBytes(phone.getDeviceId(), imeiBytes);
+        if (phone == null) {
+            return new byte[8];
+        }
+        return getDeviceId(phone.getDeviceId(), mSpecVersion);
+    }
+
+    /**
+     * Different versions of SGP.22 specify different encodings of the device's IMEI, so we handle
+     * those differences here.
+     *
+     * @param imei The IMEI of the device. Assumed to be 15 decimal digits.
+     * @param specVersion The SGP.22 version which we're encoding the IMEI for.
+     * @return A byte string representing the given IMEI according to the specified SGP.22 version.
+     */
+    @VisibleForTesting(visibility = VisibleForTesting.Visibility.PRIVATE)
+    public static byte[] getDeviceId(String imei, EuiccSpecVersion specVersion) {
+        byte[] imeiBytes = new byte[8];
+        // The IMEI's encoding is version-dependent.
+        if (specVersion.compareTo(SGP22_V_2_1) >= 0) {
+            /*
+             * In SGP.22 v2.1, a clarification was added to clause 4.2 that requires the nibbles of
+             * the last byte to be swapped from normal TBCD encoding (so put back in normal order):
+             *
+             * The IMEI (including the check digit) SHALL be represented as a string of 8 octets
+             * that is coded as a Telephony Binary Coded Decimal String as defined in 3GPP TS 29.002
+             * [63], except that the last octet contains the check digit (in high nibble) and an 'F'
+             * filler (in low nibble). It SHOULD be present if the Device contains a non-removable
+             * eUICC.
+             *
+             * 3GPP TS 29.002 clause 17.7.8 in turn says this:
+             *
+             * TBCD-STRING ::= OCTET STRING
+             * This type (Telephony Binary Coded Decimal String) is used to represent several digits
+             * from 0 through 9, *, #, a, b, c, two digits per octet, each digit encoded 0000 to
+             * 1001 (0 to 9), 1010 (*), 1011 (#), 1100 (a), 1101 (b) or 1110 (c); 1111 used as
+             * filler when there is an odd number of digits.
+             * Bits 8765 of octet n encoding digit 2n
+             * Bits 4321 of octet n encoding digit 2(n-1) + 1
+             */
+            // Since the IMEI is always just decimal digits, we can still use BCD encoding (which
+            // correctly swaps digit ordering within bytes), but we have to manually pad a 0xF value
+            // instead of 0.
+            imei += 'F';
+            IccUtils.bcdToBytes(imei, imeiBytes);
+            // And now the funky last byte flip (this is not normal TBCD, the GSMA added it on top
+            // just for the IMEI for some reason). Bitwise operations promote to int first, so we
+            // have to do some extra masking.
+            byte last = imeiBytes[7];
+            imeiBytes[7] = (byte) ((last & 0xFF) << 4 | ((last & 0xFF) >>> 4));
+        } else {
+            /*
+             * Prior to SGP.22 v2.1, clause 4.2 reads as follows:
+             *
+             * The IMEI (including the check digit) SHALL be represented as a string of 8 octets
+             * that is BCD coded as defined in 3GPP TS 23.003 [35]. It SHOULD be present if the
+             * Device contains a non-removable eUICC.
+             *
+             * It appears that 3GPP TS 23.003 doesn't define anything about BCD encoding, it just
+             * defines what IMEI and a few other telephony identifiers are. We default to normal BCD
+             * encoding since the spec is unclear here.
+             */
+            IccUtils.bcdToBytes(imei, imeiBytes);
         }
         return imeiBytes;
     }
@@ -996,7 +1081,7 @@ public class EuiccCard extends UiccCard {
                 throw new EuiccCardException("Cannot get eUICC spec version.");
             }
             try {
-                if (ver.compareTo(SGP_2_0) < 0) {
+                if (ver.compareTo(SGP22_V_2_0) < 0) {
                     throw new EuiccCardException("eUICC spec version is unsupported: " + ver);
                 }
                 builder.build(requestBuilder);

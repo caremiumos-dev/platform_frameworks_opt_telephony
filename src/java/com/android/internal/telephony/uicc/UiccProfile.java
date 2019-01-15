@@ -64,6 +64,7 @@ import com.android.internal.telephony.uicc.euicc.EuiccCard;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -204,6 +205,7 @@ public class UiccProfile extends IccCard {
 
                 case EVENT_CARRIER_CONFIG_CHANGED:
                     handleCarrierNameOverride();
+                    handleSimCountryIsoOverride();
                     break;
 
                 case EVENT_OPEN_LOGICAL_CHANNEL_DONE:
@@ -241,6 +243,7 @@ public class UiccProfile extends IccCard {
         }
 
         if (mUiccCard instanceof EuiccCard) {
+            // for RadioConfig<1.1 eid is not known when the EuiccCard is constructed
             ((EuiccCard) mUiccCard).registerForEidReady(mHandler, EVENT_EID_READY, null);
         }
 
@@ -351,6 +354,41 @@ public class UiccProfile extends IccCard {
         updateCarrierNameForSubscription(subCon, subId);
     }
 
+    /**
+     * Override sim country iso based on carrier config.
+     * Telephony country iso is based on MCC table which is coarse and doesn't work with dual IMSI
+     * SIM. e.g, a US carrier might have a roaming agreement with carriers from Europe. Devices
+     * will switch to different IMSI (differnt mccmnc) when enter roaming state. As a result, sim
+     * country iso (locale) will change to non-US.
+     *
+     * Each sim carrier should have a single country code. We should improve the accuracy of
+     * SIM country code look-up by using carrierid-to-countrycode table as an override on top of
+     * MCC table
+     */
+    private void handleSimCountryIsoOverride() {
+        SubscriptionController subCon = SubscriptionController.getInstance();
+        final int subId = subCon.getSubIdUsingPhoneId(mPhoneId);
+        if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+            loge("subId not valid for Phone " + mPhoneId);
+            return;
+        }
+
+        CarrierConfigManager configLoader = (CarrierConfigManager)
+                mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configLoader == null) {
+            loge("Failed to load a Carrier Config");
+            return;
+        }
+
+        PersistableBundle config = configLoader.getConfigForSubId(subId);
+        String iso = config.getString(CarrierConfigManager.KEY_SIM_COUNTRY_ISO_OVERRIDE_STRING);
+        if (!TextUtils.isEmpty(iso) &&
+                !iso.equals(mTelephonyManager.getSimCountryIsoForPhone(mPhoneId))) {
+            mTelephonyManager.setSimCountryIsoForPhone(mPhoneId, iso);
+            SubscriptionController.getInstance().setCountryIso(iso, subId);
+        }
+    }
+
     private void updateCarrierNameForSubscription(SubscriptionController subCon, int subId) {
         /* update display name with carrier override */
         SubscriptionInfo subInfo = subCon.getActiveSubscriptionInfo(
@@ -422,6 +460,7 @@ public class UiccProfile extends IccCard {
         }
 
         if (mUiccCard instanceof EuiccCard && ((EuiccCard) mUiccCard).getEid() == null) {
+            // for RadioConfig<1.1 the EID is not known when the EuiccCard is constructed
             if (DBG) log("EID is not ready yet.");
             return;
         }
@@ -603,9 +642,8 @@ public class UiccProfile extends IccCard {
                 }
             }
             log("setExternalState: set mPhoneId=" + mPhoneId + " mExternalState=" + mExternalState);
-            mTelephonyManager.setSimStateForPhone(mPhoneId, getState().toString());
 
-            UiccController.updateInternalIccState(getIccStateIntentString(mExternalState),
+            UiccController.updateInternalIccState(mContext, mExternalState,
                     getIccStateReason(mExternalState), mPhoneId);
         }
     }
@@ -624,22 +662,6 @@ public class UiccProfile extends IccCard {
                 return mIccRecords.getRecordsLoaded();
             }
             return false;
-        }
-    }
-
-    private String getIccStateIntentString(IccCardConstants.State state) {
-        switch (state) {
-            case ABSENT: return IccCardConstants.INTENT_VALUE_ICC_ABSENT;
-            case PIN_REQUIRED: return IccCardConstants.INTENT_VALUE_ICC_LOCKED;
-            case PUK_REQUIRED: return IccCardConstants.INTENT_VALUE_ICC_LOCKED;
-            case NETWORK_LOCKED: return IccCardConstants.INTENT_VALUE_ICC_LOCKED;
-            case READY: return IccCardConstants.INTENT_VALUE_ICC_READY;
-            case NOT_READY: return IccCardConstants.INTENT_VALUE_ICC_NOT_READY;
-            case PERM_DISABLED: return IccCardConstants.INTENT_VALUE_ICC_LOCKED;
-            case CARD_IO_ERROR: return IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR;
-            case CARD_RESTRICTED: return IccCardConstants.INTENT_VALUE_ICC_CARD_RESTRICTED;
-            case LOADED: return IccCardConstants.INTENT_VALUE_ICC_LOADED;
-            default: return IccCardConstants.INTENT_VALUE_ICC_UNKNOWN;
         }
     }
 
@@ -799,6 +821,16 @@ public class UiccProfile extends IccCard {
     public boolean getIccPuk2Blocked() {
         /* defaults to disabled */
         return mUiccApplication != null && mUiccApplication.getIccPuk2Blocked();
+    }
+
+    @Override
+    public boolean isEmptyProfile() {
+        // If there's no UiccCardApplication, it's an empty profile.
+        // Empty profile is a valid case of eSIM (default boot profile).
+        for (UiccCardApplication app : mUiccApplications) {
+            if (app != null) return false;
+        }
+        return true;
     }
 
     @Override
@@ -977,7 +1009,7 @@ public class UiccProfile extends IccCard {
         // TODO: 2/15/18 Add check to see if ISIM app will go to READY state, and if yes, check for
         // ISIM also (currently ISIM is considered as not supported in this function)
         if (app.getType() == AppType.APPTYPE_USIM || app.getType() == AppType.APPTYPE_SIM
-                || (UiccController.getInstance().isCdmaSupported()
+                || (UiccController.isCdmaSupported(mContext)
                 && (app.getType() == AppType.APPTYPE_CSIM
                 || app.getType() == AppType.APPTYPE_RUIM))) {
             return true;
@@ -1126,6 +1158,7 @@ public class UiccProfile extends IccCard {
 
     private void promptInstallCarrierApp(String pkgName) {
         Intent showDialogIntent = InstallCarrierAppTrampolineActivity.get(mContext, pkgName);
+        showDialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(showDialogIntent);
     }
 
@@ -1477,6 +1510,24 @@ public class UiccProfile extends IccCard {
         return carrierPrivilegeRules == null
                 ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED :
                 carrierPrivilegeRules.getCarrierPrivilegeStatusForUid(packageManager, uid);
+    }
+
+    /**
+     * Return a list of certs in hex string from loaded carrier privileges access rules.
+     *
+     * @return a list of certificate in hex string. return {@code null} if there is no certs
+     * or privilege rules are not loaded yet.
+     */
+    public List<String> getCertsFromCarrierPrivilegeAccessRules() {
+        final List<String> certs = new ArrayList<>();
+        final UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
+        if (carrierPrivilegeRules != null) {
+            List<UiccAccessRule> accessRules = carrierPrivilegeRules.getAccessRules();
+            for (UiccAccessRule accessRule : accessRules) {
+                certs.add(accessRule.getCertificateHexString());
+            }
+        }
+        return certs.isEmpty() ? null : certs;
     }
 
     /**

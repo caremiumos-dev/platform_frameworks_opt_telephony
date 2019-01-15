@@ -29,8 +29,6 @@ import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsMessageBase;
 import com.android.internal.telephony.SmsStorageMonitor;
 import com.android.internal.telephony.VisualVoicemailSmsFilter;
-import com.android.internal.telephony.uicc.IccRecords;
-import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UsimServiceTable;
 
 /**
@@ -154,15 +152,6 @@ public class GsmInboundSmsHandler extends InboundSmsHandler {
         }
         // update voice mail count in Phone
         mPhone.setVoiceMessageCount(voicemailCount);
-        // store voice mail count in SIM & shared preferences
-        IccRecords records = UiccController.getInstance().getIccRecords(
-                mPhone.getPhoneId(), UiccController.APP_FAM_3GPP);
-        if (records != null) {
-            log("updateMessageWaitingIndicator: updating SIM Records");
-            records.setVoiceMessageWaiting(1, voicemailCount);
-        } else {
-            log("updateMessageWaitingIndicator: SIM Records not found");
-        }
     }
 
     /**
@@ -174,22 +163,6 @@ public class GsmInboundSmsHandler extends InboundSmsHandler {
     @Override
     protected void acknowledgeLastIncomingSms(boolean success, int result, Message response) {
         mPhone.mCi.acknowledgeLastIncomingGsmSms(success, resultToCause(result), response);
-    }
-
-    /**
-     * Called when the phone changes the default method updates mPhone
-     * mStorageMonitor and mCellBroadcastHandler.updatePhoneObject.
-     * Override if different or other behavior is desired.
-     *
-     * @param phone
-     */
-    @Override
-    protected void onUpdatePhoneObject(Phone phone) {
-        super.onUpdatePhoneObject(phone);
-        log("onUpdatePhoneObject: dispose of old CellBroadcastHandler and make a new one");
-        mCellBroadcastHandler.dispose();
-        mCellBroadcastHandler = GsmCellBroadcastHandler
-                .makeGsmCellBroadcastHandler(mContext, phone);
     }
 
     /**

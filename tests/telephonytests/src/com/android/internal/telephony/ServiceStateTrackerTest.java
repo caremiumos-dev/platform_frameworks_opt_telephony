@@ -38,6 +38,7 @@ import static org.mockito.Mockito.when;
 import android.app.IAlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -49,20 +50,28 @@ import android.os.AsyncResult;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Message;
-import android.os.Parcel;
 import android.os.PersistableBundle;
 import android.os.Process;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.WorkSource;
-import android.support.test.filters.FlakyTest;
-import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
+import android.telephony.CellIdentity;
+import android.telephony.CellIdentityCdma;
 import android.telephony.CellIdentityGsm;
 import android.telephony.CellIdentityLte;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
+import android.telephony.CellSignalStrength;
+import android.telephony.CellSignalStrengthCdma;
+import android.telephony.CellSignalStrengthGsm;
+import android.telephony.CellSignalStrengthLte;
+import android.telephony.CellSignalStrengthTdscdma;
+import android.telephony.CellSignalStrengthWcdma;
+import android.telephony.INetworkService;
+import android.telephony.LteVopsSupportInfo;
 import android.telephony.NetworkRegistrationState;
 import android.telephony.NetworkService;
 import android.telephony.PhysicalChannelConfig;
@@ -70,15 +79,17 @@ import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Pair;
 import android.util.TimestampedValue;
 
+import androidx.test.filters.FlakyTest;
+
 import com.android.internal.R;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
-import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.test.SimulatedCommands;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 
@@ -96,9 +107,6 @@ import java.util.HashSet;
 import java.util.List;
 
 public class ServiceStateTrackerTest extends TelephonyTest {
-
-    @Mock
-    private DcTracker mDct;
     @Mock
     private ProxyController mProxyController;
     @Mock
@@ -106,7 +114,12 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Mock
     protected IAlarmManager mAlarmManager;
 
-    CellularNetworkService mCellularNetworkService;
+    private CellularNetworkService mCellularNetworkService;
+
+    @Mock
+    private NetworkService mIwlanNetworkService;
+    @Mock
+    private INetworkService.Stub mIwlanNetworkServiceStub;
 
     private ServiceStateTracker sst;
     private ServiceStateTrackerTestHandler mSSTTestHandler;
@@ -123,6 +136,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     private static final int EVENT_PS_RESTRICT_DISABLED = 9;
     private static final int EVENT_VOICE_ROAMING_ON = 10;
     private static final int EVENT_VOICE_ROAMING_OFF = 11;
+    private static final int EVENT_VOICE_RAT_CHANGED = 12;
 
     private class ServiceStateTrackerTestHandler extends HandlerThread {
 
@@ -139,17 +153,33 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
     private void addNetworkService() {
         mCellularNetworkService = new CellularNetworkService();
-        ServiceInfo serviceInfo =  new ServiceInfo();
-        serviceInfo.packageName = "com.android.phone";
-        serviceInfo.permission = "android.permission.BIND_TELEPHONY_NETWORK_SERVICE";
-        IntentFilter filter = new IntentFilter();
+        ServiceInfo CellularServiceInfo = new ServiceInfo();
+        CellularServiceInfo.packageName = "com.android.phone";
+        CellularServiceInfo.name = "CellularNetworkService";
+        CellularServiceInfo.permission = "android.permission.BIND_TELEPHONY_NETWORK_SERVICE";
+        IntentFilter cellularIntentfilter = new IntentFilter();
         mContextFixture.addService(
                 NetworkService.NETWORK_SERVICE_INTERFACE,
-                null,
+                new ComponentName("com.android.phone",
+                        "com.android.internal.telephony.CellularNetworkService"),
                 "com.android.phone",
                 mCellularNetworkService.mBinder,
-                serviceInfo,
-                filter);
+                CellularServiceInfo,
+                cellularIntentfilter);
+
+        ServiceInfo iwlanServiceInfo = new ServiceInfo();
+        iwlanServiceInfo.packageName = "com.xyz.iwlan.networkservice";
+        iwlanServiceInfo.name = "IwlanNetworkService";
+        iwlanServiceInfo.permission = "android.permission.BIND_TELEPHONY_NETWORK_SERVICE";
+        IntentFilter iwlanIntentFilter = new IntentFilter();
+        mContextFixture.addService(
+                NetworkService.NETWORK_SERVICE_INTERFACE,
+                new ComponentName("com.xyz.iwlan.networkservice",
+                        "com.xyz.iwlan.IwlanNetworkService"),
+                "com.xyz.iwlan.networkservice",
+                mIwlanNetworkServiceStub,
+                iwlanServiceInfo,
+                iwlanIntentFilter);
     }
 
     @Before
@@ -160,10 +190,12 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         mContextFixture.putResource(R.string.config_wwan_network_service_package,
                 "com.android.phone");
+        mContextFixture.putResource(R.string.config_wlan_network_service_package,
+                "com.xyz.iwlan.networkservice");
+        doReturn(mIwlanNetworkServiceStub).when(mIwlanNetworkServiceStub).asBinder();
         addNetworkService();
 
-        doReturn(true).when(mDct).isDisconnected();
-        mPhone.mDcTracker = mDct;
+        doReturn(true).when(mDcTracker).isDisconnected();
 
         replaceInstance(ProxyController.class, "sProxyController", null, mProxyController);
         mBundle = mContextFixture.getCarrierConfigBundle();
@@ -184,6 +216,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         int dds = SubscriptionManager.getDefaultDataSubscriptionId();
         doReturn(dds).when(mPhone).getSubId();
+        doReturn(true).when(mPhone).areAllDataDisconnected();
 
         mSSTTestHandler = new ServiceStateTrackerTestHandler(getClass().getSimpleName());
         mSSTTestHandler.start();
@@ -196,16 +229,18 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void tearDown() throws Exception {
         sst = null;
         mSSTTestHandler.quit();
+        mSSTTestHandler.join();
         super.tearDown();
     }
 
     @Test
     @MediumTest
     public void testSetRadioPower() {
-        boolean oldState = mSimulatedCommands.getRadioState().isOn();
+        boolean oldState = (mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON);
         sst.setRadioPower(!oldState);
         waitForMs(100);
-        assertTrue(oldState != mSimulatedCommands.getRadioState().isOn());
+        assertTrue(oldState
+                != (mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON));
     }
 
     @Test
@@ -214,21 +249,23 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         // Carrier disable radio power
         sst.setRadioPowerFromCarrier(false);
         waitForMs(100);
-        assertFalse(mSimulatedCommands.getRadioState().isOn());
+        assertFalse(mSimulatedCommands.getRadioState()
+                == TelephonyManager.RADIO_POWER_ON);
         assertTrue(sst.getDesiredPowerState());
         assertFalse(sst.getPowerStateFromCarrier());
 
         // User toggle radio power will not overrides carrier settings
         sst.setRadioPower(true);
         waitForMs(100);
-        assertFalse(mSimulatedCommands.getRadioState().isOn());
+        assertFalse(mSimulatedCommands.getRadioState()
+                == TelephonyManager.RADIO_POWER_ON);
         assertTrue(sst.getDesiredPowerState());
         assertFalse(sst.getPowerStateFromCarrier());
 
         // Carrier re-enable radio power
         sst.setRadioPowerFromCarrier(true);
         waitForMs(100);
-        assertTrue(mSimulatedCommands.getRadioState().isOn());
+        assertTrue(mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON);
         assertTrue(sst.getDesiredPowerState());
         assertTrue(sst.getPowerStateFromCarrier());
 
@@ -236,7 +273,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.setRadioPower(false);
         sst.setRadioPowerFromCarrier(true);
         waitForMs(100);
-        assertFalse(mSimulatedCommands.getRadioState().isOn());
+        assertFalse(mSimulatedCommands.getRadioState()
+                == TelephonyManager.RADIO_POWER_ON);
         assertFalse(sst.getDesiredPowerState());
         assertTrue(sst.getPowerStateFromCarrier());
     }
@@ -329,31 +367,85 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 intArgumentCaptor.getValue().intValue());
     }
 
+    private CellInfoGsm getCellInfoGsm() {
+        CellInfoGsm tmp = new CellInfoGsm();
+        tmp.setCellIdentity(new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst"));
+        tmp.setCellSignalStrength(new CellSignalStrengthGsm(-85, 2, 3));
+        return tmp;
+    }
+
     @Test
     @MediumTest
-    public void testCellInfoList() {
-        Parcel p = Parcel.obtain();
-        p.writeInt(1);
-        p.writeInt(1);
-        p.writeInt(2);
-        p.writeLong(1453510289108L);
-        p.writeInt(310);
-        p.writeInt(260);
-        p.writeInt(123);
-        p.writeInt(456);
-        p.writeInt(99);
-        p.writeInt(3);
-        p.setDataPosition(0);
-
-        CellInfoGsm cellInfo = CellInfoGsm.CREATOR.createFromParcel(p);
-
+    public void testCachedCellInfoList() {
         ArrayList<CellInfo> list = new ArrayList();
-        list.add(cellInfo);
+        list.add(getCellInfoGsm());
         mSimulatedCommands.setCellInfoList(list);
 
         WorkSource workSource = new WorkSource(Process.myUid(),
                 mContext.getPackageName());
-        assertEquals(sst.getAllCellInfo(workSource), list);
+
+        // null worksource and no response message will update the writethrough cache
+        sst.requestAllCellInfo(null, null);
+        waitForMs(200);
+        assertEquals(sst.getAllCellInfo(), list);
+    }
+
+    private static class CellInfoHandler extends Handler {
+        // Need to define this here so that it's accessible
+        public List<CellInfo> cellInfoResult;
+
+        CellInfoHandler(Looper l) {
+            super(l);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            synchronized (msg) {
+                assertTrue("handler received null message", msg.obj != null);
+                AsyncResult ar = (AsyncResult) msg.obj;
+                cellInfoResult = (List<CellInfo>) ar.result;
+                msg.notifyAll();
+            }
+        }
+    }
+
+    @Test
+    @MediumTest
+    public void testGetCellInfoResponse() throws InterruptedException {
+        mSimulatedCommands.setCellInfoListBehavior(true);
+        ArrayList<CellInfo> list = new ArrayList();
+        list.add(getCellInfoGsm());
+        mSimulatedCommands.setCellInfoList(list);
+        CellInfoHandler cih = new CellInfoHandler(mSSTTestHandler.getLooper());
+
+        Message rsp = cih.obtainMessage(0x7357);
+
+        sst.requestAllCellInfo(null, rsp);
+
+        synchronized (rsp) {
+            if (cih.cellInfoResult == null) rsp.wait(5000);
+        }
+
+        AsyncResult ar = (AsyncResult) rsp.obj;
+        assertTrue("CellInfo Response Not Received", cih.cellInfoResult != null);
+        assertEquals(getCellInfoGsm(), cih.cellInfoResult.get(0));
+    }
+
+    @Test
+    @MediumTest
+    public void testGetCellInfoResponseTimeout() throws InterruptedException {
+        mSimulatedCommands.setCellInfoListBehavior(false);
+        CellInfoHandler cih = new CellInfoHandler(mSSTTestHandler.getLooper());
+
+        Message rsp = cih.obtainMessage(0x7357);
+
+        sst.requestAllCellInfo(null, rsp);
+
+        synchronized (rsp) {
+            if (cih.cellInfoResult == null) rsp.wait(5000);
+        }
+
+        assertTrue("Spurious CellInfo Response Received", cih.cellInfoResult == null);
     }
 
     @Test
@@ -381,8 +473,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         // The service state of GsmCdmaPhone is STATE_OUT_OF_SERVICE, and IMS is unregistered.
         ServiceState ss = new ServiceState();
         ss.setVoiceRegState(ServiceState.STATE_OUT_OF_SERVICE);
-        sst.mSS = ss;
 
+        sst.mSS = ss;
         sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_IMS_SERVICE_STATE_CHANGED));
         waitForMs(200);
 
@@ -401,71 +493,56 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mPhone, times(1)).notifyServiceStateChanged(any(ServiceState.class));
     }
 
-    @Test
-    @MediumTest
-    public void testSignalStrength() {
-        SignalStrength ss = new SignalStrength(
-                30, // gsmSignalStrength
-                0,  // gsmBitErrorRate
-                -1, // cdmaDbm
-                -1, // cdmaEcio
-                -1, // evdoDbm
-                -1, // evdoEcio
-                -1, // evdoSnr
-                99, // lteSignalStrength
-                SignalStrength.INVALID,     // lteRsrp
-                SignalStrength.INVALID,     // lteRsrq
-                SignalStrength.INVALID,     // lteRssnr
-                SignalStrength.INVALID,     // lteCqi
-                SignalStrength.INVALID      // tdScdmaRscp
-        );
-
+    private void sendSignalStrength(SignalStrength ss) {
         mSimulatedCommands.setSignalStrength(ss);
         mSimulatedCommands.notifySignalStrength();
         waitForMs(300);
+    }
+
+    @Test
+    @MediumTest
+    public void testSignalStrength() {
+        // Send in GSM Signal Strength Info and expect isGsm == true
+        SignalStrength ss = new SignalStrength(
+                new CellSignalStrengthCdma(),
+                new CellSignalStrengthGsm(-53, 0, SignalStrength.INVALID),
+                new CellSignalStrengthWcdma(),
+                new CellSignalStrengthTdscdma(),
+                new CellSignalStrengthLte());
+
+        sendSignalStrength(ss);
         assertEquals(sst.getSignalStrength(), ss);
         assertEquals(sst.getSignalStrength().isGsm(), true);
 
-        // switch to CDMA
-        doReturn(false).when(mPhone).isPhoneTypeGsm();
-        doReturn(true).when(mPhone).isPhoneTypeCdmaLte();
-        sst.updatePhoneType();
-        sst.mSS.setRilDataRadioTechnology(ServiceState.RIL_RADIO_TECHNOLOGY_LTE);
+        // Send in CDMA+LTE Signal Strength Info and expect isGsm == true
+        ss = new SignalStrength(
+                new CellSignalStrengthCdma(-90, -12,
+                        SignalStrength.INVALID, SignalStrength.INVALID, SignalStrength.INVALID),
+                new CellSignalStrengthGsm(),
+                new CellSignalStrengthWcdma(),
+                new CellSignalStrengthTdscdma(),
+                new CellSignalStrengthLte(
+                        -110, -114, -5, 0, SignalStrength.INVALID, SignalStrength.INVALID));
 
-        mSimulatedCommands.notifySignalStrength();
-        waitForMs(300);
+        sendSignalStrength(ss);
         assertEquals(sst.getSignalStrength(), ss);
         assertEquals(sst.getSignalStrength().isGsm(), true);
 
-        // notify signal strength again, but this time data RAT is not LTE
-        sst.mSS.setRilVoiceRadioTechnology(ServiceState.RIL_RADIO_TECHNOLOGY_1xRTT);
-        sst.mSS.setRilDataRadioTechnology(ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD);
-        mSimulatedCommands.notifySignalStrength();
-        waitForMs(300);
+        // Send in CDMA-only Signal Strength Info and expect isGsm == false
+        ss = new SignalStrength(
+                new CellSignalStrengthCdma(-90, -12,
+                        SignalStrength.INVALID, SignalStrength.INVALID, SignalStrength.INVALID),
+                new CellSignalStrengthGsm(),
+                new CellSignalStrengthWcdma(),
+                new CellSignalStrengthTdscdma(),
+                new CellSignalStrengthLte());
+
+        sendSignalStrength(ss);
         assertEquals(sst.getSignalStrength(), ss);
         assertEquals(sst.getSignalStrength().isGsm(), false);
     }
 
-    @Test
-    public void testSetsNewSignalStrengthReportingCriteria() {
-        int[] wcdmaThresholds = {
-                -110, /* SIGNAL_STRENGTH_POOR */
-                -100, /* SIGNAL_STRENGTH_MODERATE */
-                -90, /* SIGNAL_STRENGTH_GOOD */
-                -80  /* SIGNAL_STRENGTH_GREAT */
-        };
-        mBundle.putIntArray(CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY,
-                wcdmaThresholds);
-
-        int[] lteThresholds = {
-                -130, /* SIGNAL_STRENGTH_POOR */
-                -120, /* SIGNAL_STRENGTH_MODERATE */
-                -110, /* SIGNAL_STRENGTH_GOOD */
-                -100,  /* SIGNAL_STRENGTH_GREAT */
-        };
-        mBundle.putIntArray(CarrierConfigManager.KEY_LTE_RSRP_THRESHOLDS_INT_ARRAY,
-                lteThresholds);
-
+    private void sendCarrierConfigUpdate() {
         CarrierConfigManager mockConfigManager = Mockito.mock(CarrierConfigManager.class);
         when(mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE))
                 .thenReturn(mockConfigManager);
@@ -474,159 +551,89 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         Intent intent = new Intent().setAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         mContext.sendBroadcast(intent);
         waitForMs(300);
-
-        verify(mPhone).setSignalStrengthReportingCriteria(eq(wcdmaThresholds),
-                eq(AccessNetworkType.UTRAN));
-        verify(mPhone).setSignalStrengthReportingCriteria(eq(lteThresholds),
-                eq(AccessNetworkType.EUTRAN));
     }
 
     @Test
-    @MediumTest
-    public void testSignalLevelWithWcdmaRscpThresholds() {
+    public void testLteSignalStrengthReportingCriteria() {
+        SignalStrength ss = new SignalStrength(
+                new CellSignalStrengthCdma(),
+                new CellSignalStrengthGsm(),
+                new CellSignalStrengthWcdma(),
+                new CellSignalStrengthTdscdma(),
+                new CellSignalStrengthLte(
+                        -110, /* rssi */
+                        -114, /* rsrp */
+                        -5, /* rsrq */
+                        0, /* rssnr */
+                        SignalStrength.INVALID, /* cqi */
+                        SignalStrength.INVALID /* ta */));
+
+        mBundle.putBoolean(CarrierConfigManager.KEY_USE_ONLY_RSRP_FOR_LTE_SIGNAL_BAR_BOOL,
+                true);
+
+        sendCarrierConfigUpdate();
+
+        mSimulatedCommands.setSignalStrength(ss);
+        mSimulatedCommands.notifySignalStrength();
+        waitForMs(300);
+        // Default thresholds are POOR=-115 MODERATE=-105 GOOD=-95 GREAT=-85
+        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_POOR, sst.getSignalStrength().getLevel());
+
+        int[] lteThresholds = {
+                -130, // SIGNAL_STRENGTH_POOR
+                -120, // SIGNAL_STRENGTH_MODERATE
+                -110, // SIGNAL_STRENGTH_GOOD
+                -100,  // SIGNAL_STRENGTH_GREAT
+        };
+        mBundle.putIntArray(CarrierConfigManager.KEY_LTE_RSRP_THRESHOLDS_INT_ARRAY,
+                lteThresholds);
+        sendCarrierConfigUpdate();
+
+        mSimulatedCommands.setSignalStrength(ss);
+        mSimulatedCommands.notifySignalStrength();
+        waitForMs(300);
+        assertEquals(sst.getSignalStrength().getLevel(),
+                CellSignalStrength.SIGNAL_STRENGTH_MODERATE);
+    }
+
+    @Test
+    public void testWcdmaSignalStrengthReportingCriteria() {
+        SignalStrength ss = new SignalStrength(
+                new CellSignalStrengthCdma(),
+                new CellSignalStrengthGsm(),
+                new CellSignalStrengthWcdma(-79, 0, -85, -5),
+                new CellSignalStrengthTdscdma(),
+                new CellSignalStrengthLte());
+
+        mSimulatedCommands.setSignalStrength(ss);
+        mSimulatedCommands.notifySignalStrength();
+        waitForMs(300);
+        assertEquals(sst.getSignalStrength().getLevel(), CellSignalStrength.SIGNAL_STRENGTH_GOOD);
+
+        int[] wcdmaThresholds = {
+                -110, // SIGNAL_STRENGTH_POOR
+                -100, // SIGNAL_STRENGTH_MODERATE
+                -90, // SIGNAL_STRENGTH_GOOD
+                -80  // SIGNAL_STRENGTH_GREAT
+        };
         mBundle.putIntArray(CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY,
-                new int[] {
-                        -110, /* SIGNAL_STRENGTH_POOR */
-                        -100, /* SIGNAL_STRENGTH_MODERATE */
-                        -90, /* SIGNAL_STRENGTH_GOOD */
-                        -80  /* SIGNAL_STRENGTH_GREAT */
-                });
+                wcdmaThresholds);
         mBundle.putString(
                 CarrierConfigManager.KEY_WCDMA_DEFAULT_SIGNAL_STRENGTH_MEASUREMENT_STRING,
                 "rscp");
-
-        SignalStrength ss = new SignalStrength(
-                30, // gsmSignalStrength
-                0,  // gsmBitErrorRate
-                -1, // cdmaDbm
-                -1, // cdmaEcio
-                -1, // evdoDbm
-                -1, // evdoEcio
-                -1, // evdoSnr
-                99, // lteSignalStrength
-                SignalStrength.INVALID,     // lteRsrp
-                SignalStrength.INVALID,     // lteRsrq
-                SignalStrength.INVALID,     // lteRssnr
-                SignalStrength.INVALID,     // lteCqi
-                SignalStrength.INVALID,     // tdScdmaRscp
-                99,                         // wcdmaSignalStrength
-                45                         // wcdmaRscpAsu
-        );
+        sendCarrierConfigUpdate();
         mSimulatedCommands.setSignalStrength(ss);
         mSimulatedCommands.notifySignalStrength();
         waitForMs(300);
-        assertEquals(sst.getSignalStrength(), ss);
-        assertEquals(sst.getSignalStrength().getWcdmaLevel(), SignalStrength.SIGNAL_STRENGTH_GREAT);
-        assertEquals(sst.getSignalStrength().getWcdmaAsuLevel(), 45);
-        assertEquals(sst.getSignalStrength().getWcdmaDbm(), -75);
-
-        ss = new SignalStrength(
-                30, // gsmSignalStrength
-                0,  // gsmBitErrorRate
-                -1, // cdmaDbm
-                -1, // cdmaEcio
-                -1, // evdoDbm
-                -1, // evdoEcio
-                -1, // evdoSnr
-                99, // lteSignalStrength
-                SignalStrength.INVALID,     // lteRsrp
-                SignalStrength.INVALID,     // lteRsrq
-                SignalStrength.INVALID,     // lteRssnr
-                SignalStrength.INVALID,     // lteCqi
-                SignalStrength.INVALID,     // tdScdmaRscp
-                99,                         // wcdmaSignalStrength
-                35                          // wcdmaRscpAsu
-        );
-        mSimulatedCommands.setSignalStrength(ss);
-        mSimulatedCommands.notifySignalStrength();
-        waitForMs(300);
-        assertEquals(sst.getSignalStrength(), ss);
-        assertEquals(sst.getSignalStrength().getWcdmaLevel(), SignalStrength.SIGNAL_STRENGTH_GOOD);
-        assertEquals(sst.getSignalStrength().getWcdmaAsuLevel(), 35);
-        assertEquals(sst.getSignalStrength().getWcdmaDbm(), -85);
-
-        ss = new SignalStrength(
-                30, // gsmSignalStrength
-                0,  // gsmBitErrorRate
-                -1, // cdmaDbm
-                -1, // cdmaEcio
-                -1, // evdoDbm
-                -1, // evdoEcio
-                -1, // evdoSnr
-                99, // lteSignalStrength
-                SignalStrength.INVALID,     // lteRsrp
-                SignalStrength.INVALID,     // lteRsrq
-                SignalStrength.INVALID,     // lteRssnr
-                SignalStrength.INVALID,     // lteCqi
-                SignalStrength.INVALID,     // tdScdmaRscp
-                99,                         // wcdmaSignalStrength
-                25                          // wcdmaRscpAsu
-        );
-        mSimulatedCommands.setSignalStrength(ss);
-        mSimulatedCommands.notifySignalStrength();
-        waitForMs(300);
-        assertEquals(sst.getSignalStrength(), ss);
-        assertEquals(sst.getSignalStrength().getWcdmaLevel(),
-                SignalStrength.SIGNAL_STRENGTH_MODERATE);
-        assertEquals(sst.getSignalStrength().getWcdmaAsuLevel(), 25);
-        assertEquals(sst.getSignalStrength().getWcdmaDbm(), -95);
-
-        ss = new SignalStrength(
-                30, // gsmSignalStrength
-                0,  // gsmBitErrorRate
-                -1, // cdmaDbm
-                -1, // cdmaEcio
-                -1, // evdoDbm
-                -1, // evdoEcio
-                -1, // evdoSnr
-                99, // lteSignalStrength
-                SignalStrength.INVALID,     // lteRsrp
-                SignalStrength.INVALID,     // lteRsrq
-                SignalStrength.INVALID,     // lteRssnr
-                SignalStrength.INVALID,     // lteCqi
-                SignalStrength.INVALID,     // tdScdmaRscp
-                99,                         // wcdmaSignalStrength
-                15                          // wcdmaRscpAsu
-        );
-        mSimulatedCommands.setSignalStrength(ss);
-        mSimulatedCommands.notifySignalStrength();
-        waitForMs(300);
-        assertEquals(sst.getSignalStrength(), ss);
-        assertEquals(sst.getSignalStrength().getWcdmaLevel(), SignalStrength.SIGNAL_STRENGTH_POOR);
-        assertEquals(sst.getSignalStrength().getWcdmaAsuLevel(), 15);
-        assertEquals(sst.getSignalStrength().getWcdmaDbm(), -105);
-
-        ss = new SignalStrength(
-                30, // gsmSignalStrength
-                0,  // gsmBitErrorRate
-                -1, // cdmaDbm
-                -1, // cdmaEcio
-                -1, // evdoDbm
-                -1, // evdoEcio
-                -1, // evdoSnr
-                99, // lteSignalStrength
-                SignalStrength.INVALID,     // lteRsrp
-                SignalStrength.INVALID,     // lteRsrq
-                SignalStrength.INVALID,     // lteRssnr
-                SignalStrength.INVALID,     // lteCqi
-                SignalStrength.INVALID,     // tdScdmaRscp
-                99,                         // wcdmaSignalStrength
-                5                           // wcdmaRscpAsu
-        );
-        mSimulatedCommands.setSignalStrength(ss);
-        mSimulatedCommands.notifySignalStrength();
-        waitForMs(300);
-        assertEquals(sst.getSignalStrength(), ss);
-        assertEquals(sst.getSignalStrength().getWcdmaLevel(),
-                SignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN);
-        assertEquals(sst.getSignalStrength().getWcdmaAsuLevel(), 5);
-        assertEquals(sst.getSignalStrength().getWcdmaDbm(), -115);
+        assertEquals(sst.getSignalStrength().getLevel(), CellSignalStrength.SIGNAL_STRENGTH_GOOD);
     }
 
     @Test
     @MediumTest
+    // TODO(nharold): we probably should remove support for this procedure (GET_LOC)
     public void testGsmCellLocation() {
-        CellIdentityGsm cellIdentityGsm = new CellIdentityGsm(0, 0, 2, 3);
+        CellIdentityGsm cellIdentityGsm = new CellIdentityGsm(
+                2, 3, 900, 5, "001", "01", "test", "tst");
         NetworkRegistrationState result = new NetworkRegistrationState(
                 0, 0, 0, 0, 0, false, null, cellIdentityGsm);
 
@@ -635,9 +642,28 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         waitForMs(200);
         WorkSource workSource = new WorkSource(Process.myUid(), mContext.getPackageName());
-        GsmCellLocation cl = (GsmCellLocation) sst.getCellLocation(workSource);
+        GsmCellLocation cl = (GsmCellLocation) sst.getCellLocation();
         assertEquals(2, cl.getLac());
         assertEquals(3, cl.getCid());
+    }
+
+    @FlakyTest /* flakes 0.86% of the time */
+    @Test
+    @MediumTest
+    // TODO(nharold): we probably should remove support for this procedure (GET_LOC)
+    public void testCdmaCellLocation() {
+        CellIdentityCdma cellIdentityCdma = new CellIdentityCdma(1, 2, 3, 4, 5, "test", "tst");
+        NetworkRegistrationState result = new NetworkRegistrationState(
+                0, 0, 0, 0, 0, false, null, cellIdentityCdma);
+
+        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_GET_LOC_DONE,
+                new AsyncResult(null, result, null)));
+
+        waitForMs(200);
+        WorkSource workSource = new WorkSource(Process.myUid(), mContext.getPackageName());
+        CdmaCellLocation cl = (CdmaCellLocation) sst.getCellLocation();
+        assertEquals(5, cl.getBaseStationLatitude());
+        assertEquals(4, cl.getBaseStationLongitude());
     }
 
     @Test
@@ -994,6 +1020,25 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
     @Test
     @MediumTest
+    public void testRegisterForVoiceRegStateOrRatChange() {
+        int vrs = NetworkRegistrationState.REG_STATE_HOME;
+        int vrat = sst.mSS.RIL_RADIO_TECHNOLOGY_LTE;
+        sst.mSS.setRilVoiceRadioTechnology(vrat);
+        sst.mSS.setVoiceRegState(vrs);
+        sst.registerForVoiceRegStateOrRatChanged(mTestHandler, EVENT_VOICE_RAT_CHANGED, null);
+
+        waitForMs(100);
+
+        // Verify if message was posted to handler and value of result
+        ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
+        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        assertEquals(EVENT_VOICE_RAT_CHANGED, messageArgumentCaptor.getValue().what);
+        assertEquals(new Pair<Integer, Integer>(vrs, vrat),
+                ((AsyncResult)messageArgumentCaptor.getValue().obj).result);
+    }
+
+    @Test
+    @MediumTest
     public void testRegisterForDataRegStateOrRatChange() {
         int drs = NetworkRegistrationState.REG_STATE_HOME;
         int rat = sst.mSS.RIL_RADIO_TECHNOLOGY_LTE;
@@ -1011,6 +1056,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 ((AsyncResult)messageArgumentCaptor.getValue().obj).result);
     }
 
+    @FlakyTest /* flakes 0.43% of the time */
     @Test
     @MediumTest
     public void testRegAndUnregForNetworkAttached() throws Exception {
@@ -1459,7 +1505,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         sst.requestShutdown();
         waitForMs(100);
-        assertFalse(mSimulatedCommands.getRadioState().isAvailable());
+        assertFalse(mSimulatedCommands.getRadioState()
+                != TelephonyManager.RADIO_POWER_UNAVAILABLE);
     }
 
     @Test
@@ -1472,10 +1519,11 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setRadioPowerFailResponse(true);
         sst.setRadioPower(false);
         waitForMs(100);
-        assertTrue(mSimulatedCommands.getRadioState().isOn());
+        assertTrue(mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON);
         sst.requestShutdown();
         waitForMs(100);
-        assertFalse(mSimulatedCommands.getRadioState().isAvailable());
+        assertFalse(mSimulatedCommands.getRadioState()
+                != TelephonyManager.RADIO_POWER_UNAVAILABLE);
     }
 
     @Test
@@ -1506,137 +1554,96 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         }
     }
 
-    // Edge and GPRS are grouped under the same family and Edge has higher rate than GPRS.
-    // Expect no rat update when move from E to G.
-    @Test
-    public void testRatRatchet() throws Exception {
-        CellIdentityGsm cellIdentity = new CellIdentityGsm(-1, -1, -1, -1, -1, -1);
+    private void changeRegState(int state, CellIdentity cid, int rat) {
+        changeRegState(state, cid, rat, rat);
+    }
+
+    private void changeRegState(int state, CellIdentity cid, int voiceRat, int dataRat) {
+        LteVopsSupportInfo lteVopsSupportInfo =
+                new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE,
+                    LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE);
         NetworkRegistrationState dataResult = new NetworkRegistrationState(
-                0, 0, 1, 2, 0, false, null, cellIdentity, 1);
+                0, 0, state, dataRat, 0, false, null, cid, 1, false, false, false,
+                lteVopsSupportInfo);
         sst.mPollingContext[0] = 2;
         // update data reg state to be in service
         sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
                 new AsyncResult(sst.mPollingContext, dataResult, null)));
         waitForMs(200);
-        assertEquals(ServiceState.STATE_IN_SERVICE, mSST.getCurrentDataConnectionState());
-
         NetworkRegistrationState voiceResult = new NetworkRegistrationState(
-                0, 0, 1, 2, 0, false, null, cellIdentity, false, 0, 0, 0);
+                0, 0, state, voiceRat, 0, false, null, cid, false, 0, 0, 0);
         sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
                 new AsyncResult(sst.mPollingContext, voiceResult, null)));
         waitForMs(200);
-        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilVoiceRadioTechnology());
+    }
 
-        // EDGE -> GPRS
-        voiceResult = new NetworkRegistrationState(
-                0, 0, 1, 1, 0, false, null,
-                cellIdentity, false, 0, 0, 0);
-        sst.mPollingContext[0] = 2;
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
-                new AsyncResult(sst.mPollingContext, dataResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.STATE_IN_SERVICE, mSST.getCurrentDataConnectionState());
-
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
-                new AsyncResult(sst.mPollingContext, voiceResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilVoiceRadioTechnology());
+    // Edge and GPRS are grouped under the same family and Edge has higher rate than GPRS.
+    // Expect no rat update when move from E to G.
+    @Test
+    public void testRatRatchet() throws Exception {
+        CellIdentityGsm cellIdentity =
+                new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst");
+        // start on GPRS
+        changeRegState(1, cellIdentity, 16, 1);
+        assertEquals(ServiceState.STATE_IN_SERVICE, sst.getCurrentDataConnectionState());
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_GPRS, sst.mSS.getRilDataRadioTechnology());
+        // upgrade to EDGE
+        changeRegState(1, cellIdentity, 16, 2);
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilDataRadioTechnology());
+        // drop back to GPRS and expect a ratchet
+        changeRegState(1, cellIdentity, 16, 1);
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilDataRadioTechnology());
     }
 
     // Edge and GPRS are grouped under the same family and Edge has higher rate than GPRS.
     // Bypass rat rachet when cell id changed. Expect rat update from E to G
     @Test
     public void testRatRatchetWithCellChange() throws Exception {
-        CellIdentityGsm cellIdentity = new CellIdentityGsm(-1, -1, -1, -1, -1, -1);
-        NetworkRegistrationState dataResult = new NetworkRegistrationState(
-                0, 0, 1, 2, 0, false, null, cellIdentity, 1);
-        sst.mPollingContext[0] = 2;
+        CellIdentityGsm cellIdentity =
+                new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst");
         // update data reg state to be in service
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
-                new AsyncResult(sst.mPollingContext, dataResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.STATE_IN_SERVICE, mSST.getCurrentDataConnectionState());
+        changeRegState(1, cellIdentity, 16, 2);
+        assertEquals(ServiceState.STATE_IN_SERVICE, sst.getCurrentDataConnectionState());
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_GSM, sst.mSS.getRilVoiceRadioTechnology());
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilDataRadioTechnology());
+        // RAT: EDGE -> GPRS cell ID: 1 -> 2
+        cellIdentity = new CellIdentityGsm(0, 2, 900, 5, "001", "01", "test", "tst");
+        changeRegState(1, cellIdentity, 16, 1);
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_GPRS, sst.mSS.getRilDataRadioTechnology());
 
-        NetworkRegistrationState voiceResult = new NetworkRegistrationState(
-                0, 0, 1, 2, 0, false, null, cellIdentity, false, 0, 0, 0);
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
-                new AsyncResult(sst.mPollingContext, voiceResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilVoiceRadioTechnology());
-
-        // RAT: EDGE -> GPRS cell ID: -1 -> 5
-        cellIdentity = new CellIdentityGsm(-1, -1, -1, 5, -1, -1);
-        voiceResult = new NetworkRegistrationState(
-                0, 0, 1, 1, 0, false, null, cellIdentity, false, 0, 0, 0);
-        sst.mPollingContext[0] = 2;
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
-                new AsyncResult(sst.mPollingContext, dataResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.STATE_IN_SERVICE, mSST.getCurrentDataConnectionState());
-
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
-                new AsyncResult(sst.mPollingContext, voiceResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_GPRS, sst.mSS.getRilVoiceRadioTechnology());
     }
 
-    // Edge, GPRS and UMTS are grouped under the same family where Edge > GPRS > UMTS  .
+    // TODO(nharold): This actually seems like broken behavior; rather than preserve it, we should
+    // probably remove it.
+    // GSM, Edge, GPRS are grouped under the same family where Edge > GPRS > GSM.
     // Expect no rat update from E to G immediately following cell id change.
-    // Expect ratratchet (from G to UMTS) for the following rat update within the cell location.
+    // Expect ratratchet (from G to E) for the following rat update within the cell location.
     @Test
     public void testRatRatchetWithCellChangeBeforeRatChange() throws Exception {
         // cell ID update
-        CellIdentityGsm cellIdentity = new CellIdentityGsm(-1, -1, -1, 5, -1, -1);
-        NetworkRegistrationState dataResult = new NetworkRegistrationState(
-                0, 0, 1, 2, 0, false, null, cellIdentity, 1);
-        sst.mPollingContext[0] = 2;
-        // update data reg state to be in service
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
-                new AsyncResult(sst.mPollingContext, dataResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.STATE_IN_SERVICE, mSST.getCurrentDataConnectionState());
-
-        NetworkRegistrationState voiceResult = new NetworkRegistrationState(
-                0, 0, 1, 2, 0, false, null, cellIdentity, false, 0, 0, 0);
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
-                new AsyncResult(sst.mPollingContext, voiceResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilVoiceRadioTechnology());
+        CellIdentityGsm cellIdentity =
+                new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst");
+        changeRegState(1, cellIdentity, 16, 2);
+        assertEquals(ServiceState.STATE_IN_SERVICE, sst.getCurrentDataConnectionState());
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilDataRadioTechnology());
 
         // RAT: EDGE -> GPRS, cell ID unchanged. Expect no rat ratchet following cell Id change.
-        voiceResult = new NetworkRegistrationState(
-                0, 0, 1, 1, 0, false, null, cellIdentity, false, 0, 0, 0);
-        sst.mPollingContext[0] = 2;
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
-                new AsyncResult(sst.mPollingContext, dataResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.STATE_IN_SERVICE, mSST.getCurrentDataConnectionState());
+        changeRegState(1, cellIdentity, 16, 1);
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_GPRS, sst.mSS.getRilDataRadioTechnology());
 
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
-                new AsyncResult(sst.mPollingContext, voiceResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_GPRS, sst.mSS.getRilVoiceRadioTechnology());
-
-        // RAT: GPRS -> UMTS
-        voiceResult = new NetworkRegistrationState(
-                0, 0, 1, 3, 0, false, null, cellIdentity, false, 0, 0, 0);
-        sst.mPollingContext[0] = 2;
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
-                new AsyncResult(sst.mPollingContext, dataResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.STATE_IN_SERVICE, mSST.getCurrentDataConnectionState());
-
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
-                new AsyncResult(sst.mPollingContext, voiceResult, null)));
-        waitForMs(200);
-        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_GPRS, sst.mSS.getRilVoiceRadioTechnology());
+        // RAT: GPRS -> EDGE should ratchet.
+        changeRegState(1, cellIdentity, 16, 2);
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilDataRadioTechnology());
     }
 
     private void sendPhyChanConfigChange(int[] bandwidths) {
         ArrayList<PhysicalChannelConfig> pc = new ArrayList<>();
         int ssType = PhysicalChannelConfig.CONNECTION_PRIMARY_SERVING;
         for (int bw : bandwidths) {
-            pc.add(new PhysicalChannelConfig(ssType, bw));
+            pc.add(new PhysicalChannelConfig.Builder()
+                    .setCellConnectionStatus(ssType)
+                    .setCellBandwidthDownlinkKhz(bw)
+                    .build());
 
             // All cells after the first are secondary serving cells.
             ssType = PhysicalChannelConfig.CONNECTION_SECONDARY_SERVING;
@@ -1647,8 +1654,12 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     private void sendRegStateUpdateForLteCellId(CellIdentityLte cellId) {
+        LteVopsSupportInfo lteVopsSupportInfo =
+                new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE,
+                    LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE);
         NetworkRegistrationState dataResult = new NetworkRegistrationState(
-                2, 1, 1, TelephonyManager.NETWORK_TYPE_LTE, 0, false, null, cellId, 1);
+                2, 1, 1, TelephonyManager.NETWORK_TYPE_LTE, 0, false, null, cellId, 1,
+                false, false, false, lteVopsSupportInfo);
         NetworkRegistrationState voiceResult = new NetworkRegistrationState(
                 1, 1, 1, TelephonyManager.NETWORK_TYPE_LTE, 0, false, null, cellId,
                 false, 0, 0, 0);
@@ -1710,8 +1721,12 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Test
     public void testPhyChanBandwidthResetsOnOos() throws Exception {
         testPhyChanBandwidthRatchetedOnPhyChanBandwidth();
+        LteVopsSupportInfo lteVopsSupportInfo =
+                new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE,
+                    LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE);
         NetworkRegistrationState dataResult = new NetworkRegistrationState(
-                2, 1, 0, TelephonyManager.NETWORK_TYPE_UNKNOWN, 0, false, null, null, 1);
+                2, 1, 0, TelephonyManager.NETWORK_TYPE_UNKNOWN, 0, false, null, null, 1, false,
+                false, false, lteVopsSupportInfo);
         NetworkRegistrationState voiceResult = new NetworkRegistrationState(
                 1, 1, 0, TelephonyManager.NETWORK_TYPE_UNKNOWN, 0, false, null, null,
                 false, 0, 0, 0);
@@ -1723,5 +1738,101 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 new AsyncResult(sst.mPollingContext, voiceResult, null)));
         waitForMs(200);
         assertTrue(Arrays.equals(new int[0], sst.mSS.getCellBandwidths()));
+    }
+
+    @Test
+    @SmallTest
+    public void testGetMdn() throws Exception {
+        doReturn(false).when(mPhone).isPhoneTypeGsm();
+        doReturn(false).when(mPhone).isPhoneTypeCdma();
+        doReturn(true).when(mPhone).isPhoneTypeCdmaLte();
+        doReturn(CdmaSubscriptionSourceManager.SUBSCRIPTION_FROM_RUIM).when(mCdmaSSM)
+                .getCdmaSubscriptionSource();
+
+        logd("Calling updatePhoneType");
+        // switch to CDMA
+        sst.updatePhoneType();
+
+        // trigger RUIM_RECORDS_LOADED
+        ArgumentCaptor<Integer> integerArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        verify(mRuimRecords).registerForRecordsLoaded(eq(sst), integerArgumentCaptor.capture(),
+                nullable(Object.class));
+
+        // response for mRuimRecords.registerForRecordsLoaded()
+        Message msg = Message.obtain();
+        msg.what = integerArgumentCaptor.getValue();
+        msg.obj = new AsyncResult(null, null, null);
+        sst.sendMessage(msg);
+
+        // wait for RUIM_RECORDS_LOADED to be handled
+        waitForHandlerAction(sst, 5000);
+
+        // mdn should be null as nothing populated it
+        assertEquals(null, sst.getMdnNumber());
+
+        // if ruim is provisioned, mdn should still be null
+        doReturn(true).when(mRuimRecords).isProvisioned();
+        assertEquals(null, sst.getMdnNumber());
+
+        // if ruim is not provisioned, and mdn is non null, sst should still return null
+        doReturn(false).when(mRuimRecords).isProvisioned();
+        String mockMdn = "mockMdn";
+        doReturn(mockMdn).when(mRuimRecords).getMdn();
+        assertEquals(null, sst.getMdnNumber());
+
+        // if ruim is provisioned, and mdn is non null, sst should also return the correct value
+        doReturn(true).when(mRuimRecords).isProvisioned();
+        assertEquals(mockMdn, sst.getMdnNumber());
+    }
+
+    @Test
+    @SmallTest
+    public void testOnVopsInfoChanged() {
+        ServiceState ss = new ServiceState();
+        ss.setVoiceRegState(ServiceState.STATE_IN_SERVICE);
+        ss.setDataRegState(ServiceState.STATE_IN_SERVICE);
+        sst.mSS = ss;
+
+        CellIdentityLte cellId =
+                new CellIdentityLte(1, 1, 5, 1, 5000, "001", "01", "test", "tst");
+        LteVopsSupportInfo lteVopsSupportInfo =
+                new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_SUPPORTED,
+                    LteVopsSupportInfo.LTE_STATUS_NOT_SUPPORTED);
+
+        NetworkRegistrationState dataResult = new NetworkRegistrationState(
+                2, 1, 1, TelephonyManager.NETWORK_TYPE_LTE, 0, false, null, cellId, 1,
+                false, false, false, lteVopsSupportInfo);
+        sst.mPollingContext[0] = 2;
+
+        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
+                new AsyncResult(sst.mPollingContext, dataResult, null)));
+        NetworkRegistrationState voiceResult = new NetworkRegistrationState(
+                1, 1, 1, TelephonyManager.NETWORK_TYPE_LTE, 0, false, null, cellId, false, 0, 0, 0);
+        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
+                new AsyncResult(sst.mPollingContext, voiceResult, null)));
+
+        waitForMs(200);
+        assertEquals(ServiceState.STATE_IN_SERVICE, sst.getCurrentDataConnectionState());
+        NetworkRegistrationState sSnetworkRegistrationState =
+                sst.mSS.getNetworkRegistrationState(2, 1);
+        assertEquals(lteVopsSupportInfo,
+                sSnetworkRegistrationState.getDataSpecificStates().lteVopsSupportInfo);
+
+        lteVopsSupportInfo =
+                new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_SUPPORTED,
+                    LteVopsSupportInfo.LTE_STATUS_NOT_SUPPORTED);
+        dataResult = new NetworkRegistrationState(
+                2, 1, 1, TelephonyManager.NETWORK_TYPE_LTE, 0, false, null, cellId, 1,
+                false, false, false, lteVopsSupportInfo);
+        sst.mPollingContext[0] = 1;
+        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
+                new AsyncResult(sst.mPollingContext, dataResult, null)));
+        waitForMs(200);
+
+        sSnetworkRegistrationState =
+                sst.mSS.getNetworkRegistrationState(2, 1);
+        assertEquals(lteVopsSupportInfo,
+                sSnetworkRegistrationState.getDataSpecificStates().lteVopsSupportInfo);
+
     }
 }

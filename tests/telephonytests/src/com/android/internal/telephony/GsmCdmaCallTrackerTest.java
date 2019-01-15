@@ -19,7 +19,9 @@ import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.eq;
@@ -30,12 +32,13 @@ import static org.mockito.Mockito.verify;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.support.test.filters.FlakyTest;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.FlakyTest;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -114,9 +117,8 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(1, mCTUT.mForegroundCall.getConnections().size());
         /* verify the command is sent out to RIL */
         verify(mSimulatedCommandsVerifier).dial(eq(PhoneNumberUtils.
-                        extractNetworkPortionAlt(mDialString)), anyInt(),
-                eq((UUSInfo) null),
-                isA(Message.class));
+                        extractNetworkPortionAlt(mDialString)), anyBoolean(), anyInt(),
+                anyInt(), eq((UUSInfo) null), isA(Message.class));
     }
 
     @Test
@@ -271,6 +273,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(0, mCTUT.mRingingCall.getConnections().size());
     }
 
+    @FlakyTest /* flakes 2.57% of the time */
     @Test
     @SmallTest
     public void testMTCallReject() {
@@ -433,6 +436,41 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
 
         // verify that the active call is disconnected
         verify(mConnection).onDisconnect(DisconnectCause.ERROR_UNSPECIFIED);
+    }
+
+    @Test
+    @SmallTest
+    public void testDispatchCsCallRadioTech() {
+        // fake connection
+        mCTUT.mConnections[0] = mConnection;
+
+        // dispatch umts
+        mCTUT.dispatchCsCallRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
+        // verify that call radio tech is set
+        verify(mConnection).setCallRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
+
+        // dispatch unknown
+        mCTUT.dispatchCsCallRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN);
+        // verify that call radio tech is set
+        verify(mConnection).setCallRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN);
+    }
+
+    @Test
+    @SmallTest
+    public void testCantCallOtaspInProgress() {
+        mDialString = "*22899";
+        testMOCallDial();
+        waitForHandlerAction(mSimulatedCommands.getHandler(), 5000);
+        mSimulatedCommands.progressConnectingToActive();
+        waitForHandlerAction(mSimulatedCommands.getHandler(), 5000);
+        // Try to place another call.
+        try {
+            mCTUT.dial("650-555-1212");
+        } catch (CallStateException cse) {
+            assertEquals(CallStateException.ERROR_OTASP_PROVISIONING_IN_PROCESS, cse.getError());
+            return;
+        }
+        fail("Expected otasp call state exception");
     }
 }
 

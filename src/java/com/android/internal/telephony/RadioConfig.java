@@ -17,14 +17,15 @@
 package com.android.internal.telephony;
 
 import static com.android.internal.telephony.RILConstants.RADIO_NOT_AVAILABLE;
+import static com.android.internal.telephony.RILConstants.REQUEST_NOT_SUPPORTED;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_SLOT_STATUS;
-import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_LOGICAL_TO_PHYSICAL_SLOT_MAPPING;
+import static com.android.internal.telephony.RILConstants
+        .RIL_REQUEST_SET_LOGICAL_TO_PHYSICAL_SLOT_MAPPING;
 
 import android.content.Context;
 import android.hardware.radio.V1_0.RadioResponseInfo;
 import android.hardware.radio.V1_0.RadioResponseType;
 import android.hardware.radio.config.V1_0.IRadioConfig;
-import android.hardware.radio.config.V1_0.SimSlotStatus;
 import android.net.ConnectivityManager;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -40,6 +41,7 @@ import com.android.internal.telephony.uicc.IccSlotStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -52,8 +54,16 @@ public class RadioConfig extends Handler {
 
     private static final int EVENT_SERVICE_DEAD = 1;
 
+    private static final HalVersion RADIO_CONFIG_HAL_VERSION_UNKNOWN = new HalVersion(-1, -1);
+
+    private static final HalVersion RADIO_CONFIG_HAL_VERSION_1_0 = new HalVersion(1, 0);
+
+    private static final HalVersion RADIO_CONFIG_HAL_VERSION_1_1 = new HalVersion(1, 1);
+
     private final boolean mIsMobileNetworkSupported;
     private volatile IRadioConfig mRadioConfigProxy = null;
+    // IRadioConfig version
+    private HalVersion mRadioConfigVersion = RADIO_CONFIG_HAL_VERSION_UNKNOWN;
     private final ServiceDeathRecipient mServiceDeathRecipient;
     private final AtomicLong mRadioConfigProxyCookie = new AtomicLong(0);
     private final RadioConfigResponse mRadioConfigResponse;
@@ -165,24 +175,9 @@ public class RadioConfig extends Handler {
             return mRadioConfigProxy;
         }
 
-        try {
-            mRadioConfigProxy = IRadioConfig.getService(true);
-            if (mRadioConfigProxy != null) {
-                mRadioConfigProxy.linkToDeath(mServiceDeathRecipient,
-                        mRadioConfigProxyCookie.incrementAndGet());
-                mRadioConfigProxy.setResponseFunctions(mRadioConfigResponse,
-                        mRadioConfigIndication);
-            } else {
-                loge("getRadioConfigProxy: mRadioConfigProxy == null");
-            }
-        } catch (RemoteException | RuntimeException e) {
-            mRadioConfigProxy = null;
-            loge("getRadioConfigProxy: RadioConfigProxy getService/setResponseFunctions: " + e);
-        }
+        updateRadioConfigProxy();
 
         if (mRadioConfigProxy == null) {
-            // getService() is a blocking call, so this should never happen
-            loge("getRadioConfigProxy: mRadioConfigProxy == null");
             if (result != null) {
                 AsyncResult.forMessage(result, null,
                         CommandException.fromRilErrno(RADIO_NOT_AVAILABLE));
@@ -191,6 +186,42 @@ public class RadioConfig extends Handler {
         }
 
         return mRadioConfigProxy;
+    }
+
+    private void updateRadioConfigProxy() {
+        try {
+            // Try to get service from different versions.
+            try {
+                mRadioConfigProxy = android.hardware.radio.config.V1_1.IRadioConfig.getService(
+                        true);
+                mRadioConfigVersion = RADIO_CONFIG_HAL_VERSION_1_1;
+            } catch (NoSuchElementException e) {
+            }
+
+            if (mRadioConfigProxy == null) {
+                try {
+                    mRadioConfigProxy = android.hardware.radio.config.V1_0
+                            .IRadioConfig.getService(true);
+                    mRadioConfigVersion = RADIO_CONFIG_HAL_VERSION_1_0;
+                } catch (NoSuchElementException e) {
+                }
+            }
+
+            if (mRadioConfigProxy == null) {
+                loge("getRadioConfigProxy: mRadioConfigProxy == null");
+                return;
+            }
+
+            // Link to death recipient and set response. If fails, set proxy to null and return.
+            mRadioConfigProxy.linkToDeath(mServiceDeathRecipient,
+                    mRadioConfigProxyCookie.incrementAndGet());
+            mRadioConfigProxy.setResponseFunctions(mRadioConfigResponse,
+                    mRadioConfigIndication);
+        } catch (RemoteException | RuntimeException e) {
+            mRadioConfigProxy = null;
+            loge("getRadioConfigProxy: RadioConfigProxy setResponseFunctions: " + e);
+            return;
+        }
     }
 
     private RILRequest obtainRequest(int request, Message result, WorkSource workSource) {
@@ -258,7 +289,32 @@ public class RadioConfig extends Handler {
     }
 
     /**
-     * Wrapper function for IRadioConfig.getSimSlotsStatus().
+     * Wrapper function for IRadioConfig.setPreferredDataModem(int modemId).
+     */
+    public void setPreferredDataModem(int modemId, Message result) {
+        if (!isSetPreferredDataCommandSupported()) {
+            if (result != null) {
+                AsyncResult.forMessage(result, null,
+                        CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                result.sendToTarget();
+            }
+        }
+        // TODO: call radioConfigProxy.setPreferredDataModem when it's ready.
+    }
+
+    /**
+     * @return whether current radio config version supports SET_PREFERRED_DATA_MODEM command.
+     * If yes, we'll use RIL_REQUEST_SET_PREFERRED_DATA_MODEM to indicate which modem is preferred.
+     * If not, we shall use RIL_REQUEST_ALLOW_DATA for on-demand PS attach / detach.
+     * See PhoneSwitcher for more details.
+     */
+    public boolean isSetPreferredDataCommandSupported() {
+        // TODO: call radioConfigProxy.isSetPreferredDataCommandSupported when it's ready.
+        return false;
+    }
+
+    /**
+     * Wrapper function for IRadioConfig.setSimSlotsMapping(int32_t serial, vec<uint32_t> slotMap).
      */
     public void setSimSlotsMapping(int[] physicalSlots, Message result) {
         IRadioConfig radioConfigProxy = getRadioConfigProxy(result);
@@ -317,15 +373,31 @@ public class RadioConfig extends Handler {
     }
 
     static ArrayList<IccSlotStatus> convertHalSlotStatus(
-            ArrayList<SimSlotStatus> halSlotStatusList) {
+            ArrayList<android.hardware.radio.config.V1_0.SimSlotStatus> halSlotStatusList) {
         ArrayList<IccSlotStatus> response = new ArrayList<IccSlotStatus>(halSlotStatusList.size());
-        for (SimSlotStatus slotStatus : halSlotStatusList) {
+        for (android.hardware.radio.config.V1_0.SimSlotStatus slotStatus : halSlotStatusList) {
             IccSlotStatus iccSlotStatus = new IccSlotStatus();
             iccSlotStatus.setCardState(slotStatus.cardState);
             iccSlotStatus.setSlotState(slotStatus.slotState);
             iccSlotStatus.logicalSlotIndex = slotStatus.logicalSlotId;
             iccSlotStatus.atr = slotStatus.atr;
             iccSlotStatus.iccid = slotStatus.iccid;
+            response.add(iccSlotStatus);
+        }
+        return response;
+    }
+
+    static ArrayList<IccSlotStatus> convertHalSlotStatus_1_2(
+            ArrayList<android.hardware.radio.config.V1_2.SimSlotStatus> halSlotStatusList) {
+        ArrayList<IccSlotStatus> response = new ArrayList<IccSlotStatus>(halSlotStatusList.size());
+        for (android.hardware.radio.config.V1_2.SimSlotStatus slotStatus : halSlotStatusList) {
+            IccSlotStatus iccSlotStatus = new IccSlotStatus();
+            iccSlotStatus.setCardState(slotStatus.base.cardState);
+            iccSlotStatus.setSlotState(slotStatus.base.slotState);
+            iccSlotStatus.logicalSlotIndex = slotStatus.base.logicalSlotId;
+            iccSlotStatus.atr = slotStatus.base.atr;
+            iccSlotStatus.iccid = slotStatus.base.iccid;
+            iccSlotStatus.eid = slotStatus.eid;
             response.add(iccSlotStatus);
         }
         return response;

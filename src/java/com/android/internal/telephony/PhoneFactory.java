@@ -43,7 +43,6 @@ import com.android.internal.telephony.imsphone.ImsPhoneFactory;
 import com.android.internal.telephony.sip.SipPhone;
 import com.android.internal.telephony.sip.SipPhoneFactory;
 import com.android.internal.telephony.uicc.UiccController;
-import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.util.NotificationChannelController;
 import com.android.internal.util.IndentingPrintWriter;
 
@@ -82,6 +81,7 @@ public class PhoneFactory {
     static private boolean sMadeDefaults = false;
     static private PhoneNotifier sPhoneNotifier;
     static private Context sContext;
+    static private PhoneConfigurationManager sPhoneConfigurationManager;
     static private PhoneSwitcher sPhoneSwitcher;
     static private SubscriptionMonitor sSubscriptionMonitor;
     static private TelephonyNetworkFactory[] sTelephonyNetworkFactories;
@@ -89,9 +89,6 @@ public class PhoneFactory {
     static private NotificationChannelController sNotificationChannelController;
 
     static private final HashMap<String, LocalLog>sLocalLogs = new HashMap<String, LocalLog>();
-
-    // TODO - make this a dynamic property read from the modem
-    public static final int MAX_ACTIVE_PHONES = 1;
 
     //***** Class Methods
 
@@ -243,7 +240,12 @@ public class PhoneFactory {
 
                 sSubscriptionMonitor = new SubscriptionMonitor(tr, sContext, sc, numPhones);
 
-                sPhoneSwitcher = new PhoneSwitcher(MAX_ACTIVE_PHONES, numPhones,
+                sPhoneConfigurationManager = PhoneConfigurationManager.init(sContext);
+
+                int maxActivePhones = sPhoneConfigurationManager
+                        .getNumberOfModemsWithSimultaneousDataConnections();
+
+                sPhoneSwitcher = PhoneSwitcher.make(maxActivePhones, numPhones,
                         sContext, sc, Looper.myLooper(), tr, sCommandsInterfaces,
                         sPhones);
 
@@ -257,8 +259,7 @@ public class PhoneFactory {
                 sTelephonyNetworkFactories = new TelephonyNetworkFactory[numPhones];
                 for (int i = 0; i < numPhones; i++) {
                     sTelephonyNetworkFactories[i] = new TelephonyNetworkFactory(
-                            sPhoneSwitcher, sc, sSubscriptionMonitor, Looper.myLooper(),
-                            sContext, i, sPhones[i].mDcTracker);
+                            sSubscriptionMonitor, Looper.myLooper(), sPhones[i]);
                 }
             }
         }
@@ -385,11 +386,13 @@ public class PhoneFactory {
     /**
      * Request a refresh of the embedded subscription list.
      *
+     * @param cardId the card ID of the eUICC.
      * @param callback Optional callback to execute after the refresh completes. Must terminate
      *     quickly as it will be called from SubscriptionInfoUpdater's handler thread.
      */
-    public static void requestEmbeddedSubscriptionInfoListRefresh(@Nullable Runnable callback) {
-        sSubInfoRecordUpdater.requestEmbeddedSubscriptionInfoListRefresh(callback);
+    public static void requestEmbeddedSubscriptionInfoListRefresh(
+            int cardId, @Nullable Runnable callback) {
+        sSubInfoRecordUpdater.requestEmbeddedSubscriptionInfoListRefresh(cardId, callback);
     }
 
     /**
@@ -454,17 +457,6 @@ public class PhoneFactory {
 
             sTelephonyNetworkFactories[i].dump(fd, pw, args);
 
-            pw.flush();
-            pw.println("++++++++++++++++++++++++++++++++");
-
-            try {
-                UiccProfile uiccProfile = (UiccProfile) phone.getIccCard();
-                if (uiccProfile != null) {
-                    uiccProfile.dump(fd, pw, args);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             pw.flush();
             pw.decreaseIndent();
             pw.println("++++++++++++++++++++++++++++++++");

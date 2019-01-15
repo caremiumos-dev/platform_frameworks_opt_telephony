@@ -23,6 +23,7 @@ import android.annotation.Nullable;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectionInfo;
 import android.net.ConnectivityManager;
 import android.net.IConnectivityManager;
 import android.net.LinkProperties;
@@ -54,7 +55,6 @@ import com.android.internal.net.VpnInfo;
 import com.android.internal.net.VpnProfile;
 import com.android.internal.util.AsyncChannel;
 import com.android.server.connectivity.NetworkAgentInfo;
-import com.android.server.connectivity.NetworkMonitor;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -261,7 +261,7 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
             //notifyNetworkCallbacks(nai, ConnectivityManager.CALLBACK_LOST);
             //mKeepaliveTracker.handleStopAllKeepalives(nai,
             //       ConnectivityManager.PacketKeepalive.ERROR_INVALID_NETWORK);
-            nai.networkMonitor.sendMessage(NetworkMonitor.CMD_NETWORK_DISCONNECTED);
+            // nai.networkMonitor.sendMessage(NetworkMonitor.CMD_NETWORK_DISCONNECTED);
             mNetworkAgentInfos.remove(msg.replyTo);
             //updateClat(null, nai.linkProperties, nai);
             //synchronized (mNetworkForNetId) {
@@ -956,12 +956,6 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
     }
 
     @VisibleForTesting
-    public NetworkMonitor createNetworkMonitor(Context context, Handler handler,
-            NetworkAgentInfo nai, NetworkRequest defaultRequest) {
-        throw new RuntimeException("not implemented");
-    }
-
-    @VisibleForTesting
     public NetworkRequest defaultRequest = null;
     @VisibleForTesting
     public synchronized void addDefaultRequest() {
@@ -985,5 +979,13 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
         defaultRequest = null;
     }
 
+    @Override
+    public int getConnectionOwnerUid(ConnectionInfo connectionInfo) {
+        throw new RuntimeException("not implemented");
+    }
 
+    @Override
+    public NetworkRequest getDefaultRequest() {
+        throw new RuntimeException("not implemented");
+    }
 }

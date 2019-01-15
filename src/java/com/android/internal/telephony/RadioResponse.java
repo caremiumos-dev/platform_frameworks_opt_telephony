@@ -42,6 +42,7 @@ import android.telephony.CellInfo;
 import android.telephony.ModemActivityInfo;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.RadioAccessFamily;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -109,6 +110,15 @@ public class RadioResponse extends IRadioResponse.Stub {
     public void getIccCardStatusResponse_1_2(RadioResponseInfo responseInfo,
                                              android.hardware.radio.V1_2.CardStatus cardStatus) {
         responseIccCardStatus_1_2(responseInfo, cardStatus);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param cardStatus ICC card status as defined by CardStatus in 1.4/types.hal
+     */
+    public void getIccCardStatusResponse_1_4(RadioResponseInfo responseInfo,
+                                             android.hardware.radio.V1_4.CardStatus cardStatus) {
+        responseIccCardStatus_1_4(responseInfo, cardStatus);
     }
 
     /**
@@ -337,6 +347,24 @@ public class RadioResponse extends IRadioResponse.Stub {
             mRil.processResponseDone(rr, responseInfo, dataRegResponse);
         }
     }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param dataRegResponse Current Data registration response as defined by DataRegStateResult in
+     *        1.4/types.hal
+     */
+    public void getDataRegistrationStateResponse_1_4(RadioResponseInfo responseInfo,
+            android.hardware.radio.V1_4.DataRegStateResult dataRegResponse) {
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr != null) {
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, dataRegResponse);
+            }
+            mRil.processResponseDone(rr, responseInfo, dataRegResponse);
+        }
+    }
+
 
     /**
      * @param responseInfo Response info struct containing response type, serial no. and error
@@ -718,6 +746,14 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     /**
+     * Callback of setPreferredNetworkTypeBitmap defined in IRadio.hal.
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void setPreferredNetworkTypeBitmapResponse(RadioResponseInfo responseInfo) {
+        responseVoid(responseInfo);
+    }
+
+    /**
      *
      * @param responseInfo Response info struct containing response type, serial no. and error
      * @param nwType RadioPreferredNetworkType defined in types.hal
@@ -725,6 +761,19 @@ public class RadioResponse extends IRadioResponse.Stub {
     public void getPreferredNetworkTypeResponse(RadioResponseInfo responseInfo, int nwType) {
         mRil.mPreferredNetworkType = nwType;
         responseInts(responseInfo, nwType);
+    }
+
+    /**
+     * Callback of the getPreferredNetworkTypeBitmap defined in the IRadio.hal.
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param networkTypeBitmap a 32-bit bitmap of
+     * {@link android.telephony.TelephonyManager.NetworkTypeBitMask}.
+     */
+    public void getPreferredNetworkTypeBitmapResponse(
+            RadioResponseInfo responseInfo, int networkTypeBitmap) {
+        int networkType = RadioAccessFamily.getNetworkTypeFromRaf(networkTypeBitmap);
+        mRil.mPreferredNetworkType = networkType;
+        responseInts(responseInfo, networkType);
     }
 
     /**
@@ -1313,37 +1362,36 @@ public class RadioResponse extends IRadioResponse.Stub {
             android.hardware.radio.V1_1.KeepaliveStatus keepaliveStatus) {
 
         RILRequest rr = mRil.processResponse(responseInfo);
-
-        if (rr == null) {
-            return;
-        }
+        if (rr == null) return;
 
         KeepaliveStatus ret = null;
-
-        switch(responseInfo.error) {
-            case RadioError.NONE:
-                int convertedStatus = convertHalKeepaliveStatusCode(keepaliveStatus.code);
-                if (convertedStatus < 0) {
+        try {
+            switch(responseInfo.error) {
+                case RadioError.NONE:
+                    int convertedStatus = convertHalKeepaliveStatusCode(keepaliveStatus.code);
+                    if (convertedStatus < 0) {
+                        ret = new KeepaliveStatus(KeepaliveStatus.ERROR_UNSUPPORTED);
+                    } else {
+                        ret = new KeepaliveStatus(keepaliveStatus.sessionHandle, convertedStatus);
+                    }
+                    // If responseInfo.error is NONE, response function sends the response message
+                    // even if result is actually an error.
+                    sendMessageResponse(rr.mResult, ret);
+                    break;
+                case RadioError.REQUEST_NOT_SUPPORTED:
                     ret = new KeepaliveStatus(KeepaliveStatus.ERROR_UNSUPPORTED);
-                } else {
-                    ret = new KeepaliveStatus(keepaliveStatus.sessionHandle, convertedStatus);
-                }
-                // If responseInfo.error is NONE, response function sends the response message
-                // even if result is actually an error.
-                sendMessageResponse(rr.mResult, ret);
-                break;
-            case RadioError.REQUEST_NOT_SUPPORTED:
-                ret = new KeepaliveStatus(KeepaliveStatus.ERROR_UNSUPPORTED);
-                break;
-            case RadioError.NO_RESOURCES:
-                ret = new KeepaliveStatus(KeepaliveStatus.ERROR_NO_RESOURCES);
-                break;
-            default:
-                ret = new KeepaliveStatus(KeepaliveStatus.ERROR_UNKNOWN);
-                break;
+                    break;
+                case RadioError.NO_RESOURCES:
+                    ret = new KeepaliveStatus(KeepaliveStatus.ERROR_NO_RESOURCES);
+                    break;
+                default:
+                    ret = new KeepaliveStatus(KeepaliveStatus.ERROR_UNKNOWN);
+                    break;
+            }
+        } finally {
+            // If responseInfo.error != NONE, the processResponseDone sends the response message.
+            mRil.processResponseDone(rr, responseInfo, ret);
         }
-        // If responseInfo.error != NONE, the processResponseDone sends the response message.
-        mRil.processResponseDone(rr, responseInfo, ret);
     }
 
     /**
@@ -1351,16 +1399,16 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void stopKeepaliveResponse(RadioResponseInfo responseInfo) {
         RILRequest rr = mRil.processResponse(responseInfo);
+        if (rr == null) return;
 
-        if (rr == null) {
-            return;
-        }
-
-        if (responseInfo.error == RadioError.NONE) {
-            sendMessageResponse(rr.mResult, null);
+        try {
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, null);
+            } else {
+                //TODO: Error code translation
+            }
+        } finally {
             mRil.processResponseDone(rr, responseInfo, null);
-        } else {
-            //TODO: Error code translation
         }
     }
 
@@ -1440,6 +1488,31 @@ public class RadioResponse extends IRadioResponse.Stub {
             }
             mRil.processResponseDone(rr, responseInfo, iccCardStatus);
         }
+    }
+
+    private void responseIccCardStatus_1_4(RadioResponseInfo responseInfo,
+                                           android.hardware.radio.V1_4.CardStatus cardStatus) {
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr != null) {
+            IccCardStatus iccCardStatus = convertHalCardStatus(cardStatus.base.base);
+            iccCardStatus.physicalSlotIndex = cardStatus.base.physicalSlotId;
+            iccCardStatus.atr = cardStatus.base.atr;
+            iccCardStatus.iccid = cardStatus.base.iccid;
+            iccCardStatus.eid = cardStatus.eid;
+            mRil.riljLog("responseIccCardStatus: from HIDL: " + iccCardStatus);
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, iccCardStatus);
+            }
+            mRil.processResponseDone(rr, responseInfo, iccCardStatus);
+        }
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void emergencyDialResponse(RadioResponseInfo responseInfo) {
+        responseVoid(responseInfo);
     }
 
     private void responseInts(RadioResponseInfo responseInfo, int ...var) {
@@ -1694,7 +1767,7 @@ public class RadioResponse extends IRadioResponse.Stub {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
-            SignalStrength ret = RIL.convertHalSignalStrength(signalStrength);
+            SignalStrength ret = new SignalStrength(signalStrength);
             if (responseInfo.error == RadioError.NONE) {
                 sendMessageResponse(rr.mResult, ret);
             }
@@ -1708,7 +1781,7 @@ public class RadioResponse extends IRadioResponse.Stub {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
-            SignalStrength ret = RIL.convertHalSignalStrength_1_2(signalStrength);
+            SignalStrength ret = new SignalStrength(signalStrength);
             if (responseInfo.error == RadioError.NONE) {
                 sendMessageResponse(rr.mResult, ret);
             }

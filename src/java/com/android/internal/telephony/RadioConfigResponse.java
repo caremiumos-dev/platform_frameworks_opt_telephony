@@ -18,8 +18,8 @@ package com.android.internal.telephony;
 
 import android.hardware.radio.V1_0.RadioError;
 import android.hardware.radio.V1_0.RadioResponseInfo;
-import android.hardware.radio.config.V1_0.IRadioConfigResponse;
-import android.hardware.radio.config.V1_0.SimSlotStatus;
+import android.hardware.radio.config.V1_1.PhoneCapability;
+import android.hardware.radio.config.V1_2.IRadioConfigResponse;
 import android.telephony.Rlog;
 
 import com.android.internal.telephony.uicc.IccSlotStatus;
@@ -41,7 +41,7 @@ public class RadioConfigResponse extends IRadioConfigResponse.Stub {
      * Response function for IRadioConfig.getSimSlotsStatus().
      */
     public void getSimSlotsStatusResponse(RadioResponseInfo responseInfo,
-                                          ArrayList<SimSlotStatus> slotStatus) {
+            ArrayList<android.hardware.radio.config.V1_0.SimSlotStatus> slotStatus) {
         RILRequest rr = mRadioConfig.processResponse(responseInfo);
 
         if (rr != null) {
@@ -60,6 +60,31 @@ public class RadioConfigResponse extends IRadioConfigResponse.Stub {
 
         } else {
             Rlog.e(TAG, "getSimSlotsStatusResponse: Error " + responseInfo.toString());
+        }
+    }
+
+    /**
+     * Response function for IRadioConfig.getSimSlotsStatus().
+     */
+    public void getSimSlotsStatusResponse_1_2(RadioResponseInfo responseInfo,
+            ArrayList<android.hardware.radio.config.V1_2.SimSlotStatus> slotStatus) {
+        RILRequest rr = mRadioConfig.processResponse(responseInfo);
+
+        if (rr != null) {
+            ArrayList<IccSlotStatus> ret = RadioConfig.convertHalSlotStatus_1_2(slotStatus);
+            if (responseInfo.error == RadioError.NONE) {
+                // send response
+                RadioResponse.sendMessageResponse(rr.mResult, ret);
+                Rlog.d(TAG, rr.serialString() + "< "
+                        + mRadioConfig.requestToString(rr.mRequest) + " " + ret.toString());
+            } else {
+                rr.onError(responseInfo.error, ret);
+                Rlog.e(TAG, rr.serialString() + "< "
+                        + mRadioConfig.requestToString(rr.mRequest) + " error "
+                        + responseInfo.error);
+            }
+        } else {
+            Rlog.e(TAG, "getSimSlotsStatusResponse_1_2: Error " + responseInfo.toString());
         }
     }
 
@@ -86,5 +111,16 @@ public class RadioConfigResponse extends IRadioConfigResponse.Stub {
         }
     }
 
+    /**
+     * Response function for IRadioConfig.getPhoneCapability().
+     */
+    public void getPhoneCapabilityResponse(RadioResponseInfo info,
+            PhoneCapability phoneCapability) {
+    }
 
+    /**
+     * Response function for IRadioConfig.setPreferredDataModem().
+     */
+    public void setPreferredDataModemResponse(RadioResponseInfo info) {
+    }
 }

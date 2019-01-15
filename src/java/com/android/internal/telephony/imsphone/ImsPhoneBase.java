@@ -23,9 +23,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.RegistrantList;
 import android.os.SystemProperties;
-import android.os.WorkSource;
-import android.telephony.CellInfo;
-import android.telephony.CellLocation;
 import android.telephony.NetworkScanRequest;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
@@ -145,19 +142,6 @@ abstract class ImsPhoneBase extends Phone {
         return s;
     }
 
-    /**
-     * @return all available cell information or null if none.
-     */
-    @Override
-    public List<CellInfo> getAllCellInfo(WorkSource workSource) {
-        return getServiceStateTracker().getAllCellInfo(workSource);
-    }
-
-    @Override
-    public CellLocation getCellLocation(WorkSource workSource) {
-        return null;
-    }
-
     @Override
     public PhoneConstants.State getState() {
         return mState;
@@ -223,8 +207,6 @@ abstract class ImsPhoneBase extends Phone {
 
     public void notifyDisconnect(Connection cn) {
         mDisconnectRegistrants.notifyResult(cn);
-
-        mNotifier.notifyDisconnectCause(cn.getDisconnectCause(), cn.getPreciseDisconnectCause());
     }
 
     void notifyUnknownConnection() {
@@ -476,16 +458,6 @@ abstract class ImsPhoneBase extends Phone {
         return false;
     }
 
-    @Override
-    public boolean isDataEnabled() {
-        return false;
-    }
-
-    @Override
-    public void setUserDataEnabled(boolean enable) {
-    }
-
-
     public boolean enableDataConnectivity() {
         return false;
     }
@@ -495,7 +467,7 @@ abstract class ImsPhoneBase extends Phone {
     }
 
     @Override
-    public boolean isDataAllowed() {
+    public boolean isDataAllowed(int apnType) {
         return false;
     }
 

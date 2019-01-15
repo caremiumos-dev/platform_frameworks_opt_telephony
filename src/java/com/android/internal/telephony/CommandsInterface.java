@@ -25,9 +25,11 @@ import android.service.carrier.CarrierIdentifier;
 import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
+import android.telephony.TelephonyManager;
 import android.telephony.data.DataProfile;
 
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
+import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccCardStatus;
 
@@ -37,19 +39,6 @@ import java.util.List;
  * {@hide}
  */
 public interface CommandsInterface {
-    enum RadioState {
-        RADIO_OFF,         /* Radio explicitly powered off (eg CFUN=0) */
-        RADIO_UNAVAILABLE, /* Radio unavailable (eg, resetting or not booted) */
-        RADIO_ON;          /* Radio is on */
-
-        public boolean isOn() /* and available...*/ {
-            return this == RADIO_ON;
-        }
-
-        public boolean isAvailable() {
-            return this != RADIO_UNAVAILABLE;
-        }
-    }
 
     //***** Constants
 
@@ -121,7 +110,12 @@ public interface CommandsInterface {
     static final int CDMA_SMS_FAIL_CAUSE_ENCODING_PROBLEM           = 96;
 
     //***** Methods
-    RadioState getRadioState();
+
+    /**
+     * get latest radio power state from modem
+     * @return
+     */
+    @TelephonyManager.RadioPowerState int getRadioState();
 
     /**
      * response.obj.result is an int[2]
@@ -831,7 +825,8 @@ public interface CommandsInterface {
      * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
      * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
      */
-    void dial (String address, int clirMode, Message result);
+    void dial(String address, boolean isEmergencyCall, int emergencyServiceCategories,
+               int clirMode, Message result);
 
     /**
      *  returned message
@@ -844,7 +839,8 @@ public interface CommandsInterface {
      * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
      * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
      */
-    void dial(String address, int clirMode, UUSInfo uusInfo, Message result);
+    void dial(String address, boolean isEmergencyCall, int emergencyServiceCategories,
+              int clirMode, UUSInfo uusInfo, Message result);
 
     /**
      *  returned message
@@ -1895,8 +1891,9 @@ public interface CommandsInterface {
      *
      * @param itemID the ID of the item to read
      * @param response callback message with the String response in the obj field
+     * @param workSource calling WorkSource
      */
-    void nvReadItem(int itemID, Message response);
+    default void nvReadItem(int itemID, Message response, WorkSource workSource) {}
 
     /**
      * Write one of the NV items defined in {@link RadioNVItems} / {@code ril_nv_items.h}.
@@ -1905,8 +1902,10 @@ public interface CommandsInterface {
      * @param itemID the ID of the item to read
      * @param itemValue the value to write, as a String
      * @param response Callback message.
+     * @param workSource calling WorkSource
      */
-    void nvWriteItem(int itemID, String itemValue, Message response);
+    default void nvWriteItem(int itemID, String itemValue, Message response,
+            WorkSource workSource) {}
 
     /**
      * Update the CDMA Preferred Roaming List (PRL) in the radio NV storage.
@@ -2059,23 +2058,27 @@ public interface CommandsInterface {
      * Get modem activity info and stats
      *
      * @param result Callback message contains the modem activity information
+     * @param workSource calling WorkSource
      */
-    public void getModemActivityInfo(Message result);
+    default void getModemActivityInfo(Message result, WorkSource workSource) {}
 
     /**
      * Set allowed carriers
      *
      * @param carriers Allowed carriers
      * @param result Callback message contains the number of carriers set successfully
+     * @param workSource calling WorkSource
      */
-    public void setAllowedCarriers(List<CarrierIdentifier> carriers, Message result);
+    default void setAllowedCarriers(List<CarrierIdentifier> carriers, Message result,
+            WorkSource workSource) {}
 
     /**
      * Get allowed carriers
      *
      * @param result Callback message contains the allowed carriers
+     * @param workSource calling WorkSource
      */
-    public void getAllowedCarriers(Message result);
+    default void getAllowedCarriers(Message result, WorkSource workSource) {}
 
     /**
      * Register for unsolicited PCO data.  This information is carrier-specific,
@@ -2167,8 +2170,9 @@ public interface CommandsInterface {
      * - {@link android.telephony.TelephonyManager#CARD_POWER_UP}
      * - {@link android.telephony.TelephonyManager#CARD_POWER_UP_PASS_THROUGH}
      * @param result callback message contains the information of SUCCESS/FAILURE
+     * @param workSource calling WorkSource
      */
-    void setSimCardPower(int state, Message result);
+    default void setSimCardPower(int state, Message result, WorkSource workSource) {}
 
     /**
      * Register for unsolicited Carrier Public Key.
@@ -2219,6 +2223,22 @@ public interface CommandsInterface {
     void unregisterForNattKeepaliveStatus(Handler h);
 
     /**
+     * Register for unsolicited Emergency Number List Indications
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    void registerForEmergencyNumberList(Handler h, int what, Object obj);
+
+    /**
+     * Deregister for unsolicited Emergency Number List Indications
+     *
+     * @param h Handler for notification message.
+     */
+    void unregisterForEmergencyNumberList(Handler h);
+
+    /**
      * Start sending NATT Keepalive packets on a specified data connection
      *
      * @param contextId cid that identifies the data connection for this keepalive
@@ -2237,7 +2257,11 @@ public interface CommandsInterface {
      */
     void stopNattKeepalive(int sessionHandle, Message result);
 
-    default public List<ClientRequestStats> getClientRequestStats() {
+    default List<ClientRequestStats> getClientRequestStats() {
         return null;
+    }
+
+    default int getIwlanOperationMode() {
+        return TransportManager.IWLAN_OPERATION_MODE_DEFAULT;
     }
 }

@@ -173,7 +173,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             // Prior to phone switch to GSM, if CDMA has any emergency call
             // data will be in disabled state, after switching to GSM enable data.
             if (mIsInEmergencyCall) {
-                mPhone.mDcTracker.setInternalDataEnabled(true);
+                mPhone.getDataEnabledSettings().setInternalDataEnabled(true);
             }
         } else {
             mConnections = new GsmCdmaConnection[MAX_CONNECTIONS_CDMA];
@@ -197,6 +197,8 @@ public class GsmCdmaCallTracker extends CallTracker {
         }
 
         if (mPendingMO != null) {
+            // Send the notification that the pending call was disconnected to the higher layers.
+            mPendingMO.onDisconnect(DisconnectCause.ERROR_UNSPECIFIED);
             mPendingMO.dispose();
         }
 
@@ -272,9 +274,10 @@ public class GsmCdmaCallTracker extends CallTracker {
         // note that this triggers call state changed notif
         clearDisconnected();
 
-        if (!canDial()) {
-            throw new CallStateException("cannot dial in current state");
-        }
+        // Check for issues which would preclude dialing and throw a CallStateException.
+        boolean isEmergencyCall = PhoneNumberUtils.isLocalEmergencyNumber(mPhone.getContext(),
+                dialString);
+        checkForDialIssues(isEmergencyCall);
 
         String origNumber = dialString;
         dialString = convertNumberIfNecessary(mPhone, dialString);
@@ -308,8 +311,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             //we should have failed in !canDial() above before we get here
             throw new CallStateException("cannot dial in current state");
         }
-        boolean isEmergencyCall = PhoneNumberUtils.isLocalEmergencyNumber(mPhone.getContext(),
-                dialString);
+
         mPendingMO = new GsmCdmaConnection(mPhone, checkForTestEmergencyNumber(dialString),
                 this, mForegroundCall, isEmergencyCall);
         mHangupPendingMO = false;
@@ -328,7 +330,9 @@ public class GsmCdmaCallTracker extends CallTracker {
             // Always unmute when initiating a new call
             setMute(false);
 
-            mCi.dial(mPendingMO.getAddress(), clirMode, uusInfo, obtainCompleteMessage());
+            mCi.dial(mPendingMO.getAddress(), mPendingMO.isEmergencyCall(),
+                    mPendingMO.getEmergencyServiceCategories(), clirMode, uusInfo,
+                    obtainCompleteMessage());
         }
 
         if (mNumberConverted) {
@@ -370,7 +374,7 @@ public class GsmCdmaCallTracker extends CallTracker {
     //CDMA
     public void setIsInEmergencyCall() {
         mIsInEmergencyCall = true;
-        mPhone.mDcTracker.setInternalDataEnabled(false);
+        mPhone.getDataEnabledSettings().setInternalDataEnabled(false);
         mPhone.notifyEmergencyCallRegistrants(true);
         mPhone.sendEmergencyCallStateChange(true);
     }
@@ -383,9 +387,11 @@ public class GsmCdmaCallTracker extends CallTracker {
         // note that this triggers call state changed notif
         clearDisconnected();
 
-        if (!canDial()) {
-            throw new CallStateException("cannot dial in current state");
-        }
+        boolean isEmergencyCall =
+                PhoneNumberUtils.isLocalEmergencyNumber(mPhone.getContext(), dialString);
+
+        // Check for issues which would preclude dialing and throw a CallStateException.
+        checkForDialIssues(isEmergencyCall);
 
         TelephonyManager tm =
                 (TelephonyManager) mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
@@ -407,8 +413,6 @@ public class GsmCdmaCallTracker extends CallTracker {
         }
 
         boolean isPhoneInEcmMode = mPhone.isInEcm();
-        boolean isEmergencyCall =
-                PhoneNumberUtils.isLocalEmergencyNumber(mPhone.getContext(), dialString);
 
         // Cancel Ecm timer if a second emergency call is originating in Ecm mode
         if (isPhoneInEcmMode && isEmergencyCall) {
@@ -443,7 +447,9 @@ public class GsmCdmaCallTracker extends CallTracker {
 
             // In Ecm mode, if another emergency call is dialed, Ecm mode will not exit.
             if(!isPhoneInEcmMode || (isPhoneInEcmMode && isEmergencyCall)) {
-                mCi.dial(mPendingMO.getAddress(), clirMode, obtainCompleteMessage());
+                mCi.dial(mPendingMO.getAddress(), mPendingMO.isEmergencyCall(),
+                        mPendingMO.getEmergencyServiceCategories(), clirMode,
+                        obtainCompleteMessage());
             } else {
                 mPhone.exitEmergencyCallbackMode();
                 mPhone.setOnEcbModeExitResponse(this,EVENT_EXIT_ECM_RESPONSE_CDMA, null);
@@ -476,7 +482,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             // Some networks need an empty flash before sending the normal one
             CarrierConfigManager configManager = (CarrierConfigManager)
                     mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
-            PersistableBundle bundle = configManager.getConfig();
+            PersistableBundle bundle = configManager.getConfigForSubId(mPhone.getSubId());
             if (bundle != null) {
                 m3WayCallFlashDelay =
                         bundle.getInt(CarrierConfigManager.KEY_CDMA_3WAYCALL_FLASH_DELAY_INT);
@@ -611,41 +617,50 @@ public class GsmCdmaCallTracker extends CallTracker {
                 && !mForegroundCall.isFull();
     }
 
-    private boolean canDial() {
-        boolean ret;
-        int serviceState = mPhone.getServiceState().getState();
+    /**
+     * Determines if there are issues which would preclude dialing an outgoing call.  Throws a
+     * {@link CallStateException} if there is an issue.
+     * @throws CallStateException
+     */
+    public void checkForDialIssues(boolean isEmergencyCall) throws CallStateException {
         String disableCall = SystemProperties.get(
                 TelephonyProperties.PROPERTY_DISABLE_CALL, "false");
 
-        ret = (serviceState != ServiceState.STATE_POWER_OFF)
-                && mPendingMO == null
-                && !mRingingCall.isRinging()
-                && !disableCall.equals("true")
-                && (!mForegroundCall.getState().isAlive()
-                    || !mBackgroundCall.getState().isAlive()
-                    || (!isPhoneTypeGsm()
-                        && mForegroundCall.getState() == GsmCdmaCall.State.ACTIVE));
-
-        if (!ret) {
-            log(String.format("canDial is false\n" +
-                            "((serviceState=%d) != ServiceState.STATE_POWER_OFF)::=%s\n" +
-                            "&& pendingMO == null::=%s\n" +
-                            "&& !ringingCall.isRinging()::=%s\n" +
-                            "&& !disableCall.equals(\"true\")::=%s\n" +
-                            "&& (!foregroundCall.getState().isAlive()::=%s\n" +
-                            "   || foregroundCall.getState() == GsmCdmaCall.State.ACTIVE::=%s\n" +
-                            "   ||!backgroundCall.getState().isAlive())::=%s)",
-                    serviceState,
-                    serviceState != ServiceState.STATE_POWER_OFF,
-                    mPendingMO == null,
-                    !mRingingCall.isRinging(),
-                    !disableCall.equals("true"),
-                    !mForegroundCall.getState().isAlive(),
-                    mForegroundCall.getState() == GsmCdmaCall.State.ACTIVE,
-                    !mBackgroundCall.getState().isAlive()));
+        if (mCi.getRadioState() != TelephonyManager.RADIO_POWER_ON) {
+            throw new CallStateException(CallStateException.ERROR_POWER_OFF,
+                    "Modem not powered");
         }
+        if (disableCall.equals("true")) {
+            throw new CallStateException(CallStateException.ERROR_CALLING_DISABLED,
+                    "Calling disabled via ro.telephony.disable-call property");
+        }
+        if (mPendingMO != null) {
+            throw new CallStateException(CallStateException.ERROR_ALREADY_DIALING,
+                    "A call is already dialing.");
+        }
+        if (mRingingCall.isRinging()) {
+            throw new CallStateException(CallStateException.ERROR_CALL_RINGING,
+                    "Can't call while a call is ringing.");
+        }
+        if (isPhoneTypeGsm()
+                && mForegroundCall.getState().isAlive() && mBackgroundCall.getState().isAlive()) {
+            throw new CallStateException(CallStateException.ERROR_TOO_MANY_CALLS,
+                    "There is already a foreground and background call.");
+        }
+        if (!isPhoneTypeGsm()
+                // Essentially foreground call state is one of:
+                // HOLDING, DIALING, ALERTING, INCOMING, WAITING
+                && mForegroundCall.getState().isAlive()
+                && mForegroundCall.getState() != GsmCdmaCall.State.ACTIVE
 
-        return ret;
+                && mBackgroundCall.getState().isAlive()) {
+            throw new CallStateException(CallStateException.ERROR_TOO_MANY_CALLS,
+                    "There is already a foreground and background call.");
+        }
+        if (!isEmergencyCall && isInOtaspCall()) {
+            throw new CallStateException(CallStateException.ERROR_OTASP_PROVISIONING_IN_PROCESS,
+                    "OTASP provisioning is in process.");
+        }
     }
 
     public boolean canTransfer() {
@@ -1431,11 +1446,36 @@ public class GsmCdmaCallTracker extends CallTracker {
                 operationComplete();
 
                 if (ar.exception != null) {
-                    // An exception occurred...just treat the disconnect
-                    // cause as "normal"
-                    causeCode = CallFailCause.NORMAL_CLEARING;
-                    Rlog.i(LOG_TAG,
-                            "Exception during getLastCallFailCause, assuming normal disconnect");
+                    if (ar.exception instanceof CommandException) {
+                        // If we get a CommandException, there are some modem-reported command
+                        // errors which are truly exceptional.  We shouldn't treat these as
+                        // NORMAL_CLEARING, so we'll re-map to ERROR_UNSPECIFIED.
+                        CommandException commandException = (CommandException) ar.exception;
+                        switch (commandException.getCommandError()) {
+                            case RADIO_NOT_AVAILABLE:
+                                // Intentional fall-through.
+                            case NO_MEMORY:
+                                // Intentional fall-through.
+                            case INTERNAL_ERR:
+                                // Intentional fall-through.
+                            case NO_RESOURCES:
+                                causeCode = CallFailCause.ERROR_UNSPECIFIED;
+
+                                // Report the actual internal command error as the vendor cause;
+                                // this will ensure it gets bubbled up into the Telecom logs.
+                                vendorCause = commandException.getCommandError().toString();
+                                break;
+                            default:
+                                causeCode = CallFailCause.NORMAL_CLEARING;
+                        }
+                    } else {
+                        // An exception occurred...just treat the disconnect
+                        // cause as "normal"
+                        causeCode = CallFailCause.NORMAL_CLEARING;
+                        Rlog.i(LOG_TAG,
+                                "Exception during getLastCallFailCause, assuming normal "
+                                        + "disconnect");
+                    }
                 } else {
                     LastCallFailCause failCause = (LastCallFailCause)ar.result;
                     causeCode = failCause.causeCode;
@@ -1493,7 +1533,9 @@ public class GsmCdmaCallTracker extends CallTracker {
                 if (!isPhoneTypeGsm()) {
                     // no matter the result, we still do the same here
                     if (mPendingCallInEcm) {
-                        mCi.dial(mPendingMO.getAddress(), mPendingCallClirMode, obtainCompleteMessage());
+                        mCi.dial(mPendingMO.getAddress(), mPendingMO.isEmergencyCall(),
+                                mPendingMO.getEmergencyServiceCategories(), mPendingCallClirMode,
+                                obtainCompleteMessage());
                         mPendingCallInEcm = false;
                     }
                     mPhone.unsetOnEcbModeExitResponse(this);
@@ -1560,6 +1602,24 @@ public class GsmCdmaCallTracker extends CallTracker {
         }
     }
 
+    /**
+     * Dispatches the CS call radio technology to all exist connections.
+     *
+     * @param vrat the RIL voice radio technology for CS calls,
+     *             see {@code RIL_RADIO_TECHNOLOGY_*} in {@link android.telephony.ServiceState}.
+     */
+    public void dispatchCsCallRadioTech(@ServiceState.RilRadioTechnology int vrat) {
+        if (mConnections == null) {
+            log("dispatchCsCallRadioTech: mConnections is null");
+            return;
+        }
+        for (GsmCdmaConnection gsmCdmaConnection : mConnections) {
+            if (gsmCdmaConnection != null) {
+                gsmCdmaConnection.setCallRadioTech(vrat);
+            }
+        }
+    }
+
     //CDMA
     /**
      * Check and enable data call after an emergency call is dropped if it's
@@ -1574,7 +1634,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             }
             if (!inEcm) {
                 // Re-initiate data connection
-                mPhone.mDcTracker.setInternalDataEnabled(true);
+                mPhone.getDataEnabledSettings().setInternalDataEnabled(true);
                 mPhone.notifyEmergencyCallRegistrants(false);
             }
             mPhone.sendEmergencyCallStateChange(false);
@@ -1622,6 +1682,18 @@ public class GsmCdmaCallTracker extends CallTracker {
      */
     public boolean isInEmergencyCall() {
         return mIsInEmergencyCall;
+    }
+
+    /**
+     * @return {@code true} if the pending outgoing call or active call is an OTASP call,
+     * {@code false} otherwise.
+     */
+    public boolean isInOtaspCall() {
+        return mPendingMO != null && mPendingMO.isOtaspCall()
+                || (mForegroundCall.getConnections().stream()
+                .filter(connection -> ((connection instanceof GsmCdmaConnection)
+                        && (((GsmCdmaConnection) connection).isOtaspCall())))
+                .count() > 0);
     }
 
     private boolean isPhoneTypeGsm() {

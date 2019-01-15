@@ -61,7 +61,7 @@ public class ApnContext {
 
     private ApnSetting mApnSetting;
 
-    DcAsyncChannel mDcAc;
+    private DataConnection mDataConnection;
 
     String mReason;
 
@@ -138,23 +138,24 @@ public class ApnContext {
     }
 
     /**
-     * Get the data call async channel.
-     * @return The data call async channel
+     * Get the associated data connection
+     * @return The data connection
      */
-    public synchronized DcAsyncChannel getDcAc() {
-        return mDcAc;
+    public synchronized DataConnection getDataConnection() {
+        return mDataConnection;
     }
 
+
     /**
-     * Set the data call async channel.
-     * @param dcac The data call async channel
+     * Set the associated data connection.
+     * @param dc data connection
      */
-    public synchronized void setDataConnectionAc(DcAsyncChannel dcac) {
+    public synchronized void setDataConnection(DataConnection dc) {
         if (DBG) {
-            log("setDataConnectionAc: old dcac=" + mDcAc + " new dcac=" + dcac
+            log("setDataConnectionAc: old dc=" + mDataConnection + ",new dc=" + dc
                     + " this=" + this);
         }
-        mDcAc = dcac;
+        mDataConnection = dc;
     }
 
     /**
@@ -162,9 +163,9 @@ public class ApnContext {
      * @param reason The reason of releasing data connection
      */
     public synchronized void releaseDataConnection(String reason) {
-        if (mDcAc != null) {
-            mDcAc.tearDown(this, reason, null);
-            mDcAc = null;
+        if (mDataConnection != null) {
+            mDataConnection.tearDown(this, reason, null);
+            mDataConnection = null;
         }
         setState(DctConstants.State.IDLE);
     }
@@ -343,7 +344,6 @@ public class ApnContext {
      */
     public boolean isConnectable() {
         return isReady() && ((mState == DctConstants.State.IDLE)
-                                || (mState == DctConstants.State.SCANNING)
                                 || (mState == DctConstants.State.RETRYING)
                                 || (mState == DctConstants.State.FAILED));
     }
@@ -363,7 +363,6 @@ public class ApnContext {
     public boolean isConnectedOrConnecting() {
         return isReady() && ((mState == DctConstants.State.CONNECTED)
                                 || (mState == DctConstants.State.CONNECTING)
-                                || (mState == DctConstants.State.SCANNING)
                                 || (mState == DctConstants.State.RETRYING));
     }
 
@@ -459,7 +458,11 @@ public class ApnContext {
         }
     }
 
-    public boolean hasNoRestrictedRequests(boolean excludeDun) {
+    /**
+     * @param excludeDun True if excluding requests that have DUN capability
+     * @return True if the attached network requests contain restricted capability.
+     */
+    public boolean hasRestrictedRequests(boolean excludeDun) {
         synchronized (mRefCountLock) {
             for (NetworkRequest nr : mNetworkRequests) {
                 if (excludeDun &&
@@ -467,13 +470,13 @@ public class ApnContext {
                         NetworkCapabilities.NET_CAPABILITY_DUN)) {
                     continue;
                 }
-                if (nr.networkCapabilities.hasCapability(
-                        NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED) == false) {
-                    return false;
+                if (!nr.networkCapabilities.hasCapability(
+                        NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)) {
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     private final SparseIntArray mRetriesLeftPerErrorCode = new SparseIntArray();

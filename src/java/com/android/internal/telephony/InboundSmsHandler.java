@@ -61,6 +61,7 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.LocalLog;
+import android.util.Pair;
 
 import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
@@ -99,12 +100,20 @@ import java.util.Map;
  */
 public abstract class InboundSmsHandler extends StateMachine {
     protected static final boolean DBG = true;
-    private static final boolean VDBG = false; // STOPSHIP if true, logs user data
+    protected static final boolean VDBG = false; // STOPSHIP if true, logs user data
 
     /** Query projection for checking for duplicate message segments. */
-    private static final String[] PDU_PROJECTION = {
-            "pdu"
+    private static final String[] PDU_DELETED_FLAG_PROJECTION = {
+            "pdu",
+            "deleted"
     };
+
+    /** Mapping from DB COLUMN to PDU_SEQUENCE_PORT PROJECTION index */
+    private static final Map<Integer, Integer> PDU_DELETED_FLAG_PROJECTION_INDEX_MAPPING =
+            new HashMap<Integer, Integer>() {{
+            put(PDU_COLUMN, 0);
+            put(DELETED_FLAG_COLUMN, 1);
+            }};
 
     /** Query projection for combining concatenated message segments. */
     private static final String[] PDU_SEQUENCE_PORT_PROJECTION = {
@@ -133,6 +142,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     public static final int ID_COLUMN = 7;
     public static final int MESSAGE_BODY_COLUMN = 8;
     public static final int DISPLAY_ADDRESS_COLUMN = 9;
+    public static final int DELETED_FLAG_COLUMN = 10;
 
     public static final String SELECT_BY_ID = "_id=?";
 
@@ -154,14 +164,11 @@ public abstract class InboundSmsHandler extends StateMachine {
     /** Sent by {@link SmsBroadcastUndelivered} after cleaning the raw table. */
     public static final int EVENT_START_ACCEPTING_SMS = 6;
 
-    /** Update phone object */
-    private static final int EVENT_UPDATE_PHONE_OBJECT = 7;
-
     /** New SMS received as an AsyncResult. */
-    public static final int EVENT_INJECT_SMS = 8;
+    public static final int EVENT_INJECT_SMS = 7;
 
     /** Update the sms tracker */
-    public static final int EVENT_UPDATE_TRACKER = 9;
+    public static final int EVENT_UPDATE_TRACKER = 8;
 
     /** Wakelock release delay when returning to idle state. */
     private static final int WAKELOCK_TIMEOUT = 3000;
@@ -252,7 +259,8 @@ public abstract class InboundSmsHandler extends StateMachine {
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, name);
         mWakeLock.acquire();    // wake lock released after we enter idle state
         mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
-        mDeviceIdleController = TelephonyComponentFactory.getInstance().getIDeviceIdleController();
+        mDeviceIdleController = TelephonyComponentFactory.getInstance()
+                .inject(IDeviceIdleController.class.getName()).getIDeviceIdleController();
 
         addState(mDefaultState);
         addState(mStartupState, mDefaultState);
@@ -269,13 +277,6 @@ public abstract class InboundSmsHandler extends StateMachine {
      */
     public void dispose() {
         quit();
-    }
-
-    /**
-     * Update the phone object when it changes.
-     */
-    public void updatePhoneObject(Phone phone) {
-        sendMessage(EVENT_UPDATE_PHONE_OBJECT, phone);
     }
 
     /**
@@ -303,10 +304,6 @@ public abstract class InboundSmsHandler extends StateMachine {
         @Override
         public boolean processMessage(Message msg) {
             switch (msg.what) {
-                case EVENT_UPDATE_PHONE_OBJECT: {
-                    onUpdatePhoneObject((Phone) msg.obj);
-                    break;
-                }
                 default: {
                     String errorText = "processMessage: unhandled message type " + msg.what +
                         " currState=" + getCurrentState().getName();
@@ -522,6 +519,8 @@ public abstract class InboundSmsHandler extends StateMachine {
             // Before moving to idle state, set wakelock timeout to WAKE_LOCK_TIMEOUT milliseconds
             // to give any receivers time to take their own wake locks
             setWakeLockTimeout(WAKELOCK_TIMEOUT);
+            mPhone.getIccSmsInterfaceManager().mDispatchersController.sendEmptyMessage(
+                    SmsDispatchersController.EVENT_SMS_HANDLER_EXITING_WAITING_STATE);
         }
 
         @Override
@@ -674,19 +673,6 @@ public abstract class InboundSmsHandler extends StateMachine {
             int result, Message response);
 
     /**
-     * Called when the phone changes the default method updates mPhone
-     * mStorageMonitor and mCellBroadcastHandler.updatePhoneObject.
-     * Override if different or other behavior is desired.
-     *
-     * @param phone
-     */
-    protected void onUpdatePhoneObject(Phone phone) {
-        mPhone = phone;
-        mStorageMonitor = mPhone.mSmsStorageMonitor;
-        log("onUpdatePhoneObject: phone=" + mPhone.getClass().getSimpleName());
-    }
-
-    /**
      * Notify interested apps if the framework has rejected an incoming SMS,
      * and send an acknowledge message to the network.
      * @param success indicates that last message was successfully received.
@@ -734,8 +720,9 @@ public abstract class InboundSmsHandler extends StateMachine {
                 destPort = smsHeader.portAddrs.destPort;
                 if (DBG) log("destination port: " + destPort);
             }
-
-            tracker = TelephonyComponentFactory.getInstance().makeInboundSmsTracker(sms.getPdu(),
+            tracker = TelephonyComponentFactory.getInstance()
+                    .inject(InboundSmsTracker.class.getName())
+                    .makeInboundSmsTracker(sms.getPdu(),
                     sms.getTimestampMillis(), destPort, is3gpp2(), false,
                     sms.getOriginatingAddress(), sms.getDisplayOriginatingAddress(),
                     sms.getMessageBody());
@@ -744,8 +731,9 @@ public abstract class InboundSmsHandler extends StateMachine {
             SmsHeader.ConcatRef concatRef = smsHeader.concatRef;
             SmsHeader.PortAddrs portAddrs = smsHeader.portAddrs;
             int destPort = (portAddrs != null ? portAddrs.destPort : -1);
-
-            tracker = TelephonyComponentFactory.getInstance().makeInboundSmsTracker(sms.getPdu(),
+            tracker = TelephonyComponentFactory.getInstance()
+                    .inject(InboundSmsTracker.class.getName())
+                    .makeInboundSmsTracker(sms.getPdu(),
                     sms.getTimestampMillis(), destPort, is3gpp2(), sms.getOriginatingAddress(),
                     sms.getDisplayOriginatingAddress(), concatRef.refNumber, concatRef.seqNumber,
                     concatRef.msgCount, false, sms.getMessageBody());
@@ -793,6 +781,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         byte[][] pdus;
         int destPort = tracker.getDestPort();
         boolean block = false;
+        String address = tracker.getAddress();
 
         // Do not process when the message count is invalid.
         if (messageCount <= 0) {
@@ -810,7 +799,6 @@ public abstract class InboundSmsHandler extends StateMachine {
             Cursor cursor = null;
             try {
                 // used by several query selection arguments
-                String address = tracker.getAddress();
                 String refNumber = Integer.toString(tracker.getReferenceNumber());
                 String count = Integer.toString(tracker.getMessageCount());
 
@@ -917,7 +905,8 @@ public abstract class InboundSmsHandler extends StateMachine {
                 }
                 output.write(pdu, 0, pdu.length);
             }
-            int result = mWapPush.dispatchWapPdu(output.toByteArray(), resultReceiver, this);
+            int result = mWapPush.dispatchWapPdu(output.toByteArray(), resultReceiver,
+                    this, address);
             if (DBG) log("dispatchWapPdu() returned " + result);
             // result is Activity.RESULT_OK if an ordered broadcast was sent
             if (result == Activity.RESULT_OK) {
@@ -1209,55 +1198,47 @@ public abstract class InboundSmsHandler extends StateMachine {
     }
 
     /**
-     * Function to check if message should be dropped because same message has already been
-     * received. In certain cases it checks for similar messages instead of exact same (cases where
-     * keeping both messages in db can cause ambiguity)
-     * @return true if duplicate exists, false otherwise
+     * Function to detect and handle duplicate messages. If the received message should replace an
+     * existing message in the raw db, this function deletes the existing message. If an existing
+     * message takes priority (for eg, existing message has already been broadcast), then this new
+     * message should be dropped.
+     * @return true if the message represented by the passed in tracker should be dropped,
+     * false otherwise
      */
-    private boolean duplicateExists(InboundSmsTracker tracker) throws SQLException {
-        String address = tracker.getAddress();
-        // convert to strings for query
-        String refNumber = Integer.toString(tracker.getReferenceNumber());
-        String count = Integer.toString(tracker.getMessageCount());
-        // sequence numbers are 1-based except for CDMA WAP, which is 0-based
-        int sequence = tracker.getSequenceNumber();
-        String seqNumber = Integer.toString(sequence);
-        String date = Long.toString(tracker.getTimestamp());
-        String messageBody = tracker.getMessageBody();
-        String where;
-        if (tracker.getMessageCount() == 1) {
-            where = "address=? AND reference_number=? AND count=? AND sequence=? AND " +
-                    "date=? AND message_body=?";
-        } else {
-            // for multi-part messages, deduping should also be done against undeleted
-            // segments that can cause ambiguity when contacenating the segments, that is,
-            // segments with same address, reference_number, count, sequence and message type.
-            where = tracker.getQueryForMultiPartDuplicates();
-        }
+    private boolean checkAndHandleDuplicate(InboundSmsTracker tracker) throws SQLException {
+        Pair<String, String[]> exactMatchQuery = tracker.getExactMatchDupDetectQuery();
 
         Cursor cursor = null;
         try {
             // Check for duplicate message segments
-            cursor = mResolver.query(sRawUri, PDU_PROJECTION, where,
-                    new String[]{address, refNumber, count, seqNumber, date, messageBody},
-                    null);
+            cursor = mResolver.query(sRawUri, PDU_DELETED_FLAG_PROJECTION, exactMatchQuery.first,
+                    exactMatchQuery.second, null);
 
             // moveToNext() returns false if no duplicates were found
             if (cursor != null && cursor.moveToNext()) {
-                loge("Discarding duplicate message segment, refNumber=" + refNumber
-                        + " seqNumber=" + seqNumber + " count=" + count);
-                if (VDBG) {
-                    loge("address=" + address + " date=" + date + " messageBody=" +
-                            messageBody);
+                if (cursor.getCount() != 1) {
+                    loge("Exact match query returned " + cursor.getCount() + " rows");
                 }
-                String oldPduString = cursor.getString(PDU_COLUMN);
-                byte[] pdu = tracker.getPdu();
-                byte[] oldPdu = HexDump.hexStringToByteArray(oldPduString);
-                if (!Arrays.equals(oldPdu, tracker.getPdu())) {
-                    loge("Warning: dup message segment PDU of length " + pdu.length
-                            + " is different from existing PDU of length " + oldPdu.length);
+
+                // if the exact matching row is marked deleted, that means this message has already
+                // been received and processed, and can be discarded as dup
+                if (cursor.getInt(
+                        PDU_DELETED_FLAG_PROJECTION_INDEX_MAPPING.get(DELETED_FLAG_COLUMN)) == 1) {
+                    loge("Discarding duplicate message segment: " + tracker);
+                    logDupPduMismatch(cursor, tracker);
+                    return true;   // reject message
+                } else {
+                    // exact match duplicate is not marked deleted. If it is a multi-part segment,
+                    // the code below for inexact match will take care of it. If it is a single
+                    // part message, handle it here.
+                    if (tracker.getMessageCount() == 1) {
+                        // delete the old message segment permanently
+                        deleteFromRawTable(exactMatchQuery.first, exactMatchQuery.second,
+                                DELETE_PERMANENTLY);
+                        loge("Replacing duplicate message: " + tracker);
+                        logDupPduMismatch(cursor, tracker);
+                    }
                 }
-                return true;   // reject message
             }
         } finally {
             if (cursor != null) {
@@ -1265,7 +1246,47 @@ public abstract class InboundSmsHandler extends StateMachine {
             }
         }
 
+        // The code above does an exact match. Multi-part message segments need an additional check
+        // on top of that: if there is a message segment that conflicts this new one (may not be an
+        // exact match), replace the old message segment with this one.
+        if (tracker.getMessageCount() > 1) {
+            Pair<String, String[]> inexactMatchQuery = tracker.getInexactMatchDupDetectQuery();
+            cursor = null;
+            try {
+                // Check for duplicate message segments
+                cursor = mResolver.query(sRawUri, PDU_DELETED_FLAG_PROJECTION,
+                        inexactMatchQuery.first, inexactMatchQuery.second, null);
+
+                // moveToNext() returns false if no duplicates were found
+                if (cursor != null && cursor.moveToNext()) {
+                    if (cursor.getCount() != 1) {
+                        loge("Inexact match query returned " + cursor.getCount() + " rows");
+                    }
+                    // delete the old message segment permanently
+                    deleteFromRawTable(inexactMatchQuery.first, inexactMatchQuery.second,
+                            DELETE_PERMANENTLY);
+                    loge("Replacing duplicate message segment: " + tracker);
+                    logDupPduMismatch(cursor, tracker);
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+
         return false;
+    }
+
+    private void logDupPduMismatch(Cursor cursor, InboundSmsTracker tracker) {
+        String oldPduString = cursor.getString(
+                PDU_DELETED_FLAG_PROJECTION_INDEX_MAPPING.get(PDU_COLUMN));
+        byte[] pdu = tracker.getPdu();
+        byte[] oldPdu = HexDump.hexStringToByteArray(oldPduString);
+        if (!Arrays.equals(oldPdu, tracker.getPdu())) {
+            loge("Warning: dup message PDU of length " + pdu.length
+                    + " is different from existing PDU of length " + oldPdu.length);
+        }
     }
 
     /**
@@ -1281,7 +1302,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     private int addTrackerToRawTable(InboundSmsTracker tracker, boolean deDup) {
         if (deDup) {
             try {
-                if (duplicateExists(tracker)) {
+                if (checkAndHandleDuplicate(tracker)) {
                     return Intents.RESULT_SMS_DUPLICATED;   // reject message
                 }
             } catch (SQLException e) {
@@ -1515,14 +1536,10 @@ public abstract class InboundSmsHandler extends StateMachine {
             loge("Failed to parse SMS pdu");
             return null;
         }
-        // Sometimes, SmsMessage.mWrappedSmsMessage is null causing NPE when we access
-        // the methods on it although the SmsMessage itself is not null. So do this check
-        // before we do anything on the parsed SmsMessages.
+        // Sometimes, SmsMessage is null if it can’t be parsed correctly.
         for (final SmsMessage sms : messages) {
-            try {
-                sms.getDisplayMessageBody();
-            } catch (NullPointerException e) {
-                loge("NPE inside SmsMessage");
+            if (sms == null) {
+                loge("Can’t write null SmsMessage");
                 return null;
             }
         }

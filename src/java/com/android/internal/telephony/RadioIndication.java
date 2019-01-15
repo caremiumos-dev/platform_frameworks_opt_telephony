@@ -25,6 +25,7 @@ import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CDMA_RUIM_SM
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CDMA_SUBSCRIPTION_SOURCE_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_CELL_INFO_LIST;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_DATA_CALL_LIST_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_EMERGENCY_NUMBER_LIST;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_ENTER_EMERGENCY_CALLBACK_MODE;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_HARDWARE_CONFIG_CHANGED;
@@ -91,6 +92,8 @@ import android.telephony.PcoData;
 import android.telephony.PhysicalChannelConfig;
 import android.telephony.SignalStrength;
 import android.telephony.SmsMessage;
+import android.telephony.TelephonyManager;
+import android.telephony.emergency.EmergencyNumber;
 
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
 import com.android.internal.telephony.cdma.CdmaInformationRecords;
@@ -120,13 +123,13 @@ public class RadioIndication extends IRadioIndication.Stub {
     public void radioStateChanged(int indicationType, int radioState) {
         mRil.processIndication(indicationType);
 
-        CommandsInterface.RadioState newState = getRadioStateFromInt(radioState);
+        int state = getRadioStateFromInt(radioState);
         if (RIL.RILJ_LOGD) {
             mRil.unsljLogMore(RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED, "radioStateChanged: " +
-                    newState);
+                    state);
         }
 
-        mRil.setRadioState(newState);
+        mRil.setRadioState(state, false /* forceNotifyRegistrants */);
     }
 
     public void callStateChanged(int indicationType) {
@@ -228,7 +231,7 @@ public class RadioIndication extends IRadioIndication.Stub {
                                       android.hardware.radio.V1_0.SignalStrength signalStrength) {
         mRil.processIndication(indicationType);
 
-        SignalStrength ss = RIL.convertHalSignalStrength(signalStrength);
+        SignalStrength ss = new SignalStrength(signalStrength);
         // Note this is set to "verbose" because it happens frequently
         if (RIL.RILJ_LOGV) mRil.unsljLogvRet(RIL_UNSOL_SIGNAL_STRENGTH, ss);
 
@@ -260,7 +263,7 @@ public class RadioIndication extends IRadioIndication.Stub {
                                       android.hardware.radio.V1_2.SignalStrength signalStrength) {
         mRil.processIndication(indicationType);
 
-        SignalStrength ss = RIL.convertHalSignalStrength_1_2(signalStrength);
+        SignalStrength ss = new SignalStrength(signalStrength);
         // Note this is set to "verbose" because it happens frequently
         if (RIL.RILJ_LOGV) mRil.unsljLogvRet(RIL_UNSOL_SIGNAL_STRENGTH, ss);
 
@@ -293,12 +296,36 @@ public class RadioIndication extends IRadioIndication.Stub {
                     break;
             }
 
-            response.add(new PhysicalChannelConfig(status, config.cellBandwidthDownlink));
+            response.add(new PhysicalChannelConfig.Builder()
+                    .setCellConnectionStatus(status)
+                    .setCellBandwidthDownlinkKhz(config.cellBandwidthDownlink)
+                    .build());
         }
 
         if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_PHYSICAL_CHANNEL_CONFIG, response);
 
         mRil.mPhysicalChannelConfigurationRegistrants.notifyRegistrants(
+                new AsyncResult(null, response, null));
+    }
+
+    /**
+     * Indicates current emergency number list.
+     */
+    public void currentEmergencyNumberList(int indicationType,
+            ArrayList<android.hardware.radio.V1_4.EmergencyNumber> emergencyNumberList) {
+        List<EmergencyNumber> response = new ArrayList<>(emergencyNumberList.size());
+
+        for (android.hardware.radio.V1_4.EmergencyNumber emergencyNumberHal
+                : emergencyNumberList) {
+            EmergencyNumber emergencyNumber = new EmergencyNumber(emergencyNumberHal.number,
+                    MccTable.countryCodeForMcc(emergencyNumberHal.mcc), emergencyNumberHal.mnc,
+                    emergencyNumberHal.categories, emergencyNumberHal.sources);
+            response.add(emergencyNumber);
+        }
+
+        if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_EMERGENCY_NUMBER_LIST, response);
+
+        mRil.mEmergencyNumberListRegistrants.notifyRegistrants(
                 new AsyncResult(null, response, null));
     }
 
@@ -668,7 +695,6 @@ public class RadioIndication extends IRadioIndication.Stub {
         // Initial conditions
         mRil.setRadioPower(false, null);
         mRil.setCdmaSubscriptionSource(mRil.mCdmaSubscription, null);
-        mRil.setCellInfoListRate();
         // todo: this should not require a version number now. Setting it to latest RIL version for
         // now.
         mRil.notifyRegistrantsRilConnectionChanged(15);
@@ -904,18 +930,22 @@ public class RadioIndication extends IRadioIndication.Stub {
         mRil.mNattKeepaliveStatusRegistrants.notifyRegistrants(new AsyncResult(null, ks, null));
     }
 
-    private CommandsInterface.RadioState getRadioStateFromInt(int stateInt) {
-        CommandsInterface.RadioState state;
+    /**
+     * @param stateInt
+     * @return {@link TelephonyManager.RadioPowerState RadioPowerState}
+     */
+    private @TelephonyManager.RadioPowerState int getRadioStateFromInt(int stateInt) {
+        int state;
 
         switch(stateInt) {
             case android.hardware.radio.V1_0.RadioState.OFF:
-                state = CommandsInterface.RadioState.RADIO_OFF;
+                state = TelephonyManager.RADIO_POWER_OFF;
                 break;
             case android.hardware.radio.V1_0.RadioState.UNAVAILABLE:
-                state = CommandsInterface.RadioState.RADIO_UNAVAILABLE;
+                state = TelephonyManager.RADIO_POWER_UNAVAILABLE;
                 break;
             case android.hardware.radio.V1_0.RadioState.ON:
-                state = CommandsInterface.RadioState.RADIO_ON;
+                state = TelephonyManager.RADIO_POWER_ON;
                 break;
             default:
                 throw new RuntimeException("Unrecognized RadioState: " + stateInt);

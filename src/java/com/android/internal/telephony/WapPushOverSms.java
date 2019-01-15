@@ -19,6 +19,7 @@ package com.android.internal.telephony;
 import static com.google.android.mms.pdu.PduHeaders.MESSAGE_TYPE_DELIVERY_IND;
 import static com.google.android.mms.pdu.PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND;
 import static com.google.android.mms.pdu.PduHeaders.MESSAGE_TYPE_READ_ORIG_IND;
+
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.app.BroadcastOptions;
@@ -38,7 +39,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IDeviceIdleController;
 import android.os.RemoteException;
-import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Telephony;
@@ -46,11 +46,10 @@ import android.provider.Telephony.Sms.Intents;
 import android.telephony.Rlog;
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.telephony.uicc.IccUtils;
-
-import java.util.HashMap;
 
 import com.google.android.mms.MmsException;
 import com.google.android.mms.pdu.DeliveryInd;
@@ -60,6 +59,8 @@ import com.google.android.mms.pdu.PduHeaders;
 import com.google.android.mms.pdu.PduParser;
 import com.google.android.mms.pdu.PduPersister;
 import com.google.android.mms.pdu.ReadOrigInd;
+
+import java.util.HashMap;
 
 /**
  * WAP push handler class.
@@ -132,7 +133,8 @@ public class WapPushOverSms implements ServiceConnection {
 
     public WapPushOverSms(Context context) {
         mContext = context;
-        mDeviceIdleController = TelephonyComponentFactory.getInstance().getIDeviceIdleController();
+        mDeviceIdleController = TelephonyComponentFactory.getInstance()
+                .inject(IDeviceIdleController.class.getName()).getIDeviceIdleController();
 
         UserManager userManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
 
@@ -199,9 +201,9 @@ public class WapPushOverSms implements ServiceConnection {
                     return result;
                 }
             }
-
             WspTypeDecoder pduDecoder =
-                    TelephonyComponentFactory.getInstance().makeWspTypeDecoder(pdu);
+                    TelephonyComponentFactory.getInstance().inject(WspTypeDecoder.class.getName())
+                            .makeWspTypeDecoder(pdu);
 
             /**
              * Parse HeaderLen(unsigned integer).
@@ -325,6 +327,21 @@ public class WapPushOverSms implements ServiceConnection {
      *         to applications
      */
     public int dispatchWapPdu(byte[] pdu, BroadcastReceiver receiver, InboundSmsHandler handler) {
+        return dispatchWapPdu(pdu, receiver, handler, null);
+    }
+
+    /**
+     * Dispatches inbound messages that are in the WAP PDU format. See
+     * wap-230-wsp-20010705-a section 8 for details on the WAP PDU format.
+     *
+     * @param pdu The WAP PDU, made up of one or more SMS PDUs
+     * @param address The originating address
+     * @return a result code from {@link android.provider.Telephony.Sms.Intents}, or
+     *         {@link Activity#RESULT_OK} if the message has been broadcast
+     *         to applications
+     */
+    public int dispatchWapPdu(byte[] pdu, BroadcastReceiver receiver, InboundSmsHandler handler,
+            String address) {
         DecodedResult result = decodeWapPdu(pdu, handler);
         if (result.statusCode != Activity.RESULT_OK) {
             return result.statusCode;
@@ -360,6 +377,9 @@ public class WapPushOverSms implements ServiceConnection {
                     intent.putExtra("data", result.intentData);
                     intent.putExtra("contentTypeParameters", result.contentTypeParameters);
                     SubscriptionManager.putPhoneIdAndSubIdExtra(intent, result.phoneId);
+                    if (!TextUtils.isEmpty(address)) {
+                        intent.putExtra("address", address);
+                    }
 
                     int procRet = wapPushMan.processMessage(
                         result.wapAppId, result.contentType, intent);
@@ -391,6 +411,9 @@ public class WapPushOverSms implements ServiceConnection {
         intent.putExtra("data", result.intentData);
         intent.putExtra("contentTypeParameters", result.contentTypeParameters);
         SubscriptionManager.putPhoneIdAndSubIdExtra(intent, result.phoneId);
+        if (!TextUtils.isEmpty(address)) {
+            intent.putExtra("address", address);
+        }
 
         // Direct the intent to only the default MMS app. If we can't find a default MMS app
         // then sent it to all broadcast receivers.

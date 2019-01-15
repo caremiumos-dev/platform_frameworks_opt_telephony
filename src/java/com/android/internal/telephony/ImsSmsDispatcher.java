@@ -21,22 +21,22 @@ import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.CarrierConfigManager;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
+import android.telephony.ServiceState;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.aidl.IImsSmsListener;
-import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.telephony.ims.stub.ImsSmsImplBase;
 import android.telephony.ims.stub.ImsSmsImplBase.SendStatusResult;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.ServiceState;
 import android.util.Pair;
 
 import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
+import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.util.SMSDispatcherUtil;
 
 import java.util.HashMap;
@@ -62,12 +62,15 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     private volatile boolean mIsImsServiceUp;
     private volatile boolean mIsRegistered;
     private final ImsManager.Connector mImsManagerConnector;
+    /** Telephony metrics instance for logging metrics event */
+    private TelephonyMetrics mMetrics = TelephonyMetrics.getInstance();
+
     /**
      * Listen to the IMS service state change
      *
      */
-    private ImsRegistrationImplBase.Callback mRegistrationCallback =
-            new ImsRegistrationImplBase.Callback() {
+    private android.telephony.ims.ImsMmTelManager.RegistrationCallback mRegistrationCallback =
+            new android.telephony.ims.ImsMmTelManager.RegistrationCallback() {
                 @Override
                 public void onRegistered(
                         @ImsRegistrationImplBase.ImsRegistrationTech int imsRadioTech) {
@@ -95,12 +98,13 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                 }
             };
 
-    private ImsFeature.CapabilityCallback mCapabilityCallback =
-            new ImsFeature.CapabilityCallback() {
+    private android.telephony.ims.ImsMmTelManager.CapabilityCallback mCapabilityCallback =
+            new android.telephony.ims.ImsMmTelManager.CapabilityCallback() {
                 @Override
-                public void onCapabilitiesStatusChanged(ImsFeature.Capabilities config) {
+                public void onCapabilitiesStatusChanged(
+                        MmTelFeature.MmTelCapabilities capabilities) {
                     synchronized (mLock) {
-                        mIsSmsCapable = config.isCapable(
+                        mIsSmsCapable = capabilities.isCapable(
                                 MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_SMS);
                     }
                 }
@@ -112,6 +116,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                 int reason) throws RemoteException {
             Rlog.d(TAG, "onSendSmsResult token=" + token + " messageRef=" + messageRef
                     + " status=" + status + " reason=" + reason);
+            mMetrics.writeOnImsServiceSmsSolicitedResponse(mPhone.getPhoneId(), status, reason);
             SmsTracker tracker = mTrackers.get(token);
             if (tracker == null) {
                 throw new IllegalArgumentException("Invalid token.");
@@ -130,6 +135,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     sendSms(tracker);
                     break;
                 case ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK:
+                    tracker.mRetryCount += 1;
                     fallbackToPstn(token, tracker);
                     break;
                 default:
@@ -164,8 +170,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         }
 
         @Override
-        public void onSmsReceived(int token, String format, byte[] pdu)
-                throws RemoteException {
+        public void onSmsReceived(int token, String format, byte[] pdu) {
             Rlog.d(TAG, "SMS received.");
             android.telephony.SmsMessage message =
                     android.telephony.SmsMessage.createFromPdu(pdu, format);
@@ -174,7 +179,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                 int mappedResult;
                 switch (result) {
                     case Intents.RESULT_SMS_HANDLED:
-                        mappedResult = ImsSmsImplBase.STATUS_REPORT_STATUS_OK;
+                        mappedResult = ImsSmsImplBase.DELIVER_STATUS_OK;
                         break;
                     case Intents.RESULT_SMS_OUT_OF_MEMORY:
                         mappedResult = ImsSmsImplBase.DELIVER_STATUS_ERROR_NO_MEMORY;
@@ -194,8 +199,11 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                         Rlog.w(TAG, "SMS Received with a PDU that could not be parsed.");
                         getImsManager().acknowledgeSms(token, 0, mappedResult);
                     }
+                    mMetrics.writeImsServiceNewSms(mPhone.getPhoneId(), format, mappedResult);
                 } catch (ImsException e) {
                     Rlog.e(TAG, "Failed to acknowledgeSms(). Error: " + e.getMessage());
+                    mMetrics.writeImsServiceNewSms(mPhone.getPhoneId(), format,
+                            ImsSmsImplBase.DELIVER_STATUS_ERROR_GENERIC);
                 }
             }, true);
         }
@@ -229,7 +237,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     private void setListeners() throws ImsException {
         getImsManager().addRegistrationCallback(mRegistrationCallback);
         getImsManager().addCapabilitiesCallback(mCapabilityCallback);
-        getImsManager().setSmsListener(mImsSmsListener);
+        getImsManager().setSmsListener(getSmsListener());
         getImsManager().onSmsReady();
     }
 
@@ -338,8 +346,9 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         byte[] pdu = (byte[]) map.get(MAP_KEY_PDU);
         byte smsc[] = (byte[]) map.get(MAP_KEY_SMSC);
         boolean isRetry = tracker.mRetryCount > 0;
+        String format = getFormat();
 
-        if (SmsConstants.FORMAT_3GPP.equals(getFormat()) && tracker.mRetryCount > 0) {
+        if (SmsConstants.FORMAT_3GPP.equals(format) && tracker.mRetryCount > 0) {
             // per TS 23.040 Section 9.2.3.6:  If TP-MTI SMS-SUBMIT (0x01) type
             //   TP-RD (bit 2) is 1 for retry
             //   and TP-MR is set to previously failed sms TP-MR
@@ -355,13 +364,17 @@ public class ImsSmsDispatcher extends SMSDispatcher {
             getImsManager().sendSms(
                     token,
                     tracker.mMessageRef,
-                    getFormat(),
+                    format,
                     smsc != null ? new String(smsc) : null,
                     isRetry,
                     pdu);
+            mMetrics.writeImsServiceSendSms(mPhone.getPhoneId(), format,
+                    ImsSmsImplBase.SEND_STATUS_OK);
         } catch (ImsException e) {
             Rlog.e(TAG, "sendSms failed. Falling back to PSTN. Error: " + e.getMessage());
             fallbackToPstn(token, tracker);
+            mMetrics.writeImsServiceSendSms(mPhone.getPhoneId(), format,
+                    ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK);
         }
     }
 
@@ -378,5 +391,10 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     @Override
     protected boolean isCdmaMo() {
         return mSmsDispatchersController.isCdmaFormat(getFormat());
+    }
+
+    @VisibleForTesting
+    public IImsSmsListener getSmsListener() {
+        return mImsSmsListener;
     }
 }

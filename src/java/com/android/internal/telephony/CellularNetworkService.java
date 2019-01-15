@@ -16,7 +16,6 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.CallSuper;
 import android.hardware.radio.V1_0.CellInfoType;
 import android.hardware.radio.V1_0.RegState;
 import android.os.AsyncResult;
@@ -24,6 +23,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.CellIdentity;
 import android.telephony.CellIdentityCdma;
@@ -31,6 +31,7 @@ import android.telephony.CellIdentityGsm;
 import android.telephony.CellIdentityLte;
 import android.telephony.CellIdentityTdscdma;
 import android.telephony.CellIdentityWcdma;
+import android.telephony.LteVopsSupportInfo;
 import android.telephony.NetworkRegistrationState;
 import android.telephony.NetworkService;
 import android.telephony.NetworkServiceCallback;
@@ -272,10 +273,14 @@ public class CellularNetworkService extends NetworkService {
                 int[] availableServices = getAvailableServices(regState, domain, emergencyOnly);
                 CellIdentity cellIdentity =
                         convertHalCellIdentityToCellIdentity(dataRegState.cellIdentity);
-
+                LteVopsSupportInfo lteVopsSupportInfo =
+                        new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE,
+                        LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE);
                 return new NetworkRegistrationState(domain, transportType, regState,
                         accessNetworkTechnology, reasonForDenial, emergencyOnly, availableServices,
-                        cellIdentity, maxDataCalls);
+                        cellIdentity, maxDataCalls, false /* isDcNrRestricted */,
+                        false /* isNrAvailable */, false /* isEnDcAvailable */, lteVopsSupportInfo);
+
             } else if (result instanceof android.hardware.radio.V1_2.DataRegStateResult) {
                 android.hardware.radio.V1_2.DataRegStateResult dataRegState =
                         (android.hardware.radio.V1_2.DataRegStateResult) result;
@@ -287,13 +292,59 @@ public class CellularNetworkService extends NetworkService {
                 int[] availableServices = getAvailableServices(regState, domain, emergencyOnly);
                 CellIdentity cellIdentity =
                         convertHalCellIdentityToCellIdentity(dataRegState.cellIdentity);
+                LteVopsSupportInfo lteVopsSupportInfo =
+                        new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE,
+                        LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE);
+                return new NetworkRegistrationState(domain, transportType, regState,
+                        accessNetworkTechnology, reasonForDenial, emergencyOnly, availableServices,
+                        cellIdentity, maxDataCalls, false /* isDcNrRestricted */,
+                        false /* isNrAvailable */, false /* isEnDcAvailable */, lteVopsSupportInfo);
+            } else if (result instanceof android.hardware.radio.V1_4.DataRegStateResult) {
+                android.hardware.radio.V1_4.DataRegStateResult dataRegState =
+                        (android.hardware.radio.V1_4.DataRegStateResult) result;
+                int regState = getRegStateFromHalRegState(dataRegState.base.regState);
+                int accessNetworkTechnology =
+                        getAccessNetworkTechnologyFromRat(dataRegState.base.rat);
+                LteVopsSupportInfo lteVopsSupportInfo = null;
+                int reasonForDenial = dataRegState.base.reasonDataDenied;
+                boolean emergencyOnly = isEmergencyOnly(dataRegState.base.regState);
+                int maxDataCalls = dataRegState.base.maxDataCalls;
+                int[] availableServices = getAvailableServices(regState, domain, emergencyOnly);
+                CellIdentity cellIdentity =
+                        convertHalCellIdentityToCellIdentity(dataRegState.base.cellIdentity);
+                android.hardware.radio.V1_4.NrIndicators nrIndicators = dataRegState.nrIndicators;
+                if (AccessNetworkType.EUTRAN == accessNetworkTechnology) {
+                    android.hardware.radio.V1_4.LteVopsInfo vopsSupport =
+                            dataRegState.vopsInfo.lteVopsInfo();
+                    lteVopsSupportInfo = convertHalLteVopsSupportInfo(vopsSupport.isVopsSupported,
+                        vopsSupport.isEmcBearerSupported);
+                } else {
+                    lteVopsSupportInfo =
+                        new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE,
+                        LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE);
+                }
 
                 return new NetworkRegistrationState(domain, transportType, regState,
                         accessNetworkTechnology, reasonForDenial, emergencyOnly, availableServices,
-                        cellIdentity, maxDataCalls);
+                        cellIdentity, maxDataCalls, nrIndicators.isDcNrRestricted,
+                        nrIndicators.isNrAvailable, nrIndicators.isEndcAvailable,
+                        lteVopsSupportInfo);
             }
-
             return null;
+        }
+
+        private LteVopsSupportInfo convertHalLteVopsSupportInfo(
+                boolean vopsSupport, boolean emcBearerSupport) {
+            int vops = LteVopsSupportInfo.LTE_STATUS_NOT_SUPPORTED;
+            int emergency = LteVopsSupportInfo.LTE_STATUS_NOT_SUPPORTED;
+
+            if (vopsSupport) {
+                vops = LteVopsSupportInfo.LTE_STATUS_SUPPORTED;
+            }
+            if (emcBearerSupport) {
+                emergency = LteVopsSupportInfo.LTE_STATUS_SUPPORTED;
+            }
+            return new LteVopsSupportInfo(vops, emergency);
         }
 
         private CellIdentity convertHalCellIdentityToCellIdentity(
@@ -308,9 +359,7 @@ public class CellularNetworkService extends NetworkService {
                     if (cellIdentity.cellIdentityGsm.size() == 1) {
                         android.hardware.radio.V1_0.CellIdentityGsm cellIdentityGsm =
                                 cellIdentity.cellIdentityGsm.get(0);
-                        result = new CellIdentityGsm(cellIdentityGsm.lac, cellIdentityGsm.cid,
-                                cellIdentityGsm.arfcn, cellIdentityGsm.bsic, cellIdentityGsm.mcc,
-                                cellIdentityGsm.mnc, null, null);
+                        result = new CellIdentityGsm(cellIdentityGsm);
                     }
                     break;
                 }
@@ -318,9 +367,7 @@ public class CellularNetworkService extends NetworkService {
                     if (cellIdentity.cellIdentityWcdma.size() == 1) {
                         android.hardware.radio.V1_0.CellIdentityWcdma cellIdentityWcdma =
                                 cellIdentity.cellIdentityWcdma.get(0);
-                        result = new CellIdentityWcdma(cellIdentityWcdma.lac, cellIdentityWcdma.cid,
-                                cellIdentityWcdma.psc, cellIdentityWcdma.uarfcn,
-                                cellIdentityWcdma.mcc, cellIdentityWcdma.mnc, null, null);
+                        result = new CellIdentityWcdma(cellIdentityWcdma);
                     }
                     break;
                 }
@@ -328,10 +375,7 @@ public class CellularNetworkService extends NetworkService {
                     if (cellIdentity.cellIdentityTdscdma.size() == 1) {
                         android.hardware.radio.V1_0.CellIdentityTdscdma cellIdentityTdscdma =
                                 cellIdentity.cellIdentityTdscdma.get(0);
-                        result = new  CellIdentityTdscdma(cellIdentityTdscdma.mcc,
-                                cellIdentityTdscdma.mnc, cellIdentityTdscdma.lac,
-                                cellIdentityTdscdma.cid, cellIdentityTdscdma.cpid,
-                                Integer.MAX_VALUE, null, null);
+                        result = new  CellIdentityTdscdma(cellIdentityTdscdma);
                     }
                     break;
                 }
@@ -339,10 +383,7 @@ public class CellularNetworkService extends NetworkService {
                     if (cellIdentity.cellIdentityLte.size() == 1) {
                         android.hardware.radio.V1_0.CellIdentityLte cellIdentityLte =
                                 cellIdentity.cellIdentityLte.get(0);
-
-                        result = new CellIdentityLte(cellIdentityLte.ci, cellIdentityLte.pci,
-                                cellIdentityLte.tac, cellIdentityLte.earfcn, Integer.MAX_VALUE,
-                                cellIdentityLte.mcc, cellIdentityLte.mnc, null, null);
+                        result = new CellIdentityLte(cellIdentityLte);
                     }
                     break;
                 }
@@ -350,10 +391,7 @@ public class CellularNetworkService extends NetworkService {
                     if (cellIdentity.cellIdentityCdma.size() == 1) {
                         android.hardware.radio.V1_0.CellIdentityCdma cellIdentityCdma =
                                 cellIdentity.cellIdentityCdma.get(0);
-
-                        result = new CellIdentityCdma(cellIdentityCdma.networkId,
-                                cellIdentityCdma.systemId, cellIdentityCdma.baseStationId,
-                                cellIdentityCdma.longitude, cellIdentityCdma.latitude);
+                        result = new CellIdentityCdma(cellIdentityCdma);
                     }
                     break;
                 }
@@ -377,16 +415,7 @@ public class CellularNetworkService extends NetworkService {
                     if (cellIdentity.cellIdentityGsm.size() == 1) {
                         android.hardware.radio.V1_2.CellIdentityGsm cellIdentityGsm =
                                 cellIdentity.cellIdentityGsm.get(0);
-
-                        result = new CellIdentityGsm(
-                                cellIdentityGsm.base.lac,
-                                cellIdentityGsm.base.cid,
-                                cellIdentityGsm.base.arfcn,
-                                cellIdentityGsm.base.bsic,
-                                cellIdentityGsm.base.mcc,
-                                cellIdentityGsm.base.mnc,
-                                cellIdentityGsm.operatorNames.alphaLong,
-                                cellIdentityGsm.operatorNames.alphaShort);
+                        result = new CellIdentityGsm(cellIdentityGsm);
                     }
                     break;
                 }
@@ -394,16 +423,7 @@ public class CellularNetworkService extends NetworkService {
                     if (cellIdentity.cellIdentityWcdma.size() == 1) {
                         android.hardware.radio.V1_2.CellIdentityWcdma cellIdentityWcdma =
                                 cellIdentity.cellIdentityWcdma.get(0);
-
-                        result = new CellIdentityWcdma(
-                                cellIdentityWcdma.base.lac,
-                                cellIdentityWcdma.base.cid,
-                                cellIdentityWcdma.base.psc,
-                                cellIdentityWcdma.base.uarfcn,
-                                cellIdentityWcdma.base.mcc,
-                                cellIdentityWcdma.base.mnc,
-                                cellIdentityWcdma.operatorNames.alphaLong,
-                                cellIdentityWcdma.operatorNames.alphaShort);
+                        result = new CellIdentityWcdma(cellIdentityWcdma);
                     }
                     break;
                 }
@@ -411,16 +431,7 @@ public class CellularNetworkService extends NetworkService {
                     if (cellIdentity.cellIdentityTdscdma.size() == 1) {
                         android.hardware.radio.V1_2.CellIdentityTdscdma cellIdentityTdscdma =
                                 cellIdentity.cellIdentityTdscdma.get(0);
-
-                        result = new  CellIdentityTdscdma(
-                                cellIdentityTdscdma.base.mcc,
-                                cellIdentityTdscdma.base.mnc,
-                                cellIdentityTdscdma.base.lac,
-                                cellIdentityTdscdma.base.cid,
-                                cellIdentityTdscdma.base.cpid,
-                                cellIdentityTdscdma.uarfcn,
-                                cellIdentityTdscdma.operatorNames.alphaLong,
-                                cellIdentityTdscdma.operatorNames.alphaShort);
+                        result = new  CellIdentityTdscdma(cellIdentityTdscdma);
                     }
                     break;
                 }
@@ -428,17 +439,7 @@ public class CellularNetworkService extends NetworkService {
                     if (cellIdentity.cellIdentityLte.size() == 1) {
                         android.hardware.radio.V1_2.CellIdentityLte cellIdentityLte =
                                 cellIdentity.cellIdentityLte.get(0);
-
-                        result = new CellIdentityLte(
-                                cellIdentityLte.base.ci,
-                                cellIdentityLte.base.pci,
-                                cellIdentityLte.base.tac,
-                                cellIdentityLte.base.earfcn,
-                                cellIdentityLte.bandwidth,
-                                cellIdentityLte.base.mcc,
-                                cellIdentityLte.base.mnc,
-                                cellIdentityLte.operatorNames.alphaLong,
-                                cellIdentityLte.operatorNames.alphaShort);
+                        result = new CellIdentityLte(cellIdentityLte);
                     }
                     break;
                 }
@@ -446,15 +447,7 @@ public class CellularNetworkService extends NetworkService {
                     if (cellIdentity.cellIdentityCdma.size() == 1) {
                         android.hardware.radio.V1_2.CellIdentityCdma cellIdentityCdma =
                                 cellIdentity.cellIdentityCdma.get(0);
-
-                        result = new CellIdentityCdma(
-                                cellIdentityCdma.base.networkId,
-                                cellIdentityCdma.base.systemId,
-                                cellIdentityCdma.base.baseStationId,
-                                cellIdentityCdma.base.longitude,
-                                cellIdentityCdma.base.latitude,
-                                cellIdentityCdma.operatorNames.alphaLong,
-                                cellIdentityCdma.operatorNames.alphaShort);
+                        result = new CellIdentityCdma(cellIdentityCdma);
                     }
                     break;
                 }
@@ -486,10 +479,8 @@ public class CellularNetworkService extends NetworkService {
             }
         }
 
-        @CallSuper
-        protected void onDestroy() {
-            super.onDestroy();
-
+        @Override
+        public void close() {
             mCallbackMap.clear();
             mHandlerThread.quit();
             mPhone.mCi.unregisterForNetworkStateChanged(mHandler);
