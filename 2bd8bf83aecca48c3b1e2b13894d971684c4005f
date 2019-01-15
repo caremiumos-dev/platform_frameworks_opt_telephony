@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e665b5a_82d2f35d",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-01-15T18:08:35Z",
+      "side": 1,
+      "message": "What about the responseCellInfoList1_4? That\u0027s why usually we write a small function in RIL.java and then call it from RadioResponse and RadioIndication.\n\nAlso, NBD but the performance of the streams APIs stinks (there\u0027s a chatty thread on it), and you end up using approximately the same lines-of-code in a for loop that\u0027s much easier to read if you skip the streams thing.",
+      "range": {
+        "startLine": 745,
+        "startChar": 0,
+        "endLine": 749,
+        "endChar": 80
+      },
+      "revId": "2bd8bf83aecca48c3b1e2b13894d971684c4005f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
