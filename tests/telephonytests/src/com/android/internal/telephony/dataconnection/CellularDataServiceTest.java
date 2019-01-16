@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class CellularDataServiceTest extends TelephonyTest {
 
@@ -70,6 +71,7 @@ public class CellularDataServiceTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress("10.0.2.15"),
                         NetworkUtils.numericToInetAddress("fe80::2")),
                 Arrays.asList(""),
+                Collections.emptyList(),
                 1500);
 
         assertEquals(response, mCellularDataService.convertDataCallResult(result));
@@ -95,6 +97,7 @@ public class CellularDataServiceTest extends TelephonyTest {
                         NetworkUtils.numericToInetAddress("1.2.3.4")),
                 Arrays.asList("fd00:976a:c206:20::6", "fd00:976a:c206:20::9",
                         "fd00:976a:c202:1d::9"),
+                Collections.emptyList(),
                 1500);
 
         assertEquals(response, mCellularDataService.convertDataCallResult(result));
