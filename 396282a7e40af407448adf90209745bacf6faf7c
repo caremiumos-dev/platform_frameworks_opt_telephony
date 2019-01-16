@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0d7cfdcb_1ff272bb",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneNumberWatcherTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1039338
+      },
+      "writtenOn": "2019-01-16T14:51:49Z",
+      "side": 1,
+      "message": "That is another way to force it to run as a JUnit 4 test rather than a JUnit 3 one. However, I think it is better to avoid the issue altogether by just not mixing the two styles.",
+      "parentUuid": "e0061173_fb1ed5d2",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 0
+      },
+      "revId": "396282a7e40af407448adf90209745bacf6faf7c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00217872_7d404ab3",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneNumberWatcherTest.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-16T14:48:04Z",
       "side": 1,
       "message": "nit: (for the file owner I guess, not this CL), can probably apply @SmallTest to the class.\n\nAlso android.test.suitebuilder.annotation.SmallTest appears to be deprecated in favour of android.support.test.filters.SmallTest.",
+      "range": {
+        "startLine": 30,
+        "startChar": 11,
+        "endLine": 30,
+        "endChar": 20
+      },
+      "revId": "396282a7e40af407448adf90209745bacf6faf7c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "79ede191_e2841479",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneNumberWatcherTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1039338
+      },
+      "writtenOn": "2019-01-16T14:51:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "00217872_7d404ab3",
       "range": {
         "startLine": 30,
         "startChar": 11,
