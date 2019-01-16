@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b54f7ae9_a70f7282",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-16T00:07:16Z",
+      "side": 1,
+      "message": "Sorry, replied too quickly, The trigger comes only if the network is validated.. only default network will be validate from connectivity service perspective. Do we really need to add any check for WWAN network?",
+      "parentUuid": "6e136986_229c6ef2",
+      "range": {
+        "startLine": 603,
+        "startChar": 8,
+        "endLine": 603,
+        "endChar": 49
+      },
+      "revId": "7f178835abdf4fd06b2529fba0894aaaab4d7383",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4a492df_fe4f6d7e",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 7
