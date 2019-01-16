@@ -22,6 +22,30 @@
       "revId": "f89fa53a535f9a81f18d313aa11db17f8b532450",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7225e2ee_d00b486e",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-16T19:22:02Z",
+      "side": 1,
+      "message": "Thanks, just follow the coding style in this file.",
+      "parentUuid": "ee791018_495ab155",
+      "range": {
+        "startLine": 741,
+        "startChar": 12,
+        "endLine": 741,
+        "endChar": 67
+      },
+      "revId": "f89fa53a535f9a81f18d313aa11db17f8b532450",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
