@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1ce44ea_3c048081",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1424401
+      },
+      "writtenOn": "2019-01-16T18:54:34Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be 2019 now.",
+      "range": {
+        "startLine": 18,
+        "startChar": 14,
+        "endLine": 18,
+        "endChar": 18
+      },
+      "revId": "ca8342a007288edc2a5d3ab4e3e691f515c184f0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34e919c7_39bd69c2",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1424401
+      },
+      "writtenOn": "2019-01-16T18:54:34Z",
+      "side": 1,
+      "message": "minor nit: moving this closer to the first usage is a better idea i.e line 174",
+      "range": {
+        "startLine": 136,
+        "startChar": 16,
+        "endLine": 136,
+        "endChar": 41
+      },
+      "revId": "ca8342a007288edc2a5d3ab4e3e691f515c184f0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7fde169_16252e64",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1424401
+      },
+      "writtenOn": "2019-01-16T18:54:34Z",
+      "side": 1,
+      "message": "nit: long line",
+      "range": {
+        "startLine": 190,
+        "startChar": 99,
+        "endLine": 190,
+        "endChar": 105
+      },
+      "revId": "ca8342a007288edc2a5d3ab4e3e691f515c184f0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca7c9c1b_1c14bc40",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1424401
+      },
+      "writtenOn": "2019-01-16T18:54:34Z",
+      "side": 1,
+      "message": "minor: nit this will fit in the above line.",
+      "range": {
+        "startLine": 410,
+        "startChar": 16,
+        "endLine": 410,
+        "endChar": 22
+      },
+      "revId": "ca8342a007288edc2a5d3ab4e3e691f515c184f0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4656858_77393755",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SubscriptionControllerTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1424401
+      },
+      "writtenOn": "2019-01-16T18:54:34Z",
+      "side": 1,
+      "message": "please fix indent",
+      "range": {
+        "startLine": 71,
+        "startChar": 32,
+        "endLine": 71,
+        "endChar": 39
+      },
+      "revId": "ca8342a007288edc2a5d3ab4e3e691f515c184f0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
