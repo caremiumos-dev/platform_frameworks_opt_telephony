@@ -82,6 +82,7 @@ import org.mockito.Mock;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class DataConnectionTest extends TelephonyTest {
 
@@ -326,6 +327,7 @@ public class DataConnectionTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
 
         assertEquals(response.getSuggestedRetryTime(), getSuggestedRetryDelay(response));
@@ -335,6 +337,7 @@ public class DataConnectionTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
         assertEquals(response.getSuggestedRetryTime(), getSuggestedRetryDelay(response));
 
@@ -343,6 +346,7 @@ public class DataConnectionTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
         assertEquals(response.getSuggestedRetryTime(), getSuggestedRetryDelay(response));
     }
@@ -355,6 +359,7 @@ public class DataConnectionTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
 
         assertEquals(RetryManager.NO_SUGGESTED_RETRY_DELAY, getSuggestedRetryDelay(response));
@@ -364,6 +369,7 @@ public class DataConnectionTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
         assertEquals(RetryManager.NO_SUGGESTED_RETRY_DELAY, getSuggestedRetryDelay(response));
 
@@ -372,6 +378,7 @@ public class DataConnectionTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
         assertEquals(RetryManager.NO_SUGGESTED_RETRY_DELAY, getSuggestedRetryDelay(response));
     }
@@ -385,6 +392,7 @@ public class DataConnectionTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
         assertEquals(RetryManager.NO_RETRY, getSuggestedRetryDelay(response));
     }
@@ -523,6 +531,7 @@ public class DataConnectionTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
 
         LinkProperties linkProperties = new LinkProperties();
@@ -562,6 +571,7 @@ public class DataConnectionTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
 
         LinkProperties linkProperties = new LinkProperties();
@@ -579,6 +589,7 @@ public class DataConnectionTest extends TelephonyTest {
                 null,
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
 
         // Make sure no exception was thrown

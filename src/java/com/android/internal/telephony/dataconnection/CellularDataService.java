@@ -328,6 +328,7 @@ public class CellularDataService extends DataService {
                 dnsList,
                 gatewayList,
                 new ArrayList<>(Arrays.asList(dcResult.pcscf.trim().split("\\s+"))),
+                null, // TODO: add in the dedicated bearers from SetupDataCallResult::1.4
                 dcResult.mtu
         );
     }
