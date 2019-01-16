@@ -25,13 +25,25 @@ import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_P
 import android.net.LinkAddress;
 import android.net.NetworkUtils;
 import android.os.Parcel;
+import android.telephony.PcoData;
 import android.telephony.data.DataCallResponse;
+import android.telephony.data.DedicatedEpsBearer;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class DataCallResponseTest extends AndroidTestCase {
+    public static final DedicatedEpsBearer FAKE_DEDICATED_BEARER = new DedicatedEpsBearer(
+            0,
+            new byte[]{0, 1, 2, 3},
+            new byte[]{0, 1, 2, 3},
+            new ArrayList<PcoData>() {{
+                add(new PcoData(0, "IPV4", 0xFF05, new byte[]{0, 1, 2, 3}));
+            }}
+    );
 
     @SmallTest
     public void testParcel() throws Exception {
@@ -40,6 +52,7 @@ public class DataCallResponseTest extends AndroidTestCase {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(FAKE_DEDICATED_BEARER),
                 1440);
 
         Parcel p = Parcel.obtain();
@@ -57,6 +70,7 @@ public class DataCallResponseTest extends AndroidTestCase {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(FAKE_DEDICATED_BEARER),
                 1440);
 
         DataCallResponse response1 = new DataCallResponse(0, -1, 1, 2, "IP", FAKE_IFNAME,
@@ -64,6 +78,7 @@ public class DataCallResponseTest extends AndroidTestCase {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(FAKE_DEDICATED_BEARER),
                 1440);
 
         assertEquals(response, response);
@@ -75,6 +90,7 @@ public class DataCallResponseTest extends AndroidTestCase {
                         NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS, FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(FAKE_DEDICATED_BEARER),
                 1441);
         assertNotSame(response1, response2);
         assertNotSame(response1, null);

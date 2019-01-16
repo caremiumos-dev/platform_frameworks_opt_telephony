@@ -54,6 +54,7 @@ import org.mockito.Mock;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class DcControllerTest extends TelephonyTest {
@@ -135,6 +136,7 @@ public class DcControllerTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)),
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)),
                 Arrays.asList(FAKE_PCSCF_ADDRESS),
+                Collections.singletonList(DataCallResponseTest.FAKE_DEDICATED_BEARER),
                 1440);
 
         l.add(dcResponse);
