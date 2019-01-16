@@ -74,6 +74,7 @@ import org.mockito.Mock;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class TelephonyMetricsTest extends TelephonyTest {
 
@@ -406,6 +407,7 @@ public class TelephonyMetricsTest extends TelephonyTest {
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_DNS)), /* dnses */
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_GATEWAY)), /* gateways */
                 Arrays.asList(NetworkUtils.numericToInetAddress(FAKE_PCSCF_ADDRESS)), /* pcscfs */
+                Collections.emptyList(),
                 1440 /* mtu */);
 
         mMetrics.writeOnRilSolicitedResponse(mPhone.getPhoneId(), 1, 2,

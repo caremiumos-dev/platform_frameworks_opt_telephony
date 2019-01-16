@@ -99,10 +99,12 @@ import android.hardware.radio.V1_0.GsmSmsMessage;
 import android.hardware.radio.V1_0.IRadio;
 import android.hardware.radio.V1_0.ImsSmsMessage;
 import android.hardware.radio.V1_0.NvWriteItem;
+import android.hardware.radio.V1_0.PcoDataInfo;
 import android.hardware.radio.V1_0.RadioError;
 import android.hardware.radio.V1_0.RadioResponseInfo;
 import android.hardware.radio.V1_0.RadioResponseType;
 import android.hardware.radio.V1_0.SmsWriteArgs;
+import android.hardware.radio.V1_5.DedicatedBearerInfo;
 import android.hardware.radio.deprecated.V1_0.IOemHook;
 import android.net.ConnectivityManager;
 import android.net.LinkAddress;
@@ -131,16 +133,20 @@ import android.telephony.CellSignalStrengthGsm;
 import android.telephony.CellSignalStrengthLte;
 import android.telephony.CellSignalStrengthTdscdma;
 import android.telephony.CellSignalStrengthWcdma;
+import android.telephony.PcoData;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
+import android.telephony.data.DedicatedEpsBearer;
 
 import androidx.test.filters.FlakyTest;
 
 import com.android.internal.telephony.RIL.RilHandler;
 import com.android.internal.telephony.dataconnection.DcTracker;
+
+import com.google.common.primitives.Bytes;
 
 import org.junit.After;
 import org.junit.Before;
@@ -151,6 +157,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class RILTest extends TelephonyTest {
@@ -1545,18 +1552,28 @@ public class RILTest extends TelephonyTest {
         result10.gateways = "10.0.2.15 fe80::2";
         result10.pcscf = "fd00:976a:c206:20::6   fd00:976a:c206:20::9    fd00:976a:c202:1d::9";
         result10.mtu = 1500;
-
-        DataCallResponse response = new DataCallResponse(0, -1, 0, 2, ApnSetting.PROTOCOL_IPV4V6,
-                "ifname",
-                Arrays.asList(new LinkAddress(NetworkUtils.numericToInetAddress("10.0.2.15"), 32),
-                        new LinkAddress("2607:fb90:a620:651d:eabe:f8da:c107:44be/64")),
-                Arrays.asList(NetworkUtils.numericToInetAddress("10.0.2.3"),
-                        NetworkUtils.numericToInetAddress("fd00:976a::9")),
-                Arrays.asList(NetworkUtils.numericToInetAddress("10.0.2.15"),
-                        NetworkUtils.numericToInetAddress("fe80::2")),
-                Arrays.asList(NetworkUtils.numericToInetAddress("fd00:976a:c206:20::6"),
+        DataCallResponse.Builder responseBuilder = new DataCallResponse.Builder()
+                .setCause(0)
+                .setSuggestedRetryTime(-1)
+                .setId(0)
+                .setLinkStatus(2)
+                .setProtocolType(ApnSetting.PROTOCOL_IPV4V6)
+                .setInterfaceName("ifname")
+                .setAddresses(Arrays.asList(
+                        new LinkAddress(NetworkUtils.numericToInetAddress("10.0.2.15"), 32),
+                        new LinkAddress("2607:fb90:a620:651d:eabe:f8da:c107:44be/64")))
+                .setDnsAddresses(Arrays.asList(NetworkUtils.numericToInetAddress("10.0.2.3"),
+                        NetworkUtils.numericToInetAddress("fd00:976a::9")))
+                .setGatewayAddresses(Arrays.asList(NetworkUtils.numericToInetAddress("10.0.2.15"),
+                        NetworkUtils.numericToInetAddress("fe80::2")))
+                .setPcscfAddresses(Arrays.asList(
+                        NetworkUtils.numericToInetAddress("fd00:976a:c206:20::6"),
                         NetworkUtils.numericToInetAddress("fd00:976a:c206:20::9"),
-                        NetworkUtils.numericToInetAddress("fd00:976a:c202:1d::9")), 1500);
+                        NetworkUtils.numericToInetAddress("fd00:976a:c202:1d::9")))
+                .setMtu(1500);
+
+
+        DataCallResponse response = responseBuilder.build();
 
         assertEquals(response, RIL.convertDataCallResult(result10));
 
@@ -1578,6 +1595,36 @@ public class RILTest extends TelephonyTest {
         result14.mtu = 1500;
 
         assertEquals(response, RIL.convertDataCallResult(result14));
+
+        // Test V1.5
+        PcoData pcoData = new PcoData(1, "IPV4V6", 0xFF07, new byte[] { 0x01, 0x02 });
+        DedicatedEpsBearer dedicatedEpsBearer = new DedicatedEpsBearer(1001,
+                new byte[] { 0x10, 0x15, 0x16 }, new byte[] { 0x00, 0x00, 0x01 },
+                Collections.singletonList(pcoData));
+        DataCallResponse expectedResponse_1_5 = responseBuilder
+                .setDedicatedEpsBearers(Collections.singletonList(dedicatedEpsBearer))
+                .build();
+
+        PcoDataInfo pcoDataInfo = new PcoDataInfo();
+        pcoDataInfo.cid = pcoData.cid;
+        pcoDataInfo.bearerProto = pcoData.bearerProto;
+        pcoDataInfo.pcoId = pcoData.pcoId;
+        pcoDataInfo.contents = new ArrayList<>(Bytes.asList(pcoData.contents));
+
+        android.hardware.radio.V1_5.DedicatedBearerInfo bearerInfo = new DedicatedBearerInfo();
+        bearerInfo.id = dedicatedEpsBearer.getBearerId();
+        bearerInfo.tft = new ArrayList<>(Bytes.asList(dedicatedEpsBearer.getTft()));
+        bearerInfo.epsQos = new ArrayList<>(Bytes.asList(dedicatedEpsBearer.getQosData()));
+        bearerInfo.carrierPco = new ArrayList<>();
+        bearerInfo.carrierPco.add(pcoDataInfo);
+
+        android.hardware.radio.V1_5.SetupDataCallResult result_1_5 =
+                new android.hardware.radio.V1_5.SetupDataCallResult();
+        result_1_5.base = result14;
+        result_1_5.dedicatedBearers = new ArrayList<>();
+        result_1_5.dedicatedBearers.add(bearerInfo);
+
+        assertEquals(expectedResponse_1_5, RIL.convertDataCallResult(result_1_5));
     }
 
     @Test

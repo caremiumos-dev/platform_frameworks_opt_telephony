@@ -89,6 +89,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -617,7 +618,7 @@ public class DataConnection extends StateMachine {
             DataCallResponse response = new DataCallResponse(
                     mDcTesterFailBringUpAll.getDcFailBringUp().mFailCause,
                     mDcTesterFailBringUpAll.getDcFailBringUp().mSuggestedRetryTime, 0, 0, 0, "",
-                    null, null, null, null, PhoneConstants.UNSET_MTU);
+                    null, null, null, null, Collections.emptyList(), PhoneConstants.UNSET_MTU);
 
             Message msg = obtainMessage(EVENT_SETUP_DATA_CONNECTION_DONE, cp);
             AsyncResult.forMessage(msg, response, null);
@@ -1370,6 +1371,7 @@ public class DataConnection extends StateMachine {
                     }
                 }
 
+                linkProperties.setDedicatedEpsBearers(response.getDedicatedEpsBearers());
                 for (InetAddress gateway : response.getGatewayAddresses()) {
                     // Allow 0.0.0.0 or :: as a gateway;
                     // this indicates a point-to-point interface.

@@ -77,6 +77,7 @@ import android.telephony.ImsiEncryptionInfo;
 import android.telephony.ModemActivityInfo;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.NetworkScanRequest;
+import android.telephony.PcoData;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.RadioAccessFamily;
 import android.telephony.RadioAccessSpecifier;
@@ -90,6 +91,7 @@ import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
+import android.telephony.data.DedicatedEpsBearer;
 import android.telephony.emergency.EmergencyNumber;
 import android.text.TextUtils;
 import android.util.Log;
@@ -115,12 +117,14 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 /**
  * RIL implementation of the CommandsInterface.
@@ -5868,7 +5872,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     /**
-     * Convert SetupDataCallResult defined in 1.0 or 1.4/types.hal into DataCallResponse
+     * Convert SetupDataCallResult defined in 1.0, 1.4, or 1.5/types.hal into DataCallResponse
      * @param dcResult setup data call result
      * @return converted DataCallResponse object
      */
@@ -5883,45 +5887,61 @@ public class RIL extends BaseCommands implements CommandsInterface {
         String[] dnses = null;
         String[] gateways = null;
         String[] pcscfs = null;
-        if (dcResult instanceof android.hardware.radio.V1_0.SetupDataCallResult) {
-            final android.hardware.radio.V1_0.SetupDataCallResult result =
-                    (android.hardware.radio.V1_0.SetupDataCallResult) dcResult;
-            cause = result.status;
-            suggestedRetryTime = result.suggestedRetryTime;
-            cid = result.cid;
-            active = result.active;
-            protocolType = ApnSetting.getProtocolIntFromString(result.type);
-            ifname = result.ifname;
-            if (!TextUtils.isEmpty(result.addresses)) {
-                addresses = result.addresses.split("\\s+");
+        List<android.hardware.radio.V1_5.DedicatedBearerInfo> bearerInfos = Collections.emptyList();
+
+        dataCollect:
+        {
+            if (dcResult instanceof android.hardware.radio.V1_0.SetupDataCallResult) {
+                final android.hardware.radio.V1_0.SetupDataCallResult result =
+                        (android.hardware.radio.V1_0.SetupDataCallResult) dcResult;
+                cause = result.status;
+                suggestedRetryTime = result.suggestedRetryTime;
+                cid = result.cid;
+                active = result.active;
+                protocolType = ApnSetting.getProtocolIntFromString(result.type);
+                ifname = result.ifname;
+                if (!TextUtils.isEmpty(result.addresses)) {
+                    addresses = result.addresses.split("\\s+");
+                }
+                if (!TextUtils.isEmpty(result.dnses)) {
+                    dnses = result.dnses.split("\\s+");
+                }
+                if (!TextUtils.isEmpty(result.gateways)) {
+                    gateways = result.gateways.split("\\s+");
+                }
+                if (!TextUtils.isEmpty(result.pcscf)) {
+                    pcscfs = result.pcscf.split("\\s+");
+                }
+                mtu = result.mtu;
+                break dataCollect;
             }
-            if (!TextUtils.isEmpty(result.dnses)) {
-                dnses = result.dnses.split("\\s+");
+
+            android.hardware.radio.V1_4.SetupDataCallResult result_1_4 = null;
+            android.hardware.radio.V1_5.SetupDataCallResult result_1_5 = null;
+            if (dcResult instanceof android.hardware.radio.V1_5.SetupDataCallResult) {
+                result_1_5 = (android.hardware.radio.V1_5.SetupDataCallResult) dcResult;
+                result_1_4 = result_1_5.base;
+            } else if (dcResult instanceof android.hardware.radio.V1_4.SetupDataCallResult) {
+                result_1_4 = (android.hardware.radio.V1_4.SetupDataCallResult) dcResult;
+            } else {
+                Rlog.e(RILJ_LOG_TAG, "Unsupported SetupDataCallResult " + dcResult);
+                return null;
             }
-            if (!TextUtils.isEmpty(result.gateways)) {
-                gateways = result.gateways.split("\\s+");
+
+            if (result_1_5 != null) {
+                bearerInfos = result_1_5.dedicatedBearers;
             }
-            if (!TextUtils.isEmpty(result.pcscf)) {
-                pcscfs = result.pcscf.split("\\s+");
-            }
-            mtu = result.mtu;
-        } else if (dcResult instanceof android.hardware.radio.V1_4.SetupDataCallResult) {
-            final android.hardware.radio.V1_4.SetupDataCallResult result =
-                    (android.hardware.radio.V1_4.SetupDataCallResult) dcResult;
-            cause = result.cause;
-            suggestedRetryTime = result.suggestedRetryTime;
-            cid = result.cid;
-            active = result.active;
-            protocolType = result.type;
-            ifname = result.ifname;
-            addresses = result.addresses.stream().toArray(String[]::new);
-            dnses = result.dnses.stream().toArray(String[]::new);
-            gateways = result.gateways.stream().toArray(String[]::new);
-            pcscfs = result.pcscf.stream().toArray(String[]::new);
-            mtu = result.mtu;
-        } else {
-            Rlog.e(RILJ_LOG_TAG, "Unsupported SetupDataCallResult " + dcResult);
-            return null;
+            cause = result_1_4.cause;
+            suggestedRetryTime = result_1_4.suggestedRetryTime;
+            cid = result_1_4.cid;
+            active = result_1_4.active;
+            protocolType = result_1_4.type;
+            ifname = result_1_4.ifname;
+            addresses = result_1_4.addresses.stream().toArray(String[]::new);
+            dnses = result_1_4.dnses.stream().toArray(String[]::new);
+            gateways = result_1_4.gateways.stream().toArray(String[]::new);
+            pcscfs = result_1_4.pcscf.stream().toArray(String[]::new);
+            mtu = result_1_4.mtu;
         }
 
         // Process address
@@ -5994,8 +6014,21 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
         }
 
+        // Process dedicated bearers
+        List<DedicatedEpsBearer> dedicatedEpsBearers = new ArrayList<>();
+        for (android.hardware.radio.V1_5.DedicatedBearerInfo bearerInfo_1_5 : bearerInfos) {
+            List<PcoData> pcoDatas = bearerInfo_1_5.carrierPco.stream()
+                    .map(RIL::convertPcoData)
+                    .collect(Collectors.toList());
+            DedicatedEpsBearer javaBearer = new DedicatedEpsBearer(bearerInfo_1_5.id,
+                    arrayListToPrimitiveArray(bearerInfo_1_5.epsQos),
+                    arrayListToPrimitiveArray(bearerInfo_1_5.tft),
+                    pcoDatas);
+            dedicatedEpsBearers.add(javaBearer);
+        }
+
         return new DataCallResponse(cause, suggestedRetryTime, cid, active, protocolType, ifname,
-                laList, dnsList, gatewayList, pcscfList, mtu);
+                laList, dnsList, gatewayList, pcscfList, dedicatedEpsBearers, mtu);
     }
 
     /**
@@ -6013,6 +6046,18 @@ public class RIL extends BaseCommands implements CommandsInterface {
             response.add(convertDataCallResult(obj));
         }
         return response;
+    }
+
+    /**
+     * Convert a PcoDataInfo object from 1.0/types.hal to the Java type
+     * @param pcoDataInfo PcoDataInfo object to be converted
+     * @return the converted Java class
+     */
+    public static PcoData convertPcoData(android.hardware.radio.V1_0.PcoDataInfo pcoDataInfo) {
+        return new PcoData(pcoDataInfo.cid,
+                pcoDataInfo.bearerProto,
+                pcoDataInfo.pcoId,
+                arrayListToPrimitiveArray(pcoDataInfo.contents));
     }
 
     /**
