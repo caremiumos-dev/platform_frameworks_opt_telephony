@@ -22,6 +22,30 @@
       "revId": "55fc5e958b3484950cf7ec1349a523c5a7ebdb5a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "534068bf_407e473d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-01-17T18:25:36Z",
+      "side": 1,
+      "message": "No, gotta wait until we get the 1.4 impl from the vendor for this",
+      "parentUuid": "0d96dda6_4a01ec12",
+      "range": {
+        "startLine": 331,
+        "startChar": 22,
+        "endLine": 331,
+        "endChar": 89
+      },
+      "revId": "55fc5e958b3484950cf7ec1349a523c5a7ebdb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
