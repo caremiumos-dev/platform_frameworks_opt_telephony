@@ -93,6 +93,30 @@
       "revId": "396282a7e40af407448adf90209745bacf6faf7c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1cb36c_21e32875",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneNumberWatcherTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-17T01:47:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "79ede191_e2841479",
+      "range": {
+        "startLine": 30,
+        "startChar": 11,
+        "endLine": 30,
+        "endChar": 20
+      },
+      "revId": "396282a7e40af407448adf90209745bacf6faf7c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
