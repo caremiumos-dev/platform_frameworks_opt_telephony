@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bd4aac3_dc81c781",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 2804,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-01-17T19:20:16Z",
+      "side": 1,
+      "message": "it\u0027s better to print out isRecoveryOnBadNetworkEnabled() and mTransportType so you know which case triggers bail out.",
+      "range": {
+        "startLine": 2804,
+        "startChar": 30,
+        "endLine": 2804,
+        "endChar": 69
+      },
+      "revId": "458bbc76c7f1dacbf3eee0225c96174f69b5aac3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
