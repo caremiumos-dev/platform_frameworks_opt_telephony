@@ -22,6 +22,30 @@
       "revId": "20a7c159c63005e74686fc58e35e6227c237df45",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3839f29_1cbb77aa",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2204,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-01-17T00:37:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9476ad42_2efa10c9",
+      "range": {
+        "startLine": 2204,
+        "startChar": 22,
+        "endLine": 2204,
+        "endChar": 49
+      },
+      "revId": "20a7c159c63005e74686fc58e35e6227c237df45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
