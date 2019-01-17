@@ -1352,4 +1352,11 @@ public class EuiccCard extends UiccCard {
             Rlog.d(LOG_TAG, message);
         }
     }
+
+    @Override
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        super.dump(fd, pw, args);
+        pw.println("EuiccCard:");
+        pw.println(" mEid=" + mEid);
+    }
 }
