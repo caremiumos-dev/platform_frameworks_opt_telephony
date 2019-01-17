@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d96dda6_4a01ec12",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-17T18:23:28Z",
+      "side": 1,
+      "message": "more patch updates for this?",
+      "range": {
+        "startLine": 331,
+        "startChar": 22,
+        "endLine": 331,
+        "endChar": 89
+      },
+      "revId": "55fc5e958b3484950cf7ec1349a523c5a7ebdb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
