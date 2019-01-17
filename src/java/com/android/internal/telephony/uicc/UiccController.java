@@ -115,6 +115,7 @@ public class UiccController extends Handler {
     private static final int EVENT_RADIO_AVAILABLE = 6;
     private static final int EVENT_RADIO_UNAVAILABLE = 7;
     private static final int EVENT_SIM_REFRESH = 8;
+    private static final int EVENT_EID_READY = 9;
 
     // this needs to be here, because on bootup we dont know which index maps to which UiccSlot
     private CommandsInterface[] mCis;
@@ -452,6 +453,10 @@ public class UiccController extends Handler {
                     if (DBG) log("Received EVENT_SIM_REFRESH");
                     onSimRefresh(ar, phoneId);
                     break;
+                case EVENT_EID_READY:
+                    if (DBG) log("Received EVENT_EID_READY");
+                    onEidReady(ar, phoneId);
+                    break;
                 default:
                     Rlog.e(LOG_TAG, " Unknown Event " + msg.what);
                     break;
@@ -560,9 +565,20 @@ public class UiccController extends Handler {
 
         UiccCard card = mUiccSlots[slotId].getUiccCard();
         if (card != null && (card.getCardState() == CardState.CARDSTATE_PRESENT)) {
-            String cardString = card.getCardId();
-            if (!mUiccSlots[slotId].isEuicc()) {
-                // getCardId() returns the raw ICCID for a UICC, so we strip it manually
+            String cardString;
+            if (mUiccSlots(slotId).isEuicc()) {
+                // use EID for eUICC
+                cardString = ((EuiccCard) card).getEid();
+
+                // EID may be unpopulated if RadioConfig<1.1
+                // If so, register for EID loaded and skip this stuff
+                if (cardString == null) {
+                    ((EuiccCard) card).registerForEidReady(this, EVENT_EID_READY, slotId);
+                    continue;
+                }
+            } else {
+                // use ICCID for UICC
+                String cardString = card.getIccId();
                 cardString = IccUtils.stripTrailingFs(cardString);
             }
             addCardId(cardString);
@@ -714,6 +730,11 @@ public class UiccController extends Handler {
             }
 
             if (mUiccSlots[i].isEuicc()) {
+                // for RadioConfig<1.1 iss.eid is not populated
+                if (TextUtils.isEmpty(eid)) {
+                    continue;
+                }
+
                 String eid = iss.eid;
                 addCardId(eid);
 
@@ -721,6 +742,8 @@ public class UiccController extends Handler {
                 // lowest slot index.
                 if (mDefaultEuiccCardId == INVALID_CARD_ID) {
                     mDefaultEuiccCardId = convertToPublicCardId(eid);
+                    log("Using eid=" + eid + " in slot=" + i + " to set mDefaultEuiccCardId="
+                            + mDefaultEuiccCardId);
                 }
             }
         }
@@ -825,6 +848,33 @@ public class UiccController extends Handler {
 
         // The card status could have changed. Get the latest state.
         mCis[index].getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE, index));
+    }
+
+    private void onEidReady(AsyncResult ar, Integer index) {
+        if (ar.exception != null) {
+            Rlog.e(LOG_TAG, "onEidReady: exception: " + ar.exception);
+            return;
+        }
+
+        if (!isValidPhoneIndex(index)) {
+            Rlog.e(LOG_TAG, "onEidReady: invalid index: " + index);
+            return;
+        }
+
+        UiccCard card = mUiccSlots[index].getUiccCard();
+        if (card == null) {
+            Rlog.e(LOG_TAG, "onEidReady: UiccCard in slot " + index + " is null");
+            return;
+        }
+
+        // set mCardStrings and the defaultEuiccCardId using the now available EID
+        String eid = ((EuiccCard) card).getEid();
+        addCardId(eid);
+        if (mDefaultEuiccCardId == INVALID_CARD_ID) {
+            mDefaultEuiccCardId = convertToPublicCardId(eid);
+            log("onEidReady: eid=" + eid + " slot=" + index + " mDefaultEuiccCardId="
+                    + mDefaultEuiccCardId);
+        }
     }
 
     /**
