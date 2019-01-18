@@ -668,6 +668,9 @@ message TelephonyEvent {
 
     // Carrier Key Change event.
     CARRIER_KEY_CHANGED = 14;
+
+    // DSDS status change event.
+    DSDS_STATUS_CHANGED = 15;
   }
 
   // Setup a packet data connection
@@ -1462,6 +1465,45 @@ message TelephonyEvent {
     optional string mccmnc = 3;
   }
 
+  message SimStatus {
+      enum SimState {
+          /** SIM card state is unknown, signifies that the SIM is in transition between states. */
+          SIM_STATE_UNKNOWN = 0;
+
+          /** SIM card state: no SIM card is available in the device. */
+          SIM_STATE_ABSENT = 1;
+
+          /** SIM card error, present but faulty. */
+          SIM_STATE_IO_ERROR = 2;
+
+          /**
+           * SIM card state: SIM Card restricted, present but not usable due to carrier
+           * restrictions.
+           */
+          SIM_STATE_CARD_RESTRICTED = 3;
+
+          /** SIM card applications have been loaded. */
+          SIM_STATE_LOADED = 4;
+      };
+
+      /** Current SIM state. */
+      optional SimState sim_state;
+
+      /** The Carrier id of this SIM. */
+      optional int carrier_id;
+  }
+
+  message PhoneStatus {
+      /** The number of avaliable phones in the deivce. */
+      optional int32 phone_count = 1;
+
+      /** The sim status of each physical slot, include both physical sim and embedded sim. */
+      optional repeated SimStatus sim_status = 2;
+
+      /** The number of powered on modems. */
+      optional int32 enabled_modem_count = 3;
+  }
+
   // Time when event happened on device, in milliseconds since epoch
   optional int64 timestamp_millis = 1;
 
@@ -1512,6 +1554,9 @@ message TelephonyEvent {
 
   // Carrier key change
   optional CarrierKeyChange carrier_key_change = 17;
+
+  // Phone status
+  optional PhoneStatus phone_status = 18;
 }
 
 enum TimeInterval {
@@ -1879,6 +1924,9 @@ message TelephonyCallSession {
 
   // Indicating some call events are dropped
   optional bool events_dropped = 4;
+
+  // SIM status
+  optional SimStatus sim_status = 5;
 }
 
 message SmsSession {
@@ -2052,6 +2100,9 @@ message SmsSession {
 
   // Indicating some sms session events are dropped
   optional bool events_dropped = 4;
+
+  // SIM status
+  optional SimStatus sim_status = 5;
 }
 
 // Power stats for modem
