@@ -133,4 +133,25 @@ public class TelephonyEventBuilder {
         mEvent.carrierKeyChange = carrierKeyChange;
         return this;
     }
+
+    /** Set and build the event of count phone. */
+    public TelephonyEventBuilder setPhoneCount(int phoneCount) {
+        mEvent.type = TelephonyEvent.Type.PHONE_COUNT;
+        mEvent.phoneCount = phoneCount;
+        return this;
+    }
+
+    /** Set and build the event of count inserted sim. */
+    public TelephonyEventBuilder setInsertedSimCount(int insertedSimCount) {
+        mEvent.type = TelephonyEvent.Type.INSERTED_SIM_COUNT;
+        mEvent.insertedSimCount = insertedSimCount;
+        return this;
+    }
+
+    /** Set and build the event of count enabled modem. */
+    public TelephonyEventBuilder setEnabledModemCount(int enabledModemCount) {
+        mEvent.type = TelephonyEvent.Type.ENABLED_MODEM_COUNT;
+        mEvent.enabledModemCount = enabledModemCount;
+        return this;
+    }
 }

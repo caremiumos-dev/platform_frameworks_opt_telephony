@@ -170,6 +170,15 @@ public class TelephonyMetrics {
      */
     private final SparseArray<CarrierIdMatching> mLastCarrierId = new SparseArray<>();
 
+    /** Last phone count. */
+    private int mLastPhoneCount;
+
+    /** Last inserted sim count. */
+    private int mLastInsertedSimCount;
+
+    /** Last enabled modem count. */
+    private int mLastEnabledModemCount;
+
     /** The start system time of the TelephonyLog in milliseconds*/
     private long mStartSystemTimeMs;
 
@@ -528,6 +537,18 @@ public class TelephonyMetrics {
                     .setCarrierIdMatching(mLastCarrierId.get(key)).build();
             addTelephonyEvent(event);
         }
+
+        addTelephonyEvent(new TelephonyEventBuilder(mStartElapsedTimeMs, 0 /* phoneId */)
+                .setPhoneCount(mLastPhoneCount)
+                .build());
+
+        addTelephonyEvent(new TelephonyEventBuilder(mStartElapsedTimeMs, 0 /* phoneId */)
+                .setPhoneCount(mLastInsertedSimCount)
+                .build());
+
+        addTelephonyEvent(new TelephonyEventBuilder(mStartElapsedTimeMs, 0 /* phoneId */)
+                .setPhoneCount(mLastEnabledModemCount)
+                .build());
     }
 
     /**
@@ -2129,6 +2150,42 @@ public class TelephonyMetrics {
 
             if (VDBG) Rlog.v(TAG, "Logged Audio Codec event. Value: " + codec);
         }
+    }
+
+    /**
+     * Write the event of count phone.
+     *
+     * @param phoneCount the number of phone which the which can support.
+     */
+    public synchronized void writePhoneCount(int phoneCount) {
+        mLastPhoneCount = phoneCount;
+        addTelephonyEvent(new TelephonyEventBuilder(SystemClock.elapsedRealtime(), 0 /* phoneId */)
+                .setPhoneCount(phoneCount)
+                .build());
+    }
+
+    /**
+     * Write the event of count inserted sim.
+     *
+     * @param insertedSimCount the number of inserted sim.
+     */
+    public synchronized void writeInsertedSimCount(int insertedSimCount) {
+        mLastInsertedSimCount = insertedSimCount;
+        addTelephonyEvent(new TelephonyEventBuilder(SystemClock.elapsedRealtime(), 0 /* phoneId */)
+                .setInsertedSimCount(insertedSimCount)
+                .build());
+    }
+
+    /**
+     * Write the event of count enabled modem.
+     *
+     * @param enabledModemCount the number of enabled modem.
+     */
+    public synchronized void writeEnabledModemCount(int enabledModemCount) {
+        mLastEnabledModemCount = enabledModemCount;
+        addTelephonyEvent(new TelephonyEventBuilder(SystemClock.elapsedRealtime(), 0 /* phoneId */)
+                .setEnabledModemCount(enabledModemCount)
+                .build());
     }
 
     /**

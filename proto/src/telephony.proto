@@ -664,6 +664,15 @@ message TelephonyEvent {
 
     // Carrier Key Change event.
     CARRIER_KEY_CHANGED = 14;
+
+    // Count how many SIMs are inserted.
+    INSERTED_SIM_COUNT = 15;
+
+    // Count how many phones the device can support.
+    PHONE_COUNT = 16;
+
+    // Count how many enabled modems.
+    ENABLED_MODEM_COUNT = 17;
   }
 
   // Setup a packet data connection
@@ -984,6 +993,15 @@ message TelephonyEvent {
 
   // Carrier key change
   optional CarrierKeyChange carrier_key_change = 17;
+
+  // The number of inserted SIM.
+  optional int32 inserted_sim_count = 18;
+
+  // The number of phone device can support.
+  optional int32 phone_count = 19;
+
+  // The number of enabled modem.
+  optional int32 enabled_modem_count = 20;
 }
 
 enum TimeInterval {
