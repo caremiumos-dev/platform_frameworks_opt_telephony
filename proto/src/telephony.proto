@@ -276,6 +276,9 @@ message TelephonyServiceState {
 
   // Current data radio technology
   optional RadioAccessTechnology data_rat = 6 [default = UNKNOWN];
+
+  // Sim status of the corresponding phone.
+  optional SimStatus sim_status = 7;
 }
 
 // Radio access families
@@ -616,6 +619,9 @@ message RilDataCall {
 
   // The network interface name e.g. wlan0, rmnet_data0.
   optional string iframe = 3;
+
+  // Sim status of the corresponding phone
+  optional SimStatus sim_status = 4;
 }
 
 message TelephonyEvent {
@@ -668,6 +674,9 @@ message TelephonyEvent {
 
     // Carrier Key Change event.
     CARRIER_KEY_CHANGED = 14;
+
+    // DSDS status change event.
+    DSDS_STATUS_CHANGED = 15;
   }
 
   // Setup a packet data connection
@@ -1462,6 +1471,14 @@ message TelephonyEvent {
     optional string mccmnc = 3;
   }
 
+  message PhoneStatus {
+      /** The sim status of each active slot. */
+      repeated SimStatus sim_status = 1;
+
+      /** The number of powered on modems. */
+      optional int32 enabled_modem_count = 2;
+  }
+
   // Time when event happened on device, in milliseconds since epoch
   optional int64 timestamp_millis = 1;
 
@@ -1512,6 +1529,34 @@ message TelephonyEvent {
 
   // Carrier key change
   optional CarrierKeyChange carrier_key_change = 17;
+
+  // Phone status
+  optional PhoneStatus phone_status = 18;
+}
+
+message SimStatus {
+    enum SimState {
+        /** SIM card state: no SIM card is available in the device. */
+        SIM_STATE_ABSENT = 0;
+
+        /** SIM card error, present but faulty. */
+        SIM_STATE_IO_ERROR = 1;
+
+        /**
+         * SIM card state: SIM Card restricted, present but not usable due to carrier
+         * restrictions.
+         */
+        SIM_STATE_CARD_RESTRICTED = 2;
+
+        /** SIM card applications have been loaded. */
+        SIM_STATE_LOADED = 3;
+    };
+
+    /** Current SIM state. */
+    optional SimState sim_state = 1;
+
+    /** The Carrier id of this SIM. */
+    optional int32 carrier_id = 2;
 }
 
 enum TimeInterval {
@@ -1879,6 +1924,9 @@ message TelephonyCallSession {
 
   // Indicating some call events are dropped
   optional bool events_dropped = 4;
+
+  // SIM status of the corresponding phone
+  optional SimStatus sim_status = 5;
 }
 
 message SmsSession {
@@ -2093,6 +2141,9 @@ message SmsSession {
 
   // Indicating some sms session events are dropped
   optional bool events_dropped = 4;
+
+  // SIM status of the corresponding phone
+  optional SimStatus sim_status = 5;
 }
 
 // Power stats for modem
