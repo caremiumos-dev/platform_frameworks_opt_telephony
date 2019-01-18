@@ -668,6 +668,9 @@ message TelephonyEvent {
 
     // Carrier Key Change event.
     CARRIER_KEY_CHANGED = 14;
+
+    // DSDS status change event.
+    DSDS_STATUS_CHANGED = 15;
   }
 
   // Setup a packet data connection
@@ -1462,6 +1465,12 @@ message TelephonyEvent {
     optional string mccmnc = 3;
   }
 
+  message DSDSStatus {
+      optional int32 phone_count = 1;
+      optional int32 inserted_sim_count = 2;
+      optional int32 enabled_modem_count = 3;
+  }
+
   // Time when event happened on device, in milliseconds since epoch
   optional int64 timestamp_millis = 1;
 
@@ -1512,6 +1521,9 @@ message TelephonyEvent {
 
   // Carrier key change
   optional CarrierKeyChange carrier_key_change = 17;
+
+  // DSDS status
+  optional DSDSStatus dsds_status = 18;
 }
 
 enum TimeInterval {

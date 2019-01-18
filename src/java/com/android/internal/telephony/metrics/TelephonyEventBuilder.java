@@ -133,4 +133,11 @@ public class TelephonyEventBuilder {
         mEvent.carrierKeyChange = carrierKeyChange;
         return this;
     }
+
+    /** Set and build the event of dsds status logging. */
+    public TelephonyEventBuilder setDsdsStatus(DSDSStatus status) {
+        mEvent.type = TelephonyEvent.Type.DSDS_STATUS_CHANGED;
+        mEvent.dsdsStatus = status;
+        return this;
+    }
 }

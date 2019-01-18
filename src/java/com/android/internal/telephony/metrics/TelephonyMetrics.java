@@ -171,6 +171,8 @@ public class TelephonyMetrics {
      */
     private final SparseArray<CarrierIdMatching> mLastCarrierId = new SparseArray<>();
 
+    private DSDSStatus mLastDsdsStatus;
+
     /** The start system time of the TelephonyLog in milliseconds*/
     private long mStartSystemTimeMs;
 
@@ -529,6 +531,10 @@ public class TelephonyMetrics {
                     .setCarrierIdMatching(mLastCarrierId.get(key)).build();
             addTelephonyEvent(event);
         }
+
+        addTelephonyEvent(new TelephonyEventBuilder(mStartElapsedTimeMs, 0 /* phoneId */)
+                .setDsdsStatus(mLastDsdsStatus)
+                .build());
     }
 
     /**
@@ -2130,6 +2136,18 @@ public class TelephonyMetrics {
 
             if (VDBG) Rlog.v(TAG, "Logged Audio Codec event. Value: " + codec);
         }
+    }
+
+    /**
+     * Write the event of dsds status logging.
+     *
+     * @param status the DSDS status.
+     */
+    public synchronized void writeDsdsStatus(DsdsStatus status) {
+        mLastDsdsStatus = status;
+        addTelephonyEvent(new TelephonyEventBuilder(SystemClock.elapsedRealtime(), 0 /* phoneId */)
+                .setDsdsStatus(status)
+                .build());
     }
 
     /**
