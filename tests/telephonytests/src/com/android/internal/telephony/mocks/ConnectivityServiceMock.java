@@ -988,4 +988,9 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
     public NetworkRequest getDefaultRequest() {
         throw new RuntimeException("not implemented");
     }
+
+    @Override
+    public boolean getAvoidBadWifi() {
+        return true;
+    }
 }
