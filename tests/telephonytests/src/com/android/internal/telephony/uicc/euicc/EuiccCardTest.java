@@ -220,6 +220,30 @@ public class EuiccCardTest extends TelephonyTest {
     }
 
     @Test
+    public void testNotRemovable() throws InterruptedException {
+        mMockIccCardStatus.eid = "1A2B3C4D";
+        // mock the resource overlay which declares the euicc slots
+        mContextFixture.putIntArrayResource(com.android.internal.R.array.non_removable_euicc_slots,
+                new int[]{0, 1});
+        mEuiccCard = new EuiccCard(mContextFixture.getTestDouble(), mMockCi,
+                mMockIccCardStatus, 0 /* phoneId */, new Object());
+        // This will instantly return, since EID is already set
+        assertFalse("EuiccCard should not be removable", mEuiccCard.isRemovable());
+    }
+
+    @Test
+    public void testIsRemovable() throws InterruptedException {
+        mMockIccCardStatus.eid = "1A2B3C4D";
+        // mock the resource overlay which declares the euicc slots
+        mContextFixture.putIntArrayResource(com.android.internal.R.array.non_removable_euicc_slots,
+                new int[]{1});
+        mEuiccCard = new EuiccCard(mContextFixture.getTestDouble(), mMockCi,
+                mMockIccCardStatus, 0 /* phoneId */, new Object());
+        // This will instantly return, since EID is already set
+        assertTrue("EuiccCard should be removable", mEuiccCard.isRemovable());
+    }
+
+    @Test
     public void testGetAllProfiles() {
         int channel = mockLogicalChannelResponses(
                 "BF2D14A012E3105A0A896700000000004523019F7001019000");

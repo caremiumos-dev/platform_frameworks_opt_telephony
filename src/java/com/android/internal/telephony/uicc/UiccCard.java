@@ -116,6 +116,13 @@ public class UiccCard {
     }
 
     /**
+     * Returns whether the UiccCard is removable.
+     */
+    public void isRemovable() {
+        return true;
+    }
+
+    /**
      * Notifies handler when carrier privilege rules are loaded.
      * @deprecated Please use
      * {@link UiccProfile#registerForCarrierPrivilegeRulesLoaded(Handler, int, Object)} instead.
