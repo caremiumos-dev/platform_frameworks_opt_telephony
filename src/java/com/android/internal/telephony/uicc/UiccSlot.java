@@ -26,6 +26,7 @@ import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.SystemProperties;
 import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -36,6 +37,7 @@ import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.euicc.EuiccCard;
+import com.android.server.power.ShutdownThread;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -264,6 +266,14 @@ public class UiccSlot extends Handler {
             log("onIccSwap: isHotSwapSupported is true, don't prompt for rebooting");
             return;
         }
+
+        String shutdownAct = SystemProperties.get(
+                ShutdownThread.SHUTDOWN_ACTION_PROPERTY, "");
+        if (shutdownAct != null && shutdownAct.length() > 0) {
+            log("onIccSwap: already doing shutdown, no need to prompt");
+            return;
+        }
+
         log("onIccSwap: isHotSwapSupported is false, prompt for rebooting");
 
         promptForRestart(isAdded);
