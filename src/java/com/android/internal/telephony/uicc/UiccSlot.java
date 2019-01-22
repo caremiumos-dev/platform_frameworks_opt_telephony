@@ -77,7 +77,7 @@ public class UiccSlot extends Handler {
     /**
      * Update slot. The main trigger for this is a change in the ICC Card status.
      */
-    public void update(CommandsInterface ci, IccCardStatus ics, int phoneId) {
+    public void update(CommandsInterface ci, IccCardStatus ics, int phoneId, int slotIndex) {
         if (DBG) log("cardStatus update: " + ics.toString());
         synchronized (mLock) {
             CardState oldState = mCardState;
@@ -121,7 +121,7 @@ public class UiccSlot extends Handler {
                     if (TextUtils.isEmpty(ics.eid)) {
                         loge("update: eid is missing. ics.eid=" + ics.eid);
                     }
-                    mUiccCard = new EuiccCard(mContext, mCi, ics, phoneId, mLock);
+                    mUiccCard = new EuiccCard(mContext, mCi, ics, phoneId, mLock, slotIndex);
                 }
             } else {
                 if (mUiccCard != null) {

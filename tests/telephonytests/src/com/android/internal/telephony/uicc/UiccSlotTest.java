@@ -65,7 +65,8 @@ public class UiccSlotTest extends TelephonyTest {
                 public void handleMessage(Message msg) {
                     switch (msg.what) {
                         case UICCCARD_UPDATE_CARD_STATE_EVENT:
-                            mUiccSlot.update(mSimulatedCommands, mIccCardStatus, 0 /* phoneId */);
+                            mUiccSlot.update(mSimulatedCommands, mIccCardStatus, 0 /* phoneId */,
+                                    0 /* slotIndex */);
                             setReady(true);
                             break;
                         default:
@@ -235,9 +236,10 @@ public class UiccSlotTest extends TelephonyTest {
     @SmallTest
     public void testUpdateAbsentState() {
         int phoneId = 0;
+        int slotIndex = 0;
         // Make sure when received CARDSTATE_ABSENT state in the first time,
         mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_ABSENT;
-        mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId);
+        mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId, slotIndex);
         verify(mSubInfoRecordUpdater).updateInternalIccState(
                 IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
         assertEquals(IccCardStatus.CardState.CARDSTATE_ABSENT, mUiccSlot.getCardState());
@@ -248,9 +250,10 @@ public class UiccSlotTest extends TelephonyTest {
     @SmallTest
     public void testUiccSlotCreateAndDispose() {
         int phoneId = 0;
+        int slotIndex = 0;
         // Simulate when SIM is added, UiccCard and UiccProfile should be created.
         mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_PRESENT;
-        mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId);
+        mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId, slotIndex);
         verify(mTelephonyComponentFactory).makeUiccProfile(
                 anyObject(), eq(mSimulatedCommands), eq(mIccCardStatus), anyInt(), anyObject(),
                 anyObject());
@@ -260,7 +263,7 @@ public class UiccSlotTest extends TelephonyTest {
         // Simulate when SIM is removed, UiccCard and UiccProfile should be disposed and ABSENT
         // state is sent to SubscriptionInfoUpdater.
         mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_ABSENT;
-        mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId);
+        mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId, slotIndex);
         verify(mSubInfoRecordUpdater).updateInternalIccState(
                 IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
         verify(mUiccProfile).dispose();
