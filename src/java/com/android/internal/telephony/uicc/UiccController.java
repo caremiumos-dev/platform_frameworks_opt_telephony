@@ -43,6 +43,7 @@ import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.RadioConfig;
 import com.android.internal.telephony.SubscriptionInfoUpdater;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
+import com.android.internal.telephony.uicc.euicc.EuiccCard;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -610,14 +611,17 @@ public class UiccController extends Handler {
             }
             String iccid = card.getIccId();
             int cardId = INVALID_CARD_ID;
+            boolean isRemovable = false;
             if (isEuicc) {
                 eid = card.getCardId();
                 cardId = convertToPublicCardId(eid);
+                isRemovable = ((EuiccCard) card).isRemovable();
             } else {
-                // leave eid null if the UICC is not embedded
+                // leave eid=null and isRemovable=false if the UICC is not embedded
                 cardId = convertToPublicCardId(iccid);
             }
-            UiccCardInfo info = new UiccCardInfo(isEuicc, cardId, eid, iccid, slotIndex);
+            UiccCardInfo info = new UiccCardInfo(isEuicc, cardId, eid, iccid, slotIndex,
+                    isRemovable);
             infos.add(info);
         }
         return infos;
