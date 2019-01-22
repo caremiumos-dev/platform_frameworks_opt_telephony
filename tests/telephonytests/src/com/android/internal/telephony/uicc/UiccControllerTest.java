@@ -335,7 +335,8 @@ public class UiccControllerTest extends TelephonyTest {
                 0,         // cardId
                 ics.eid,   // eid
                 ics.iccid, // iccid is unknown
-                0);        // slotIndex
+                0,         // slotIndex
+                true);     // isRemovable
         assertEquals(uiccCardInfo, mUiccControllerUT.getAllUiccCardInfos().get(0));
     }
 
