@@ -115,11 +115,14 @@ public class EuiccCard extends UiccCard {
     private RegistrantList mEidReadyRegistrants;
     private EuiccSpecVersion mSpecVersion;
     private volatile String mEid;
+    private boolean mIsRemovable;
 
     public EuiccCard(Context c, CommandsInterface ci, IccCardStatus ics, int phoneId, Object lock) {
         super(c, ci, ics, phoneId, lock);
         // TODO: Set supportExtendedApdu based on ATR.
         mApduSender = new ApduSender(ci, ISD_R_AID, false /* supportExtendedApdu */);
+
+        mIsRemovable = !isNonRemovableEuicc(c, phoneId);
 
         if (TextUtils.isEmpty(ics.eid)) {
             loge("no eid given in constructor for phone " + phoneId);
@@ -364,6 +367,15 @@ public class EuiccCard extends UiccCard {
                     }
                 },
                 callback, handler);
+    }
+
+    /**
+     * Returns whether the EuiccCard is removable.
+     *
+     */
+    @Override
+    public boolean isRemovable() {
+        return mIsRemovable;
     }
 
     /**
@@ -1072,6 +1084,21 @@ public class EuiccCard extends UiccCard {
     @VisibleForTesting(visibility = VisibleForTesting.Visibility.PRIVATE)
     protected Resources getResources()  {
         return Resources.getSystem();
+    }
+
+    // Return true if a slot index is for an embedded, non-removable eUICC
+    private boolean isNonRemovableEuicc(Context context, int slotIndex) {
+        int[] euiccSlots = context.getResources()
+                .getIntArray(com.android.internal.R.array.non_removable_euicc_slots);
+        if (euiccSlots == null) {
+            return false;
+        }
+        for (int euiccSlot : euiccSlots) {
+            if (euiccSlot == slotIndex) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private RequestProvider newRequestProvider(ApduRequestBuilder builder) {

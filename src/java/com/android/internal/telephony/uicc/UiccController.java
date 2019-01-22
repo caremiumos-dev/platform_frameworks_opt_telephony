@@ -610,6 +610,7 @@ public class UiccController extends Handler {
             }
             String iccid = card.getIccId();
             int cardId = INVALID_CARD_ID;
+            boolean isRemovable = card.isRemovable();
             if (isEuicc) {
                 eid = card.getCardId();
                 cardId = convertToPublicCardId(eid);
@@ -617,7 +618,8 @@ public class UiccController extends Handler {
                 // leave eid null if the UICC is not embedded
                 cardId = convertToPublicCardId(iccid);
             }
-            UiccCardInfo info = new UiccCardInfo(isEuicc, cardId, eid, iccid, slotIndex);
+            UiccCardInfo info = new UiccCardInfo(isEuicc, cardId, eid, iccid, slotIndex,
+                    isRemovable);
             infos.add(info);
         }
         return infos;
