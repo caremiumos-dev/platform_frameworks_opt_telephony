@@ -69,6 +69,30 @@
       "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a00c006_d989417f",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-23T00:59:02Z",
+      "side": 1,
+      "message": "I think I prefer \"non-removable\" to \"soldered\" but if we just want to make the method name shorter I can change it to isNonRemovableEuicc",
+      "parentUuid": "4ef85a6f_948485f9",
+      "range": {
+        "startLine": 1088,
+        "startChar": 20,
+        "endLine": 1088,
+        "endChar": 51
+      },
+      "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
