@@ -22,6 +22,29 @@
       "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ef85a6f_948485f9",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2019-01-23T00:50:13Z",
+      "side": 1,
+      "message": "isSolderedEuicc?",
+      "range": {
+        "startLine": 1088,
+        "startChar": 20,
+        "endLine": 1088,
+        "endChar": 51
+      },
+      "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
