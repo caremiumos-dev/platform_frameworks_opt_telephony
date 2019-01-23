@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dd7487f3_55f96bcf",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-23T00:57:08Z",
+      "side": 1,
+      "message": "Good point. We can pass the physical slot status down from UiccController as well.",
+      "parentUuid": "be390229_6cc1b81f",
+      "range": {
+        "startLine": 125,
+        "startChar": 59,
+        "endLine": 125,
+        "endChar": 66
+      },
+      "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4ef85a6f_948485f9",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 1
