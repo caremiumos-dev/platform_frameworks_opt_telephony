@@ -16,6 +16,24 @@
       "revId": "5d298325ccf0540836d371241b37f7697c551638",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dea8ed3_9d89703a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1129688
+      },
+      "writtenOn": "2019-01-23T22:32:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f66734c3_8d53ae07",
+      "revId": "5d298325ccf0540836d371241b37f7697c551638",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
