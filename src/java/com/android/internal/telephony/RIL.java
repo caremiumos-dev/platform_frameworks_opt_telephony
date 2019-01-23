@@ -1936,7 +1936,43 @@ public class RIL extends BaseCommands implements CommandsInterface {
     public void startNetworkScan(NetworkScanRequest nsr, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
-            if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_2)) {
+            if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_4)) {
+                android.hardware.radio.V1_4.IRadio radioProxy14 =
+                        (android.hardware.radio.V1_4.IRadio) radioProxy;
+
+                android.hardware.radio.V1_2.NetworkScanRequest request =
+                        new android.hardware.radio.V1_2.NetworkScanRequest();
+                request.type = nsr.getScanType();
+                request.interval = nsr.getSearchPeriodicity();
+                request.maxSearchTime = nsr.getMaxSearchTime();
+                request.incrementalResultsPeriodicity = nsr.getIncrementalResultsPeriodicity();
+                request.incrementalResults = nsr.getIncrementalResults();
+
+                for (RadioAccessSpecifier ras : nsr.getSpecifiers()) {
+
+                    android.hardware.radio.V1_1.RadioAccessSpecifier rasInHalFormat =
+                            convertRadioAccessSpecifierToRadioHAL(ras);
+                    if (rasInHalFormat == null) {
+                        return;
+                    }
+
+                    request.specifiers.add(rasInHalFormat);
+                }
+
+                request.mccMncs.addAll(nsr.getPlmns());
+                RILRequest rr = obtainRequest(RIL_REQUEST_START_NETWORK_SCAN, result,
+                        mRILDefaultWorkSource);
+
+                if (RILJ_LOGD) {
+                    riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+                }
+
+                try {
+                    radioProxy14.startNetworkScan_1_4(rr.mSerial, request);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "startNetworkScan", e);
+                }
+            } else if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_2)) {
                 android.hardware.radio.V1_2.IRadio radioProxy12 =
                         (android.hardware.radio.V1_2.IRadio) radioProxy;
 

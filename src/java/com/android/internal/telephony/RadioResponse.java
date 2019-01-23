@@ -610,6 +610,14 @@ public class RadioResponse extends IRadioResponse.Stub {
      *
      * @param responseInfo Response info struct containing response type, serial no. and error
      */
+    public void startNetworkScanResponse_1_4(RadioResponseInfo responseInfo) {
+        responseScanStatus(responseInfo);
+    }
+
+    /**
+     *
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
     public void stopNetworkScanResponse(RadioResponseInfo responseInfo) {
         responseScanStatus(responseInfo);
     }
