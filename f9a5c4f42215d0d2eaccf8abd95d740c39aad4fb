@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be390229_6cc1b81f",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-01-23T00:28:56Z",
+      "side": 1,
+      "message": "Is this the right thing on real devices? I\u0027ve always seen phoneId referring to *logical* slotId, not *physical* slotId.",
+      "range": {
+        "startLine": 125,
+        "startChar": 59,
+        "endLine": 125,
+        "endChar": 66
+      },
+      "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
