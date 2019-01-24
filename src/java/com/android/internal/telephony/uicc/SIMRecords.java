@@ -35,11 +35,14 @@ import com.android.internal.telephony.SmsConstants;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.gsm.SimTlv;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
+import com.android.internal.telephony.TelephonyIntents;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import android.os.SystemProperties;
 
 /**
  * {@hide}
@@ -80,11 +83,16 @@ public class SIMRecords extends IccRecords {
     byte[] mEfLi = null;
     byte[] mEfPl = null;
 
+    byte[] mEfOCSGL_PLMN = null;
+    ArrayList<byte[]> mEfOCSGL_CSG_INFORMATIONs = new ArrayList<byte[]>();
+    byte[] mEfOCSGL_DISPLAY_INDICATOR = null;
+
     int mSpnDisplayCondition;
     // Numeric network codes listed in TS 51.011 EF[SPDI]
     ArrayList<String> mSpdiNetworks = null;
 
     UsimServiceTable mUsimServiceTable;
+    EnabledServiceTable mEnabledServiceTable;
 
     @Override
     public String toString() {
@@ -130,6 +138,15 @@ public class SIMRecords extends IccRecords {
     private static final int CFIS_ADN_CAPABILITY_ID_OFFSET = 14;
     private static final int CFIS_ADN_EXTENSION_ID_OFFSET = 15;
 
+    // EF_OCSGL
+    static final int TAG_OCSGL_CSG_LIST = 0xA0;
+    static final int TAG_OCSGL_PLMN = 0x80;
+    static final int TAG_OCSGL_CSG_INFORMATION = 0x81;
+    static final int TAG_OCSGL_DISPLAY_INDICATOR = 0x82;
+
+    // EF_ACL
+    static final int TAG_ACL = 0xDD;
+
     // ***** Event Constants
     private static final int SIM_RECORD_EVENT_BASE = 0x00;
     private static final int EVENT_GET_IMSI_DONE = 3 + SIM_RECORD_EVENT_BASE;
@@ -165,11 +182,22 @@ public class SIMRecords extends IccRecords {
     private static final int EVENT_GET_EHPLMN_DONE = 40 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_GET_FPLMN_DONE = 41 + SIM_RECORD_EVENT_BASE;
 
+    // Append Custom Event
+    private static final int CUSTOM_EVENT_BASE = SIM_RECORD_EVENT_BASE + 0xF0;
+    private static final int EVENT_GET_OPL_DONE = 1 + CUSTOM_EVENT_BASE;
+    private static final int EVENT_GET_OCSGL_DONE = 2 + CUSTOM_EVENT_BASE;
+    private static final int EVENT_GET_ACL_DONE = 3 + CUSTOM_EVENT_BASE;
+    private static final int EVENT_GET_EST_DONE = 4 + CUSTOM_EVENT_BASE;
+    private static final int EVENT_GET_ECC_DONE = 5 + CUSTOM_EVENT_BASE;
+
     // TODO: Possibly move these to IccRecords.java
     private static final int SYSTEM_EVENT_BASE = 0x100;
     private static final int EVENT_APP_LOCKED = 2 + SYSTEM_EVENT_BASE;
     private static final int EVENT_APP_NETWORK_LOCKED = 3 + SYSTEM_EVENT_BASE;
 
+    // Initial ECC List
+    private static final String ECCLIST_PROP_NAME = "ril.ecclist";
+    private static final String INITIAL_ECC_LIST = "";
 
     // ***** Constructor
 
@@ -181,10 +209,12 @@ public class SIMRecords extends IccRecords {
         mVmConfig = new VoiceMailConstants();
 
         mRecordsRequested = false;  // No load request is made till SIM ready
+        mExtRecordsRequested = false;
         mLockedRecordsReqReason = LOCKED_RECORDS_REQ_REASON_NONE;
 
         // recordsToLoad is set to 0 because no requests are made yet
         mRecordsToLoad = 0;
+        mExtRecordsToLoad = 0;
 
         mCi.setOnSmsOnSim(this, EVENT_SMS_ON_SIM, null);
 
@@ -205,6 +235,11 @@ public class SIMRecords extends IccRecords {
         mParentApp.unregisterForLocked(this);
         mParentApp.unregisterForNetworkLocked(this);
         resetRecords();
+
+        // Reset ECC LIST to default
+        String propertyName = ECCLIST_PROP_NAME + (mParentApp.getPhoneId()==0? "0" : "1");
+        SystemProperties.set(propertyName, INITIAL_ECC_LIST);
+
         super.dispose();
     }
 
@@ -247,6 +282,7 @@ public class SIMRecords extends IccRecords {
         // read requests made so far are not valid. This is set to
         // true only when fresh set of read requests are made.
         mRecordsRequested = false;
+        mExtRecordsRequested = false;
         mLockedRecordsReqReason = LOCKED_RECORDS_REQ_REASON_NONE;
         mLoaded.set(false);
     }
@@ -261,6 +297,26 @@ public class SIMRecords extends IccRecords {
     @Override
     public UsimServiceTable getUsimServiceTable() {
         return mUsimServiceTable;
+    }
+
+    @Override
+    public EnabledServiceTable getEnabledServiceTable() {
+        return mEnabledServiceTable;
+    }
+
+    @Override
+    public byte[] getOcsglPLMN() {
+        return mEfOCSGL_PLMN;
+    }
+
+    @Override
+    public ArrayList<byte[]> getOcsglInformation() {
+        return mEfOCSGL_CSG_INFORMATIONs;
+    }
+
+    @Override
+    public byte[] getOcsglDisplayIndicator() {
+        return mEfOCSGL_DISPLAY_INDICATOR;
     }
 
     private int getExtFromEf(int ef) {
@@ -607,8 +663,10 @@ public class SIMRecords extends IccRecords {
         AdnRecord adn;
 
         byte data[];
+        ArrayList<byte[]> datas;
 
         boolean isRecordLoadResponse = false;
+        boolean isExtRecordLoadResponse = false;
 
         if (mDestroyed.get()) {
             loge("Received message " + msg + "[" + msg.what + "] " +
@@ -905,23 +963,173 @@ public class SIMRecords extends IccRecords {
                     isRecordLoadResponse = true;
 
                     ar = (AsyncResult) msg.obj;
-                    data = (byte[]) ar.result;
-
                     if (ar.exception != null) {
+                        log("ar.exception := " + ar.exception);
                         break;
                     }
 
-                    SimTlv tlv = new SimTlv(data, 0, data.length);
-
-                    for (; tlv.isValidObject(); tlv.nextObject()) {
-                        if (tlv.getTag() == TAG_FULL_NETWORK_NAME) {
-                            mPnnHomeName = IccUtils.networkNameToString(
-                                    tlv.getData(), 0, tlv.getData().length);
-                            log("PNN: " + mPnnHomeName);
-                            break;
+                    datas = (ArrayList<byte[]>) ar.result;
+                    // log("mPnnList datas size := " + datas.size());
+                    mPnnList.clear();
+                    for (int i = 0; i < datas.size(); i++) {
+                        data = datas.get(i);
+                        SimTlv tlv = new SimTlv(data, 0, data.length);
+                        for ( ; tlv.isValidObject() ; tlv.nextObject()) {
+                            if (tlv.getTag() == TAG_FULL_NETWORK_NAME) {
+                                mPnnList.add(IccUtils.networkNameToString(tlv.getData(), 0, tlv.getData().length));
+                                break;
+                            }
                         }
                     }
+
+                    if (DBG) {
+                        log("mPnnList size := " + mPnnList.size());
+                        log("mPnnList := " + mPnnList);
+                    }
+                break;
+
+                case EVENT_GET_OPL_DONE:
+                {
+                    log("EVENT_GET_OPL_DONE++");
+                    isExtRecordLoadResponse = true;
+
+                    ar = (AsyncResult)msg.obj;
+                    if (ar.exception != null) {
+                        log("ar.exception := " + ar.exception);
+                        break;
+                    }
+
+                    datas = (ArrayList<byte[]>) ar.result;
+                    // log("mOpList datas size := " + datas.size());
+                    mOpList.clear();
+                    for (int i = 0; i < datas.size(); i++) {
+                        mOpList.add(new OpList(IccUtils.bytesToHexString(datas.get(i))));
+                    }
+
+                    if (DBG) {
+                        log("mOpList size := " + datas.size());
+                        log("mOpList := " + mOpList);
+                    }
+                }
+                break;
+
+                case EVENT_GET_OCSGL_DONE:
+                {
+                    log("EVENT_GET_OCSGL_DONE++");
+                    isExtRecordLoadResponse = true;
+
+                    ar = (AsyncResult)msg.obj;
+                    if (ar.exception != null) {
+                        log("ar.exception := " + ar.exception);
+                        break;
+                    }
+
+                    data = (byte[])ar.result;
+                    if(VDBG) log("EF_OCSGL : " + IccUtils.bytesToHexString(data));
+
+                    mEfOCSGL_CSG_INFORMATIONs.clear();
+                    SimTlv tlv = new SimTlv(data, 0, data.length);
+                    if (tlv.getTag() == TAG_OCSGL_CSG_LIST) {
+                        tlv = new SimTlv(data, 2, data.length);
+                        int i = 0;
+                        for ( ; tlv.isValidObject() ; tlv.nextObject()) {
+                            if (tlv.getTag() == TAG_OCSGL_PLMN) {
+                                mEfOCSGL_PLMN = tlv.getData();
+                            } else if (tlv.getTag() == TAG_OCSGL_CSG_INFORMATION) {
+                                mEfOCSGL_CSG_INFORMATIONs.add(tlv.getData());
+                            } else if (tlv.getTag() == TAG_OCSGL_DISPLAY_INDICATOR) {
+                                mEfOCSGL_DISPLAY_INDICATOR = tlv.getData();
+                            }
+                        }
+                    }
+
+                    if (VDBG) {
+                        log("EF_OCSGL - PLMN : " + IccUtils.bytesToHexString(mEfOCSGL_PLMN));
+                        for (int i = 0; i < mEfOCSGL_CSG_INFORMATIONs.size();i++) {
+                            log("EF_OCSGL - CSG INFORMATION : " + IccUtils.bytesToHexString(mEfOCSGL_CSG_INFORMATIONs.get(i)));
+                        }
+                        log("EF_OCSGL - DISPLAY INDICATOR : " + IccUtils.bytesToHexString(mEfOCSGL_DISPLAY_INDICATOR));
+                    }
+                }
+                break;
+
+                case EVENT_GET_EST_DONE:
+                    log("EVENT_GET_EST_DONE++");
+                    isExtRecordLoadResponse = true;
+
+                    ar = (AsyncResult)msg.obj;
+                    data = (byte[])ar.result;
+
+                    if (ar.exception != null) {
+                        log("ar.exception := " + ar.exception);
+                        break;
+                    }
+
+                    mEnabledServiceTable = new EnabledServiceTable(data);
+                    if (DBG) log("EST: " + mEnabledServiceTable);
                     break;
+
+                case EVENT_GET_ACL_DONE:
+                {
+                    log("EVENT_GET_ACL_DONE++");
+                    isExtRecordLoadResponse = true;
+
+                    ar = (AsyncResult)msg.obj;
+                    if (ar.exception != null) {
+                        log("ar.exception := " + ar.exception);
+                        break;
+                    }
+
+                    data = (byte[]) ar.result;
+                    if(VDBG) log("data : " + IccUtils.bytesToHexString(data));
+                    SimTlv tlv = new SimTlv(data, 1, data.length);
+                    for ( ; tlv.isValidObject() ; tlv.nextObject()) {
+                        if (tlv.getTag() == TAG_ACL) {
+                            mACList.add(new String(tlv.getData()));
+                        }
+                    }
+
+                    if (DBG) log("EF_ACL: " + mACList);
+                }
+                break;
+
+                case EVENT_GET_ECC_DONE:
+                {
+                    log("EVENT_GET_ECC_DONE++");
+                    isExtRecordLoadResponse = true;
+
+                    ar = (AsyncResult)msg.obj;
+                    if (ar.exception != null) {
+                        log("ar.exception := " + ar.exception);
+                        break;
+                    }
+
+                    datas = (ArrayList<byte[]>) ar.result;
+                    mEccList.clear();
+                    for (int i = 0; i < datas.size(); i++) {
+                        EccList eccInfo = new EccList(IccUtils.bytesToHexString(datas.get(i)));
+                        if (eccInfo.getCode() != "")
+                            mEccList.add(eccInfo);
+                    }
+
+                    if (VDBG) {
+                        log("mEccList := " + mEccList);
+                    }
+
+                    String propertyValue = INITIAL_ECC_LIST;
+                    for(int i = 0; i < mEccList.size(); i++) {
+                        if (propertyValue.length()==0)
+                            propertyValue = mEccList.get(i).getCode();
+                        else
+                            propertyValue = propertyValue + "," + mEccList.get(i).getCode();
+                    }
+
+                    String propertyName = ECCLIST_PROP_NAME + (mParentApp.getPhoneId()==0? "" : "1");
+                    SystemProperties.set(propertyName, propertyValue);
+                    String readProperty = SystemProperties.get(propertyName, "empty");
+                    if (DBG) log("readProperty := " + readProperty);
+                }
+                break;
 
                 case EVENT_GET_ALL_SMS_DONE:
                     isRecordLoadResponse = true;
@@ -1229,6 +1437,10 @@ public class SIMRecords extends IccRecords {
             if (isRecordLoadResponse) {
                 onRecordLoaded();
             }
+
+            if (isExtRecordLoadResponse) {
+                onExtRecordLoaded();
+            }
         }
     }
 
@@ -1381,6 +1593,20 @@ public class SIMRecords extends IccRecords {
         }
     }
 
+    protected void onExtRecordLoaded() {
+        // One record loaded successfully or failed, In either case
+        // we need to update the recordsToLoad count
+        mExtRecordsToLoad -= 1;
+        if (DBG) log("onExtRecordLoaded " + mExtRecordsToLoad + " requested: " + mExtRecordsRequested);
+
+        if (mExtRecordsToLoad == 0 && mExtRecordsRequested == true) {
+            onAllExtRecordsLoaded();
+        } else if (mExtRecordsToLoad < 0) {
+            loge("extRecordsToLoad <0, programmer error suspected");
+            mExtRecordsToLoad = 0;
+        }
+    }
+
     private void setVoiceCallForwardingFlagFromSimRecords() {
         if (validEfCfis(mEfCfis)) {
             // Refer TS 51.011 Section 10.3.46 for the content description
@@ -1452,6 +1678,13 @@ public class SIMRecords extends IccRecords {
         setVoiceMailByCountry(operator);
         mLoaded.set(true);
         mRecordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
+
+        fetchSimExtRecords();
+    }
+
+    protected void onAllExtRecordsLoaded() {
+        if (DBG) log("extend recorded load complete");
+
     }
 
     //***** Private methods
@@ -1557,7 +1790,7 @@ public class SIMRecords extends IccRecords {
         mFh.loadEFTransparent(EF_SPDI, obtainMessage(EVENT_GET_SPDI_DONE));
         mRecordsToLoad++;
 
-        mFh.loadEFLinearFixed(EF_PNN, 1, obtainMessage(EVENT_GET_PNN_DONE));
+        mFh.loadEFLinearFixedAll(EF_PNN, obtainMessage(EVENT_GET_PNN_DONE));
         mRecordsToLoad++;
 
         mFh.loadEFTransparent(EF_SST, obtainMessage(EVENT_GET_SST_DONE));
@@ -1987,6 +2220,31 @@ public class SIMRecords extends IccRecords {
         log("[CSP] Value Added Service Group (0xC0), not found!");
     }
 
+    protected void fetchSimExtRecords() {
+        mExtRecordsRequested = true;
+
+        if (DBG) log("fetchSimExtRecords " + mExtRecordsToLoad);
+
+        mFh.loadEFLinearFixedAll(EF_ECC, obtainMessage(EVENT_GET_ECC_DONE));
+        mExtRecordsToLoad++;
+
+        // for ATT, TMO
+        mFh.loadEFLinearFixedAll(EF_OPL, obtainMessage(EVENT_GET_OPL_DONE));
+        mExtRecordsToLoad++;
+
+        mFh.loadEFLinearFixedAll(EF_OCSGL, obtainMessage(EVENT_GET_OCSGL_DONE));
+        mExtRecordsToLoad++;
+
+        // for VZW
+        mFh.loadEFTransparent(EF_ACL, obtainMessage(EVENT_GET_ACL_DONE));
+        mExtRecordsToLoad++;
+
+        mFh.loadEFTransparent(EF_EST, obtainMessage(EVENT_GET_EST_DONE));
+        mExtRecordsToLoad++;
+
+        if (DBG) log("fetchSimExtRecords " + mExtRecordsToLoad + " requested: " + mExtRecordsRequested);
+    }
+
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("SIMRecords: " + this);
@@ -2004,6 +2262,7 @@ public class SIMRecords extends IccRecords {
         pw.println(" mSpnDisplayCondition=" + mSpnDisplayCondition);
         pw.println(" mSpdiNetworks[]=" + mSpdiNetworks);
         pw.println(" mUsimServiceTable=" + mUsimServiceTable);
+        pw.println(" mEnabledServiceTable=" + mEnabledServiceTable);
         pw.println(" mGid1=" + mGid1);
         if (mCarrierTestOverride.isInTestMode()) {
             pw.println(" mFakeGid1=" + mCarrierTestOverride.getFakeGid1());
@@ -2022,5 +2281,21 @@ public class SIMRecords extends IccRecords {
         pw.println(" mFplmns[]=" + Arrays.toString(mFplmns));
         pw.println(" mEhplmns[]=" + Arrays.toString(mEhplmns));
         pw.flush();
+    }
+
+    @Override
+    public boolean isOCSGLAvailable() {
+        if (mUsimServiceTable != null) {
+            return mUsimServiceTable.isAvailable(UsimServiceTable.UsimService.OPERATOR_CSG_LISTS_AND_INDICATIONS);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isACLEnabled() {
+        if (mEnabledServiceTable != null) {
+            return mEnabledServiceTable.isAvailable(EnabledServiceTable.EnabledService.APN_CONTROL_LIST);
+        }
+        return false;
     }
 }

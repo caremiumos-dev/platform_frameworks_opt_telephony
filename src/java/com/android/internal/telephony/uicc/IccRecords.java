@@ -91,6 +91,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected RegistrantList mRecordsOverrideRegistrants = new RegistrantList();
 
     protected int mRecordsToLoad;  // number of pending load requests
+    protected int mExtRecordsToLoad;  // number of pending load requests
 
     protected AdnRecordCache mAdnCache;
 
@@ -104,6 +105,8 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected static final int LOCKED_RECORDS_REQ_REASON_NETWORK_LOCKED = 2;
 
     protected boolean mRecordsRequested = false; // true if we've made requests for the sim records
+    protected boolean mExtRecordsRequested = false; // true if we've made requests for the sim records
+
     protected int mLockedRecordsReqReason = LOCKED_RECORDS_REQ_REASON_NONE;
 
     protected String mIccId;  // Includes only decimals (no hex)
@@ -177,6 +180,126 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     public static final int DEFAULT_VOICE_MESSAGE_COUNT = -2;
     public static final int UNKNOWN_VOICE_MESSAGE_COUNT = -1;
+
+    public class OpList {
+        String mMCC;
+        String mMNC;
+        int mStartLac;
+        int mEndLac;
+        int mPnnId;
+
+        public OpList(String OplInfo) {
+            String tempStr;
+            byte[] tempbytes = new byte[]{0x00, 0x00, 0x00};
+
+            // log("OplInfo : " + OplInfo);
+            tempbytes[0] = (byte)OplInfo.charAt(1);
+            tempbytes[1] = (byte)OplInfo.charAt(0);
+            tempbytes[2] = (byte)OplInfo.charAt(3);
+            mMCC = new String(tempbytes);
+
+            tempbytes[0] = (byte)OplInfo.charAt(5);
+            tempbytes[1] = (byte)OplInfo.charAt(4);
+            tempbytes[2] = (byte)OplInfo.charAt(2);
+            mMNC = new String(tempbytes);
+
+            mStartLac = Integer.parseInt(OplInfo.substring(6,10), 16);
+            mEndLac = Integer.parseInt(OplInfo.substring(10,14), 16);
+
+            try {
+                mPnnId = Integer.parseInt(OplInfo.substring(15), 10);
+            } catch (NumberFormatException e) {
+                mPnnId = -1;
+            }
+            // log("mMCC : " + mMCC + " mMNC : " + mMNC + " mStartLac : " + mStartLac + " mEndLac : " + mEndLac + " mPnnId : " + mPnnId);
+        }
+
+        public String getMcc() {
+            return mMCC;
+        }
+
+        public String getMnc() {
+            return mMNC;
+        }
+
+        public int getStartLac() {
+            return mStartLac;
+        }
+
+        public int getEndLac() {
+            return mEndLac;
+        }
+
+        public int getPnnId() {
+            return mPnnId;
+        }
+
+        public String toString() {
+            return ("mMCC:= " + mMCC + " mMNC:= " + mMNC + " mStartLac:= " + mStartLac + " mEndLac:= " + mEndLac + " mPnnId:= " + mPnnId);
+        }
+
+    };
+
+    public class EccList {
+        String mCode = "";
+        String mAlphaIdentifier;
+        int mServiceCategory;
+
+        public EccList(String EccInfo) {
+            String tempStr = "";
+            byte[] tempbytes = new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+            byte[] alphaIdentifier = null;
+
+            if (DBG) log("EccList[" + EccInfo.length() +"] - " + EccInfo );
+
+            /* 1 to 3 : Emergency Call Code */
+            if ((EccInfo.charAt(1) == 'F' || EccInfo.charAt(1) == 'f'))
+                return;
+
+            mCode = mCode + ((EccInfo.charAt(1) == 'F' || EccInfo.charAt(1) == 'f') ? "" : EccInfo.charAt(1));
+            mCode = mCode + ((EccInfo.charAt(0) == 'F' || EccInfo.charAt(0) == 'f') ? "" : EccInfo.charAt(0));
+            mCode = mCode + ((EccInfo.charAt(3) == 'F' || EccInfo.charAt(3) == 'f') ? "" : EccInfo.charAt(3));
+            mCode = mCode + ((EccInfo.charAt(2) == 'F' || EccInfo.charAt(2) == 'f') ? "" : EccInfo.charAt(2));
+            mCode = mCode + ((EccInfo.charAt(5) == 'F' || EccInfo.charAt(5) == 'f') ? "" : EccInfo.charAt(5));
+            mCode = mCode + ((EccInfo.charAt(4) == 'F' || EccInfo.charAt(4) == 'f') ? "" : EccInfo.charAt(4));
+
+            if (VDBG) log("EccList - mCode : " + mCode);
+
+            /* 4 to X+3 : Emergency Call Code Alpha Identifier */
+            if (EccInfo.length() == 8) {        // mAlphaIdentifier is empty
+                mAlphaIdentifier = "";
+            } else {
+                tempStr = EccInfo.substring(6, EccInfo.length()-2);
+                alphaIdentifier = IccUtils.hexStringToBytes(tempStr);
+                mAlphaIdentifier = new String(alphaIdentifier);
+            }
+
+            if (VDBG) log("EccList - mAlphaIdentifier : " + mAlphaIdentifier);
+
+            /* X+4 : Emergency Service Category */
+            mServiceCategory = Integer.parseInt(EccInfo.substring(EccInfo.length()-2, EccInfo.length()), 16);
+            if (VDBG) log("EccList - mServiceCategory : " + mServiceCategory);
+
+        }
+
+        public String getCode() {
+            return mCode;
+        }
+        public String getAlphaIdentifier() {
+            return mAlphaIdentifier;
+        }
+        public int getServiceCategory() {
+            return mServiceCategory;
+        }
+        public String toString() {
+            return ("mCode:= " + mCode + " mAlphaIdentifier:= " + mAlphaIdentifier + " mServiceCategory:= " + mServiceCategory);
+        }
+    }
+
+    protected ArrayList<String> mPnnList = new ArrayList<String>();
+    protected ArrayList<OpList> mOpList = new ArrayList<OpList>();
+    protected ArrayList<String> mACList = new ArrayList<String>();
+    protected ArrayList<EccList> mEccList = new ArrayList<EccList>();
 
     @Override
     public String toString() {
@@ -963,6 +1086,22 @@ public abstract class IccRecords extends Handler implements IccConstants {
         return null;
     }
 
+    public EnabledServiceTable getEnabledServiceTable() {
+        return null;
+    }
+
+    public byte[] getOcsglPLMN() {
+        return null;
+    }
+
+    public ArrayList<byte[]> getOcsglInformation() {
+        return null;
+    }
+
+    public byte[] getOcsglDisplayIndicator() {
+        return null;
+    }
+
     protected void setSystemProperty(String key, String val) {
         TelephonyManager.getDefault().setTelephonyProperty(mParentApp.getPhoneId(), key, val);
 
@@ -1017,6 +1156,31 @@ public abstract class IccRecords extends Handler implements IccConstants {
         if (DBG) log("getIccSimChallengeResponse: return auth_rsp");
 
         return android.util.Base64.encodeToString(auth_rsp.payload, android.util.Base64.NO_WRAP);
+    }
+
+
+    public ArrayList<String> getPnnList() {
+        if (0 < mPnnList.size())
+            return mPnnList;
+        return null;
+    }
+
+    public ArrayList<OpList> getOpList() {
+        if (0 < mOpList.size())
+            return mOpList;
+        return null;
+    }
+
+    public ArrayList<String> getACList() {
+        if (0 < mACList.size())
+            return mACList;
+        return null;
+    }
+
+    public ArrayList<EccList> getEccList() {
+        if (0 < mEccList.size())
+            return mEccList;
+        return null;
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
@@ -1090,4 +1254,16 @@ public abstract class IccRecords extends Handler implements IccConstants {
         }
         pw.flush();
     }
+
+    /**
+     * OCSGL(Operator CSG List) aware or not aware
+     * @return true if EF_UST support OCSGL others false
+     */
+    public boolean isOCSGLAvailable() { return false; }
+
+    /**
+     * ACL(APN Control List) aware or not aware
+     * @return true if EF_EST support ACL others false
+     */
+    public boolean isACLEnabled() { return false; }
 }

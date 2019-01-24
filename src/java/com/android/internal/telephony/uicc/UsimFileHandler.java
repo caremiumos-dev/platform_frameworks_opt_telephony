@@ -70,7 +70,13 @@ public final class UsimFileHandler extends IccFileHandler implements IccConstant
         case EF_FPLMN:
         case EF_LRPLMNSI:
         case EF_HPPLMN:
+        case EF_ACL:
+        case EF_EST:
+        case EF_ECC:
             return MF_SIM + DF_ADF;
+
+        case EF_OCSGL:
+            return MF_SIM + DF_ADF + DF_HNB;
 
         case EF_PBR:
             // we only support global phonebook.
