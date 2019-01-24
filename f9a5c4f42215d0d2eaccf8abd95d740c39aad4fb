@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b68a57fc_c9588ba1",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-24T19:49:29Z",
+      "side": 1,
+      "message": "Hmmm, I\u0027m not sure. We definitely use info about the slot to populate the field, but I think being removable or not is a property of the card itself.\n\nAnother thing is that if we make it part of UiccSlot, and we want to make it public so Fi can use it, we would add it to UiccSlotInfo which contains fields like logicalSlotIdx that we\u0027d want to hide.",
+      "parentUuid": "0dc4f55b_8bd0719e",
+      "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be390229_6cc1b81f",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 1
@@ -66,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "aa3ef6d6_15d1156c",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-24T19:49:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd7487f3_55f96bcf",
+      "range": {
+        "startLine": 125,
+        "startChar": 59,
+        "endLine": 125,
+        "endChar": 66
+      },
+      "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ef85a6f_948485f9",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 1
@@ -110,6 +152,30 @@
       "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3c367c8_6df5f6ed",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-24T19:49:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a00c006_d989417f",
+      "range": {
+        "startLine": 1088,
+        "startChar": 20,
+        "endLine": 1088,
+        "endChar": 51
+      },
+      "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
