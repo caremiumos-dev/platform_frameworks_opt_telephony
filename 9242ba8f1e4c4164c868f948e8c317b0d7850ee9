@@ -46,6 +46,30 @@
       "revId": "9242ba8f1e4c4164c868f948e8c317b0d7850ee9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fec2183a_938bb5b3",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1120458
+      },
+      "writtenOn": "2019-01-24T22:41:38Z",
+      "side": 0,
+      "message": "Do you have any idea how this would be linking against these libraries from framework.jar then or how I can check this at runtime?",
+      "parentUuid": "8ec66f2a_a6764258",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 16
+      },
+      "revId": "9242ba8f1e4c4164c868f948e8c317b0d7850ee9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
