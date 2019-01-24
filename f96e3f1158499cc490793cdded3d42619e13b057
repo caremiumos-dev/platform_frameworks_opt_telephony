@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51908539_acdb1a0c",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-01-24T21:54:55Z",
+      "side": 1,
+      "message": "If we return a non-null value, we can check if infos.isEmpty(). But I\u0027m ok if the API can return null value.",
+      "range": {
+        "startLine": 958,
+        "startChar": 12,
+        "endLine": 958,
+        "endChar": 46
+      },
+      "revId": "f96e3f1158499cc490793cdded3d42619e13b057",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
