@@ -45,7 +45,14 @@ import android.telephony.TelephonyManager;
 import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.CallManager;
+import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.dataconnection.DcRequest;
+import com.android.internal.telephony.ITelephonyRegistry;
+import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.PhoneSwitcher;
+import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.util.IndentingPrintWriter;
 
 import java.io.FileDescriptor;
@@ -103,6 +110,7 @@ public class PhoneSwitcher extends Handler {
     private static final int EVENT_RADIO_CAPABILITY_CHANGED       = 106;
     private static final int EVENT_PREFERRED_SUBSCRIPTION_CHANGED = 107;
     private static final int EVENT_RADIO_AVAILABLE                = 108;
+    private static final int EVENT_DDS_SWITCH_RESPONSE            = 109;
 
     // Depending on version of IRadioConfig, we need to send either RIL_REQUEST_ALLOW_DATA if it's
     // 1.0, or RIL_REQUEST_SET_PREFERRED_DATA if it's 1.1 or later. So internally mHalCommandToUse
@@ -115,6 +123,11 @@ public class PhoneSwitcher extends Handler {
     private RadioConfig mRadioConfig;
 
     private final static int MAX_LOCAL_LOG_LINES = 30;
+
+    private final int MAX_CONNECT_FAILURE_COUNT = 5;
+    private final int[] mRetryArray =  new int []{5,10,20,40,60};
+    private int[] mDdsSwitchFailure;
+    private CallManager mCm;
 
     /**
      * Method to get singleton instance.
@@ -226,6 +239,10 @@ public class PhoneSwitcher extends Handler {
         networkFactory.setScoreFilter(101);
         networkFactory.register();
 
+        mDdsSwitchFailure = new int[numPhones];
+        mCm = CallManager.getInstance();
+        mCm.registerForDisconnect(this, EVENT_VOICE_CALL_ENDED, null);
+
         log("PhoneSwitcher started");
     }
 
@@ -280,6 +297,18 @@ public class PhoneSwitcher extends Handler {
             case EVENT_RADIO_AVAILABLE: {
                 updateHalCommandToUse();
                 onEvaluate(REQUESTS_UNCHANGED, "EVENT_RADIO_AVAILABLE");
+                break;
+            }
+            case EVENT_DDS_SWITCH_RESPONSE: {
+                onDdsSwitchResponse(msg.arg1, (AsyncResult)msg.obj);
+                break;
+            }
+            case EVENT_VOICE_CALL_ENDED: {
+                log("EVENT_VOICE_CALL_ENDED");
+                int ddsPhoneId = mSubscriptionController.getPhoneId(ddsSubId);
+                if (getConnectFailureCount(ddsPhoneId) > 0) {
+                    resendRilCommands(ddsPhoneId);
+                }
                 break;
             }
         }
@@ -392,7 +421,8 @@ public class PhoneSwitcher extends Handler {
                     activate(phoneId);
                 }
                 if (SubscriptionManager.isUsableSubIdValue(mPreferredDataPhoneId)) {
-                    mRadioConfig.setPreferredDataModem(mPreferredDataPhoneId, null);
+                    mRadioConfig.setPreferredDataModem(mPreferredDataPhoneId,
+                            obtainMessage(EVENT_DDS_SWITCH_RESPONSE, phoneId, 0));
                 }
             } else {
                 List<Integer> newActivePhones = new ArrayList<Integer>();
@@ -443,8 +473,6 @@ public class PhoneSwitcher extends Handler {
                     activate(phoneId);
                 }
             }
-            // Notify all registrants.
-            mActivePhoneRegistrants.notifyRegistrants();
         }
     }
 
@@ -470,7 +498,8 @@ public class PhoneSwitcher extends Handler {
         if (mHalCommandToUse == HAL_COMMAND_ALLOW_DATA || mHalCommandToUse == HAL_COMMAND_UNKNOWN) {
             // Skip ALLOW_DATA for single SIM device
             if (mNumPhones > 1) {
-                mCommandsInterfaces[phoneId].setDataAllowed(active, null);
+                mCommandsInterfaces[phoneId].setDataAllowed(active,
+                        active ? obtainMessage(EVENT_DDS_SWITCH_RESPONSE, phoneId, 0) : null);
             }
         }
     }
@@ -488,13 +517,20 @@ public class PhoneSwitcher extends Handler {
 
     private void resendRilCommands(Message msg) {
         final int phoneId = msg.arg1;
+        resendRilCommands(phoneId);
+    }
+
+    private void resendRilCommands(int phoneId) {
         if (mHalCommandToUse == HAL_COMMAND_ALLOW_DATA || mHalCommandToUse == HAL_COMMAND_UNKNOWN) {
             // Skip ALLOW_DATA for single SIM device
             if (mNumPhones > 1) {
-                mCommandsInterfaces[phoneId].setDataAllowed(isPhoneActive(phoneId), null);
+                boolean active = isPhoneActive(phoneId);
+                mCommandsInterfaces[phoneId].setDataAllowed(active,
+                        active ? obtainMessage(EVENT_DDS_SWITCH_RESPONSE, phoneId, 0) : null);
             }
         } else {
-            mRadioConfig.setPreferredDataModem(mPreferredDataPhoneId, null);
+            mRadioConfig.setPreferredDataModem(mPreferredDataPhoneId,
+                    obtainMessage(EVENT_DDS_SWITCH_RESPONSE, phoneId, 0));
         }
     }
 
@@ -639,6 +675,79 @@ public class PhoneSwitcher extends Handler {
     private void updateHalCommandToUse() {
         mHalCommandToUse = mRadioConfig.isSetPreferredDataCommandSupported()
                 ? HAL_COMMAND_PREFERRED_DATA : HAL_COMMAND_ALLOW_DATA;
+    }
+
+    private void resetConnectFailureCount(int phoneId) {
+        mDdsSwitchFailure[phoneId] = 0;
+    }
+
+    private void incConnectFailureCount(int phoneId) {
+        mDdsSwitchFailure[phoneId]++;
+    }
+
+    private int getConnectFailureCount(int phoneId) {
+        return mDdsSwitchFailure[phoneId];
+    }
+
+    private void handleConnectMaxFailure(int phoneId) {
+        resetConnectFailureCount(phoneId);
+        int ddsSubId = mSubscriptionController.getDefaultDataSubId();
+        int ddsPhoneId = mSubscriptionController.getPhoneId(ddsSubId);
+        if ((ddsPhoneId > 0 && ddsPhoneId < mNumPhones) &&
+            phoneId != ddsPhoneId) {
+            log("DDS switch retries exhausted on phoneId = " + phoneId);
+            enforceDds(ddsPhoneId);
+        }
+    }
+
+    private void enforceDds(int phoneId) {
+        int[] subId = mSubscriptionController.getSubId(phoneId);
+        log("enforceDds: subId = " + subId[0]);
+        mSubscriptionController.setDefaultDataSubId(subId[0]);
+    }
+
+    private boolean isAnyVoiceCallActiveOnDevice() {
+        boolean ret = (mCm.getState() != PhoneConstants.State.IDLE);
+        log("isAnyVoiceCallActiveOnDevice: " + ret);
+        return ret;
+    }
+
+    private void onDdsSwitchResponse(int phoneId, AsyncResult ar) {
+        if (ar.exception != null) {
+            incConnectFailureCount(phoneId);
+            log("Allow_data failed on phoneId = " + phoneId + ", failureCount = "
+                    + getConnectFailureCount(phoneId));
+            if (isAnyVoiceCallActiveOnDevice()) {
+                /* Any DDS retry while voice call is active is in vain
+                Wait for call to get disconnected */
+                log("Wait for call end indication");
+                return;
+            }
+
+            if (getConnectFailureCount(phoneId) == MAX_CONNECT_FAILURE_COUNT) {
+                handleConnectMaxFailure(phoneId);
+            } else {
+                int retryDelay = mRetryArray[allowDataFailureCount - 1] * 1000;
+                log("Scheduling retry connect/allow_data after: " + retryDelay);
+                postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    int ddsSubId = mSubscriptionController.getDefaultDataSubId();
+                    int ddsPhoneId = mSubscriptionController.getPhoneId(ddsSubId);
+                    if (ddsPhoneId == phoneId) {
+                        log("Running retry connect/allow_data");
+                        resendRilCommands(phoneId);
+                    } else {
+                        log("Dds sub changed");
+                        resetConnectFailureCount(phoneId);
+                    }
+                }}, retryDelay);
+            }
+        } else {
+            log("Allow_data success on phoneId = " + phoneId);
+            resetConnectFailureCount(phoneId);
+            mActivePhoneRegistrants.notifyRegistrants();
+        }
     }
 
     private void log(String l) {
