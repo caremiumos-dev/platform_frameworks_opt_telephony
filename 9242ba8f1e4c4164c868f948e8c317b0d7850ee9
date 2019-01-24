@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef73c837_cef66a4f",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1120458
+      },
+      "writtenOn": "2019-01-24T20:25:05Z",
+      "side": 0,
+      "message": "I\u0027m not actually sure why this isn\u0027t needed anymore, but it seems the build system must be handling it. Colin, any idea?",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 16
+      },
+      "revId": "9242ba8f1e4c4164c868f948e8c317b0d7850ee9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
