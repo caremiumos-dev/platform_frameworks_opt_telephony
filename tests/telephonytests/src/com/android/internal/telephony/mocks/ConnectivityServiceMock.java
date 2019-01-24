@@ -1007,6 +1007,12 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
     }
 
     @Override
+    public void getLatestTetheringEntitlementValue(int type, ResultReceiver receiver,
+            boolean showEntitlementUi, String callerPkg) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
     public boolean getAvoidBadWifi() {
         return true;
     }
