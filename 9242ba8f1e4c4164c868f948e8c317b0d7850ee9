@@ -70,6 +70,30 @@
       "revId": "9242ba8f1e4c4164c868f948e8c317b0d7850ee9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a63ce0d1_d8e63977",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2019-01-24T23:20:57Z",
+      "side": 0,
+      "message": "Try:\n\ndexdump2 out/soong/.intermediates/frameworks/opt/telephony/telephony-common/android_common/dex/classes.dex.jar | grep android/hidl/base",
+      "parentUuid": "fec2183a_938bb5b3",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 16
+      },
+      "revId": "9242ba8f1e4c4164c868f948e8c317b0d7850ee9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
