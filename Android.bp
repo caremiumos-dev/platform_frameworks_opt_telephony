@@ -40,16 +40,7 @@ java_library {
         "src/java/**/*.logtags",
     ],
 
-    jarjar_rules: ":framework-hidl-jarjar",
-
     libs: [
-        "voip-common",
-        "ims-common",
-        "services",
-    ],
-    static_libs: [
-        "telephony-protos",
-        "ecc-protos-lite",
         "android.hardware.radio-V1.0-java",
         "android.hardware.radio-V1.1-java",
         "android.hardware.radio-V1.2-java",
@@ -60,6 +51,13 @@ java_library {
         "android.hardware.radio.config-V1.2-java",
         "android.hardware.radio.deprecated-V1.0-java",
         "android.hidl.base-V1.0-java",
+        "voip-common",
+        "ims-common",
+        "services",
+    ],
+    static_libs: [
+        "telephony-protos",
+        "ecc-protos-lite",
     ],
 
     product_variables: {
