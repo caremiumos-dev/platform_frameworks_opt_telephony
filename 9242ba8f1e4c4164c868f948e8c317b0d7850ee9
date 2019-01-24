@@ -22,6 +22,30 @@
       "revId": "9242ba8f1e4c4164c868f948e8c317b0d7850ee9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ec66f2a_a6764258",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2019-01-24T20:37:13Z",
+      "side": 0,
+      "message": "Nothing in the build system should be continuing to apply these jarjar rules if you remove this line.",
+      "parentUuid": "ef73c837_cef66a4f",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 16
+      },
+      "revId": "9242ba8f1e4c4164c868f948e8c317b0d7850ee9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
