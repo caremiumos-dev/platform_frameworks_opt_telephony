@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.net.ConnectionInfo;
 import android.net.ConnectivityManager;
 import android.net.IConnectivityManager;
+import android.net.ITetheringUpstreamListener;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -1003,6 +1004,24 @@ public class ConnectivityServiceMock extends IConnectivityManager.Stub
 
     @Override
     public boolean isCallerCurrentAlwaysOnVpnLockdownApp() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public void registerTetheringUpstreamListener(ITetheringUpstreamListener listener,
+            String callerPkg) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public void unregisterTetheringUpstreamListener(ITetheringUpstreamListener listener,
+            String callerPkg) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public void getLatestTetheringEntitlementValue(int type, ResultReceiver receiver,
+            boolean showEntitlementUi, String callerPkg) {
         throw new RuntimeException("not implemented");
     }
 
