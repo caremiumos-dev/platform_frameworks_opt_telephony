@@ -22,6 +22,30 @@
       "revId": "f96e3f1158499cc490793cdded3d42619e13b057",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d0b4cd3_d3eecc43",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-25T00:31:36Z",
+      "side": 1,
+      "message": "If there\u0027s an issue connecting to the telephony service, the API could return null.",
+      "parentUuid": "51908539_acdb1a0c",
+      "range": {
+        "startLine": 958,
+        "startChar": 12,
+        "endLine": 958,
+        "endChar": 46
+      },
+      "revId": "f96e3f1158499cc490793cdded3d42619e13b057",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
