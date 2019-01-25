@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c64ec25_21d13159",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1424401
+      },
+      "writtenOn": "2019-01-25T19:16:44Z",
+      "side": 1,
+      "message": "agree with Garik. Please move these to an API getDefaultSubId maybe?",
+      "revId": "7d4877de48889891cca8ca78d61d2f33193e96a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d4f6ea3_1c50dc36",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1424401
+      },
+      "writtenOn": "2019-01-25T19:16:44Z",
+      "side": 1,
+      "message": "final int subId \u003d subIds[0] ? (subIds !\u003d null \u0026\u0026 subIds.length \u003e 0) : SubscriptionManager.INVALID_SUBSCRIPTION_ID;\n\nalso please replace lines 769-771 with this in the new API added.",
+      "range": {
+        "startLine": 771,
+        "startChar": 20,
+        "endLine": 771,
+        "endChar": 26
+      },
+      "revId": "7d4877de48889891cca8ca78d61d2f33193e96a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
