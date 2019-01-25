@@ -94,6 +94,30 @@
       "revId": "9242ba8f1e4c4164c868f948e8c317b0d7850ee9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9ab2271_c1e11737",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1120458
+      },
+      "writtenOn": "2019-01-25T00:56:20Z",
+      "side": 0,
+      "message": "Ah, duh. Nothing here actually references android.hidl.base. The jarjar is restricted to some of these static libs. Thanks Colin!",
+      "parentUuid": "a63ce0d1_d8e63977",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 16
+      },
+      "revId": "9242ba8f1e4c4164c868f948e8c317b0d7850ee9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
