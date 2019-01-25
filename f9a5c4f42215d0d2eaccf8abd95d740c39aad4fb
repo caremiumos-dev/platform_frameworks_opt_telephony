@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d1838434_b20eb1ba",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-25T20:21:29Z",
+      "side": 1,
+      "message": "It\u0027s debatable. But think of the case where a slot has no SIM in it. There\u0027s no card but we still know that any card in that slot is going to be removable; in that sense it really is a property of the slot. How/where we expose it is different. We can expose it as part of the card if that is more desirable from an API perspective.",
+      "parentUuid": "b68a57fc_c9588ba1",
+      "revId": "f9a5c4f42215d0d2eaccf8abd95d740c39aad4fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be390229_6cc1b81f",
         "filename": "src/java/com/android/internal/telephony/uicc/euicc/EuiccCard.java",
         "patchSetId": 1
