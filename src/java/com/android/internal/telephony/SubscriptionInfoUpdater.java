@@ -764,9 +764,15 @@ public class SubscriptionInfoUpdater extends Handler {
         i.putExtra(PhoneConstants.PHONE_NAME_KEY, "Phone");
         i.putExtra(IccCardConstants.INTENT_KEY_ICC_STATE, state);
         i.putExtra(IccCardConstants.INTENT_KEY_LOCKED_REASON, reason);
-        SubscriptionManager.putPhoneIdAndSubIdExtra(i, slotId);
+
+        int subIds[] = mSubscriptionManager.getSubscriptionIds(slotId);
+        int subId = INVALID_SUBSCRIPTION_ID;
+        if (subIds != null && subIds.length > 0) {
+            subId = subIds[0];
+        }
+        SubscriptionManager.putPhoneIdAndSubIdExtra(i, slotId, subId);
         logd("Broadcasting intent ACTION_SIM_STATE_CHANGED " + state + " reason " + reason +
-             " for mCardIndex: " + slotId);
+             " for mCardIndex: " + slotId + " subId: " + subId);
         IntentBroadcaster.getInstance().broadcastStickyIntent(i, slotId);
     }
 
@@ -777,9 +783,14 @@ public class SubscriptionInfoUpdater extends Handler {
             i.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
             i.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
             i.putExtra(TelephonyManager.EXTRA_SIM_STATE, state);
-            SubscriptionManager.putPhoneIdAndSubIdExtra(i, phoneId);
+            int subIds[] = mSubscriptionManager.getSubscriptionIds(slotId);
+            int subId = INVALID_SUBSCRIPTION_ID;
+            if (subIds != null && subIds.length > 0) {
+                subId = subIds[0];
+            }
+            SubscriptionManager.putPhoneIdAndSubIdExtra(i, phoneId, subId);
             logd("Broadcasting intent ACTION_SIM_CARD_STATE_CHANGED " + simStateString(state)
-                    + " for phone: " + phoneId);
+                    + " for phone: " + phoneId + " subId: " + subId);
             mContext.sendBroadcast(i, Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
         }
     }
@@ -796,9 +807,14 @@ public class SubscriptionInfoUpdater extends Handler {
             i.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
             i.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
             i.putExtra(TelephonyManager.EXTRA_SIM_STATE, state);
-            SubscriptionManager.putPhoneIdAndSubIdExtra(i, phoneId);
+            int subIds[] = mSubscriptionManager.getSubscriptionIds(slotId);
+            int subId = INVALID_SUBSCRIPTION_ID;
+            if (subIds != null && subIds.length > 0) {
+                subId = subIds[0];
+            }
+            SubscriptionManager.putPhoneIdAndSubIdExtra(i, phoneId, subId);
             logd("Broadcasting intent ACTION_SIM_APPLICATION_STATE_CHANGED " + simStateString(state)
-                    + " for phone: " + phoneId);
+                    + " for phone: " + phoneId + " subId: " + subId);
             mContext.sendBroadcast(i, Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
         }
     }
