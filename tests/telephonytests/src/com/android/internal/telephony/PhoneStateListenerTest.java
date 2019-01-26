@@ -21,9 +21,13 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 
 import android.os.HandlerThread;
+import android.telephony.CallAttributes;
+import android.telephony.CallQuality;
 import android.telephony.PhoneStateListener;
 import android.telephony.PhysicalChannelConfig;
+import android.telephony.PreciseCallState;
 import android.telephony.ServiceState;
+import android.telephony.TelephonyManager;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import org.junit.After;
@@ -40,6 +44,7 @@ public class PhoneStateListenerTest extends TelephonyTest {
     private PhoneStateListenerHandler mPhoneStateListenerHandler;
     private boolean mUserMobileDataState = false;
     private List<PhysicalChannelConfig> mPhysicalChannelConfigs;
+    private CallAttributes mCallAttributes;
 
     private class PhoneStateListenerHandler extends HandlerThread {
         private PhoneStateListenerHandler(String name) {
@@ -69,6 +74,13 @@ public class PhoneStateListenerTest extends TelephonyTest {
                         List<PhysicalChannelConfig> configs) {
                     logd("PhysicalChannelConfig Changed");
                     mPhysicalChannelConfigs = configs;
+                    setReady(true);
+                }
+
+                @Override
+                public void onCallAttributesChanged(CallAttributes callAttributes) {
+                    logd("CallAttributes Changed");
+                    mCallAttributes = callAttributes;
                     setReady(true);
                 }
             };
@@ -141,5 +153,25 @@ public class PhoneStateListenerTest extends TelephonyTest {
         waitUntilReady();
 
         assertTrue(mPhysicalChannelConfigs.equals(configs));
+    }
+
+    @Test @SmallTest
+    public void testTriggerCallAttributesChanged() throws Exception {
+        Field field = PhoneStateListener.class.getDeclaredField("callback");
+        field.setAccessible(true);
+
+        assertNull(mCallAttributes);
+
+        CallQuality callQuality = new CallQuality();
+        PreciseCallState preciseCallState = new PreciseCallState();
+        CallAttributes callAttributes = new CallAttributes(preciseCallState,
+                TelephonyManager.NETWORK_TYPE_UNKNOWN, callQuality);
+
+        setReady(false);
+        ((IPhoneStateListener) field.get(mPhoneStateListenerUT))
+            .onCallAttributesChanged(callAttributes);
+        waitUntilReady();
+
+        assertTrue(mCallAttributes.equals(callAttributes));
     }
 }
