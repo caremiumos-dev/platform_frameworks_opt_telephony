@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fbf0a33_5680b3c3",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-28T20:26:05Z",
+      "side": 1,
+      "message": "This should be done just once in the constructor, or read the overlay in UiccController and pass the flag to the constructor here.",
+      "revId": "0ec687bd22a0302d299bd0f62cd3a76d7c2fbbdc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
