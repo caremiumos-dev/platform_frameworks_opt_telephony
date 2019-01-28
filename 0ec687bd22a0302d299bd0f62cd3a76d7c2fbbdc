@@ -16,6 +16,29 @@
       "revId": "0ec687bd22a0302d299bd0f62cd3a76d7c2fbbdc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "332568f8_052e45b8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-01-28T22:01:40Z",
+      "side": 1,
+      "message": "Can we also propagate this to UiccSlotInfo for users of TelMan#getUiccSlotsInfo (and PhoneInterfaceManager#getUiccSlotsInfo)?",
+      "range": {
+        "startLine": 258,
+        "startChar": 19,
+        "endLine": 258,
+        "endChar": 30
+      },
+      "revId": "0ec687bd22a0302d299bd0f62cd3a76d7c2fbbdc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
