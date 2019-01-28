@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "14ac9a30_4fe6ff4a",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2019-01-28T07:40:29Z",
+      "side": 1,
+      "message": "We can keep count and know the exact retry delay with this implementation. This is needed",
+      "parentUuid": "0a1c6210_f6f09395",
+      "range": {
+        "startLine": 131,
+        "startChar": 24,
+        "endLine": 131,
+        "endChar": 35
+      },
+      "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb31de55_b6568512",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2019-01-25T19:12:23Z",
       "side": 1,
       "message": "is this compiling? This doesn\u0027t look right. No closing parantheses",
+      "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b499556_67fa5716",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2019-01-28T07:40:29Z",
+      "side": 1,
+      "message": "Updated it to ddsSubId. Got missed when applying changes from internal branch",
+      "parentUuid": "fb31de55_b6568512",
       "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "c044b291_6531d097",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2019-01-28T07:40:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66479302_0cac5f46",
+      "range": {
+        "startLine": 531,
+        "startChar": 19,
+        "endLine": 531,
+        "endChar": 20
+      },
+      "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99ceea61_dca2bc5d",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "fdc6e37d_06d749aa",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2019-01-28T07:40:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99ceea61_dca2bc5d",
+      "range": {
+        "startLine": 688,
+        "startChar": 0,
+        "endLine": 688,
+        "endChar": 54
+      },
+      "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97a92300_382f3380",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
@@ -102,6 +192,24 @@
       "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51dbd4fa_303abc3c",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2019-01-28T07:40:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a92300_382f3380",
+      "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "264539e8_f166c58f",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2019-01-28T07:40:29Z",
+      "side": 1,
+      "message": "Yes, any state other than IDLE (OFFHOOK, RINGING etc) would mean call is active.",
+      "parentUuid": "e79d5eb4_b0608b4c",
+      "range": {
+        "startLine": 714,
+        "startChar": 27,
+        "endLine": 714,
+        "endChar": 35
+      },
+      "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c9dee37_9f5b3626",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
@@ -139,6 +271,30 @@
       "writtenOn": "2019-01-25T19:12:23Z",
       "side": 1,
       "message": "just any exception mean DDS switch failed or is there a specific error code sent?",
+      "range": {
+        "startLine": 720,
+        "startChar": 0,
+        "endLine": 720,
+        "endChar": 35
+      },
+      "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9627075d_b6323436",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2019-01-28T07:40:29Z",
+      "side": 1,
+      "message": "Yes, DDS switch failure is notified with an exception, no specific error codes",
+      "parentUuid": "7c9dee37_9f5b3626",
       "range": {
         "startLine": 720,
         "startChar": 0,
