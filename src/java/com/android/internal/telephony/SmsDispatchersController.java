@@ -18,6 +18,8 @@ package com.android.internal.telephony;
 
 import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PERIOD_NOT_SPECIFIED;
 import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PRIORITY_NOT_SPECIFIED;
+import static com.android.internal.telephony.cdma.sms.BearerData.ERROR_NONE;
+import static com.android.internal.telephony.cdma.sms.BearerData.ERROR_TEMPORARY;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -764,9 +766,23 @@ public class SmsDispatchersController extends Handler {
 
     private Pair<Boolean, Boolean> handleCdmaStatusReport(SMSDispatcher.SmsTracker tracker,
             String format, byte[] pdu) {
-        tracker.updateSentMessageStatus(mContext, Sms.STATUS_COMPLETE);
-        boolean success = triggerDeliveryIntent(tracker, format, pdu);
-        return new Pair(success, true /* complete */);
+        com.android.internal.telephony.cdma.SmsMessage sms =
+                com.android.internal.telephony.cdma.SmsMessage.createFromPdu(pdu);
+        boolean complete = false;
+        boolean success = false;
+        if (sms != null) {
+            int errorClass = (sms.getStatus() >> 24) & 0x03;
+            // TODO: CDMA status:ERROR_TEMPORARY is same with GSM TP-Status:Temporary error?
+            if (errorClass != ERROR_TEMPORARY) {
+                // Update the message status (COMPLETE or FAILED)
+                tracker.updateSentMessageStatus(
+                        mContext,
+                        (errorClass == ERROR_NONE) ? Sms.STATUS_COMPLETE : Sms.STATUS_FAILED);
+                complete = true;
+            }
+            success = triggerDeliveryIntent(tracker, format, pdu);
+        }
+        return new Pair(success, complete);
     }
 
     private Pair<Boolean, Boolean> handleGsmStatusReport(SMSDispatcher.SmsTracker tracker,
