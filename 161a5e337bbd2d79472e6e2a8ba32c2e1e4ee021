@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24e03667_e66ceec3",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2019-01-29T17:53:05Z",
+      "side": 1,
+      "message": "don\u0027t pass this in - it suggests sometimes we want a different subId and we don\u0027t - we always want to fetch this from mPhone",
+      "range": {
+        "startLine": 1112,
+        "startChar": 74,
+        "endLine": 1112,
+        "endChar": 79
+      },
+      "revId": "161a5e337bbd2d79472e6e2a8ba32c2e1e4ee021",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
