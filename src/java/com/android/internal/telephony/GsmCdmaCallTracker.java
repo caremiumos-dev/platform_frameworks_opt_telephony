@@ -1260,6 +1260,10 @@ public class GsmCdmaCallTracker extends CallTracker {
                 // Do not auto-answer ringing on CHUP, instead just end active calls
                 log("hangup all conns in active/background call, without affecting ringing call");
                 hangupAllConnections(call);
+            } else if (call.mHoldingRequestState.isStarted()) {
+                log("hangup waiting or background call");
+                logHangupEvent(call);
+                hangupWaitingOrBackground();
             } else {
                 logHangupEvent(call);
                 hangupForegroundResumeBackground();
