@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29cbfdec_d9c7aafd",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-01-29T00:05:58Z",
+      "side": 1,
+      "message": "Add comment describing what each of these longs mean and how they\u0027re used",
+      "range": {
+        "startLine": 333,
+        "startChar": 35,
+        "endLine": 333,
+        "endChar": 45
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0f4691c_1655253c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-01-29T00:05:58Z",
+      "side": 1,
+      "message": "Milliseconds since what?",
+      "range": {
+        "startLine": 1262,
+        "startChar": 44,
+        "endLine": 1262,
+        "endChar": 63
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e968eda_b815c305",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-01-29T00:05:58Z",
+      "side": 1,
+      "message": "Can you add a comment explaining what this is doing?",
+      "range": {
+        "startLine": 1264,
+        "startChar": 8,
+        "endLine": 1266,
+        "endChar": 9
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea5dee91_5472e1aa",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1299,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-01-29T00:05:58Z",
+      "side": 1,
+      "message": "Is this just to exclude the post-dial portion? If so, use PhoneNumberUtils.extractNetworkPortion",
+      "range": {
+        "startLine": 1299,
+        "startChar": 20,
+        "endLine": 1299,
+        "endChar": 83
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "052abc93_4d0d9237",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-01-29T00:05:58Z",
+      "side": 1,
+      "message": "poll() already returns null if it\u0027s empty",
+      "range": {
+        "startLine": 1307,
+        "startChar": 0,
+        "endLine": 1307,
+        "endChar": 87
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eac6ed76_bcd4549c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2635,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-01-29T00:05:58Z",
+      "side": 1,
+      "message": "time",
+      "range": {
+        "startLine": 2635,
+        "startChar": 46,
+        "endLine": 2635,
+        "endChar": 50
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
