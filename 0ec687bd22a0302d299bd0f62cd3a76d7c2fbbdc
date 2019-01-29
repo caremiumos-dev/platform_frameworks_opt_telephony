@@ -39,6 +39,30 @@
       "revId": "0ec687bd22a0302d299bd0f62cd3a76d7c2fbbdc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe4f2ee3_4de7bc05",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-01-29T00:44:51Z",
+      "side": 1,
+      "message": "I\u0027d prefer to have it in one place or the other, does UiccSlotInfo make more sense for Fi\u0027s use case than UiccCardInfo?",
+      "parentUuid": "332568f8_052e45b8",
+      "range": {
+        "startLine": 258,
+        "startChar": 19,
+        "endLine": 258,
+        "endChar": 30
+      },
+      "revId": "0ec687bd22a0302d299bd0f62cd3a76d7c2fbbdc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
