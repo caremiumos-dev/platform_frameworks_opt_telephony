@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c0f191dd_61b0d2a4",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-30T21:34:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29cbfdec_d9c7aafd",
+      "range": {
+        "startLine": 333,
+        "startChar": 35,
+        "endLine": 333,
+        "endChar": 45
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b0f4691c_1655253c",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36c646cf_9f5e65fd",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-30T21:34:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0f4691c_1655253c",
+      "range": {
+        "startLine": 1262,
+        "startChar": 44,
+        "endLine": 1262,
+        "endChar": 63
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f7192973_ef301408",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-30T21:34:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e968eda_b815c305",
+      "range": {
+        "startLine": 1264,
+        "startChar": 8,
+        "endLine": 1266,
+        "endChar": 9
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea5dee91_5472e1aa",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 3
@@ -82,6 +154,30 @@
       "writtenOn": "2019-01-29T00:05:58Z",
       "side": 1,
       "message": "Is this just to exclude the post-dial portion? If so, use PhoneNumberUtils.extractNetworkPortion",
+      "range": {
+        "startLine": 1299,
+        "startChar": 20,
+        "endLine": 1299,
+        "endChar": 83
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e28f68e_72f2d822",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1299,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-30T21:34:44Z",
+      "side": 1,
+      "message": "This is for getting phone numbers from ssp.",
+      "parentUuid": "ea5dee91_5472e1aa",
       "range": {
         "startLine": 1299,
         "startChar": 20,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "b80e9329_7e692bcb",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-30T21:34:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "052abc93_4d0d9237",
+      "range": {
+        "startLine": 1307,
+        "startChar": 0,
+        "endLine": 1307,
+        "endChar": 87
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eac6ed76_bcd4549c",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 3
@@ -137,6 +257,30 @@
       "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36454298_468e0ca0",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2635,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-30T21:34:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eac6ed76_bcd4549c",
+      "range": {
+        "startLine": 2635,
+        "startChar": 46,
+        "endLine": 2635,
+        "endChar": 50
+      },
+      "revId": "8f37d110c830ddc81912a6ee8f3ccc555fd96938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
