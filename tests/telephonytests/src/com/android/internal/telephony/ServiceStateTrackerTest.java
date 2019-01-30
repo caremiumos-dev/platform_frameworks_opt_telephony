@@ -1567,12 +1567,14 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 lteVopsSupportInfo);
         sst.mPollingContext[0] = 2;
         // update data reg state to be in service
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_PS_CELLULAR_REGISTRATION,
                 new AsyncResult(sst.mPollingContext, dataResult, null)));
         waitForMs(200);
         NetworkRegistrationState voiceResult = new NetworkRegistrationState(
                 0, 0, state, voiceRat, 0, false, null, cid, false, 0, 0, 0);
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_CS_CELLULAR_REGISTRATION,
                 new AsyncResult(sst.mPollingContext, voiceResult, null)));
         waitForMs(200);
     }
@@ -1665,10 +1667,12 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 false, 0, 0, 0);
         sst.mPollingContext[0] = 2;
         // update data reg state to be in service
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_PS_CELLULAR_REGISTRATION,
                 new AsyncResult(sst.mPollingContext, dataResult, null)));
         waitForMs(200);
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_CS_CELLULAR_REGISTRATION,
                 new AsyncResult(sst.mPollingContext, voiceResult, null)));
         waitForMs(200);
     }
@@ -1731,10 +1735,12 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 1, 1, 0, TelephonyManager.NETWORK_TYPE_UNKNOWN, 0, false, null, null,
                 false, 0, 0, 0);
         sst.mPollingContext[0] = 2;
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_PS_CELLULAR_REGISTRATION,
                 new AsyncResult(sst.mPollingContext, dataResult, null)));
         waitForMs(200);
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_CS_CELLULAR_REGISTRATION,
                 new AsyncResult(sst.mPollingContext, voiceResult, null)));
         waitForMs(200);
         assertTrue(Arrays.equals(new int[0], sst.mSS.getCellBandwidths()));
@@ -1804,11 +1810,13 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 false, false, false, lteVopsSupportInfo);
         sst.mPollingContext[0] = 2;
 
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_PS_CELLULAR_REGISTRATION,
                 new AsyncResult(sst.mPollingContext, dataResult, null)));
         NetworkRegistrationState voiceResult = new NetworkRegistrationState(
                 1, 1, 1, TelephonyManager.NETWORK_TYPE_LTE, 0, false, null, cellId, false, 0, 0, 0);
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_REGISTRATION,
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_CS_CELLULAR_REGISTRATION,
                 new AsyncResult(sst.mPollingContext, voiceResult, null)));
 
         waitForMs(200);
@@ -1825,7 +1833,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 2, 1, 1, TelephonyManager.NETWORK_TYPE_LTE, 0, false, null, cellId, 1,
                 false, false, false, lteVopsSupportInfo);
         sst.mPollingContext[0] = 1;
-        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_POLL_STATE_GPRS,
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_PS_CELLULAR_REGISTRATION,
                 new AsyncResult(sst.mPollingContext, dataResult, null)));
         waitForMs(200);
 
