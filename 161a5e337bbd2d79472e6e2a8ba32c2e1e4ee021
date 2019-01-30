@@ -22,6 +22,30 @@
       "revId": "161a5e337bbd2d79472e6e2a8ba32c2e1e4ee021",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c87eef_89658f1f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1033528
+      },
+      "writtenOn": "2019-01-30T00:52:28Z",
+      "side": 1,
+      "message": "Ok.\nWe remove this subId parameter from here and change the line 1118 from subId to mPhone.getSubId().",
+      "parentUuid": "24e03667_e66ceec3",
+      "range": {
+        "startLine": 1112,
+        "startChar": 74,
+        "endLine": 1112,
+        "endChar": 79
+      },
+      "revId": "161a5e337bbd2d79472e6e2a8ba32c2e1e4ee021",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
