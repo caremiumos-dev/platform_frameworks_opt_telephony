@@ -197,7 +197,7 @@ public class PhoneSwitcher extends Handler {
         mCommandsInterfaces[0].registerForAvailable(this, EVENT_RADIO_AVAILABLE, null);
         try {
             tr.addOnSubscriptionsChangedListener(context.getOpPackageName(),
-                    mSubscriptionsChangedListener);
+                    mSubscriptionsChangedListener, SubscriptionManager.SUBINFO_CHANGE_TYPE_ALL);
         } catch (RemoteException e) {
         }
 

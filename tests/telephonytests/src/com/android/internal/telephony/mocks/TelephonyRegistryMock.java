@@ -54,6 +54,8 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
         int events;
 
+        int subChangeTypes;
+
         int subId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
 
         int phoneId = SubscriptionManager.INVALID_PHONE_INDEX;
@@ -64,8 +66,8 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
             return (callback != null) && ((events & this.events) != 0);
         }
 
-        boolean matchOnSubscriptionsChangedListener() {
-            return (onSubscriptionsChangedListenerCallback != null);
+        boolean matchOnSubscriptionsChangedListener(int subChangeTypes) {
+            return (onSubscriptionsChangedListenerCallback != null) && ((subChangeTypes & this.subChangeTypes) != 0);
         }
 
         boolean matchOnOpportunisticSubscriptionsChangedListener() {
@@ -89,9 +91,11 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
     private final ArrayList<IBinder> mRemoveList = new ArrayList<IBinder>();
     private final ArrayList<Record> mRecords = new ArrayList<Record>();
+
     private boolean mHasNotifySubscriptionInfoChangedOccurred = false;
     private boolean mHasNotifyOpportunisticSubscriptionInfoChangedOccurred = false;
 
+    private int mHasNotifySubscriptionInfoChangedType = 0;
     public TelephonyRegistryMock() {
     }
 
@@ -120,7 +124,7 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
     @Override
     public void addOnSubscriptionsChangedListener(String callingPackage,
-            IOnSubscriptionsChangedListener callback) {
+            IOnSubscriptionsChangedListener callback, int subChangeTypes) {
         Record r;
 
         synchronized (mRecords) {
@@ -143,9 +147,10 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
             r.callingPackage = callingPackage;
             r.callerUserId = UserHandle.getCallingUserId();
             r.events = 0;
+            r.subChangeTypes = subChangeTypes;
             r.canReadPhoneState = true; // permission has been enforced above
             // Always notify when registration occurs if there has been a notification.
-            if (mHasNotifySubscriptionInfoChangedOccurred) {
+            if ((subChangeTypes & mHasNotifySubscriptionInfoChangedType) != 0) {
                 try {
                     r.onSubscriptionsChangedListenerCallback.onSubscriptionsChanged();
                 } catch (RemoteException e) {
@@ -205,16 +210,17 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
     }
 
     @Override
-    public void notifySubscriptionInfoChanged() {
+    public void notifySubscriptionInfoChanged(int subChangeTypes) {
         synchronized (mRecords) {
             if (!mHasNotifySubscriptionInfoChangedOccurred) {
                 //log("notifySubscriptionInfoChanged: first invocation mRecords.size="
                 //        + mRecords.size());
             }
             mHasNotifySubscriptionInfoChangedOccurred = true;
+            mHasNotifySubscriptionInfoChangedType |= subChangeTypes;
             mRemoveList.clear();
             for (Record r : mRecords) {
-                if (r.matchOnSubscriptionsChangedListener()) {
+                if (r.matchOnSubscriptionsChangedListener(subChangeTypes)) {
                     try {
                         r.onSubscriptionsChangedListenerCallback.onSubscriptionsChanged();
                     } catch (RemoteException ex) {
