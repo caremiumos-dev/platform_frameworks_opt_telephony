@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f253f5c_a9eeae6a",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "RcsMsgStoreController?",
+      "range": {
+        "startLine": 124,
+        "startChar": 31,
+        "endLine": 124,
+        "endChar": 49
+      },
+      "revId": "6cb422064a60ed5849ed6241e4a53ab127b7c144",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0807c466_37629e98",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "no return value to indicate if delete was successful?",
+      "revId": "6cb422064a60ed5849ed6241e4a53ab127b7c144",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

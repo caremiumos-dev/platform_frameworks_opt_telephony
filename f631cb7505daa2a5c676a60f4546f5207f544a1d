@@ -1,0 +1,192 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8eed6a4b_840f020c",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "I would have thought as far as the db is concerned this and adding conference uri and setting owner should be an atomic operation. But given your comment about allowing 0 owner and getting URI from the server, this is probably ok. But in that case, if creating group fails at server, it\u0027s the apps responsibility to delete this thread? Should a thread be added to db only after its successfully created at the server?",
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b8c8628_01a0504f",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "As a follow up to the above comment, here we create thread first and then add participants one by one, all as separate operations. If the device crashes midway, it would leave the thread in the db in a weird state.",
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01feb3b0_2f34f1ff",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "Will this be the case if participant already exists?",
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee15e189_122ed3bd",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "This seems a little weird to me. This should be allowed only at message creation and not allowed to be changed later, no?",
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb26b83a_ae6892c9",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "Same for these APIs as well.",
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d764695e_a1607d5d",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "Typically all of these parameters will be queried together, correct? If yes, we should have a single API to avoid multiple db reads which could be fairly expensive.",
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "911fb621_1710334e",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreUtil.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "Should this be in ThreadHelper?",
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c344b990_3a6563ac",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreUtil.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "This is not necessarily an error, is it?",
+      "range": {
+        "startLine": 194,
+        "startChar": 8,
+        "endLine": 196,
+        "endChar": 9
+      },
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b651d056_abb0aa8e",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "For places where you do a single appendPath you could just use Uri.withAppendedPath I guess?",
+      "range": {
+        "startLine": 45,
+        "startChar": 48,
+        "endLine": 45,
+        "endChar": 58
+      },
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d16d863a_ee8bca9d",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-01-31T02:13:46Z",
+      "side": 1,
+      "message": "Why query all columns if only a couple of them are used? I think it may be more efficient to get only the required ones.",
+      "range": {
+        "startLine": 65,
+        "startChar": 68,
+        "endLine": 65,
+        "endChar": 72
+      },
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
