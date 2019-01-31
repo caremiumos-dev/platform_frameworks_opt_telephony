@@ -71,7 +71,7 @@ public class SubscriptionMonitor {
             SubscriptionController subscriptionController, int numPhones) {
         try {
             tr.addOnSubscriptionsChangedListener(context.getOpPackageName(),
-                    mSubscriptionsChangedListener);
+                    mSubscriptionsChangedListener, SubscriptionManager.SUBINFO_CHANGE_TYPE_ALL);
         } catch (RemoteException e) {
         }
 

@@ -19,7 +19,7 @@ package com.android.internal.telephony.mocks;
 import static android.telephony.SubscriptionManager.DEFAULT_SUBSCRIPTION_ID;
 import static android.telephony.SubscriptionManager.INVALID_PHONE_INDEX;
 import static android.telephony.SubscriptionManager.INVALID_SUBSCRIPTION_ID;
-
+import static android.telephony.SubscriptionManager.SUBINFO_CHANGE_TYPE_ALL;
 import android.content.Context;
 import android.content.Intent;
 import android.os.RemoteException;
@@ -103,8 +103,12 @@ public class SubscriptionControllerMock extends SubscriptionController {
 
     @Override
     public void notifySubscriptionInfoChanged() {
+        notifySubscriptionInfoChanged(SUBINFO_CHANGE_TYPE_ALL);
+    }
+
+    public void notifySubscriptionInfoChanged(int changeType) {
         try {
-            mTelephonyRegistry.notifySubscriptionInfoChanged();
+            mTelephonyRegistry.notifySubscriptionInfoChanged(changeType);
         } catch (RemoteException ex) {}
     }
     @Override
@@ -205,7 +209,7 @@ public class SubscriptionControllerMock extends SubscriptionController {
         if (mSlotIndexToSubId[slotIndex][0] != subId) {
             mSlotIndexToSubId[slotIndex][0] = subId;
             try {
-                mTelephonyRegistry.notifySubscriptionInfoChanged();
+                mTelephonyRegistry.notifySubscriptionInfoChanged(SUBINFO_CHANGE_TYPE_ALL);
             } catch (RemoteException ex) {}
         }
     }

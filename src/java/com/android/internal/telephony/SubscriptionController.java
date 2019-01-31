@@ -282,13 +282,20 @@ public class SubscriptionController extends ISub.Stub {
 
     /**
      * Notify the changed of subscription info.
-     */
+    */
     public void notifySubscriptionInfoChanged() {
+        notifySubscriptionInfoChanged(SubscriptionManager.SUBINFO_CHANGE_TYPE_ALL);
+    }
+
+    /**
+     * Notify the changed of subscription info for type
+    */
+    public void notifySubscriptionInfoChanged(int changeType) {
         ITelephonyRegistry tr = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
                 "telephony.registry"));
         try {
-            if (DBG) logd("notifySubscriptionInfoChanged:");
-            tr.notifySubscriptionInfoChanged();
+            if (DBG) logd("notifySubscriptionInfoChangedE for type " + changeType);
+            tr.notifySubscriptionInfoChanged(changeType);
         } catch (RemoteException ex) {
             // Should never happen because its always available.
         }
@@ -1441,7 +1448,7 @@ public class SubscriptionController extends ISub.Stub {
             // Refresh the Cache of Active Subscription Info List
             refreshCachedActiveSubscriptionInfoList();
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged(SubscriptionManager.SUBINFO_CHANGE_TYPE_CARRIER_NAME);
 
             return result;
         } finally {
@@ -1475,7 +1482,7 @@ public class SubscriptionController extends ISub.Stub {
             // Refresh the Cache of Active Subscription Info List
             refreshCachedActiveSubscriptionInfoList();
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged(SubscriptionManager.SUBINFO_CHANGE_TYPE_NAME_COLOR);
 
             return result;
         } finally {
@@ -1538,7 +1545,7 @@ public class SubscriptionController extends ISub.Stub {
             // Refresh the Cache of Active Subscription Info List
             refreshCachedActiveSubscriptionInfoList();
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged(SubscriptionManager.SUBINFO_CHANGE_TYPE_NAME_SOURCE);
 
             return result;
         } finally {
@@ -1584,7 +1591,7 @@ public class SubscriptionController extends ISub.Stub {
             refreshCachedActiveSubscriptionInfoList();
 
             if (DBG) logd("[setDisplayNumber]- update result :" + result);
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged(SubscriptionManager.SUBINFO_CHANGE_TYPE_NUMBER);
 
             return result;
         } finally {
@@ -1655,7 +1662,7 @@ public class SubscriptionController extends ISub.Stub {
             // Refresh the Cache of Active Subscription Info List
             refreshCachedActiveSubscriptionInfoList();
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged(SubscriptionManager.SUBINFO_CHANGE_TYPE_DATA_ROAMING);
 
             return result;
         } finally {
@@ -1693,7 +1700,7 @@ public class SubscriptionController extends ISub.Stub {
         // Refresh the Cache of Active Subscription Info List
         refreshCachedActiveSubscriptionInfoList();
 
-        notifySubscriptionInfoChanged();
+        notifySubscriptionInfoChanged(SubscriptionManager.SUBINFO_CHANGE_TYPE_MCC_MNC);
 
         return result;
     }
