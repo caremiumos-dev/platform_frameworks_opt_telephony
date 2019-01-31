@@ -21,8 +21,12 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 
 import android.os.HandlerThread;
+import android.os.Parcel;
+import android.telephony.CallAttributes;
+import android.telephony.CallQuality;
 import android.telephony.PhoneStateListener;
 import android.telephony.PhysicalChannelConfig;
+import android.telephony.PreciseCallState;
 import android.telephony.ServiceState;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -141,5 +145,20 @@ public class PhoneStateListenerTest extends TelephonyTest {
         waitUntilReady();
 
         assertTrue(mPhysicalChannelConfigs.equals(configs));
+    }
+
+    @Test @SmallTest
+    public  void testCallAttributesParcel() {
+        // create callAttributes
+        PreciseCallState preciseCallState = new PreciseCallState();
+        CallQuality callQuality = new CallQuality();
+        CallAttributes callAttributes = new CallAttributes(preciseCallState, 0, callQuality);
+
+        Parcel p = Parcel.obtain();
+        callAttributes.writeToParcel(p, 0);
+        CallAttributes callAttributesFromParcel = CallAttributes.CREATOR.createFromParcel(p);
+        assertTrue("CallAttributes " + callAttributes.toString() + " is not equal to parceled "
+                + callAttributesFromParcel.toString(),
+                callAttributes.equals(CallAttributes.CREATOR.createFromParcel(p)));
     }
 }
