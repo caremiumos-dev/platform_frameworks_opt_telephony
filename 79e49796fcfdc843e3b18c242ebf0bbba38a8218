@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "c5e01b05_f9dc5be9",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1424401
+      },
+      "writtenOn": "2019-01-31T00:41:22Z",
+      "side": 1,
+      "message": "if your count \u003d 0 the retry_count \u003d 5. for every increment to count can you not do retry_count \u003d retry_count * (2 ^ count)?\nwhen count \u003d 0, retry_count \u003d retry_count * (2 ^ count) \u003d 5 * 1\nwhen count \u003d 1, retry_count \u003d 5 * 2 ^ 1 \u003d 10\nwhen count \u003d 2, retry_count \u003d 5 * 2 ^ 2 \u003d 20 and so on.\n\nAlso shouldn\u0027t the last element in the array be 80 instead of 60?",
+      "parentUuid": "14ac9a30_4fe6ff4a",
+      "range": {
+        "startLine": 131,
+        "startChar": 24,
+        "endLine": 131,
+        "endChar": 35
+      },
+      "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb31de55_b6568512",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
