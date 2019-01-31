@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86f6e27e_fe047ff4",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-01-31T23:39:18Z",
+      "side": 1,
+      "message": "I think at this point it\u0027s also reasonable to undo this? Possibly in its own CL for easy rollbacks.",
+      "range": {
+        "startLine": 677,
+        "startChar": 0,
+        "endLine": 680,
+        "endChar": 0
+      },
+      "revId": "94cd9454317ae08b15f6b547909137b5fa77045f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
