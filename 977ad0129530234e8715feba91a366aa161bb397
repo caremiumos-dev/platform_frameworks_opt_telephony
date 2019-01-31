@@ -22,6 +22,29 @@
       "revId": "977ad0129530234e8715feba91a366aa161bb397",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c27774f_7813f615",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-01-31T19:06:43Z",
+      "side": 1,
+      "message": "Why would this go to phoneId 0?\nMy understanding is that metrics for TelephonyEvents are currently organizer per phone. Adding this only for phone 0 does not seem right.",
+      "range": {
+        "startLine": 535,
+        "startChar": 73,
+        "endLine": 535,
+        "endChar": 88
+      },
+      "revId": "977ad0129530234e8715feba91a366aa161bb397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
