@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "615a46c2_e7dc687a",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-01-31T18:59:28Z",
+      "side": 1,
+      "message": "This structure does not allow to know where the SIM card is present, which might be of interest. It only indicates the SIM count.\n\nKnowing just the count makes it impossible to map a SIM card to a specific phone or modem.\n\nIf you just want to track the count, at least let\u0027s use a bitmask, so we have a clear picture of the status.\n\nAlso, can you please add comments so that intention is clear? What is \"enabled modem\"?",
+      "range": {
+        "startLine": 1468,
+        "startChar": 10,
+        "endLine": 1468,
+        "endChar": 20
+      },
+      "revId": "977ad0129530234e8715feba91a366aa161bb397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
