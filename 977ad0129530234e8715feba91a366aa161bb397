@@ -25,6 +25,70 @@
     },
     {
       "key": {
+        "uuid": "05dd2758_c4906dfb",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-01-31T19:13:31Z",
+      "side": 1,
+      "message": "One more thing. Avoid usage of \"DSDS\". It is wrong:\n - it does not scale well for devices with 3 SIM cards\n - it does not accurately reflect status for DSDA devices (dual SIM dual active)",
+      "parentUuid": "615a46c2_e7dc687a",
+      "range": {
+        "startLine": 1468,
+        "startChar": 10,
+        "endLine": 1468,
+        "endChar": 20
+      },
+      "revId": "977ad0129530234e8715feba91a366aa161bb397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2d23af8_5992b793",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 1894,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-01-31T19:13:31Z",
+      "side": 1,
+      "message": "Is it possible to add the new message DSDSStatus here as well, so that we have it for each voice call session?\n\nSee:\nhttps://googleplex-android-review.git.corp.google.com/c/platform/frameworks/opt/telephony/+/6101172/2/proto/src/telephony.proto#1380",
+      "range": {
+        "startLine": 1894,
+        "startChar": 0,
+        "endLine": 1894,
+        "endChar": 1
+      },
+      "revId": "977ad0129530234e8715feba91a366aa161bb397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48af36f6_bb2149b0",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 2067,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-01-31T19:13:31Z",
+      "side": 1,
+      "message": "Is it possible to add the new message DSDSStatus here as well, so that we have it for each SMS session?\n\nSee:\nhttps://googleplex-android-review.git.corp.google.com/c/platform/frameworks/opt/telephony/+/6101172/2/proto/src/telephony.proto#1556",
+      "revId": "977ad0129530234e8715feba91a366aa161bb397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8c27774f_7813f615",
         "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
         "patchSetId": 2
