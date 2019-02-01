@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7a8bf2c_77195490",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-01T23:57:47Z",
+      "side": 0,
+      "message": "why get rid of GPRS event?",
+      "range": {
+        "startLine": 207,
+        "startChar": 30,
+        "endLine": 207,
+        "endChar": 75
+      },
+      "revId": "465700dec45812de7e5e011f0dcde3a5c2ff4451",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

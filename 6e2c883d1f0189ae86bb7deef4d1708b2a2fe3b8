@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1c5acd8_dc6e015b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1919,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-01T23:57:47Z",
+      "side": 1,
+      "message": "https://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/ServiceStateTracker.java?rcl\u003d756bd50959c0641d899021afa7904ee1eb0017f1\u0026l\u003d3417\n\nis that because IWLAN doesnt support roaming? also, why here we only care in service?",
+      "range": {
+        "startLine": 1918,
+        "startChar": 15,
+        "endLine": 1919,
+        "endChar": 90
+      },
+      "revId": "6e2c883d1f0189ae86bb7deef4d1708b2a2fe3b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
