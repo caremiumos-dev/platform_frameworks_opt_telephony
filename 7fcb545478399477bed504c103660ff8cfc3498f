@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24273956_2817e34f",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T19:16:04Z",
+      "side": 1,
+      "message": "The item below is called PhoneStatus. So, this should be renamed to PHONE_STATUS_CHANGED to be consistent.",
+      "range": {
+        "startLine": 673,
+        "startChar": 4,
+        "endLine": 673,
+        "endChar": 8
+      },
+      "revId": "7fcb545478399477bed504c103660ff8cfc3498f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88453100_3ce3b8e4",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T19:16:04Z",
+      "side": 1,
+      "message": "No issues with this. In order to simplify metrics, we can club UNKNOWN with ABSENT and remove an extra state which is not very meaningful anyway.",
+      "range": {
+        "startLine": 1471,
+        "startChar": 10,
+        "endLine": 1471,
+        "endChar": 27
+      },
+      "revId": "7fcb545478399477bed504c103660ff8cfc3498f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "276b7d1d_f4b49c7a",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T19:16:04Z",
+      "side": 1,
+      "message": "Should this be int32?",
+      "range": {
+        "startLine": 1493,
+        "startChar": 15,
+        "endLine": 1493,
+        "endChar": 18
+      },
+      "revId": "7fcb545478399477bed504c103660ff8cfc3498f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e87ff28_1c8a8ee4",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T19:16:04Z",
+      "side": 1,
+      "message": "Typo: device",
+      "range": {
+        "startLine": 1497,
+        "startChar": 48,
+        "endLine": 1497,
+        "endChar": 54
+      },
+      "revId": "7fcb545478399477bed504c103660ff8cfc3498f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94dc9e1a_0c6e6965",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T19:16:04Z",
+      "side": 1,
+      "message": "Remove this description as it might become obsolete soon.\nFor example, iUICC is under discussion.\nThe metric should be generic, irrelevant of the form factor (eSIM, integrated, removable)",
+      "range": {
+        "startLine": 1500,
+        "startChar": 48,
+        "endLine": 1500,
+        "endChar": 90
+      },
+      "revId": "7fcb545478399477bed504c103660ff8cfc3498f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80e96ed6_6310e1a9",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T19:16:04Z",
+      "side": 1,
+      "message": "This description is not accurate. We don\u0027t care about physical slots.\nFor example, on the Pixel 3, there are 2 physical slots (eSIM and pSIM), but we would be tracking only one slot (whichever is active).\n\nCan you remove the word \"physical\"?\n\nMaybe we can expand saying that this array has the same length as phone_count?",
+      "range": {
+        "startLine": 1500,
+        "startChar": 33,
+        "endLine": 1500,
+        "endChar": 41
+      },
+      "revId": "7fcb545478399477bed504c103660ff8cfc3498f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22be18dc_b4593229",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T19:16:04Z",
+      "side": 1,
+      "message": "This is ok, but it does not indicate which one is powered on. If you have a snapshot of what card is where, there you might want to know which one is in use.\nAs per previous suggestion, can this be a bitmask?",
+      "range": {
+        "startLine": 1503,
+        "startChar": 24,
+        "endLine": 1503,
+        "endChar": 41
+      },
+      "revId": "7fcb545478399477bed504c103660ff8cfc3498f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
