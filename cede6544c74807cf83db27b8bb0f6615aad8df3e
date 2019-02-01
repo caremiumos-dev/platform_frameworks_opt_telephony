@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9620c1c_04d74a14",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1140984
+      },
+      "writtenOn": "2019-02-01T07:23:24Z",
+      "side": 1,
+      "message": "I\u0027m so sorry for cutting in..\n\nI guess it should be msg.obj instead of msg.arg1?",
+      "revId": "cede6544c74807cf83db27b8bb0f6615aad8df3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
