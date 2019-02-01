@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "795aa4b4_8cdffd5a",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1274496
+      },
+      "writtenOn": "2019-02-01T19:13:58Z",
+      "side": 1,
+      "message": "Would it be possible to add this to TelephonyServiceState and RilDataCall? \nWould be helpful to get metrics for CBRS",
+      "range": {
+        "startLine": 1929,
+        "startChar": 11,
+        "endLine": 1929,
+        "endChar": 20
+      },
+      "revId": "f9491d07b536dca42e0498c625e26124649b20f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
