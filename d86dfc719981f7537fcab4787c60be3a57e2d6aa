@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "643b830f_45595dec",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T22:13:39Z",
+      "side": 1,
+      "message": "See comments in a previous patchset.\nSince the message below is called PhoneStatus, this should be PHONE_STATUS_CHANGED",
+      "range": {
+        "startLine": 679,
+        "startChar": 4,
+        "endLine": 679,
+        "endChar": 8
+      },
+      "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b8b4ffa_8186f0d3",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T22:13:39Z",
+      "side": 1,
+      "message": "Is it the same as number of phones?\nIn the previous revisions, I was under the impression that:\n - number of phones was the number of total phones.\n - enabled_modems was the number of phones in use\n\nWhat is this?\n\nAlso, as I commented before, a bitmask would be more efficient... with same memory you would carry not only the total count, but also information on which one is in use.",
+      "range": {
+        "startLine": 1478,
+        "startChar": 10,
+        "endLine": 1478,
+        "endChar": 41
+      },
+      "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d24dce1_057ddcdc",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T22:13:39Z",
+      "side": 1,
+      "message": "This gives only information on one SIM card. Which is less useful for dual SIM.\nWhy passing only the SIM status of the corresponding phone and not all SIMs?",
+      "range": {
+        "startLine": 1929,
+        "startChar": 2,
+        "endLine": 1929,
+        "endChar": 10
+      },
+      "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2490e5ea_499f9ba5",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T22:13:39Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 2146,
+        "startChar": 2,
+        "endLine": 2146,
+        "endChar": 36
+      },
+      "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
