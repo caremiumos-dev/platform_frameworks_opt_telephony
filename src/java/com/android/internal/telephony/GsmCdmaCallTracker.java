@@ -331,7 +331,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             setMute(false);
 
             mCi.dial(mPendingMO.getAddress(), mPendingMO.isEmergencyCall(),
-                    mPendingMO.getEmergencyServiceCategories(), clirMode, uusInfo,
+                    mPendingMO.getEmergencyNumberInfo(), clirMode, uusInfo,
                     obtainCompleteMessage());
         }
 
@@ -448,7 +448,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             // In Ecm mode, if another emergency call is dialed, Ecm mode will not exit.
             if(!isPhoneInEcmMode || (isPhoneInEcmMode && isEmergencyCall)) {
                 mCi.dial(mPendingMO.getAddress(), mPendingMO.isEmergencyCall(),
-                        mPendingMO.getEmergencyServiceCategories(), clirMode,
+                        mPendingMO.getEmergencyNumberInfo(), clirMode,
                         obtainCompleteMessage());
             } else {
                 mPhone.exitEmergencyCallbackMode();
@@ -1260,6 +1260,12 @@ public class GsmCdmaCallTracker extends CallTracker {
                 // Do not auto-answer ringing on CHUP, instead just end active calls
                 log("hangup all conns in active/background call, without affecting ringing call");
                 hangupAllConnections(call);
+            } else if (call.mHoldingRequestState.isStarted()) {
+                // Even if the progress of holding is not completed, lower layer expects to hang up
+                // as background call because of being going to holding.
+                log("hangup waiting or background call");
+                logHangupEvent(call);
+                hangupWaitingOrBackground();
             } else {
                 logHangupEvent(call);
                 hangupForegroundResumeBackground();
@@ -1534,8 +1540,8 @@ public class GsmCdmaCallTracker extends CallTracker {
                     // no matter the result, we still do the same here
                     if (mPendingCallInEcm) {
                         mCi.dial(mPendingMO.getAddress(), mPendingMO.isEmergencyCall(),
-                                mPendingMO.getEmergencyServiceCategories(), mPendingCallClirMode,
-                                obtainCompleteMessage());
+                                mPendingMO.getEmergencyNumberInfo(),
+                                mPendingCallClirMode, obtainCompleteMessage());
                         mPendingCallInEcm = false;
                     }
                     mPhone.unsetOnEcbModeExitResponse(this);

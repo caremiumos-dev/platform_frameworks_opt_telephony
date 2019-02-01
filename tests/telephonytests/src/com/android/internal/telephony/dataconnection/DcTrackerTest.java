@@ -48,6 +48,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.hardware.radio.V1_0.SetupDataCallResult;
 import android.net.LinkProperties;
+import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.Uri;
@@ -107,9 +108,6 @@ public class DcTrackerTest extends TelephonyTest {
             "mobile_ims,11,0,2,60000,true", "mobile_cbs,12,0,2,60000,true",
             "mobile_ia,14,0,2,-1,true", "mobile_emergency,15,0,2,-1,true"};
 
-    private static final int LTE_BEARER_BITMASK = 1 << (ServiceState.RIL_RADIO_TECHNOLOGY_LTE - 1);
-    private static final int EHRPD_BEARER_BITMASK =
-            1 << (ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD - 1);
     public static final String FAKE_APN1 = "FAKE APN 1";
     public static final String FAKE_APN2 = "FAKE APN 2";
     public static final String FAKE_APN3 = "FAKE APN 3";
@@ -513,7 +511,7 @@ public class DcTrackerTest extends TelephonyTest {
                                    int supportedApnTypesBitmap, int type, int bearerBitmask) {
         assertEquals(profileId, dp.getProfileId());
         assertEquals(apn, dp.getApn());
-        assertEquals("IP", dp.getProtocol());
+        assertEquals(ApnSetting.PROTOCOL_IP, dp.getProtocol());
         assertEquals(0, dp.getAuthType());
         assertEquals("", dp.getUserName());
         assertEquals("", dp.getPassword());
@@ -521,7 +519,7 @@ public class DcTrackerTest extends TelephonyTest {
         assertEquals(0, dp.getWaitTime());
         assertTrue(dp.isEnabled());
         assertEquals(supportedApnTypesBitmap, dp.getSupportedApnTypesBitmap());
-        assertEquals("IP", dp.getRoamingProtocol());
+        assertEquals(ApnSetting.PROTOCOL_IP, dp.getRoamingProtocol());
         assertEquals(bearerBitmask, dp.getBearerBitmap());
         assertEquals(0, dp.getMtu());
         assertTrue(dp.isPersistent());
@@ -580,9 +578,9 @@ public class DcTrackerTest extends TelephonyTest {
         mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
         waitForMs(200);
 
-        logd("Sending EVENT_ENABLE_NEW_APN");
+        logd("Sending EVENT_ENABLE_APN");
         // APN id 0 is APN_TYPE_DEFAULT
-        mDct.setEnabled(ApnSetting.TYPE_DEFAULT, true);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
         waitForMs(200);
 
         dataConnectionReasons = new DataConnectionReasons();
@@ -596,7 +594,7 @@ public class DcTrackerTest extends TelephonyTest {
                         mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
                 eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
                 any(Message.class));
-        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 5, 1, LTE_BEARER_BITMASK);
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 21, 1, NETWORK_TYPE_LTE_BITMASK);
 
         verifyDataConnected(FAKE_APN1);
     }
@@ -629,9 +627,9 @@ public class DcTrackerTest extends TelephonyTest {
         mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
         waitForMs(200);
 
-        logd("Sending EVENT_ENABLE_NEW_APN");
+        logd("Sending EVENT_ENABLE_APN");
         // APN id 0 is APN_TYPE_DEFAULT
-        mDct.setEnabled(ApnSetting.TYPE_DEFAULT, true);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
         waitForMs(200);
 
         dataConnectionReasons = new DataConnectionReasons();
@@ -645,7 +643,7 @@ public class DcTrackerTest extends TelephonyTest {
                         mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
                 eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
                 any(Message.class));
-        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 5, 1, LTE_BEARER_BITMASK);
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 21, 1, NETWORK_TYPE_LTE_BITMASK);
 
         // Verify the retry manger schedule another data call setup.
         verify(mAlarmManager, times(1)).setExact(eq(AlarmManager.ELAPSED_REALTIME_WAKEUP),
@@ -670,7 +668,7 @@ public class DcTrackerTest extends TelephonyTest {
                         mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
                 eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
                 any(Message.class));
-        verifyDataProfile(dpCaptor.getValue(), FAKE_APN2, 0, 5, 1, LTE_BEARER_BITMASK);
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN2, 0, 21, 1, NETWORK_TYPE_LTE_BITMASK);
 
         // Verify connected with APN2 setting.
         verifyDataConnected(FAKE_APN2);
@@ -685,8 +683,8 @@ public class DcTrackerTest extends TelephonyTest {
         //set Default and MMS to be metered in the CarrierConfigManager
         mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
                 new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
-        mDct.setEnabled(ApnSetting.TYPE_IMS, true);
-        mDct.setEnabled(ApnSetting.TYPE_DEFAULT, true);
+        mDct.enableApn(ApnSetting.TYPE_IMS, DcTracker.REQUEST_TYPE_NORMAL);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
 
         logd("Sending EVENT_RECORDS_LOADED");
         mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
@@ -702,7 +700,7 @@ public class DcTrackerTest extends TelephonyTest {
                         mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
                 eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
                 any(Message.class));
-        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 5, 1, LTE_BEARER_BITMASK);
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 5, 1, NETWORK_TYPE_LTE_BITMASK);
 
         logd("Sending DATA_DISABLED_CMD");
         doReturn(false).when(mDataEnabledSettings).isDataEnabled();
@@ -734,8 +732,8 @@ public class DcTrackerTest extends TelephonyTest {
         mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_ROAMING_APN_TYPES_STRINGS,
                 new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
 
-        mDct.setEnabled(ApnSetting.TYPE_IMS, true);
-        mDct.setEnabled(ApnSetting.TYPE_DEFAULT, true);
+        mDct.enableApn(ApnSetting.TYPE_IMS, DcTracker.REQUEST_TYPE_NORMAL);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
 
         logd("Sending EVENT_RECORDS_LOADED");
         mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
@@ -751,7 +749,7 @@ public class DcTrackerTest extends TelephonyTest {
                         mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
                 eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
                 any(Message.class));
-        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 5, 1, LTE_BEARER_BITMASK);
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 21, 1, NETWORK_TYPE_LTE_BITMASK);
 
         //user is in roaming
         doReturn(true).when(mServiceState).getDataRoaming();
@@ -786,8 +784,8 @@ public class DcTrackerTest extends TelephonyTest {
         //set Default and MMS to be metered in the CarrierConfigManager
         mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_ROAMING_APN_TYPES_STRINGS,
                 new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
-        mDct.setEnabled(ApnSetting.TYPE_IMS, true);
-        mDct.setEnabled(ApnSetting.TYPE_DEFAULT, true);
+        mDct.enableApn(ApnSetting.TYPE_IMS, DcTracker.REQUEST_TYPE_NORMAL);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
 
         logd("Sending DISABLE_ROAMING_CMD");
         mDct.setDataRoamingEnabledByUser(false);
@@ -863,7 +861,7 @@ public class DcTrackerTest extends TelephonyTest {
         NetworkRequest nr = new NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build();
         LocalLog l = new LocalLog(100);
-        mDct.requestNetwork(nr, l);
+        mDct.requestNetwork(nr, DcTracker.REQUEST_TYPE_NORMAL, l);
         waitForMs(200);
 
         verifyDataConnected(FAKE_APN1);
@@ -898,8 +896,8 @@ public class DcTrackerTest extends TelephonyTest {
         mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
                 new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
 
-        mDct.setEnabled(ApnSetting.TYPE_IMS, true);
-        mDct.setEnabled(ApnSetting.TYPE_DEFAULT, true);
+        mDct.enableApn(ApnSetting.TYPE_IMS, DcTracker.REQUEST_TYPE_NORMAL);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
 
         logd("Sending EVENT_RECORDS_LOADED");
         mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
@@ -915,7 +913,7 @@ public class DcTrackerTest extends TelephonyTest {
                         mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
                 eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
                 any(Message.class));
-        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 5, 1, LTE_BEARER_BITMASK);
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 5, 1, NETWORK_TYPE_LTE_BITMASK);
         assertEquals(DctConstants.State.CONNECTED, mDct.getOverallState());
 
         AsyncResult ar = new AsyncResult(null,
@@ -940,7 +938,7 @@ public class DcTrackerTest extends TelephonyTest {
         doReturn(apnSetting).when(mApnContext).getApnSetting();
         doReturn(mDataConnection).when(mApnContext).getDataConnection();
         doReturn(true).when(mApnContext).isEnabled();
-        doReturn(true).when(mApnContext).getDependencyMet();
+        doReturn(true).when(mApnContext).isDependencyMet();
         doReturn(true).when(mApnContext).isReady();
         doReturn(false).when(mApnContext).hasRestrictedRequests(eq(true));
     }
@@ -1187,7 +1185,7 @@ public class DcTrackerTest extends TelephonyTest {
                 .getRilDataRadioTechnology();
         mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
                 new String[]{PhoneConstants.APN_TYPE_DEFAULT});
-        mDct.setEnabled(ApnSetting.TYPE_DEFAULT, true);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
         initApns(PhoneConstants.APN_TYPE_DEFAULT, new String[]{PhoneConstants.APN_TYPE_ALL});
 
         logd("Sending EVENT_RECORDS_LOADED");
@@ -1205,7 +1203,7 @@ public class DcTrackerTest extends TelephonyTest {
                         mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
                 eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
                 any(Message.class));
-        verifyDataProfile(dpCaptor.getValue(), FAKE_APN4, 0, 5, 2, EHRPD_BEARER_BITMASK);
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN4, 0, 21, 2, NETWORK_TYPE_EHRPD_BITMASK);
         assertEquals(DctConstants.State.CONNECTED, mDct.getOverallState());
 
         //data rat change from ehrpd to lte
@@ -1238,7 +1236,7 @@ public class DcTrackerTest extends TelephonyTest {
                         mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
                 eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
                 any(Message.class));
-        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 5, 1, LTE_BEARER_BITMASK);
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 21, 1, NETWORK_TYPE_LTE_BITMASK);
         assertEquals(DctConstants.State.CONNECTED, mDct.getOverallState());
     }
 
@@ -1307,7 +1305,7 @@ public class DcTrackerTest extends TelephonyTest {
                 .getRilDataRadioTechnology();
         mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
                 new String[]{PhoneConstants.APN_TYPE_DEFAULT});
-        mDct.setEnabled(ApnSetting.TYPE_DEFAULT, true);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
         initApns(PhoneConstants.APN_TYPE_DEFAULT, new String[]{PhoneConstants.APN_TYPE_ALL});
 
         logd("Sending EVENT_RECORDS_LOADED");
@@ -1325,7 +1323,7 @@ public class DcTrackerTest extends TelephonyTest {
                         mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
                 eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
                 any(Message.class));
-        verifyDataProfile(dpCaptor.getValue(), FAKE_APN4, 0, 5, 2, EHRPD_BEARER_BITMASK);
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN4, 0, 21, 2, NETWORK_TYPE_EHRPD_BITMASK);
         assertEquals(DctConstants.State.CONNECTED, mDct.getOverallState());
 
         // Data rat change from ehrpd to unknown due to OOS
@@ -1425,6 +1423,220 @@ public class DcTrackerTest extends TelephonyTest {
         verifyDataEnabledChangedMessage(
                 true, DataEnabledSettings.REASON_PROVISIONING_DATA_ENABLED_CHANGED);
     }*/
+
+    @Test
+    @SmallTest
+    public void testNetworkStatusChangedRecoveryOFF() throws Exception {
+        ContentResolver resolver = mContext.getContentResolver();
+        Settings.Global.putInt(resolver, Settings.Global.DATA_STALL_RECOVERY_ON_BAD_NETWORK, 0);
+
+        mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
+                new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
+        mDct.enableApn(ApnSetting.TYPE_IMS, DcTracker.REQUEST_TYPE_NORMAL);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
+
+        logd("Sending EVENT_RECORDS_LOADED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_DATA_CONNECTION_ATTACHED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
+        waitForMs(200);
+
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, times(2)).setupDataCall(
+                eq(ServiceState.rilRadioTechnologyToAccessNetworkType(
+                mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                any(Message.class));
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 21, 1, NETWORK_TYPE_LTE_BITMASK);
+
+        logd("Sending EVENT_NETWORK_STATUS_CHANGED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_NETWORK_STATUS_CHANGED,
+                NetworkAgent.VALID_NETWORK, 0, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_NETWORK_STATUS_CHANGED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_NETWORK_STATUS_CHANGED,
+                NetworkAgent.INVALID_NETWORK, 0, null));
+        waitForMs(200);
+
+        // Verify that its no-op when the new data stall detection feature is disabled
+        verify(mSimulatedCommandsVerifier, times(0)).getDataCallList(any(Message.class));
+    }
+
+    @Test
+    @SmallTest
+    public void testNetworkStatusChangedRecoveryON() throws Exception {
+        ContentResolver resolver = mContext.getContentResolver();
+        Settings.Global.putInt(resolver, Settings.Global.DATA_STALL_RECOVERY_ON_BAD_NETWORK, 1);
+        Settings.System.putInt(resolver, "radio.data.stall.recovery.action", 0);
+
+        mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
+                new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
+        mDct.enableApn(ApnSetting.TYPE_IMS, DcTracker.REQUEST_TYPE_NORMAL);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
+
+        logd("Sending EVENT_RECORDS_LOADED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_DATA_CONNECTION_ATTACHED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
+        waitForMs(200);
+
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, times(2)).setupDataCall(
+                eq(ServiceState.rilRadioTechnologyToAccessNetworkType(
+                mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                any(Message.class));
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 21, 1, NETWORK_TYPE_LTE_BITMASK);
+
+        logd("Sending EVENT_NETWORK_STATUS_CHANGED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_NETWORK_STATUS_CHANGED,
+                NetworkAgent.VALID_NETWORK, 0, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_NETWORK_STATUS_CHANGED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_NETWORK_STATUS_CHANGED,
+                NetworkAgent.INVALID_NETWORK, 0, null));
+        waitForMs(200);
+
+        verify(mSimulatedCommandsVerifier, times(1)).getDataCallList(any(Message.class));
+
+        // reset the setting at the end of this test
+        Settings.Global.putInt(resolver, Settings.Global.DATA_STALL_RECOVERY_ON_BAD_NETWORK, 0);
+        waitForMs(200);
+    }
+
+    @Test
+    @SmallTest
+    public void testRecoveryStepPDPReset() throws Exception {
+        ContentResolver resolver = mContext.getContentResolver();
+        Settings.Global.putInt(resolver, Settings.Global.DATA_STALL_RECOVERY_ON_BAD_NETWORK, 1);
+        Settings.Global.putLong(resolver,
+                Settings.Global.MIN_DURATION_BETWEEN_RECOVERY_STEPS_IN_MS, 100);
+        Settings.System.putInt(resolver, "radio.data.stall.recovery.action", 1);
+
+        mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
+                new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
+        mDct.enableApn(ApnSetting.TYPE_IMS, DcTracker.REQUEST_TYPE_NORMAL);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
+
+        logd("Sending EVENT_RECORDS_LOADED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_DATA_CONNECTION_ATTACHED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
+        waitForMs(200);
+
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, times(2)).setupDataCall(
+                eq(ServiceState.rilRadioTechnologyToAccessNetworkType(
+                mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                any(Message.class));
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 21, 1, NETWORK_TYPE_LTE_BITMASK);
+
+        logd("Sending EVENT_NETWORK_STATUS_CHANGED false");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_NETWORK_STATUS_CHANGED,
+                NetworkAgent.INVALID_NETWORK, 0, null));
+        waitForMs(200);
+
+        // expected tear down all DataConnections
+        verify(mSimulatedCommandsVerifier, times(1)).deactivateDataCall(
+                eq(DataService.REQUEST_REASON_NORMAL), anyInt(),
+                any(Message.class));
+
+        // reset the setting at the end of this test
+        Settings.Global.putInt(resolver, Settings.Global.DATA_STALL_RECOVERY_ON_BAD_NETWORK, 0);
+        waitForMs(200);
+    }
+
+
+    @Test
+    @SmallTest
+    public void testRecoveryStepReRegister() throws Exception {
+        ContentResolver resolver = mContext.getContentResolver();
+        Settings.Global.putInt(resolver, Settings.Global.DATA_STALL_RECOVERY_ON_BAD_NETWORK, 1);
+        Settings.Global.putLong(resolver,
+                Settings.Global.MIN_DURATION_BETWEEN_RECOVERY_STEPS_IN_MS, 100);
+        Settings.System.putInt(resolver, "radio.data.stall.recovery.action", 2);
+
+        mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
+                new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
+
+        logd("Sending EVENT_RECORDS_LOADED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_DATA_CONNECTION_ATTACHED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
+        waitForMs(200);
+
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
+                eq(ServiceState.rilRadioTechnologyToAccessNetworkType(
+                mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                any(Message.class));
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 21, 1, NETWORK_TYPE_LTE_BITMASK);
+
+        logd("Sending EVENT_NETWORK_STATUS_CHANGED false");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_NETWORK_STATUS_CHANGED,
+                NetworkAgent.INVALID_NETWORK, 0, null));
+        waitForMs(200);
+
+        // expected to get preferred network type
+        verify(mSST, times(1)).reRegisterNetwork(eq(null));
+
+        // reset the setting at the end of this test
+        Settings.Global.putInt(resolver, Settings.Global.DATA_STALL_RECOVERY_ON_BAD_NETWORK, 0);
+    }
+
+    @Test
+    @SmallTest
+    public void testRecoveryStepRestartRadio() throws Exception {
+        ContentResolver resolver = mContext.getContentResolver();
+        Settings.Global.putInt(resolver, Settings.Global.DATA_STALL_RECOVERY_ON_BAD_NETWORK, 1);
+        Settings.Global.putLong(resolver,
+                Settings.Global.MIN_DURATION_BETWEEN_RECOVERY_STEPS_IN_MS, 100);
+        Settings.System.putInt(resolver, "radio.data.stall.recovery.action", 3);
+
+        mBundle.putStringArray(CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
+                new String[]{PhoneConstants.APN_TYPE_DEFAULT, PhoneConstants.APN_TYPE_MMS});
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL);
+
+        logd("Sending EVENT_RECORDS_LOADED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RECORDS_LOADED, null));
+        waitForMs(200);
+
+        logd("Sending EVENT_DATA_CONNECTION_ATTACHED");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_DATA_CONNECTION_ATTACHED, null));
+        waitForMs(200);
+
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
+                eq(ServiceState.rilRadioTechnologyToAccessNetworkType(
+                mServiceState.getRilDataRadioTechnology())), dpCaptor.capture(),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                any(Message.class));
+        verifyDataProfile(dpCaptor.getValue(), FAKE_APN1, 0, 21, 1, NETWORK_TYPE_LTE_BITMASK);
+
+        logd("Sending EVENT_NETWORK_STATUS_CHANGED false");
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_NETWORK_STATUS_CHANGED,
+                NetworkAgent.INVALID_NETWORK, 0, null));
+        waitForMs(200);
+
+        // expected to get preferred network type
+        verify(mSST, times(1)).powerOffRadioSafely();
+
+        // reset the setting at the end of this test
+        Settings.Global.putInt(resolver, Settings.Global.DATA_STALL_RECOVERY_ON_BAD_NETWORK, 0);
+    }
 
     private void verifyDataEnabledChangedMessage(boolean enabled, int reason) {
         verify(mHandler, times(1)).sendMessageDelayed(any(), anyLong());
