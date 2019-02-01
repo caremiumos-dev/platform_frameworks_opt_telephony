@@ -328,6 +328,30 @@
       "revId": "7fcb545478399477bed504c103660ff8cfc3498f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b762f39_830e0b8c",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-01T22:15:48Z",
+      "side": 1,
+      "message": "As far as I see, the mapping cannot change. Phone 0 is always slot 0, phone 1 is always slot 1.\n\nMinor comment: in the current Pixel 3 there is only slot 0, which can be dynamically mapped to pSIM or eSIM. But from Android perspective, it\u0027s always slot 0.",
+      "parentUuid": "24b2ed29_6956105f",
+      "range": {
+        "startLine": 1503,
+        "startChar": 24,
+        "endLine": 1503,
+        "endChar": 41
+      },
+      "revId": "7fcb545478399477bed504c103660ff8cfc3498f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
