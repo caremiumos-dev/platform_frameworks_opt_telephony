@@ -16,11 +16,13 @@
 
 package com.android.internal.telephony;
 
+import android.annotation.NonNull;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.telephony.CallQuality;
 import android.telephony.CellInfo;
 import android.telephony.CellLocation;
 import android.telephony.DataFailCause;
@@ -32,6 +34,7 @@ import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.data.ApnSetting;
+import android.telephony.ims.ImsReasonInfo;
 
 import java.util.List;
 
@@ -270,7 +273,8 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
                 mRegistry.notifyPreciseCallState(
                         convertPreciseCallState(ringingCall.getState()),
                         convertPreciseCallState(foregroundCall.getState()),
-                        convertPreciseCallState(backgroundCall.getState()));
+                        convertPreciseCallState(backgroundCall.getState()),
+                        sender.getPhoneId());
             } catch (RemoteException ex) {
                 // system process is dead
             }
@@ -281,6 +285,15 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         // FIXME: subId?
         try {
             mRegistry.notifyDisconnectCause(cause, preciseCause);
+        } catch (RemoteException ex) {
+            // system process is dead
+        }
+    }
+
+    @Override
+    public void notifyImsDisconnectCause(@NonNull Phone sender, ImsReasonInfo imsReasonInfo) {
+        try {
+            mRegistry.notifyImsDisconnectCause(sender.getSubId(), imsReasonInfo);
         } catch (RemoteException ex) {
             // system process is dead
         }
@@ -367,6 +380,17 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         try {
             if (mRegistry != null) {
                 mRegistry.notifyEmergencyNumberList();
+            }
+        } catch (RemoteException ex) {
+            // system process is dead
+        }
+    }
+
+    @Override
+    public void notifyCallQualityChanged(Phone sender, CallQuality callQuality) {
+        try {
+            if (mRegistry != null) {
+                mRegistry.notifyCallQualityChanged(callQuality, sender.getPhoneId());
             }
         } catch (RemoteException ex) {
             // system process is dead

@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.telephony.CallQuality;
 import android.telephony.CellInfo;
 import android.telephony.DataFailCause;
 import android.telephony.PhoneCapability;
@@ -29,6 +30,7 @@ import android.telephony.PhysicalChannelConfig;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
+import android.telephony.ims.ImsReasonInfo;
 
 import com.android.internal.telephony.IOnSubscriptionsChangedListener;
 import com.android.internal.telephony.IPhoneStateListener;
@@ -367,8 +369,13 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
     }
 
     @Override
+    public void notifyCallQualityChanged(CallQuality callQuality, int phoneId) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
     public void notifyPreciseCallState(int ringingCallState, int foregroundCallState,
-            int backgroundCallState) {
+            int backgroundCallState, int phoneId) {
         throw new RuntimeException("Not implemented");
     }
 
@@ -425,6 +432,11 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
     @Override
     public void notifyPreferredDataSubIdChanged(int subId) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void notifyImsDisconnectCause(int subId, ImsReasonInfo imsReasonInfo)  {
         throw new RuntimeException("Not implemented");
     }
 }

@@ -25,7 +25,6 @@ import android.net.StringNetworkSpecifier;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.Rlog;
 import android.util.LocalLog;
 
@@ -33,11 +32,13 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneSwitcher;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.SubscriptionMonitor;
+import com.android.internal.telephony.dataconnection.DcTracker.ReleaseNetworkType;
 import com.android.internal.util.IndentingPrintWriter;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 public class TelephonyNetworkFactory extends NetworkFactory {
     public final String LOG_TAG;
@@ -52,13 +53,15 @@ public class TelephonyNetworkFactory extends NetworkFactory {
     private final PhoneSwitcher mPhoneSwitcher;
     private final SubscriptionController mSubscriptionController;
     private final SubscriptionMonitor mSubscriptionMonitor;
-    private final DcTracker mDcTracker;
     private final LocalLog mLocalLog = new LocalLog(REQUEST_LOG_SIZE);
 
     // Key: network request. Value: whether it's applied to DcTracker.
-    private final HashMap<NetworkRequest, Boolean> mNetworkRequests = new HashMap();
+    private final Map<NetworkRequest, Boolean> mNetworkRequests = new HashMap<>();
 
     private final Phone mPhone;
+
+    private final TransportManager mTransportManager;
+
     private int mSubscriptionId;
 
     private final static int TELEPHONY_NETWORK_SCORE = 50;
@@ -74,6 +77,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         super(looper, phone.getContext(), "TelephonyNetworkFactory[" + phone.getPhoneId()
                 + "]", null);
         mPhone = phone;
+        mTransportManager = mPhone.getTransportManager();
         mInternalHandler = new InternalHandler(looper);
 
         mSubscriptionController = SubscriptionController.getInstance();
@@ -84,9 +88,6 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         mPhoneSwitcher = PhoneSwitcher.getInstance();
         mSubscriptionMonitor = subscriptionMonitor;
         LOG_TAG = "TelephonyNetworkFactory[" + mPhone.getPhoneId() + "]";
-        // TODO: Will need to dynamically route network requests to the corresponding DcTracker in
-        // the future. For now we route everything to WWAN.
-        mDcTracker = mPhone.getDcTracker(TransportType.WWAN);
 
         mPhoneSwitcher.registerForActivePhoneSwitch(mInternalHandler, EVENT_ACTIVE_PHONE_SWITCH,
                 null);
@@ -151,17 +152,40 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         }
     }
 
-    private void applyRequestsOnActivePhoneSwitch(NetworkRequest networkRequest,
-            boolean cleanUpOnRelease, int action) {
+    private int getTransportTypeFromNetworkRequest(NetworkRequest networkRequest) {
+        int apnType = ApnContext.getApnTypeFromNetworkRequest(networkRequest);
+        return mTransportManager.getCurrentTransport(apnType);
+    }
+
+    private void requestNetworkInternal(NetworkRequest networkRequest) {
+        int transportType = getTransportTypeFromNetworkRequest(networkRequest);
+        if (mPhone.getDcTracker(transportType) != null) {
+            // TODO: Handover logic will be added later. For now always normal request.
+            mPhone.getDcTracker(transportType).requestNetwork(networkRequest,
+                    DcTracker.REQUEST_TYPE_NORMAL, mLocalLog);
+        }
+    }
+
+    private void releaseNetworkInternal(NetworkRequest networkRequest,
+                                        @ReleaseNetworkType int releaseType) {
+        int transportType = getTransportTypeFromNetworkRequest(networkRequest);
+        if (mPhone.getDcTracker(transportType) != null) {
+            // TODO: Handover logic will be added later. For now always normal or detach request.
+            mPhone.getDcTracker(transportType).releaseNetwork(networkRequest, releaseType,
+                    mLocalLog);
+        }
+    }
+
+    private void applyRequestsOnActivePhoneSwitch(NetworkRequest networkRequest, int action) {
         if (action == ACTION_NO_OP) return;
 
         String logStr = "onActivePhoneSwitch: " + ((action == ACTION_REQUEST)
                 ? "Requesting" : "Releasing") + " network request " + networkRequest;
         mLocalLog.log(logStr);
         if (action == ACTION_REQUEST) {
-            mDcTracker.requestNetwork(networkRequest, mLocalLog);
+            requestNetworkInternal(networkRequest);
         } else if (action == ACTION_RELEASE) {
-            mDcTracker.releaseNetwork(networkRequest, mLocalLog, cleanUpOnRelease);
+            releaseNetworkInternal(networkRequest, DcTracker.RELEASE_TYPE_DETACH);
         }
     }
 
@@ -184,8 +208,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
             boolean shouldApply = mPhoneSwitcher.shouldApplyNetworkRequest(
                     networkRequest, mPhone.getPhoneId());
 
-            applyRequestsOnActivePhoneSwitch(networkRequest, true,
-                    getAction(applied, shouldApply));
+            applyRequestsOnActivePhoneSwitch(networkRequest, getAction(applied, shouldApply));
             mNetworkRequests.put(networkRequest, shouldApply);
         }
     }
@@ -221,7 +244,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         mLocalLog.log(s);
 
         if (shouldApply) {
-            mDcTracker.requestNetwork(networkRequest, mLocalLog);
+            requestNetworkInternal(networkRequest);
         }
     }
 
@@ -242,9 +265,8 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         log(s);
         mLocalLog.log(s);
 
-
         if (applied) {
-            mDcTracker.releaseNetwork(networkRequest, mLocalLog, false);
+            releaseNetworkInternal(networkRequest, DcTracker.RELEASE_TYPE_NORMAL);
         }
     }
 
