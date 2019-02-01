@@ -16,6 +16,24 @@
       "revId": "cede6544c74807cf83db27b8bb0f6615aad8df3e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9da3fe3_3ac9c3f5",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1377475
+      },
+      "writtenOn": "2019-02-01T17:53:16Z",
+      "side": 1,
+      "message": "Thanks for reviewing Wei. It\u0027s always better to have more reviewers.\nmsg.obj contains the return value, for the get cases. But arg1 is the parameter that we have initially passed to the Message object. If you look at line 170 here, I am passing numOfSims as an argument to the message, and that argument is retained in the response message as well, that I can access here as arg1.",
+      "parentUuid": "b9620c1c_04d74a14",
+      "revId": "cede6544c74807cf83db27b8bb0f6615aad8df3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
