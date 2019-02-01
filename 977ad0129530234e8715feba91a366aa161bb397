@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d22e5640_9985d26c",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-01T18:33:16Z",
+      "side": 1,
+      "message": "Yes, it should not a DSDS specific structure, i change it to phone status and include both sim status and phone_count and enabled_modem_count. \n\nIn DSDS event, we care about the phone_count, inserted_sim_count, enabled_modem_count. We can get the data from the phoneStatus. \n\nFor the metrics you are interested, I think you could add the SimStatus to SMS, Call session.",
+      "parentUuid": "05dd2758_c4906dfb",
+      "range": {
+        "startLine": 1468,
+        "startChar": 10,
+        "endLine": 1468,
+        "endChar": 20
+      },
+      "revId": "977ad0129530234e8715feba91a366aa161bb397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2d23af8_5992b793",
         "filename": "proto/src/telephony.proto",
         "patchSetId": 2
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "be5a3e8f_4284ce83",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 1894,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-01T18:33:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2d23af8_5992b793",
+      "range": {
+        "startLine": 1894,
+        "startChar": 0,
+        "endLine": 1894,
+        "endChar": 1
+      },
+      "revId": "977ad0129530234e8715feba91a366aa161bb397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48af36f6_bb2149b0",
         "filename": "proto/src/telephony.proto",
         "patchSetId": 2
@@ -86,6 +134,24 @@
       "revId": "977ad0129530234e8715feba91a366aa161bb397",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e49b697c_20ebfde5",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 2067,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-01T18:33:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48af36f6_bb2149b0",
+      "revId": "977ad0129530234e8715feba91a366aa161bb397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
