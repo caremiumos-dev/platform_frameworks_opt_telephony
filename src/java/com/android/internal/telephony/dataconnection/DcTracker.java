@@ -111,6 +111,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -627,6 +628,13 @@ public class DcTracker extends Handler {
 
     private DataStallRecoveryHandler mDsRecoveryHandler;
 
+    /**
+     * data handover completion message map. Key is the APN type, value is the list of completion
+     * messages to be sent. Using a list because there might be multiple network requests for
+     * the same APN type.
+     */
+    private final Map<Integer, List<Message>> mHandoverCompletionMsgs = new HashMap<>();
+
     //***** Constructor
     public DcTracker(Phone phone, int transportType) {
         super();
@@ -852,12 +860,22 @@ public class DcTracker extends Handler {
     }
 
     public void requestNetwork(NetworkRequest networkRequest, @RequestNetworkType int type,
-                               LocalLog log) {
+                               Message onCompleteMsg, LocalLog log) {
         final int apnType = ApnContext.getApnTypeFromNetworkRequest(networkRequest);
         final ApnContext apnContext = mApnContextsByType.get(apnType);
         log.log("DcTracker.requestNetwork for " + networkRequest + " found " + apnContext
                 + ", type=" + requestTypeToString(type));
         if (apnContext != null) {
+            if (type == DcTracker.REQUEST_TYPE_HANDOVER && onCompleteMsg != null) {
+                synchronized (mHandoverCompletionMsgs) {
+                    List<Message> msgs = mHandoverCompletionMsgs.get(apnType);
+                    if (msgs == null) {
+                        msgs = new ArrayList<>();
+                    }
+                    msgs.add(onCompleteMsg);
+                    mHandoverCompletionMsgs.put(apnType, msgs);
+                }
+            }
             apnContext.requestNetwork(networkRequest, type, log);
         }
     }
@@ -2666,6 +2684,20 @@ public class DcTracker extends Handler {
      */
     private void onDataSetupComplete(ApnContext apnContext, boolean success, int cause,
                                      boolean isHandover) {
+        if (isHandover) {
+            int apnType = ApnSetting.getApnTypesBitmaskFromString(apnContext.getApnType());
+            synchronized (mHandoverCompletionMsgs) {
+                List<Message> msgs = mHandoverCompletionMsgs.get(apnType);
+                if (msgs != null) {
+                    for (Message msg : msgs) {
+                        msg.arg1 = success ? 1 : 0;
+                        msg.arg2 = mTransportType;
+                        msg.sendToTarget();
+                    }
+                    msgs.clear();
+                }
+            }
+        }
         if (success) {
             DataConnection dataConnection = apnContext.getDataConnection();
 

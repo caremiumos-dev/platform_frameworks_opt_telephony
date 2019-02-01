@@ -21,6 +21,7 @@ import android.annotation.NonNull;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RegistrantList;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.CarrierConfigManager;
@@ -51,6 +52,7 @@ import java.util.stream.Collectors;
 public class TransportManager extends Handler {
     private static final String TAG = TransportManager.class.getSimpleName();
 
+    // Key is the access network, value is the transport.
     private static final Map<Integer, Integer> ACCESS_NETWORK_TRANSPORT_TYPE_MAP;
 
     static {
@@ -108,6 +110,26 @@ public class TransportManager extends Handler {
      */
     private final Map<Integer, int[]> mCurrentAvailableNetworks;
 
+    /**
+     * The current transport of the APN type. The key is the APN type, and the value is the
+     * transport.
+     */
+    private final Map<Integer, Integer> mCurrentTransports;
+
+    /**
+     * The registrants for listening data handover needed events.
+     */
+    private final RegistrantList mHandoverNeededEventRegistrants;
+
+    static class HandoverEntry {
+        public final @ApnType int apnType;
+        public final int targetTransport;
+        HandoverEntry(int apnType, int targetTransport) {
+            this.apnType = apnType;
+            this.targetTransport = targetTransport;
+        }
+    }
+
     public TransportManager(Phone phone) {
         mPhone = phone;
         mAccessNetworksManager = new AccessNetworksManager(phone);
@@ -116,6 +138,8 @@ public class TransportManager extends Handler {
                 EVENT_QUALIFIED_NETWORKS_CHANGED);
 
         mCurrentAvailableNetworks = new ConcurrentHashMap<>();
+        mCurrentTransports = new ConcurrentHashMap<>();
+        mHandoverNeededEventRegistrants = new RegistrantList();
 
         if (isInLegacyMode()) {
             // For legacy mode, WWAN is the only transport to handle all data connections, even
@@ -140,10 +164,72 @@ public class TransportManager extends Handler {
         }
     }
 
+    private boolean isHandoverNeeded(QualifiedNetworks newNetworks) {
+        int apnType = newNetworks.apnType;
+        int[] newNetworkList = newNetworks.qualifiedNetworks;
+        int[] currentNetworkList = mCurrentAvailableNetworks.get(apnType);
+
+        // If the current network list is empty, but the new network list is not, then we can
+        // directly setup data on the new network. If the current network list is not empty, but
+        // the new network is, then we can tear down the data directly. Therefore if one of the
+        // list is empty, then we don't need to do handover.
+        if (ArrayUtils.isEmpty(newNetworkList) || ArrayUtils.isEmpty(currentNetworkList)) {
+            return false;
+        }
+
+        // The list is networks in the preferred order. For now we always pick the first element
+        // because it's the most preferred.
+        return !ACCESS_NETWORK_TRANSPORT_TYPE_MAP.get(newNetworkList[0]).equals(
+                ACCESS_NETWORK_TRANSPORT_TYPE_MAP.get(currentNetworkList[0]));
+    }
+
+    private boolean areNetworksValid(QualifiedNetworks networks) {
+        if (networks.qualifiedNetworks == null) {
+            return true;
+        }
+        for (int network : networks.qualifiedNetworks) {
+            if (!ACCESS_NETWORK_TRANSPORT_TYPE_MAP.containsKey(network)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Set the current transport of apn type.
+     *
+     * @apnType The APN type
+     * @transport The transport. Must be WWAN or WLAN.
+     */
+    public void setCurrentTransport(@ApnType int apnType, int transport) {
+        mCurrentTransports.put(apnType, transport);
+    }
+
     private synchronized void updateAvailableNetworks(List<QualifiedNetworks> networksList) {
         log("updateAvailableNetworks: " + networksList);
         for (QualifiedNetworks networks : networksList) {
-            mCurrentAvailableNetworks.put(networks.apnType, networks.qualifiedNetworks);
+            if (areNetworksValid(networks)) {
+                mCurrentAvailableNetworks.put(networks.apnType, networks.qualifiedNetworks);
+                if (isHandoverNeeded(networks)) {
+                    // If handover is needed, perform the handover works.
+                    int targetTransport = ACCESS_NETWORK_TRANSPORT_TYPE_MAP.get(
+                            networks.qualifiedNetworks[0]);
+                    mHandoverNeededEventRegistrants.notifyResult(new HandoverEntry(networks.apnType,
+                            targetTransport));
+
+                } else {
+                    // If handover is not needed, immediately update the available networks and
+                    // transport.
+                    int transport = TransportType.WWAN;
+                    if (!ArrayUtils.isEmpty(networks.qualifiedNetworks)
+                            && ACCESS_NETWORK_TRANSPORT_TYPE_MAP.containsKey(
+                                    networks.qualifiedNetworks[0])) {
+                        transport = ACCESS_NETWORK_TRANSPORT_TYPE_MAP
+                                .get(networks.qualifiedNetworks[0]);
+                    }
+                    setCurrentTransport(networks.apnType, transport);
+                }
+            }
         }
     }
 
@@ -186,22 +272,34 @@ public class TransportManager extends Handler {
             return TransportType.WWAN;
         }
 
-        // If we can't find the available networks, always route to cellular.
-        if (!mCurrentAvailableNetworks.containsKey(apnType)) {
+        // If we can't find the corresponding transport, always route to cellular.
+        Integer transport = mCurrentTransports.get(apnType);
+        if (transport == null) {
             return TransportType.WWAN;
         }
 
-        int[] availableNetworks = mCurrentAvailableNetworks.get(apnType);
+        return transport;
+    }
 
-        // If the available networks list is empty, route to cellular.
-        if (ArrayUtils.isEmpty(availableNetworks)) {
-            return TransportType.WWAN;
+    /**
+     * Register for data handover needed event
+     *
+     * @param h The handler of the event
+     * @param what The id of the event
+     */
+    public void registerForHandoverNeededEvent(Handler h, int what) {
+        if (h != null) {
+            mHandoverNeededEventRegistrants.addUnique(h, what, null);
         }
+    }
 
-        // TODO: For now we choose the first network because it's the most preferred one. In the
-        // the future we should validate it to make sure this network does not violate carrier
-        // preference and user preference.
-        return ACCESS_NETWORK_TRANSPORT_TYPE_MAP.get(availableNetworks[0]);
+    /**
+     * Unregister for data handover needed event
+     *
+     * @param h The handler
+     */
+    public void unregisterForActivePhoneSwitch(Handler h) {
+        mHandoverNeededEventRegistrants.remove(h);
     }
 
     /**
@@ -218,6 +316,8 @@ public class TransportManager extends Handler {
         pw.println("mAvailableTransports=[" + Arrays.stream(mAvailableTransports)
                 .mapToObj(type -> TransportType.toString(type))
                 .collect(Collectors.joining(",")) + "]");
+        pw.println("mCurrentAvailableNetworks=" + mCurrentAvailableNetworks);
+        pw.println("mCurrentTransports=" + mCurrentTransports);
         pw.println("isInLegacy=" + isInLegacyMode());
         pw.println("IWLAN operation mode=" + mPhone.mCi.getIwlanOperationMode());
         mAccessNetworksManager.dump(fd, pw, args);

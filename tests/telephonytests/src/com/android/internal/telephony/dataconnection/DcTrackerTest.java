@@ -861,7 +861,7 @@ public class DcTrackerTest extends TelephonyTest {
         NetworkRequest nr = new NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build();
         LocalLog l = new LocalLog(100);
-        mDct.requestNetwork(nr, DcTracker.REQUEST_TYPE_NORMAL, l);
+        mDct.requestNetwork(nr, DcTracker.REQUEST_TYPE_NORMAL, null, l);
         waitForMs(200);
 
         verifyDataConnected(FAKE_APN1);
