@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dcc7c404_7755983d",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-04T19:29:14Z",
+      "side": 1,
+      "message": "PhoneStatus is a optional general field and it can be included in any event. \n\nWe log the PhoneStatus when the DSDS status changed, so the name of the event should be DSDS_STATUS_CHANGED.",
+      "parentUuid": "643b830f_45595dec",
+      "range": {
+        "startLine": 679,
+        "startChar": 4,
+        "endLine": 679,
+        "endChar": 8
+      },
+      "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b8b4ffa_8186f0d3",
         "filename": "proto/src/telephony.proto",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26325107_34a90eab",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-04T19:29:14Z",
+      "side": 1,
+      "message": "Yes, it\u0027s the same as number of phones. I will change this filed to a bitmap, thanks!",
+      "parentUuid": "9b8b4ffa_8186f0d3",
+      "range": {
+        "startLine": 1478,
+        "startChar": 10,
+        "endLine": 1478,
+        "endChar": 41
+      },
+      "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a94e21ca_48ebab14",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-04T19:29:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d24dce1_057ddcdc",
+      "range": {
+        "startLine": 1929,
+        "startChar": 2,
+        "endLine": 1929,
+        "endChar": 10
+      },
+      "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2490e5ea_499f9ba5",
         "filename": "proto/src/telephony.proto",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "764d0b68_76323e4b",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-04T19:29:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2490e5ea_499f9ba5",
+      "range": {
+        "startLine": 2146,
+        "startChar": 2,
+        "endLine": 2146,
+        "endChar": 36
+      },
+      "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
