@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fe3e8302_5f09346b",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-04T19:52:00Z",
+      "side": 1,
+      "message": "Usage of \"DSDS\" is incorrect anyway. What about a device with three SIM cards?\nAlso, DSDS is confusing for DSDA devices (dual SIM dual active).\nCan we get a better name?",
+      "parentUuid": "dcc7c404_7755983d",
+      "range": {
+        "startLine": 679,
+        "startChar": 4,
+        "endLine": 679,
+        "endChar": 8
+      },
+      "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b8b4ffa_8186f0d3",
         "filename": "proto/src/telephony.proto",
         "patchSetId": 7
