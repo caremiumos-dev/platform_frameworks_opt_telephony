@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b109dc1_155313ae",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-04T22:09:54Z",
+      "side": 1,
+      "message": "HandOverParam?",
+      "range": {
+        "startLine": 124,
+        "startChar": 17,
+        "endLine": 124,
+        "endChar": 30
+      },
+      "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee5ff938_51c89793",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-04T22:09:54Z",
+      "side": 1,
+      "message": "static ?",
+      "range": {
+        "startLine": 186,
+        "startChar": 4,
+        "endLine": 186,
+        "endChar": 19
+      },
+      "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae98cecf_0a9b7c6e",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-04T22:09:54Z",
+      "side": 1,
+      "message": "the structure is a apn_type \u003c-\u003e a list a network and here you are only picking the first network to handle that apn type, Is that intended or there should be a TODO to handle other networks",
+      "range": {
+        "startLine": 228,
+        "startChar": 29,
+        "endLine": 228,
+        "endChar": 68
+      },
+      "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9c353ee_c839803b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-04T22:09:54Z",
+      "side": 1,
+      "message": "for now, you only passing onCompleteMsg when type is HANDOVER, I guess you will handle the rest of request type in your later patch, then please add a @NonNull for the onCompleteMsg",
+      "range": {
+        "startLine": 863,
+        "startChar": 31,
+        "endLine": 863,
+        "endChar": 51
+      },
+      "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b1cecd8_9a65a4a4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-04T22:09:54Z",
+      "side": 1,
+      "message": "better define constant for -1",
+      "range": {
+        "startLine": 221,
+        "startChar": 50,
+        "endLine": 221,
+        "endChar": 52
+      },
+      "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
