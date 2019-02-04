@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "648f1acf_77343e57",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-04T20:01:08Z",
+      "side": 1,
+      "message": "OK, change it to a general name, thanks!",
+      "parentUuid": "fe3e8302_5f09346b",
+      "range": {
+        "startLine": 679,
+        "startChar": 4,
+        "endLine": 679,
+        "endChar": 8
+      },
+      "revId": "d86dfc719981f7537fcab4787c60be3a57e2d6aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b8b4ffa_8186f0d3",
         "filename": "proto/src/telephony.proto",
         "patchSetId": 7
