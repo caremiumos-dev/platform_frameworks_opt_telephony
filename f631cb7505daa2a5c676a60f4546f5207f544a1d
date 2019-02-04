@@ -212,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "9ec67d7d_41457e28",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-02-04T23:30:54Z",
+      "side": 1,
+      "message": "Won\u0027t that affect the public API? If yes, we should try to update that asap at least.",
+      "parentUuid": "211504c1_ea2af784",
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "911fb621_1710334e",
         "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreUtil.java",
         "patchSetId": 3
