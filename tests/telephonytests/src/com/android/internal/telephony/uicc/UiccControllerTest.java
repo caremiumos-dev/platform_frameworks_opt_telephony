@@ -246,14 +246,14 @@ public class UiccControllerTest extends TelephonyTest {
     @Test
     public void testConvertNullCardId() {
         // trying to convert a null string should return -1
-        assertEquals(TelephonyManager.INVALID_CARD_ID,
+        assertEquals(TelephonyManager.UNSUPPORTED_CARD_ID,
                 mUiccControllerUT.convertToPublicCardId(null));
     }
 
     @Test
     public void testConvertEmptyCardId() {
         // trying to convert an empty string should return -1
-        assertEquals(TelephonyManager.INVALID_CARD_ID,
+        assertEquals(TelephonyManager.UNSUPPORTED_CARD_ID,
                 mUiccControllerUT.convertToPublicCardId(""));
     }
 
@@ -362,5 +362,32 @@ public class UiccControllerTest extends TelephonyTest {
 
         // assert that the getAllUiccCardInfos returns an empty list without crashing
         assertEquals(0, mUiccControllerUT.getAllUiccCardInfos().size());
+    }
+
+    @Test
+    public void testEidNotSupported() {
+        // Give UiccController a real context so it can use shared preferences
+        mUiccControllerUT.mContext = InstrumentationRegistry.getContext();
+
+        // Mock out UiccSlots
+        mUiccControllerUT.mUiccSlots[0] = mMockSlot;
+        doReturn(true).when(mMockSlot).isEuicc();
+        doReturn(mMockCard).when(mMockSlot).getUiccCard();
+
+        // simulate card status loaded so that the UiccController sets the card ID
+        IccCardStatus ics = new IccCardStatus();
+        ics.setCardState(1 /* present */);
+        ics.setUniversalPinState(3 /* disabled */);
+        ics.atr = "abcdef0123456789abcdef";
+        ics.iccid = "123451234567890";
+        // make it seem like EID is not supported by setting physical slot = -1 like on HAL < 1.2
+        ics.physicalSlotIndex = UiccController.INVALID_SLOT_ID;
+        AsyncResult ar = new AsyncResult(null, ics, null);
+        Message msg = Message.obtain(mUiccControllerUT, EVENT_GET_ICC_STATUS_DONE, ar);
+        mUiccControllerUT.handleMessage(msg);
+
+        // assert that the default eUICC card Id is UNSUPPORTED_CARD_ID
+        assertEquals(TelephonyManager.UNSUPPORTED_CARD_ID,
+                mUiccControllerUT.getCardIdForDefaultEuicc());
     }
 }

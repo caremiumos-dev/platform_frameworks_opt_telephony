@@ -130,11 +130,15 @@ public class UiccController extends Handler {
     // considered sensetive information.
     private ArrayList<String> mCardStrings;
 
-    // This is the card ID of the default eUICC. Whenever we receive slot status, we set it to the
-    // eUICC with the lowest slot index
+    // This is the card ID of the default eUICC. It starts as UNINITIALIZED_CARD_ID.
+    // When we load the EID (either with slot status or from the EuiccCard), we set it to the eUICC
+    // with the lowest slot index.
+    // If EID is not supported (e.g. on HAL version < 1.2), we set it to UNSUPPORTED_CARD_ID
     private int mDefaultEuiccCardId;
 
-    private static final int INVALID_CARD_ID = TelephonyManager.INVALID_CARD_ID;
+    private static final int UNSUPPORTED_CARD_ID = TelephonyManager.UNSUPPORTED_CARD_ID;
+
+    private static final int UNINITIALIZED_CARD_ID = TelephonyManager.UNINITIALIZED_CARD_ID;
 
     // GSM SGP.02 section 2.2.2 states that the EID is always 32 digits long
     private static final int EID_LENGTH = 32;
@@ -213,7 +217,7 @@ public class UiccController extends Handler {
 
         mLauncher = new UiccStateChangedLauncher(c, this);
         mCardStrings = loadCardStrings();
-        mDefaultEuiccCardId = INVALID_CARD_ID;
+        mDefaultEuiccCardId = UNINITIALIZED_CARD_ID;
     }
 
     private int getSlotIdFromPhoneId(int phoneId) {
@@ -552,6 +556,11 @@ public class UiccController extends Handler {
         if (slotId == INVALID_SLOT_ID) {
             slotId = index;
         }
+
+        if (eidIsNotSupported(status)) {
+            // we will never get EID from the HAL, so set mDefaultEuiccCardId to UNSUPPORTED_CARD_ID
+            mDefaultEuiccCardId = UNSUPPORTED_CARD_ID;
+        }
         mPhoneIdToSlotId[index] = slotId;
 
         if (VDBG) logPhoneIdToSlotIdMapping();
@@ -594,6 +603,15 @@ public class UiccController extends Handler {
     }
 
     /**
+     * Returns true if EID is not supproted.
+     */
+    private boolean eidIsNotSupported(IccCardStatus status) {
+        // if card status does not contain slot ID, we know we are on HAL < 1.2, so EID will never
+        // be available
+        return status.physicalSlotIndex == INVALID_SLOT_ID;
+    }
+
+    /**
      * Add a cardString to mCardStrings. If this is an ICCID, trailing Fs will be automatically
      * stripped.
      */
@@ -615,18 +633,19 @@ public class UiccController extends Handler {
      * If the given cardString is an ICCID, trailing Fs will be automatically stripped before trying
      * to match to a card ID.
      *
-     * @return the matching cardId, or INVALID_CARD_ID if the card string does not map to a cardId
+     * @return the matching cardId, or UNINITIALIZED_CARD_ID if the card string does not map to a
+     * currently loaded cardId
      */
     public int convertToPublicCardId(String cardString) {
         if (TextUtils.isEmpty(cardString)) {
-            return INVALID_CARD_ID;
+            return UNINITIALIZED_CARD_ID;
         }
         if (cardString.length() < EID_LENGTH) {
             cardString = IccUtils.stripTrailingFs(cardString);
         }
         int id = mCardStrings.indexOf(cardString);
         if (id == -1) {
-            return INVALID_CARD_ID;
+            return UNINITIALIZED_CARD_ID;
         } else {
             return id;
         }
@@ -646,7 +665,7 @@ public class UiccController extends Handler {
                 continue;
             }
             String iccid = card.getIccId();
-            int cardId = INVALID_CARD_ID;
+            int cardId = UNINITIALIZED_CARD_ID;
             if (isEuicc) {
                 eid = card.getCardId();
                 cardId = convertToPublicCardId(eid);
@@ -895,7 +914,7 @@ public class UiccController extends Handler {
         // set mCardStrings and the defaultEuiccCardId using the now available EID
         String eid = ((EuiccCard) card).getEid();
         addCardId(eid);
-        if (mDefaultEuiccCardId == INVALID_CARD_ID) {
+        if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID) {
             // TODO(b/122738148) the default eUICC should not be removable
             mDefaultEuiccCardId = convertToPublicCardId(eid);
             log("onEidReady: eid=" + eid + " slot=" + slotId + " mDefaultEuiccCardId="
