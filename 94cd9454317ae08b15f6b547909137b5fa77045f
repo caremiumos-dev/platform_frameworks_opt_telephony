@@ -69,6 +69,30 @@
       "revId": "94cd9454317ae08b15f6b547909137b5fa77045f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3cbb759_b5e04269",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccConnector.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-02-04T22:55:01Z",
+      "side": 1,
+      "message": "We\u0027ll modify EuiccManager so that UNINITIALIZED_CARD_ID shouldn\u0027t be sent.",
+      "parentUuid": "2d792204_b6913cb8",
+      "range": {
+        "startLine": 957,
+        "startChar": 39,
+        "endLine": 957,
+        "endChar": 54
+      },
+      "revId": "94cd9454317ae08b15f6b547909137b5fa77045f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
