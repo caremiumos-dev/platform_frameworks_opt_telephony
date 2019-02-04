@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c85ed0fa_42888706",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-02-04T20:57:45Z",
+      "side": 1,
+      "message": "Needs increaseIndent()",
+      "range": {
+        "startLine": 552,
+        "startChar": 8,
+        "endLine": 552,
+        "endChar": 35
+      },
+      "revId": "0d3fcbe903df704aab422457af7294313cb41835",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
