@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e2d66139_6533e8fe",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1274496
+      },
+      "writtenOn": "2019-02-05T17:54:42Z",
+      "side": 1,
+      "message": "Wanted to use this information for CBRS metrics. To identify cases when DATA call was on CBRS network for a certain carrier.",
+      "parentUuid": "97426c89_2a9e12a9",
+      "range": {
+        "startLine": 624,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 36
+      },
+      "revId": "d7987b4210a4eff8a2dcd9a6d72df01892c61388",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e20ab16_b1ba2817",
         "filename": "proto/src/telephony.proto",
         "patchSetId": 11
