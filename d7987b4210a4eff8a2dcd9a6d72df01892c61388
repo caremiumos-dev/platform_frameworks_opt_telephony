@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "97426c89_2a9e12a9",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-02-05T04:55:00Z",
+      "side": 1,
+      "message": "why is this needed here?\ni feel we are putting SimStatus in too many redundant places.",
+      "range": {
+        "startLine": 624,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 36
+      },
+      "revId": "d7987b4210a4eff8a2dcd9a6d72df01892c61388",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e20ab16_b1ba2817",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-02-05T04:55:00Z",
+      "side": 1,
+      "message": "is it a 1 to 1 mapping to public sim status? is there a UNKNOWN state?",
+      "range": {
+        "startLine": 1542,
+        "startChar": 0,
+        "endLine": 1555,
+        "endChar": 29
+      },
+      "revId": "d7987b4210a4eff8a2dcd9a6d72df01892c61388",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dec62118_e72e3476",
         "filename": "proto/src/telephony.proto",
         "patchSetId": 11
@@ -85,6 +131,30 @@
       "side": 1,
       "message": "Yes, for now this is still not a standard (though we are working on adding it to the SIM files). But it is not true that this is not a sim information. This is still a sim information, but currently not a standard.",
       "parentUuid": "0f4da839_5155969b",
+      "range": {
+        "startLine": 1565,
+        "startChar": 18,
+        "endLine": 1565,
+        "endChar": 33
+      },
+      "revId": "d7987b4210a4eff8a2dcd9a6d72df01892c61388",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f07ff728_147ba2e9",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-02-05T04:55:00Z",
+      "side": 1,
+      "message": "if we are putting carrier_id and isOpportunistic here, i suggest we name it to activeSubscriptionStatus. It more accurately describes what we want here.",
+      "parentUuid": "05db0cff_80e5d269",
       "range": {
         "startLine": 1565,
         "startChar": 18,
