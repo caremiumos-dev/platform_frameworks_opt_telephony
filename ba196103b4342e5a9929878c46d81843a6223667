@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "384d9d48_bec9dc45",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-02-05T05:57:30Z",
+      "side": 1,
+      "message": "nit: Why have these local constants? import static?",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 141,
+        "endChar": 92
+      },
+      "revId": "ba196103b4342e5a9929878c46d81843a6223667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "638c98c3_512d25ba",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-02-05T05:57:30Z",
+      "side": 1,
+      "message": "Don\u0027t need to initialize here.",
+      "revId": "ba196103b4342e5a9929878c46d81843a6223667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
