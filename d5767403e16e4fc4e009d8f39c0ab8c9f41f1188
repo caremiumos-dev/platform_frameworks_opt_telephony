@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cd9d5e4_98d17c74",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-02-05T21:59:44Z",
+      "side": 1,
+      "message": "Had an offline discussion that indicated that the temperatures would need to be correlated with events that happen (e.g. modem throttles). The linked design doc seems to say the same thing. If you put the histogram here, you\u0027re not going to be able to correlate it with anything besides device info (e.g. carrier, build id, model, etc.) if more than one event of interest happens in a day. Are you sure this is where you want it? If this is actually what you want, you\u0027d be better off sticking this into Westworld since it\u0027s got better UI/dashboarding support than our pipeline.",
+      "range": {
+        "startLine": 55,
+        "startChar": 11,
+        "endLine": 55,
+        "endChar": 37
+      },
+      "revId": "d5767403e16e4fc4e009d8f39c0ab8c9f41f1188",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86d5b0ac_cad69b1e",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 5
+      },
+      "lineNbr": 2085,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-02-05T21:59:44Z",
+      "side": 1,
+      "message": "If it\u0027s always going to be a length-two array, can you separate it into two fields?",
+      "range": {
+        "startLine": 2084,
+        "startChar": 0,
+        "endLine": 2085,
+        "endChar": 67
+      },
+      "revId": "d5767403e16e4fc4e009d8f39c0ab8c9f41f1188",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1f69554_9797a4df",
+        "filename": "src/java/com/android/internal/telephony/metrics/ThermalMetrics.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-02-05T21:59:44Z",
+      "side": 1,
+      "message": "9",
+      "range": {
+        "startLine": 2,
+        "startChar": 20,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "d5767403e16e4fc4e009d8f39c0ab8c9f41f1188",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5f3a18a_6ed5b5b6",
+        "filename": "src/java/com/android/internal/telephony/metrics/ThermalMetrics.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-02-05T21:59:44Z",
+      "side": 1,
+      "message": "make this a private static constant",
+      "range": {
+        "startLine": 70,
+        "startChar": 21,
+        "endLine": 70,
+        "endChar": 41
+      },
+      "revId": "d5767403e16e4fc4e009d8f39c0ab8c9f41f1188",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21bd7588_cbc43dfa",
+        "filename": "src/java/com/android/internal/telephony/metrics/ThermalMetrics.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-02-05T21:59:44Z",
+      "side": 1,
+      "message": "com.android.internal.telephony.metrics.action.ThermalMetrics",
+      "range": {
+        "startLine": 71,
+        "startChar": 17,
+        "endLine": 71,
+        "endChar": 69
+      },
+      "revId": "d5767403e16e4fc4e009d8f39c0ab8c9f41f1188",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "374121b5_43096dad",
+        "filename": "src/java/com/android/internal/telephony/metrics/ThermalMetrics.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-02-05T21:59:44Z",
+      "side": 1,
+      "message": "Does this array get reset every time you call getDeviceTemperatures? You might be double counting if it doesn\u0027t reset",
+      "range": {
+        "startLine": 136,
+        "startChar": 20,
+        "endLine": 136,
+        "endChar": 35
+      },
+      "revId": "d5767403e16e4fc4e009d8f39c0ab8c9f41f1188",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
