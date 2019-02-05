@@ -81,6 +81,24 @@
       "revId": "6cb422064a60ed5849ed6241e4a53ab127b7c144",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa37b1a7_d5a10d1e",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-02-05T00:03:43Z",
+      "side": 1,
+      "message": "Are you sure the exception isn\u0027t passed on to the caller? That doesn\u0027t sound correct to me. Our manager code in other places does handle RemoteExceptions.",
+      "parentUuid": "d8f61351_71c46c7e",
+      "revId": "6cb422064a60ed5849ed6241e4a53ab127b7c144",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
