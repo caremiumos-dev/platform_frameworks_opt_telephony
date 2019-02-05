@@ -22,6 +22,30 @@
       "revId": "d7987b4210a4eff8a2dcd9a6d72df01892c61388",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91537a67_a88ac7f4",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1274496
+      },
+      "writtenOn": "2019-02-05T00:21:35Z",
+      "side": 1,
+      "message": "isOpportunistic field is part of SubscriptionInfo. It will give information about the subscription just like carrier_id. This will be useful to identify CBRS subscriptions (Fi for example)",
+      "parentUuid": "dec62118_e72e3476",
+      "range": {
+        "startLine": 1565,
+        "startChar": 18,
+        "endLine": 1565,
+        "endChar": 33
+      },
+      "revId": "d7987b4210a4eff8a2dcd9a6d72df01892c61388",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
