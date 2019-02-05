@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "68cca763_58fddfd7",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1407099
+      },
+      "writtenOn": "2019-02-05T23:34:02Z",
+      "side": 1,
+      "message": "Yes, we are sure this is where we want it. The histogram will be able to specify what the device temperatures the device were running at. With this logging pipeline we can correlate which carriers cause the device to have higher temperatures. Which models average higher temperatures with average telephony use. With this pipeline it would give us more opportunity to isolate thermal issues. If a specific build has the device stable at a higher temperature than the previous.",
+      "parentUuid": "9cd9d5e4_98d17c74",
+      "range": {
+        "startLine": 55,
+        "startChar": 11,
+        "endLine": 55,
+        "endChar": 37
+      },
+      "revId": "d5767403e16e4fc4e009d8f39c0ab8c9f41f1188",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86d5b0ac_cad69b1e",
         "filename": "proto/src/telephony.proto",
         "patchSetId": 5
