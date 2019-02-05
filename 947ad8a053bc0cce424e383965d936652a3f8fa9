@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c3c5876_0a46a74f",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 14
+      },
+      "lineNbr": 1548,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-02-05T22:57:01Z",
+      "side": 1,
+      "message": "nit: is_opportunistic to be consistent with others",
+      "range": {
+        "startLine": 1548,
+        "startChar": 18,
+        "endLine": 1548,
+        "endChar": 33
+      },
+      "revId": "947ad8a053bc0cce424e383965d936652a3f8fa9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
