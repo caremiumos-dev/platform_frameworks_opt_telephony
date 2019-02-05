@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5db33f3a_5c0296f8",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 15
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-05T23:44:15Z",
+      "side": 1,
+      "message": "In the case of SimState, the index of the array indicates the slot.\nSo, we simply have: repeated SimState sim_states\n\nThis is not the case here and it means that logic in aggregation will be more complex: now we need to loop thru the list of ActiveSubscriptionInfo and search the item with the correct slot_index.\n\nI personally preferred the previous approach, where carrier_id (a property of the SIM card) was in the same structure as SIM status, so that the two went hand-in-hand, leaving \"is_opportunistic\" out as an additional boolean or structure.",
+      "range": {
+        "startLine": 1542,
+        "startChar": 4,
+        "endLine": 1542,
+        "endChar": 29
+      },
+      "revId": "c1b07394ab372d85d9bd4801d22d632527d27511",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f14e2f9_6e7f5253",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 15
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-05T23:44:15Z",
+      "side": 1,
+      "message": "I assume SIM_STATE_ABSENT will cover also cases where SIM is physically present, but not yet loaded, such as PIN code is not verified. As such, can the description be a bit more generic to reflect this?",
+      "range": {
+        "startLine": 1555,
+        "startChar": 24,
+        "endLine": 1555,
+        "endChar": 62
+      },
+      "revId": "c1b07394ab372d85d9bd4801d22d632527d27511",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aca02cd_9b2507df",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 15
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-05T23:44:15Z",
+      "side": 1,
+      "message": "Minor: in the other 2 cases, there is not \"SIM card state:\". I think we should remove it from here for consistency.",
+      "range": {
+        "startLine": 1555,
+        "startChar": 8,
+        "endLine": 1555,
+        "endChar": 23
+      },
+      "revId": "c1b07394ab372d85d9bd4801d22d632527d27511",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
