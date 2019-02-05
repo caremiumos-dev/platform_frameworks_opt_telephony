@@ -230,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "725627d0_24612bc5",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-02-05T19:00:13Z",
+      "side": 1,
+      "message": "It shouldn\u0027t affect public API, the user should still use the getters and setters. What I am thinking is that over the RPC instead of getting them one by one, we can send a larger parcelable. For Q the APIs will be limited to the default SMS app only so there shouldn\u0027t be any concurrency issues.",
+      "parentUuid": "9ec67d7d_41457e28",
+      "revId": "f631cb7505daa2a5c676a60f4546f5207f544a1d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "911fb621_1710334e",
         "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreUtil.java",
         "patchSetId": 3

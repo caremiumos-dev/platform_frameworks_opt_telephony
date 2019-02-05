@@ -99,6 +99,24 @@
       "revId": "6cb422064a60ed5849ed6241e4a53ab127b7c144",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27cf9716_7829e188",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-02-05T19:00:13Z",
+      "side": 1,
+      "message": "As discussed offline, we will investigate. This shouldn\u0027t change the public API. Thanks!",
+      "parentUuid": "fa37b1a7_d5a10d1e",
+      "revId": "6cb422064a60ed5849ed6241e4a53ab127b7c144",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
