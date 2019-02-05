@@ -46,6 +46,30 @@
       "revId": "d7987b4210a4eff8a2dcd9a6d72df01892c61388",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f4da839_5155969b",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-05T01:50:28Z",
+      "side": 1,
+      "message": "Maybe you can help me understand it better. Is the information about being opportunistic something that can be derived simply looking at the content of the SIM card? I was under the impression that this might be true in some cases, but not in general.",
+      "parentUuid": "91537a67_a88ac7f4",
+      "range": {
+        "startLine": 1565,
+        "startChar": 18,
+        "endLine": 1565,
+        "endChar": 33
+      },
+      "revId": "d7987b4210a4eff8a2dcd9a6d72df01892c61388",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
