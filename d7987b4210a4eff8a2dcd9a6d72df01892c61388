@@ -70,6 +70,30 @@
       "revId": "d7987b4210a4eff8a2dcd9a6d72df01892c61388",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05db0cff_80e5d269",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2019-02-05T01:52:44Z",
+      "side": 1,
+      "message": "Yes, for now this is still not a standard (though we are working on adding it to the SIM files). But it is not true that this is not a sim information. This is still a sim information, but currently not a standard.",
+      "parentUuid": "0f4da839_5155969b",
+      "range": {
+        "startLine": 1565,
+        "startChar": 18,
+        "endLine": 1565,
+        "endChar": 33
+      },
+      "revId": "d7987b4210a4eff8a2dcd9a6d72df01892c61388",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
