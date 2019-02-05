@@ -23,6 +23,7 @@ import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /** Unit tests for {@link CarrierRestrictionRules}. */
 
@@ -32,11 +33,22 @@ public class CarrierRestrictionRulesTest extends AndroidTestCase {
     private static final String MNC1 = "210";
     private static final String MCC2 = "120";
     private static final String MNC2 = "220";
+    private static final String MCC3 = "130";
+    private static final String MNC3 = "230";
+    private static final String MCC4 = "140";
+    private static final String MNC4 = "240";
+    private static final String MCC5 = "150";
+    private static final String MNC5 = "250";
+    private static final String MCC6 = "360";
+    private static final String MNC6 = "380";
     private static final String MCC1_WILDCHAR = "3??";
     private static final String MNC1_WILDCHAR = "???";
     private static final String MCC2_WILDCHAR = "31?";
     private static final String MNC2_WILDCHAR = "?0";
+    private static final String SPN = "spn";
+    private static final String IMSI = "123456";
     private static final String GID1 = "80";
+    private static final String GID2 = "506090";
 
     @SmallTest
     public void testBuilderAllowedAndExcludedCarriers() {
@@ -101,7 +113,7 @@ public class CarrierRestrictionRulesTest extends AndroidTestCase {
         allowedCarriers.add(new CarrierIdentifier(MCC2, MNC2, null, null, null, null));
 
         ArrayList<CarrierIdentifier> excludedCarriers = new ArrayList<>();
-        allowedCarriers.add(new CarrierIdentifier(MCC2, MNC2, null, null, GID1, null));
+        excludedCarriers.add(new CarrierIdentifier(MCC2, MNC2, null, null, GID1, null));
 
         CarrierRestrictionRules rules = CarrierRestrictionRules.newBuilder()
                 .setAllowedCarriers(allowedCarriers)
@@ -171,5 +183,161 @@ public class CarrierRestrictionRulesTest extends AndroidTestCase {
         CarrierRestrictionRules rules = CarrierRestrictionRules.newBuilder().build();
 
         assertEquals(CarrierRestrictionRules.MULTISIM_POLICY_NONE, rules.getMultiSimPolicy());
+    }
+
+    @SmallTest
+    public void testTestCarrierId_allCarriersAllowed() {
+        // Carrier lock configuration
+        CarrierRestrictionRules rules = CarrierRestrictionRules.newBuilder()
+                .setAllCarriersAllowed()
+                .build();
+
+        // Carrier list for test
+        CarrierIdentifier[] list = {
+            new CarrierIdentifier(MCC1, MNC1, null, null, null, null),
+            new CarrierIdentifier(MCC1, MNC1, SPN, null, GID1, GID2),
+            new CarrierIdentifier(MCC2, MNC2, SPN, null, null, null),
+            new CarrierIdentifier(MCC3, MNC3, null, IMSI, null, null),
+            new CarrierIdentifier(MCC4, MNC4, null, null, GID1, null),
+            new CarrierIdentifier(MCC6, MNC1, null, null, null, null),
+            new CarrierIdentifier(MCC1, MNC6, null, null, null, null),
+            new CarrierIdentifier(MCC2, MNC2, null, null, null, null),
+            new CarrierIdentifier(MCC3, MNC3, null, null, null, null),
+            new CarrierIdentifier(MCC4, MNC4, null, null, null, null),
+            new CarrierIdentifier(MCC5, MNC5, null, null, null, null),
+        };
+
+        boolean[] result = rules.testCarrierIds(list);
+
+        boolean[] expected = {true, true, true, true, true, true, true, true, true, true, true};
+        assertTrue(Arrays.equals(result, expected));
+    }
+
+    @SmallTest
+    public void testTestCarrierId_defaultNotAllowed() {
+        // Carrier lock configuration
+        ArrayList<CarrierIdentifier> allowedCarriers = new ArrayList<>();
+        allowedCarriers.add(new CarrierIdentifier(MCC1, MNC1, null, null, null, null));
+        allowedCarriers.add(new CarrierIdentifier(MCC2, MNC2, SPN, null, null, null));
+        allowedCarriers.add(new CarrierIdentifier(MCC3, MNC3, null, IMSI, null, null));
+        allowedCarriers.add(new CarrierIdentifier(MCC4, MNC4, null, null, GID1, null));
+        allowedCarriers.add(new CarrierIdentifier(MCC1_WILDCHAR, MNC1, null, null, null, null));
+        allowedCarriers.add(new CarrierIdentifier(MCC1, MNC1_WILDCHAR, null, null, null, null));
+
+        CarrierRestrictionRules rules = CarrierRestrictionRules.newBuilder()
+                .setAllowedCarriers(allowedCarriers)
+                .setDefaultCarrierRestriction(
+                    CarrierRestrictionRules.CARRIER_RESTRICTION_DEFAULT_NOT_ALLOWED)
+                .build();
+
+        // Carrier list for test
+        CarrierIdentifier[] list = {
+            // Allowed carriers
+            new CarrierIdentifier(MCC1, MNC1, null, null, null, null),
+            new CarrierIdentifier(MCC1, MNC1, SPN, null, GID1, GID2),
+            new CarrierIdentifier(MCC2, MNC2, SPN, null, null, null),
+            new CarrierIdentifier(MCC3, MNC3, null, IMSI, null, null),
+            new CarrierIdentifier(MCC4, MNC4, null, null, GID1, null),
+            new CarrierIdentifier(MCC6, MNC1, null, null, null, null),
+            new CarrierIdentifier(MCC1, MNC6, null, null, null, null),
+            // Excluded carriers
+            new CarrierIdentifier(MCC2, MNC2, null, null, null, null),
+            new CarrierIdentifier(MCC3, MNC3, null, null, null, null),
+            new CarrierIdentifier(MCC4, MNC4, null, null, null, null),
+            new CarrierIdentifier(MCC5, MNC5, null, null, null, null),
+        };
+        boolean[] result = rules.testCarrierIds(list);
+
+        boolean[] expected = {true, true, true, true, true, true, true,
+                false, false, false, false};
+        assertTrue(Arrays.equals(result, expected));
+    }
+
+    @SmallTest
+    public void testTestCarrierId_defaultAllowed() {
+        // Carrier lock configuration
+        ArrayList<CarrierIdentifier> allowedCarriers = new ArrayList<>();
+        ArrayList<CarrierIdentifier> excludedCarriers = new ArrayList<>();
+        excludedCarriers.add(new CarrierIdentifier(MCC1, MNC1_WILDCHAR, null, null, null, null));
+        allowedCarriers.add(new CarrierIdentifier(MCC1, MNC1, null, null, null, null));
+        allowedCarriers.add(new CarrierIdentifier(MCC1, MNC2, null, null, null, null));
+
+        CarrierRestrictionRules rules = CarrierRestrictionRules.newBuilder()
+                .setAllowedCarriers(allowedCarriers)
+                .setExcludedCarriers(excludedCarriers)
+                .setDefaultCarrierRestriction(
+                    CarrierRestrictionRules.CARRIER_RESTRICTION_DEFAULT_ALLOWED)
+                .build();
+
+        // Carrier list for test
+        CarrierIdentifier[] list = {
+            // Allowed carriers
+            new CarrierIdentifier(MCC1, MNC1, null, null, null, null),
+            new CarrierIdentifier(MCC1, MNC2, null, null, null, null),
+            new CarrierIdentifier(MCC2, MNC2, null, null, null, null),
+            new CarrierIdentifier(MCC3, MNC3, null, null, null, null),
+            // Excluded carriers
+            new CarrierIdentifier(MCC1, MNC3, null, null, null, null),
+            new CarrierIdentifier(MCC1, MNC4, null, null, null, null),
+        };
+        boolean[] result = rules.testCarrierIds(list);
+
+        boolean[] expected = {true, true, true, true, false, false};
+        assertTrue(Arrays.equals(result, expected));
+    }
+
+    @SmallTest
+    public void testTestCarrierId_OneValidCardMustBePresentPolicy_CardPresent() {
+        // Carrier lock configuration
+        ArrayList<CarrierIdentifier> allowedCarriers = new ArrayList<>();
+        allowedCarriers.add(new CarrierIdentifier(MCC1, MNC1, null, null, null, null));
+        allowedCarriers.add(new CarrierIdentifier(MCC2, MNC2, null, null, null, null));
+
+        CarrierRestrictionRules rules = CarrierRestrictionRules.newBuilder()
+                .setAllowedCarriers(allowedCarriers)
+                .setMultiSimPolicy(
+                    CarrierRestrictionRules.MULTISIM_POLICY_ONE_VALID_SIM_MUST_BE_PRESENT)
+                .build();
+
+        // Carrier list for test: this contains at least one valid carrier and one non valid
+        // carrier to verify that multisim policy is applied correctly.
+        CarrierIdentifier[] list = {
+            new CarrierIdentifier(MCC1, MNC1, SPN, null, GID1, GID2),  // allowed carrier
+            new CarrierIdentifier(MCC3, MNC3, null, null, null, null),
+            new CarrierIdentifier(MCC4, MNC4, null, null, null, null),
+            new CarrierIdentifier(MCC5, MNC5, null, null, null, null),
+        };
+
+        boolean[] result = rules.testCarrierIds(list);
+
+        boolean[] expected = {true, true, true, true};
+        assertTrue(Arrays.equals(result, expected));
+    }
+
+    @SmallTest
+    public void testTestCarrierId_OneValidCardMustBePresentPolicy_CardNotPresent() {
+        // Carrier lock configuration
+        ArrayList<CarrierIdentifier> allowedCarriers = new ArrayList<>();
+        allowedCarriers.add(new CarrierIdentifier(MCC1, MNC1, null, null, null, null));
+        allowedCarriers.add(new CarrierIdentifier(MCC2, MNC2, null, null, null, null));
+
+        CarrierRestrictionRules rules = CarrierRestrictionRules.newBuilder()
+                .setAllowedCarriers(allowedCarriers)
+                .setMultiSimPolicy(
+                    CarrierRestrictionRules.MULTISIM_POLICY_ONE_VALID_SIM_MUST_BE_PRESENT)
+                .build();
+
+        // Carrier list for test. This does not contain any valid carrier to verify that multisim
+        // policy is applied correctly.
+        CarrierIdentifier[] list = {
+            new CarrierIdentifier(MCC3, MNC3, null, null, null, null),
+            new CarrierIdentifier(MCC4, MNC4, null, null, null, null),
+            new CarrierIdentifier(MCC5, MNC5, null, null, null, null),
+        };
+
+        boolean[] result = rules.testCarrierIds(list);
+
+        boolean[] expected = {false, false, false};
+        assertTrue(Arrays.equals(result, expected));
     }
 }
