@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "256e99d1_1c0f253d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2019-02-06T15:41:23Z",
+      "side": 1,
+      "message": "Ya, we can do that way. But we want to limit max retry time to 1 min, and retry times in an array makes it easy for reading.",
+      "parentUuid": "c5e01b05_f9dc5be9",
+      "range": {
+        "startLine": 131,
+        "startChar": 24,
+        "endLine": 131,
+        "endChar": 35
+      },
+      "revId": "79e49796fcfdc843e3b18c242ebf0bbba38a8218",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb31de55_b6568512",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
