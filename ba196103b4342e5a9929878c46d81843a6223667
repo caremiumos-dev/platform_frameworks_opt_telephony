@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "f7f7d194_685ec36c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-02-06T00:01:36Z",
+      "side": 1,
+      "message": "TODO: we can also skip this if we know EID is not supported.",
+      "range": {
+        "startLine": 596,
+        "startChar": 0,
+        "endLine": 596,
+        "endChar": 81
+      },
+      "revId": "ba196103b4342e5a9929878c46d81843a6223667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "638c98c3_512d25ba",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
