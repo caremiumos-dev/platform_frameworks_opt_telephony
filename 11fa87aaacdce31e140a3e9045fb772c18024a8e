@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fe00628_5c6e0bf1",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-06T22:41:42Z",
+      "side": 0,
+      "message": "why remove the broadcast, is that intended?",
+      "range": {
+        "startLine": 802,
+        "startChar": 11,
+        "endLine": 802,
+        "endChar": 87
+      },
+      "revId": "11fa87aaacdce31e140a3e9045fb772c18024a8e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
