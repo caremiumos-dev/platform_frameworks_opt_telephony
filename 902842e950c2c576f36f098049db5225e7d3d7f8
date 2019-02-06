@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2512481c_7d6d00e0",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-06T19:20:50Z",
+      "side": 1,
+      "message": "Good caught. The SIM_STATE_LOADED will be broadcasted from  broadcastSimApplicationStateChanged. \n\nI will add a update in broadcastSimApplicationStateChanged and also keep the update here for the SIM_STATE_ABSENT event.\n\nThanks!",
+      "parentUuid": "abd4a4f7_a0bbfbad",
+      "range": {
+        "startLine": 786,
+        "startChar": 11,
+        "endLine": 786,
+        "endChar": 50
+      },
+      "revId": "902842e950c2c576f36f098049db5225e7d3d7f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a413dd82_f3045b5f",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "902842e950c2c576f36f098049db5225e7d3d7f8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "233ddf5e_0c4551b1",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-06T19:20:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a413dd82_f3045b5f",
+      "range": {
+        "startLine": 840,
+        "startChar": 4,
+        "endLine": 843,
+        "endChar": 5
+      },
+      "revId": "902842e950c2c576f36f098049db5225e7d3d7f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
