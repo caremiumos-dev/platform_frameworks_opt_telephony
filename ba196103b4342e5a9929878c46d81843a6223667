@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a9dc7ee0_20e71229",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-02-06T00:15:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "384d9d48_bec9dc45",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 141,
+        "endChar": 92
+      },
+      "revId": "ba196103b4342e5a9929878c46d81843a6223667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7f7d194_685ec36c",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "49a3a4fd_47ed7120",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-02-06T00:15:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7f7d194_685ec36c",
+      "range": {
+        "startLine": 596,
+        "startChar": 0,
+        "endLine": 596,
+        "endChar": 81
+      },
+      "revId": "ba196103b4342e5a9929878c46d81843a6223667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "638c98c3_512d25ba",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
@@ -62,6 +110,24 @@
       "revId": "ba196103b4342e5a9929878c46d81843a6223667",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7e78bb5_6e12663b",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-02-06T00:15:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "638c98c3_512d25ba",
+      "revId": "ba196103b4342e5a9929878c46d81843a6223667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
