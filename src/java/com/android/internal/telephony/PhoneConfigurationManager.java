@@ -26,6 +26,8 @@ import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.android.internal.telephony.metrics.TelephonyMetrics;
+
 /**
  * This class manages phone's configuration which defines the potential capability (static) of the
  * phone and its current activated capability (current).
@@ -100,6 +102,7 @@ public class PhoneConfigurationManager {
                     if (msg.obj != null) {
                         int numOfLiveModems = msg.arg1;
                         setMultiSimProperties(numOfLiveModems);
+                        updatePhoneCountMetrics(numOfLiveModems);
                     } else {
                         log(msg.what + " failure. Not switching multi-sim config.");
                     }
@@ -233,6 +236,11 @@ public class PhoneConfigurationManager {
             PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
             pm.reboot("Switching to " + finalMultiSimConfig);
         }
+    }
+
+    private static void updatePhoneCountMetrics(int phoneCount) {
+        TelephonyMetrics metrics = TelephonyMetrics.getInstance();
+        metrics.updatePhoneCount(phoneCount);
     }
 
     private static void log(String s) {

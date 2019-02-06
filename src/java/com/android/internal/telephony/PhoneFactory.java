@@ -40,6 +40,7 @@ import com.android.internal.telephony.euicc.EuiccController;
 import com.android.internal.telephony.ims.ImsResolver;
 import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneFactory;
+import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.sip.SipPhone;
 import com.android.internal.telephony.sip.SipPhoneFactory;
 import com.android.internal.telephony.uicc.UiccController;
@@ -141,6 +142,11 @@ public class PhoneFactory {
                    where as in single SIM mode only instance. isMultiSimEnabled() function checks
                    whether it is single SIM or multi SIM mode */
                 int numPhones = TelephonyManager.getDefault().getPhoneCount();
+
+                // Update the phone count metrics.
+                TelephonyMetrics metrics = TelephonyMetrics.getInstance();
+                metrics.updatePhoneCount(numPhones);
+
                 // Return whether or not the device should use dynamic binding or the static
                 // implementation (deprecated)
                 boolean isDynamicBinding = sContext.getResources().getBoolean(
