@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abd4a4f7_a0bbfbad",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-06T18:24:52Z",
+      "side": 1,
+      "message": "are you sure sim_state_loaded will be broadcasted here?\nhttps://cs.corp.google.com/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java?rcl\u003d2fc87d1ea841e12de8460a8e0ada54a173098969\u0026l\u003d484",
+      "range": {
+        "startLine": 786,
+        "startChar": 11,
+        "endLine": 786,
+        "endChar": 50
+      },
+      "revId": "902842e950c2c576f36f098049db5225e7d3d7f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a413dd82_f3045b5f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-06T18:24:52Z",
+      "side": 1,
+      "message": "nit: no need of a separate API? maybe directly call TelephonyMetrics.getInstance().updateSimState() #785",
+      "range": {
+        "startLine": 840,
+        "startChar": 4,
+        "endLine": 843,
+        "endChar": 5
+      },
+      "revId": "902842e950c2c576f36f098049db5225e7d3d7f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
