@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b2352ca5_0cf24663",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 15
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-06T00:27:45Z",
+      "side": 1,
+      "message": "The carrier id and isOpportunistic is a property of Subscription, but not SIM card. This is why I separated them into a different structure. \n\nAlso, other event who care about the carrier_id and other subscription info can benefit from the ActiveSubscriptionInfo, they don\u0027t need to include the sim state in this case.\n\nThe other benefit is that we can save the space when the sim card is absent. If the sim card is absent, we don\u0027t need to upload an invalid subscription_info.",
+      "parentUuid": "5db33f3a_5c0296f8",
+      "range": {
+        "startLine": 1542,
+        "startChar": 4,
+        "endLine": 1542,
+        "endChar": 29
+      },
+      "revId": "c1b07394ab372d85d9bd4801d22d632527d27511",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f14e2f9_6e7f5253",
         "filename": "proto/src/telephony.proto",
         "patchSetId": 15
@@ -68,6 +92,54 @@
       "revId": "c1b07394ab372d85d9bd4801d22d632527d27511",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be08d36f_c4351fbb",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 15
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-06T00:27:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aca02cd_9b2507df",
+      "range": {
+        "startLine": 1555,
+        "startChar": 8,
+        "endLine": 1555,
+        "endChar": 23
+      },
+      "revId": "c1b07394ab372d85d9bd4801d22d632527d27511",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b0ff0672_d03f3a47",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 15
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-06T00:27:45Z",
+      "side": 1,
+      "message": "Reference from TelephonyManager, SIM_STATE_ABSENT indicates that no sim card is available in the deivce, so the SIM is not physically present. \n\nSIM_STATE_UNKONWN will cover the case other than LOADED and ABSENT.",
+      "parentUuid": "0f14e2f9_6e7f5253",
+      "range": {
+        "startLine": 1555,
+        "startChar": 24,
+        "endLine": 1555,
+        "endChar": 62
+      },
+      "revId": "c1b07394ab372d85d9bd4801d22d632527d27511",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
