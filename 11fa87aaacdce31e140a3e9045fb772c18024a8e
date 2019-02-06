@@ -22,6 +22,30 @@
       "revId": "11fa87aaacdce31e140a3e9045fb772c18024a8e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ea9acc7_f80e616b",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-06T23:20:10Z",
+      "side": 0,
+      "message": "deleted by mistake \u003d.\u003d, thanks!!",
+      "parentUuid": "3fe00628_5c6e0bf1",
+      "range": {
+        "startLine": 802,
+        "startChar": 11,
+        "endLine": 802,
+        "endChar": 87
+      },
+      "revId": "11fa87aaacdce31e140a3e9045fb772c18024a8e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
