@@ -486,6 +486,8 @@ public class DcTrackerTest extends TelephonyTest {
     @After
     public void tearDown() throws Exception {
         logd("DcTrackerTest -tearDown");
+        // Wait for the Handler to clear before tearing down and ending test.
+        waitForHandlerAction(mDct, 10000 /*ms*/);
         mDct.removeCallbacksAndMessages(null);
         mDct = null;
         mDcTrackerTestHandler.quit();
