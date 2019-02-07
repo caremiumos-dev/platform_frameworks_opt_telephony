@@ -577,12 +577,12 @@ public abstract class TelephonyTest {
                 eq(TAG), anyInt(), anyInt());
     }
 
-    protected final void waitForHandlerAction(Handler h, long timeoutMillis) {
+    protected final boolean waitForHandlerAction(Handler h, long timeoutMillis) {
         final CountDownLatch lock = new CountDownLatch(1);
         h.post(lock::countDown);
         while (lock.getCount() > 0) {
             try {
-                lock.await(timeoutMillis, TimeUnit.MILLISECONDS);
+                return lock.await(timeoutMillis, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 // do nothing
             }

@@ -76,6 +76,7 @@ import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.text.TextUtils;
 import android.util.LocalLog;
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.test.filters.FlakyTest;
@@ -486,6 +487,10 @@ public class DcTrackerTest extends TelephonyTest {
     @After
     public void tearDown() throws Exception {
         logd("DcTrackerTest -tearDown");
+        // Wait for the Handler to clear before tearing down and ending test.
+        if (!waitForHandlerAction(mDct, 10000 /*ms*/)) {
+            Log.e(TAG, "tearDown", new Throwable("Waited 10 sec and handler hasn't cleared."));
+        }
         mDct.removeCallbacksAndMessages(null);
         mDct = null;
         mDcTrackerTestHandler.quit();
