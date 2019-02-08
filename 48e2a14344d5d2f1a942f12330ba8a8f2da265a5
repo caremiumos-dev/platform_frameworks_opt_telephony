@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0ff2da63_0332fddf",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-02-08T17:53:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b109dc1_155313ae",
+      "range": {
+        "startLine": 124,
+        "startChar": 17,
+        "endLine": 124,
+        "endChar": 30
+      },
+      "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee5ff938_51c89793",
         "filename": "src/java/com/android/internal/telephony/TransportManager.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a67b264f_7ec10666",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-02-08T17:53:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee5ff938_51c89793",
+      "range": {
+        "startLine": 186,
+        "startChar": 4,
+        "endLine": 186,
+        "endChar": 19
+      },
+      "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "711155e0_19d00a7d",
+        "filename": "src/java/com/android/internal/telephony/TransportManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-02-08T17:53:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae98cecf_0a9b7c6e",
+      "range": {
+        "startLine": 228,
+        "startChar": 29,
+        "endLine": 228,
+        "endChar": 68
+      },
+      "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9c353ee_c839803b",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "2e18729d_1abbf69b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-02-08T17:53:14Z",
+      "side": 1,
+      "message": "I think we can still pass null here, it means the caller doesn\u0027t care whether it\u0027s completed or not.",
+      "parentUuid": "a9c353ee_c839803b",
+      "range": {
+        "startLine": 863,
+        "startChar": 31,
+        "endLine": 863,
+        "endChar": 51
+      },
+      "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b1cecd8_9a65a4a4",
         "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
         "patchSetId": 3
@@ -114,6 +210,30 @@
       "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66761db4_5e990728",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-02-08T17:53:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b1cecd8_9a65a4a4",
+      "range": {
+        "startLine": 221,
+        "startChar": 50,
+        "endLine": 221,
+        "endChar": 52
+      },
+      "revId": "48e2a14344d5d2f1a942f12330ba8a8f2da265a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
