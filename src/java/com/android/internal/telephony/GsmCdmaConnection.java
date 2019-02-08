@@ -780,6 +780,15 @@ public class GsmCdmaConnection extends Connection {
         }
     }
 
+    /**
+     * We have completed the migration of another connection to this GsmCdmaConnection (for example,
+     * in the case of SRVCC).
+     */
+    void onConnectionMigrated() {
+        // We can release the wakelock in this case, the call is already active or holding.
+        releaseWakeLock();
+    }
+
     private void
     doDisconnect() {
         mIndex = -1;

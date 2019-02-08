@@ -860,6 +860,8 @@ public class GsmCdmaCallTracker extends CallTracker {
                                 hoConnection.mPreHandoverState != GsmCdmaCall.State.HOLDING &&
                                 dc.state == DriverCall.State.ACTIVE) {
                             mConnections[i].onConnectedInOrOut();
+                        } else {
+                            mConnections[i].onConnectionMigrated();
                         }
 
                         mHandoverConnections.remove(hoConnection);
