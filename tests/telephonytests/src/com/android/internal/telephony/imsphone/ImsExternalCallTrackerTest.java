@@ -24,8 +24,6 @@ import android.net.Uri;
 import android.telephony.ims.ImsCallProfile;
 import android.telephony.ims.ImsExternalCallState;
 
-import androidx.test.filters.FlakyTest;
-
 import com.android.internal.telephony.Call;
 import com.android.internal.telephony.Connection;
 
@@ -61,7 +59,7 @@ public class ImsExternalCallTrackerTest {
         mTracker = new ImsExternalCallTracker(mImsPhone, mImsPullCall, mCallNotifier);
     }
 
-    @FlakyTest
+    @Ignore
     @Test
     @Ignore
     public void testAddExternalCall() {
@@ -85,7 +83,7 @@ public class ImsExternalCallTrackerTest {
         assert(connection instanceof ImsExternalConnection);
     }
 
-    @FlakyTest
+    @Ignore
     @Test
     @Ignore
     public void testRemoveExternalCall() {
