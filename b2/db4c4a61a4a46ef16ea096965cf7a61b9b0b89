@@ -1,0 +1,9 @@
+Build-Cop-Override+1: Colin Cross <ccross@android.com>
+Presubmit-Ready+1: Julien Desprez <jdesprez@google.com>
+Presubmit-Ready+1: Ian Kasprzak <iankaz@google.com>
+Code-Review+2: Ian Kasprzak <iankaz@google.com>
+Submitted-by: Julien Desprez <jdesprez@google.com>
+Submitted-at: Fri, 08 Feb 2019 21:54:33 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/898549
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
