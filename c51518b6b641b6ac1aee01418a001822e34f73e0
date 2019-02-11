@@ -22,6 +22,30 @@
       "revId": "c51518b6b641b6ac1aee01418a001822e34f73e0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f536bc70_28634261",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-02-11T18:40:28Z",
+      "side": 1,
+      "message": "yes this won\u0027t track the case that sim change during the day. The rationale is sim swap action is infrequent. We should think of this in a statistic way instead of focus on the accuracy for corner cases. This will greatly reduce the redundant information uploaded from devices side especially for frequent events like service state change and make it easier for other telephony events to query sim state \u0026 carrier id. Lets say if we decided to query sim state \u0026 carrier id for some events in the middle of release, then we can easily achieve that without the need to modify the proto (no code change in client side).",
+      "parentUuid": "30cef571_0b88b44b",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 36
+      },
+      "revId": "c51518b6b641b6ac1aee01418a001822e34f73e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
