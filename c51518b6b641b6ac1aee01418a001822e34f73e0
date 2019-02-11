@@ -69,6 +69,30 @@
       "revId": "c51518b6b641b6ac1aee01418a001822e34f73e0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8abf511_77d5cf2e",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-02-11T19:26:07Z",
+      "side": 1,
+      "message": "Yes, if you want the accurate data of sim state changed.",
+      "parentUuid": "ef089173_63b6939b",
+      "range": {
+        "startLine": 679,
+        "startChar": 4,
+        "endLine": 679,
+        "endChar": 24
+      },
+      "revId": "c51518b6b641b6ac1aee01418a001822e34f73e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
