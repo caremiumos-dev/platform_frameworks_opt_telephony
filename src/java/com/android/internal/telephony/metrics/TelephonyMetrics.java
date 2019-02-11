@@ -87,7 +87,6 @@ import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.Carrier
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.CarrierIdMatchingResult;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.CarrierKeyChange;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.ModemRestart;
-import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.PhoneStatus;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.RilDeactivateDataCall;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.RilDeactivateDataCall.DeactivateReason;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.RilSetupDataCall;
@@ -595,7 +594,18 @@ public class TelephonyMetrics {
             addTelephonyEvent(event);
         }
 
-        writePhoneStatusChangedEvent();
+        for (int i = 0; i < mLastActiveSubscriptionInfos.size(); i++) {
+            final int key = mLastActiveSubscriptionInfos.keyAt(i);
+            TelephonyEvent event = new TelephonyEventBuilder(mStartElapsedTimeMs, key)
+                    .setActiveSubscriptionInfoChange(mLastActiveSubscriptionInfos.get(key)).build();
+            addTelephonyEvent(event);
+        }
+
+        addTelephonyEvent(new TelephonyEventBuilder(mStartElapsedTimeMs, -1 /* phoneId */)
+                .setSimStateChange(mLastSimState).build());
+
+        addTelephonyEvent(new TelephonyEventBuilder(mStartElapsedTimeMs, -1 /* phoneId */)
+                .setEnabledModemBitmap(mLastEnabledModemBitmap).build());
     }
 
     /**
@@ -661,19 +671,27 @@ public class TelephonyMetrics {
         Integer lastSimState = mLastSimState.get(phoneId);
         if (lastSimState == null || !lastSimState.equals(state)) {
             mLastSimState.put(phoneId, state);
-            writePhoneStatusChangedEvent();
+            addTelephonyEvent(new TelephonyEventBuilder(-1)
+                    .setSimStateChange(mLastSimState).build());
         }
     }
 
     /** Update active subscription info list. */
     public void updateActiveSubscriptionInfoList(List<SubscriptionInfo> subInfos) {
-        mLastActiveSubscriptionInfos.clear();
         for (SubscriptionInfo info : subInfos) {
             int phoneId = SubscriptionManager.getPhoneId(info.getSubscriptionId());
-            ActiveSubscriptionInfo activeSubscriptionInfo = new ActiveSubscriptionInfo();
-            activeSubscriptionInfo.isOpportunistic = info.isOpportunistic();
-            activeSubscriptionInfo.carrierId = info.getCarrierId();
-            mLastActiveSubscriptionInfos.put(phoneId, activeSubscriptionInfo);
+            ActiveSubscriptionInfo oldInfo = mLastActiveSubscriptionInfos.get(phoneId);
+            if (oldInfo == null || oldInfo.carrierId != info.getCarrierId()
+                    || oldInfo.isOpportunistic != info.isOpportunistic()) {
+                ActiveSubscriptionInfo activeSubscriptionInfo = new ActiveSubscriptionInfo();
+                activeSubscriptionInfo.isOpportunistic = info.isOpportunistic();
+                activeSubscriptionInfo.carrierId = info.getCarrierId();
+
+                addTelephonyEvent(new TelephonyEventBuilder(-1)
+                        .setActiveSubscriptionInfoChange(activeSubscriptionInfo).build());
+
+                mLastActiveSubscriptionInfos.put(phoneId, activeSubscriptionInfo);
+            }
         }
     }
 
@@ -681,28 +699,8 @@ public class TelephonyMetrics {
     public void updateEnabledModemBitmap(int enabledModemBitmap) {
         if (mLastEnabledModemBitmap == enabledModemBitmap) return;
         mLastEnabledModemBitmap = enabledModemBitmap;
-        writePhoneStatusChangedEvent();
-    }
-
-    /** Write the event of phone status changed. */
-    public void writePhoneStatusChangedEvent() {
-        int phoneCount = TelephonyManager.getDefault().getPhoneCount();
-        PhoneStatus phoneStatus = new PhoneStatus();
-        phoneStatus.enabledModemBitmap = mLastEnabledModemBitmap;
-        phoneStatus.simState = new int[phoneCount];
-        Arrays.fill(phoneStatus.simState, SimState.SIM_STATE_ABSENT);
-        for (int i = 0; i < mLastSimState.size(); i++) {
-            int phoneId = mLastSimState.keyAt(i);
-            if (SubscriptionManager.isValidPhoneId(phoneId)) {
-                phoneStatus.simState[phoneId] = mLastSimState.get(phoneId);
-            }
-        }
-
-        // Phone status is not associated with any phone id, so set the phone id to -1 for the phone
-        // status changed event.
-        addTelephonyEvent(new TelephonyEventBuilder(-1 /* phoneId */)
-                .setPhoneStatusChange(phoneStatus)
-                .build());
+        addTelephonyEvent(new TelephonyEventBuilder(-1)
+                .setEnabledModemBitmap(mLastEnabledModemBitmap).build());
     }
 
     /**
