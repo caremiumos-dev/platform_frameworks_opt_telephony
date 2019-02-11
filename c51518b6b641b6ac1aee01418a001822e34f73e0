@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30cef571_0b88b44b",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-11T08:45:53Z",
+      "side": 1,
+      "message": "This would be the state at a specific time of the log collection. When? Beginning? End?\nThis would not allow to track cases of users switching between a mode and another during the day for example. Are we confident that a large majority of users will have a consistent configuration throughout the day? If so, how are we?\nFor example, it\u0027s common practice to use the work profile only during certain hours (busieness hours). Could this apply to second SIM?",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 36
+      },
+      "revId": "c51518b6b641b6ac1aee01418a001822e34f73e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
