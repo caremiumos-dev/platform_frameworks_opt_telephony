@@ -50,6 +50,12 @@ message TelephonyLog {
 
   // Hardware revision (EVT, DVT, PVT etc.)
   optional string hardware_revision = 9;
+
+  // SIM state of the active slots
+  repeated SimState sim_states = 10;
+
+  // All the active subscription information.
+  repeated ActiveSubscriptionInfo active_subscription_info = 11;
 }
 
 // The time information
@@ -276,9 +282,6 @@ message TelephonyServiceState {
 
   // Current data radio technology
   optional RadioAccessTechnology data_rat = 6 [default = UNKNOWN];
-
-  // All the active subscription information.
-  repeated ActiveSubscriptionInfo active_subscription_info = 7;
 }
 
 // Radio access families
@@ -619,9 +622,6 @@ message RilDataCall {
 
   // The network interface name e.g. wlan0, rmnet_data0.
   optional string iframe = 3;
-
-  // All the active subscription information.
-  repeated ActiveSubscriptionInfo active_subscription_info = 4;
 }
 
 message TelephonyEvent {
@@ -1927,13 +1927,7 @@ message TelephonyCallSession {
 
   // Indicating some call events are dropped
   optional bool events_dropped = 4;
-
-  // SIM state of the active slots
-  repeated SimState sim_states = 5;
-
-  // All the active subscription information.
-  repeated ActiveSubscriptionInfo active_subscription_info = 6;
-}
+ }
 
 message SmsSession {
 
@@ -2147,12 +2141,6 @@ message SmsSession {
 
   // Indicating some sms session events are dropped
   optional bool events_dropped = 4;
-
-  // SIM state of the active slots.
-  repeated SimState sim_state = 5;
-
-  // All the active subscription information.
-  repeated ActiveSubscriptionInfo active_subscription_info = 6;
 }
 
 // Power stats for modem
