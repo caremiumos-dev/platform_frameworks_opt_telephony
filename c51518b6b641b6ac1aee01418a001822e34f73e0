@@ -46,6 +46,29 @@
       "revId": "c51518b6b641b6ac1aee01418a001822e34f73e0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef089173_63b6939b",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-11T19:17:04Z",
+      "side": 1,
+      "message": "Since this event is still present, would it make sense to rely only on this and remove the information from the top level (TelephonyLog message)?\nAt least, we would not give a potentially wrong information, knowing that it\u0027s potentially wrong.",
+      "range": {
+        "startLine": 679,
+        "startChar": 4,
+        "endLine": 679,
+        "endChar": 24
+      },
+      "revId": "c51518b6b641b6ac1aee01418a001822e34f73e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
