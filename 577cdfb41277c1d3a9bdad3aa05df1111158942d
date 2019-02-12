@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1eda194_843683bd",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-12T07:17:42Z",
+      "side": 1,
+      "message": "Comment removed by: Thomas Joseph Avila; Reason: requested by developer to delete",
+      "range": {
+        "startLine": 55,
+        "startChar": 11,
+        "endLine": 55,
+        "endChar": 58
+      },
+      "revId": "577cdfb41277c1d3a9bdad3aa05df1111158942d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c00cf5a_3a90dce0",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-12T07:17:42Z",
+      "side": 1,
+      "message": "Can you confirm that it\u0027s acceptable to change the numbering?\nI was under the impression that we had to mark 15 as deprecated to avoid any potential issue.",
+      "range": {
+        "startLine": 676,
+        "startChar": 18,
+        "endLine": 676,
+        "endChar": 20
+      },
+      "revId": "577cdfb41277c1d3a9bdad3aa05df1111158942d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de21763c_d71ba654",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-02-12T07:17:42Z",
+      "side": 1,
+      "message": "SimState without this bitmap is less useful... because it is not possible to know if a SIM card is present, but unused, or rather the SIM card is present and used.\n\nInstead of sending separate events, is it possible to club SimState and enabled_modem_bitmap into a single message, as it was before?",
+      "range": {
+        "startLine": 1610,
+        "startChar": 17,
+        "endLine": 1610,
+        "endChar": 37
+      },
+      "revId": "577cdfb41277c1d3a9bdad3aa05df1111158942d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
