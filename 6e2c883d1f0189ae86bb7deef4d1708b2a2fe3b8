@@ -22,6 +22,30 @@
       "revId": "6e2c883d1f0189ae86bb7deef4d1708b2a2fe3b8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5118844_9f3cc3c5",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1919,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-02-12T00:11:46Z",
+      "side": 1,
+      "message": "Right. There is no roaming for IWLAN. Also if IWLAN is out of service, the current behavior is to use cellular PS\u0027s reg/rat.",
+      "parentUuid": "a1c5acd8_dc6e015b",
+      "range": {
+        "startLine": 1918,
+        "startChar": 15,
+        "endLine": 1919,
+        "endChar": 90
+      },
+      "revId": "6e2c883d1f0189ae86bb7deef4d1708b2a2fe3b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
