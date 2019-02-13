@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
+import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 
 /**
@@ -811,11 +812,12 @@ public abstract class BaseCommands implements CommandsInterface {
     protected void setRadioState(@TelephonyManager.RadioPowerState int newState,
                                  boolean forceNotifyRegistrants) {
         int oldState;
-
         synchronized (mStateMonitor) {
             oldState = mState;
             mState = newState;
-
+            Rlog.d("BaseCommands", "old state = " + oldState
+                    + ", new state = " + newState
+                    + ", forceNotify = " + forceNotifyRegistrants);
             if (oldState == mState && !forceNotifyRegistrants) {
                 // no state transition
                 return;

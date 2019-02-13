@@ -321,7 +321,8 @@ public class DataServiceManager {
                 throw new IllegalStateException("Transport type not WWAN or WLAN. type="
                         + mTransportType);
         }
-
+        Rlog.d(TAG, "getting data service package name for transportType: "
+                + transportType + ", resourceId: " + resourceId);
         // Read package name from resource overlay
         packageName = mPhone.getContext().getResources().getString(resourceId);
 
@@ -330,6 +331,9 @@ public class DataServiceManager {
         if (b != null && !TextUtils.isEmpty(b.getString(carrierConfig))) {
             // If carrier config overrides it, use the one from carrier config
             packageName = b.getString(carrierConfig, packageName);
+            Rlog.d(TAG, "getting data service pkgName from bundle: "
+                    + b.getString(carrierConfig) + ", result in packageName:"
+                    + packageName + ", carrierConfig used is: " + carrierConfig);
         }
 
         return packageName;
