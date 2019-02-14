@@ -113,6 +113,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -501,6 +502,45 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     //***** Constructors
 
     public ImsPhoneCallTracker(ImsPhone phone) {
+        init(phone);
+
+        mImsManagerConnector = new ImsManager.Connector(phone.getContext(), phone.getPhoneId(),
+                new ImsManager.Connector.Listener() {
+                    @Override
+                    public void connectionReady(ImsManager manager) throws ImsException {
+                        mImsManager = manager;
+                        startListeningForCalls();
+                    }
+
+                    @Override
+                    public void connectionUnavailable() {
+                        stopListeningForCalls();
+                    }
+                });
+        mImsManagerConnector.connect();
+    }
+
+    @VisibleForTesting
+    public ImsPhoneCallTracker(ImsPhone phone, Executor executor) {
+        init(phone);
+        // Allow the executor to be specified for testing.
+        mImsManagerConnector = new ImsManager.Connector(phone.getContext(), phone.getPhoneId(),
+                new ImsManager.Connector.Listener() {
+                    @Override
+                    public void connectionReady(ImsManager manager) throws ImsException {
+                        mImsManager = manager;
+                        startListeningForCalls();
+                    }
+
+                    @Override
+                    public void connectionUnavailable() {
+                        stopListeningForCalls();
+                    }
+                }, executor);
+        mImsManagerConnector.connect();
+    }
+
+    private void init(ImsPhone phone) {
         this.mPhone = phone;
 
         mMetrics = TelephonyMetrics.getInstance();
@@ -522,22 +562,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         long currentTime = SystemClock.elapsedRealtime();
         mVtDataUsageSnapshot = new NetworkStats(currentTime, 1);
         mVtDataUsageUidSnapshot = new NetworkStats(currentTime, 1);
-
-        mImsManagerConnector = new ImsManager.Connector(phone.getContext(), phone.getPhoneId(),
-                new ImsManager.Connector.Listener() {
-                    @Override
-                    public void connectionReady(ImsManager manager) throws ImsException {
-                        mImsManager = manager;
-                        startListeningForCalls();
-                    }
-
-                    @Override
-                    public void connectionUnavailable() {
-                        stopListeningForCalls();
-                    }
-                });
-        mImsManagerConnector.connect();
     }
+
 
     /**
      * Test-only method used to mock out access to the shared preferences through the

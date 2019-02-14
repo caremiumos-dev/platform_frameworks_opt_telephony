@@ -110,7 +110,9 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         }
         @Override
         public void onLooperPrepared() {
-            mCTUT = new ImsPhoneCallTracker(mImsPhone);
+            // Run it on the current thread, do not repost onto the handler again in
+            // ImsManager.Connector.
+            mCTUT = new ImsPhoneCallTracker(mImsPhone, Runnable::run);
             mCTUT.addReasonCodeRemapping(null, "Wifi signal lost.", ImsReasonInfo.CODE_WIFI_LOST);
             mCTUT.addReasonCodeRemapping(501, "Call answered elsewhere.",
                     ImsReasonInfo.CODE_ANSWERED_ELSEWHERE);
@@ -238,7 +240,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         waitUntilReady();
         logd("ImsPhoneCallTracker initiated");
         /* Make sure getImsService is triggered on handler */
-        waitForHandlerAction(mCTHander, 100);
+        waitForHandlerAction(mCTHander, 1000);
     }
 
     @After
