@@ -374,6 +374,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(VOICE_CALL_ENDED_EVENT, mCaptorMessage.getValue().what);
     }
 
+    @FlakyTest
     @Test @SmallTest
     public void testUpdatePhoneType() {
         // verify getCurrentCalls is called on init

@@ -261,6 +261,7 @@ public class GsmSmsDispatcherTest extends TelephonyTest {
         assertEquals(RESULT_ERROR_SHORT_CODE_NEVER_ALLOWED, (int) argumentCaptor.getValue());
     }
 
+    @FlakyTest
     @Test @SmallTest
     public void testSendMultipartTextWithInvalidText() throws Exception {
         // unmock ActivityManager to be able to register receiver, create real PendingIntent and

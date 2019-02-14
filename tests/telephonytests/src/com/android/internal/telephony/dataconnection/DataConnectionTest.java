@@ -729,7 +729,8 @@ public class DataConnectionTest extends TelephonyTest {
                 4500);
         mDc.obtainMessage(
                 DataConnection.EVENT_KEEPALIVE_START_REQUEST, slotId, interval, kd).sendToTarget();
-        waitForMs(100);
+        waitForMs(200);
+        waitForHandlerAction(mDc.getHandler(), 1000);
         verify(mSimulatedCommandsVerifier, times(1))
                 .startNattKeepalive(anyInt(), eq(kd), eq(interval * 1000), any(Message.class));
 
@@ -752,11 +753,13 @@ public class DataConnectionTest extends TelephonyTest {
                             sessionHandle, KeepaliveStatus.STATUS_INACTIVE), null);
             kaRunning.sendToTarget();
         }
-        waitForMs(100);
+        waitForMs(200);
+        waitForHandlerAction(mDc.getHandler(), 1000);
         // Verify that a failed connection request cannot be stopped due to no record in
         // the DataConnection.
         mDc.obtainMessage(DataConnection.EVENT_KEEPALIVE_STOP_REQUEST, slotId).sendToTarget();
-        waitForMs(100);
+        waitForMs(200);
+        waitForHandlerAction(mDc.getHandler(), 1000);
         verify(mSimulatedCommandsVerifier, times(0))
                 .stopNattKeepalive(anyInt(), any(Message.class));
     }
