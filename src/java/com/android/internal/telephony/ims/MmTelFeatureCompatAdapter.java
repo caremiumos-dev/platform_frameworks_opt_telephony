@@ -333,8 +333,13 @@ public class MmTelFeatureCompatAdapter extends MmTelFeature {
         }
         try {
             IImsConfig imsConfig = mCompatFeature.getConfigInterface();
+            List<CapabilityChangeRequest.CapabilityPair> disableRequest =
+                    request.getCapabilitiesToDisable();
+            // Capability with previous radio versions.
+            stripVtCapability(disableRequest);
+
             // Disable Capabilities
-            for (CapabilityChangeRequest.CapabilityPair cap : request.getCapabilitiesToDisable()) {
+            for (CapabilityChangeRequest.CapabilityPair cap : disableRequest) {
                 CountDownLatch latch = new CountDownLatch(1);
                 int capConverted = convertCapability(cap.getCapability(), cap.getRadioTech());
                 int radioTechConverted = REG_TECH_TO_NET_TYPE.getOrDefault(cap.getRadioTech(),
@@ -358,22 +363,13 @@ public class MmTelFeatureCompatAdapter extends MmTelFeature {
                         });
                 latch.await(WAIT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
             }
-            // Hack For compatibility purposes: older implementations would ignore the VT feature
-            // enabled flag when VoLTE was also enabled on the first time after sub loaded. If we
-            // did not ignore the VT feature, it would send multiple registrations to the network
-            // (first voice, then voice+video). So, we should only send voice if voice+vt is enabled
-            // because they will check to see if VT is enabled separately.
             List<CapabilityChangeRequest.CapabilityPair> enableRequest =
                     request.getCapabilitiesToEnable();
-            if (enableRequest.contains(VT_CAPABILITY_PAIR)
-                    && enableRequest.contains(VOLTE_CAPABILITY_PAIR)) {
-                Log.i(TAG, "changeEnabledCapabilities: VT + VoLTE enable requested - removing VT "
-                        + "request");
-                enableRequest.remove(VT_CAPABILITY_PAIR);
-            }
+            // Capability with previous radio versions.
+            stripVtCapability(enableRequest);
 
             // Enable Capabilities
-            for (CapabilityChangeRequest.CapabilityPair cap : request.getCapabilitiesToEnable()) {
+            for (CapabilityChangeRequest.CapabilityPair cap : enableRequest) {
                 CountDownLatch latch = new CountDownLatch(1);
                 int capConverted = convertCapability(cap.getCapability(), cap.getRadioTech());
                 int radioTechConverted = REG_TECH_TO_NET_TYPE.getOrDefault(cap.getRadioTech(),
@@ -399,6 +395,20 @@ public class MmTelFeatureCompatAdapter extends MmTelFeature {
             }
         } catch (RemoteException | InterruptedException e) {
             Log.w(TAG, "changeEnabledCapabilities: Error processing: " + e.getMessage());
+        }
+    }
+
+    private void stripVtCapability(List<CapabilityChangeRequest.CapabilityPair> request) {
+        // Hack For compatibility purposes: older implementations would ignore the VT feature
+        // enabled flag when VoLTE was also enabled on the first time after sub loaded. If we
+        // did not ignore the VT feature, it would send multiple registrations to the network
+        // (first voice, then voice+video). So, we should only send voice if voice+vt is enabled
+        // because they will check to see if VT is enabled separately.
+        if (request.contains(VT_CAPABILITY_PAIR)
+                && request.contains(VOLTE_CAPABILITY_PAIR)) {
+            Log.i(TAG, "changeEnabledCapabilities: VT + VoLTE requested - removing VT "
+                    + "request");
+            request.remove(VT_CAPABILITY_PAIR);
         }
     }
 
