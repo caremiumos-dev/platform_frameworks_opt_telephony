@@ -57,8 +57,10 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerExecutor;
 import android.os.IInterface;
 import android.os.IPowerManager;
+import android.os.Looper;
 import android.os.PersistableBundle;
 import android.os.PowerManager;
 import android.os.UserHandle;
@@ -91,6 +93,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
  * Controls a test {@link Context} as would be provided by the Android framework to an
@@ -298,6 +301,22 @@ public class ContextFixture implements TestFixture<Context> {
         @Override
         public ContentResolver getContentResolver() {
             return mContentResolver;
+        }
+
+        @Override
+        public Looper getMainLooper() {
+            if (Looper.getMainLooper() == null) {
+                Looper.prepareMainLooper();
+            }
+            return Looper.getMainLooper();
+        }
+
+        @Override
+        public Executor getMainExecutor() {
+            if (Looper.getMainLooper() == null) {
+                Looper.prepareMainLooper();
+            }
+            return new HandlerExecutor(new Handler(Looper.getMainLooper()));
         }
 
         @Override

@@ -678,10 +678,14 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Test
     @MediumTest
     public void testUpdatePhoneType() {
-        doReturn(false).when(mPhone).isPhoneTypeGsm();
-        doReturn(true).when(mPhone).isPhoneTypeCdmaLte();
-        doReturn(CdmaSubscriptionSourceManager.SUBSCRIPTION_FROM_RUIM).when(mCdmaSSM).
-                getCdmaSubscriptionSource();
+        // This is a hack to stop b/113526936 from happening. The issue is that in some tests it
+        // looks like the mock is being modified while the thread is still running something.
+        runOnHandlerBlocked(mSSTTestHandler.getThreadHandler(), () -> {
+            doReturn(false).when(mPhone).isPhoneTypeGsm();
+            doReturn(true).when(mPhone).isPhoneTypeCdmaLte();
+            doReturn(CdmaSubscriptionSourceManager.SUBSCRIPTION_FROM_RUIM).when(mCdmaSSM)
+                    .getCdmaSubscriptionSource();
+        }, 1000);
 
         logd("Calling updatePhoneType");
         // switch to CDMA
@@ -701,9 +705,12 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         // on RUIM_RECORDS_LOADED, sst is expected to call following apis
         verify(mRuimRecords, times(1)).isProvisioned();
 
-        // switch back to GSM
-        doReturn(true).when(mPhone).isPhoneTypeGsm();
-        doReturn(false).when(mPhone).isPhoneTypeCdmaLte();
+        // This is a hack to stop b/113526936
+        runOnHandlerBlocked(mSSTTestHandler.getThreadHandler(), () -> {
+            // switch back to GSM
+            doReturn(true).when(mPhone).isPhoneTypeGsm();
+            doReturn(false).when(mPhone).isPhoneTypeCdmaLte();
+        }, 1000);
 
         // response for mRuimRecords.registerForRecordsLoaded() can be sent after switching to GSM
         msg = Message.obtain();
@@ -762,17 +769,19 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @MediumTest
     public void testRegAndUnregForVoiceRoamingOff() throws Exception {
         // Enable roaming
-        doReturn(true).when(mPhone).isPhoneTypeGsm();
+        // This is a hack to stop b/113526936
+        runOnHandlerBlocked(mSSTTestHandler.getThreadHandler(), () -> {
+            doReturn(true).when(mPhone).isPhoneTypeGsm();
+        }, 1000);
         mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         sst.registerForVoiceRoamingOff(mTestHandler, EVENT_DATA_ROAMING_OFF, null);
 
         // Disable roaming
-        doReturn(true).when(mPhone).isPhoneTypeGsm();
         mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
@@ -789,7 +798,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // Unregister registrant
         sst.unregisterForVoiceRoamingOff(mTestHandler);
@@ -799,7 +808,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // verify that no new message posted to handler
         verify(mTestHandler, times(1)).sendMessage(any(Message.class));
@@ -817,6 +826,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
+        waitForHandlerAction(sst, 1000);
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
@@ -828,7 +838,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
+        waitForHandlerAction(sst, 1000);
 
         // Unregister registrant
         sst.unregisterForDataRoamingOn(mTestHandler);
@@ -839,6 +850,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.notifyNetworkStateChanged();
 
         waitForMs(200);
+        waitForHandlerAction(sst, 1000);
 
         // verify that no new message posted to handler
         verify(mTestHandler, times(1)).sendMessage(any(Message.class));
@@ -848,12 +860,15 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @MediumTest
     public void testRegAndUnregForDataRoamingOff() throws Exception {
         // Enable roaming
-        doReturn(true).when(mPhone).isPhoneTypeGsm();
+        // This is a hack to stop b/113526936
+        runOnHandlerBlocked(mSSTTestHandler.getThreadHandler(), () -> {
+            doReturn(true).when(mPhone).isPhoneTypeGsm();
+        }, 1000);
         mSimulatedCommands.setVoiceRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         sst.registerForDataRoamingOff(mTestHandler, EVENT_DATA_ROAMING_OFF, null, true);
 
@@ -863,7 +878,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
@@ -875,7 +890,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // Unregister registrant
         sst.unregisterForDataRoamingOff(mTestHandler);
@@ -885,7 +900,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_HOME);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // verify that no new message posted to handler
         verify(mTestHandler, times(1)).sendMessage(any(Message.class));
@@ -900,7 +915,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(23);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         sst.registerForDataConnectionAttached(mTestHandler, EVENT_DATA_CONNECTION_ATTACHED, null);
 
@@ -921,7 +936,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(-1);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // Unregister registrant
         sst.unregisterForDataConnectionAttached(mTestHandler);
@@ -931,7 +946,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // verify that no new message posted to handler
         verify(mTestHandler, times(1)).sendMessage(any(Message.class));
@@ -946,7 +961,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         sst.registerForDataConnectionAttached(mTestHandler, EVENT_DATA_CONNECTION_ATTACHED, null);
 
@@ -967,7 +982,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // Unregister registrant
         sst.unregisterForDataConnectionAttached(mTestHandler);
@@ -977,7 +992,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // verify that no new message posted to handler
         verify(mTestHandler, times(1)).sendMessage(any(Message.class));
@@ -1075,7 +1090,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         sst.registerForNetworkAttached(mTestHandler, EVENT_REGISTERED_TO_NETWORK, null);
 
@@ -1084,7 +1099,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
@@ -1096,7 +1111,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_UNKNOWN);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // Unregister registrant
         sst.unregisterForNetworkAttached(mTestHandler);
@@ -1106,7 +1121,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // verify that no new message posted to handler
         verify(mTestHandler, times(1)).sendMessage(any(Message.class));
@@ -1121,7 +1136,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(23);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         sst.registerForNetworkAttached(mTestHandler, EVENT_REGISTERED_TO_NETWORK, null);
 
@@ -1130,7 +1145,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
@@ -1142,13 +1157,13 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(-1);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // Unregister registrant
         sst.unregisterForNetworkAttached(mTestHandler);
 
 
-        waitForMs(100);
+        waitForMs(200);
 
         sst.registerForNetworkAttached(mTestHandler, EVENT_REGISTERED_TO_NETWORK, null);
 
@@ -1157,7 +1172,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setDataRegState(NetworkRegistrationState.REG_STATE_ROAMING);
         mSimulatedCommands.notifyNetworkStateChanged();
 
-        waitForMs(100);
+        waitForMs(200);
 
         // verify if registered handler has message posted to it
         messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
