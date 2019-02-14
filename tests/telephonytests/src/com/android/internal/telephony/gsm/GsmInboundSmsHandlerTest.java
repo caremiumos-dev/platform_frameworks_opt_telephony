@@ -706,6 +706,7 @@ public class GsmInboundSmsHandlerTest extends TelephonyTest {
         assertEquals("IdleState", getCurrentState().getName());
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testBroadcastUndeliveredUserLocked() throws Exception {
