@@ -720,6 +720,7 @@ public class DcTrackerTest extends TelephonyTest {
         assertEquals(DctConstants.State.CONNECTED, mDct.getState(PhoneConstants.APN_TYPE_IMS));
     }
 
+    @FlakyTest
     @Test
     @MediumTest
     public void testUserDisableRoaming() throws Exception {
@@ -986,6 +987,7 @@ public class DcTrackerTest extends TelephonyTest {
     }
 
     // Test the unmetered APN setup when data is disabled.
+    @FlakyTest
     @Test
     @SmallTest
     public void testTrySetupDataUnmeteredDataDisabled() throws Exception {
@@ -1126,6 +1128,7 @@ public class DcTrackerTest extends TelephonyTest {
     }
 
     // Test the default data on IWLAN.
+    @FlakyTest
     @Test
     @SmallTest
     public void testTrySetupDefaultOnIWLAN() throws Exception {
@@ -1426,6 +1429,7 @@ public class DcTrackerTest extends TelephonyTest {
                 true, DataEnabledSettings.REASON_PROVISIONING_DATA_ENABLED_CHANGED);
     }*/
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testNetworkStatusChangedRecoveryOFF() throws Exception {
@@ -1558,6 +1562,7 @@ public class DcTrackerTest extends TelephonyTest {
     }
 
 
+    @FlakyTest
     @Test
     @SmallTest
     public void testRecoveryStepReRegister() throws Exception {
