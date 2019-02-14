@@ -828,6 +828,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
     @Test
     @SmallTest
+    @FlakyTest
     public void testCallForwardingIndicator() {
         doReturn(IccRecords.CALL_FORWARDING_STATUS_UNKNOWN).when(mSimRecords).
                 getVoiceCallForwardingFlag();

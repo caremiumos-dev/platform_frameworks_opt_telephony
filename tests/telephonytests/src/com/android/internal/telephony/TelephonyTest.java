@@ -616,6 +616,11 @@ public abstract class TelephonyTest {
         }
     }
 
+    protected final void runOnHandlerBlocked(Handler h, Runnable r, int timeout) {
+        h.post(r);
+        waitForHandlerAction(h, timeout);
+    }
+
     public static Object invokeMethod(
             Object instance, String methodName, Class<?>[] parameterClasses, Object[] parameters) {
         try {
