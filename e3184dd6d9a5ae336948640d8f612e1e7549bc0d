@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32fa7b8f_3e123afa",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4978,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:46:09Z",
+      "side": 1,
+      "message": "Is it possible to move all of this logic into a separate CarrierNameResolver class (or whatever... I haven\u0027t spent any time thinking about the correct name) and only inject the necessary info from SST? That will help make this logic more test-able, and SST is already quite a pile of spaghetti.",
+      "range": {
+        "startLine": 4978,
+        "startChar": 19,
+        "endLine": 4978,
+        "endChar": 49
+      },
+      "revId": "e3184dd6d9a5ae336948640d8f612e1e7549bc0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c901a9d_a407e6dc",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4986,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:46:09Z",
+      "side": 1,
+      "message": "the cellIdentity is in mSS, and if for some reason it\u0027s not, you probably want it to be null anyway. getCellLocation has side effects (like calling getAllCellInfo()) that could lead to some weird results.",
+      "range": {
+        "startLine": 4986,
+        "startChar": 31,
+        "endLine": 4986,
+        "endChar": 46
+      },
+      "revId": "e3184dd6d9a5ae336948640d8f612e1e7549bc0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13b3d73c_8ab96352",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4994,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:46:09Z",
+      "side": 1,
+      "message": "You want the CellIdentity (not CellLocation).",
+      "range": {
+        "startLine": 4987,
+        "startChar": 0,
+        "endLine": 4994,
+        "endChar": 9
+      },
+      "revId": "e3184dd6d9a5ae336948640d8f612e1e7549bc0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8413694_00f2cdea",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5020,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:46:09Z",
+      "side": 1,
+      "message": "I think you\u0027ll be happier if you define a function on the OpListRecord that looks something like:\n\nboolean isMatch(String plmn, int lac) {\n    // return true if the PLMN and LAC are a match for this record\n}\n\nIf you do that, then all the complexity of the wildcards will be hidden. Also, I don\u0027t think you should have to deal with the \"F\" characters after the initial decode since I expect them to be trimmed...",
+      "range": {
+        "startLine": 5003,
+        "startChar": 0,
+        "endLine": 5020,
+        "endChar": 45
+      },
+      "revId": "e3184dd6d9a5ae336948640d8f612e1e7549bc0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c366eb19_20ba3343",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5022,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:46:09Z",
+      "side": 1,
+      "message": "Magic numbers are magical. If you need it, can you define it? Though I believe this logic can be simplified (in addition to moving most of it elsewhere).",
+      "range": {
+        "startLine": 5022,
+        "startChar": 22,
+        "endLine": 5022,
+        "endChar": 23
+      },
+      "revId": "e3184dd6d9a5ae336948640d8f612e1e7549bc0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
