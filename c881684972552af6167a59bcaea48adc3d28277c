@@ -48,6 +48,23 @@
     },
     {
       "key": {
+        "uuid": "3397da0f_74018bda",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T23:14:10Z",
+      "side": 1,
+      "message": "You might want to call this an OpListRecord since a List\u003cOpListRecord\u003e is actually equivalent to EFopl.",
+      "revId": "c881684972552af6167a59bcaea48adc3d28277c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "68dd9591_481ebfa7",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 1
