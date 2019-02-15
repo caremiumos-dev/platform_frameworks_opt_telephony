@@ -16,6 +16,9 @@
 
 package com.android.internal.telephony.uicc;
 
+import static android.telephony.TelephonyManager.UNINITIALIZED_CARD_ID;
+import static android.telephony.TelephonyManager.UNSUPPORTED_CARD_ID;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -128,6 +131,8 @@ public class UiccController extends Handler {
     // The array index is the card ID (int).
     // This mapping exists to expose card-based functionality without exposing the EID, which is
     // considered sensetive information.
+    // mCardStrings is populated using values from the IccSlotStatus and IccCardStatus. For
+    // HAL < 1.2, these do not contain the EID or the ICCID, so mCardStrings will be empty
     private ArrayList<String> mCardStrings;
 
     // This is the card ID of the default eUICC. It starts as UNINITIALIZED_CARD_ID.
@@ -135,6 +140,10 @@ public class UiccController extends Handler {
     // with the lowest slot index.
     // If EID is not supported (e.g. on HAL version < 1.2), we set it to UNSUPPORTED_CARD_ID
     private int mDefaultEuiccCardId;
+
+    // Whether the EID is known to be unsupported (e.g. on HAL version < 1.2). By default this is
+    // false, and we set it to true when we get an IccCardStatus which implements < 1.2
+    private boolean mEidNotSupported = false;
 
     // GSM SGP.02 section 2.2.2 states that the EID is always 32 digits long
     private static final int EID_LENGTH = 32;
@@ -213,7 +222,7 @@ public class UiccController extends Handler {
 
         mLauncher = new UiccStateChangedLauncher(c, this);
         mCardStrings = loadCardStrings();
-        mDefaultEuiccCardId = TelephonyManager.UNINITIALIZED_CARD_ID;
+        mDefaultEuiccCardId = UNINITIALIZED_CARD_ID;
     }
 
     private int getSlotIdFromPhoneId(int phoneId) {
@@ -555,7 +564,9 @@ public class UiccController extends Handler {
 
         if (eidIsNotSupported(status)) {
             // we will never get EID from the HAL, so set mDefaultEuiccCardId to UNSUPPORTED_CARD_ID
-            mDefaultEuiccCardId = TelephonyManager.UNSUPPORTED_CARD_ID;
+            if (DBG) log("eid is not supported");
+            mEidNotSupported = true;
+            mDefaultEuiccCardId = UNSUPPORTED_CARD_ID;
         }
         mPhoneIdToSlotId[index] = slotId;
 
@@ -589,9 +600,10 @@ public class UiccController extends Handler {
         // EID may be unpopulated if RadioConfig<1.2
         // If so, just register for EID loaded and skip this stuff
         if (isEuicc && cardString == null
-                && mDefaultEuiccCardId != TelephonyManager.UNSUPPORTED_CARD_ID) {
+                && mDefaultEuiccCardId != UNSUPPORTED_CARD_ID) {
             ((EuiccCard) card).registerForEidReady(this, EVENT_EID_READY, index);
         }
+
 
         if (cardString != null) {
             addCardId(cardString);
@@ -633,21 +645,26 @@ public class UiccController extends Handler {
      * to match to a card ID.
      *
      * @return the matching cardId, or UNINITIALIZED_CARD_ID if the card string does not map to a
-     * currently loaded cardId
+     * currently loaded cardId, or UNSUPPORTED_CARD_ID if the device does not support card IDs
      */
     public int convertToPublicCardId(String cardString) {
-        if (TextUtils.isEmpty(cardString)) {
-            return TelephonyManager.UNINITIALIZED_CARD_ID;
+        if (mEidNotSupported) {
+            // even if cardString is not an EID, if EID is not supported (e.g. HAL < 1.2) we can't
+            // guarentee a working card ID implementation, so return UNSUPPORTED_CARD_ID
+            return UNSUPPORTED_CARD_ID;
         }
+        if (TextUtils.isEmpty(cardString)) {
+            return UNINITIALIZED_CARD_ID;
+        }
+
         if (cardString.length() < EID_LENGTH) {
             cardString = IccUtils.stripTrailingFs(cardString);
         }
         int id = mCardStrings.indexOf(cardString);
         if (id == -1) {
-            return TelephonyManager.UNINITIALIZED_CARD_ID;
-        } else {
-            return id;
+            return UNINITIALIZED_CARD_ID;
         }
+        return id;
     }
 
     /**
@@ -913,7 +930,7 @@ public class UiccController extends Handler {
         // set mCardStrings and the defaultEuiccCardId using the now available EID
         String eid = ((EuiccCard) card).getEid();
         addCardId(eid);
-        if (mDefaultEuiccCardId == TelephonyManager.UNINITIALIZED_CARD_ID) {
+        if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID) {
             // TODO(b/122738148) the default eUICC should not be removable
             mDefaultEuiccCardId = convertToPublicCardId(eid);
             log("onEidReady: eid=" + eid + " slot=" + slotId + " mDefaultEuiccCardId="
@@ -965,6 +982,7 @@ public class UiccController extends Handler {
         pw.println(" mUiccSlots: size=" + mUiccSlots.length);
         pw.println(" mCardStrings=" + mCardStrings);
         pw.println(" mDefaultEuiccCardId=" + mDefaultEuiccCardId);
+        pw.println(" mEidNotSupported=" + mEidNotSupported);
         for (int i = 0; i < mUiccSlots.length; i++) {
             if (mUiccSlots[i] == null) {
                 pw.println("  mUiccSlots[" + i + "]=null");
