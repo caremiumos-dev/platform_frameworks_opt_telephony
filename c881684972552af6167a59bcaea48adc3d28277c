@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3bbc45_1df813d9",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:32:22Z",
+      "side": 1,
+      "message": "nit",
+      "range": {
+        "startLine": 108,
+        "startChar": 95,
+        "endLine": 108,
+        "endChar": 102
+      },
+      "revId": "c881684972552af6167a59bcaea48adc3d28277c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e8e475a_07ddcbf1",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:32:22Z",
+      "side": 1,
+      "message": "static?",
+      "range": {
+        "startLine": 184,
+        "startChar": 4,
+        "endLine": 184,
+        "endChar": 10
+      },
+      "revId": "c881684972552af6167a59bcaea48adc3d28277c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68dd9591_481ebfa7",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:32:22Z",
+      "side": 1,
+      "message": "You can make all these variables final.",
+      "revId": "c881684972552af6167a59bcaea48adc3d28277c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a4f7f4b_f93f9871",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:32:22Z",
+      "side": 1,
+      "message": "mMcc",
+      "range": {
+        "startLine": 185,
+        "startChar": 15,
+        "endLine": 185,
+        "endChar": 19
+      },
+      "revId": "c881684972552af6167a59bcaea48adc3d28277c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82aea3ab_81e2ab2a",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:32:22Z",
+      "side": 1,
+      "message": "mMnc",
+      "range": {
+        "startLine": 186,
+        "startChar": 15,
+        "endLine": 186,
+        "endChar": 19
+      },
+      "revId": "c881684972552af6167a59bcaea48adc3d28277c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27c5dfb6_5f67d3fa",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:32:22Z",
+      "side": 1,
+      "message": "Would it be easier to convert the entire thing to a bytearray first? We have all kinds of functions in IccUtils.java Then I wonder if this encoding would match a function we already have in IccUtils...",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 51
+      },
+      "revId": "c881684972552af6167a59bcaea48adc3d28277c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b8d677c_97b6ba73",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:32:22Z",
+      "side": 1,
+      "message": "nit line length",
+      "range": {
+        "startLine": 214,
+        "startChar": 90,
+        "endLine": 214,
+        "endChar": 97
+      },
+      "revId": "c881684972552af6167a59bcaea48adc3d28277c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a767d5d1_aa20d41f",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-02-15T18:32:22Z",
+      "side": 1,
+      "message": "Same general comment about the decoding... I hope there are already generic methods to handle these situations. if there aren\u0027t, then perhaps add a new utility in IccUtils?",
+      "range": {
+        "startLine": 259,
+        "startChar": 6,
+        "endLine": 264,
+        "endChar": 110
+      },
+      "revId": "c881684972552af6167a59bcaea48adc3d28277c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
