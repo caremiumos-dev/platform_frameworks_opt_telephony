@@ -57,10 +57,14 @@ public class ImsManagerTest extends TelephonyTest {
     private static final boolean VT_IMS_ENABLE_DEFAULT_VAL = true;
     private static final boolean WFC_IMS_EDITABLE_VAL = true;
     private static final boolean WFC_IMS_NOT_EDITABLE_VAL = false;
+    private static final boolean WFC_IMS_ROAMING_EDITABLE_VAL = true;
+    private static final boolean WFC_IMS_ROAMING_NOT_EDITABLE_VAL = false;
     private static final int WFC_IMS_MODE_DEFAULT_VAL =
             ImsConfig.WfcModeFeatureValueConstants.CELLULAR_PREFERRED;
     private static final int WFC_IMS_ROAMING_MODE_DEFAULT_VAL =
             ImsConfig.WfcModeFeatureValueConstants.WIFI_PREFERRED;
+    private static final boolean WFC_USE_HOME_MODE_FOR_ROAMING_VAL = true;
+    private static final boolean WFC_NOT_USE_HOME_MODE_FOR_ROAMING_VAL = false;
 
     PersistableBundle mBundle;
     @Mock IBinder mBinder;
@@ -101,6 +105,8 @@ public class ImsManagerTest extends TelephonyTest {
                 ENHANCED_4G_MODE_EDITABLE);
         mBundle.putBoolean(CarrierConfigManager.KEY_EDITABLE_WFC_MODE_BOOL,
                 WFC_IMS_EDITABLE_VAL);
+        mBundle.putBoolean(CarrierConfigManager.KEY_EDITABLE_WFC_ROAMING_MODE_BOOL,
+                WFC_IMS_ROAMING_EDITABLE_VAL);
         mBundle.putBoolean(CarrierConfigManager.KEY_CARRIER_DEFAULT_WFC_IMS_ENABLED_BOOL,
                 WFC_IMS_ENABLE_DEFAULT_VAL);
         mBundle.putBoolean(CarrierConfigManager.KEY_CARRIER_DEFAULT_WFC_IMS_ROAMING_ENABLED_BOOL,
@@ -112,6 +118,9 @@ public class ImsManagerTest extends TelephonyTest {
         mBundle.putBoolean(CarrierConfigManager.KEY_ENHANCED_4G_LTE_ON_BY_DEFAULT_BOOL,
                 ENHANCED_4G_MODE_DEFAULT_VAL);
         mBundle.putBoolean(CarrierConfigManager.KEY_CARRIER_VOLTE_PROVISIONING_REQUIRED_BOOL, true);
+        mBundle.putBoolean(
+                CarrierConfigManager.KEY_USE_WFC_HOME_NETWORK_MODE_IN_ROAMING_NETWORK_BOOL,
+                WFC_NOT_USE_HOME_MODE_FOR_ROAMING_VAL);
     }
 
     @Test @SmallTest
@@ -645,6 +654,96 @@ public class ImsManagerTest extends TelephonyTest {
         verify(mImsConfigImplBaseMock).setConfig(
                 eq(ImsConfig.ConfigConstants.VOICE_OVER_WIFI_MODE),
                 eq(WFC_IMS_MODE_DEFAULT_VAL));
+    }
+
+    /**
+     * Tests that when get WFC roaming network mode return WFC roaming network mode, if the carrier
+     * doesn't set the settings to use WFC home network mode in roaming network.
+     *
+     * Preconditions:
+     *  - CarrierConfigManager.KEY_USE_WFC_HOME_NETWORK_MODE_IN_ROAMING_NETWORK_BOOL = false
+     */
+    @Test @SmallTest
+    public void getWfcMode_useWfcHomeModeConfigFalse_shouldUseWfcRoamingMode() {
+        // Set some values that are different than the defaults for WFC mode.
+        doReturn(String.valueOf(ImsConfig.WfcModeFeatureValueConstants.WIFI_ONLY))
+                .when(mSubscriptionController).getSubscriptionProperty(
+                anyInt(),
+                eq(SubscriptionManager.WFC_IMS_MODE),
+                anyString());
+        doReturn(String.valueOf(ImsConfig.WfcModeFeatureValueConstants.CELLULAR_PREFERRED))
+                .when(mSubscriptionController).getSubscriptionProperty(
+                anyInt(),
+                eq(SubscriptionManager.WFC_IMS_ROAMING_MODE),
+                anyString());
+
+        ImsManager imsManager = getImsManagerAndInitProvisionedValues();
+
+        // Check that use the WFC roaming network mode.
+        assertEquals(ImsConfig.WfcModeFeatureValueConstants.CELLULAR_PREFERRED,
+                imsManager.getWfcMode(true));
+        verify(mSubscriptionController, times(1)).getSubscriptionProperty(
+                anyInt(),
+                eq(SubscriptionManager.WFC_IMS_ROAMING_MODE),
+                anyString());
+
+        // Set WFC roaming network mode to not editable.
+        mBundle.putBoolean(CarrierConfigManager.KEY_EDITABLE_WFC_ROAMING_MODE_BOOL,
+                WFC_IMS_ROAMING_NOT_EDITABLE_VAL);
+
+        // Check that use the default WFC roaming network mode.
+        assertEquals(WFC_IMS_ROAMING_MODE_DEFAULT_VAL, imsManager.getWfcMode(true));
+        verify(mSubscriptionController, times(1)).getSubscriptionProperty(
+                anyInt(),
+                eq(SubscriptionManager.WFC_IMS_ROAMING_MODE),
+                anyString());
+    }
+
+    /**
+     * Tests that when get WFC roaming network mode return WFC home network mode, if the carrier
+     * sets the settings to use home network WFC mode in roaming network.
+     *
+     * Preconditions:
+     *  - CarrierConfigManager.KEY_USE_WFC_HOME_NETWORK_MODE_IN_ROAMING_NETWORK_BOOL = true
+     */
+    @Test @SmallTest
+    public void getWfcMode_useWfcHomeModeConfigTrue_shouldUseWfcHomeMode() {
+        // Set some values that are different than the defaults for WFC mode.
+        doReturn(String.valueOf(ImsConfig.WfcModeFeatureValueConstants.WIFI_ONLY))
+                .when(mSubscriptionController).getSubscriptionProperty(
+                anyInt(),
+                eq(SubscriptionManager.WFC_IMS_MODE),
+                anyString());
+        doReturn(String.valueOf(ImsConfig.WfcModeFeatureValueConstants.CELLULAR_PREFERRED))
+                .when(mSubscriptionController).getSubscriptionProperty(
+                anyInt(),
+                eq(SubscriptionManager.WFC_IMS_ROAMING_MODE),
+                anyString());
+
+        // Set to use WFC home network mode in roaming network.
+        mBundle.putBoolean(
+                CarrierConfigManager.KEY_USE_WFC_HOME_NETWORK_MODE_IN_ROAMING_NETWORK_BOOL,
+                WFC_USE_HOME_MODE_FOR_ROAMING_VAL);
+
+        ImsManager imsManager = getImsManagerAndInitProvisionedValues();
+
+        // Check that use the WFC home network mode.
+        assertEquals(ImsConfig.WfcModeFeatureValueConstants.WIFI_ONLY, imsManager.getWfcMode(true));
+        verify(mSubscriptionController, times(1)).getSubscriptionProperty(
+                anyInt(),
+                eq(SubscriptionManager.WFC_IMS_MODE),
+                anyString());
+
+        // Set WFC home network mode to not editable.
+        mBundle.putBoolean(CarrierConfigManager.KEY_EDITABLE_WFC_MODE_BOOL,
+                WFC_IMS_NOT_EDITABLE_VAL);
+
+        // Check that use the default WFC home network mode.
+        assertEquals(WFC_IMS_MODE_DEFAULT_VAL, imsManager.getWfcMode(true));
+        verify(mSubscriptionController, times(1)).getSubscriptionProperty(
+                anyInt(),
+                eq(SubscriptionManager.WFC_IMS_MODE),
+                anyString());
     }
 
     private ImsManager getImsManagerAndInitProvisionedValues() {
