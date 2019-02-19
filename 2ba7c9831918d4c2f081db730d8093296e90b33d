@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6895b02_86e32921",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-02-19T18:18:31Z",
+      "side": 0,
+      "message": "This logic was moved to the provider.",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 67
+      },
+      "revId": "2ba7c9831918d4c2f081db730d8093296e90b33d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
