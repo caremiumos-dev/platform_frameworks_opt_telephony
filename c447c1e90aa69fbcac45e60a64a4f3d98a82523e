@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c16d1bb_0ee22796",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-02-19T22:25:33Z",
+      "side": 1,
+      "message": "can you call the other constructor instead of replicating the code here?",
+      "range": {
+        "startLine": 507,
+        "startChar": 7,
+        "endLine": 519,
+        "endChar": 19
+      },
+      "revId": "c447c1e90aa69fbcac45e60a64a4f3d98a82523e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bcd885d_09ffaa61",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-02-19T22:25:33Z",
+      "side": 1,
+      "message": "If the handler is on the same thread as the test thread, wouldn\u0027t this just block for 1 second all the time?",
+      "range": {
+        "startLine": 243,
+        "startChar": 8,
+        "endLine": 243,
+        "endChar": 46
+      },
+      "revId": "c447c1e90aa69fbcac45e60a64a4f3d98a82523e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
