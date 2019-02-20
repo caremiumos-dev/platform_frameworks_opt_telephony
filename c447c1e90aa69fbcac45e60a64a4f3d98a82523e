@@ -45,6 +45,30 @@
       "revId": "c447c1e90aa69fbcac45e60a64a4f3d98a82523e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94252f91_461ef14e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-02-20T23:54:22Z",
+      "side": 1,
+      "message": "mCTHandler is on a different thread than the test thread, so it shouldn\u0027t in this case.",
+      "parentUuid": "5bcd885d_09ffaa61",
+      "range": {
+        "startLine": 243,
+        "startChar": 8,
+        "endLine": 243,
+        "endChar": 46
+      },
+      "revId": "c447c1e90aa69fbcac45e60a64a4f3d98a82523e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
