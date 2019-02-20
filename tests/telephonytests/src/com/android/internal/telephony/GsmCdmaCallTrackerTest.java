@@ -357,9 +357,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         logd("voice call started");
         testMOCallPickUp();
         ArgumentCaptor<Message> mCaptorMessage = ArgumentCaptor.forClass(Message.class);
-        ArgumentCaptor<Long> mCaptorLong = ArgumentCaptor.forClass(Long.class);
-        verify(mHandler, times(1))
-                .sendMessageAtTime(mCaptorMessage.capture(), mCaptorLong.capture());
+        verify(mHandler, times(1)).sendMessage(mCaptorMessage.capture());
         assertEquals(VOICE_CALL_STARTED_EVENT, mCaptorMessage.getValue().what);
 
     }
@@ -371,10 +369,8 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         logd("register for voice call ended event");
         mCTUT.registerForVoiceCallEnded(mHandler, VOICE_CALL_ENDED_EVENT, null);
         ArgumentCaptor<Message> mCaptorMessage = ArgumentCaptor.forClass(Message.class);
-        ArgumentCaptor<Long> mCaptorLong = ArgumentCaptor.forClass(Long.class);
         testMOCallHangup();
-        verify(mHandler, times(1))
-                .sendMessageAtTime(mCaptorMessage.capture(), mCaptorLong.capture());
+        verify(mHandler, times(1)).sendMessage(mCaptorMessage.capture());
         assertEquals(VOICE_CALL_ENDED_EVENT, mCaptorMessage.getValue().what);
     }
 

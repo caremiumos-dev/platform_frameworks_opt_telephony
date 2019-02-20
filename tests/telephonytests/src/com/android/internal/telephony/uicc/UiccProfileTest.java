@@ -272,10 +272,8 @@ public class UiccProfileTest extends TelephonyTest {
         mUiccProfile.registerForCarrierPrivilegeRulesLoaded(mMockedHandler,
                 UICCPROFILE_CARRIER_PRIVILEDGE_LOADED_EVENT, null);
         ArgumentCaptor<Message> mCaptorMessage = ArgumentCaptor.forClass(Message.class);
-        ArgumentCaptor<Long> mCaptorLong = ArgumentCaptor.forClass(Long.class);
         testUpdateUiccProfile();
-        verify(mMockedHandler, atLeast(1)).sendMessageDelayed(mCaptorMessage.capture(),
-                mCaptorLong.capture());
+        verify(mMockedHandler, atLeast(1)).sendMessage(mCaptorMessage.capture());
         assertEquals(UICCPROFILE_CARRIER_PRIVILEDGE_LOADED_EVENT, mCaptorMessage.getValue().what);
     }
 
