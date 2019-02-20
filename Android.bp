@@ -66,6 +66,10 @@ java_library {
         "android.hardware.radio.deprecated-V1.0-java-shallow",
         "telephony-protos",
         "ecc-protos-lite",
+<<<<<<< HEAD
+=======
+        "android-support-annotations",
+>>>>>>> c7041f8... IMS: Remove dependency on ims-ext-common
     ],
 
     product_variables: {
