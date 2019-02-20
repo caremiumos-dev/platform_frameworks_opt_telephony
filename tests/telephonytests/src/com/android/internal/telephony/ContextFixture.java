@@ -25,6 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.app.DownloadManager;
@@ -49,6 +50,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.hardware.display.DisplayManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -56,7 +58,9 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IInterface;
+import android.os.IPowerManager;
 import android.os.PersistableBundle;
+import android.os.PowerManager;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.preference.PreferenceManager;
@@ -246,10 +250,11 @@ public class ContextFixture implements TestFixture<Context> {
                 case Context.DOWNLOAD_SERVICE:
                     return mDownloadManager;
                 case Context.DISPLAY_SERVICE:
+                    return mDisplayManager;
                 case Context.POWER_SERVICE:
-                    // PowerManager and DisplayManager are final classes so cannot be mocked,
-                    // return real services.
-                    return TestApplication.getAppContext().getSystemService(name);
+                    return mPowerManager;
+                case Context.ACTIVITY_SERVICE:
+                    return mActivityManager;
                 default:
                     return null;
             }
@@ -556,6 +561,8 @@ public class ContextFixture implements TestFixture<Context> {
     private final BatteryManager mBatteryManager = mock(BatteryManager.class);
     private final EuiccManager mEuiccManager = mock(EuiccManager.class);
     private final TelecomManager mTelecomManager = mock(TelecomManager.class);
+    private final DisplayManager mDisplayManager = mock(DisplayManager.class);
+    private final ActivityManager mActivityManager = mock(ActivityManager.class);
 
     private final ContentProvider mContentProvider = spy(new FakeContentProvider());
 
@@ -564,6 +571,7 @@ public class ContextFixture implements TestFixture<Context> {
             .getDefaultSharedPreferences(TestApplication.getAppContext());
     private final MockContentResolver mContentResolver = new MockContentResolver();
     private final PersistableBundle mBundle = new PersistableBundle();
+    private PowerManager mPowerManager;
 
     public ContextFixture() {
         MockitoAnnotations.initMocks(this);
@@ -601,6 +609,8 @@ public class ContextFixture implements TestFixture<Context> {
         Settings.Global.getInt(mContentResolver, Settings.Global.AIRPLANE_MODE_ON, 0);
         mContentResolver.addProvider(ServiceStateTable.AUTHORITY, mContentProvider);
         mPermissionTable.add(PERMISSION_ENABLE_ALL);
+        mPowerManager = new PowerManager(getTestDouble(), mock(IPowerManager.class),
+                mock(Handler.class));
     }
 
     @Override
