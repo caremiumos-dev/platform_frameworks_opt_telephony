@@ -210,9 +210,7 @@ public class UiccControllerTest extends TelephonyTest {
         mUiccControllerUT.registerForIccChanged(mMockedHandler, ICC_CHANGED_EVENT, null);
         testPowerOff();
         ArgumentCaptor<Message> mCaptorMessage = ArgumentCaptor.forClass(Message.class);
-        ArgumentCaptor<Long> mCaptorLong = ArgumentCaptor.forClass(Long.class);
-        verify(mMockedHandler, atLeast(1)).sendMessageDelayed(mCaptorMessage.capture(),
-                mCaptorLong.capture());
+        verify(mMockedHandler, atLeast(1)).sendMessage(mCaptorMessage.capture());
         assertEquals(ICC_CHANGED_EVENT, mCaptorMessage.getValue().what);
     }
 

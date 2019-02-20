@@ -21,7 +21,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doAnswer;
@@ -121,24 +120,24 @@ public class PhoneSwitcherTest extends TelephonyTest {
                 .shouldApplyNetworkRequest(internetNetworkRequest, 0));
 
         // not registered yet - shouldn't inc
-        verify(mActivePhoneSwitchHandler, never()).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, never()).sendMessage(any());
 
         mPhoneSwitcher.registerForActivePhoneSwitch(mActivePhoneSwitchHandler,
                 ACTIVE_PHONE_SWITCH, null);
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
 
         setDefaultDataSubId(0);
 
-        verify(mActivePhoneSwitchHandler, never()).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, never()).sendMessage(any());
         assertFalse("data allowed", mDataAllowed[0]);
 
         setSlotIndexToSubId(0, 0);
         mSubChangedListener.onSubscriptionsChanged();
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertTrue("data not allowed", mDataAllowed[0]);
 
@@ -158,7 +157,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         setDefaultDataSubId(1);
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertFalse("data allowed", mDataAllowed[0]);
 
@@ -166,7 +165,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mSubChangedListener.onSubscriptionsChanged();
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertFalse("data allowed", mDataAllowed[0]);
         assertTrue("data not allowed", mDataAllowed[1]);
@@ -175,7 +174,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         setDefaultDataSubId(0);
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertFalse("data allowed", mDataAllowed[1]);
         assertTrue("data not allowed", mDataAllowed[0]);
@@ -185,7 +184,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mSubChangedListener.onSubscriptionsChanged();
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertFalse("data allowed", mDataAllowed[0]);
         assertFalse("data allowed", mDataAllowed[1]);
@@ -195,7 +194,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mSubChangedListener.onSubscriptionsChanged();
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertTrue("data not allowed", mDataAllowed[0]);
         assertFalse("data allowed", mDataAllowed[1]);
@@ -204,7 +203,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         releaseNetworkRequest(internetNetworkRequest);
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertFalse("data allowed", mDataAllowed[0]);
         assertFalse("data allowed", mDataAllowed[1]);
@@ -213,7 +212,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         NetworkRequest specificInternetRequest = addInternetNetworkRequest(0, 50);
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertTrue("data not allowed", mDataAllowed[0]);
         assertFalse("data allowed", mDataAllowed[1]);
@@ -223,7 +222,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mSubChangedListener.onSubscriptionsChanged();
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertFalse("data allowed", mDataAllowed[0]);
         assertFalse("data allowed", mDataAllowed[1]);
@@ -233,7 +232,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mSubChangedListener.onSubscriptionsChanged();
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertTrue("data not allowed", mDataAllowed[0]);
         assertFalse("data allowed", mDataAllowed[1]);
@@ -242,7 +241,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         releaseNetworkRequest(specificInternetRequest);
         waitABit();
 
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
         assertFalse("data allowed", mDataAllowed[0]);
         assertFalse("data allowed", mDataAllowed[1]);
@@ -302,7 +301,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
                 ACTIVE_PHONE_SWITCH, null);
         waitABit();
         // verify initial conditions
-        verify(mActivePhoneSwitchHandler, times(1)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(1)).sendMessage(any());
 
         assertTrue("data not allowed", mDataAllowed[0]);
         assertFalse("data allowed", mDataAllowed[1]);
@@ -312,7 +311,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         waitABit();
 
         // After gain of network request, mActivePhoneSwitchHandler should be notified 2 times.
-        verify(mActivePhoneSwitchHandler, times(2)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(2)).sendMessage(any());
         assertFalse("data allowed", mDataAllowed[0]);
         assertTrue("data not allowed", mDataAllowed[1]);
 
@@ -411,7 +410,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
                 ACTIVE_PHONE_SWITCH, null);
         mPhoneSwitcher.registerForActivePhoneSwitch(mActivePhoneSwitchHandler,
                 ACTIVE_PHONE_SWITCH, null);
-        verify(mActivePhoneSwitchHandler, times(2)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(2)).sendMessage(any());
         clearInvocations(mActivePhoneSwitchHandler);
 
         // Phone 0 has sub 1, phone 1 has sub 2.
@@ -423,7 +422,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         waitABit();
         // Phone 0 (sub 1) should be preferred data phone as it has default data sub.
         verify(mMockRadioConfig).setPreferredDataModem(eq(0), any());
-        verify(mActivePhoneSwitchHandler, times(2)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(2)).sendMessage(any());
 
         clearInvocations(mMockRadioConfig);
         clearInvocations(mActivePhoneSwitchHandler);
@@ -434,7 +433,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         NetworkRequest mmsRequest = addMmsNetworkRequest(2);
         waitABit();
         verify(mMockRadioConfig, never()).setPreferredDataModem(anyInt(), any());
-        verify(mActivePhoneSwitchHandler, never()).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, never()).sendMessage(any());
         assertTrue(mPhoneSwitcher.shouldApplyNetworkRequest(internetRequest, 0));
         assertFalse(mPhoneSwitcher.shouldApplyNetworkRequest(mmsRequest, 0));
         assertFalse(mPhoneSwitcher.shouldApplyNetworkRequest(internetRequest, 1));
@@ -444,7 +443,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mPhoneSwitcher.setOpportunisticDataSubscription(2);
         waitABit();
         verify(mMockRadioConfig).setPreferredDataModem(eq(1), any());
-        verify(mActivePhoneSwitchHandler, times(2)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(2)).sendMessage(any());
         assertFalse(mPhoneSwitcher.shouldApplyNetworkRequest(internetRequest, 0));
         assertFalse(mPhoneSwitcher.shouldApplyNetworkRequest(mmsRequest, 0));
         assertTrue(mPhoneSwitcher.shouldApplyNetworkRequest(internetRequest, 1));
@@ -457,7 +456,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mPhoneSwitcher.unsetOpportunisticDataSubscription();
         waitABit();
         verify(mMockRadioConfig).setPreferredDataModem(eq(0), any());
-        verify(mActivePhoneSwitchHandler, times(2)).sendMessageAtTime(any(), anyLong());
+        verify(mActivePhoneSwitchHandler, times(2)).sendMessage(any());
         assertTrue(mPhoneSwitcher.shouldApplyNetworkRequest(internetRequest, 0));
         assertFalse(mPhoneSwitcher.shouldApplyNetworkRequest(mmsRequest, 0));
         assertFalse(mPhoneSwitcher.shouldApplyNetworkRequest(internetRequest, 1));
