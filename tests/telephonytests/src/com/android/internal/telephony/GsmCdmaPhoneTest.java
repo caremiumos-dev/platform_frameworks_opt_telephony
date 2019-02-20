@@ -18,13 +18,11 @@ package com.android.internal.telephony;
 
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_ENABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_REASON_UNCONDITIONAL;
-import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.nullable;
 import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyInt;
@@ -55,9 +53,10 @@ import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
-import android.test.suitebuilder.annotation.SmallTest;
 
 import androidx.test.filters.FlakyTest;
+import androidx.test.filters.SmallTest;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.android.internal.telephony.test.SimulatedCommands;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
@@ -71,12 +70,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.List;
 
+@RunWith(AndroidJUnit4.class)
 public class GsmCdmaPhoneTest extends TelephonyTest {
     @Mock
     private Handler mTestHandler;
@@ -108,7 +109,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         mPhoneUT.sendMessage(mPhoneUT.obtainMessage(GsmCdmaPhone.EVENT_VOICE_RADIO_TECH_CHANGED,
                 new AsyncResult(null, new int[]{ServiceState.RIL_RADIO_TECHNOLOGY_GSM}, null)));
         //wait for voice RAT to be updated
-        waitForMs(50);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
         assertEquals(PhoneConstants.PHONE_TYPE_GSM, mPhoneUT.getPhoneType());
     }
 
@@ -117,7 +118,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         mPhoneUT.sendMessage(mPhoneUT.obtainMessage(GsmCdmaPhone.EVENT_VOICE_RADIO_TECH_CHANGED,
                 new AsyncResult(null, new int[]{ServiceState.RIL_RADIO_TECHNOLOGY_IS95A}, null)));
         //wait for voice RAT to be updated
-        waitForMs(100);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
         assertEquals(PhoneConstants.PHONE_TYPE_CDMA, mPhoneUT.getPhoneType());
     }
 
@@ -136,7 +137,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         Message msg = Message.obtain();
         msg.what = integerArgumentCaptor.getValue();
         mPhoneUT.sendMessage(msg);
-        waitForMs(50);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
     }
 
     @After
@@ -161,7 +162,8 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
     public void testHandleActionCarrierConfigChanged() {
         Intent intent = new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         mContext.sendBroadcast(intent);
-        waitForMs(50);
+        // wait for handler to process carrier config change
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
         verify(mSST, times(1)).pollState();
 
         // set voice radio tech in RIL to 1xRTT. ACTION_CARRIER_CONFIG_CHANGED should trigger a
@@ -169,7 +171,10 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         mSimulatedCommands.setVoiceRadioTech(ServiceState.RIL_RADIO_TECHNOLOGY_1xRTT);
         assertTrue(mPhoneUT.isPhoneTypeGsm());
         mContext.sendBroadcast(intent);
-        waitForMs(50);
+        // wait for handler to handle voice type changing.
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
+        // wait for handler to handle carrier config change.
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
         assertTrue(mPhoneUT.isPhoneTypeCdmaLte());
         verify(mSST, times(2)).pollState();
     }
@@ -479,7 +484,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         AsyncResult.forMessage(msg).exception =
                 new IccException("setVoiceMailNumber not implemented");
         msg.sendToTarget();
-        waitForMs(50);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
 
         assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
     }
@@ -551,7 +556,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         verify(mSimulatedCommandsVerifier).queryCallForwardStatus(
                 eq(CF_REASON_UNCONDITIONAL), eq(CommandsInterface.SERVICE_CLASS_VOICE),
                 nullable(String.class), nullable(Message.class));
-        waitForMs(50);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
         verify(mSimRecords).setVoiceCallForwardingFlag(anyInt(), anyBoolean(),
                 nullable(String.class));
 
@@ -585,7 +590,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         verify(mSimulatedCommandsVerifier).setCallForward(eq(CF_ACTION_ENABLE),
                 eq(CF_REASON_UNCONDITIONAL), anyInt(), eq(cfNumber), eq(0),
                 nullable(Message.class));
-        waitForMs(50);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
         verify(mSimRecords).setVoiceCallForwardingFlag(anyInt(), anyBoolean(), eq(cfNumber));
     }
 
@@ -658,7 +663,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
         // verify handling of emergency callback mode
         mSimulatedCommands.notifyEmergencyCallbackMode();
-        waitForMs(50);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
 
         // verify ACTION_EMERGENCY_CALLBACK_MODE_CHANGED
         ArgumentCaptor<Intent> intentArgumentCaptor = ArgumentCaptor.forClass(Intent.class);
@@ -693,7 +698,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
         // verify handling of emergency callback mode exit
         mSimulatedCommands.notifyExitEmergencyCallbackMode();
-        waitForMs(50);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
 
         // verify ACTION_EMERGENCY_CALLBACK_MODE_CHANGED
         try {
@@ -722,8 +727,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
 
         // verify EcmExitRespRegistrant and mEmergencyCallToggledRegistrants are notified
-        verify(mTestHandler, times(2)).sendMessageAtTime(messageArgumentCaptor.capture(),
-                anyLong());
+        verify(mTestHandler, times(2)).sendMessage(messageArgumentCaptor.capture());
         List<Message> msgList = messageArgumentCaptor.getAllValues();
         assertEquals(EVENT_EMERGENCY_CALLBACK_MODE_EXIT, msgList.get(0).what);
         assertEquals(EVENT_EMERGENCY_CALL_TOGGLE, msgList.get(1).what);
@@ -746,7 +750,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         switchToCdma();
         // verify handling of emergency callback mode
         mSimulatedCommands.notifyEmergencyCallbackMode();
-        waitForMs(50);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
 
         // verify ACTION_EMERGENCY_CALLBACK_MODE_CHANGED
         ArgumentCaptor<Intent> intentArgumentCaptor = ArgumentCaptor.forClass(Intent.class);
@@ -781,7 +785,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
         // verify handling of emergency callback mode exit when modem resets
         mSimulatedCommands.notifyModemReset();
-        waitForMs(50);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
 
         // verify ACTION_EMERGENCY_CALLBACK_MODE_CHANGED
         try {
@@ -810,8 +814,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
 
         // verify EcmExitRespRegistrant and mEmergencyCallToggledRegistrants are notified
-        verify(mTestHandler, times(2)).sendMessageAtTime(messageArgumentCaptor.capture(),
-                anyLong());
+        verify(mTestHandler, times(2)).sendMessage(messageArgumentCaptor.capture());
         List<Message> msgList = messageArgumentCaptor.getAllValues();
         assertEquals(EVENT_EMERGENCY_CALLBACK_MODE_EXIT, msgList.get(0).what);
         assertEquals(EVENT_EMERGENCY_CALL_TOGGLE, msgList.get(1).what);
@@ -883,7 +886,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         mPhoneUT.mEriManager = mEriManager;
         mPhoneUT.sendMessage(mPhoneUT.obtainMessage(GsmCdmaPhone.EVENT_CARRIER_CONFIG_CHANGED,
                 null));
-        waitForMs(100);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
         verify(mEriManager, times(1)).loadEriFile();
     }
 
@@ -928,15 +931,15 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertEquals(false, iccCard.getIccPin2Blocked());
         assertEquals(false, iccCard.getIccPuk2Blocked());
 
-        Message onComplete = mTestHandler.obtainMessage(EVENT_SET_ICC_LOCK_ENABLED);
+
+        Message onComplete = Message.obtain(mTestHandler, EVENT_SET_ICC_LOCK_ENABLED);
         iccCard.setIccLockEnabled(true, "password", onComplete);
 
-        waitForMs(100);
+        waitForHandlerAction(mPhoneUT, 1000/*ms*/);
 
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
         // Verify that message is sent back with exception.
-        verify(mTestHandler, times(1)).sendMessageAtTime(messageArgumentCaptor.capture(),
-                anyLong());
+        verify(mTestHandler, times(1)).sendMessage(messageArgumentCaptor.capture());
         Message message = messageArgumentCaptor.getAllValues().get(0);
         AsyncResult ret = (AsyncResult) message.obj;
         assertEquals(EVENT_SET_ICC_LOCK_ENABLED, message.what);

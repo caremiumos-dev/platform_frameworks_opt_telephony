@@ -3,6 +3,11 @@ android_test {
 
     srcs: ["**/*.java"],
 
+    jni_libs: [
+            // For static/final mockito support
+            "libdexmakerjvmtiagent"
+    ],
+
     libs: [
         "android.test.base",
         "android.test.mock",
@@ -14,7 +19,7 @@ android_test {
         "androidx.test.rules",
         "frameworks-base-testutils",
         "guava",
-        "mockito-target-minus-junit4",
+        "mockito-target-inline",
         "platform-test-annotations",
         "services.core",
         "telephony-common",

@@ -25,7 +25,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyChar;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.nullable;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doNothing;
@@ -53,9 +52,10 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
 import android.telephony.ims.ImsCallProfile;
 import android.telephony.ims.ImsReasonInfo;
-import android.test.suitebuilder.annotation.SmallTest;
 
 import androidx.test.filters.FlakyTest;
+import androidx.test.filters.SmallTest;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.android.ims.ImsEcbmStateListener;
 import com.android.ims.ImsManager;
@@ -75,11 +75,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import java.util.List;
 
+@RunWith(AndroidJUnit4.class)
 public class ImsPhoneTest extends TelephonyTest {
     @Mock
     private ImsPhoneCall mForegroundCall;
@@ -134,8 +136,8 @@ public class ImsPhoneTest extends TelephonyTest {
 
         mDoesRilSendMultipleCallRing = SystemProperties.getBoolean(
                 TelephonyProperties.PROPERTY_RIL_SENDS_MULTIPLE_CALL_RING, true);
-        replaceInstance(Handler.class, "mLooper", mTestHandler, mImsPhoneUT.getLooper());
-        replaceInstance(Phone.class, "mLooper", mPhone, mImsPhoneUT.getLooper());
+        doReturn(mImsPhoneUT.getLooper()).when(mTestHandler).getLooper();
+        doReturn(mImsPhoneUT.getLooper()).when(mPhone).getLooper();
         mImsPhoneUT.registerForSuppServiceNotification(mTestHandler,
                 EVENT_SUPP_SERVICE_NOTIFICATION, null);
         mImsPhoneUT.registerForSuppServiceFailed(mTestHandler,
@@ -183,7 +185,7 @@ public class ImsPhoneTest extends TelephonyTest {
         // dial string length > 1
         assertEquals(true, mImsPhoneUT.handleInCallMmiCommands("10"));
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_SUPP_SERVICE_FAILED, messageArgumentCaptor.getValue().what);
         assertEquals(Phone.SuppService.HANGUP,
                 ((AsyncResult)messageArgumentCaptor.getValue().obj).result);
@@ -210,7 +212,7 @@ public class ImsPhoneTest extends TelephonyTest {
         // dial string length > 1
         assertEquals(true, mImsPhoneUT.handleInCallMmiCommands("20"));
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_SUPP_SERVICE_FAILED, messageArgumentCaptor.getValue().what);
         assertEquals(Phone.SuppService.SEPARATE,
                 ((AsyncResult) messageArgumentCaptor.getValue().obj).result);
@@ -249,7 +251,7 @@ public class ImsPhoneTest extends TelephonyTest {
         // dial string length == 1
         assertEquals(true, mImsPhoneUT.handleInCallMmiCommands("4"));
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_SUPP_SERVICE_FAILED, messageArgumentCaptor.getValue().what);
         assertEquals(Phone.SuppService.TRANSFER,
                 ((AsyncResult) messageArgumentCaptor.getValue().obj).result);
@@ -266,7 +268,7 @@ public class ImsPhoneTest extends TelephonyTest {
         // dial string length == 1
         assertEquals(true, mImsPhoneUT.handleInCallMmiCommands("5"));
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_SUPP_SERVICE_FAILED, messageArgumentCaptor.getValue().what);
         assertEquals(Phone.SuppService.UNKNOWN,
                 ((AsyncResult)messageArgumentCaptor.getValue().obj).result);
@@ -370,8 +372,7 @@ public class ImsPhoneTest extends TelephonyTest {
 
         // verify registrants are notified
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler, times(1)).sendMessageAtTime(messageArgumentCaptor.capture(),
-                anyLong());
+        verify(mTestHandler, times(1)).sendMessage(messageArgumentCaptor.capture());
         Message message = messageArgumentCaptor.getValue();
         assertEquals(EVENT_SUPP_SERVICE_NOTIFICATION, message.what);
         assertEquals(ssn, ((AsyncResult) message.obj).result);
@@ -382,7 +383,7 @@ public class ImsPhoneTest extends TelephonyTest {
         // notification)
         mImsPhoneUT.unregisterForSuppServiceNotification(mTestHandler);
         mImsPhoneUT.notifySuppSvcNotification(ssn);
-        verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, times(1)).sendMessage(any(Message.class));
     }
 
     @Test
@@ -434,8 +435,7 @@ public class ImsPhoneTest extends TelephonyTest {
         mImsPhoneUT.notifyIncomingRing();
         waitForMs(100);
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler, times(1)).sendMessageAtTime(messageArgumentCaptor.capture(),
-                anyLong());
+        verify(mTestHandler, times(1)).sendMessage(messageArgumentCaptor.capture());
         Message message = messageArgumentCaptor.getValue();
         assertEquals(EVENT_INCOMING_RING, message.what);
     }
@@ -595,8 +595,7 @@ public class ImsPhoneTest extends TelephonyTest {
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
 
         // verify EcmExitRespRegistrant is notified
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(),
-                anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_EMERGENCY_CALLBACK_MODE_EXIT, messageArgumentCaptor.getValue().what);
 
         // verify wakeLock released
