@@ -26,10 +26,17 @@ import android.telecom.PhoneAccountHandle;
 import android.telephony.TelephonyManager;
 import android.telephony.VisualVoicemailSmsFilterSettings;
 
+import androidx.test.filters.SmallTest;
+import androidx.test.runner.AndroidJUnit4;
+
 import com.android.internal.telephony.VisualVoicemailSmsFilter.PhoneAccountHandleConverter;
 
 import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
@@ -37,6 +44,7 @@ import java.util.Arrays;
 /**
  * Unit test for {@link VisualVoicemailSmsFilter}
  */
+@RunWith(AndroidJUnit4.class)
 public class VisualVoicemailSmsFilterTest extends TestCase {
 
     /**
@@ -81,13 +89,15 @@ public class VisualVoicemailSmsFilterTest extends TestCase {
     private Context mContext;
     private TelephonyManager mTelephonyManager;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
         super.setUp();
         mContext = Mockito.mock(Context.class);
         mTelephonyManager = Mockito.mock(TelephonyManager.class);
         when(mContext.getSystemServiceName(TelephonyManager.class))
                 .thenReturn(Context.TELEPHONY_SERVICE);
+        when(mContext.getSystemService(TelephonyManager.class))
+                .thenReturn(mTelephonyManager);
         when(mContext.getSystemService(Context.TELEPHONY_SERVICE))
                 .thenReturn(mTelephonyManager);
 
@@ -102,7 +112,7 @@ public class VisualVoicemailSmsFilterTest extends TestCase {
                 });
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
         VisualVoicemailSmsFilter.setPhoneAccountHandleConverterForTest(null);
         super.tearDown();
@@ -115,6 +125,8 @@ public class VisualVoicemailSmsFilterTest extends TestCase {
      * will fail to parse it and return an invalid object, causing {@link NullPointerException} on
      * any operation if not handled.
      */
+    @SmallTest
+    @Test
     public void testUnsupportedPdu() {
 
         setSettings(new VisualVoicemailSmsFilterSettings.Builder().build());
@@ -126,6 +138,8 @@ public class VisualVoicemailSmsFilterTest extends TestCase {
                 VisualVoicemailSmsFilter.filter(mContext, pdus, SmsConstants.FORMAT_3GPP, 0, 0));
     }
 
+    @SmallTest
+    @Test
     public void testFilterNotSet_matchesVvmPattern_filtered() {
         setSettings(null);
         Resources resources = Mockito.mock(Resources.class);
@@ -141,12 +155,16 @@ public class VisualVoicemailSmsFilterTest extends TestCase {
                         0));
     }
 
+    @SmallTest
+    @Test
     public void testOriginatingNumber_unspecified_filtered() {
         setSettings(new VisualVoicemailSmsFilterSettings.Builder().build());
         assertTrue(VisualVoicemailSmsFilter
                 .filter(mContext, SYNC_PDU, SmsConstants.FORMAT_3GPP, 0, 0));
     }
 
+    @SmallTest
+    @Test
     public void testOriginatingNumber_match_filtered() {
         setSettings(
                 new VisualVoicemailSmsFilterSettings.Builder().setOriginatingNumbers(
@@ -156,6 +174,8 @@ public class VisualVoicemailSmsFilterTest extends TestCase {
                 .filter(mContext, SYNC_PDU, SmsConstants.FORMAT_3GPP, 0, 0));
     }
 
+    @SmallTest
+    @Test
     public void testOriginatingNumber_mismatch_notFiltered() {
         setSettings(
                 new VisualVoicemailSmsFilterSettings.Builder().setOriginatingNumbers(
@@ -165,6 +185,8 @@ public class VisualVoicemailSmsFilterTest extends TestCase {
                 .filter(mContext, SYNC_PDU, SmsConstants.FORMAT_3GPP, 0, 0));
     }
 
+    @SmallTest
+    @Test
     public void testDestinationPort_anyMatch_filtered() {
         setSettings(new VisualVoicemailSmsFilterSettings.Builder()
                 .setDestinationPort(123).build());
@@ -172,6 +194,8 @@ public class VisualVoicemailSmsFilterTest extends TestCase {
                 .filter(mContext, SYNC_PDU, SmsConstants.FORMAT_3GPP, 123, 0));
     }
 
+    @SmallTest
+    @Test
     public void testDestinationPort_anyData_filtered() {
         setSettings(new VisualVoicemailSmsFilterSettings.Builder()
                 .setDestinationPort(VisualVoicemailSmsFilterSettings.DESTINATION_PORT_DATA_SMS)
@@ -180,6 +204,8 @@ public class VisualVoicemailSmsFilterTest extends TestCase {
                 .filter(mContext, SYNC_PDU, SmsConstants.FORMAT_3GPP, 456, 0));
     }
 
+    @SmallTest
+    @Test
     public void testDestinationPort_anyData_textReceived_notFiltered() {
         setSettings(new VisualVoicemailSmsFilterSettings.Builder()
                 .setDestinationPort(VisualVoicemailSmsFilterSettings.DESTINATION_PORT_DATA_SMS)
@@ -188,7 +214,8 @@ public class VisualVoicemailSmsFilterTest extends TestCase {
                 .filter(mContext, SYNC_PDU, SmsConstants.FORMAT_3GPP, -1, 0));
     }
 
-
+    @SmallTest
+    @Test
     public void testDestinationPort_mismatch_notFiltered() {
         setSettings(new VisualVoicemailSmsFilterSettings.Builder()
                 .setDestinationPort(123).build());

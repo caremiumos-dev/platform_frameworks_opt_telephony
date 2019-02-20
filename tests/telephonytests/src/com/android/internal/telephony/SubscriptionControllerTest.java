@@ -374,7 +374,6 @@ public class SubscriptionControllerTest extends TelephonyTest {
                 mCallingPackage));
     }
 
-
     @Test
     @SmallTest
     public void testOpptSubInfoListChanged() throws Exception {
@@ -513,7 +512,6 @@ public class SubscriptionControllerTest extends TelephonyTest {
         // Add a few subscriptions
         addAndVerifyRemoteSimAddition(4, 0);
     }
-
 
     @Test @SmallTest
     public void testDefaultSubIdOnMultiSimDevice() {

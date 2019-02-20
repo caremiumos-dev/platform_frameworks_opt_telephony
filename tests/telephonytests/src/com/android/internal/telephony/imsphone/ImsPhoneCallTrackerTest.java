@@ -57,9 +57,10 @@ import android.telephony.ims.ImsStreamMediaProfile;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
-import android.test.suitebuilder.annotation.SmallTest;
 
 import androidx.test.filters.FlakyTest;
+import androidx.test.filters.SmallTest;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.android.ims.ImsCall;
 import com.android.ims.ImsConfig;
@@ -77,11 +78,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+@RunWith(AndroidJUnit4.class)
 public class ImsPhoneCallTrackerTest extends TelephonyTest {
     private ImsPhoneCallTracker mCTUT;
     private ImsCTHandlerThread mImsCTHandlerThread;

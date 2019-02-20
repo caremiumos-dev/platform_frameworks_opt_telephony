@@ -18,7 +18,6 @@ package com.android.internal.telephony;
 import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -32,7 +31,6 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.provider.Settings;
 import android.provider.Telephony;
-import android.telephony.CarrierConfigManager;
 import android.test.mock.MockContentResolver;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -109,17 +107,17 @@ public class CarrierActionAgentTest extends TelephonyTest {
 
         // no carrier actions triggered from sim loading since there are same as the current one
         ArgumentCaptor<Message> message = ArgumentCaptor.forClass(Message.class);
-        verify(mDataActionHandler, times(0)).sendMessageAtTime(message.capture(), anyLong());
-        verify(mRadioActionHandler, times(0)).sendMessageAtTime(message.capture(), anyLong());
+        verify(mDataActionHandler, times(0)).sendMessage(message.capture());
+        verify(mRadioActionHandler, times(0)).sendMessage(message.capture());
 
         // disable metered apns and radio
         mCarrierActionAgentUT.carrierActionSetRadioEnabled(false);
         mCarrierActionAgentUT.carrierActionSetMeteredApnsEnabled(false);
-        waitForMs(200);
-        verify(mDataActionHandler, times(1)).sendMessageAtTime(message.capture(), anyLong());
+        waitForHandlerAction(mCarrierActionAgentUT, 1000/*ms*/);
+        verify(mDataActionHandler, times(1)).sendMessage(message.capture());
         assertEquals(DATA_CARRIER_ACTION_EVENT, message.getValue().what);
         assertEquals(false, ((AsyncResult) message.getValue().obj).result);
-        verify(mRadioActionHandler, times(1)).sendMessageAtTime(message.capture(), anyLong());
+        verify(mRadioActionHandler, times(1)).sendMessage(message.capture());
         assertEquals(RADIO_CARRIER_ACTION_EVENT, message.getValue().what);
         assertEquals(false, ((AsyncResult) message.getValue().obj).result);
 
@@ -130,11 +128,11 @@ public class CarrierActionAgentTest extends TelephonyTest {
         waitForMs(200);
 
         // carrier actions triggered from APM
-        verify(mDataActionHandler, times(2)).sendMessageAtTime(message.capture(), anyLong());
+        verify(mDataActionHandler, times(2)).sendMessage(message.capture());
         assertEquals(DATA_CARRIER_ACTION_EVENT, message.getValue().what);
         assertEquals(true, ((AsyncResult) message.getValue().obj).result);
 
-        verify(mRadioActionHandler, times(2)).sendMessageAtTime(message.capture(), anyLong());
+        verify(mRadioActionHandler, times(2)).sendMessage(message.capture());
         assertEquals(RADIO_CARRIER_ACTION_EVENT, message.getValue().what);
         assertEquals(true, ((AsyncResult) message.getValue().obj).result);
     }
@@ -151,19 +149,19 @@ public class CarrierActionAgentTest extends TelephonyTest {
 
         // no carrier actions triggered from sim loading since there are same as the current one
         ArgumentCaptor<Message> message = ArgumentCaptor.forClass(Message.class);
-        verify(mDataActionHandler, times(0)).sendMessageAtTime(message.capture(), anyLong());
-        verify(mRadioActionHandler, times(0)).sendMessageAtTime(message.capture(), anyLong());
+        verify(mDataActionHandler, times(0)).sendMessage(message.capture());
+        verify(mRadioActionHandler, times(0)).sendMessage(message.capture());
 
         // disable metered apns and radio
         mCarrierActionAgentUT.carrierActionSetRadioEnabled(false);
         mCarrierActionAgentUT.carrierActionSetMeteredApnsEnabled(false);
         waitForMs(200);
 
-        verify(mDataActionHandler, times(1)).sendMessageAtTime(message.capture(), anyLong());
+        verify(mDataActionHandler, times(1)).sendMessage(message.capture());
         assertEquals(DATA_CARRIER_ACTION_EVENT, message.getValue().what);
         assertEquals(false, ((AsyncResult) message.getValue().obj).result);
 
-        verify(mRadioActionHandler, times(1)).sendMessageAtTime(message.capture(), anyLong());
+        verify(mRadioActionHandler, times(1)).sendMessage(message.capture());
         assertEquals(RADIO_CARRIER_ACTION_EVENT, message.getValue().what);
         assertEquals(false, ((AsyncResult) message.getValue().obj).result);
 
@@ -172,11 +170,11 @@ public class CarrierActionAgentTest extends TelephonyTest {
         waitForMs(200);
 
         // Carrier actions triggered from APN change
-        verify(mDataActionHandler, times(2)).sendMessageAtTime(message.capture(), anyLong());
+        verify(mDataActionHandler, times(2)).sendMessage(message.capture());
         assertEquals(DATA_CARRIER_ACTION_EVENT, message.getValue().what);
         assertEquals(true, ((AsyncResult) message.getValue().obj).result);
 
-        verify(mRadioActionHandler, times(2)).sendMessageAtTime(message.capture(), anyLong());
+        verify(mRadioActionHandler, times(2)).sendMessage(message.capture());
         assertEquals(RADIO_CARRIER_ACTION_EVENT, message.getValue().what);
         assertEquals(true, ((AsyncResult) message.getValue().obj).result);
     }
