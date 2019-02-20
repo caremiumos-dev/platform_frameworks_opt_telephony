@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "168b08da_a6a66d9e",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-02-20T07:19:34Z",
+      "side": 1,
+      "message": "Do we need these both? Doesn\u0027t one imply the other, and so we can do away with one of them?",
+      "range": {
+        "startLine": 568,
+        "startChar": 12,
+        "endLine": 569,
+        "endChar": 54
+      },
+      "revId": "f179086e484c9fe8c51c0121c4782b26ac1609bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
