@@ -149,8 +149,10 @@ public class RcsMessageStoreUtil {
 
     private Cursor getValueFromTableRow(Uri tableUri, String valueColumn, String idColumn,
             int idValue) {
-        return mContentResolver.query(tableUri, new String[]{valueColumn}, idColumn + "=?",
-                new String[]{Integer.toString(idValue)}, null);
+        // TODO - support selection queries in RcsProvider. For now, add the id to the URI to do
+        //        queries.
+        return mContentResolver.query(Uri.withAppendedPath(tableUri, Integer.toString(idValue)),
+                new String[]{valueColumn}, null, null, null);
     }
 
     static Uri getMessageTableUri(boolean isIncoming) {

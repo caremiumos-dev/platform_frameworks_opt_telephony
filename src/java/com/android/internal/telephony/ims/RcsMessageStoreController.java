@@ -455,7 +455,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public int addIncomingMessage(int rcsThreadId,
+    public int addIncomingMessage(int rcsThreadId, boolean isGroup,
             RcsIncomingMessageCreationParams rcsIncomingMessageCreationParams)
             throws RemoteException {
         ContentValues contentValues = new ContentValues();
@@ -470,11 +470,11 @@ public class RcsMessageStoreController extends IRcs.Stub {
         mMessageQueryHelper.createContentValuesForGenericMessage(contentValues, rcsThreadId,
                 rcsIncomingMessageCreationParams);
 
-        return addMessage(rcsThreadId, true, contentValues);
+        return addMessage(rcsThreadId, isGroup, true, contentValues);
     }
 
     @Override
-    public int addOutgoingMessage(int rcsThreadId,
+    public int addOutgoingMessage(int rcsThreadId, boolean isGroup,
             RcsOutgoingMessageCreationParams rcsOutgoingMessageCreationParameters)
             throws RemoteException {
         ContentValues contentValues = new ContentValues();
@@ -482,13 +482,14 @@ public class RcsMessageStoreController extends IRcs.Stub {
         mMessageQueryHelper.createContentValuesForGenericMessage(contentValues, rcsThreadId,
                 rcsOutgoingMessageCreationParameters);
 
-        return addMessage(rcsThreadId, false, contentValues);
+        return addMessage(rcsThreadId, isGroup, false, contentValues);
     }
 
-    private int addMessage(int rcsThreadId, boolean isIncoming, ContentValues contentValues)
+    private int addMessage(int rcsThreadId, boolean isGroup, boolean isIncoming,
+            ContentValues contentValues)
             throws RemoteException {
-        Uri uri = mContentResolver.insert(mMessageQueryHelper.getMessageInsertionUri(isIncoming),
-                contentValues);
+        Uri uri = mContentResolver.insert(mMessageQueryHelper.getMessageInsertionUri(
+                isIncoming, rcsThreadId, isGroup), contentValues);
 
         if (uri == null) {
             throw new RemoteException(
@@ -796,7 +797,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public int getFileTransferStatus(int partId) throws RemoteException {
-        return mMessageStoreUtil.getIntValueFromTableRow(FILE_TRANSFER_URI, STATUS_COLUMN,
+        return mMessageStoreUtil.getIntValueFromTableRow(FILE_TRANSFER_URI, TRANSFER_STATUS_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
