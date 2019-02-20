@@ -16,21 +16,26 @@
 
 package com.android.internal.telephony;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.telephony.PhoneNumberUtils;
-import android.test.suitebuilder.annotation.SmallTest;
-import android.test.suitebuilder.annotation.MediumTest;
-import android.telephony.DisconnectCause;
+import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+
+import android.os.Looper;
+import android.telephony.DisconnectCause;
+import android.telephony.PhoneNumberUtils;
+
+import androidx.test.filters.MediumTest;
+import androidx.test.filters.SmallTest;
+import androidx.test.runner.AndroidJUnit4;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
+@RunWith(AndroidJUnit4.class)
 public class GsmCdmaConnectionTest extends TelephonyTest {
 
     private GsmCdmaConnection connection;
@@ -41,7 +46,7 @@ public class GsmCdmaConnectionTest extends TelephonyTest {
     @Before
     public void setUp() throws Exception {
         super.setUp(getClass().getSimpleName());
-        replaceInstance(Handler.class, "mLooper", mCT, Looper.getMainLooper());
+        doReturn(Looper.getMainLooper()).when(mCT).getLooper();
 
         mCT.mForegroundCall = new GsmCdmaCall(mCT);
         mCT.mBackgroundCall = new GsmCdmaCall(mCT);

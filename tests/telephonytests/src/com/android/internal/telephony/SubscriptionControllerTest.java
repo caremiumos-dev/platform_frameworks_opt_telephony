@@ -376,6 +376,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
                 mCallingPackage));
     }
 
+<<<<<<< HEAD
     @Test
     @SmallTest
     public void testSkipMigrateImsSettings() throws Exception {
@@ -429,6 +430,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
                     Settings.Global.WFC_IMS_ROAMING_MODE));
     }
 
+=======
+>>>>>>> Add support for mocking final classes using Mockito
     @Test
     @SmallTest
     public void testOpptSubInfoListChanged() throws Exception {
@@ -570,7 +573,10 @@ public class SubscriptionControllerTest extends TelephonyTest {
         addAndVerifyRemoteSimAddition(4, 0);
     }
 
+<<<<<<< HEAD
     @FlakyTest
+=======
+>>>>>>> Add support for mocking final classes using Mockito
     @Test @SmallTest
     public void testDefaultSubIdOnMultiSimDevice() {
         makeThisDeviceMultiSimCapable();

@@ -172,9 +172,14 @@ public abstract class TelephonyTest {
     @Mock
     protected ProxyController mProxyController;
     @Mock
-    protected Singleton<IActivityManager> mIActivityManagerSingleton;
-    @Mock
     protected IActivityManager mIActivityManager;
+    protected Singleton<IActivityManager> mIActivityManagerSingleton =
+            new Singleton<IActivityManager>() {
+        @Override
+        protected IActivityManager create() {
+            return mIActivityManager;
+        }
+    };
     @Mock
     protected IIntentSender mIIntentSender;
     @Mock
@@ -546,8 +551,6 @@ public abstract class TelephonyTest {
                 "mCdmaSubscriptionSourceChangedRegistrants", mCdmaSSM, mRegistrantList);
         replaceInstance(SimulatedCommandsVerifier.class, "sInstance", null,
                 mSimulatedCommandsVerifier);
-        replaceInstance(Singleton.class, "mInstance", mIActivityManagerSingleton,
-                mIActivityManager);
         replaceInstance(ServiceManager.class, "sCache", null, mServiceManagerMockedServices);
         replaceInstance(IntentBroadcaster.class, "sIntentBroadcaster", null, mIntentBroadcaster);
         replaceInstance(TelephonyManager.class, "sInstance", null,

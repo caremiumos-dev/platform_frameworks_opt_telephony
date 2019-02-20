@@ -50,16 +50,18 @@ import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.test.mock.MockContentProvider;
 import android.test.mock.MockContentResolver;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.android.internal.telephony.euicc.EuiccController;
-import com.android.internal.telephony.uicc.IccFileHandler;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.UiccSlot;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
@@ -71,6 +73,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+@RunWith(AndroidJUnit4.class)
 public class SubscriptionInfoUpdaterTest extends TelephonyTest {
 
     private static final int FAKE_SUB_ID_1 = 0;
@@ -82,16 +85,13 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
     private SubscriptionInfoUpdaterHandlerThread mSubscriptionInfoUpdaterHandlerThread;
     private SubscriptionInfoUpdater mUpdater;
     private IccRecords mIccRecord;
+    private HashMap<String, Object> mSubscriptionContent = new HashMap<>();
     @Mock
     private UserInfo mUserInfo;
     @Mock
     private SubscriptionInfo mSubInfo;
     @Mock
     private ContentProvider mContentProvider;
-    @Mock
-    private HashMap<String, Object> mSubscriptionContent;
-    @Mock
-    private IccFileHandler mIccFileHandler;
     @Mock
     private EuiccController mEuiccController;
     @Mock
@@ -229,8 +229,12 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
                 IccCardConstants.INTENT_VALUE_ICC_UNKNOWN, null, FAKE_SUB_ID_1, false);
 
         waitForMs(100);
+<<<<<<< HEAD
         assertFalse(mUpdater.isSubInfoInitialized());
         verify(mSubscriptionContent, times(0)).put(anyString(), any());
+=======
+        assertTrue(mSubscriptionContent.isEmpty());
+>>>>>>> Add support for mocking final classes using Mockito
         CarrierConfigManager mConfigManager = (CarrierConfigManager)
                 mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         verify(mConfigManager).updateConfigForPhoneId(eq(FAKE_SUB_ID_1),
@@ -246,8 +250,12 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
                 IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR, null, FAKE_SUB_ID_1, false);
 
         waitForMs(100);
+<<<<<<< HEAD
         assertTrue(mUpdater.isSubInfoInitialized());
         verify(mSubscriptionContent, times(0)).put(anyString(), any());
+=======
+        assertTrue(mSubscriptionContent.isEmpty());
+>>>>>>> Add support for mocking final classes using Mockito
         CarrierConfigManager mConfigManager = (CarrierConfigManager)
                 mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         verify(mConfigManager).updateConfigForPhoneId(eq(FAKE_SUB_ID_1),
@@ -263,8 +271,12 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
                 IccCardConstants.INTENT_VALUE_ICC_IMSI, null, 2, false);
 
         waitForMs(100);
+<<<<<<< HEAD
         assertFalse(mUpdater.isSubInfoInitialized());
         verify(mSubscriptionContent, times(0)).put(anyString(), any());
+=======
+        assertTrue(mSubscriptionContent.isEmpty());
+>>>>>>> Add support for mocking final classes using Mockito
         CarrierConfigManager mConfigManager = (CarrierConfigManager)
                 mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         verify(mConfigManager, times(0)).updateConfigForPhoneId(eq(2),

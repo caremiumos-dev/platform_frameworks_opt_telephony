@@ -24,7 +24,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.nullable;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
@@ -817,7 +816,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_DATA_ROAMING_ON, messageArgumentCaptor.getValue().what);
 
         // Disable roaming
@@ -838,7 +837,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForMs(200);
 
         // verify that no new message posted to handler
-        verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, times(1)).sendMessage(any(Message.class));
     }
 
     @Test
@@ -864,7 +863,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_DATA_ROAMING_OFF, messageArgumentCaptor.getValue().what);
 
         // Enable roaming
@@ -885,7 +884,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForMs(100);
 
         // verify that no new message posted to handler
-        verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, times(1)).sendMessage(any(Message.class));
     }
 
     @Test
@@ -903,7 +902,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_DATA_ROAMING_ON, messageArgumentCaptor.getValue().what);
 
         // Disable roaming
@@ -924,7 +923,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForMs(200);
 
         // verify that no new message posted to handler
-        verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, times(1)).sendMessage(any(Message.class));
     }
 
     @Test
@@ -950,7 +949,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_DATA_ROAMING_OFF, messageArgumentCaptor.getValue().what);
 
         // Enable roaming
@@ -971,7 +970,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForMs(100);
 
         // verify that no new message posted to handler
-        verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, times(1)).sendMessage(any(Message.class));
     }
 
     @Test
@@ -997,7 +996,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_DATA_CONNECTION_ATTACHED, messageArgumentCaptor.getValue().what);
 
         // set service state out of service
@@ -1019,7 +1018,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForMs(100);
 
         // verify that no new message posted to handler
-        verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, times(1)).sendMessage(any(Message.class));
     }
 
     @Test
@@ -1045,7 +1044,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_DATA_CONNECTION_ATTACHED, messageArgumentCaptor.getValue().what);
 
         // set service state out of service
@@ -1067,7 +1066,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForMs(100);
 
         // verify that no new message posted to handler
-        verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, times(1)).sendMessage(any(Message.class));
     }
 
     @Test
@@ -1091,7 +1090,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_DATA_CONNECTION_DETACHED, messageArgumentCaptor.getValue().what);
 
         // set service state in service
@@ -1113,7 +1112,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForMs(100);
 
         // verify that no new message posted to handler
-        verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, times(1)).sendMessage(any(Message.class));
     }
 
     @Test
@@ -1132,7 +1131,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // Verify if message was posted to handler and value of result
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_VOICE_RAT_CHANGED, messageArgumentCaptor.getValue().what);
         assertEquals(new Pair<Integer, Integer>(ServiceState.STATE_IN_SERVICE,
                         ServiceState.RIL_RADIO_TECHNOLOGY_LTE),
@@ -1156,7 +1155,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // Verify if message was posted to handler and value of result
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_DATA_RAT_CHANGED, messageArgumentCaptor.getValue().what);
         assertEquals(new Pair<Integer, Integer>(ServiceState.STATE_IN_SERVICE,
                         ServiceState.RIL_RADIO_TECHNOLOGY_LTE),
@@ -1186,7 +1185,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_REGISTERED_TO_NETWORK, messageArgumentCaptor.getValue().what);
 
         // set service state out of service
@@ -1207,7 +1206,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForMs(100);
 
         // verify that no new message posted to handler
-        verify(mTestHandler, times(1)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, times(1)).sendMessage(any(Message.class));
     }
 
     @Test
@@ -1232,7 +1231,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_REGISTERED_TO_NETWORK, messageArgumentCaptor.getValue().what);
 
         // set service state out of service
@@ -1259,8 +1258,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler, times(2)).sendMessageAtTime(messageArgumentCaptor.capture(),
-                anyLong());
+        verify(mTestHandler, times(2)).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_REGISTERED_TO_NETWORK, messageArgumentCaptor.getValue().what);
     }
 
@@ -1276,7 +1274,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify posted message
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_PS_RESTRICT_ENABLED, messageArgumentCaptor.getValue().what);
     }
 
@@ -1292,7 +1290,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify posted message
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_PS_RESTRICT_DISABLED, messageArgumentCaptor.getValue().what);
     }
 
@@ -1502,7 +1500,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify posted message
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler).sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler).sendMessage(messageArgumentCaptor.capture());
         assertEquals(EVENT_SUBSCRIPTION_INFO_READY, messageArgumentCaptor.getValue().what);
     }
 
@@ -1529,8 +1527,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // verify if registered handler has message posted to it
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mTestHandler, atLeast(3)).sendMessageAtTime(
-                messageArgumentCaptor.capture(), anyLong());
+        verify(mTestHandler, atLeast(3)).sendMessage(messageArgumentCaptor.capture());
         HashSet<Integer> messageSet = new HashSet<>();
         for (Message m : messageArgumentCaptor.getAllValues()) {
             messageSet.add(m.what);
