@@ -117,20 +117,24 @@ class RcsMessageQueryHelper {
         contentValues.put(RCS_THREAD_ID_COLUMN, threadId);
     }
 
-    Uri getMessageInsertionUri(boolean isIncoming) {
+    Uri getMessageQueryUri(boolean isIncoming) {
         return isIncoming ? INCOMING_MESSAGE_URI : OUTGOING_MESSAGE_URI;
     }
 
-    Uri getMessageDeletionUri(int messageId, boolean isIncoming, int rcsThreadId, boolean isGroup) {
+    Uri getMessageInsertionUri(boolean isIncoming, int rcsThreadId, boolean isGroup) {
         return CONTENT_AND_AUTHORITY.buildUpon().appendPath(
                 isGroup ? RCS_GROUP_THREAD_URI_PART : RCS_1_TO_1_THREAD_URI_PART).appendPath(
                 Integer.toString(rcsThreadId)).appendPath(
-                isIncoming ? INCOMING_MESSAGE_URI_PART : OUTGOING_MESSAGE_URI_PART).appendPath(
-                Integer.toString(messageId)).build();
+                isIncoming ? INCOMING_MESSAGE_URI_PART : OUTGOING_MESSAGE_URI_PART).build();
+    }
+
+    Uri getMessageDeletionUri(int messageId, boolean isIncoming, int rcsThreadId, boolean isGroup) {
+        return Uri.withAppendedPath(getMessageInsertionUri(isIncoming, rcsThreadId, isGroup),
+                Integer.toString(messageId));
     }
 
     Uri getMessageUpdateUri(int messageId, boolean isIncoming) {
-        return getMessageInsertionUri(isIncoming).buildUpon().appendPath(
+        return getMessageQueryUri(isIncoming).buildUpon().appendPath(
                 Integer.toString(messageId)).build();
     }
 
@@ -174,7 +178,7 @@ class RcsMessageQueryHelper {
     }
 
     private Uri getMessageDeliveryQueryUri(int messageId) {
-        return getMessageInsertionUri(false).buildUpon().appendPath(
+        return getMessageQueryUri(false).buildUpon().appendPath(
                 Integer.toString(messageId)).appendPath(DELIVERY_URI_PART).build();
     }
 
@@ -184,7 +188,8 @@ class RcsMessageQueryHelper {
         contentValues.put(SESSION_ID_COLUMN,
                 fileTransferCreationParameters.getRcsFileTransferSessionId());
         contentValues.put(CONTENT_URI_COLUMN,
-                fileTransferCreationParameters.getContentUri().toString());
+                fileTransferCreationParameters.getContentUri() == null ? null
+                        : fileTransferCreationParameters.getContentUri().toString());
         contentValues.put(CONTENT_TYPE_COLUMN, fileTransferCreationParameters.getContentMimeType());
         contentValues.put(FILE_SIZE_COLUMN, fileTransferCreationParameters.getFileSize());
         contentValues.put(SUCCESSFULLY_TRANSFERRED_BYTES,
@@ -196,7 +201,8 @@ class RcsMessageQueryHelper {
         contentValues.put(DURATION_MILLIS_COLUMN,
                 fileTransferCreationParameters.getMediaDuration());
         contentValues.put(PREVIEW_URI_COLUMN,
-                fileTransferCreationParameters.getPreviewUri().toString());
+                fileTransferCreationParameters.getPreviewUri() == null ? null
+                        : fileTransferCreationParameters.getPreviewUri().toString());
         contentValues.put(PREVIEW_TYPE_COLUMN, fileTransferCreationParameters.getPreviewMimeType());
 
         return contentValues;
