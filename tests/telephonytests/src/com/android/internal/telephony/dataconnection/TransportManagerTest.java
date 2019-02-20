@@ -20,7 +20,6 @@ import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -100,7 +99,7 @@ public class TransportManagerTest extends TelephonyTest {
                 new AsyncResult(null, networkList, null)).sendToTarget();
         waitForMs(100);
         // Verify handover needed event was not sent
-        verify(mTestHandler, never()).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, never()).sendMessage(any(Message.class));
 
         // Now change the order of qualified networks by putting IWLAN first
         networkList = new ArrayList<>(Arrays.asList(
@@ -114,8 +113,7 @@ public class TransportManagerTest extends TelephonyTest {
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
 
         // Verify handover needed event was sent and the the target transport is WLAN.
-        verify(mTestHandler, times(1)).sendMessageAtTime(messageArgumentCaptor.capture(),
-                anyLong());
+        verify(mTestHandler, times(1)).sendMessage(messageArgumentCaptor.capture());
         Message message = messageArgumentCaptor.getValue();
         assertEquals(EVENT_HANDOVER_NEEDED, message.what);
         AsyncResult ar = (AsyncResult) message.obj;
@@ -135,8 +133,7 @@ public class TransportManagerTest extends TelephonyTest {
         messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
 
         // Verify handover needed event was sent and the the target transport is WWAN.
-        verify(mTestHandler, times(2)).sendMessageAtTime(messageArgumentCaptor.capture(),
-                anyLong());
+        verify(mTestHandler, times(2)).sendMessage(messageArgumentCaptor.capture());
         message = messageArgumentCaptor.getValue();
         assertEquals(EVENT_HANDOVER_NEEDED, message.what);
         ar = (AsyncResult) message.obj;
@@ -159,7 +156,7 @@ public class TransportManagerTest extends TelephonyTest {
                 new AsyncResult(null, networkList, null)).sendToTarget();
         waitForMs(100);
         // Verify handover needed event was not sent
-        verify(mTestHandler, never()).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, never()).sendMessage(any(Message.class));
 
         // Now change the order of qualified networks by swapping EUTRAN and UTRAN.
         networkList = new ArrayList<>(Arrays.asList(
@@ -170,6 +167,6 @@ public class TransportManagerTest extends TelephonyTest {
                 new AsyncResult(null, networkList, null)).sendToTarget();
         waitForMs(100);
         // Verify handover needed event was not sent
-        verify(mTestHandler, never()).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mTestHandler, never()).sendMessage(any(Message.class));
     }
 }

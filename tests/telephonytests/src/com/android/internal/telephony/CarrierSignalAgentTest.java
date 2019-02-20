@@ -21,7 +21,6 @@ import static com.android.internal.telephony.TelephonyIntents
 import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.argThat;
@@ -242,7 +241,7 @@ public class CarrierSignalAgentTest extends TelephonyTest {
         mContext.sendBroadcast(new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
         waitForMs(50);
         // verify no reset action on initial config load
-        verify(mCarrierActionAgent, times(0)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mCarrierActionAgent, times(0)).sendMessage(any(Message.class));
 
         // new carrier config with different receiver intent order
         mBundle.putStringArray(
@@ -252,7 +251,7 @@ public class CarrierSignalAgentTest extends TelephonyTest {
         mContext.sendBroadcast(new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
         waitForMs(50);
         // verify no reset action for the same config (different order)
-        verify(mCarrierActionAgent, times(0)).sendMessageAtTime(any(Message.class), anyLong());
+        verify(mCarrierActionAgent, times(0)).sendMessage(any(Message.class));
 
         // new different config value
         mBundle.putStringArray(
@@ -262,10 +261,7 @@ public class CarrierSignalAgentTest extends TelephonyTest {
         mContext.sendBroadcast(new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
         waitForMs(50);
         // verify there is no reset action
-        ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mCarrierActionAgent, times(1))
-                .sendMessageAtTime(messageArgumentCaptor.capture(), anyLong());
-        assertEquals(CarrierActionAgent.CARRIER_ACTION_RESET,
-                messageArgumentCaptor.getValue().what);
+        verify(mCarrierActionAgent, times(1)).sendEmptyMessage(
+                CarrierActionAgent.CARRIER_ACTION_RESET);
     }
 }

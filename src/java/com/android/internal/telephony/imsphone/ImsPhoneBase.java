@@ -48,7 +48,7 @@ import com.android.internal.telephony.uicc.IccFileHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class ImsPhoneBase extends Phone {
+public abstract class ImsPhoneBase extends Phone {
     private static final String LOG_TAG = "ImsPhoneBase";
 
     private RegistrantList mRingbackRegistrants = new RegistrantList();
