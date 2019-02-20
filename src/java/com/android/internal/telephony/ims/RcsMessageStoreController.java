@@ -94,15 +94,15 @@ import android.telephony.ims.RcsEventQueryResultDescriptor;
 import android.telephony.ims.RcsFileTransferCreationParams;
 import android.telephony.ims.RcsIncomingMessageCreationParams;
 import android.telephony.ims.RcsMessageQueryParams;
-import android.telephony.ims.RcsMessageQueryResult;
+import android.telephony.ims.RcsMessageQueryResultDescriptor;
 import android.telephony.ims.RcsMessageSnippet;
 import android.telephony.ims.RcsMessageStore;
 import android.telephony.ims.RcsOutgoingMessageCreationParams;
 import android.telephony.ims.RcsParticipantQueryParams;
-import android.telephony.ims.RcsParticipantQueryResult;
+import android.telephony.ims.RcsParticipantQueryResultDescriptor;
 import android.telephony.ims.RcsQueryContinuationToken;
 import android.telephony.ims.RcsThreadQueryParams;
-import android.telephony.ims.RcsThreadQueryResult;
+import android.telephony.ims.RcsThreadQueryResultDescriptor;
 import android.telephony.ims.aidl.IRcs;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -168,7 +168,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public RcsThreadQueryResult getRcsThreads(RcsThreadQueryParams queryParameters)
+    public RcsThreadQueryResultDescriptor getRcsThreads(RcsThreadQueryParams queryParameters)
             throws RemoteException {
         Bundle bundle = new Bundle();
         bundle.putParcelable(THREAD_QUERY_PARAMETERS_KEY, queryParameters);
@@ -176,7 +176,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public RcsThreadQueryResult getRcsThreadsWithToken(
+    public RcsThreadQueryResultDescriptor getRcsThreadsWithToken(
             RcsQueryContinuationToken continuationToken) throws RemoteException {
         Bundle bundle = new Bundle();
         bundle.putParcelable(QUERY_CONTINUATION_TOKEN, continuationToken);
@@ -184,7 +184,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public RcsParticipantQueryResult getParticipants(
+    public RcsParticipantQueryResultDescriptor getParticipants(
             RcsParticipantQueryParams queryParameters) throws RemoteException {
         Bundle bundle = new Bundle();
         bundle.putParcelable(PARTICIPANT_QUERY_PARAMETERS_KEY, queryParameters);
@@ -192,7 +192,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public RcsParticipantQueryResult getParticipantsWithToken(
+    public RcsParticipantQueryResultDescriptor getParticipantsWithToken(
             RcsQueryContinuationToken continuationToken) throws RemoteException {
         Bundle bundle = new Bundle();
         bundle.putParcelable(QUERY_CONTINUATION_TOKEN, continuationToken);
@@ -200,7 +200,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public RcsMessageQueryResult getMessages(RcsMessageQueryParams queryParams)
+    public RcsMessageQueryResultDescriptor getMessages(RcsMessageQueryParams queryParams)
             throws RemoteException {
         Bundle bundle = new Bundle();
         bundle.putParcelable(MESSAGE_QUERY_PARAMETERS_KEY, queryParams);
@@ -208,7 +208,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public RcsMessageQueryResult getMessagesWithToken(
+    public RcsMessageQueryResultDescriptor getMessagesWithToken(
             RcsQueryContinuationToken continuationToken) throws RemoteException {
         Bundle bundle = new Bundle();
         bundle.putParcelable(QUERY_CONTINUATION_TOKEN, continuationToken);
