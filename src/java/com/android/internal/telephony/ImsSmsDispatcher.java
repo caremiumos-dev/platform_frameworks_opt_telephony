@@ -324,7 +324,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
 
     @Override
     protected TextEncodingDetails calculateLength(CharSequence messageBody, boolean use7bitOnly) {
-        return SMSDispatcherUtil.calculateLength(isCdmaMo(), messageBody, use7bitOnly);
+        return SMSDispatcherUtil.calculateLength(isCdmaMo(), messageBody, use7bitOnly, getSubId());
     }
 
     @Override

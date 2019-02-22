@@ -90,7 +90,7 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
 
     @Override
     protected TextEncodingDetails calculateLength(CharSequence messageBody, boolean use7bitOnly) {
-        return SMSDispatcherUtil.calculateLengthCdma(messageBody, use7bitOnly);
+        return SMSDispatcherUtil.calculateLengthCdma(messageBody, use7bitOnly, getSubId());
     }
     /**
      * Called from parent class to handle status report from {@code CdmaInboundSmsHandler}.

@@ -233,15 +233,16 @@ public final class SMSDispatcherUtil {
      * Calculate the number of septets needed to encode the message. This function should only be
      * called for individual segments of multipart message.
      *
-     * @param isCdma  true if cdma format should be used.
+     * @param isCdma true if cdma format should be used.
      * @param messageBody the message to encode
      * @param use7bitOnly ignore (but still count) illegal characters if true
+     * @param subId Subscription for the message
      * @return TextEncodingDetails
      */
-    public static TextEncodingDetails calculateLength(boolean isCdma, CharSequence messageBody,
-            boolean use7bitOnly) {
+    public static TextEncodingDetails calculateLength(
+            boolean isCdma, CharSequence messageBody, boolean use7bitOnly, int subId) {
         if (isCdma) {
-            return calculateLengthCdma(messageBody, use7bitOnly);
+            return calculateLengthCdma(messageBody, use7bitOnly, subId);
         } else {
             return calculateLengthGsm(messageBody, use7bitOnly);
         }
@@ -266,11 +267,12 @@ public final class SMSDispatcherUtil {
      *
      * @param messageBody the message to encode
      * @param use7bitOnly ignore (but still count) illegal characters if true
+     * @param subId Subscription for the message
      * @return TextEncodingDetails
      */
-    public static TextEncodingDetails calculateLengthCdma(CharSequence messageBody,
-            boolean use7bitOnly) {
-        return com.android.internal.telephony.cdma.SmsMessage.calculateLength(messageBody,
-                use7bitOnly, false);
+    public static TextEncodingDetails calculateLengthCdma(
+            CharSequence messageBody, boolean use7bitOnly, int subId) {
+        return com.android.internal.telephony.cdma.SmsMessage.calculateLength(
+                messageBody, use7bitOnly, false, subId);
     }
 }

@@ -598,11 +598,5 @@ public class SmsMessageBodyTest extends AndroidTestCase {
         assertEquals("codeUnitCount",      expectedValues[1], ted.codeUnitCount);
         assertEquals("codeUnitsRemaining", expectedValues[2], ted.codeUnitsRemaining);
         assertEquals("codeUnitSize",       expectedValues[3], ted.codeUnitSize);
-
-        ted = com.android.internal.telephony.cdma.sms.BearerData.calcTextEncodingDetails(msgBody, use7bitOnly, true);
-        assertEquals("msgCount",           expectedValues[0], ted.msgCount);
-        assertEquals("codeUnitCount",      expectedValues[1], ted.codeUnitCount);
-        assertEquals("codeUnitsRemaining", expectedValues[2], ted.codeUnitsRemaining);
-        assertEquals("codeUnitSize",       expectedValues[3], ted.codeUnitSize);
     }
 }
