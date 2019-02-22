@@ -96,7 +96,7 @@ public class ImsPhoneCall extends Call {
     @Override
     public Phone
     getPhone() {
-        return mOwner.mPhone;
+        return mOwner.getPhone();
     }
 
     @Override
@@ -315,15 +315,15 @@ public class ImsPhoneCall extends Call {
         //and ringback tone mode can be changed during the call setup procedure
         if (state == State.ALERTING) {
             if (mRingbackTonePlayed && !isLocalTone(imsCall)) {
-                mOwner.mPhone.stopRingbackTone();
+                getPhone().stopRingbackTone();
                 mRingbackTonePlayed = false;
             } else if (!mRingbackTonePlayed && isLocalTone(imsCall)) {
-                mOwner.mPhone.startRingbackTone();
+                getPhone().startRingbackTone();
                 mRingbackTonePlayed = true;
             }
         } else {
             if (mRingbackTonePlayed) {
-                mOwner.mPhone.stopRingbackTone();
+                getPhone().stopRingbackTone();
                 mRingbackTonePlayed = false;
             }
         }
@@ -358,6 +358,16 @@ public class ImsPhoneCall extends Call {
             that.takeOver(tmp);
         }
         mOwner.logState();
+    }
+
+    /**
+     * Stops ringback tone playing if it is playing.
+     */
+    public void maybeStopRingback() {
+        if (mRingbackTonePlayed) {
+            getPhone().stopRingbackTone();
+            mRingbackTonePlayed = false;
+        }
     }
 
     private void takeOver(ImsPhoneCall that) {
