@@ -46,6 +46,30 @@
       "revId": "f179086e484c9fe8c51c0121c4782b26ac1609bb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5c9f2a4_dc68398c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-02-22T06:39:31Z",
+      "side": 1,
+      "message": "Redundancy can lead to discrepancy and we won\u0027t know which one is correct :)\nI feel it\u0027s better to just rely on default being UNSUPPORTED to know that EID is not supported. But if you want to submit this I can +2 it.",
+      "parentUuid": "c85d80c1_53fd3127",
+      "range": {
+        "startLine": 568,
+        "startChar": 12,
+        "endLine": 569,
+        "endChar": 54
+      },
+      "revId": "f179086e484c9fe8c51c0121c4782b26ac1609bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
