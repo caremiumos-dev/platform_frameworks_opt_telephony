@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9f7603c_9eb85bc7",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/ApnSettingTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1033528
+      },
+      "writtenOn": "2019-02-22T07:06:49Z",
+      "side": 1,
+      "message": "I guess this should be \"ApnSettingV6\" for carrierId.",
+      "range": {
+        "startLine": 237,
+        "startChar": 14,
+        "endLine": 237,
+        "endChar": 26
+      },
+      "revId": "34de8f94dc5b61d317260558a8f9566a323d43aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
