@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0579a5a7_9c1cd8cb",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-02-26T19:46:24Z",
+      "side": 1,
+      "message": "guarantee",
+      "range": {
+        "startLine": 647,
+        "startChar": 15,
+        "endLine": 647,
+        "endChar": 24
+      },
+      "revId": "8f7c7448d3ad1fc1eb836ab4c617b79246eb8c42",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
