@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea3dcd06_d4c6361d",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-02-27T00:56:55Z",
+      "side": 1,
+      "message": "Can be simplified as\nreturn !TextUtils.isEmpty(mPackageName) \u0026\u0026 !TextUtils.isEmpty(mPackageName) \u0026\u0026 mJarPath.startsWith(SYSTEM) ?",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 24
+      },
+      "revId": "8d87723c9d5f77b7a942d5628a69c069bc0ebc76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
