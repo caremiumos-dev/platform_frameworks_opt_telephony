@@ -22,6 +22,30 @@
       "revId": "8f7c7448d3ad1fc1eb836ab4c617b79246eb8c42",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe29216b_7e3c981c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-02-27T20:47:01Z",
+      "side": 1,
+      "message": "good catch. I\u0027m going to leave it in this CL for consistency with the merge to internal master, but we can fix it in the future.",
+      "parentUuid": "0579a5a7_9c1cd8cb",
+      "range": {
+        "startLine": 647,
+        "startChar": 15,
+        "endLine": 647,
+        "endChar": 24
+      },
+      "revId": "8f7c7448d3ad1fc1eb836ab4c617b79246eb8c42",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
