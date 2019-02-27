@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22fccb81_5ad5f4ec",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/ImsManagerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-02-27T18:02:29Z",
+      "side": 1,
+      "message": "This is unclear, suggestion:\n\nTests the operation of getWfcMode when the configuration to use the home network mode when roaming for WFC is false. First, it checks that the user setting for WFC_IMS_ROAMING_MODE is returned when WFC roaming is set to editable. Then, it switches the WFC roaming mode to not editable and ensures that the default WFC roaming mode is returned.",
+      "range": {
+        "startLine": 660,
+        "startChar": 7,
+        "endLine": 661,
+        "endChar": 80
+      },
+      "revId": "364414e1c552dc3093ed6753d6f340ab35ade371",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37386c59_73ff0c56",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ims/ImsManagerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-02-27T18:02:29Z",
+      "side": 1,
+      "message": "Unclear, suggestion:\n\nTests the operation of getWfcMode when the configuration to use the home network mode when roaming for WFC is true independent of whether or not the WFC roaming mode is editable.",
+      "range": {
+        "startLine": 703,
+        "startChar": 7,
+        "endLine": 704,
+        "endChar": 73
+      },
+      "revId": "364414e1c552dc3093ed6753d6f340ab35ade371",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
