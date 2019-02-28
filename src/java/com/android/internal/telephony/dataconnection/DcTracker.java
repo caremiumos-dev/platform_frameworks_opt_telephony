@@ -158,7 +158,6 @@ public class DcTracker extends Handler {
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface ReleaseNetworkType {}
-
     /**
      * For release network, this is just removing the network request from the {@link ApnContext}.
      * Note this does not tear down the physical data connection. Normally the data connection is
@@ -2842,9 +2841,7 @@ public class DcTracker extends Handler {
                         cause, cid, mTelephonyManager.getNetworkType());
             }
             ApnSetting apn = apnContext.getApnSetting();
-            mPhone.notifyPreciseDataConnectionFailed(
-                    apnContext.getApnType(), apn != null ? apn.getApnName()
-                    : "unknown", cause);
+            mPhone.notifyPreciseDataConnectionFailed(apnContext.getApnType(), apn, cause);
 
             // Compose broadcast intent send to the specific carrier signaling receivers
             Intent intent = new Intent(TelephonyIntents
