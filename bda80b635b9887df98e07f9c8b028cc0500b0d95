@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e914ed7_18adabb2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1823,
+      "author": {
+        "id": 1033528
+      },
+      "writtenOn": "2019-02-28T06:00:21Z",
+      "side": 1,
+      "message": "I plan to move this logic into isSkip464XlatCapabilities method for Unit Test in next patch set.\nAnd the name of method will be isSkip464Xlat() instead of isSkip464XlatCapabilities().",
+      "range": {
+        "startLine": 1816,
+        "startChar": 12,
+        "endLine": 1823,
+        "endChar": 13
+      },
+      "revId": "bda80b635b9887df98e07f9c8b028cc0500b0d95",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
