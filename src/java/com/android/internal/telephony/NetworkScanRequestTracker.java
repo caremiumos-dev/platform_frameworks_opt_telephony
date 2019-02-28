@@ -36,11 +36,14 @@ import android.telephony.LocationAccessPolicy;
 import android.telephony.NetworkScan;
 import android.telephony.NetworkScanRequest;
 import android.telephony.RadioAccessSpecifier;
+import android.telephony.TelephonyManager;
 import android.telephony.TelephonyScanManager;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Manages radio access network scan requests.
@@ -168,10 +171,18 @@ public final class NetworkScanRequestTracker {
         message.what = what;
         message.arg1 = err;
         message.arg2 = nsri.mScanId;
+
         if (result != null) {
+            ArrayList<Integer> carrierIds = getCarrierIdsFromCellInfos(nsri.mPhone, result);
+            if (what == TelephonyScanManager.CALLBACK_RESTRICTED_SCAN_RESULTS) {
+                result = result.stream().map(CellInfo::sanitizeLocationInfo)
+                        .collect(Collectors.toList());
+            }
+
             CellInfo[] ci = result.toArray(new CellInfo[result.size()]);
             Bundle b = new Bundle();
             b.putParcelableArray(TelephonyScanManager.SCAN_RESULT_KEY, ci);
+            b.putIntegerArrayList(TelephonyScanManager.SCAN_CARRIER_ID_KEY, carrierIds);
             message.setData(b);
         } else {
             message.obj = null;
@@ -387,25 +398,23 @@ public final class NetworkScanRequestTracker {
                     .build();
             if (ar.exception == null && ar.result != null) {
                 NetworkScanResult nsr = (NetworkScanResult) ar.result;
+                boolean isLocationAccessAllowed = LocationAccessPolicy.checkLocationPermission(
+                        nsri.mPhone.getContext(), locationQuery)
+                        == LocationAccessPolicy.LocationPermissionResult.ALLOWED;
+                int notifyMsg = isLocationAccessAllowed
+                        ? TelephonyScanManager.CALLBACK_SCAN_RESULTS
+                        : TelephonyScanManager.CALLBACK_RESTRICTED_SCAN_RESULTS;
                 if (nsr.scanError == NetworkScan.SUCCESS) {
-                    if (LocationAccessPolicy.checkLocationPermission(
-                            nsri.mPhone.getContext(), locationQuery)
-                            == LocationAccessPolicy.LocationPermissionResult.ALLOWED) {
-                        notifyMessenger(nsri, TelephonyScanManager.CALLBACK_SCAN_RESULTS,
-                                rilErrorToScanError(nsr.scanError), nsr.networkInfos);
-                    }
+                    notifyMessenger(nsri, notifyMsg,
+                            rilErrorToScanError(nsr.scanError), nsr.networkInfos);
                     if (nsr.scanStatus == NetworkScanResult.SCAN_STATUS_COMPLETE) {
                         deleteScanAndMayNotify(nsri, NetworkScan.SUCCESS, true);
                         nsri.mPhone.mCi.unregisterForNetworkScanResult(mHandler);
                     }
                 } else {
                     if (nsr.networkInfos != null) {
-                        if (LocationAccessPolicy.checkLocationPermission(
-                                nsri.mPhone.getContext(), locationQuery)
-                                == LocationAccessPolicy.LocationPermissionResult.ALLOWED) {
-                            notifyMessenger(nsri, TelephonyScanManager.CALLBACK_SCAN_RESULTS,
-                                    NetworkScan.SUCCESS, nsr.networkInfos);
-                        }
+                        notifyMessenger(nsri, notifyMsg,
+                                rilErrorToScanError(nsr.scanError), nsr.networkInfos);
                     }
                     deleteScanAndMayNotify(nsri, rilErrorToScanError(nsr.scanError), true);
                     nsri.mPhone.mCi.unregisterForNetworkScanResult(mHandler);
@@ -416,7 +425,6 @@ public final class NetworkScanRequestTracker {
                 nsri.mPhone.mCi.unregisterForNetworkScanResult(mHandler);
             }
         }
-
 
         // Stops the scan if the scanId and uid match the mScanId and mUid.
         // If the scan to be stopped is the live scan, we only send the request to RIL, while the
@@ -533,6 +541,21 @@ public final class NetworkScanRequestTracker {
                 }
             }
         }
+    }
+
+    private ArrayList<Integer> getCarrierIdsFromCellInfos(Phone phone, List<CellInfo> cellInfos) {
+        ArrayList<Integer> result = new ArrayList<>(cellInfos.size());
+        for (CellInfo ci : cellInfos) {
+            String mcc = ci.getCellIdentity().getMccStr();
+            String mnc = ci.getCellIdentity().getMncStr();
+            if (mcc == null || mnc == null) {
+                result.add(TelephonyManager.UNKNOWN_CARRIER_ID);
+                continue;
+            }
+            String mccmnc = mcc + mnc;
+            result.add(CarrierResolver.getCarrierIdFromMccMnc(phone.getContext(), mccmnc));
+        }
+        return result;
     }
 
     /**
