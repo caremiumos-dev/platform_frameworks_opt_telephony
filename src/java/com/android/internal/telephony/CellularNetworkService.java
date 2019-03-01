@@ -488,7 +488,7 @@ public class CellularNetworkService extends NetworkService {
     }
 
     @Override
-    protected NetworkServiceProvider createNetworkServiceProvider(int slotId) {
+    public NetworkServiceProvider onCreateNetworkServiceProvider(int slotId) {
         if (DBG) log("Cellular network service created for slot " + slotId);
         if (!SubscriptionManager.isValidSlotIndex(slotId)) {
             loge("Tried to Cellular network service with invalid slotId " + slotId);

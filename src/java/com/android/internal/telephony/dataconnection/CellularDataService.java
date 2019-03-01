@@ -211,7 +211,7 @@ public class CellularDataService extends DataService {
     }
 
     @Override
-    public DataServiceProvider createDataServiceProvider(int slotId) {
+    public DataServiceProvider onCreateDataServiceProvider(int slotId) {
         log("Cellular data service created for slot " + slotId);
         if (!SubscriptionManager.isValidSlotIndex(slotId)) {
             loge("Tried to cellular data service with invalid slotId " + slotId);
