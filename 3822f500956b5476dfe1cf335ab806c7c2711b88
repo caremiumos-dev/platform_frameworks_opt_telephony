@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "097a36c0_c3dc8c89",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-02T00:25:21Z",
+      "side": 1,
+      "message": "{@code True} if 464xlat should be skipped.",
+      "range": {
+        "startLine": 1195,
+        "startChar": 15,
+        "endLine": 1195,
+        "endChar": 49
+      },
+      "revId": "3822f500956b5476dfe1cf335ab806c7c2711b88",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "561516df_d881dbe8",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-02T00:25:21Z",
+      "side": 1,
+      "message": "maybe shouldSkip464Xlat?",
+      "range": {
+        "startLine": 1198,
+        "startChar": 19,
+        "endLine": 1198,
+        "endChar": 32
+      },
+      "revId": "3822f500956b5476dfe1cf335ab806c7c2711b88",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85287396_917b8e1a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-02T00:25:21Z",
+      "side": 1,
+      "message": "To be clear add one more case Telephony.Carriers.SKIP464XLAT_DEFAULT here",
+      "range": {
+        "startLine": 1204,
+        "startChar": 12,
+        "endLine": 1204,
+        "endChar": 20
+      },
+      "revId": "3822f500956b5476dfe1cf335ab806c7c2711b88",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
