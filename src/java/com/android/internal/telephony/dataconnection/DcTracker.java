@@ -128,6 +128,19 @@ public class DcTracker extends Handler {
     private static final boolean VDBG_STALL = false; // STOPSHIP if true
     private static final boolean RADIO_TESTS = false;
 
+    private static final int TYPE_MOBILE = ConnectivityManager.TYPE_MOBILE;
+    private static final int TYPE_MOBILE_MMS = ConnectivityManager.TYPE_MOBILE_MMS;
+    private static final int TYPE_MOBILE_SUPL = ConnectivityManager.TYPE_MOBILE_SUPL;
+    private static final int TYPE_MOBILE_DUN = ConnectivityManager.TYPE_MOBILE_DUN;
+    private static final int TYPE_MOBILE_HIPRI = ConnectivityManager.TYPE_MOBILE_HIPRI;
+    private static final int TYPE_MOBILE_FOTA = ConnectivityManager.TYPE_MOBILE_FOTA;
+    private static final int TYPE_MOBILE_IMS = ConnectivityManager.TYPE_MOBILE_IMS;
+    private static final int TYPE_MOBILE_CBS = ConnectivityManager.TYPE_MOBILE_CBS;
+    private static final int TYPE_MOBILE_IA = ConnectivityManager.TYPE_MOBILE_IA;
+    private static final int TYPE_MOBILE_EMERGENCY = ConnectivityManager.TYPE_MOBILE_EMERGENCY;
+    private static final int TYPE_MOBILE_MCX = 1001;  // far away from ConnectivityManager.TYPE_xxx
+                                                      // constants as MCX isn't defined there.
+
     @IntDef(value = {
             REQUEST_TYPE_NORMAL,
             REQUEST_TYPE_HANDOVER,
@@ -972,39 +985,42 @@ public class DcTracker extends Handler {
             ApnContext apnContext = null;
 
             switch (networkConfig.type) {
-            case ConnectivityManager.TYPE_MOBILE:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_DEFAULT, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_MMS:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_MMS, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_SUPL:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_SUPL, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_DUN:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_DUN, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_HIPRI:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_HIPRI, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_FOTA:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_FOTA, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_IMS:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_IMS, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_CBS:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_CBS, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_IA:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_IA, networkConfig);
-                break;
-            case ConnectivityManager.TYPE_MOBILE_EMERGENCY:
-                apnContext = addApnContext(PhoneConstants.APN_TYPE_EMERGENCY, networkConfig);
-                break;
-            default:
-                log("initApnContexts: skipping unknown type=" + networkConfig.type);
-                continue;
+                case TYPE_MOBILE:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_DEFAULT, networkConfig);
+                    break;
+                case TYPE_MOBILE_MMS:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_MMS, networkConfig);
+                    break;
+                case TYPE_MOBILE_SUPL:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_SUPL, networkConfig);
+                    break;
+                case TYPE_MOBILE_DUN:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_DUN, networkConfig);
+                    break;
+                case TYPE_MOBILE_HIPRI:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_HIPRI, networkConfig);
+                    break;
+                case TYPE_MOBILE_FOTA:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_FOTA, networkConfig);
+                    break;
+                case TYPE_MOBILE_IMS:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_IMS, networkConfig);
+                    break;
+                case TYPE_MOBILE_CBS:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_CBS, networkConfig);
+                    break;
+                case TYPE_MOBILE_IA:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_IA, networkConfig);
+                    break;
+                case TYPE_MOBILE_EMERGENCY:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_EMERGENCY, networkConfig);
+                    break;
+                case TYPE_MOBILE_MCX:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_MCX, networkConfig);
+                    break;
+                default:
+                    log("initApnContexts: skipping unknown type=" + networkConfig.type);
+                    continue;
             }
             log("initApnContexts: apnContext=" + apnContext);
         }
