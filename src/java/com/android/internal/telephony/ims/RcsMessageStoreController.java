@@ -74,6 +74,8 @@ import static android.telephony.ims.RcsThreadQueryParams.THREAD_QUERY_PARAMETERS
 
 import static com.android.internal.telephony.ims.RcsMessageStoreUtil.getMessageTableUri;
 import static com.android.internal.telephony.ims.RcsParticipantQueryHelper.getUriForParticipant;
+import static com.android.internal.telephony.ims.RcsPermissions.checkReadPermissions;
+import static com.android.internal.telephony.ims.RcsPermissions.checkWritePermissions;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.get1To1ThreadUri;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.getAllParticipantsInThreadUri;
 import static com.android.internal.telephony.ims.RcsThreadQueryHelper.getGroupThreadUri;
@@ -117,6 +119,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     private static RcsMessageStoreController sInstance;
 
+    private final Context mContext;
     private final ContentResolver mContentResolver;
     private final RcsParticipantQueryHelper mParticipantQueryHelper;
     private final RcsMessageQueryHelper mMessageQueryHelper;
@@ -130,7 +133,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
     public static RcsMessageStoreController init(Context context) {
         synchronized (RcsMessageStoreController.class) {
             if (sInstance == null) {
-                sInstance = new RcsMessageStoreController(context.getContentResolver());
+                sInstance = new RcsMessageStoreController(context);
                 if (ServiceManager.getService(RCS_SERVICE_NAME) == null) {
                     ServiceManager.addService(RCS_SERVICE_NAME, sInstance);
                 }
@@ -142,17 +145,20 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @VisibleForTesting
-    public RcsMessageStoreController(ContentResolver contentResolver) {
-        mContentResolver = contentResolver;
-        mParticipantQueryHelper = new RcsParticipantQueryHelper(contentResolver);
-        mMessageQueryHelper = new RcsMessageQueryHelper(contentResolver);
-        mThreadQueryHelper = new RcsThreadQueryHelper(contentResolver, mParticipantQueryHelper);
-        mEventQueryHelper = new RcsEventQueryHelper(contentResolver);
-        mMessageStoreUtil = new RcsMessageStoreUtil(contentResolver);
+    public RcsMessageStoreController(Context context) {
+        mContext = context;
+        mContentResolver = context.getContentResolver();
+        mParticipantQueryHelper = new RcsParticipantQueryHelper(mContentResolver);
+        mMessageQueryHelper = new RcsMessageQueryHelper(mContentResolver);
+        mThreadQueryHelper = new RcsThreadQueryHelper(mContentResolver, mParticipantQueryHelper);
+        mEventQueryHelper = new RcsEventQueryHelper(mContentResolver);
+        mMessageStoreUtil = new RcsMessageStoreUtil(mContentResolver);
     }
 
     @Override
-    public boolean deleteThread(int threadId, int threadType) {
+    public boolean deleteThread(int threadId, int threadType, String callingPackage) {
+        checkWritePermissions(mContext, callingPackage);
+
         int deletionCount = mContentResolver.delete(
                 threadType == THREAD_TYPE_GROUP ? RCS_GROUP_THREAD_URI : RCS_1_TO_1_THREAD_URI,
                 RCS_THREAD_ID_COLUMN + "=?",
@@ -162,14 +168,19 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public RcsMessageSnippet getMessageSnippet(int threadId) {
+    public RcsMessageSnippet getMessageSnippet(int threadId, String callingPackage) {
+        checkReadPermissions(mContext, callingPackage);
+
         // TODO - implement
         return null;
     }
 
     @Override
-    public RcsThreadQueryResultDescriptor getRcsThreads(RcsThreadQueryParams queryParameters)
+    public RcsThreadQueryResultDescriptor getRcsThreads(RcsThreadQueryParams queryParameters,
+            String callingPackage)
             throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         Bundle bundle = new Bundle();
         bundle.putParcelable(THREAD_QUERY_PARAMETERS_KEY, queryParameters);
         return mThreadQueryHelper.performThreadQuery(bundle);
@@ -177,7 +188,10 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public RcsThreadQueryResultDescriptor getRcsThreadsWithToken(
-            RcsQueryContinuationToken continuationToken) throws RemoteException {
+            RcsQueryContinuationToken continuationToken, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         Bundle bundle = new Bundle();
         bundle.putParcelable(QUERY_CONTINUATION_TOKEN, continuationToken);
         return mThreadQueryHelper.performThreadQuery(bundle);
@@ -185,7 +199,10 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public RcsParticipantQueryResultDescriptor getParticipants(
-            RcsParticipantQueryParams queryParameters) throws RemoteException {
+            RcsParticipantQueryParams queryParameters, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         Bundle bundle = new Bundle();
         bundle.putParcelable(PARTICIPANT_QUERY_PARAMETERS_KEY, queryParameters);
         return mParticipantQueryHelper.performParticipantQuery(bundle);
@@ -193,15 +210,21 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public RcsParticipantQueryResultDescriptor getParticipantsWithToken(
-            RcsQueryContinuationToken continuationToken) throws RemoteException {
+            RcsQueryContinuationToken continuationToken, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         Bundle bundle = new Bundle();
         bundle.putParcelable(QUERY_CONTINUATION_TOKEN, continuationToken);
         return mParticipantQueryHelper.performParticipantQuery(bundle);
     }
 
     @Override
-    public RcsMessageQueryResultDescriptor getMessages(RcsMessageQueryParams queryParams)
+    public RcsMessageQueryResultDescriptor getMessages(RcsMessageQueryParams queryParams,
+            String callingPackage)
             throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         Bundle bundle = new Bundle();
         bundle.putParcelable(MESSAGE_QUERY_PARAMETERS_KEY, queryParams);
         return mMessageQueryHelper.performMessageQuery(bundle);
@@ -209,15 +232,21 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public RcsMessageQueryResultDescriptor getMessagesWithToken(
-            RcsQueryContinuationToken continuationToken) throws RemoteException {
+            RcsQueryContinuationToken continuationToken, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         Bundle bundle = new Bundle();
         bundle.putParcelable(QUERY_CONTINUATION_TOKEN, continuationToken);
         return mMessageQueryHelper.performMessageQuery(bundle);
     }
 
     @Override
-    public RcsEventQueryResultDescriptor getEvents(RcsEventQueryParams queryParameters)
+    public RcsEventQueryResultDescriptor getEvents(RcsEventQueryParams queryParameters,
+            String callingPackage)
             throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         Bundle bundle = new Bundle();
         bundle.putParcelable(EVENT_QUERY_PARAMETERS_KEY, queryParameters);
         return mEventQueryHelper.performEventQuery(bundle);
@@ -225,20 +254,28 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public RcsEventQueryResultDescriptor getEventsWithToken(
-            RcsQueryContinuationToken continuationToken) throws RemoteException {
+            RcsQueryContinuationToken continuationToken, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         Bundle bundle = new Bundle();
         bundle.putParcelable(QUERY_CONTINUATION_TOKEN, continuationToken);
         return mEventQueryHelper.performEventQuery(bundle);
     }
 
     @Override
-    public int createRcs1To1Thread(int recipientId) throws RemoteException {
+    public int createRcs1To1Thread(int recipientId, String callingPackage) throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         return mThreadQueryHelper.create1To1Thread(recipientId);
     }
 
     @Override
-    public int createGroupThread(int[] participantIds, String groupName, Uri groupIcon)
+    public int createGroupThread(int[] participantIds, String groupName, Uri groupIcon,
+            String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         int groupThreadId = mThreadQueryHelper.createGroupThread(groupName, groupIcon);
         if (groupThreadId <= 0) {
             throw new RemoteException("Could not create RcsGroupThread.");
@@ -249,7 +286,7 @@ public class RcsMessageStoreController extends IRcs.Stub {
         // one transaction
         if (participantIds != null) {
             for (int participantId : participantIds) {
-                addParticipantToGroupThread(groupThreadId, participantId);
+                addParticipantToGroupThread(groupThreadId, participantId, callingPackage);
             }
         }
 
@@ -262,7 +299,10 @@ public class RcsMessageStoreController extends IRcs.Stub {
      * on whether we should have RCS storage in a separate database file.
      */
     @Override
-    public int createRcsParticipant(String canonicalAddress, String alias) throws RemoteException {
+    public int createRcsParticipant(String canonicalAddress, String alias, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         ContentValues contentValues = new ContentValues();
 
         long canonicalAddressId = Telephony.RcsColumns.RcsCanonicalAddressHelper
@@ -294,51 +334,74 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public String getRcsParticipantCanonicalAddress(int participantId) throws RemoteException {
+    public String getRcsParticipantCanonicalAddress(int participantId, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getStringValueFromTableRow(RCS_PARTICIPANT_URI,
                 Telephony.CanonicalAddressesColumns.ADDRESS, RCS_PARTICIPANT_ID_COLUMN,
                 participantId);
     }
 
     @Override
-    public String getRcsParticipantAlias(int participantId) throws RemoteException {
+    public String getRcsParticipantAlias(int participantId, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getStringValueFromTableRow(RCS_PARTICIPANT_URI, RCS_ALIAS_COLUMN,
                 RCS_PARTICIPANT_ID_COLUMN, participantId);
     }
 
     @Override
-    public void setRcsParticipantAlias(int id, String alias) throws RemoteException {
+    public void setRcsParticipantAlias(int id, String alias, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(getUriForParticipant(id), RCS_ALIAS_COLUMN,
                 alias, "Could not update RCS participant alias");
     }
 
     @Override
-    public String getRcsParticipantContactId(int participantId) {
+    public String getRcsParticipantContactId(int participantId, String callingPackage) {
+        checkReadPermissions(mContext, callingPackage);
+
         // TODO - implement
         return null;
     }
 
     @Override
-    public void setRcsParticipantContactId(int participantId, String contactId) {
+    public void setRcsParticipantContactId(int participantId, String contactId,
+            String callingPackage) {
+        checkWritePermissions(mContext, callingPackage);
+
         // TODO - implement
     }
 
     @Override
-    public void set1To1ThreadFallbackThreadId(int rcsThreadId, long fallbackId)
+    public void set1To1ThreadFallbackThreadId(int rcsThreadId, long fallbackId,
+            String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(get1To1ThreadUri(rcsThreadId),
                 FALLBACK_THREAD_ID_COLUMN, fallbackId, "Could not set fallback thread ID");
     }
 
     @Override
-    public long get1To1ThreadFallbackThreadId(int rcsThreadId) throws RemoteException {
+    public long get1To1ThreadFallbackThreadId(int rcsThreadId, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getLongValueFromTableRow(RCS_1_TO_1_THREAD_URI,
                 FALLBACK_THREAD_ID_COLUMN,
                 RCS_THREAD_ID_COLUMN, rcsThreadId);
     }
 
     @Override
-    public int get1To1ThreadOtherParticipantId(int rcsThreadId) throws RemoteException {
+    public int get1To1ThreadOtherParticipantId(int rcsThreadId, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         Uri uri = get1To1ThreadUri(rcsThreadId);
         String[] projection = new String[]{RCS_PARTICIPANT_ID_COLUMN};
         try (Cursor cursor = mContentResolver.query(uri, projection, null, null)) {
@@ -352,56 +415,81 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public void setGroupThreadName(int rcsThreadId, String groupName) throws RemoteException {
+    public void setGroupThreadName(int rcsThreadId, String groupName, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(getGroupThreadUri(rcsThreadId),
                 GROUP_NAME_COLUMN, groupName, "Could not update group name");
     }
 
     @Override
-    public String getGroupThreadName(int rcsThreadId) throws RemoteException {
+    public String getGroupThreadName(int rcsThreadId, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getStringValueFromTableRow(RCS_GROUP_THREAD_URI, GROUP_NAME_COLUMN,
                 RCS_THREAD_ID_COLUMN, rcsThreadId);
     }
 
     @Override
-    public void setGroupThreadIcon(int rcsThreadId, Uri groupIcon) throws RemoteException {
+    public void setGroupThreadIcon(int rcsThreadId, Uri groupIcon, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(getGroupThreadUri(rcsThreadId),
                 GROUP_ICON_COLUMN, groupIcon, "Could not update group icon");
     }
 
     @Override
-    public Uri getGroupThreadIcon(int rcsThreadId) throws RemoteException {
+    public Uri getGroupThreadIcon(int rcsThreadId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getUriValueFromTableRow(RCS_GROUP_THREAD_URI, GROUP_ICON_COLUMN,
                 RCS_THREAD_ID_COLUMN, rcsThreadId);
     }
 
     @Override
-    public void setGroupThreadOwner(int rcsThreadId, int participantId) throws RemoteException {
+    public void setGroupThreadOwner(int rcsThreadId, int participantId, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(getGroupThreadUri(rcsThreadId),
                 OWNER_PARTICIPANT_COLUMN, participantId, "Could not set the group owner");
     }
 
     @Override
-    public int getGroupThreadOwner(int rcsThreadId) throws RemoteException {
+    public int getGroupThreadOwner(int rcsThreadId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getIntValueFromTableRow(RCS_GROUP_THREAD_URI,
                 OWNER_PARTICIPANT_COLUMN,
                 RCS_THREAD_ID_COLUMN, rcsThreadId);
     }
 
     @Override
-    public void setGroupThreadConferenceUri(int rcsThreadId, Uri uri) throws RemoteException {
+    public void setGroupThreadConferenceUri(int rcsThreadId, Uri uri, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(getGroupThreadUri(rcsThreadId),
                 CONFERENCE_URI_COLUMN, uri, "Could not set the conference URI for group");
     }
 
     @Override
-    public Uri getGroupThreadConferenceUri(int rcsThreadId) throws RemoteException {
+    public Uri getGroupThreadConferenceUri(int rcsThreadId, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getUriValueFromTableRow(RCS_GROUP_THREAD_URI,
                 CONFERENCE_URI_COLUMN, RCS_THREAD_ID_COLUMN, rcsThreadId);
     }
 
     @Override
-    public void addParticipantToGroupThread(int rcsThreadId, int participantId) {
+    public void addParticipantToGroupThread(int rcsThreadId, int participantId,
+            String callingPackage) {
+        checkWritePermissions(mContext, callingPackage);
+
         ContentValues contentValues = new ContentValues(2);
         contentValues.put(RCS_THREAD_ID_COLUMN, rcsThreadId);
         contentValues.put(RCS_PARTICIPANT_ID_COLUMN, participantId);
@@ -410,15 +498,21 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public void removeParticipantFromGroupThread(int rcsThreadId, int participantId) {
+    public void removeParticipantFromGroupThread(int rcsThreadId, int participantId,
+            String callingPackage) {
+        checkWritePermissions(mContext, callingPackage);
+
         mContentResolver.delete(getParticipantInThreadUri(rcsThreadId, participantId), null,
                 null);
     }
 
     @Override
     public int addIncomingMessage(int rcsThreadId,
-            RcsIncomingMessageCreationParams rcsIncomingMessageCreationParams)
+            RcsIncomingMessageCreationParams rcsIncomingMessageCreationParams,
+            String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ARRIVAL_TIMESTAMP_COLUMN,
@@ -436,8 +530,11 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public int addOutgoingMessage(int rcsThreadId,
-            RcsOutgoingMessageCreationParams rcsOutgoingMessageCreationParameters)
+            RcsOutgoingMessageCreationParams rcsOutgoingMessageCreationParameters,
+            String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         ContentValues contentValues = new ContentValues();
 
         mMessageQueryHelper.createContentValuesForGenericMessage(contentValues, rcsThreadId,
@@ -460,7 +557,10 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public void deleteMessage(int messageId, boolean isIncoming, int rcsThreadId, boolean isGroup) {
+    public void deleteMessage(int messageId, boolean isIncoming, int rcsThreadId, boolean isGroup,
+            String callingPackage) {
+        checkWritePermissions(mContext, callingPackage);
+
         mContentResolver.delete(
                 mMessageQueryHelper.getMessageDeletionUri(messageId, isIncoming, rcsThreadId,
                         isGroup),
@@ -468,36 +568,49 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public void setMessageSubId(int messageId, boolean isIncoming, int subId)
+    public void setMessageSubId(int messageId, boolean isIncoming, int subId, String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming), SUB_ID_COLUMN,
                 subId, "Could not set subscription ID for message");
     }
 
     @Override
-    public int getMessageSubId(int messageId, boolean isIncoming) throws RemoteException {
+    public int getMessageSubId(int messageId, boolean isIncoming, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getIntValueFromTableRow(getMessageTableUri(isIncoming),
                 SUB_ID_COLUMN, MESSAGE_ID_COLUMN, messageId);
     }
 
     @Override
-    public void setMessageStatus(int messageId, boolean isIncoming, int status)
+    public void setMessageStatus(int messageId, boolean isIncoming, int status,
+            String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming), STATUS_COLUMN,
                 status, "Could not set the status for message");
     }
 
     @Override
-    public int getMessageStatus(int messageId, boolean isIncoming) throws RemoteException {
+    public int getMessageStatus(int messageId, boolean isIncoming, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getIntValueFromTableRow(getMessageTableUri(isIncoming),
                 STATUS_COLUMN, MESSAGE_ID_COLUMN, messageId);
     }
 
     @Override
     public void setMessageOriginationTimestamp(int messageId, boolean isIncoming,
-            long originationTimestamp) throws RemoteException {
+            long originationTimestamp, String callingPackage) throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
                 ORIGINATION_TIMESTAMP_COLUMN, originationTimestamp,
@@ -505,30 +618,41 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public long getMessageOriginationTimestamp(int messageId, boolean isIncoming)
+    public long getMessageOriginationTimestamp(int messageId, boolean isIncoming,
+            String callingPackage)
             throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getLongValueFromTableRow(getMessageTableUri(isIncoming),
                 ORIGINATION_TIMESTAMP_COLUMN, MESSAGE_ID_COLUMN, messageId);
     }
 
     @Override
-    public void setGlobalMessageIdForMessage(int messageId, boolean isIncoming, String globalId)
+    public void setGlobalMessageIdForMessage(int messageId, boolean isIncoming, String globalId,
+            String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming), GLOBAL_ID_COLUMN,
                 globalId, "Could not set the global ID for message");
     }
 
     @Override
-    public String getGlobalMessageIdForMessage(int messageId, boolean isIncoming)
+    public String getGlobalMessageIdForMessage(int messageId, boolean isIncoming,
+            String callingPackage)
             throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getStringValueFromTableRow(getMessageTableUri(isIncoming),
                 GLOBAL_ID_COLUMN, MESSAGE_ID_COLUMN, messageId);
     }
 
     @Override
     public void setMessageArrivalTimestamp(int messageId, boolean isIncoming,
-            long arrivalTimestamp) throws RemoteException {
+            long arrivalTimestamp, String callingPackage) throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
                 ARRIVAL_TIMESTAMP_COLUMN, arrivalTimestamp,
@@ -536,15 +660,19 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public long getMessageArrivalTimestamp(int messageId, boolean isIncoming)
+    public long getMessageArrivalTimestamp(int messageId, boolean isIncoming, String callingPackage)
             throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getLongValueFromTableRow(getMessageTableUri(isIncoming),
                 ARRIVAL_TIMESTAMP_COLUMN, MESSAGE_ID_COLUMN, messageId);
     }
 
     @Override
     public void setMessageSeenTimestamp(int messageId, boolean isIncoming,
-            long notifiedTimestamp) throws RemoteException {
+            long notifiedTimestamp, String callingPackage) throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming),
                 SEEN_TIMESTAMP_COLUMN, notifiedTimestamp,
@@ -552,27 +680,36 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public long getMessageSeenTimestamp(int messageId, boolean isIncoming)
+    public long getMessageSeenTimestamp(int messageId, boolean isIncoming, String callingPackage)
             throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getLongValueFromTableRow(getMessageTableUri(isIncoming),
                 SEEN_TIMESTAMP_COLUMN, MESSAGE_ID_COLUMN, messageId);
     }
 
     @Override
-    public int[] getMessageRecipients(int messageId) throws RemoteException {
+    public int[] getMessageRecipients(int messageId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageQueryHelper.getDeliveryParticipantsForMessage(messageId);
     }
 
     @Override
-    public long getOutgoingDeliveryDeliveredTimestamp(int messageId, int participantId)
+    public long getOutgoingDeliveryDeliveredTimestamp(int messageId, int participantId,
+            String callingPackage)
             throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageQueryHelper.getLongValueFromDelivery(messageId, participantId,
                 DELIVERED_TIMESTAMP_COLUMN);
     }
 
     @Override
     public void setOutgoingDeliveryDeliveredTimestamp(int messageId, int participantId,
-            long deliveredTimestamp) throws RemoteException {
+            long deliveredTimestamp, String callingPackage) throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageDeliveryUri(messageId, participantId),
                 DELIVERED_TIMESTAMP_COLUMN, deliveredTimestamp,
@@ -580,15 +717,20 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public long getOutgoingDeliverySeenTimestamp(int messageId, int participantId)
+    public long getOutgoingDeliverySeenTimestamp(int messageId, int participantId,
+            String callingPackage)
             throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageQueryHelper.getLongValueFromDelivery(messageId, participantId,
                 SEEN_TIMESTAMP_COLUMN);
     }
 
     @Override
     public void setOutgoingDeliverySeenTimestamp(int messageId, int participantId,
-            long seenTimestamp) throws RemoteException {
+            long seenTimestamp, String callingPackage) throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageDeliveryUri(messageId, participantId),
                 SEEN_TIMESTAMP_COLUMN, seenTimestamp,
@@ -596,78 +738,110 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public int getOutgoingDeliveryStatus(int messageId, int participantId) {
+    public int getOutgoingDeliveryStatus(int messageId, int participantId, String callingPackage) {
+        checkReadPermissions(mContext, callingPackage);
+
         // TODO - implement
         return 0;
     }
 
     @Override
-    public void setOutgoingDeliveryStatus(int messageId, int participantId, int status) {
+    public void setOutgoingDeliveryStatus(int messageId, int participantId, int status,
+            String callingPackage) {
+        checkWritePermissions(mContext, callingPackage);
+
         // TODO - implement
     }
 
     @Override
-    public void setTextForMessage(int messageId, boolean isIncoming, String text)
+    public void setTextForMessage(int messageId, boolean isIncoming, String text,
+            String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming), MESSAGE_TEXT_COLUMN,
                 text, "Could not set the text for message");
     }
 
     @Override
-    public String getTextForMessage(int messageId, boolean isIncoming) throws RemoteException {
+    public String getTextForMessage(int messageId, boolean isIncoming, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getStringValueFromTableRow(getMessageTableUri(isIncoming),
                 MESSAGE_TEXT_COLUMN, MESSAGE_ID_COLUMN, messageId);
     }
 
     @Override
-    public void setLatitudeForMessage(int messageId, boolean isIncoming, double latitude)
+    public void setLatitudeForMessage(int messageId, boolean isIncoming, double latitude,
+            String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming), LATITUDE_COLUMN,
                 latitude, "Could not update latitude for message");
     }
 
     @Override
-    public double getLatitudeForMessage(int messageId, boolean isIncoming) throws RemoteException {
+    public double getLatitudeForMessage(int messageId, boolean isIncoming, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getDoubleValueFromTableRow(getMessageTableUri(isIncoming),
                 LATITUDE_COLUMN, MESSAGE_ID_COLUMN, messageId);
     }
 
     @Override
-    public void setLongitudeForMessage(int messageId, boolean isIncoming, double longitude)
+    public void setLongitudeForMessage(int messageId, boolean isIncoming, double longitude,
+            String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getMessageUpdateUri(messageId, isIncoming), LONGITUDE_COLUMN,
                 longitude, "Could not set longitude for message");
     }
 
     @Override
-    public double getLongitudeForMessage(int messageId, boolean isIncoming) throws RemoteException {
+    public double getLongitudeForMessage(int messageId, boolean isIncoming, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getDoubleValueFromTableRow(getMessageTableUri(isIncoming),
                 LONGITUDE_COLUMN, MESSAGE_ID_COLUMN, messageId);
     }
 
     @Override
-    public int[] getFileTransfersAttachedToMessage(int messageId, boolean isIncoming) {
+    public int[] getFileTransfersAttachedToMessage(int messageId, boolean isIncoming,
+            String callingPackage) {
+        checkReadPermissions(mContext, callingPackage);
+
         // TODO - implement
         return new int[0];
     }
 
     @Override
-    public int getSenderParticipant(int messageId) throws RemoteException {
+    public int getSenderParticipant(int messageId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getIntValueFromTableRow(INCOMING_MESSAGE_URI,
                 SENDER_PARTICIPANT_ID_COLUMN, MESSAGE_ID_COLUMN, messageId);
     }
 
     @Override
-    public void deleteFileTransfer(int partId) {
+    public void deleteFileTransfer(int partId, String callingPackage) {
+        checkWritePermissions(mContext, callingPackage);
+
         mContentResolver.delete(mMessageQueryHelper.getFileTransferUpdateUri(partId), null, null);
     }
 
     @Override
     public int storeFileTransfer(int messageId, boolean isIncoming,
-            RcsFileTransferCreationParams fileTransferCreationParameters) {
+            RcsFileTransferCreationParams fileTransferCreationParameters, String callingPackage) {
+        checkWritePermissions(mContext, callingPackage);
+
         ContentValues contentValues = mMessageQueryHelper.getContentValuesForFileTransfer(
                 fileTransferCreationParameters);
         Uri uri = mContentResolver.insert(
@@ -681,60 +855,85 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public void setFileTransferSessionId(int partId, String sessionId) throws RemoteException {
+    public void setFileTransferSessionId(int partId, String sessionId, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId), SESSION_ID_COLUMN, sessionId,
                 "Could not set session ID for file transfer");
     }
 
     @Override
-    public String getFileTransferSessionId(int partId) throws RemoteException {
+    public String getFileTransferSessionId(int partId, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getStringValueFromTableRow(FILE_TRANSFER_URI, SESSION_ID_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
-    public void setFileTransferContentUri(int partId, Uri contentUri) throws RemoteException {
+    public void setFileTransferContentUri(int partId, Uri contentUri, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId), CONTENT_URI_COLUMN,
                 contentUri, "Could not set content URI for file transfer");
     }
 
     @Override
-    public Uri getFileTransferContentUri(int partId) throws RemoteException {
+    public Uri getFileTransferContentUri(int partId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getUriValueFromTableRow(FILE_TRANSFER_URI, CONTENT_URI_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
-    public void setFileTransferContentType(int partId, String contentType) throws RemoteException {
+    public void setFileTransferContentType(int partId, String contentType, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId), CONTENT_TYPE_COLUMN,
                 contentType, "Could not set content type for file transfer");
     }
 
     @Override
-    public String getFileTransferContentType(int partId) throws RemoteException {
+    public String getFileTransferContentType(int partId, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getStringValueFromTableRow(FILE_TRANSFER_URI, CONTENT_TYPE_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
-    public void setFileTransferFileSize(int partId, long fileSize) throws RemoteException {
+    public void setFileTransferFileSize(int partId, long fileSize, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId), FILE_SIZE_COLUMN, fileSize,
                 "Could not set file size for file transfer");
     }
 
     @Override
-    public long getFileTransferFileSize(int partId) throws RemoteException {
+    public long getFileTransferFileSize(int partId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getLongValueFromTableRow(FILE_TRANSFER_URI, FILE_SIZE_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
-    public void setFileTransferTransferOffset(int partId, long transferOffset)
+    public void setFileTransferTransferOffset(int partId, long transferOffset,
+            String callingPackage)
             throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId),
                 SUCCESSFULLY_TRANSFERRED_BYTES,
@@ -742,53 +941,74 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public long getFileTransferTransferOffset(int partId) throws RemoteException {
+    public long getFileTransferTransferOffset(int partId, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getLongValueFromTableRow(FILE_TRANSFER_URI,
                 SUCCESSFULLY_TRANSFERRED_BYTES,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
-    public void setFileTransferStatus(int partId, int transferStatus) throws RemoteException {
+    public void setFileTransferStatus(int partId, int transferStatus, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId), TRANSFER_STATUS_COLUMN,
                 transferStatus, "Could not set transfer status for file transfer");
     }
 
     @Override
-    public int getFileTransferStatus(int partId) throws RemoteException {
+    public int getFileTransferStatus(int partId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getIntValueFromTableRow(FILE_TRANSFER_URI, STATUS_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
-    public void setFileTransferWidth(int partId, int width) throws RemoteException {
+    public void setFileTransferWidth(int partId, int width, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId), WIDTH_COLUMN, width,
                 "Could not set width of file transfer");
     }
 
     @Override
-    public int getFileTransferWidth(int partId) throws RemoteException {
+    public int getFileTransferWidth(int partId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getIntValueFromTableRow(FILE_TRANSFER_URI, WIDTH_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
-    public void setFileTransferHeight(int partId, int height) throws RemoteException {
+    public void setFileTransferHeight(int partId, int height, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId), HEIGHT_COLUMN, height,
                 "Could not set height of file transfer");
     }
 
     @Override
-    public int getFileTransferHeight(int partId) throws RemoteException {
+    public int getFileTransferHeight(int partId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getIntValueFromTableRow(FILE_TRANSFER_URI, HEIGHT_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
-    public void setFileTransferLength(int partId, long length) throws RemoteException {
+    public void setFileTransferLength(int partId, long length, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId), DURATION_MILLIS_COLUMN,
                 length,
@@ -796,40 +1016,56 @@ public class RcsMessageStoreController extends IRcs.Stub {
     }
 
     @Override
-    public long getFileTransferLength(int partId) throws RemoteException {
+    public long getFileTransferLength(int partId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getLongValueFromTableRow(FILE_TRANSFER_URI, DURATION_MILLIS_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
-    public void setFileTransferPreviewUri(int partId, Uri uri) throws RemoteException {
+    public void setFileTransferPreviewUri(int partId, Uri uri, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId), PREVIEW_URI_COLUMN, uri,
                 "Could not set preview URI of file transfer");
     }
 
     @Override
-    public Uri getFileTransferPreviewUri(int partId) throws RemoteException {
+    public Uri getFileTransferPreviewUri(int partId, String callingPackage) throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getUriValueFromTableRow(FILE_TRANSFER_URI, DURATION_MILLIS_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
-    public void setFileTransferPreviewType(int partId, String type) throws RemoteException {
+    public void setFileTransferPreviewType(int partId, String type, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         mMessageStoreUtil.updateValueOfProviderUri(
                 mMessageQueryHelper.getFileTransferUpdateUri(partId), PREVIEW_TYPE_COLUMN, type,
                 "Could not set preview type of file transfer");
     }
 
     @Override
-    public String getFileTransferPreviewType(int partId) throws RemoteException {
+    public String getFileTransferPreviewType(int partId, String callingPackage)
+            throws RemoteException {
+        checkReadPermissions(mContext, callingPackage);
+
         return mMessageStoreUtil.getStringValueFromTableRow(FILE_TRANSFER_URI, PREVIEW_TYPE_COLUMN,
                 FILE_TRANSFER_ID_COLUMN, partId);
     }
 
     @Override
     public int createGroupThreadNameChangedEvent(long timestamp, int threadId,
-            int originationParticipantId, String newName) throws RemoteException {
+            int originationParticipantId, String newName, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         ContentValues eventSpecificValues = new ContentValues();
         eventSpecificValues.put(NEW_NAME_COLUMN, newName);
 
@@ -839,7 +1075,10 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public int createGroupThreadIconChangedEvent(long timestamp, int threadId,
-            int originationParticipantId, Uri newIcon) throws RemoteException {
+            int originationParticipantId, Uri newIcon, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         ContentValues eventSpecificValues = new ContentValues();
         eventSpecificValues.put(NEW_ICON_URI_COLUMN, newIcon == null ? null : newIcon.toString());
 
@@ -849,7 +1088,10 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public int createGroupThreadParticipantJoinedEvent(long timestamp, int threadId,
-            int originationParticipantId, int participantId) throws RemoteException {
+            int originationParticipantId, int participantId, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         ContentValues eventSpecificValues = new ContentValues();
         eventSpecificValues.put(DESTINATION_PARTICIPANT_ID_COLUMN, participantId);
 
@@ -859,7 +1101,10 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public int createGroupThreadParticipantLeftEvent(long timestamp, int threadId,
-            int originationParticipantId, int participantId) throws RemoteException {
+            int originationParticipantId, int participantId, String callingPackage)
+            throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         ContentValues eventSpecificValues = new ContentValues();
         eventSpecificValues.put(DESTINATION_PARTICIPANT_ID_COLUMN, participantId);
 
@@ -869,7 +1114,9 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     @Override
     public int createParticipantAliasChangedEvent(long timestamp, int participantId,
-            String newAlias) throws RemoteException {
+            String newAlias, String callingPackage) throws RemoteException {
+        checkWritePermissions(mContext, callingPackage);
+
         ContentValues contentValues = new ContentValues(4);
         contentValues.put(TIMESTAMP_COLUMN, timestamp);
         contentValues.put(SOURCE_PARTICIPANT_ID_COLUMN, participantId);
