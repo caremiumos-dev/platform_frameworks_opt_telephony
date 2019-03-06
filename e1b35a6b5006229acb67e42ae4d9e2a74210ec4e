@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fcf3b2e_be8e7283",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2019-03-06T00:14:59Z",
+      "side": 1,
+      "message": "Should we give these different names so it\u0027s clear that they are conceptually in different? APN_TYPE_* seems like an obvious choice but I think that\u0027s already used. NETWORK_TYPE? TELEPHONY_TYPE_*? DCTRACKER_TYPE_*?\n\nAlso would be nice to add a brief comment to explain why these exist (ConnectivityManager.TYPE_* are deprecated and new ones will not be added) and why their values need to be the same as ConnectivityManager.TYPE_xxx (and I\u0027m not sure exactly what the reason for this is - is it only they have to match the networkAttributes array, or are there other reasons as well?).",
+      "revId": "e1b35a6b5006229acb67e42ae4d9e2a74210ec4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
