@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4dcf8f4_cd6addaf",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2019-03-07T23:15:30Z",
+      "side": 1,
+      "message": "blockingGetEuiccProfileInfoList from EuiccService?",
+      "revId": "89e2067218c7901185c7dbc7d42e76e655d20ec0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
