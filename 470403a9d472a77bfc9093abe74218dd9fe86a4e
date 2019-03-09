@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da654dfa_98585ad0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-03-09T01:05:10Z",
+      "side": 1,
+      "message": "why do you change package name assignment from onServiceConnected to here? is there any issue",
+      "range": {
+        "startLine": 276,
+        "startChar": 12,
+        "endLine": 276,
+        "endChar": 52
+      },
+      "revId": "470403a9d472a77bfc9093abe74218dd9fe86a4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
