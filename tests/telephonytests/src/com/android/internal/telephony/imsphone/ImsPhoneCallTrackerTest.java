@@ -825,6 +825,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
 
     @Test
     @SmallTest
+<<<<<<< HEAD   (4e9b89 Merge "frequent logging of activeSubscriptionInfo")
     public void testCallRestrictedDisconnect() {
         doReturn(true).when(mSST.mRestrictedState).isCsRestricted();
         assertEquals(DisconnectCause.CS_RESTRICTED, mCTUT.getDisconnectCauseFromReasonInfo(
@@ -947,6 +948,12 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 new ImsStreamMediaProfile());
         imsCall.getImsCallSessionListenerProxy().callSessionStarted(imsCall.getSession(),
                 new ImsCallProfile());
+=======
+    public void testSipNotFoundRemap() {
+        assertEquals(DisconnectCause.INVALID_NUMBER,
+                mCTUT.getDisconnectCauseFromReasonInfo(
+                        new ImsReasonInfo(ImsReasonInfo.CODE_SIP_NOT_FOUND, 0), Call.State.ACTIVE));
+>>>>>>> BRANCH (867980 Snap for 5180536 from e2b71fbd1f36abac5a9fa55647083f54dc50d5)
     }
 }
 

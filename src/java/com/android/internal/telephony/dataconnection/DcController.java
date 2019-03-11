@@ -320,8 +320,13 @@ public class DcController extends StateMachine {
                             apnsToCleanup.addAll(apnContexts);
                             mDct.isCleanupRequired.set(false);
                         } else {
+<<<<<<< HEAD   (4e9b89 Merge "frequent logging of activeSubscriptionInfo")
                             int failCause = DataFailCause.getFailCause(newState.getStatus());
                             if (DataFailCause.isRadioRestartFailure(mPhone.getContext(), failCause,
+=======
+                            DcFailCause failCause = DcFailCause.fromInt(newState.getStatus());
+                            if (failCause.isRadioRestartFailure(mPhone.getContext(),
+>>>>>>> BRANCH (867980 Snap for 5180536 from e2b71fbd1f36abac5a9fa55647083f54dc50d5)
                                         mPhone.getSubId())) {
                                 if (DBG) {
                                     log("onDataStateChanged: X restart radio, failCause="

@@ -1779,8 +1779,13 @@ public class DataConnection extends StateMachine {
                                     + " delay=" + delay
                                     + " result=" + result
                                     + " result.isRadioRestartFailure="
+<<<<<<< HEAD   (4e9b89 Merge "frequent logging of activeSubscriptionInfo")
                                     + DataFailCause.isRadioRestartFailure(mPhone.getContext(),
                                     result.mFailCause, mPhone.getSubId())
+=======
+                                    + result.mFailCause.isRadioRestartFailure(mPhone.getContext(),
+                                            mPhone.getSubId())
+>>>>>>> BRANCH (867980 Snap for 5180536 from e2b71fbd1f36abac5a9fa55647083f54dc50d5)
                                     + " isPermanentFailure=" +
                                     mDct.isPermanentFailure(result.mFailCause);
                             if (DBG) log(str);

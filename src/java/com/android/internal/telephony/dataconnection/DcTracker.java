@@ -2878,8 +2878,13 @@ public class DcTracker extends Handler {
             intent.putExtra(TelephonyIntents.EXTRA_APN_TYPE_KEY, apnContext.getApnType());
             mPhone.getCarrierSignalAgent().notifyCarrierSignalReceivers(intent);
 
+<<<<<<< HEAD   (4e9b89 Merge "frequent logging of activeSubscriptionInfo")
             if (DataFailCause.isRadioRestartFailure(mPhone.getContext(), cause, mPhone.getSubId())
                     || apnContext.restartOnError(cause)) {
+=======
+            if (cause.isRadioRestartFailure(mPhone.getContext(), mPhone.getSubId())
+                    || apnContext.restartOnError(cause.getErrorCode())) {
+>>>>>>> BRANCH (867980 Snap for 5180536 from e2b71fbd1f36abac5a9fa55647083f54dc50d5)
                 if (DBG) log("Modem restarted.");
                 sendRestartRadio();
             }

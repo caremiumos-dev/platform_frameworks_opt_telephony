@@ -999,7 +999,10 @@ public class ServiceStateTracker extends Handler {
                     cancelAllNotifications();
                     // clear cached values on SIM removal
                     mMdn = null;
+<<<<<<< HEAD   (4e9b89 Merge "frequent logging of activeSubscriptionInfo")
                     logMdnChange("EVENT_ICC_CHANGED: setting mMdn to null");
+=======
+>>>>>>> BRANCH (867980 Snap for 5180536 from e2b71fbd1f36abac5a9fa55647083f54dc50d5)
                     mMin = null;
                     mIsMinInfoReady = false;
                 }
