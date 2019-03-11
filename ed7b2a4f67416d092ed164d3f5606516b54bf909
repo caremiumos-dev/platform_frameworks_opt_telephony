@@ -22,6 +22,30 @@
       "revId": "ed7b2a4f67416d092ed164d3f5606516b54bf909",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cfbeadd_cdd52912",
+        "filename": "src/java/com/android/internal/telephony/RadioConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-03-11T21:55:43Z",
+      "side": 1,
+      "message": "sure, i\u0027ll put up a patch",
+      "parentUuid": "b4f1d7e1_8e032ebf",
+      "range": {
+        "startLine": 407,
+        "startChar": 16,
+        "endLine": 407,
+        "endChar": 43
+      },
+      "revId": "ed7b2a4f67416d092ed164d3f5606516b54bf909",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
