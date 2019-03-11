@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4f1d7e1_8e032ebf",
+        "filename": "src/java/com/android/internal/telephony/RadioConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2019-03-11T20:25:57Z",
+      "side": 1,
+      "message": "Can we change it into return \"\u003cunknown request\u003e \" + request;\nso that if similar things happens in the future we at least know what is the request",
+      "range": {
+        "startLine": 407,
+        "startChar": 16,
+        "endLine": 407,
+        "endChar": 43
+      },
+      "revId": "ed7b2a4f67416d092ed164d3f5606516b54bf909",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
