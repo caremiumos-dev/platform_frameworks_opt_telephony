@@ -84,6 +84,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -152,31 +153,31 @@ public class RcsMessageStoreController extends IRcs.Stub {
 
     private void checkWritePermissions(String callingPackage, ThrowingRunnable fn) {
         RcsPermissions.checkWritePermissions(mContext, callingPackage);
-
-        try {
+        runAsSelf(() -> {
             fn.run();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+            return null;
+        });
     }
 
     private <T> T checkCreatePermissions(String callingPackage, ThrowingSupplier<T> fn) {
         RcsPermissions.checkWritePermissions(mContext, callingPackage);
-
-        try {
-            return fn.get();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        return runAsSelf(fn);
     }
 
     private <T> T checkReadPermissions(String callingPackage, ThrowingSupplier<T> fn) {
         RcsPermissions.checkReadPermissions(mContext, callingPackage);
+        return runAsSelf(fn);
+    }
 
+    private <T> T runAsSelf(ThrowingSupplier<T> fn) {
+        // Now that all security checks passes, perform the operation as ourselves.
+        final long identity = Binder.clearCallingIdentity();
         try {
             return fn.get();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
+        } finally {
+            Binder.restoreCallingIdentity(identity);
         }
     }
 
