@@ -789,7 +789,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     /**
-     * Callback of setPreferredNetworkTypeBitmap defined in IRadio.hal.
+     * Callback of setPreferredNetworkTypeBitmask defined in IRadio.hal.
      * @param responseInfo Response info struct containing response type, serial no. and error
      */
     public void setPreferredNetworkTypeBitmapResponse(RadioResponseInfo responseInfo) {
@@ -807,7 +807,7 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     /**
-     * Callback of the getPreferredNetworkTypeBitmap defined in the IRadio.hal.
+     * Callback of the getPreferredNetworkTypeBitmask defined in the IRadio.hal.
      * @param responseInfo Response info struct containing response type, serial no. and error
      * @param networkTypeBitmap a 32-bit bitmap of
      * {@link android.telephony.TelephonyManager.NetworkTypeBitMask}.

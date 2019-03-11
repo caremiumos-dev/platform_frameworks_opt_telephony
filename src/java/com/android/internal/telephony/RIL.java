@@ -2578,7 +2578,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     radioProxy14.setPreferredNetworkTypeBitmap(
                             rr.mSerial, convertToHalRadioAccessFamily(networkType));
                 } catch (RemoteException | RuntimeException e) {
-                    handleRadioProxyExceptionForRR(rr, "setPreferredNetworkTypeBitmap", e);
+                    handleRadioProxyExceptionForRR(rr, "setPreferredNetworkTypeBitmask", e);
                 }
             }
         }
@@ -2610,7 +2610,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 try {
                     radioProxy14.getPreferredNetworkTypeBitmap(rr.mSerial);
                 } catch (RemoteException | RuntimeException e) {
-                    handleRadioProxyExceptionForRR(rr, "getPreferredNetworkTypeBitmap", e);
+                    handleRadioProxyExceptionForRR(rr, "getPreferredNetworkTypeBitmask", e);
                 }
             }
         }
@@ -5658,9 +5658,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             ArrayList<android.hardware.radio.V1_0.CellInfo> records) {
         ArrayList<CellInfo> response = new ArrayList<CellInfo>(records.size());
 
-        final long nanotime = SystemClock.elapsedRealtimeNanos();
         for (android.hardware.radio.V1_0.CellInfo record : records) {
-            record.timeStamp = nanotime;
             response.add(CellInfo.create(record));
         }
 
@@ -5677,9 +5675,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             ArrayList<android.hardware.radio.V1_2.CellInfo> records) {
         ArrayList<CellInfo> response = new ArrayList<CellInfo>(records.size());
 
-        final long nanotime = SystemClock.elapsedRealtimeNanos();
         for (android.hardware.radio.V1_2.CellInfo record : records) {
-            record.timeStamp = nanotime;
             response.add(CellInfo.create(record));
         }
         return response;
@@ -5695,9 +5691,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
             ArrayList<android.hardware.radio.V1_4.CellInfo> records) {
         ArrayList<CellInfo> response = new ArrayList<CellInfo>(records.size());
 
-        final long nanotime = SystemClock.elapsedRealtimeNanos();
         for (android.hardware.radio.V1_4.CellInfo record : records) {
-            response.add(CellInfo.create(record, nanotime));
+            response.add(CellInfo.create(record));
         }
         return response;
     }
