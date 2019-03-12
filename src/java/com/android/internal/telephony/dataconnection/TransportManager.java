@@ -16,13 +16,14 @@
 
 package com.android.internal.telephony.dataconnection;
 
-import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.annotation.StringDef;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RegistrantList;
+import android.os.SystemProperties;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.CarrierConfigManager;
@@ -32,6 +33,7 @@ import android.telephony.data.ApnSetting.ApnType;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.RIL;
 import com.android.internal.telephony.dataconnection.AccessNetworksManager.QualifiedNetworks;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.IndentingPrintWriter;
@@ -74,7 +76,7 @@ public class TransportManager extends Handler {
             "ro.telephony.iwlan_operation_mode";
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef(prefix = {"IWLAN_OPERATION_MODE_"},
+    @StringDef(prefix = {"IWLAN_OPERATION_MODE_"},
             value = {
                     IWLAN_OPERATION_MODE_DEFAULT,
                     IWLAN_OPERATION_MODE_LEGACY,
@@ -86,19 +88,19 @@ public class TransportManager extends Handler {
      * {@link #IWLAN_OPERATION_MODE_AP_ASSISTED}. On device that has IRadio 1.2 or below, it means
      * {@link #IWLAN_OPERATION_MODE_LEGACY}.
      */
-    public static final int IWLAN_OPERATION_MODE_DEFAULT = 0;
+    public static final String IWLAN_OPERATION_MODE_DEFAULT = "default";
 
     /**
      * IWLAN legacy mode. IWLAN is completely handled by the modem, and when the device is on
      * IWLAN, modem reports IWLAN as a RAT.
      */
-    public static final int IWLAN_OPERATION_MODE_LEGACY = 1;
+    public static final String IWLAN_OPERATION_MODE_LEGACY = "legacy";
 
     /**
      * IWLAN application processor assisted mode. IWLAN is handled by the bound IWLAN data service
      * and network service separately.
      */
-    public static final int IWLAN_OPERATION_MODE_AP_ASSISTED = 2;
+    public static final String IWLAN_OPERATION_MODE_AP_ASSISTED = "AP-assisted";
 
     private final Phone mPhone;
 
@@ -145,10 +147,12 @@ public class TransportManager extends Handler {
         mHandoverNeededEventRegistrants = new RegistrantList();
 
         if (isInLegacyMode()) {
+            log("operates in legacy mode.");
             // For legacy mode, WWAN is the only transport to handle all data connections, even
             // the IWLAN ones.
             mAvailableTransports = new int[]{TransportType.WWAN};
         } else {
+            log("operates in AP-assisted mode.");
             mAccessNetworksManager = new AccessNetworksManager(phone);
             mAccessNetworksManager.registerForQualifiedNetworksChanged(this,
                     EVENT_QUALIFIED_NETWORKS_CHANGED);
@@ -276,7 +280,17 @@ public class TransportManager extends Handler {
      * to the qualified networks service package.
      */
     public boolean isInLegacyMode() {
-        return (mPhone.mCi.getIwlanOperationMode() == IWLAN_OPERATION_MODE_LEGACY);
+        // Get IWLAN operation mode from the system property. If the system property is missing,
+        // use the default mode.
+        String mode = SystemProperties.get(SYSTEM_PROPERTIES_IWLAN_OPERATION_MODE);
+
+        if (mode.equals(IWLAN_OPERATION_MODE_LEGACY)) {
+            return true;
+        } else if (mode.equals(IWLAN_OPERATION_MODE_AP_ASSISTED)) {
+            return false;
+        }
+
+        return mPhone.getHalVersion().less(RIL.RADIO_HAL_VERSION_1_4);
     }
 
     /**
@@ -334,7 +348,8 @@ public class TransportManager extends Handler {
         pw.println("mCurrentAvailableNetworks=" + mCurrentAvailableNetworks);
         pw.println("mCurrentTransports=" + mCurrentTransports);
         pw.println("isInLegacy=" + isInLegacyMode());
-        pw.println("IWLAN operation mode=" + mPhone.mCi.getIwlanOperationMode());
+        pw.println("IWLAN operation mode="
+                + SystemProperties.get(SYSTEM_PROPERTIES_IWLAN_OPERATION_MODE));
         if (mAccessNetworksManager != null) {
             mAccessNetworksManager.dump(fd, pw, args);
         }
