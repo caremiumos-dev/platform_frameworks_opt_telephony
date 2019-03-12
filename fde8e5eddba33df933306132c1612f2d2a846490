@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ededc518_ba1717b6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TransportManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-03-12T20:38:17Z",
+      "side": 1,
+      "message": "nit: can you update the comment here? it doesnt seems relevant",
+      "range": {
+        "startLine": 269,
+        "startChar": 4,
+        "endLine": 281,
+        "endChar": 7
+      },
+      "revId": "fde8e5eddba33df933306132c1612f2d2a846490",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9900c692_db1e3ed5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TransportManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-03-12T20:38:17Z",
+      "side": 1,
+      "message": "what is HAL version is \u003c 1.4 but system prop configured to be ap assisted?",
+      "range": {
+        "startLine": 289,
+        "startChar": 18,
+        "endLine": 291,
+        "endChar": 9
+      },
+      "revId": "fde8e5eddba33df933306132c1612f2d2a846490",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
