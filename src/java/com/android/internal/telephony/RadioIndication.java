@@ -362,10 +362,7 @@ public class RadioIndication extends IRadioIndication.Stub {
         notification.number = suppSvcNotification.number;
 
         if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_SUPP_SVC_NOTIFICATION, notification);
-
-        if (mRil.mSsnRegistrant != null) {
-            mRil.mSsnRegistrant.notifyRegistrant(new AsyncResult (null, notification, null));
-        }
+        mRil.mSsnRegistrants.notifyRegistrants(new AsyncResult(null, notification, null));
     }
 
     public void stkSessionEnd(int indicationType) {
