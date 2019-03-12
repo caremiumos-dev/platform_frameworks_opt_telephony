@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.os.IRemoteCallback;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.preference.PreferenceManager;
@@ -99,6 +100,8 @@ public class SubscriptionInfoUpdater extends Handler {
     private SubscriptionManager mSubscriptionManager = null;
     private EuiccManager mEuiccManager;
     private IPackageManager mPackageManager;
+    private final CarrierConfigManager.CarrierConfigHook mCarrierConfigLoadedHook;
+
 
     // The current foreground user ID.
     private int mCurrentlyActiveUserId;
@@ -109,6 +112,7 @@ public class SubscriptionInfoUpdater extends Handler {
         this(looper, context, phone, ci,
                 IPackageManager.Stub.asInterface(ServiceManager.getService("package")));
     }
+
 
     @VisibleForTesting public SubscriptionInfoUpdater(
             Looper looper, Context context, Phone[] phone,
@@ -124,6 +128,13 @@ public class SubscriptionInfoUpdater extends Handler {
 
         mCarrierServiceBindHelper = new CarrierServiceBindHelper(mContext);
         initializeCarrierApps();
+        mCarrierConfigLoadedHook =
+            new CarrierConfigManager.CarrierConfigHook(this, mContext) {
+                @Override
+                public void onConfigLoaded(int phoneId, int carrierId,
+                        String carrierPackageName, PersistableBundle config) {
+                }
+            };
     }
 
     private void initializeCarrierApps() {
