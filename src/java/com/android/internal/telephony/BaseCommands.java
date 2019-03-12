@@ -99,6 +99,7 @@ public abstract class BaseCommands implements CommandsInterface {
     protected Registrant mGsmBroadcastSmsRegistrant;
     protected Registrant mCatCcAlphaRegistrant;
     protected Registrant mSsRegistrant;
+    protected RegistrantList mSsnRegistrants = new RegistrantList();
 
     // Preferred network type received from PhoneFactory.
     // This is used when establishing a connection to the
@@ -403,15 +404,13 @@ public abstract class BaseCommands implements CommandsInterface {
 
     @Override
     public void setOnSuppServiceNotification(Handler h, int what, Object obj) {
-        mSsnRegistrant = new Registrant (h, what, obj);
+        Registrant r = new Registrant(h, what, obj);
+        mSsnRegistrants.add(r);
     }
 
     @Override
     public void unSetOnSuppServiceNotification(Handler h) {
-        if (mSsnRegistrant != null && mSsnRegistrant.getHandler() == h) {
-            mSsnRegistrant.clear();
-            mSsnRegistrant = null;
-        }
+        mSsnRegistrants.remove(h);
     }
 
     @Override
