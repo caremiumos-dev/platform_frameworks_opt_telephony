@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc839a4e_0e3237ec",
+        "filename": "src/java/com/android/internal/telephony/NetworkRegistrationManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-03-13T22:37:07Z",
+      "side": 1,
+      "message": "nit: is this a duplicate of line #240?",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 0
+      },
+      "revId": "0b393c7198330c6a14e9c5e6162917c407c05614",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
