@@ -2022,6 +2022,10 @@ public class DcTracker extends Handler {
         boolean isDisconnected = (overallState == DctConstants.State.IDLE ||
                 overallState == DctConstants.State.FAILED);
 
+        ArrayList<ApnSetting> preAllApns = mAllApnSettings;
+        ApnSetting prePreferredApn = mPreferredApn;
+        boolean cleanup = true;
+
         if (mPhone instanceof GsmCdmaPhone) {
             // The "current" may no longer be valid.  MMS depends on this to send properly. TBD
             ((GsmCdmaPhone)mPhone).updateCurrentCarrierInProvider();
@@ -2033,7 +2037,19 @@ public class DcTracker extends Handler {
         createAllApnList();
         setDataProfilesAsNeeded();
         setInitialAttachApn();
-        cleanUpConnectionsOnUpdatedApns(!isDisconnected, Phone.REASON_APN_CHANGED);
+
+        if (prePreferredApn == null && mPreferredApn == null){
+            if (!isAllApnsChange(preAllApns)) {
+                cleanup = false;
+            }
+        }else if (prePreferredApn != null && mPreferredApn != null){
+            if (prePreferredApn.equalsIgnoreName(mPreferredApn)){
+                cleanup = false;
+            }
+        }
+        if(cleanup){
+            cleanUpConnectionsOnUpdatedApns(!isDisconnected, Phone.REASON_APN_CHANGED);
+        }
 
         // FIXME: See bug 17426028 maybe no conditional is needed.
         if (mPhone.getSubId() == SubscriptionManager.getDefaultDataSubscriptionId()) {
@@ -4797,5 +4813,27 @@ public class DcTracker extends Handler {
             return ServiceState.networkTypeToRilRadioTechnology(nrs.getAccessNetworkTechnology());
         }
         return ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
+    }
+
+    private boolean isAllApnsChange(ArrayList<ApnSetting> preAllApnSettings){
+        int i = 0;
+        if (preAllApnSettings == null || mAllApnSettings == null){
+            return true;
+        }
+        if(preAllApnSettings.size() == mAllApnSettings.size()){
+            for (ApnSetting apn : mAllApnSettings) {
+                for (ApnSetting preApn : preAllApnSettings) {
+                    if(apn.equalsIgnoreName(preApn)){
+                        i++;
+                        break;
+                    }
+                }
+            }
+            log("isAllApnsChange i = " + i + "preAllApnSettings.size() = " +preAllApnSettings.size());
+            if (i == preAllApnSettings.size()){
+                return false;
+            }
+        }
+        return true;
     }
 }
