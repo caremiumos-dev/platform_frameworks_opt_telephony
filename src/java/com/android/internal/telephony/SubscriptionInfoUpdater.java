@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.os.IRemoteCallback;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.preference.PreferenceManager;
@@ -743,6 +744,117 @@ public class SubscriptionInfoUpdater extends Handler {
 
         if (DBG) logd("updateEmbeddedSubscriptions done hasChanges=" + hasChanges);
         return hasChanges;
+    }
+
+    /**
+     * Called by CarrierConfigLoader to update the subscription before sending a broadcast.
+     */
+    public void updateCarrierConfigSync(int phoneId, int carrierId,
+            String carrierPackageName, PersistableBundle config, Message onComplete) {
+        post(() -> {
+            updateSubscriptionByCarrierConfigSync(
+                    phoneId, carrierId, carrierPackageName, config);
+            onComplete.sendToTarget();
+        });
+    }
+
+    private void updateSubscriptionByCarrierConfigSync(
+            int phoneId, int carrierId, String carrierPackageName, PersistableBundle config) {
+        if (!SubscriptionManager.isValidPhoneId(phoneId)
+                || carrierId == TelephonyManager.UNKNOWN_CARRIER_ID
+                || TextUtils.isEmpty(carrierPackageName)
+                || config == null) {
+            if (DBG) {
+                logd("In updateSubscriptionByCarrierConfigSync(): phoneId=" + phoneId
+                        + " carrierId=" + carrierId + " packageName=" + carrierPackageName
+                        + " config=" + ((config == null) ? "null" : config.hashCode()));
+            }
+            return;
+        }
+
+        SubscriptionController sc = SubscriptionController.getInstance();
+        if (sc == null) {
+            loge("SubscriptionController was null");
+            return;
+        }
+
+        int newSubId = sc.getSubIdUsingPhoneId(phoneId);
+        if (!SubscriptionManager.isValidSubscriptionId(newSubId)
+                || newSubId == SubscriptionManager.DEFAULT_SUBSCRIPTION_ID) {
+            if (DBG) logd("No subscription is active for phone being updated");
+            return;
+        }
+
+        SubscriptionInfo newSi = sc.getSubscriptionInfo(newSubId, mContext.getOpPackageName());
+
+        // Handle the opportunistic subscription stuff
+        boolean isOpportunistic = config.getBoolean(
+                CarrierConfigManager.KEY_IS_OPPORTUNISTIC_SUBSCRIPTION_BOOL, false);
+        if (newSi.isOpportunistic() != isOpportunistic) {
+            mSubscriptionManager.setOpportunistic(isOpportunistic, newSubId);
+        }
+
+        // Handle the subId grouping stuff
+        int parentSubId = config.getInt(
+                CarrierConfigManager.KEY_PARENT_SUBSCRIPTION_INT,
+                SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+
+        if (newSi == null) {
+            logd("Cannot find subscription to update, subId=" + newSubId);
+            return;
+        }
+
+        if (SubscriptionManager.isValidSubscriptionId(parentSubId)
+                && parentSubId != SubscriptionManager.DEFAULT_SUBSCRIPTION_ID) {
+            // Subscription needs to be added to a parent assuming privileges check out.
+            SubscriptionInfo groupOwnerSi = sc.getSubscriptionInfo(
+                    parentSubId, mContext.getOpPackageName());
+            if (groupOwnerSi == null) {
+                loge("Failed to find subscription info for parent subscription");
+                return;
+            }
+
+            // TODO: Is matching CarrierId sufficient or do carrier privilege rules need to match?
+            // 1) Today the privilege rules are not stored in the SubInfo, so to compare the rules
+            // we would need to ensure that both subs HAVE privilege rules, and that for PSIM the
+            // rules are loaded and cached in subinfo.
+            // 2) It remains be seen whether the platform default carrier config app should have
+            // executive privilege to group things without matching carrier IDs.
+            if (groupOwnerSi.getCarrierId() != newSi.getCarrierId()) {
+                loge("Subscription Grouping request not honored due to non-matching Carrier IDs");
+            } else {
+                addSubscriptionToGroup(parentSubId, newSubId);
+            }
+        } else {
+            // Proactively try to remove it, we don't care whether it succeeds because
+            // determining whether it's in a group is more work than just attempting a removal
+            // that might fail.
+            mSubscriptionManager.removeSubscriptionsFromGroup(new int[]{newSubId});
+        }
+    }
+
+    private void addSubscriptionToGroup(int groupOwnerSubId, int childSubId) {
+        List<SubscriptionInfo> oldGroup =
+                mSubscriptionManager.getSubscriptionsInGroup(groupOwnerSubId);
+
+        // Check to see if the parent was already in a group
+        if (oldGroup == null || oldGroup.isEmpty()) {
+            mSubscriptionManager.setSubscriptionGroup(new int[] {groupOwnerSubId, childSubId});
+            return;
+        }
+
+        int[] newGroup = new int[oldGroup.size() + 1];
+        int i = 0;
+        for (SubscriptionInfo si : oldGroup) {
+            newGroup[i] = si.getSubscriptionId();
+            if (newGroup[i] == childSubId) {
+                // Child is already in the group, so nothing to do here.
+                return;
+            }
+            i++;
+        }
+        newGroup[i] = childSubId;
+        mSubscriptionManager.setSubscriptionGroup(newGroup);
     }
 
     private static int findSubscriptionInfoForIccid(List<SubscriptionInfo> list, String iccid) {
