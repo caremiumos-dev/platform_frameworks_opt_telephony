@@ -19,6 +19,7 @@ package com.android.internal.telephony;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 import android.Manifest;
+import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.UnsupportedAppUsage;
 import android.app.AppOpsManager;
@@ -503,6 +504,21 @@ public class SubscriptionController extends ISub.Stub {
             Binder.restoreCallingIdentity(identity);
         }
 
+        return null;
+    }
+
+    /**
+     * Get a single subscription info record for a given subscription.
+     *
+     * @hide
+     */
+    public SubscriptionInfo getSubscriptionInfo(int subId, String packageName) {
+        List<SubscriptionInfo> subInfoList = getAllSubInfoList(packageName);
+        if (subInfoList == null) return null;
+
+        for (SubscriptionInfo si : subInfoList) {
+            if (si.getSubscriptionId() == subId) return si;
+        }
         return null;
     }
 
@@ -2310,6 +2326,41 @@ public class SubscriptionController extends ISub.Stub {
         return false;
     }
 
+    /**
+     * Update the name of the carrier package that's allowed to manage the subId.
+     *
+     * @param subId the subId to update
+     * @param packageName the package name of the carrier package that can manage the
+     *        subscription. An empty string clears the package name.
+     */
+    public void updateCarrierPackageNameForSubscription(int subId, @NonNull String packageName) {
+        // TODO:
+    }
+
+    /**
+     * Update all instances of a carrier package name in the subscription database to
+     * use a new package name.
+     *
+     * @param oldPackageName the old package name
+     * @param newPackageName the new package name
+     * @param forceForLoaded force the package name to be updated for subscriptions that are
+     *        currently loaded. By default, active subscriptions should not be cleared, since we
+     *        know their package name.
+     */
+    public void updateCarrierPackageNames(@NonNull String oldPackageName,
+            @NonNull String newPackageName, boolean forceForLoaded) {
+        // TODO: implement
+    }
+
+    /**
+     * @param subId the subId to query
+     * @return the String package name that is allowed to manage the subscription or an empty
+     *         string if the package name is unknown.
+     */
+    public @NonNull String getCarrierPackageNameForSubscription(int subId) {
+        return "";
+        // TODO: implement
+    }
 
     /**
      * @return the list of subId's that are active, is never null but the length maybe 0.
