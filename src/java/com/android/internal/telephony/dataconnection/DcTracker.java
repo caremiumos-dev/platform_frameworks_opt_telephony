@@ -46,6 +46,7 @@ import android.net.LinkProperties;
 import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
 import android.net.NetworkConfig;
+import android.net.NetworkFactory;
 import android.net.NetworkRequest;
 import android.net.ProxyInfo;
 import android.net.TrafficStats;
@@ -289,6 +290,8 @@ public class DcTracker extends Handler {
     private boolean mIsDisposed = false;
 
     private ContentResolver mResolver;
+
+    private NetworkFactory mNetworkFactory;
 
     /* Set to true with CMD_ENABLE_MOBILE_PROVISIONING */
     private boolean mIsProvisioning = false;
@@ -892,7 +895,8 @@ public class DcTracker extends Handler {
     }
 
     public void requestNetwork(NetworkRequest networkRequest, @RequestNetworkType int type,
-                               Message onCompleteMsg, LocalLog log) {
+                               Message onCompleteMsg, LocalLog log, NetworkFactory factory) {
+        mNetworkFactory = factory;
         final int apnType = ApnContext.getApnTypeFromNetworkRequest(networkRequest);
         final ApnContext apnContext = mApnContextsByType.get(apnType);
         log.log("DcTracker.requestNetwork for " + networkRequest + " found " + apnContext
@@ -3218,7 +3222,7 @@ public class DcTracker extends Handler {
 
         int id = mUniqueIdGenerator.getAndIncrement();
         DataConnection dataConnection = DataConnection.makeDataConnection(mPhone, id, this,
-                mDataServiceManager, mDcTesterFailBringUpAll, mDcc);
+                mDataServiceManager, mDcTesterFailBringUpAll, mDcc, mNetworkFactory);
         mDataConnections.put(id, dataConnection);
         if (DBG) log("createDataConnection() X id=" + id + " dc=" + dataConnection);
         return dataConnection;

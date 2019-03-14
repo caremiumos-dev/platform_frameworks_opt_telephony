@@ -28,6 +28,7 @@ import android.net.LinkProperties;
 import android.net.NattKeepalivePacketData;
 import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
+import android.net.NetworkFactory;
 import android.net.NetworkInfo;
 import android.net.NetworkMisc;
 import android.net.NetworkRequest;
@@ -134,6 +135,9 @@ public class DataConnection extends StateMachine {
 
     private static AtomicInteger mInstanceNumber = new AtomicInteger(0);
     private AsyncChannel mAc;
+
+    // The network factory in charge of publishing the network agent
+    private NetworkFactory mNetworkFactory;
 
     // The DCT that's talking to us, we only support one!
     private DcTracker mDct = null;
@@ -323,13 +327,13 @@ public class DataConnection extends StateMachine {
     public static DataConnection makeDataConnection(Phone phone, int id, DcTracker dct,
                                                     DataServiceManager dataServiceManager,
                                                     DcTesterFailBringUpAll failBringUpAll,
-                                                    DcController dcc) {
+                                                    DcController dcc, NetworkFactory factory) {
         String transportType = (dataServiceManager.getTransportType() == TransportType.WWAN)
                 ? "C"   // Cellular
                 : "I";  // IWLAN
         DataConnection dc = new DataConnection(phone, transportType + "-"
                 + mInstanceNumber.incrementAndGet(), id, dct, dataServiceManager, failBringUpAll,
-                dcc);
+                dcc, factory);
         dc.start();
         if (DBG) dc.log("Made " + dc.getName());
         return dc;
@@ -508,7 +512,8 @@ public class DataConnection extends StateMachine {
     //***** Constructor (NOTE: uses dcc.getHandler() as its Handler)
     private DataConnection(Phone phone, String tagSuffix, int id,
                            DcTracker dct, DataServiceManager dataServiceManager,
-                           DcTesterFailBringUpAll failBringUpAll, DcController dcc) {
+                           DcTesterFailBringUpAll failBringUpAll, DcController dcc,
+                           NetworkFactory factory) {
         super("DC-" + tagSuffix, dcc.getHandler());
         mTagSuffix = tagSuffix;
         setLogRecSize(300);
@@ -520,6 +525,7 @@ public class DataConnection extends StateMachine {
         mDataServiceManager = dataServiceManager;
         mDcTesterFailBringUpAll = failBringUpAll;
         mDcController = dcc;
+        mNetworkFactory = factory;
         mId = id;
         mCid = -1;
         ServiceState ss = mPhone.getServiceState();
@@ -1891,9 +1897,14 @@ public class DataConnection extends StateMachine {
                 }
             } else {
                 mScore = calculateScore();
+            // The factory is nullable, but it is passed at creation time by DcTracker in
+            // response to a network request. Therefore in practice it should never be null
+            // outside of tests.
+                final int factorySerialNumber = (null == mNetworkFactory)
+                        ? NetworkFactory.SerialNumber.NONE : mNetworkFactory.getSerialNumber();
                 mNetworkAgent = new DcNetworkAgent(getHandler().getLooper(), mPhone.getContext(),
                         "DcNetworkAgent" + mTagSuffix, mNetworkInfo, getNetworkCapabilities(),
-                        mLinkProperties, mScore, misc);
+                        mLinkProperties, mScore, misc, factorySerialNumber);
             }
             if (mDataServiceManager.getTransportType() == TransportType.WWAN) {
                 mPhone.mCi.registerForNattKeepaliveStatus(
@@ -2333,8 +2344,9 @@ public class DataConnection extends StateMachine {
         public final DcKeepaliveTracker keepaliveTracker = new DcKeepaliveTracker();
 
         public DcNetworkAgent(Looper l, Context c, String TAG, NetworkInfo ni,
-                NetworkCapabilities nc, LinkProperties lp, int score, NetworkMisc misc) {
-            super(l, c, TAG, ni, nc, lp, score, misc);
+                NetworkCapabilities nc, LinkProperties lp, int score, NetworkMisc misc,
+                int factorySerialNumber) {
+            super(l, c, TAG, ni, nc, lp, score, misc, factorySerialNumber);
             mNetCapsLocalLog.log("New network agent created. capabilities=" + nc);
             mNetworkCapabilities = nc;
             mTransportType = new AtomicInteger(mDataServiceManager.getTransportType());

@@ -51,6 +51,7 @@ import android.hardware.radio.V1_0.SetupDataCallResult;
 import android.net.LinkProperties;
 import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
+import android.net.NetworkFactory;
 import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.AsyncResult;
@@ -129,6 +130,7 @@ public class DcTrackerTest extends TelephonyTest {
     private static final int DATA_ENABLED_CHANGED = 0;
     private static final String FAKE_PLMN = "44010";
     private static final long TEST_TIMEOUT = 1000;
+    private static final int TEST_FACTORY_SERIAL_NUMBER = 81;
 
     @Mock
     ISub mIsub;
@@ -144,6 +146,8 @@ public class DcTrackerTest extends TelephonyTest {
     PackageManagerService mMockPackageManagerInternal;
     @Mock
     Handler mHandler;
+    @Mock
+    NetworkFactory mMockFactory;
 
     private DcTracker mDct;
     private DcTrackerTestHandler mDcTrackerTestHandler;
@@ -431,6 +435,7 @@ public class DcTrackerTest extends TelephonyTest {
                 .getRilDataRadioTechnology();
         doReturn(TelephonyManager.NETWORK_TYPE_LTE).when(mNetworkRegistrationState)
                 .getAccessNetworkTechnology();
+        doReturn(TEST_FACTORY_SERIAL_NUMBER).when(mMockFactory).getSerialNumber();
 
         mContextFixture.putStringArrayResource(com.android.internal.R.array.networkAttributes,
                 sNetworkAttributes);
@@ -873,7 +878,7 @@ public class DcTrackerTest extends TelephonyTest {
         NetworkRequest nr = new NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build();
         LocalLog l = new LocalLog(100);
-        mDct.requestNetwork(nr, DcTracker.REQUEST_TYPE_NORMAL, null, l);
+        mDct.requestNetwork(nr, DcTracker.REQUEST_TYPE_NORMAL, null, l, mMockFactory);
         waitForMs(200);
 
         verifyDataConnected(FAKE_APN1);

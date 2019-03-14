@@ -194,7 +194,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                                         int transport, Message onCompleteMsg) {
         if (mPhone.getDcTracker(transport) != null) {
             mPhone.getDcTracker(transport).requestNetwork(networkRequest, requestType,
-                    onCompleteMsg, mLocalLog);
+                    onCompleteMsg, mLocalLog, this);
         }
     }
 

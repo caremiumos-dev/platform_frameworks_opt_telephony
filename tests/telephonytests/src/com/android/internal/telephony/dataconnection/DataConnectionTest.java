@@ -46,6 +46,7 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.NattKeepalivePacketData;
 import android.net.NetworkCapabilities;
+import android.net.NetworkFactory;
 import android.net.NetworkInfo;
 import android.net.NetworkUtils;
 import android.os.AsyncResult;
@@ -85,6 +86,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class DataConnectionTest extends TelephonyTest {
+    private static final int TEST_FACTORY_SERIAL_NUMBER = 81;
 
     @Mock
     DcTesterFailBringUpAll mDcTesterFailBringUpAll;
@@ -98,6 +100,8 @@ public class DataConnectionTest extends TelephonyTest {
     DcFailBringUp mDcFailBringUp;
     @Mock
     PackageManagerService mMockPackageManagerInternal;
+    @Mock
+    NetworkFactory mMockFactory;
 
     private DataConnection mDc;
     private DataConnectionTestHandler mDataConnectionTestHandler;
@@ -258,7 +262,7 @@ public class DataConnectionTest extends TelephonyTest {
             mDcc = DcController.makeDcc(mPhone, mDcTracker, manager, h, "");
             mDcc.start();
             mDc = DataConnection.makeDataConnection(mPhone, 0, mDcTracker, manager,
-                    mDcTesterFailBringUpAll, mDcc);
+                    mDcTesterFailBringUpAll, mDcc, mMockFactory);
         }
     }
 
@@ -289,6 +293,7 @@ public class DataConnectionTest extends TelephonyTest {
                 ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
         doReturn(mApn1).when(mApnContext).getApnSetting();
         doReturn(PhoneConstants.APN_TYPE_DEFAULT).when(mApnContext).getApnType();
+        doReturn(TEST_FACTORY_SERIAL_NUMBER).when(mMockFactory).getSerialNumber();
 
         mDcFailBringUp.saveParameters(0, 0, -2);
         doReturn(mDcFailBringUp).when(mDcTesterFailBringUpAll).getDcFailBringUp();
