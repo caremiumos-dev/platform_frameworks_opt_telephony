@@ -32,12 +32,15 @@ import android.os.Handler;
 import android.os.IRemoteCallback;
 import android.os.Looper;
 import android.os.Message;
+import android.os.ParcelUuid;
+import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.provider.Settings.SettingNotFoundException;
+import android.service.carrier.CarrierService;
 import android.service.euicc.EuiccProfileInfo;
 import android.service.euicc.EuiccService;
 import android.service.euicc.GetEuiccProfileInfoListResult;
@@ -64,6 +67,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *@hide
@@ -89,6 +93,9 @@ public class SubscriptionInfoUpdater extends Handler {
     private static final int EVENT_REFRESH_EMBEDDED_SUBSCRIPTIONS = 12;
 
     private static final String ICCID_STRING_FOR_NO_SIM = "";
+
+    private static final ParcelUuid REMOVE_GROUP_UUID =
+            ParcelUuid.fromString("00000000-0000-0000-0000-000000000000");
 
     // Key used to read/write the current IMSI. Updated on SIM_STATE_CHANGED - LOADED.
     public static final String CURR_SUBID = "curr_subid";
@@ -751,6 +758,130 @@ public class SubscriptionInfoUpdater extends Handler {
 
         if (DBG) logd("updateEmbeddedSubscriptions done hasChanges=" + hasChanges);
         return hasChanges;
+    }
+
+    /**
+     * Called by CarrierConfigLoader to update the subscription before sending a broadcast.
+     */
+    public void updateSubscriptionByCarrierConfigSync(int phoneId,
+            String carrierPackageName, PersistableBundle config, Message onComplete) {
+        post(() -> {
+            updateSubscriptionByCarrierConfigSync(phoneId, carrierPackageName, config);
+            onComplete.sendToTarget();
+        });
+    }
+
+    private String getDefaultCarrierServicePackageName() {
+        CarrierConfigManager configManager = (CarrierConfigManager)
+                mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        return configManager.getDefaultCarrierServicePackageName();
+    }
+
+    // For non-embedded subscriptions check that pkgName is either:
+    // 1) The CarrierService Package for CarrierConfig; or
+    // 2) The System Default carrier package iff there is no CarrierService package
+    private boolean canManageSubscription(int phoneId, String pkgName) {
+        List<String> carrierPackageNames = TelephonyManager.from(mContext)
+                .getCarrierPackageNamesForIntentAndPhone(
+                        new Intent(CarrierService.CARRIER_SERVICE_INTERFACE), phoneId);
+        if (DBG) logd("Carrier Packages For Subscription = " + carrierPackageNames);
+        return (carrierPackageNames != null
+                && carrierPackageNames.contains(pkgName))
+                || ((carrierPackageNames == null || carrierPackageNames.isEmpty())
+                        && pkgName.equals(getDefaultCarrierServicePackageName()));
+    }
+
+    /**
+     * Update the currently active Subscription based on information from CarrierConfig
+     */
+    @VisibleForTesting
+    public void updateSubscriptionByCarrierConfigSync(
+            int phoneId, String carrierPackageName, PersistableBundle config) {
+        if (!SubscriptionManager.isValidPhoneId(phoneId)
+                || TextUtils.isEmpty(carrierPackageName) || config == null) {
+            if (DBG) {
+                logd("In updateSubscriptionByCarrierConfigSync(): phoneId=" + phoneId
+                        + " packageName=" + carrierPackageName + " config="
+                        + ((config == null) ? "null" : config.hashCode()));
+            }
+            return;
+        }
+
+        SubscriptionController sc = SubscriptionController.getInstance();
+        if (sc == null) {
+            loge("SubscriptionController was null");
+            return;
+        }
+
+        int currentSubId = sc.getSubIdUsingPhoneId(phoneId);
+        if (!SubscriptionManager.isValidSubscriptionId(currentSubId)
+                || currentSubId == SubscriptionManager.DEFAULT_SUBSCRIPTION_ID) {
+            if (DBG) logd("No subscription is active for phone being updated");
+            return;
+        }
+
+        SubscriptionInfo currentSubInfo = sc.getSubscriptionInfo(currentSubId, carrierPackageName);
+        if (currentSubInfo == null) {
+            loge("Couldn't retrieve subscription info for current subscription");
+            return;
+        }
+
+        // There could (conceivably) be a race where by the time this method gets invoked, the
+        // underlying subscription in the phone has changed, in which case the carrier package
+        // returned here wouldn't be able to manage that subscription.
+        // FIXME: The SM.canManageSubscription() call should support active subscriptions as well.
+        //        ISTM that this is a bug that it simply doesn't bother.
+        if ((currentSubInfo.isEmbedded()
+                && !mSubscriptionManager.canManageSubscription(currentSubInfo, carrierPackageName))
+                || !canManageSubscription(phoneId, carrierPackageName)) {
+            loge("Cannot manage subId=" + currentSubId + ", carrierPackage=" + carrierPackageName);
+            return;
+        }
+
+        final String oldCarrierPackageName = currentSubInfo.getCarrierPackageName();
+        boolean isNewCarrierPackage = !Objects.equals(carrierPackageName, oldCarrierPackageName);
+        boolean isOldCarrierPackageKnown = !TextUtils.isEmpty(oldCarrierPackageName);
+        boolean isOldCarrierPackageSystemDefault = isOldCarrierPackageKnown
+                && oldCarrierPackageName.equals(getDefaultCarrierServicePackageName());
+
+        if (isNewCarrierPackage) {
+            sc.updateCarrierPackageNameForSubscription(currentSubId, carrierPackageName);
+        }
+
+        // If the carrier package name has changed for the current subscription and the previous
+        // package was not the system default or unknown, then all subscriptions that were managed
+        // by that old package name are now in limbo. We do not know exactly what package can
+        // manage them, so this info will be updated the next time they load.
+        // Disassociating them with the old package name allows them to have group information
+        // provisionally updated.
+        if (isNewCarrierPackage && isOldCarrierPackageKnown && !isOldCarrierPackageSystemDefault) {
+            sc.updateCarrierPackageNames(oldCarrierPackageName, "", false);
+        }
+
+        // Update the opportunistic bit if necessary; if the subscription is already opportunistic
+        // then this is a no-op
+        boolean isOpportunistic = config.getBoolean(
+                CarrierConfigManager.KEY_IS_OPPORTUNISTIC_SUBSCRIPTION_BOOL, false);
+        if (mSubscriptionManager.setOpportunistic(isOpportunistic, currentSubId)) {
+            if (DBG) logd("Set SubId=" + currentSubId + " isOpportunistic=" + isOpportunistic);
+        }
+
+        String groupUuidString =
+                config.getString(CarrierConfigManager.KEY_SUBSCRIPTION_GROUP_UUID_STRING, "");
+        ParcelUuid groupId = null;
+        if (!TextUtils.isEmpty(groupUuidString)) {
+            try {
+                ParcelUuid groupUuid = ParcelUuid.fromString(groupUuidString);
+                if (groupUuid.equals(REMOVE_GROUP_UUID)) {
+                    sc.stubRemoveSubscriptionFromGroup(currentSubId, carrierPackageName);
+                } else {
+                    sc.stubAddSubscriptionsIntoGroup(
+                            groupUuid, Arrays.asList(currentSubId));
+                }
+            } catch (Exception e) {
+                loge("Invalid Group UUID=" + groupUuidString);
+            }
+        }
     }
 
     private static int findSubscriptionInfoForIccid(List<SubscriptionInfo> list, String iccid) {
