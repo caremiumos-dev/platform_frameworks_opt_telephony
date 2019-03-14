@@ -22,6 +22,30 @@
       "revId": "186cda4460512b527649747923b0fadee5fa1cc0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d3df576_ab74425d",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-14T18:12:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d38660c_6fe64343",
+      "range": {
+        "startLine": 358,
+        "startChar": 4,
+        "endLine": 358,
+        "endChar": 6
+      },
+      "revId": "186cda4460512b527649747923b0fadee5fa1cc0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
