@@ -42,6 +42,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.provider.Telephony;
+import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.DataFailCause;
 import android.telephony.NetworkRegistrationState;
@@ -324,7 +325,8 @@ public class DataConnection extends StateMachine {
                                                     DataServiceManager dataServiceManager,
                                                     DcTesterFailBringUpAll failBringUpAll,
                                                     DcController dcc) {
-        String transportType = (dataServiceManager.getTransportType() == TransportType.WWAN)
+        String transportType = (dataServiceManager.getTransportType()
+                == AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
                 ? "C"   // Cellular
                 : "I";  // IWLAN
         DataConnection dc = new DataConnection(phone, transportType + "-"
@@ -548,8 +550,9 @@ public class DataConnection extends StateMachine {
     private DcTracker getHandoverDcTracker() {
         int transportType = mDataServiceManager.getTransportType();
         // Get the DcTracker from the other transport.
-        return mPhone.getDcTracker(transportType == TransportType.WWAN
-                ? TransportType.WLAN : TransportType.WWAN);
+        return mPhone.getDcTracker(transportType == AccessNetworkConstants.TRANSPORT_TYPE_WWAN
+                ? AccessNetworkConstants.TRANSPORT_TYPE_WLAN
+                : AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
     }
 
     /**
@@ -1895,7 +1898,8 @@ public class DataConnection extends StateMachine {
                         "DcNetworkAgent" + mTagSuffix, mNetworkInfo, getNetworkCapabilities(),
                         mLinkProperties, mScore, misc);
             }
-            if (mDataServiceManager.getTransportType() == TransportType.WWAN) {
+            if (mDataServiceManager.getTransportType()
+                    == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
                 mPhone.mCi.registerForNattKeepaliveStatus(
                         getHandler(), DataConnection.EVENT_KEEPALIVE_STATUS, null);
                 mPhone.mCi.registerForLceInfo(
@@ -1920,7 +1924,8 @@ public class DataConnection extends StateMachine {
             mNetworkInfo.setDetailedState(NetworkInfo.DetailedState.DISCONNECTED,
                     reason, mNetworkInfo.getExtraInfo());
 
-            if (mDataServiceManager.getTransportType() == TransportType.WWAN) {
+            if (mDataServiceManager.getTransportType()
+                    == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
                 mPhone.mCi.unregisterForNattKeepaliveStatus(getHandler());
                 mPhone.mCi.unregisterForLceInfo(getHandler());
             }
@@ -2053,7 +2058,8 @@ public class DataConnection extends StateMachine {
                     KeepalivePacketData pkt = (KeepalivePacketData) msg.obj;
                     int slotId = msg.arg1;
                     int intervalMillis = msg.arg2 * 1000;
-                    if (mDataServiceManager.getTransportType() == TransportType.WWAN) {
+                    if (mDataServiceManager.getTransportType()
+                            == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
                         mPhone.mCi.startNattKeepalive(
                                 DataConnection.this.mCid, pkt, intervalMillis,
                                 DataConnection.this.obtainMessage(
@@ -2340,7 +2346,7 @@ public class DataConnection extends StateMachine {
             mTransportType = new AtomicInteger(mDataServiceManager.getTransportType());
         }
 
-        public void setTransportType(int transportType) {
+        public void setTransportType(@TransportType int transportType) {
             mTransportType.set(transportType);
         }
 
@@ -2369,7 +2375,8 @@ public class DataConnection extends StateMachine {
         @Override
         protected void pollLceData() {
             if (mPhone.getLceStatus() == RILConstants.LCE_ACTIVE     // active LCE service
-                    && mDataServiceManager.getTransportType() == TransportType.WWAN) {
+                    && mDataServiceManager.getTransportType()
+                    == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
                 mPhone.mCi.pullLceData(
                         DataConnection.this.obtainMessage(EVENT_BW_REFRESH_RESPONSE));
             }
@@ -2387,7 +2394,7 @@ public class DataConnection extends StateMachine {
         public void sendNetworkCapabilities(NetworkCapabilities networkCapabilities) {
             if (mTransportType.get() != mDataServiceManager.getTransportType()) {
                 log("sendNetworkCapabilities: Data connection has been handover to transport "
-                        + TransportType.toString(mTransportType.get()));
+                        + AccessNetworkConstants.transportTypeToString(mTransportType.get()));
                 return;
             }
             if (!networkCapabilities.equals(mNetworkCapabilities)) {
@@ -2406,7 +2413,7 @@ public class DataConnection extends StateMachine {
         public void sendLinkProperties(LinkProperties linkProperties) {
             if (mTransportType.get() != mDataServiceManager.getTransportType()) {
                 log("sendLinkProperties: Data connection has been handover to transport "
-                        + TransportType.toString(mTransportType.get()));
+                        + AccessNetworkConstants.transportTypeToString(mTransportType.get()));
                 return;
             }
             super.sendLinkProperties(linkProperties);
@@ -2416,7 +2423,7 @@ public class DataConnection extends StateMachine {
         public void sendNetworkScore(int score) {
             if (mTransportType.get() != mDataServiceManager.getTransportType()) {
                 log("sendNetworkScore: Data connection has been handover to transport "
-                        + TransportType.toString(mTransportType.get()));
+                        + AccessNetworkConstants.transportTypeToString(mTransportType.get()));
                 return;
             }
             super.sendNetworkScore(score);
@@ -2426,7 +2433,7 @@ public class DataConnection extends StateMachine {
         public void sendNetworkInfo(NetworkInfo networkInfo) {
             if (mTransportType.get() != mDataServiceManager.getTransportType()) {
                 log("sendNetworkScore: Data connection has been handover to transport "
-                        + TransportType.toString(mTransportType.get()));
+                        + AccessNetworkConstants.transportTypeToString(mTransportType.get()));
                 return;
             }
             super.sendNetworkInfo(networkInfo);
