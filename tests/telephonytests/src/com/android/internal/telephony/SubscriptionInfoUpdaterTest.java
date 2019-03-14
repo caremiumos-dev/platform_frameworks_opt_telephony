@@ -40,6 +40,8 @@ import android.content.pm.IPackageManager;
 import android.content.pm.UserInfo;
 import android.net.Uri;
 import android.os.HandlerThread;
+import android.os.ParcelUuid;
+import android.os.PersistableBundle;
 import android.service.euicc.EuiccProfileInfo;
 import android.service.euicc.EuiccService;
 import android.service.euicc.GetEuiccProfileInfoListResult;
@@ -64,6 +66,7 @@ import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -570,5 +573,104 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
         verify(mSubscriptionManager, times(1)).addSubscriptionInfoRecord(eq("890126042000000000"),
                 eq(FAKE_SUB_ID_1));
         verify(mSubscriptionController, times(0)).clearSubInfo();
+    }
+
+    PersistableBundle getCarrierConfigForSubInfoUpdate(
+            boolean isOpportunistic, String groupUuid) {
+        PersistableBundle p = new PersistableBundle();
+        p.putBoolean(CarrierConfigManager.KEY_IS_OPPORTUNISTIC_SUBSCRIPTION_BOOL, isOpportunistic);
+        p.putString(CarrierConfigManager.KEY_SUBSCRIPTION_GROUP_UUID_STRING, groupUuid);
+        return p;
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateFromCarrierConfigOpportunisticUnchanged() throws Exception {
+        final int phoneId = mPhone.getPhoneId();
+        String carrierPackageName = "FakeCarrierPackageName";
+
+        doReturn(FAKE_SUB_ID_1).when(mSubscriptionController).getSubIdUsingPhoneId(phoneId);
+        doReturn(mSubInfo).when(mSubscriptionController).getSubscriptionInfo(
+                eq(FAKE_SUB_ID_1), anyString());
+        doReturn(Collections.singletonList(carrierPackageName)).when(mTelephonyManager)
+                .getCarrierPackageNamesForIntentAndPhone(any(), eq(phoneId));
+
+        mUpdater.updateSubscriptionByCarrierConfig(mPhone.getPhoneId(),
+                carrierPackageName, new PersistableBundle());
+
+        verify(mSubscriptionManager, times(1)).setOpportunistic(false, FAKE_SUB_ID_1);
+        verify(mSubscriptionController, never()).removeSubscriptionsFromGroup(
+                any(), any(), any());
+        verify(mSubscriptionController, never()).addSubscriptionsIntoGroup(any(), any(), any());
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateFromCarrierConfigOpportunisticSetOpportunistic() throws Exception {
+        final int phoneId = mPhone.getPhoneId();
+        PersistableBundle carrierConfig = getCarrierConfigForSubInfoUpdate(
+                true, "");
+        String carrierPackageName = "FakeCarrierPackageName";
+
+        doReturn(FAKE_SUB_ID_1).when(mSubscriptionController).getSubIdUsingPhoneId(phoneId);
+        doReturn(mSubInfo).when(mSubscriptionController).getSubscriptionInfo(
+                eq(FAKE_SUB_ID_1), anyString());
+        doReturn(Collections.singletonList(carrierPackageName)).when(mTelephonyManager)
+                .getCarrierPackageNamesForIntentAndPhone(any(), eq(phoneId));
+
+        mUpdater.updateSubscriptionByCarrierConfig(mPhone.getPhoneId(),
+                carrierPackageName, carrierConfig);
+
+        verify(mSubscriptionManager, times(1)).setOpportunistic(true, FAKE_SUB_ID_1);
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateFromCarrierConfigOpportunisticAddToGroup() throws Exception {
+        final int phoneId = mPhone.getPhoneId();
+        PersistableBundle carrierConfig = getCarrierConfigForSubInfoUpdate(
+                true, "11111111-2222-3333-4444-555555555555");
+        String carrierPackageName = "FakeCarrierPackageName";
+
+        doReturn(FAKE_SUB_ID_1).when(mSubscriptionController).getSubIdUsingPhoneId(phoneId);
+        doReturn(mSubInfo).when(mSubscriptionController).getSubscriptionInfo(
+                eq(FAKE_SUB_ID_1), anyString());
+        doReturn(Collections.singletonList(carrierPackageName)).when(mTelephonyManager)
+                .getCarrierPackageNamesForIntentAndPhone(any(), eq(phoneId));
+
+        mUpdater.updateSubscriptionByCarrierConfig(mPhone.getPhoneId(),
+                carrierPackageName, carrierConfig);
+
+        verify(mSubscriptionManager, times(1)).setOpportunistic(true, FAKE_SUB_ID_1);
+        verify(mSubscriptionController, times(1)).addSubscriptionsIntoGroup(
+                eq(new int[] {FAKE_SUB_ID_1}),
+                eq(ParcelUuid.fromString("11111111-2222-3333-4444-555555555555")),
+                eq(carrierPackageName));
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateFromCarrierConfigOpportunisticRemoveFromGroup() throws Exception {
+        final int phoneId = mPhone.getPhoneId();
+        PersistableBundle carrierConfig = getCarrierConfigForSubInfoUpdate(
+                true, "00000000-0000-0000-0000-000000000000");
+        String carrierPackageName = "FakeCarrierPackageName";
+
+        doReturn(FAKE_SUB_ID_1).when(mSubscriptionController).getSubIdUsingPhoneId(phoneId);
+        doReturn(mSubInfo).when(mSubscriptionController).getSubscriptionInfo(
+                eq(FAKE_SUB_ID_1), anyString());
+        doReturn(ParcelUuid.fromString("11111111-2222-3333-4444-555555555555"))
+            .when(mSubInfo).getGroupUuid();
+        doReturn(Collections.singletonList(carrierPackageName)).when(mTelephonyManager)
+                .getCarrierPackageNamesForIntentAndPhone(any(), eq(phoneId));
+
+        mUpdater.updateSubscriptionByCarrierConfig(mPhone.getPhoneId(),
+                carrierPackageName, carrierConfig);
+
+        verify(mSubscriptionManager, times(1)).setOpportunistic(true, FAKE_SUB_ID_1);
+        verify(mSubscriptionController, times(1)).removeSubscriptionsFromGroup(
+                eq(new int[] {FAKE_SUB_ID_1}),
+                eq(ParcelUuid.fromString("11111111-2222-3333-4444-555555555555")),
+                eq(carrierPackageName));
     }
 }
