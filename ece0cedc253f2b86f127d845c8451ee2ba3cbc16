@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "534f2fa1_53b22992",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2475,
+      "author": {
+        "id": 1141529
+      },
+      "writtenOn": "2019-03-14T07:07:11Z",
+      "side": 1,
+      "message": "Looks like this else if is unreachable code and #2464 always gets executed since HOLD request is issued assuming that HOLD will succeed but if HOLD request fails, #2464 will always evaluate to TRUE.\n\nAlso, we need to do below for this else if case\n\nmForegroundCall.switchWith(mBackgroundCall);",
+      "revId": "ece0cedc253f2b86f127d845c8451ee2ba3cbc16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
