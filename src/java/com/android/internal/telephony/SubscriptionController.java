@@ -19,6 +19,7 @@ package com.android.internal.telephony;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 import android.Manifest;
+import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.UnsupportedAppUsage;
 import android.app.AppOpsManager;
@@ -32,6 +33,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.ParcelUuid;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
@@ -503,6 +505,21 @@ public class SubscriptionController extends ISub.Stub {
             Binder.restoreCallingIdentity(identity);
         }
 
+        return null;
+    }
+
+    /**
+     * Get a single subscription info record for a given subscription.
+     *
+     * @hide
+     */
+    public SubscriptionInfo getSubscriptionInfo(int subId, String packageName) {
+        List<SubscriptionInfo> subInfoList = getAllSubInfoList(packageName);
+        if (subInfoList == null) return null;
+
+        for (SubscriptionInfo si : subInfoList) {
+            if (si.getSubscriptionId() == subId) return si;
+        }
         return null;
     }
 
@@ -2310,6 +2327,31 @@ public class SubscriptionController extends ISub.Stub {
         return false;
     }
 
+    /**
+     * Update the name of the carrier package that's allowed to manage the subId.
+     *
+     * @param subId the subId to update
+     * @param packageName the package name of the carrier package that can manage the
+     *        subscription. An empty string clears the package name.
+     */
+    public void updateCarrierPackageNameForSubscription(int subId, @NonNull String packageName) {
+        // TODO:
+    }
+
+    /**
+     * Update all instances of a carrier package name in the subscription database to
+     * use a new package name.
+     *
+     * @param oldPackageName the old package name
+     * @param newPackageName the new package name
+     * @param forceForLoaded force the package name to be updated for subscriptions that are
+     *        currently loaded. By default, active subscriptions should not be cleared, since we
+     *        know their package name.
+     */
+    public void updateCarrierPackageNames(@NonNull String oldPackageName,
+            @NonNull String newPackageName, boolean forceForLoaded) {
+        // TODO: implement
+    }
 
     /**
      * @return the list of subId's that are active, is never null but the length maybe 0.
@@ -3389,5 +3431,15 @@ public class SubscriptionController extends ISub.Stub {
             euiccManager.switchToSubscription(SubscriptionManager.INVALID_SUBSCRIPTION_ID,
                     PendingIntent.getService(mContext, 0, new Intent(), 0));
         }
+    }
+
+    /** Stub for RemoveSubscriptionsFromGroup */
+    public boolean stubRemoveSubscriptionFromGroup(int subId, String packageName) {
+        return true;
+    }
+
+    /** Stub for AddSubscriptionsIntoGroup */
+    public int stubAddSubscriptionsIntoGroup(ParcelUuid groupUuid, List<Integer> subscriptions) {
+        return subscriptions != null ? subscriptions.size() : 0;
     }
 }
