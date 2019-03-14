@@ -32,6 +32,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.ParcelUuid;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
@@ -67,7 +68,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -504,6 +504,23 @@ public class SubscriptionController extends ISub.Stub {
             Binder.restoreCallingIdentity(identity);
         }
 
+        return null;
+    }
+
+    /**
+     * Get a single subscription info record for a given subscription.
+     *
+     * @param subId the subId to query.
+     * @param packageName the packageName to use for permission validation.
+     * @hide
+     */
+    public SubscriptionInfo getSubscriptionInfo(int subId, String packageName) {
+        List<SubscriptionInfo> subInfoList = getAllSubInfoList(packageName);
+        if (subInfoList == null) return null;
+
+        for (SubscriptionInfo si : subInfoList) {
+            if (si.getSubscriptionId() == subId) return si;
+        }
         return null;
     }
 
@@ -3391,5 +3408,17 @@ public class SubscriptionController extends ISub.Stub {
             euiccManager.switchToSubscription(SubscriptionManager.INVALID_SUBSCRIPTION_ID,
                     PendingIntent.getService(mContext, 0, new Intent(), 0));
         }
+    }
+
+    /** Stub for RemoveSubscriptionsFromGroup */
+    public boolean stubRemoveSubscriptionFromGroup(int subId, String packageName) {
+        if (DBG) logd("stubRemoveSubscriptionFromGroup");
+        return true;
+    }
+
+    /** Stub for AddSubscriptionsIntoGroup */
+    public int stubAddSubscriptionsIntoGroup(ParcelUuid groupUuid, List<Integer> subscriptions) {
+        if (DBG) logd("stubAddSubscriptionsIntoGroup");
+        return subscriptions != null ? subscriptions.size() : 0;
     }
 }
