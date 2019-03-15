@@ -157,6 +157,7 @@ public class PhoneSwitcher extends Handler {
                     if (mConnectivityManager.getNetworkCapabilities(network)
                             .hasTransport(TRANSPORT_CELLULAR)) {
                         logDataSwitchEvent(
+                                mPreferredDataSubId,
                                 TelephonyEvent.EventState.EVENT_STATE_END,
                                 TelephonyEvent.DataSwitch.Reason.DATA_SWITCH_REASON_UNKNOWN);
                     }
@@ -334,9 +335,10 @@ public class PhoneSwitcher extends Handler {
                 break;
             }
             case EVENT_DEFAULT_SUBSCRIPTION_CHANGED: {
-                logDataSwitchEvent(TelephonyEvent.EventState.EVENT_STATE_START,
-                        DataSwitch.Reason.DATA_SWITCH_REASON_MANUAL);
                 onEvaluate(REQUESTS_UNCHANGED, "defaultChanged");
+                logDataSwitchEvent(mPreferredDataSubId,
+                        TelephonyEvent.EventState.EVENT_STATE_START,
+                        DataSwitch.Reason.DATA_SWITCH_REASON_MANUAL);
                 registerDefaultNetworkChangeCallback();
                 break;
             }
@@ -374,9 +376,10 @@ public class PhoneSwitcher extends Handler {
                 break;
             }
             case EVENT_PHONE_IN_CALL_CHANGED: {
-                logDataSwitchEvent(TelephonyEvent.EventState.EVENT_STATE_START,
-                        DataSwitch.Reason.DATA_SWITCH_REASON_IN_CALL);
                 onEvaluate(REQUESTS_UNCHANGED, "EVENT_PHONE_IN_CALL_CHANGED");
+                logDataSwitchEvent(mPreferredDataSubId,
+                        TelephonyEvent.EventState.EVENT_STATE_START,
+                        DataSwitch.Reason.DATA_SWITCH_REASON_IN_CALL);
                 registerDefaultNetworkChangeCallback();
                 break;
             }
@@ -819,7 +822,7 @@ public class PhoneSwitcher extends Handler {
         // If validation feature is not supported, set it directly. Otherwise,
         // start validation on the subscription first.
         if (CellularNetworkValidator.isValidationFeatureSupported() && needValidation) {
-            logDataSwitchEvent(TelephonyEvent.EventState.EVENT_STATE_START,
+            logDataSwitchEvent(subId, TelephonyEvent.EventState.EVENT_STATE_START,
                     DataSwitch.Reason.DATA_SWITCH_REASON_CBRS);
             mSetOpptSubCallback = callback;
             mValidator.validate(subId, DEFAULT_VALIDATION_EXPIRATION_TIME,
@@ -860,9 +863,9 @@ public class PhoneSwitcher extends Handler {
     private void setPreferredSubscription(int subId) {
         if (mPreferredDataSubId != subId) {
             mPreferredDataSubId = subId;
-            logDataSwitchEvent(TelephonyEvent.EventState.EVENT_STATE_START,
-                    DataSwitch.Reason.DATA_SWITCH_REASON_CBRS);
             onEvaluate(REQUESTS_UNCHANGED, "preferredDataSubscriptionIdChanged");
+            logDataSwitchEvent(mPreferredDataSubId, TelephonyEvent.EventState.EVENT_STATE_START,
+                    DataSwitch.Reason.DATA_SWITCH_REASON_CBRS);
             registerDefaultNetworkChangeCallback();
         }
     }
@@ -914,11 +917,11 @@ public class PhoneSwitcher extends Handler {
         mLocalLog.log(l);
     }
 
-    private void logDataSwitchEvent(int state, int reason) {
+    private void logDataSwitchEvent(int subId, int state, int reason) {
         DataSwitch dataSwitch = new DataSwitch();
         dataSwitch.state = state;
         dataSwitch.reason = reason;
-        TelephonyMetrics.getInstance().writeDataSwitch(dataSwitch);
+        TelephonyMetrics.getInstance().writeDataSwitch(subId, dataSwitch);
 
     }
 
