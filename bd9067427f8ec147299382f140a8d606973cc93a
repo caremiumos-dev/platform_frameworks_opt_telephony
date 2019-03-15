@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a598f9a5_f9b8062b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2393,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-03-15T17:44:03Z",
+      "side": 0,
+      "message": "is this mDCT correct? or we should get rid of this and replace with mPhone.getDcTracker(transport)?",
+      "range": {
+        "startLine": 2393,
+        "startChar": 26,
+        "endLine": 2393,
+        "endChar": 30
+      },
+      "revId": "bd9067427f8ec147299382f140a8d606973cc93a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dfbe922_e39f2880",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2446,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-03-15T17:44:03Z",
+      "side": 0,
+      "message": "why those are not needed?",
+      "range": {
+        "startLine": 2427,
+        "startChar": 6,
+        "endLine": 2446,
+        "endChar": 0
+      },
+      "revId": "bd9067427f8ec147299382f140a8d606973cc93a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
