@@ -61,8 +61,8 @@ import android.provider.Telephony.Sms;
 import android.service.carrier.CarrierMessagingService;
 import android.service.carrier.ICarrierMessagingCallback;
 import android.service.carrier.ICarrierMessagingService;
-import android.telephony.CarrierMessagingServiceManager;
 import android.telephony.CarrierConfigManager;
+import android.telephony.CarrierMessagingServiceManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
@@ -666,6 +666,7 @@ public abstract class SMSDispatcher extends Handler {
                 deliveryPendingList.add(tracker);
             }
             tracker.onSent(mContext);
+            mPhone.notifySmsSent(tracker.mDestAddress);
         } else {
             if (DBG) Rlog.d(TAG, "SMS send failed");
 
