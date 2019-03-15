@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a38c920_835dab69",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-03-15T20:45:39Z",
+      "side": 1,
+      "message": "paths, since you\u0027re returning multiple paths separated by :",
+      "range": {
+        "startLine": 94,
+        "startChar": 45,
+        "endLine": 94,
+        "endChar": 49
+      },
+      "revId": "dc04dc13b29694a04756ebcc512f57350637bcd3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
