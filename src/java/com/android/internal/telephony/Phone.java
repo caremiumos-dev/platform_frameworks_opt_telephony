@@ -35,6 +35,7 @@ import android.os.Message;
 import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
+import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.WorkSource;
 import android.preference.PreferenceManager;
@@ -152,6 +153,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     // Key used to read/write data_roaming_is_user_setting pref
     public static final String DATA_ROAMING_IS_USER_SETTING_KEY = "data_roaming_is_user_setting_key";
+
+    public static final int EMERGENCY_SMS_TIMER_MAX_MS = 300000;
 
     /* Event Constants */
     protected static final int EVENT_RADIO_AVAILABLE             = 1;
@@ -283,6 +286,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     // Keep track of whether or not the phone is in Emergency Callback Mode for Phone and
     // subclasses
     protected boolean mIsPhoneInEcmState = false;
+    private volatile long mTimeLastEmergencySmsSentMs = -1;
 
     // Variable to cache the video capability. When RAT changes, we lose this info and are unable
     // to recover from the state. We cache it and notify listeners when they register.
@@ -882,6 +886,60 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     protected void setIsInEmergencyCall() {
+    }
+
+    /**
+     * Notify the phone that an SMS has been sent. This will be used determine if the SMS was sent
+     * to an emergency address.
+     * @param destinationAddress the address that the SMS was sent to.
+     */
+    public void notifySmsSent(String destinationAddress) {
+        TelephonyManager m = (TelephonyManager) getContext().getSystemService(
+                Context.TELEPHONY_SERVICE);
+        if (m != null && m.isCurrentEmergencyNumber(destinationAddress)) {
+            Rlog.i(LOG_TAG, "Emergency SMS detected, recording time.");
+            mTimeLastEmergencySmsSentMs = SystemClock.elapsedRealtime();
+        }
+    }
+
+    /**
+     * Determine if the Phone has recently sent an emergency SMS and is still in the interval of
+     * time defined by a carrier that we may need to do perform special actions, for example
+     * override user setting for location so the carrier can find the user's location for emergency
+     * services.
+     *
+     * @return true if the device is in emergency SMS mode, false otherwise.
+     */
+    public boolean isInEmergencySmsMode() {
+        long lastSmsTimeMs = mTimeLastEmergencySmsSentMs;
+        if (lastSmsTimeMs == -1) {
+            // an emergency SMS hasn't been sent since the last check.
+            return false;
+        }
+        CarrierConfigManager configManager = (CarrierConfigManager)
+                getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle b = configManager.getConfigForSubId(getSubId());
+        if (b == null) {
+            // default for KEY_EMERGENCY_SMS_MODE_TIMER_MS_INT is 0 and CarrierConfig isn't
+            // available, so return false.
+            return false;
+        }
+        int eSmsTimerMs = b.getInt(CarrierConfigManager.KEY_EMERGENCY_SMS_MODE_TIMER_MS_INT, 0);
+        if (eSmsTimerMs == 0) {
+            // We do not support this feature for this carrier.
+            return false;
+        }
+        if (eSmsTimerMs > EMERGENCY_SMS_TIMER_MAX_MS) {
+            eSmsTimerMs = EMERGENCY_SMS_TIMER_MAX_MS;
+        }
+        boolean isInEmergencySmsMode = SystemClock.elapsedRealtime()
+                <= (lastSmsTimeMs + eSmsTimerMs);
+        if (!isInEmergencySmsMode) {
+            // Shortcut this next time so we do not have to waste time if another emergency SMS
+            // hasn't been sent since the last query.
+            mTimeLastEmergencySmsSentMs = -1;
+        }
+        return isInEmergencySmsMode;
     }
 
     protected void migrateFrom(Phone from) {
@@ -3903,6 +3961,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         pw.println(" getVoiceMessageCount()=" + getVoiceMessageCount());
         pw.println(" getActiveApnTypes()=" + getActiveApnTypes());
         pw.println(" needsOtaServiceProvisioning=" + needsOtaServiceProvisioning());
+        pw.println(" isInEmergencySmsMode=" + isInEmergencySmsMode());
         pw.flush();
         pw.println("++++++++++++++++++++++++++++++++");
 
