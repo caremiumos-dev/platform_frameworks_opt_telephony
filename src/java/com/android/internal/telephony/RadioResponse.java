@@ -46,6 +46,7 @@ import android.telephony.ModemActivityInfo;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.RadioAccessFamily;
+import android.telephony.Rlog;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -1014,7 +1015,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void getDeviceIdentityResponse(RadioResponseInfo responseInfo, String imei,
                                           String imeisv, String esn, String meid) {
-        responseStrings(responseInfo, imei, imeisv, esn, meid);
+        responseStrings(responseInfo, Rlog.pii(imei), imeisv, esn, meid);
     }
 
     /**
