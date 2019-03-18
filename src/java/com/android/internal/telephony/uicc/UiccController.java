@@ -953,12 +953,18 @@ public class UiccController extends Handler {
 
         // set mCardStrings and the defaultEuiccCardId using the now available EID
         String eid = ((EuiccCard) card).getEid();
-        addCardId(eid);
-        if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID) {
-            // TODO(b/122738148) the default eUICC should not be removable
-            mDefaultEuiccCardId = convertToPublicCardId(eid);
-            log("onEidReady: eid=" + eid + " slot=" + slotId + " mDefaultEuiccCardId="
-                    + mDefaultEuiccCardId);
+        if (TextUtils.isEmpty(eid)) {
+            // eid may be empty here if the eUICC is off
+            mDefaultEuiccCardId = UNSUPPORTED_CARD_ID;
+            log("onEidReady: eid is empty, setting mDefaultEuiccCardId to UNSUPPORTED_CARD_ID");
+        } else {
+            addCardId(eid);
+            if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID) {
+                // TODO(b/122738148) the default eUICC should not be removable
+                mDefaultEuiccCardId = convertToPublicCardId(eid);
+                log("onEidReady: eid=" + eid + " slot=" + slotId + " mDefaultEuiccCardId="
+                        + mDefaultEuiccCardId);
+            }
         }
         ((EuiccCard) card).unregisterForEidReady(this);
     }
