@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b9950e4_c625a242",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-03-18T22:44:51Z",
+      "side": 1,
+      "message": "is that because device doesn\u0027t support WIFI or wifi service is not coming up yet? will we renotify wifi once their service is available?",
+      "range": {
+        "startLine": 415,
+        "startChar": 14,
+        "endLine": 419,
+        "endChar": 13
+      },
+      "revId": "b260d732c685f42a443e2253c5c6b2c8aee1ca6e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
