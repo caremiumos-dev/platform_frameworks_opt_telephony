@@ -58,7 +58,7 @@ public class CellularNetworkServiceTest extends TelephonyTest {
         serviceInfo.permission = "android.permission.BIND_TELEPHONY_NETWORK_SERVICE";
         IntentFilter filter = new IntentFilter();
         mContextFixture.addService(
-                NetworkService.NETWORK_SERVICE_INTERFACE,
+                NetworkService.SERVICE_INTERFACE,
                 null,
                 "com.android.phone",
                 mCellularNetworkService.mBinder,
@@ -125,7 +125,7 @@ public class CellularNetworkServiceTest extends TelephonyTest {
         mSimulatedCommands.notifyNetworkStateChanged();
 
         try {
-            mBinder.getNetworkRegistrationInfo(0, domain, mCallback);
+            mBinder.requestNetworkRegistrationInfo(0, domain, mCallback);
         } catch (RemoteException e) {
             assertTrue(false);
         }
@@ -139,7 +139,7 @@ public class CellularNetworkServiceTest extends TelephonyTest {
                 roamingIndicator, systemIsInPrl, defaultRoamingIndicator);
 
         try {
-            verify(mCallback, times(1)).onGetNetworkRegistrationInfoComplete(
+            verify(mCallback, times(1)).onRequestNetworkRegistrationInfoComplete(
                     eq(NetworkServiceCallback.RESULT_SUCCESS), eq(expectedState));
         } catch (RemoteException e) {
             assertTrue(false);
@@ -148,7 +148,7 @@ public class CellularNetworkServiceTest extends TelephonyTest {
         domain = NetworkRegistrationInfo.DOMAIN_PS;
         availableServices = new int[] {NetworkRegistrationInfo.SERVICE_TYPE_DATA};
         try {
-            mBinder.getNetworkRegistrationInfo(0, domain, mCallback);
+            mBinder.requestNetworkRegistrationInfo(0, domain, mCallback);
         } catch (RemoteException e) {
             assertTrue(false);
         }
@@ -166,7 +166,7 @@ public class CellularNetworkServiceTest extends TelephonyTest {
                 lteVopsSupportInfo);
 
         try {
-            verify(mCallback, times(1)).onGetNetworkRegistrationInfoComplete(
+            verify(mCallback, times(1)).onRequestNetworkRegistrationInfoComplete(
                     eq(NetworkServiceCallback.RESULT_SUCCESS), eq(expectedState));
         } catch (RemoteException e) {
             assertTrue(false);
