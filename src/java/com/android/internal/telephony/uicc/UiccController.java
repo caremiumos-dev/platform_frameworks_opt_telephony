@@ -143,6 +143,11 @@ public class UiccController extends Handler {
     // If EID is not supported (e.g. on HAL version < 1.2), we set it to UNSUPPORTED_CARD_ID
     private int mDefaultEuiccCardId;
 
+    // Card ID used when the device is temporarily unable to read the EID (e.g. on HAL 1.2-1.3 if
+    // the eUICC is currently inaccessible). This value is only used within the UiccController and
+    // should be converted to UNSUPPORTED_CARD_ID when others ask
+    private static final int TEMPORARILY_UNSUPPORTED_CARD_ID = -3;
+
     // GSM SGP.02 section 2.2.2 states that the EID is always 32 digits long
     private static final int EID_LENGTH = 32;
 
@@ -722,6 +727,9 @@ public class UiccController extends Handler {
      * Get the card ID of the default eUICC.
      */
     public int getCardIdForDefaultEuicc() {
+        if (mDefaultEuiccCardId == TEMPORARILY_UNSUPPORTED_CARD_ID) {
+            return UNSUPPORTED_CARD_ID;
+        }
         return mDefaultEuiccCardId;
     }
 
@@ -953,12 +961,20 @@ public class UiccController extends Handler {
 
         // set mCardStrings and the defaultEuiccCardId using the now available EID
         String eid = ((EuiccCard) card).getEid();
-        addCardId(eid);
-        if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID) {
-            // TODO(b/122738148) the default eUICC should not be removable
-            mDefaultEuiccCardId = convertToPublicCardId(eid);
-            log("onEidReady: eid=" + eid + " slot=" + slotId + " mDefaultEuiccCardId="
-                    + mDefaultEuiccCardId);
+        if (TextUtils.isEmpty(eid)) {
+            // eid may be empty here if the eUICC is inaccessible. In this case the device in its
+            // current configuration will never get the EID
+            mDefaultEuiccCardId = TEMPORARILY_UNSUPPORTED_CARD_ID;
+            log("onEidReady: eid is empty, setting TEMPORARILY_UNSUPPORTED_CARD_ID");
+        } else {
+            addCardId(eid);
+            if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID
+                    || mDefaultEuiccCardId == TEMPORARILY_UNSUPPORTED_CARD_ID) {
+                // TODO(b/122738148) the default eUICC should not be removable
+                mDefaultEuiccCardId = convertToPublicCardId(eid);
+                log("onEidReady: eid=" + eid + " slot=" + slotId + " mDefaultEuiccCardId="
+                        + mDefaultEuiccCardId);
+            }
         }
         ((EuiccCard) card).unregisterForEidReady(this);
     }
