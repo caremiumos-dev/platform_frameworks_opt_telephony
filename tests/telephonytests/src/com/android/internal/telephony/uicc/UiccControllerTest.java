@@ -55,6 +55,10 @@ public class UiccControllerTest extends TelephonyTest {
     private static final int ICC_CHANGED_EVENT = 0;
     private static final int EVENT_GET_ICC_STATUS_DONE = 3;
     private static final int EVENT_GET_SLOT_STATUS_DONE = 4;
+
+    // EIDs are 32 characters long (UiccController sometimes uses length check to distiguish between
+    // EID and ICCID, so the fake EID we use in our tests should be the right length)
+    private static final String FAKE_EID = "123451234567890123451234567890123451234567890AA";
     @Mock
     private Handler mMockedHandler;
     @Mock
@@ -235,7 +239,7 @@ public class UiccControllerTest extends TelephonyTest {
         ics.setUniversalPinState(3 /* disabled */);
         ics.atr = "abcdef0123456789abcdef";
         ics.iccid = "123451234567890";
-        ics.eid = "A1B2C3D4";
+        ics.eid = FAKE_EID;
         ics.physicalSlotIndex = 0;
         AsyncResult ar = new AsyncResult(null, ics, null);
         Message msg = Message.obtain(mUiccControllerUT, EVENT_GET_ICC_STATUS_DONE, ar);
@@ -271,7 +275,7 @@ public class UiccControllerTest extends TelephonyTest {
         // simulate slot status loaded so that the UiccController sets the card ID
         IccSlotStatus iss = new IccSlotStatus();
         iss.setSlotState(1 /* active */);
-        iss.eid = "ABADACB";
+        iss.eid = FAKE_EID;
         ArrayList<IccSlotStatus> status = new ArrayList<IccSlotStatus>();
         status.add(iss);
         AsyncResult ar = new AsyncResult(null, status, null);
@@ -294,7 +298,7 @@ public class UiccControllerTest extends TelephonyTest {
         // simulate slot status loaded so that the UiccController sets the card ID
         IccSlotStatus iss = new IccSlotStatus();
         iss.setSlotState(1 /* active */);
-        iss.eid = "AB123456";
+        iss.eid = FAKE_EID;
         ArrayList<IccSlotStatus> status = new ArrayList<IccSlotStatus>();
         status.add(iss);
         AsyncResult ar = new AsyncResult(null, status, null);
@@ -305,6 +309,32 @@ public class UiccControllerTest extends TelephonyTest {
         assertEquals(mUiccControllerUT.convertToPublicCardId(iss.eid),
                 mUiccControllerUT.getCardIdForDefaultEuicc());
     }
+
+    @Test
+    public void testDefaultEuiccFromCardStatus() {
+        // Give UiccController a real context so it can use shared preferences
+        mUiccControllerUT.mContext = InstrumentationRegistry.getContext();
+
+        // Mock out UiccSlots
+        mUiccControllerUT.mUiccSlots[0] = mMockSlot;
+        doReturn(true).when(mMockSlot).isEuicc();
+
+
+        // simulate card status loaded so that the UiccController sets the card ID
+        IccCardStatus ics = new IccCardStatus();
+        ics.setCardState(1 /* present */);
+        ics.setUniversalPinState(3 /* disabled */);
+        ics.atr = "abcdef0123456789abcdef";
+        ics.eid = FAKE_EID;
+        AsyncResult ar = new AsyncResult(null, ics, null);
+        Message msg = Message.obtain(mUiccControllerUT, EVENT_GET_ICC_STATUS_DONE, ar);
+        mUiccControllerUT.handleMessage(msg);
+
+        // assert that the default cardId is set using the IccCardStatus
+        assertEquals(mUiccControllerUT.convertToPublicCardId(ics.eid),
+                mUiccControllerUT.getCardIdForDefaultEuicc());
+    }
+
 
     @Test
     public void testGetAllUiccCardInfos() {
@@ -359,7 +389,7 @@ public class UiccControllerTest extends TelephonyTest {
         ics.setUniversalPinState(3 /* disabled */);
         ics.atr = "abcdef0123456789abcdef";
         ics.iccid = "123451234567890";
-        ics.eid = "A1B2C3D4";
+        ics.eid = FAKE_EID;
         AsyncResult ar = new AsyncResult(null, ics, null);
         Message msg = Message.obtain(mUiccControllerUT, EVENT_GET_ICC_STATUS_DONE, ar);
         mUiccControllerUT.handleMessage(msg);

@@ -629,6 +629,12 @@ public class UiccController extends Handler {
             addCardId(cardString);
         }
 
+        if (isEuicc && cardString != null && mDefaultEuiccCardId == UNINITIALIZED_CARD_ID) {
+            mDefaultEuiccCardId = convertToPublicCardId(cardString);
+            log("Using eid=" + cardString + " on phone=" + index + " to set mDefaultEuiccCardId="
+                    + mDefaultEuiccCardId);
+        }
+
         if (DBG) log("Notifying IccChangedRegistrants");
         mIccChangedRegistrants.notifyRegistrants(new AsyncResult(null, index, null));
     }
