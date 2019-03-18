@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89d3c71e_d93d7172",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1120458
+      },
+      "writtenOn": "2019-03-18T21:52:32Z",
+      "side": 1,
+      "message": "so these libraries which framework.jar doesn\u0027t need are now included directly in telephony-common",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 62
+      },
+      "revId": "a2b60be2af233179c5cd11e5bc49aed92a08cd25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
