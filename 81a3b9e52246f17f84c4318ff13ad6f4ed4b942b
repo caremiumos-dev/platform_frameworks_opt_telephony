@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "317e6957_3d7e4661",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-03-19T20:31:07Z",
+      "side": 1,
+      "message": "let\u0027s use phoneId directly",
+      "range": {
+        "startLine": 164,
+        "startChar": 32,
+        "endLine": 164,
+        "endChar": 51
+      },
+      "revId": "81a3b9e52246f17f84c4318ff13ad6f4ed4b942b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70750a1b_8724d285",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-03-19T20:31:07Z",
+      "side": 1,
+      "message": "let\u0027s use phoneId directly",
+      "range": {
+        "startLine": 1787,
+        "startChar": 36,
+        "endLine": 1787,
+        "endChar": 41
+      },
+      "revId": "81a3b9e52246f17f84c4318ff13ad6f4ed4b942b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
