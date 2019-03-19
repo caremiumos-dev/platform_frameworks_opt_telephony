@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "10be5451_b9413271",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-19T01:41:17Z",
+      "side": 1,
+      "message": "We can\u0027t assume that the carrier privilege rules of the target subscription will be loaded. For instance, if we switch subscriptions on a PSIM between Sprint and T-Mobile, when the Sprint profile loads, it will be grouped with TMO, but the TMO subscription will be invisible at that time.\n\nThis particular function is just something that seems straightforward and I\u0027m not sure why it\u0027s not already there for convenience.",
+      "parentUuid": "ba73f15c_e3cb1025",
+      "range": {
+        "startLine": 503,
+        "startChar": 0,
+        "endLine": 509,
+        "endChar": 20
+      },
+      "revId": "2709ffd86d548c11b87df1d12da6073e62847b71",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b390d0da_f134580c",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2019-03-15T06:09:04Z",
       "side": 1,
       "message": "infoUpdater will trigger carrier config loading for all SIM state changes : ABSENT / UNKNOWN / LOADED / ERROR ... but only a few makes sent to us.\nI guess for ABSENT / ERROR cases, it will fail the checking and return here?",
+      "revId": "2709ffd86d548c11b87df1d12da6073e62847b71",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eea9ef5d_f81271d0",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-19T01:41:17Z",
+      "side": 1,
+      "message": "I felt like it was better to just loop through this any time the CC changes since it makes the steps for what happens on a CC change more consistent, but yes... in our current case it\u0027s just going to check here and return quickly. But... if we want to use this mechanism to remove a subId from a group, or if the carrier config is changed based on provisioning (which might not happen at SIM load), I think it\u0027ll be nice to have the hooks in place.",
+      "parentUuid": "b390d0da_f134580c",
       "revId": "2709ffd86d548c11b87df1d12da6073e62847b71",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "e205d4c1_a321e710",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-19T01:41:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a788dbe6_90df4afa",
+      "range": {
+        "startLine": 802,
+        "startChar": 0,
+        "endLine": 806,
+        "endChar": 0
+      },
+      "revId": "2709ffd86d548c11b87df1d12da6073e62847b71",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "517370e2_8797d374",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 2
@@ -76,6 +142,30 @@
       "writtenOn": "2019-03-15T06:09:04Z",
       "side": 1,
       "message": "hmm... we need to check : in privilege checking, we may compare the caller UID and the packageName, which will fail here.",
+      "range": {
+        "startLine": 811,
+        "startChar": 33,
+        "endLine": 811,
+        "endChar": 60
+      },
+      "revId": "2709ffd86d548c11b87df1d12da6073e62847b71",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa1148f3_b5a75789",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-19T01:41:17Z",
+      "side": 1,
+      "message": "should be OK? calling package name should be \"self\" (this runs in phone process), and package name should be com.android.phone.",
+      "parentUuid": "517370e2_8797d374",
       "range": {
         "startLine": 811,
         "startChar": 33,
