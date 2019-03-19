@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fefa924c_5c38b020",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-19T03:03:46Z",
+      "side": 1,
+      "message": "I don\u0027t think this is needed. When SIM is removed onSimNotReady() or onUpdateIcc() will trigger createAllApnList() which adds emergency apn.",
+      "revId": "c1603b47f2aac3e24edf3ed9b759378ad316b4de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
