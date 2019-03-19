@@ -45,6 +45,30 @@
       "revId": "81a3b9e52246f17f84c4318ff13ad6f4ed4b942b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87281d9e_520da32c",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-03-19T23:10:58Z",
+      "side": 1,
+      "message": "As we discussed offline, subId is enough, but we need to replace the DEFAULT_SUBSCRIPTION_ID with the default data subscription, thanks!",
+      "parentUuid": "70750a1b_8724d285",
+      "range": {
+        "startLine": 1787,
+        "startChar": 36,
+        "endLine": 1787,
+        "endChar": 41
+      },
+      "revId": "81a3b9e52246f17f84c4318ff13ad6f4ed4b942b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
