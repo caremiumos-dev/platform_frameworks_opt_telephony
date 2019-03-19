@@ -22,6 +22,30 @@
       "revId": "b260d732c685f42a443e2253c5c6b2c8aee1ca6e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ba1528d_0360d666",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-19T05:44:24Z",
+      "side": 1,
+      "message": "That 3rd party android device does not start wifi service until screen unlock",
+      "parentUuid": "7b9950e4_c625a242",
+      "range": {
+        "startLine": 415,
+        "startChar": 14,
+        "endLine": 419,
+        "endChar": 13
+      },
+      "revId": "b260d732c685f42a443e2253c5c6b2c8aee1ca6e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
