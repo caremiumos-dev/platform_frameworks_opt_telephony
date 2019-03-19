@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baf965a7_b01e3d5d",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1466968
+      },
+      "writtenOn": "2019-03-19T12:05:54Z",
+      "side": 1,
+      "message": "mCacheActiveSubInfoList has Thread Synchronization Issues.\n\njava.util.ConcurrentModificationException\n\tat java.util.ArrayList$Itr.next(ArrayList.java:860)\n\tat com.android.internal.telephony.metrics.TelephonyMetrics.updateActiveSubscriptionInfoList(TelephonyMetrics.java:701)\n\tat com.android.internal.telephony.SubscriptionController.notifySubscriptionInfoChanged(SubscriptionController.java:341)\n\tat com.android.internal.telephony.SubscriptionController.setMccMnc(SubscriptionController.java:1855)\n\tat com.android.internal.telephony.SubscriptionInfoUpdater.handleSimLoaded(SubscriptionInfoUpdater.java:454)\n\tat com.android.internal.telephony.SubscriptionInfoUpdater.handleMessage(SubscriptionInfoUpdater.java:246)\n\tat android.os.Handler.dispatchMessage(Handler.java:106)\n\tat android.os.Looper.loop(Looper.java:209)\n\tat android.os.HandlerThread.run(HandlerThread.java:67)",
+      "revId": "f3581e480703069c4326af4898dea5bcfac80bb1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
