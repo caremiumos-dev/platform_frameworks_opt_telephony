@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9cb2b2b_c7107468",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-19T22:18:41Z",
+      "side": 1,
+      "message": "inaccessible?",
+      "range": {
+        "startLine": 957,
+        "startChar": 53,
+        "endLine": 957,
+        "endChar": 56
+      },
+      "revId": "02fb06eab751d321401f8d0b6532e02bfe76e403",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb5da300_4edd0a5b",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-19T22:18:41Z",
+      "side": 1,
+      "message": "Add some comment here maybe. I am not sure though if UNSUPPORTED is the right value for this case.",
+      "revId": "02fb06eab751d321401f8d0b6532e02bfe76e403",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
