@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30a749f2_61858345",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-03-20T00:43:55Z",
+      "side": 1,
+      "message": "hmm... in many places above you are using phoneId but here it\u0027s subId",
+      "range": {
+        "startLine": 932,
+        "startChar": 40,
+        "endLine": 932,
+        "endChar": 45
+      },
+      "revId": "460389d70b2697db93141b709f7ce8bca2253bf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
