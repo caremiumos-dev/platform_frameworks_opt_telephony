@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a756aadc_6c98d644",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-20T23:54:52Z",
+      "side": 1,
+      "message": "else case won\u0027t be very frequent. Should add a log for that case, and maybe even a locallog.",
+      "revId": "10008ed888c5be0e29a5d21e59142a09db4724f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
