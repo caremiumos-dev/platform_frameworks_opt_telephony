@@ -5061,7 +5061,22 @@ public class RIL extends BaseCommands implements CommandsInterface {
         StringBuilder sb;
         String s;
         int length;
-        if (ret instanceof int[]) {
+
+        if (req == RIL_REQUEST_DEVICE_IDENTITY && ret instanceof String[]) {
+            String[] identities = (String[]) ret;
+            length = identities.length;
+            sb = new StringBuilder("{");
+            if (length > 0) {
+                int i = 0;
+                // position 0 is IMEI
+                sb.append(Rlog.pii(RILJ_LOG_TAG, identities[i++]));
+                while (i < length) {
+                    sb.append(", ").append(identities[i++]);
+                }
+            }
+            sb.append("}");
+            s = sb.toString();
+        } else if (ret instanceof int[]) {
             int[] intArray = (int[]) ret;
             length = intArray.length;
             sb = new StringBuilder("{");
