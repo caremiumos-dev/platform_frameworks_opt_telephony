@@ -113,6 +113,46 @@ public class TelephonyPermissionsTest {
     }
 
     @Test
+    public void testCheckReadPhoneStateNoThrow_noPermissions() {
+        assertFalse(TelephonyPermissions.checkReadPhoneStateNoThrow(
+                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+    }
+
+    @Test
+    public void testCheckReadPhoneStateNoThrow_hasPrivilegedPermission() {
+        doNothing().when(mMockContext).enforcePermission(
+                android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE, PID, UID, MSG);
+        assertTrue(TelephonyPermissions.checkReadPhoneStateNoThrow(
+                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+    }
+
+    @Test
+    public void testCheckReadPhoneStateNoThrow_hasPermissionAndAppOp() {
+        doNothing().when(mMockContext).enforcePermission(
+                android.Manifest.permission.READ_PHONE_STATE, PID, UID, MSG);
+        when(mMockAppOps.noteOp(AppOpsManager.OP_READ_PHONE_STATE, UID, PACKAGE))
+                .thenReturn(AppOpsManager.MODE_ALLOWED);
+        assertTrue(TelephonyPermissions.checkReadPhoneStateNoThrow(
+                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+    }
+
+    @Test
+    public void testCheckReadPhoneStateNoThrow_hasPermissionWithoutAppOp() {
+        doNothing().when(mMockContext).enforcePermission(
+                android.Manifest.permission.READ_PHONE_STATE, PID, UID, MSG);
+        assertFalse(TelephonyPermissions.checkReadPhoneStateNoThrow(
+                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+    }
+
+    @Test
+    public void testCheckReadPhoneStateNoThrow_hasCarrierPrivileges() throws Exception {
+        when(mMockTelephony.getCarrierPrivilegeStatusForUid(eq(SUB_ID), eq(UID)))
+                .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
+        assertTrue(TelephonyPermissions.checkReadPhoneStateNoThrow(
+                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+    }
+
+    @Test
     public void testCheckReadPhoneNumber_noPermissions() {
         try {
             TelephonyPermissions.checkReadPhoneNumber(
