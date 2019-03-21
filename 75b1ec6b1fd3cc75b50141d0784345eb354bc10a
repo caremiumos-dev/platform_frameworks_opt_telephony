@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "719d1e33_5365c88d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2019-03-21T21:48:43Z",
+      "side": 1,
+      "message": "I think we also need to check the case when mDefaultEuiccCardId \u003d\u003d UNSUPPORTED_CARD_ID to update the default card Id.",
+      "range": {
+        "startLine": 963,
+        "startChar": 60,
+        "endLine": 963,
+        "endChar": 61
+      },
+      "revId": "75b1ec6b1fd3cc75b50141d0784345eb354bc10a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
