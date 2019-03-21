@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "229d4dd7_3c1cf452",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-03-21T21:19:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9cb2b2b_c7107468",
+      "range": {
+        "startLine": 957,
+        "startChar": 53,
+        "endLine": 957,
+        "endChar": 56
+      },
+      "revId": "02fb06eab751d321401f8d0b6532e02bfe76e403",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb5da300_4edd0a5b",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "02fb06eab751d321401f8d0b6532e02bfe76e403",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7a58dff_eb2d52fd",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-03-21T21:19:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb5da300_4edd0a5b",
+      "revId": "02fb06eab751d321401f8d0b6532e02bfe76e403",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
