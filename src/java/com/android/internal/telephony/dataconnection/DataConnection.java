@@ -2456,7 +2456,7 @@ public class DataConnection extends StateMachine {
                 DataConnection.this.obtainMessage(EVENT_KEEPALIVE_START_REQUEST,
                         msg.arg1, msg.arg2, msg.obj).sendToTarget();
             } else {
-                onSocketKeepaliveEvent(msg.arg1, SocketKeepalive.ERROR_HARDWARE_UNSUPPORTED);
+                onSocketKeepaliveEvent(msg.arg1, SocketKeepalive.ERROR_UNSUPPORTED);
             }
         }
 
@@ -2492,7 +2492,7 @@ public class DataConnection extends StateMachine {
                     case KeepaliveStatus.ERROR_NONE:
                         return SocketKeepalive.SUCCESS;
                     case KeepaliveStatus.ERROR_UNSUPPORTED:
-                        return SocketKeepalive.ERROR_HARDWARE_UNSUPPORTED;
+                        return SocketKeepalive.ERROR_UNSUPPORTED;
                     case KeepaliveStatus.ERROR_NO_RESOURCES:
                     case KeepaliveStatus.ERROR_UNKNOWN:
                     default:
