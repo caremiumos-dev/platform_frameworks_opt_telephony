@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1002f80f_0407bade",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-03-22T00:05:07Z",
+      "side": 1,
+      "message": "Yeah actually I\u0027m wondering if this is really necessary. Since CardStatus.eid and SlotStatus.eid both start being populated in the same HAL/RadioConfig level, maybe we should just continue setting it only using the SlotStatus for consistency.",
+      "parentUuid": "14e9e28f_c01d9e17",
+      "revId": "44c494e80092a262f4a59a75f4a1b45906395105",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "65ad8844_856491b5",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
