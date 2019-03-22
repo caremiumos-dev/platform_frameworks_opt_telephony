@@ -148,6 +148,13 @@ public class SmsController extends ISmsImplBase {
     public void sendTextForSubscriber(int subId, String callingPackage, String destAddr,
             String scAddr, String text, PendingIntent sentIntent, PendingIntent deliveryIntent,
             boolean persistMessageForNonDefaultSmsApp) {
+        if (!getSmsPermissions(subId).checkCallingCanSendText(
+            persistMessageForNonDefaultSmsApp, callingPackage, "Sending SMS message")) {
+            sendErrorInPendingIntent(sentIntent, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
+            return;
+        }
+
+
         SubscriptionInfo info = getSubscriptionInfo(subId);
         if (isBluetoothSubscription(info)) {
             sendBluetoothText(info, destAddr, text, sentIntent, deliveryIntent);
