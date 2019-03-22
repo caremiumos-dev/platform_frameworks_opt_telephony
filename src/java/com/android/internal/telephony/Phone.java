@@ -4100,4 +4100,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             pw.println("++++++++++++++++++++++++++++++++");
         }
     }
+
+    public void setRadioConfig(android.hardware.radio.config.V1_1.IRadioConfig radioProxy) {
+        mCi.setRadioConfig(radioProxy);
+    }
 }

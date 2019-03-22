@@ -2362,4 +2362,7 @@ public interface CommandsInterface {
     default List<ClientRequestStats> getClientRequestStats() {
         return null;
     }
+
+    default void setRadioConfig(android.hardware.radio.config.V1_1.IRadioConfig radioProxy) {
+    }
 }

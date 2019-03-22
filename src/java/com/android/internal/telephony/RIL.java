@@ -6018,4 +6018,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
     public HalVersion getHalVersion() {
         return mRadioVersion;
     }
+
+    public void setRadioConfig(android.hardware.radio.config.V1_1.IRadioConfig radioConfigProxy) {
+        RadioConfig.getInstance(mContext).setRadioConfigProxy(radioConfigProxy);
+    }
 }
