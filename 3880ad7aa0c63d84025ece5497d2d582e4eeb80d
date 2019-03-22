@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eefff9c0_23f6ba9b",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-22T23:19:55Z",
+      "side": 1,
+      "message": "nit static?",
+      "range": {
+        "startLine": 165,
+        "startChar": 11,
+        "endLine": 165,
+        "endChar": 12
+      },
+      "revId": "3880ad7aa0c63d84025ece5497d2d582e4eeb80d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
