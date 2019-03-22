@@ -22,6 +22,30 @@
       "revId": "75b1ec6b1fd3cc75b50141d0784345eb354bc10a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5dcc51c_c9c061dd",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-03-22T19:38:08Z",
+      "side": 1,
+      "message": "done (as per offline discussions with Amit, we\u0027ve added an internal constant TEMPORARILY_UNSUPPORTED. We can update from TEMPORARILY_UNSUPPORTED, but not UNSUPPORTED).",
+      "parentUuid": "719d1e33_5365c88d",
+      "range": {
+        "startLine": 963,
+        "startChar": 60,
+        "endLine": 963,
+        "endChar": 61
+      },
+      "revId": "75b1ec6b1fd3cc75b50141d0784345eb354bc10a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
