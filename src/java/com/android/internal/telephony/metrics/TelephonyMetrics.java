@@ -46,7 +46,6 @@ import android.telephony.ServiceState;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionInfo;
-import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyHistogram;
 import android.telephony.TelephonyManager;
 import android.telephony.data.DataCallResponse;
@@ -714,14 +713,14 @@ public class TelephonyMetrics {
     }
 
     /** Update active subscription info list. */
-    public void updateActiveSubscriptionInfoList(List<SubscriptionInfo> subInfos) {
+    public synchronized void updateActiveSubscriptionInfoList(List<SubscriptionInfo> subInfos) {
         List<Integer> inActivePhoneList = new ArrayList<>();
         for (int i = 0; i < mLastActiveSubscriptionInfos.size(); i++) {
             inActivePhoneList.add(mLastActiveSubscriptionInfos.keyAt(i));
         }
 
         for (SubscriptionInfo info : subInfos) {
-            int phoneId = SubscriptionManager.getPhoneId(info.getSubscriptionId());
+            int phoneId = info.getSimSlotIndex();
             inActivePhoneList.removeIf(value -> value.equals(phoneId));
             ActiveSubscriptionInfo activeSubscriptionInfo = new ActiveSubscriptionInfo();
             activeSubscriptionInfo.slotIndex = phoneId;
