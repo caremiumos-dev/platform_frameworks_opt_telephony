@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "6ad8c297_5e3d8851",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-22T00:08:44Z",
+      "side": 1,
+      "message": "yeah I agree, since we anyway want to use lowest slotId for this and that info isn\u0027t readily available here.",
+      "parentUuid": "1002f80f_0407bade",
+      "revId": "44c494e80092a262f4a59a75f4a1b45906395105",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "65ad8844_856491b5",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 1
