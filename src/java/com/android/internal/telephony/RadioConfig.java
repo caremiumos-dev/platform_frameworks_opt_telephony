@@ -57,6 +57,8 @@ public class RadioConfig extends Handler {
     private static final boolean VDBG = false;   //STOPSHIP if true
 
     private static final int EVENT_SERVICE_DEAD = 1;
+    private static final int EVENT_SWITCH_TO_MOCK_MODEM = 2;
+    private static final int EVENT_RELEASE_MOCK_MODEM = 3;
 
     private static final HalVersion RADIO_CONFIG_HAL_VERSION_UNKNOWN = new HalVersion(-1, -1);
 
@@ -78,6 +80,8 @@ public class RadioConfig extends Handler {
     private static RadioConfig sRadioConfig;
 
     protected Registrant mSimSlotStatusRegistrant;
+
+    private MockRadio<IRadioConfig> mMockRadioConfig;
 
     final class ServiceDeathRecipient implements HwBinder.DeathRecipient {
         @Override
@@ -493,5 +497,16 @@ public class RadioConfig extends Handler {
 
     private static void loge(String log) {
         Rlog.e(TAG, log);
+    }
+
+    public void setRadioConfigProxy(IRadioConfig radioConfigProxy) {
+        mMockRadioConfig = (radioConfigProxy == null) ? null :
+                new MockRadio<IRadioConfig>(radioConfigProxy);
+
+        reConfigMockRadioConfig(mMockRadioConfig != null);
+    }
+
+    private void reConfigMockRadioConfig(boolean enable) {
+        sendEmptyMessage(enable ? EVENT_SWITCH_TO_MOCK_MODEM : EVENT_RELEASE_MOCK_MODEM);
     }
 }
