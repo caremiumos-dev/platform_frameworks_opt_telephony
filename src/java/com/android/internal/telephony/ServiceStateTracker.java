@@ -398,7 +398,14 @@ public class ServiceStateTracker extends Handler {
     private final GsmCdmaPhone mPhone;
 
     private CellIdentity mCellIdentity;
-    private CellIdentity mNewCellIdentity;
+    private CellIdentity mLastCellIdentity;
+
+    // Transient CellIdentities that will be used to report location. For legacy reasons, we
+    // prefer CS > PS > WLAN
+    private CellIdentity mNewCsCellIdentity;
+    private CellIdentity mNewPsCellIdentity;
+    private CellIdentity mNewIwlanCellIdentity;
+
     private static final int MS_PER_HOUR = 60 * 60 * 1000;
     private final NitzStateMachine mNitzState;
     @UnsupportedAppUsage
@@ -670,8 +677,8 @@ public class ServiceStateTracker extends Handler {
         mPrlVersion = null;
         mIsMinInfoReady = false;
         mNitzState.handleNetworkCountryCodeUnavailable();
-        mCellIdentity = null;
-        mNewCellIdentity = null;
+        mCellIdentity = mLastCellIdentity = null;
+        mNewCsCellIdentity = mNewPsCellIdentity = mNewIwlanCellIdentity = null;
         mRuimProvisionedRecordsLoaded = false;
 
         //cancel any pending pollstate request on voice tech switching
@@ -2074,7 +2081,7 @@ public class ServiceStateTracker extends Handler {
                     }
                 }
 
-                mNewCellIdentity = networkRegState.getCellIdentity();
+                mNewCsCellIdentity = networkRegState.getCellIdentity();
 
                 if (DBG) {
                     log("handlPollVoiceRegResultMessage: regState=" + registrationState
@@ -2086,6 +2093,8 @@ public class ServiceStateTracker extends Handler {
             case EVENT_POLL_STATE_PS_IWLAN_REGISTRATION: {
                 NetworkRegistrationInfo networkRegState = (NetworkRegistrationInfo) ar.result;
                 mNewSS.addNetworkRegistrationInfo(networkRegState);
+
+                mNewIwlanCellIdentity = networkRegState.getCellIdentity();
 
                 if (DBG) {
                     log("handlPollStateResultMessage: PS IWLAN. " + networkRegState);
@@ -2119,7 +2128,6 @@ public class ServiceStateTracker extends Handler {
                 setPhyCellInfoFromCellIdentity(mNewSS, networkRegState.getCellIdentity());
 
                 if (mPhone.isPhoneTypeGsm()) {
-
                     mNewReasonDataDenied = networkRegState.getRejectCause();
                     mNewMaxDataCalls = dataSpecificStates.maxDataCalls;
                     mDataRoaming = regCodeIsRoaming(registrationState);
@@ -2151,60 +2159,23 @@ public class ServiceStateTracker extends Handler {
 
                 updateServiceStateLteEarfcnBoost(mNewSS,
                         getLteEarfcn(networkRegState.getCellIdentity()));
+
+                mNewPsCellIdentity = networkRegState.getCellIdentity();
                 break;
             }
 
             case EVENT_POLL_STATE_OPERATOR: {
-                if (mPhone.isPhoneTypeGsm()) {
-                    String opNames[] = (String[]) ar.result;
-
-                    if (opNames != null && opNames.length >= 3) {
-                        // FIXME: Giving brandOverride higher precedence, is this desired?
-                        String brandOverride = mUiccController.getUiccCard(getPhoneId()) != null
-                                ? mUiccController.getUiccCard(getPhoneId())
-                                        .getOperatorBrandOverride() : null;
-                        if (brandOverride != null) {
-                            log("EVENT_POLL_STATE_OPERATOR: use brandOverride=" + brandOverride);
-                            mNewSS.setOperatorName(brandOverride, brandOverride, opNames[2]);
-                        } else {
-                            mNewSS.setOperatorName(opNames[0], opNames[1], opNames[2]);
-                        }
-                    }
-                } else {
-                    String opNames[] = (String[])ar.result;
-
-                    if (opNames != null && opNames.length >= 3) {
-                        // TODO: Do we care about overriding in this case.
-                        // If the NUMERIC field isn't valid use PROPERTY_CDMA_HOME_OPERATOR_NUMERIC
-                        if ((opNames[2] == null) || (opNames[2].length() < 5)
-                                || ("00000".equals(opNames[2]))) {
-                            opNames[2] = SystemProperties.get(
-                                    GsmCdmaPhone.PROPERTY_CDMA_HOME_OPERATOR_NUMERIC, "00000");
-                            if (DBG) {
-                                log("RIL_REQUEST_OPERATOR.response[2], the numeric, " +
-                                        " is bad. Using SystemProperties '" +
-                                        GsmCdmaPhone.PROPERTY_CDMA_HOME_OPERATOR_NUMERIC +
-                                        "'= " + opNames[2]);
-                            }
-                        }
-
-                        if (!mIsSubscriptionFromRuim) {
-                            // NV device (as opposed to CSIM)
-                            mNewSS.setOperatorName(opNames[0], opNames[1], opNames[2]);
-                        } else {
-                            String brandOverride = mUiccController.getUiccCard(getPhoneId()) != null
-                                    ? mUiccController.getUiccCard(getPhoneId())
-                                    .getOperatorBrandOverride() : null;
-                            if (brandOverride != null) {
-                                mNewSS.setOperatorName(brandOverride, brandOverride, opNames[2]);
-                            } else {
-                                mNewSS.setOperatorName(opNames[0], opNames[1], opNames[2]);
-                            }
-                        }
-                    } else {
-                        if (DBG) log("EVENT_POLL_STATE_OPERATOR_CDMA: error parsing opNames");
-                    }
+                String[] opNames = (String[]) ar.result;
+                if (opNames == null || opNames.length < 3) {
+                    if (DBG) log("EVENT_POLL_STATE_OPERATOR: error parsing opNames");
+                    break;
                 }
+
+                if (opNames.length > 3) {
+                    loge("EVENT_POLL_STATE_OPERATOR: Returned array of unexpected length: "
+                            + opNames.length);
+                }
+                updateOperatorName(opNames[0], opNames[1], opNames[2]);
                 break;
             }
 
@@ -2226,6 +2197,46 @@ public class ServiceStateTracker extends Handler {
 
             default:
                 loge("handlePollStateResultMessage: Unexpected RIL response received: " + what);
+        }
+    }
+
+    private void updateOperatorName(String alphaLong, String alphaShort, String plmnId) {
+        if (mPhone.isPhoneTypeGsm()) {
+            // FIXME: Giving brandOverride higher precedence, is this desired?
+            String brandOverride = mUiccController.getUiccCard(getPhoneId()) != null
+                    ? mUiccController.getUiccCard(getPhoneId())
+                            .getOperatorBrandOverride() : null;
+            if (brandOverride != null) {
+                log("EVENT_POLL_STATE_OPERATOR: use brandOverride=" + brandOverride);
+                mNewSS.setOperatorName(brandOverride, brandOverride, plmnId);
+            } else {
+                mNewSS.setOperatorName(alphaLong, alphaShort, plmnId);
+            }
+        } else {
+            // TODO: Do we care about overriding in this case.
+            // If the NUMERIC field isn't valid use PROPERTY_CDMA_HOME_OPERATOR_NUMERIC
+            if (TextUtils.isEmpty(plmnId) || plmnId.length() < 5 || "00000".equals(plmnId)) {
+                plmnId = SystemProperties.get(
+                        GsmCdmaPhone.PROPERTY_CDMA_HOME_OPERATOR_NUMERIC, "00000");
+                if (DBG) {
+                    log("Operator Numeric " + plmnId + "value is bad. Using SystemProperties '"
+                            + GsmCdmaPhone.PROPERTY_CDMA_HOME_OPERATOR_NUMERIC + "'= " + plmnId);
+                }
+            }
+
+            if (!mIsSubscriptionFromRuim) {
+                // NV device (as opposed to CSIM)
+                mNewSS.setOperatorName(alphaLong, alphaShort, plmnId);
+            } else {
+                String brandOverride = mUiccController.getUiccCard(getPhoneId()) != null
+                        ? mUiccController.getUiccCard(getPhoneId())
+                        .getOperatorBrandOverride() : null;
+                if (brandOverride != null) {
+                    mNewSS.setOperatorName(brandOverride, brandOverride, plmnId);
+                } else {
+                    mNewSS.setOperatorName(alphaLong, alphaShort, plmnId);
+                }
+            }
         }
     }
 
@@ -2953,7 +2964,7 @@ public class ServiceStateTracker extends Handler {
         switch (mCi.getRadioState()) {
             case TelephonyManager.RADIO_POWER_UNAVAILABLE:
                 mNewSS.setStateOutOfService();
-                mNewCellIdentity = null;
+                mNewCsCellIdentity = mNewPsCellIdentity = mNewIwlanCellIdentity = null;
                 setSignalStrengthDefaultValues();
                 mNitzState.handleNetworkCountryCodeUnavailable();
                 pollStateDone();
@@ -2961,7 +2972,7 @@ public class ServiceStateTracker extends Handler {
 
             case TelephonyManager.RADIO_POWER_OFF:
                 mNewSS.setStateOff();
-                mNewCellIdentity = null;
+                mNewCsCellIdentity = mNewPsCellIdentity = mNewIwlanCellIdentity = null;
                 setSignalStrengthDefaultValues();
                 mNitzState.handleNetworkCountryCodeUnavailable();
                 // don't poll when device is shutting down or the poll was not modemTrigged
@@ -2976,8 +2987,14 @@ public class ServiceStateTracker extends Handler {
             default:
                 // Issue all poll-related commands at once then count down the responses, which
                 // are allowed to arrive out-of-order
-                mPollingContext[0]++;
-                mCi.getOperator(obtainMessage(EVENT_POLL_STATE_OPERATOR, mPollingContext));
+
+                // We shouldn't't need to get operator for any HAL that support CellIdentity in the
+                // RegState structures; however, for 1.0 devices, we should not rely on the
+                // CellIdentity to be correctly populated.
+                if (mPhone.getHalVersion().compareTo(new HalVersion(1, 2)) <= 0) {
+                    mPollingContext[0]++;
+                    mCi.getOperator(obtainMessage(EVENT_POLL_STATE_OPERATOR, mPollingContext));
+                }
 
                 mPollingContext[0]++;
                 mRegStateManagers.get(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
@@ -3032,13 +3049,16 @@ public class ServiceStateTracker extends Handler {
                     + " mNewReasonDataDenied=" + mNewReasonDataDenied);
         }
 
-        boolean hasRegistered =
+        final boolean hasRegistered =
                 mSS.getVoiceRegState() != ServiceState.STATE_IN_SERVICE
                         && mNewSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE;
 
-        boolean hasDeregistered =
+        final boolean hasDeregistered =
                 mSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE
                         && mNewSS.getVoiceRegState() != ServiceState.STATE_IN_SERVICE;
+
+        final boolean isDataInService = mNewSS.getDataRegState() == ServiceState.STATE_IN_SERVICE;
+        final boolean isVoiceInService = mNewSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE;
 
         SparseBooleanArray hasDataAttached = new SparseBooleanArray(
                 mTransportManager.getAvailableTransports().length);
@@ -3095,15 +3115,21 @@ public class ServiceStateTracker extends Handler {
                 mNewSS.getNetworkRegistrationInfo(
                         NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkType.EUTRAN));
 
+
+        // CS > PS > IWLAN, but only override if in-service or previous is OOS;
+        // If none are IN_SERVICE, default to CS.
+        CellIdentity newCellIdentity = mNewIwlanCellIdentity;
+        if (isDataInService) newCellIdentity = mNewPsCellIdentity;
+        if (newCellIdentity == null || isVoiceInService) newCellIdentity = mNewCsCellIdentity;
+
         // TODO: loosen this restriction to exempt fields that are provided through system
         // information; otherwise, we will get false positives when things like the operator
         // alphas are provided later - that's better than missing location changes, but
         // still not ideal.
-        boolean hasLocationChanged = !Objects.equals(mNewCellIdentity, mCellIdentity);
+        boolean hasLocationChanged = !Objects.equals(newCellIdentity, mCellIdentity);
 
         // ratchet the new tech up through its rat family but don't drop back down
         // until cell change or device is OOS
-        boolean isDataInService = mNewSS.getDataRegState() == ServiceState.STATE_IN_SERVICE;
         if (isDataInService) {
             mRatRatcheter.ratchet(mSS, mNewSS, hasLocationChanged);
         }
@@ -3189,7 +3215,7 @@ public class ServiceStateTracker extends Handler {
             // TODO: we may add filtering to reduce the event logged,
             // i.e. check preferred network setting, only switch to 2G, etc
             if (hasRilVoiceRadioTechnologyChanged) {
-                int cid = getCidFromCellIdentity(mNewCellIdentity);
+                int cid = getCidFromCellIdentity(newCellIdentity);
                 // NOTE: this code was previously located after mSS and mNewSS are swapped, so
                 // existing logs were incorrectly using the new state for "network_from"
                 // and STATE_OUT_OF_SERVICE for "network_to". To avoid confusion, use a new log tag
@@ -3225,10 +3251,9 @@ public class ServiceStateTracker extends Handler {
         // clean slate for next time
         mNewSS.setStateOutOfService();
 
-        // swap mCellIdentity and mNewCellIdentity to put new state in mCellIdentity
-        CellIdentity tempCellId = mCellIdentity;
-        mCellIdentity = mNewCellIdentity;
-        mNewCellIdentity = tempCellId;
+        // store Last cell Identity in mLastCellIdentity and update mCellIdentity
+        mLastCellIdentity = mCellIdentity;
+        mCellIdentity = newCellIdentity;
 
         if (hasRilVoiceRadioTechnologyChanged) {
             updatePhoneObject();
@@ -4815,7 +4840,10 @@ public class ServiceStateTracker extends Handler {
         pw.println(" mPendingRadioPowerOffAfterDataOff=" + mPendingRadioPowerOffAfterDataOff);
         pw.println(" mPendingRadioPowerOffAfterDataOffTag=" + mPendingRadioPowerOffAfterDataOffTag);
         pw.println(" mCellIdentity=" + Rlog.pii(VDBG, mCellIdentity));
-        pw.println(" mNewCellIdentity=" + Rlog.pii(VDBG, mNewCellIdentity));
+        pw.println(" mLastCellIdentity=" + Rlog.pii(VDBG, mLastCellIdentity));
+        pw.println(" mNewCsCellIdentity=" + Rlog.pii(VDBG, mNewCsCellIdentity));
+        pw.println(" mNewPsCellIdentity=" + Rlog.pii(VDBG, mNewPsCellIdentity));
+        pw.println(" mNewIwlanCellIdentity=" + Rlog.pii(VDBG, mNewIwlanCellIdentity));
         pw.println(" mLastCellInfoReqTime=" + mLastCellInfoReqTime);
         dumpCellInfoList(pw);
         pw.flush();
