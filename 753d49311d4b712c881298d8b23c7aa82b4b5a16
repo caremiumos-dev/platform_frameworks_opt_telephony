@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d847afe5_5828cb3e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-03-25T20:28:33Z",
+      "side": 1,
+      "message": "can you do some simple manual tests too?",
+      "range": {
+        "startLine": 10,
+        "startChar": 6,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "753d49311d4b712c881298d8b23c7aa82b4b5a16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05351073_47ce0869",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5071,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-03-25T20:28:33Z",
+      "side": 1,
+      "message": "can this just be rolled into the logic below at 5092?\n\nAlso the convention set above (at 5050) seems to be just not logging IMEI when !RILJ_LOGV, maybe we can just do that",
+      "range": {
+        "startLine": 5071,
+        "startChar": 0,
+        "endLine": 5071,
+        "endChar": 37
+      },
+      "revId": "753d49311d4b712c881298d8b23c7aa82b4b5a16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
