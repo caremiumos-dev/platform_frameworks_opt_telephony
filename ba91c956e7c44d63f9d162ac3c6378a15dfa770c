@@ -22,6 +22,30 @@
       "revId": "ba91c956e7c44d63f9d162ac3c6378a15dfa770c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b971f11_30677a80",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-03-25T23:38:14Z",
+      "side": 0,
+      "message": "Thanks!",
+      "parentUuid": "ae855e27_145f144c",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 44
+      },
+      "revId": "ba91c956e7c44d63f9d162ac3c6378a15dfa770c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
