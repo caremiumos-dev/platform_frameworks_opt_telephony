@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60be56d6_163248b1",
+        "filename": "src/java/com/android/internal/telephony/BtSmsInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-03-25T21:28:47Z",
+      "side": 1,
+      "message": "update copyright",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "c7a3ddd44ff23710e1e484b421975f03d48a8e8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07ef5775_47b38895",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-03-25T21:28:47Z",
+      "side": 1,
+      "message": "Not sure why we are using this pattern in other places of the file, but it may be better to use mContext here.",
+      "range": {
+        "startLine": 495,
+        "startChar": 26,
+        "endLine": 495,
+        "endChar": 85
+      },
+      "revId": "c7a3ddd44ff23710e1e484b421975f03d48a8e8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
