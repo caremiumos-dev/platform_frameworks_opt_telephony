@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9976bd47_08594d31",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5053,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-03-25T23:27:46Z",
+      "side": 1,
+      "message": "Actually now that we have Rlog.pii available, maybe we should use it to print this stuff too? wdyt",
+      "range": {
+        "startLine": 5049,
+        "startChar": 17,
+        "endLine": 5053,
+        "endChar": 54
+      },
+      "revId": "d0a9788d0d0db8056b1d29a26dc66caacaf9ed5c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
