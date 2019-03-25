@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2f1df72_4017ea05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2019-03-25T02:03:34Z",
+      "side": 1,
+      "message": "Shall we test FrameworksTelephonyTests instead FrameworksNetTests if it\u0027s a modification in DC?",
+      "revId": "10e5b070a06e016cb83993065bb9f22d9e240519",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
