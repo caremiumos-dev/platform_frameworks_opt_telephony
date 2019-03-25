@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97d843b6_7f3ffb18",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-03-25T21:45:43Z",
+      "side": 0,
+      "message": "Can you also add a comment here saying something along the lines of: \"SEND_SMS permission should be checked by the caller of this method\", since it is the only method in this file that doesn\u0027t check permissions here?",
+      "range": {
+        "startLine": 416,
+        "startChar": 8,
+        "endLine": 420,
+        "endChar": 9
+      },
+      "revId": "c7a3ddd44ff23710e1e484b421975f03d48a8e8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
