@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e6c9218_e5cd2bf2",
+        "filename": "src/java/com/android/internal/telephony/SmsPermissions.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-26T00:12:23Z",
+      "side": 1,
+      "message": "The logic for how this gets mPhone is different from what it was earlier. This can be null now. I\u0027d prefer we avoid functional changes other than allowing the permission check to work for BT case, and if that seems difficult it may be better to replicate the check.",
+      "range": {
+        "startLine": 101,
+        "startChar": 66,
+        "endLine": 101,
+        "endChar": 72
+      },
+      "revId": "64523c13f0bea9fe59eca7db250c1d7a10d15725",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
