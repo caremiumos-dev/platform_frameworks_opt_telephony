@@ -833,11 +833,10 @@ public class UiccController extends Handler {
 
                 addCardId(eid);
 
-                // whenever slot status is received, set default card to the eUICC with the
-                // lowest slot index.
-                if (!isDefaultEuiccCardIdSet) {
+                // whenever slot status is received, set default card to the non-removable eUICC
+                // with the lowest slot index.
+                if (!mUiccSlots[i].isRemovable() && !isDefaultEuiccCardIdSet) {
                     isDefaultEuiccCardIdSet = true;
-                    // TODO(b/122738148) the default eUICC should not be removable
                     mDefaultEuiccCardId = convertToPublicCardId(eid);
                     log("Using eid=" + eid + " in slot=" + i + " to set mDefaultEuiccCardId="
                             + mDefaultEuiccCardId);
@@ -847,7 +846,30 @@ public class UiccController extends Handler {
 
         if (hasEuicc && !anyEuiccIsActive && !isDefaultEuiccCardIdSet) {
             log("onGetSlotStatusDone: setting TEMPORARILY_UNSUPPORTED_CARD_ID");
+            isDefaultEuiccCardIdSet = true;
             mDefaultEuiccCardId = TEMPORARILY_UNSUPPORTED_CARD_ID;
+        }
+
+        if (!hasBuiltInEuicc()) {
+            // if there are no built-in eUICCs, then consider setting a removable eUICC to the
+            // default.
+            // Note that on HAL<1.2, it's possible that a built-in eUICC exists, but does not
+            // correspond to any slot in mUiccSlots. This logic is still safe in that case because
+            // SlotStatus is only for HAL >= 1.2
+            for (int i = 0; i < status.size(); i++) {
+                if (mUiccSlots[i].isEuicc() && mUiccSlots[i].isRemovable()) {
+                    isDefaultEuiccCardIdSet = true;
+                    IccSlotStatus iss = status.get(i);
+                    mDefaultEuiccCardId = convertToPublicCardId(iss.eid);
+                    log("Using eid=" + iss.eid + " from removable eUICC in slot="
+                            + i + " to set mDefaultEuiccCardId=" + mDefaultEuiccCardId);
+                }
+            }
+        }
+
+        if (!isDefaultEuiccCardIdSet) {
+            // no eUICCs at all
+            mDefaultEuiccCardId = UNINITIALIZED_CARD_ID;
         }
 
         if (VDBG) logPhoneIdToSlotIdMapping();
@@ -952,8 +974,9 @@ public class UiccController extends Handler {
         mCis[index].getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE, index));
     }
 
-    // for RadioConfig 1.2 or higher, the EID comes with the IccSlotStatus
-    // for RadioConfig<1.2 we register for EID ready set mCardStrings and mDefaultEuiccCardId here
+    // for HAL 1.2-1.3 we register for EID ready, set mCardStrings and mDefaultEuiccCardId here.
+    // Note that if there are multiple eUICCs on HAL 1.2-1.3, the default eUICC is the one whose EID
+    // is first loaded
     private void onEidReady(AsyncResult ar, Integer index) {
         if (ar.exception != null) {
             Rlog.e(LOG_TAG, "onEidReady: exception: " + ar.exception);
@@ -965,23 +988,43 @@ public class UiccController extends Handler {
             return;
         }
         int slotId = mPhoneIdToSlotId[index];
-        UiccCard card = mUiccSlots[slotId].getUiccCard();
+        EuiccCard card = (EuiccCard) mUiccSlots[slotId].getUiccCard();
         if (card == null) {
             Rlog.e(LOG_TAG, "onEidReady: UiccCard in slot " + slotId + " is null");
             return;
         }
 
         // set mCardStrings and the defaultEuiccCardId using the now available EID
-        String eid = ((EuiccCard) card).getEid();
+        String eid = card.getEid();
         addCardId(eid);
         if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID
                 || mDefaultEuiccCardId == TEMPORARILY_UNSUPPORTED_CARD_ID) {
-            // TODO(b/122738148) the default eUICC should not be removable
-            mDefaultEuiccCardId = convertToPublicCardId(eid);
-            log("onEidReady: eid=" + eid + " slot=" + slotId + " mDefaultEuiccCardId="
-                    + mDefaultEuiccCardId);
+            if (!mUiccSlots[slotId].isRemovable()) {
+                mDefaultEuiccCardId = convertToPublicCardId(eid);
+                log("onEidReady: eid=" + eid + " slot=" + slotId + " mDefaultEuiccCardId="
+                        + mDefaultEuiccCardId);
+            } else {
+                // we only set a removable eUICC to the default if there are no non-removable eUICCs
+                boolean hasNonRemovableEuicc = hasBuiltInEuicc();
+                if (DBG) log("onEidReady: hasNonRemovableEuicc=" + hasNonRemovableEuicc);
+                if (!hasNonRemovableEuicc) {
+                    mDefaultEuiccCardId = convertToPublicCardId(eid);
+                    log("onEidReady: eid=" + eid + " from removable eUICC in slot="
+                            + slotId + " mDefaultEuiccCardId=" + mDefaultEuiccCardId);
+                }
+            }
         }
-        ((EuiccCard) card).unregisterForEidReady(this);
+        card.unregisterForEidReady(this);
+    }
+
+    // Return true if the device has at least one built in eUICC based on the resource overlay
+    private boolean hasBuiltInEuicc() {
+        int[] euiccSlots = mContext.getResources()
+                .getIntArray(com.android.internal.R.array.non_removable_euicc_slots);
+        if (euiccSlots == null || euiccSlots.length == 0) {
+            return false;
+        }
+        return true;
     }
 
     /**
