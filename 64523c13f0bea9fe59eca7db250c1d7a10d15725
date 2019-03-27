@@ -22,6 +22,30 @@
       "revId": "64523c13f0bea9fe59eca7db250c1d7a10d15725",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7ff573c_a76254be",
+        "filename": "src/java/com/android/internal/telephony/SmsPermissions.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-27T17:02:38Z",
+      "side": 1,
+      "message": "I take that back. I took a second closer look, and I dont think there\u0027s any functional change here. And mPhone should never be null.",
+      "parentUuid": "1e6c9218_e5cd2bf2",
+      "range": {
+        "startLine": 101,
+        "startChar": 66,
+        "endLine": 101,
+        "endChar": 72
+      },
+      "revId": "64523c13f0bea9fe59eca7db250c1d7a10d15725",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
