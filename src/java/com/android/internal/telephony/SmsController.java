@@ -156,12 +156,18 @@ public class SmsController extends ISmsImplBase {
             return;
         }
 
-        SubscriptionInfo info = getSubscriptionInfo(subId);
+        long token = Binder.clearCallingIdentity();
+        SubscriptionInfo info;
+        try {
+            info = getSubscriptionInfo(subId);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
         if (isBluetoothSubscription(info)) {
             sendBluetoothText(info, destAddr, text, sentIntent, deliveryIntent);
         } else {
-            sendIccText(subId, callingPackage, destAddr, scAddr, text, sentIntent, deliveryIntent,
-                    persistMessageForNonDefaultSmsApp);
+            sendIccText(subId, callingPackage, destAddr, scAddr, text, sentIntent,
+                    deliveryIntent, persistMessageForNonDefaultSmsApp);
         }
     }
 
