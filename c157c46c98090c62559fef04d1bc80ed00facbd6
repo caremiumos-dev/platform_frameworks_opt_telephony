@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03087e8c_55d4f0f4",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2019-03-27T18:19:05Z",
+      "side": 1,
+      "message": "I think it\u0027s more readable if we name it as anyEuiccActive  (\u003dfalse)\n\nif (isActive) {\n  anyEuiccActive \u003d true;\n}\n\nif (hasEuicc \u0026\u0026 !anyEuiccActive \u0026\u0026 ...) {\n ...\n}",
+      "range": {
+        "startLine": 790,
+        "startChar": 16,
+        "endLine": 790,
+        "endChar": 36
+      },
+      "revId": "c157c46c98090c62559fef04d1bc80ed00facbd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
