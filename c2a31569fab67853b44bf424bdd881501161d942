@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec7f3aac_7779f439",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2019-03-27T20:30:34Z",
+      "side": 1,
+      "message": "Add a comment that -1 and -2 are already taken in TelephonyManager?",
+      "range": {
+        "startLine": 148,
+        "startChar": 81,
+        "endLine": 148,
+        "endChar": 84
+      },
+      "revId": "c2a31569fab67853b44bf424bdd881501161d942",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
