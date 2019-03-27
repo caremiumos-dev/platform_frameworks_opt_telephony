@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3bd98208_e4508bae",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-27T17:42:30Z",
+      "side": 1,
+      "message": "I don\u0027t this this is needed because emergency APN is always added when mAllApnSettings is populated.",
+      "revId": "5edf4b8f73f26d379e1c3dc84150b05484a7ff57",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38a216d5_b2e150f1",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-27T17:42:30Z",
+      "side": 1,
+      "message": "please remove this hardcoding. We should check for all other SIMs, and not assume 2 SIM configuration.",
+      "revId": "5edf4b8f73f26d379e1c3dc84150b05484a7ff57",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "611e257d_f50a1459",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-27T17:42:30Z",
+      "side": 1,
+      "message": "So you are assuming that the request is always on primary slot?",
+      "range": {
+        "startLine": 286,
+        "startChar": 56,
+        "endLine": 286,
+        "endChar": 70
+      },
+      "revId": "5edf4b8f73f26d379e1c3dc84150b05484a7ff57",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
