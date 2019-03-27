@@ -180,6 +180,7 @@ public class DataConnection extends StateMachine {
         @ReleaseNetworkType
         final int mReleaseType;
         Message mOnCompletedMsg;
+        ArrayList<DisconnectParams> pendingList;
 
         DisconnectParams(ApnContext apnContext, String reason, @ReleaseNetworkType int releaseType,
                          Message onCompletedMsg) {
@@ -751,7 +752,7 @@ public class DataConnection extends StateMachine {
         if (dp != null && dp.mOnCompletedMsg != null) {
             // Get the completed message but only use it once
             Message msg = dp.mOnCompletedMsg;
-            dp.mOnCompletedMsg = null;
+            dp.mOnCompletedMsg = mOnCompletedMsg = mApnContexts.size() == 0 ? null : msg;
             if (msg.obj instanceof ApnContext) {
                 alreadySent = (ApnContext)msg.obj;
             }
@@ -1575,6 +1576,12 @@ public class DataConnection extends StateMachine {
                             + mDcFailCause);
                 }
                 notifyDisconnectCompleted(mDisconnectParams, true);
+                if (mDisconnectParams.pendingList != null) {
+                    for (DisconnectParams dp : mDisconnectParams.pendingList) {
+                        notifyDisconnectCompleted(dp, true);
+                    }
+                    mDisconnectParams.pendingList = null;
+                }
             }
             if (mDisconnectParams == null && mConnectionParams == null
                     && mDcFailCause != DataFailCause.NONE) {
@@ -1764,6 +1771,7 @@ public class DataConnection extends StateMachine {
      * The state machine is connected, expecting an EVENT_DISCONNECT.
      */
     private class DcActiveState extends State {
+        private final ArrayList<DisconnectParams> pendingDisconnectParams = new ArrayList<DisconnectParams>();
 
         @Override public void enter() {
             if (DBG) log("DcActiveState: enter dc=" + DataConnection.this);
@@ -1915,6 +1923,7 @@ public class DataConnection extends StateMachine {
                             mApnContexts.clear();
                             mDisconnectParams = dp;
                             mConnectionParams = null;
+                            mDisconnectParams.mPendingList = pendingDisconnectParams;
                             dp.mTag = mTag;
                             tearDownData(dp);
                             transitionTo(mDisconnectingState);
@@ -1924,6 +1933,7 @@ public class DataConnection extends StateMachine {
                             // different scores to different Cellular network.
                             mDisabledApnTypeBitMask |= dp.mApnContext.getApnTypeBitmask();
                             mNetworkAgent.sendNetworkCapabilities(getNetworkCapabilities());
+                            pendingDisconnectParams.add(dp);
                             notifyDisconnectCompleted(dp, false);
                         }
                     } else {
