@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df3d80a7_b5f00b45",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-03-28T18:26:02Z",
+      "side": 1,
+      "message": "I think we should clear calling identity only for this call. sendIccText() may involve looking up default SMS app, and may have uid/package name comparison and stuff.",
+      "range": {
+        "startLine": 161,
+        "startChar": 36,
+        "endLine": 161,
+        "endChar": 55
+      },
+      "revId": "ca18e1a764a7d5e4dda399ee4266def25379a756",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
