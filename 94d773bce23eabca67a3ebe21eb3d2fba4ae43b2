@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "89225f7b_e2abc9f7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-28T00:42:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a204a3b3_6d70487c",
+      "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f84aa328_1d7e3ce3",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 3
@@ -65,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "e2929a2f_5152c47b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1914,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-28T00:42:05Z",
+      "side": 1,
+      "message": "1. LCE info is not available from the iwlan service, at least it was not in the plan and no data service AIDL interface was added for that. That\u0027s why here it directly talks to mCi instead of mDataServiceManager.\n\n2. This block is shared for both non-handover and handover cases. The NattKeepalive session will be killed when the WWAN data connection is disconnected.",
+      "parentUuid": "f84aa328_1d7e3ce3",
+      "range": {
+        "startLine": 1914,
+        "startChar": 12,
+        "endLine": 1914,
+        "endChar": 13
+      },
+      "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56fa0f9d_6a2cf014",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 3
@@ -85,6 +127,30 @@
       "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00c8d2ad_bfb20030",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1936,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-28T00:42:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56fa0f9d_6a2cf014",
+      "range": {
+        "startLine": 1936,
+        "startChar": 16,
+        "endLine": 1936,
+        "endChar": 54
+      },
+      "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +200,30 @@
     },
     {
       "key": {
+        "uuid": "ade8023c_1338fa25",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1955,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-28T00:42:05Z",
+      "side": 1,
+      "message": "It\u0027s extremely hard to support this nicely. The agent is transferred at the time new data connection is established in the other transport. After that we gracefully disconnect the original data connection. But during the time of tearing down this data connection, we needs to be careful not touching anything in the original agent, which has been transferred to the new data connection. Adding a \u0027been-transferred\u0027 flag is as bad as NPE check. The other way to do is overriding all network agent\u0027s methods and checking ownership inside the overridden methods.",
+      "parentUuid": "bed74513_b3b59dcb",
+      "range": {
+        "startLine": 1955,
+        "startChar": 23,
+        "endLine": 1955,
+        "endChar": 37
+      },
+      "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6fb822cb_f940699a",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 3
@@ -145,6 +235,30 @@
       "writtenOn": "2019-03-15T19:03:28Z",
       "side": 1,
       "message": "under what conditions could this be null? I\u0027m scared by the suddenness of this check. Maybe a different pre-existing bug?",
+      "range": {
+        "startLine": 1968,
+        "startChar": 28,
+        "endLine": 1968,
+        "endChar": 41
+      },
+      "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6727b62a_b10db47b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1968,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-28T00:42:05Z",
+      "side": 1,
+      "message": "null when it\u0027s transferred to the other DC. Since one DC can serve multiple connect request from different ApnContext, it\u0027s possible during handover, the dc still takes connect event from other ApnContext. Ideally this network request should be transferred to the new DCT as well, so probably will not happen I think.",
+      "parentUuid": "6fb822cb_f940699a",
       "range": {
         "startLine": 1968,
         "startChar": 28,
@@ -180,6 +294,30 @@
     },
     {
       "key": {
+        "uuid": "29ad5870_96f778fc",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2004,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-28T00:42:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e579c334_39dd8095",
+      "range": {
+        "startLine": 2004,
+        "startChar": 36,
+        "endLine": 2004,
+        "endChar": 49
+      },
+      "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e3489fb6_bda05465",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 3
@@ -200,6 +338,30 @@
       "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2df79ad6_761afe67",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-28T00:42:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3489fb6_bda05465",
+      "range": {
+        "startLine": 2138,
+        "startChar": 28,
+        "endLine": 2138,
+        "endChar": 34
+      },
+      "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -226,6 +388,30 @@
     },
     {
       "key": {
+        "uuid": "9616df87_e1f027ef",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-28T00:42:05Z",
+      "side": 1,
+      "message": "was needed in the previous implementation, no need now.",
+      "parentUuid": "6c525a4b_666a5a73",
+      "range": {
+        "startLine": 2398,
+        "startChar": 16,
+        "endLine": 2398,
+        "endChar": 24
+      },
+      "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cac9bea8_56388426",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 3
@@ -249,6 +435,30 @@
     },
     {
       "key": {
+        "uuid": "99955f51_96a22d74",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2412,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-28T00:42:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cac9bea8_56388426",
+      "range": {
+        "startLine": 2412,
+        "startChar": 20,
+        "endLine": 2412,
+        "endChar": 28
+      },
+      "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b8d1da6_f0f0dfbc",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 3
@@ -269,6 +479,30 @@
       "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "862aeb0e_0ba85f8f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-28T00:42:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b8d1da6_f0f0dfbc",
+      "range": {
+        "startLine": 2427,
+        "startChar": 11,
+        "endLine": 2428,
+        "endChar": 57
+      },
+      "revId": "94d773bce23eabca67a3ebe21eb3d2fba4ae43b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
