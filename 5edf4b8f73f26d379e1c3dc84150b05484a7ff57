@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "12e19cb4_161f8d77",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2019-03-28T00:17:19Z",
+      "side": 1,
+      "message": "we are rewording the entire the logic.",
+      "parentUuid": "38a216d5_b2e150f1",
+      "revId": "5edf4b8f73f26d379e1c3dc84150b05484a7ff57",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "611e257d_f50a1459",
         "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
         "patchSetId": 2
