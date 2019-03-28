@@ -88,6 +88,8 @@ public class LocaleTracker extends Handler {
     /** The maximum fail count to prevent delay time overflow */
     private static final int MAX_FAIL_COUNT = 30;
 
+    public static final String TEST_MCC = "001";
+
     private final Phone mPhone;
 
     private final NitzStateMachine mNitzStateMachine;
@@ -427,7 +429,7 @@ public class LocaleTracker extends Handler {
             countryChanged = true;
         }
 
-        if (TextUtils.isEmpty(countryIso)) {
+        if (TextUtils.isEmpty(countryIso) && !TEST_MCC.equals(mcc)) {
             mNitzStateMachine.handleNetworkCountryCodeUnavailable();
         } else {
             mNitzStateMachine.handleNetworkCountryCodeSet(countryChanged);
