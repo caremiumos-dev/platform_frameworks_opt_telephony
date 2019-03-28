@@ -37,6 +37,7 @@ import android.telephony.CellInfoGsm;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.text.TextUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -151,6 +152,15 @@ public class LocaleTrackerTest extends TelephonyTest {
         mLocaleTracker.updateOperatorNumeric(US_MCC + FAKE_MNC);
         assertEquals(US_COUNTRY_CODE, mLocaleTracker.getCurrentCountry());
         verifyCountryCodeNotified(new String[]{US_COUNTRY_CODE});
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateOperatorTestNetwork() throws Exception {
+        String testMcc = LocaleTracker.TEST_MCCS.iterator().next();
+        mLocaleTracker.updateOperatorNumeric(testMcc + FAKE_MNC);
+        assertTrue(TextUtils.isEmpty(mLocaleTracker.getCurrentCountry()));
+        verifyCountryCodeNotified(new String[]{""});
     }
 
     @Test
