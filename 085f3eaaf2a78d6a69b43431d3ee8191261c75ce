@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92d26fb6_02b31b49",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1152149
+      },
+      "writtenOn": "2019-03-28T05:12:43Z",
+      "side": 1,
+      "message": "Can we not have this hardcoded? I believe test MCCs can also have values different from 001.",
+      "revId": "085f3eaaf2a78d6a69b43431d3ee8191261c75ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
