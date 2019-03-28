@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "b72ba220_eed692ba",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2019-03-28T22:14:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12e19cb4_161f8d77",
+      "revId": "5edf4b8f73f26d379e1c3dc84150b05484a7ff57",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "611e257d_f50a1459",
         "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
         "patchSetId": 2
@@ -92,6 +110,30 @@
       "revId": "5edf4b8f73f26d379e1c3dc84150b05484a7ff57",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b422b4b_f1f66d91",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2019-03-28T22:14:54Z",
+      "side": 1,
+      "message": "Please the new logic on patchset 3.",
+      "parentUuid": "611e257d_f50a1459",
+      "range": {
+        "startLine": 286,
+        "startChar": 56,
+        "endLine": 286,
+        "endChar": 70
+      },
+      "revId": "5edf4b8f73f26d379e1c3dc84150b05484a7ff57",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
