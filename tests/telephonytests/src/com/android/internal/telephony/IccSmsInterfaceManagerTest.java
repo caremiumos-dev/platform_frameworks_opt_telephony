@@ -25,6 +25,7 @@ import android.content.Context;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.UserManager;
 
 import org.junit.After;
 import org.junit.Before;
@@ -36,7 +37,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class SmsPermissionsTest {
+public class IccSmsInterfaceManagerTest {
     private static final String PACKAGE = "com.example.package";
     private static final String MESSAGE = "msg";
 
@@ -48,8 +49,12 @@ public class SmsPermissionsTest {
     private Context mMockContext;
     @Mock
     private AppOpsManager mMockAppOps;
+    @Mock
+    private UserManager mMockUserManager;
+    @Mock
+    private SmsDispatchersController mMockDispatchersController;
 
-    private SmsPermissions mSmsPermissionsTest;
+    private IccSmsInterfaceManager mIccSmsInterfaceManager;
 
     private boolean mCallerHasCarrierPrivileges;
 
@@ -60,8 +65,9 @@ public class SmsPermissionsTest {
         mHandlerThread.start();
         final CountDownLatch initialized = new CountDownLatch(1);
         new Handler(mHandlerThread.getLooper()).post(() -> {
-            mSmsPermissionsTest = new SmsPermissions(
-                    mMockPhone, mMockContext, mMockAppOps) {
+            mIccSmsInterfaceManager = new IccSmsInterfaceManager(
+                    mMockPhone, mMockContext, mMockAppOps, mMockUserManager,
+                    mMockDispatchersController) {
                 @Override
                 public void enforceCallerIsImsAppOrCarrierApp(String message) {
                     if (!mCallerHasCarrierPrivileges) {
@@ -84,7 +90,7 @@ public class SmsPermissionsTest {
 
     @Test
     public void testCheckCallingSendTextPermissions_persist_grant() {
-        assertTrue(mSmsPermissionsTest.checkCallingCanSendText(
+        assertTrue(mIccSmsInterfaceManager.checkCallingSendTextPermissions(
                 true /* persistMessageForNonDefaultSmsApp */, PACKAGE, MESSAGE));
     }
 
@@ -93,7 +99,7 @@ public class SmsPermissionsTest {
         Mockito.doThrow(new SecurityException(MESSAGE)).when(mMockContext)
                 .enforceCallingPermission(Manifest.permission.SEND_SMS, MESSAGE);
         try {
-            mSmsPermissionsTest.checkCallingCanSendText(
+            mIccSmsInterfaceManager.checkCallingSendTextPermissions(
                     true /* persistMessageForNonDefaultSmsApp */, PACKAGE, MESSAGE);
             fail();
         } catch (SecurityException e) {
@@ -106,7 +112,7 @@ public class SmsPermissionsTest {
         Mockito.when(mMockAppOps.noteOp(
                 AppOpsManager.OP_SEND_SMS, Binder.getCallingUid(), PACKAGE))
                 .thenReturn(AppOpsManager.MODE_ERRORED);
-        assertFalse(mSmsPermissionsTest.checkCallingCanSendText(
+        assertFalse(mIccSmsInterfaceManager.checkCallingSendTextPermissions(
                 true /* persistMessageForNonDefaultSmsApp */, PACKAGE, MESSAGE));
     }
 
@@ -122,13 +128,13 @@ public class SmsPermissionsTest {
                 AppOpsManager.OP_SEND_SMS, Binder.getCallingUid(), PACKAGE))
                 .thenReturn(AppOpsManager.MODE_ERRORED);
 
-        assertTrue(mSmsPermissionsTest.checkCallingCanSendText(
+        assertTrue(mIccSmsInterfaceManager.checkCallingSendTextPermissions(
                 false /* persistMessageForNonDefaultSmsApp */, PACKAGE, MESSAGE));
     }
 
     @Test
     public void testCheckCallingSendTextPermissions_noPersist_grantViaModifyAndSend() {
-        assertTrue(mSmsPermissionsTest.checkCallingCanSendText(
+        assertTrue(mIccSmsInterfaceManager.checkCallingSendTextPermissions(
                 false /* persistMessageForNonDefaultSmsApp */, PACKAGE, MESSAGE));
     }
 
@@ -137,7 +143,7 @@ public class SmsPermissionsTest {
         Mockito.doThrow(new SecurityException(MESSAGE)).when(mMockContext)
                 .enforceCallingPermission(Manifest.permission.MODIFY_PHONE_STATE, MESSAGE);
         try {
-            mSmsPermissionsTest.checkCallingCanSendText(
+            mIccSmsInterfaceManager.checkCallingSendTextPermissions(
                     false /* persistMessageForNonDefaultSmsApp */, PACKAGE, MESSAGE);
             fail();
         } catch (SecurityException e) {
@@ -150,7 +156,7 @@ public class SmsPermissionsTest {
         Mockito.doThrow(new SecurityException(MESSAGE)).when(mMockContext)
                 .enforceCallingPermission(Manifest.permission.SEND_SMS, MESSAGE);
         try {
-            mSmsPermissionsTest.checkCallingCanSendText(
+            mIccSmsInterfaceManager.checkCallingSendTextPermissions(
                     false /* persistMessageForNonDefaultSmsApp */, PACKAGE, MESSAGE);
             fail();
         } catch (SecurityException e) {
@@ -163,7 +169,7 @@ public class SmsPermissionsTest {
         Mockito.when(mMockAppOps.noteOp(
                 AppOpsManager.OP_SEND_SMS, Binder.getCallingUid(), PACKAGE))
                 .thenReturn(AppOpsManager.MODE_ERRORED);
-        assertFalse(mSmsPermissionsTest.checkCallingCanSendText(
+        assertFalse(mIccSmsInterfaceManager.checkCallingSendTextPermissions(
                 false /* persistMessageForNonDefaultSmsApp */, PACKAGE, MESSAGE));
     }
 }
