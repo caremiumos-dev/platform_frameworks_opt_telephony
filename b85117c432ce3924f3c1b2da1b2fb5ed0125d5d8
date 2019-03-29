@@ -22,6 +22,30 @@
       "revId": "b85117c432ce3924f3c1b2da1b2fb5ed0125d5d8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf18a26e_71de769b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-03-29T23:38:38Z",
+      "side": 0,
+      "message": "Because naming is difficult. Maybe getDcTracker(getHandoverTargetTransport()) is better?",
+      "parentUuid": "4bcf44df_7c6d68ce",
+      "range": {
+        "startLine": 553,
+        "startChar": 21,
+        "endLine": 553,
+        "endChar": 46
+      },
+      "revId": "b85117c432ce3924f3c1b2da1b2fb5ed0125d5d8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
