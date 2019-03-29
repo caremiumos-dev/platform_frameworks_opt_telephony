@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e940e5d_8c352a16",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2392,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-03-29T17:57:10Z",
+      "side": 1,
+      "message": "nit: should this be loge?",
+      "range": {
+        "startLine": 2392,
+        "startChar": 20,
+        "endLine": 2392,
+        "endChar": 23
+      },
+      "revId": "ad2738baaf8e22e4f8cd79526b3fafbe6ab59e21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aac140a6_dc68a2c7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-03-29T17:57:10Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2407,
+        "startChar": 20,
+        "endLine": 2407,
+        "endChar": 23
+      },
+      "revId": "ad2738baaf8e22e4f8cd79526b3fafbe6ab59e21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
