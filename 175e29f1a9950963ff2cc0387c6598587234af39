@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "238739c5_646cba68",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-29T19:42:47Z",
+      "side": 1,
+      "message": "nit can this be on the previous line?",
+      "range": {
+        "startLine": 1881,
+        "startChar": 24,
+        "endLine": 1881,
+        "endChar": 38
+      },
+      "revId": "175e29f1a9950963ff2cc0387c6598587234af39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a37c199c_d1c7a7f5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-29T19:42:47Z",
+      "side": 1,
+      "message": "I made a suggestion below, and if you do it, then I don\u0027t think you need these.",
+      "range": {
+        "startLine": 1964,
+        "startChar": 28,
+        "endLine": 1964,
+        "endChar": 42
+      },
+      "revId": "175e29f1a9950963ff2cc0387c6598587234af39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abfb2c5f_b3f5763a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-29T19:42:47Z",
+      "side": 1,
+      "message": "I think this needs to be volatile.",
+      "range": {
+        "startLine": 2361,
+        "startChar": 8,
+        "endLine": 2361,
+        "endChar": 15
+      },
+      "revId": "175e29f1a9950963ff2cc0387c6598587234af39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eb8275e_c47f2aa1",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2400,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-29T19:42:47Z",
+      "side": 1,
+      "message": "I think you can simplify the transferNetworkAgent() raciness if you allow this function to reach back to its old DataConnection and null itself out. Thus.\n\nDataConnection {\n    setNetworkAgent(DcNetworkAgent);\n}\n\nand\n\nDcNetworkAgent {\n    setDataConnection(DataConnection dc, TransportType tt) {\n       if (mDataConnection !\u003d null) mDataConnection.setNetworkAgent(null);\n       mDataConnection \u003d dc;\n       mTransportType \u003d tt;\n    }\n}\n\nYou probably also want the references to DataConnection in DcNetworkAgent + the references to DcNetworkAgent in DataConnection to both be volatile.",
+      "revId": "175e29f1a9950963ff2cc0387c6598587234af39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7a7f54b_b5c6d314",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-29T19:42:47Z",
+      "side": 1,
+      "message": "for my comment above, if you put all references to mDataConnection inside synchronized(), then you don\u0027t need volatile in DcNetworkAgent... still think you want it for references in DataConnection.",
+      "revId": "175e29f1a9950963ff2cc0387c6598587234af39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cb61ef9_71552fc6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-29T19:42:47Z",
+      "side": 1,
+      "message": "actually, synchronized is quite slow... you might be better off just making the mDataConnection() check volatile. You might have to be careful with the ordering in the update function though.",
+      "range": {
+        "startLine": 2428,
+        "startChar": 12,
+        "endLine": 2428,
+        "endChar": 24
+      },
+      "revId": "175e29f1a9950963ff2cc0387c6598587234af39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
