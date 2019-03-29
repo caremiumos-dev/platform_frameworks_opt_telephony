@@ -1,0 +1,181 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b38d8259_a388e356",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-03-29T18:41:23Z",
+      "side": 1,
+      "message": "nit: can you explain how the packageName argument is used? It\u0027s not clear from the method name or this summary.",
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f5e1f8c_8788439e",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-03-29T18:41:23Z",
+      "side": 1,
+      "message": "i\u0027ll defer style questions to the telephony team but google3 practice is generally to always use braces (to avoid goto fail type errors from sneaking in)",
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84db7de8_d5ca7670",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-03-29T18:41:23Z",
+      "side": 1,
+      "message": "should this be a constant in CarrierConfigManager that\u0027s also referenced here? It feels more like part of the API signature, and in a future world where we make the API public, it would be nice to be able to reference this value.",
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f1f89fb_d5d9f00c",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-03-29T18:41:23Z",
+      "side": 1,
+      "message": "not sure what the \"sync\" means here. To me it implies synchronous but this is an async method since it\u0027s posting a runanble.",
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b64306ad_0f5710e2",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-03-29T18:41:23Z",
+      "side": 1,
+      "message": "nit: grab this at instantiation time and hold it at the class level like the other *Managers",
+      "range": {
+        "startLine": 775,
+        "startChar": 7,
+        "endLine": 776,
+        "endChar": 74
+      },
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b96b81e0_d3b1a033",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-03-29T18:41:23Z",
+      "side": 1,
+      "message": "nit: this is a bit hard to follow. I would personally suggest a bit more verbosity for the sake of clarity between the two major forks of logic:\n\nif (carrierPackageNames !\u003d null \u0026\u0026 !carrierPackageNames.isEmpty()) {\n  return carrierPackageNames.contains(pkgName);\n} else {\n  return pkgName.equals(getDefaultCarrierServicePackageName());\n}",
+      "range": {
+        "startLine": 788,
+        "startChar": 0,
+        "endLine": 791,
+        "endChar": 82
+      },
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab4a8f9f_2867f1bb",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-03-29T18:41:23Z",
+      "side": 1,
+      "message": "same comment here regarding the fact that this may not be a carrier package",
+      "range": {
+        "startLine": 799,
+        "startChar": 32,
+        "endLine": 799,
+        "endChar": 50
+      },
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab5ab77d_55ce583d",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-03-29T18:41:23Z",
+      "side": 1,
+      "message": "should this be held at construction time (like SubscriptionManager?)",
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6b20f6f_72184041",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-03-29T18:41:23Z",
+      "side": 1,
+      "message": "I wouldn\u0027t say this is definitively what to do. We drew a distinction between the right to manage the subscription (e.g. switch to it / add/delete it) and to have carrier privileges on that subscription.",
+      "range": {
+        "startLine": 832,
+        "startChar": 0,
+        "endLine": 833,
+        "endChar": 72
+      },
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
