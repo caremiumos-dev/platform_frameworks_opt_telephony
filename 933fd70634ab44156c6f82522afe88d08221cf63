@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a556f590_f43a6370",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-31T02:48:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b38d8259_a388e356",
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f5e1f8c_8788439e",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7209de0_f658bb0c",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-31T02:48:47Z",
+      "side": 1,
+      "message": "This is right and well with android style (so long as everything fits within the line limit).",
+      "parentUuid": "3f5e1f8c_8788439e",
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ee196d66_a9d67d2d",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-31T02:48:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84db7de8_d5ca7670",
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f1f89fb_d5d9f00c",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 6
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "e141f959_ad24a5f3",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-31T02:48:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f1f89fb_d5d9f00c",
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b64306ad_0f5710e2",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 6
@@ -81,6 +153,30 @@
       "writtenOn": "2019-03-29T18:41:23Z",
       "side": 1,
       "message": "nit: grab this at instantiation time and hold it at the class level like the other *Managers",
+      "range": {
+        "startLine": 775,
+        "startChar": 7,
+        "endLine": 776,
+        "endChar": 74
+      },
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bb6a2ec_f3dddbef",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-31T02:48:47Z",
+      "side": 1,
+      "message": "Sadly, due to the init order in PhoneGlobals, SubInfoUpdater being added as part of the phone objects, the constructor is called for this before CarrierConfigLoader registers itself with ServiceManager. The best I can do is a function that does lazy-init, which didn\u0027t save anything. I can make it more concise though.\n\nEdit: I can\u0027t make it more concise because the unit tests don\u0027t support the simpler form of getSystemService.",
+      "parentUuid": "b64306ad_0f5710e2",
       "range": {
         "startLine": 775,
         "startChar": 7,
@@ -116,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "83cd5b63_6edf959e",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-31T02:48:47Z",
+      "side": 1,
+      "message": "As per conversation with Malcolm, I\u0027ve removed a lot of complexity and some functionality... this *should* be a lot simpler now.",
+      "parentUuid": "b96b81e0_d3b1a033",
+      "range": {
+        "startLine": 788,
+        "startChar": 0,
+        "endLine": 791,
+        "endChar": 82
+      },
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab4a8f9f_2867f1bb",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 6
@@ -139,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "f56ab1cc_32feb02f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-31T02:48:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab4a8f9f_2867f1bb",
+      "range": {
+        "startLine": 799,
+        "startChar": 32,
+        "endLine": 799,
+        "endChar": 50
+      },
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab5ab77d_55ce583d",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 6
@@ -156,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "b4a3a84a_8a5e0a0b",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-31T02:48:47Z",
+      "side": 1,
+      "message": "This would actually be cleaner; SubscriptionController is made above SubInfoUpdater in PhoneFactory; however, the unit tests are relying on the current pattern. The right way to fix it is actually to pass the SubscriptionController instance into the SubInfoUpdater constructor... but then I\u0027d have to go update some undetermined number of unit tests (which seems like a bigger change than I want to do here). I\u0027ll add a TODO.",
+      "parentUuid": "ab5ab77d_55ce583d",
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6b20f6f_72184041",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 6
@@ -167,6 +329,30 @@
       "writtenOn": "2019-03-29T18:41:23Z",
       "side": 1,
       "message": "I wouldn\u0027t say this is definitively what to do. We drew a distinction between the right to manage the subscription (e.g. switch to it / add/delete it) and to have carrier privileges on that subscription.",
+      "range": {
+        "startLine": 832,
+        "startChar": 0,
+        "endLine": 833,
+        "endChar": 72
+      },
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc28839e_85fbe967",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-03-31T02:48:47Z",
+      "side": 1,
+      "message": "I\u0027m not sure I follow.",
+      "parentUuid": "d6b20f6f_72184041",
       "range": {
         "startLine": 832,
         "startChar": 0,
