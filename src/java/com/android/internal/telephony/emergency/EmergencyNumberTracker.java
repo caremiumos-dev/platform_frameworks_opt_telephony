@@ -20,9 +20,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Country;
-import android.location.CountryDetector;
-import android.location.CountryListener;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +28,7 @@ import android.os.SystemProperties;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
+import android.telephony.TelephonyManager;
 import android.telephony.emergency.EmergencyNumber;
 import android.telephony.emergency.EmergencyNumber.EmergencyCallRouting;
 import android.telephony.emergency.EmergencyNumber.EmergencyServiceCategories;
@@ -42,6 +40,7 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.LocaleTracker;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.ServiceStateTracker;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.util.IndentingPrintWriter;
@@ -79,7 +78,6 @@ public class EmergencyNumberTracker extends Handler {
 
     private final CommandsInterface mCi;
     private final Phone mPhone;
-    private CountryDetector mCountryDetector;
     private String mCountryIso;
     private String[] mEmergencyNumberPrefix = new String[0];
 
@@ -116,6 +114,17 @@ public class EmergencyNumberTracker extends Handler {
                     CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED)) {
                 onCarrierConfigChanged();
                 return;
+            } else if (intent.getAction().equals(
+                    TelephonyManager.ACTION_NETWORK_COUNTRY_CHANGED)) {
+                int phoneId = intent.getIntExtra(PhoneConstants.PHONE_KEY, -1);
+                if (phoneId == mPhone.getPhoneId()) {
+                    String countryIso = intent.getStringExtra(
+                            TelephonyManager.EXTRA_NETWORK_COUNTRY);
+                    logd("ACTION_NETWORK_COUNTRY_CHANGED: PhoneId: " + phoneId + " CountryIso: "
+                            + countryIso);
+                    updateEmergencyNumberDatabaseCountryChange(countryIso);
+                }
+                return;
             }
         }
     };
@@ -132,22 +141,21 @@ public class EmergencyNumberTracker extends Handler {
                     mEmergencyNumberPrefix = b.getStringArray(
                             CarrierConfigManager.KEY_EMERGENCY_NUMBER_PREFIX_STRING_ARRAY);
                 }
+            } else {
+                loge("CarrierConfigManager is null.");
             }
 
-            // Receive Carrier Config changes
-            mPhone.getContext().registerReceiver(mIntentReceiver, new IntentFilter(
-                    CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
+            // Receive Carrier Config Changes
+            IntentFilter filter = new IntentFilter(
+                    CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+            // Receive Telephony Network Country Changes
+            filter.addAction(TelephonyManager.ACTION_NETWORK_COUNTRY_CHANGED);
 
-            mCountryDetector = (CountryDetector) mPhone.getContext().getSystemService(
-                    Context.COUNTRY_DETECTOR);
-            if (mCountryDetector != null) {
-                mCountryDetector.addCountryListener(new CountryListener() {
-                    public void onCountryDetected(Country country) {
-                        updateEmergencyNumberDatabaseCountryChange(country.getCountryIso());
-                    }
-                }, getLooper());
-            }
+            mPhone.getContext().registerReceiver(mIntentReceiver, filter);
+        } else {
+            loge("mPhone is null.");
         }
+
         initializeDatabaseEmergencyNumberList();
         mCi.registerForEmergencyNumberList(this, EVENT_UNSOL_EMERGENCY_NUMBER_LIST, null);
     }
@@ -231,14 +239,6 @@ public class EmergencyNumberTracker extends Handler {
     }
 
     private String getInitialCountryIso() {
-        Country country = null;
-        if (mCountryDetector != null) {
-            country = mCountryDetector.detectCountry();
-            if (country != null) {
-                return country.getCountryIso();
-            }
-        }
-        // Fallback to Telephony's country detector if there are issues with CountryDetector
         if (mPhone != null) {
             ServiceStateTracker sst = mPhone.getServiceStateTracker();
             if (sst != null) {
@@ -247,6 +247,9 @@ public class EmergencyNumberTracker extends Handler {
                     return lt.getCurrentCountry();
                 }
             }
+        } else {
+            loge("getInitialCountryIso mPhone is null.");
+
         }
         return "";
     }
@@ -798,7 +801,6 @@ public class EmergencyNumberTracker extends Handler {
 
     private List<EmergencyNumber> getEmergencyNumberListFromEccListAndTest() {
         List<EmergencyNumber> mergedEmergencyNumberList = getEmergencyNumberListFromEccList();
-        mergedEmergencyNumberList.addAll(mEmergencyNumberListWithPrefix);
         mergedEmergencyNumberList.addAll(getEmergencyNumberListTestMode());
         return mergedEmergencyNumberList;
     }
@@ -832,34 +834,49 @@ public class EmergencyNumberTracker extends Handler {
      */
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         final IndentingPrintWriter ipw = new IndentingPrintWriter(pw, "  ");
+        ipw.println(" Hal Version:" + mPhone.getHalVersion());
+        ipw.println(" ========================================= ");
+
         ipw.println("mEmergencyNumberListDatabaseLocalLog:");
         ipw.increaseIndent();
         mEmergencyNumberListDatabaseLocalLog.dump(fd, pw, args);
         ipw.decreaseIndent();
-        ipw.println("   -   -   -   -   -   -   -   -");
+        ipw.println(" ========================================= ");
 
         ipw.println("mEmergencyNumberListRadioLocalLog:");
         ipw.increaseIndent();
         mEmergencyNumberListRadioLocalLog.dump(fd, pw, args);
         ipw.decreaseIndent();
-        ipw.println("   -   -   -   -   -   -   -   -");
+        ipw.println(" ========================================= ");
 
         ipw.println("mEmergencyNumberListPrefixLocalLog:");
         ipw.increaseIndent();
         mEmergencyNumberListPrefixLocalLog.dump(fd, pw, args);
         ipw.decreaseIndent();
-        ipw.println("   -   -   -   -   -   -   -   -");
+        ipw.println(" ========================================= ");
 
         ipw.println("mEmergencyNumberListTestModeLocalLog:");
         ipw.increaseIndent();
         mEmergencyNumberListTestModeLocalLog.dump(fd, pw, args);
         ipw.decreaseIndent();
-        ipw.println("   -   -   -   -   -   -   -   -");
+        ipw.println(" ========================================= ");
 
-        ipw.println("mEmergencyNumberListLocalLog:");
+        ipw.println("mEmergencyNumberListLocalLog (valid >= 1.4 HAL):");
         ipw.increaseIndent();
         mEmergencyNumberListLocalLog.dump(fd, pw, args);
         ipw.decreaseIndent();
+        ipw.println(" ========================================= ");
+
+        int slotId = SubscriptionController.getInstance().getSlotIndex(mPhone.getSubId());
+        String ecclist = (slotId <= 0) ? "ril.ecclist" : ("ril.ecclist" + slotId);
+        ipw.println(" ril.ecclist: " + SystemProperties.get(ecclist, ""));
+        ipw.println(" ========================================= ");
+
+        ipw.println("Emergency Number List for Phone" + "(" + mPhone.getPhoneId() + ")");
+        ipw.increaseIndent();
+        ipw.println(getEmergencyNumberList());
+        ipw.decreaseIndent();
+        ipw.println(" ========================================= ");
 
         ipw.flush();
     }

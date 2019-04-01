@@ -41,6 +41,8 @@ import android.telephony.UiccSlotInfo;
 import android.test.mock.MockContentResolver;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import androidx.test.filters.FlakyTest;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,6 +54,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
 
 public class SubscriptionControllerTest extends TelephonyTest {
     private static final int SINGLE_SIM = 1;
@@ -144,7 +147,6 @@ public class SubscriptionControllerTest extends TelephonyTest {
         String disName = "TESTING";
         String disNum = "12345";
         boolean isOpportunistic = true;
-        boolean isMetered = false;
 
         testInsertSim();
         /* Get SUB ID */
@@ -155,8 +157,6 @@ public class SubscriptionControllerTest extends TelephonyTest {
         /* Getting, there is no direct getter function for each fields of property */
         SubscriptionInfo subInfo = mSubscriptionControllerUT
                 .getActiveSubscriptionInfo(subID, mCallingPackage);
-        //isMetered should initialize as true
-        assertTrue(subInfo.isMetered());
 
         /* Setting */
         mSubscriptionControllerUT.setDisplayName(disName, subID);
@@ -164,7 +164,6 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mSubscriptionControllerUT.setDisplayNumber(disNum, subID);
         mSubscriptionControllerUT.setIconTint(iconTint, subID);
         mSubscriptionControllerUT.setOpportunistic(isOpportunistic, subID, mCallingPackage);
-        mSubscriptionControllerUT.setMetered(isMetered, subID, mCallingPackage);
 
         subInfo = mSubscriptionControllerUT
             .getActiveSubscriptionInfo(subID, mCallingPackage);
@@ -175,7 +174,6 @@ public class SubscriptionControllerTest extends TelephonyTest {
         assertEquals(iconTint, subInfo.getIconTint());
         assertEquals(disNum, subInfo.getNumber());
         assertEquals(isOpportunistic, subInfo.isOpportunistic());
-        assertEquals(isMetered, subInfo.isMetered());
 
         /* verify broadcast intent */
         ArgumentCaptor<Intent> captorIntent = ArgumentCaptor.forClass(Intent.class);
@@ -514,7 +512,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         addAndVerifyRemoteSimAddition(4, 0);
     }
 
-
+    @FlakyTest
     @Test @SmallTest
     public void testDefaultSubIdOnMultiSimDevice() {
         makeThisDeviceMultiSimCapable();
