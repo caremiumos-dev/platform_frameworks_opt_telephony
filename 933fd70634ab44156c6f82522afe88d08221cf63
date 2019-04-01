@@ -362,6 +362,30 @@
       "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddfed6f1_0b4e9ff9",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-04-01T17:03:37Z",
+      "side": 1,
+      "message": "My interpretation of what your FIXME is suggesting is that you want SubscriptionManager#canManageSubscription to return true for active subscriptions based on the carrier privilege rules of those subscriptions (e.g. hasCarrierPrivileges). But those rules are two different sets of rules. canManageSubscription is based on eSIM metadata external to a profile; hasCarrierPrivileges is based on the ARA/ARF data within a profile. For better or worse we\u0027ve defined two different sets of semantics for those two rules - one related to management of the subscription at a meta level, vs. one related to carrier operations within the scope of that subscription.",
+      "parentUuid": "cc28839e_85fbe967",
+      "range": {
+        "startLine": 832,
+        "startChar": 0,
+        "endLine": 833,
+        "endChar": 72
+      },
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
