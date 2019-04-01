@@ -410,6 +410,30 @@
       "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00c7d65a_a5c23058",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2019-04-01T18:19:11Z",
+      "side": 1,
+      "message": "\u003e Ok, I spoke to jpd@ offline since there\u0027s definitely some confusion here. The root of the problem is that carrierPrivilegeRules and ARA/ARF rules grant distinct types of permission, so we need to draw a distinction between what they do:\n\u003e 1) The ARA/ARF rules grant the ability to add and delete subscriptions (profiles) on an eSIM.\n\u003e 2) The carrier privilege rules grant the ability to modify the contents of those profiles.\n\u003e \n\nI think this is backwards. ARA/ARF are tied to TM.hasCarrierPrivileges and grant access to do operations within those profiles. The (currently only eSIM) profile metadata is tied to SM.canManageSubscription and is tied to the ability to add/delete the profile itself.\n\n\u003e Since those ARE distinct concepts, and since SM.canManageSubscription() only concerns itself with the former (and we see no straightforward alternative that allows such a mechanism to work without an eSIM), I propose the following:\n\u003e \n\u003e 1) We change the name of canManageSubscription() to canManageProfile() or canManageEmbeddedProfile() etc since it operates on the profile, not the subscription. (It\u0027s also documented to only work on \"embedded\" subscriptions).\n\u003e \n\u003e 2) We need some clear definable boundaries between what carrier privilege grants vs what profile management ability grants. Right now, we\u0027re saying that either is sufficient to allow subscriptions to be grouped: that may or may not should be true... I\u0027m starting to think we shouldn\u0027t let inactive embedded subscriptions be added to groups either and that it should be strictly within the realm of carrier privilege.\n\u003e \n\nI can buy that grouping is sort of a meta-level operation similar to creating/deleting profiles, in which case canManageSubscription *is* probably the right home. Unfortunately since the metadata currently lives only on eSIM profiles, we don\u0027t have a similar concept for pSIM ones, and could only rely on pSIM profile privileges in that case.\n\n\u003e 3) We also need to define what system privileged apps can do in terms of profile management since they will not have carrier privilege or ARA rules and yet probably canManageEmbeddedProfile given some other specific permission? Thinking out loud, I bet that permission already exists?",
+      "parentUuid": "da4deebf_bbdc489b",
+      "range": {
+        "startLine": 832,
+        "startChar": 0,
+        "endLine": 833,
+        "endChar": 72
+      },
+      "revId": "933fd70634ab44156c6f82522afe88d08221cf63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
