@@ -97,6 +97,7 @@ import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.LocaleTracker;
+import com.android.internal.telephony.EcbmHandler;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneInternalInterface;
@@ -667,11 +668,17 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
         mImsManager.getConfigInterface().addConfigCallback(mConfigCallback);
 
-        // Get the ECBM interface and set IMSPhone's listener object for notifications
-        getEcbmInterface().setEcbmStateListener(mPhone.getImsEcbmStateListener());
-        if (mPhone.isInEcm()) {
+        // Get the ECBM interface and set EcbmHandler's listener object for notifications
+        EcbmHandler ecbmHandler = EcbmHandler.getInstance();
+        getEcbmInterface().setEcbmStateListener(
+                ecbmHandler.getImsEcbmStateListener(mPhone.getPhoneId()));
+        if (ecbmHandler.isInEcm()) {
             // Call exit ECBM which will invoke onECBMExited
-            mPhone.exitEmergencyCallbackMode();
+            try {
+                ecbmHandler.exitEmergencyCallbackMode();
+            } catch (Exception e) {
+                    e.printStackTrace();
+            }
         }
         int mPreferredTtyMode = Settings.Secure.getInt(
                 mPhone.getContext().getContentResolver(),
@@ -829,7 +836,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         checkForDialIssues();
 
         if (isPhoneInEcmMode && isEmergencyNumber) {
-            handleEcmTimer(ImsPhone.CANCEL_ECM_TIMER);
+            handleEcmTimer(EcbmHandler.CANCEL_ECM_TIMER);
         }
 
         // If the call is to an emergency number and the carrier does not support video emergency
@@ -904,12 +911,13 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 dialInternal(mPendingMO, clirMode, videoState, dialArgs.intentExtras);
             } else {
                 try {
-                    getEcbmInterface().exitEmergencyCallbackMode();
-                } catch (ImsException e) {
+                    EcbmHandler.getInstance().exitEmergencyCallbackMode();
+                } catch (Exception e) {
                     e.printStackTrace();
                     throw new CallStateException("service not available");
                 }
-                mPhone.setOnEcbModeExitResponse(this, EVENT_EXIT_ECM_RESPONSE_CDMA, null);
+                EcbmHandler.getInstance().setOnEcbModeExitResponse(this,
+                        EVENT_EXIT_ECM_RESPONSE_CDMA, null);
                 pendingCallClirMode = clirMode;
                 mPendingCallVideoState = videoState;
                 pendingCallInEcm = true;
@@ -1068,11 +1076,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     @UnsupportedAppUsage
     private void handleEcmTimer(int action) {
-        mPhone.handleTimerInEmergencyCallbackMode(action);
+        EcbmHandler.getInstance().handleTimerInEmergencyCallbackMode(action);
         switch (action) {
-            case ImsPhone.CANCEL_ECM_TIMER:
+            case EcbmHandler.CANCEL_ECM_TIMER:
                 break;
-            case ImsPhone.RESTART_ECM_TIMER:
+            case EcbmHandler.RESTART_ECM_TIMER:
                 break;
             default:
                 log("handleEcmTimer, unsupported action " + action);
@@ -2242,7 +2250,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
      * @return true if the phone is in Emergency Callback mode, otherwise false
      */
     private boolean isPhoneInEcbMode() {
-        return mPhone != null && mPhone.isInEcm();
+        return EcbmHandler.getInstance() != null && EcbmHandler.getInstance().isInEcm();
     }
 
     /**
@@ -3397,11 +3405,12 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 if (mPendingMO != null) {
                     //Send ECBM exit request
                     try {
-                        getEcbmInterface().exitEmergencyCallbackMode();
-                        mPhone.setOnEcbModeExitResponse(this, EVENT_EXIT_ECM_RESPONSE_CDMA, null);
+                        EcbmHandler.getInstance().exitEmergencyCallbackMode();
+                        EcbmHandler.getInstance().setOnEcbModeExitResponse(this,
+                                EVENT_EXIT_ECM_RESPONSE_CDMA, null);
                         pendingCallClirMode = mClirMode;
                         pendingCallInEcm = true;
-                    } catch (ImsException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         mPendingMO.setDisconnectCause(DisconnectCause.ERROR_UNSPECIFIED);
                         sendEmptyMessageDelayed(EVENT_HANGUP_PENDINGMO, TIMEOUT_HANGUP_PENDINGMO);
@@ -3417,7 +3426,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     mPendingIntentExtras = null;
                     pendingCallInEcm = false;
                 }
-                mPhone.unsetOnEcbModeExitResponse(this);
+                EcbmHandler.getInstance().unsetOnEcbModeExitResponse(this);
                 break;
             case EVENT_VT_DATA_USAGE_UPDATE:
                 ar = (AsyncResult) msg.obj;
@@ -3700,7 +3709,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     /* package */
     @UnsupportedAppUsage
-    ImsEcbm getEcbmInterface() throws ImsException {
+    public ImsEcbm getEcbmInterface() throws ImsException {
         if (mImsManager == null) {
             throw getImsManagerIsNullException();
         }
