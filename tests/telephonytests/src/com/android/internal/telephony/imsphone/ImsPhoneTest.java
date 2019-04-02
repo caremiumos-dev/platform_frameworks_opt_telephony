@@ -70,6 +70,7 @@ import com.android.internal.telephony.Call;
 import com.android.internal.telephony.CallStateException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.Connection;
+import com.android.internal.telephony.EcbmHandler;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyIntents;
@@ -544,7 +545,8 @@ public class ImsPhoneTest extends TelephonyTest {
     @Test
     @Ignore
     public void testEcbm() throws Exception {
-        ImsEcbmStateListener imsEcbmStateListener = mImsPhoneUT.getImsEcbmStateListener();
+        ImsEcbmStateListener imsEcbmStateListener =
+                EcbmHandler.getInstance().getImsEcbmStateListener(mPhone.getPhoneId());
 
         // verify handling of emergency callback mode
         imsEcbmStateListener.onECBMEntered();
@@ -572,8 +574,8 @@ public class ImsPhoneTest extends TelephonyTest {
         // verify that wakeLock is acquired in ECM
         assertEquals(true, mImsPhoneUT.getWakeLock().isHeld());
 
-        mImsPhoneUT.setOnEcbModeExitResponse(mTestHandler, EVENT_EMERGENCY_CALLBACK_MODE_EXIT,
-                null);
+        EcbmHandler.getInstance().setOnEcbModeExitResponse(mTestHandler,
+                EVENT_EMERGENCY_CALLBACK_MODE_EXIT, null);
 
         // verify handling of emergency callback mode exit
         imsEcbmStateListener.onECBMExited();
