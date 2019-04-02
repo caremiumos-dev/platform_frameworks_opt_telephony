@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6625c958_7cfa527a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-04-02T01:47:49Z",
+      "side": 1,
+      "message": "this logic should live in mPhoneSwitcher.shouldApplyNetworkRequest. In it, you don\u0027t need to check isSimInserted(). just check:\nif mPreferredPhoneId is valid, use that. Otherwise, use default phone.",
+      "range": {
+        "startLine": 306,
+        "startChar": 0,
+        "endLine": 318,
+        "endChar": 13
+      },
+      "revId": "8130a7b114451db821b43c6e0ac4f8b7208e96c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
