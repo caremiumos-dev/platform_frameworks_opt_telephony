@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9855f5b_0357c4e6",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-02T23:54:41Z",
+      "side": 1,
+      "message": "Can we not just check (built-in slotIds array).length \u003e 0 here?",
+      "range": {
+        "startLine": 793,
+        "startChar": 34,
+        "endLine": 793,
+        "endChar": 39
+      },
+      "revId": "ddec507b6ed0a78d8f621c0ae1f8da245693200b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "645e3200_672595ef",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-02T23:54:41Z",
+      "side": 1,
+      "message": "Combine this with the check below addCardId(eid).\n\nif (!mUiccSlots[i].isRemovable()) {\n  hasBuiltInEuicc \u003d true;\n  if (!isDefaultEuiccCardIdSet) { ... }\n}",
+      "range": {
+        "startLine": 829,
+        "startChar": 16,
+        "endLine": 831,
+        "endChar": 17
+      },
+      "revId": "ddec507b6ed0a78d8f621c0ae1f8da245693200b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20e3d240_15898deb",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-02T23:54:41Z",
+      "side": 1,
+      "message": "Does this work on Pixel 2s correctly? mUiccSlots.length \u003d\u003d 1 for those devices, even though they have 2 slots because of their old HAL. I have a suspicion that if a Pixel 2 boots on removable eSIM, that may become the default cardId, even though it should really be UNSUPPORTED.\n\nIf this method is never called on Pixel 2s (i.e. HAL ?.?), please add a comment around here and/or above the method.",
+      "range": {
+        "startLine": 860,
+        "startChar": 12,
+        "endLine": 868,
+        "endChar": 13
+      },
+      "revId": "ddec507b6ed0a78d8f621c0ae1f8da245693200b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
