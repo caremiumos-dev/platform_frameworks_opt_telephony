@@ -172,6 +172,7 @@ public class PhoneFactory {
                 SubscriptionController sc = SubscriptionController.init(context);
                 MultiSimSettingController.init(context, sc);
 
+                EcbmHandler.init();
                 if (context.getPackageManager().hasSystemFeature(
                         PackageManager.FEATURE_TELEPHONY_EUICC)) {
                     sEuiccController = EuiccController.init(context);
