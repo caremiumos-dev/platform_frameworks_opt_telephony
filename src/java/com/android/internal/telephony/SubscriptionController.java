@@ -130,6 +130,29 @@ public class SubscriptionController extends ISub.Stub {
     private List<SubscriptionInfo> mCacheOpportunisticSubInfoList = new ArrayList<>();
     private AtomicBoolean mOpptSubInfoListChangedDirtyBit = new AtomicBoolean();
 
+    public static class NotifyOnCloseUpdateTracker implements AutoCloseable {
+        private bool mIsNotifyRequired = false;
+        private final Runnable mNotifier = null;
+
+        public NotifyOnCloseUpdateTracker(@NonNull Runnable notifier) {
+            mNotifier = notifier;
+        }
+
+        public setNotifyRequired() {
+            mIsNotifyRequired = true;
+        }
+
+        @Override
+        void close() {
+            if (mIsNotifyRequired) mNotifier.run();
+        }
+    }
+
+    public static class SubscriptionNotifyOnCloseUpdateTracker extends NotifyOnCloseUpdateTracker {
+        SubscriptionNotifyOnCloseUpdateTracker() {
+        }
+    }
+
     private static final Comparator<SubscriptionInfo> SUBSCRIPTION_INFO_COMPARATOR =
             (arg0, arg1) -> {
                 // Primary sort key on SimSlotIndex
