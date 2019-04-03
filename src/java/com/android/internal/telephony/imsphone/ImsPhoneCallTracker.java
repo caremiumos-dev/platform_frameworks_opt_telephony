@@ -1788,9 +1788,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         }
     }
 
-    public void cancelUSSD() {
+    /**
+     * Cancel USSD session.
+     *
+     * @param msg The message to dispatch when the USSD session terminated.
+     */
+    public void cancelUSSD(Message msg) {
         if (mUssdSession == null) return;
-
+        mPendingUssd = msg;
         mUssdSession.terminate(ImsReasonInfo.CODE_USER_TERMINATED);
     }
 
@@ -2925,7 +2930,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
          */
         @Override
         public void onCallQualityChanged(ImsCall imsCall, CallQuality callQuality) {
-            mPhone.onCallQualityChanged(callQuality, imsCall.getRadioTechnology());
+            // convert ServiceState.radioTech to TelephonyManager.NetworkType constant
+            mPhone.onCallQualityChanged(callQuality,
+                    ServiceState.rilRadioTechnologyToNetworkType(imsCall.getRadioTechnology()));
         }
     };
 
