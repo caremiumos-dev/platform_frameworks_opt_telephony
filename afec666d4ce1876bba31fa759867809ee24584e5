@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99f10730_6ff1147c",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-04-03T03:41:08Z",
+      "side": 1,
+      "message": "or you can use \ngetSubInfo(SubscriptionManager.UNIQUE_KEY_SUBSCRIPTION_ID + \"\u003d\" + subId, null);",
+      "range": {
+        "startLine": 525,
+        "startChar": 45,
+        "endLine": 525,
+        "endChar": 62
+      },
+      "revId": "afec666d4ce1876bba31fa759867809ee24584e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23c42057_54829fad",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-04-03T03:41:08Z",
+      "side": 1,
+      "message": "so this is carrier app package based, not carrier privilege rule based. \n\nThis api is new to me, but can we say carrierPackageName always have carrier privilege rule? if not, which is more appropriate?",
+      "range": {
+        "startLine": 782,
+        "startChar": 0,
+        "endLine": 785,
+        "endChar": 87
+      },
+      "revId": "afec666d4ce1876bba31fa759867809ee24584e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c09e859a_a93f1654",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-04-03T03:41:08Z",
+      "side": 1,
+      "message": "usually what we do in this class is something like:\n            ContentValues values \u003d new ContentValues();\n            values.put(SubscriptionManager.IS_OPPORTUNISTIC, 0);\n\n            values.put(SubscriptionManager.GROUP_UUID, groupUuid);\n\n            contentResolver.update(SubscriptionManager.CONTENT_URI, values, whereClause, null);\n\nto avoid multiple external calls and subInfoChanged notifications. \nThen at the end you need to manually:\n\n            if (changed) {\n                // refresh Cached Active Subscription Info List\n                SubscriptionController.getInstance().refreshCachedActiveSubscriptionInfoList();\n                SubscriptionController.getInstance().notifySubscriptionInfoChanged();\n            }",
+      "range": {
+        "startLine": 834,
+        "startChar": 0,
+        "endLine": 834,
+        "endChar": 83
+      },
+      "revId": "afec666d4ce1876bba31fa759867809ee24584e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
