@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6abfd38f_d57bf3f3",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-03T23:56:26Z",
+      "side": 1,
+      "message": "This doesn\u0027t follow the coding style. Please do not bypass the checking script.",
+      "range": {
+        "startLine": 813,
+        "startChar": 0,
+        "endLine": 817,
+        "endChar": 13
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b54ae71_90497959",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1480,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-03T23:56:26Z",
+      "side": 1,
+      "message": "This section is not needed. In onSimNotReady(), we call createAllApnList() which should call addEmergencyApnSetting(). If this\u0027s not doing that, please fix the bug there.",
+      "range": {
+        "startLine": 1467,
+        "startChar": 0,
+        "endLine": 1480,
+        "endChar": 70
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
