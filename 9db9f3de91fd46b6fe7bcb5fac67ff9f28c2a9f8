@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57e2d0c4_9b8e5352",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-04-03T05:23:38Z",
+      "side": 1,
+      "message": "Just use mParentApp.getPhoneId() instead.",
+      "revId": "9db9f3de91fd46b6fe7bcb5fac67ff9f28c2a9f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
