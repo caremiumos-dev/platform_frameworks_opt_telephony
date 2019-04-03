@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84bd8a14_68a54839",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-04-03T01:09:51Z",
+      "side": 1,
+      "message": "this line should be indented 8 spaces past the beginning of the previous line",
+      "range": {
+        "startLine": 1103,
+        "startChar": 0,
+        "endLine": 1103,
+        "endChar": 89
+      },
+      "revId": "990f382698349fd228601b1d26e4b217c6ae8578",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
