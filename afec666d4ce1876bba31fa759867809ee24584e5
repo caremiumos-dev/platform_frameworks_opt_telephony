@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e88ef1fe_8376eccd",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-03T21:58:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99f10730_6ff1147c",
+      "range": {
+        "startLine": 525,
+        "startChar": 45,
+        "endLine": 525,
+        "endChar": 62
+      },
+      "revId": "afec666d4ce1876bba31fa759867809ee24584e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23c42057_54829fad",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a1ff7c2b_95f18d8f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-03T21:58:44Z",
+      "side": 1,
+      "message": "Yes, carrierPackageNames always have carrier privilege on the current phone object. If pkgName that\u0027s passed in doesn\u0027t have it, then we return false and bail because the CarrierConfig is old and doesn\u0027t apply to the currently loaded subscription... this could happen if someone managed to switch sims really quickly, for instance... by the time CC loaded the subscription could change.",
+      "parentUuid": "23c42057_54829fad",
+      "range": {
+        "startLine": 782,
+        "startChar": 0,
+        "endLine": 785,
+        "endChar": 87
+      },
+      "revId": "afec666d4ce1876bba31fa759867809ee24584e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c09e859a_a93f1654",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2019-04-03T03:41:08Z",
       "side": 1,
       "message": "usually what we do in this class is something like:\n            ContentValues values \u003d new ContentValues();\n            values.put(SubscriptionManager.IS_OPPORTUNISTIC, 0);\n\n            values.put(SubscriptionManager.GROUP_UUID, groupUuid);\n\n            contentResolver.update(SubscriptionManager.CONTENT_URI, values, whereClause, null);\n\nto avoid multiple external calls and subInfoChanged notifications. \nThen at the end you need to manually:\n\n            if (changed) {\n                // refresh Cached Active Subscription Info List\n                SubscriptionController.getInstance().refreshCachedActiveSubscriptionInfoList();\n                SubscriptionController.getInstance().notifySubscriptionInfoChanged();\n            }",
+      "range": {
+        "startLine": 834,
+        "startChar": 0,
+        "endLine": 834,
+        "endChar": 83
+      },
+      "revId": "afec666d4ce1876bba31fa759867809ee24584e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06afe97f_cefb91d1",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-03T21:58:44Z",
+      "side": 1,
+      "message": "That is:\n1) much harder to unit test\n2) is much more error prone\n3) leaks a bunch of implementation detail from SubscriptionController that really shouldn\u0027t be (which is also part of why it\u0027s more error prone).\n4) Is going to be harder to maintain... for instance, now you\u0027re going to have to update the code here when you add group owner. If this were properly abstracted, that would not be necessary.\n\nI\u0027m making the change almost exactly as you\u0027ve requested, but you\u0027re asking me to use poor software engineering practices, and I\u0027m pretty unhappy about it.",
+      "parentUuid": "c09e859a_a93f1654",
       "range": {
         "startLine": 834,
         "startChar": 0,
