@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4e001d12_c0bbf85d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-04-04T05:08:47Z",
+      "side": 1,
+      "message": "+1\nAnd please add some comments to explain why it\u0027s special here.\nthanks",
+      "parentUuid": "6abfd38f_d57bf3f3",
+      "range": {
+        "startLine": 813,
+        "startChar": 0,
+        "endLine": 817,
+        "endChar": 13
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b54ae71_90497959",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
