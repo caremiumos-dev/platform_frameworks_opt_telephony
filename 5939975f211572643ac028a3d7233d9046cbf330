@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb68a943_24feca16",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1141529
+      },
+      "writtenOn": "2019-04-04T12:10:21Z",
+      "side": 1,
+      "message": "In Android P, fgcall and bgcall are not switched, though there is a comment @ http://androidxref.com/9.0.0_r3/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#1743 I\u0027m not clearly aware of the reason for not switching.\n\nDo you suspect any issue because of switching fgcall and bgcall now?",
+      "revId": "5939975f211572643ac028a3d7233d9046cbf330",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
