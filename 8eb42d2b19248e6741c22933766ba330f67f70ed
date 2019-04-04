@@ -93,6 +93,30 @@
       "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21068b3a_61fed366",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1480,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2019-04-04T21:42:07Z",
+      "side": 1,
+      "message": "And also, if first available EMERGENCY APN in the apn conf is added in onSimNotReady(), then we need to overwrite the existing emergency apn with apn corresponding to mcc/mnc after SIM is ready/inserted.",
+      "parentUuid": "e0f0593e_0607a711",
+      "range": {
+        "startLine": 1467,
+        "startChar": 0,
+        "endLine": 1480,
+        "endChar": 70
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
