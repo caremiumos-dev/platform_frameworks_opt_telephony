@@ -69,6 +69,30 @@
       "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0f0593e_0607a711",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1480,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2019-04-04T18:21:37Z",
+      "side": 1,
+      "message": "Jack, onSimNotReady() is not getting called in SIM-less case as both mPhone.getIccRecords() and mIccRecords.get() are null in onUpdateIcc(). Need to modify onUpdateIcc function too?",
+      "parentUuid": "2b54ae71_90497959",
+      "range": {
+        "startLine": 1467,
+        "startChar": 0,
+        "endLine": 1480,
+        "endChar": 70
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
