@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "24634d6e_a55f7e7c",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-04T16:47:30Z",
+      "side": 1,
+      "message": "Yeah, that seemed safer for now, and we didn\u0027t need that to work. My original intent was to permit such a thing, but this gives us plenty of room to figure out the broader story without having to worry about some edge cases.",
+      "parentUuid": "03a1cd76_ec90beb9",
+      "range": {
+        "startLine": 781,
+        "startChar": 0,
+        "endLine": 781,
+        "endChar": 80
+      },
+      "revId": "2d65f8c82695167efd139858d7f18b7d34e33b23",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "62c6da81_ac4a82d2",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 10
@@ -39,6 +63,24 @@
       "revId": "2d65f8c82695167efd139858d7f18b7d34e33b23",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a5907e7_db6d53e2",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-04T16:47:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62c6da81_ac4a82d2",
+      "revId": "2d65f8c82695167efd139858d7f18b7d34e33b23",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
