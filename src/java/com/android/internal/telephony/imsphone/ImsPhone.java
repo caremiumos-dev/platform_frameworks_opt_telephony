@@ -91,6 +91,7 @@ import com.android.internal.telephony.MmiCode;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneNotifier;
+import com.android.internal.telephony.ServiceStateTracker;
 import com.android.internal.telephony.TelephonyComponentFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
@@ -119,7 +120,8 @@ public class ImsPhone extends ImsPhoneBase {
     private static final int EVENT_SET_CLIR_DONE                     = EVENT_LAST + 5;
     private static final int EVENT_GET_CLIR_DONE                     = EVENT_LAST + 6;
     private static final int EVENT_DEFAULT_PHONE_DATA_STATE_CHANGED  = EVENT_LAST + 7;
-    private static final int EVENT_SERVICE_STATE_CHANGED             = EVENT_LAST + 8;
+    @VisibleForTesting
+    public static final int EVENT_SERVICE_STATE_CHANGED             = EVENT_LAST + 8;
     private static final int EVENT_VOICE_CALL_ENDED                  = EVENT_LAST + 9;
 
     static final int RESTART_ECM_TIMER = 0; // restart Ecm timer
@@ -1491,25 +1493,16 @@ public class ImsPhone extends ImsPhoneBase {
                 if (VDBG) logd("EVENT_SERVICE_STATE_CHANGED");
                 ar = (AsyncResult) msg.obj;
                 ServiceState newServiceState = (ServiceState) ar.result;
-                // only update if roaming status changed
-                if (mRoaming != newServiceState.getRoaming()) {
-                    if (DBG) logd("Roaming state changed - " + mRoaming);
-                    // Update WFC mode only if voice or data is in service.
-                    // The STATE_IN_SERVICE is checked to prevent wifi calling mode change
-                    // when phone moves from roaming to no service.
-                    boolean isInService =
-                            (newServiceState.getVoiceRegState() == ServiceState.STATE_IN_SERVICE ||
-                            newServiceState.getDataRegState() == ServiceState.STATE_IN_SERVICE);
-                    updateRoamingState(newServiceState.getRoaming(), isInService);
-                }
+                updateRoamingState(newServiceState);
                 break;
             case EVENT_VOICE_CALL_ENDED:
                 if (DBG) logd("Voice call ended. Handle pending updateRoamingState.");
                 mCT.unregisterForVoiceCallEnded(this);
-                // only update if roaming status changed
-                boolean newRoaming = getCurrentRoaming();
-                if (mRoaming != newRoaming) {
-                    updateRoamingState(newRoaming, true);
+                // Get the current unmodified ServiceState from the tracker, as it has more info
+                // about the cell roaming state.
+                ServiceStateTracker sst = getDefaultPhone().getServiceStateTracker();
+                if (sst != null) {
+                    updateRoamingState(sst.mSS);
                 }
                 break;
 
@@ -1882,27 +1875,50 @@ public class ImsPhone extends ImsPhoneBase {
         return mCT.getVtDataUsage(perUidStats);
     }
 
-    private void updateRoamingState(boolean newRoaming, boolean isInService) {
-        if (mCT.getState() == PhoneConstants.State.IDLE) {
-            if (DBG) logd("updateRoamingState now: " + newRoaming);
-            mRoaming = newRoaming;
-            if (isInService) {
-                ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
-                imsManager.setWfcMode(imsManager.getWfcMode(newRoaming), newRoaming);
-            } else {
-                if (DBG) Rlog.d(LOG_TAG, "updateRoamingState service state is OUT_OF_SERVICE");
-            }
-        } else {
-            if (DBG) logd("updateRoamingState postponed: " + newRoaming);
-            mCT.registerForVoiceCallEnded(this,
-                    EVENT_VOICE_CALL_ENDED, null);
+    /**
+     * Update roaming state and WFC mode in the following situations:
+     *     1) voice is in service.
+     *     2) data is in service and it is not IWLAN (if in legacy mode).
+     * @param ss non-null ServiceState
+     */
+    private void updateRoamingState(ServiceState ss) {
+        if (ss == null) {
+            loge("updateRoamingState: null ServiceState!");
+            return;
         }
-    }
-
-    private boolean getCurrentRoaming() {
-        TelephonyManager tm = (TelephonyManager) mContext
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.isNetworkRoaming(getSubId());
+        boolean newRoamingState = ss.getRoaming();
+        // Do not recalculate if there is no change to state.
+        if (mRoaming == newRoamingState) {
+            return;
+        }
+        boolean isInService = (ss.getVoiceRegState() == ServiceState.STATE_IN_SERVICE
+                || ss.getDataRegState() == ServiceState.STATE_IN_SERVICE);
+        // If we are not IN_SERVICE for voice or data, ignore change roaming state, as we always
+        // move to home in this case.
+        if (!isInService) {
+            logi("updateRoamingState: we are OUT_OF_SERVICE, ignoring roaming change.");
+            return;
+        }
+        // We ignore roaming changes when moving to IWLAN because it always sets the roaming
+        // mode to home and masks the actual cellular roaming status if voice is not registered. If
+        // we just moved to IWLAN because WFC roaming mode is IWLAN preferred and WFC home mode is
+        // cell preferred, we can get into a condition where the modem keeps bouncing between
+        // IWLAN->cell->IWLAN->cell...
+        // Note: this will only happen in legacy mode, we will not get IWLAN RAT in AP assist mode.
+        if (ss.getVoiceRegState() == ServiceState.STATE_OUT_OF_SERVICE
+                && ss.getRilDataRadioTechnology() == ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN) {
+            logi("updateRoamingState: moved to IWLAN, ignore roaming change.");
+            return;
+        }
+        if (mCT.getState() == PhoneConstants.State.IDLE) {
+            if (DBG) logd("updateRoamingState now: " + newRoamingState);
+            mRoaming = newRoamingState;
+            ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
+            imsManager.setWfcMode(imsManager.getWfcMode(newRoamingState), newRoamingState);
+        } else {
+            if (DBG) logd("updateRoamingState postponed: " + newRoamingState);
+            mCT.registerForVoiceCallEnded(this, EVENT_VOICE_CALL_ENDED, null);
+        }
     }
 
     @Override
