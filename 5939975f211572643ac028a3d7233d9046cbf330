@@ -16,6 +16,24 @@
       "revId": "5939975f211572643ac028a3d7233d9046cbf330",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "852a57dc_651939bf",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-04-04T21:42:50Z",
+      "side": 1,
+      "message": "The comment says that it was to distinguish between the resume-call and the swap-call cases. I don\u0027t think we need to do that anymore, since we added mHoldSwitchingState to explicitly encode what kind of operation is in progress.",
+      "parentUuid": "fb68a943_24feca16",
+      "revId": "5939975f211572643ac028a3d7233d9046cbf330",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
