@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03a1cd76_ec90beb9",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-04-04T05:24:39Z",
+      "side": 1,
+      "message": "so if Paris is the default carrier service, we won\u0027t update the carrier config?\nwhich I think is fine for now as Tycho might be the only one end up using it. But want to confirm that\u0027s the intention.",
+      "range": {
+        "startLine": 781,
+        "startChar": 0,
+        "endLine": 781,
+        "endChar": 80
+      },
+      "revId": "2d65f8c82695167efd139858d7f18b7d34e33b23",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62c6da81_ac4a82d2",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-04-04T05:24:39Z",
+      "side": 1,
+      "message": "nit: can we add:\n// TODO: check if the package can manage the group\nand update it once we confirm how to check it?",
+      "revId": "2d65f8c82695167efd139858d7f18b7d34e33b23",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
