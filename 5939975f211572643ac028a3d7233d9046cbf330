@@ -34,6 +34,24 @@
       "revId": "5939975f211572643ac028a3d7233d9046cbf330",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f54b5128_fe99e5ca",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1141529
+      },
+      "writtenOn": "2019-04-05T05:12:46Z",
+      "side": 1,
+      "message": "Thank you for the clarification.",
+      "parentUuid": "852a57dc_651939bf",
+      "revId": "5939975f211572643ac028a3d7233d9046cbf330",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
