@@ -49,6 +49,29 @@
     },
     {
       "key": {
+        "uuid": "519bef34_aabf75e8",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-05T03:04:29Z",
+      "side": 1,
+      "message": "Try if this works for you.\n\n            } else if (action.equals(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED)) {\n                if (DBG) log(\"received carrier config change\");\n                if (intent.getIntExtra(CarrierConfigManager.EXTRA_SLOT_INDEX,\n                        SubscriptionManager.INVALID_SIM_SLOT_INDEX) !\u003d mPhone.getPhoneId()) {\n                    if (DBG) log(\"carrier config changed not for this phone.\");\n                    return;\n                }\n                if (intent.getIntExtra(SubscriptionManager.EXTRA_SUBSCRIPTION_INDEX,\n                        SubscriptionManager.INVALID_SUBSCRIPTION_ID)\n                        !\u003d SubscriptionManager.INVALID_SUBSCRIPTION_ID) {\n                    setDefaultDataRoamingEnabled();\n                } else {\n                    // SIM is absent\n                    onSimNotReady();\n                }\n            } else {",
+      "range": {
+        "startLine": 351,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 20
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b54ae71_90497959",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
@@ -113,6 +136,53 @@
         "startChar": 0,
         "endLine": 1480,
         "endChar": 70
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e87b8a0c_cd110263",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1480,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-05T03:04:29Z",
+      "side": 1,
+      "message": "It\u0027s not needed. You should config the APN setting so it can only emergency APN type, and the normal APN only supports default or other types but emergency type.\n\nWaiting APN is a list that all applicable APNs for this carrier are in the list. Based on the requested APN type, we select an appropriate one to setup the data.",
+      "parentUuid": "21068b3a_61fed366",
+      "range": {
+        "startLine": 1467,
+        "startChar": 0,
+        "endLine": 1480,
+        "endChar": 70
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab569643_4f34a90b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3828,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-05T03:04:29Z",
+      "side": 1,
+      "message": "remove this",
+      "range": {
+        "startLine": 3826,
+        "startChar": 13,
+        "endLine": 3828,
+        "endChar": 13
       },
       "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
