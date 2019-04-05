@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5f3949e9_91917b5e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2019-04-05T22:17:35Z",
+      "side": 1,
+      "message": "ACTION_CARRIER_CONFIG_CHANGED is not received in SIM-less case.",
+      "parentUuid": "519bef34_aabf75e8",
+      "range": {
+        "startLine": 351,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 20
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b54ae71_90497959",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
