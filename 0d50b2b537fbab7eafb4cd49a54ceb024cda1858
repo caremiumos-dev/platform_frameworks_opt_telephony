@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "591035f9_f66b2175",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-06T00:27:59Z",
+      "side": 1,
+      "message": "We actually provides backward compatibility support that returns RIL_RADIO_TECHNOLOGY_IWLAN when the device is on IWLAN in both AP-assisted mode and legacy mode. Here is the behavior in two different modes.\n\nAP-assisted mode:\nss.getNetworkRegistrationInfo(PS, WWAN).getAccessNetworkTechnology() \u003d LTE \nss.getNetworkRegistrationInfo(PS, WLAN).getAccessNetworkTechnology() \u003d IWLAN\n\nLegacy mode:\nss.getNetworkRegistrationInfo(PS, WWAN).getAccessNetworkTechnology() \u003d IWLAN \u003c-- unfortunately there is no way to know the actual cellular registration info in legacy mode.\nss.getNetworkRegistrationInfo(PS, WLAN).getAccessNetworkTechnology() \u003d IWLAN\n\nOr you can use mDefaultPhone.getTransportManager().isInLegacyMode() to distinguish between two modes.",
+      "range": {
+        "startLine": 1907,
+        "startChar": 0,
+        "endLine": 1912,
+        "endChar": 9
+      },
+      "revId": "0d50b2b537fbab7eafb4cd49a54ceb024cda1858",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
