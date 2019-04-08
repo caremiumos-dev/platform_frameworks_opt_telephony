@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c42f0d1_6b0dd1c7",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CallQualityTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-04-08T23:00:26Z",
+      "side": 1,
+      "message": "nit: not GTS",
+      "range": {
+        "startLine": 27,
+        "startChar": 10,
+        "endLine": 27,
+        "endChar": 13
+      },
+      "revId": "cdfa731ae2c0343042850a11707287c568c3affe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7eb464c_371f0150",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CallQualityTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-04-08T23:00:26Z",
+      "side": 1,
+      "message": "any need for this?",
+      "range": {
+        "startLine": 29,
+        "startChar": 37,
+        "endLine": 29,
+        "endChar": 52
+      },
+      "revId": "cdfa731ae2c0343042850a11707287c568c3affe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76cce319_c85d7e3c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CallQualityTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-04-08T23:00:26Z",
+      "side": 1,
+      "message": "@RunWith(AndroidJUnit4.class)",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 6
+      },
+      "revId": "cdfa731ae2c0343042850a11707287c568c3affe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc80b728_50eb1711",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CallQualityTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-04-08T23:00:26Z",
+      "side": 1,
+      "message": "add org.junit.Test annotation",
+      "revId": "cdfa731ae2c0343042850a11707287c568c3affe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
