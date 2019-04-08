@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e83f548_ba091c97",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-04-08T23:02:10Z",
+      "side": 1,
+      "message": "sorry for late notice. i just realized this won\u0027t work.\n\nFor older modems if isPhoneActive(phoneId) is false, it means data is not allowed (PS detached). So the data connection won\u0027t setup.\n\nAnd if default data is not set, it\u0027s possible that mPreferredDataPhoneId stays INVALID and it\u0027s possible that no phone becomes active.\n\nWe should fix:\nin updatePreferredDataPhoneId, if mPreferredDataPhoneId is INVALID, we should assign it to PhoneFactory.getDefault(). this way, if Emergency IMS is high priority request (we need to make sure of it), default Phone is guaranteed to be active, and we don\u0027t need to update shouldApplyNetworkRequest at all because phoneIdForRequest(EIMS) will return the default phone.",
+      "range": {
+        "startLine": 810,
+        "startChar": 0,
+        "endLine": 810,
+        "endChar": 34
+      },
+      "revId": "c4344d475e1657e8551eae421b7591e35410b8e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
