@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b3b38d4_1fb78c5b",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1475292
+      },
+      "writtenOn": "2019-04-08T05:51:48Z",
+      "side": 1,
+      "message": "Dear Amit Mahajan\n\nWe found below code in subscriptionManager.java.\nintent.putExtra(PhoneConstants.PHONE_KEY, phoneId);\nintent.putExtra(PhoneConstants.SLOT_KEY, phoneId);\n\nTherefore, PHONE_KEY or SLOT_KEY is better than using \"PHONE_ID\".\nCould you give a opinion that new commit should be uploaded or not?",
+      "revId": "a2505bec8295da94ef969a5ac372dd77be9b73de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
