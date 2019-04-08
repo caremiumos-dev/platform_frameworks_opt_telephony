@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "42ad9208_2f76a38a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-08T17:56:00Z",
+      "side": 1,
+      "message": "Fixed in https://android-review.googlesource.com/c/platform/packages/services/Telephony/+/940469",
+      "parentUuid": "5f3949e9_91917b5e",
+      "range": {
+        "startLine": 351,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 20
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b54ae71_90497959",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
