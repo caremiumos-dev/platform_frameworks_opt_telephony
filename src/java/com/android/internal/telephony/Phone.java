@@ -3214,6 +3214,18 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
+     * Retrieves the service provider name (EF_SPN) from UICC.
+     *
+     * Reference: 3GPP TS 31.102 v15.2.0 section 4.2.12 EF_SPN
+     * Reference: 3GPP2 C.P0065-B v3.0 section 5.2.32 EF_SPN
+     *
+     * @return the service provider name if existed, otherwise return null.
+     */
+    public String getSimServiceProviderName() {
+        return null;
+    }
+
+    /**
      * Get the current for the default apn DataState. No change notification
      * exists at this interface -- use
      * {@link android.telephony.PhoneStateListener} instead.
