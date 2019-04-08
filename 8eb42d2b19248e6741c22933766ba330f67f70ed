@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "0714ff87_d634cc7c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2019-04-08T19:17:37Z",
+      "side": 1,
+      "message": "It works with the fix. I will upload a new patch with all the required changes along with your suggested changes in DcTracker. Thanks.",
+      "parentUuid": "42ad9208_2f76a38a",
+      "range": {
+        "startLine": 351,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 20
+      },
+      "revId": "8eb42d2b19248e6741c22933766ba330f67f70ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b54ae71_90497959",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
