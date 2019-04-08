@@ -16,6 +16,24 @@
       "revId": "a2505bec8295da94ef969a5ac372dd77be9b73de",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7db96c86_fb6dedcc",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-04-08T17:05:55Z",
+      "side": 1,
+      "message": "Thanks for bringing this up. I agree.\nhaya93@, can you please change this to PhoneConstants.PHONE_KEY?",
+      "parentUuid": "3b3b38d4_1fb78c5b",
+      "revId": "a2505bec8295da94ef969a5ac372dd77be9b73de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
