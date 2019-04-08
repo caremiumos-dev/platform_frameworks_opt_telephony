@@ -1771,6 +1771,12 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
+    public String getSimServiceProviderName() {
+        IccRecords r = mIccRecords.get();
+        return r != null ? r.getServiceProviderName() : null;
+    }
+
+    @Override
     public String getCdmaPrlVersion() {
         return mSST.getPrlVersion();
     }
