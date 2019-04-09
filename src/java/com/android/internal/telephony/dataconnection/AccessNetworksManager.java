@@ -22,6 +22,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.IPackageManager;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
@@ -238,12 +241,23 @@ public class AccessNetworksManager extends Handler {
      * configuration from carrier config if it exists. If not, read it from resources.
      */
     private void bindQualifiedNetworksService() {
+        Intent intent = null;
         String packageName = getQualifiedNetworksServicePackageName();
+        String className = getQualifiedNetworksServiceClassName();
 
         if (DBG) log("Qualified network service package = " + packageName);
         if (TextUtils.isEmpty(packageName)) {
             loge("Can't find the binding package");
             return;
+        }
+
+        if (TextUtils.isEmpty(className)) {
+            intent = new Intent(QualifiedNetworksService.QUALIFIED_NETWORKS_SERVICE_INTERFACE);
+            intent.setPackage(packageName);
+        } else {
+            ComponentName cm = new ComponentName(packageName, className);
+            intent = new Intent(QualifiedNetworksService.QUALIFIED_NETWORKS_SERVICE_INTERFACE)
+                    .setComponent(cm);
         }
 
         if (TextUtils.equals(packageName, mTargetBindingPackageName)) {
@@ -266,11 +280,8 @@ public class AccessNetworksManager extends Handler {
         try {
             mServiceConnection = new QualifiedNetworksServiceConnection();
             log("bind to " + packageName);
-            if (!mPhone.getContext().bindService(
-                    new Intent(QualifiedNetworksService.QUALIFIED_NETWORKS_SERVICE_INTERFACE)
-                            .setPackage(packageName),
-                    mServiceConnection,
-                    Context.BIND_AUTO_CREATE)) {
+            if (!mPhone.getContext().bindService(intent, mServiceConnection,
+                        Context.BIND_AUTO_CREATE)) {
                 loge("Cannot bind to the qualified networks service.");
                 return;
             }
@@ -306,6 +317,43 @@ public class AccessNetworksManager extends Handler {
         return packageName;
     }
 
+    /**
+     * Get the qualified network service class name.
+     *
+     * @return class name of the qualified networks service package.
+     */
+    private String getQualifiedNetworksServiceClassName() {
+        // Read package name from the resource
+        String className = mPhone.getContext().getResources().getString(
+                com.android.internal.R.string.config_qualified_networks_service_class);
+
+        PersistableBundle b = mCarrierConfigManager.getConfigForSubId(mPhone.getSubId());
+
+        if (b != null) {
+            // If carrier config overrides it, use the one from carrier config
+            String carrierConfigPackageName =  b.getString(CarrierConfigManager
+                    .KEY_CARRIER_QUALIFIED_NETWORKS_SERVICE_CLASS_OVERRIDE_STRING);
+            if (!TextUtils.isEmpty(carrierConfigPackageName)) {
+                if (DBG) log("Found carrier config override " + carrierConfigPackageName);
+                className = carrierConfigPackageName;
+            }
+        }
+
+        List<ResolveInfo> resolveInfo =
+                mPhone.getContext().getPackageManager().queryIntentServices(
+                new Intent(QualifiedNetworksService.QUALIFIED_NETWORKS_SERVICE_INTERFACE),
+                PackageManager.MATCH_SYSTEM_ONLY);
+        if (resolveInfo != null) {
+            for (ResolveInfo info : resolveInfo) {
+                if (info.serviceInfo == null) continue;
+                if ((info.serviceInfo.name).contains(className)) {
+                    className = info.serviceInfo.name;
+                    break;
+                }
+            }
+        }
+        return className;
+    }
 
     private @NonNull List<QualifiedNetworks> getQualifiedNetworksList() {
         List<QualifiedNetworks> qualifiedNetworksList = new ArrayList<>();
