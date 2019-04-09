@@ -34,6 +34,24 @@
       "revId": "a2505bec8295da94ef969a5ac372dd77be9b73de",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d193ea5_3180bbb7",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1475292
+      },
+      "writtenOn": "2019-04-09T01:24:55Z",
+      "side": 1,
+      "message": "I uploaded new patch.\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/940139\n\nplease review",
+      "parentUuid": "7db96c86_fb6dedcc",
+      "revId": "a2505bec8295da94ef969a5ac372dd77be9b73de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
