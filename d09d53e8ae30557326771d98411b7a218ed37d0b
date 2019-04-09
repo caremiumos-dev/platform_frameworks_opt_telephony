@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "160a4e77_fa23d039",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-09T23:19:49Z",
+      "side": 1,
+      "message": "Add a log here if this returns false. Considering that it\u0027s on device manufacturers to realize this array is present and fill it in, a standard log to look for would be good as a first line of defense for debugging partners. Even in the true case maybe?",
+      "range": {
+        "startLine": 1025,
+        "startChar": 12,
+        "endLine": 1025,
+        "endChar": 24
+      },
+      "revId": "d09d53e8ae30557326771d98411b7a218ed37d0b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
