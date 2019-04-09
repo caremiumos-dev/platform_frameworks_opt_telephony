@@ -22,6 +22,30 @@
       "revId": "c4344d475e1657e8551eae421b7591e35410b8e0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "539b2c3a_609fad3e",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2019-04-09T17:57:07Z",
+      "side": 1,
+      "message": "I have verified that the telephony is able to send out the setupdata call request with this change in simless case.",
+      "parentUuid": "9e83f548_ba091c97",
+      "range": {
+        "startLine": 810,
+        "startChar": 0,
+        "endLine": 810,
+        "endChar": 34
+      },
+      "revId": "c4344d475e1657e8551eae421b7591e35410b8e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
