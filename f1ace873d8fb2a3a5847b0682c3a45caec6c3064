@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61c6e0cb_7bc337ea",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-10T01:58:03Z",
+      "side": 1,
+      "message": "Nit: this ternary can be eliminated and the check can be inverted for positive-first style:\n\nif (isValidPhoneIndex(...) \u0026\u0026 isActive) {\n  mUiccSlots[i].update(mCis[iss.logicalSlotIndex], ...);\n} else {\n  mUiccSlots[i].update(null, ...);\n}",
+      "range": {
+        "startLine": 824,
+        "startChar": 37,
+        "endLine": 824,
+        "endChar": 81
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99de79e1_99cb32c2",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-10T01:58:03Z",
+      "side": 1,
+      "message": "Negation got lost: if (!mHasBuiltInEuicc) { ... }",
+      "range": {
+        "startLine": 858,
+        "startChar": 12,
+        "endLine": 858,
+        "endChar": 28
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6698392d_1f3da4c3",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-10T01:58:03Z",
+      "side": 1,
+      "message": "We already know they\u0027re all removable because none are built-in, don\u0027t bother checking this.",
+      "range": {
+        "startLine": 865,
+        "startChar": 44,
+        "endLine": 865,
+        "endChar": 74
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fd85dea_21562ca5",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-10T01:58:03Z",
+      "side": 1,
+      "message": "Nit: avoid duplicate accesses of iss.eid with no other use of iss.\n\nString eid \u003d status.get(i).eid;",
+      "range": {
+        "startLine": 867,
+        "startChar": 20,
+        "endLine": 867,
+        "endChar": 54
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "379b58fb_6d76111a",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-10T01:58:03Z",
+      "side": 1,
+      "message": "Break at the end of this branch? Otherwise we\u0027ll be setting the highest-slotId reSIM as default.",
+      "range": {
+        "startLine": 871,
+        "startChar": 16,
+        "endLine": 871,
+        "endChar": 17
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca0e3a72_34eb8b3c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-10T01:58:03Z",
+      "side": 1,
+      "message": "Collapse this into a single else if case instead of else { if { ... } }.",
+      "range": {
+        "startLine": 1011,
+        "startChar": 19,
+        "endLine": 1014,
+        "endChar": 18
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
