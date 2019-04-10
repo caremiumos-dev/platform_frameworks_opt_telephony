@@ -1398,7 +1398,7 @@ public class DcTracker extends Handler {
             reasons.add(DataDisallowedReasonType.ON_IWLAN);
         }
 
-        if (isEmergency()) {
+        if (shouldRestrictDataForEcbm() || mPhone.isInEmergencyCall()) {
             reasons.add(DataDisallowedReasonType.IN_ECBM);
         }
 
@@ -1544,9 +1544,9 @@ public class DcTracker extends Handler {
         }
     }
 
-    boolean isEmergency() {
-        final boolean result = mPhone.isInEcm() || mPhone.isInEmergencyCall();
-        log("isEmergency: result=" + result);
+    private boolean shouldRestrictDataForEcbm() {
+        final boolean result = mPhone.isInEcm() && !mPhone.isVolteEnabled();
+        log("shouldRestrictDataForEcbm: result=" + result);
         return result;
     }
 
