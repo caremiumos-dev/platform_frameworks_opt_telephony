@@ -46,6 +46,30 @@
       "revId": "c4344d475e1657e8551eae421b7591e35410b8e0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f7f28a0_355a4f29",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-04-10T18:02:19Z",
+      "side": 1,
+      "message": "Did you try L+W or L+G modem with older version of IRadio and IRadioConfig? In that case we won\u0027t allow any data if no SIM is inserted and if no subId specified network request is received.\n\nIf you are not sure how to fix it, I can take over and upload new patch but it will take a while.",
+      "parentUuid": "539b2c3a_609fad3e",
+      "range": {
+        "startLine": 810,
+        "startChar": 0,
+        "endLine": 810,
+        "endChar": 34
+      },
+      "revId": "c4344d475e1657e8551eae421b7591e35410b8e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
