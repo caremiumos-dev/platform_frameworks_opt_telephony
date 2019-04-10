@@ -22,6 +22,30 @@
       "revId": "d09d53e8ae30557326771d98411b7a218ed37d0b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "200708c9_d214870b",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-10T01:33:06Z",
+      "side": 1,
+      "message": "I\u0027ve added a log and I\u0027m caching the value so we just print it in the constructor. It\u0027ll also be part of the dumpsys.",
+      "parentUuid": "160a4e77_fa23d039",
+      "range": {
+        "startLine": 1025,
+        "startChar": 12,
+        "endLine": 1025,
+        "endChar": 24
+      },
+      "revId": "d09d53e8ae30557326771d98411b7a218ed37d0b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
