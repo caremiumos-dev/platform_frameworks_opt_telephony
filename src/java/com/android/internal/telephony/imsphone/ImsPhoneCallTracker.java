@@ -403,6 +403,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     private boolean mIsInEmergencyCall = false;
     private boolean mIsDataEnabled = false;
+    private boolean mIsEcmTimerCanceled = false;
 
     private int pendingCallClirMode;
     private int mPendingCallVideoState;
@@ -1023,8 +1024,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         mPhone.handleTimerInEmergencyCallbackMode(action);
         switch (action) {
             case ImsPhone.CANCEL_ECM_TIMER:
+                mIsEcmTimerCanceled = true;
                 break;
             case ImsPhone.RESTART_ECM_TIMER:
+                mIsEcmTimerCanceled = false;
                 break;
             default:
                 log("handleEcmTimer, unsupported action " + action);
@@ -1869,6 +1872,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             }
 
             if (!isEmergencyCallInList) {
+                if (mIsEcmTimerCanceled) {
+                    handleEcmTimer(ImsPhone.RESTART_ECM_TIMER);
+                }
                 mIsInEmergencyCall = false;
                 mPhone.sendEmergencyCallStateChange(false);
             }
@@ -3576,6 +3582,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         pw.println(" mVtDataUsageUidSnapshot=" + mVtDataUsageUidSnapshot);
         pw.println(" mCallQualityMetrics=" + mCallQualityMetrics);
         pw.println(" mCallQualityMetricsHistory=" + mCallQualityMetricsHistory);
+        pw.println(" mIsEcmTimerCanceled=" + mIsEcmTimerCanceled);
 
         pw.flush();
         pw.println("++++++++++++++++++++++++++++++++");
