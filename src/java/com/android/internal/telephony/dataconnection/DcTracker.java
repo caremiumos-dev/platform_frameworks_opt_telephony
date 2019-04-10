@@ -68,7 +68,6 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.Annotation.ApnType;
 import android.telephony.Annotation.DataFailureCause;
-import android.telephony.Annotation.NetworkType;
 import android.telephony.Annotation.RilRadioTechnology;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
@@ -1304,7 +1303,7 @@ public class DcTracker extends Handler {
             reasons.add(DataDisallowedReasonType.ON_IWLAN);
         }
 
-        if (isEmergency()) {
+        if (!mPhone.isImsRegistered() && isEmergency()) {
             reasons.add(DataDisallowedReasonType.IN_ECBM);
         }
 
