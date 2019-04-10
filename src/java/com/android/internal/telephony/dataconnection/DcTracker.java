@@ -1338,7 +1338,7 @@ public class DcTracker extends Handler {
             reasons.add(DataDisallowedReasonType.ON_IWLAN);
         }
 
-        if (isEmergency()) {
+        if (!mPhone.isImsRegistered() && isEmergency()) {
             reasons.add(DataDisallowedReasonType.IN_ECBM);
         }
 
