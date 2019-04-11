@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "c3a8e457_087a5193",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1248840
+      },
+      "writtenOn": "2019-04-11T21:23:45Z",
+      "side": 1,
+      "message": "If the embedded eSIM is never active, the corresponding UiccCard is null, and there will be no UiccCardInfo for this slot. In this case, if we set the defaultCardId to the embedded one, caller using the default EuiccManager with the defaultCardId will accidentally interact with a mystery slot that can\u0027t be found in UiccCardsInfo array.\n\nIt looks to me that if the embedded UiccCard is null (it may still exist), we should set the defaultCardId to the removable one. Once the embedded one is non-null, we always set the defaultCardId to the embedded one no mater it\u0027s currently active or not.\n\nThoughts?",
+      "parentUuid": "6ab66449_5151bbe8",
+      "range": {
+        "startLine": 855,
+        "startChar": 34,
+        "endLine": 855,
+        "endChar": 65
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99de79e1_99cb32c2",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 5
