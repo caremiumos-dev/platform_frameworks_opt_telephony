@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "e1b67c1e_fb86a390",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-11T18:40:46Z",
+      "side": 1,
+      "message": "ack, but gonna leave this alone since it\u0027s irrelevant to this change",
+      "parentUuid": "61c6e0cb_7bc337ea",
+      "range": {
+        "startLine": 824,
+        "startChar": 37,
+        "endLine": 824,
+        "endChar": 81
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e784f51_664dd24b",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-11T18:40:46Z",
+      "side": 1,
+      "message": "If there is an active removable eUICC and an inactive built-in eUICC, we need to clarify whether we should set UNSUPPORTED or set the default to the removable eUICC.",
+      "range": {
+        "startLine": 855,
+        "startChar": 34,
+        "endLine": 855,
+        "endChar": 65
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99de79e1_99cb32c2",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 5
@@ -45,6 +92,30 @@
       "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75d8f368_b8f026ef",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-11T18:40:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99de79e1_99cb32c2",
+      "range": {
+        "startLine": 858,
+        "startChar": 12,
+        "endLine": 858,
+        "endChar": 28
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "ec0516ca_65d9affe",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-11T18:40:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6698392d_1f3da4c3",
+      "range": {
+        "startLine": 865,
+        "startChar": 44,
+        "endLine": 865,
+        "endChar": 74
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7fd85dea_21562ca5",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 5
@@ -91,6 +186,30 @@
       "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13ed4e01_66a389cb",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-11T18:40:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fd85dea_21562ca5",
+      "range": {
+        "startLine": 867,
+        "startChar": 20,
+        "endLine": 867,
+        "endChar": 54
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "4e9eb5e2_c99903f1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-11T18:40:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "379b58fb_6d76111a",
+      "range": {
+        "startLine": 871,
+        "startChar": 16,
+        "endLine": 871,
+        "endChar": 17
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca0e3a72_34eb8b3c",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 5
@@ -184,6 +327,30 @@
       "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf44604e_7b842832",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-11T18:40:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca0e3a72_34eb8b3c",
+      "range": {
+        "startLine": 1011,
+        "startChar": 19,
+        "endLine": 1014,
+        "endChar": 18
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

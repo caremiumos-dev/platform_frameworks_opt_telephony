@@ -70,6 +70,30 @@
       "revId": "d09d53e8ae30557326771d98411b7a218ed37d0b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9bf6d25_ad852d4a",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-11T18:40:46Z",
+      "side": 1,
+      "message": "let\u0027s leave the logs in, it should only be one per boot anyway.",
+      "parentUuid": "52474d40_e8dd1aec",
+      "range": {
+        "startLine": 1025,
+        "startChar": 12,
+        "endLine": 1025,
+        "endChar": 24
+      },
+      "revId": "d09d53e8ae30557326771d98411b7a218ed37d0b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
