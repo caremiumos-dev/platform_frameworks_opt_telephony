@@ -45,6 +45,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Manages radio access network scan requests.
@@ -177,9 +178,9 @@ public final class NetworkScanRequestTracker {
      */
     public static List<String> getAllowedMccMncsForLocationRestrictedScan(Context context) {
         return withCleanCallingIdentity(() -> SubscriptionController.getInstance()
-                .getAllSubInfoList(context.getOpPackageName()).stream()
-                .filter(subInfo -> subInfo.getMccString() != null)
-                .map(subInfo -> subInfo.getMccString() + subInfo.getMncString())
+                .getAvailableSubscriptionInfoList(context.getOpPackageName()).stream()
+                .flatMap(subInfo -> Stream.of(subInfo.getEhplmns(), subInfo.getHplmns())
+                        .flatMap(List::stream))
                 .collect(Collectors.toList()));
     }
 
