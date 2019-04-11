@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cca4bade_d1a93a9c",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1039969
+      },
+      "writtenOn": "2019-04-11T02:46:08Z",
+      "side": 1,
+      "message": "It is supposed to open default SMS app only if device is unlocked. \nBut refer to the red highlight code below, current logic is just opposite.\n\nLooks like it should be if (userManager.isUserUnlock()) { ... }",
+      "range": {
+        "startLine": 1691,
+        "startChar": 20,
+        "endLine": 1691,
+        "endChar": 49
+      },
+      "revId": "c62d61cb5e0a1f8fcac911b3feec0e069714bc73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
