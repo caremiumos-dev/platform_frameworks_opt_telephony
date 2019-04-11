@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6ab66449_5151bbe8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-11T20:49:18Z",
+      "side": 1,
+      "message": "I think if we know there\u0027s an internal eSIM, we should avoid setting the default to removable.\n\nOnly set default to removable when we can guarantee there is no internally soldered/non-removable eSIM.",
+      "parentUuid": "3e784f51_664dd24b",
+      "range": {
+        "startLine": 855,
+        "startChar": 34,
+        "endLine": 855,
+        "endChar": 65
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99de79e1_99cb32c2",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 5
