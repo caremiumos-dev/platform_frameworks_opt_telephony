@@ -3690,14 +3690,9 @@ public class GsmCdmaPhone extends Phone {
 
         // Refresh.
         if (status) {
-            IccRecords iccRecords = mIccRecords.get();
-            if (iccRecords != null) {
-                TelephonyManager.from(mContext).setSimOperatorNameForPhone(
-                        getPhoneId(), iccRecords.getServiceProviderName());
-            }
-            if (mSST != null) {
-                mSST.pollState();
-            }
+            TelephonyManager.from(mContext).setSimOperatorNameForPhone(
+                    getPhoneId(), mSST.getServiceProviderName());
+            mSST.pollState();
         }
         return status;
     }
