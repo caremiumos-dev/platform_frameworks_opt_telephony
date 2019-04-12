@@ -46,6 +46,30 @@
       "revId": "f7c3ffff9aef7c4bad69af51de54958285352bb8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee7030e5_8524425e",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-04-12T21:06:41Z",
+      "side": 0,
+      "message": "Hmm line 472 is not run in the case that the isEmergencyNumberFromEccList method is run, it is skipped.",
+      "parentUuid": "7655796b_d5c4aa6d",
+      "range": {
+        "startLine": 675,
+        "startChar": 33,
+        "endLine": 675,
+        "endChar": 71
+      },
+      "revId": "f7c3ffff9aef7c4bad69af51de54958285352bb8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
