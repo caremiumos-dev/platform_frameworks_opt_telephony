@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2811c5c4_52b97bb5",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2019-04-12T03:42:25Z",
+      "side": 1,
+      "message": "It looks better to avoid making mUiccApplication null like;\n\n    public void dispose() {\n    ...\n            mCatService \u003d null;\n -          mUiccApplications \u003d null;\n +          mUiccApplications \u003d new UiccCardApplication[IccCardStatus.CARD_MAX_APPS];\n            mCarrierPrivilegeRules \u003d null;\n            mDisposed \u003d true;\n        }\n    }",
+      "range": {
+        "startLine": 1592,
+        "startChar": 8,
+        "endLine": 1592,
+        "endChar": 40
+      },
+      "revId": "ef1c92dba148cc7911138aca2d5c8db75aca6c07",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
