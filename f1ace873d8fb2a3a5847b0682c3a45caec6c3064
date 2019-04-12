@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "9c96ec3d_bf56bbdf",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-12T23:12:07Z",
+      "side": 1,
+      "message": "I agree with Jordan. We should avoid defaulting to a removable eUICC at all costs if we know there\u0027s an embedded one, even if we can\u0027t access it right now.\n\nEuiccServiceImpl would then get slotId -1, which seems ok. Holly?",
+      "parentUuid": "2868e40f_1cc97600",
+      "range": {
+        "startLine": 855,
+        "startChar": 34,
+        "endLine": 855,
+        "endChar": 65
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99de79e1_99cb32c2",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 5
@@ -353,6 +377,30 @@
       "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "352e2c19_56d8c8f1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-12T23:12:07Z",
+      "side": 1,
+      "message": "How was this resolved? Still using the same accessor for this value.",
+      "parentUuid": "55d06612_572d2a1d",
+      "range": {
+        "startLine": 868,
+        "startChar": 64,
+        "endLine": 868,
+        "endChar": 71
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     },
     {
       "key": {

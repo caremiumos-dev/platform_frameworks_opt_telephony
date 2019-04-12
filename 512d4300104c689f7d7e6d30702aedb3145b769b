@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "706823be_2c9e27c2",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccControllerTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-04-12T23:12:07Z",
+      "side": 1,
+      "message": "Add another case with iss1 and iss2 reversed? Not 100% sure that adds any additional coverage though.",
+      "range": {
+        "startLine": 449,
+        "startChar": 15,
+        "endLine": 449,
+        "endChar": 18
+      },
+      "revId": "512d4300104c689f7d7e6d30702aedb3145b769b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
