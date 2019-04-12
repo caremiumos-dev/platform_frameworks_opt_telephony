@@ -3284,7 +3284,7 @@ public class DcTracker extends Handler {
                                 + " does not include radioTech:" + radioTech);
                     }
                 }
-            } else if (DBG) {
+            } else if (VDBG) {
                 log("buildWaitingApns: couldn't handle requested ApnType="
                         + requestedApnType);
             }

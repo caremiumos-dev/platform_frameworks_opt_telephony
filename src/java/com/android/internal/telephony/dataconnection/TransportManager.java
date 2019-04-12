@@ -30,6 +30,9 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.ApnSetting.ApnType;
+import android.util.LocalLog;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.Phone;
@@ -97,8 +100,6 @@ public class TransportManager extends Handler {
 
     static {
         ACCESS_NETWORK_TRANSPORT_TYPE_MAP = new HashMap<>();
-        ACCESS_NETWORK_TRANSPORT_TYPE_MAP.put(AccessNetworkType.UNKNOWN,
-                AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
         ACCESS_NETWORK_TRANSPORT_TYPE_MAP.put(AccessNetworkType.GERAN,
                 AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
         ACCESS_NETWORK_TRANSPORT_TYPE_MAP.put(AccessNetworkType.UTRAN,
@@ -145,6 +146,8 @@ public class TransportManager extends Handler {
 
     private final Phone mPhone;
 
+    private final LocalLog mLocalLog = new LocalLog(100);
+
     /** The available transports. Must be one or more of AccessNetworkConstants.TransportType.XXX */
     private final int[] mAvailableTransports;
 
@@ -155,13 +158,20 @@ public class TransportManager extends Handler {
      * Available networks. The key is the APN type, and the value is the available network list in
      * the preferred order.
      */
-    private final Map<Integer, int[]> mCurrentAvailableNetworks;
+    private final SparseArray<int[]> mCurrentAvailableNetworks;
 
     /**
      * The current transport of the APN type. The key is the APN type, and the value is the
      * transport.
      */
     private final Map<Integer, Integer> mCurrentTransports;
+
+    /**
+     * The pending handover list. This is a list of APNs that are being handover to the new
+     * transport. The entry will be removed once handover is completed. The key
+     * is the APN type, and the value is the target transport that the APN is handovered to.
+     */
+    private final SparseIntArray mPendingHandoverApns;
 
     /**
      * The registrants for listening data handover needed events.
@@ -173,18 +183,33 @@ public class TransportManager extends Handler {
      */
     @VisibleForTesting
     public static final class HandoverParams {
+        /**
+         * The callback for handover complete.
+         */
+        public interface HandoverCallback {
+            /**
+             * Called when handover is completed.
+             *
+             * @param success {@true} if handover succeeded, otherwise failed.
+             */
+            void onCompleted(boolean success);
+        }
+
         public final @ApnType int apnType;
         public final int targetTransport;
-        HandoverParams(int apnType, int targetTransport) {
+        public final HandoverCallback callback;
+        HandoverParams(int apnType, int targetTransport, HandoverCallback callback) {
             this.apnType = apnType;
             this.targetTransport = targetTransport;
+            this.callback = callback;
         }
     }
 
     public TransportManager(Phone phone) {
         mPhone = phone;
-        mCurrentAvailableNetworks = new ConcurrentHashMap<>();
+        mCurrentAvailableNetworks = new SparseArray<>();
         mCurrentTransports = new ConcurrentHashMap<>();
+        mPendingHandoverApns = new SparseIntArray();
         mHandoverNeededEventRegistrants = new RegistrantList();
 
         if (isInLegacyMode()) {
@@ -251,15 +276,17 @@ public class TransportManager extends Handler {
     /**
      * Set the current transport of apn type.
      *
-     * @apnType The APN type
-     * @transport The transport. Must be WWAN or WLAN.
+     * @param apnType The APN type
+     * @param transport The transport. Must be WWAN or WLAN.
      */
-    public void setCurrentTransport(@ApnType int apnType, int transport) {
+    private void setCurrentTransport(@ApnType int apnType, int transport) {
         mCurrentTransports.put(apnType, transport);
+        logl("setCurrentTransport: apnType=" + ApnSetting.getApnTypeString(apnType)
+                + ", transport=" + AccessNetworkConstants.transportTypeToString(transport));
     }
 
     private synchronized void updateAvailableNetworks(List<QualifiedNetworks> networksList) {
-        log("updateAvailableNetworks: " + networksList);
+        logl("updateAvailableNetworks: " + networksList);
         for (QualifiedNetworks networks : networksList) {
             if (areNetworksValid(networks)) {
                 if (isHandoverNeeded(networks)) {
@@ -270,30 +297,52 @@ public class TransportManager extends Handler {
                     // carrier/user policy.
                     int targetTransport = ACCESS_NETWORK_TRANSPORT_TYPE_MAP.get(
                             networks.qualifiedNetworks[0]);
-                    log("Handover needed for APN type: "
+                    logl("Handover needed for APN type: "
                             + ApnSetting.getApnTypeString(networks.apnType) + ", target transport: "
                             + AccessNetworkConstants.transportTypeToString(targetTransport));
+                    mPendingHandoverApns.put(networks.apnType, targetTransport);
                     mHandoverNeededEventRegistrants.notifyResult(
-                            new HandoverParams(networks.apnType, targetTransport));
-
+                            new HandoverParams(networks.apnType, targetTransport, success -> {
+                                // The callback for handover completed.
+                                if (success) {
+                                    logl("Handover succeeded.");
+                                    setCurrentTransport(networks.apnType, targetTransport);
+                                } else {
+                                    logl("APN type "
+                                            + ApnSetting.getApnTypeString(networks.apnType)
+                                            + " handover to "
+                                            + AccessNetworkConstants.transportTypeToString(
+                                                    targetTransport) + " failed.");
+                                }
+                                // Remove from the pending list since it's done.
+                                mPendingHandoverApns.delete(networks.apnType);
+                            }));
                 } else {
-                    // If handover is not needed, immediately update the available networks and
-                    // transport.
-                    log("Handover not needed for APN type: "
-                            + ApnSetting.getApnTypeString(networks.apnType));
                     mCurrentAvailableNetworks.put(networks.apnType, networks.qualifiedNetworks);
-                    int transport = AccessNetworkConstants.TRANSPORT_TYPE_WWAN;
-                    if (!ArrayUtils.isEmpty(networks.qualifiedNetworks)
-                            && ACCESS_NETWORK_TRANSPORT_TYPE_MAP.containsKey(
-                                    networks.qualifiedNetworks[0])) {
-                        // For now we only pick the first element because it's the most preferred.
-                        // In the future we should also consider the rest in the list, for example,
-                        // the first one violates carrier/user policy.
-                        transport = ACCESS_NETWORK_TRANSPORT_TYPE_MAP
-                                .get(networks.qualifiedNetworks[0]);
+
+                    // If handover is not needed, and there is no pending handover, immediately
+                    // update the transport.
+                    if (mPendingHandoverApns.get(networks.apnType) == 0) {
+                        logl("Handover not needed for APN type: "
+                                + ApnSetting.getApnTypeString(networks.apnType));
+                        int transport = AccessNetworkConstants.TRANSPORT_TYPE_WWAN;
+                        if (!ArrayUtils.isEmpty(networks.qualifiedNetworks)
+                                && ACCESS_NETWORK_TRANSPORT_TYPE_MAP.containsKey(
+                                networks.qualifiedNetworks[0])) {
+                            // For now we only pick the first element because it's the most
+                            // preferred. In the future we should also consider the rest in the
+                            // list, for example, the first one violates carrier/user policy.
+                            transport = ACCESS_NETWORK_TRANSPORT_TYPE_MAP
+                                    .get(networks.qualifiedNetworks[0]);
+                        }
+                        setCurrentTransport(networks.apnType, transport);
+                    } else {
+                        logl("Handover is pending. Transport will be updated once handover "
+                                + " is completed.");
                     }
-                    setCurrentTransport(networks.apnType, transport);
                 }
+            } else {
+                loge("Invalid networks received: " + networks);
             }
         }
     }
@@ -313,7 +362,7 @@ public class TransportManager extends Handler {
      */
     public boolean isInLegacyMode() {
         // Get IWLAN operation mode from the system property. If the system property is missing or
-        // misconfiged the default behavior is tied to the IRadio version. For 1.4 or above, it's
+        // mis-configured the default behavior is tied to the IRadio version. For 1.4 or above, it's
         // AP-assisted mode, for 1.3 or below, it's legacy mode. For IRadio 1.3 or below, no matter
         // what the configuration is, it will always be legacy mode.
         String mode = SystemProperties.get(SYSTEM_PROPERTIES_IWLAN_OPERATION_MODE);
@@ -382,8 +431,17 @@ public class TransportManager extends Handler {
         if (mAccessNetworksManager != null) {
             mAccessNetworksManager.dump(fd, pw, args);
         }
+        pw.println("Local logs=");
+        pw.increaseIndent();
+        mLocalLog.dump(fd, pw, args);
+        pw.decreaseIndent();
         pw.decreaseIndent();
         pw.flush();
+    }
+
+    private void logl(String s) {
+        log(s);
+        mLocalLog.log(s);
     }
 
     private void log(String s) {
