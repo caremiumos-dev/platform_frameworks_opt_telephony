@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "2868e40f_1cc97600",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-12T22:57:50Z",
+      "side": 1,
+      "message": "Sorry, my last comment was drafted before I saw Holly\u0027s response. I think its a neater solution to just say that the defaultCardId is TEMPORARILY_UNSUPPORTED when there is an inactive built-in eUICC (even if there\u0027s an active removable eUICC).",
+      "parentUuid": "b3eb2cd4_4e3c3ff2",
+      "range": {
+        "startLine": 855,
+        "startChar": 34,
+        "endLine": 855,
+        "endChar": 65
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99de79e1_99cb32c2",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 5
