@@ -344,9 +344,6 @@ public class UiccProfile extends IccCard {
         // a name in carrier config, use the carrier config name as a backup.
         if (preferCcName || (TextUtils.isEmpty(getServiceProviderName())
                 && !TextUtils.isEmpty(ccName))) {
-            if (mIccRecords != null) {
-                mIccRecords.setServiceProviderName(ccName);
-            }
             mTelephonyManager.setSimOperatorNameForPhone(mPhoneId, ccName);
             mOperatorBrandOverrideRegistrants.notifyRegistrants();
         }
