@@ -1993,8 +1993,6 @@ public class ServiceStateTracker extends Handler {
             // If the device is not camped on IWLAN, then we use cellular PS registration state
             // to compute reg state and rat.
             int regState = wwanPsRegState.getRegistrationState();
-            int dataRat = ServiceState.networkTypeToRilRadioTechnology(
-                    wwanPsRegState.getAccessNetworkTechnology());
             serviceState.setDataRegState(regCodeToServiceState(regState));
         }
         if (DBG) {
