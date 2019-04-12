@@ -473,7 +473,7 @@ public class EmergencyNumberTracker extends Handler {
                         || mCountryIso.equals("ni")) {
                     exactMatch = true;
                 } else {
-                    exactMatch = false;
+                    exactMatch = false || exactMatch;
                 }
                 if (exactMatch) {
                     if (num.getNumber().equals(number)) {
@@ -672,7 +672,7 @@ public class EmergencyNumberTracker extends Handler {
             for (String emergencyNum : emergencyNumbers.split(",")) {
                 // It is not possible to append additional digits to an emergency number to dial
                 // the number in Brazil - it won't connect.
-                if (useExactMatch || "br".equalsIgnoreCase(mCountryIso)) {
+                if (useExactMatch) {
                     if (number.equals(emergencyNum)) {
                         return true;
                     } else {
