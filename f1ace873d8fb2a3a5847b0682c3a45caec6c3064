@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "b3eb2cd4_4e3c3ff2",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-12T22:55:37Z",
+      "side": 1,
+      "message": "I agree. In other words, we will set default\u003dTEMP_UNSUPPORTED when there is a built-in eSIM which is inactive and we are not able to get the EID (because we are on HAL 1.2-1.3).\n\nI can change the if condition to (mHasBuiltInEuicc \u0026\u0026 !anyEuiccIsActive \u0026\u0026 !isDefaultEuiccCardIdSet) and remove the hasEuicc check",
+      "parentUuid": "6ab66449_5151bbe8",
+      "range": {
+        "startLine": 855,
+        "startChar": 34,
+        "endLine": 855,
+        "endChar": 65
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99de79e1_99cb32c2",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 5
@@ -281,6 +305,30 @@
       "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55d06612_572d2a1d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-12T22:55:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d10528c4_7e291b81",
+      "range": {
+        "startLine": 868,
+        "startChar": 64,
+        "endLine": 868,
+        "endChar": 71
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
