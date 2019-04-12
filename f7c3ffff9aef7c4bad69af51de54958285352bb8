@@ -70,6 +70,30 @@
       "revId": "f7c3ffff9aef7c4bad69af51de54958285352bb8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07f8c5c2_61588cfb",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2019-04-12T21:14:21Z",
+      "side": 0,
+      "message": "isEmergencyNumberFromEccList is returned by isEmergencyNumber which includes line 472",
+      "parentUuid": "ee7030e5_8524425e",
+      "range": {
+        "startLine": 675,
+        "startChar": 33,
+        "endLine": 675,
+        "endChar": 71
+      },
+      "revId": "f7c3ffff9aef7c4bad69af51de54958285352bb8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
