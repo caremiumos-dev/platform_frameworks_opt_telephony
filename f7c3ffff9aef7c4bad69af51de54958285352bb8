@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc57585d_297020ce",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-04-12T20:44:13Z",
+      "side": 0,
+      "message": "Why is this being removed?",
+      "range": {
+        "startLine": 675,
+        "startChar": 33,
+        "endLine": 675,
+        "endChar": 71
+      },
+      "revId": "f7c3ffff9aef7c4bad69af51de54958285352bb8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
