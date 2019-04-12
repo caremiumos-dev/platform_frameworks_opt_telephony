@@ -404,6 +404,30 @@
     },
     {
       "key": {
+        "uuid": "33b41f2e_0124f0fe",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-12T23:25:40Z",
+      "side": 1,
+      "message": "iss.eid will null on old HALs, but accessing the value shouldn\u0027t have any issues, so we just do a nullcheck in PS8 before continuing",
+      "parentUuid": "352e2c19_56d8c8f1",
+      "range": {
+        "startLine": 868,
+        "startChar": 64,
+        "endLine": 868,
+        "endChar": 71
+      },
+      "revId": "f1ace873d8fb2a3a5847b0682c3a45caec6c3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "379b58fb_6d76111a",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 5
