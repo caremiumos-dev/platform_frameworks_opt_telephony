@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7f82de7_b7c8dbc5",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-13T02:20:43Z",
+      "side": 1,
+      "message": "I\u0027m not very familiar with streams, but will this filter dupes somewhere? My understanding here is that it\u0027s going to get the subInfo, and then get the plmns from it which get returned in another stream which then gets collected... I think you might want a Set\u003c\u003e out of this thing rather than a list.",
+      "range": {
+        "startLine": 184,
+        "startChar": 13,
+        "endLine": 184,
+        "endChar": 20
+      },
+      "revId": "527c8950641de1d62b3f1e518e64acaea96b8397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e1acb7a_3308f236",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1671,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-13T02:20:43Z",
+      "side": 1,
+      "message": "Is the PLMN ID from the IMSI being added somewhere? Or should the \"getAllowableMccMncs...\" function add that too? Also, is it possible to standardize on PLMN to avoid switching nomenclature, or are we too far gone at this point?",
+      "range": {
+        "startLine": 1671,
+        "startChar": 16,
+        "endLine": 1671,
+        "endChar": 34
+      },
+      "revId": "527c8950641de1d62b3f1e518e64acaea96b8397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
