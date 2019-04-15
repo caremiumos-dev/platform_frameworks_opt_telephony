@@ -22,6 +22,30 @@
       "revId": "34573108752e63cb11430ab16a8b1367be51bbeb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48ecb7cb_ce081bbc",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-15T20:30:10Z",
+      "side": 1,
+      "message": "let me put up a follow up which changes all the @VisibleForTesting members to package-priv",
+      "parentUuid": "25c9efe3_6d3d63d1",
+      "range": {
+        "startLine": 169,
+        "startChar": 4,
+        "endLine": 169,
+        "endChar": 10
+      },
+      "revId": "34573108752e63cb11430ab16a8b1367be51bbeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
