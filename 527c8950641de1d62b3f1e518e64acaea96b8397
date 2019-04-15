@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "316d3011_d49feb62",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-04-15T18:41:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7f82de7_b7c8dbc5",
+      "range": {
+        "startLine": 184,
+        "startChar": 13,
+        "endLine": 184,
+        "endChar": 20
+      },
+      "revId": "527c8950641de1d62b3f1e518e64acaea96b8397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e1acb7a_3308f236",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "527c8950641de1d62b3f1e518e64acaea96b8397",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69d2d016_2749c0b5",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1671,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-04-15T18:41:18Z",
+      "side": 1,
+      "message": "The one from the IMSI is included in getAllowableMccMncsFromSubscriptionInfo -- it\u0027s SubscriptionInfo.getMccString/getMncString.\nAlso I think it\u0027s too late at this point. I tried to keep it as PLMNs all the way through SubscriptionInfo but getMccString/getMncString have already been there for a while...",
+      "parentUuid": "0e1acb7a_3308f236",
+      "range": {
+        "startLine": 1671,
+        "startChar": 16,
+        "endLine": 1671,
+        "endChar": 34
+      },
+      "revId": "527c8950641de1d62b3f1e518e64acaea96b8397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
