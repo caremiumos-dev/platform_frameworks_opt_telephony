@@ -127,6 +127,11 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     if (tracker.mDeliveryIntent == null) {
                         // Remove the tracker here if a status report is not requested.
                         mTrackers.remove(token);
+                    } else {
+                        // Update the tracker map. Valid message ref is needed to find this tracker
+                        // from the map when a status report corresponding to this sent SMS is
+                        // received over CS.
+                        mTrackers.put(token, tracker);
                     }
                     tracker.onSent(mContext);
                     mPhone.notifySmsSent(tracker.mDestAddress);
