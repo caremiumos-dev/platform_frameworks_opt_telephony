@@ -16,13 +16,16 @@
 
 package com.android.internal.telephony;
 
+import static android.os.Binder.withCleanCallingIdentity;
 import static android.telephony.AccessNetworkConstants.AccessNetworkType.EUTRAN;
 import static android.telephony.AccessNetworkConstants.AccessNetworkType.GERAN;
 import static android.telephony.AccessNetworkConstants.AccessNetworkType.UTRAN;
 
+import android.content.Context;
 import android.hardware.radio.V1_0.RadioError;
 import android.os.AsyncResult;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -31,14 +34,20 @@ import android.os.Messenger;
 import android.os.Process;
 import android.os.RemoteException;
 import android.telephony.CellInfo;
+import android.telephony.LocationAccessPolicy;
 import android.telephony.NetworkScan;
 import android.telephony.NetworkScanRequest;
 import android.telephony.RadioAccessSpecifier;
+import android.telephony.SubscriptionInfo;
 import android.telephony.TelephonyScanManager;
 import android.util.Log;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Manages radio access network scan requests.
@@ -158,6 +167,32 @@ public final class NetworkScanRequestTracker {
         return true;
     }
 
+    private static boolean doesCellInfoCorrespondToKnownMccMnc(CellInfo ci,
+            Collection<String> knownMccMncs) {
+        String mccMnc = ci.getCellIdentity().getMccString()
+                + ci.getCellIdentity().getMncString();
+        return knownMccMncs.contains(mccMnc);
+    }
+
+    /**
+     * @return A list of MCC/MNC ids that apps should be allowed to see as results from a network
+     * scan when scan results are restricted due to location privacy.
+     */
+    public static Set<String> getAllowedMccMncsForLocationRestrictedScan(Context context) {
+        return withCleanCallingIdentity(() -> SubscriptionController.getInstance()
+            .getAvailableSubscriptionInfoList(context.getOpPackageName()).stream()
+            .flatMap(NetworkScanRequestTracker::getAllowableMccMncsFromSubscriptionInfo)
+            .collect(Collectors.toSet()));
+    }
+
+    private static Stream<String> getAllowableMccMncsFromSubscriptionInfo(SubscriptionInfo info) {
+        Stream<String> plmns = Stream.of(info.getEhplmns(), info.getHplmns()).flatMap(List::stream);
+        if (info.getMccString() != null && info.getMncString() != null) {
+            plmns = Stream.concat(plmns, Stream.of(info.getMccString() + info.getMncString()));
+        }
+        return plmns;
+    }
+
     /** Sends a message back to the application via its callback. */
     private void notifyMessenger(NetworkScanRequestInfo nsri, int what, int err,
             List<CellInfo> result) {
@@ -166,7 +201,17 @@ public final class NetworkScanRequestTracker {
         message.what = what;
         message.arg1 = err;
         message.arg2 = nsri.mScanId;
+
         if (result != null) {
+            if (what == TelephonyScanManager.CALLBACK_RESTRICTED_SCAN_RESULTS) {
+                Set<String> allowedMccMncs =
+                        getAllowedMccMncsForLocationRestrictedScan(nsri.mPhone.getContext());
+
+                result = result.stream().map(CellInfo::sanitizeLocationInfo)
+                        .filter(ci -> doesCellInfoCorrespondToKnownMccMnc(ci, allowedMccMncs))
+                        .collect(Collectors.toList());
+            }
+
             CellInfo[] ci = result.toArray(new CellInfo[result.size()]);
             Bundle b = new Bundle();
             b.putParcelableArray(TelephonyScanManager.SCAN_RESULT_KEY, ci);
@@ -194,9 +239,11 @@ public final class NetworkScanRequestTracker {
         private final int mScanId;
         private final int mUid;
         private final int mPid;
+        private final String mCallingPackage;
         private boolean mIsBinderDead;
 
-        NetworkScanRequestInfo(NetworkScanRequest r, Messenger m, IBinder b, int id, Phone phone) {
+        NetworkScanRequestInfo(NetworkScanRequest r, Messenger m, IBinder b, int id, Phone phone,
+                String callingPackage) {
             super();
             mRequest = r;
             mMessenger = m;
@@ -205,6 +252,7 @@ public final class NetworkScanRequestTracker {
             mPhone = phone;
             mUid = Binder.getCallingUid();
             mPid = Binder.getCallingPid();
+            mCallingPackage = callingPackage;
             mIsBinderDead = false;
 
             try {
@@ -372,10 +420,24 @@ public final class NetworkScanRequestTracker {
                 Log.e(TAG, "EVENT_RECEIVE_NETWORK_SCAN_RESULT: nsri is null");
                 return;
             }
+            LocationAccessPolicy.LocationPermissionQuery locationQuery =
+                    new LocationAccessPolicy.LocationPermissionQuery.Builder()
+                    .setCallingPackage(nsri.mCallingPackage)
+                    .setCallingPid(nsri.mPid)
+                    .setCallingUid(nsri.mUid)
+                    .setMinSdkVersionForFine(Build.VERSION_CODES.Q)
+                    .setMethod("NetworkScanTracker#onResult")
+                    .build();
             if (ar.exception == null && ar.result != null) {
                 NetworkScanResult nsr = (NetworkScanResult) ar.result;
+                boolean isLocationAccessAllowed = LocationAccessPolicy.checkLocationPermission(
+                        nsri.mPhone.getContext(), locationQuery)
+                        == LocationAccessPolicy.LocationPermissionResult.ALLOWED;
+                int notifyMsg = isLocationAccessAllowed
+                        ? TelephonyScanManager.CALLBACK_SCAN_RESULTS
+                        : TelephonyScanManager.CALLBACK_RESTRICTED_SCAN_RESULTS;
                 if (nsr.scanError == NetworkScan.SUCCESS) {
-                    notifyMessenger(nsri, TelephonyScanManager.CALLBACK_SCAN_RESULTS,
+                    notifyMessenger(nsri, notifyMsg,
                             rilErrorToScanError(nsr.scanError), nsr.networkInfos);
                     if (nsr.scanStatus == NetworkScanResult.SCAN_STATUS_COMPLETE) {
                         deleteScanAndMayNotify(nsri, NetworkScan.SUCCESS, true);
@@ -383,8 +445,8 @@ public final class NetworkScanRequestTracker {
                     }
                 } else {
                     if (nsr.networkInfos != null) {
-                        notifyMessenger(nsri, TelephonyScanManager.CALLBACK_SCAN_RESULTS,
-                                NetworkScan.SUCCESS, nsr.networkInfos);
+                        notifyMessenger(nsri, notifyMsg,
+                                rilErrorToScanError(nsr.scanError), nsr.networkInfos);
                     }
                     deleteScanAndMayNotify(nsri, rilErrorToScanError(nsr.scanError), true);
                     nsri.mPhone.mCi.unregisterForNetworkScanResult(mHandler);
@@ -395,7 +457,6 @@ public final class NetworkScanRequestTracker {
                 nsri.mPhone.mCi.unregisterForNetworkScanResult(mHandler);
             }
         }
-
 
         // Stops the scan if the scanId and uid match the mScanId and mUid.
         // If the scan to be stopped is the live scan, we only send the request to RIL, while the
@@ -535,10 +596,12 @@ public final class NetworkScanRequestTracker {
      * returned to the user, no matter how this scan will be actually handled.
      */
     public int startNetworkScan(
-            NetworkScanRequest request, Messenger messenger, IBinder binder, Phone phone) {
+            NetworkScanRequest request, Messenger messenger, IBinder binder, Phone phone,
+            String callingPackage) {
         int scanId = mNextNetworkScanRequestId.getAndIncrement();
         NetworkScanRequestInfo nsri =
-                new NetworkScanRequestInfo(request, messenger, binder, scanId, phone);
+                new NetworkScanRequestInfo(request, messenger, binder, scanId, phone,
+                        callingPackage);
         // nsri will be stored as Message.obj
         mHandler.obtainMessage(CMD_START_NETWORK_SCAN, nsri).sendToTarget();
         return scanId;

@@ -19,6 +19,7 @@ import static android.provider.Telephony.RcsColumns.Rcs1To1ThreadColumns.RCS_1_T
 import static android.provider.Telephony.RcsColumns.RcsGroupThreadColumns.GROUP_ICON_COLUMN;
 import static android.provider.Telephony.RcsColumns.RcsGroupThreadColumns.GROUP_NAME_COLUMN;
 import static android.provider.Telephony.RcsColumns.RcsGroupThreadColumns.RCS_GROUP_THREAD_URI;
+import static android.provider.Telephony.RcsColumns.RcsParticipantColumns.RCS_PARTICIPANT_ID_COLUMN;
 import static android.provider.Telephony.RcsColumns.RcsParticipantColumns.RCS_PARTICIPANT_URI_PART;
 import static android.provider.Telephony.RcsColumns.RcsThreadColumns.RCS_THREAD_ID_COLUMN;
 import static android.provider.Telephony.RcsColumns.RcsThreadColumns.RCS_THREAD_URI;
@@ -34,7 +35,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.telephony.ims.RcsQueryContinuationToken;
-import android.telephony.ims.RcsThreadQueryResult;
+import android.telephony.ims.RcsThreadQueryResultParcelable;
 
 import com.android.ims.RcsTypeIdPair;
 
@@ -59,7 +60,7 @@ class RcsThreadQueryHelper {
         mParticipantQueryHelper = participantQueryHelper;
     }
 
-    RcsThreadQueryResult performThreadQuery(Bundle bundle) throws RemoteException {
+    RcsThreadQueryResultParcelable performThreadQuery(Bundle bundle) throws RemoteException {
         RcsQueryContinuationToken continuationToken = null;
         List<RcsTypeIdPair> rcsThreadIdList = new ArrayList<>();
         try (Cursor cursor = mContentResolver.query(RCS_THREAD_URI, null, bundle, null)) {
@@ -86,19 +87,19 @@ class RcsThreadQueryHelper {
                 continuationToken = cursorExtras.getParcelable(QUERY_CONTINUATION_TOKEN);
             }
         }
-        return new RcsThreadQueryResult(continuationToken, rcsThreadIdList);
+        return new RcsThreadQueryResultParcelable(continuationToken, rcsThreadIdList);
     }
 
-    int create1To1Thread() throws RemoteException {
-        ContentValues contentValues = new ContentValues(0);
-        Uri insertionUri = mContentResolver.insert(RCS_THREAD_URI, contentValues);
+    int create1To1Thread(int participantId) throws RemoteException {
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(RCS_PARTICIPANT_ID_COLUMN, participantId);
+        Uri insertionUri = mContentResolver.insert(RCS_1_TO_1_THREAD_URI, contentValues);
 
         if (insertionUri == null) {
             throw new RemoteException("Rcs1To1Thread creation failed");
         }
 
-        String threadIdAsString = insertionUri.getPathSegments().get(
-                THREAD_ID_INDEX_IN_INSERTION_URI);
+        String threadIdAsString = insertionUri.getLastPathSegment();
         int threadId = Integer.parseInt(threadIdAsString);
 
         if (threadId <= 0) {

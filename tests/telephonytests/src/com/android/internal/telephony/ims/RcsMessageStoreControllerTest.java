@@ -65,7 +65,7 @@ public class RcsMessageStoreControllerTest extends TelephonyTest {
         mContentResolver = (MockContentResolver) mContext.getContentResolver();
         mContentResolver.addProvider("rcs", mFakeRcsProvider);
 
-        mRcsMessageStoreController = new RcsMessageStoreController(mContentResolver, null);
+        mRcsMessageStoreController = new RcsMessageStoreController(mContentResolver);
     }
 
     @After
@@ -185,10 +185,8 @@ public class RcsMessageStoreControllerTest extends TelephonyTest {
         mFakeRcsProvider.addExpectedOperation(new ExpectedUpdate(
                 Uri.parse("content://rcs/group_thread/454"), null, null, contentValues, 0));
 
-        RcsParticipant participant = new RcsParticipant(9);
-
         try {
-            mRcsMessageStoreController.setGroupThreadOwner(454, participant.getId());
+            mRcsMessageStoreController.setGroupThreadOwner(454, 9);
         } catch (RemoteException e) {
             // eat the exception as there is no provider - we care about the expected update assert
         }

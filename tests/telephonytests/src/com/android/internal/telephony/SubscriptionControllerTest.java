@@ -33,13 +33,15 @@ import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.ParcelUuid;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
-import android.telephony.UiccSlotInfo;
 import android.test.mock.MockContentResolver;
 import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.FlakyTest;
 
 import org.junit.After;
 import org.junit.Before;
@@ -62,6 +64,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
     private FakeTelephonyProvider mFakeTelephonyProvider;
     @Mock
     private ITelephonyRegistry.Stub mTelephonyRegisteryMock;
+    @Mock
+    private MultiSimSettingController mMultiSimSettingControllerMock;
 
     private static final String MAC_ADDRESS_PREFIX = "mac_";
     private static final String DISPLAY_NAME_PREFIX = "my_phone_";
@@ -77,6 +81,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mMockContentResolver.addProvider(SubscriptionManager.CONTENT_URI.getAuthority(),
                 mFakeTelephonyProvider);
         replaceInstance(SubscriptionController.class, "sInstance", null, null);
+        replaceInstance(MultiSimSettingController.class, "sInstance", null,
+                mMultiSimSettingControllerMock);
 
         SubscriptionController.init(mContext, null);
         mSubscriptionControllerUT = SubscriptionController.getInstance();
@@ -144,27 +150,24 @@ public class SubscriptionControllerTest extends TelephonyTest {
         String disName = "TESTING";
         String disNum = "12345";
         boolean isOpportunistic = true;
-        boolean isMetered = false;
 
         testInsertSim();
         /* Get SUB ID */
-        int[] subIds = mSubscriptionControllerUT.getActiveSubIdList();
+        int[] subIds = mSubscriptionControllerUT.getActiveSubIdList(/*visibleOnly*/false);
         assertTrue(subIds != null && subIds.length != 0);
         int subID = subIds[0];
 
         /* Getting, there is no direct getter function for each fields of property */
         SubscriptionInfo subInfo = mSubscriptionControllerUT
                 .getActiveSubscriptionInfo(subID, mCallingPackage);
-        //isMetered should initialize as true
-        assertTrue(subInfo.isMetered());
 
         /* Setting */
-        mSubscriptionControllerUT.setDisplayName(disName, subID);
+        mSubscriptionControllerUT.setDisplayNameUsingSrc(disName, subID,
+                SubscriptionManager.NAME_SOURCE_USER_INPUT);
         mSubscriptionControllerUT.setDataRoaming(dataRoaming, subID);
         mSubscriptionControllerUT.setDisplayNumber(disNum, subID);
         mSubscriptionControllerUT.setIconTint(iconTint, subID);
         mSubscriptionControllerUT.setOpportunistic(isOpportunistic, subID, mCallingPackage);
-        mSubscriptionControllerUT.setMetered(isMetered, subID, mCallingPackage);
 
         subInfo = mSubscriptionControllerUT
             .getActiveSubscriptionInfo(subID, mCallingPackage);
@@ -175,7 +178,6 @@ public class SubscriptionControllerTest extends TelephonyTest {
         assertEquals(iconTint, subInfo.getIconTint());
         assertEquals(disNum, subInfo.getNumber());
         assertEquals(isOpportunistic, subInfo.isOpportunistic());
-        assertEquals(isMetered, subInfo.isMetered());
 
         /* verify broadcast intent */
         ArgumentCaptor<Intent> captorIntent = ArgumentCaptor.forClass(Intent.class);
@@ -189,13 +191,13 @@ public class SubscriptionControllerTest extends TelephonyTest {
         testInsertSim();
 
         /* Get SUB ID */
-        int[] subIds = mSubscriptionControllerUT.getActiveSubIdList();
+        int[] subIds = mSubscriptionControllerUT.getActiveSubIdList(/*visibleOnly*/false);
         assertTrue(subIds != null && subIds.length != 0);
         int subID = subIds[0];
 
         /* Setting */
         String disName = "TESTING";
-        long nameSource = 1;
+        int nameSource = SubscriptionManager.NAME_SOURCE_SIM_SOURCE;
         mSubscriptionControllerUT.setDisplayNameUsingSrc(disName, subID, nameSource);
         SubscriptionInfo subInfo = mSubscriptionControllerUT
                 .getActiveSubscriptionInfo(subID, mCallingPackage);
@@ -300,7 +302,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
     @SmallTest
     public void testMigrateImsSettings() throws Exception {
         testInsertSim();
-        int[] subIds = mSubscriptionControllerUT.getActiveSubIdList();
+        int[] subIds = mSubscriptionControllerUT.getActiveSubIdList(/*visibleOnly*/false);
         assertTrue(subIds != null && subIds.length != 0);
         int subID = subIds[0];
 
@@ -405,11 +407,13 @@ public class SubscriptionControllerTest extends TelephonyTest {
         assertEquals("test2", opptSubList.get(0).getIccId());
 
         // Changing non-opportunistic sub1 shouldn't trigger callback.
-        mSubscriptionControllerUT.setDisplayName("DisplayName", 1);
+        mSubscriptionControllerUT.setDisplayNameUsingSrc("DisplayName", 1,
+                SubscriptionManager.NAME_SOURCE_SIM_SOURCE);
         verify(mTelephonyRegisteryMock, times(1))
                 .notifyOpportunisticSubscriptionInfoChanged();
 
-        mSubscriptionControllerUT.setDisplayName("DisplayName", 2);
+        mSubscriptionControllerUT.setDisplayNameUsingSrc("DisplayName", 2,
+                SubscriptionManager.NAME_SOURCE_SIM_SOURCE);
         verify(mTelephonyRegisteryMock, times(2))
                 .notifyOpportunisticSubscriptionInfoChanged();
     }
@@ -514,7 +518,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         addAndVerifyRemoteSimAddition(4, 0);
     }
 
-
+    @FlakyTest
     @Test @SmallTest
     public void testDefaultSubIdOnMultiSimDevice() {
         makeThisDeviceMultiSimCapable();
@@ -554,7 +558,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         /* insert some sims */
         testInsertMultipleRemoteSims();
         assertEquals(1, mSubscriptionControllerUT.getDefaultSubId());
-        int[] subIdsArray = mSubscriptionControllerUT.getActiveSubIdList();
+        int[] subIdsArray = mSubscriptionControllerUT.getActiveSubIdList(/*visibleOnly*/false);
         assertTrue(subIdsArray.length > 0);
         int len = subIdsArray.length;
 
@@ -564,7 +568,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         assertTrue(result > 0);
         // now check the number of subs left. should be one less than earlier
-        int[] newSubIdsArray = mSubscriptionControllerUT.getActiveSubIdList();
+        int[] newSubIdsArray = mSubscriptionControllerUT.getActiveSubIdList(/*visibleOnly*/false);
         assertTrue(newSubIdsArray.length > 0);
         assertEquals(len - 1, newSubIdsArray.length);
 
@@ -586,21 +590,21 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         int[] subIdList = new int[] {1, 2};
         try {
-            mSubscriptionControllerUT.setSubscriptionGroup(
+            mSubscriptionControllerUT.createSubscriptionGroup(
                     subIdList, mContext.getOpPackageName());
-            fail("setSubscriptionGroup should fail with no permission.");
+            fail("createSubscriptionGroup should fail with no permission.");
         } catch (SecurityException e) {
             // Expected result.
         }
 
         // With modify permission it should succeed.
         mContextFixture.addCallingOrSelfPermission(android.Manifest.permission.MODIFY_PHONE_STATE);
-        String groupId = mSubscriptionControllerUT.setSubscriptionGroup(
+        ParcelUuid groupId = mSubscriptionControllerUT.createSubscriptionGroup(
                 subIdList, mContext.getOpPackageName());
         assertNotEquals(null, groupId);
 
         // Calling it again should generate a new group ID.
-        String newGroupId = mSubscriptionControllerUT.setSubscriptionGroup(
+        ParcelUuid newGroupId = mSubscriptionControllerUT.createSubscriptionGroup(
                 subIdList, mContext.getOpPackageName());
         assertNotEquals(null, newGroupId);
         assertNotEquals(groupId, newGroupId);
@@ -608,7 +612,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
     @Test
     @SmallTest
-    public void testSetSubscriptionGroupWithCarrierPrivilegePermission() throws Exception {
+    public void testCreateSubscriptionGroupWithCarrierPrivilegePermission() throws Exception {
         testInsertSim();
         // Adding a second profile and mark as embedded.
         // TODO b/123300875 slot index 1 is not expected to be valid
@@ -625,24 +629,24 @@ public class SubscriptionControllerTest extends TelephonyTest {
         int[] subIdList = new int[] {1, 2};
         // It should fail since it has no permission.
         try {
-            mSubscriptionControllerUT.setSubscriptionGroup(
+            mSubscriptionControllerUT.createSubscriptionGroup(
                     subIdList, mContext.getOpPackageName());
-            fail("setSubscriptionGroup should fail with no permission.");
+            fail("createSubscriptionGroup should fail with no permission.");
         } catch (SecurityException e) {
             // Expected result.
         }
 
         doReturn(true).when(mTelephonyManager).hasCarrierPrivileges(1);
         try {
-            mSubscriptionControllerUT.setSubscriptionGroup(
+            mSubscriptionControllerUT.createSubscriptionGroup(
                     subIdList, mContext.getOpPackageName());
-            fail("setSubscriptionGroup should fail with no permission on sub 2.");
+            fail("createSubscriptionGroup should fail with no permission on sub 2.");
         } catch (SecurityException e) {
             // Expected result.
         }
 
         doReturn(true).when(mTelephonyManager).hasCarrierPrivileges(2);
-        String groupId = mSubscriptionControllerUT.setSubscriptionGroup(
+        ParcelUuid groupId = mSubscriptionControllerUT.createSubscriptionGroup(
                 subIdList, mContext.getOpPackageName());
         assertNotEquals(null, groupId);
 
@@ -660,10 +664,42 @@ public class SubscriptionControllerTest extends TelephonyTest {
         doReturn(true).when(mSubscriptionManager).canManageSubscription(
                 eq(subInfoList.get(1)), anyString());
 
-        String newGroupId = mSubscriptionControllerUT.setSubscriptionGroup(
+        ParcelUuid newGroupId = mSubscriptionControllerUT.createSubscriptionGroup(
                 subIdList, mContext.getOpPackageName());
         assertNotEquals(null, newGroupId);
         assertNotEquals(groupId, newGroupId);
+    }
+
+    @Test
+    @SmallTest
+    public void testUpdateSubscriptionGroupWithCarrierPrivilegePermission() throws Exception {
+        testInsertSim();
+        // Adding a second profile and mark as embedded.
+        // TODO b/123300875 slot index 1 is not expected to be valid
+        mSubscriptionControllerUT.addSubInfoRecord("test2", 1);
+        ContentValues values = new ContentValues();
+        values.put(SubscriptionManager.IS_EMBEDDED, 1);
+        mFakeTelephonyProvider.update(SubscriptionManager.CONTENT_URI, values,
+                SubscriptionManager.UNIQUE_KEY_SUBSCRIPTION_ID + "=" + 2, null);
+        mSubscriptionControllerUT.refreshCachedActiveSubscriptionInfoList();
+
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+        mContextFixture.addCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE);
+
+        int[] subIdList = new int[] {1};
+
+        doReturn(true).when(mTelephonyManager).hasCarrierPrivileges(1);
+        doReturn(true).when(mTelephonyManager).hasCarrierPrivileges(2);
+
+        ParcelUuid groupId = mSubscriptionControllerUT.createSubscriptionGroup(
+                subIdList, mContext.getOpPackageName());
+        assertNotEquals(null, groupId);
+
+        mSubscriptionControllerUT.addSubscriptionsIntoGroup(
+                new int[] {2}, groupId, mContext.getOpPackageName());
+
+        mSubscriptionControllerUT.removeSubscriptionsFromGroup(
+                new int[] {2}, groupId, mContext.getOpPackageName());
     }
 
     @Test
@@ -687,7 +723,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         // Set sub 1 and 2 into same group.
         int[] subIdList = new int[] {1, 2};
-        String groupId = mSubscriptionControllerUT.setSubscriptionGroup(
+        ParcelUuid groupId = mSubscriptionControllerUT.createSubscriptionGroup(
                 subIdList, mContext.getOpPackageName());
         assertNotEquals(null, groupId);
 
@@ -719,21 +755,26 @@ public class SubscriptionControllerTest extends TelephonyTest {
     public void testSetSubscriptionGroup() throws Exception {
         testInsertSim();
         // Adding a second profile and mark as embedded.
-        mSubscriptionControllerUT.addSubInfoRecord("test2", 0);
+        mSubscriptionControllerUT.addSubInfoRecord("test2", 1);
         ContentValues values = new ContentValues();
         values.put(SubscriptionManager.IS_EMBEDDED, 1);
         mFakeTelephonyProvider.update(SubscriptionManager.CONTENT_URI, values,
                 SubscriptionManager.UNIQUE_KEY_SUBSCRIPTION_ID + "=" + 2, null);
         mSubscriptionControllerUT.refreshCachedActiveSubscriptionInfoList();
 
+        assertTrue(mSubscriptionControllerUT.isActiveSubId(1));
+        assertTrue(mSubscriptionControllerUT.isActiveSubId(2));
+        assertTrue(TelephonyPermissions.checkCallingOrSelfReadPhoneState(mContext, 1,
+                mContext.getOpPackageName(), "getSubscriptionsInGroup"));
+
         int[] subIdList = new int[] {1, 2};
-        String groupUuid = mSubscriptionControllerUT.setSubscriptionGroup(
+        ParcelUuid groupUuid = mSubscriptionControllerUT.createSubscriptionGroup(
                 subIdList, mContext.getOpPackageName());
         assertNotEquals(null, groupUuid);
 
         // Sub 1 and sub 2 should be in same group.
         List<SubscriptionInfo> infoList = mSubscriptionControllerUT
-                .getSubscriptionsInGroup(1, mContext.getOpPackageName());
+                .getSubscriptionsInGroup(groupUuid, mContext.getOpPackageName());
         assertNotEquals(null, infoList);
         assertEquals(2, infoList.size());
         assertEquals(1, infoList.get(0).getSubscriptionId());
@@ -741,11 +782,10 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         // Remove group of sub 1.
         subIdList = new int[] {1};
-        boolean result = mSubscriptionControllerUT.removeSubscriptionsFromGroup(
-                subIdList, mContext.getOpPackageName());
-        assertEquals(true, result);
+        mSubscriptionControllerUT.removeSubscriptionsFromGroup(
+                subIdList, groupUuid, mContext.getOpPackageName());
         infoList = mSubscriptionControllerUT
-                .getSubscriptionsInGroup(2, mContext.getOpPackageName());
+                .getSubscriptionsInGroup(groupUuid, mContext.getOpPackageName());
         assertEquals(1, infoList.size());
         assertEquals(2, infoList.get(0).getSubscriptionId());
     }
@@ -763,9 +803,15 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         // Non existing subId.
         assertFalse(mSubscriptionControllerUT.isSubscriptionEnabled(2));
-        assertFalse(mSubscriptionControllerUT.isSubscriptionEnabled(-1));
 
         // Test invalid arguments.
+        try {
+            assertFalse(mSubscriptionControllerUT.isSubscriptionEnabled(-1));
+            fail("Should throw IllegalArgumentException with invalid subId.");
+        } catch (IllegalArgumentException exception) {
+            // Expected.
+        }
+
         try {
             mSubscriptionControllerUT.getEnabledSubscriptionId(3);
             fail("Should throw IllegalArgumentException with invalid subId.");
@@ -776,34 +822,13 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
     @Test
     @SmallTest
-    public void testEnableDisableSubscriptionSingleSim() throws Exception {
-        testInsertSim();
-        // UiccSlotInfo that maps logicalSlotIndex 0 to physicalSlotIndex 0.
-        UiccSlotInfo slotInfo = new UiccSlotInfo(true, false, "", 0, 0, false);
-        UiccSlotInfo[] slotInfos = new UiccSlotInfo[] {slotInfo};
-        doReturn(slotInfos).when(mTelephonyManager).getUiccSlotsInfo();
-
-        // Current active subscription should be the enabled one.
-        assertTrue(mSubscriptionControllerUT.isSubscriptionEnabled(1));
-        assertEquals(1, mSubscriptionControllerUT.getEnabledSubscriptionId(0));
-        // SetSubscriptionEnabled should fail (no-op) on single SIM device.
-        assertFalse(mSubscriptionControllerUT.setSubscriptionEnabled(false, 1));
-
-        // Current active subscription should be the enabled one.
-        assertTrue(mSubscriptionControllerUT.isSubscriptionEnabled(1));
-        assertEquals(1, mSubscriptionControllerUT.getEnabledSubscriptionId(0));
-        // TODO: test dual SIM case when SubscriptionControllerTest supports dual SIM config.
-    }
-
-    @Test
-    @SmallTest
     public void testGetActiveSubIdList() throws Exception {
         // TODO b/123300875 slot index 1 is not expected to be valid
         mSubscriptionControllerUT.addSubInfoRecord("123", 1);   // sub 1
         mSubscriptionControllerUT.addSubInfoRecord("456", 0);   // sub 2
 
+        int[] subIds = mSubscriptionControllerUT.getActiveSubIdList(/*visibleOnly*/false);
         // Make sure the return sub ids are sorted by slot index
-        assertTrue("active sub ids = " + mSubscriptionControllerUT.getActiveSubIdList(),
-                Arrays.equals(mSubscriptionControllerUT.getActiveSubIdList(), new int[]{2, 1}));
+        assertTrue("active sub ids = " + subIds, Arrays.equals(subIds, new int[]{2, 1}));
     }
 }

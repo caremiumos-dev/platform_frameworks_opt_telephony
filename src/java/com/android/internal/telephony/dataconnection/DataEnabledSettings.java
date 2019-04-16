@@ -19,17 +19,21 @@ package com.android.internal.telephony.dataconnection;
 
 import android.annotation.IntDef;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.os.Handler;
 import android.os.RegistrantList;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
-import android.telephony.SubscriptionManager;
-import android.telephony.TelephonyManager;
+import android.telephony.SubscriptionInfo;
 import android.util.LocalLog;
 import android.util.Pair;
 
+import com.android.internal.telephony.GlobalSettingsHelper;
+import com.android.internal.telephony.MultiSimSettingController;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.SubscriptionController;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -126,30 +130,28 @@ public class DataEnabledSettings {
     }
 
     public synchronized void setUserDataEnabled(boolean enabled) {
+        // Can't disable data for stand alone opportunistic subscription.
+        if (isStandAloneOpportunistic(mPhone.getSubId(), mPhone.getContext()) && !enabled) return;
+
         localLog("UserDataEnabled", enabled);
-        Settings.Global.putInt(mResolver, getMobileDataSettingName(), enabled ? 1 : 0);
-        mPhone.notifyUserMobileDataStateChanged(enabled);
-        updateDataEnabledAndNotify(REASON_USER_DATA_ENABLED);
+        boolean changed = GlobalSettingsHelper.setInt(mPhone.getContext(),
+                Settings.Global.MOBILE_DATA, mPhone.getSubId(), (enabled ? 1 : 0));
+        if (changed) {
+            mPhone.notifyUserMobileDataStateChanged(enabled);
+            updateDataEnabledAndNotify(REASON_USER_DATA_ENABLED);
+            MultiSimSettingController.getInstance().onUserDataEnabled(mPhone.getSubId(), enabled);
+        }
     }
 
     public synchronized boolean isUserDataEnabled() {
+        // User data should always be true for opportunistic subscription.
+        if (isStandAloneOpportunistic(mPhone.getSubId(), mPhone.getContext())) return true;
+
         boolean defaultVal = "true".equalsIgnoreCase(SystemProperties.get(
                 "ro.com.android.mobiledata", "true"));
 
-        return (Settings.Global.getInt(mResolver, getMobileDataSettingName(),
-                defaultVal ? 1 : 0) != 0);
-    }
-
-    private String getMobileDataSettingName() {
-        // For single SIM phones, this is a per phone property. Or if it's invalid subId, we
-        // read default setting.
-        int subId = mPhone.getSubId();
-        if (TelephonyManager.getDefault().getSimCount() == 1
-                || !SubscriptionManager.isValidSubscriptionId(subId)) {
-            return Settings.Global.MOBILE_DATA;
-        } else {
-            return Settings.Global.MOBILE_DATA + mPhone.getSubId();
-        }
+        return GlobalSettingsHelper.getBoolean(mPhone.getContext(),
+                Settings.Global.MOBILE_DATA, mPhone.getSubId(), defaultVal);
     }
 
     public synchronized void setPolicyDataEnabled(boolean enabled) {
@@ -231,6 +233,43 @@ public class DataEnabledSettings {
         return retVal;
     }
 
+    public synchronized void setDataRoamingEnabled(boolean enabled) {
+        localLog("setDataRoamingEnabled", enabled);
+
+        // will trigger handleDataOnRoamingChange() through observer
+        boolean changed = GlobalSettingsHelper.setBoolean(mPhone.getContext(),
+                Settings.Global.DATA_ROAMING, mPhone.getSubId(), enabled);
+
+        if (changed) {
+            MultiSimSettingController.getInstance()
+                    .onRoamingDataEnabled(mPhone.getSubId(), enabled);
+        }
+    }
+
+    /**
+     * Return current {@link android.provider.Settings.Global#DATA_ROAMING} value.
+     */
+    public synchronized boolean getDataRoamingEnabled() {
+        return GlobalSettingsHelper.getBoolean(mPhone.getContext(),
+                Settings.Global.DATA_ROAMING, mPhone.getSubId(), getDefaultDataRoamingEnabled());
+    }
+
+    /**
+     * get default values for {@link Settings.Global#DATA_ROAMING}
+     * return {@code true} if either
+     * {@link CarrierConfigManager#KEY_CARRIER_DEFAULT_DATA_ROAMING_ENABLED_BOOL} or
+     * system property ro.com.android.dataroaming is set to true. otherwise return {@code false}
+     */
+    public synchronized boolean getDefaultDataRoamingEnabled() {
+        final CarrierConfigManager configMgr = (CarrierConfigManager)
+                mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        boolean isDataRoamingEnabled = "true".equalsIgnoreCase(SystemProperties.get(
+                "ro.com.android.dataroaming", "false"));
+        isDataRoamingEnabled |= configMgr.getConfigForSubId(mPhone.getSubId()).getBoolean(
+                CarrierConfigManager.KEY_CARRIER_DEFAULT_DATA_ROAMING_ENABLED_BOOL);
+        return isDataRoamingEnabled;
+    }
+
     private void notifyDataEnabledChanged(boolean enabled, int reason) {
         mOverallDataEnabledChangedRegistrants.notifyResult(new Pair<>(enabled, reason));
     }
@@ -242,6 +281,12 @@ public class DataEnabledSettings {
 
     public void unregisterForDataEnabledChanged(Handler h) {
         mOverallDataEnabledChangedRegistrants.remove(h);
+    }
+
+    private static boolean isStandAloneOpportunistic(int subId, Context context) {
+        SubscriptionInfo info = SubscriptionController.getInstance().getActiveSubscriptionInfo(
+                subId, context.getOpPackageName());
+        return (info != null) && info.isOpportunistic() && info.getGroupUuid() == null;
     }
 
     private void log(String s) {

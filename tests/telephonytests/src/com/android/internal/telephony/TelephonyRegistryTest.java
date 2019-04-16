@@ -15,14 +15,15 @@
  */
 package com.android.internal.telephony;
 
+import static android.telephony.PhoneStateListener.LISTEN_ACTIVE_DATA_SUBSCRIPTION_ID_CHANGE;
 import static android.telephony.PhoneStateListener.LISTEN_PHONE_CAPABILITY_CHANGE;
-import static android.telephony.PhoneStateListener.LISTEN_PREFERRED_DATA_SUBID_CHANGE;
 import static android.telephony.PhoneStateListener.LISTEN_SRVCC_STATE_CHANGED;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 import android.os.HandlerThread;
 import android.os.ServiceManager;
@@ -44,7 +45,7 @@ public class TelephonyRegistryTest extends TelephonyTest {
     private PhoneStateListener mPhoneStateListener;
     private TelephonyRegistry mTelephonyRegistry;
     private PhoneCapability mPhoneCapability;
-    private int mPreferredSubId;
+    private int mActiveSubId;
     private int mSrvccState = -1;
 
     public class PhoneStateListenerWrapper extends PhoneStateListener {
@@ -60,8 +61,8 @@ public class TelephonyRegistryTest extends TelephonyTest {
             setReady(true);
         }
         @Override
-        public void onPreferredDataSubIdChanged(int preferredSubId) {
-            mPreferredSubId = preferredSubId;
+        public void onActiveDataSubscriptionIdChanged(int activeSubId) {
+            mActiveSubId = activeSubId;
             setReady(true);
         }
     }
@@ -121,23 +122,25 @@ public class TelephonyRegistryTest extends TelephonyTest {
 
 
     @Test @SmallTest
-    public void testPreferredDataSubChanged() {
+    public void testActiveDataSubChanged() {
         // mTelephonyRegistry.listen with notifyNow = true should trigger callback immediately.
         setReady(false);
-        int preferredSubId = 0;
-        mTelephonyRegistry.notifyPreferredDataSubIdChanged(preferredSubId);
+        int[] activeSubs = {0, 1, 2};
+        when(mSubscriptionManager.getActiveSubscriptionIdList()).thenReturn(activeSubs);
+        int activeSubId = 0;
+        mTelephonyRegistry.notifyActiveDataSubIdChanged(activeSubId);
         mTelephonyRegistry.listen(mContext.getOpPackageName(),
                 mPhoneStateListener.callback,
-                LISTEN_PREFERRED_DATA_SUBID_CHANGE, true);
+                LISTEN_ACTIVE_DATA_SUBSCRIPTION_ID_CHANGE, true);
         waitUntilReady();
-        assertEquals(preferredSubId, mPreferredSubId);
+        assertEquals(activeSubId, mActiveSubId);
 
         // notifyPhoneCapabilityChanged with a new capability. Callback should be triggered.
         setReady(false);
-        mPreferredSubId = 1;
-        mTelephonyRegistry.notifyPreferredDataSubIdChanged(preferredSubId);
+        mActiveSubId = 1;
+        mTelephonyRegistry.notifyActiveDataSubIdChanged(activeSubId);
         waitUntilReady();
-        assertEquals(preferredSubId, mPreferredSubId);
+        assertEquals(activeSubId, mActiveSubId);
     }
 
     /**

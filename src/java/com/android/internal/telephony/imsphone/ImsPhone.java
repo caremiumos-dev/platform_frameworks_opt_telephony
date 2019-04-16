@@ -37,6 +37,7 @@ import static com.android.internal.telephony.CommandsInterface.CF_REASON_UNCONDI
 import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_NONE;
 import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
 
+import android.annotation.UnsupportedAppUsage;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -59,7 +60,9 @@ import android.os.RegistrantList;
 import android.os.ResultReceiver;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
+import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
@@ -90,9 +93,11 @@ import com.android.internal.telephony.MmiCode;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneNotifier;
+import com.android.internal.telephony.ServiceStateTracker;
 import com.android.internal.telephony.TelephonyComponentFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
+import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.uicc.IccRecords;
@@ -118,7 +123,8 @@ public class ImsPhone extends ImsPhoneBase {
     private static final int EVENT_SET_CLIR_DONE                     = EVENT_LAST + 5;
     private static final int EVENT_GET_CLIR_DONE                     = EVENT_LAST + 6;
     private static final int EVENT_DEFAULT_PHONE_DATA_STATE_CHANGED  = EVENT_LAST + 7;
-    private static final int EVENT_SERVICE_STATE_CHANGED             = EVENT_LAST + 8;
+    @VisibleForTesting
+    public static final int EVENT_SERVICE_STATE_CHANGED             = EVENT_LAST + 8;
     private static final int EVENT_VOICE_CALL_ENDED                  = EVENT_LAST + 9;
 
     static final int RESTART_ECM_TIMER = 0; // restart Ecm timer
@@ -182,9 +188,12 @@ public class ImsPhone extends ImsPhoneBase {
 
     // Instance Variables
     Phone mDefaultPhone;
+    @UnsupportedAppUsage
     ImsPhoneCallTracker mCT;
     ImsExternalCallTracker mExternalCallTracker;
+    @UnsupportedAppUsage
     private ArrayList <ImsPhoneMmiCode> mPendingMMIs = new ArrayList<ImsPhoneMmiCode>();
+    @UnsupportedAppUsage
     private ServiceState mSS = new ServiceState();
 
     // To redial silently through GSM or CDMA when dialing through IMS fails
@@ -233,6 +242,7 @@ public class ImsPhone extends ImsPhoneBase {
         final Message mOnComplete;
         final boolean mIsCfu;
 
+        @UnsupportedAppUsage
         Cf(String cfNumber, boolean isCfu, Message onComplete) {
             mSetCfNumber = cfNumber;
             mIsCfu = isCfu;
@@ -272,10 +282,13 @@ public class ImsPhone extends ImsPhoneBase {
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LOG_TAG);
         mWakeLock.setReferenceCounted(false);
 
-        if (mDefaultPhone.getServiceStateTracker() != null) {
-            mDefaultPhone.getServiceStateTracker()
-                    .registerForDataRegStateOrRatChanged(this,
-                            EVENT_DEFAULT_PHONE_DATA_STATE_CHANGED, null);
+        if (mDefaultPhone.getServiceStateTracker() != null
+                && mDefaultPhone.getTransportManager() != null) {
+            for (int transport : mDefaultPhone.getTransportManager().getAvailableTransports()) {
+                mDefaultPhone.getServiceStateTracker()
+                        .registerForDataRegStateOrRatChanged(transport, this,
+                                EVENT_DEFAULT_PHONE_DATA_STATE_CHANGED, null);
+            }
         }
         // Sets the Voice reg state to STATE_OUT_OF_SERVICE and also queries the data service
         // state. We don't ever need the voice reg state to be anything other than in or out of
@@ -301,17 +314,21 @@ public class ImsPhone extends ImsPhoneBase {
 
         //Force all referenced classes to unregister their former registered events
         if (mDefaultPhone != null && mDefaultPhone.getServiceStateTracker() != null) {
-            mDefaultPhone.getServiceStateTracker().
-                    unregisterForDataRegStateOrRatChanged(this);
+            for (int transport : mDefaultPhone.getTransportManager().getAvailableTransports()) {
+                mDefaultPhone.getServiceStateTracker()
+                        .unregisterForDataRegStateOrRatChanged(transport, this);
+            }
             mDefaultPhone.unregisterForServiceStateChanged(this);
         }
     }
 
+    @UnsupportedAppUsage
     @Override
     public ServiceState getServiceState() {
         return mSS;
     }
 
+    @UnsupportedAppUsage
     @VisibleForTesting
     public void setServiceState(int state) {
         boolean isVoiceRegStateChanged = false;
@@ -396,18 +413,21 @@ public class ImsPhone extends ImsPhoneBase {
         mCT.explicitCallTransfer();
     }
 
+    @UnsupportedAppUsage
     @Override
     public ImsPhoneCall
     getForegroundCall() {
         return mCT.mForegroundCall;
     }
 
+    @UnsupportedAppUsage
     @Override
     public ImsPhoneCall
     getBackgroundCall() {
         return mCT.mBackgroundCall;
     }
 
+    @UnsupportedAppUsage
     @Override
     public ImsPhoneCall
     getRingingCall() {
@@ -601,6 +621,7 @@ public class ImsPhone extends ImsPhoneBase {
         mSsnRegistrants.notifyRegistrants(ar);
     }
 
+    @UnsupportedAppUsage
     @Override
     public boolean handleInCallMmiCommands(String dialString) {
         if (!isInCall()) {
@@ -665,6 +686,7 @@ public class ImsPhone extends ImsPhoneBase {
         mDefaultPhone.notifyNewRingingConnectionP(c);
     }
 
+    @UnsupportedAppUsage
     void notifyUnknownConnection(Connection c) {
         mDefaultPhone.notifyUnknownConnectionP(c);
     }
@@ -803,11 +825,13 @@ public class ImsPhone extends ImsPhoneBase {
         return mCT.getMute();
     }
 
+    @UnsupportedAppUsage
     @Override
     public PhoneConstants.State getState() {
         return mCT.getState();
     }
 
+    @UnsupportedAppUsage
     private boolean isValidCommandInterfaceCFReason (int commandInterfaceCFReason) {
         switch (commandInterfaceCFReason) {
         case CF_REASON_UNCONDITIONAL:
@@ -822,6 +846,7 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @UnsupportedAppUsage
     private boolean isValidCommandInterfaceCFAction (int commandInterfaceCFAction) {
         switch (commandInterfaceCFAction) {
         case CF_ACTION_DISABLE:
@@ -834,10 +859,12 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @UnsupportedAppUsage
     private  boolean isCfEnable(int action) {
         return (action == CF_ACTION_ENABLE) || (action == CF_ACTION_REGISTRATION);
     }
 
+    @UnsupportedAppUsage
     private int getConditionFromCFReason(int reason) {
         switch(reason) {
             case CF_REASON_UNCONDITIONAL: return ImsUtInterface.CDIV_CF_UNCONDITIONAL;
@@ -868,6 +895,7 @@ public class ImsPhone extends ImsPhoneBase {
         return CF_REASON_NOT_REACHABLE;
     }
 
+    @UnsupportedAppUsage
     private int getActionFromCFAction(int action) {
         switch(action) {
             case CF_ACTION_DISABLE: return ImsUtInterface.ACTION_DEACTIVATION;
@@ -911,6 +939,7 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @UnsupportedAppUsage
     @Override
     public void getCallForwardingOption(int commandInterfaceCFReason,
             Message onComplete) {
@@ -941,6 +970,7 @@ public class ImsPhone extends ImsPhoneBase {
                 CommandsInterface.SERVICE_CLASS_VOICE, timerSeconds, onComplete);
     }
 
+    @UnsupportedAppUsage
     public void setCallForwardingOption(int commandInterfaceCFAction,
             int commandInterfaceCFReason,
             String dialingNumber,
@@ -975,6 +1005,7 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @UnsupportedAppUsage
     @Override
     public void getCallWaiting(Message onComplete) {
         if (DBG) logd("getCallWaiting");
@@ -989,6 +1020,7 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @UnsupportedAppUsage
     @Override
     public void setCallWaiting(boolean enable, Message onComplete) {
         setCallWaiting(enable, CommandsInterface.SERVICE_CLASS_VOICE, onComplete);
@@ -1101,10 +1133,11 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     @Override
-    public void cancelUSSD() {
-        mCT.cancelUSSD();
+    public void cancelUSSD(Message msg) {
+        mCT.cancelUSSD(msg);
     }
 
+    @UnsupportedAppUsage
     private void sendErrorResponse(Message onComplete) {
         logd("sendErrorResponse");
         if (onComplete != null) {
@@ -1114,6 +1147,7 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @UnsupportedAppUsage
     @VisibleForTesting
     public void sendErrorResponse(Message onComplete, Throwable e) {
         logd("sendErrorResponse");
@@ -1226,6 +1260,7 @@ public class ImsPhone extends ImsPhoneBase {
      * registrants that it is complete.
      * @param mmi MMI that is done
      */
+    @UnsupportedAppUsage
     public void onMMIDone(ImsPhoneMmiCode mmi) {
         /* Only notify complete if it's on the pending list.
          * Otherwise, it's already been handled (eg, previously canceled).
@@ -1392,7 +1427,12 @@ public class ImsPhone extends ImsPhoneBase {
                 && mDefaultPhone.getServiceStateTracker().mSS != null) {
             ServiceState ss = mDefaultPhone.getServiceStateTracker().mSS;
             mSS.setDataRegState(ss.getDataRegState());
-            mSS.setRilDataRadioTechnology(ss.getRilDataRadioTechnology());
+            List<NetworkRegistrationInfo> nriList =
+                    ss.getNetworkRegistrationInfoListForDomain(NetworkRegistrationInfo.DOMAIN_PS);
+            for (NetworkRegistrationInfo nri : nriList) {
+                mSS.addNetworkRegistrationInfo(nri);
+            }
+
             logd("updateDataServiceState: defSs = " + ss + " imsSs = " + mSS);
         }
     }
@@ -1461,25 +1501,16 @@ public class ImsPhone extends ImsPhoneBase {
                 if (VDBG) logd("EVENT_SERVICE_STATE_CHANGED");
                 ar = (AsyncResult) msg.obj;
                 ServiceState newServiceState = (ServiceState) ar.result;
-                // only update if roaming status changed
-                if (mRoaming != newServiceState.getRoaming()) {
-                    if (DBG) logd("Roaming state changed - " + mRoaming);
-                    // Update WFC mode only if voice or data is in service.
-                    // The STATE_IN_SERVICE is checked to prevent wifi calling mode change
-                    // when phone moves from roaming to no service.
-                    boolean isInService =
-                            (newServiceState.getVoiceRegState() == ServiceState.STATE_IN_SERVICE ||
-                            newServiceState.getDataRegState() == ServiceState.STATE_IN_SERVICE);
-                    updateRoamingState(newServiceState.getRoaming(), isInService);
-                }
+                updateRoamingState(newServiceState);
                 break;
             case EVENT_VOICE_CALL_ENDED:
                 if (DBG) logd("Voice call ended. Handle pending updateRoamingState.");
                 mCT.unregisterForVoiceCallEnded(this);
-                // only update if roaming status changed
-                boolean newRoaming = getCurrentRoaming();
-                if (mRoaming != newRoaming) {
-                    updateRoamingState(newRoaming, true);
+                // Get the current unmodified ServiceState from the tracker, as it has more info
+                // about the cell roaming state.
+                ServiceStateTracker sst = getDefaultPhone().getServiceStateTracker();
+                if (sst != null) {
+                    updateRoamingState(sst.mSS);
                 }
                 break;
 
@@ -1543,6 +1574,7 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @UnsupportedAppUsage
     private void handleEnterEmergencyCallbackMode() {
         if (DBG) logd("handleEnterEmergencyCallbackMode,mIsPhoneInEcmState= " + isInEcm());
         // if phone is not in Ecm mode, and it's changed to Ecm mode
@@ -1561,6 +1593,7 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @UnsupportedAppUsage
     @Override
     protected void handleExitEmergencyCallbackMode() {
         if (DBG) logd("handleExitEmergencyCallbackMode: mIsPhoneInEcmState = " + isInEcm());
@@ -1608,6 +1641,7 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @UnsupportedAppUsage
     @Override
     public void setOnEcbModeExitResponse(Handler h, int what, Object obj) {
         mEcmExitRespRegistrant = new Registrant(h, what, obj);
@@ -1627,6 +1661,7 @@ public class ImsPhone extends ImsPhoneBase {
         return mCT.isImsCapabilityAvailable(capability, regTech);
     }
 
+    @UnsupportedAppUsage
     @Override
     public boolean isVolteEnabled() {
         return mCT.isVolteEnabled();
@@ -1657,6 +1692,7 @@ public class ImsPhone extends ImsPhoneBase {
         return mImsRegistered;
     }
 
+    @UnsupportedAppUsage
     public void setImsRegistered(boolean value) {
         mImsRegistered = value;
     }
@@ -1821,6 +1857,7 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @UnsupportedAppUsage
     @Override
     public boolean isUtEnabled() {
         return mCT.isUtEnabled();
@@ -1846,27 +1883,72 @@ public class ImsPhone extends ImsPhoneBase {
         return mCT.getVtDataUsage(perUidStats);
     }
 
-    private void updateRoamingState(boolean newRoaming, boolean isInService) {
+    /**
+     * Update roaming state and WFC mode in the following situations:
+     *     1) voice is in service.
+     *     2) data is in service and it is not IWLAN (if in legacy mode).
+     * @param ss non-null ServiceState
+     */
+    private void updateRoamingState(ServiceState ss) {
+        if (ss == null) {
+            loge("updateRoamingState: null ServiceState!");
+            return;
+        }
+        boolean newRoamingState = ss.getRoaming();
+        // Do not recalculate if there is no change to state.
+        if (mRoaming == newRoamingState) {
+            return;
+        }
+        boolean isInService = (ss.getVoiceRegState() == ServiceState.STATE_IN_SERVICE
+                || ss.getDataRegState() == ServiceState.STATE_IN_SERVICE);
+        // If we are not IN_SERVICE for voice or data, ignore change roaming state, as we always
+        // move to home in this case.
+        if (!isInService) {
+            logi("updateRoamingState: we are OUT_OF_SERVICE, ignoring roaming change.");
+            return;
+        }
+        // We ignore roaming changes when moving to IWLAN because it always sets the roaming
+        // mode to home and masks the actual cellular roaming status if voice is not registered. If
+        // we just moved to IWLAN because WFC roaming mode is IWLAN preferred and WFC home mode is
+        // cell preferred, we can get into a condition where the modem keeps bouncing between
+        // IWLAN->cell->IWLAN->cell...
+        if (isCsNotInServiceAndPsWwanReportingWlan(ss)) {
+            logi("updateRoamingState: IWLAN masking roaming, ignore roaming change.");
+            return;
+        }
         if (mCT.getState() == PhoneConstants.State.IDLE) {
-            if (DBG) logd("updateRoamingState now: " + newRoaming);
-            mRoaming = newRoaming;
-            if (isInService) {
-                ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
-                imsManager.setWfcMode(imsManager.getWfcMode(newRoaming), newRoaming);
-            } else {
-                if (DBG) Rlog.d(LOG_TAG, "updateRoamingState service state is OUT_OF_SERVICE");
-            }
+            if (DBG) logd("updateRoamingState now: " + newRoamingState);
+            mRoaming = newRoamingState;
+            ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
+            imsManager.setWfcMode(imsManager.getWfcMode(newRoamingState), newRoamingState);
         } else {
-            if (DBG) logd("updateRoamingState postponed: " + newRoaming);
-            mCT.registerForVoiceCallEnded(this,
-                    EVENT_VOICE_CALL_ENDED, null);
+            if (DBG) logd("updateRoamingState postponed: " + newRoamingState);
+            mCT.registerForVoiceCallEnded(this, EVENT_VOICE_CALL_ENDED, null);
         }
     }
 
-    private boolean getCurrentRoaming() {
-        TelephonyManager tm = (TelephonyManager) mContext
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.isNetworkRoaming(getSubId());
+    /**
+     * In legacy mode, data registration will report IWLAN when we are using WLAN for data,
+     * effectively masking the true roaming state of the device if voice is not registered.
+     *
+     * @return true if we are reporting not in service for CS domain over WWAN transport and WLAN
+     * for PS domain over WWAN transport.
+     */
+    private boolean isCsNotInServiceAndPsWwanReportingWlan(ServiceState ss) {
+        TransportManager tm = mDefaultPhone.getTransportManager();
+        // We can not get into this condition if we are in AP-Assisted mode.
+        if (tm == null || !tm.isInLegacyMode()) {
+            return false;
+        }
+        NetworkRegistrationInfo csInfo = ss.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_CS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        NetworkRegistrationInfo psInfo = ss.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        // We will return roaming state correctly if the CS domain is in service because
+        // ss.getRoaming() returns isVoiceRoaming||isDataRoaming result and isDataRoaming==false
+        // when the modem reports IWLAN RAT.
+        return psInfo != null && csInfo != null && !csInfo.isInService()
+                && psInfo.getAccessNetworkTechnology() == TelephonyManager.NETWORK_TYPE_IWLAN;
     }
 
     @Override

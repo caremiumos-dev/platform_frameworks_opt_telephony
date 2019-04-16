@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.uicc;
 
+import android.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncResult;
@@ -24,6 +25,7 @@ import android.telephony.Rlog;
 import android.telephony.ServiceState;
 
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.gsm.SimTlv;
 //import com.android.internal.telephony.gsm.VoiceMailConstants;
 
@@ -49,13 +51,20 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
     private static final int EVENT_ISIM_AUTHENTICATE_DONE          = 91;
 
     // ISIM EF records (see 3GPP TS 31.103)
+    @UnsupportedAppUsage
     private String mIsimImpi;               // IMS private user identity
+    @UnsupportedAppUsage
     private String mIsimDomain;             // IMS home network domain name
+    @UnsupportedAppUsage
     private String[] mIsimImpu;             // IMS public user identity(s)
+    @UnsupportedAppUsage
     private String mIsimIst;                // IMS Service Table
+    @UnsupportedAppUsage
     private String[] mIsimPcscf;            // IMS Proxy Call Session Control Function
+    @UnsupportedAppUsage
     private String auth_rsp;
 
+    @UnsupportedAppUsage
     private final Object mLock = new Object();
 
     private static final int TAG_ISIM_VALUE = 0x80;     // From 3GPP TS 31.103
@@ -148,6 +157,7 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
         }
     }
 
+    @UnsupportedAppUsage
     protected void fetchIsimRecords() {
         mRecordsRequested = true;
 
@@ -260,6 +270,7 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
      * @param record the byte array containing the IMS data string
      * @return the decoded String value, or null if the record can't be decoded
      */
+    @UnsupportedAppUsage
     private static String isimTlvToString(byte[] record) {
         SimTlv tlv = new SimTlv(record, 0, record.length);
         do {
@@ -352,6 +363,7 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
     private void broadcastRefresh() {
         Intent intent = new Intent(INTENT_ISIM_REFRESH);
         log("send ISim REFRESH: " + INTENT_ISIM_REFRESH);
+        intent.putExtra(PhoneConstants.PHONE_KEY, mParentApp.getPhoneId());
         mContext.sendBroadcast(intent);
     }
 
@@ -436,6 +448,7 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
         // Not applicable to Isim
     }
 
+    @UnsupportedAppUsage
     @Override
     protected void log(String s) {
         if (DBG) Rlog.d(LOG_TAG, "[ISIM] " + s);

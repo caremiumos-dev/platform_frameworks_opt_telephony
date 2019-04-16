@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import android.annotation.UnsupportedAppUsage;
 import android.telephony.CallQuality;
 import android.telephony.CellInfo;
 import android.telephony.CellLocation;
@@ -39,8 +40,10 @@ public interface PhoneNotifier {
     /** Notify registrants of the current CellLocation */
     void notifyCellLocation(Phone sender, CellLocation cl);
 
+    @UnsupportedAppUsage
     void notifySignalStrength(Phone sender);
 
+    @UnsupportedAppUsage
     void notifyMessageWaitingChanged(Phone sender);
 
     void notifyCallForwardingChanged(Phone sender);
@@ -86,5 +89,5 @@ public interface PhoneNotifier {
     void notifyEmergencyNumberList();
 
     /** Notify of a change to the call quality of an active foreground call. */
-    void notifyCallQualityChanged(Phone sender, CallQuality callQuality);
+    void notifyCallQualityChanged(Phone sender, CallQuality callQuality, int callNetworkType);
 }

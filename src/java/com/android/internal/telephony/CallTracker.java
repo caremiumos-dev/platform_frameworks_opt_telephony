@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import android.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -41,13 +42,17 @@ public abstract class CallTracker extends Handler {
 
     static final int POLL_DELAY_MSEC = 250;
 
+    @UnsupportedAppUsage
     protected int mPendingOperations;
+    @UnsupportedAppUsage
     protected boolean mNeedsPoll;
     protected Message mLastRelevantPoll;
     protected ArrayList<Connection> mHandoverConnections = new ArrayList<Connection>();
 
+    @UnsupportedAppUsage
     public CommandsInterface mCi;
 
+    @UnsupportedAppUsage
     protected boolean mNumberConverted = false;
     private final int VALID_COMPARE_LENGTH   = 3;
 
@@ -286,14 +291,29 @@ public abstract class CallTracker extends Handler {
         return ret;
     }
 
+    /**
+     * Get the ringing connections which during SRVCC handover.
+     */
+    public Connection getRingingHandoverConnection() {
+        for (Connection hoConn : mHandoverConnections) {
+            if (hoConn.getCall().isRinging()) {
+                return hoConn;
+            }
+        }
+        return null;
+    }
+
     //***** Overridden from Handler
     @Override
     public abstract void handleMessage (Message msg);
     public abstract void registerForVoiceCallStarted(Handler h, int what, Object obj);
     public abstract void unregisterForVoiceCallStarted(Handler h);
+    @UnsupportedAppUsage
     public abstract void registerForVoiceCallEnded(Handler h, int what, Object obj);
     public abstract void unregisterForVoiceCallEnded(Handler h);
+    @UnsupportedAppUsage
     public abstract PhoneConstants.State getState();
+    @UnsupportedAppUsage
     protected abstract void log(String msg);
 
     /**

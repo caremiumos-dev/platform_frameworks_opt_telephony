@@ -17,6 +17,7 @@
 package com.android.internal.telephony;
 
 import android.annotation.NonNull;
+import android.annotation.UnsupportedAppUsage;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     private static final String LOG_TAG = "DefaultPhoneNotifier";
     private static final boolean DBG = false; // STOPSHIP if true
 
+    @UnsupportedAppUsage
     protected ITelephonyRegistry mRegistry;
 
     public DefaultPhoneNotifier() {
@@ -387,10 +389,12 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     @Override
-    public void notifyCallQualityChanged(Phone sender, CallQuality callQuality) {
+    public void notifyCallQualityChanged(Phone sender, CallQuality callQuality,
+            int callNetworkType) {
         try {
             if (mRegistry != null) {
-                mRegistry.notifyCallQualityChanged(callQuality, sender.getPhoneId());
+                mRegistry.notifyCallQualityChanged(callQuality, sender.getPhoneId(),
+                        callNetworkType);
             }
         } catch (RemoteException ex) {
             // system process is dead

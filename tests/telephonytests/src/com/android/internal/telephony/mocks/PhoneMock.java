@@ -36,7 +36,6 @@ import android.telephony.SignalStrength;
 import android.telephony.VoLteServiceState;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.telephony.PhoneConstants.DataState;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccFileHandler;
@@ -1052,7 +1051,7 @@ public class PhoneMock extends Phone {
         throw new RuntimeException("not implemented");
     }
 
-    public void cancelUSSD() {
+    public void cancelUSSD(Message msg) {
         throw new RuntimeException("not implemented");
     }
 
@@ -1074,10 +1073,6 @@ public class PhoneMock extends Phone {
     }
 
     public CellLocation getCellLocation(WorkSource workSource) {
-        throw new RuntimeException("not implemented");
-    }
-
-    public DataState getDataConnectionState(String apnType) {
         throw new RuntimeException("not implemented");
     }
 
