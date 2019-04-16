@@ -127,6 +127,10 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     if (tracker.mDeliveryIntent == null) {
                         // Remove the tracker here if a status report is not requested.
                         mTrackers.remove(token);
+                    } else {
+                        // Update. Message Ref in a tracker is used to handle a status
+                        // report which is delivered over CS.
+                        mTrackers.put(token, tracker);
                     }
                     tracker.onSent(mContext);
                     mPhone.notifySmsSent(tracker.mDestAddress);
