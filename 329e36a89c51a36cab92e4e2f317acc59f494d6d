@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ead7749a_2f99c440",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-17T21:39:56Z",
+      "side": 1,
+      "message": "I think if onSimNotReady can be triggered, you don\u0027t need this?",
+      "range": {
+        "startLine": 742,
+        "startChar": 8,
+        "endLine": 742,
+        "endChar": 30
+      },
+      "revId": "329e36a89c51a36cab92e4e2f317acc59f494d6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
