@@ -46,6 +46,30 @@
       "revId": "329e36a89c51a36cab92e4e2f317acc59f494d6d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ced7b58_8a7ce07e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-17T22:10:14Z",
+      "side": 1,
+      "message": "okay. But I still feel onSimNotReady needs to be called when there is no SIM. If we are not fixing it here, then we probably need to fix it in the next CL.",
+      "parentUuid": "670fbda1_b6aab39f",
+      "range": {
+        "startLine": 742,
+        "startChar": 8,
+        "endLine": 742,
+        "endChar": 30
+      },
+      "revId": "329e36a89c51a36cab92e4e2f317acc59f494d6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
