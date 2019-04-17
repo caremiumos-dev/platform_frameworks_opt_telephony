@@ -118,6 +118,30 @@
       "revId": "329e36a89c51a36cab92e4e2f317acc59f494d6d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "12f1d6bc_3957b7b3",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-17T23:33:12Z",
+      "side": 1,
+      "message": "Hmm... I think we should probably make sure this is init\u0027d anyway without waiting for the carrier config change... I\u0027ll revert back to addEmergencyApnSetting().",
+      "parentUuid": "69d74604_e541ebbb",
+      "range": {
+        "startLine": 742,
+        "startChar": 8,
+        "endLine": 742,
+        "endChar": 30
+      },
+      "revId": "329e36a89c51a36cab92e4e2f317acc59f494d6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
