@@ -94,6 +94,30 @@
       "revId": "329e36a89c51a36cab92e4e2f317acc59f494d6d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69d74604_e541ebbb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-17T23:01:57Z",
+      "side": 1,
+      "message": "Sorry for the confusion. Actually what I mean is not calling onSimNotReady in the constructor. I also feel it might break something else. What I mean is calling onSimNotReady in carrier config change (assuming you have the fix aosp/940469), and removing onSimNotReady in onUpdateIcc, the method I think we should completely remove in the future.",
+      "parentUuid": "3cc852c3_bacae4c6",
+      "range": {
+        "startLine": 742,
+        "startChar": 8,
+        "endLine": 742,
+        "endChar": 30
+      },
+      "revId": "329e36a89c51a36cab92e4e2f317acc59f494d6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
