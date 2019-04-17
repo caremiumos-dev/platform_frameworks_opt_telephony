@@ -1450,6 +1450,12 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
         IRadio radioProxy = getRadioProxy(result);
 
+        if ((dataProfile.getSupportedApnTypesBitmask() & ApnSetting.TYPE_EMERGENCY) ==
+                ApnSetting.TYPE_EMERGENCY) {
+            Rlog.e(RILJ_LOG_TAG, "DEBUG DEBUG Skipping Emergency APN Type");
+            return;
+        }
+
         if (radioProxy != null) {
 
             RILRequest rr = obtainRequest(RIL_REQUEST_SETUP_DATA_CALL, result,
