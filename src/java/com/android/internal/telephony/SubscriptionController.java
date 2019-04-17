@@ -3574,6 +3574,10 @@ public class SubscriptionController extends ISub.Stub {
     }
 
     private @ApnSetting.ApnType int getWhiteListedApnDataTypes(int subId, String callingPackage) {
+        if (!SubscriptionManager.isValidSubscriptionId(subId)) {
+            return 0;
+        }
+
         return Integer.valueOf(getSubscriptionProperty(subId,
                 SubscriptionManager.WHITE_LISTED_APN_DATA, callingPackage));
     }
