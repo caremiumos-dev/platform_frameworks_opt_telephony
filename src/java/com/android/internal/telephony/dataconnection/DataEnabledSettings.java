@@ -150,8 +150,10 @@ public class DataEnabledSettings {
         boolean defaultVal = "true".equalsIgnoreCase(SystemProperties.get(
                 "ro.com.android.mobiledata", "true"));
 
-        return GlobalSettingsHelper.getBoolean(mPhone.getContext(),
+        boolean retVal = GlobalSettingsHelper.getBoolean(mPhone.getContext(),
                 Settings.Global.MOBILE_DATA, mPhone.getSubId(), defaultVal);
+        log("getDataEnabled not during provisioning retVal=" + retVal + " - defaultVal=" + defaultVal);
+        return retVal;
     }
 
     public synchronized void setPolicyDataEnabled(boolean enabled) {
