@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "92d1fe38_8175e3e8",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1438823
+      },
+      "writtenOn": "2019-04-19T22:52:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c09fa47a_9a6c9f7e",
+      "range": {
+        "startLine": 604,
+        "startChar": 0,
+        "endLine": 604,
+        "endChar": 63
+      },
+      "revId": "c0ccb1dc077ae3128cd0db2cfa5b7beefb1563bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f210e54d_f5d89d5b",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "c0ccb1dc077ae3128cd0db2cfa5b7beefb1563bb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3bff8eb_07dd3050",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1438823
+      },
+      "writtenOn": "2019-04-19T22:52:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f210e54d_f5d89d5b",
+      "range": {
+        "startLine": 853,
+        "startChar": 13,
+        "endLine": 853,
+        "endChar": 26
+      },
+      "revId": "c0ccb1dc077ae3128cd0db2cfa5b7beefb1563bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
