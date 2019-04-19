@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "e76af37a_4f8c1dab",
+        "filename": "README.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-19T17:39:20Z",
+      "side": 1,
+      "message": "I made this statement more broad to include all our code.",
+      "parentUuid": "f506717c_ea9d9094",
+      "range": {
+        "startLine": 6,
+        "startChar": 66,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "d95665353bafc8777b9966e80410251e2f6723f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "262d604d_fc33a76e",
         "filename": "README.txt",
         "patchSetId": 1
@@ -117,6 +141,30 @@
       "revId": "d95665353bafc8777b9966e80410251e2f6723f9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5025d3b9_e9cff661",
+        "filename": "README.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-19T17:39:20Z",
+      "side": 1,
+      "message": "replaced with frameworks/base/telephony so it includes both",
+      "parentUuid": "4f5c20ac_3d691c3b",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 28
+      },
+      "revId": "d95665353bafc8777b9966e80410251e2f6723f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
