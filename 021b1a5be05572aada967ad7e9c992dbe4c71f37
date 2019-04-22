@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0528b6f3_6a93d4ea",
+        "filename": "tests/telephonytests/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2019-04-22T12:33:35Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be services.net instead of services? Services contains everything.",
+      "range": {
+        "startLine": 19,
+        "startChar": 9,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "021b1a5be05572aada967ad7e9c992dbe4c71f37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
