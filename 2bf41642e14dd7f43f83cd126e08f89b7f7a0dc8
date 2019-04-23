@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da101a9f_b591f646",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-23T20:21:36Z",
+      "side": 1,
+      "message": "I would think yes. But shouldn\u0027t this be moved into updatePreferredDataPhoneId?",
+      "parentUuid": "8dec745d_b1b7f234",
+      "range": {
+        "startLine": 605,
+        "startChar": 12,
+        "endLine": 605,
+        "endChar": 31
+      },
+      "revId": "2bf41642e14dd7f43f83cd126e08f89b7f7a0dc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "931db934_bbda42dc",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 7
