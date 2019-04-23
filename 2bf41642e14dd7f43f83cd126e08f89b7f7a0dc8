@@ -68,6 +68,30 @@
       "revId": "2bf41642e14dd7f43f83cd126e08f89b7f7a0dc8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03b6ef78_c78fcd9a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3581,
+      "author": {
+        "id": 1438823
+      },
+      "writtenOn": "2019-04-23T05:22:43Z",
+      "side": 1,
+      "message": "Agreed. Don\u0027t think we need a null check though. Since it throws NumberFormatException when its null.",
+      "parentUuid": "e970f3fb_96c45ca1",
+      "range": {
+        "startLine": 3581,
+        "startChar": 31,
+        "endLine": 3581,
+        "endChar": 54
+      },
+      "revId": "2bf41642e14dd7f43f83cd126e08f89b7f7a0dc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
