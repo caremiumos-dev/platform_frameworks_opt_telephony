@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8dec745d_b1b7f234",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-23T02:16:37Z",
+      "side": 1,
+      "message": "Question for refuhoo@ - Should setting this invoke notifyPreferredDataSubIdChanged() (if indeed it wasn\u0027t INVALID before?)",
+      "range": {
+        "startLine": 605,
+        "startChar": 12,
+        "endLine": 605,
+        "endChar": 31
+      },
+      "revId": "2bf41642e14dd7f43f83cd126e08f89b7f7a0dc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "931db934_bbda42dc",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3578,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-23T02:16:37Z",
+      "side": 1,
+      "message": "If the comment below is not accepted, then ApnSetting.TYPE_NONE.",
+      "range": {
+        "startLine": 3578,
+        "startChar": 19,
+        "endLine": 3578,
+        "endChar": 20
+      },
+      "revId": "2bf41642e14dd7f43f83cd126e08f89b7f7a0dc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e970f3fb_96c45ca1",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3581,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-23T02:16:37Z",
+      "side": 1,
+      "message": "getSubscriptionProperty is null/garbage-safe anyway. We shouldn\u0027t assume here that everything is going to be happy just because the subscriptionId is \u003e -1. It\u0027s possible to have a valid subId that refers to nothing or to a valid subId that doesn\u0027t have a valid integer in the DB. I think a 2-step check should be used:\n1) check for null\n2) call Integer.valueOf() and catch NumberFormatException.",
+      "range": {
+        "startLine": 3581,
+        "startChar": 31,
+        "endLine": 3581,
+        "endChar": 54
+      },
+      "revId": "2bf41642e14dd7f43f83cd126e08f89b7f7a0dc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
