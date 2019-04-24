@@ -359,13 +359,13 @@ public class SubscriptionController extends ISub.Stub {
         String[] ehplmns = ehplmnsRaw == null ? null : ehplmnsRaw.split(",");
         String[] hplmns = hplmnsRaw == null ? null : hplmnsRaw.split(",");
 
-        // cardId is the private ICCID/EID string, also known as the card string
-        String cardId = cursor.getString(cursor.getColumnIndexOrThrow(
-                SubscriptionManager.CARD_ID));
+        // cardString is the private ICCID/EID string
+        String cardString = cursor.getString(cursor.getColumnIndexOrThrow(
+                SubscriptionManager.CARD_STRING));
         String countryIso = cursor.getString(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.ISO_COUNTRY_CODE));
-        // publicCardId is the publicly exposed int card ID
-        int publicCardId = mUiccController.convertToPublicCardId(cardId);
+        // cardId is the publicly exposed int card ID
+        int cardId = mUiccController.convertToPublicCardId(cardString);
         boolean isEmbedded = cursor.getInt(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.IS_EMBEDDED)) == 1;
         int carrierId = cursor.getInt(cursor.getColumnIndexOrThrow(
@@ -388,14 +388,14 @@ public class SubscriptionController extends ISub.Stub {
 
         if (VDBG) {
             String iccIdToPrint = SubscriptionInfo.givePrintableIccid(iccId);
-            String cardIdToPrint = SubscriptionInfo.givePrintableIccid(cardId);
+            String cardIdToPrint = SubscriptionInfo.givePrintableIccid(cardString);
             logd("[getSubInfoRecord] id:" + id + " iccid:" + iccIdToPrint + " simSlotIndex:"
                     + simSlotIndex + " carrierid:" + carrierId + " displayName:" + displayName
                     + " nameSource:" + nameSource + " iconTint:" + iconTint
                     + " dataRoaming:" + dataRoaming + " mcc:" + mcc + " mnc:" + mnc
                     + " countIso:" + countryIso + " isEmbedded:"
                     + isEmbedded + " accessRules:" + Arrays.toString(accessRules)
-                    + " cardId:" + cardIdToPrint + " publicCardId:" + publicCardId
+                    + " cardString:" + cardString + " cardId:" + cardId
                     + " isOpportunistic:" + isOpportunistic + " groupUUID:" + groupUUID
                     + " profileClass:" + profileClass + " subscriptionType: " + subType);
         }
@@ -407,7 +407,7 @@ public class SubscriptionController extends ISub.Stub {
         }
         SubscriptionInfo info = new SubscriptionInfo(id, iccId, simSlotIndex, displayName,
                 carrierName, nameSource, iconTint, number, dataRoaming, iconBitmap, mcc, mnc,
-                countryIso, isEmbedded, accessRules, cardId, publicCardId, isOpportunistic,
+                countryIso, isEmbedded, accessRules, cardString, cardId, isOpportunistic,
                 groupUUID, false /* isGroupDisabled */, carrierId, profileClass, subType);
         info.setAssociatedPlmns(ehplmns, hplmns);
         return info;
@@ -1043,7 +1043,7 @@ public class SubscriptionController extends ISub.Stub {
             Cursor cursor = resolver.query(SubscriptionManager.CONTENT_URI,
                     new String[]{SubscriptionManager.UNIQUE_KEY_SUBSCRIPTION_ID,
                             SubscriptionManager.SIM_SLOT_INDEX, SubscriptionManager.NAME_SOURCE,
-                            SubscriptionManager.ICC_ID, SubscriptionManager.CARD_ID},
+                            SubscriptionManager.ICC_ID, SubscriptionManager.CARD_STRING},
                     selection, args, null);
 
             boolean setDisplayName = false;
@@ -1069,7 +1069,7 @@ public class SubscriptionController extends ISub.Stub {
                         int oldSimInfoId = cursor.getInt(1);
                         int nameSource = cursor.getInt(2);
                         String oldIccId = cursor.getString(3);
-                        String oldCardId = cursor.getString(4);
+                        String oldCardString = cursor.getString(4);
                         ContentValues value = new ContentValues();
 
                         if (slotIndex != oldSimInfoId) {
@@ -1083,9 +1083,9 @@ public class SubscriptionController extends ISub.Stub {
 
                         UiccCard card = mUiccController.getUiccCardForPhone(slotIndex);
                         if (card != null) {
-                            String cardId = card.getCardId();
-                            if (cardId != null && cardId != oldCardId) {
-                                value.put(SubscriptionManager.CARD_ID, cardId);
+                            String cardString = card.getCardString();
+                            if (cardString != null && cardString != oldCardString) {
+                                value.put(SubscriptionManager.CARD_STRING, cardString);
                             }
                         }
 
@@ -1401,16 +1401,16 @@ public class SubscriptionController extends ISub.Stub {
         value.put(SubscriptionManager.COLOR, color);
         value.put(SubscriptionManager.SIM_SLOT_INDEX, slotIndex);
         value.put(SubscriptionManager.CARRIER_NAME, "");
-        value.put(SubscriptionManager.CARD_ID, uniqueId);
+        value.put(SubscriptionManager.CARD_STRING, uniqueId);
         value.put(SubscriptionManager.SUBSCRIPTION_TYPE, subscriptionType);
         if (isSubscriptionForRemoteSim(subscriptionType)) {
             value.put(SubscriptionManager.DISPLAY_NAME, displayName);
         } else {
             UiccCard card = mUiccController.getUiccCardForPhone(slotIndex);
             if (card != null) {
-                String cardId = card.getCardId();
-                if (cardId != null) {
-                    value.put(SubscriptionManager.CARD_ID, cardId);
+                String cardString = card.getCardString();
+                if (cardString != null) {
+                    value.put(SubscriptionManager.CARD_STRING, cardString);
                 }
             }
         }

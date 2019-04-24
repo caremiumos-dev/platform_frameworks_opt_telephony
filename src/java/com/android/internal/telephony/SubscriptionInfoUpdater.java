@@ -308,7 +308,7 @@ public class SubscriptionInfoUpdater extends Handler {
         UiccController uiccController = UiccController.getInstance();
         UiccCard card = uiccController.getUiccCardForPhone(phoneId);
         if (card != null) {
-            return uiccController.convertToPublicCardId(card.getCardId());
+            return uiccController.convertToPublicCardId(card.getCardString());
         }
         return TelephonyManager.UNINITIALIZED_CARD_ID;
     }
@@ -619,7 +619,7 @@ public class SubscriptionInfoUpdater extends Handler {
                 Arrays.stream(uiccSlots)
                         .filter(uiccSlot -> uiccSlot.getUiccCard() != null)
                         .map(uiccSlot -> uiccController.convertToPublicCardId(
-                                uiccSlot.getUiccCard().getCardId()))
+                                uiccSlot.getUiccCard().getCardString()))
                         .forEach(cardId -> updateEmbeddedSubscriptions(cardId));
             }
             // update default subId

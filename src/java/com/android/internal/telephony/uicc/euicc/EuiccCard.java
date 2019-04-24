@@ -128,7 +128,7 @@ public class EuiccCard extends UiccCard {
             loadEidAndNotifyRegistrants();
         } else {
             mEid = ics.eid;
-            mCardId = ics.eid;
+            mCardString = ics.eid;
         }
     }
 
@@ -177,7 +177,7 @@ public class EuiccCard extends UiccCard {
                     mEidReadyRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
                 }
                 mEid = "";
-                mCardId = "";
+                mCardString = "";
                 Rlog.e(LOG_TAG, "Failed loading eid", e);
             }
         };
@@ -209,11 +209,11 @@ public class EuiccCard extends UiccCard {
     }
 
     @Override
-    protected void updateCardId() {
+    protected void updateCardString() {
         if (TextUtils.isEmpty(mEid)) {
-            super.updateCardId();
+            super.updateCardString();
         } else {
-            mCardId = mEid;
+            mCardString = mEid;
         }
     }
 
@@ -377,7 +377,7 @@ public class EuiccCard extends UiccCard {
     }
 
     /**
-     * Gets the EID of the eUICC and overwrites mCardId in UiccCard.
+     * Gets the EID of the eUICC and overwrites mCardString in UiccCard.
      *
      * @param callback The callback to get the result.
      * @param handler The handler to run the callback.
@@ -398,7 +398,7 @@ public class EuiccCard extends UiccCard {
                             .getChild(Tags.TAG_EID).asBytes());
                     synchronized (mLock) {
                         mEid = eid;
-                        mCardId = eid;
+                        mCardString = eid;
                     }
                     return eid;
                 },
