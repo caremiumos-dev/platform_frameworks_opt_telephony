@@ -55,7 +55,7 @@ public class UiccCard {
     @UnsupportedAppUsage
     private CardState mCardState;
     private String mIccid;
-    protected String mCardId;
+    protected String mCardString;
     private UiccProfile mUiccProfile;
     @UnsupportedAppUsage
     private Context mContext;
@@ -88,7 +88,7 @@ public class UiccCard {
             mContext = c;
             mCi = ci;
             mIccid = ics.iccid;
-            updateCardId();
+            updateCardString();
 
             if (mCardState != CardState.CARDSTATE_ABSENT) {
                 if (mUiccProfile == null) {
@@ -114,11 +114,11 @@ public class UiccCard {
      *
      * <p>Whenever the {@link UiccCard#update(Context, CommandsInterface, IccCardStatus)} is called,
      * this function needs to be called to update the card ID. Subclasses of {@link UiccCard}
-     * could override this function to set the {@link UiccCard#mCardId} to be something else instead
-     * of {@link UiccCard#mIccid}.</p>
+     * could override this function to set the {@link UiccCard#mCardString} to be something else
+     * instead of {@link UiccCard#mIccid}.</p>
      */
-    protected void updateCardId() {
-        mCardId = mIccid;
+    protected void updateCardString() {
+        mCardString = mIccid;
     }
 
     /**
@@ -504,9 +504,9 @@ public class UiccCard {
      * Returns the ID of this SIM card, it is the ICCID of the active profile on the card for a UICC
      * card or the EID of the card for an eUICC card.
      */
-    public String getCardId() {
-        if (!TextUtils.isEmpty(mCardId)) {
-            return mCardId;
+    public String getCardString() {
+        if (!TextUtils.isEmpty(mCardString)) {
+            return mCardString;
         } else if (mUiccProfile != null) {
             return mUiccProfile.getIccId();
         } else {
@@ -528,7 +528,7 @@ public class UiccCard {
         pw.println("UiccCard:");
         pw.println(" mCi=" + mCi);
         pw.println(" mCardState=" + mCardState);
-        pw.println(" mCardId=" + mCardId);
+        pw.println(" mCardString=" + mCardString);
         pw.println(" mPhoneId=" + mPhoneId);
         pw.println();
         if (mUiccProfile != null) {

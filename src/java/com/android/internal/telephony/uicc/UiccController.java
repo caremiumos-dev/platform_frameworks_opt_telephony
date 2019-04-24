@@ -381,20 +381,20 @@ public class UiccController extends Handler {
      * @return int Index of UiccSlot for the given cardId if one is found, {@link #INVALID_SLOT_ID}
      * otherwise
      */
-    public int getUiccSlotForCardId(String cardId) {
+    public int getUiccSlotForCardString(String cardString) {
         synchronized (mLock) {
-            // first look up based on cardId
+            // first look up based on cardString
             for (int idx = 0; idx < mUiccSlots.length; idx++) {
                 if (mUiccSlots[idx] != null) {
                     UiccCard uiccCard = mUiccSlots[idx].getUiccCard();
-                    if (uiccCard != null && cardId.equals(uiccCard.getCardId())) {
+                    if (uiccCard != null && cardString.equals(uiccCard.getCardString())) {
                         return idx;
                     }
                 }
             }
             // if a match is not found, do a lookup based on ICCID
             for (int idx = 0; idx < mUiccSlots.length; idx++) {
-                if (mUiccSlots[idx] != null && cardId.equals(mUiccSlots[idx].getIccId())) {
+                if (mUiccSlots[idx] != null && cardString.equals(mUiccSlots[idx].getIccId())) {
                     return idx;
                 }
             }
@@ -725,7 +725,7 @@ public class UiccController extends Handler {
             int cardId;
             boolean isRemovable = slot.isRemovable();
             if (isEuicc) {
-                eid = card.getCardId();
+                eid = card.getCardString();
                 cardId = convertToPublicCardId(eid);
             } else {
                 // leave eid null if the UICC is not embedded

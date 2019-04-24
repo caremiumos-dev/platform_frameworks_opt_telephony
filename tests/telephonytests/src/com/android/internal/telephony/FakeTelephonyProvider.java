@@ -78,7 +78,7 @@ public class FakeTelephonyProvider extends MockContentProvider {
                     + SubscriptionManager.SIM_PROVISIONING_STATUS
                     + " INTEGER DEFAULT " + SubscriptionManager.SIM_PROVISIONED + ","
                     + SubscriptionManager.IS_EMBEDDED + " INTEGER DEFAULT 0,"
-                    + SubscriptionManager.CARD_ID + " TEXT NOT NULL,"
+                    + SubscriptionManager.CARD_STRING + " TEXT NOT NULL,"
                     + SubscriptionManager.ACCESS_RULES + " BLOB,"
                     + SubscriptionManager.IS_REMOVABLE + " INTEGER DEFAULT 0,"
                     + SubscriptionManager.CB_EXTREME_THREAT_ALERT + " INTEGER DEFAULT 1,"

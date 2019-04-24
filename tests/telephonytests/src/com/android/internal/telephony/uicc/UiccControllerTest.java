@@ -254,7 +254,7 @@ public class UiccControllerTest extends TelephonyTest {
         mUiccControllerUT.mUiccSlots[0] = mMockSlot;
         doReturn(mMockCard).when(mMockSlot).getUiccCard();
         doReturn("A1B2C3D4").when(mMockCard).getIccId();
-        doReturn("A1B2C3D4").when(mMockCard).getCardId();
+        doReturn("A1B2C3D4").when(mMockCard).getCardString();
         doReturn(IccCardStatus.CardState.CARDSTATE_PRESENT).when(mMockCard).getCardState();
 
         // simulate card status loaded so that the UiccController sets the card ID
@@ -343,9 +343,9 @@ public class UiccControllerTest extends TelephonyTest {
         mUiccControllerUT.mUiccSlots[0] = mMockSlot;
         doReturn(false).when(mMockSlot).isEuicc();
         doReturn(mMockCard).when(mMockSlot).getUiccCard();
-        doReturn("ASDF1234").when(mMockCard).getCardId();
+        doReturn("ASDF1234").when(mMockCard).getCardString();
         doReturn(true).when(mMockSlot).isRemovable();
-        doReturn("A1B2C3D4").when(mMockCard).getCardId();
+        doReturn("A1B2C3D4").when(mMockCard).getCardString();
         doReturn("123451234567890").when(mMockCard).getIccId();
         doReturn(IccCardStatus.CardState.CARDSTATE_PRESENT).when(mMockCard).getCardState();
 
