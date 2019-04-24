@@ -936,10 +936,6 @@ public abstract class InboundSmsHandler extends StateMachine {
 
         SmsBroadcastReceiver resultReceiver = new SmsBroadcastReceiver(tracker);
 
-        if (!mUserManager.isUserUnlocked()) {
-            return processMessagePartWithUserLocked(tracker, pdus, destPort, resultReceiver);
-        }
-
         if (destPort == SmsHeader.PORT_WAP_PUSH) {
             // Build up the data stream
             ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -957,6 +953,14 @@ public abstract class InboundSmsHandler extends StateMachine {
                     }
                 }
                 output.write(pdu, 0, pdu.length);
+            }
+            if (!mUserManager.isUserUnlocked()) {
+                log("Credential-encrypted storage not available. Port: " + destPort);
+                if (mWapPush.isWapPushForMms(output.toByteArray(), this)) {
+                    // If the message is a regular MMS, show a new message notification.
+                    showNewMessageNotification();
+                }
+                return false;
             }
             int result = mWapPush.dispatchWapPdu(output.toByteArray(), resultReceiver,
                     this, address);
@@ -986,46 +990,32 @@ public abstract class InboundSmsHandler extends StateMachine {
             return false;
         }
 
-        boolean filterInvoked = filterSms(
-            pdus, destPort, tracker, resultReceiver, true /* userUnlocked */);
+        boolean filterInvoked;
+        if (!mUserManager.isUserUnlocked()) {
+            log("Credential-encrypted storage not available. Port: " + destPort);
+            if (destPort == -1) {
+                // This is a regular SMS - hand it to the carrier or system app for filtering.
+                filterInvoked =
+                        filterSms(
+                                pdus, destPort, tracker, resultReceiver, false /* userUnlocked */);
+                if (filterInvoked) {
+                    // filter invoked, wait for it to return the result.
+                    return true;
+                } else {
+                    // filter not invoked, show the notification and do nothing further.
+                    showNewMessageNotification();
+                }
+            }
+            return false;
+        }
+
+        filterInvoked = filterSms(pdus, destPort, tracker, resultReceiver, true /* userUnlocked */);
 
         if (!filterInvoked) {
             dispatchSmsDeliveryIntent(pdus, tracker.getFormat(), destPort, resultReceiver);
         }
 
         return true;
-    }
-
-    /**
-     * Processes the message part while the credential-encrypted storage is still locked.
-     *
-     * <p>If the message is a regular MMS, show a new message notification. If the message is a
-     * SMS, ask the carrier app to filter it and show the new message notification if the carrier
-     * app asks to keep the message.
-     *
-     * @return true if an ordered broadcast was sent to the carrier app; false otherwise.
-     */
-    private boolean processMessagePartWithUserLocked(InboundSmsTracker tracker,
-            byte[][] pdus, int destPort, SmsBroadcastReceiver resultReceiver) {
-        log("Credential-encrypted storage not available. Port: " + destPort);
-        if (destPort == SmsHeader.PORT_WAP_PUSH && mWapPush.isWapPushForMms(pdus[0], this)) {
-            showNewMessageNotification();
-            return false;
-        }
-        if (destPort == -1) {
-            // This is a regular SMS - hand it to the carrier or system app for filtering.
-            boolean filterInvoked = filterSms(
-                pdus, destPort, tracker, resultReceiver, false /* userUnlocked */);
-            if (filterInvoked) {
-                // filter invoked, wait for it to return the result.
-                return true;
-            } else {
-                // filter not invoked, show the notification and do nothing further.
-                showNewMessageNotification();
-                return false;
-            }
-        }
-        return false;
     }
 
     @UnsupportedAppUsage
