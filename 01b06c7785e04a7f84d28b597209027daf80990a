@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a818dc9_61431401",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneSwitcherTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-04-24T02:56:10Z",
+      "side": 0,
+      "message": "Just a note: these checks are removed due to an intentional behavior change (to have one of the phones \"allow data\" from a RIL perspective).",
+      "range": {
+        "startLine": 119,
+        "startChar": 50,
+        "endLine": 119,
+        "endChar": 62
+      },
+      "revId": "01b06c7785e04a7f84d28b597209027daf80990a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
