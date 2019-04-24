@@ -990,6 +990,26 @@ public abstract class InboundSmsHandler extends StateMachine {
             pdus, destPort, tracker, resultReceiver, true /* userUnlocked */);
 
         if (!filterInvoked) {
+            if (messageCount == 1 && !tracker.is3gpp2()) {
+                // Support Replace Short Message Type. See TS 23.040 9.2.3.9 more.
+                SmsMessage sms = SmsMessage.createFromPdu(pdus[0], SmsConstants.FORMAT_3GPP);
+                if (sms != null) {
+                    if (sms.isReplace() && hasReplaced(sms)) {
+                        deleteFromRawTable(
+                                tracker.getDeleteWhere(),
+                                tracker.getDeleteWhereArgs(),
+                                MARK_DELETED);
+                        return false; // Replacement is done.
+                    }
+                } else {
+                    loge("processMessagePart: SmsMessage.createFromPdu returned null");
+                    deleteFromRawTable(
+                            tracker.getDeleteWhere(),
+                            tracker.getDeleteWhereArgs(),
+                            DELETE_PERMANENTLY);
+                    return false;
+                }
+            }
             dispatchSmsDeliveryIntent(pdus, tracker.getFormat(), destPort, resultReceiver);
         }
 
@@ -1060,6 +1080,35 @@ public abstract class InboundSmsHandler extends StateMachine {
             (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(InboundSmsHandler.NOTIFICATION_TAG,
             InboundSmsHandler.NOTIFICATION_ID_NEW_MESSAGE);
+    }
+
+    private boolean hasReplaced(SmsMessage sms) {
+        final String where = "address=? AND protocol=?";
+        final ContentValues values = new ContentValues();
+        values.put(Telephony.Sms.Inbox.ADDRESS, sms.getDisplayOriginatingAddress());
+        values.put(Telephony.Sms.Inbox.BODY, replaceFormFeeds(sms.getDisplayMessageBody()));
+        values.put(Telephony.Sms.Inbox.DATE_SENT, sms.getTimestampMillis());
+        values.put(Telephony.Sms.Inbox.DATE, System.currentTimeMillis());
+        values.put(Telephony.Sms.Inbox.PROTOCOL, sms.getProtocolIdentifier());
+        values.put(Telephony.Sms.Inbox.SEEN, 0);
+        values.put(Telephony.Sms.Inbox.READ, 0);
+        final String subject = sms.getPseudoSubject();
+        if (!TextUtils.isEmpty(subject)) {
+            values.put(Telephony.Sms.Inbox.SUBJECT, subject);
+        }
+        values.put(Telephony.Sms.Inbox.REPLY_PATH_PRESENT, sms.isReplyPathPresent() ? 1 : 0);
+        values.put(Telephony.Sms.Inbox.SERVICE_CENTER, sms.getServiceCenterAddress());
+        values.put(Telephony.Sms.Inbox.SUBSCRIPTION_ID, mPhone.getSubId());
+        int cnt =
+                mResolver.update(
+                        Telephony.Sms.Inbox.CONTENT_URI,
+                        values,
+                        where,
+                        new String[] {
+                            sms.getDisplayOriginatingAddress(),
+                            Integer.toString(sms.getProtocolIdentifier())
+                        });
+        return (cnt == 0) ? false : true;
     }
 
     /**
