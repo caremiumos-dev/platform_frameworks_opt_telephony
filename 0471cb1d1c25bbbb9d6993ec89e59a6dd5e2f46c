@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19e609d1_e414945f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-04-24T23:56:40Z",
+      "side": 1,
+      "message": "Why is this if-else and not if A || B? The code in both blocks is identical other than the log lines, right? Or am I reading it wrong?",
+      "range": {
+        "startLine": 1011,
+        "startChar": 12,
+        "endLine": 1024,
+        "endChar": 13
+      },
+      "revId": "0471cb1d1c25bbbb9d6993ec89e59a6dd5e2f46c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
