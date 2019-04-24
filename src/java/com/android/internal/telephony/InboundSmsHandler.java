@@ -918,7 +918,7 @@ public abstract class InboundSmsHandler extends StateMachine {
 
         // At this point, all parts of the SMS are received. Update metrics for incoming SMS.
         // WAP-PUSH messages are handled below to also keep track of the result of the processing.
-        String format = (!tracker.is3gpp2() ? SmsConstants.FORMAT_3GPP : SmsConstants.FORMAT_3GPP2);
+        String format = tracker.getFormat();
         if (destPort != SmsHeader.PORT_WAP_PUSH) {
             mMetrics.writeIncomingSmsSession(mPhone.getPhoneId(), mLastSmsWasInjected,
                     format, timestamps, block);
@@ -952,7 +952,7 @@ public abstract class InboundSmsHandler extends StateMachine {
                     } else {
                         loge("processMessagePart: SmsMessage.createFromPdu returned null");
                         mMetrics.writeIncomingWapPush(mPhone.getPhoneId(), mLastSmsWasInjected,
-                                format, timestamps, false);
+                                SmsConstants.FORMAT_3GPP, timestamps, false);
                         return false;
                     }
                 }
@@ -990,7 +990,7 @@ public abstract class InboundSmsHandler extends StateMachine {
             pdus, destPort, tracker, resultReceiver, true /* userUnlocked */);
 
         if (!filterInvoked) {
-            dispatchSmsDeliveryIntent(pdus, tracker.getFormat(), destPort, resultReceiver);
+            dispatchSmsDeliveryIntent(pdus, format, destPort, resultReceiver);
         }
 
         return true;
