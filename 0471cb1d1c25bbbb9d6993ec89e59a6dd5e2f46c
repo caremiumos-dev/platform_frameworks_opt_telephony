@@ -46,6 +46,30 @@
       "revId": "0471cb1d1c25bbbb9d6993ec89e59a6dd5e2f46c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f498483_160dd7ea",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-04-25T16:50:06Z",
+      "side": 1,
+      "message": "Sure, its just a nit but I think thats better to do instead of code duplication. Maybe in a later CL.",
+      "parentUuid": "42738f5b_a1df4915",
+      "range": {
+        "startLine": 1011,
+        "startChar": 12,
+        "endLine": 1024,
+        "endChar": 13
+      },
+      "revId": "0471cb1d1c25bbbb9d6993ec89e59a6dd5e2f46c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
