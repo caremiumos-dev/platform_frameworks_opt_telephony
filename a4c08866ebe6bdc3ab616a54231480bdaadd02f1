@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62758bc9_b49f8fd1",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-25T21:13:39Z",
+      "side": 1,
+      "message": "TODO: remove",
+      "range": {
+        "startLine": 402,
+        "startChar": 55,
+        "endLine": 402,
+        "endChar": 84
+      },
+      "revId": "a4c08866ebe6bdc3ab616a54231480bdaadd02f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9835cdff_4460e623",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccCardController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-25T21:13:39Z",
+      "side": 1,
+      "message": "TODO: Also update callsites in EuiccCardManager.java",
+      "range": {
+        "startLine": 174,
+        "startChar": 22,
+        "endLine": 174,
+        "endChar": 41
+      },
+      "revId": "a4c08866ebe6bdc3ab616a54231480bdaadd02f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5a31b9e_aca1ae7a",
+        "filename": "src/java/com/android/internal/telephony/euicc/EuiccCardController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-25T21:13:39Z",
+      "side": 1,
+      "message": "TODO: rename these args in IEuiccCardController.aidl",
+      "range": {
+        "startLine": 174,
+        "startChar": 42,
+        "endLine": 174,
+        "endChar": 52
+      },
+      "revId": "a4c08866ebe6bdc3ab616a54231480bdaadd02f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e622fceb_4427ec42",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-25T21:13:39Z",
+      "side": 1,
+      "message": "TODO: card string",
+      "range": {
+        "startLine": 113,
+        "startChar": 19,
+        "endLine": 113,
+        "endChar": 21
+      },
+      "revId": "a4c08866ebe6bdc3ab616a54231480bdaadd02f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb9db85b_d7528733",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCard.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-25T21:13:39Z",
+      "side": 1,
+      "message": "TODO: update comment",
+      "range": {
+        "startLine": 504,
+        "startChar": 0,
+        "endLine": 506,
+        "endChar": 0
+      },
+      "revId": "a4c08866ebe6bdc3ab616a54231480bdaadd02f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "715a2859_6cec7cfa",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/UiccControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-25T21:13:39Z",
+      "side": 1,
+      "message": "TODO: remove",
+      "range": {
+        "startLine": 346,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 61
+      },
+      "revId": "a4c08866ebe6bdc3ab616a54231480bdaadd02f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
