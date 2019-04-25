@@ -22,6 +22,30 @@
       "revId": "0471cb1d1c25bbbb9d6993ec89e59a6dd5e2f46c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42738f5b_a1df4915",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-04-25T00:00:01Z",
+      "side": 1,
+      "message": "its just the log lines, but I think the log differentiation is useful. We could do (A || B) and just print out mHasBuiltInEuicc and !mUiccSlots[slotId].isRemovable() in the log if we want",
+      "parentUuid": "19e609d1_e414945f",
+      "range": {
+        "startLine": 1011,
+        "startChar": 12,
+        "endLine": 1024,
+        "endChar": 13
+      },
+      "revId": "0471cb1d1c25bbbb9d6993ec89e59a6dd5e2f46c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
