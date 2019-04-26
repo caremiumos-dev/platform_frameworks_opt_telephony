@@ -1016,17 +1016,15 @@ public class UiccController extends Handler {
         addCardId(eid);
         if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID
                 || mDefaultEuiccCardId == TEMPORARILY_UNSUPPORTED_CARD_ID) {
-            if (!mUiccSlots[slotId].isRemovable()) {
+            boolean builtInEuicc = !mUiccSlots[slotId].isRemovable();
+            if (builtInEuicc || !mHasBuiltInEuicc) {
+                // we set mDefaultEuiccCardId if the eUICC is built in, or it is removable but there
+                // are no non-removable eUICCs
                 mDefaultEuiccCardId = convertToPublicCardId(eid);
                 String logStr = "onEidReady: eid=" + eid + " slot=" + slotId
-                        + " mDefaultEuiccCardId=" + mDefaultEuiccCardId;
-                sLocalLog.log(logStr);
-                log(logStr);
-            } else if (!mHasBuiltInEuicc) {
-                // we only set a removable eUICC to the default if there are no non-removable eUICCs
-                mDefaultEuiccCardId = convertToPublicCardId(eid);
-                String logStr = "onEidReady: eid=" + eid + " from removable eUICC in slot="
-                        + slotId + " mDefaultEuiccCardId=" + mDefaultEuiccCardId;
+                        + " mDefaultEuiccCardId=" + mDefaultEuiccCardId
+                        + " builtInEuicc=" + builtInEuicc
+                        + " mHasBuiltInEuicc=" + mHasBuiltInEuicc;
                 sLocalLog.log(logStr);
                 log(logStr);
             }
