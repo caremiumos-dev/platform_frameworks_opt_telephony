@@ -174,7 +174,8 @@ public class RcsMessageStoreController extends IRcs.Stub {
         final long identity = Binder.clearCallingIdentity();
         try {
             return fn.get();
-        } catch (RemoteException e) {
+        } catch (Exception e) {
+            Rlog.e(TAG, "Exception when running as self: " + e);
             throw new RuntimeException(e);
         } finally {
             Binder.restoreCallingIdentity(identity);
