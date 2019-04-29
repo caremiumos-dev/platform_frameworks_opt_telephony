@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ef4e6d3_7c3fb02d",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1318036
+      },
+      "writtenOn": "2019-04-29T23:26:32Z",
+      "side": 1,
+      "message": "nit: line break looks a little weird",
+      "range": {
+        "startLine": 311,
+        "startChar": 15,
+        "endLine": 312,
+        "endChar": 30
+      },
+      "revId": "29760fb1999f6991f23d79be577a5c57875e6027",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
