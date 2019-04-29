@@ -22,6 +22,30 @@
       "revId": "29760fb1999f6991f23d79be577a5c57875e6027",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f242c1b9_c372ff4c",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-04-29T23:50:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ef4e6d3_7c3fb02d",
+      "range": {
+        "startLine": 311,
+        "startChar": 15,
+        "endLine": 312,
+        "endChar": 30
+      },
+      "revId": "29760fb1999f6991f23d79be577a5c57875e6027",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
