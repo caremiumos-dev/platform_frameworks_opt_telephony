@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e07ea626_5e441127",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-04-30T21:36:52Z",
+      "side": 1,
+      "message": "Seems not used.",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 46
+      },
+      "revId": "4ccf04fcd6507f91b2bc38827bd5ddec09e8829a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
