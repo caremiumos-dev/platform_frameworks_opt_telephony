@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b6f2e73_85f88724",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-04-30T18:11:15Z",
+      "side": 1,
+      "message": "It should be okay to leave class name empty here.",
+      "range": {
+        "startLine": 290,
+        "startChar": 42,
+        "endLine": 290,
+        "endChar": 77
+      },
+      "revId": "2f6016c56dda6f7c1f0d3bcbe273e9869e90e86e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
