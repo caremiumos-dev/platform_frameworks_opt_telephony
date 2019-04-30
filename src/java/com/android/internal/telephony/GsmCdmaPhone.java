@@ -2803,6 +2803,23 @@ public class GsmCdmaPhone extends Phone {
                     loge("didn't get broadcastEmergencyCallStateChanges from carrier config");
                 }
 
+                if (b != null) {
+                    mAllowedRans = null;
+                    allowedRans = b.getStringArray(CarrierConfigManager.ALLOWED_RANS);
+                    if (!ArrayUtils.isEmpty(allowedRans)) {
+                        ranSet = new HashSet<Integer>();
+                        for (String ran : allowedRans) {
+                            int ran = AccessNetworkConstants.AccessNetworkType.fromString(ran);
+                            if (ran != AccessNetworkConstants.AccessNetworkType.UNKNOWN) {
+                                ranSet.add(ran);
+                            }
+                        }
+                        if (!ranSet.isEmpty()) {
+                            mAllowedRans = ranSet;
+                        }
+                    }
+                }
+
                 // Changing the cdma roaming settings based carrier config.
                 if (b != null) {
                     int config_cdma_roaming_mode = b.getInt(

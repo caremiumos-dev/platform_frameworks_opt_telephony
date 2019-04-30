@@ -300,6 +300,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected boolean mEcmCanceledForEmergency = false;
     private volatile long mTimeLastEmergencySmsSentMs = EMERGENCY_SMS_NO_TIME_RECORDED;
 
+    protected Set<Integer> mAllowedRans = null;
+
     // Variable to cache the video capability. When RAT changes, we lose this info and are unable
     // to recover from the state. We cache it and notify listeners when they register.
     protected boolean mIsVideoCapable = false;
