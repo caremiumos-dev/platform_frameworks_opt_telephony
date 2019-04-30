@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7790263e_59952b47",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-04-30T21:38:32Z",
+      "side": 1,
+      "message": "You can just call Binder.getCallingUid() here instead of passing it in from SmsManager.  Until the Binder.clearCallingIdentity below on line 163, the Binder.getCallingUid() will be the same.\n\nThen I\u0027d recommend giving SEND_SMS permission to Telecom in its manifest as well as in the com.android.server.telecom section of data/etc/privapp-permissions-platform.xml.",
+      "range": {
+        "startLine": 150,
+        "startChar": 76,
+        "endLine": 150,
+        "endChar": 94
+      },
+      "revId": "ace6350c1eafdf183c8311649f6b1cef9784b995",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
