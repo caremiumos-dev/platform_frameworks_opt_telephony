@@ -147,9 +147,9 @@ public class SmsController extends ISmsImplBase {
     }
 
     @Override
-    public void sendTextForSubscriber(int subId, String callingPackage, String destAddr,
-            String scAddr, String text, PendingIntent sentIntent, PendingIntent deliveryIntent,
-            boolean persistMessageForNonDefaultSmsApp) {
+    public void sendTextForSubscriber(int subId, String callingPackage,
+            String destAddr, String scAddr, String text, PendingIntent sentIntent,
+            PendingIntent deliveryIntent, boolean persistMessageForNonDefaultSmsApp) {
         if (!getSmsPermissions(subId).checkCallingCanSendText(persistMessageForNonDefaultSmsApp,
                 callingPackage, "Sending SMS message")) {
             sendErrorInPendingIntent(sentIntent, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
@@ -228,9 +228,10 @@ public class SmsController extends ISmsImplBase {
     }
 
     @Override
-    public void sendMultipartTextForSubscriber(int subId, String callingPackage, String destAddr,
-            String scAddr, List<String> parts, List<PendingIntent> sentIntents,
-            List<PendingIntent> deliveryIntents, boolean persistMessageForNonDefaultSmsApp) {
+    public void sendMultipartTextForSubscriber(int subId, String callingPackage,
+            String destAddr, String scAddr, List<String> parts,
+            List<PendingIntent> sentIntents, List<PendingIntent> deliveryIntents,
+            boolean persistMessageForNonDefaultSmsApp) {
         IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
         if (iccSmsIntMgr != null) {
             iccSmsIntMgr.sendMultipartText(callingPackage, destAddr, scAddr, parts, sentIntents,

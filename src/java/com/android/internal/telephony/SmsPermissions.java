@@ -71,7 +71,7 @@ public class SmsPermissions {
                         android.Manifest.permission.MODIFY_PHONE_STATE, message);
             }
         }
-        return checkCallingCanSendSms(callingPackage, message);
+        return checkCallingOrSelfCanSendSms(callingPackage, message);
     }
 
 
@@ -99,20 +99,6 @@ public class SmsPermissions {
         }
 
         TelephonyPermissions.enforceCallingOrSelfCarrierPrivilege(mPhone.getSubId(), message);
-    }
-
-
-    /**
-     * Check that the caller has SEND_SMS permissions. Can only be called during an IPC.
-     *
-     * @throws SecurityException if the caller is missing the permission declaration or has had the
-     *                           permission revoked at runtime.
-     * @return whether the caller has the OP_SEND_SMS AppOps bit.
-     */
-    public boolean checkCallingCanSendSms(String callingPackage, String message) {
-        mContext.enforceCallingPermission(Manifest.permission.SEND_SMS, message);
-        return mAppOps.noteOp(AppOpsManager.OP_SEND_SMS, Binder.getCallingUid(), callingPackage)
-                == AppOpsManager.MODE_ALLOWED;
     }
 
     /**
