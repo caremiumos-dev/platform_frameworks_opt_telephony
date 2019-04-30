@@ -147,11 +147,15 @@ public class SmsController extends ISmsImplBase {
     }
 
     @Override
-    public void sendTextForSubscriber(int subId, String callingPackage, String destAddr,
-            String scAddr, String text, PendingIntent sentIntent, PendingIntent deliveryIntent,
-            boolean persistMessageForNonDefaultSmsApp) {
-        if (!getSmsPermissions(subId).checkCallingCanSendText(persistMessageForNonDefaultSmsApp,
-                callingPackage, "Sending SMS message")) {
+    public void sendTextForSubscriber(int subId, String callingPackage, int externalCallingUid,
+            String destAddr, String scAddr, String text, PendingIntent sentIntent,
+            PendingIntent deliveryIntent, boolean persistMessageForNonDefaultSmsApp) {
+        if (callingPackage == null) {
+            Rlog.d(LOG_TAG, "retrive calling package using: " + externalCallingUid);
+            callingPackage = mContext.getPackageManager().getNameForUid(externalCallingUid);
+        }
+        if (!callingCanSendText(persistMessageForNonDefaultSmsApp, callingPackage,
+                externalCallingUid, "Sending SMS message", subId)) {
             sendErrorInPendingIntent(sentIntent, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
             return;
         }
@@ -169,6 +173,22 @@ public class SmsController extends ISmsImplBase {
             sendIccText(subId, callingPackage, destAddr, scAddr, text, sentIntent, deliveryIntent,
                     persistMessageForNonDefaultSmsApp);
         }
+    }
+
+    private boolean callingCanSendText(boolean persistMessageForNonDefaultSmsApp,
+            String callingPackage, int uid, String message, int subId) {
+        if (!persistMessageForNonDefaultSmsApp) {
+            try {
+                getSmsPermissions(subId).enforceCallerIsImsAppOrCarrierApp(message);
+                // No need to also check SEND_SMS.
+                return true;
+            } catch (SecurityException e) {
+                mContext.enforceCallingPermission(
+                        android.Manifest.permission.MODIFY_PHONE_STATE, message);
+            }
+        }
+        return getSmsPermissions(subId)
+                .checkCallingCanSendSms(callingPackage, uid, message);
     }
 
     private boolean isBluetoothSubscription(SubscriptionInfo info) {
@@ -228,9 +248,14 @@ public class SmsController extends ISmsImplBase {
     }
 
     @Override
-    public void sendMultipartTextForSubscriber(int subId, String callingPackage, String destAddr,
-            String scAddr, List<String> parts, List<PendingIntent> sentIntents,
-            List<PendingIntent> deliveryIntents, boolean persistMessageForNonDefaultSmsApp) {
+    public void sendMultipartTextForSubscriber(int subId, String callingPackage,
+            int externalCallingUid, String destAddr, String scAddr, List<String> parts,
+            List<PendingIntent> sentIntents, List<PendingIntent> deliveryIntents,
+            boolean persistMessageForNonDefaultSmsApp) {
+        if (callingPackage == null) {
+            Rlog.d(LOG_TAG, "retrive calling package using: " + externalCallingUid);
+            callingPackage = mContext.getPackageManager().getNameForUid(externalCallingUid);
+        }
         IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
         if (iccSmsIntMgr != null) {
             iccSmsIntMgr.sendMultipartText(callingPackage, destAddr, scAddr, parts, sentIntents,

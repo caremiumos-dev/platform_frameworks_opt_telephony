@@ -71,7 +71,7 @@ public class SmsPermissions {
                         android.Manifest.permission.MODIFY_PHONE_STATE, message);
             }
         }
-        return checkCallingCanSendSms(callingPackage, message);
+        return checkCallingCanSendSms(callingPackage, Binder.getCallingUid(), message);
     }
 
 
@@ -109,9 +109,9 @@ public class SmsPermissions {
      *                           permission revoked at runtime.
      * @return whether the caller has the OP_SEND_SMS AppOps bit.
      */
-    public boolean checkCallingCanSendSms(String callingPackage, String message) {
+    public boolean checkCallingCanSendSms(String callingPackage, int callingUid, String message) {
         mContext.enforceCallingPermission(Manifest.permission.SEND_SMS, message);
-        return mAppOps.noteOp(AppOpsManager.OP_SEND_SMS, Binder.getCallingUid(), callingPackage)
+        return mAppOps.noteOp(AppOpsManager.OP_SEND_SMS, callingUid, callingPackage)
                 == AppOpsManager.MODE_ALLOWED;
     }
 
