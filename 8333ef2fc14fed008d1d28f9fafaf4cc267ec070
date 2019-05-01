@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "796dee93_a031d006",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccIoResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-05-01T21:50:01Z",
+      "side": 1,
+      "message": "Done. Using sw2 values in a couple other places too (sw1 \u003d\u003d 0x61, 0x6C)",
+      "parentUuid": "ae1ea477_b0b1214d",
+      "range": {
+        "startLine": 53,
+        "startChar": 28,
+        "endLine": 54,
+        "endChar": 72
+      },
+      "revId": "8333ef2fc14fed008d1d28f9fafaf4cc267ec070",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb8bb47c_2f75e40c",
         "filename": "src/java/com/android/internal/telephony/uicc/IccIoResult.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "3bb17de1_d899b39c",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccIoResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-05-01T21:50:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb8bb47c_2f75e40c",
+      "range": {
+        "startLine": 136,
+        "startChar": 79,
+        "endLine": 136,
+        "endChar": 80
+      },
+      "revId": "8333ef2fc14fed008d1d28f9fafaf4cc267ec070",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e17e088a_2e91cf8e",
         "filename": "src/java/com/android/internal/telephony/uicc/IccIoResult.java",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "8333ef2fc14fed008d1d28f9fafaf4cc267ec070",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05fdb452_418e6be0",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccIoResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2019-05-01T21:50:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e17e088a_2e91cf8e",
+      "range": {
+        "startLine": 158,
+        "startChar": 42,
+        "endLine": 158,
+        "endChar": 43
+      },
+      "revId": "8333ef2fc14fed008d1d28f9fafaf4cc267ec070",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
