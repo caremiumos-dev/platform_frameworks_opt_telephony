@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae1ea477_b0b1214d",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccIoResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-05-01T21:31:14Z",
+      "side": 1,
+      "message": "Based on the spec, how about\n\n\"command successful but after using an internal update retry routine, or verification failed\"\n\nIt\u0027s not high priority but we may also want to follow up with something that checks the last nibble (X) of sw2 and includes it in the message\n\n\"command successful but after using an internal update retry routine X times, or verification failed, X retries remaining\"",
+      "range": {
+        "startLine": 53,
+        "startChar": 28,
+        "endLine": 54,
+        "endChar": 72
+      },
+      "revId": "8333ef2fc14fed008d1d28f9fafaf4cc267ec070",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb8bb47c_2f75e40c",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccIoResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-05-01T21:31:14Z",
+      "side": 1,
+      "message": "nit: no periods at the end for consistency, I guess?",
+      "range": {
+        "startLine": 136,
+        "startChar": 79,
+        "endLine": 136,
+        "endChar": 80
+      },
+      "revId": "8333ef2fc14fed008d1d28f9fafaf4cc267ec070",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e17e088a_2e91cf8e",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccIoResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-05-01T21:31:14Z",
+      "side": 1,
+      "message": "/\"",
+      "range": {
+        "startLine": 158,
+        "startChar": 42,
+        "endLine": 158,
+        "endChar": 43
+      },
+      "revId": "8333ef2fc14fed008d1d28f9fafaf4cc267ec070",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
