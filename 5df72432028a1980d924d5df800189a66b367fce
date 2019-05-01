@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ca871625_5432982b",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-05-01T18:42:28Z",
+      "side": 1,
+      "message": "I did this so that in http://r.android.com/927198 we could also clear and restore the calling identity. Originally I did just have the check in each one, and changed to this in a separate CL before the calling identity change.\n\nOnce we add in the clearing of the calling identity it seemed like a worthwhile change to me, since there is a restore step that happens after the operation. It seemed like a good way to ensure all operations had consistent behavior.\n\nIf you do not like it there either, I can change it though.",
+      "parentUuid": "f9e88eb9_feec14ee",
+      "revId": "5df72432028a1980d924d5df800189a66b367fce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c47c899f_c862cbda",
         "filename": "src/java/com/android/internal/telephony/ims/RcsPermissions.java",
         "patchSetId": 9
@@ -30,6 +48,24 @@
       "writtenOn": "2019-05-01T16:45:10Z",
       "side": 1,
       "message": "There\u0027s only appOp for write? No permission check?",
+      "revId": "5df72432028a1980d924d5df800189a66b367fce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e5b1737_e8215cd2",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsPermissions.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1396528
+      },
+      "writtenOn": "2019-05-01T18:42:28Z",
+      "side": 1,
+      "message": "From what I could tell that is true. Other places where we only check appOp:\n\n- TelephonyPermissions only has appOp for WRITE_SMS, but permission check for READ_SMS (https://android.googlesource.com/platform/frameworks/base/+/master/telephony/java/com/android/internal/telephony/TelephonyPermissions.java#247)\n- MmsServiceBroker (https://android.googlesource.com/platform/frameworks/base/+/master/services/core/java/com/android/server/MmsServiceBroker.java#390)\n\nThe TelephonyProvider only lists read SMS permissions in the manifest (https://android.googlesource.com/platform/packages/providers/TelephonyProvider/+/3a3a5d145d380deef2d5b7c3150864cd04be397f/AndroidManifest.xml) and checks appOps in the provider.\n\nIn addition, I do not see a WRITE_SMS permission listed in Manifest.permission or in the Android API documentation (https://developer.android.com/guide/topics/permissions/overview).\n\nPlease let me know if I missed something and I should be checking something else though.",
+      "parentUuid": "c47c899f_c862cbda",
       "revId": "5df72432028a1980d924d5df800189a66b367fce",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
