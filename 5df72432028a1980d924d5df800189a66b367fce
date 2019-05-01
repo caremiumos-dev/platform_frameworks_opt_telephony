@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9e88eb9_feec14ee",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-05-01T16:45:10Z",
+      "side": 1,
+      "message": "I feel this is unnecessary if it\u0027s just to avoid permission check/try catch in each function. It would be better to simply check permission in each one separately.",
+      "revId": "5df72432028a1980d924d5df800189a66b367fce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c47c899f_c862cbda",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsPermissions.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-05-01T16:45:10Z",
+      "side": 1,
+      "message": "There\u0027s only appOp for write? No permission check?",
+      "revId": "5df72432028a1980d924d5df800189a66b367fce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
