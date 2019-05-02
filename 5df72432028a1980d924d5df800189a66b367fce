@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5988d540_7ff9c429",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-05-02T20:42:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ca871625_5432982b",
+      "revId": "5df72432028a1980d924d5df800189a66b367fce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c47c899f_c862cbda",
         "filename": "src/java/com/android/internal/telephony/ims/RcsPermissions.java",
         "patchSetId": 9
@@ -69,6 +87,24 @@
       "revId": "5df72432028a1980d924d5df800189a66b367fce",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15d2453a_799a7926",
+        "filename": "src/java/com/android/internal/telephony/ims/RcsPermissions.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-05-02T20:42:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9e5b1737_e8215cd2",
+      "revId": "5df72432028a1980d924d5df800189a66b367fce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
