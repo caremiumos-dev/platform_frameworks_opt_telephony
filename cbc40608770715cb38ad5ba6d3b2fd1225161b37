@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3155edee_f1aa5bd8",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1152149
+      },
+      "writtenOn": "2019-05-03T15:00:48Z",
+      "side": 1,
+      "message": "Since the countryIso for test MCCs will return \"\", the \u0027mcc\u0027 variable here will be reset to the one received from the mCellInfoList object. For test MCCs, this will again be null and the \u0027mcc\u0027 variable too will end up being assigned null.\n\nAs such, the additional condition added to Line# 448 will not be helpful as the comparison will be done with \u0027null\u0027 MCC instead of the test MCC.\n\n\u003d\u003dLog snippets\u003d\u003d\n\n04-29 12:12:10.190  4064  4064 D LocaleTrackerMod: Operator numeric changes to \"00101\"\n04-29 12:12:10.190  4064  4064 D LocaleTrackerMod: updateLocale: mcc \u003d null, country \u003d",
+      "revId": "cbc40608770715cb38ad5ba6d3b2fd1225161b37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
