@@ -3416,6 +3416,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
     public void getCellInfoList(Message result, WorkSource workSource) {
         workSource = getDeafultWorkSourceIfInvalid(workSource);
         IRadio radioProxy = getRadioProxy(result);
+
+        Log.d("NSAT", "RIL received CellInfo reqeust");
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_GET_CELL_INFO_LIST, result,
                     workSource);
@@ -3427,6 +3429,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
             try {
                 radioProxy.getCellInfoList(rr.mSerial);
             } catch (RemoteException | RuntimeException e) {
+                Log.d("NSAT", "RIL received error from IRadio: " + e
+                        + "\nstacktrace:" + Arrays.toString(e.getStackTrace()));
                 handleRadioProxyExceptionForRR(rr, "getCellInfoList", e);
             }
         }

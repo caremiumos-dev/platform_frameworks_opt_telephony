@@ -80,6 +80,7 @@ import android.telephony.gsm.GsmCellLocation;
 import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.LocalLog;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -130,7 +131,7 @@ import java.util.regex.PatternSyntaxException;
 public class ServiceStateTracker extends Handler {
     static final String LOG_TAG = "SST";
     static final boolean DBG = true;
-    private static final boolean VDBG = false;  // STOPSHIP if true
+    private static final boolean VDBG = true;  // STOPSHIP if true
 
     private static final String PROP_FORCE_ROAMING = "telephony.test.forceRoaming";
 
@@ -1096,12 +1097,18 @@ public class ServiceStateTracker extends Handler {
                 if (msg.obj != null) {
                     ar = (AsyncResult) msg.obj;
                     if (ar.exception != null) {
+                        Log.d("NSAT SST", "error returned, e=" + ar.exception
+                                + " message=" + ar.exception.getMessage()
+                                + "\n"
+                                + Arrays.toString(ar.exception.getStackTrace()));
                         log("EVENT_GET_CELL_INFO_LIST: error ret null, e=" + ar.exception);
                         ex = ar.exception;
                     } else if (ar.result == null) {
+                        Log.d("NSAT SST", "Invalid CellInfo result returned");
                         loge("Invalid CellInfo result");
                     } else {
                         cellInfo = (List<CellInfo>) ar.result;
+                        Log.d("NSAT SST", "CellInfo returned=" + cellInfo);
                         updateOperatorNameForCellInfo(cellInfo);
                         mLastCellInfoList = cellInfo;
                         mPhone.notifyCellInfo(cellInfo);
@@ -1120,6 +1127,7 @@ public class ServiceStateTracker extends Handler {
                         break;
                     }
                     // We've received a legitimate timeout, so something has gone terribly wrong.
+                    Log.d("NSAT SST", "Timeout waiting for CellInfo; (everybody panic)!");
                     loge("Timeout waiting for CellInfo; (everybody panic)!");
                     mLastCellInfoList = null;
                     // Since the timeout is applicable, fall through and update all synchronous
@@ -4798,6 +4806,7 @@ public class ServiceStateTracker extends Handler {
             final long curTime = SystemClock.elapsedRealtime();
             if ((curTime - mLastCellInfoReqTime) < mCellInfoMinIntervalMs) {
                 if (rspMsg != null) {
+                    Log.d("NSAT SST", "SST.requestAllCellInfo() returning cached result");
                     if (DBG) log("SST.requestAllCellInfo(): return last, back to back calls");
                     AsyncResult.forMessage(rspMsg, mLastCellInfoList, null);
                     rspMsg.sendToTarget();
@@ -4814,6 +4823,7 @@ public class ServiceStateTracker extends Handler {
             // Send a cell info request and also chase it with a timeout message
             Message msg = obtainMessage(EVENT_GET_CELL_INFO_LIST);
             mCi.getCellInfoList(msg, workSource);
+            Log.d("NSAT SST", "SST.requestAllCellInfo() sending fresh request");
             // This message will arrive TIMEOUT ms later and ensure that we don't wait forever for
             // a CELL_INFO response.
             sendMessageDelayed(
