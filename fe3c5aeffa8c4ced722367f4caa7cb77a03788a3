@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af41850f_6b111762",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-05-16T20:47:23Z",
+      "side": 1,
+      "message": "Mark it @Override",
+      "revId": "fe3c5aeffa8c4ced722367f4caa7cb77a03788a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1190e23_bc9a26e8",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-05-16T20:47:23Z",
+      "side": 1,
+      "message": "Mark it @Override",
+      "revId": "fe3c5aeffa8c4ced722367f4caa7cb77a03788a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
