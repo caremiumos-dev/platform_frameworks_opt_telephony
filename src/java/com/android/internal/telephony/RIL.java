@@ -1005,10 +1005,19 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
             }
 
+            ArrayList<String> emergencyUrns = new ArrayList<>();
+            for (String urn : emergencyNumberInfo.getEmergencyUrns()) {
+                emergencyUrns.add(urn);
+            }
+
             try {
                 radioProxy14.emergencyDial(rr.mSerial, dialInfo,
-                        emergencyNumberInfo.getEmergencyServiceCategoryBitmaskInternalDial(),
-                        (ArrayList) emergencyNumberInfo.getEmergencyUrns(),
+                        //We can add a emergency number with Emergency Service Category by eccdata,
+                        //but we can not get Emergency Service Category when emergencyDial.
+                        //support get service category bitmask from eccdata
+                        //emergencyNumberInfo.getEmergencyServiceCategoryBitmaskInternalDial(),
+                        emergencyNumberInfo.getEmergencyServiceCategoryBitmask(),
+                        emergencyUrns,
                         emergencyNumberInfo.getEmergencyCallRouting(),
                         hasKnownUserIntentEmergency,
                         emergencyNumberInfo.getEmergencyNumberSourceBitmask()
@@ -5620,6 +5629,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_UNSOL_KEEPALIVE_STATUS";
             case RIL_UNSOL_PHYSICAL_CHANNEL_CONFIG:
                 return "RIL_UNSOL_PHYSICAL_CHANNEL_CONFIG";
+                //RIL_UNSOL_EMERGENCY_NUMBER_LIST to string
+            case  RIL_UNSOL_EMERGENCY_NUMBER_LIST:
+                return "UNSOL_EMERGENCY_NUMBER_LIST";
             default:
                 return "<unknown response>";
         }

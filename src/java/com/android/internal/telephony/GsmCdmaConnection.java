@@ -136,7 +136,6 @@ public class GsmCdmaConnection extends Connection {
         mHandler = new MyHandler(mOwner.getLooper());
 
         mAddress = dc.number;
-        setEmergencyCallInfo();
 
         mIsIncoming = dc.isMT;
         mCreateTime = System.currentTimeMillis();
@@ -150,6 +149,9 @@ public class GsmCdmaConnection extends Connection {
         mParent = parentFromDCState(dc.state);
         mParent.attach(this, dc);
 
+        //setEmergencyCallInfo after set mParent, otherwise, we can not get
+        // emergencyInfo since Connection.getCall returns null
+        setEmergencyCallInfo();
         fetchDtmfToneDelay(phone);
 
         setAudioQuality(getAudioQualityFromDC(dc.audioQuality));
@@ -178,9 +180,6 @@ public class GsmCdmaConnection extends Connection {
         }
 
         mAddress = PhoneNumberUtils.extractNetworkPortionAlt(dialString);
-        if (isEmergencyCall) {
-            setEmergencyCallInfo();
-        }
 
         mPostDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
 
@@ -206,7 +205,11 @@ public class GsmCdmaConnection extends Connection {
 
             }
         }
-
+        // setEmergencyCallInfo after set mParent, otherwise, we can not get
+        // emergencyInfo since Connection.getCall returns null
+        if (isEmergencyCall) {
+            setEmergencyCallInfo();
+        }
         fetchDtmfToneDelay(phone);
 
         setCallRadioTech(mOwner.getPhone().getCsCallRadioTech());
