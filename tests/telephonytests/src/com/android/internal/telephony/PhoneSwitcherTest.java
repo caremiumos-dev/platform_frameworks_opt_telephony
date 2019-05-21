@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -116,7 +117,6 @@ public class PhoneSwitcherTest extends TelephonyTest {
         NetworkRequest internetNetworkRequest = addInternetNetworkRequest(null, 50);
         waitABit();
 
-        assertFalse("data allowed after request", mDataAllowed[0]);
         assertFalse("phone active after request", mPhoneSwitcher
                 .shouldApplyNetworkRequest(internetNetworkRequest, 0));
 
@@ -132,7 +132,6 @@ public class PhoneSwitcherTest extends TelephonyTest {
         setDefaultDataSubId(0);
 
         verify(mActivePhoneSwitchHandler, never()).sendMessageAtTime(any(), anyLong());
-        assertFalse("data allowed", mDataAllowed[0]);
 
         setSlotIndexToSubId(0, 0);
         mSubChangedListener.onSubscriptionsChanged();
@@ -413,6 +412,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mPhoneSwitcher.registerForActivePhoneSwitch(mActivePhoneSwitchHandler,
                 ACTIVE_PHONE_SWITCH, null);
         verify(mActivePhoneSwitchHandler, times(2)).sendMessageAtTime(any(), anyLong());
+        clearInvocations(mMockRadioConfig);
         clearInvocations(mActivePhoneSwitchHandler);
 
         // Phone 0 has sub 1, phone 1 has sub 2.
@@ -471,6 +471,56 @@ public class PhoneSwitcherTest extends TelephonyTest {
 
         mHandlerThread.quit();
 
+    }
+
+    @Test
+    @SmallTest
+    public void testSetPreferredDataWithValidation() throws Exception {
+        final int numPhones = 2;
+        final int maxActivePhones = 1;
+        doReturn(true).when(mMockRadioConfig).isSetPreferredDataCommandSupported();
+        initialize(numPhones, maxActivePhones);
+
+        // Phone 0 has sub 1, phone 1 has sub 2.
+        // Sub 1 is default data sub.
+        // Both are active subscriptions are active sub, as they are in both active slots.
+        setSlotIndexToSubId(0, 1);
+        setSlotIndexToSubId(1, 2);
+        setDefaultDataSubId(1);
+        // Mark sub 2 as opportunistic.
+        doReturn(true).when(mSubscriptionController).isOpportunistic(2);
+
+        // Phone 0 (sub 1) should be activated as it has default data sub.
+        assertEquals(0, mPhoneSwitcher.getPreferredDataPhoneId());
+
+        // Set sub 2 as preferred sub should make phone 1 activated and phone 0 deactivated.
+        mPhoneSwitcher.trySetOpportunisticDataSubscription(2, true, null);
+        waitABit();
+        verify(mCellularNetworkValidator).validate(eq(2), anyInt(), eq(false),
+                eq(mPhoneSwitcher.mValidationCallback));
+        // Validation failed. Preferred data sub should remain 1, data phone should remain 0.
+        mPhoneSwitcher.mValidationCallback.onValidationResult(false, 2);
+        waitABit();
+        assertEquals(0, mPhoneSwitcher.getPreferredDataPhoneId());
+
+        // Validation succeeds. Preferred data sub changes to 2, data phone changes to 1.
+        mPhoneSwitcher.trySetOpportunisticDataSubscription(2, true, null);
+        waitABit();
+        mPhoneSwitcher.mValidationCallback.onValidationResult(true, 2);
+        waitABit();
+        assertEquals(1, mPhoneSwitcher.getPreferredDataPhoneId());
+
+        // Switching data back to primary (subId 1).
+        mPhoneSwitcher.trySetOpportunisticDataSubscription(
+                SubscriptionManager.DEFAULT_SUBSCRIPTION_ID, true, null);
+        waitABit();
+        verify(mCellularNetworkValidator).validate(eq(1), anyInt(), eq(false),
+                eq(mPhoneSwitcher.mValidationCallback));
+        mPhoneSwitcher.mValidationCallback.onValidationResult(true, 1);
+        waitABit();
+        assertEquals(0, mPhoneSwitcher.getPreferredDataPhoneId());
+
+        mHandlerThread.quit();
     }
 
     @Test
@@ -566,6 +616,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mSlotIndexToSubId = new int[numPhones][];
         doReturn(0).when(mPhone).getPhoneId();
         doReturn(1).when(mPhone2).getPhoneId();
+        doReturn(true).when(mPhone2).isUserDataEnabled();
         for (int i = 0; i < numPhones; i++) {
             mSlotIndexToSubId[i] = new int[1];
             mSlotIndexToSubId[i][0] = SubscriptionManager.INVALID_SUBSCRIPTION_ID;

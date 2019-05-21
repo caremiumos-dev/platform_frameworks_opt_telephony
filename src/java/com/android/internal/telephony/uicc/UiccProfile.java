@@ -338,20 +338,31 @@ public class UiccProfile extends IccCard {
         boolean preferCcName = config.getBoolean(
                 CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL, false);
         String ccName = config.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING);
+
+        String newCarrierName = null;
+        String currSpn = getServiceProviderName();
+        int nameSource = SubscriptionManager.NAME_SOURCE_SIM_SOURCE;
         // If carrier config is priority, use it regardless - the preference
         // and the name were both set by the carrier, so this is safe;
         // otherwise, if the SPN is priority but we don't have one *and* we have
         // a name in carrier config, use the carrier config name as a backup.
-        if (preferCcName || (TextUtils.isEmpty(getServiceProviderName())
-                && !TextUtils.isEmpty(ccName))) {
-            if (mIccRecords != null) {
-                mIccRecords.setServiceProviderName(ccName);
+        if (preferCcName || (TextUtils.isEmpty(currSpn) && !TextUtils.isEmpty(ccName))) {
+            newCarrierName = ccName;
+            nameSource = SubscriptionManager.NAME_SOURCE_CARRIER;
+        } else if (TextUtils.isEmpty(currSpn)) {
+            // currSpn is empty and could not get name from carrier config; get name from carrier id
+            Phone phone = PhoneFactory.getPhone(mPhoneId);
+            if (phone != null) {
+                newCarrierName = phone.getCarrierName();
             }
-            mTelephonyManager.setSimOperatorNameForPhone(mPhoneId, ccName);
+        }
+
+        if (!TextUtils.isEmpty(newCarrierName)) {
+            mTelephonyManager.setSimOperatorNameForPhone(mPhoneId, newCarrierName);
             mOperatorBrandOverrideRegistrants.notifyRegistrants();
         }
 
-        updateCarrierNameForSubscription(subCon, subId);
+        updateCarrierNameForSubscription(subCon, subId, nameSource);
     }
 
     /**
@@ -385,18 +396,17 @@ public class UiccProfile extends IccCard {
         if (!TextUtils.isEmpty(iso) &&
                 !iso.equals(mTelephonyManager.getSimCountryIsoForPhone(mPhoneId))) {
             mTelephonyManager.setSimCountryIsoForPhone(mPhoneId, iso);
-            SubscriptionController.getInstance().setCountryIso(iso, subId);
+            subCon.setCountryIso(iso, subId);
         }
     }
 
-    private void updateCarrierNameForSubscription(SubscriptionController subCon, int subId) {
+    private void updateCarrierNameForSubscription(SubscriptionController subCon, int subId,
+            int nameSource) {
         /* update display name with carrier override */
         SubscriptionInfo subInfo = subCon.getActiveSubscriptionInfo(
                 subId, mContext.getOpPackageName());
 
-        if (subInfo == null || subInfo.getNameSource()
-                == SubscriptionManager.NAME_SOURCE_USER_INPUT) {
-            // either way, there is no subinfo to update
+        if (subInfo == null) {
             return;
         }
 
@@ -405,7 +415,7 @@ public class UiccProfile extends IccCard {
 
         if (!TextUtils.isEmpty(newCarrierName) && !newCarrierName.equals(oldSubName)) {
             log("sim name[" + mPhoneId + "] = " + newCarrierName);
-            subCon.setDisplayName(newCarrierName, subId);
+            subCon.setDisplayNameUsingSrc(newCarrierName, subId, nameSource);
         }
     }
 

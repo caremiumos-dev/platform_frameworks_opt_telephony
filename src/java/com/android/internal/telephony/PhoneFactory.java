@@ -173,6 +173,7 @@ public class PhoneFactory {
 
                 Rlog.i(LOG_TAG, "Creating SubscriptionController");
                 SubscriptionController.init(context, sCommandsInterfaces);
+                MultiSimSettingController.init(context, SubscriptionController.getInstance());
 
                 if (context.getPackageManager().hasSystemFeature(
                         PackageManager.FEATURE_TELEPHONY_EUICC)) {
@@ -308,13 +309,16 @@ public class PhoneFactory {
                 throw new IllegalStateException("Default phones haven't been made yet!");
                 // CAF_MSIM FIXME need to introduce default phone id ?
             } else if (phoneId == SubscriptionManager.DEFAULT_PHONE_INDEX) {
-                if (DBG) dbgInfo = "phoneId == DEFAULT_PHONE_ID return sPhone";
+                if (DBG) {
+                    dbgInfo = "phoneId == DEFAULT_PHONE_ID return sPhone";
+                }
                 phone = sPhone;
             } else {
-                if (DBG) dbgInfo = "phoneId != DEFAULT_PHONE_ID return sPhones[phoneId]";
-                phone = (((phoneId >= 0)
-                                && (phoneId < TelephonyManager.getDefault().getPhoneCount()))
-                        ? sPhones[phoneId] : null);
+                if (DBG) {
+                    dbgInfo = "phoneId != DEFAULT_PHONE_ID return sPhones[phoneId]";
+                }
+                phone = (phoneId >= 0 && phoneId < sPhones.length)
+                            ? sPhones[phoneId] : null;
             }
             if (DBG) {
                 Rlog.d(LOG_TAG, "getPhone:- " + dbgInfo + " phoneId=" + phoneId +
@@ -455,6 +459,18 @@ public class PhoneFactory {
     public static void requestEmbeddedSubscriptionInfoListRefresh(
             int cardId, @Nullable Runnable callback) {
         sSubInfoRecordUpdater.requestEmbeddedSubscriptionInfoListRefresh(cardId, callback);
+    }
+
+    /**
+     * Get a the SmsController.
+     */
+    public static SmsController getSmsController() {
+        synchronized (sLockProxyPhones) {
+            if (!sMadeDefaults) {
+                throw new IllegalStateException("Default phones haven't been made yet!");
+            }
+            return sProxyController.getSmsController();
+        }
     }
 
     /**

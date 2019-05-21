@@ -139,7 +139,8 @@ public class DataEnabledSettings {
         if (changed) {
             mPhone.notifyUserMobileDataStateChanged(enabled);
             updateDataEnabledAndNotify(REASON_USER_DATA_ENABLED);
-            MultiSimSettingController.getInstance().onUserDataEnabled(mPhone.getSubId(), enabled);
+            MultiSimSettingController.getInstance().notifyUserDataEnabled(mPhone.getSubId(),
+                    enabled);
         }
     }
 
@@ -241,8 +242,8 @@ public class DataEnabledSettings {
                 Settings.Global.DATA_ROAMING, mPhone.getSubId(), enabled);
 
         if (changed) {
-            MultiSimSettingController.getInstance()
-                    .onRoamingDataEnabled(mPhone.getSubId(), enabled);
+            MultiSimSettingController.getInstance().notifyRoamingDataEnabled(mPhone.getSubId(),
+                    enabled);
         }
     }
 
@@ -287,6 +288,15 @@ public class DataEnabledSettings {
         SubscriptionInfo info = SubscriptionController.getInstance().getActiveSubscriptionInfo(
                 subId, context.getOpPackageName());
         return (info != null) && info.isOpportunistic() && info.getGroupUuid() == null;
+    }
+
+    public synchronized boolean isDataEnabled(int apnType) {
+        boolean userDataEnabled = isUserDataEnabled();
+        boolean isApnWhiteListed = SubscriptionController.getInstance().isApnWhiteListed(
+                mPhone.getSubId(), mPhone.getContext().getOpPackageName(), apnType);
+
+        return (mInternalDataEnabled && mPolicyDataEnabled && mCarrierDataEnabled
+                && (userDataEnabled || isApnWhiteListed));
     }
 
     private void log(String s) {

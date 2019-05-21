@@ -122,6 +122,14 @@ public class EmergencyNumberTracker extends Handler {
                             TelephonyManager.EXTRA_NETWORK_COUNTRY);
                     logd("ACTION_NETWORK_COUNTRY_CHANGED: PhoneId: " + phoneId + " CountryIso: "
                             + countryIso);
+                    // Sometimes the country is updated as an empty string when the network signal
+                    // is lost; though we may not call emergency when there is no signal, we want
+                    // to keep the old country iso to provide country-related emergency numbers,
+                    // because they think they are still in that country. So we do need to update
+                    // country change in this case.
+                    if (TextUtils.isEmpty(countryIso)) {
+                        return;
+                    }
                     updateEmergencyNumberDatabaseCountryChange(countryIso);
                 }
                 return;
@@ -473,7 +481,7 @@ public class EmergencyNumberTracker extends Handler {
                         || mCountryIso.equals("ni")) {
                     exactMatch = true;
                 } else {
-                    exactMatch = false;
+                    exactMatch = false || exactMatch;
                 }
                 if (exactMatch) {
                     if (num.getNumber().equals(number)) {
@@ -670,9 +678,11 @@ public class EmergencyNumberTracker extends Handler {
             // searches through the comma-separated list for a match,
             // return true if one is found.
             for (String emergencyNum : emergencyNumbers.split(",")) {
-                // It is not possible to append additional digits to an emergency number to dial
-                // the number in Brazil - it won't connect.
-                if (useExactMatch || "br".equalsIgnoreCase(mCountryIso)) {
+                // According to com.android.i18n.phonenumbers.ShortNumberInfo, in
+                // these countries, if extra digits are added to an emergency number,
+                // it no longer connects to the emergency service.
+                if (useExactMatch || mCountryIso.equals("br") || mCountryIso.equals("cl")
+                        || mCountryIso.equals("ni")) {
                     if (number.equals(emergencyNum)) {
                         return true;
                     } else {
@@ -687,7 +697,7 @@ public class EmergencyNumberTracker extends Handler {
                         return true;
                     } else {
                         for (String prefix : mEmergencyNumberPrefix) {
-                            if (number.equals(prefix + emergencyNum)) {
+                            if (number.startsWith(prefix + emergencyNum)) {
                                 return true;
                             }
                         }

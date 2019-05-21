@@ -100,6 +100,7 @@ import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings.DataEnabledChangedReason;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
+import com.android.internal.telephony.metrics.CallQualityMetrics;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.ImsConnectionState;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyCallSession;
@@ -114,6 +115,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -151,6 +153,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             new MmTelFeature.MmTelCapabilities();
 
     private TelephonyMetrics mMetrics;
+    private final Map<String, CallQualityMetrics> mCallQualityMetrics = new ConcurrentHashMap<>();
+    private final ConcurrentLinkedQueue<String> mLeastRecentCallId = new ConcurrentLinkedQueue<>();
     private boolean mCarrierConfigLoaded = false;
 
     private final MmTelFeatureListener mMmTelFeatureListener = new MmTelFeatureListener();
@@ -277,6 +281,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     static final int MAX_CONNECTIONS = 7;
     static final int MAX_CONNECTIONS_PER_CALL = 5;
+
+    // Max number of calls we will keep call quality history for (the history is saved in-memory and
+    // included in bug reports).
+    private static final int MAX_CALL_QUALITY_HISTORY = 10;
 
     private static final int EVENT_HANGUP_PENDINGMO = 18;
     private static final int EVENT_DIAL_PENDINGMO = 20;
@@ -640,6 +648,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         if (mCarrierConfigLoaded) {
             mImsManager.updateImsServiceConfig(true);
         }
+        // For compatibility with apps that still use deprecated intent
+        sendImsServiceStateIntent(ImsManager.ACTION_IMS_SERVICE_UP);
     }
 
     private void stopListeningForCalls() {
@@ -653,6 +663,16 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 Log.w(LOG_TAG, "stopListeningForCalls: unable to remove config callback.");
             }
             mImsManager.close();
+        }
+        // For compatibility with apps that still use deprecated intent
+        sendImsServiceStateIntent(ImsManager.ACTION_IMS_SERVICE_DOWN);
+    }
+
+    private void sendImsServiceStateIntent(String intentAction) {
+        Intent intent = new Intent(intentAction);
+        intent.putExtra(ImsManager.EXTRA_PHONE_ID, mPhone.getPhoneId());
+        if (mPhone != null && mPhone.getContext() != null) {
+            mPhone.getContext().sendBroadcast(intent);
         }
     }
 
@@ -1994,6 +2014,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 return DisconnectCause.INCOMING_REJECTED;
 
             case ImsReasonInfo.CODE_USER_TERMINATED_BY_REMOTE:
+            case ImsReasonInfo.CODE_SIP_USER_REJECTED:
                 return DisconnectCause.NORMAL;
 
             case ImsReasonInfo.CODE_SIP_FORBIDDEN:
@@ -2002,7 +2023,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             case ImsReasonInfo.CODE_SIP_REDIRECTED:
             case ImsReasonInfo.CODE_SIP_BAD_REQUEST:
             case ImsReasonInfo.CODE_SIP_NOT_ACCEPTABLE:
-            case ImsReasonInfo.CODE_SIP_USER_REJECTED:
             case ImsReasonInfo.CODE_SIP_GLOBAL_ERROR:
                 return DisconnectCause.SERVER_ERROR;
 
@@ -2103,6 +2123,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
             case ImsReasonInfo.CODE_UNOBTAINABLE_NUMBER:
                 return DisconnectCause.UNOBTAINABLE_NUMBER;
+
+            case ImsReasonInfo.CODE_MEDIA_NO_DATA:
+                return DisconnectCause.MEDIA_TIMEOUT;
 
             case ImsReasonInfo.CODE_UNSPECIFIED:
                 if (mPhone.getDefaultPhone().getServiceStateTracker().mRestrictedState
@@ -2319,8 +2342,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 cause = DisconnectCause.IMS_MERGED_SUCCESSFULLY;
             }
 
+            String callId = imsCall.getSession().getCallId();
             mMetrics.writeOnImsCallTerminated(mPhone.getPhoneId(), imsCall.getCallSession(),
-                    reasonInfo);
+                    reasonInfo, mCallQualityMetrics.get(callId));
+            pruneCallQualityMetricsHistory();
             mPhone.notifyImsReason(reasonInfo);
 
             if (reasonInfo.getCode() == ImsReasonInfo.CODE_SIP_ALTERNATE_EMERGENCY_CALL
@@ -2948,6 +2973,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             // convert ServiceState.radioTech to TelephonyManager.NetworkType constant
             mPhone.onCallQualityChanged(callQuality,
                     ServiceState.rilRadioTechnologyToNetworkType(imsCall.getRadioTechnology()));
+            String callId = imsCall.getSession().getCallId();
+            CallQualityMetrics cqm = mCallQualityMetrics.get(callId);
+            if (cqm == null) {
+                cqm = new CallQualityMetrics(mPhone);
+                mLeastRecentCallId.add(callId);
+            }
+            cqm.saveCallQuality(callQuality);
+            mCallQualityMetrics.put(callId, cqm);
         }
     };
 
@@ -3500,6 +3533,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         pw.println(" mDefaultDialerUid=" + mDefaultDialerUid.get());
         pw.println(" mVtDataUsageSnapshot=" + mVtDataUsageSnapshot);
         pw.println(" mVtDataUsageUidSnapshot=" + mVtDataUsageUidSnapshot);
+        pw.println(" mCallQualityMetrics=" + mCallQualityMetrics);
 
         pw.flush();
         pw.println("++++++++++++++++++++++++++++++++");
@@ -4074,6 +4108,13 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     @VisibleForTesting
     public void setDataEnabled(boolean isDataEnabled) {
         mIsDataEnabled = isDataEnabled;
+    }
+
+    // Removes old call quality metrics if mCallQualityMetrics exceeds its max size
+    private void pruneCallQualityMetricsHistory() {
+        if (mCallQualityMetrics.size() > MAX_CALL_QUALITY_HISTORY) {
+            mCallQualityMetrics.remove(mLeastRecentCallId.poll());
+        }
     }
 
     private void handleFeatureCapabilityChanged(ImsFeature.Capabilities capabilities) {
