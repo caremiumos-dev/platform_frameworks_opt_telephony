@@ -173,6 +173,7 @@ public class PhoneFactory {
 
                 Rlog.i(LOG_TAG, "Creating SubscriptionController");
                 SubscriptionController.init(context, sCommandsInterfaces);
+                MultiSimSettingController.init(context, SubscriptionController.getInstance());
 
                 if (context.getPackageManager().hasSystemFeature(
                         PackageManager.FEATURE_TELEPHONY_EUICC)) {
@@ -458,6 +459,18 @@ public class PhoneFactory {
     public static void requestEmbeddedSubscriptionInfoListRefresh(
             int cardId, @Nullable Runnable callback) {
         sSubInfoRecordUpdater.requestEmbeddedSubscriptionInfoListRefresh(cardId, callback);
+    }
+
+    /**
+     * Get a the SmsController.
+     */
+    public static SmsController getSmsController() {
+        synchronized (sLockProxyPhones) {
+            if (!sMadeDefaults) {
+                throw new IllegalStateException("Default phones haven't been made yet!");
+            }
+            return sProxyController.getSmsController();
+        }
     }
 
     /**

@@ -156,6 +156,8 @@ public interface PhoneInternalInterface {
             "carrierActionDisableMeteredApn";
     static final String REASON_CSS_INDICATOR_CHANGED = "cssIndicatorChanged";
     static final String REASON_RELEASED_BY_CONNECTIVITY_SERVICE = "releasedByConnectivityService";
+    static final String REASON_APN_ADDED_TO_WHITELIST = "apnAddedToWhiteList";
+    static final String REASON_APN_REMOVED_FROM_WHITELIST = "apnRemovedFromWhiteList";
 
     // Used for band mode selection methods
     static final int BM_UNSPECIFIED = RILConstants.BAND_MODE_UNSPECIFIED; // automatic
@@ -178,6 +180,36 @@ public interface PhoneInternalInterface {
     static final int BM_AWS         = RILConstants.BAND_MODE_AWS;
     static final int BM_US_2500M    = RILConstants.BAND_MODE_USA_2500M;
     static final int BM_NUM_BAND_MODES = 19; //Total number of band modes
+
+    // Used for preferred network type
+    // Note NT_* substitute RILConstants.NETWORK_MODE_* above the Phone
+    int NT_MODE_WCDMA_PREF   = RILConstants.NETWORK_MODE_WCDMA_PREF;
+    int NT_MODE_GSM_ONLY     = RILConstants.NETWORK_MODE_GSM_ONLY;
+    int NT_MODE_WCDMA_ONLY   = RILConstants.NETWORK_MODE_WCDMA_ONLY;
+    int NT_MODE_GSM_UMTS     = RILConstants.NETWORK_MODE_GSM_UMTS;
+
+    int NT_MODE_CDMA         = RILConstants.NETWORK_MODE_CDMA;
+
+    int NT_MODE_CDMA_NO_EVDO = RILConstants.NETWORK_MODE_CDMA_NO_EVDO;
+    int NT_MODE_EVDO_NO_CDMA = RILConstants.NETWORK_MODE_EVDO_NO_CDMA;
+    int NT_MODE_GLOBAL       = RILConstants.NETWORK_MODE_GLOBAL;
+
+    int NT_MODE_LTE_CDMA_AND_EVDO        = RILConstants.NETWORK_MODE_LTE_CDMA_EVDO;
+    int NT_MODE_LTE_GSM_WCDMA            = RILConstants.NETWORK_MODE_LTE_GSM_WCDMA;
+    int NT_MODE_LTE_CDMA_EVDO_GSM_WCDMA  = RILConstants.NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA;
+    int NT_MODE_LTE_ONLY                 = RILConstants.NETWORK_MODE_LTE_ONLY;
+    int NT_MODE_LTE_WCDMA                = RILConstants.NETWORK_MODE_LTE_WCDMA;
+
+    int NT_MODE_TDSCDMA_ONLY            = RILConstants.NETWORK_MODE_TDSCDMA_ONLY;
+    int NT_MODE_TDSCDMA_WCDMA           = RILConstants.NETWORK_MODE_TDSCDMA_WCDMA;
+    int NT_MODE_LTE_TDSCDMA             = RILConstants.NETWORK_MODE_LTE_TDSCDMA;
+    int NT_MODE_TDSCDMA_GSM             = RILConstants.NETWORK_MODE_TDSCDMA_GSM;
+    int NT_MODE_LTE_TDSCDMA_GSM         = RILConstants.NETWORK_MODE_LTE_TDSCDMA_GSM;
+    int NT_MODE_TDSCDMA_GSM_WCDMA       = RILConstants.NETWORK_MODE_TDSCDMA_GSM_WCDMA;
+    int NT_MODE_LTE_TDSCDMA_WCDMA       = RILConstants.NETWORK_MODE_LTE_TDSCDMA_WCDMA;
+    int NT_MODE_LTE_TDSCDMA_GSM_WCDMA   = RILConstants.NETWORK_MODE_LTE_TDSCDMA_GSM_WCDMA;
+    int NT_MODE_TDSCDMA_CDMA_EVDO_GSM_WCDMA = RILConstants.NETWORK_MODE_TDSCDMA_CDMA_EVDO_GSM_WCDMA;
+    int NT_MODE_LTE_TDSCDMA_CDMA_EVDO_GSM_WCDMA = RILConstants.NETWORK_MODE_LTE_TDSCDMA_CDMA_EVDO_GSM_WCDMA;
 
     @UnsupportedAppUsage
     int PREFERRED_NT_MODE                = RILConstants.PREFERRED_NETWORK_MODE;

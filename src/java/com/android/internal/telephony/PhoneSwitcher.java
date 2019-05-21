@@ -85,6 +85,10 @@ public class PhoneSwitcher extends Handler {
     private static final int DEFAULT_NETWORK_CHANGE_TIMEOUT_MS = 5000;
     private static final int MODEM_COMMAND_RETRY_PERIOD_MS     = 5000;
 
+    // If there are no subscriptions in a device, then the phone to be used for emergency should
+    // always be the "first" phone.
+    private static final int DEFAULT_EMERGENCY_PHONE_ID = 0;
+
     private final List<DcRequest> mPrioritizedDcRequests = new ArrayList<DcRequest>();
     private final RegistrantList mActivePhoneRegistrants;
     private final SubscriptionController mSubscriptionController;
@@ -100,7 +104,8 @@ public class PhoneSwitcher extends Handler {
     @VisibleForTesting
     public final PhoneStateListener mPhoneStateListener;
     private final CellularNetworkValidator mValidator;
-    private final CellularNetworkValidator.ValidationCallback mValidationCallback =
+    @VisibleForTesting
+    public final CellularNetworkValidator.ValidationCallback mValidationCallback =
             (validated, subId) -> Message.obtain(PhoneSwitcher.this,
                     EVENT_NETWORK_VALIDATION_DONE, subId, validated ? 1 : 0).sendToTarget();
     @UnsupportedAppUsage
@@ -401,11 +406,7 @@ public class PhoneSwitcher extends Handler {
                 boolean needValidation = (msg.arg2 == 1);
                 ISetOpportunisticDataCallback callback =
                         (ISetOpportunisticDataCallback) msg.obj;
-                if (SubscriptionManager.isUsableSubscriptionId(subId)) {
-                    setOpportunisticDataSubscription(subId, needValidation, callback);
-                } else {
-                    unsetOpportunisticDataSubscription(callback);
-                }
+                setOpportunisticDataSubscription(subId, needValidation, callback);
                 break;
             }
             case EVENT_RADIO_AVAILABLE: {
@@ -455,6 +456,10 @@ public class PhoneSwitcher extends Handler {
         for (Phone p : mPhones) {
             if (p == null) continue;
             if (p.isInEcm() || p.isInEmergencyCall()) return true;
+            Phone imsPhone = p.getImsPhone();
+            if (imsPhone != null && (imsPhone.isInEcm() || imsPhone.isInEmergencyCall())) {
+                return true;
+            }
         }
         return false;
     }
@@ -578,9 +583,15 @@ public class PhoneSwitcher extends Handler {
             mPrimaryDataSubId = primaryDataSubId;
         }
 
+        // Check to see if there is any active subscription on any phone
+        boolean hasAnyActiveSubscription = false;
+
         // Check if phoneId to subId mapping is changed.
         for (int i = 0; i < mNumPhones; i++) {
             int sub = mSubscriptionController.getSubIdUsingPhoneId(i);
+
+            if (SubscriptionManager.isValidSubscriptionId(sub)) hasAnyActiveSubscription = true;
+
             if (sub != mPhoneSubscriptions[i]) {
                 sb.append(" phone[").append(i).append("] ").append(mPhoneSubscriptions[i]);
                 sb.append("->").append(sub);
@@ -589,9 +600,22 @@ public class PhoneSwitcher extends Handler {
             }
         }
 
+        if (!hasAnyActiveSubscription) {
+            transitionToEmergencyPhone();
+        } else {
+            if (VDBG) log("Found an active subscription");
+        }
+
         // Check if phoneId for preferred data is changed.
         int oldPreferredDataPhoneId = mPreferredDataPhoneId;
-        updatePreferredDataPhoneId();
+
+        // When there are no subscriptions, the preferred data phone ID is invalid, but we want
+        // to keep a valid phoneId for Emergency, so skip logic that updates for preferred data
+        // phone ID. Ideally there should be a single set of checks that evaluate the correct
+        // phoneId on a service-by-service basis (EIMS being one), but for now... just bypass
+        // this logic in the no-SIM case.
+        if (hasAnyActiveSubscription) updatePreferredDataPhoneId();
+
         if (oldPreferredDataPhoneId != mPreferredDataPhoneId) {
             sb.append(" preferred phoneId ").append(oldPreferredDataPhoneId)
                     .append("->").append(mPreferredDataPhoneId);
@@ -738,8 +762,7 @@ public class PhoneSwitcher extends Handler {
         // if Internet PDN is established on the non-preferred phone, it will interrupt
         // Internet connection on the preferred phone. So we only accept Internet request with
         // preferred data subscription or no specified subscription.
-        if (netRequest.networkCapabilities.hasCapability(
-                NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        if (netRequest.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                 && subId != preferredDataSubId && subId != mValidator.getSubIdInValidation()) {
             // Returning INVALID_PHONE_INDEX will result in netRequest not being handled.
             return INVALID_PHONE_INDEX;
@@ -816,6 +839,18 @@ public class PhoneSwitcher extends Handler {
         mPreferredDataSubId = mSubscriptionController.getSubIdUsingPhoneId(mPreferredDataPhoneId);
     }
 
+    private void transitionToEmergencyPhone() {
+        if (mPreferredDataPhoneId != DEFAULT_EMERGENCY_PHONE_ID) {
+            log("No active subscriptions: resetting preferred phone to 0 for emergency");
+            mPreferredDataPhoneId = DEFAULT_EMERGENCY_PHONE_ID;
+        }
+
+        if (mPreferredDataSubId != INVALID_SUBSCRIPTION_ID) {
+            mPreferredDataSubId = INVALID_SUBSCRIPTION_ID;
+            notifyPreferredDataSubIdChanged();
+        }
+    }
+
     private Phone findPhoneById(final int phoneId) {
         if (phoneId < 0 || phoneId >= mNumPhones) {
             return null;
@@ -827,11 +862,19 @@ public class PhoneSwitcher extends Handler {
         validatePhoneId(phoneId);
 
         // In any case, if phone state is inactive, don't apply the network request.
-        if (!isPhoneActive(phoneId)) return false;
+        if (!isPhoneActive(phoneId) || (
+                mSubscriptionController.getSubIdUsingPhoneId(phoneId) == INVALID_SUBSCRIPTION_ID
+                && !isEmergencyNetworkRequest(networkRequest))) {
+            return false;
+        }
 
         int phoneIdToHandle = phoneIdForRequest(networkRequest);
 
         return phoneId == phoneIdToHandle;
+    }
+
+    boolean isEmergencyNetworkRequest(NetworkRequest networkRequest) {
+        return networkRequest.hasCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
     }
 
     @VisibleForTesting
@@ -863,18 +906,31 @@ public class PhoneSwitcher extends Handler {
     /**
      * Set opportunistic data subscription. It's an indication to switch Internet data to this
      * subscription. It has to be an active subscription, and PhoneSwitcher will try to validate
-     * it first if needed.
+     * it first if needed. If subId is DEFAULT_SUBSCRIPTION_ID, it means we are un-setting
+     * opportunistic data sub and switch data back to primary sub.
+     *
+     * @param subId the opportunistic data subscription to switch to. pass DEFAULT_SUBSCRIPTION_ID
+     *              if un-setting it.
+     * @param needValidation whether Telephony will wait until the network is validated by
+     *              connectivity service before switching data to it. More details see
+     *              {@link NetworkCapabilities#NET_CAPABILITY_VALIDATED}.
+     * @param callback Callback will be triggered once it succeeds or failed.
+     *                 Pass null if don't care about the result.
      */
     private void setOpportunisticDataSubscription(int subId, boolean needValidation,
             ISetOpportunisticDataCallback callback) {
-        if (!mSubscriptionController.isActiveSubId(subId)) {
+        if (!mSubscriptionController.isActiveSubId(subId)
+                && subId != SubscriptionManager.DEFAULT_SUBSCRIPTION_ID) {
             log("Can't switch data to inactive subId " + subId);
             sendSetOpptCallbackHelper(callback, SET_OPPORTUNISTIC_SUB_INACTIVE_SUBSCRIPTION);
             return;
         }
 
+        int subIdToValidate = (subId == SubscriptionManager.DEFAULT_SUBSCRIPTION_ID)
+                ? mPrimaryDataSubId : subId;
+
         if (mValidator.isValidating()
-                && (!needValidation || subId != mValidator.getSubIdInValidation())) {
+                && (!needValidation || subIdToValidate != mValidator.getSubIdInValidation())) {
             mValidator.stopValidation();
         }
 
@@ -885,31 +941,16 @@ public class PhoneSwitcher extends Handler {
 
         // If validation feature is not supported, set it directly. Otherwise,
         // start validation on the subscription first.
-        if (CellularNetworkValidator.isValidationFeatureSupported() && needValidation) {
+        if (mValidator.isValidationFeatureSupported() && needValidation) {
             logDataSwitchEvent(subId, TelephonyEvent.EventState.EVENT_STATE_START,
                     DataSwitch.Reason.DATA_SWITCH_REASON_CBRS);
             mSetOpptSubCallback = callback;
-            mValidator.validate(subId, DEFAULT_VALIDATION_EXPIRATION_TIME,
+            mValidator.validate(subIdToValidate, DEFAULT_VALIDATION_EXPIRATION_TIME,
                     false, mValidationCallback);
         } else {
             setOpportunisticSubscriptionInternal(subId);
             sendSetOpptCallbackHelper(callback, SET_OPPORTUNISTIC_SUB_SUCCESS);
         }
-    }
-
-    /**
-     * Unset opportunistic data subscription. It's an indication to switch Internet data back
-     * from opportunistic subscription to primary subscription.
-     */
-    private void unsetOpportunisticDataSubscription(ISetOpportunisticDataCallback callback) {
-        if (mValidator.isValidating()) {
-            mValidator.stopValidation();
-        }
-
-        // Set mOpptDataSubId back to DEFAULT_SUBSCRIPTION_ID. This will trigger
-        // data switch to mPrimaryDataSubId.
-        setOpportunisticSubscriptionInternal(SubscriptionManager.DEFAULT_SUBSCRIPTION_ID);
-        sendSetOpptCallbackHelper(callback, SET_OPPORTUNISTIC_SUB_SUCCESS);
     }
 
     private void sendSetOpptCallbackHelper(ISetOpportunisticDataCallback callback, int result) {
@@ -937,18 +978,45 @@ public class PhoneSwitcher extends Handler {
     }
 
     private void onValidationDone(int subId, boolean passed) {
-        log("Network validation " + (passed ? "passed" : "failed")
+        log("onValidationDone: " + (passed ? "passed" : "failed")
                 + " on subId " + subId);
-        if (passed) setOpportunisticSubscriptionInternal(subId);
+        int resultForCallBack;
+
+        if (!mSubscriptionController.isActiveSubId(subId)) {
+            log("onValidationDone: subId " + subId + " is no longer active");
+            resultForCallBack = SET_OPPORTUNISTIC_SUB_INACTIVE_SUBSCRIPTION;
+        } else if (!passed) {
+            resultForCallBack = SET_OPPORTUNISTIC_SUB_VALIDATION_FAILED;
+        } else {
+            if (mSubscriptionController.isOpportunistic(subId)) {
+                setOpportunisticSubscriptionInternal(subId);
+            } else {
+                // Switching data back to primary subscription.
+                setOpportunisticSubscriptionInternal(SubscriptionManager.DEFAULT_SUBSCRIPTION_ID);
+            }
+            resultForCallBack = SET_OPPORTUNISTIC_SUB_SUCCESS;
+        }
 
         // Trigger callback if needed
-        sendSetOpptCallbackHelper(mSetOpptSubCallback, passed ? SET_OPPORTUNISTIC_SUB_SUCCESS
-                : SET_OPPORTUNISTIC_SUB_VALIDATION_FAILED);
+        sendSetOpptCallbackHelper(mSetOpptSubCallback, resultForCallBack);
         mSetOpptSubCallback = null;
     }
 
     /**
      * Notify PhoneSwitcher to try to switch data to an opportunistic subscription.
+     *
+     * Set opportunistic data subscription. It's an indication to switch Internet data to this
+     * subscription. It has to be an active subscription, and PhoneSwitcher will try to validate
+     * it first if needed. If subId is DEFAULT_SUBSCRIPTION_ID, it means we are un-setting
+     * opportunistic data sub and switch data back to primary sub.
+     *
+     * @param subId the opportunistic data subscription to switch to. pass DEFAULT_SUBSCRIPTION_ID
+     *              if un-setting it.
+     * @param needValidation whether Telephony will wait until the network is validated by
+     *              connectivity service before switching data to it. More details see
+     *              {@link NetworkCapabilities#NET_CAPABILITY_VALIDATED}.
+     * @param callback Callback will be triggered once it succeeds or failed.
+     *                 Pass null if don't care about the result.
      */
     public void trySetOpportunisticDataSubscription(int subId, boolean needValidation,
             ISetOpportunisticDataCallback callback) {

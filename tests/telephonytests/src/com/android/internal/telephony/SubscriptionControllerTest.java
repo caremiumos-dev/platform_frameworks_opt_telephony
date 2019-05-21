@@ -376,6 +376,58 @@ public class SubscriptionControllerTest extends TelephonyTest {
                 mCallingPackage));
     }
 
+    @Test
+    @SmallTest
+    public void testSkipMigrateImsSettings() throws Exception {
+
+        // Set default invalid subId.
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.MULTI_SIM_VOICE_CALL_SUBSCRIPTION,
+                -1);
+
+        int enhanced4gModeEnabled = 1;
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.ENHANCED_4G_MODE_ENABLED,
+                enhanced4gModeEnabled);
+
+        int vtImsEnabled = 0;
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.VT_IMS_ENABLED,
+                vtImsEnabled);
+
+        int wfcImsEnabled = 1;
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.WFC_IMS_ENABLED,
+                wfcImsEnabled);
+
+        int wfcImsMode = 2;
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.WFC_IMS_MODE,
+                wfcImsMode);
+
+        int wfcImsRoamingMode = 3;
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.WFC_IMS_ROAMING_MODE,
+                wfcImsRoamingMode);
+
+        mSubscriptionControllerUT.migrateImsSettings();
+
+        // Migration should be skipped because subId was invalid
+        assertEquals(enhanced4gModeEnabled, Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.ENHANCED_4G_MODE_ENABLED));
+
+        assertEquals(vtImsEnabled, Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.VT_IMS_ENABLED));
+
+        assertEquals(wfcImsEnabled, Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.WFC_IMS_ENABLED));
+
+        assertEquals(wfcImsMode, Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.WFC_IMS_MODE));
+
+        assertEquals(wfcImsRoamingMode, Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.WFC_IMS_ROAMING_MODE));
+    }
 
     @Test
     @SmallTest
@@ -692,14 +744,51 @@ public class SubscriptionControllerTest extends TelephonyTest {
         doReturn(true).when(mTelephonyManager).hasCarrierPrivileges(2);
 
         ParcelUuid groupId = mSubscriptionControllerUT.createSubscriptionGroup(
-                subIdList, mContext.getOpPackageName());
+                subIdList, "packageName1");
         assertNotEquals(null, groupId);
 
         mSubscriptionControllerUT.addSubscriptionsIntoGroup(
-                new int[] {2}, groupId, mContext.getOpPackageName());
+                new int[] {2}, groupId, "packageName1");
+        List<SubscriptionInfo> infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
+                groupId, "packageName1");
+        assertEquals(2, infoList.size());
+        assertEquals(1, infoList.get(0).getSubscriptionId());
+        assertEquals(2, infoList.get(1).getSubscriptionId());
 
         mSubscriptionControllerUT.removeSubscriptionsFromGroup(
-                new int[] {2}, groupId, mContext.getOpPackageName());
+                new int[] {2}, groupId, "packageName1");
+        infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
+                groupId, "packageName1");
+        assertEquals(1, infoList.size());
+        assertEquals(1, infoList.get(0).getSubscriptionId());
+
+        // Make sub 1 inactive.
+        mSubscriptionControllerUT.clearSubInfoRecord(0);
+
+        try {
+            mSubscriptionControllerUT.addSubscriptionsIntoGroup(
+                    new int[] {2}, groupId, "packageName2");
+            fail("addSubscriptionsIntoGroup should fail with wrong callingPackage name");
+        } catch (SecurityException e) {
+            // Expected result.
+        }
+
+        // Adding and removing subscription should still work for packageName1, as it's the group
+        // owner who created the group earlier..
+        mSubscriptionControllerUT.addSubscriptionsIntoGroup(
+                new int[] {2}, groupId, "packageName1");
+        infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
+                groupId, "packageName1");
+        assertEquals(2, infoList.size());
+        assertEquals(1, infoList.get(0).getSubscriptionId());
+        assertEquals(2, infoList.get(1).getSubscriptionId());
+
+        mSubscriptionControllerUT.removeSubscriptionsFromGroup(
+                new int[] {2}, groupId, "packageName1");
+        infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
+                groupId, "packageName1");
+        assertEquals(1, infoList.size());
+        assertEquals(1, infoList.get(0).getSubscriptionId());
     }
 
     @Test
@@ -767,7 +856,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         assertTrue(TelephonyPermissions.checkCallingOrSelfReadPhoneState(mContext, 1,
                 mContext.getOpPackageName(), "getSubscriptionsInGroup"));
 
-        int[] subIdList = new int[] {1, 2};
+        int[] subIdList = new int[] {1};
         ParcelUuid groupUuid = mSubscriptionControllerUT.createSubscriptionGroup(
                 subIdList, mContext.getOpPackageName());
         assertNotEquals(null, groupUuid);
@@ -776,8 +865,16 @@ public class SubscriptionControllerTest extends TelephonyTest {
         List<SubscriptionInfo> infoList = mSubscriptionControllerUT
                 .getSubscriptionsInGroup(groupUuid, mContext.getOpPackageName());
         assertNotEquals(null, infoList);
-        assertEquals(2, infoList.size());
+        assertEquals(1, infoList.size());
         assertEquals(1, infoList.get(0).getSubscriptionId());
+
+        subIdList = new int[] {2};
+
+        mSubscriptionControllerUT.addSubscriptionsIntoGroup(
+                subIdList, groupUuid, mContext.getOpPackageName());
+        infoList = mSubscriptionControllerUT
+                .getSubscriptionsInGroup(groupUuid, mContext.getOpPackageName());
+        assertEquals(2, infoList.size());
         assertEquals(2, infoList.get(1).getSubscriptionId());
 
         // Remove group of sub 1.

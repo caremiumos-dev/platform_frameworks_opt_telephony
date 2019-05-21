@@ -223,6 +223,10 @@ public abstract class TelephonyTest {
     protected PhoneConfigurationManager mPhoneConfigurationManager;
     @Mock
     protected CellularNetworkValidator mCellularNetworkValidator;
+    @Mock
+    protected UiccCard mUiccCard;
+    @Mock
+    protected MultiSimSettingController mMultiSimSettingController;
 
     protected ImsCallProfile mImsCallProfile;
     protected TelephonyManager mTelephonyManager;
@@ -347,6 +351,9 @@ public abstract class TelephonyTest {
                 BlockedNumberContract.AUTHORITY, mFakeBlockedNumberContentProvider);
         mPhone.mCi = mSimulatedCommands;
         mCT.mCi = mSimulatedCommands;
+        doReturn(mUiccCard).when(mPhone).getUiccCard();
+        doReturn(mUiccProfile).when(mUiccCard).getUiccProfile();
+
         mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         mSubscriptionManager = (SubscriptionManager) mContext.getSystemService(
                 Context.TELEPHONY_SUBSCRIPTION_SERVICE);
@@ -491,6 +498,7 @@ public abstract class TelephonyTest {
                 nullable(Intent[].class), nullable(String[].class), anyInt(),
                 nullable(Bundle.class), anyInt());
         doReturn(mTelephonyManager).when(mTelephonyManager).createForSubscriptionId(anyInt());
+        doReturn(mServiceState).when(mSST).getServiceState();
         mSST.mSS = mServiceState;
         mSST.mRestrictedState = mRestrictedState;
         mServiceManagerMockedServices.put("connectivity_metrics_logger", mConnMetLoggerBinder);
@@ -500,6 +508,7 @@ public abstract class TelephonyTest {
         doReturn(AccessNetworkConstants.TRANSPORT_TYPE_WWAN).when(mTransportManager)
                 .getCurrentTransport(anyInt());
         doReturn(true).when(mDataEnabledSettings).isDataEnabled();
+        doReturn(true).when(mDataEnabledSettings).isDataEnabled(anyInt());
         doReturn(true).when(mDataEnabledSettings).isInternalDataEnabled();
         doReturn(mNetworkRegistrationInfo).when(mServiceState).getNetworkRegistrationInfo(
                 anyInt(), anyInt());
@@ -520,6 +529,7 @@ public abstract class TelephonyTest {
         // CellularNetworkValidator
         doReturn(SubscriptionManager.INVALID_PHONE_INDEX)
                 .when(mCellularNetworkValidator).getSubIdInValidation();
+        doReturn(true).when(mCellularNetworkValidator).isValidationFeatureSupported();
 
         //Use reflection to mock singletons
         replaceInstance(CallManager.class, "INSTANCE", null, mCallManager);
@@ -551,6 +561,9 @@ public abstract class TelephonyTest {
                 mPhoneConfigurationManager);
         replaceInstance(CellularNetworkValidator.class, "sInstance", null,
                 mCellularNetworkValidator);
+        replaceInstance(MultiSimSettingController.class, "sInstance", null,
+                mMultiSimSettingController);
+        replaceInstance(SubscriptionInfoUpdater.class, "sIsSubInfoInitialized", null, true);
 
         assertNotNull("Failed to set up SubscriptionController singleton",
                 SubscriptionController.getInstance());

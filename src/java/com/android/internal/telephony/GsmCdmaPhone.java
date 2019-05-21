@@ -284,7 +284,10 @@ public class GsmCdmaPhone extends Phone {
             Rlog.d(LOG_TAG, "mBroadcastReceiver: action " + intent.getAction());
             String action = intent.getAction();
             if (CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED.equals(action)) {
-                sendMessage(obtainMessage(EVENT_CARRIER_CONFIG_CHANGED));
+                // Only handle carrier config changes for this phone id.
+                if (mPhoneId == intent.getIntExtra(CarrierConfigManager.EXTRA_SLOT_INDEX, -1)) {
+                    sendMessage(obtainMessage(EVENT_CARRIER_CONFIG_CHANGED));
+                }
             } else if (TelecomManager.ACTION_CURRENT_TTY_MODE_CHANGED.equals(action)) {
                 int ttyMode = intent.getIntExtra(
                         TelecomManager.EXTRA_CURRENT_TTY_MODE, TelecomManager.TTY_MODE_OFF);
@@ -686,7 +689,8 @@ public class GsmCdmaPhone extends Phone {
     public void notifyDisconnect(Connection cn) {
         mDisconnectRegistrants.notifyResult(cn);
 
-        mNotifier.notifyDisconnectCause(cn.getDisconnectCause(), cn.getPreciseDisconnectCause());
+        mNotifier.notifyDisconnectCause(this, cn.getDisconnectCause(),
+                cn.getPreciseDisconnectCause());
     }
 
     public void notifyUnknownConnection(Connection cn) {
@@ -1753,6 +1757,13 @@ public class GsmCdmaPhone extends Phone {
             IccRecords r = mIccRecords.get();
             return (r != null) ? r.getMsisdnNumber() : null;
         } else {
+            CarrierConfigManager configManager = (CarrierConfigManager)
+                    mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+            boolean use_usim = configManager.getConfigForSubId(getSubId()).getBoolean(
+                    CarrierConfigManager.KEY_USE_USIM_BOOL);
+            if (use_usim) {
+                return (mSimRecords != null) ? mSimRecords.getMsisdnNumber() : null;
+            }
             return mSST.getMdnNumber();
         }
     }
@@ -2078,7 +2089,8 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void getAvailableNetworks(Message response) {
         if (isPhoneTypeGsm() || isPhoneTypeCdmaLte()) {
-            mCi.getAvailableNetworks(response);
+            Message msg = obtainMessage(EVENT_GET_AVAILABLE_NETWORKS_DONE, response);
+            mCi.getAvailableNetworks(msg);
         } else {
             loge("getAvailableNetworks: not possible in CDMA");
         }
@@ -2363,7 +2375,7 @@ public class GsmCdmaPhone extends Phone {
 
     private void handleRadioPowerStateChange() {
         Rlog.d(LOG_TAG, "handleRadioPowerStateChange, state= " + mCi.getRadioState());
-        mNotifier.notifyRadioPowerStateChanged(mCi.getRadioState());
+        mNotifier.notifyRadioPowerStateChanged(this, mCi.getRadioState());
     }
 
     @Override
@@ -2738,6 +2750,34 @@ public class GsmCdmaPhone extends Phone {
             case EVENT_DEVICE_PROVISIONING_DATA_SETTING_CHANGE:
                 mDataEnabledSettings.updateProvisioningDataEnabled();
                 break;
+            case EVENT_GET_AVAILABLE_NETWORKS_DONE:
+                ar = (AsyncResult) msg.obj;
+                if (ar.exception == null && ar.result != null && mSST != null) {
+                    List<OperatorInfo> operatorInfoList = (List<OperatorInfo>) ar.result;
+                    List<OperatorInfo> filteredInfoList = new ArrayList<>();
+                    for (OperatorInfo operatorInfo : operatorInfoList) {
+                        if (OperatorInfo.State.CURRENT == operatorInfo.getState()) {
+                            filteredInfoList.add(new OperatorInfo(
+                                    mSST.filterOperatorNameByPattern(
+                                            operatorInfo.getOperatorAlphaLong()),
+                                    mSST.filterOperatorNameByPattern(
+                                            operatorInfo.getOperatorAlphaShort()),
+                                    operatorInfo.getOperatorNumeric(),
+                                    operatorInfo.getState()
+                            ));
+                        } else {
+                            filteredInfoList.add(operatorInfo);
+                        }
+                    }
+                    ar.result = filteredInfoList;
+                }
+
+                onComplete = (Message) ar.userObj;
+                if (onComplete != null) {
+                    AsyncResult.forMessage(onComplete, ar.result, ar.exception);
+                    onComplete.sendToTarget();
+                }
+                break;
             default:
                 super.handleMessage(msg);
         }
@@ -3012,8 +3052,8 @@ public class GsmCdmaPhone extends Phone {
          *  selection is disallowed. So we should force auto select mode.
          */
         if (isManualSelProhibitedInGlobalMode()
-                && ((nwMode == TelephonyManager.NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA)
-                        || (nwMode == TelephonyManager.NETWORK_MODE_GLOBAL)) ){
+                && ((nwMode == Phone.NT_MODE_LTE_CDMA_EVDO_GSM_WCDMA)
+                        || (nwMode == Phone.NT_MODE_GLOBAL)) ){
             logd("Should force auto network select mode = " + nwMode);
             return true;
         } else {
@@ -3652,14 +3692,10 @@ public class GsmCdmaPhone extends Phone {
 
         // Refresh.
         if (status) {
-            IccRecords iccRecords = mIccRecords.get();
-            if (iccRecords != null) {
-                TelephonyManager.from(mContext).setSimOperatorNameForPhone(
-                        getPhoneId(), iccRecords.getServiceProviderName());
-            }
-            if (mSST != null) {
-                mSST.pollState();
-            }
+            TelephonyManager.from(mContext).setSimOperatorNameForPhone(
+                    getPhoneId(), mSST.getServiceProviderName());
+            // TODO: check if pollState is need when set operator brand override.
+            mSST.pollState();
         }
         return status;
     }
