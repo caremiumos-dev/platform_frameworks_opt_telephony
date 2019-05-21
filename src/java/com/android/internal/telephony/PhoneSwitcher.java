@@ -746,6 +746,7 @@ public class PhoneSwitcher extends Handler {
         if (mMaxActivePhones != newMaxActivePhones) {
             mMaxActivePhones = newMaxActivePhones;
             log("Max active phones changed to " + mMaxActivePhones);
+            updateHalCommandToUse();
             onEvaluate(REQUESTS_UNCHANGED, "phoneCfgChanged");
         }
     }
@@ -1036,7 +1037,7 @@ public class PhoneSwitcher extends Handler {
     }
 
     private void updateHalCommandToUse() {
-        mHalCommandToUse = mRadioConfig.isSetPreferredDataCommandSupported()
+        mHalCommandToUse = mRadioConfig.isSetPreferredDataCommandSupported() && (mMaxActivePhones == 2)
                 ? HAL_COMMAND_PREFERRED_DATA : HAL_COMMAND_ALLOW_DATA;
     }
 
