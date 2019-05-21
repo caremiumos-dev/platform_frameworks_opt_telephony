@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9d6e366_85620299",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-05-21T20:58:47Z",
+      "side": 1,
+      "message": "If package name \u0026 class name are both non-empty, call setComponent. If only package name is non-empty, call setPackage.",
+      "range": {
+        "startLine": 319,
+        "startChar": 0,
+        "endLine": 321,
+        "endChar": 79
+      },
+      "revId": "8a360a7e4404b8f4211aee707051c88cb2239aee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34668e9c_5aa8bb63",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-05-21T20:58:47Z",
+      "side": 1,
+      "message": "I think you should only use the one from config.",
+      "range": {
+        "startLine": 450,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 9
+      },
+      "revId": "8a360a7e4404b8f4211aee707051c88cb2239aee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
