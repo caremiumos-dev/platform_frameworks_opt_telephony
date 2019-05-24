@@ -32,6 +32,7 @@ import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccConstants;
 import com.android.internal.telephony.uicc.IccFileHandler;
 import com.android.internal.telephony.uicc.IccRecords;
+import com.android.internal.telephony.uicc.IccUtils;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -53,6 +54,9 @@ public class IccPhoneBookInterfaceManager {
     protected static final int EVENT_GET_SIZE_DONE = 1;
     protected static final int EVENT_LOAD_DONE = 2;
     protected static final int EVENT_UPDATE_DONE = 3;
+
+    private static int sTagLen = -1;
+    private static final int FOOTER_SIZE_BYTES = 14;
 
     private static final class Request {
         AtomicBoolean mStatus = new AtomicBoolean(false);
@@ -77,6 +81,7 @@ public class IccPhoneBookInterfaceManager {
                         logd("GET_RECORD_SIZE Size " + recordSize[0]
                                 + " total " + recordSize[1]
                                 + " #record " + recordSize[2]);
+                        sTagLen = recordSize[0] - FOOTER_SIZE_BYTES;
                     } else {
                         loge("EVENT_GET_SIZE_DONE: failed; ex=" + ar.exception);
                     }
@@ -182,6 +187,7 @@ public class IccPhoneBookInterfaceManager {
                 "," + Rlog.pii(LOG_TAG, newPhoneNumber) + ")"+ " pin2=" + Rlog.pii(LOG_TAG, pin2));
 
         efid = updateEfForIccType(efid);
+        if (!checkLengthOfTag(efid, newTag)) return false;
 
         checkThread();
         Request updateRequest = new Request();
@@ -233,6 +239,7 @@ public class IccPhoneBookInterfaceManager {
         String[] newEmailArray = TextUtils.isEmpty(newEmail) ? null : getStringArray(newEmail);
 
         efid = updateEfForIccType(efid);
+        if (!checkLengthOfTag(efid, newTag)) return false;
         if (DBG) {
             logd("updateAdnRecordsWithContentValuesInEfBySearch: efid=" + efid
                     + ", values = " + values + ", pin2=" + pin2);
@@ -281,6 +288,8 @@ public class IccPhoneBookInterfaceManager {
     public boolean
     updateAdnRecordsInEfByIndex(int efid, String newTag,
             String newPhoneNumber, int index, String pin2) {
+
+        if (!checkLengthOfTag(efid, newTag)) return false;
 
         if (mPhone.getContext().checkCallingOrSelfPermission(
                 android.Manifest.permission.WRITE_CONTACTS)
@@ -419,6 +428,26 @@ public class IccPhoneBookInterfaceManager {
             return str.split(",");
         }
         return null;
+    }
+
+    /**
+     * Based on the description in "3GPP TS 31.102 clause 4.4.2.3.
+     * Alpha Identifier of EF_ADN of USIM is defined in default 7-bit co
+     * ded alphabet if bit8 is set to 0 otherwise, it is defined in UCS2 cod
+     * ed.
+     */
+    @UnsupportedAppUsage
+    protected boolean checkLengthOfTag(int efid, String name) {
+        if (sTagLen < 0) {
+            getAdnRecordsSize(efid);
+        }
+        if (!TextUtils.isEmpty(name) && sTagLen >= 0) {
+            byte[] nameTag = IccUtils.stringToAdnStringField(name);
+            if (nameTag.length > sTagLen) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 
