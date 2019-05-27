@@ -18,6 +18,7 @@ package com.android.internal.telephony;
 
 import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PERIOD_NOT_SPECIFIED;
 import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PRIORITY_NOT_SPECIFIED;
+import static com.android.internal.telephony.SmsResponse.NO_ERROR_CODE;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -458,7 +459,7 @@ public class SmsDispatchersController extends Handler {
                 || (map.containsKey("data") && map.containsKey("destPort"))))) {
             // should never come here...
             Rlog.e(TAG, "sendRetrySms failed to re-encode per missing fields!");
-            tracker.onFailed(mContext, SmsManager.RESULT_ERROR_GENERIC_FAILURE, 0/*errorCode*/);
+            tracker.onFailed(mContext, SmsManager.RESULT_ERROR_GENERIC_FAILURE, NO_ERROR_CODE);
             return;
         }
         String scAddr = (String) map.get("scAddr");

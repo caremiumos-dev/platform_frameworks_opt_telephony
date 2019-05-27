@@ -28,6 +28,7 @@ import static android.telephony.SmsManager.RESULT_ERROR_SHORT_CODE_NOT_ALLOWED;
 
 import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PERIOD_NOT_SPECIFIED;
 import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PRIORITY_NOT_SPECIFIED;
+import static com.android.internal.telephony.SmsResponse.NO_ERROR_CODE;
 
 import android.annotation.Nullable;
 import android.annotation.UnsupportedAppUsage;
@@ -323,17 +324,17 @@ public abstract class SMSDispatcher extends Handler {
             if (msg.arg1 == ConfirmDialogListener.SHORT_CODE_MSG) {
                 if (msg.arg2 == ConfirmDialogListener.NEVER_ALLOW) {
                     tracker.onFailed(mContext,
-                            RESULT_ERROR_SHORT_CODE_NEVER_ALLOWED, 0/*errorCode*/);
+                            RESULT_ERROR_SHORT_CODE_NEVER_ALLOWED, NO_ERROR_CODE);
                     Rlog.d(TAG, "SMSDispatcher: EVENT_STOP_SENDING - "
                             + "sending SHORT_CODE_NEVER_ALLOWED error code.");
                 } else {
                     tracker.onFailed(mContext,
-                            RESULT_ERROR_SHORT_CODE_NOT_ALLOWED, 0/*errorCode*/);
+                            RESULT_ERROR_SHORT_CODE_NOT_ALLOWED, NO_ERROR_CODE);
                     Rlog.d(TAG, "SMSDispatcher: EVENT_STOP_SENDING - "
                             + "sending SHORT_CODE_NOT_ALLOWED error code.");
                 }
             } else if (msg.arg1 == ConfirmDialogListener.RATE_LIMIT) {
-                tracker.onFailed(mContext, RESULT_ERROR_LIMIT_EXCEEDED, 0/*errorCode*/);
+                tracker.onFailed(mContext, RESULT_ERROR_LIMIT_EXCEEDED, NO_ERROR_CODE);
                 Rlog.d(TAG, "SMSDispatcher: EVENT_STOP_SENDING - "
                         + "sending LIMIT_EXCEEDED error code.");
             } else {
@@ -504,8 +505,7 @@ public abstract class SMSDispatcher extends Handler {
             return;
         }
 
-        SmsResponse smsResponse = new SmsResponse(
-                messageRef, null /* ackPdu */, -1 /* unknown error code */);
+        SmsResponse smsResponse = new SmsResponse(messageRef, null /* ackPdu */, NO_ERROR_CODE);
 
         switch (result) {
         case CarrierMessagingService.SEND_STATUS_OK:
@@ -640,7 +640,7 @@ public abstract class SMSDispatcher extends Handler {
     private void sendSubmitPdu(SmsTracker tracker) {
         if (shouldBlockSmsForEcbm()) {
             Rlog.d(TAG, "Block SMS in Emergency Callback mode");
-            tracker.onFailed(mContext, SmsManager.RESULT_ERROR_NO_SERVICE, 0/*errorCode*/);
+            tracker.onFailed(mContext, SmsManager.RESULT_ERROR_NO_SERVICE, NO_ERROR_CODE);
         } else {
             sendRawPdu(tracker);
         }
@@ -700,7 +700,7 @@ public abstract class SMSDispatcher extends Handler {
 
             // if sms over IMS is not supported on data and voice is not available...
             if (!isIms() && ss != ServiceState.STATE_IN_SERVICE) {
-                tracker.onFailed(mContext, getNotInServiceError(ss), 0/*errorCode*/);
+                tracker.onFailed(mContext, getNotInServiceError(ss), NO_ERROR_CODE);
             } else if ((((CommandException)(ar.exception)).getCommandError()
                     == CommandException.Error.SMS_FAIL_RETRY) &&
                    tracker.mRetryCount < MAX_SEND_RETRIES) {
@@ -716,7 +716,7 @@ public abstract class SMSDispatcher extends Handler {
                 Message retryMsg = obtainMessage(EVENT_SEND_RETRY, tracker);
                 sendMessageDelayed(retryMsg, SEND_RETRY_DELAY);
             } else {
-                int errorCode = 0;
+                int errorCode = NO_ERROR_CODE;
                 if (ar.result != null) {
                     errorCode = ((SmsResponse)ar.result).mErrorCode;
                 }
@@ -1159,13 +1159,13 @@ public abstract class SMSDispatcher extends Handler {
 
         if (mSmsSendDisabled) {
             Rlog.e(TAG, "Device does not support sending sms.");
-            tracker.onFailed(mContext, RESULT_ERROR_NO_SERVICE, 0/*errorCode*/);
+            tracker.onFailed(mContext, RESULT_ERROR_NO_SERVICE, NO_ERROR_CODE);
             return;
         }
 
         if (pdu == null) {
             Rlog.e(TAG, "Empty PDU");
-            tracker.onFailed(mContext, RESULT_ERROR_NULL_PDU, 0/*errorCode*/);
+            tracker.onFailed(mContext, RESULT_ERROR_NULL_PDU, NO_ERROR_CODE);
             return;
         }
 
@@ -1179,7 +1179,7 @@ public abstract class SMSDispatcher extends Handler {
                     packageName, PackageManager.GET_SIGNATURES, tracker.mUserId);
         } catch (PackageManager.NameNotFoundException e) {
             Rlog.e(TAG, "Can't get calling app package info: refusing to send SMS");
-            tracker.onFailed(mContext, RESULT_ERROR_GENERIC_FAILURE, 0/*errorCode*/);
+            tracker.onFailed(mContext, RESULT_ERROR_GENERIC_FAILURE, NO_ERROR_CODE);
             return;
         }
 
@@ -1300,7 +1300,7 @@ public abstract class SMSDispatcher extends Handler {
         if (mPendingTrackerCount >= MO_MSG_QUEUE_LIMIT) {
             // Deny sending message when the queue limit is reached.
             Rlog.e(TAG, "Denied because queue limit reached");
-            tracker.onFailed(mContext, RESULT_ERROR_LIMIT_EXCEEDED, 0/*errorCode*/);
+            tracker.onFailed(mContext, RESULT_ERROR_LIMIT_EXCEEDED, NO_ERROR_CODE);
             return true;
         }
         mPendingTrackerCount++;
@@ -1657,7 +1657,7 @@ public abstract class SMSDispatcher extends Handler {
             if (mDeliveryIntent != null) {
                 values.put(Sms.STATUS, Telephony.Sms.STATUS_PENDING);
             }
-            if (errorCode != 0) {
+            if (errorCode != NO_ERROR_CODE) {
                 values.put(Sms.ERROR_CODE, errorCode);
             }
             final long identity = Binder.clearCallingIdentity();
@@ -1726,7 +1726,7 @@ public abstract class SMSDispatcher extends Handler {
                         // Pass this to SMS apps so that they know where it is stored
                         fillIn.putExtra("uri", mMessageUri.toString());
                     }
-                    if (errorCode != 0) {
+                    if (errorCode != NO_ERROR_CODE) {
                         fillIn.putExtra("errorCode", errorCode);
                     }
                     if (mUnsentPartCount != null && isSinglePartOrLastPart) {
@@ -1757,7 +1757,7 @@ public abstract class SMSDispatcher extends Handler {
                 if (mAnyPartFailed != null && mAnyPartFailed.get()) {
                     messageType = Sms.MESSAGE_TYPE_FAILED;
                 }
-                persistOrUpdateMessage(context, messageType, 0/*errorCode*/);
+                persistOrUpdateMessage(context, messageType, NO_ERROR_CODE);
             }
             if (mSentIntent != null) {
                 try {
