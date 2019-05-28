@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "604681ba_284a8705",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2926,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-05-28T22:12:06Z",
+      "side": 1,
+      "message": "If the group doesn\u0027t exist, the carrier app will generate a random UUID and assign it?",
+      "range": {
+        "startLine": 2926,
+        "startChar": 0,
+        "endLine": 2926,
+        "endChar": 24
+      },
+      "revId": "7a3478efa881d0aa21ee74a1a410392ab9579cc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
