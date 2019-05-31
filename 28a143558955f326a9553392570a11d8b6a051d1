@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fa104e3_26a7917a",
+        "filename": "src/java/com/android/internal/telephony/NetworkRegistrationManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-05-31T16:36:07Z",
+      "side": 1,
+      "message": "redundant",
+      "range": {
+        "startLine": 355,
+        "startChar": 0,
+        "endLine": 358,
+        "endChar": 9
+      },
+      "revId": "28a143558955f326a9553392570a11d8b6a051d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "974d969e_0f2fafc6",
+        "filename": "src/java/com/android/internal/telephony/NetworkRegistrationManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-05-31T16:36:07Z",
+      "side": 1,
+      "message": "remove?",
+      "range": {
+        "startLine": 360,
+        "startChar": 0,
+        "endLine": 372,
+        "endChar": 9
+      },
+      "revId": "28a143558955f326a9553392570a11d8b6a051d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61632e85_edb790bc",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-05-31T16:36:07Z",
+      "side": 1,
+      "message": "Can we remove this part? I think we should either use the config from resource overlay (for device) or carrier config (for specific carrier).",
+      "range": {
+        "startLine": 342,
+        "startChar": 0,
+        "endLine": 354,
+        "endChar": 9
+      },
+      "revId": "28a143558955f326a9553392570a11d8b6a051d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36f984af_3c3ec8a3",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-05-31T16:36:07Z",
+      "side": 1,
+      "message": "Can we remove this part?",
+      "range": {
+        "startLine": 456,
+        "startChar": 0,
+        "endLine": 468,
+        "endChar": 9
+      },
+      "revId": "28a143558955f326a9553392570a11d8b6a051d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
