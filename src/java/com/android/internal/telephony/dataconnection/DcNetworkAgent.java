@@ -19,6 +19,7 @@ package com.android.internal.telephony.dataconnection;
 import android.annotation.NonNull;
 import android.net.LinkProperties;
 import android.net.NattKeepalivePacketData;
+import android.net.NattKeepalivePacketDataParcelable;
 import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -266,9 +267,10 @@ public class DcNetworkAgent extends NetworkAgent {
             return;
         }
 
-        if (msg.obj instanceof NattKeepalivePacketData) {
+        if (msg.obj instanceof NattKeepalivePacketDataParcelable) {
             mDataConnection.obtainMessage(DataConnection.EVENT_KEEPALIVE_START_REQUEST,
-                    msg.arg1, msg.arg2, msg.obj).sendToTarget();
+                    msg.arg1, msg.arg2, NattKeepalivePacketData.fromStableParcelable(
+                            (NattKeepalivePacketDataParcelable) msg.obj)).sendToTarget();
         } else {
             onSocketKeepaliveEvent(msg.arg1, SocketKeepalive.ERROR_UNSUPPORTED);
         }
