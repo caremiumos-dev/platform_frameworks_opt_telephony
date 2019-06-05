@@ -72,6 +72,14 @@ public class WapPushOverSms implements ServiceConnection {
     private static final String TAG = "WAP PUSH";
     private static final boolean DBG = false;
 
+    /**
+     * OMA PUSH Application ID URL and Number for the Secure User Plane Location(SUPL) User
+     * Agent(UA). Requested by OMA Location WG and documented in OMA-TS-ULP-V1_0
+     */
+    private static final String OMA_APP_ULP_URN = "x-oma-application:ulp.ua";
+
+    private static final String OMA_APP_ULP_NUMBER = "16"; // 0x10
+
     @UnsupportedAppUsage
     private final Context mContext;
     @UnsupportedAppUsage
@@ -300,6 +308,17 @@ public class WapPushOverSms implements ServiceConnection {
                         Long.toString(binaryContentType) : mimeType);
                 result.contentType = contentType;
                 if (DBG) Rlog.v(TAG, "appid found: " + wapAppId + ":" + contentType);
+
+                // Ignore incorrect OMA Push meessage content.
+                // (See OMA-ETS-SUPL-V2_0_3-20170221-C, 5.1.1.2)
+                if (contentType.equals(WspTypeDecoder.CONTENT_TYPE_B_PUSH_SUPL_INIT)
+                        && !OMA_APP_ULP_URN.equals(wapAppId)
+                        && !OMA_APP_ULP_NUMBER.equals(wapAppId)) {
+                    Rlog.w(TAG, "Ignored. SUPL init with incorrect appid(" + wapAppId
+                                + ") is received.");
+                    result.statusCode = Intents.RESULT_SMS_HANDLED;
+                    return result;
+                }
             }
 
             result.subId = subId;
