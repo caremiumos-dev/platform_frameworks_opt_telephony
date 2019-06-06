@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a02e4682_d8bb1952",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-06-06T22:53:03Z",
+      "side": 1,
+      "message": "Could you see CL:944916 for this?\n\nFix a negative mPendingTrackerCount issue\n\nIf an user has set permission to PREMIUM_SMS_PERMISSION_NEVER_ALLOW\nalready, no need to decrease mPendingTrackerCount when stop sending. New\nEVENT_HAS_DENIED_SENDING is issued to just stop sending without it.",
+      "parentUuid": "4eca0b73_eef1de55",
+      "range": {
+        "startLine": 133,
+        "startChar": 21,
+        "endLine": 133,
+        "endChar": 46
+      },
+      "revId": "41db8263adff83ba942c742907dd206aeaff2a27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85060825_1244b9d2",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-06-06T22:00:11Z",
       "side": 1,
       "message": "This does not do mPendingTrackerCount--\nIn any case, I\u0027d suggest you get rid of this.",
+      "range": {
+        "startLine": 306,
+        "startChar": 8,
+        "endLine": 316,
+        "endChar": 9
+      },
+      "revId": "41db8263adff83ba942c742907dd206aeaff2a27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8830ba69_ca84016b",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-06-06T22:53:03Z",
+      "side": 1,
+      "message": "Could you see CL:944916 for this?\n\nFix a negative mPendingTrackerCount issue\n\nIf an user has set permission to PREMIUM_SMS_PERMISSION_NEVER_ALLOW\nalready, no need to decrease mPendingTrackerCount when stop sending. New\nEVENT_HAS_DENIED_SENDING is issued to just stop sending without it.",
+      "parentUuid": "85060825_1244b9d2",
       "range": {
         "startLine": 306,
         "startChar": 8,
