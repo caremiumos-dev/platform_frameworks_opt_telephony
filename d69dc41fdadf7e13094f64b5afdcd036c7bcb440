@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03d6ad0d_3787d47e",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-06-07T21:20:21Z",
+      "side": 0,
+      "message": "Why? It\u0027s needed in this file.",
+      "revId": "d69dc41fdadf7e13094f64b5afdcd036c7bcb440",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
