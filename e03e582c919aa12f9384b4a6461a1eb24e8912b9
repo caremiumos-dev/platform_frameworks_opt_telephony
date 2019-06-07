@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "815eb659_56b9f069",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-06-07T00:09:02Z",
+      "side": 1,
+      "message": "User had already denied earlier.",
+      "range": {
+        "startLine": 132,
+        "startChar": 37,
+        "endLine": 132,
+        "endChar": 52
+      },
+      "revId": "e03e582c919aa12f9384b4a6461a1eb24e8912b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61993e69_d179e804",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-06-07T00:09:02Z",
+      "side": 1,
+      "message": "Can you rename this to EVENT_SENDING_NOT_ALLOWED?",
+      "range": {
+        "startLine": 133,
+        "startChar": 21,
+        "endLine": 133,
+        "endChar": 45
+      },
+      "revId": "e03e582c919aa12f9384b4a6461a1eb24e8912b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
