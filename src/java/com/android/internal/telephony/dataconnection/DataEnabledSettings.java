@@ -117,7 +117,6 @@ public class DataEnabledSettings {
                                 + mPhone.getSubId());
                         mSubId = mPhone.getSubId();
                         updateDataEnabledAndNotify(REASON_USER_DATA_ENABLED);
-                        mPhone.notifyUserMobileDataStateChanged(isUserDataEnabled());
                     }
                 }
             };
