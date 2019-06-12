@@ -171,6 +171,8 @@ public interface CallFailCause {
     // Access Blocked by CDMA Network.
     int CDMA_ACCESS_BLOCKED            = 1009;
 
-    int ERROR_UNSPECIFIED = 0xffff;
+    //MT call has ended due to a release from the network because the call was answered elsewhere.
+    int ANSWERED_ELSEWHERE = 2000;
 
+    int ERROR_UNSPECIFIED = 0xffff;
 }

@@ -110,6 +110,8 @@ public class GsmCdmaCallTracker extends CallTracker {
     private boolean mIsEcmTimerCanceled;
     private int m3WayCallFlashDelay;
 
+    private boolean mHasMissedCall = false;
+
     /**
      * Listens for Emergency Callback Mode state change intents
      */
@@ -790,7 +792,6 @@ public class GsmCdmaCallTracker extends CallTracker {
     }
 
     // ***** Overwritten from CallTracker
-
     @Override
     protected synchronized void handlePollCalls(AsyncResult ar) {
         List polledCalls;
@@ -1059,24 +1060,28 @@ public class GsmCdmaCallTracker extends CallTracker {
             GsmCdmaConnection conn = mDroppedDuringPoll.get(i);
             //CDMA
             boolean wasDisconnected = false;
-
             if (conn.isIncoming() && conn.getConnectTime() == 0) {
                 // Missed or rejected call
                 int cause;
                 if (conn.mCause == DisconnectCause.LOCAL) {
                     cause = DisconnectCause.INCOMING_REJECTED;
+                    if (Phone.DEBUG_PHONE) {
+                        log("missed/rejected call, conn.cause=" + conn.mCause);
+                        log("setting cause to " + cause);
+                    }
+                    mDroppedDuringPoll.remove(i);
+                    hasAnyCallDisconnected |= conn.onDisconnect(cause);
+                    wasDisconnected = true;
+                    locallyDisconnectedConnections.add(conn);
                 } else {
-                    cause = DisconnectCause.INCOMING_MISSED;
+                    // Missed call need "last call fail" reason
+                    mHasMissedCall = true;
+                    if (mDroppedDuringPoll.size() > 0) {
+                        mCi.getLastCallFailCause(obtainNoPollCompleteMessage(
+                                EVENT_GET_LAST_CALL_FAIL_CAUSE));
+                    }
                 }
 
-                if (Phone.DEBUG_PHONE) {
-                    log("missed/rejected call, conn.cause=" + conn.mCause);
-                    log("setting cause to " + cause);
-                }
-                mDroppedDuringPoll.remove(i);
-                hasAnyCallDisconnected |= conn.onDisconnect(cause);
-                wasDisconnected = true;
-                locallyDisconnectedConnections.add(conn);
             } else if (conn.mCause == DisconnectCause.LOCAL
                     || conn.mCause == DisconnectCause.INVALID_NUMBER) {
                 mDroppedDuringPoll.remove(i);
@@ -1550,9 +1555,13 @@ public class GsmCdmaCallTracker extends CallTracker {
                 for (int i = 0, s = mDroppedDuringPoll.size(); i < s ; i++) {
                     GsmCdmaConnection conn = mDroppedDuringPoll.get(i);
 
+                    // Log default cause code for normal missed call.
+                    if (mHasMissedCall && (causeCode != CallFailCause.ANSWERED_ELSEWHERE)) {
+                        causeCode = DisconnectCause.INCOMING_MISSED;
+                    }
                     conn.onRemoteDisconnect(causeCode, vendorCause);
                 }
-
+                mHasMissedCall = false;
                 updatePhoneState();
 
                 mPhone.notifyPreciseCallStateChanged();
