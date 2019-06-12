@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21a65e08_fad95a67",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-06-12T21:20:44Z",
+      "side": 1,
+      "message": "Where does this 24 come from? Please add some comments. Same for the 0x03.\n\nShouldn\u0027t this be 16? (based on cdma.SmsMessage.getStatus())",
+      "range": {
+        "startLine": 777,
+        "startChar": 49,
+        "endLine": 777,
+        "endChar": 51
+      },
+      "revId": "dc7c8db6eac00e04ce27b8d57f9d8a217d76c7ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16c691b5_2b4a67d6",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-06-12T21:20:44Z",
+      "side": 1,
+      "message": "What is the TODO? Do you need to check if CDMA status:ERROR_TEMPORARY is same as GSM TP-Status:Temporary error? Can you please check that? And what if they are/are not the same?",
+      "range": {
+        "startLine": 778,
+        "startChar": 15,
+        "endLine": 778,
+        "endChar": 19
+      },
+      "revId": "dc7c8db6eac00e04ce27b8d57f9d8a217d76c7ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
