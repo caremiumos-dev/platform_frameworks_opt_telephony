@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8947a70_5c12b72c",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5895,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-06-12T18:11:26Z",
+      "side": 1,
+      "message": "this is a cool pattern",
+      "range": {
+        "startLine": 5885,
+        "startChar": 8,
+        "endLine": 5895,
+        "endChar": 9
+      },
+      "revId": "4fb2207dddaa271a48730dc233925d9dd678dad7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
