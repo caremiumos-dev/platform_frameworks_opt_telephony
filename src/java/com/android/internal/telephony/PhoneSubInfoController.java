@@ -126,10 +126,9 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
     }
 
     public String getSubscriberIdForSubscriber(int subId, String callingPackage) {
-        Phone thePhone = getPhone(subId);
         String message = "getSubscriberId";
-        if (thePhone != null) {
-            return callPhoneMethodForSubIdWithReadCheck(subId, callingPackage,
+        if (SubscriptionController.getInstance().isActiveSubId(subId, callingPackage)) {
+            return callPhoneMethodForSubIdWithReadSubscriberIdentifiersCheck(subId, callingPackage,
                     message, (phone) -> phone.getSubscriberId());
         } else {
             if (!TelephonyPermissions.checkCallingOrSelfReadSubscriberIdentifiers(
@@ -138,7 +137,7 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
             }
             final long identity = Binder.clearCallingIdentity();
             try {
-                return SubscriptionController.getInstance().getImsi(subId);
+                return SubscriptionController.getInstance().getImsiPrivileged(subId);
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
