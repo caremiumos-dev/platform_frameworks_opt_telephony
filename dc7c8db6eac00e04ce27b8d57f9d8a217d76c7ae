@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "28c4366c_18a3a27f",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-06-13T01:03:18Z",
+      "side": 1,
+      "message": "An error class is 2 bits(25-24). So, Shift 24 and \u0027\u0026 0x03\u0027 are used.\nPlease see https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/telephony/java/android/telephony/SmsMessage.java#854",
+      "parentUuid": "21a65e08_fad95a67",
+      "range": {
+        "startLine": 777,
+        "startChar": 49,
+        "endLine": 777,
+        "endChar": 51
+      },
+      "revId": "dc7c8db6eac00e04ce27b8d57f9d8a217d76c7ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "16c691b5_2b4a67d6",
         "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-06-12T21:20:44Z",
       "side": 1,
       "message": "What is the TODO? Do you need to check if CDMA status:ERROR_TEMPORARY is same as GSM TP-Status:Temporary error? Can you please check that? And what if they are/are not the same?",
+      "range": {
+        "startLine": 778,
+        "startChar": 15,
+        "endLine": 778,
+        "endChar": 19
+      },
+      "revId": "dc7c8db6eac00e04ce27b8d57f9d8a217d76c7ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "317ba5fe_8a29ee0c",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-06-13T01:03:18Z",
+      "side": 1,
+      "message": "Line#799: In case of temporary error, GSM SC is still trying to deliver the SMS to the destination and will send the report again. (I\u0027m not sure all the carriers work like that).\n\nCDMA carriers, I\u0027m not sure as well.\nAnyway, a messaging app will receive the report regardless of the errorClass always even the temporary error. Remaining operations depend on the app.",
+      "parentUuid": "16c691b5_2b4a67d6",
       "range": {
         "startLine": 778,
         "startChar": 15,
