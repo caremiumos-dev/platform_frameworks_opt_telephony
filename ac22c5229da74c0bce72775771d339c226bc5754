@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6dfdafb_9866ecff",
+        "filename": "src/java/com/android/internal/telephony/RILRequest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-06-18T23:33:59Z",
+      "side": 1,
+      "message": "referencing member var from static context. please ignore while I sort this out.",
+      "range": {
+        "startLine": 97,
+        "startChar": 21,
+        "endLine": 97,
+        "endChar": 32
+      },
+      "revId": "ac22c5229da74c0bce72775771d339c226bc5754",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
