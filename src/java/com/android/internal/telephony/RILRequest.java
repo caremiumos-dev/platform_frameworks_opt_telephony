@@ -37,7 +37,7 @@ public class RILRequest {
 
     //***** Class Variables
     static Random sRandom = new Random();
-    static AtomicInteger sNextSerial = new AtomicInteger(0);
+    private AtomicInteger mNextSerial = new AtomicInteger(0);
     private static Object sPoolSync = new Object();
     private static RILRequest sPool = null;
     private static int sPoolSize = 0;
@@ -94,7 +94,7 @@ public class RILRequest {
         }
 
         // Increment serial number. Wrap to 0 when reaching Integer.MAX_VALUE.
-        rr.mSerial = sNextSerial.getAndUpdate(n -> ((n + 1) % Integer.MAX_VALUE));
+        rr.mSerial = mNextSerial.getAndUpdate(n -> ((n + 1) % Integer.MAX_VALUE));
 
         rr.mRequest = request;
         rr.mResult = result;
@@ -184,7 +184,7 @@ public class RILRequest {
     static void resetSerial() {
         // Use a non-negative random number so that on recovery we probably don't mix old requests
         // with new.
-        sNextSerial.set(sRandom.nextInt(Integer.MAX_VALUE));
+        mNextSerial.set(sRandom.nextInt(Integer.MAX_VALUE));
     }
 
     @UnsupportedAppUsage
