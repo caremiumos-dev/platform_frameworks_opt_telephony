@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "246bacad_297452d9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2019-06-19T16:27:34Z",
+      "side": 1,
+      "message": "Is this appropriate ? Is NO_KEEPALIVE better, or maybe a new error value ? I\u0027m not sure it\u0027s really a hardware error ; it\u0027s probably a programming error somewhere, but not necessarily on the closer-to-hardware side.",
+      "range": {
+        "startLine": 2156,
+        "startChar": 40,
+        "endLine": 2156,
+        "endChar": 76
+      },
+      "revId": "f52afee5aad2f54e119a5b4198c658e6fff630e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
