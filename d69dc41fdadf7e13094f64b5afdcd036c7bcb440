@@ -52,6 +52,24 @@
       "revId": "d69dc41fdadf7e13094f64b5afdcd036c7bcb440",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bcaf845_a5cc24ac",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-06-21T07:07:13Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "956bb6c0_c48d6894",
+      "revId": "d69dc41fdadf7e13094f64b5afdcd036c7bcb440",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
