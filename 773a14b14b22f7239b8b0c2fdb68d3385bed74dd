@@ -46,6 +46,30 @@
       "revId": "773a14b14b22f7239b8b0c2fdb68d3385bed74dd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "38683d04_e42736bc",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1120458
+      },
+      "writtenOn": "2019-06-24T18:02:24Z",
+      "side": 0,
+      "message": "Yes, also since \u0027iccphonebook\u0027 doesn\u0027t exist, I didn\u0027t want to put this. It seems like IccPhoneBookInterfaceManager and other classes are preferred?",
+      "parentUuid": "52ae09e9_afa2188d",
+      "range": {
+        "startLine": 31,
+        "startChar": 41,
+        "endLine": 31,
+        "endChar": 43
+      },
+      "revId": "773a14b14b22f7239b8b0c2fdb68d3385bed74dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
