@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aee169cd_e455931c",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-06-24T17:50:07Z",
+      "side": 0,
+      "message": "Replace this with ServiceManager instead of getting rid of the entire comment.",
+      "range": {
+        "startLine": 31,
+        "startChar": 41,
+        "endLine": 31,
+        "endChar": 43
+      },
+      "revId": "773a14b14b22f7239b8b0c2fdb68d3385bed74dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
