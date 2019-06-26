@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0234b127_7770ef21",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-06-26T05:57:24Z",
+      "side": 1,
+      "message": "nit: earlier indentation was correct",
+      "range": {
+        "startLine": 1232,
+        "startChar": 16,
+        "endLine": 1233,
+        "endChar": 16
+      },
+      "revId": "e90dbd966f86036bb300731f6eb8c2a9151d6f3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
