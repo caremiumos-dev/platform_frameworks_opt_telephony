@@ -2656,6 +2656,7 @@ public class GsmCdmaPhone extends Phone {
         mCi.areUiccApplicationsEnabled(obtainMessage(EVENT_GET_UICC_APPS_ENABLEMENT_DONE));
 
         startLceAfterRadioIsAvailable();
+        mCi.setSuppServiceNotifications(true, null);
     }
 
     private void handleRadioOn() {
