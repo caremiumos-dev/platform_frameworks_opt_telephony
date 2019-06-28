@@ -22,6 +22,30 @@
       "revId": "2dd25e6ef509834973fe7ad3e5305ba0daa98258",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d125f8a_17d1168e",
+        "filename": "src/java/com/google/android/mms/ContentType.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1004395
+      },
+      "writtenOn": "2019-06-28T21:54:55Z",
+      "side": 1,
+      "message": "Since this is package com.google.android.mms, it is not part of Android SDK public API\n(as far as I can tell) so this is not a long-term commitment.  Thus I\u0027m OK with renaming\nin the future if needed.",
+      "parentUuid": "7502d8cc_eb430faf",
+      "range": {
+        "startLine": 64,
+        "startChar": 31,
+        "endLine": 64,
+        "endChar": 41
+      },
+      "revId": "2dd25e6ef509834973fe7ad3e5305ba0daa98258",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
