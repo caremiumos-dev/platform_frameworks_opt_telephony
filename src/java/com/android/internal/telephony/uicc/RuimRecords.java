@@ -876,6 +876,9 @@ public class RuimRecords extends IccRecords {
                 obtainMessage(EVENT_GET_ICC_RECORD_DONE, new EfCsimMipUppLoaded()));
         mRecordsToLoad++;
 
+        mFh.getEFLinearRecordSize(EF_SMS, obtainMessage(EVENT_GET_ICC_SMS_CAPACITY_DONE));
+        mRecordsToLoad++;
+
         if (DBG) log("fetchRuimRecords " + mRecordsToLoad + " requested: " + mRecordsRequested);
         // Further records that can be inserted are Operator/OEM dependent
     }

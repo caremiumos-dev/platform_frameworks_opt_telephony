@@ -1582,6 +1582,9 @@ public class SIMRecords extends IccRecords {
 
         loadEfLiAndEfPl();
 
+        mFh.getEFLinearRecordSize(EF_SMS, obtainMessage(EVENT_GET_ICC_SMS_CAPACITY_DONE));
+        mRecordsToLoad++;
+
         // XXX should seek instead of examining them all
         if (false) { // XXX
             mFh.loadEFLinearFixedAll(EF_SMS, obtainMessage(EVENT_GET_ALL_SMS_DONE));
