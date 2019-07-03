@@ -39,6 +39,7 @@ import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 
+import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.util.IndentingPrintWriter;
 
 import java.io.FileDescriptor;
@@ -115,6 +116,20 @@ public class SmsController extends ISmsImplBase {
                     + " null for Subscription: " + subId);
             return null;
         }
+    }
+
+    @UnsupportedAppUsage
+    @Override
+    public int getMessageCapacityFromIccEfForSubscriber(int subId, String callingPackage) {
+        int capacity = 0;
+        if (getPhone(subId).getIccRecordsLoaded()) {
+            capacity = UiccController.getInstance().getUiccProfileForPhone(
+                    getPhone(subId).getPhoneId()).getIccRecords().getSmsCapacityOnIcc();
+        } else {
+            Rlog.e(LOG_TAG, "getMessageCapacityFromIccEfForSubscriber Error no icc card present");
+        }
+        Rlog.d(LOG_TAG, "getMessageCapacityFromIccEfForSubscriber capacity: " + capacity);
+        return capacity;
     }
 
     @UnsupportedAppUsage
