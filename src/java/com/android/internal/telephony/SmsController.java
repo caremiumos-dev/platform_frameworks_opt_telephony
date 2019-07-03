@@ -116,6 +116,23 @@ public class SmsController extends ISmsImplBase {
 
     @UnsupportedAppUsage
     @Override
+    public int getMessageCapacityFromIccEfForSubscriber(int subId, String callingPackage) {
+        List<SmsRawData> records = null;
+        IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
+        if (iccSmsIntMgr != null) {
+            records = iccSmsIntMgr.getAllMessagesFromIccEf(callingPackage);
+            if (records != null) {
+                return records.size();
+            }
+        } else {
+            Rlog.e(LOG_TAG, "getMessageCapacityFromIccEfForSubscriber iccSmsIntMgr is"
+                    + " null for Subscription: " + subId);
+        }
+        return 0;
+    }
+
+    @UnsupportedAppUsage
+    @Override
     public void sendDataForSubscriber(int subId, String callingPackage, String destAddr,
             String scAddr, int destPort, byte[] data, PendingIntent sentIntent,
             PendingIntent deliveryIntent) {
