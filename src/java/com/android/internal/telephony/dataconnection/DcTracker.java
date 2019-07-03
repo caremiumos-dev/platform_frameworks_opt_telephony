@@ -360,6 +360,14 @@ public class DcTracker extends Handler {
                 if (mIccRecords.get() != null && mIccRecords.get().getRecordsLoaded()) {
                     setDefaultDataRoamingEnabled();
                 }
+            } else if (action.equals(TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED)){
+                int phoneId = intent.getIntExtra(PhoneConstants.PHONE_KEY, -1);
+                int state = intent.getIntExtra(TelephonyManager.EXTRA_SIM_STATE,TelephonyManager.SIM_STATE_UNKNOWN);
+                log("action ACTION_SIM_APPLICATION_STATE_CHANGED");
+                if ((phoneId == mPhone.getPhoneId()) && (state == TelephonyManager.SIM_STATE_LOADED)) {
+                    log("phone" + phoneId + " is loaded");
+                    onRecordsLoadedOrSubIdChanged();
+                }
             } else {
                 if (DBG) log("onReceive: Unknown action=" + action);
             }
@@ -408,7 +416,7 @@ public class DcTracker extends Handler {
             }
             if (SubscriptionManager.isValidSubscriptionId(subId) &&
                     mPreviousSubId.getAndSet(subId) != subId) {
-                onRecordsLoadedOrSubIdChanged();
+                //onRecordsLoadedOrSubIdChanged();
             }
         }
     };
@@ -3452,7 +3460,7 @@ public class DcTracker extends Handler {
                 // onSubscriptionsChanged() when a valid subId is available.
                 int subId = mPhone.getSubId();
                 if (SubscriptionManager.isValidSubscriptionId(subId)) {
-                    onRecordsLoadedOrSubIdChanged();
+                    //onRecordsLoadedOrSubIdChanged();
                 } else {
                     log("Ignoring EVENT_RECORDS_LOADED as subId is not valid: " + subId);
                 }
