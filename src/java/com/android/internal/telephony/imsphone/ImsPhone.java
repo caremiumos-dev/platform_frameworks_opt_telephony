@@ -1099,7 +1099,7 @@ public class ImsPhone extends ImsPhoneBase {
 
     @UnsupportedAppUsage
     @Override
-    public void getCallForwardingOption(int commandInterfaceCFReason,
+    public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass,
             Message onComplete) {
         if (DBG) logd("getCallForwardingOption reason=" + commandInterfaceCFReason);
         if (isValidCommandInterfaceCFReason(commandInterfaceCFReason)) {
@@ -1119,20 +1119,11 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     @Override
-    public void setCallForwardingOption(int commandInterfaceCFAction,
-            int commandInterfaceCFReason,
-            String dialingNumber,
-            int timerSeconds,
-            Message onComplete) {
-        setCallForwardingOption(commandInterfaceCFAction, commandInterfaceCFReason, dialingNumber,
-                CommandsInterface.SERVICE_CLASS_VOICE, timerSeconds, onComplete);
-    }
-
     @UnsupportedAppUsage
     public void setCallForwardingOption(int commandInterfaceCFAction,
             int commandInterfaceCFReason,
-            String dialingNumber,
             int serviceClass,
+            String dialingNumber,
             int timerSeconds,
             Message onComplete) {
         if (DBG) {
