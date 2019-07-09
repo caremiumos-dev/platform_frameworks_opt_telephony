@@ -557,10 +557,12 @@ public interface PhoneInternalInterface {
      * @param commandInterfaceCFReason is one of the valid call forwarding
      *        CF_REASONS, as defined in
      *        <code>com.android.internal.telephony.CommandsInterface.</code>
+     * @param serviceClass is a sum of SERVICE_CLASS_* as defined in
+     *        <code>com.android.internal.telephony.CommandsInterface.</code>
      * @param onComplete a callback message when the action is completed.
      *        @see com.android.internal.telephony.CallForwardInfo for details.
      */
-    void getCallForwardingOption(int commandInterfaceCFReason,
+    void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass,
                                   Message onComplete);
 
     /**
@@ -573,6 +575,8 @@ public interface PhoneInternalInterface {
      * @param commandInterfaceCFReason is one of the valid call forwarding
      *        CF_REASONS, as defined in
      *        <code>com.android.internal.telephony.CommandsInterface.</code>
+     * @param serviceClass is a sum of SERVICE_CLASS_* as defined in
+     *        <code>com.android.internal.telephony.CommandsInterface.</code>
      * @param dialingNumber is the target phone number to forward calls to
      * @param timerSeconds is used by CFNRy to indicate the timeout before
      *        forwarding is attempted.
@@ -580,6 +584,7 @@ public interface PhoneInternalInterface {
      */
     void setCallForwardingOption(int commandInterfaceCFAction,
                                  int commandInterfaceCFReason,
+                                 int serviceClass,
                                  String dialingNumber,
                                  int timerSeconds,
                                  Message onComplete);
