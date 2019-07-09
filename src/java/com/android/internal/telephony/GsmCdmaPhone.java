@@ -56,6 +56,8 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.sysprop.TelephonyProperties;
+import android.telecom.PhoneAccount;
+import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
 import android.telecom.VideoProfile;
 import android.telephony.AccessNetworkConstants;
@@ -109,6 +111,7 @@ import com.android.telephony.Rlog;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -2048,7 +2051,9 @@ public class GsmCdmaPhone extends Phone {
                 mCi.queryCallForwardStatus(commandInterfaceCFReason, serviceClass, null, resp);
             }
         } else {
-            loge("getCallForwardingOption: not possible in CDMA without IMS");
+            loge("getCallForwardingOption: not possible in CDMA, just return empty result");
+            AsyncResult.forMessage(onComplete, makeEmptyCallForward(), null);
+            onComplete.sendToTarget();
         }
     }
 
@@ -2099,7 +2104,21 @@ public class GsmCdmaPhone extends Phone {
                         resp);
             }
         } else {
-            loge("setCallForwardingOption: not possible in CDMA without IMS");
+            String formatNumber = GsmCdmaConnection.formatDialString(dialingNumber);
+            String cfNumber = getCallForwardingPrefixAndNumber(commandInterfaceCFAction,
+                    commandInterfaceCFReason, formatNumber);
+            loge("setCallForwardingOption: dial for set call forwarding"
+                    + " prefixWithNumber= " + cfNumber + " number= " + dialingNumber);
+
+            PhoneAccountHandle phoneAccountHandle = subscriptionIdToPhoneAccountHandle(getSubId());
+            Bundle extras = new Bundle();
+            extras.putParcelable(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE, phoneAccountHandle);
+
+            final TelecomManager telecomManager = TelecomManager.from(mContext);
+            telecomManager.placeCall(Uri.parse("tel:" + cfNumber), extras);
+
+            AsyncResult.forMessage(onComplete, CommandsInterface.SS_STATUS_UNKNOWN, null);
+            onComplete.sendToTarget();
         }
     }
 
@@ -4073,6 +4092,79 @@ public class GsmCdmaPhone extends Phone {
         } else {
             setVoiceMessageCount(countWaiting);
         }
+    }
+
+    private CallForwardInfo[] makeEmptyCallForward() {
+        CallForwardInfo infos[] = new CallForwardInfo[1];
+
+        infos[0] = new CallForwardInfo();
+        infos[0].status = CommandsInterface.SS_STATUS_UNKNOWN;
+        infos[0].reason = 0;
+        infos[0].serviceClass = CommandsInterface.SERVICE_CLASS_VOICE;
+        infos[0].toa = PhoneNumberUtils.TOA_Unknown;
+        infos[0].number = "";
+        infos[0].timeSeconds = 0;
+
+        return infos;
+    }
+
+    private String getCallForwardingPrefixAndNumber(int action, int reason, String number) {
+        String prefixWithNum = "";
+        switch(reason) {
+            case CF_REASON_UNCONDITIONAL: {
+                if (action == CF_ACTION_REGISTRATION) {
+                    prefixWithNum = "*72" + number;
+                } else if (action == CF_ACTION_DISABLE) {
+                    prefixWithNum = "*720";
+                }
+                break;
+            }
+            case CF_REASON_BUSY: {
+                if (action == CF_ACTION_REGISTRATION) {
+                    prefixWithNum = "*90" + number;
+                } else if (action == CF_ACTION_DISABLE) {
+                    prefixWithNum = "*900";
+                }
+                break;
+            }
+            case CF_REASON_NO_REPLY: {
+                if (action == CF_ACTION_REGISTRATION) {
+                    prefixWithNum = "*92" + number;
+                } else if (action == CF_ACTION_DISABLE) {
+                    prefixWithNum = "*920";
+                }
+                break;
+            }
+            case CF_REASON_NOT_REACHABLE: {
+                if (action == CF_ACTION_REGISTRATION) {
+                    prefixWithNum = "*68" + number;
+                } else if (action == CF_ACTION_DISABLE) {
+                    prefixWithNum = "*680";
+                }
+                break;
+            }
+            default:
+                Rlog.d(LOG_TAG, "getCallForwardingPrefix not match any prefix");
+                break;
+        }
+        return prefixWithNum;
+    }
+
+    private PhoneAccountHandle subscriptionIdToPhoneAccountHandle(final int subId) {
+        final TelecomManager telecomManager = TelecomManager.from(mContext);
+        final TelephonyManager telephonyManager = TelephonyManager.from(mContext);
+        final Iterator<PhoneAccountHandle> phoneAccounts =
+            telecomManager.getCallCapablePhoneAccounts(true).listIterator();
+
+        while (phoneAccounts.hasNext()) {
+            final PhoneAccountHandle phoneAccountHandle = phoneAccounts.next();
+            final PhoneAccount phoneAccount = telecomManager.getPhoneAccount(phoneAccountHandle);
+            if (subId == telephonyManager.getSubIdForPhoneAccount(phoneAccount)) {
+                return phoneAccountHandle;
+            }
+        }
+
+        return null;
     }
 
     @UnsupportedAppUsage
