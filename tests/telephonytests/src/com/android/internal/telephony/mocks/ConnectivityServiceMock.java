@@ -39,6 +39,12 @@ import android.os.RemoteException;
 import android.util.Slog;
 
 import com.android.internal.annotations.VisibleForTesting;
+<<<<<<< HEAD   (b165de Merge "Add unit test for CallQualityMetrics")
+=======
+import com.android.internal.net.LegacyVpnInfo;
+import com.android.internal.net.VpnConfig;
+import com.android.internal.net.VpnProfile;
+>>>>>>> BRANCH (741849 Snap for 5622519 from fe4b8179b63eb376b3b189ef9b3463ad523b26)
 import com.android.internal.util.AsyncChannel;
 import com.android.server.connectivity.NetworkAgentInfo;
 
@@ -393,6 +399,286 @@ public class ConnectivityServiceMock {
         return mNextNetworkRequestId++;
     }
 
+<<<<<<< HEAD   (b165de Merge "Add unit test for CallQualityMetrics")
+=======
+    @Override
+    public NetworkInfo getActiveNetworkInfo() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public Network getActiveNetwork() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public Network getActiveNetworkForUid(int uid, boolean ignoreBlocked) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public NetworkInfo getActiveNetworkInfoUnfiltered() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public NetworkInfo getActiveNetworkInfoForUid(int uid, boolean ignoreBlocked) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public NetworkInfo getNetworkInfo(int networkType) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public NetworkInfo getNetworkInfoForUid(Network network, int uid, boolean ignoreBlocked) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public NetworkInfo[] getAllNetworkInfo() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public Network getNetworkForType(int networkType) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public Network[] getAllNetworks() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public NetworkCapabilities[] getDefaultNetworkCapabilitiesForUser(int userId) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public boolean isNetworkSupported(int networkType) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public LinkProperties getActiveLinkProperties() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public LinkProperties getLinkPropertiesForType(int networkType) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public LinkProperties getLinkProperties(Network network) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public NetworkCapabilities getNetworkCapabilities(Network network) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public NetworkState[] getAllNetworkState() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public NetworkQuotaInfo getActiveNetworkQuotaInfo() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public boolean isActiveNetworkMetered() {
+        throw new RuntimeException("not implemented");
+    }
+
+    public boolean requestRouteToHostAddress(int networkType, byte[] hostAddress) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public int getRestoreDefaultNetworkDelay(int networkType) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    protected void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public void setAcceptUnvalidated(Network network, boolean accept, boolean always) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public void setAvoidUnvalidated(Network network) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public void startCaptivePortalApp(Network network) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public int getMultipathPreference(Network network) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public int tether(String iface, String callerPkg) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public int untether(String iface, String callerPkg) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public int getLastTetherError(String iface) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public String[] getTetherableUsbRegexs() {
+        throw new RuntimeException("not implemented");
+    }
+
+    public String[] getTetherableWifiRegexs() {
+        throw new RuntimeException("not implemented");
+    }
+
+    public String[] getTetherableBluetoothRegexs() {
+        throw new RuntimeException("not implemented");
+    }
+
+    public int setUsbTethering(boolean enable, String callerPkg) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public String[] getTetherableIfaces() {
+        throw new RuntimeException("not implemented");
+    }
+
+    public String[] getTetheredIfaces() {
+        throw new RuntimeException("not implemented");
+    }
+
+    public String[] getTetheringErroredIfaces() {
+        throw new RuntimeException("not implemented");
+    }
+
+    public String[] getTetheredDhcpRanges() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public boolean isTetheringSupported(String callerPkg) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public void startTethering(int type, ResultReceiver receiver, boolean showProvisioningUi,
+            String callerPkg) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public void stopTethering(int type, String callerPkg) {
+        throw new RuntimeException("not implemented");
+    }
+
+
+    public void reportInetCondition(int networkType, int percentage) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public void reportNetworkConnectivity(Network network, boolean hasConnectivity) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public ProxyInfo getProxyForNetwork(Network network) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public void setGlobalProxy(ProxyInfo proxyProperties) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public ProxyInfo getGlobalProxy() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public boolean prepareVpn(@Nullable String oldPackage, @Nullable String newPackage,
+            int userId) {
+        throw new RuntimeException("not implemented");
+    }
+
+    public void setVpnPackageAuthorization(String packageName, int userId, boolean authorized) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public ParcelFileDescriptor establishVpn(VpnConfig config) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public void startLegacyVpn(VpnProfile profile) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public LegacyVpnInfo getLegacyVpnInfo(int userId) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public VpnConfig getVpnConfig(int userId) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public boolean updateLockdownVpn() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public boolean isAlwaysOnVpnPackageSupported(int userId, String packageName) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public boolean setAlwaysOnVpnPackage(int userId, String packageName, boolean lockdownEnabled) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public String getAlwaysOnVpnPackage(int userId) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public int checkMobileProvisioning(int suggestedTimeOutMs) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public String getMobileProvisioningUrl() {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public void setProvisioningNotificationVisible(boolean visible, int networkType,
+            String action) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public void setAirplaneMode(boolean enable) {
+        throw new RuntimeException("not implemented");
+    }
+
+    @Override
+>>>>>>> BRANCH (741849 Snap for 5622519 from fe4b8179b63eb376b3b189ef9b3463ad523b26)
     public NetworkRequest requestNetwork(NetworkCapabilities networkCapabilities,
             Messenger messenger, int timeoutMs, IBinder binder, int legacyType) {
         networkCapabilities = new NetworkCapabilities(networkCapabilities);
