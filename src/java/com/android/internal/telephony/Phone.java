@@ -1956,10 +1956,11 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     public void setVoiceCallForwardingFlag(int line, boolean enable, String number) {
         setCallForwardingIndicatorInSharedPref(enable);
-        IccRecords r = mIccRecords.get();
+        IccRecords r = getIccRecords();
         if (r != null) {
             r.setVoiceCallForwardingFlag(line, enable, number);
         }
+        notifyCallForwardingIndicator();
     }
 
     /**
@@ -1973,7 +1974,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public void setVoiceCallForwardingFlag(IccRecords r, int line, boolean enable,
                                               String number) {
         setCallForwardingIndicatorInSharedPref(enable);
-        r.setVoiceCallForwardingFlag(line, enable, number);
+        if (r != null) {
+            r.setVoiceCallForwardingFlag(line, enable, number);
+        }
+        notifyCallForwardingIndicator();
     }
 
     /**
@@ -1987,7 +1991,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             Rlog.e(LOG_TAG, "getCallForwardingIndicator: not possible in CDMA");
             return false;
         }
-        IccRecords r = mIccRecords.get();
+        IccRecords r = getIccRecords();
         int callForwardingIndicator = IccRecords.CALL_FORWARDING_STATUS_UNKNOWN;
         if (r != null) {
             callForwardingIndicator = r.getVoiceCallForwardingFlag();
