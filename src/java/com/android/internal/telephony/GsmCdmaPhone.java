@@ -1937,13 +1937,13 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
-    public void getCallForwardingOption(int commandInterfaceCFReason, Message onComplete) {
+    public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete) {
         if (isPhoneTypeGsm() || isImsUtEnabledOverCdma()) {
             Phone imsPhone = mImsPhone;
             if ((imsPhone != null)
                     && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
                     || imsPhone.isUtEnabled())) {
-                imsPhone.getCallForwardingOption(commandInterfaceCFReason, onComplete);
+                imsPhone.getCallForwardingOption(commandInterfaceCFReason, serviceClass, onComplete);
                 return;
             }
 
@@ -1955,8 +1955,7 @@ public class GsmCdmaPhone extends Phone {
                 } else {
                     resp = onComplete;
                 }
-                mCi.queryCallForwardStatus(commandInterfaceCFReason,
-                        CommandsInterface.SERVICE_CLASS_VOICE, null, resp);
+                mCi.queryCallForwardStatus(commandInterfaceCFReason, serviceClass, null, resp);
             }
         } else {
             loge("getCallForwardingOption: not possible in CDMA without IMS");
@@ -1966,6 +1965,7 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void setCallForwardingOption(int commandInterfaceCFAction,
             int commandInterfaceCFReason,
+            int serviceClass,
             String dialingNumber,
             int timerSeconds,
             Message onComplete) {
@@ -1975,7 +1975,8 @@ public class GsmCdmaPhone extends Phone {
                     && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
                     || imsPhone.isUtEnabled())) {
                 imsPhone.setCallForwardingOption(commandInterfaceCFAction,
-                        commandInterfaceCFReason, dialingNumber, timerSeconds, onComplete);
+                        commandInterfaceCFReason, serviceClass, dialingNumber,
+                        timerSeconds, onComplete);
                 return;
             }
 
@@ -1992,7 +1993,7 @@ public class GsmCdmaPhone extends Phone {
                 }
                 mCi.setCallForward(commandInterfaceCFAction,
                         commandInterfaceCFReason,
-                        CommandsInterface.SERVICE_CLASS_VOICE,
+                        serviceClass,
                         dialingNumber,
                         timerSeconds,
                         resp);
