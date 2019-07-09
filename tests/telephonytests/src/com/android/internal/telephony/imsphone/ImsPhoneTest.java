@@ -482,15 +482,16 @@ public class ImsPhoneTest extends TelephonyTest {
     @Ignore
     public void testCallForwardingOption() throws Exception {
         Message msg = mTestHandler.obtainMessage();
-        mImsPhoneUT.getCallForwardingOption(CF_REASON_UNCONDITIONAL, msg);
+        mImsPhoneUT.getCallForwardingOption(CF_REASON_UNCONDITIONAL,
+                CommandsInterface.SERVICE_CLASS_VOICE, msg);
 
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
         verify(mImsUtInterface).queryCallForward(eq(ImsUtInterface.CDIV_CF_UNCONDITIONAL),
                 (String) eq(null), messageArgumentCaptor.capture());
         assertEquals(msg, messageArgumentCaptor.getValue().obj);
 
-        mImsPhoneUT.setCallForwardingOption(CF_ACTION_ENABLE, CF_REASON_UNCONDITIONAL, "1234", 0,
-                msg);
+        mImsPhoneUT.setCallForwardingOption(CF_ACTION_ENABLE, CF_REASON_UNCONDITIONAL,
+                CommandsInterface.SERVICE_CLASS_VOICE, "1234", 0, msg);
         verify(mImsUtInterface).updateCallForward(eq(ImsUtInterface.ACTION_ACTIVATION),
                 eq(ImsUtInterface.CDIV_CF_UNCONDITIONAL), eq("1234"),
                 eq(CommandsInterface.SERVICE_CLASS_VOICE), eq(0), eq(msg));

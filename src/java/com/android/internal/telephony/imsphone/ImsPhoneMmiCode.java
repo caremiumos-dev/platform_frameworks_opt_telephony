@@ -818,7 +818,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                 int time = siToTime(mSic);
 
                 if (isInterrogate()) {
-                    mPhone.getCallForwardingOption(reason,
+                    mPhone.getCallForwardingOption(reason, serviceClass,
                             obtainMessage(EVENT_QUERY_CF_COMPLETE, this));
                 } else {
                     int cfAction;
@@ -854,8 +854,8 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                                 (cfAction == CommandsInterface.CF_ACTION_REGISTRATION)) ? 1 : 0;
 
                     Rlog.d(LOG_TAG, "processCode: is CF setCallForward");
-                    mPhone.setCallForwardingOption(cfAction, reason,
-                            dialingNumber, serviceClass, time, obtainMessage(
+                    mPhone.setCallForwardingOption(cfAction, reason, serviceClass,
+                            dialingNumber, time, obtainMessage(
                                     EVENT_SET_CFF_COMPLETE,
                                     isSettingUnconditional,
                                     isEnableDesired, this));

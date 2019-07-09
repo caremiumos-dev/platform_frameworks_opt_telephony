@@ -755,14 +755,14 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
     @SmallTest
     public void testGetCallForwardingOption() {
         // invalid reason (-1)
-        mPhoneUT.getCallForwardingOption(-1, null);
+        mPhoneUT.getCallForwardingOption(-1, CommandsInterface.SERVICE_CLASS_VOICE, null);
         verify(mSimulatedCommandsVerifier, times(0)).queryCallForwardStatus(
                 anyInt(), anyInt(), nullable(String.class), nullable(Message.class));
 
         // valid reason
         String imsi = "1234567890";
         doReturn(imsi).when(mSimRecords).getIMSI();
-        mPhoneUT.getCallForwardingOption(CF_REASON_UNCONDITIONAL, null);
+        mPhoneUT.getCallForwardingOption(CF_REASON_UNCONDITIONAL, CommandsInterface.SERVICE_CLASS_VOICE, null);
         verify(mSimulatedCommandsVerifier).queryCallForwardStatus(
                 eq(CF_REASON_UNCONDITIONAL), eq(CommandsInterface.SERVICE_CLASS_VOICE),
                 nullable(String.class), nullable(Message.class));
@@ -789,13 +789,14 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         String cfNumber = "1234567890";
 
         // invalid action
-        mPhoneUT.setCallForwardingOption(-1, CF_REASON_UNCONDITIONAL,
+        mPhoneUT.setCallForwardingOption(-1, CF_REASON_UNCONDITIONAL, CommandsInterface.SERVICE_CLASS_VOICE,
                 cfNumber, 0, null);
         verify(mSimulatedCommandsVerifier, times(0)).setCallForward(anyInt(), anyInt(), anyInt(),
                 nullable(String.class), anyInt(), nullable(Message.class));
 
         // valid action
-        mPhoneUT.setCallForwardingOption(CF_ACTION_ENABLE, CF_REASON_UNCONDITIONAL, cfNumber, 0,
+        mPhoneUT.setCallForwardingOption(CF_ACTION_ENABLE, CF_REASON_UNCONDITIONAL,
+                                         CommandsInterface.SERVICE_CLASS_VOICE, cfNumber, 0,
                 null);
         verify(mSimulatedCommandsVerifier).setCallForward(eq(CF_ACTION_ENABLE),
                 eq(CF_REASON_UNCONDITIONAL), anyInt(), eq(cfNumber), eq(0),
