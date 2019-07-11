@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2f27a1a_0164d480",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-07-11T00:22:59Z",
+      "side": 1,
+      "message": "This returns the messages on ICC, not the capacity.",
+      "range": {
+        "startLine": 123,
+        "startChar": 35,
+        "endLine": 123,
+        "endChar": 58
+      },
+      "revId": "88c172620563b04128e057fd32547ad5926d7d45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
