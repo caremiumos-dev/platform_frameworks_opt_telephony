@@ -817,24 +817,19 @@ public class IccSmsInterfaceManager {
     }
 
     /**
-     * create SmsRawData lists from all sms record byte[]
-     * Use null to indicate "free" record
+     * Creates SmsRawData list from all sms record byte[].
      *
      * @param messages List of message records from EF_SMS.
      * @return SmsRawData list of all in-used records
      */
     protected ArrayList<SmsRawData> buildValidRawData(ArrayList<byte[]> messages) {
         int count = messages.size();
-        ArrayList<SmsRawData> ret;
-
-        ret = new ArrayList<SmsRawData>(count);
+        ArrayList<SmsRawData> ret = new ArrayList<SmsRawData>();
 
         for (int i = 0; i < count; i++) {
             byte[] ba = messages.get(i);
-            if ((ba[0] & 0x01) == STATUS_ON_ICC_FREE) {
-                ret.add(null);
-            } else {
-                ret.add(new SmsRawData(messages.get(i)));
+            if ((ba[0] & 0x01) != STATUS_ON_ICC_FREE) {
+                ret.add(new SmsRawData(messages.get(i), i + 1));
             }
         }
 
