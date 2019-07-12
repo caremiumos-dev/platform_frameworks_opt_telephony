@@ -109,6 +109,9 @@ public class GsmCdmaCallTracker extends CallTracker {
     private int mPendingCallClirMode;
     private int m3WayCallFlashDelay;
 
+    // it represents whether last call type is GSM after phone type switch.
+    private boolean mIsPhoneTypeGsm = true;
+
     /**
      * Listens for Emergency Callback Mode state change intents
      */
@@ -192,16 +195,23 @@ public class GsmCdmaCallTracker extends CallTracker {
             m3WayCallFlashDelay = 0;
             mCi.registerForCallWaitingInfo(this, EVENT_CALL_WAITING_INFO_CDMA, null);
         }
+
+        mIsPhoneTypeGsm = mPhone.isPhoneTypeGsm();
     }
 
     private void reset() {
         Rlog.d(LOG_TAG, "reset");
 
-        for (GsmCdmaConnection gsmCdmaConnection : mConnections) {
-            if (gsmCdmaConnection != null) {
-                gsmCdmaConnection.onDisconnect(DisconnectCause.ERROR_UNSPECIFIED);
-                gsmCdmaConnection.dispose();
+        if (mIsPhoneTypeGsm) {
+            for (GsmCdmaConnection gsmCdmaConnection : mConnections) {
+                if (gsmCdmaConnection != null) {
+                    gsmCdmaConnection.onDisconnect(DisconnectCause.ERROR_UNSPECIFIED);
+                    gsmCdmaConnection.dispose();
+                }
             }
+        } else {
+            // last call is CDMA call, after phone type change, need to release all CDMA calls.
+            resetCdmaConnections();
         }
 
         if (mPendingMO != null) {
@@ -213,6 +223,23 @@ public class GsmCdmaCallTracker extends CallTracker {
         mConnections = null;
         mPendingMO = null;
         clearDisconnected();
+    }
+
+    private void resetCdmaConnections() {
+        int count = mForegroundCall.mConnections.size();
+        for (int n = count-1; n >= 0; n--) {
+            if (Phone.DEBUG_PHONE) log("release fgCall cn " + n);
+            GsmCdmaConnection cn = (GsmCdmaConnection)mForegroundCall.mConnections.get(n);
+            cn.onDisconnect(DisconnectCause.ERROR_UNSPECIFIED);
+            cn.dispose();
+        }
+        count = mRingingCall.mConnections.size();
+        for (int n = count-1; n >= 0; n--) {
+            if (Phone.DEBUG_PHONE) log("release rgCall cn " + n);
+            GsmCdmaConnection cn = (GsmCdmaConnection)mRingingCall.mConnections.get(n);
+            cn.onDisconnect(DisconnectCause.ERROR_UNSPECIFIED);
+            cn.dispose();
+        }
     }
 
     @Override
