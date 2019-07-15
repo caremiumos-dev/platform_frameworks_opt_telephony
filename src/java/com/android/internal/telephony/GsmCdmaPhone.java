@@ -1502,19 +1502,25 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public String getVoiceMailNumber() {
         String number = null;
-        if (isPhoneTypeGsm()) {
-            // Read from the SIM. If its null, try reading from the shared preference area.
-            IccRecords r = mIccRecords.get();
-            number = (r != null) ? r.getVoiceMailNumber() : "";
-            if (TextUtils.isEmpty(number)) {
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-                number = sp.getString(VM_NUMBER + getPhoneId(), null);
-            }
-        } else {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-            number = sp.getString(VM_NUMBER_CDMA + getPhoneId(), null);
+
+        IccRecords r = mIccRecords.get();
+
+        // If the phone is CDMA-type but has SIM/USIM, forcibly use those records instead of CDMA.
+        if (!isPhoneTypeGsm() && mSimRecords != null) {
+            r = mSimRecords;
         }
 
+        if (r != null) number = r.getVoiceMailNumber();
+
+        // If the IccRecords did not have a valid number, then resort to shared preferences.
+        if (TextUtils.isEmpty(number)) {
+            String preferenceSource = isPhoneTypeGsm() ? VM_NUMBER : VM_NUMBER_CDMA;
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+            number = sp.getString(preferenceSource + getPhoneId(), null);
+        }
+
+        // If the shared preferences still doesn't provide a valid number, then fall back to the
+        // carrier config for a default.
         if (TextUtils.isEmpty(number)) {
             CarrierConfigManager configManager = (CarrierConfigManager)
                     getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
@@ -1560,15 +1566,18 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public String getVoiceMailAlphaTag() {
-        String ret = "";
+        String ret = null;
 
-        if (isPhoneTypeGsm()) {
-            IccRecords r = mIccRecords.get();
+        IccRecords r = mIccRecords.get();
 
-            ret = (r != null) ? r.getVoiceMailAlphaTag() : "";
+        // If the phone is CDMA-type but has SIM/USIM, forcibly use those records instead of CDMA.
+        if (!isPhoneTypeGsm() && mSimRecords != null) {
+            r = mSimRecords;
         }
 
-        if (ret == null || ret.length() == 0) {
+        if (r != null) ret = r.getVoiceMailAlphaTag();
+
+        if (TextUtils.isEmpty(ret)) {
             return mContext.getText(
                 com.android.internal.R.string.defaultVoiceMailAlphaTag).toString();
         }
@@ -1844,6 +1853,7 @@ public class GsmCdmaPhone extends Phone {
 
         IccRecords r = mIccRecords.get();
 
+        // If the phone is CDMA-type but has SIM/USIM, forcibly use those records instead of CDMA.
         if (!isPhoneTypeGsm() && mSimRecords != null) {
             r = mSimRecords;
         }
