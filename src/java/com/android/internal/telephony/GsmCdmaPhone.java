@@ -2133,7 +2133,9 @@ public class GsmCdmaPhone extends Phone {
             }
             mCi.queryFacilityLock(facility, password, serviceClass, onComplete);
         } else {
-            loge("getCallBarringOption: not possible in CDMA");
+            loge("getCallBarringOption: not possible in CDMA, just return empty result");
+            AsyncResult.forMessage(onComplete, new int[]{CommandsInterface.SS_STATUS_UNKNOWN}, null);
+            onComplete.sendToTarget();
         }
     }
 
@@ -2148,7 +2150,18 @@ public class GsmCdmaPhone extends Phone {
             }
             mCi.setFacilityLock(facility, lockState, password, serviceClass, onComplete);
         } else {
-            loge("setCallBarringOption: not possible in CDMA");
+            String cbNumber = getCallBarringPrefix(facility, lockState);
+            loge("setCallBarring: dial for set call barring number=" + cbNumber);
+
+            PhoneAccountHandle phoneAccountHandle = subscriptionIdToPhoneAccountHandle(getSubId());
+            Bundle extras = new Bundle();
+            extras.putParcelable(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE, phoneAccountHandle);
+
+            final TelecomManager telecomManager = TelecomManager.from(mContext);
+            telecomManager.placeCall(Uri.parse("tel:" + cbNumber + password + "#"), extras);
+
+            AsyncResult.forMessage(onComplete, CommandsInterface.SS_STATUS_UNKNOWN, null);
+            onComplete.sendToTarget();
         }
     }
 
@@ -4161,6 +4174,22 @@ public class GsmCdmaPhone extends Phone {
                 break;
         }
         return prefixWithNum;
+    }
+
+    private String getCallBarringPrefix(String facility, boolean lockState) {
+        String number = lockState ? "*" : "#";
+        if (CommandsInterface.CB_FACILITY_BAOC.equals(facility)) {
+            number += "333";
+        } else if (CommandsInterface.CB_FACILITY_BAOIC.equals(facility)) {
+            number += "331";
+        } else if (CommandsInterface.CB_FACILITY_BAOICxH.equals(facility)) {
+            number += "332";
+        } else if (CommandsInterface.CB_FACILITY_BAIC.equals(facility)) {
+            number += "35";
+        } else if (CommandsInterface.CB_FACILITY_BAICr.equals(facility)) {
+            number += "351";
+        }
+        return number + "*";
     }
 
     private PhoneAccountHandle subscriptionIdToPhoneAccountHandle(final int subId) {
