@@ -26,6 +26,7 @@ import android.app.ActivityManager;
 import android.app.ActivityThread;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Binder;
@@ -548,6 +549,64 @@ public class SmsController extends ISmsImplBase {
             byte[] data = text.getBytes(StandardCharsets.UTF_8);
             sendDataForSubscriberWithSelfPermissionsInternal(subId, callingPackage, number,
                     null, (short) port, data, sentIntent, null, true /* isForVvm */);
+        }
+    }
+
+    @Override
+    public String getSmscAddressFromIccEfForSubscriber(int subId, String callingPackage) {
+        final Context context = ActivityThread.currentApplication().getApplicationContext();
+        final ComponentName defaultSmsComponent =
+                SmsApplication.getDefaultSmsApplication(context, false /* updateIfNeeded */);
+        if (defaultSmsComponent == null
+                || !defaultSmsComponent.getPackageName().equals(callingPackage)) {
+            try {
+                TelephonyPermissions
+                        .enforeceCallingOrSelfReadPrivilegedPhoneStatePermissionOrCarrierPrivilege(
+                                context, subId, "getSmscAddressOnIccEfForSubscriber");
+            } catch (SecurityException ex) {
+                Rlog.e(LOG_TAG, "getSmscAddressFromIccEfForSubscriber requires that "
+                        + "the calling app is the default SMS app, "
+                        + "or has READ_PRIVILEGED_PHONE_STATE or carrier privileges", ex);
+                return null;
+            }
+        }
+
+        IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
+        if (iccSmsIntMgr != null) {
+            return iccSmsIntMgr.getSmscAddressFromIccEf();
+        } else {
+            Rlog.e(LOG_TAG, "getSmscAddressFromIccEfForSubscriber iccSmsIntMgr is null"
+                    + " for Subscription: " + subId);
+            return null;
+        }
+    }
+
+    @Override
+    public boolean setSmscAddressOnIccEfForSubscriber(
+            String smsc, int subId, String callingPackage) {
+        final Context context = ActivityThread.currentApplication().getApplicationContext();
+        final ComponentName defaultSmsComponent =
+                SmsApplication.getDefaultSmsApplication(context, false /* updateIfNeeded */);
+        if (defaultSmsComponent == null
+                || !defaultSmsComponent.getPackageName().equals(callingPackage)) {
+            try {
+                TelephonyPermissions.enforceCallingOrSelfModifyPermissionOrCarrierPrivilege(
+                        context, subId, "setSmscAddressOnIccEfForSubscriber");
+            } catch (SecurityException ex) {
+                Rlog.e(LOG_TAG, "setSmscAddressFromIccEfForSubscriber requires that "
+                        + "the calling app is the default SMS app, "
+                        + "or has MODIFY_PHONE_STATE or carrier privileges", ex);
+                return false;
+            }
+        }
+
+        IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
+        if (iccSmsIntMgr != null) {
+            return iccSmsIntMgr.setSmscAddressOnIccEf(smsc);
+        } else {
+            Rlog.e(LOG_TAG, "setSmscAddressOnIccEfForSubscriber iccSmsIntMgr is null"
+                    + " for Subscription: " + subId);
+            return false;
         }
     }
 
