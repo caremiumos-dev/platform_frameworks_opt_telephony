@@ -503,14 +503,6 @@ public class PhoneMock extends Phone {
         throw new RuntimeException("not implemented");
     }
 
-    public void getSmscAddress(Message result) {
-        throw new RuntimeException("not implemented");
-    }
-
-    public void setSmscAddress(String address, Message result) {
-        throw new RuntimeException("not implemented");
-    }
-
     public void setTTYMode(int ttyMode, Message onComplete) {
         throw new RuntimeException("not implemented");
     }
