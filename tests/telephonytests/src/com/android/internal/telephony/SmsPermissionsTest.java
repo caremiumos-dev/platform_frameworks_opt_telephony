@@ -15,6 +15,9 @@
  */
 package com.android.internal.telephony;
 
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -165,5 +168,70 @@ public class SmsPermissionsTest {
                 .thenReturn(AppOpsManager.MODE_ERRORED);
         assertFalse(mSmsPermissionsTest.checkCallingCanSendText(
                 false /* persistMessageForNonDefaultSmsApp */, PACKAGE, MESSAGE));
+    }
+
+    @Test
+    public void testCheckCallingOrSelfCanGetSmscAddressPermissions_defaultSmsApp() {
+        Mockito.when(mMockAppOps.noteOp(
+                AppOpsManager.OPSTR_WRITE_SMS, Binder.getCallingUid(), PACKAGE))
+                .thenReturn(AppOpsManager.MODE_ALLOWED);
+        Mockito.when(mMockContext.checkCallingOrSelfPermission(
+                    Manifest.permission.READ_PRIVILEGED_PHONE_STATE))
+                .thenReturn(PERMISSION_DENIED);
+        assertTrue(mSmsPermissionsTest.checkCallingOrSelfCanGetSmscAddress(PACKAGE, MESSAGE));
+    }
+
+    @Test
+    public void testCheckCallingOrSelfCanGetSmscAddressPermissions_hasReadPrivilegedPhoneState() {
+        Mockito.when(mMockAppOps.noteOp(
+                AppOpsManager.OPSTR_WRITE_SMS, Binder.getCallingUid(), PACKAGE))
+                .thenReturn(AppOpsManager.MODE_IGNORED);
+        Mockito.when(mMockContext.checkCallingOrSelfPermission(
+                    Manifest.permission.READ_PRIVILEGED_PHONE_STATE))
+                .thenReturn(PERMISSION_GRANTED);
+        assertTrue(mSmsPermissionsTest.checkCallingOrSelfCanGetSmscAddress(PACKAGE, MESSAGE));
+    }
+
+    @Test
+    public void testCheckCallingOrSelfCanGetSmscAddressPermissions_noPermissions() {
+        Mockito.when(mMockAppOps.noteOp(
+                AppOpsManager.OPSTR_WRITE_SMS, Binder.getCallingUid(), PACKAGE))
+                .thenReturn(AppOpsManager.MODE_IGNORED);
+        Mockito.when(mMockContext.checkCallingOrSelfPermission(
+                    Manifest.permission.READ_PRIVILEGED_PHONE_STATE))
+                .thenReturn(PERMISSION_DENIED);
+        assertFalse(mSmsPermissionsTest.checkCallingOrSelfCanGetSmscAddress(PACKAGE, MESSAGE));
+    }
+    @Test
+    public void testCheckCallingOrSelfCanSetSmscAddressPermissions_defaultSmsApp() {
+        Mockito.when(mMockAppOps.noteOp(
+                AppOpsManager.OPSTR_WRITE_SMS, Binder.getCallingUid(), PACKAGE))
+                .thenReturn(AppOpsManager.MODE_ALLOWED);
+        Mockito.when(mMockContext.checkCallingOrSelfPermission(
+                    Manifest.permission.MODIFY_PHONE_STATE))
+                .thenReturn(PERMISSION_DENIED);
+        assertTrue(mSmsPermissionsTest.checkCallingOrSelfCanSetSmscAddress(PACKAGE, MESSAGE));
+    }
+
+    @Test
+    public void testCheckCallingOrSelfCanSetSmscAddressPermissions_hasModifyPhoneState() {
+        Mockito.when(mMockAppOps.noteOp(
+                AppOpsManager.OPSTR_WRITE_SMS, Binder.getCallingUid(), PACKAGE))
+                .thenReturn(AppOpsManager.MODE_IGNORED);
+        Mockito.when(mMockContext.checkCallingOrSelfPermission(
+                    Manifest.permission.MODIFY_PHONE_STATE))
+                .thenReturn(PERMISSION_GRANTED);
+        assertTrue(mSmsPermissionsTest.checkCallingOrSelfCanSetSmscAddress(PACKAGE, MESSAGE));
+    }
+
+    @Test
+    public void testCheckCallingOrSelfCanSetSmscAddressPermissions_noPermissions() {
+        Mockito.when(mMockAppOps.noteOp(
+                AppOpsManager.OPSTR_WRITE_SMS, Binder.getCallingUid(), PACKAGE))
+                .thenReturn(AppOpsManager.MODE_IGNORED);
+        Mockito.when(mMockContext.checkCallingOrSelfPermission(
+                    Manifest.permission.MODIFY_PHONE_STATE))
+                .thenReturn(PERMISSION_DENIED);
+        assertFalse(mSmsPermissionsTest.checkCallingOrSelfCanSetSmscAddress(PACKAGE, MESSAGE));
     }
 }

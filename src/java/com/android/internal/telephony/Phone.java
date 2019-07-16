@@ -2129,27 +2129,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
-     * Gets the default SMSC address.
-     *
-     * @param result Callback message contains the SMSC address.
-     */
-    @UnsupportedAppUsage
-    public void getSmscAddress(Message result) {
-        mCi.getSmscAddress(result);
-    }
-
-    /**
-     * Sets the default SMSC address.
-     *
-     * @param address new SMSC address
-     * @param result Callback message is empty on completion
-     */
-    @UnsupportedAppUsage
-    public void setSmscAddress(String address, Message result) {
-        mCi.setSmscAddress(address, result);
-    }
-
-    /**
      * setTTYMode
      * sets a TTY mode option.
      * @param ttyMode is a one of the following:
