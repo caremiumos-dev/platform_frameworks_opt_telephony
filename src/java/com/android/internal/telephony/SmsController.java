@@ -552,6 +552,39 @@ public class SmsController extends ISmsImplBase {
     }
 
     @Override
+    public String getSmscAddressFromIccEfForSubscriber(int subId, String callingPackage) {
+        if (!TelephonyPermissions.checkCallingOrSelfReadPhoneState(getPhone(subId).getContext(),
+                subId, callingPackage, "getSmscAddressFromIccEfForSubscriber")) {
+            return null;
+        }
+        IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
+        if (iccSmsIntMgr != null) {
+            return iccSmsIntMgr.getSmscAddressFromIccEf();
+        } else {
+            Rlog.e(LOG_TAG, "getSmscAddressFromIccEfForSubscriber iccSmsIntMgr is null"
+                    + " for Subscription: " + subId);
+            return null;
+        }
+    }
+
+    @Override
+    public boolean setSmscAddressOnIccEfForSubscriber(
+            String smsc, int subId, String callingPackage) {
+        if (!TelephonyPermissions.checkCallingOrSelfReadPhoneState(getPhone(subId).getContext(),
+                subId, callingPackage, "setSmscAddressOnIccEfForSubscriber")) {
+            return false;
+        }
+        IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
+        if (iccSmsIntMgr != null) {
+            return iccSmsIntMgr.setSmscAddressOnIccEf(smsc);
+        } else {
+            Rlog.e(LOG_TAG, "setSmscAddressOnIccEfForSubscriber iccSmsIntMgr is null"
+                    + " for Subscription: " + subId);
+            return false;
+        }
+    }
+
+    @Override
     protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         if (!checkDumpPermission(mContext, LOG_TAG, pw)) {
             return;
