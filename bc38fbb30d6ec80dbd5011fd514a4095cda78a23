@@ -16,6 +16,24 @@
       "revId": "bc38fbb30d6ec80dbd5011fd514a4095cda78a23",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2fc4d8b_e85ded67",
+        "filename": "src/java/com/android/internal/telephony/NitzStateMachineImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-07-16T00:23:39Z",
+      "side": 1,
+      "message": "yes, for nfuller@",
+      "parentUuid": "1fe4f51e_a851be1e",
+      "revId": "bc38fbb30d6ec80dbd5011fd514a4095cda78a23",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
