@@ -2220,7 +2220,9 @@ public class GsmCdmaPhone extends Phone {
             //class parameter in call waiting interrogation  to network
             mCi.queryCallWaiting(CommandsInterface.SERVICE_CLASS_NONE, onComplete);
         } else {
-            mCi.queryCallWaiting(CommandsInterface.SERVICE_CLASS_VOICE, onComplete);
+            int arr[] = {CommandsInterface.SS_STATUS_UNKNOWN, CommandsInterface.SERVICE_CLASS_NONE};
+            AsyncResult.forMessage(onComplete, arr, null);
+            onComplete.sendToTarget();
         }
     }
 
@@ -2244,7 +2246,18 @@ public class GsmCdmaPhone extends Phone {
             }
             mCi.setCallWaiting(enable, serviceClass, onComplete);
         } else {
-            loge("method setCallWaiting is NOT supported in CDMA without IMS!");
+            String cwPrefix = enable ? "*74" : "*740";
+            Rlog.i(LOG_TAG, "setCallWaiting in CDMA : dial for set call waiting" + " prefix= " + cwPrefix);
+
+            PhoneAccountHandle phoneAccountHandle = subscriptionIdToPhoneAccountHandle(getSubId());
+            Bundle extras = new Bundle();
+            extras.putParcelable(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE, phoneAccountHandle);
+
+            final TelecomManager telecomManager = TelecomManager.from(mContext);
+            telecomManager.placeCall(Uri.parse("tel:" + cwPrefix), extras);
+
+            AsyncResult.forMessage(onComplete, CommandsInterface.SS_STATUS_UNKNOWN, null);
+            onComplete.sendToTarget();
         }
     }
 
