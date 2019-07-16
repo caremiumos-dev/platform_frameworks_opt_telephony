@@ -50,7 +50,6 @@ public class SmsPermissions {
      * Check that the caller can send text messages.
      *
      * For persisted messages, the caller just needs the SEND_SMS permission. For unpersisted
-     * For persisted messages, the caller just needs the SEND_SMS permission. For unpersisted
      * messages, the caller must either be the IMS app or a carrier-privileged app, or they must
      * have both the MODIFY_PHONE_STATE and SEND_SMS permissions.
      *
@@ -73,7 +72,6 @@ public class SmsPermissions {
         }
         return checkCallingCanSendSms(callingPackage, message);
     }
-
 
     /**
      * Enforces that the caller is one of the following apps:
@@ -101,7 +99,6 @@ public class SmsPermissions {
         TelephonyPermissions.enforceCallingOrSelfCarrierPrivilege(mPhone.getSubId(), message);
     }
 
-
     /**
      * Check that the caller has SEND_SMS permissions. Can only be called during an IPC.
      *
@@ -126,6 +123,45 @@ public class SmsPermissions {
         mContext.enforceCallingOrSelfPermission(Manifest.permission.SEND_SMS, message);
         return mAppOps.noteOp(AppOpsManager.OPSTR_SEND_SMS, Binder.getCallingUid(), callingPackage)
                 == AppOpsManager.MODE_ALLOWED;
+    }
+
+    /**
+     * Check that the caller (or self, if this is not an IPC) has SEND_SMS permissions, or {@link
+     * android.Manifest.permission#READ_PRIVILEGED_PHONE_STATE} or carrier privileges.
+     *
+     * @throws SecurityException if the caller is missing the permission declaration or has had the
+     *                           permission revoked at runtime.
+     * @return true unless the caller has all necessary permissions but has a revoked AppOps bit.
+     */
+    public boolean checkCallingOrSelfCanGetSmscAddress(String callingPackage, String message) {
+        try {
+            TelephonyPermissions
+                    .enforeceCallingOrSelfReadPrivilegedPhoneStatePermissionOrCarrierPrivilege(
+                            mContext, mPhone.getSubId(), message);
+            return true;
+        } catch (SecurityException e) {
+            // ignore it
+        }
+        return checkCallingOrSelfCanSendSms(callingPackage, message);
+    }
+
+    /**
+     * Check that the caller (or self, if this is not an IPC) has SEND_SMS permissions, or {@link
+     * android.Manifest.permission#MODIFY_PHONE_STATE} or carrier privileges.
+     *
+     * @throws SecurityException if the caller is missing the permission declaration or has had the
+     *                           permission revoked at runtime.
+     * @return true unless the caller has all necessary permissions but has a revoked AppOps bit.
+     */
+    public boolean checkCallingOrSelfCanSetSmscAddress(String callingPackage, String message) {
+        try {
+            TelephonyPermissions.enforceCallingOrSelfModifyPermissionOrCarrierPrivilege(
+                    mContext, mPhone.getSubId(), message);
+            return true;
+        } catch (SecurityException e) {
+            // ignore it
+        }
+        return checkCallingOrSelfCanSendSms(callingPackage, message);
     }
 
     @UnsupportedAppUsage
