@@ -142,6 +142,7 @@ public class ImsPhone extends ImsPhoneBase {
     @VisibleForTesting
     public static final int EVENT_SERVICE_STATE_CHANGED             = EVENT_LAST + 8;
     private static final int EVENT_VOICE_CALL_ENDED                  = EVENT_LAST + 9;
+    private static final int EVENT_GET_CLIP_DONE                     = EVENT_LAST + 10;
 
     static final int RESTART_ECM_TIMER = 0; // restart Ecm timer
     static final int CANCEL_ECM_TIMER  = 1; // cancel Ecm timer
@@ -1126,6 +1127,20 @@ public class ImsPhone extends ImsPhoneBase {
         }
     }
 
+    @Override
+    public void queryCLIP(Message onComplete) {
+        Message resp;
+        resp = obtainMessage(EVENT_GET_CLIP_DONE, onComplete);
+
+        try {
+            Rlog.d(LOG_TAG, "ut.queryCLIP");
+            ImsUtInterface ut = mCT.getUtInterface();
+            ut.queryCLIP(resp);
+        } catch (ImsException e) {
+            sendErrorResponse(onComplete, e);
+        }
+    }
+
     @UnsupportedAppUsage
     @Override
     public void getCallForwardingOption(int commandInterfaceCFReason,
@@ -1686,6 +1701,14 @@ public class ImsPhone extends ImsPhoneBase {
                     clirInfo = ssInfo.getCompatArray(ImsSsData.SS_CLIR);
                 }
                 sendResponse((Message) ar.userObj, clirInfo, ar.exception);
+                break;
+
+            case EVENT_GET_CLIP_DONE:
+                Bundle ssInfoResp = null;
+                if (ar.exception == null) {
+                    ssInfoResp = (Bundle) ar.result;
+                }
+                sendResponse((Message) ar.userObj, ssInfoResp, ar.exception);
                 break;
 
             case EVENT_SET_CLIR_DONE:
