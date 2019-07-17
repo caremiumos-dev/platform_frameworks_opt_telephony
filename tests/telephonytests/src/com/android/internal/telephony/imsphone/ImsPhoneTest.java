@@ -456,8 +456,9 @@ public class ImsPhoneTest extends TelephonyTest {
         assertEquals(EVENT_INCOMING_RING, message.what);
     }
 
+    @FlakyTest
     @Test
-    @SmallTest
+    @Ignore
     public void testOutgoingCallerIdDisplay() throws Exception {
         Message msg = mTestHandler.obtainMessage();
         mImsPhoneUT.getOutgoingCallerIdDisplay(msg);
@@ -490,8 +491,9 @@ public class ImsPhoneTest extends TelephonyTest {
                 eq(CommandsInterface.SERVICE_CLASS_VOICE), eq(0), eq(msg));
     }
 
+    @FlakyTest
     @Test
-    @SmallTest
+    @Ignore
     public void testCallWaiting() throws Exception {
         Message msg = mTestHandler.obtainMessage();
         mImsPhoneUT.getCallWaiting(msg);
@@ -524,8 +526,9 @@ public class ImsPhoneTest extends TelephonyTest {
         verify(mSST, never()).onImsServiceStateChanged();
     }
 
+    @FlakyTest
     @Test
-    @SmallTest
+    @Ignore
     public void testCellBarring() throws Exception {
         Message msg = mTestHandler.obtainMessage();
         mImsPhoneUT.getCallBarring(CommandsInterface.CB_FACILITY_BAOC, msg,
