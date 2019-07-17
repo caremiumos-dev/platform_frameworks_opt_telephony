@@ -2219,6 +2219,22 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
+    public void queryCLIP(Message onComplete) {
+        if (isPhoneTypeGsm()) {
+            Phone imsPhone = mImsPhone;
+            if ((imsPhone != null)
+                    && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
+                        || imsPhone.isUtEnabled())) {
+                imsPhone.queryCLIP(onComplete);
+                return;
+            }
+            mCi.queryCLIP(onComplete);
+        } else {
+            loge("queryCLIP: not possible in CDMA");
+        }
+    }
+
+    @Override
     public void getCallWaiting(Message onComplete) {
         if (isPhoneTypeGsm() || isImsUtEnabledOverCdma()) {
             Phone imsPhone = mImsPhone;
