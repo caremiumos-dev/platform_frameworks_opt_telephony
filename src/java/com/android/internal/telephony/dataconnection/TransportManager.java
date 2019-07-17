@@ -199,8 +199,10 @@ public class TransportManager extends Handler {
              * Called when handover is completed.
              *
              * @param success {@true} if handover succeeded, otherwise failed.
+             * @param fallback {@true} if handover failed, the data connection fallback to the
+             * original transport
              */
-            void onCompleted(boolean success);
+            void onCompleted(boolean success, boolean fallback);
         }
 
         public final @ApnType int apnType;
@@ -347,28 +349,33 @@ public class TransportManager extends Handler {
                             + AccessNetworkConstants.transportTypeToString(targetTransport));
                     mPendingHandoverApns.put(networks.apnType, targetTransport);
                     mHandoverNeededEventRegistrants.notifyResult(
-                            new HandoverParams(networks.apnType, targetTransport, success -> {
-                                // The callback for handover completed.
-                                if (success) {
-                                    logl("Handover succeeded.");
-                                } else {
-                                    logl("APN type "
-                                            + ApnSetting.getApnTypeString(networks.apnType)
-                                            + " handover to "
-                                            + AccessNetworkConstants.transportTypeToString(
-                                                    targetTransport) + " failed.");
-                                }
-                                // No matter succeeded or not, we need to set the current transport
-                                // to the new one. If failed, there will be retry afterwards anyway.
-                                setCurrentTransport(networks.apnType, targetTransport);
-                                mPendingHandoverApns.delete(networks.apnType);
+                            new HandoverParams(networks.apnType, targetTransport,
+                                    (success, fallback) -> {
+                                        // The callback for handover completed.
+                                        if (success) {
+                                            logl("Handover succeeded.");
+                                        } else {
+                                            logl("APN type "
+                                                    + ApnSetting.getApnTypeString(networks.apnType)
+                                                    + " handover to "
+                                                    + AccessNetworkConstants.transportTypeToString(
+                                                    targetTransport) + " failed."
+                                                    + ", fallback=" + fallback);
+                                        }
+                                        if (success || !fallback) {
+                                            // If handover succeeds or failed without falling back
+                                            // to the original transport, we should move to the new
+                                            // transport (even if it is failed).
+                                            setCurrentTransport(networks.apnType, targetTransport);
+                                        }
+                                        mPendingHandoverApns.delete(networks.apnType);
 
-                                // If there are still pending available network changes, we need to
-                                // process the rest.
-                                if (mAvailableNetworksList.size() > 0) {
-                                    sendEmptyMessage(EVENT_UPDATE_AVAILABLE_NETWORKS);
-                                }
-                            }));
+                                        // If there are still pending available network changes, we
+                                        // need to process the rest.
+                                        if (mAvailableNetworksList.size() > 0) {
+                                            sendEmptyMessage(EVENT_UPDATE_AVAILABLE_NETWORKS);
+                                        }
+                                    }));
                 }
                 mCurrentAvailableNetworks.put(networks.apnType, networks.qualifiedNetworks);
             } else {
@@ -421,6 +428,21 @@ public class TransportManager extends Handler {
         // If we can't find the corresponding transport, always route to cellular.
         return mCurrentTransports.get(apnType) == null
                 ? AccessNetworkConstants.TRANSPORT_TYPE_WWAN : mCurrentTransports.get(apnType);
+    }
+
+    /**
+     * Check if there is any APN type of network preferred on IWLAN.
+     *
+     * @return {@code true} if there is any APN preferred on IWLAN, otherwise {@code false}.
+     */
+    public boolean isAnyApnPreferredOnIwlan() {
+        for (int i = 0; i < mCurrentAvailableNetworks.size(); i++) {
+            int[] networkList = mCurrentAvailableNetworks.valueAt(i);
+            if (networkList.length > 0 && networkList[0] == AccessNetworkType.IWLAN) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

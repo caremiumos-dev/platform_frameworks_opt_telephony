@@ -71,6 +71,7 @@ import android.telephony.PhysicalChannelConfig;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
@@ -1745,6 +1746,10 @@ public class ServiceStateTracker extends Handler {
         }
     }
 
+    public void onAirplaneModeChanged(boolean isAirplaneModeOn) {
+        mNitzState.handleAirplaneModeChanged(isAirplaneModeOn);
+    }
+
     protected Phone getPhone() {
         return mPhone;
     }
@@ -1995,11 +2000,16 @@ public class ServiceStateTracker extends Handler {
                 NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WLAN);
         NetworkRegistrationInfo wwanPsRegState = serviceState.getNetworkRegistrationInfo(
                 NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+
+        // Check if any APN is preferred on IWLAN.
+        boolean isIwlanPreferred = mTransportManager.isAnyApnPreferredOnIwlan();
+        serviceState.setIwlanPreferred(isIwlanPreferred);
         if (wlanPsRegState != null
                 && wlanPsRegState.getAccessNetworkTechnology()
                 == TelephonyManager.NETWORK_TYPE_IWLAN
                 && wlanPsRegState.getRegistrationState()
-                == NetworkRegistrationInfo.REGISTRATION_STATE_HOME) {
+                == NetworkRegistrationInfo.REGISTRATION_STATE_HOME
+                && isIwlanPreferred) {
             serviceState.setDataRegState(ServiceState.STATE_IN_SERVICE);
         } else if (wwanPsRegState != null) {
             // If the device is not camped on IWLAN, then we use cellular PS registration state
@@ -2622,7 +2632,7 @@ public class ServiceStateTracker extends Handler {
                 final boolean forceDisplayNoService = mPhone.getContext().getResources().getBoolean(
                         com.android.internal.R.bool.config_display_no_service_when_sim_unready)
                         && !mIsSimReady;
-                if (mEmergencyOnly && !forceDisplayNoService) {
+                if (!forceDisplayNoService && Phone.isEmergencyCallOnly()) {
                     // No service but emergency call allowed
                     plmn = Resources.getSystem().
                             getText(com.android.internal.R.string.emergency_calls_only).toString();
@@ -2873,7 +2883,18 @@ public class ServiceStateTracker extends Handler {
             // Checking the Concurrent Service Supported flag first for all phone types.
             return true;
         } else if (mPhone.isPhoneTypeGsm()) {
-            return (mSS.getRilDataRadioTechnology() >= ServiceState.RIL_RADIO_TECHNOLOGY_UMTS);
+            int radioTechnology = mSS.getRilDataRadioTechnology();
+            // There are cases where we we would setup data connection even data is not yet
+            // attached. In these cases we check voice rat.
+            if (radioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN
+                    && mSS.getDataRegState() != ServiceState.STATE_IN_SERVICE) {
+                radioTechnology = mSS.getRilVoiceRadioTechnology();
+            }
+            // Concurrent voice and data is not allowed for 2G technologies. It's allowed in other
+            // rats e.g. UMTS, LTE, etc.
+            return radioTechnology != ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN
+                    && ServiceState.rilRadioTechnologyToAccessNetworkType(radioTechnology)
+                        != AccessNetworkType.GERAN;
         } else {
             return false;
         }
@@ -4007,16 +4028,24 @@ public class ServiceStateTracker extends Handler {
             loge("cannot setNotification on invalid subid mSubId=" + mSubId);
             return;
         }
+        Context context = mPhone.getContext();
+
+        SubscriptionInfo info = mSubscriptionController
+                .getActiveSubscriptionInfo(mPhone.getSubId(), context.getOpPackageName());
+
+        //if subscription is part of a group and non-primary, suppress all notifications
+        if (info == null || (info.isOpportunistic() && info.getGroupUuid() != null)) {
+            log("cannot setNotification on invisible subid mSubId=" + mSubId);
+            return;
+        }
 
         // Needed because sprout RIL sends these when they shouldn't?
-        boolean isSetNotification = mPhone.getContext().getResources().getBoolean(
+        boolean isSetNotification = context.getResources().getBoolean(
                 com.android.internal.R.bool.config_user_notification_of_restrictied_mobile_access);
         if (!isSetNotification) {
             if (DBG) log("Ignore all the notifications");
             return;
         }
-
-        Context context = mPhone.getContext();
 
         boolean autoCancelCsRejectNotification = false;
 
@@ -5209,6 +5238,10 @@ public class ServiceStateTracker extends Handler {
                     mNewSS.addNetworkRegistrationInfo(nri);
                 }
                 mNewSS.setOperatorAlphaLong(operator);
+                // Since it's in airplane mode, cellular must be out of service. The only possible
+                // transport for data to go through is the IWLAN transport. Setting this to true
+                // so that ServiceState.getDataNetworkType can report the right RAT.
+                mNewSS.setIwlanPreferred(true);
                 log("pollStateDone: mNewSS = " + mNewSS);
             }
             return;

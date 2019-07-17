@@ -69,6 +69,7 @@ import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
 import android.telephony.DataFailCause;
+import android.telephony.DataFailCause.FailCause;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PcoData;
 import android.telephony.Rlog;
@@ -161,15 +162,15 @@ public class DcTracker extends Handler {
     public @interface RequestNetworkType {}
 
     /**
-     * Normal request for {@link #requestNetwork(NetworkRequest, int, LocalLog)}. For request
+     * Normal request for {@link #requestNetwork(NetworkRequest, int, Message)}. For request
      * network, this adds the request to the {@link ApnContext}. If there were no network request
      * attached to the {@link ApnContext} earlier, this request setups a data connection.
      */
     public static final int REQUEST_TYPE_NORMAL = 1;
 
     /**
-     * Handover request for {@link #requestNetwork(NetworkRequest, int, LocalLog)} or
-     * {@link #releaseNetwork(NetworkRequest, int, LocalLog)}. For request network, this
+     * Handover request for {@link #requestNetwork(NetworkRequest, int, Message)} or
+     * {@link #releaseNetwork(NetworkRequest, int)}. For request network, this
      * initiates the handover data setup process. The existing data connection will be seamlessly
      * handover to the new network. For release network, this performs a data connection softly
      * clean up at the underlying layer (versus normal data release).
@@ -192,7 +193,7 @@ public class DcTracker extends Handler {
     public static final int RELEASE_TYPE_NORMAL = 1;
 
     /**
-     * Detach request for {@link #releaseNetwork(NetworkRequest, int, LocalLog)} only. This
+     * Detach request for {@link #releaseNetwork(NetworkRequest, int)} only. This
      * forces the APN context detach from the data connection. If this {@link ApnContext} is the
      * last one attached to the data connection, the data connection will be torn down, otherwise
      * the data connection remains active.
@@ -200,7 +201,7 @@ public class DcTracker extends Handler {
     public static final int RELEASE_TYPE_DETACH = 2;
 
     /**
-     * Handover request for {@link #releaseNetwork(NetworkRequest, int, LocalLog)}. For release
+     * Handover request for {@link #releaseNetwork(NetworkRequest, int)}. For release
      * network, this performs a data connection softly clean up at the underlying layer (versus
      * normal data release).
      */
@@ -211,6 +212,12 @@ public class DcTracker extends Handler {
     static final String DATA_COMPLETE_MSG_EXTRA_TRANSPORT_TYPE = "extra_transport_type";
     static final String DATA_COMPLETE_MSG_EXTRA_REQUEST_TYPE = "extra_request_type";
     static final String DATA_COMPLETE_MSG_EXTRA_SUCCESS = "extra_success";
+    /**
+     * The flag indicates whether after handover failure, the data connection should remain on the
+     * original transport.
+     */
+    static final String DATA_COMPLETE_MSG_EXTRA_HANDOVER_FAILURE_FALLBACK =
+            "extra_handover_failure_fallback";
 
     private final String mLogTag;
 
@@ -708,6 +715,8 @@ public class DcTracker extends Handler {
 
         mDataEnabledSettings.registerForDataEnabledChanged(this,
                 DctConstants.EVENT_DATA_ENABLED_CHANGED, null);
+        mDataEnabledSettings.registerForDataEnabledOverrideChanged(this,
+                DctConstants.EVENT_DATA_ENABLED_OVERRIDE_RULES_CHANGED);
 
         mPhone.getContext().registerReceiver(mIntentReceiver, filter, null, mPhone);
 
@@ -863,6 +872,9 @@ public class DcTracker extends Handler {
         mPhone.getCallTracker().unregisterForVoiceCallStarted(this);
         unregisterServiceStateTrackerEvents();
         mDataServiceManager.unregisterForServiceBindingChanged(this);
+
+        mDataEnabledSettings.unregisterForDataEnabledChanged(this);
+        mDataEnabledSettings.unregisterForDataEnabledOverrideChanged(this);
     }
 
     /**
@@ -1308,7 +1320,7 @@ public class DcTracker extends Handler {
             reasons.add(DataDisallowedReasonType.IN_ECBM);
         }
 
-        if (!attachedState && !mAutoAttachEnabled.get() && requestType != REQUEST_TYPE_HANDOVER) {
+        if (!attachedState && !shouldAutoAttach() && requestType != REQUEST_TYPE_HANDOVER) {
             reasons.add(DataDisallowedReasonType.NOT_ATTACHED);
         }
         if (!recordsLoaded) {
@@ -1476,6 +1488,10 @@ public class DcTracker extends Handler {
                 apnContext.setState(DctConstants.State.IDLE);
             }
             int radioTech = getDataRat();
+            if (radioTech == ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN && mPhone.getServiceState()
+                    .getVoiceRegState() == ServiceState.STATE_IN_SERVICE) {
+                radioTech = getVoiceRat();
+            }
             log("service state=" + mPhone.getServiceState());
             apnContext.setConcurrentVoiceAndDataAllowed(mPhone.getServiceStateTracker()
                     .isConcurrentVoiceAndDataAllowed());
@@ -1749,8 +1765,8 @@ public class DcTracker extends Handler {
         }
 
         for (ApnSetting dunSetting : dunCandidates) {
-            if (!ServiceState.bitmaskHasTech(dunSetting.getNetworkTypeBitmask(),
-                    ServiceState.rilRadioTechnologyToNetworkType(bearer))) {
+            if (!ServiceState.networkBitmaskHasAccessNetworkType(dunSetting.getNetworkTypeBitmask(),
+                    ServiceState.rilRadioTechnologyToAccessNetworkType(bearer))) {
                 continue;
             }
             retDunSettings.add(dunSetting);
@@ -1829,7 +1845,7 @@ public class DcTracker extends Handler {
         }
     }
 
-    boolean isPermanentFailure(@DataFailCause.FailCause int dcFailCause) {
+    boolean isPermanentFailure(@FailCause int dcFailCause) {
         return (DataFailCause.isPermanentFailure(mPhone.getContext(), dcFailCause,
                 mPhone.getSubId())
                 && (mAttached.get() == false || dcFailCause != DataFailCause.SIGNAL_LOST));
@@ -1957,7 +1973,8 @@ public class DcTracker extends Handler {
         Message msg = obtainMessage();
         msg.what = DctConstants.EVENT_DATA_SETUP_COMPLETE;
         msg.obj = new Pair<ApnContext, Integer>(apnContext, generation);
-        dataConnection.bringUp(apnContext, profileId, radioTech, msg, generation, requestType);
+        dataConnection.bringUp(apnContext, profileId, radioTech, msg, generation, requestType,
+                mPhone.getSubId());
 
         if (DBG) log("setupData: initing!");
         return true;
@@ -2183,17 +2200,13 @@ public class DcTracker extends Handler {
                 SystemClock.elapsedRealtime() + delay, alarmIntent);
     }
 
-    private void notifyNoData(@DataFailCause.FailCause int lastFailCauseCode,
+    private void notifyNoData(@FailCause int lastFailCauseCode,
                               ApnContext apnContext) {
         if (DBG) log( "notifyNoData: type=" + apnContext.getApnType());
         if (isPermanentFailure(lastFailCauseCode)
             && (!apnContext.getApnType().equals(PhoneConstants.APN_TYPE_DEFAULT))) {
             mPhone.notifyDataConnectionFailed(apnContext.getApnType());
         }
-    }
-
-    public boolean getAutoAttachEnabled() {
-        return mAutoAttachEnabled.get();
     }
 
     private void onRecordsLoadedOrSubIdChanged() {
@@ -2313,13 +2326,19 @@ public class DcTracker extends Handler {
 
     private void sendRequestNetworkCompleteMsg(Message message, boolean success,
                                                @TransportType int transport,
-                                               @RequestNetworkType int requestType) {
+                                               @RequestNetworkType int requestType,
+                                               @FailCause int cause) {
         if (message == null) return;
 
         Bundle b = message.getData();
         b.putBoolean(DATA_COMPLETE_MSG_EXTRA_SUCCESS, success);
         b.putInt(DATA_COMPLETE_MSG_EXTRA_REQUEST_TYPE, requestType);
         b.putInt(DATA_COMPLETE_MSG_EXTRA_TRANSPORT_TYPE, transport);
+        // TODO: For now this is the only fail cause that we know modem keeps data connection on
+        // original transport. Might add more complicated logic or mapping in the future.
+        b.putBoolean(DATA_COMPLETE_MSG_EXTRA_HANDOVER_FAILURE_FALLBACK,
+                (requestType == REQUEST_TYPE_HANDOVER
+                        && cause == DataFailCause.HANDOFF_PREFERENCE_CHANGED));
         message.sendToTarget();
     }
 
@@ -2334,7 +2353,8 @@ public class DcTracker extends Handler {
         ApnContext apnContext = mApnContextsByType.get(apnType);
         if (apnContext == null) {
             loge("onEnableApn(" + apnType + "): NO ApnContext");
-            sendRequestNetworkCompleteMsg(onCompleteMsg, false, mTransportType, requestType);
+            sendRequestNetworkCompleteMsg(onCompleteMsg, false, mTransportType, requestType,
+                    DataFailCause.NONE);
             return;
         }
 
@@ -2349,7 +2369,8 @@ public class DcTracker extends Handler {
             str = "onEnableApn: dependency is not met.";
             if (DBG) log(str);
             apnContext.requestLog(str);
-            sendRequestNetworkCompleteMsg(onCompleteMsg, false, mTransportType, requestType);
+            sendRequestNetworkCompleteMsg(onCompleteMsg, false, mTransportType, requestType,
+                    DataFailCause.NONE);
             return;
         }
 
@@ -2363,16 +2384,15 @@ public class DcTracker extends Handler {
                     return;
                 case CONNECTED:
                     if (DBG) log("onEnableApn: 'CONNECTED' so return");
-                    apnContext.requestLog("onEnableApn state=CONNECTED, so return");
-
+                    // Don't add to local log since this is so common
                     sendRequestNetworkCompleteMsg(onCompleteMsg, true, mTransportType,
-                            requestType);
+                            requestType, DataFailCause.NONE);
                     return;
                 case DISCONNECTING:
                     if (DBG) log("onEnableApn: 'DISCONNECTING' so return");
                     apnContext.requestLog("onEnableApn state=DISCONNECTING, so return");
                     sendRequestNetworkCompleteMsg(onCompleteMsg, false, mTransportType,
-                            requestType);
+                            requestType, DataFailCause.NONE);
                     return;
                 case IDLE:
                     // fall through: this is unexpected but if it happens cleanup and try setup
@@ -2399,7 +2419,7 @@ public class DcTracker extends Handler {
             addRequestNetworkCompleteMsg(onCompleteMsg, apnType);
         } else {
             sendRequestNetworkCompleteMsg(onCompleteMsg, false, mTransportType,
-                    requestType);
+                    requestType, DataFailCause.NONE);
         }
     }
 
@@ -2689,7 +2709,7 @@ public class DcTracker extends Handler {
         List<Message> messageList = mRequestNetworkCompletionMsgs.get(apnType);
         if (messageList != null) {
             for (Message msg : messageList) {
-                sendRequestNetworkCompleteMsg(msg, success, mTransportType, requestType);
+                sendRequestNetworkCompleteMsg(msg, success, mTransportType, requestType, cause);
             }
             messageList.clear();
         }
@@ -3265,8 +3285,9 @@ public class DcTracker extends Handler {
                         + mPreferredApn.getOperatorNumeric() + ":" + mPreferredApn);
             }
             if (mPreferredApn.getOperatorNumeric().equals(operator)) {
-                if (ServiceState.bitmaskHasTech(mPreferredApn.getNetworkTypeBitmask(),
-                        ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
+                if (ServiceState.networkBitmaskHasAccessNetworkType(
+                        mPreferredApn.getNetworkTypeBitmask(),
+                        ServiceState.rilRadioTechnologyToAccessNetworkType(radioTech))) {
                     apnList.add(mPreferredApn);
                     apnList = sortApnListByPreferred(apnList);
                     if (DBG) log("buildWaitingApns: X added preferred apnList=" + apnList);
@@ -3286,8 +3307,8 @@ public class DcTracker extends Handler {
         if (DBG) log("buildWaitingApns: mAllApnSettings=" + mAllApnSettings);
         for (ApnSetting apn : mAllApnSettings) {
             if (apn.canHandleType(requestedApnTypeBitmask)) {
-                if (ServiceState.bitmaskHasTech(apn.getNetworkTypeBitmask(),
-                        ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
+                if (ServiceState.networkBitmaskHasAccessNetworkType(apn.getNetworkTypeBitmask(),
+                        ServiceState.rilRadioTechnologyToAccessNetworkType(radioTech))) {
                     if (VDBG) log("buildWaitingApns: adding apn=" + apn);
                     apnList.add(apn);
                 } else {
@@ -3774,10 +3795,8 @@ public class DcTracker extends Handler {
                     onDataEnabledChanged(enabled, reason);
                 }
                 break;
-            case DctConstants.EVENT_APN_WHITE_LIST_CHANGE:
-                int apnType = msg.arg1;
-                boolean enable = msg.arg2 == 1;
-                onApnWhiteListChange(apnType, enable);
+            case DctConstants.EVENT_DATA_ENABLED_OVERRIDE_RULES_CHANGED:
+                onDataEnabledOverrideRulesChanged();
                 break;
             default:
                 Rlog.e("DcTracker", "Unhandled event=" + msg);
@@ -3858,31 +3877,32 @@ public class DcTracker extends Handler {
         log("update(): Active DDS, register for all events now!");
         onUpdateIcc();
 
-        updateAutoAttachOnCreation();
+        mAutoAttachEnabled.set(false);
 
         mPhone.updateCurrentCarrierInProvider();
     }
 
-    /**
-     * For non DDS phone, mAutoAttachEnabled should be true because it may be detached
-     * automatically from network only because it's idle for too long. In this case, we should
-     * try setting up data call even if it's not attached for 2G or 3G networks. And doing so will
-     * trigger PS attach if possible.
-     */
-    public void updateAutoAttachOnCreation() {
+    @VisibleForTesting
+    public boolean shouldAutoAttach() {
+        if (mAutoAttachEnabled.get()) return true;
+
         PhoneSwitcher phoneSwitcher = PhoneSwitcher.getInstance();
         ServiceState serviceState = mPhone.getServiceState();
-        if (PhoneSwitcher.getInstance() == null || serviceState == null) {
-            mAutoAttachEnabled.set(false);
-            return;
-        }
 
-        // If it's non DDS phone, and voice is registered on 2G or 3G network, we set
-        // mAutoAttachEnabled to true.
-        mAutoAttachEnabled.set(mPhone.getPhoneId() != phoneSwitcher.getPreferredDataPhoneId()
-                && serviceState.getVoiceRegState() == ServiceState.STATE_IN_SERVICE
-                && serviceState.getVoiceNetworkType() != NETWORK_TYPE_LTE
-                && serviceState.getVoiceNetworkType() != NETWORK_TYPE_NR);
+        if (phoneSwitcher == null || serviceState == null) return false;
+
+        // If voice is also not in service, don't auto attach.
+        if (serviceState.getVoiceRegState() != ServiceState.STATE_IN_SERVICE) return false;
+
+        // If voice is on LTE or NR, don't auto attach as for LTE / NR data would be attached.
+        if (serviceState.getVoiceNetworkType() == NETWORK_TYPE_LTE
+                || serviceState.getVoiceNetworkType() == NETWORK_TYPE_NR) return false;
+
+        // If phone is non default phone, modem may have detached from data for optimization.
+        // If phone is in voice call, for DSDS case DDS switch may be limited so we do try our
+        // best to setup data connection and allow auto-attach.
+        return (mPhone.getPhoneId() != phoneSwitcher.getPreferredDataPhoneId()
+                || mPhone.getState() != PhoneConstants.State.IDLE);
     }
 
     private void notifyAllDataDisconnected() {
@@ -4265,30 +4285,22 @@ public class DcTracker extends Handler {
         setActivity(activity);
     }
 
-    public void notifyApnWhiteListChange(int apnType, boolean enable) {
-        Message msg = obtainMessage(DctConstants.EVENT_APN_WHITE_LIST_CHANGE);
-        msg.arg1 = apnType;
-        msg.arg2 = enable ? 1 : 0;
-        sendMessage(msg);
-    }
-
-    private void onApnWhiteListChange(int apnType, boolean enable) {
+    private void onDataEnabledOverrideRulesChanged() {
         if (DBG) {
-            log("onApnWhiteListChange: enable=" + enable + ", apnType=" + apnType);
+            log("onDataEnabledOverrideRulesChanged");
         }
 
-        final ApnContext apnContext = mApnContextsByType.get(apnType);
-        if (apnContext == null) return;
-
-        if (isDataAllowed(apnContext, REQUEST_TYPE_NORMAL, null)) {
-            if (apnContext.getDataConnection() != null) {
-                apnContext.getDataConnection().reevaluateRestrictedState();
+        for (ApnContext apnContext : mPrioritySortedApnContexts) {
+            if (isDataAllowed(apnContext, REQUEST_TYPE_NORMAL, null)) {
+                if (apnContext.getDataConnection() != null) {
+                    apnContext.getDataConnection().reevaluateRestrictedState();
+                }
+                setupDataOnConnectableApn(apnContext, Phone.REASON_DATA_ENABLED_OVERRIDE,
+                        RetryFailures.ALWAYS);
+            } else if (shouldCleanUpConnection(apnContext, true)) {
+                apnContext.setReason(Phone.REASON_DATA_ENABLED_OVERRIDE);
+                cleanUpConnectionInternal(true, RELEASE_TYPE_DETACH, apnContext);
             }
-            setupDataOnConnectableApn(apnContext, Phone.REASON_APN_ADDED_TO_WHITELIST,
-                    RetryFailures.ALWAYS);
-        } else if (shouldCleanUpConnection(apnContext, true)) {
-            apnContext.setReason(Phone.REASON_APN_REMOVED_FROM_WHITELIST);
-            cleanUpConnectionInternal(true, RELEASE_TYPE_DETACH, apnContext);
         }
     }
 
@@ -4827,6 +4839,16 @@ public class DcTracker extends Handler {
         ServiceState ss = mPhone.getServiceState();
         NetworkRegistrationInfo nrs = ss.getNetworkRegistrationInfo(
                 NetworkRegistrationInfo.DOMAIN_PS, mTransportType);
+        if (nrs != null) {
+            return ServiceState.networkTypeToRilRadioTechnology(nrs.getAccessNetworkTechnology());
+        }
+        return ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
+    }
+
+    private int getVoiceRat() {
+        ServiceState ss = mPhone.getServiceState();
+        NetworkRegistrationInfo nrs = ss.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_CS, mTransportType);
         if (nrs != null) {
             return ServiceState.networkTypeToRilRadioTechnology(nrs.getAccessNetworkTechnology());
         }

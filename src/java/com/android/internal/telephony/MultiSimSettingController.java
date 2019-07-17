@@ -22,20 +22,30 @@ import static android.telephony.TelephonyManager.EXTRA_DEFAULT_SUBSCRIPTION_SELE
 import static android.telephony.TelephonyManager.EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_ALL;
 import static android.telephony.TelephonyManager.EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_DATA;
 import static android.telephony.TelephonyManager.EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_NONE;
+import static android.telephony.TelephonyManager.EXTRA_SIM_COMBINATION_NAMES;
+import static android.telephony.TelephonyManager.EXTRA_SIM_COMBINATION_WARNING_TYPE;
+import static android.telephony.TelephonyManager.EXTRA_SIM_COMBINATION_WARNING_TYPE_DUAL_CDMA;
+import static android.telephony.TelephonyManager.EXTRA_SIM_COMBINATION_WARNING_TYPE_NONE;
 import static android.telephony.TelephonyManager.EXTRA_SUBSCRIPTION_ID;
 
 import android.annotation.IntDef;
 import android.annotation.NonNull;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelUuid;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.euicc.EuiccManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -44,6 +54,7 @@ import com.android.internal.util.ArrayUtils;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +77,7 @@ public class MultiSimSettingController extends Handler {
     private static final int EVENT_SUBSCRIPTION_INFO_CHANGED         = 4;
     private static final int EVENT_SUBSCRIPTION_GROUP_CHANGED        = 5;
     private static final int EVENT_DEFAULT_DATA_SUBSCRIPTION_CHANGED = 6;
+    private static final int EVENT_CARRIER_CONFIG_CHANGED            = 7;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef(prefix = {"PRIMARY_SUB_"},
@@ -103,6 +115,40 @@ public class MultiSimSettingController extends Handler {
     /** The singleton instance. */
     private static MultiSimSettingController sInstance = null;
 
+    // This will be set true when handling EVENT_ALL_SUBSCRIPTIONS_LOADED. The reason of keeping
+    // a local variable instead of calling SubscriptionInfoUpdater#isSubInfoInitialized is, there
+    // might be a race condition that we receive EVENT_SUBSCRIPTION_INFO_CHANGED first, then
+    // EVENT_ALL_SUBSCRIPTIONS_LOADED. And calling SubscriptionInfoUpdater#isSubInfoInitialized
+    // will make us handle EVENT_SUBSCRIPTION_INFO_CHANGED unexpectedly and causing us to believe
+    // the SIMs are newly inserted instead of being initialized.
+    private boolean mSubInfoInitialized = false;
+
+    // mInitialHandling is to make sure we don't always ask user to re-select data SIM after reboot.
+    // After boot-up when things are firstly initialized (mSubInfoInitialized is changed to true
+    // and carrier configs are all loaded), we do a reEvaluateAll(). In the first reEvaluateAll(),
+    // mInitialHandling will be true and we won't pop up SIM select dialog.
+    private boolean mInitialHandling = true;
+
+    // Keep a record of which subIds have carrier config loaded. Length of the array is phone count.
+    // The index is phoneId, and value is subId. For example:
+    // If carrier config of subId 2 is loaded on phone 0,mCarrierConfigLoadedSubIds[0] = 2.
+    // Then if subId 2 is deactivated from phone 0, the value becomes INVALID,
+    // mCarrierConfigLoadedSubIds[0] = INVALID_SUBSCRIPTION_ID.
+    private int[] mCarrierConfigLoadedSubIds;
+
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED.equals(intent.getAction())) {
+                int phoneId = intent.getIntExtra(CarrierConfigManager.EXTRA_SLOT_INDEX,
+                        SubscriptionManager.INVALID_SIM_SLOT_INDEX);
+                int subId = intent.getIntExtra(CarrierConfigManager.EXTRA_SUBSCRIPTION_INDEX,
+                        SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+                notifyCarrierConfigChanged(phoneId, subId);
+            }
+        }
+    };
+
     /**
      * Return the singleton or create one if not existed.
      */
@@ -134,6 +180,15 @@ public class MultiSimSettingController extends Handler {
     public MultiSimSettingController(Context context, SubscriptionController sc) {
         mContext = context;
         mSubController = sc;
+
+        // Initialize mCarrierConfigLoadedSubIds and register to listen to carrier config change.
+        final int phoneCount = ((TelephonyManager) mContext.getSystemService(
+                Context.TELEPHONY_SERVICE)).getPhoneCount();
+        mCarrierConfigLoadedSubIds = new int[phoneCount];
+        Arrays.fill(mCarrierConfigLoadedSubIds, SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+
+        context.registerReceiver(mIntentReceiver, new IntentFilter(
+                CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
     }
 
     /**
@@ -207,6 +262,11 @@ public class MultiSimSettingController extends Handler {
             case EVENT_DEFAULT_DATA_SUBSCRIPTION_CHANGED:
                 onDefaultDataSettingChanged();
                 break;
+            case EVENT_CARRIER_CONFIG_CHANGED:
+                int phoneId = msg.arg1;
+                int subId = msg.arg2;
+                onCarrierConfigChanged(phoneId, subId);
+                break;
         }
     }
 
@@ -245,8 +305,8 @@ public class MultiSimSettingController extends Handler {
      */
     private void onAllSubscriptionsLoaded() {
         if (DBG) log("onAllSubscriptionsLoaded");
-        updateDefaults(/*init*/ true);
-        disableDataForNonDefaultNonOpportunisticSubscriptions();
+        mSubInfoInitialized = true;
+        reEvaluateAll();
     }
 
     /**
@@ -256,9 +316,60 @@ public class MultiSimSettingController extends Handler {
      */
     private void onSubscriptionsChanged() {
         if (DBG) log("onSubscriptionsChanged");
-        if (!SubscriptionInfoUpdater.isSubInfoInitialized()) return;
-        updateDefaults(/*init*/ false);
+        reEvaluateAll();
+    }
+
+    /**
+     * Called when carrier config changes on any phone.
+     */
+    @VisibleForTesting
+    public void notifyCarrierConfigChanged(int phoneId, int subId) {
+        obtainMessage(EVENT_CARRIER_CONFIG_CHANGED, phoneId, subId).sendToTarget();
+    }
+
+    private void onCarrierConfigChanged(int phoneId, int subId) {
+        log("onCarrierConfigChanged phoneId " + phoneId + " subId " + subId);
+        if (!SubscriptionManager.isValidPhoneId(phoneId)) {
+            loge("Carrier config change with invalid phoneId " + phoneId);
+            return;
+        }
+
+        mCarrierConfigLoadedSubIds[phoneId] = subId;
+        reEvaluateAll();
+    }
+
+    private boolean isCarrierConfigLoadedForAllSub() {
+        int[] activeSubIds = mSubController.getActiveSubIdList(false);
+        for (int activeSubId : activeSubIds) {
+            boolean isLoaded = false;
+            for (int configLoadedSub : mCarrierConfigLoadedSubIds) {
+                if (configLoadedSub == activeSubId) {
+                    isLoaded = true;
+                    break;
+                }
+            }
+            if (!isLoaded) {
+                if (DBG) log("Carrier config subId " + activeSubId + " is not loaded.");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Wait for subInfo initialization (after boot up) and carrier config load for all active
+     * subscriptions before re-evaluate multi SIM settings.
+     */
+    private boolean isReadyToReevaluate() {
+        return mSubInfoInitialized && isCarrierConfigLoadedForAllSub();
+    }
+
+    private void reEvaluateAll() {
+        if (!isReadyToReevaluate()) return;
+        updateDefaults();
         disableDataForNonDefaultNonOpportunisticSubscriptions();
+        deactivateGroupedOpportunisticSubscriptionIfNeeded();
     }
 
     /**
@@ -335,12 +446,11 @@ public class MultiSimSettingController extends Handler {
      *    not a user settable value anymore.
      * 4) If non above is met, clear the default value to INVALID.
      *
-     * @param init whether the subscriptions are just initialized.
      */
-    private void updateDefaults(boolean init) {
+    private void updateDefaults() {
         if (DBG) log("updateDefaults");
 
-        if (!SubscriptionInfoUpdater.isSubInfoInitialized()) return;
+        if (!isReadyToReevaluate()) return;
 
         List<SubscriptionInfo> activeSubInfos = mSubController
                 .getActiveSubscriptionInfoList(mContext.getOpPackageName());
@@ -354,7 +464,7 @@ public class MultiSimSettingController extends Handler {
             return;
         }
 
-        int change = updatePrimarySubListAndGetChangeType(activeSubInfos, init);
+        int change = updatePrimarySubListAndGetChangeType(activeSubInfos);
         if (DBG) log("[updateDefaultValues] change: " + change);
         if (change == PRIMARY_SUB_NO_CHANGE) return;
 
@@ -392,12 +502,11 @@ public class MultiSimSettingController extends Handler {
                 mSubController.getDefaultSmsSubId(),
                 (newValue -> mSubController.setDefaultSmsSubId(newValue)));
 
-        showSimSelectDialogIfNeeded(change, dataSelected, voiceSelected, smsSelected);
+        sendSubChangeNotificationIfNeeded(change, dataSelected, voiceSelected, smsSelected);
     }
 
     @PrimarySubChangeType
-    private int updatePrimarySubListAndGetChangeType(List<SubscriptionInfo> activeSubList,
-            boolean init) {
+    private int updatePrimarySubListAndGetChangeType(List<SubscriptionInfo> activeSubList) {
         // Update mPrimarySubList. Opportunistic subscriptions can't be default
         // data / voice / sms subscription.
         List<Integer> prevPrimarySubList = mPrimarySubList;
@@ -405,7 +514,10 @@ public class MultiSimSettingController extends Handler {
                 .map(info -> info.getSubscriptionId())
                 .collect(Collectors.toList());
 
-        if (init) return PRIMARY_SUB_INITIALIZED;
+        if (mInitialHandling) {
+            mInitialHandling = false;
+            return PRIMARY_SUB_INITIALIZED;
+        }
         if (mPrimarySubList.equals(prevPrimarySubList)) return PRIMARY_SUB_NO_CHANGE;
         if (mPrimarySubList.size() > prevPrimarySubList.size()) return PRIMARY_SUB_ADDED;
 
@@ -440,11 +552,41 @@ public class MultiSimSettingController extends Handler {
         }
     }
 
-    private void showSimSelectDialogIfNeeded(int change, boolean dataSelected,
+    private void sendSubChangeNotificationIfNeeded(int change, boolean dataSelected,
             boolean voiceSelected, boolean smsSelected) {
         @TelephonyManager.DefaultSubscriptionSelectType
+        int simSelectDialogType = getSimSelectDialogType(
+                change, dataSelected, voiceSelected, smsSelected);
+        SimCombinationWarningParams simCombinationParams = getSimCombinationWarningParams(change);
+
+        if (simSelectDialogType != EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_NONE
+                || simCombinationParams.mWarningType != EXTRA_SIM_COMBINATION_WARNING_TYPE_NONE) {
+            log("[sendSubChangeNotificationIfNeeded] showing dialog type "
+                    + simSelectDialogType);
+            log("[sendSubChangeNotificationIfNeeded] showing sim warning "
+                    + simCombinationParams.mWarningType);
+            Intent intent = new Intent();
+            intent.setAction(ACTION_PRIMARY_SUBSCRIPTION_LIST_CHANGED);
+            intent.setClassName("com.android.settings",
+                    "com.android.settings.sim.SimSelectNotification");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            intent.putExtra(EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE, simSelectDialogType);
+            if (simSelectDialogType == EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_ALL) {
+                intent.putExtra(EXTRA_SUBSCRIPTION_ID, mPrimarySubList.get(0));
+            }
+
+            intent.putExtra(EXTRA_SIM_COMBINATION_WARNING_TYPE, simCombinationParams.mWarningType);
+            if (simCombinationParams.mWarningType == EXTRA_SIM_COMBINATION_WARNING_TYPE_DUAL_CDMA) {
+                intent.putExtra(EXTRA_SIM_COMBINATION_NAMES, simCombinationParams.mSimNames);
+            }
+            mContext.sendBroadcast(intent);
+        }
+    }
+
+    private int getSimSelectDialogType(int change, boolean dataSelected,
+            boolean voiceSelected, boolean smsSelected) {
         int dialogType = EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_NONE;
-        int preferredSubId = INVALID_SUBSCRIPTION_ID;
 
         // If a primary subscription is removed and only one is left active, ask user
         // for preferred sub selection if any default setting is not set.
@@ -453,30 +595,60 @@ public class MultiSimSettingController extends Handler {
         if (mPrimarySubList.size() == 1 && change == PRIMARY_SUB_REMOVED
                 && (!dataSelected || !smsSelected || !voiceSelected)) {
             dialogType = EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_ALL;
-            preferredSubId = mPrimarySubList.get(0);
-        } else if (mPrimarySubList.size() > 1 && (change == PRIMARY_SUB_REMOVED
-                || change == PRIMARY_SUB_ADDED || change == PRIMARY_SUB_SWAPPED)) {
+        } else if (mPrimarySubList.size() > 1 && isUserVisibleChange(change)) {
             // If change is SWAPPED_IN_GROUP or MARKED_OPPT orINITIALIZED, don't ask user again.
             dialogType = EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_DATA;
         }
 
-        if (dialogType != EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_NONE) {
-            log("[showSimSelectDialogIfNeeded] showing dialog type " + dialogType);
-            Intent intent = new Intent();
-            intent.setAction(ACTION_PRIMARY_SUBSCRIPTION_LIST_CHANGED);
-            intent.setClassName("com.android.settings",
-                    "com.android.settings.sim.SimSelectNotification");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE, dialogType);
-            if (dialogType == EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_ALL) {
-                intent.putExtra(EXTRA_SUBSCRIPTION_ID, preferredSubId);
+        return dialogType;
+    }
+
+    private class SimCombinationWarningParams {
+        @TelephonyManager.SimCombinationWarningType
+        int mWarningType = EXTRA_SIM_COMBINATION_WARNING_TYPE_NONE;
+        String mSimNames;
+    }
+
+    private SimCombinationWarningParams getSimCombinationWarningParams(int change) {
+        SimCombinationWarningParams params = new SimCombinationWarningParams();
+        // If it's single SIM active, no SIM combination warning is needed.
+        if (mPrimarySubList.size() <= 1) return params;
+        // If it's no primary SIM change or it's not user visible change
+        // (initialized or swapped in a group), no SIM combination warning is needed.
+        if (!isUserVisibleChange(change)) return params;
+
+        List<String> simNames = new ArrayList<>();
+        int cdmaPhoneCount = 0;
+        for (int subId : mPrimarySubList) {
+            Phone phone = PhoneFactory.getPhone(SubscriptionManager.getPhoneId(subId));
+            // If a dual CDMA SIM combination warning is needed.
+            if (phone != null && phone.isCdmaSubscriptionAppPresent()) {
+                cdmaPhoneCount++;
+                String simName = mSubController.getActiveSubscriptionInfo(
+                        subId, mContext.getOpPackageName()).getDisplayName().toString();
+                if (TextUtils.isEmpty(simName)) {
+                    // Fall back to carrier name.
+                    simName = phone.getCarrierName();
+                }
+                simNames.add(simName);
             }
-            mContext.sendBroadcast(intent);
         }
+
+        if (cdmaPhoneCount > 1) {
+            params.mWarningType = EXTRA_SIM_COMBINATION_WARNING_TYPE_DUAL_CDMA;
+            params.mSimNames = String.join(" & ", simNames);
+        }
+
+        return params;
+    }
+
+    private boolean isUserVisibleChange(int change) {
+        return (change == PRIMARY_SUB_ADDED || change == PRIMARY_SUB_REMOVED
+                || change == PRIMARY_SUB_SWAPPED);
     }
 
     private void disableDataForNonDefaultNonOpportunisticSubscriptions() {
-        if (!SubscriptionInfoUpdater.isSubInfoInitialized()) return;
+        if (!isReadyToReevaluate()) return;
 
         int defaultDataSub = mSubController.getDefaultDataSubId();
 
@@ -578,6 +750,38 @@ public class MultiSimSettingController extends Handler {
         }
 
         return SubscriptionManager.isValidSubscriptionId(newValue);
+    }
+
+    // When a primary and its grouped opportunistic subscriptions were active, and the primary
+    // subscription gets deactivated or removed, we need to automatically disable the grouped
+    // opportunistic subscription, which will be marked isGroupDisabled as true by SubController.
+    private void deactivateGroupedOpportunisticSubscriptionIfNeeded() {
+        if (!SubscriptionInfoUpdater.isSubInfoInitialized()) return;
+
+        List<SubscriptionInfo> opptSubList = mSubController.getOpportunisticSubscriptions(
+                mContext.getOpPackageName());
+
+        if (ArrayUtils.isEmpty(opptSubList)) return;
+
+        for (SubscriptionInfo info : opptSubList) {
+            if (info.isGroupDisabled() && mSubController.isActiveSubId(info.getSubscriptionId())) {
+                log("[deactivateGroupedOpptSubIfNeeded] "
+                        + "Deactivating grouped opportunistic subscription "
+                        + info.getSubscriptionId());
+                deactivateSubscription(info);
+            }
+        }
+    }
+
+    private void deactivateSubscription(SubscriptionInfo info) {
+        // TODO: b/133379187 have a way to deactivate pSIM.
+        if (info.isEmbedded()) {
+            log("[deactivateSubscription] eSIM profile " + info.getSubscriptionId());
+            EuiccManager euiccManager = (EuiccManager)
+                    mContext.getSystemService(Context.EUICC_SERVICE);
+            euiccManager.switchToSubscription(SubscriptionManager.INVALID_SUBSCRIPTION_ID,
+                    PendingIntent.getService(mContext, 0, new Intent(), 0));
+        }
     }
 
     private void log(String msg) {
