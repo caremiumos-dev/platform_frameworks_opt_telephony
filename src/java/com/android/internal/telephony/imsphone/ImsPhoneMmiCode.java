@@ -1233,6 +1233,8 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                 return mContext.getText(com.android.internal.R.string.stk_cc_ss_to_ss);
             } else if (err.getCommandError() == CommandException.Error.SS_MODIFIED_TO_DIAL_VIDEO) {
                 return mContext.getText(com.android.internal.R.string.stk_cc_ss_to_dial_video);
+            } else if (err.getCommandError() == CommandException.Error.INTERNAL_ERR) {
+                return mContext.getText(com.android.internal.R.string.mmiError);
             }
         }
         return null;
@@ -1516,15 +1518,19 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                 }
 
             } else {
-                Rlog.d(LOG_TAG, "onSuppSvcQueryComplete: Received Call Barring Response.");
-                // Response for Call Barring queries.
-                int[] cbInfos = (int[]) ar.result;
-                if (cbInfos[0] == 1) {
-                    sb.append(mContext.getText(com.android.internal.R.string.serviceEnabled));
-                    mState = State.COMPLETE;
+                // Call barring, CSFB CLIP
+                Rlog.d(LOG_TAG, "onSuppSvcQueryComplete: Received Call Barring or CSFB CLIP Response.");
+                int[] infos = (int[]) ar.result;
+                if (infos == null || infos.length == 0) {
+                    sb.append(mContext.getText(com.android.internal.R.string.mmiError));
                 } else {
-                    sb.append(mContext.getText(com.android.internal.R.string.serviceDisabled));
-                    mState = State.COMPLETE;
+                    if (infos[0] == 1) {
+                        sb.append(mContext.getText(com.android.internal.R.string.serviceEnabled));
+                        mState = State.COMPLETE;
+                    } else {
+                        sb.append(mContext.getText(com.android.internal.R.string.serviceDisabled));
+                        mState = State.COMPLETE;
+                    }
                 }
             }
         }
@@ -1587,6 +1593,8 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         if (ar.exception != null) {
             if (ar.exception instanceof ImsException) {
                 sb.append(getImsErrorMessage(ar));
+            } else {
+                sb.append(getErrorMessage(ar));
             }
         } else {
             int[] clirInfo = (int[]) ar.result;
@@ -1683,7 +1691,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         } else {
             int[] ints = (int[])ar.result;
 
-            if (ints.length != 0) {
+            if (ints != null && ints.length != 0) {
                 if (ints[0] == 0) {
                     sb.append(mContext.getText(com.android.internal.R.string.serviceDisabled));
                     mState = State.COMPLETE;

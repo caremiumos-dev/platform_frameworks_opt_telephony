@@ -84,6 +84,7 @@ import com.android.internal.telephony.uicc.IsimRecords;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.uicc.UsimServiceTable;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.telephony.Rlog;
@@ -4190,6 +4191,18 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     public void queryCLIP(Message onComplete) {
+    }
+
+    public boolean useSsOverIms(Message onComplete) {
+        return false;
+    }
+
+    public boolean isUsimApplicationOnIcc() {
+        if (mUiccController != null) {
+            UiccProfile uiccProfile = mUiccController.getUiccProfileForPhone(mPhoneId);
+            return uiccProfile.isApplicationOnIcc(AppType.APPTYPE_USIM);
+        }
+        return false;
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
