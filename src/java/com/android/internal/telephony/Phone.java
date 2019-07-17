@@ -86,6 +86,7 @@ import com.android.internal.telephony.uicc.IsimRecords;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.uicc.UsimServiceTable;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.telephony.Rlog;
@@ -340,6 +341,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * TODO: Replace this with a proper exception; {@link CallStateException} doesn't make sense.
      */
     public static final String CS_FALLBACK = "cs_fallback";
+
+    // Used for retry over cs for supplementary services
+    public static final String CS_FALLBACK_SS = "cs_fallback_ss";
+
     /**
      * @deprecated Use {@link android.telephony.ims.ImsManager#EXTRA_WFC_REGISTRATION_FAILURE_TITLE}
      * instead.
@@ -4222,6 +4227,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             return ((RIL) mCi).getHalVersion();
         }
         return RIL.RADIO_HAL_VERSION_UNKNOWN;
+    }
+
+    public boolean useSsOverIms(Message onComplete) {
+        return false;
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
