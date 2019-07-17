@@ -2033,6 +2033,26 @@ public class GsmCdmaPhone extends Phone {
             && mImsPhone.isUtEnabled();
     }
 
+    private boolean isCsRetry(Message onComplete) {
+        if (onComplete != null) {
+            return onComplete.getData().getBoolean(CS_FALLBACK_SS, false);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean useSsOverIms(Message onComplete) {
+        boolean isUtEnabled = isUtEnabled();
+
+        Rlog.d(LOG_TAG, "useSsOverIms: isUtEnabled()= " + isUtEnabled +
+                " isCsRetry(onComplete))= " + isCsRetry(onComplete));
+
+        if (isUtEnabled && !isCsRetry(onComplete)) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void getCallForwardingOption(int commandInterfaceCFReason, Message onComplete) {
         getCallForwardingOption(commandInterfaceCFReason,
@@ -2042,16 +2062,13 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass,
             Message onComplete) {
-        if (isPhoneTypeGsm() || isImsUtEnabledOverCdma()) {
-            Phone imsPhone = mImsPhone;
-            if ((imsPhone != null)
-                    && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
-                    || imsPhone.isUtEnabled())) {
-                imsPhone.getCallForwardingOption(commandInterfaceCFReason, serviceClass,
-                        onComplete);
-                return;
-            }
+        Phone imsPhone = mImsPhone;
+        if (useSsOverIms(onComplete)) {
+            imsPhone.getCallForwardingOption(commandInterfaceCFReason, serviceClass, onComplete);
+            return;
+        }
 
+        if (isPhoneTypeGsm()) {
             if (isValidCommandInterfaceCFReason(commandInterfaceCFReason)) {
                 if (DBG) logd("requesting call forwarding query.");
                 Message resp;
@@ -2087,17 +2104,14 @@ public class GsmCdmaPhone extends Phone {
             int serviceClass,
             int timerSeconds,
             Message onComplete) {
-        if (isPhoneTypeGsm() || isImsUtEnabledOverCdma()) {
-            Phone imsPhone = mImsPhone;
-            if ((imsPhone != null)
-                    && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
-                    || imsPhone.isUtEnabled())) {
-                imsPhone.setCallForwardingOption(commandInterfaceCFAction,
-                        commandInterfaceCFReason, dialingNumber, serviceClass,
-                        timerSeconds, onComplete);
-                return;
-            }
+        Phone imsPhone = mImsPhone;
+        if (useSsOverIms(onComplete)) {
+            imsPhone.setCallForwardingOption(commandInterfaceCFAction, commandInterfaceCFReason,
+                    dialingNumber, serviceClass, timerSeconds, onComplete);
+            return;
+        }
 
+        if (isPhoneTypeGsm()) {
             if ((isValidCommandInterfaceCFAction(commandInterfaceCFAction)) &&
                     (isValidCommandInterfaceCFReason(commandInterfaceCFReason))) {
 
@@ -2127,12 +2141,13 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void getCallBarring(String facility, String password, Message onComplete,
             int serviceClass) {
+        Phone imsPhone = mImsPhone;
+        if (useSsOverIms(onComplete)) {
+            imsPhone.getCallBarring(facility, password, onComplete, serviceClass);
+            return;
+        }
+
         if (isPhoneTypeGsm()) {
-            Phone imsPhone = mImsPhone;
-            if ((imsPhone != null) && imsPhone.isUtEnabled()) {
-                imsPhone.getCallBarring(facility, password, onComplete, serviceClass);
-                return;
-            }
             mCi.queryFacilityLock(facility, password, serviceClass, onComplete);
         } else {
             loge("getCallBarringOption: not possible in CDMA");
@@ -2142,12 +2157,13 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void setCallBarring(String facility, boolean lockState, String password,
             Message onComplete, int serviceClass) {
+        Phone imsPhone = mImsPhone;
+        if (useSsOverIms(onComplete)) {
+            imsPhone.setCallBarring(facility, lockState, password, onComplete, serviceClass);
+            return;
+        }
+
         if (isPhoneTypeGsm()) {
-            Phone imsPhone = mImsPhone;
-            if ((imsPhone != null) && imsPhone.isUtEnabled()) {
-                imsPhone.setCallBarring(facility, lockState, password, onComplete, serviceClass);
-                return;
-            }
             mCi.setFacilityLock(facility, lockState, password, serviceClass, onComplete);
         } else {
             loge("setCallBarringOption: not possible in CDMA");
@@ -2173,14 +2189,13 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public void getOutgoingCallerIdDisplay(Message onComplete) {
+        Phone imsPhone = mImsPhone;
+        if (useSsOverIms(onComplete)) {
+            imsPhone.getOutgoingCallerIdDisplay(onComplete);
+            return;
+        }
+
         if (isPhoneTypeGsm()) {
-            Phone imsPhone = mImsPhone;
-            if ((imsPhone != null)
-                    && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
-                    || imsPhone.isUtEnabled())) {
-                imsPhone.getOutgoingCallerIdDisplay(onComplete);
-                return;
-            }
             mCi.getCLIR(onComplete);
         } else {
             loge("getOutgoingCallerIdDisplay: not possible in CDMA");
@@ -2189,14 +2204,13 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public void setOutgoingCallerIdDisplay(int commandInterfaceCLIRMode, Message onComplete) {
+        Phone imsPhone = mImsPhone;
+        if (useSsOverIms(onComplete)) {
+            imsPhone.setOutgoingCallerIdDisplay(commandInterfaceCLIRMode, onComplete);
+            return;
+        }
+
         if (isPhoneTypeGsm()) {
-            Phone imsPhone = mImsPhone;
-            if ((imsPhone != null)
-                    && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
-                    || imsPhone.isUtEnabled())) {
-                imsPhone.setOutgoingCallerIdDisplay(commandInterfaceCLIRMode, onComplete);
-                return;
-            }
             // Packing CLIR value in the message. This will be required for
             // SharedPreference caching, if the message comes back as part of
             // a success response.
@@ -2209,15 +2223,13 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public void getCallWaiting(Message onComplete) {
-        if (isPhoneTypeGsm() || isImsUtEnabledOverCdma()) {
-            Phone imsPhone = mImsPhone;
-            if ((imsPhone != null)
-                    && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
-                    || imsPhone.isUtEnabled())) {
-                imsPhone.getCallWaiting(onComplete);
-                return;
-            }
+        Phone imsPhone = mImsPhone;
+        if (useSsOverIms(onComplete)) {
+            imsPhone.getCallWaiting(onComplete);
+            return;
+        }
 
+        if (isPhoneTypeGsm()) {
             //As per 3GPP TS 24.083, section 1.6 UE doesn't need to send service
             //class parameter in call waiting interrogation  to network
             mCi.queryCallWaiting(CommandsInterface.SERVICE_CLASS_NONE, onComplete);
@@ -2241,14 +2253,13 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public void setCallWaiting(boolean enable, int serviceClass, Message onComplete) {
-        if (isPhoneTypeGsm() || isImsUtEnabledOverCdma()) {
-            Phone imsPhone = mImsPhone;
-            if ((imsPhone != null)
-                    && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
-                    || imsPhone.isUtEnabled())) {
-                imsPhone.setCallWaiting(enable, onComplete);
-                return;
-            }
+        Phone imsPhone = mImsPhone;
+        if (useSsOverIms(onComplete)) {
+            imsPhone.setCallWaiting(enable, onComplete);
+            return;
+        }
+
+        if (isPhoneTypeGsm()) {
             mCi.setCallWaiting(enable, serviceClass, onComplete);
         } else {
             loge("method setCallWaiting is NOT supported in CDMA without IMS!");
