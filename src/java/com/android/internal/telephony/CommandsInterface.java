@@ -51,6 +51,8 @@ public interface CommandsInterface {
 
     // Used as return value for CDMA SS query
     static final int SS_STATUS_UNKNOWN          = 0xff;
+    // Indication of SS performed through CS
+    static final int SS_CS_QUERIED              = 0xff;
 
     // Used as parameters for call forward methods below
     static final int CF_ACTION_DISABLE          = 0;

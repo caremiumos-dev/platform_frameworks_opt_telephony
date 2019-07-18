@@ -205,6 +205,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected static final int EVENT_GET_UICC_APPS_ENABLEMENT_DONE  = 54;
     protected static final int EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE = 55;
     protected static final int EVENT_REGISTRATION_FAILED = 56;
+    protected static final int EVENT_GET_CALL_BARRING_DONE          = 57;
 
     protected static final int EVENT_LAST = EVENT_REGISTRATION_FAILED;
 
