@@ -2103,6 +2103,8 @@ public class GsmCdmaPhone extends Phone {
         }
 
         if (isPhoneTypeGsm()) {
+            Message resp;
+            resp = obtainMessage(EVENT_GET_CALL_BARRING_DONE, onComplete);
             mCi.queryFacilityLock(facility, password, serviceClass, onComplete);
         } else {
             loge("getCallBarringOption: not possible in CDMA, just return empty result");
@@ -3022,6 +3024,15 @@ public class GsmCdmaPhone extends Phone {
 //                }
 //                break;
             }
+            case EVENT_GET_CALL_BARRING_DONE:
+                ar = (AsyncResult)msg.obj;
+                onComplete = (Message) ar.userObj;
+                if (onComplete != null) {
+                    int[] result = {((int[])ar.result)[0], CommandsInterface.SS_CS_QUERIED};
+                    AsyncResult.forMessage(onComplete, result, ar.exception);
+                    onComplete.sendToTarget();
+                }
+                break;
             default:
                 super.handleMessage(msg);
         }
