@@ -334,7 +334,9 @@ public class IccPhoneBookInterfaceManager {
     private int updateEfForIccType(int efid) {
         // Check if we are trying to read ADN records
         if (efid == IccConstants.EF_ADN) {
-            if (mPhone.getCurrentUiccAppType() == AppType.APPTYPE_USIM) {
+            if (mPhone.getCurrentUiccAppType() == AppType.APPTYPE_USIM
+                    || mPhone.getCurrentUiccAppType() == AppType.APPTYPE_CSIM
+                    || mPhone.getCurrentUiccAppType() == AppType.APPTYPE_RUIM) {
                 return IccConstants.EF_PBR;
             }
         }
