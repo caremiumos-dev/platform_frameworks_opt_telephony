@@ -330,11 +330,21 @@ public class IccPhoneBookInterfaceManager {
         }
     }
 
+    /**
+    *
+    * EFADN and EFPBR shall always be present if the DFPHONEBOOK is present.
+    * For USIM: TS 131-102 4.4.2.1 Phone Book Reference file
+    * For RUIM: C.S0023-D 2.7 Content of EFs
+    * For CSIM: C.S0065-B 5.4.1 EF_ADN
+    *
+    */
     @UnsupportedAppUsage
     private int updateEfForIccType(int efid) {
         // Check if we are trying to read ADN records
         if (efid == IccConstants.EF_ADN) {
-            if (mPhone.getCurrentUiccAppType() == AppType.APPTYPE_USIM) {
+            if (mPhone.getCurrentUiccAppType() == AppType.APPTYPE_USIM
+                    || mPhone.getCurrentUiccAppType() == AppType.APPTYPE_CSIM
+                    || mPhone.getCurrentUiccAppType() == AppType.APPTYPE_RUIM) {
                 return IccConstants.EF_PBR;
             }
         }
