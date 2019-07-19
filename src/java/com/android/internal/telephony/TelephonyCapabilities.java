@@ -37,19 +37,19 @@ public class TelephonyCapabilities {
      * state for a short period of time after making an outgoing emergency
      * call.
      *
-     * (On current devices, that state lasts 5 minutes.  It prevents data
+     * (On current devices, that state lasts 5 minutes. It prevents data
      * usage by other apps, to avoid conflicts with any possible incoming
-     * calls.  It also puts up a notification in the status bar, showing a
+     * calls. It also puts up a notification in the status bar, showing a
      * countdown while ECM is active, and allowing the user to exit ECM.)
      *
-     * Currently this is assumed to be true for CDMA phones, and false
-     * otherwise.
+     * Currently this is assumed to be true for CDMA and IMS phones, and
+     * false otherwise.
      */
     public static boolean supportsEcm(Phone phone) {
-        Rlog.d(LOG_TAG, "supportsEcm: Phone type = " + phone.getPhoneType() +
-                  " Ims Phone = " + phone.getImsPhone());
-        return (phone.getPhoneType() == PhoneConstants.PHONE_TYPE_CDMA ||
-                phone.getImsPhone() != null);
+        int phoneType = phone.getPhoneType();
+        Rlog.d(LOG_TAG, "supportsEcm: Phone type = " + phoneType);
+        return (phoneType == PhoneConstants.PHONE_TYPE_CDMA
+                || phoneType == PhoneConstants.PHONE_TYPE_IMS);
     }
 
     /**
