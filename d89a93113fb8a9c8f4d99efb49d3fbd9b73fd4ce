@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "551beaa4_5ca34e8d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1041813
+      },
+      "writtenOn": "2019-07-24T16:11:00Z",
+      "side": 0,
+      "message": "I more think the mPreferredDataPhoneId should not be returned directly here.\nAs what is checked at the L951 below, the mPreferredDataPhoneId might be invalid in some case,\nit should be checked first before returned.\n\nAnd the crash problem looks like being introduced by the change here:\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/782521/1/src/java/com/android/internal/telephony/PhoneSwitcher.java#b406\n\nbefore that change, the subId was checked by the for loop at the end of this function,\nbut after that change, the check was skipped by returning directly when specifier is null.",
+      "range": {
+        "startLine": 948,
+        "startChar": 0,
+        "endLine": 948,
+        "endChar": 75
+      },
+      "revId": "d89a93113fb8a9c8f4d99efb49d3fbd9b73fd4ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
