@@ -965,14 +965,7 @@ public class PhoneSwitcher extends Handler {
         }
 
         // Try to find matching phone ID. If it doesn't exist, we'll end up returning INVALID.
-        int phoneId = INVALID_PHONE_INDEX;
-        for (int i = 0; i < mNumPhones; i++) {
-            if (mPhoneSubscriptions[i] == subId) {
-                phoneId = i;
-                break;
-            }
-        }
-        return phoneId;
+        return getPhoneIdWithSubId(subId);
     }
 
     private int getSubIdFromNetworkRequest(NetworkRequest networkRequest) {
@@ -1006,6 +999,17 @@ public class PhoneSwitcher extends Handler {
         }
     }
 
+    private int getPhoneIdWithSubId(int subId) {
+        int phoneId = SubscriptionManager.INVALID_PHONE_INDEX;
+        for (int i = 0; i < mNumPhones; i++) {
+            if (mPhoneSubscriptions[i] == subId) {
+                phoneId = i;
+                break;
+            }
+        }
+        return phoneId;
+    }
+
     // This updates mPreferredDataPhoneId which decides which phone should handle default network
     // requests.
     private void updatePreferredDataPhoneId() {
@@ -1027,18 +1031,13 @@ public class PhoneSwitcher extends Handler {
             mPreferredDataPhoneId = mPhoneIdInVoiceCall;
         } else {
             int subId = getSubIdForDefaultNetworkRequests();
-            int phoneId = SubscriptionManager.INVALID_PHONE_INDEX;
 
             if (SubscriptionManager.isUsableSubIdValue(subId)) {
-                for (int i = 0; i < mNumPhones; i++) {
-                    if (mPhoneSubscriptions[i] == subId) {
-                        phoneId = i;
-                        break;
-                    }
-                }
-            }
+                mPreferredDataPhoneId = getPhoneIdWithSubId(subId);
+            } else {
+                mPreferredDataPhoneId = SubscriptionManager.INVALID_PHONE_INDEX;
 
-            mPreferredDataPhoneId = phoneId;
+            }
         }
 
         mPreferredDataSubId = mSubscriptionController.getSubIdUsingPhoneId(mPreferredDataPhoneId);
