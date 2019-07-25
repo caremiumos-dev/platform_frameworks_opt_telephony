@@ -945,10 +945,15 @@ public class PhoneSwitcher extends Handler {
     private int phoneIdForRequest(NetworkRequest netRequest) {
         int subId = getSubIdFromNetworkRequest(netRequest);
 
-        if (subId == DEFAULT_SUBSCRIPTION_ID) return mPreferredDataPhoneId;
         if (subId == INVALID_SUBSCRIPTION_ID) return INVALID_PHONE_INDEX;
 
-        int preferredDataSubId = SubscriptionManager.isValidPhoneId(mPreferredDataPhoneId)
+        boolean isPreferredDataPhoneIdValid = (mPreferredDataPhoneId >= 0)
+                                                && (mPreferredDataPhoneId < mNumPhones);
+        if (subId == DEFAULT_SUBSCRIPTION_ID) {
+            return isPreferredDataPhoneIdValid ? mPreferredDataPhoneId : INVALID_PHONE_INDEX;
+        }
+
+        int preferredDataSubId = isPreferredDataPhoneIdValid
                 ? mPhoneSubscriptions[mPreferredDataPhoneId] : INVALID_SUBSCRIPTION_ID;
 
         // Currently we assume multi-SIM devices will only support one Internet PDN connection. So
