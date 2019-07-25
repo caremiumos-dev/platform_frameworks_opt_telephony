@@ -25,10 +25,12 @@ import static android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE;
 import android.annotation.UnsupportedAppUsage;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.UserHandle;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
@@ -56,6 +58,25 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
         }
         mContext = context;
         mAppOps = (AppOpsManager) mContext.getSystemService(Context.APP_OPS_SERVICE);
+    }
+
+    /**
+     * Returns the target SDK version number for a given package name.
+     *
+     * This call MUST be invoked before clearing the calling UID.
+     *
+     * @return target SDK if the package is found or INT_MAX.
+     */
+    private int getTargetSdk(String packageName) {
+        try {
+            final ApplicationInfo ai = mContext.getPackageManager().getApplicationInfoAsUser(
+                    packageName, 0, UserHandle.getUserId(Binder.getCallingUid()));
+            if (ai != null) return ai.targetSdkVersion;
+        } catch (PackageManager.NameNotFoundException unexpected) {
+            loge("Failed to get package info for pkg="
+                    + packageName + ", uid=" + Binder.getCallingUid());
+        }
+        return Integer.MAX_VALUE;
     }
 
     public String getDeviceId(String callingPackage) {
@@ -228,7 +249,7 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
 
     /**
      * get Phone object based on subId.
-     **/
+     */
     @UnsupportedAppUsage
     private Phone getPhone(int subId) {
         int phoneId = SubscriptionManager.getPhoneId(subId);
@@ -236,24 +257,6 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
             phoneId = 0;
         }
         return mPhone[phoneId];
-    }
-
-    /**
-     * Make sure caller has either read privileged phone permission or carrier privilege.
-     *
-     * @throws SecurityException if the caller does not have the required permission/privilege
-     */
-    private void enforcePrivilegedPermissionOrCarrierPrivilege(int subId, String message) {
-        // TODO(b/73660190): Migrate to
-        // TelephonyPermissions.enforceCallingOrSelfModifyPermissionOrCarrierPrivileges and delete
-        // this helper method.
-        int permissionResult = mContext.checkCallingOrSelfPermission(
-                READ_PRIVILEGED_PHONE_STATE);
-        if (permissionResult == PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        if (VDBG) log("No read privileged phone permission, check carrier privilege next.");
-        TelephonyPermissions.enforceCallingOrSelfCarrierPrivilege(subId, message);
     }
 
     /**
@@ -270,8 +273,8 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
     }
 
     /**
-    * get the Isim Impi based on subId
-    */
+     * get the Isim Impi based on subId
+     */
     public String getIsimImpi(int subId) {
         return callPhoneMethodForSubIdWithPrivilegedCheck(subId, "getIsimImpi",
                 (phone) -> {
@@ -300,8 +303,8 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
     }
 
     /**
-    * get the Isim Impu based on subId
-    */
+     * get the Isim Impu based on subId
+     */
     public String[] getIsimImpu(int subId) {
         return callPhoneMethodForSubIdWithPrivilegedCheck(subId, "getIsimImpu",
                 (phone) -> {
@@ -315,8 +318,8 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
     }
 
     /**
-    * get the Isim Ist based on subId
-    */
+     * get the Isim Ist based on subId
+     */
     public String getIsimIst(int subId) throws RemoteException {
         return callPhoneMethodForSubIdWithPrivilegedCheck(subId, "getIsimIst",
                 (phone) -> {
@@ -330,8 +333,8 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
     }
 
     /**
-    * get the Isim Pcscf based on subId
-    */
+     * get the Isim Pcscf based on subId
+     */
     public String[] getIsimPcscf(int subId) throws RemoteException {
         return callPhoneMethodForSubIdWithPrivilegedCheck(subId, "getIsimPcscf",
                 (phone) -> {
@@ -344,38 +347,42 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
                 });
     }
 
-    public String getIccSimChallengeResponse(int subId, int appType, int authType, String data)
-            throws RemoteException {
+    /**
+     * Get an Auth challenge response from the SIM such as SIM, AKA, AKA'
+     */
+    public String getIccAuthentication(int subId, int appType, int authType, String data,
+            String pkgName) throws RemoteException {
         CallPhoneMethodHelper<String> toExecute = (phone)-> {
             UiccCard uiccCard = phone.getUiccCard();
             if (uiccCard == null) {
-                loge("getIccSimChallengeResponse() UiccCard is null");
+                loge("getIccAuthentication() UiccCard is null");
                 return null;
             }
 
             UiccCardApplication uiccApp = uiccCard.getApplicationByType(appType);
             if (uiccApp == null) {
-                loge("getIccSimChallengeResponse() no app with specified type -- " + appType);
+                loge("getIccAuthentication() no app with specified type -- " + appType);
                 return null;
             } else {
-                loge("getIccSimChallengeResponse() found app " + uiccApp.getAid()
+                loge("getIccAuthentication() found app " + uiccApp.getAid()
                         + " specified type -- " + appType);
             }
 
             if (authType != UiccCardApplication.AUTH_CONTEXT_EAP_SIM
                     && authType != UiccCardApplication.AUTH_CONTEXT_EAP_AKA) {
-                loge("getIccSimChallengeResponse() unsupported authType: " + authType);
+                loge("getIccAuthentication() unsupported authType: " + authType);
                 return null;
             }
             return uiccApp.getIccRecords().getIccSimChallengeResponse(authType, data);
         };
 
-        return callPhoneMethodWithPermissionCheck(
-                subId, null, "getIccSimChallengeResponse", toExecute,
-                (aContext, aSubId, aCallingPackage, aMessage)-> {
-                    enforcePrivilegedPermissionOrCarrierPrivilege(aSubId, aMessage);
-                    return true;
-                });
+        if (getTargetSdk(pkgName) > android.os.Build.VERSION_CODES.Q) {
+            return callPhoneMethodForSubIdWithModifyOrCarrierPrivilegeCheck(subId, pkgName,
+                    "getIccAuthentication", toExecute);
+        } else {
+            return callPhoneMethodForSubIdWithPrivilegedOrCarrierPrivilegeCheck(subId, pkgName,
+                    "getIccAuthentication", toExecute);
+        }
     }
 
     public String getGroupIdLevel1ForSubscriber(int subId, String callingPackage) {
@@ -440,11 +447,34 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
                 });
     }
 
+    private <T> T callPhoneMethodForSubIdWithPrivilegedOrCarrierPrivilegeCheck(
+            int subId, String callingPackage, String message,
+            CallPhoneMethodHelper<T> callMethodHelper) {
+        return callPhoneMethodWithPermissionCheck(subId, callingPackage, message, callMethodHelper,
+                (aContext, aSubId, aCallingPackage, aMessage)-> {
+                    TelephonyPermissions
+                            .enforeceCallingOrSelfReadPrivilegedPhoneStatePermissionOrCarrierPrivilege(
+                                    aContext, aSubId, aMessage);
+                    return true;
+                });
+    }
+
     private <T> T callPhoneMethodForSubIdWithModifyCheck(int subId, String callingPackage,
             String message, CallPhoneMethodHelper<T> callMethodHelper) {
         return callPhoneMethodWithPermissionCheck(subId, null, message, callMethodHelper,
                 (aContext, aSubId, aCallingPackage, aMessage)-> {
                     enforceModifyPermission();
+                    return true;
+                });
+    }
+
+    private <T> T callPhoneMethodForSubIdWithModifyOrCarrierPrivilegeCheck(
+            int subId, String callingPackage, String message,
+            CallPhoneMethodHelper<T> callMethodHelper) {
+        return callPhoneMethodWithPermissionCheck(subId, callingPackage, message, callMethodHelper,
+                (aContext, aSubId, aCallingPackage, aMessage)-> {
+                    TelephonyPermissions.enforceCallingOrSelfModifyPermissionOrCarrierPrivilege(
+                            aContext, aSubId, aMessage);
                     return true;
                 });
     }
