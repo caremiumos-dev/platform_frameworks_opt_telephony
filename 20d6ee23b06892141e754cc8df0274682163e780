@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "515eac1b_1b4099e2",
+        "filename": "src/java/com/android/internal/telephony/PhoneSubInfoController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-07-26T01:33:53Z",
+      "side": 1,
+      "message": "that\u0027s a good idea.",
+      "parentUuid": "98b68bb0_e44bb77a",
+      "range": {
+        "startLine": 70,
+        "startChar": 16,
+        "endLine": 70,
+        "endChar": 28
+      },
+      "revId": "20d6ee23b06892141e754cc8df0274682163e780",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f80b07b8_7c84b6c9",
         "filename": "src/java/com/android/internal/telephony/PhoneSubInfoController.java",
         "patchSetId": 1
@@ -83,6 +107,30 @@
       "writtenOn": "2019-07-26T01:26:19Z",
       "side": 1,
       "message": "is this typo (enforece) present in the actual method here?",
+      "range": {
+        "startLine": 456,
+        "startChar": 29,
+        "endLine": 456,
+        "endChar": 37
+      },
+      "revId": "20d6ee23b06892141e754cc8df0274682163e780",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb9a57f9_e1188dcd",
+        "filename": "src/java/com/android/internal/telephony/PhoneSubInfoController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-07-26T01:33:53Z",
+      "side": 1,
+      "message": "Yes, and it drives me absolutely crazy.\nhttps://android.googlesource.com/platform/frameworks/base/+/master/telephony/java/com/android/internal/telephony/TelephonyPermissions.java#530\nhttps://android.googlesource.com/platform/frameworks/base/+/master/telephony/java/com/android/internal/telephony/TelephonyPermissions.java#550",
+      "parentUuid": "af8f5c93_262cd19b",
       "range": {
         "startLine": 456,
         "startChar": 29,
