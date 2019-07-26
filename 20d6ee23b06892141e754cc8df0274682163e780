@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f80b07b8_7c84b6c9",
+        "filename": "src/java/com/android/internal/telephony/PhoneSubInfoController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-07-26T00:30:26Z",
+      "side": 1,
+      "message": "Note that I have to violate 1 of the formatting rules here by either not indenting sufficiently or by exceeding the line length or by violating the style of the file. I\u0027ve chosen to exceed line length as the lesser of the 3 evils.",
+      "range": {
+        "startLine": 456,
+        "startChar": 29,
+        "endLine": 456,
+        "endChar": 102
+      },
+      "revId": "20d6ee23b06892141e754cc8df0274682163e780",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
