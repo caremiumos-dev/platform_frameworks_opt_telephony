@@ -965,7 +965,7 @@ public class DataConnection extends StateMachine {
     private static final String TCP_BUFFER_SIZES_NR =
             "2097152,6291456,16777216,512000,2097152,8388608";
 
-    private void updateTcpBufferSizes(int rilRat) {
+    public void updateTcpBufferSizes(int rilRat) {
         String sizes = null;
         if (rilRat == ServiceState.RIL_RADIO_TECHNOLOGY_LTE_CA) {
             // for now treat CA as LTE.  Plan to surface the extra bandwith in a more

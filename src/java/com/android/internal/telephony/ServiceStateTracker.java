@@ -131,7 +131,7 @@ import java.util.regex.PatternSyntaxException;
 public class ServiceStateTracker extends Handler {
     static final String LOG_TAG = "SST";
     static final boolean DBG = true;
-    private static final boolean VDBG = false;  // STOPSHIP if true
+    private static final boolean VDBG = true;  // STOPSHIP if true
 
     private static final String PROP_FORCE_ROAMING = "telephony.test.forceRoaming";
 
@@ -1932,12 +1932,21 @@ public class ServiceStateTracker extends Handler {
                     // Update the frequency range of the NR parameters if there is an internet data
                     // connection associate to this NR physical channel channel config.
                     int[] contextIds = config.getContextIds();
+                    log("5G contextIds = " + Arrays.toString(contextIds));
                     for (int cid : contextIds) {
                         DataConnection dc = dcTracker.getDataConnectionByContextId(cid);
+                        if (dc != null) {
+                            log("5G data connection, cid = " + cid
+                                    + " NET_CAPABILITY_INTERNET = "
+                                    + dc.getNetworkCapabilities().hasCapability(
+                                NetworkCapabilities.NET_CAPABILITY_INTERNET));
+                        }
+
                         if (dc != null && dc.getNetworkCapabilities().hasCapability(
                                 NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
                             newFrequencyRange = ServiceState.getBetterNRFrequencyRange(
                                     newFrequencyRange, config.getFrequencyRange());
+                            dc.updateTcpBufferSizes(ServiceState.RIL_RADIO_TECHNOLOGY_LTE);
                             break;
                         }
                     }
