@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1c2b17f_b5e4793b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1950,
+      "author": {
+        "id": 1332435
+      },
+      "writtenOn": "2019-07-30T23:32:48Z",
+      "side": 1,
+      "message": "Is it a good idea to updateTcpBufferSizes inside of a function call \"updateNrFrequencyRange...\"? Is it better to create new function to update tcp buffer sizes?",
+      "revId": "7cfcc0bdb8aa428e2fa9e33aa570db55e92e228a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
