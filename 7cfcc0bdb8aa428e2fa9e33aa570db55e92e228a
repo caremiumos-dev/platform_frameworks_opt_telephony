@@ -16,6 +16,24 @@
       "revId": "7cfcc0bdb8aa428e2fa9e33aa570db55e92e228a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77c0f7a9_215037e9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1950,
+      "author": {
+        "id": 1098848
+      },
+      "writtenOn": "2019-07-31T00:07:00Z",
+      "side": 1,
+      "message": "This is only for debuging purpose, if you come from the bug b/135941346, could you please cherry-pick this patch to your local branch and collect the bugreport, thanks :-)",
+      "parentUuid": "f1c2b17f_b5e4793b",
+      "revId": "7cfcc0bdb8aa428e2fa9e33aa570db55e92e228a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
