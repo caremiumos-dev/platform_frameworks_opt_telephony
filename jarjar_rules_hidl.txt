@@ -1,0 +1,2 @@
+rule android.hidl.** android.telinternal.hidl.@1
+rule android.hardware.** android.telinternal.hardware.@1
