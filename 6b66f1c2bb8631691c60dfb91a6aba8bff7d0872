@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c5e4e68_a3e556d9",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-08-06T00:01:04Z",
+      "side": 1,
+      "message": "jarjar_rules_hidl.txt",
+      "range": {
+        "startLine": 50,
+        "startChar": 19,
+        "endLine": 50,
+        "endChar": 40
+      },
+      "revId": "6b66f1c2bb8631691c60dfb91a6aba8bff7d0872",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
