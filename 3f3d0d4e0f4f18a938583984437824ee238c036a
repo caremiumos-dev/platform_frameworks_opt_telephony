@@ -22,6 +22,30 @@
       "revId": "3f3d0d4e0f4f18a938583984437824ee238c036a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04e33dd5_cc12af90",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1137063
+      },
+      "writtenOn": "2019-08-07T18:08:31Z",
+      "side": 1,
+      "message": "\u003e preferably telephony just isn\u0027t running.\n\nIt is running, that\u0027s why this change is needed.  Do you have a suggestion for how to fix it to not run?",
+      "parentUuid": "f12d1e96_60a7c4f5",
+      "range": {
+        "startLine": 1048,
+        "startChar": 24,
+        "endLine": 1048,
+        "endChar": 25
+      },
+      "revId": "3f3d0d4e0f4f18a938583984437824ee238c036a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
