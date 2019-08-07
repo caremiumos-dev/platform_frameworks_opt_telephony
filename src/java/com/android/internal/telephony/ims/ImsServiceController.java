@@ -71,25 +71,29 @@ public class ImsServiceController {
             synchronized (mLock) {
                 mIsBound = true;
                 mIsBinding = false;
-                Log.d(LOG_TAG, "ImsService(" + name + "): onServiceConnected with binder: "
-                        + service);
-                if (service != null) {
-                    try {
-                        setServiceController(service);
-                        notifyImsServiceReady();
-                        // create all associated features in the ImsService
-                        for (ImsFeatureConfiguration.FeatureSlotPair i : mImsFeatures) {
-                            addImsServiceFeature(i);
-                        }
-                    } catch (RemoteException e) {
-                        mIsBound = false;
-                        mIsBinding = false;
-                        // Remote exception means that the binder already died.
-                        cleanupConnection();
-                        startDelayedRebindToService();
-                        Log.e(LOG_TAG, "ImsService(" + name + ") RemoteException:"
-                                + e.getMessage());
+                if (service == null) {
+                    if (mCallbacks != null) {
+                        mCallbacks.imsServiceBindPermanentError(getComponentName());
+                        return;
                     }
+                }
+                try {
+                    Log.d(LOG_TAG, "ImsService(" + name + "): onServiceConnected with binder: "
+                            + service);
+                    setServiceController(service);
+                    notifyImsServiceReady();
+                    // create all associated features in the ImsService
+                    for (ImsFeatureConfiguration.FeatureSlotPair i : mImsFeatures) {
+                        addImsServiceFeature(i);
+                    }
+                } catch (RemoteException e) {
+                    mIsBound = false;
+                    mIsBinding = false;
+                    // Remote exception means that the binder already died.
+                    cleanupConnection();
+                    startDelayedRebindToService();
+                    Log.e(LOG_TAG, "ImsService(" + name + ") RemoteException:"
+                            + e.getMessage());
                 }
             }
         }
@@ -151,6 +155,12 @@ public class ImsServiceController {
          */
         void imsServiceFeaturesChanged(ImsFeatureConfiguration config,
                 ImsServiceController controller);
+
+        /**
+         * Called by the ImsServiceController when there has been an error binding that is
+         * not recoverable, such as the ImsService returning a null binder.
+         */
+        void imsServiceBindPermanentError(ComponentName name);
     }
 
     /**
