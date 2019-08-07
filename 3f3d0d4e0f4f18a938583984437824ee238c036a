@@ -70,6 +70,30 @@
       "revId": "3f3d0d4e0f4f18a938583984437824ee238c036a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cd8bf65_ec75a861",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1010110
+      },
+      "writtenOn": "2019-08-07T19:12:17Z",
+      "side": 1,
+      "message": "\u003e It\u0027s been a long time since we disabled it... but I think it was last done for some versions of Volantis (Nexus 9). The real question is: who remembers how (not me)? But it\u0027d probably be worth figuring it out. A rough idea is to remove the Phone app from the makefile and remove FEATURE_TELEPHONY. There might be a few rough edges, but it would be the right way to go for something like hikey, and you\u0027d reap some further rewards in the process. Somehow I think amitmahajan@ might have a pointer; bugs float around about this once in a while.\n\n\nProbably the PixelC as well, but that\u0027s EOL too, so not probably a useful reference point. :)\n\nSo the HiKey/HiKey960 makefiles don\u0027t reference the phone app at all (nor FEATURE_TELEPHONY), so I\u0027m not sure how to remove it without diving into the framework. \n\nI\u0027d think treble-ized tablets would have hit the same issue as well, no?\n\nI suspect something in the overlay/frameworks/base/core/res/res/values/config.xml like:\n \u003cbool name\u003d\"config_voice_capable\"\u003efalse\u003c/bool\u003e \nwould do it, but I\u0027m not sure what all the possible options are there.",
+      "parentUuid": "912b6d7a_a91cb77c",
+      "range": {
+        "startLine": 1048,
+        "startChar": 24,
+        "endLine": 1048,
+        "endChar": 25
+      },
+      "revId": "3f3d0d4e0f4f18a938583984437824ee238c036a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
