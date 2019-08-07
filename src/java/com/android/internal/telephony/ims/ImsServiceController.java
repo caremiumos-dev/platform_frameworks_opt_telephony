@@ -327,7 +327,8 @@ public class ImsServiceController {
     // Creating a new HandlerThread and background handler for each test causes a segfault, so for
     // testing, use a handler supplied by the testing system.
     public ImsServiceController(Context context, ComponentName componentName,
-            ImsServiceControllerCallbacks callbacks, Handler handler, RebindRetry rebindRetry) {
+            ImsServiceControllerCallbacks callbacks, Handler handler, RebindRetry rebindRetry,
+            IPackageManager testPm) {
         mContext = context;
         mComponentName = componentName;
         mCallbacks = callbacks;
@@ -337,7 +338,7 @@ public class ImsServiceController {
                 2, /* multiplier */
                 handler,
                 mRestartImsServiceRunnable);
-        mPackageManager = null;
+        mPackageManager = testPm;
     }
 
     /**
@@ -399,6 +400,7 @@ public class ImsServiceController {
         synchronized (mLock) {
             mBackoff.stop();
             if (mImsServiceConnection == null) {
+                revokePermissionsFromService();
                 return;
             }
             // Clean up all features
@@ -408,6 +410,9 @@ public class ImsServiceController {
             mContext.unbindService(mImsServiceConnection);
             mIsBound = false;
             mIsBinding = false;
+            // Don't revoke permissions until after the call to unbind the service to avoid race
+            // conditions between unbind and permissions being gone as much as possible.
+            revokePermissionsFromService();
             cleanUpService();
         }
     }
@@ -619,6 +624,20 @@ public class ImsServiceController {
         try {
             if (mPackageManager != null) {
                 mPackageManager.grantDefaultPermissionsToEnabledImsServices(pkgToGrant,
+                        mContext.getUserId());
+            }
+        } catch (RemoteException e) {
+            Log.w(LOG_TAG, "Unable to grant permissions, binder died.");
+        }
+    }
+
+    // Revoke previously granted runtime permissions from ImsService.
+    private void revokePermissionsFromService() {
+        Log.i(LOG_TAG, "Revoking Runtime permissions from:" + getComponentName());
+        String[] pkgToGrant = {mComponentName.getPackageName()};
+        try {
+            if (mPackageManager != null) {
+                mPackageManager.revokeDefaultPermissionsFromEnabledImsServices(pkgToGrant,
                         mContext.getUserId());
             }
         } catch (RemoteException e) {
