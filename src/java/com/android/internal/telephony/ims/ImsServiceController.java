@@ -395,6 +395,7 @@ public class ImsServiceController {
             removeImsServiceFeatureCallbacks();
             Log.i(LOG_TAG, "Unbinding ImsService: " + mComponentName);
             mContext.unbindService(mImsServiceConnection);
+            revokePermissionsFromService();
             cleanUpService();
         }
     }
@@ -606,6 +607,20 @@ public class ImsServiceController {
         try {
             if (mPackageManager != null) {
                 mPackageManager.grantDefaultPermissionsToEnabledImsServices(pkgToGrant,
+                        mContext.getUserId());
+            }
+        } catch (RemoteException e) {
+            Log.w(LOG_TAG, "Unable to grant permissions, binder died.");
+        }
+    }
+
+    // Revoke previously granted runtime permissions from ImsService.
+    private void revokePermissionsFromService() {
+        Log.i(LOG_TAG, "Revoking Runtime permissions from:" + getComponentName());
+        String[] pkgToGrant = {mComponentName.getPackageName()};
+        try {
+            if (mPackageManager != null) {
+                mPackageManager.revokeDefaultPermissionsFromEnabledImsServices(pkgToGrant,
                         mContext.getUserId());
             }
         } catch (RemoteException e) {
