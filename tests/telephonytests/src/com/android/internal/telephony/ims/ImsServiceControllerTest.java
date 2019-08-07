@@ -33,6 +33,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.IPackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
@@ -77,6 +78,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     @Mock ImsServiceController.ImsServiceControllerCallbacks mMockCallbacks;
     @Mock IImsServiceFeatureCallback mMockProxyCallbacks;
     @Mock Context mMockContext;
+    @Mock IPackageManager mIPackageManager;
     private final ComponentName mTestComponentName = new ComponentName("TestPkg",
             "ImsServiceControllerTest");
     private final Handler mHandler = new Handler(Looper.getMainLooper());
@@ -87,7 +89,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     public void setUp() throws Exception {
         super.setUp();
         mTestImsServiceController = new ImsServiceController(mMockContext, mTestComponentName,
-                mMockCallbacks, mHandler, REBIND_RETRY);
+                mMockCallbacks, mHandler, REBIND_RETRY, mIPackageManager);
         mTestImsServiceController.addImsServiceFeatureCallback(mMockProxyCallbacks);
         when(mMockContext.bindService(any(), any(), anyInt())).thenReturn(true);
     }
@@ -132,7 +134,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
      */
     @SmallTest
     @Test
-    public void testBindFailureWhenBound() {
+    public void testBindFailureWhenBound() throws RemoteException {
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> testFeatures = new HashSet<>();
         // Slot 1, MMTel
         testFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, 1));
@@ -258,7 +260,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
         testFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, 2));
         ServiceConnection conn = bindAndConnectService(testFeatures);
 
-        mTestImsServiceController.unbind();
+        unbindService();
 
         verify(mMockContext).unbindService(eq(conn));
         verify(mMockServiceControllerBinder).removeImsFeature(eq(1), eq(1), any());
@@ -398,7 +400,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
         // Slot 1, MMTel
         testFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, 1));
         bindAndConnectService(testFeatures);
-        mTestImsServiceController.unbind();
+        unbindService();
         // Create a new list with an additional item
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> testFeaturesWithAddition = new HashSet<>(
                 testFeatures);
@@ -468,7 +470,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
         ServiceConnection conn = bindAndConnectService(testFeatures);
 
         conn.onBindingDied(null /*null*/);
-        mTestImsServiceController.unbind();
+        unbindService();
 
         long delay = mTestImsServiceController.getRebindDelay();
         waitForHandlerActionDelayed(mHandler, delay, 2 * delay);
@@ -500,15 +502,29 @@ public class ImsServiceControllerTest extends ImsTestBase {
     }
 
     private ServiceConnection bindAndConnectService(
-            HashSet<ImsFeatureConfiguration.FeatureSlotPair> testFeatures) {
+            HashSet<ImsFeatureConfiguration.FeatureSlotPair> testFeatures) throws RemoteException {
         ArgumentCaptor<ServiceConnection> serviceCaptor =
                 ArgumentCaptor.forClass(ServiceConnection.class);
         assertTrue(mTestImsServiceController.bind(testFeatures));
+        ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
+        verify(mIPackageManager).grantDefaultPermissionsToEnabledImsServices(captor.capture(),
+                anyInt());
+        assertEquals(1, captor.getValue().length);
+        assertEquals(mTestComponentName.getPackageName(), captor.getValue()[0]);
         verify(mMockContext).bindService(any(), serviceCaptor.capture(), anyInt());
         IImsServiceController.Stub controllerStub = mock(IImsServiceController.Stub.class);
         when(controllerStub.queryLocalInterface(any())).thenReturn(mMockServiceControllerBinder);
         serviceCaptor.getValue().onServiceConnected(mTestComponentName,
                 controllerStub);
         return serviceCaptor.getValue();
+    }
+
+    private void unbindService() throws RemoteException {
+        mTestImsServiceController.unbind();
+        ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
+        verify(mIPackageManager).revokeDefaultPermissionsFromEnabledImsServices(captor.capture(),
+                anyInt());
+        assertEquals(1, captor.getValue().length);
+        assertEquals(mTestComponentName.getPackageName(), captor.getValue()[0]);
     }
 }
