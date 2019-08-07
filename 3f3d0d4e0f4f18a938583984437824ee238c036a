@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f12d1e96_60a7c4f5",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-08-07T17:44:36Z",
+      "side": 1,
+      "message": "while \u003c\u003d is defensive coding, it shouldn\u0027t be possible to have \u003c 0 phones (there should be Log.wtf() all over the place for that), and if you have 0 phones, preferably telephony just isn\u0027t running.",
+      "range": {
+        "startLine": 1048,
+        "startChar": 24,
+        "endLine": 1048,
+        "endChar": 25
+      },
+      "revId": "3f3d0d4e0f4f18a938583984437824ee238c036a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

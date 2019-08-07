@@ -22,6 +22,30 @@
       "revId": "d89a93113fb8a9c8f4d99efb49d3fbd9b73fd4ce",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e789f753_9752f36d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-08-07T17:44:36Z",
+      "side": 0,
+      "message": "AFAICT the response to phoneIdForRequest() is checked in the only places where it\u0027s used, so I think this is OK (although a bit scary) since it can be INVALID_PHONE_INDEX. There is shouldApplyNetworkRequest() which used phoneIdForRequest(), but it compares the phoneIds, so it would only work if someone intentionally checked whether shouldApplyNewtorkRequest( NR , INVALID_PHONE_INDEX)... and since the invocations are phone.getPhoneId() that can\u0027t happen.",
+      "parentUuid": "551beaa4_5ca34e8d",
+      "range": {
+        "startLine": 948,
+        "startChar": 0,
+        "endLine": 948,
+        "endChar": 75
+      },
+      "revId": "d89a93113fb8a9c8f4d99efb49d3fbd9b73fd4ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
