@@ -17,10 +17,16 @@ package com.android.internal.telephony;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.Signature;
 import android.os.Parcel;
 import android.telephony.SubscriptionInfo;
+import android.telephony.UiccAccessRule;
 import android.test.suitebuilder.annotation.SmallTest;
+
+import com.android.internal.telephony.uicc.IccUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -111,5 +117,33 @@ public class SubscriptionInfoTest {
         assertEquals(mSubscriptionInfoUT, copiedInfo);
         assertNotEquals(mSubscriptionInfoUT, differentDisplayName);
         assertNotEquals(mSubscriptionInfoUT, differentSubId);
+    }
+
+    @Test
+    public void testSetCarrierConfigAccessRules() {
+        String[] certs = new String[2];
+        certs[0] = "testCertificate";
+        certs[1] = "testCertificate2";
+        mSubscriptionInfoUT.setCarrierConfigAccessRules(certs);
+        UiccAccessRule[] rules = mSubscriptionInfoUT.getCarrierConfigAccessRules();
+        assertEquals(IccUtils.bytesToHexString(certs[0].getBytes()),
+                rules[0].getCertificateHexString());
+        assertEquals(IccUtils.bytesToHexString(certs[1].getBytes()),
+                rules[1].getCertificateHexString());
+    }
+
+    @Test
+    public void testHasCarrierPrivilegeStatusFromNonUiccCertificates() {
+        String[] certs = new String[2];
+        certs[0] = "testCertificate";
+        certs[1] = "testCertificate2";
+        mSubscriptionInfoUT.setCarrierConfigAccessRules(certs);
+
+        Signature[] sigs = new Signature[1];
+        sigs[0] = new Signature(certs[0].getBytes());
+        PackageInfo pkgInfo = new PackageInfo();
+        pkgInfo.signatures = sigs;
+
+        assertTrue(mSubscriptionInfoUT.hasCarrierPrivilegeStatusFromNonUiccCertificates(pkgInfo));
     }
 }
