@@ -870,6 +870,9 @@ public class SubscriptionInfoUpdater extends Handler {
             return;
         }
 
+        currentSubInfo.setCarrierConfigAccessRules(config.getStringArray(
+                CarrierConfigManager.KEY_CARRIER_CERTIFICATE_STRING_ARRAY));
+
         if (!isCarrierServicePackage(phoneId, configPackageName)) {
             loge("Cannot manage subId=" + currentSubId + ", carrierPackage=" + configPackageName);
             return;
