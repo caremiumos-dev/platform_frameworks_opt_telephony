@@ -2385,16 +2385,16 @@ public class ServiceStateTracker extends Handler {
              * is set to roaming when either is true.
              *
              * There are exceptions for the above rule.
-             * The new SS is not set as roaming while gsm service reports
-             * roaming but indeed it is same operator.
-             * And the operator is considered non roaming.
+             * The new SS is not set as roaming while gsm service or
+             * data service reports roaming but indeed it is same
+             * operator. And the operator is considered non roaming.
              *
              * The test for the operators is to handle special roaming
              * agreements and MVNO's.
              */
             boolean roaming = (mGsmRoaming || mDataRoaming);
 
-            if (mGsmRoaming && !isOperatorConsideredRoaming(mNewSS)
+            if (roaming && !isOperatorConsideredRoaming(mNewSS)
                     && (isSameNamedOperators(mNewSS) || isOperatorConsideredNonRoaming(mNewSS))) {
                 log("updateRoamingState: resource override set non roaming.isSameNamedOperators="
                         + isSameNamedOperators(mNewSS) + ",isOperatorConsideredNonRoaming="
@@ -3101,6 +3101,11 @@ public class ServiceStateTracker extends Handler {
             }
         }
 
+        // Filter out per transport data RAT changes, only want to track changes based on
+        // transport preference changes (WWAN to WLAN, for example).
+        boolean hasDataTransportPreferenceChanged = !anyDataRatChanged
+                && (mSS.getRilDataRadioTechnology() != mNewSS.getRilDataRadioTechnology());
+
         boolean hasVoiceRegStateChanged =
                 mSS.getVoiceRegState() != mNewSS.getVoiceRegState();
 
@@ -3180,6 +3185,7 @@ public class ServiceStateTracker extends Handler {
                     + " hasDataRegStateChanged = " + hasDataRegStateChanged
                     + " hasRilVoiceRadioTechnologyChanged = " + hasRilVoiceRadioTechnologyChanged
                     + " hasRilDataRadioTechnologyChanged = " + hasRilDataRadioTechnologyChanged
+                    + " hasDataTransportPreferenceChanged = " + hasDataTransportPreferenceChanged
                     + " hasChanged = " + hasChanged
                     + " hasVoiceRoamingOn = " + hasVoiceRoamingOn
                     + " hasVoiceRoamingOff = " + hasVoiceRoamingOff
@@ -3355,7 +3361,10 @@ public class ServiceStateTracker extends Handler {
             }
 
             if (hasDataRegStateChanged.get(transport)
-                    || hasRilDataRadioTechnologyChanged.get(transport)) {
+                    || hasRilDataRadioTechnologyChanged.get(transport)
+                    // Update all transports if preference changed so that consumers can be notified
+                    // that ServiceState#getRilDataRadioTechnology has changed.
+                    || hasDataTransportPreferenceChanged) {
                 notifyDataRegStateRilRadioTechnologyChanged(transport);
                 mPhone.notifyDataConnection();
             }
