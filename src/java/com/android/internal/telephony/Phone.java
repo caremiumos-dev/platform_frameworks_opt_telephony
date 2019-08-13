@@ -714,9 +714,17 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                     String dialString = (String) ar.result;
                     if (TextUtils.isEmpty(dialString)) return;
                     try {
-                        dialInternal(dialString, new DialArgs.Builder().build());
+                        Connection cn = dialInternal(dialString, new DialArgs.Builder().build());
+                        Rlog.d(LOG_TAG, "Notify Handover state changed cn: " + cn);
+                        if (mImsPhone != null) {
+                            // Don't care it is null or not.
+                            mImsPhone.notifyHandoverStateChanged(cn);
+                        }
                     } catch (CallStateException e) {
                         Rlog.e(LOG_TAG, "silent redial failed: " + e);
+                        if (mImsPhone != null) {
+                            mImsPhone.notifyHandoverStateChanged(null);
+                        }
                     }
                 }
                 break;
