@@ -48,6 +48,7 @@ import android.provider.Settings;
 import android.telecom.ConferenceParticipant;
 import android.telecom.TelecomManager;
 import android.telecom.VideoProfile;
+import android.telephony.AccessNetworkConstants;
 import android.telephony.CallQuality;
 import android.telephony.CarrierConfigManager;
 import android.telephony.DisconnectCause;
@@ -57,6 +58,7 @@ import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.TimedLog;
 import android.telephony.emergency.EmergencyNumber;
 import android.telephony.ims.ImsCallProfile;
 import android.telephony.ims.ImsMmTelManager;
@@ -107,6 +109,7 @@ import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.ImsConnectionState;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyCallSession;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyCallSession.Event.ImsCommand;
+import com.android.internal.util.IndentingPrintWriter;
 import com.android.server.net.NetworkStatsService;
 
 import java.io.FileDescriptor;
@@ -164,7 +167,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private class MmTelFeatureListener extends MmTelFeature.Listener {
         @Override
         public void onIncomingCall(IImsCallSession c, Bundle extras) {
-            if (DBG) log("onReceive : incoming call intent");
+            mRegLocalLog.log("onIncomingCall Received");
 
             if (mImsManager == null) return;
 
@@ -309,6 +312,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private static final int TIMEOUT_REDIAL_WIFI_E911_MS = 10000;
 
     private static final int TIMEOUT_PARTICIPANT_CONNECT_TIME_CACHE_MS = 60000; //ms
+
+    // Time period threshold after which TimedLog will start pruning
+    // Currently 10 hrs
+    private static final long TIMED_LOG_STALE_PERIOD_THRESHOLD = 36000000L;
+    // Number of logs after which logs older than TIMED_LOG_STALE_PERIOD_THRESHOLD will be pruned.
+    private static final int TIMED_LOG_STALE_LOG_COUNT_THRESHOLD = 40;
+    // TimedLog should never exceed this number of lines.
+    private static final int TIMED_LOG_ABSOLUTE_MAX_LINES = 100;
 
     // Following values are for mHoldSwitchingState
     private enum HoldSwapState {
@@ -521,6 +532,13 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     private final ImsManager.Connector mImsManagerConnector;
 
+    // Used exclusively for IMS Registration related events for logging.
+    private final TimedLog mRegLocalLog = new TimedLog(TIMED_LOG_ABSOLUTE_MAX_LINES,
+            TIMED_LOG_STALE_LOG_COUNT_THRESHOLD, TIMED_LOG_STALE_PERIOD_THRESHOLD);
+    // Used for important operational related events for logging.
+    private final TimedLog mOperationLocalLog = new TimedLog(TIMED_LOG_ABSOLUTE_MAX_LINES,
+            TIMED_LOG_STALE_LOG_COUNT_THRESHOLD, TIMED_LOG_STALE_PERIOD_THRESHOLD);
+
     //***** Events
 
 
@@ -568,6 +586,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     }
                 }, executor, "ImsPhoneCallTracker");
         mImsManagerConnector.connect();
+
+        // When logging in TimedLog, also proxy to Rlog.
+        mRegLocalLog.setLogger((log) -> Rlog.i(LOG_TAG, log));
+        mOperationLocalLog.setLogger((log) -> Rlog.i(LOG_TAG, log));
     }
 
     /**
@@ -614,7 +636,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     }
 
     private void startListeningForCalls() throws ImsException {
-        log("startListeningForCalls");
+        mOperationLocalLog.log("startListeningForCalls - Connecting to ImsService");
         mImsManager.open(mMmTelFeatureListener);
         mImsManager.addRegistrationCallback(mImsRegistrationCallback);
         mImsManager.addCapabilitiesCallback(mImsCapabilityCallback);
@@ -656,7 +678,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     }
 
     private void stopListeningForCalls() {
-        log("stopListeningForCalls");
+        mOperationLocalLog.log("stopListeningForCalls - Disconnecting from ImsService");
         resetImsCapabilities();
         // Only close on valid session.
         if (mImsManager != null) {
@@ -754,7 +776,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         boolean isEmergencyNumber = mPhoneNumberUtilsProxy.isEmergencyNumber(dialString);
 
         if (!shouldNumberBePlacedOnIms(isEmergencyNumber, dialString)) {
-            Rlog.i(LOG_TAG, "dial: shouldNumberBePlacedOnIms = false");
+            mRegLocalLog.log("dial: shouldNumberBePlacedOnIms = false");
             throw new CallStateException(CS_FALLBACK);
         }
 
@@ -762,6 +784,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         int videoState = dialArgs.videoState;
 
         if (DBG) log("dial clirMode=" + clirMode);
+        mRegLocalLog.log("dial requested.");
         if (isEmergencyNumber) {
             clirMode = CommandsInterface.CLIR_SUPPRESSION;
             if (DBG) log("dial emergency call, set clirModIe=" + clirMode);
@@ -1099,7 +1122,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             setVideoCallProvider(conn, imsCall);
             conn.setAllowAddCallDuringVideoCall(mAllowAddCallDuringVideoCall);
         } catch (ImsException e) {
-            loge("dialInternal : " + e);
+            mOperationLocalLog.log("dialInternal exception: " + e);
             conn.setDisconnectCause(DisconnectCause.ERROR_UNSPECIFIED);
             sendEmptyMessageDelayed(EVENT_HANGUP_PENDINGMO, TIMEOUT_HANGUP_PENDINGMO);
             retryGetImsService();
@@ -1115,7 +1138,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
      * @throws CallStateException
      */
     public void acceptCall(int videoState) throws CallStateException {
-        if (DBG) log("acceptCall");
+        mOperationLocalLog.log("accepted incoming call");
 
         if (mForegroundCall.getState().isAlive()
                 && mBackgroundCall.getState().isAlive()) {
@@ -1170,7 +1193,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     }
 
     public void rejectCall () throws CallStateException {
-        if (DBG) log("rejectCall");
+        mOperationLocalLog.log("rejected incoming call");
 
         if (mRingingCall.getState().isRinging()) {
             hangup(mRingingCall);
@@ -1450,7 +1473,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             backgroundId = backgroundConnection.getTelecomCallId();
             cacheConnectionTimeWithPhoneNumber(backgroundConnection);
         }
-        log("conference: fgCallId=" + foregroundId + ", bgCallId=" + backgroundId);
+        mOperationLocalLog.log("conference: fgCallId=" + foregroundId + ", bgCallId="
+                + backgroundId);
 
         try {
             fgImsCall.merge(bgImsCall);
@@ -3061,9 +3085,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             new ImsMmTelManager.RegistrationCallback() {
 
                 @Override
-                public void onRegistered(
-                        @ImsRegistrationImplBase.ImsRegistrationTech int imsRadioTech) {
-                    if (DBG) log("onImsConnected imsRadioTech=" + imsRadioTech);
+                public void onRegistered(int imsRadioTech) {
+                    mRegLocalLog.log("onImsConnected imsRadioTech="
+                            + AccessNetworkConstants.transportTypeToString(imsRadioTech));
                     mPhone.setServiceState(ServiceState.STATE_IN_SERVICE);
                     mPhone.setImsRegistered(true);
                     mMetrics.writeOnImsConnectionState(mPhone.getPhoneId(),
@@ -3071,9 +3095,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 }
 
                 @Override
-                public void onRegistering(
-                        @ImsRegistrationImplBase.ImsRegistrationTech int imsRadioTech) {
-                    if (DBG) log("onImsProgressing imsRadioTech=" + imsRadioTech);
+                public void onRegistering(int imsRadioTech) {
+                    mRegLocalLog.log("onImsProgressing imsRadioTech="
+                            + AccessNetworkConstants.transportTypeToString(imsRadioTech));
                     mPhone.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
                     mPhone.setImsRegistered(false);
                     mMetrics.writeOnImsConnectionState(mPhone.getPhoneId(),
@@ -3082,7 +3106,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
                 @Override
                 public void onUnregistered(ImsReasonInfo imsReasonInfo) {
-                    if (DBG) log("onImsDisconnected imsReasonInfo=" + imsReasonInfo);
+                    mRegLocalLog.log("onImsDisconnected imsRadioTech=" + imsReasonInfo);
                     mPhone.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
                     mPhone.setImsRegistered(false);
                     mPhone.processDisconnectReason(imsReasonInfo);
@@ -3523,9 +3547,12 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     }
 
     @Override
-    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+    public void dump(FileDescriptor fd, PrintWriter printWriter, String[] args) {
+        IndentingPrintWriter pw = new IndentingPrintWriter(printWriter, "  ");
         pw.println("ImsPhoneCallTracker extends:");
+        pw.increaseIndent();
         super.dump(fd, pw, args);
+        pw.decreaseIndent();
         pw.println(" mVoiceCallEndedRegistrants=" + mVoiceCallEndedRegistrants);
         pw.println(" mVoiceCallStartedRegistrants=" + mVoiceCallStartedRegistrants);
         pw.println(" mRingingCall=" + mRingingCall);
@@ -3533,7 +3560,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         pw.println(" mBackgroundCall=" + mBackgroundCall);
         pw.println(" mHandoverCall=" + mHandoverCall);
         pw.println(" mPendingMO=" + mPendingMO);
-        //pw.println(" mHangupPendingMO=" + mHangupPendingMO);
+        //printWriter.println(" mHangupPendingMO=" + mHangupPendingMO);
         pw.println(" mPhone=" + mPhone);
         pw.println(" mDesiredMute=" + mDesiredMute);
         pw.println(" mState=" + mState);
@@ -3543,6 +3570,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         pw.println(" mVtDataUsageUidSnapshot=" + mVtDataUsageUidSnapshot);
         pw.println(" mCallQualityMetrics=" + mCallQualityMetrics);
         pw.println(" mCallQualityMetricsHistory=" + mCallQualityMetricsHistory);
+        pw.println(" Registration Log:");
+        pw.increaseIndent();
+        mRegLocalLog.dump(pw);
+        pw.decreaseIndent();
+        pw.println(" Event Log:");
+        pw.increaseIndent();
+        mOperationLocalLog.dump(pw);
+        pw.decreaseIndent();
 
         pw.flush();
         pw.println("++++++++++++++++++++++++++++++++");
@@ -3608,20 +3643,17 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     }
 
     public boolean isVolteEnabled() {
-        boolean isRadioTechLte = getImsRegistrationTech()
-                == ImsRegistrationImplBase.REGISTRATION_TECH_LTE;
-        return isRadioTechLte && mMmTelCapabilities.isCapable(
-                MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE);
+        return isImsCapabilityAvailable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE,
+                ImsRegistrationImplBase.REGISTRATION_TECH_LTE);
     }
 
     public boolean isVowifiEnabled() {
-        boolean isRadioTechIwlan = getImsRegistrationTech()
-                == ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN;
-        return isRadioTechIwlan && mMmTelCapabilities.isCapable(
-                MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE);
+        return isImsCapabilityAvailable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE,
+                ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN);
     }
 
     public boolean isVideoCallEnabled() {
+        // Currently no reliance on transport technology.
         return mMmTelCapabilities.isCapable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VIDEO);
     }
 
@@ -3668,6 +3700,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     }
 
     public boolean isUtEnabled() {
+        // Currently no reliance on transport technology
         return mMmTelCapabilities.isCapable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_UT);
     }
 
@@ -4152,12 +4185,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
         if (DBG) log(sb.toString());
 
-        if (DBG) {
-            log("handleFeatureCapabilityChanged: isVolteEnabled=" + isVolteEnabled()
-                    + ", isVideoCallEnabled=" + isVideoCallEnabled()
-                    + ", isVowifiEnabled=" + isVowifiEnabled()
-                    + ", isUtEnabled=" + isUtEnabled());
-        }
+        String logMessage = "handleFeatureCapabilityChanged: isVolteEnabled=" + isVolteEnabled()
+                + ", isVideoCallEnabled=" + isVideoCallEnabled()
+                + ", isVowifiEnabled=" + isVowifiEnabled()
+                + ", isUtEnabled=" + isUtEnabled();
+        mRegLocalLog.log(logMessage);
 
         mPhone.onFeatureCapabilityChanged();
 
