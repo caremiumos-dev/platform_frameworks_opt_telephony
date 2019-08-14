@@ -27,7 +27,6 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.PhoneStateListener;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
-import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.sip.SipPhone;
 
@@ -2089,8 +2088,18 @@ public class CallManager {
                 case EVENT_NEW_RINGING_CONNECTION:
                     if (VDBG) Rlog.d(LOG_TAG, " handleMessage (EVENT_NEW_RINGING_CONNECTION)");
                     Connection c = (Connection) ((AsyncResult) msg.obj).result;
-                    int subId = c.getCall().getPhone().getSubId();
-                    if (getActiveFgCallState(subId).isDialing() || hasMoreThanOneRingingCall()) {
+                    //int subId = c.getCall().getPhone().getSubId();
+                    boolean isDialing = false;
+                    for (Phone phone : PhoneFactory.getPhones()) {
+                        if (getActiveFgCallState(phone.getSubId()).isDialing()) {
+                            Rlog.d(LOG_TAG, " handleMessage (EVENT_NEW_RINGING_CONNECTION) phone "
+                                            + phone.getPhoneId() + " : "
+                                            + getActiveFgCallState(phone.getSubId()));
+                            isDialing = true;
+                            break;
+                        }
+                    }
+                    if (isDialing || hasMoreThanOneRingingCall()) {
                         try {
                             Rlog.d(LOG_TAG, "silently drop incoming call: " + c.getCall());
                             c.getCall().hangup();
