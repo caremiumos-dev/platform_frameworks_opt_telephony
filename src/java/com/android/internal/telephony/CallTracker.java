@@ -79,6 +79,13 @@ public abstract class CallTracker extends Handler {
         mNeedsPoll = true;
 
         if (checkNoOperationsPending()) {
+            if (mLastRelevantPoll != null) {
+                log("pollCallsWhenSafe: mLastRelevantPoll " + mLastRelevantPoll.what);
+                if (mLastRelevantPoll.what == EVENT_POLL_CALLS_RESULT) {
+                    pollCallsAfterDelay();
+                    return;
+                }
+            }
             mLastRelevantPoll = obtainMessage(EVENT_POLL_CALLS_RESULT);
             mCi.getCurrentCalls(mLastRelevantPoll);
         }
