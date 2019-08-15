@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5034b7e7_ec09878b",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-08-15T00:29:42Z",
+      "side": 1,
+      "message": "what does the size represent?\n\nwill this capture atleast 10 hours of history in sunny day scenario ?",
+      "range": {
+        "startLine": 529,
+        "startChar": 54,
+        "endLine": 529,
+        "endChar": 59
+      },
+      "revId": "d501ac3aaab1ebe9d406a3a0debe41b159186679",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
