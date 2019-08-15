@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import static com.android.internal.telephony.SmsResponse.NO_ERROR_CODE;
+
 import android.content.Context;
 import android.os.PersistableBundle;
 import android.os.RemoteException;
@@ -51,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ImsSmsDispatcher extends SMSDispatcher {
 
-    private static final String TAG = "ImsSmsDispacher";
+    private static final String TAG = "ImsSmsDispatcher";
 
     @VisibleForTesting
     public Map<Integer, SmsTracker> mTrackers = new ConcurrentHashMap<>();
@@ -132,7 +134,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     mPhone.notifySmsSent(tracker.mDestAddress);
                     break;
                 case ImsSmsImplBase.SEND_STATUS_ERROR:
-                    tracker.onFailed(mContext, reason, 0 /* errorCode */);
+                    tracker.onFailed(mContext, reason, NO_ERROR_CODE);
                     mTrackers.remove(token);
                     break;
                 case ImsSmsImplBase.SEND_STATUS_ERROR_RETRY:
@@ -232,7 +234,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                             mIsImsServiceUp = false;
                         }
                     }
-                });
+                }, "ImsSmsDispatcher");
         mImsManagerConnector.connect();
     }
 

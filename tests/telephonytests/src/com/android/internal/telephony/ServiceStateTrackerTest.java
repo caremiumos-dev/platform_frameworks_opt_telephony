@@ -32,6 +32,7 @@ import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -81,6 +82,7 @@ import android.telephony.NetworkService;
 import android.telephony.PhysicalChannelConfig;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
@@ -125,6 +127,9 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     private NetworkService mIwlanNetworkService;
     @Mock
     private INetworkService.Stub mIwlanNetworkServiceStub;
+
+    @Mock
+    private SubscriptionInfo mSubInfo;
 
     private ServiceStateTracker sst;
     private ServiceStateTrackerTestHandler mSSTTestHandler;
@@ -1380,7 +1385,13 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testSetPsNotifications() {
-        sst.mSubId = 1;
+        int subId = 1;
+        sst.mSubId = subId;
+        doReturn(subId).when(mSubInfo).getSubscriptionId();
+
+        doReturn(mSubInfo).when(mSubscriptionController).getActiveSubscriptionInfo(
+                anyInt(), anyString());
+
         final NotificationManager nm = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mContextFixture.putBooleanResource(
@@ -1407,7 +1418,12 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testSetCsNotifications() {
-        sst.mSubId = 1;
+        int subId = 1;
+        sst.mSubId = subId;
+        doReturn(subId).when(mSubInfo).getSubscriptionId();
+        doReturn(mSubInfo).when(mSubscriptionController)
+                .getActiveSubscriptionInfo(anyInt(), anyString());
+
         final NotificationManager nm = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mContextFixture.putBooleanResource(
@@ -1435,7 +1451,12 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testSetCsNormalNotifications() {
-        sst.mSubId = 1;
+        int subId = 1;
+        sst.mSubId = subId;
+        doReturn(subId).when(mSubInfo).getSubscriptionId();
+        doReturn(mSubInfo).when(mSubscriptionController)
+                .getActiveSubscriptionInfo(anyInt(), anyString());
+
         final NotificationManager nm = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mContextFixture.putBooleanResource(
@@ -1462,7 +1483,12 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testSetCsEmergencyNotifications() {
-        sst.mSubId = 1;
+        int subId = 1;
+        sst.mSubId = subId;
+        doReturn(subId).when(mSubInfo).getSubscriptionId();
+        doReturn(mSubInfo).when(mSubscriptionController)
+                .getActiveSubscriptionInfo(anyInt(), anyString());
+
         final NotificationManager nm = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mContextFixture.putBooleanResource(
@@ -1486,6 +1512,36 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.setNotification(ServiceStateTracker.CS_DISABLED);
         verify(nm).cancel(Integer.toString(sst.mSubId), ServiceStateTracker.CS_NOTIFICATION);
         sst.setNotification(ServiceStateTracker.CS_REJECT_CAUSE_ENABLED);
+    }
+
+    @Test
+    @SmallTest
+    public void testSetNotificationsForGroupedSubs() {
+        //if subscription is grouped, no notification should be set whatsoever
+        int subId = 1;
+        int otherSubId = 2;
+        sst.mSubId = otherSubId;
+        doReturn(subId).when(mSubInfo).getSubscriptionId();
+
+        final NotificationManager nm = (NotificationManager)
+                mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        mContextFixture.putBooleanResource(
+                R.bool.config_user_notification_of_restrictied_mobile_access, true);
+        doReturn(new ApplicationInfo()).when(mContext).getApplicationInfo();
+        Drawable mockDrawable = mock(Drawable.class);
+        Resources mockResources = mContext.getResources();
+        when(mockResources.getDrawable(anyInt(), any())).thenReturn(mockDrawable);
+
+        mContextFixture.putResource(com.android.internal.R.string.RestrictedOnDataTitle, "test1");
+
+        sst.setNotification(ServiceStateTracker.EVENT_NETWORK_STATE_CHANGED);
+        ArgumentCaptor<Notification> notificationArgumentCaptor =
+                ArgumentCaptor.forClass(Notification.class);
+        verify(nm, never()).notify(anyString(), anyInt(), notificationArgumentCaptor.capture());
+
+        sst.setNotification(ServiceStateTracker.PS_DISABLED);
+        verify(nm, never()).cancel(Integer.toString(sst.mSubId),
+                ServiceStateTracker.PS_NOTIFICATION);
     }
 
     @Test
@@ -1700,6 +1756,44 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForMs(200);
     }
 
+    private void changeRegStateWithIwlan(int state, CellIdentity cid, int voiceRat, int dataRat,
+            int iwlanState, int iwlanDataRat) {
+        LteVopsSupportInfo lteVopsSupportInfo =
+                new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE,
+                        LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE);
+        sst.mPollingContext[0] = 3;
+
+        // PS WWAN
+        NetworkRegistrationInfo dataResult = new NetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN,
+                state, dataRat, 0, false,
+                null, cid, 1, false, false, false, lteVopsSupportInfo, false);
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_PS_CELLULAR_REGISTRATION,
+                new AsyncResult(sst.mPollingContext, dataResult, null)));
+        waitForMs(200);
+
+        // CS WWAN
+        NetworkRegistrationInfo voiceResult = new NetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_CS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN,
+                state, voiceRat, 0, false,
+                null, cid, false, 0, 0, 0);
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_CS_CELLULAR_REGISTRATION,
+                new AsyncResult(sst.mPollingContext, voiceResult, null)));
+        waitForMs(200);
+
+        // PS WLAN
+        NetworkRegistrationInfo dataIwlanResult = new NetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WLAN,
+                iwlanState, iwlanDataRat, 0, false,
+                null, null, 1, false, false, false, lteVopsSupportInfo, false);
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_PS_IWLAN_REGISTRATION,
+                new AsyncResult(sst.mPollingContext, dataIwlanResult, null)));
+        waitForMs(200);
+    }
+
     // Edge and GPRS are grouped under the same family and Edge has higher rate than GPRS.
     // Expect no rat update when move from E to G.
     @Test
@@ -1870,6 +1964,49 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 new AsyncResult(sst.mPollingContext, voiceResult, null)));
         waitForMs(200);
         assertTrue(Arrays.equals(new int[0], sst.mSS.getCellBandwidths()));
+    }
+
+    /**
+     * Ensure that TransportManager changes due to transport preference changes are picked up in the
+     * new ServiceState when a poll event occurs. This causes ServiceState#getRilDataRadioTechnology
+     * to change even though the underlying transports have not changed state.
+     */
+    @SmallTest
+    @Test
+    public void testRilDataTechnologyChangeTransportPreference() {
+        when(mTransportManager.isAnyApnPreferredOnIwlan()).thenReturn(false);
+
+        // Start state: Cell data only LTE + IWLAN
+        CellIdentityLte cellIdentity =
+                new CellIdentityLte(1, 1, 5, 1, 5000, "001", "01", "test", "tst");
+        changeRegStateWithIwlan(
+                // WWAN
+                NetworkRegistrationInfo.REGISTRATION_STATE_HOME, cellIdentity,
+                TelephonyManager.NETWORK_TYPE_UNKNOWN, TelephonyManager.NETWORK_TYPE_LTE,
+                // WLAN
+                NetworkRegistrationInfo.REGISTRATION_STATE_HOME,
+                TelephonyManager.NETWORK_TYPE_IWLAN);
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_LTE, sst.mSS.getRilDataRadioTechnology());
+
+        sst.registerForDataRegStateOrRatChanged(AccessNetworkConstants.TRANSPORT_TYPE_WWAN,
+                mTestHandler, EVENT_DATA_RAT_CHANGED, null);
+        // transport preference change for a PDN for IWLAN occurred, no registration change, but
+        // trigger unrelated poll to pick up transport preference.
+        when(mTransportManager.isAnyApnPreferredOnIwlan()).thenReturn(true);
+        changeRegStateWithIwlan(
+                // WWAN
+                NetworkRegistrationInfo.REGISTRATION_STATE_HOME, cellIdentity,
+                TelephonyManager.NETWORK_TYPE_UNKNOWN, TelephonyManager.NETWORK_TYPE_LTE,
+                // WLAN
+                NetworkRegistrationInfo.REGISTRATION_STATE_HOME,
+                TelephonyManager.NETWORK_TYPE_IWLAN);
+        // Now check to make sure a transport independent notification occurred for the registrants.
+        // There will be two, one when the registration happened and another when the transport
+        // preference changed.
+        ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
+        verify(mTestHandler, times(2)).sendMessageAtTime(messageArgumentCaptor.capture(),
+                anyLong());
+        assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN, sst.mSS.getRilDataRadioTechnology());
     }
 
     @Test

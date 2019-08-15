@@ -243,7 +243,7 @@ public class PhoneFactory {
                     Rlog.i(LOG_TAG, "ImsResolver: defaultImsPackage: " + defaultImsPackage);
                     sImsResolver = new ImsResolver(sContext, defaultImsPackage, numPhones,
                             isDynamicBinding);
-                    sImsResolver.initPopulateCacheAndStartBind();
+                    sImsResolver.initialize();
                     // Start monitoring after defaults have been made.
                     // Default phone must be ready before ImsPhone is created because ImsService
                     // might need it when it is being opened. This should initialize multiple
@@ -280,7 +280,6 @@ public class PhoneFactory {
 
                 sNotificationChannelController = new NotificationChannelController(context);
 
-                sTelephonyNetworkFactories = new TelephonyNetworkFactory[numPhones];
                 for (int i = 0; i < numPhones; i++) {
                     sTelephonyNetworkFactories[i] = new TelephonyNetworkFactory(
                             sSubscriptionMonitor, Looper.myLooper(), sPhones[i]);

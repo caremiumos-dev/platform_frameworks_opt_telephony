@@ -98,6 +98,7 @@ import com.android.internal.telephony.TelephonyComponentFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.dataconnection.TransportManager;
+import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.uicc.IccRecords;
@@ -231,6 +232,16 @@ public class ImsPhone extends ImsPhoneBase {
     @Override
     public Uri[] getCurrentSubscriberUris() {
         return mCurrentSubscriberUris;
+    }
+
+    @Override
+    public EmergencyNumberTracker getEmergencyNumberTracker() {
+        return mDefaultPhone.getEmergencyNumberTracker();
+    }
+
+    @Override
+    public ServiceStateTracker getServiceStateTracker() {
+        return mDefaultPhone.getServiceStateTracker();
     }
 
     // Create Cf (Call forward) so that dialling number &
@@ -1433,6 +1444,7 @@ public class ImsPhone extends ImsPhoneBase {
                 mSS.addNetworkRegistrationInfo(nri);
             }
 
+            mSS.setIwlanPreferred(ss.isIwlanPreferred());
             logd("updateDataServiceState: defSs = " + ss + " imsSs = " + mSS);
         }
     }
@@ -1582,6 +1594,7 @@ public class ImsPhone extends ImsPhoneBase {
             setIsInEcm(true);
             // notify change
             sendEmergencyCallbackModeChange();
+            ((GsmCdmaPhone) mDefaultPhone).notifyEmergencyCallRegistrants(true);
 
             // Post this runnable so we will automatically exit
             // if no one invokes exitEmergencyCallbackMode() directly.
