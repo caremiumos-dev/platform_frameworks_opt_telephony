@@ -22,6 +22,30 @@
       "revId": "d501ac3aaab1ebe9d406a3a0debe41b159186679",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74f7f344_8c3bf1d8",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-08-15T00:31:43Z",
+      "side": 1,
+      "message": "No, it only captures the last 40 events, which is variable depending on device conditions.. I can look into a time based log and see if that is a viable alternative.",
+      "parentUuid": "5034b7e7_ec09878b",
+      "range": {
+        "startLine": 529,
+        "startChar": 54,
+        "endLine": 529,
+        "endChar": 59
+      },
+      "revId": "d501ac3aaab1ebe9d406a3a0debe41b159186679",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
