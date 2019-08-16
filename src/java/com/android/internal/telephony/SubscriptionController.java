@@ -1586,6 +1586,10 @@ public class SubscriptionController extends ISub.Stub {
             String nameToSet;
             if (displayName == null) {
                 nameToSet = mContext.getString(SubscriptionManager.DEFAULT_NAME_RES);
+            } else if (nameSource == SubscriptionManager.NAME_SOURCE_USER_INPUT
+                    && displayName.trim().length() == 0
+                    && SubscriptionManager.isValidSlotIndex(getSlotIndex(subId))) {
+                nameToSet = "SIM " + Integer.toString(getSlotIndex(subId) + 1);
             } else {
                 nameToSet = displayName;
             }
