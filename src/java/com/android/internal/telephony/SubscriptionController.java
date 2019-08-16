@@ -1584,8 +1584,12 @@ public class SubscriptionController extends ISub.Stub {
                 }
             }
             String nameToSet;
-            if (displayName == null) {
+            if (TextUtils.isEmpty(displayName)) {
+                logd("user input displayname is null or null string.");
                 nameToSet = mContext.getString(SubscriptionManager.DEFAULT_NAME_RES);
+                if (SubscriptionManager.isValidSlotIndex(getSlotIndex(subId))) {
+                    nameToSet = "SIM " + Integer.toString(getSlotIndex(subId) + 1);
+                }
             } else {
                 nameToSet = displayName;
             }
