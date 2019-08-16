@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdd96b37_c522cfc1",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-08-16T17:43:21Z",
+      "side": 1,
+      "message": "This is not necessarily user input. Move this to the if check below.",
+      "range": {
+        "startLine": 1588,
+        "startChar": 22,
+        "endLine": 1588,
+        "endChar": 32
+      },
+      "revId": "69632e9eeb1d84a8bd0189138c19d844b8ab05a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "285d849a_9b76efa3",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1589,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-08-16T17:43:21Z",
+      "side": 1,
+      "message": "Move this to else for the if condition you added below.",
+      "revId": "69632e9eeb1d84a8bd0189138c19d844b8ab05a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35e69090_93897705",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-08-16T17:43:21Z",
+      "side": 1,
+      "message": "add \u0027\u0026\u0026 nameSource \u003d\u003d USER\u0027",
+      "revId": "69632e9eeb1d84a8bd0189138c19d844b8ab05a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
