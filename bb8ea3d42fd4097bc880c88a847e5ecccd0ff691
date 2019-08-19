@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1903966_34dc804b",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-08-19T21:11:14Z",
+      "side": 1,
+      "message": "I thought a little more about it. I think it should be like this (easier to share code snippet than add comments):\n\nif (TextUtils.isEmpty(displayName) || displayName.trim().length() \u003d\u003d 0) {\n    nameToSet \u003d TelephonyManager.getSimOperatorName(subId);\n    if (TextUtils.isEmpty(nameToSet)) {\n        if (multi sim \u0026\u0026 valid slotIndex) {\n            nameToSet \u003d \"CARD \" + (slotIndex + 1);\n        } else {\n            nameToSet \u003d mContext.getString(SubscriptionManager.DEFAULT_NAME_RES);\n        }\n    }\n} else {\n    nameToSet \u003d displayName;\n}",
+      "range": {
+        "startLine": 1587,
+        "startChar": 12,
+        "endLine": 1595,
+        "endChar": 13
+      },
+      "revId": "bb8ea3d42fd4097bc880c88a847e5ecccd0ff691",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
