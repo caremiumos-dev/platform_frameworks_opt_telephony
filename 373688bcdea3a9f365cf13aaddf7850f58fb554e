@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b8c7aec_262d5050",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-08-19T17:37:48Z",
+      "side": 1,
+      "message": "this filegroup is for non-java file, do we need add path properties here?",
+      "range": {
+        "startLine": 29,
+        "startChar": 11,
+        "endLine": 29,
+        "endChar": 21
+      },
+      "revId": "373688bcdea3a9f365cf13aaddf7850f58fb554e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
