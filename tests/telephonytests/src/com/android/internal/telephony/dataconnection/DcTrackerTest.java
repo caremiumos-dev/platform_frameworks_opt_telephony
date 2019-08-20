@@ -51,6 +51,7 @@ import android.hardware.radio.V1_0.SetupDataCallResult;
 import android.net.LinkProperties;
 import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
+import android.net.NetworkPolicyManager;
 import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.AsyncResult;
@@ -145,6 +146,8 @@ public class DcTrackerTest extends TelephonyTest {
     PackageManagerService mMockPackageManagerInternal;
     @Mock
     Handler mHandler;
+    @Mock
+    NetworkPolicyManager mNetworkPolicyManager;
 
     private DcTracker mDct;
     private DcTrackerTestHandler mDcTrackerTestHandler;
@@ -503,7 +506,8 @@ public class DcTrackerTest extends TelephonyTest {
                 }
         ).when(mSubscriptionManager).addOnSubscriptionsChangedListener(any());
         doReturn(mSubscriptionInfo).when(mSubscriptionManager).getActiveSubscriptionInfo(anyInt());
-
+        doReturn(mNetworkPolicyManager).when(mContext)
+                .getSystemService(Context.NETWORK_POLICY_SERVICE);
         doReturn(1).when(mIsub).getDefaultDataSubId();
         doReturn(mIsub).when(mBinder).queryLocalInterface(anyString());
         mServiceManagerMockedServices.put("isub", mBinder);
