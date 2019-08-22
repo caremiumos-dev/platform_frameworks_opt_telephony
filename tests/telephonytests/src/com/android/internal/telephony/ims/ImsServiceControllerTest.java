@@ -35,9 +35,13 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PersistableBundle;
 import android.os.RemoteException;
+import android.telephony.CarrierConfigManager;
 import android.telephony.ims.ImsService;
 import android.telephony.ims.aidl.IImsServiceController;
+import android.telephony.ims.feature.ImsFeature;
+import android.telephony.ims.feature.RcsFeature;
 import android.telephony.ims.stub.ImsFeatureConfiguration;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -73,14 +77,18 @@ public class ImsServiceControllerTest extends ImsTestBase {
         }
     };
 
+    @Mock CarrierConfigManager mCarrierConfigManager;
     @Mock IImsServiceController mMockServiceControllerBinder;
     @Mock ImsServiceController.ImsServiceControllerCallbacks mMockCallbacks;
     @Mock IImsServiceFeatureCallback mMockProxyCallbacks;
     @Mock Context mMockContext;
+    @Mock RcsFeature.SubscriptionManagerProxy mSubscriptionManagerProxy;
+    @Mock RcsFeature.SystempropertyProxy mSystempropertyProxy;
     private final ComponentName mTestComponentName = new ComponentName("TestPkg",
             "ImsServiceControllerTest");
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private ImsServiceController mTestImsServiceController;
+    private final PersistableBundle mBundle = new PersistableBundle();
 
     @Before
     @Override
@@ -135,7 +143,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     public void testBindFailureWhenBound() {
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> testFeatures = new HashSet<>();
         // Slot 1, MMTel
-        testFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, 1));
+        testFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, ImsFeature.FEATURE_MMTEL));
         bindAndConnectService(testFeatures);
 
         // already bound, should return false
@@ -153,9 +161,16 @@ public class ImsServiceControllerTest extends ImsTestBase {
     public void testBindServiceAndConnected() throws RemoteException {
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> testFeatures = new HashSet<>();
         // Slot 1, MMTel
-        testFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, 1));
+        testFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, ImsFeature.FEATURE_MMTEL));
         // Slot 1, RCS
-        testFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, 2));
+        testFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, ImsFeature.FEATURE_RCS));
+
+        when(mMockContext.getSystemService(Context.CARRIER_CONFIG_SERVICE))
+                .thenReturn(mCarrierConfigManager);
+        mBundle.putBoolean(CarrierConfigManager.KEY_USE_RCS_PRESENCE_BOOL, true);
+        when(mCarrierConfigManager.getConfigForSubId(anyInt())).thenReturn(mBundle);
+        when(mSystempropertyProxy.getRcsConfigOfSupported()).thenReturn("1");
+        when(mSubscriptionManagerProxy.getSubId(eq(1))).thenReturn(1);
 
         bindAndConnectService(testFeatures);
 
