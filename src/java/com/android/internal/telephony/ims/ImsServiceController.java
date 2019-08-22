@@ -34,6 +34,7 @@ import android.telephony.ims.aidl.IImsRcsFeature;
 import android.telephony.ims.aidl.IImsRegistration;
 import android.telephony.ims.aidl.IImsServiceController;
 import android.telephony.ims.feature.ImsFeature;
+import android.telephony.ims.feature.RcsFeature;
 import android.telephony.ims.stub.ImsFeatureConfiguration;
 import android.util.Log;
 
@@ -678,15 +679,15 @@ public class ImsServiceController {
             Log.w(LOG_TAG, "addImsServiceFeature called with null values.");
             return;
         }
-        if (featurePair.featureType != ImsFeature.FEATURE_EMERGENCY_MMTEL) {
-            ImsFeatureStatusCallback c = new ImsFeatureStatusCallback(featurePair.slotId,
-                    featurePair.featureType);
-            mFeatureStatusCallbacks.add(c);
-            IInterface f = createImsFeature(featurePair.slotId, featurePair.featureType,
-                    c.getCallback());
-            addImsFeatureBinder(featurePair.slotId, featurePair.featureType, f);
-            // Signal ImsResolver to change supported ImsFeatures for this ImsServiceController
-            mCallbacks.imsServiceFeatureCreated(featurePair.slotId, featurePair.featureType, this);
+        if (featurePair.featureType == ImsFeature.FEATURE_MMTEL) {
+            prepareImsFeature(featurePair);
+        } else if (featurePair.featureType == ImsFeature.FEATURE_RCS) {
+            if (RcsFeature.isRcsSupported(mContext, featurePair.slotId)) {
+                prepareImsFeature(featurePair);
+            } else {
+                Log.w(LOG_TAG, "This slot do not support RCS.");
+                return;
+            }
         } else {
             // Don't update ImsService for emergency MMTEL feature.
             Log.i(LOG_TAG, "supports emergency calling on slot " + featurePair.slotId);
@@ -732,6 +733,19 @@ public class ImsServiceController {
         // ImsManager requests the ImsService while it is being removed in ImsResolver, this
         // callback will clean it up after.
         sendImsFeatureRemovedCallback(featurePair.slotId, featurePair.featureType);
+    }
+
+    // This method should only be called when already synchronized on mLock.
+    private void prepareImsFeature(ImsFeatureConfiguration.FeatureSlotPair featurePair)
+            throws RemoteException {
+        ImsFeatureStatusCallback c = new ImsFeatureStatusCallback(featurePair.slotId,
+                featurePair.featureType);
+        mFeatureStatusCallbacks.add(c);
+        IInterface f = createImsFeature(featurePair.slotId, featurePair.featureType,
+                c.getCallback());
+        addImsFeatureBinder(featurePair.slotId, featurePair.featureType, f);
+        // Signal ImsResolver to change supported ImsFeatures for this ImsServiceController
+        mCallbacks.imsServiceFeatureCreated(featurePair.slotId, featurePair.featureType, this);
     }
 
     // This method should only be called when already synchronized on mLock.
