@@ -1,0 +1,12 @@
+Code-Review+1: John Stultz <john.stultz@linaro.org>
+Code-Review+1: Tim Klein <tim.klein@arm.corp-partner.google.com>
+Code-Review+1: Sam Protsenko <semen.protsenko@linaro.org>
+Code-Review+1: YongQin Liu <yongqin.liu@linaro.org>
+Code-Review+2: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Autosubmit+1: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Fri, 23 Aug 2019 03:57:37 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1089630
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
