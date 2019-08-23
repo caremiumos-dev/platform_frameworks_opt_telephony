@@ -804,11 +804,11 @@ public class NitzStateMachineImplTest extends TelephonyTest {
         }
 
         void verifyTimeWasNotSuggested() {
-            verify(mTimeServiceHelper, times(0)).suggestDeviceTime(any());
+            verify(mTimeServiceHelper, times(0)).suggestDeviceTime(any(), any());
         }
 
         void verifyTimeWasSuggested(TimestampedValue<Long> expectedTime) {
-            verify(mTimeServiceHelper, times(1)).suggestDeviceTime(eq(expectedTime));
+            verify(mTimeServiceHelper, times(1)).suggestDeviceTime(any(), eq(expectedTime));
         }
 
         /**

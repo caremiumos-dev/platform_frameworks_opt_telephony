@@ -386,7 +386,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
                 Rlog.d(LOG_TAG, logMsg);
             }
             mTimeLog.log(logMsg);
-            mTimeServiceHelper.suggestDeviceTime(newNitzTime);
+            mTimeServiceHelper.suggestDeviceTime(nitzSignal.toString(), newNitzTime);
             TelephonyMetrics.getInstance().writeNITZEvent(
                     mPhone.getPhoneId(), newNitzTime.getValue());
 

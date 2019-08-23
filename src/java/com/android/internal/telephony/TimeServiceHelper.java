@@ -17,8 +17,8 @@
 package com.android.internal.telephony;
 
 import android.app.AlarmManager;
+import android.app.timedetector.NitzTimeSignal;
 import android.app.timedetector.TimeDetector;
-import android.app.timedetector.TimeSignal;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -129,10 +129,12 @@ public class TimeServiceHelper {
     /**
      * Suggest the time to the {@link TimeDetector}.
      *
+     * @param nitzDebugString unstructured information that could be logged used to help debug time
+     *      detection issues
      * @param signalTimeMillis the signal time as received from the network
      */
-    public void suggestDeviceTime(TimestampedValue<Long> signalTimeMillis) {
-        TimeSignal timeSignal = new TimeSignal(TimeSignal.SOURCE_ID_NITZ, signalTimeMillis);
+    public void suggestDeviceTime(String nitzDebugString, TimestampedValue<Long> signalTimeMillis) {
+        NitzTimeSignal timeSignal = new NitzTimeSignal(nitzDebugString, signalTimeMillis);
         mTimeDetector.suggestTime(timeSignal);
     }
 
