@@ -93,6 +93,7 @@ public class SubscriptionInfoUpdater extends Handler {
     private static final int EVENT_SIM_IMSI = 11;
     private static final int EVENT_REFRESH_EMBEDDED_SUBSCRIPTIONS = 12;
     private static final int EVENT_MULTI_SIM_CONFIG_CHANGED = 13;
+    private static final int EVENT_SIM_ICCID_LOADED = 14;
 
     private static final String ICCID_STRING_FOR_NO_SIM = "";
 
@@ -105,10 +106,11 @@ public class SubscriptionInfoUpdater extends Handler {
     @UnsupportedAppUsage
     private static Context sContext = null;
     @UnsupportedAppUsage
-
     private static String[] sIccId = new String[SUPPORTED_MODEM_COUNT];
     private static int[] sSimCardState = new int[SUPPORTED_MODEM_COUNT];
     private static int[] sSimApplicationState = new int[SUPPORTED_MODEM_COUNT];
+    private boolean[] mIccIdNotify = new boolean[SUPPORTED_MODEM_COUNT];
+
     private static boolean sIsSubInfoInitialized = false;
     private SubscriptionManager mSubscriptionManager = null;
     private EuiccManager mEuiccManager;
@@ -218,6 +220,7 @@ public class SubscriptionInfoUpdater extends Handler {
             case IccCardConstants.INTENT_VALUE_ICC_LOADED: return EVENT_SIM_LOADED;
             case IccCardConstants.INTENT_VALUE_ICC_READY: return EVENT_SIM_READY;
             case IccCardConstants.INTENT_VALUE_ICC_IMSI: return EVENT_SIM_IMSI;
+            case IccCardConstants.INTENT_VALUE_ICCID_LOADED: return EVENT_SIM_ICCID_LOADED;
             default:
                 logd("Ignoring simStatus: " + simStatus);
                 return EVENT_INVALID;
@@ -268,6 +271,7 @@ public class SubscriptionInfoUpdater extends Handler {
 
             case EVENT_SIM_ABSENT:
                 handleSimAbsent(msg.arg1, msg.arg2);
+                mIccIdNotify[msg.arg1] = false;
                 break;
 
             case EVENT_SIM_LOCKED:
@@ -337,6 +341,14 @@ public class SubscriptionInfoUpdater extends Handler {
                     }
                 });
                 break;
+            /* When IccId has been fetched,go to create SubscriptionInfo @{*/
+            case EVENT_SIM_ICCID_LOADED:
+                if (!mIccIdNotify[msg.arg1]) {
+                    handleSimIccIdLoaded(msg.arg1, (String) msg.obj);
+                    mIccIdNotify[msg.arg1] = true;
+                }
+                break;
+            /* @} */
 
             case EVENT_MULTI_SIM_CONFIG_CHANGED:
                 onMultiSimConfigChanged();
@@ -616,6 +628,32 @@ public class SubscriptionInfoUpdater extends Handler {
         updateSubscriptionCarrierId(phoneId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
         updateCarrierServices(phoneId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
     }
+
+    /*When IccId has been fetched,go to create SubscriptionInfo @{*/
+    private void handleSimIccIdLoaded(int slotId, String reason) {
+        if (mIccId[slotId] != null && mIccId[slotId].equals(ICCID_STRING_FOR_NO_SIM)) {
+            mIccId[slotId] = null;
+        }
+
+        String iccId = mIccId[slotId];
+        if (iccId == null) {
+            UiccCard uiccCard = mPhone[slotId].getUiccCard();
+            if (uiccCard == null) {
+                logd("handleSimIccIdLoaded: IccCard null");
+                return;
+            }
+            if (IccUtils.stripTrailingFs(uiccCard.getIccId()) == null) {
+                logd("handleSimIccIdLoaded: IccID null");
+                return;
+            }
+            mIccId[slotId] = uiccCard.getIccId();
+        } else {
+            logd("NOT Querying IccId its already set sIccid[" + slotId + "]=" + iccId);
+        }
+        updateSubscriptionInfoByIccId(slotId,false);
+        broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICCID_LOADED, null);
+    }
+    /* @} */
 
     private synchronized void updateSubscriptionInfoByIccId(int phoneId,
             boolean updateEmbeddedSubs) {
