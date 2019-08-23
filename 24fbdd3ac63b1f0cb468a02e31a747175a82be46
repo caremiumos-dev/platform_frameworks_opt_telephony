@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecdecdae_2622d2b3",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1373692
+      },
+      "writtenOn": "2019-08-23T09:09:19Z",
+      "side": 1,
+      "message": "does",
+      "range": {
+        "startLine": 688,
+        "startChar": 42,
+        "endLine": 688,
+        "endChar": 44
+      },
+      "revId": "24fbdd3ac63b1f0cb468a02e31a747175a82be46",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
