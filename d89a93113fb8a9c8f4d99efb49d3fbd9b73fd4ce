@@ -46,6 +46,30 @@
       "revId": "d89a93113fb8a9c8f4d99efb49d3fbd9b73fd4ce",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e1631d5_a1bcc179",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-08-23T02:12:23Z",
+      "side": 0,
+      "message": "as Nathan said it\u0027s harmless to return an INVALID phone id",
+      "parentUuid": "e789f753_9752f36d",
+      "range": {
+        "startLine": 948,
+        "startChar": 0,
+        "endLine": 948,
+        "endChar": 75
+      },
+      "revId": "d89a93113fb8a9c8f4d99efb49d3fbd9b73fd4ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

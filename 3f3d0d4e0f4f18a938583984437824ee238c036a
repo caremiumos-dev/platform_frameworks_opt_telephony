@@ -94,6 +94,30 @@
       "revId": "3f3d0d4e0f4f18a938583984437824ee238c036a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e6c2a51_086b1f60",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-08-23T02:12:23Z",
+      "side": 1,
+      "message": "feel free to keep looking into how to disable telephony feature, for now i\u0027ll submit this change to bypass the crash.",
+      "parentUuid": "5cd8bf65_ec75a861",
+      "range": {
+        "startLine": 1048,
+        "startChar": 24,
+        "endLine": 1048,
+        "endChar": 25
+      },
+      "revId": "3f3d0d4e0f4f18a938583984437824ee238c036a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
