@@ -28,6 +28,7 @@ import android.os.SystemProperties;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.emergency.EmergencyNumber;
 import android.telephony.emergency.EmergencyNumber.EmergencyCallRouting;
@@ -134,7 +135,11 @@ public class EmergencyNumberTracker extends Handler {
                     // to keep the old country iso to provide country-related emergency numbers,
                     // because they think they are still in that country. So we do need to update
                     // country change in this case.
-                    if (TextUtils.isEmpty(countryIso)) {
+                    if (TextUtils.isEmpty(countryIso)
+                            //Sometimes the country is updated as an empty string in GCF test
+                            //but we need to update emergency numbers database
+                            && mPhone.getServiceState().getState()
+                                == ServiceState.STATE_POWER_OFF) {
                         return;
                     }
 
