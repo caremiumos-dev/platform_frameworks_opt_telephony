@@ -782,9 +782,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
         if (DBG) log("dial clirMode=" + clirMode);
         mRegLocalLog.log("dial requested.");
+
+        String origNumber = dialString;
+
         if (isEmergencyNumber) {
             clirMode = CommandsInterface.CLIR_SUPPRESSION;
             if (DBG) log("dial emergency call, set clirModIe=" + clirMode);
+        } else {
+            dialString = convertNumberIfNecessary(mPhone, dialString);
         }
 
         // note that this triggers call state changed notif
@@ -884,6 +889,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 mPendingCallVideoState = videoState;
                 pendingCallInEcm = true;
             }
+        }
+
+        if (mNumberConverted) {
+            mPendingMO.restoreDialedNumberAfterConversion(origNumber);
+            mNumberConverted = false;
         }
 
         updatePhoneState();
