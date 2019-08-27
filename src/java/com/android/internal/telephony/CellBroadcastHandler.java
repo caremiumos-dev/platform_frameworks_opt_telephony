@@ -43,6 +43,7 @@ import android.provider.Telephony;
 import android.provider.Telephony.CellBroadcasts;
 import android.telephony.SmsCbMessage;
 import android.telephony.SubscriptionManager;
+import android.text.format.DateUtils;
 import android.util.LocalLog;
 import android.util.Log;
 
@@ -103,8 +104,7 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
     @Override
     protected boolean handleSmsMessage(Message message) {
         if (message.obj instanceof SmsCbMessage) {
-            handleBroadcastSms((SmsCbMessage) message.obj);
-            return true;
+            return handleBroadcastSms((SmsCbMessage) message.obj);
         } else {
             loge("handleMessage got object of type: " + message.obj.getClass().getName());
             return false;
@@ -114,8 +114,9 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
     /**
      * Dispatch a Cell Broadcast message to listeners.
      * @param message the Cell Broadcast to broadcast
+     * @return {@code True} if the broadcast message is dispatched.
      */
-    protected void handleBroadcastSms(SmsCbMessage message) {
+    protected boolean handleBroadcastSms(SmsCbMessage message) {
         // Log Cellbroadcast msg received event
         TelephonyMetrics metrics = TelephonyMetrics.getInstance();
         metrics.writeNewCBSms(mPhone.getPhoneId(), message.getMessageFormat(),
@@ -141,7 +142,8 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
                 } else {
                     performGeoFencing(message, uri, message.getGeometries(), location);
                 }
-            });
+            }, message.getMaximumWaitingTime());
+            return false;
         } else {
             if (DBG) {
                 log("Broadcast the message directly because no geo-fencing required, "
@@ -149,6 +151,7 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
                         + " needGeoFencing = " + message.needGeoFencingCheck());
             }
             broadcastMessage(message, uri);
+            return true;
         }
     }
 
@@ -185,9 +188,11 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
     /**
      * Request a single location update.
      * @param callback a callback will be called when the location is available.
+     * @param maximumWaitTimeSec the maximum wait time of this request. If location is not updated
+     * within the maximum wait time, {@code callback#onLocationUpadte(null)} will be called.
      */
-    protected void requestLocationUpdate(LocationUpdateCallback callback) {
-        mLocationRequester.requestLocationUpdate(callback);
+    protected void requestLocationUpdate(LocationUpdateCallback callback, int maximumWaitTimeSec) {
+        mLocationRequester.requestLocationUpdate(callback, maximumWaitTimeSec);
     }
 
     /**
@@ -295,6 +300,12 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
         private static final String TAG = LocationRequester.class.getSimpleName();
 
         /**
+         * Use as the default maximum wait time if the cell broadcast doesn't specify the value.
+         * Most of the location request should be responded within 20 seconds.
+         */
+        private static final int DEFAULT_MAXIMUM_WAIT_TIME_SEC = 20;
+
+        /**
          * Trigger this event when the {@link LocationManager} is not responded within the given
          * time.
          */
@@ -302,9 +313,6 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
 
         /** Request a single location update. */
         private static final int EVENT_REQUEST_LOCATION_UPDATE = 2;
-
-        /** Default expired time of the location request. */
-        private static final int LOCATION_REQUEST_TIMEOUT_MILLIS = 30 * 1000;
 
         /**
          * Request location update from network or gps location provider. Network provider will be
@@ -330,10 +338,16 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
         /**
          * Request a single location update. If the location is not available, a callback with
          * {@code null} location will be called immediately.
+         *
          * @param callback a callback to the the response when the location is available
+         * @param maximumWaitTimeSec the maximum wait time of this request. If location is not
+         * updated within the maximum wait time, {@code callback#onLocationUpadte(null)} will be
+         * called.
          */
-        void requestLocationUpdate(@NonNull LocationUpdateCallback callback) {
-            mLocationHandler.obtainMessage(EVENT_REQUEST_LOCATION_UPDATE, callback).sendToTarget();
+        void requestLocationUpdate(@NonNull LocationUpdateCallback callback,
+                int maximumWaitTimeSec) {
+            mLocationHandler.obtainMessage(EVENT_REQUEST_LOCATION_UPDATE, maximumWaitTimeSec,
+                    0 /* arg2 */, callback).sendToTarget();
         }
 
         private void onLocationUpdate(@Nullable LatLng location) {
@@ -343,7 +357,8 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
             mCallbacks.clear();
         }
 
-        private void requestLocationUpdateInternal(@NonNull LocationUpdateCallback callback) {
+        private void requestLocationUpdateInternal(@NonNull LocationUpdateCallback callback,
+                int maximumWaitTimeSec) {
             if (DBG) Log.d(TAG, "requestLocationUpdate");
             if (!isLocationServiceAvailable()) {
                 if (DBG) {
@@ -353,11 +368,13 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
                 return;
             }
 
-            // TODO: handle the "Geo-fencing Maximum Wait" defined in ATIS-0700041 Section 5.2.3
             if (!mLocationHandler.hasMessages(EVENT_LOCATION_REQUEST_TIMEOUT)) {
+                if (maximumWaitTimeSec == SmsCbMessage.MAXIMUM_WAIT_TIME_NOT_SET) {
+                    maximumWaitTimeSec = DEFAULT_MAXIMUM_WAIT_TIME_SEC;
+                }
                 mLocationHandler.sendMessageDelayed(
                         mLocationHandler.obtainMessage(EVENT_LOCATION_REQUEST_TIMEOUT),
-                        LOCATION_REQUEST_TIMEOUT_MILLIS);
+                        maximumWaitTimeSec * DateUtils.SECOND_IN_MILLIS);
             }
 
             mCallbacks.add(callback);
@@ -414,7 +431,7 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
                         onLocationUpdate(null);
                         break;
                     case EVENT_REQUEST_LOCATION_UPDATE:
-                        requestLocationUpdateInternal((LocationUpdateCallback) msg.obj);
+                        requestLocationUpdateInternal((LocationUpdateCallback) msg.obj, msg.arg1);
                         break;
                     default:
                         Log.e(TAG, "Unsupported message type " + msg.what);
