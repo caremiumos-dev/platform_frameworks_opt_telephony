@@ -19,6 +19,7 @@ package com.android.internal.telephony;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.content.Context;
 import android.os.Looper;
 import android.telephony.SmsMessage;
 import android.telephony.ims.stub.ImsSmsImplBase;
@@ -98,7 +100,7 @@ public class ImsSmsDispatcherTest extends TelephonyTest {
 
         // Fallback over GSM
         mImsSmsDispatcher.getSmsListener().onSendSmsResult(token, 0,
-                ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK, 0);
+                ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK, 0, 0);
         ArgumentCaptor<SMSDispatcher.SmsTracker> captor =
                 ArgumentCaptor.forClass(SMSDispatcher.SmsTracker.class);
         // Ensure GsmSmsDispatcher calls sendSms
@@ -125,7 +127,7 @@ public class ImsSmsDispatcherTest extends TelephonyTest {
 
         // Fallback over GSM
         mImsSmsDispatcher.getSmsListener().onSendSmsResult(token, 0,
-                ImsSmsImplBase.SEND_STATUS_ERROR_RETRY, 0);
+                ImsSmsImplBase.SEND_STATUS_ERROR_RETRY, 0, 0);
 
         // Make sure retry bit set
         ArgumentCaptor<byte[]> byteCaptor = ArgumentCaptor.forClass(byte[].class);
@@ -135,6 +137,27 @@ public class ImsSmsDispatcherTest extends TelephonyTest {
         // Make sure that TP-RD is set for this message
         assertNotNull(pdu);
         assertEquals(0x04, (pdu[0] & 0x04));
+    }
+
+    /**
+     * Ensure that when an outgoing SMS has failed over IMS with SEND_STATUS_ERROR and an associated
+     * networkErrorCode, the error is sent to the tracker properly.
+     */
+    @Test
+    @SmallTest
+    public void testNetworkError() throws Exception {
+        int token = mImsSmsDispatcher.mNextToken.get();
+        mTrackerData.put("pdu", com.android.internal.telephony.gsm.SmsMessage.getSubmitPdu(null,
+                "+15555551212", "Test", false).encodedMessage);
+        when(mImsManager.getSmsFormat()).thenReturn(SmsMessage.FORMAT_3GPP);
+        mImsSmsDispatcher.mTrackers.put(token, mSmsTracker);
+        when(mPhone.getPhoneType()).thenReturn(PhoneConstants.PHONE_TYPE_GSM);
+
+        // network error 41
+        mImsSmsDispatcher.getSmsListener().onSendSmsResult(token, 0,
+                ImsSmsImplBase.SEND_STATUS_ERROR, 0, 41);
+
+        verify(mSmsTracker).onFailed(any(Context.class), anyInt(), eq(41));
     }
 
     @After
