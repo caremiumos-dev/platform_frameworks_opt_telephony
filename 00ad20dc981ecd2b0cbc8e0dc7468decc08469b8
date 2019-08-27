@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f3de1cd_bb818abc",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-08-27T20:28:15Z",
+      "side": 1,
+      "message": "I am not sure if we want to block feature creation due to the carrier config.\n\nFor MMTEL we still create the ImsFeature, but send a ImsFeature#changeEnabledCapabilites indication reflecting the current state of the features. So in this case, we should create the feature and then have telephony send the indication.\n\nThe reason why this approach may be better is that there are other factors besides carrier config change that may enable/disable presence and we do not have to call addImsServiceFeature when one of these other things change (for example, if we add a user toggle for enable/disable RCS presence).",
+      "range": {
+        "startLine": 684,
+        "startChar": 8,
+        "endLine": 684,
+        "endChar": 71
+      },
+      "revId": "00ad20dc981ecd2b0cbc8e0dc7468decc08469b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
