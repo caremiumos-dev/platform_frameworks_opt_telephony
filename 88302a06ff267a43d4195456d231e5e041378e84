@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "bdc934ef_2d1500b0",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-08-28T05:33:21Z",
+      "side": 1,
+      "message": "Line 124 will just update the tracker that is already present in mTrackers. You don\u0027t need to call put again.",
+      "parentUuid": "1e923bc4_703fb25b",
+      "revId": "88302a06ff267a43d4195456d231e5e041378e84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ef4746c_aa65ebe2",
         "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
         "patchSetId": 2
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "I am not sure about carrier requirements regarding of this. But I received some field issues about this before.",
       "parentUuid": "2ef4746c_aa65ebe2",
+      "range": {
+        "startLine": 750,
+        "startChar": 80,
+        "endLine": 751,
+        "endChar": 87
+      },
+      "revId": "88302a06ff267a43d4195456d231e5e041378e84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f60f9ea_2c5d6847",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-08-28T05:33:21Z",
+      "side": 1,
+      "message": "Brad, what do you think about this?",
+      "parentUuid": "5e579ae4_a9b8aa9f",
       "range": {
         "startLine": 750,
         "startChar": 80,
