@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "a78cd8c7_61a899ab",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-08-28T09:34:47Z",
+      "side": 1,
+      "message": "Thank you for the correction.",
+      "parentUuid": "bdc934ef_2d1500b0",
+      "revId": "88302a06ff267a43d4195456d231e5e041378e84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ef4746c_aa65ebe2",
         "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
         "patchSetId": 2
