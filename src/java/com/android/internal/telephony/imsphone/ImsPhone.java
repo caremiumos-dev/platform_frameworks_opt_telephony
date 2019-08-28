@@ -1964,6 +1964,13 @@ public class ImsPhone extends ImsPhoneBase {
                 && psInfo.getAccessNetworkTechnology() == TelephonyManager.NETWORK_TYPE_IWLAN;
     }
 
+    /**
+     * setLastDialString
+     */
+    void setLastDialString(String dialString) {
+        mLastDialString = dialString;
+    }
+
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("ImsPhone extends:");
