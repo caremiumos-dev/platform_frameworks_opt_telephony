@@ -2261,7 +2261,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 // To initiate dialing circuit-switched call
                 if (reasonInfo.getCode() == ImsReasonInfo.CODE_LOCAL_CALL_CS_RETRY_REQUIRED
                         && mBackgroundCall.getState() == ImsPhoneCall.State.IDLE
-                        && mRingingCall.getState() == ImsPhoneCall.State.IDLE) {
+                        && mRingingCall.getState() == ImsPhoneCall.State.IDLE
+                        && mPhone.getDefaultPhone().getServiceStateTracker().mSS.getState()
+                        != ServiceState.STATE_POWER_OFF) {
+                    mPhone.setLastDialString(mPendingMO.getOrigDialString());
                     mForegroundCall.detach(mPendingMO);
                     removeConnection(mPendingMO);
                     mPendingMO.finalize();
@@ -2269,6 +2272,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     mPhone.initiateSilentRedial();
                     return;
                 } else {
+                    if (reasonInfo.getCode() == ImsReasonInfo.CODE_LOCAL_CALL_CS_RETRY_REQUIRED
+                            && mPhone.getDefaultPhone().getServiceStateTracker().mSS.getState()
+                            == ServiceState.STATE_POWER_OFF) {
+                        reasonInfo.mCode = ImsReasonInfo.CODE_LOCAL_POWER_OFF;
+                    }
                     sendCallStartFailedDisconnect(imsCall, reasonInfo);
                 }
                 mMetrics.writeOnImsCallStartFailed(mPhone.getPhoneId(), imsCall.getCallSession(),
