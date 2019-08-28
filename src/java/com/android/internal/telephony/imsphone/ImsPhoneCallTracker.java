@@ -435,6 +435,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private boolean mIsViLteDataMetered = false;
     private boolean mAlwaysPlayRemoteHoldTone = false;
     private boolean mAutoRetryFailedWifiEmergencyCall = false;
+    private boolean mTipTurnOffAirplaneMdoeWhenCSRetry = false;
     // Tracks the state of our background/foreground calls while a call hold/swap operation is
     // in progress. Values listed above.
     private HoldSwapState mHoldSwitchingState = HoldSwapState.INACTIVE;
@@ -1027,6 +1028,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         mAlwaysPlayRemoteHoldTone = carrierConfig.getBoolean(
                 CarrierConfigManager.KEY_ALWAYS_PLAY_REMOTE_HOLD_TONE_BOOL);
         mAutoRetryFailedWifiEmergencyCall = carrierConfig.getBoolean(
+                CarrierConfigManager.KEY_AUTO_RETRY_FAILED_WIFI_EMERGENCY_CALL);
+        mTipTurnOffAirplaneMdoeWhenCSRetry = carrierConfig.getBoolean(
                 CarrierConfigManager.KEY_AUTO_RETRY_FAILED_WIFI_EMERGENCY_CALL);
 
         String[] mappings = carrierConfig
@@ -2345,7 +2348,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 // To initiate dialing circuit-switched call
                 if (reasonInfo.getCode() == ImsReasonInfo.CODE_LOCAL_CALL_CS_RETRY_REQUIRED
                         && mBackgroundCall.getState() == ImsPhoneCall.State.IDLE
-                        && mRingingCall.getState() == ImsPhoneCall.State.IDLE) {
+                        && mRingingCall.getState() == ImsPhoneCall.State.IDLE
+                        && mPhone.getDefaultPhone().getServiceStateTracker().mSS.getState()
+                        != ServiceState.STATE_POWER_OFF) {
+                    mPhone.setLastDialString(mPendingMO.getOrigDialString());
                     mForegroundCall.detach(mPendingMO);
                     removeConnection(mPendingMO);
                     mPendingMO.finalize();
@@ -2353,6 +2359,12 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     mPhone.initiateSilentRedial();
                     return;
                 } else {
+                    if (reasonInfo.getCode() == ImsReasonInfo.CODE_LOCAL_CALL_CS_RETRY_REQUIRED
+                            && mPhone.getDefaultPhone().getServiceStateTracker().mSS.getState()
+                            == ServiceState.STATE_POWER_OFF
+                            && mTipTurnOffAirplaneMdoeWhenCSRetry) {
+                        reasonInfo.mCode = ImsReasonInfo.CODE_LOCAL_POWER_OFF;
+                    }
                     sendCallStartFailedDisconnect(imsCall, reasonInfo);
                 }
                 mMetrics.writeOnImsCallStartFailed(mPhone.getPhoneId(), imsCall.getCallSession(),
