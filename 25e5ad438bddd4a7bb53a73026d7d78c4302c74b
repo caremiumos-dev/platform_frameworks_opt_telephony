@@ -70,6 +70,30 @@
       "revId": "25e5ad438bddd4a7bb53a73026d7d78c4302c74b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b22c329d_dcc7bbb6",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2019-08-29T07:47:31Z",
+      "side": 1,
+      "message": "Additional patch is 1110439. TelephonyConnection will be disconnected when receiving handover connection as null.",
+      "parentUuid": "88a21603_72269d8e",
+      "range": {
+        "startLine": 725,
+        "startChar": 23,
+        "endLine": 727,
+        "endChar": 25
+      },
+      "revId": "25e5ad438bddd4a7bb53a73026d7d78c4302c74b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
