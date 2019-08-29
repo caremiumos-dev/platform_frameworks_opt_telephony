@@ -165,6 +165,30 @@
       "revId": "88302a06ff267a43d4195456d231e5e041378e84",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b78d7728_cb2d074a",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-08-29T00:18:13Z",
+      "side": 1,
+      "message": "The report is received over CS without any MO issue. Double-checked it with modem engineer again. Can not find any issue in SMS over IMS.",
+      "parentUuid": "18c82e50_eae385de",
+      "range": {
+        "startLine": 750,
+        "startChar": 80,
+        "endLine": 751,
+        "endChar": 87
+      },
+      "revId": "88302a06ff267a43d4195456d231e5e041378e84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
