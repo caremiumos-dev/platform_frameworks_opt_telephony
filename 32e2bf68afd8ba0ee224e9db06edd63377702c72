@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8682b7c7_dccad976",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-08-30T17:50:34Z",
+      "side": 1,
+      "message": "Why not just keep the same token that was used for sendSMS as it is implemented now?",
+      "range": {
+        "startLine": 129,
+        "startChar": 20,
+        "endLine": 130,
+        "endChar": 30
+      },
+      "revId": "32e2bf68afd8ba0ee224e9db06edd63377702c72",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3530bc1_c5c19f45",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-08-30T17:50:34Z",
+      "side": 1,
+      "message": "Is there a reason why you prefer message ref over a token? It may seem a little redundant at first but tokens are supposed to be unique, where as messageRefs are reused values from 0-255.",
+      "range": {
+        "startLine": 164,
+        "startChar": 17,
+        "endLine": 164,
+        "endChar": 56
+      },
+      "revId": "32e2bf68afd8ba0ee224e9db06edd63377702c72",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
