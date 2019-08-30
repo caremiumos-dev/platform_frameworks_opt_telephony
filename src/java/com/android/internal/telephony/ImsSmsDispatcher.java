@@ -178,6 +178,50 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         }
 
         @Override
+        public void onSmsStatusReportReceivedWithoutMessageRef(int token, String format, byte[] pdu)
+                throws RemoteException {
+            Rlog.d(TAG, "Status report received.");
+            android.telephony.SmsMessage message =
+                    android.telephony.SmsMessage.createFromPdu(pdu, format);
+            if (message == null || message.mWrappedSmsMessage == null) {
+                throw new RemoteException(
+                        "Status report received with a PDU that could not be parsed.");
+            }
+            int messageRef = message.mWrappedSmsMessage.mMessageRef;
+            SmsTracker tracker = null;
+            int key = 0;
+            for (Map.Entry<Integer, SmsTracker> entry : mTrackers.entrySet()) {
+                if (messageRef == ((SmsTracker) entry.getValue()).mMessageRef) {
+                    tracker = entry.getValue();
+                    key = entry.getKey();
+                    break;
+                }
+            }
+
+            if (tracker == null) {
+                throw new RemoteException("No tracker for messageRef " + messageRef);
+            }
+
+            Pair<Boolean, Boolean> result = mSmsDispatchersController.handleSmsStatusReport(
+                    tracker, format, pdu);
+            Rlog.d(TAG, "Status report handle result, success: " + result.first
+                    + "complete: " + result.second);
+            try {
+                getImsManager().acknowledgeSmsReport(
+                        token,
+                        messageRef,
+                        result.first ? ImsSmsImplBase.STATUS_REPORT_STATUS_OK
+                                : ImsSmsImplBase.STATUS_REPORT_STATUS_ERROR);
+            } catch (ImsException e) {
+                Rlog.e(TAG, "Failed to acknowledgeSmsReport(). Error: "
+                        + e.getMessage());
+            }
+            if (result.second) {
+                mTrackers.remove(key);
+            }
+        }
+
+        @Override
         public void onSmsReceived(int token, String format, byte[] pdu) {
             Rlog.d(TAG, "SMS received.");
             android.telephony.SmsMessage message =
