@@ -126,6 +126,8 @@ public class ImsSmsDispatcher extends SMSDispatcher {
             tracker.mMessageRef = messageRef;
             switch(status) {
                 case ImsSmsImplBase.SEND_STATUS_OK:
+                    // TODO: Create new MAP for trackers expecting a status report with messageRef
+                    // as key?
                     if (tracker.mDeliveryIntent == null) {
                         // Remove the tracker here if a status report is not requested.
                         mTrackers.remove(token);
@@ -153,10 +155,23 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         public void onSmsStatusReportReceived(int token, int messageRef, String format, byte[] pdu)
                 throws RemoteException {
             Rlog.d(TAG, "Status report received.");
-            SmsTracker tracker = mTrackers.get(token);
-            if (tracker == null) {
-                throw new RemoteException("Invalid token.");
+            // TODO: Get the traker from new MAP for trackers expecting a status report by the
+            // messageRef.
+            SmsTracker tracker = null;
+            int key = 0;
+            for (Map.Entry<Integer, SmsTracker> entry : mTrackers.entrySet()) {
+                tracker = entry.getValue();
+                if (tracker.mMessageRef == messageRef) {
+                    key = entry.getKey();
+                    break;
+                }
+                tracker = null;
             }
+
+            if (tracker == null) {
+                throw new RemoteException("No tracker for messageRef " + messageRef);
+            }
+
             Pair<Boolean, Boolean> result = mSmsDispatchersController.handleSmsStatusReport(
                     tracker, format, pdu);
             Rlog.d(TAG, "Status report handle result, success: " + result.first +
@@ -164,7 +179,6 @@ public class ImsSmsDispatcher extends SMSDispatcher {
             try {
                 getImsManager().acknowledgeSmsReport(
                         token,
-                        messageRef,
                         result.first ? ImsSmsImplBase.STATUS_REPORT_STATUS_OK
                                 : ImsSmsImplBase.STATUS_REPORT_STATUS_ERROR);
             } catch (ImsException e) {
@@ -172,7 +186,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                         + e.getMessage());
             }
             if (result.second) {
-                mTrackers.remove(token);
+                mTrackers.remove(key);
             }
         }
 
@@ -199,13 +213,10 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                         break;
                 }
                 try {
-                    if (message != null && message.mWrappedSmsMessage != null) {
-                        getImsManager().acknowledgeSms(token,
-                                message.mWrappedSmsMessage.mMessageRef, mappedResult);
-                    } else {
+                    if (message == null || message.mWrappedSmsMessage == null) {
                         Rlog.w(TAG, "SMS Received with a PDU that could not be parsed.");
-                        getImsManager().acknowledgeSms(token, 0, mappedResult);
                     }
+                    getImsManager().acknowledgeSms(token, mappedResult);
                 } catch (ImsException e) {
                     Rlog.e(TAG, "Failed to acknowledgeSms(). Error: " + e.getMessage());
                 }
