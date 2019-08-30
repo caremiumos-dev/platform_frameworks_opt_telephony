@@ -173,7 +173,7 @@ public class TimeZoneLookupHelperTest {
 
             OffsetResult deSummerWithDstResult =
                     mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, deIso);
-            expectedResult = new OffsetResult(zone("Europe/Berlin"), false /* isOnlyMatch */);
+            expectedResult = new OffsetResult(zone("Europe/Berlin"), true /* isOnlyMatch */);
             assertEquals(expectedResult, deSummerWithDstResult);
             assertOffsetResultZoneOffsets(nhSummerTimeMillis, expectedUtcOffset, expectedDstOffset,
                     deSummerWithDstResult);
@@ -200,7 +200,7 @@ public class TimeZoneLookupHelperTest {
 
             OffsetResult deWinterWithDstResult =
                     mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, deIso);
-            expectedResult = new OffsetResult(zone("Europe/Berlin"), false /* isOnlyMatch */);
+            expectedResult = new OffsetResult(zone("Europe/Berlin"), true /* isOnlyMatch */);
             assertEquals(expectedResult, deWinterWithDstResult);
             assertOffsetResultZoneOffsets(nhWinterTimeMillis, expectedUtcOffset, expectedDstOffset,
                     deWinterWithDstResult);
@@ -245,7 +245,7 @@ public class TimeZoneLookupHelperTest {
 
             OffsetResult deWinterUnknownDstResult =
                     mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, deIso);
-            expectedResult = new OffsetResult(zone("Europe/Berlin"), false /* isOnlyMatch */);
+            expectedResult = new OffsetResult(zone("Europe/Berlin"), true /* isOnlyMatch */);
             assertEquals(expectedResult, deWinterUnknownDstResult);
             assertOffsetResultZoneOffsets(nhWinterTimeMillis, expectedUtcOffset, expectedDstOffset,
                     deWinterUnknownDstResult);
@@ -260,36 +260,67 @@ public class TimeZoneLookupHelperTest {
     }
 
     @Test
-    public void testLookupByCountry() {
+    public void testLookupByCountry_oneZone() {
         CountryResult expectedResult;
 
         // GB has one time zone.
-        expectedResult = new CountryResult("Europe/London", true /* allZonesHaveSameOffset */,
-                NH_SUMMER_TIME_MILLIS);
+        expectedResult = new CountryResult("Europe/London", false /* multipleZonesInCountry */,
+                true /* allZonesHaveSameOffset */, NH_SUMMER_TIME_MILLIS);
         assertEquals(expectedResult,
                 mTimeZoneLookupHelper.lookupByCountry("gb", NH_SUMMER_TIME_MILLIS));
-        expectedResult = new CountryResult("Europe/London", true /* allZonesHaveSameOffset */,
-                NH_WINTER_TIME_MILLIS);
+        expectedResult = new CountryResult("Europe/London", false /* multipleZonesInCountry */,
+                true /* allZonesHaveSameOffset */, NH_WINTER_TIME_MILLIS);
         assertEquals(expectedResult,
                 mTimeZoneLookupHelper.lookupByCountry("gb", NH_WINTER_TIME_MILLIS));
+    }
 
-        // DE has two time zones according to IANA data: Europe/Berlin and Europe/Busingen.
-        expectedResult = new CountryResult("Europe/Berlin", true /* allZonesHaveSameOffset */,
-                NH_SUMMER_TIME_MILLIS);
+    @Test
+    public void testLookupByCountry_oneEffectiveZone() {
+        // Historical dates are used to avoid the test breaking due to data changes.
+
+        // DE has two time zones according to IANA data: Europe/Berlin and Europe/Busingen, but they
+        // become effectively identical after 338950800000 millis (Sun, 28 Sep 1980 01:00:00 GMT).
+        // Android data tells us that Europe/Berlin the one that was "kept".
+        long nhSummerTimeMillis = createUtcTime(1975, 6, 20, 1, 2, 3);
+        long nhWinterTimeMillis = createUtcTime(1975, 1, 20, 1, 2, 3);
+
+        CountryResult expectedResult;
+
+        expectedResult = new CountryResult("Europe/Berlin", true /* multipleZonesInCountry */,
+                true /* allZonesHaveSameOffset */, nhSummerTimeMillis);
         assertEquals(expectedResult,
-                mTimeZoneLookupHelper.lookupByCountry("de", NH_SUMMER_TIME_MILLIS));
-        expectedResult = new CountryResult("Europe/Berlin", true /* allZonesHaveSameOffset */,
-                NH_WINTER_TIME_MILLIS);
+                mTimeZoneLookupHelper.lookupByCountry("de", nhSummerTimeMillis));
+        expectedResult = new CountryResult("Europe/Berlin", true /* multipleZonesInCountry */,
+                true /* allZonesHaveSameOffset */, nhWinterTimeMillis);
         assertEquals(expectedResult,
-                mTimeZoneLookupHelper.lookupByCountry("de", NH_WINTER_TIME_MILLIS));
+                mTimeZoneLookupHelper.lookupByCountry("de", nhWinterTimeMillis));
+
+        // And in 2015, multipleZonesInCountry == false because Europe/Busingen became irrelevant
+        // after 1980.
+        nhSummerTimeMillis = createUtcTime(2015, 6, 20, 1, 2, 3);
+        nhWinterTimeMillis = createUtcTime(2015, 1, 20, 1, 2, 3);
+
+        expectedResult = new CountryResult("Europe/Berlin", false /* multipleZonesInCountry */,
+                true /* allZonesHaveSameOffset */, nhSummerTimeMillis);
+        assertEquals(expectedResult,
+                mTimeZoneLookupHelper.lookupByCountry("de", nhSummerTimeMillis));
+        expectedResult = new CountryResult("Europe/Berlin", false /* multipleZonesInCountry */,
+                true /* allZonesHaveSameOffset */, nhWinterTimeMillis);
+        assertEquals(expectedResult,
+                mTimeZoneLookupHelper.lookupByCountry("de", nhWinterTimeMillis));
+    }
+
+    @Test
+    public void testLookupByCountry_multipleZones() {
+        CountryResult expectedResult;
 
         // US has many time zones that have different offsets.
-        expectedResult = new CountryResult("America/New_York", false /* allZonesHaveSameOffset */,
-                NH_SUMMER_TIME_MILLIS);
+        expectedResult = new CountryResult("America/New_York", true /* multipleZonesInCountry */,
+                false /* allZonesHaveSameOffset */, NH_SUMMER_TIME_MILLIS);
         assertEquals(expectedResult,
                 mTimeZoneLookupHelper.lookupByCountry("us", NH_SUMMER_TIME_MILLIS));
-        expectedResult = new CountryResult("America/New_York", false /* allZonesHaveSameOffset */,
-                NH_WINTER_TIME_MILLIS);
+        expectedResult = new CountryResult("America/New_York", true /* multipleZonesInCountry */,
+                false /* allZonesHaveSameOffset */, NH_WINTER_TIME_MILLIS);
         assertEquals(expectedResult,
                 mTimeZoneLookupHelper.lookupByCountry("us", NH_WINTER_TIME_MILLIS));
     }
