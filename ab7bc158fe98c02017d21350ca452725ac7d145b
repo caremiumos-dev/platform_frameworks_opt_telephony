@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4bfe042_84014fbe",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5322,
+      "author": {
+        "id": 1140984
+      },
+      "writtenOn": "2019-09-01T06:58:27Z",
+      "side": 1,
+      "message": "Sorry for cutting in.\n\nBut as my understanding, it seems that below fields can\u0027t be updated via updateOperatorNameForServiceState:\nServiceState#mNetworkRegistrationInfos#CellIdentity#mAlphaLong\nServiceState#mNetworkRegistrationInfos#CellIdentity#mAlphaShort\n\nPlease allow me to explain it step by step:\nStep 1:\nupdateOperatorNameForServiceState is triggered.\ne.g. line#1801 updateOperatorNameForServiceState(mNewSS);",
+      "revId": "ab7bc158fe98c02017d21350ca452725ac7d145b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d8f74c5_dd2f40d7",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5330,
+      "author": {
+        "id": 1140984
+      },
+      "writtenOn": "2019-09-01T06:58:27Z",
+      "side": 1,
+      "message": "Step 2:\nmNewSS#mOperatorAlphaLongRaw and mNewSS#mOperatorAlphaShortRaw are updated correctly with selected block.\nWe\u0027re OK until here.",
+      "range": {
+        "startLine": 5327,
+        "startChar": 8,
+        "endLine": 5330,
+        "endChar": 51
+      },
+      "revId": "ab7bc158fe98c02017d21350ca452725ac7d145b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6750ded_a69aba4c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5334,
+      "author": {
+        "id": 1140984
+      },
+      "writtenOn": "2019-09-01T06:58:27Z",
+      "side": 1,
+      "message": "Step 3:\nFetch the networkRegistrationInfos from ServiceState, i.e. mNewSS#mNetworkRegistrationInfos.\nBut according to the function of ServiceState#getNetworkRegistrationInfoList, it always returns a copy of ServiceState#mNetworkRegistrationInfos:\nhttps://android-review.googlesource.com/c/platform/frameworks/base/+/950576/1/telephony/java/android/telephony/ServiceState.java#1795\n\nSo in other word, here networkRegistrationInfos is not the same object of ServiceState#mNetworkRegistrationInfos, it is just a copy.",
+      "range": {
+        "startLine": 5332,
+        "startChar": 8,
+        "endLine": 5334,
+        "endChar": 0
+      },
+      "revId": "ab7bc158fe98c02017d21350ca452725ac7d145b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c3ffc2c_1f9b06f4",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5338,
+      "author": {
+        "id": 1140984
+      },
+      "writtenOn": "2019-09-01T06:58:27Z",
+      "side": 1,
+      "message": "Step 4:\nAfter the selected code logic is executed, the copy object is updated:\ncopy_of_mNetworkRegistrationInfos#CellIdentity#mAlphaLong\ncopy_of_mNetworkRegistrationInfos#CellIdentity#mAlphaShort\n\nWhile the object under mNewSS is not updated: \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003e NG?\nmNewSS#mNetworkRegistrationInfos#CellIdentity#mAlphaLong\nmNewSS#mNetworkRegistrationInfos#CellIdentity#mAlphaShort\n\n\nCould you please check whether my understanding is correct?\nIf my understanding is wrong, please kindly help to correct me.\n\nIf my understanding is correct, maybe we should provide new interface to update ServiceState#mNetworkRegistrationInfos directly instead of the copy.\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003dplatform/frameworks/opt/telephony reference code start\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\ndiff --git a/src/java/com/android/internal/telephony/ServiceStateTracker.java b/src/java/com/android/internal/telephony/ServiceStateTracker.java\nindex aa1fc11c55..54136bfad4 100755\n--- a/src/java/com/android/internal/telephony/ServiceStateTracker.java\n+++ b/src/java/com/android/internal/telephony/ServiceStateTracker.java\n@@ -5406,16 +5406,7 @@ public class ServiceStateTracker extends Handler {\n                 filterOperatorNameByPattern(servicestate.getOperatorAlphaLong()),\n                 filterOperatorNameByPattern(servicestate.getOperatorAlphaShort()),\n                 servicestate.getOperatorNumeric());\n-\n-        List\u003cNetworkRegistrationInfo\u003e networkRegistrationInfos \u003d\n-                servicestate.getNetworkRegistrationInfoList();\n-\n-        for (int i \u003d 0; i \u003c networkRegistrationInfos.size(); i++) {\n-            if (networkRegistrationInfos.get(i) !\u003d null) {\n-                updateOperatorNameForCellIdentity(\n-                        networkRegistrationInfos.get(i).getCellIdentity());\n-            }\n-        }\n+        servicestate.setCellIdentityOperatorName(mOperatorNameStringPattern);\n     }\n \n     private void updateOperatorNameForCellIdentity(CellIdentity cellIdentity) {\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003dplatform/frameworks/opt/telephony referenee code end\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003dplatform/frameworks/base reference code start\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\ndiff --git a/api/system-current.txt b/api/system-current.txt\nindex ecf7dedda6b5..bedc9583f599 100644\n--- a/api/system-current.txt\n+++ b/api/system-current.txt\n@@ -6221,6 +6221,7 @@ package android.telephony {\n     method @NonNull public java.util.List\u003candroid.telephony.NetworkRegistrationInfo\u003e getNetworkRegistrationInfoList();\n     method @NonNull public java.util.List\u003candroid.telephony.NetworkRegistrationInfo\u003e getNetworkRegistrationInfoListForDomain(int);\n     method @NonNull public java.util.List\u003candroid.telephony.NetworkRegistrationInfo\u003e getNetworkRegistrationInfoListForTransportType(int);\n+    method public void setCellIdentityOperatorName(@Nullable java.util.regex.Pattern);\n     field public static final int ROAMING_TYPE_DOMESTIC \u003d 2; // 0x2\n     field public static final int ROAMING_TYPE_INTERNATIONAL \u003d 3; // 0x3\n     field public static final int ROAMING_TYPE_NOT_ROAMING \u003d 0; // 0x0\ndiff --git a/telephony/java/android/telephony/ServiceState.java b/telephony/java/android/telephony/ServiceState.java\nindex e9af8a8ab1ec..5e66b917817f 100644\n--- a/telephony/java/android/telephony/ServiceState.java\n+++ b/telephony/java/android/telephony/ServiceState.java\n@@ -40,6 +40,8 @@ import java.lang.annotation.RetentionPolicy;\n import java.util.ArrayList;\n import java.util.Arrays;\n import java.util.List;\n+import java.util.regex.Matcher;\n+import java.util.regex.Pattern;\n import java.util.Objects;\n import java.util.stream.Collectors;\n \n@@ -2049,4 +2051,54 @@ public class ServiceState implements Parcelable {\n     public boolean isIwlanPreferred() {\n         return mIsIwlanPreferred;\n     }\n+\n+    /**\n+     * Update the short and long alpha Operator Name for {@link android.telephony.CellIdentity}.\n+     *\n+     * @param operatorNameStrPattern the operator name string pattern, comes from {@link\n+     *             android.telephony.CarrierConfigManager#KEY_OPERATOR_NAME_FILTER_PATTERN_STRING}.\n+     *\n+     * @hide\n+     */\n+    @SystemApi\n+    public void setCellIdentityOperatorName(@Nullable Pattern operatorNameStrPattern) {\n+        if (operatorNameStrPattern \u003d\u003d null) {\n+            Rlog.e(LOG_TAG, \"calling setCellIdentityOperatorName with null operatorNameStrPattern\");\n+            return;\n+        }\n+        synchronized (mNetworkRegistrationInfos) {\n+            for (NetworkRegistrationInfo nri : mNetworkRegistrationInfos) {\n+                updateOperatorNameForCellIdentity(operatorNameStrPattern, nri.getCellIdentity());\n+            }\n+        }\n+    }\n+\n+    private void updateOperatorNameForCellIdentity(@NonNull Pattern operatorNameStrPattern,\n+            @Nullable CellIdentity cellIdentity) {\n+        if (cellIdentity \u003d\u003d null) {\n+            return;\n+        }\n+        cellIdentity.setOperatorAlphaLong(\n+                filterOperatorNameByPattern(operatorNameStrPattern,\n+                        (String) cellIdentity.getOperatorAlphaLong()));\n+        cellIdentity.setOperatorAlphaShort(\n+                filterOperatorNameByPattern(operatorNameStrPattern,\n+                        (String) cellIdentity.getOperatorAlphaShort()));\n+    }\n+\n+    private String filterOperatorNameByPattern(@NonNull Pattern operatorNameStrPattern,\n+            String operatorName) {\n+        if (operatorNameStrPattern \u003d\u003d null || TextUtils.isEmpty(operatorName)) {\n+            return operatorName;\n+        }\n+        Matcher matcher \u003d operatorNameStrPattern.matcher(operatorName);\n+        if (matcher.find()) {\n+            if (matcher.groupCount() \u003e 0) {\n+                operatorName \u003d matcher.group(1);\n+            } else {\n+                if (DBG) Rlog.e(LOG_TAG, \"filterOperatorNameByPattern: pattern no group\");\n+            }\n+        }\n+        return operatorName;\n+    }\n }\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003dplatform/frameworks/base reference code end\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\nThanks",
+      "range": {
+        "startLine": 5337,
+        "startChar": 16,
+        "endLine": 5338,
+        "endChar": 75
+      },
+      "revId": "ab7bc158fe98c02017d21350ca452725ac7d145b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
