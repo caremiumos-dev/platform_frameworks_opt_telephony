@@ -1121,10 +1121,11 @@ public abstract class SMSDispatcher extends Handler {
             }
         } else {
             SmsMessageBase.SubmitPduBase pdu =
-                    com.android.internal.telephony.gsm.SmsMessage.getSubmitPdu(scAddress,
+                    com.android.internal.telephony.gsm.SmsMessage.getSubmitOrDeliverPdu(scAddress,
                             destinationAddress, message, deliveryIntent != null,
                             SmsHeader.toByteArray(smsHeader), encoding, smsHeader.languageTable,
-                            smsHeader.languageShiftTable, validityPeriod);
+                            smsHeader.languageShiftTable, validityPeriod, 0,
+                            false /*getDeliverPdu*/);
             if (pdu != null) {
                 HashMap map =  getSmsTrackerMap(destinationAddress, scAddress,
                         message, pdu);
