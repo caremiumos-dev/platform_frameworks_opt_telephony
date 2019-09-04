@@ -22,6 +22,29 @@
       "revId": "12a06f66cd26201d8ffc33636879cde6a80274e3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e7ddbb7_1cc4c208",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1122483
+      },
+      "writtenOn": "2019-09-04T00:46:38Z",
+      "side": 1,
+      "message": "I will remove that condition.",
+      "range": {
+        "startLine": 179,
+        "startChar": 27,
+        "endLine": 179,
+        "endChar": 38
+      },
+      "revId": "12a06f66cd26201d8ffc33636879cde6a80274e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
