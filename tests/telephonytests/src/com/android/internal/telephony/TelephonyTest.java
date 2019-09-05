@@ -641,6 +641,32 @@ public abstract class TelephonyTest {
         }
     }
 
+    /**
+     * Wait for up to 1 second for the handler message queue to clear.
+     */
+    protected final boolean waitForLastHandlerAction(Handler h) {
+        CountDownLatch lock = new CountDownLatch(1);
+        // Allow the handler to start work on stuff.
+        h.postDelayed(lock::countDown, 100);
+        int timeoutCount = 0;
+        while (timeoutCount < 5) {
+            try {
+                if (lock.await(200, TimeUnit.MILLISECONDS)) {
+                    // no messages in queue, stop waiting.
+                    if (!h.hasMessagesOrCallbacks()) break;
+                    lock = new CountDownLatch(1);
+                    // Delay to allow the handler thread to start work on stuff.
+                    h.postDelayed(lock::countDown, 100);
+                }
+
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+            timeoutCount++;
+        }
+        return timeoutCount < 5;
+    }
+
     protected final void waitForHandlerActionDelayed(Handler h, long timeoutMillis, long delayMs) {
         final CountDownLatch lock = new CountDownLatch(1);
         h.postDelayed(lock::countDown, delayMs);
