@@ -22,6 +22,29 @@
       "revId": "8682acbcec0ff38f25454761009949b4e85948dc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea2acbd5_4042f28e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-09-05T19:21:33Z",
+      "side": 1,
+      "message": "i don\u0027t know how much this will help. \nin ServiceStateTrackerTest, it has multiple threads, and each may or may not have multiple handlers associated with it. checking a handler being empty doesn\u0027t mean this thread or all threads are done processing: someone may still add message into this handler after it\u0027s empty.\n\nif it appears to solve the flacky for now, it\u0027s good, but we should eventually have a cleaner way in ServiceStateTrackerTest.",
+      "range": {
+        "startLine": 656,
+        "startChar": 0,
+        "endLine": 656,
+        "endChar": 59
+      },
+      "revId": "8682acbcec0ff38f25454761009949b4e85948dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
