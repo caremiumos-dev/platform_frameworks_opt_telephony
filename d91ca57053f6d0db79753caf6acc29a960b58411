@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee2008e7_e8d2827c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2019-09-05T04:50:47Z",
+      "side": 1,
+      "message": "1. device is booted up with Wifi and LTE enabled.\n2. IMS networkrequest from connectivity service on the available transport WWAN. Data is not registered So setup data failed.\n3. Got handover request for IMS with target transport WLAN. Then per #365 and #367, handover happens on WLAN and setcurrenttransport as WLAN.\nEverything is fine till here.\n\n4. Now when user turns off Wifi calling and handover request comes with apn IMS and target transport WWAN, then #onDataHandoverNeeded does not try to setup data call. why? isn\u0027t it a issue?",
+      "revId": "d91ca57053f6d0db79753caf6acc29a960b58411",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6aa0ccc_7d7aafc1",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2019-09-05T04:50:47Z",
+      "side": 1,
+      "message": "we don\u0027t need to remove the networkrequest?  \nmNetworkRequests.remove(networkRequest)",
+      "revId": "d91ca57053f6d0db79753caf6acc29a960b58411",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
