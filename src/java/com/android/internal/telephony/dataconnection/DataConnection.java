@@ -499,6 +499,14 @@ public class DataConnection extends StateMachine {
         return ret;
     }
 
+    /** Trigger the tcp buffer size update process. */
+    public void updateTcpBufferSizes() {
+        updateTcpBufferSizes(mRilRat);
+        if (mNetworkAgent != null) {
+            mNetworkAgent.sendLinkProperties(mLinkProperties, DataConnection.this);
+        }
+    }
+
     @VisibleForTesting
     public UpdateLinkPropertyResult updateLinkProperty(DataCallResponse newState) {
         UpdateLinkPropertyResult result = new UpdateLinkPropertyResult(mLinkProperties);
