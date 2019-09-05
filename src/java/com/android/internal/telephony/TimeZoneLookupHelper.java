@@ -188,10 +188,18 @@ public class TimeZoneLookupHelper {
         }
         TimeZone bias = TimeZone.getDefault();
 
+        // Android NITZ detection doesn't try to do a precise match using the DST offset supplied by
+        // the carrier. It currently only considers whether or not the carrier suggests local time
+        // is DST (if known). NITZ is limited in only being able to express DST offsets in whole
+        // hours and the DST info is optional. Up to Android 10, this code treated "unknown DST
+        // state" as "not in DST" but it now correctly treats it as "unknown" and will match time
+        // zones that are using DST.
+        Integer dstAdjustmentMillis = nitzData.getDstAdjustmentMillis();
+        Boolean isDst = dstAdjustmentMillis == null ? null : dstAdjustmentMillis != 0;
+        Integer dstAdjustmentMillisToUse = null;
         CountryTimeZones.OffsetResult offsetResult = countryTimeZones.lookupByOffsetWithBias(
-                nitzData.getLocalOffsetMillis(), nitzData.isDst(),
+                nitzData.getLocalOffsetMillis(), isDst, dstAdjustmentMillisToUse,
                 nitzData.getCurrentTimeInMillis(), bias);
-
         if (offsetResult == null) {
             return null;
         }
