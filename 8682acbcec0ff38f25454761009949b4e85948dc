@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea74688d_78f5ce1b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-09-05T18:31:32Z",
+      "side": 1,
+      "message": "nit: can you use an assertTrue(message, condition) that prints a message indicating that we timed out? Or maybe do the assert in waitForLastHandlerAction so you don\u0027t have to repeat yourself everywhere",
+      "range": {
+        "startLine": 2189,
+        "startChar": 8,
+        "endLine": 2189,
+        "endChar": 18
+      },
+      "revId": "8682acbcec0ff38f25454761009949b4e85948dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
