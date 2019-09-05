@@ -1547,12 +1547,16 @@ public class ServiceStateTracker extends Handler {
                     mLastPhysicalChannelConfigList = list;
                     boolean hasChanged =
                             updateNrFrequencyRangeFromPhysicalChannelConfigs(list, mSS);
-                    hasChanged |= updateNrStateFromPhysicalChannelConfigs(
-                            list, mSS);
+                    if (updateNrStateFromPhysicalChannelConfigs(list, mSS)) {
+                        updateTcpBufferSizeForNrConnections(list);
+                        hasChanged = true;
+                    }
+
+                    hasChanged |= RatRatcheter.updateBandwidths(
+                            getBandwidthsFromConfigs(list), mSS);
 
                     // Notify NR frequency, NR connection status or bandwidths changed.
-                    if (hasChanged
-                            || RatRatcheter.updateBandwidths(getBandwidthsFromConfigs(list), mSS)) {
+                    if (hasChanged) {
                         mPhone.notifyServiceStateChanged(mSS);
                     }
                 }
@@ -1955,6 +1959,21 @@ public class ServiceStateTracker extends Handler {
         boolean hasChanged = newFrequencyRange != ss.getNrFrequencyRange();
         ss.setNrFrequencyRange(newFrequencyRange);
         return hasChanged;
+    }
+
+    private void updateTcpBufferSizeForNrConnections(List<PhysicalChannelConfig> configs) {
+        if (configs == null) return;
+        DcTracker dct = mPhone.getDcTracker(AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        for (PhysicalChannelConfig config : configs) {
+            if (isNrPhysicalChannelConfig(config)) {
+                for (int cid : config.getContextIds()) {
+                    DataConnection dc = dct.getDataConnectionByContextId(cid);
+                    if (dc != null) {
+                        dc.updateTcpBufferSizes();
+                    }
+                }
+            }
+        }
     }
 
     private boolean updateNrStateFromPhysicalChannelConfigs(
