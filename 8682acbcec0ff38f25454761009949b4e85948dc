@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b2bd3029_76d82543",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-09-05T20:16:32Z",
+      "side": 1,
+      "message": "Okay",
+      "parentUuid": "ea74688d_78f5ce1b",
+      "range": {
+        "startLine": 2189,
+        "startChar": 8,
+        "endLine": 2189,
+        "endChar": 18
+      },
+      "revId": "8682acbcec0ff38f25454761009949b4e85948dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea2acbd5_4042f28e",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-09-05T19:21:33Z",
       "side": 1,
       "message": "i don\u0027t know how much this will help. \nin ServiceStateTrackerTest, it has multiple threads, and each may or may not have multiple handlers associated with it. checking a handler being empty doesn\u0027t mean this thread or all threads are done processing: someone may still add message into this handler after it\u0027s empty.\n\nif it appears to solve the flacky for now, it\u0027s good, but we should eventually have a cleaner way in ServiceStateTrackerTest.",
+      "range": {
+        "startLine": 656,
+        "startChar": 0,
+        "endLine": 656,
+        "endChar": 59
+      },
+      "revId": "8682acbcec0ff38f25454761009949b4e85948dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3009965d_68ba80f1",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-09-05T20:16:32Z",
+      "side": 1,
+      "message": "Yes, unfortunately, this is a hack to deal with this test. :) If i do not solve the flakiness in a week, they will turn off our tests for presubmit.\n\nAlso, Where are the other threads defined? I only see the mSSTTestHandler thread.",
+      "parentUuid": "ea2acbd5_4042f28e",
       "range": {
         "startLine": 656,
         "startChar": 0,
