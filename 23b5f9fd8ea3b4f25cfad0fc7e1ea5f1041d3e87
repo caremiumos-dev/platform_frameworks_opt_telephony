@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ece8700_f1c64764",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-09-05T20:37:48Z",
+      "side": 0,
+      "message": "This class extends NetworkService, the base class creates a handler thread.\n\nThen inside CellularNetworkService when CellularNetworkServiceProvider is created per slot(i actually don\u0027t know when/how it\u0027s triggered in this test), it creates another one.",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 63
+      },
+      "revId": "23b5f9fd8ea3b4f25cfad0fc7e1ea5f1041d3e87",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

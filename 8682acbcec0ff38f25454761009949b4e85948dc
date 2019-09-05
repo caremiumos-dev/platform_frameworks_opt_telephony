@@ -93,6 +93,30 @@
       "revId": "8682acbcec0ff38f25454761009949b4e85948dc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faa94b75_796c9a3c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-09-05T20:37:48Z",
+      "side": 1,
+      "message": "Yeah i saw the bug and i\u0027m ok with it if it appears to solve the problem.\n\nCommented where other threads are created.",
+      "parentUuid": "3009965d_68ba80f1",
+      "range": {
+        "startLine": 656,
+        "startChar": 0,
+        "endLine": 656,
+        "endChar": 59
+      },
+      "revId": "8682acbcec0ff38f25454761009949b4e85948dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
