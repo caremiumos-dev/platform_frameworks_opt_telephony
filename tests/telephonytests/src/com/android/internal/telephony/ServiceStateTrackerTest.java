@@ -27,6 +27,7 @@ import static org.mockito.Matchers.nullable;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
@@ -47,6 +48,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.ServiceInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.NetworkCapabilities;
 import android.os.AsyncResult;
 import android.os.Bundle;
 import android.os.Handler;
@@ -94,6 +96,7 @@ import androidx.test.filters.FlakyTest;
 
 import com.android.internal.R;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
+import com.android.internal.telephony.dataconnection.DataConnection;
 import com.android.internal.telephony.test.SimulatedCommands;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccRecords;
@@ -105,6 +108,8 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -2068,6 +2073,50 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         // Only show spn because all PLMNs will be considered HOME PLMNs.
         assertThat(sst.getCarrierNameDisplayBitmask(new ServiceState())).isEqualTo(
                 ServiceStateTracker.CARRIER_NAME_DISPLAY_BITMASK_SHOW_SPN);
+    }
+
+    @Test
+    public void testUpdateTcpBufferForNrDataConnections() {
+        // GIVEN the NR and Non-NR data connection.
+        DataConnection nrDc = Mockito.mock(DataConnection.class);
+        NetworkRegistrationInfo regInfo = new NetworkRegistrationInfo.Builder().build();
+        regInfo.setNrState(NetworkRegistrationInfo.NR_STATE_NOT_RESTRICTED);
+        sst.mSS = mServiceState;
+        doReturn(regInfo).when(mServiceState).getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        doReturn(new int[] {123, 4}).when(mServiceState).getCellBandwidths();
+        doReturn(new NetworkCapabilities()).when(nrDc).getNetworkCapabilities();
+
+        DataConnection nonNrDc = Mockito.mock(DataConnection.class);
+        List<DataConnection> dataConnections = Arrays.asList(nrDc, nonNrDc);
+
+        int nrDataConnectionIdx = 0;
+        int nonNrDataConnectionIdx = 1;
+        int[] contextIds = new int[] {nrDataConnectionIdx};
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                int cid = invocation.getArgument(0);
+                return dataConnections.get(cid);
+            }
+        }).when(mDcTracker).getDataConnectionByContextId(anyInt());
+
+        // WHEN there is a NR physical channel config changed.
+        List<PhysicalChannelConfig> configs = Arrays.asList(new PhysicalChannelConfig.Builder()
+                .setContextIds(contextIds)
+                .setCellConnectionStatus(PhysicalChannelConfig.CONNECTION_SECONDARY_SERVING)
+                .setRat(TelephonyManager.NETWORK_TYPE_NR)
+                .setCellBandwidthDownlinkKhz(12345)
+                .build());
+        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_PHYSICAL_CHANNEL_CONFIG,
+                new AsyncResult(null, configs, null)));
+        waitForHandlerAction(sst, 100);
+
+        // THEN verify the TCP buffer size is updated for the NR data connection, and never trigger
+        // tcp buffer size update for non-NR data connection.
+        verify(dataConnections.get(nrDataConnectionIdx)).updateTcpBufferSizes();
+        verify(dataConnections.get(nonNrDataConnectionIdx), never()).updateTcpBufferSizes();
     }
 
     @Test
