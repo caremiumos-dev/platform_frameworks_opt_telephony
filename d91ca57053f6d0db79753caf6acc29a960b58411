@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a66aaef0_0aa8a9ca",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-09-05T16:03:28Z",
+      "side": 1,
+      "message": "We fixed that internally. Cherry picked to AOSP at https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1115160",
+      "parentUuid": "ee2008e7_e8d2827c",
+      "revId": "d91ca57053f6d0db79753caf6acc29a960b58411",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6aa0ccc_7d7aafc1",
         "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "d91ca57053f6d0db79753caf6acc29a960b58411",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7155a58_41484f6a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-09-05T16:03:28Z",
+      "side": 1,
+      "message": "We fixed that internally. Cherry picked to AOSP at https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1115160",
+      "parentUuid": "f6aa0ccc_7d7aafc1",
+      "revId": "d91ca57053f6d0db79753caf6acc29a960b58411",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
