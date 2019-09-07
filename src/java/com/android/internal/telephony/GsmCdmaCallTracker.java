@@ -915,7 +915,10 @@ public class GsmCdmaCallTracker extends CallTracker {
                             }
                         }
 
-                        mPhone.notifyHandoverStateChanged(mConnections[i]);
+                        Phone imsPhone = mPhone.getImsPhone();
+                        if (imsPhone != null) {
+                            imsPhone.notifyHandoverStateChanged(mConnections[i]);
+                        }
                     } else {
                         // find if the MT call is a new ring or unknown connection
                         newRinging = checkMtFindNewRinging(dc,i);
