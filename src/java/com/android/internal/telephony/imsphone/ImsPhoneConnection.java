@@ -129,6 +129,8 @@ public class ImsPhoneConnection extends Connection implements
      */
     private boolean mIsLocalVideoCapable = true;
 
+    private boolean mIsCsRetried = false;
+
     // Store the current audio codec
     private int mAudioCodec = ImsStreamMediaProfile.AUDIO_QUALITY_NONE;
 
@@ -1394,5 +1396,15 @@ public class ImsPhoneConnection extends Connection implements
         Rlog.i(LOG_TAG, "setLocalVideoCapable: mIsLocalVideoCapable = " + mIsLocalVideoCapable
                 + "; updating local video availability.");
         updateMediaCapabilities(getImsCall());
+    }
+
+    /*package*/ void
+    setCsRetried(boolean state) {
+        mIsCsRetried = state;
+    }
+
+    /*package*/ boolean
+    isCsRetried() {
+        return mIsCsRetried;
     }
 }
