@@ -1722,6 +1722,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     + "does not belong to ImsPhoneCallTracker " + this);
         }
 
+        if (conn.isCsRetried()) {
+            throw new CallStateException(CS_FALLBACK);
+        }
+
         hangup(conn.getCall());
     }
 
@@ -2286,6 +2290,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                         && mRingingCall.getState() == ImsPhoneCall.State.IDLE) {
                     mForegroundCall.detach(mPendingMO);
                     removeConnection(mPendingMO);
+                    mPendingMO.setCsRetried(true);
                     mPendingMO.finalize();
                     mPendingMO = null;
                     mPhone.initiateSilentRedial();
