@@ -715,6 +715,7 @@ public class ImsPhone extends ImsPhoneBase {
 
     @Override
     public Connection dial(String dialString, DialArgs dialArgs) throws CallStateException {
+        mLastDialString = dialString;
         return dialInternal(dialString, dialArgs, null);
     }
 
