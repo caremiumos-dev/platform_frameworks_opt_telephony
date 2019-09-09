@@ -30,6 +30,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDiskIOException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -1492,9 +1493,13 @@ public class SubscriptionController extends ISub.Stub {
             notifySubscriptionInfoChanged();
 
             return result;
+        } catch (SQLiteDiskIOException e) {
+            loge("[setCarrierText] e=" + e);
         } finally {
             Binder.restoreCallingIdentity(identity);
         }
+
+        return 0;
     }
 
     /**
