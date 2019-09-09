@@ -52,7 +52,7 @@ public class TimeZoneLookupHelperTest {
     }
 
     @Test
-    public void testLookupByNitzdByNitz() {
+    public void testLookupByNitzByNitz() {
         // Historical dates are used to avoid the test breaking due to data changes.
         // However, algorithm updates may change the exact time zone returned, though it shouldn't
         // ever be a less exact match.
