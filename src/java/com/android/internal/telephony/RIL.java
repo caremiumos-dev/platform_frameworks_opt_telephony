@@ -1013,7 +1013,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
             try {
                 radioProxy14.emergencyDial(rr.mSerial, dialInfo,
-                        emergencyNumberInfo.getEmergencyServiceCategoryBitmaskInternalDial(),
+                        emergencyNumberInfo.getEmergencyServiceCategoryBitmask(),
                         emergencyNumberInfo.getEmergencyUrns() != null
                                 ? new ArrayList(emergencyNumberInfo.getEmergencyUrns())
                                 : new ArrayList<>(),
