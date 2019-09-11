@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f1c5ae1_7f5650ca",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2244,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-09-11T20:18:48Z",
+      "side": 1,
+      "message": "I\u0027m assuming these don\u0027t apply as they\u0027re part of 1.4 and that is already done.",
+      "range": {
+        "startLine": 2206,
+        "startChar": 4,
+        "endLine": 2244,
+        "endChar": 5
+      },
+      "revId": "70ad92a72c6cc7b1c0272ad1b7a8ab00d9a68b73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
