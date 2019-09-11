@@ -27,6 +27,8 @@ import static org.junit.Assert.assertTrue;
 import android.icu.util.GregorianCalendar;
 import android.icu.util.TimeZone;
 
+import libcore.timezone.CountryTimeZones;
+import libcore.timezone.CountryTimeZones.TimeZoneMapping;
 import libcore.timezone.TimeZoneFinder;
 
 import org.junit.Before;
@@ -36,6 +38,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 public class TimeZoneLookupHelperTest {
     // Note: Historical dates are used to avoid the test breaking due to data changes.
@@ -392,10 +395,14 @@ public class TimeZoneLookupHelperTest {
     private static void assertOffsetResultZoneCountry(
             String isoCountryCode, OffsetResult lookupResult) {
         String timeZoneId = lookupResult.getTimeZone().getID();
-        List<String> zoneIdsByCountry =
-                TimeZoneFinder.getInstance().lookupTimeZoneIdsByCountry(isoCountryCode);
-        assertTrue(timeZoneId + " must be used in " + isoCountryCode,
-                zoneIdsByCountry.contains(timeZoneId));
+        CountryTimeZones countryTimeZones =
+                TimeZoneFinder.getInstance().lookupCountryTimeZones(isoCountryCode);
+        List<TimeZoneMapping> timeZoneMappings = countryTimeZones.getTimeZoneMappings();
+        Predicate<TimeZoneMapping> idMatchesPredicate =
+                x -> timeZoneId.equals(x.getTimeZone().getID());
+        assertTrue(timeZoneId + " must be used in " + isoCountryCode
+                        + " but not found in " + timeZoneMappings,
+                timeZoneMappings.stream().anyMatch(idMatchesPredicate));
     }
 
     /**
@@ -436,5 +443,4 @@ public class TimeZoneLookupHelperTest {
     private static TimeZone zone(String zoneId) {
         return TimeZone.getFrozenTimeZone(zoneId);
     }
-
 }
