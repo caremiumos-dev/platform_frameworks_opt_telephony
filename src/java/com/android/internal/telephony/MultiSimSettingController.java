@@ -655,6 +655,7 @@ public class MultiSimSettingController extends Handler {
         for (Phone phone : PhoneFactory.getPhones()) {
             if (phone.getSubId() != defaultDataSub
                     && SubscriptionManager.isValidSubscriptionId(phone.getSubId())
+                    && SubscriptionManager.isValidSubscriptionId(defaultDataSub)
                     && !mSubController.isOpportunistic(phone.getSubId())
                     && phone.isUserDataEnabled()
                     && !areSubscriptionsInSameGroup(defaultDataSub, phone.getSubId())) {
