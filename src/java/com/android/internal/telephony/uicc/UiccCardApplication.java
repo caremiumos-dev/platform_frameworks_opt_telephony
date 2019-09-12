@@ -25,6 +25,7 @@ import android.os.Registrant;
 import android.os.RegistrantList;
 import android.telephony.Rlog;
 
+import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
@@ -386,6 +387,16 @@ public class UiccCardApplication {
             if (mDestroyed) {
                 loge("Received message " + msg + "[" + msg.what
                         + "] while being destroyed. Ignoring.");
+                //When UiccCardApp dispose,handle message and return exception
+                ar = (AsyncResult) msg.obj;
+                if (ar != null) {
+                    ar.exception = new CommandException(CommandException.Error.ABORTED);
+                    Message response = (Message) ar.userObj;
+                    if (response != null) {
+                        AsyncResult.forMessage(response).exception = ar.exception;
+                        response.sendToTarget();
+                    }
+                }
                 return;
             }
 
