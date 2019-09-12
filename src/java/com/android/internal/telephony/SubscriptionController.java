@@ -1213,6 +1213,15 @@ public class SubscriptionController extends ISub.Stub {
 
                 // Once the records are loaded, notify DcTracker
                 sPhones[slotIndex].updateDataConnectionTracker();
+                 /*When intent SERVICE_STATE_CHANGED broadcast as device just reboot,
+                 * it may not be recognized for invalid contained subId. This will cause
+                 * UI display errouneous registration info untill state changed again.
+                 * So trigger broadcast operation as siminfo is available.*/
+                 if (DBG) {
+                     logdl("[addSubInfoRecord] update serviceState for subId:" + subId);
+                 }
+                 ((GsmCdmaPhone) sPhones[slotIndex]).notifyServiceStateChanged(((GsmCdmaPhone) sPhones[slotIndex]).getServiceState());
+                 /* @} */
 
                 if (DBG) logdl("[addSubInfoRecord]- info size=" + sSlotIndexToSubIds.size());
             }
