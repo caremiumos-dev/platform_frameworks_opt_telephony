@@ -21,12 +21,12 @@ import android.content.Context;
 import android.os.PowerManager;
 import android.telephony.Rlog;
 import android.text.TextUtils;
+import android.timezone.CountryTimeZones.OffsetResult;
 import android.util.LocalLog;
 import android.util.TimestampedValue;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.TimeZoneLookupHelper.CountryResult;
-import com.android.internal.telephony.TimeZoneLookupHelper.OffsetResult;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.util.IndentingPrintWriter;
 

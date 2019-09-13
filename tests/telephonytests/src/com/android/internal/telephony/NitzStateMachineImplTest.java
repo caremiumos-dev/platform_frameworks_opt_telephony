@@ -34,11 +34,11 @@ import static org.junit.Assert.assertTrue;
 
 import android.app.timedetector.PhoneTimeSuggestion;
 import android.icu.util.TimeZone;
+import android.timezone.CountryTimeZones.OffsetResult;
 import android.util.TimestampedValue;
 
 import com.android.internal.telephony.NitzStateMachineTestSupport.FakeDeviceState;
 import com.android.internal.telephony.NitzStateMachineTestSupport.Scenario;
-import com.android.internal.telephony.TimeZoneLookupHelper.OffsetResult;
 
 import org.junit.After;
 import org.junit.Before;
