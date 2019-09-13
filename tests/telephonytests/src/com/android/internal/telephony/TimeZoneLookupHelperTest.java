@@ -29,9 +29,9 @@ import static org.junit.Assert.assertTrue;
 
 import android.icu.util.GregorianCalendar;
 import android.icu.util.TimeZone;
+import android.timezone.CountryTimeZones.OffsetResult;
 
 import com.android.internal.telephony.TimeZoneLookupHelper.CountryResult;
-import com.android.internal.telephony.TimeZoneLookupHelper.OffsetResult;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -27,16 +27,15 @@ import android.os.Build;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.text.TextUtils;
+import android.timezone.TelephonyLookup;
+import android.timezone.TelephonyNetwork;
+import android.timezone.TelephonyNetworkFinder;
 import android.util.Slog;
 
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.app.LocaleStore;
 import com.android.internal.app.LocaleStore.LocaleInfo;
-
-import libcore.timezone.TelephonyLookup;
-import libcore.timezone.TelephonyNetwork;
-import libcore.timezone.TelephonyNetworkFinder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
