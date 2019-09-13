@@ -23,6 +23,7 @@ import android.annotation.Nullable;
 import android.app.timezonedetector.PhoneTimeZoneSuggestion;
 import android.telephony.Rlog;
 import android.text.TextUtils;
+import android.timezone.CountryTimeZones.OffsetResult;
 import android.util.TimestampedValue;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -142,7 +143,7 @@ public class TimeZoneSuggesterImpl implements TimeZoneSuggester {
         PhoneTimeZoneSuggestion.Builder suggestionBuilder =
                 new PhoneTimeZoneSuggestion.Builder(phoneId);
         suggestionBuilder.addDebugInfo("findTimeZoneForTestNetwork: nitzSignal=" + nitzSignal);
-        TimeZoneLookupHelper.OffsetResult lookupResult =
+        OffsetResult lookupResult =
                 mTimeZoneLookupHelper.lookupByNitz(nitzData);
         if (lookupResult == null) {
             suggestionBuilder.addDebugInfo("findTimeZoneForTestNetwork: No zone found");
@@ -183,7 +184,7 @@ public class TimeZoneSuggesterImpl implements TimeZoneSuggester {
         }
 
         // Try to find a match using both country + NITZ signal.
-        TimeZoneLookupHelper.OffsetResult lookupResult =
+        OffsetResult lookupResult =
                 mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, countryIsoCode);
         if (lookupResult != null) {
             suggestionBuilder.setZoneId(lookupResult.getTimeZone().getID());
