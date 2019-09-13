@@ -32,10 +32,10 @@ import static org.mockito.Mockito.when;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.icu.util.TimeZone;
+import android.timezone.CountryTimeZones.OffsetResult;
 import android.util.TimestampedValue;
 
 import com.android.internal.telephony.TimeZoneLookupHelper.CountryResult;
-import com.android.internal.telephony.TimeZoneLookupHelper.OffsetResult;
 
 import org.junit.After;
 import org.junit.Before;

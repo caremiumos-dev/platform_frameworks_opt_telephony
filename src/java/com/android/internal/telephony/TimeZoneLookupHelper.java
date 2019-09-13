@@ -18,76 +18,18 @@ package com.android.internal.telephony;
 
 import android.icu.util.TimeZone;
 import android.text.TextUtils;
-
-import libcore.timezone.CountryTimeZones;
-import libcore.timezone.CountryTimeZones.TimeZoneMapping;
-import libcore.timezone.TimeZoneFinder;
+import android.timezone.CountryTimeZones;
+import android.timezone.CountryTimeZones.OffsetResult;
+import android.timezone.CountryTimeZones.TimeZoneMapping;
+import android.timezone.TimeZoneFinder;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * An interface to various time zone lookup behaviors.
  */
 // Non-final to allow mocking.
 public class TimeZoneLookupHelper {
-
-    /**
-     * The result of looking up a time zone using offset information (and possibly more).
-     */
-    public static final class OffsetResult {
-
-        /** A zone that matches the supplied criteria. See also {@link #mIsOnlyMatch}. */
-        private final TimeZone mTimeZone;
-
-        /** True if there is only one matching time zone for the supplied criteria. */
-        private final boolean mIsOnlyMatch;
-
-        public OffsetResult(TimeZone timeZone, boolean isOnlyMatch) {
-            mTimeZone = Objects.requireNonNull(timeZone);
-            mIsOnlyMatch = isOnlyMatch;
-        }
-
-        /**
-         * Returns a time zone that matches the supplied criteria.
-         */
-        public TimeZone getTimeZone() {
-            return mTimeZone;
-        }
-
-        /**
-         * Returns {@code true} if there is only one matching time zone for the supplied criteria.
-         */
-        public boolean getIsOnlyMatch() {
-            return mIsOnlyMatch;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            OffsetResult that = (OffsetResult) o;
-            return mIsOnlyMatch == that.mIsOnlyMatch
-                    && mTimeZone.getID().equals(that.mTimeZone.getID());
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(mTimeZone, mIsOnlyMatch);
-        }
-
-        @Override
-        public String toString() {
-            return "OffsetResult{"
-                    + "mTimeZone=" + mTimeZone
-                    + ", mIsOnlyMatch=" + mIsOnlyMatch
-                    + '}';
-        }
-    }
 
     /**
      * The result of looking up a time zone using country information.
@@ -194,13 +136,9 @@ public class TimeZoneLookupHelper {
         Integer dstAdjustmentMillis = nitzData.getDstAdjustmentMillis();
         Boolean isDst = dstAdjustmentMillis == null ? null : dstAdjustmentMillis != 0;
         Integer dstAdjustmentMillisToMatch = null; // Don't try to match the precise DST offset.
-        CountryTimeZones.OffsetResult offsetResult = countryTimeZones.lookupByOffsetWithBias(
+        return countryTimeZones.lookupByOffsetWithBias(
                 nitzData.getLocalOffsetMillis(), isDst, dstAdjustmentMillisToMatch,
                 nitzData.getCurrentTimeInMillis(), bias);
-        if (offsetResult == null) {
-            return null;
-        }
-        return new OffsetResult(offsetResult.mTimeZone, offsetResult.mOneMatch);
     }
 
     /**
@@ -264,7 +202,7 @@ public class TimeZoneLookupHelper {
             String countryDefaultId = countryDefault.getID();
             int countryDefaultOffset = countryDefault.getOffset(whenMillis);
             for (TimeZoneMapping timeZoneMapping : timeZoneMappings) {
-                if (timeZoneMapping.timeZoneId.equals(countryDefaultId)) {
+                if (timeZoneMapping.getTimeZoneId().equals(countryDefaultId)) {
                     continue;
                 }
 

@@ -17,7 +17,6 @@
 package com.android.internal.telephony;
 
 import com.android.internal.telephony.TimeZoneLookupHelper.CountryResult;
-import com.android.internal.telephony.TimeZoneLookupHelper.OffsetResult;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 import android.icu.util.GregorianCalendar;
 import android.icu.util.TimeZone;
+import android.timezone.CountryTimeZones.OffsetResult;
 
 import org.junit.Before;
 import org.junit.Test;
