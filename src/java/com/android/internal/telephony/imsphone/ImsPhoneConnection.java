@@ -816,10 +816,7 @@ public class ImsPhoneConnection extends Connection implements
 
         boolean changed = false;
         ImsCallProfile callProfile = imsCall.getCallProfile();
-        if (callProfile != null && isIncoming()) {
-            // Only look for changes to the address for incoming calls.  The originating identity
-            // can change for outgoing calls due to, for example, a call being forwarded to
-            // voicemail.  This address change does not need to be presented to the user.
+        if (callProfile != null) {
             String address = callProfile.getCallExtra(ImsCallProfile.EXTRA_OI);
             String name = callProfile.getCallExtra(ImsCallProfile.EXTRA_CNA);
             int nump = ImsCallProfile.OIRToPresentation(
