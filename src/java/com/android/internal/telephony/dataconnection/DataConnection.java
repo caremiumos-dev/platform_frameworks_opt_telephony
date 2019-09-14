@@ -1259,6 +1259,11 @@ public class DataConnection extends StateMachine {
             result.removeCapability(NetworkCapabilities.NET_CAPABILITY_DUN);
         }
 
+        if (!mPhone.getDataEnabledSettings().isDataEnabled(ApnSetting.TYPE_DEFAULT) ||
+                (mPhone.getServiceState().getDataRoaming() && !mDct.getDataRoamingEnabled())) {
+            result.removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        }
+
         int up = 14;
         int down = 14;
         switch (mRilRat) {
