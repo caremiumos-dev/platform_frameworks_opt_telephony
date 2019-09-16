@@ -537,6 +537,7 @@ public class DcTrackerTest extends TelephonyTest {
         mDct.removeCallbacksAndMessages(null);
         mDct = null;
         mDcTrackerTestHandler.quit();
+        mDcTrackerTestHandler.join();
         super.tearDown();
     }
 

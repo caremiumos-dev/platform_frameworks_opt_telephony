@@ -248,6 +248,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
     public void tearDown() throws Exception {
         mCTUT = null;
         mImsCTHandlerThread.quit();
+        mImsCTHandlerThread.join();
         super.tearDown();
     }
 
