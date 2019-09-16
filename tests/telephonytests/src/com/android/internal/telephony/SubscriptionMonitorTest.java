@@ -57,9 +57,10 @@ public class SubscriptionMonitorTest extends AndroidTestCase {
             super(looper);
         }
 
-        public void die() {
+        public void die() throws Exception {
             if(handlerThread != null) {
                 handlerThread.quit();
+                handlerThread.join();
                 handlerThread = null;
             }
         }

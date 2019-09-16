@@ -175,6 +175,7 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
     @After
     public void tearDown() throws Exception {
         mSubscriptionInfoUpdaterHandlerThread.quit();
+        mSubscriptionInfoUpdaterHandlerThread.join();
         super.tearDown();
     }
 
