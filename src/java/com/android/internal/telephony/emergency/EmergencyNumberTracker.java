@@ -343,13 +343,46 @@ public class EmergencyNumberTracker extends Handler {
                             : emergencyServiceCategoryBitmask
                             | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE;
                     break;
+                case EccInfo.Type.MARINE:
+                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
+                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MARINE_GUARD
+                            : emergencyServiceCategoryBitmask
+                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MARINE_GUARD;
+                    break;
+                case EccInfo.Type.MOUNTAIN:
+                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
+                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MOUNTAIN_RESCUE
+                            : emergencyServiceCategoryBitmask
+                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MOUNTAIN_RESCUE;
+                    break;
+                case EccInfo.Type.MIEC:
+                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
+                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC
+                            : emergencyServiceCategoryBitmask
+                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC;
+                    break;
+                case EccInfo.Type.AIEC:
+                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
+                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC
+                            : emergencyServiceCategoryBitmask
+                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC;
+                    break;
                 default:
                     // Ignores unknown types.
             }
         }
+
+        int routing = eccInfo.routing;
+        // When emergency only or sim state not ready, we need to dial emergency numbers by
+        // EMERGENCY_CALL_ROUTING_EMERGENCY
+        if (mPhone.getServiceState().isEmergencyOnly()
+                || TelephonyManager.from(mPhone.getContext()).getSimState(mPhone.getPhoneId())
+                != TelephonyManager.SIM_STATE_READY) {
+            routing = EmergencyNumber.EMERGENCY_CALL_ROUTING_EMERGENCY;
+        }
         return new EmergencyNumber(phoneNumber, countryIso, "", emergencyServiceCategoryBitmask,
                 new ArrayList<String>(), EmergencyNumber.EMERGENCY_NUMBER_SOURCE_DATABASE,
-                EmergencyNumber.EMERGENCY_CALL_ROUTING_UNKNOWN);
+                eccInfo.routing);
     }
 
     private void cacheEmergencyDatabaseByCountry(String countryIso) {
