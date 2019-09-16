@@ -29,6 +29,7 @@ import android.os.SystemProperties;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.emergency.EmergencyNumber;
 import android.telephony.emergency.EmergencyNumber.EmergencyCallRouting;
@@ -39,12 +40,15 @@ import android.util.LocalLog;
 import com.android.i18n.phonenumbers.ShortNumberInfo;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.LocaleTracker;
+import com.android.internal.telephony.MccTable;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.ServiceStateTracker;
 import com.android.internal.telephony.SubscriptionController;
+import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.phone.ecc.nano.ProtobufEccData;
@@ -90,6 +94,7 @@ public class EmergencyNumberTracker extends Handler {
     private final Phone mPhone;
     private String mCountryIso;
     private int mCurrentDatabaseVersion = INVALID_DATABASE_VERSION;
+    private int mServiceState = ServiceState.STATE_POWER_OFF;
     /**
      * Indicates if the country iso is set by another subscription.
      * @hide
@@ -124,6 +129,7 @@ public class EmergencyNumberTracker extends Handler {
     private static final int EVENT_UPDATE_EMERGENCY_NUMBER_PREFIX = 4;
     /** Event indicating the update for the OTA emergency number database. */
     private static final int EVENT_UPDATE_OTA_EMERGENCY_NUMBER_DB = 5;
+    private static final int EVENT_SERVICE_STATE_CHANGED = 6;
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -157,6 +163,19 @@ public class EmergencyNumberTracker extends Handler {
                     TelephonyManager.ACTION_OTA_EMERGENCY_NUMBER_DB_INSTALLED)) {
                 logd("ACTION_OTA_EMERGENCY_NUMBER_DB_INSTALLED: triggered");
                 updateOtaEmergencyNumberDatabase();
+                return;
+            } else if (intent.getAction().equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
+                int phoneId = intent.getIntExtra(PhoneConstants.PHONE_KEY, 0);
+                String simState = intent.getStringExtra(IccCardConstants.INTENT_KEY_ICC_STATE);
+                logd("ACTION_SIM_STATE_CHANGED: PhoneId: " + phoneId + " mPhoneId: "
+                        + mPhone.getPhoneId() + " simState " + simState);
+                if (phoneId != mPhone.getPhoneId()) {
+                    return;
+                }
+                if (IccCardConstants.INTENT_VALUE_ICC_LOADED.equals(simState)
+                        || IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(simState)) {
+                    initializeDatabase();
+                }
                 return;
             }
         }
@@ -244,6 +263,10 @@ public class EmergencyNumberTracker extends Handler {
             case EVENT_UPDATE_OTA_EMERGENCY_NUMBER_DB:
                 updateOtaEmergencyNumberListDatabaseAndNotify();
                 break;
+            case EVENT_SERVICE_STATE_CHANGED:
+                AsyncResult asyncResult = (AsyncResult) msg.obj;
+                onServiceStateChanged((ServiceState) asyncResult.result);
+                break;
         }
     }
 
@@ -321,6 +344,63 @@ public class EmergencyNumberTracker extends Handler {
         return "";
     }
 
+    private void onServiceStateChanged(ServiceState serviceState) {
+        if (mServiceState != serviceState.getState()) {
+            String countryIso = getCountryIsoByServiceState(serviceState);
+            mServiceState = serviceState.getState();
+            if (countryIso == null || TextUtils.equals("", countryIso)) {
+                return;
+            }
+            if (serviceState.isEmergencyOnly()
+                    || mServiceState == ServiceState.STATE_IN_SERVICE) {
+                updateEmergencyNumberDatabaseCountryChange(countryIso);
+            }
+        }
+    }
+
+    private void initializeDatabase() {
+        if (mCountryIso == null || TextUtils.equals("", mCountryIso)) {
+            String countryIso = getCountryIsoBySimOperatorNumeric();
+            if (TextUtils.isEmpty(countryIso)) {
+                return;
+            }
+            updateEmergencyNumberDatabaseCountryChange(countryIso);
+        }
+    }
+
+    private String getCountryIsoBySimOperatorNumeric() {
+        String mcc = null;
+        String countryIso = "";
+        String numeric = ((TelephonyManager) mPhone.getContext().getSystemService(
+                Context.TELEPHONY_SERVICE)).getSimOperatorNumericForPhone(mPhone.getPhoneId());
+        if (!TextUtils.isEmpty(numeric)) {
+            try {
+                mcc = numeric.substring(0, 3);
+                countryIso = MccTable.countryCodeForMcc(mcc);
+            } catch (StringIndexOutOfBoundsException ex) {
+                loge("updateLocale: Can't get country from operator numeric. mcc = "
+                        + mcc + ". ex=" + ex);
+            }
+        }
+        return countryIso;
+    }
+
+    private String getCountryIsoByServiceState(ServiceState serviceState) {
+        String mcc = null;
+        String countryIso = "";
+        String numeric = serviceState.getOperatorNumeric();
+        if (!TextUtils.isEmpty(numeric)) {
+            try {
+                mcc = numeric.substring(0, 3);
+                countryIso = MccTable.countryCodeForMcc(mcc);
+            } catch (StringIndexOutOfBoundsException ex) {
+                loge("updateLocale: Can't get country from operator numeric. mcc = "
+                        + mcc + ". ex=" + ex);
+            }
+        }
+        return countryIso;
+    }
+
     /**
      * Update Emergency Number database based on changed Country ISO.
      *
@@ -368,13 +448,47 @@ public class EmergencyNumberTracker extends Handler {
                             : emergencyServiceCategoryBitmask
                             | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE;
                     break;
+                case EccInfo.Type.MARINE:
+                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
+                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MARINE_GUARD
+                            : emergencyServiceCategoryBitmask
+                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MARINE_GUARD;
+                    break;
+                case EccInfo.Type.MOUNTAIN:
+                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
+                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MOUNTAIN_RESCUE
+                            : emergencyServiceCategoryBitmask
+                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MOUNTAIN_RESCUE;
+                    break;
+                case EccInfo.Type.MIEC:
+                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
+                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC
+                            : emergencyServiceCategoryBitmask
+                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC;
+                    break;
+                case EccInfo.Type.AIEC:
+                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
+                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC
+                            : emergencyServiceCategoryBitmask
+                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC;
+                    break;
                 default:
+                    break;
                     // Ignores unknown types.
             }
         }
+
+        int routing = eccInfo.routing;
+        // When emergency only or sim state not ready, we need to dial emergency numbers by
+        // EMERGENCY_CALL_ROUTING_EMERGENCY
+        if (mPhone.getServiceState().isEmergencyOnly()
+                || TelephonyManager.from(mPhone.getContext()).getSimState(mPhone.getPhoneId())
+                != TelephonyManager.SIM_STATE_READY) {
+            routing = EmergencyNumber.EMERGENCY_CALL_ROUTING_EMERGENCY;
+        }
         return new EmergencyNumber(phoneNumber, countryIso, "", emergencyServiceCategoryBitmask,
                 new ArrayList<String>(), EmergencyNumber.EMERGENCY_NUMBER_SOURCE_DATABASE,
-                EmergencyNumber.EMERGENCY_CALL_ROUTING_UNKNOWN);
+                eccInfo.routing);
     }
 
     private void cacheEmergencyDatabaseByCountry(String countryIso) {
