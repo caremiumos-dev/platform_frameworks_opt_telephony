@@ -2337,6 +2337,38 @@ public interface CommandsInterface {
     void unregisterForEmergencyNumberList(Handler h);
 
     /**
+     * Register for unsolicited Outgoing Emergency Call Indications
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    void registerForOutgoingEmergencyCall(Handler h, int what, Object obj);
+
+    /**
+     * Deregister for unsolicited Outgoing Emergency Call Indications
+     *
+     * @param h Handler for notification message.
+     */
+    void unregisterForOutgoingEmergencyCall(Handler h);
+
+    /**
+     * Register for unsolicited Outgoing Emergency SMS Indications
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    void registerForOutgoingEmergencySms(Handler h, int what, Object obj);
+
+    /**
+     * Deregister for unsolicited Outgoing Emergency SMS Indications
+     *
+     * @param h Handler for notification message.
+     */
+    void unregisterForOutgoingEmergencySms(Handler h);
+
+    /**
      * Start sending NATT Keepalive packets on a specified data connection
      *
      * @param contextId cid that identifies the data connection for this keepalive

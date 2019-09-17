@@ -1098,6 +1098,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             }
 
             ImsCall imsCall = mImsManager.makeCall(profile, callees, mImsCallListener);
+
+            // Notify the ongoing placed emergency number to listeners.
+            mPhone.notifyOutgoingEmergencyCall(conn.getEmergencyNumberInfo());
             conn.setImsCall(imsCall);
 
             mMetrics.writeOnImsCallStart(mPhone.getPhoneId(),
