@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81975edb_d3b129b3",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2275,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-09-17T23:18:13Z",
+      "side": 1,
+      "message": "Remove references to unisoc",
+      "range": {
+        "startLine": 2275,
+        "startChar": 22,
+        "endLine": 2275,
+        "endChar": 28
+      },
+      "revId": "a03a6f532e9a0f9b34cb21d1c597a8f07327c0b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
