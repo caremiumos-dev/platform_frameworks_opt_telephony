@@ -369,6 +369,18 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
     }
 
     @Override
+    public void notifyOutgoingEmergencyCall(int phoneId, int subId,
+        EmergencyNumber emergencyNumber) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void notifyOutgoingEmergencySms(int phoneId, int subId,
+        EmergencyNumber emergencyNumber) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
     public void notifyCallQualityChanged(CallQuality callQuality, int phoneId, int subId,
             int callNetworkType) {
         throw new RuntimeException("Not implemented");
