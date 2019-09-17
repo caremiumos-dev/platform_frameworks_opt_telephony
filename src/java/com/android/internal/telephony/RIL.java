@@ -1008,6 +1008,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 handleRadioProxyExceptionForRR(rr, "dial", e);
             }
         }
+        if (isEmergencyCall) {
+            // Notify the ongoing placed emergency number to listeners.
+            PhoneFactory.getPhone(mPhoneId).notifyOutgoingEmergencyCall(emergencyNumberInfo);
+        }
     }
 
     private void emergencyDial(String address, EmergencyNumber emergencyNumberInfo,

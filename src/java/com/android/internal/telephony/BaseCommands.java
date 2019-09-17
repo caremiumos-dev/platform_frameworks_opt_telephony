@@ -100,6 +100,8 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mPhysicalChannelConfigurationRegistrants = new RegistrantList();
     protected RegistrantList mLceInfoRegistrants = new RegistrantList();
     protected RegistrantList mEmergencyNumberListRegistrants = new RegistrantList();
+    protected RegistrantList mOutgoingEmergencyCallRegistrants = new RegistrantList();
+    protected RegistrantList mOutgoingEmergencySmsRegistrants = new RegistrantList();
 
     @UnsupportedAppUsage
     protected Registrant mGsmSmsRegistrant;
@@ -835,6 +837,28 @@ public abstract class BaseCommands implements CommandsInterface {
     @Override
     public void unregisterForEmergencyNumberList(Handler h) {
         mEmergencyNumberListRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForOutgoingEmergencyCall(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mOutgoingEmergencyCallRegistrants.add(r);
+    }
+
+    @Override
+    public void unregisterForOutgoingEmergencyCall(Handler h) {
+        mOutgoingEmergencyCallRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForOutgoingEmergencySms(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mOutgoingEmergencySmsRegistrants.add(r);
+    }
+
+    @Override
+    public void unregisterForOutgoingEmergencySms(Handler h) {
+        mOutgoingEmergencySmsRegistrants.remove(h);
     }
 
     //***** Protected Methods
