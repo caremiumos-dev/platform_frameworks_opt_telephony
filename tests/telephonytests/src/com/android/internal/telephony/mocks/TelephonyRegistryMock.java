@@ -30,6 +30,7 @@ import android.telephony.PhysicalChannelConfig;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
+import android.telephony.emergency.EmergencyNumber;
 import android.telephony.ims.ImsReasonInfo;
 
 import com.android.internal.telephony.IOnSubscriptionsChangedListener;
@@ -365,6 +366,18 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
     @Override
     public void notifyEmergencyNumberList(int phoneId, int subId) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void notifyOutgoingEmergencyCall(int phoneId, int subId,
+            EmergencyNumber emergencyNumber) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void notifyOutgoingEmergencySms(int phoneId, int subId,
+            EmergencyNumber emergencyNumber) {
         throw new RuntimeException("Not implemented");
     }
 
