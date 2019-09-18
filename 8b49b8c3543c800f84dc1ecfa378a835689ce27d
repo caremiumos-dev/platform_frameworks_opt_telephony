@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea5c63cd_8c4822e8",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-09-18T00:09:53Z",
+      "side": 1,
+      "message": "This is only set when the user changes it, so the previous CLIR_KEY + phoneId mappings will still exist and be potentiall misread as CLIR settings for sub 0 and sub 1.\n\nFor example, if Phone 0 has sub 3 installed and Phone 1 has sub 0 installed, suddenly the clir settings will be loaded for sub 0 (old phone 0 setting), instead of sub 3.\n\nYou may need to introduce a migration step as well that will move the shared prefs from phone -\u003e sub or change the CLIR_KEY to clir_sub_key, removing the previous setting.",
+      "range": {
+        "startLine": 1506,
+        "startChar": 15,
+        "endLine": 1506,
+        "endChar": 21
+      },
+      "revId": "8b49b8c3543c800f84dc1ecfa378a835689ce27d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
