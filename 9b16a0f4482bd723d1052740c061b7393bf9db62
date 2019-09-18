@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e77f862_d7db8eb1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-09-18T00:21:33Z",
+      "side": 1,
+      "message": "Is it okay if we are registered for IMS only for non-voice calling features, such as SMS over IMS only?",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "9b16a0f4482bd723d1052740c061b7393bf9db62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efe13c25_71a47fa4",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaPhoneTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-09-18T00:21:33Z",
+      "side": 1,
+      "message": "mSST.mSS.getRoaming() is currently false here and ims is not registered, shouldnt this be voiceMailNumber?",
+      "range": {
+        "startLine": 443,
+        "startChar": 21,
+        "endLine": 443,
+        "endChar": 64
+      },
+      "revId": "9b16a0f4482bd723d1052740c061b7393bf9db62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
