@@ -17,9 +17,10 @@ package com.android.internal.telephony.util;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
-import android.os.SystemProperties;
 import android.content.pm.ComponentInfo;
 import android.content.pm.ResolveInfo;
+import android.os.RemoteException;
+import android.os.SystemProperties;
 
 /**
  * This class provides various util functions
@@ -40,5 +41,10 @@ public final class TelephonyUtils {
         if (resolveInfo.serviceInfo != null) return resolveInfo.serviceInfo;
         if (resolveInfo.providerInfo != null) return resolveInfo.providerInfo;
         throw new IllegalStateException("Missing ComponentInfo!");
+    }
+
+    /** {@hide} */
+    public static RuntimeException rethrowAsRuntimeException(RemoteException remoteException) {
+        throw new RuntimeException(remoteException);
     }
   }
