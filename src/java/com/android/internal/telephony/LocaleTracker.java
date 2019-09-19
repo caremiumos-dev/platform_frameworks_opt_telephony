@@ -411,10 +411,15 @@ public class LocaleTracker extends Handler {
         // If MCC is available from network service state, use it first.
         String mcc = null;
         String countryIso = getCarrierCountry();
+        boolean isBogusMcc = false;
+
         if (!TextUtils.isEmpty(mOperatorNumeric)) {
             try {
                 mcc = mOperatorNumeric.substring(0, 3);
                 countryIso = MccTable.countryCodeForMcc(mcc);
+                if (!TextUtils.isEmpty(mcc) && TextUtils.isEmpty(countryIso)) {
+                    isBogusMcc = true;
+                }
             } catch (StringIndexOutOfBoundsException ex) {
                 loge("updateLocale: Can't get country from operator numeric. mcc = "
                         + mcc + ". ex=" + ex);
@@ -428,7 +433,8 @@ public class LocaleTracker extends Handler {
             countryIso = MccTable.countryCodeForMcc(mcc);
         }
 
-        log("updateLocale: mcc = " + mcc + ", country = " + countryIso);
+        log("updateLocale: mcc = " + mcc + ", country = " + countryIso
+                + ", isBogusMcc = " + isBogusMcc);
         boolean countryChanged = false;
         if (!Objects.equals(countryIso, mCurrentCountryIso)) {
             String msg = "updateLocale: Change the current country to \"" + countryIso
@@ -448,7 +454,8 @@ public class LocaleTracker extends Handler {
             countryChanged = true;
         }
 
-        if (TextUtils.isEmpty(countryIso)) {
+        // For bogus mcc, the countryIso is always empty, it should be marked as available.
+        if (TextUtils.isEmpty(countryIso) && !isBogusMcc) {
             mNitzStateMachine.handleNetworkCountryCodeUnavailable();
         } else {
             mNitzStateMachine.handleNetworkCountryCodeSet(countryChanged);
