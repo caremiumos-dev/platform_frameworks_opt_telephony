@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac4c1dc_453ff47d",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-09-19T19:48:12Z",
+      "side": 1,
+      "message": "If i am reading this correctly, this is going to call notifyRedialConnectionChanged on the ImsPhone, not the GsmCdmaPhone where the event is being registered in TelephonyConnection. Should this be calling notifyRedialConnectionChanged directly?",
+      "range": {
+        "startLine": 724,
+        "startChar": 28,
+        "endLine": 724,
+        "endChar": 37
+      },
+      "revId": "8548e0a57db13c75fb4609f8b34f5177465ff122",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
