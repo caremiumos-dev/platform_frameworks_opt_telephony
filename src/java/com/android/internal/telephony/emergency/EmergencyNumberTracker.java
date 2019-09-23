@@ -150,29 +150,26 @@ public class EmergencyNumberTracker extends Handler {
     public EmergencyNumberTracker(Phone phone, CommandsInterface ci) {
         mPhone = phone;
         mCi = ci;
-        if (mPhone != null) {
-            CarrierConfigManager configMgr = (CarrierConfigManager)
-                    mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
-            if (configMgr != null) {
-                PersistableBundle b = configMgr.getConfigForSubId(mPhone.getSubId());
-                if (b != null) {
-                    mEmergencyNumberPrefix = b.getStringArray(
-                            CarrierConfigManager.KEY_EMERGENCY_NUMBER_PREFIX_STRING_ARRAY);
-                }
-            } else {
-                loge("CarrierConfigManager is null.");
+
+        CarrierConfigManager configMgr = (CarrierConfigManager)
+                mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configMgr != null) {
+            PersistableBundle b = configMgr.getConfigForSubId(mPhone.getSubId());
+            if (b != null) {
+                mEmergencyNumberPrefix = b.getStringArray(
+                        CarrierConfigManager.KEY_EMERGENCY_NUMBER_PREFIX_STRING_ARRAY);
             }
-
-            // Receive Carrier Config Changes
-            IntentFilter filter = new IntentFilter(
-                    CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
-            // Receive Telephony Network Country Changes
-            filter.addAction(TelephonyManager.ACTION_NETWORK_COUNTRY_CHANGED);
-
-            mPhone.getContext().registerReceiver(mIntentReceiver, filter);
         } else {
-            loge("mPhone is null.");
+            loge("CarrierConfigManager is null.");
         }
+
+        // Receive Carrier Config Changes
+        IntentFilter filter = new IntentFilter(
+                CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        // Receive Telephony Network Country Changes
+        filter.addAction(TelephonyManager.ACTION_NETWORK_COUNTRY_CHANGED);
+
+        mPhone.getContext().registerReceiver(mIntentReceiver, filter);
 
         initializeDatabaseEmergencyNumberList();
         mCi.registerForEmergencyNumberList(this, EVENT_UNSOL_EMERGENCY_NUMBER_LIST, null);
