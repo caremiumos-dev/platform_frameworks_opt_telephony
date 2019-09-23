@@ -108,6 +108,8 @@ import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.util.NotificationChannelController;
+import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
+import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.IndentingPrintWriter;
 
@@ -4520,6 +4522,9 @@ public class ServiceStateTracker extends Handler {
                         mPhone.mCT.mBackgroundCall.hangupIfAlive();
                         mPhone.mCT.mForegroundCall.hangupIfAlive();
                     }
+                    // hang up all ims call
+                    hangupImsCall();
+
                     for (int transport : mTransportManager.getAvailableTransports()) {
                         if (mPhone.getDcTracker(transport) != null) {
                             mPhone.getDcTracker(transport).cleanUpAllConnections(
@@ -4548,6 +4553,18 @@ public class ServiceStateTracker extends Handler {
                         mPendingRadioPowerOffAfterDataOff = false;
                     }
                 }
+            }
+        }
+    }
+
+    private void hangupImsCall() {
+        ImsPhone imsPhone = (ImsPhone)(mPhone.getImsPhone());
+        if(imsPhone != null){
+            log("hang up ims call");
+            if (imsPhone.isInCall()) {
+                ((ImsPhoneCallTracker)(imsPhone.getCallTracker())).mRingingCall.hangupIfAlive();
+                ((ImsPhoneCallTracker)(imsPhone.getCallTracker())).mBackgroundCall.hangupIfAlive();
+                ((ImsPhoneCallTracker)(imsPhone.getCallTracker())).mForegroundCall.hangupIfAlive();
             }
         }
     }
@@ -4723,7 +4740,8 @@ public class ServiceStateTracker extends Handler {
             mPhone.mCT.mBackgroundCall.hangupIfAlive();
             mPhone.mCT.mForegroundCall.hangupIfAlive();
         }
-
+        // hang up all ims call
+        hangupImsCall();
         mCi.setRadioPower(false, obtainMessage(EVENT_RADIO_POWER_OFF_DONE));
 
     }

@@ -673,7 +673,7 @@ public class ImsPhone extends ImsPhoneBase {
         return result;
     }
 
-    boolean isInCall() {
+    public boolean isInCall() {
         ImsPhoneCall.State foregroundCallState = getForegroundCall().getState();
         ImsPhoneCall.State backgroundCallState = getBackgroundCall().getState();
         ImsPhoneCall.State ringingCallState = getRingingCall().getState();
