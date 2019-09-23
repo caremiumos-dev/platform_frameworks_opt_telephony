@@ -405,9 +405,16 @@ public class CatService extends Handler implements AppInterface {
             case DISPLAY_TEXT:
                 break;
             case SET_UP_IDLE_MODE_TEXT:
-                resultCode = cmdParams.mLoadIconFailed ? ResultCode.PRFRMD_ICON_NOT_DISPLAYED
-                                                                            : ResultCode.OK;
-                sendTerminalResponse(cmdParams.mCmdDet,resultCode, false, 0, null);
+                if(((DisplayTextParams)cmdParams).mTextMsg.icon != null
+                        && ((DisplayTextParams)cmdParams).mTextMsg.iconSelfExplanatory == false
+                        && ((DisplayTextParams)cmdParams).mTextMsg.text == null){
+                    sendTerminalResponse(cmdParams.mCmdDet, ResultCode.CMD_DATA_NOT_UNDERSTOOD, false,0, null);
+                    return;
+                } else {
+                    resultCode = cmdParams.mLoadIconFailed ? ResultCode.PRFRMD_ICON_NOT_DISPLAYED
+                            : ResultCode.OK;
+                    sendTerminalResponse(cmdParams.mCmdDet, resultCode, false,0, null);
+                }
                 break;
             case SET_UP_EVENT_LIST:
                 if (isSupportedSetupEventCommand(cmdMsg)) {
