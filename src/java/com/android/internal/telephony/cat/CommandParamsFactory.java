@@ -619,7 +619,15 @@ class CommandParamsFactory extends Handler {
         while (true) {
             ctlv = searchForNextTag(ComprehensionTlvTag.ITEM, iter);
             if (ctlv != null) {
-                menu.items.add(ValueParser.retrieveItem(ctlv));
+                // Don't to add the NULL item to menu for SELECT_ITEM only
+                if (cmdType == AppInterface.CommandType.SELECT_ITEM) {
+                    Item item = ValueParser.retrieveItem(ctlv);
+                    if (item != null) {
+                        menu.items.add(item);
+                    }
+                } else {
+                    menu.items.add(ValueParser.retrieveItem(ctlv));
+                }
             } else {
                 break;
             }
