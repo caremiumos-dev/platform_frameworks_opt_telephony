@@ -559,6 +559,7 @@ public class CatService extends Handler implements AppInterface {
 
         mCurrntCmd = mMenuCmd;
         Intent intent = new Intent(AppInterface.CAT_SESSION_END_ACTION);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         intent.putExtra("SLOT_ID", mSlotId);
         intent.setComponent(AppInterface.getDefaultSTKApplication());
         mContext.sendBroadcast(intent, AppInterface.STK_PERMISSION);
