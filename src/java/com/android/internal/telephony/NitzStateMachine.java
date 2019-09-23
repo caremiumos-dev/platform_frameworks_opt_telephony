@@ -118,6 +118,11 @@ public interface NitzStateMachine {
          * Returns the same value as {@link SystemClock#elapsedRealtime()}.
          */
         long elapsedRealtime();
+
+        /**
+         * Returns the same value as {@link System#currentTimeMillis()}.
+         */
+        long currentTimeMillis();
     }
 
     /**
@@ -174,6 +179,11 @@ public interface NitzStateMachine {
         @Override
         public long elapsedRealtime() {
             return SystemClock.elapsedRealtime();
+        }
+
+        @Override
+        public long currentTimeMillis() {
+            return System.currentTimeMillis();
         }
     }
 }
