@@ -428,9 +428,15 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         if (mSavedTimeZoneId != null) {
             setAndBroadcastNetworkSetTimeZone(mSavedTimeZoneId, logMsg);
         } else {
-            if (DBG) {
-                logMsg += " [Not setting device time zone]";
-                Rlog.d(LOG_TAG, logMsg);
+            String iso = mDeviceState.getNetworkCountryIsoForPhone();
+            if (!TextUtils.isEmpty(iso)) {
+                updateTimeZoneFromNetworkCountryCode(iso);
+            } else {
+                if (DBG) {
+                    logMsg += " [Not setting device time zone]";
+                    Rlog.d(LOG_TAG, logMsg);
+
+                }
             }
         }
     }
