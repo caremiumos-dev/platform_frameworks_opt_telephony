@@ -1778,8 +1778,15 @@ public class ServiceStateTracker extends Handler {
 
             if (err == CommandException.Error.RADIO_NOT_AVAILABLE) {
                 // Radio has crashed or turned off
-                cancelPollState();
-                return;
+                loge("handlePollStateResult exception " + err);
+                if (mCi.getRadioState() == TelephonyManager.RADIO_POWER_OFF
+                        && mSS.getState() != ServiceState.STATE_POWER_OFF) {
+                    loge("If radioState is off but service State not off, not return instead of notify servce state changed");
+                } else {
+                    loge("cancelPollState and return ");
+                    cancelPollState();
+                    return;
+                }
             }
 
             if (err != CommandException.Error.OP_NOT_ALLOWED_BEFORE_REG_NW) {
