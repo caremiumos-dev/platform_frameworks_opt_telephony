@@ -2007,6 +2007,9 @@ public class ServiceStateTracker extends Handler {
                 NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WLAN);
         NetworkRegistrationInfo wwanPsRegState = serviceState.getNetworkRegistrationInfo(
                 NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        //Whether skip IWLAN APN check before combine IWLAN state.
+        boolean skipIwlanApnCheck = mPhone.getContext().getResources()
+                .getBoolean(com.android.internal.R.bool.config_skipApnCheckBeforeCombineWlanState);
 
         // Check if any APN is preferred on IWLAN.
         boolean isIwlanPreferred = mTransportManager.isAnyApnPreferredOnIwlan();
@@ -2016,7 +2019,7 @@ public class ServiceStateTracker extends Handler {
                 == TelephonyManager.NETWORK_TYPE_IWLAN
                 && wlanPsRegState.getRegistrationState()
                 == NetworkRegistrationInfo.REGISTRATION_STATE_HOME
-                && isIwlanPreferred) {
+                && (isIwlanPreferred || skipIwlanApnCheck)) {
             serviceState.setDataRegState(ServiceState.STATE_IN_SERVICE);
         } else if (wwanPsRegState != null) {
             // If the device is not camped on IWLAN, then we use cellular PS registration state
