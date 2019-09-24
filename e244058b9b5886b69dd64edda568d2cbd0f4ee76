@@ -22,6 +22,30 @@
       "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9d445c3_8d01d57e",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-09-24T06:10:34Z",
+      "side": 1,
+      "message": "Non-default app with SEND_SMS can be allowed to set SMSC address since checkCallingOrSelfCanSendSms() checks SEND_SMS permission only. Is it expected operation?\n\nCL:1044011\ntelephony/java/android/telephony/SmsManager.java:\nLine 3040:\nDefault SMS app or apps with READ_PRIVILEGED_PHONE_STATE (so system apps can do this).\nAnd MODIFY_PHONE_STATE for the set api.",
+      "parentUuid": "f2058023_4b6da4bc",
+      "range": {
+        "startLine": 587,
+        "startChar": 8,
+        "endLine": 590,
+        "endChar": 8
+      },
+      "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
