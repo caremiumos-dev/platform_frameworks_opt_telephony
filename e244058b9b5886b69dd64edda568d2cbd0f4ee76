@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2058023_4b6da4bc",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-09-24T05:40:20Z",
+      "side": 1,
+      "message": "The general convention here is that permissions check are done in IccSmsInterfaceManager.\n\nFor default app check, you can use SmsPermissions.checkCallingOrSelfCanSendSms(). Or even better add a helper function in SmsPermissions for the check that is required here.",
+      "range": {
+        "startLine": 587,
+        "startChar": 8,
+        "endLine": 590,
+        "endChar": 8
+      },
+      "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
