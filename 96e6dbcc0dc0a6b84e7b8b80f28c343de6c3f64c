@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db51e04c_4c04c28d",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2019-09-24T18:40:27Z",
+      "side": 1,
+      "message": "getDefault is deprecated? Using it might not be the future direction.",
+      "range": {
+        "startLine": 151,
+        "startChar": 49,
+        "endLine": 151,
+        "endChar": 59
+      },
+      "revId": "96e6dbcc0dc0a6b84e7b8b80f28c343de6c3f64c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
