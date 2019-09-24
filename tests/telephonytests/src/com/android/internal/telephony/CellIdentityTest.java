@@ -19,7 +19,9 @@ package com.android.internal.telephony;
 import android.os.Parcel;
 import android.telephony.CellIdentity;
 import android.telephony.CellIdentityCdma;
+import android.telephony.CellIdentityGsm;
 import android.telephony.CellIdentityLte;
+import android.telephony.CellInfo;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -51,6 +53,29 @@ public class CellIdentityTest extends AndroidTestCase {
     private static final int LONGITUDE = 2592000;
     // Latitude ranges from -1296000 to 1296000.
     private static final int LATITUDE = 1296000;
+
+    public void testConstructCellIdentityGsm() {
+        // Test values below zero (these must all be non-negative)
+        CellIdentityGsm gsm = new CellIdentityGsm(-1, -1, -1, -1, null, null, null, null);
+        assertEquals(CellInfo.UNAVAILABLE, gsm.getLac());
+        assertEquals(CellInfo.UNAVAILABLE, gsm.getCid());
+        assertEquals(CellInfo.UNAVAILABLE, gsm.getArfcn());
+        assertEquals(CellInfo.UNAVAILABLE, gsm.getBsic());
+
+        // Test max values of LAC, CID, ARFCN, and BSIC
+        gsm = new CellIdentityGsm(65535, 65535, 65535, 63, null, null, null, null);
+        assertEquals(65535, gsm.getLac());
+        assertEquals(65535, gsm.getCid());
+        assertEquals(65535, gsm.getArfcn());
+        assertEquals(63, gsm.getBsic());
+
+        // Test max values + 1 of LAC, CID, ARFCN, and BSIC
+        gsm = new CellIdentityGsm(65536, 65536, 65536, 64, null, null, null, null);
+        assertEquals(CellInfo.UNAVAILABLE, gsm.getLac());
+        assertEquals(CellInfo.UNAVAILABLE, gsm.getCid());
+        assertEquals(CellInfo.UNAVAILABLE, gsm.getArfcn());
+        assertEquals(CellInfo.UNAVAILABLE, gsm.getBsic());
+    }
 
     @SmallTest
     public void testEquals() {
