@@ -22,6 +22,30 @@
       "revId": "96e6dbcc0dc0a6b84e7b8b80f28c343de6c3f64c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34e71533_7a117b35",
+        "filename": "src/java/com/android/internal/telephony/PhoneFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-09-24T18:55:44Z",
+      "side": 1,
+      "message": "Right, it isn\u0027t. But we need to check if the issues reported on the b/141396302 are all related to phone count. Using this API makes sure that phone count will never be 0.\n\nFuture direction should be to use correct TelephonyManager version and also make sure that all code is ok if phone array is empty (default phone is null).",
+      "parentUuid": "db51e04c_4c04c28d",
+      "range": {
+        "startLine": 151,
+        "startChar": 49,
+        "endLine": 151,
+        "endChar": 59
+      },
+      "revId": "96e6dbcc0dc0a6b84e7b8b80f28c343de6c3f64c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
