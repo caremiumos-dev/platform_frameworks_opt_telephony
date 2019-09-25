@@ -70,6 +70,30 @@
       "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15021baa_011309df",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-09-25T07:12:39Z",
+      "side": 1,
+      "message": "Thank you. \nBtw, Although I changed default messaging app in the settings, it looks like that noteOp() allows non-default(previous default) app to do it. I will check it further.",
+      "parentUuid": "16dfc5c1_75e95d17",
+      "range": {
+        "startLine": 587,
+        "startChar": 8,
+        "endLine": 590,
+        "endChar": 8
+      },
+      "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
