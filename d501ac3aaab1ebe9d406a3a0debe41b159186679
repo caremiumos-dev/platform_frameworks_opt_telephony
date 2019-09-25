@@ -70,6 +70,30 @@
       "revId": "d501ac3aaab1ebe9d406a3a0debe41b159186679",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a32e2fc9_190dd894",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-09-25T00:01:04Z",
+      "side": 1,
+      "message": "Reverted other change, after talking to Hall + Tyler, I have used LocalLog with a buffer of 100 events, more complicated logging has the potential to introduce bugs.",
+      "parentUuid": "78c54ef9_f5a1be5d",
+      "range": {
+        "startLine": 529,
+        "startChar": 54,
+        "endLine": 529,
+        "endChar": 59
+      },
+      "revId": "d501ac3aaab1ebe9d406a3a0debe41b159186679",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
