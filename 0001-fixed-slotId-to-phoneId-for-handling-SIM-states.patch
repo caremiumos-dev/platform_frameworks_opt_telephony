@@ -1,0 +1,336 @@
+From 691c534afc2063d4501773dc83d888403193763f Mon Sep 17 00:00:00 2001
+From: Yunjin Kim <yunzhen.kim@samsung.com>
+Date: Wed, 25 Sep 2019 18:13:41 +0900
+Subject: [PATCH] fixed slotId to phoneId for handling SIM states.
+
+When calling updateInternalIccState, UiccController puts phoneId as parameter, but this
+api in SubscriptionInfoUpdater gets it as slotId. It will cause confusion to people who
+uses this sim information. So, I fixed this part for related funtions.
+
+Change-Id: I4266b67672b5f9b96da49ac3f8fc65a74ecc8925
+Signed-off-by: Yunjin Kim <yunzhen.kim@samsung.com>
+---
+ .../internal/telephony/IntentBroadcaster.java |   6 +-
+ .../telephony/SubscriptionInfoUpdater.java    | 168 +++++++++---------
+ 2 files changed, 91 insertions(+), 83 deletions(-)
+
+diff --git a/src/java/com/android/internal/telephony/IntentBroadcaster.java b/src/java/com/android/internal/telephony/IntentBroadcaster.java
+index 75288193d..e211c24be 100644
+--- a/src/java/com/android/internal/telephony/IntentBroadcaster.java
++++ b/src/java/com/android/internal/telephony/IntentBroadcaster.java
+@@ -86,13 +86,13 @@ public class IntentBroadcaster {
+      * Wrapper for ActivityManager.broadcastStickyIntent() that also stores intent to be rebroadcast
+      * on USER_UNLOCKED
+      */
+-    public void broadcastStickyIntent(Intent intent, int slotId) {
++    public void broadcastStickyIntent(Intent intent, int phoneId) {
+         logd("Broadcasting and adding intent for rebroadcast: " + intent.getAction() + " "
+                 + intent.getStringExtra(IccCardConstants.INTENT_KEY_ICC_STATE)
+-                + " for slotId " + slotId);
++                + " for phoneId " + phoneId);
+         synchronized (mRebroadcastIntents) {
+             ActivityManager.broadcastStickyIntent(intent, UserHandle.USER_ALL);
+-            mRebroadcastIntents.put(slotId, intent);
++            mRebroadcastIntents.put(phoneId, intent);
+         }
+     }
+ 
+diff --git a/src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java b/src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java
+index 1eaddfb2e..230c35ac6 100644
+--- a/src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java
++++ b/src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java
+@@ -193,13 +193,13 @@ public class SubscriptionInfoUpdater extends Handler {
+     /**
+      * Update subscriptions when given a new ICC state.
+      */
+-    public void updateInternalIccState(String simStatus, String reason, int slotId,
++    public void updateInternalIccState(String simStatus, String reason, int phoneId,
+             boolean absentAndInactive) {
+         logd("updateInternalIccState to simStatus " + simStatus + " reason " + reason
+-                + " slotId " + slotId);
++                + " phoneId " + phoneId);
+         int message = internalIccStateToMessage(simStatus);
+         if (message != EVENT_INVALID) {
+-            sendMessage(obtainMessage(message, slotId, absentAndInactive ? 1 : 0, reason));
++            sendMessage(obtainMessage(message, phoneId, absentAndInactive ? 1 : 0, reason));
+         }
+     }
+ 
+@@ -353,15 +353,15 @@ public class SubscriptionInfoUpdater extends Handler {
+                 EVENT_REFRESH_EMBEDDED_SUBSCRIPTIONS, cardId, 0 /* arg2 */, callback));
+     }
+ 
+-    private void handleSimLocked(int slotId, String reason) {
+-        if (mIccId[slotId] != null && mIccId[slotId].equals(ICCID_STRING_FOR_NO_SIM)) {
+-            logd("SIM" + (slotId + 1) + " hot plug in");
+-            mIccId[slotId] = null;
++    private void handleSimLocked(int phoneId, String reason) {
++        if (mIccId[phoneId] != null && mIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
++            logd("SIM" + (phoneId + 1) + " hot plug in");
++            mIccId[phoneId] = null;
+         }
+ 
+-        String iccId = mIccId[slotId];
++        String iccId = mIccId[phoneId];
+         if (iccId == null) {
+-            IccCard iccCard = mPhone[slotId].getIccCard();
++            IccCard iccCard = mPhone[phoneId].getIccCard();
+             if (iccCard == null) {
+                 logd("handleSimLocked: IccCard null");
+                 return;
+@@ -375,18 +375,18 @@ public class SubscriptionInfoUpdater extends Handler {
+                 logd("handleSimLocked: IccID null");
+                 return;
+             }
+-            mIccId[slotId] = IccUtils.stripTrailingFs(records.getFullIccId());
++            mIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
+         } else {
+-            logd("NOT Querying IccId its already set sIccid[" + slotId + "]=" + iccId);
++            logd("NOT Querying IccId its already set sIccid[" + phoneId + "]=" + iccId);
+         }
+ 
+-        updateSubscriptionInfoByIccId(slotId, true /* updateEmbeddedSubs */);
++        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+ 
+-        broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_LOCKED, reason);
+-        broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_PRESENT);
+-        broadcastSimApplicationStateChanged(slotId, getSimStateFromLockedReason(reason));
+-        updateSubscriptionCarrierId(slotId, IccCardConstants.INTENT_VALUE_ICC_LOCKED);
+-        updateCarrierServices(slotId, IccCardConstants.INTENT_VALUE_ICC_LOCKED);
++        broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_LOCKED, reason);
++        broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
++        broadcastSimApplicationStateChanged(phoneId, getSimStateFromLockedReason(reason));
++        updateSubscriptionCarrierId(phoneId, IccCardConstants.INTENT_VALUE_ICC_LOCKED);
++        updateCarrierServices(phoneId, IccCardConstants.INTENT_VALUE_ICC_LOCKED);
+     }
+ 
+     private static int getSimStateFromLockedReason(String lockedReason) {
+@@ -405,32 +405,32 @@ public class SubscriptionInfoUpdater extends Handler {
+         }
+     }
+ 
+-    private void handleSimNotReady(int slotId) {
+-        logd("handleSimNotReady: slotId: " + slotId);
++    private void handleSimNotReady(int phoneId) {
++        logd("handleSimNotReady: phoneId: " + phoneId);
+ 
+-        IccCard iccCard = mPhone[slotId].getIccCard();
++        IccCard iccCard = mPhone[phoneId].getIccCard();
+         if (iccCard.isEmptyProfile()) {
+             // ICC_NOT_READY is a terminal state for an eSIM on the boot profile. At this
+             // phase, the subscription list is accessible. Treating NOT_READY
+             // as equivalent to ABSENT, once the rest of the system can handle it.
+-            mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
+-            updateSubscriptionInfoByIccId(slotId, false /* updateEmbeddedSubs */);
++            mIccId[phoneId] = ICCID_STRING_FOR_NO_SIM;
++            updateSubscriptionInfoByIccId(phoneId, false /* updateEmbeddedSubs */);
+         }
+ 
+-        broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_NOT_READY,
++        broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_NOT_READY,
+                 null);
+-        broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_PRESENT);
+-        broadcastSimApplicationStateChanged(slotId, TelephonyManager.SIM_STATE_NOT_READY);
++        broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
++        broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_NOT_READY);
+     }
+ 
+-    private void handleSimLoaded(int slotId) {
+-        logd("handleSimLoaded: slotId: " + slotId);
++    private void handleSimLoaded(int phoneId) {
++        logd("handleSimLoaded: phoneId: " + phoneId);
+ 
+         // The SIM should be loaded at this state, but it is possible in cases such as SIM being
+         // removed or a refresh RESET that the IccRecords could be null. The right behavior is to
+         // not broadcast the SIM loaded.
+-        int loadedSlotId = slotId;
+-        IccCard iccCard = mPhone[slotId].getIccCard();
++        int loadedPhoneId = phoneId;
++        IccCard iccCard = mPhone[phoneId].getIccCard();
+         if (iccCard == null) {  // Possibly a race condition.
+             logd("handleSimLoaded: IccCard null");
+             return;
+@@ -444,13 +444,14 @@ public class SubscriptionInfoUpdater extends Handler {
+             logd("handleSimLoaded: IccID null");
+             return;
+         }
+-        mIccId[slotId] = IccUtils.stripTrailingFs(records.getFullIccId());
++        mIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
+ 
+-        updateSubscriptionInfoByIccId(slotId, true /* updateEmbeddedSubs */);
++        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
++        int slotId = UiccController.getInstance().getSlotIdFromPhoneId(phoneId);
+         List<SubscriptionInfo> subscriptionInfos = SubscriptionController.getInstance()
+                 .getSubInfoUsingSlotIndexPrivileged(slotId);
+         if (subscriptionInfos == null || subscriptionInfos.isEmpty()) {
+-            loge("empty subinfo for slotId: " + slotId + "could not update ContentResolver");
++            loge("empty subinfo for YJ slotId: " + slotId + "could not update ContentResolver");
+         } else {
+             for (SubscriptionInfo sub : subscriptionInfos) {
+                 int subId = sub.getSubscriptionId();
+@@ -549,80 +550,87 @@ public class SubscriptionInfoUpdater extends Handler {
+          *  3. ACTION_SUBSCRIPTION_CARRIER_IDENTITY_CHANGED
+          *  4. ACTION_CARRIER_CONFIG_CHANGED
+          */
+-        broadcastSimStateChanged(loadedSlotId, IccCardConstants.INTENT_VALUE_ICC_LOADED, null);
+-        broadcastSimCardStateChanged(loadedSlotId, TelephonyManager.SIM_STATE_PRESENT);
+-        broadcastSimApplicationStateChanged(loadedSlotId, TelephonyManager.SIM_STATE_LOADED);
+-        updateSubscriptionCarrierId(loadedSlotId, IccCardConstants.INTENT_VALUE_ICC_LOADED);
+-        updateCarrierServices(loadedSlotId, IccCardConstants.INTENT_VALUE_ICC_LOADED);
++        broadcastSimStateChanged(loadedPhoneId, IccCardConstants.INTENT_VALUE_ICC_LOADED, null);
++        broadcastSimCardStateChanged(loadedPhoneId, TelephonyManager.SIM_STATE_PRESENT);
++        broadcastSimApplicationStateChanged(loadedPhoneId, TelephonyManager.SIM_STATE_LOADED);
++        updateSubscriptionCarrierId(loadedPhoneId, IccCardConstants.INTENT_VALUE_ICC_LOADED);
++        updateCarrierServices(loadedPhoneId, IccCardConstants.INTENT_VALUE_ICC_LOADED);
+     }
+ 
+-    private void updateCarrierServices(int slotId, String simState) {
++    private void updateCarrierServices(int phoneId, String simState) {
+         CarrierConfigManager configManager =
+                 (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+-        configManager.updateConfigForPhoneId(slotId, simState);
+-        mCarrierServiceBindHelper.updateForPhoneId(slotId, simState);
++        configManager.updateConfigForPhoneId(phoneId, simState);
++        mCarrierServiceBindHelper.updateForPhoneId(phoneId, simState);
+     }
+ 
+-    private void updateSubscriptionCarrierId(int slotId, String simState) {
+-        if (mPhone != null && mPhone[slotId] != null) {
+-            mPhone[slotId].resolveSubscriptionCarrierId(simState);
++    private void updateSubscriptionCarrierId(int phoneId, String simState) {
++        if (mPhone != null && mPhone[phoneId] != null) {
++            mPhone[phoneId].resolveSubscriptionCarrierId(simState);
+         }
+     }
+ 
+-    private void handleSimAbsent(int slotId, int absentAndInactive) {
+-        if (mIccId[slotId] != null && !mIccId[slotId].equals(ICCID_STRING_FOR_NO_SIM)) {
+-            logd("SIM" + (slotId + 1) + " hot plug out, absentAndInactive=" + absentAndInactive);
++    private void handleSimAbsent(int phoneId, int absentAndInactive) {
++        if (mIccId[phoneId] != null && !mIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
++            logd("SIM" + (phoneId + 1) + " hot plug out, absentAndInactive=" + absentAndInactive);
+         }
+-        mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
+-        updateSubscriptionInfoByIccId(slotId, true /* updateEmbeddedSubs */);
++        mIccId[phoneId] = ICCID_STRING_FOR_NO_SIM;
++
++
++        sIsSubInfoInitialized = false;
++        MultiSimSettingController.getInstance().SubscriptionLoadedProcessingInit();
++
++        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
++
+         // Do not broadcast if the SIM is absent and inactive, because the logical slotId here is
+         // no longer correct
+         if (absentAndInactive == 0) {
+-            broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_ABSENT, null);
+-            broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_ABSENT);
+-            broadcastSimApplicationStateChanged(slotId, TelephonyManager.SIM_STATE_UNKNOWN);
+-            updateSubscriptionCarrierId(slotId, IccCardConstants.INTENT_VALUE_ICC_ABSENT);
+-            updateCarrierServices(slotId, IccCardConstants.INTENT_VALUE_ICC_ABSENT);
+-        }
++            broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_ABSENT, null);
++            broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_ABSENT);
++            broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_UNKNOWN);
++            updateSubscriptionCarrierId(phoneId, IccCardConstants.INTENT_VALUE_ICC_ABSENT);
++            updateCarrierServices(phoneId, IccCardConstants.INTENT_VALUE_ICC_ABSENT);
++         }
+     }
+ 
+-    private void handleSimError(int slotId) {
+-        if (mIccId[slotId] != null && !mIccId[slotId].equals(ICCID_STRING_FOR_NO_SIM)) {
+-            logd("SIM" + (slotId + 1) + " Error ");
++    private void handleSimError(int phoneId) {
++        if (mIccId[phoneId] != null && !mIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
++            logd("SIM" + (phoneId + 1) + " Error ");
+         }
+-        mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
+-        updateSubscriptionInfoByIccId(slotId, true /* updateEmbeddedSubs */);
+-        broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR,
++        mIccId[phoneId] = ICCID_STRING_FOR_NO_SIM;
++        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
++        broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR,
+                 IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
+-        broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_CARD_IO_ERROR);
+-        broadcastSimApplicationStateChanged(slotId, TelephonyManager.SIM_STATE_NOT_READY);
+-        updateSubscriptionCarrierId(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
+-        updateCarrierServices(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
++        broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_CARD_IO_ERROR);
++        broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_NOT_READY);
++        updateSubscriptionCarrierId(phoneId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
++        updateCarrierServices(phoneId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
+     }
+ 
+-    private synchronized void updateSubscriptionInfoByIccId(int slotIndex,
++    private synchronized void updateSubscriptionInfoByIccId(int phoneId,
+             boolean updateEmbeddedSubs) {
+-        logd("updateSubscriptionInfoByIccId:+ Start");
+-        if (!SubscriptionManager.isValidSlotIndex(slotIndex)) {
+-            loge("[updateSubscriptionInfoByIccId]- invalid slotIndex=" + slotIndex);
++        logd("updateSubscriptionInfoByIccId:+ Start - phoneId:" + phoneId);
++        int slotId = UiccController.getInstance().getSlotIdFromPhoneId(phoneId);
++        if (!SubscriptionManager.isValidSlotIndex(slotId)) {
++            loge("[updateSubscriptionInfoByIccId]- invalid YJ slotIndex=" + slotId);
+             return;
+         }
+-        logd("updateSubscriptionInfoByIccId: removing subscription info record: slotIndex "
+-                + slotIndex);
++        logd("updateSubscriptionInfoByIccId: removing subscription info record: slotId "
++                + slotId);
+         // Clear slotIndex only when sim absent is not enough. It's possible to switch SIM profile
+         // within the same slot. Need to clear the slot index of the previous sub. Thus always clear
+         // for the changing slot first.
+-        SubscriptionController.getInstance().clearSubInfoRecord(slotIndex);
++        SubscriptionController.getInstance().clearSubInfoRecord(slotId);
+ 
+         // If SIM is not absent, insert new record or update existing record.
+-        if (!ICCID_STRING_FOR_NO_SIM.equals(mIccId[slotIndex])) {
++        if (!ICCID_STRING_FOR_NO_SIM.equals(mIccId[slotId])) {
+            logd("updateSubscriptionInfoByIccId: adding subscription info record: iccid: "
+-                    + mIccId[slotIndex] + "slot: " + slotIndex);
+-           mSubscriptionManager.addSubscriptionInfoRecord(mIccId[slotIndex], slotIndex);
++                    + mIccId[slotId] + "slot: " + slotId);
++           mSubscriptionManager.addSubscriptionInfoRecord(mIccId[slotId], slotId);
+         }
+ 
+         List<SubscriptionInfo> subInfos = SubscriptionController.getInstance()
+-                .getSubInfoUsingSlotIndexPrivileged(slotIndex);
++                .getSubInfoUsingSlotIndexPrivileged(slotId);
+         if (subInfos != null) {
+             boolean changed = false;
+             for (int i = 0; i < subInfos.size(); i++) {
+@@ -1036,7 +1044,7 @@ public class SubscriptionInfoUpdater extends Handler {
+     }
+ 
+     @UnsupportedAppUsage
+-    private void broadcastSimStateChanged(int slotId, String state, String reason) {
++    private void broadcastSimStateChanged(int phoneId, String state, String reason) {
+         Intent i = new Intent(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
+         // TODO - we'd like this intent to have a single snapshot of all sim state,
+         // but until then this should not use REPLACE_PENDING or we may lose
+@@ -1047,10 +1055,10 @@ public class SubscriptionInfoUpdater extends Handler {
+         i.putExtra(PhoneConstants.PHONE_NAME_KEY, "Phone");
+         i.putExtra(IccCardConstants.INTENT_KEY_ICC_STATE, state);
+         i.putExtra(IccCardConstants.INTENT_KEY_LOCKED_REASON, reason);
+-        SubscriptionManager.putPhoneIdAndSubIdExtra(i, slotId);
++        SubscriptionManager.putPhoneIdAndSubIdExtra(i, phoneId);
+         logd("Broadcasting intent ACTION_SIM_STATE_CHANGED " + state + " reason " + reason +
+-                " for phone: " + slotId);
+-        IntentBroadcaster.getInstance().broadcastStickyIntent(i, slotId);
++                " for phone: " + phoneId);
++        IntentBroadcaster.getInstance().broadcastStickyIntent(i, phoneId);
+     }
+ 
+     private void broadcastSimCardStateChanged(int phoneId, int state) {
+@@ -1094,7 +1102,7 @@ public class SubscriptionInfoUpdater extends Handler {
+             int slotId = UiccController.getInstance().getSlotIdFromPhoneId(phoneId);
+             i.putExtra(PhoneConstants.SLOT_KEY, slotId);
+             logd("Broadcasting intent ACTION_SIM_APPLICATION_STATE_CHANGED " + simStateString(state)
+-                    + " for phone: " + phoneId + " slot: " + slotId);
++                    + " for phone: " + phoneId + "YJ slot: " + slotId);
+             mContext.sendBroadcast(i, Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
+             TelephonyMetrics.getInstance().updateSimState(phoneId, state);
+         }
+-- 
+2.21.0
+
