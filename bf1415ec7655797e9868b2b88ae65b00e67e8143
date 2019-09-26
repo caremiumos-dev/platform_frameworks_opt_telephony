@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be50a2fd_ee16598f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-09-26T18:06:26Z",
+      "side": 1,
+      "message": "Do you expect slotId to be different from phoneId here? If yes, why?\n\nInternally we have used phoneId and slotId almost interchangeably, although that\u0027s a clean up that we need to do. That said, here specifically the 2 should have the same value.",
+      "revId": "bf1415ec7655797e9868b2b88ae65b00e67e8143",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
