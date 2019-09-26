@@ -18,6 +18,7 @@ package com.android.internal.telephony.dataconnection;
 
 import static android.net.NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED;
 import static android.net.NetworkCapabilities.NET_CAPABILITY_NOT_METERED;
+import static android.net.NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED;
 import static android.net.NetworkPolicyManager.OVERRIDE_CONGESTED;
 import static android.net.NetworkPolicyManager.OVERRIDE_UNMETERED;
 
@@ -546,8 +547,8 @@ public class DataConnectionTest extends TelephonyTest {
 
         testConnectEvent();
 
-        assertFalse(getNetworkCapabilities()
-                .hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED));
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_TEMPORARILY_NOT_METERED));
     }
 
     @Test
@@ -561,8 +562,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         testConnectEvent();
 
-        assertTrue(getNetworkCapabilities()
-                .hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED));
+        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
     }
 
     @Test
@@ -572,17 +572,17 @@ public class DataConnectionTest extends TelephonyTest {
                 new String[] { "default" });
         testConnectEvent();
 
-        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_TEMPORARILY_NOT_METERED));
         assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
 
         mDc.onSubscriptionOverride(OVERRIDE_UNMETERED, OVERRIDE_UNMETERED);
 
-        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
+        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_TEMPORARILY_NOT_METERED));
         assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
 
         mDc.onSubscriptionOverride(OVERRIDE_UNMETERED, 0);
 
-        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_TEMPORARILY_NOT_METERED));
         assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
     }
 
