@@ -258,6 +258,7 @@ public class DataConnection extends StateMachine {
     private Object mUserData;
     private int mSubscriptionOverride;
     private int mRilRat = Integer.MAX_VALUE;
+    private boolean mUnmeteredOverride;
     private int mDataRegState = Integer.MAX_VALUE;
     private NetworkInfo mNetworkInfo;
 
@@ -308,9 +309,10 @@ public class DataConnection extends StateMachine {
     static final int EVENT_RESET = BASE + 24;
     static final int EVENT_REEVALUATE_RESTRICTED_STATE = BASE + 25;
     static final int EVENT_REEVALUATE_DATA_CONNECTION_PROPERTIES = BASE + 26;
-
-    private static final int CMD_TO_STRING_COUNT =
-            EVENT_REEVALUATE_DATA_CONNECTION_PROPERTIES - BASE + 1;
+    static final int EVENT_NR_STATE_CHANGED = BASE + 27;
+    static final int EVENT_DATA_CONNECTION_METEREDNESS_CHANGED = BASE + 28;
+    static final int EVENT_NR_FREQUENCY_CHANGED = BASE + 29;
+    private static final int CMD_TO_STRING_COUNT = EVENT_NR_FREQUENCY_CHANGED - BASE + 1;
 
     private static String[] sCmdToString = new String[CMD_TO_STRING_COUNT];
     static {
@@ -346,6 +348,10 @@ public class DataConnection extends StateMachine {
                 "EVENT_REEVALUATE_RESTRICTED_STATE";
         sCmdToString[EVENT_REEVALUATE_DATA_CONNECTION_PROPERTIES - BASE] =
                 "EVENT_REEVALUATE_DATA_CONNECTION_PROPERTIES";
+        sCmdToString[EVENT_NR_STATE_CHANGED - BASE] = "EVENT_NR_STATE_CHANGED";
+        sCmdToString[EVENT_DATA_CONNECTION_METEREDNESS_CHANGED - BASE] =
+                "EVENT_DATA_CONNECTION_METEREDNESS_CHANGED";
+        sCmdToString[EVENT_NR_FREQUENCY_CHANGED - BASE] = "EVENT_NR_FREQUENCY_CHANGED";
     }
     // Convert cmd to string or null if unknown
     static String cmdToString(int cmd) {
@@ -712,6 +718,14 @@ public class DataConnection extends StateMachine {
     }
 
     /**
+     * Update NetworkCapabilities.NET_CAPABILITY_NOT_METERED based on meteredness
+     * @param isUnmetered whether this DC should be set to unmetered or not
+     */
+    public void onMeterednessChanged(boolean isUnmetered) {
+        sendMessage(obtainMessage(EVENT_DATA_CONNECTION_METEREDNESS_CHANGED, isUnmetered));
+    }
+
+    /**
      * TearDown the data connection when the deactivation is complete a Message with
      * msg.what == EVENT_DEACTIVATE_DONE
      *
@@ -880,6 +894,8 @@ public class DataConnection extends StateMachine {
         mDcFailCause = DataFailCause.NONE;
         mDisabledApnTypeBitMask = 0;
         mSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
+        mSubscriptionOverride = 0;
+        mUnmeteredOverride = false;
     }
 
     /**
@@ -1048,6 +1064,24 @@ public class DataConnection extends StateMachine {
             }
         }
         mLinkProperties.setTcpBufferSizes(sizes);
+    }
+
+    private void updateLinkBandwidths(NetworkCapabilities caps, int rilRat) {
+        String ratName = ServiceState.rilRadioTechnologyToString(rilRat);
+        if (rilRat == ServiceState.RIL_RADIO_TECHNOLOGY_LTE && isNRConnected()) {
+            ratName = mPhone.getServiceState().getNrFrequencyRange()
+                    == ServiceState.FREQUENCY_RANGE_MMWAVE
+                    ? DctConstants.RAT_NAME_NR_NSA_MMWAVE : DctConstants.RAT_NAME_NR_NSA;
+        }
+
+        if (DBG) log("updateLinkBandwidths: " + ratName);
+
+        Pair<Integer, Integer> values = mDct.getLinkBandwidths(ratName);
+        if (values == null) {
+            values = new Pair<>(14, 14);
+        }
+        caps.setLinkDownstreamBandwidthKbps(values.first);
+        caps.setLinkUpstreamBandwidthKbps(values.second);
     }
 
     /**
@@ -1232,15 +1266,11 @@ public class DataConnection extends StateMachine {
                 }
             }
 
-            // Mark NOT_METERED in the following cases,
-            // 1. All APNs in APN settings are unmetered.
-            // 2. The non-restricted data and is intended for unmetered use only.
-            if ((mUnmeteredUseOnly && !mRestrictedNetworkOverride)
-                    || !ApnSettingUtils.isMetered(mApnSetting, mPhone)) {
-                result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-            } else {
-                result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-            }
+            // DataConnection has the immutable NOT_METERED capability only if all APNs in the
+            // APN setting are unmetered according to carrier config METERED_APN_TYPES_STRINGS.
+            // All other cases should use the dynamic TEMPORARILY_NOT_METERED capability instead.
+            result.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED,
+                    !ApnSettingUtils.isMetered(mApnSetting, mPhone));
 
             result.maybeMarkCapabilitiesRestricted();
         }
@@ -1251,43 +1281,32 @@ public class DataConnection extends StateMachine {
             result.removeCapability(NetworkCapabilities.NET_CAPABILITY_DUN);
         }
 
-        int up = 14;
-        int down = 14;
-        switch (mRilRat) {
-            case ServiceState.RIL_RADIO_TECHNOLOGY_GPRS: up = 80; down = 80; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_EDGE: up = 59; down = 236; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_UMTS: up = 384; down = 384; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_IS95A: // fall through
-            case ServiceState.RIL_RADIO_TECHNOLOGY_IS95B: up = 14; down = 14; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_0: up = 153; down = 2457; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_A: up = 1843; down = 3174; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_1xRTT: up = 100; down = 100; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_HSDPA: up = 2048; down = 14336; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_HSUPA: up = 5898; down = 14336; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_HSPA: up = 5898; down = 14336; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_B: up = 1843; down = 5017; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_LTE: up = 51200; down = 102400; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_LTE_CA: up = 51200; down = 102400; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD: up = 153; down = 2516; break;
-            case ServiceState.RIL_RADIO_TECHNOLOGY_HSPAP: up = 11264; down = 43008; break;
-            default:
-        }
-        result.setLinkUpstreamBandwidthKbps(up);
-        result.setLinkDownstreamBandwidthKbps(down);
+        updateLinkBandwidths(result, mRilRat);
 
         result.setNetworkSpecifier(new StringNetworkSpecifier(Integer.toString(mSubId)));
 
         result.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING,
                 !mPhone.getServiceState().getDataRoaming());
 
-        result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
-
-        // Override values set above when requested by policy
-        if ((mSubscriptionOverride & OVERRIDE_UNMETERED) != 0) {
-            result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+        if ((mSubscriptionOverride & OVERRIDE_CONGESTED) == 0) {
+            result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
         }
-        if ((mSubscriptionOverride & OVERRIDE_CONGESTED) != 0) {
-            result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
+
+        // Mark TEMPORARILY_NOT_METERED in the following cases:
+        // 1. The non-restricted data is intended for unmetered use only.
+        // 2. DcTracker set an unmetered override due to network/location (eg. 5G).
+        // 3. SubscriptionManager set an unmetered override as requested by policy.
+        if (DBG) {
+            log("Temporarily not metered: mUnmeteredUseOnly=" + mUnmeteredUseOnly
+                    + ", mRestrictedNetworkOverride=" + mRestrictedNetworkOverride
+                    + ", mUnmeteredOverride=" + mUnmeteredOverride + ", mSubscriptionOverride="
+                    + ((mSubscriptionOverride & OVERRIDE_UNMETERED) != 0));
+        }
+        if ((mUnmeteredUseOnly && !mRestrictedNetworkOverride) || mUnmeteredOverride
+                || (mSubscriptionOverride & OVERRIDE_UNMETERED) != 0) {
+            result.addCapability(NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED);
+        } else {
+            result.removeCapability(NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED);
         }
 
         return result;
@@ -1478,6 +1497,10 @@ public class DataConnection extends StateMachine {
                     DataConnection.EVENT_DATA_CONNECTION_ROAM_ON, null);
             mPhone.getServiceStateTracker().registerForDataRoamingOff(getHandler(),
                     DataConnection.EVENT_DATA_CONNECTION_ROAM_OFF, null, true);
+            mPhone.getServiceStateTracker().registerForNrStateChanged(getHandler(),
+                    DataConnection.EVENT_NR_STATE_CHANGED, null);
+            mPhone.getServiceStateTracker().registerForNrFrequencyChanged(getHandler(),
+                    DataConnection.EVENT_NR_FREQUENCY_CHANGED, null);
 
             // Add ourselves to the list of data connections
             mDcController.addDc(DataConnection.this);
@@ -1492,6 +1515,8 @@ public class DataConnection extends StateMachine {
 
             mPhone.getServiceStateTracker().unregisterForDataRoamingOn(getHandler());
             mPhone.getServiceStateTracker().unregisterForDataRoamingOff(getHandler());
+            mPhone.getServiceStateTracker().unregisterForNrStateChanged(getHandler());
+            mPhone.getServiceStateTracker().unregisterForNrFrequencyChanged(getHandler());
 
             // Remove ourselves from the DC lists
             mDcController.removeDc(DataConnection.this);
@@ -1575,6 +1600,18 @@ public class DataConnection extends StateMachine {
                         mNetworkAgent.sendLinkProperties(mLinkProperties, DataConnection.this);
                     }
                     break;
+                case EVENT_DATA_CONNECTION_METEREDNESS_CHANGED:
+                    boolean isUnmetered = (boolean) msg.obj;
+                    if (isUnmetered == mUnmeteredOverride) {
+                        break;
+                    }
+                    if (DBG) {
+                        log("mUnmeteredOverride changed from " + mUnmeteredOverride + " to "
+                                + isUnmetered);
+                    }
+                    mUnmeteredOverride = isUnmetered;
+                    // fallthrough
+                case EVENT_NR_FREQUENCY_CHANGED:
                 case EVENT_DATA_CONNECTION_ROAM_ON:
                 case EVENT_DATA_CONNECTION_ROAM_OFF:
                 case EVENT_DATA_CONNECTION_OVERRIDE_CHANGED:
@@ -2107,6 +2144,18 @@ public class DataConnection extends StateMachine {
                     retVal = HANDLED;
                     break;
                 }
+                case EVENT_DATA_CONNECTION_METEREDNESS_CHANGED:
+                    boolean isUnmetered = (boolean) msg.obj;
+                    if (isUnmetered == mUnmeteredOverride) {
+                        retVal = HANDLED;
+                        break;
+                    }
+                    if (DBG) {
+                        log("mUnmeteredOverride changed from " + mUnmeteredOverride + " to "
+                                + isUnmetered);
+                    }
+                    mUnmeteredOverride = isUnmetered;
+                    // fallthrough
                 case EVENT_DATA_CONNECTION_ROAM_ON:
                 case EVENT_DATA_CONNECTION_ROAM_OFF:
                 case EVENT_DATA_CONNECTION_OVERRIDE_CHANGED: {
@@ -2124,13 +2173,21 @@ public class DataConnection extends StateMachine {
                     if (ar.exception != null) {
                         log("EVENT_BW_REFRESH_RESPONSE: error ignoring, e=" + ar.exception);
                     } else {
-                        final LinkCapacityEstimate lce = (LinkCapacityEstimate) ar.result;
+                        boolean useModem = DctConstants.BANDWIDTH_SOURCE_MODEM_KEY.equals(
+                                mPhone.getContext().getResources().getString(com.android.internal.R
+                                        .string.config_bandwidthEstimateSource));
                         NetworkCapabilities nc = getNetworkCapabilities();
-                        if (mPhone.getLceStatus() == RILConstants.LCE_ACTIVE) {
-                            nc.setLinkDownstreamBandwidthKbps(lce.downlinkCapacityKbps);
-                            if (mNetworkAgent != null) {
-                                mNetworkAgent.sendNetworkCapabilities(nc, DataConnection.this);
+                        LinkCapacityEstimate lce = (LinkCapacityEstimate) ar.result;
+                        if (useModem && mPhone.getLceStatus() == RILConstants.LCE_ACTIVE) {
+                            if (lce.downlinkCapacityKbps != LinkCapacityEstimate.INVALID) {
+                                nc.setLinkDownstreamBandwidthKbps(lce.downlinkCapacityKbps);
                             }
+                            if (lce.uplinkCapacityKbps != LinkCapacityEstimate.INVALID) {
+                                nc.setLinkUpstreamBandwidthKbps(lce.uplinkCapacityKbps);
+                            }
+                        }
+                        if (mNetworkAgent != null) {
+                            mNetworkAgent.sendNetworkCapabilities(nc, DataConnection.this);
                         }
                     }
                     retVal = HANDLED;
@@ -2246,13 +2303,18 @@ public class DataConnection extends StateMachine {
                     if (ar.exception != null) {
                         loge("EVENT_LINK_CAPACITY_CHANGED e=" + ar.exception);
                     } else {
-                        LinkCapacityEstimate lce = (LinkCapacityEstimate) ar.result;
+                        boolean useModem = DctConstants.BANDWIDTH_SOURCE_MODEM_KEY.equals(
+                                mPhone.getContext().getResources().getString(com.android.internal.R
+                                        .string.config_bandwidthEstimateSource));
                         NetworkCapabilities nc = getNetworkCapabilities();
-                        if (lce.downlinkCapacityKbps != LinkCapacityEstimate.INVALID) {
-                            nc.setLinkDownstreamBandwidthKbps(lce.downlinkCapacityKbps);
-                        }
-                        if (lce.uplinkCapacityKbps != LinkCapacityEstimate.INVALID) {
-                            nc.setLinkUpstreamBandwidthKbps(lce.uplinkCapacityKbps);
+                        if (useModem) {
+                            LinkCapacityEstimate lce = (LinkCapacityEstimate) ar.result;
+                            if (lce.downlinkCapacityKbps != LinkCapacityEstimate.INVALID) {
+                                nc.setLinkDownstreamBandwidthKbps(lce.downlinkCapacityKbps);
+                            }
+                            if (lce.uplinkCapacityKbps != LinkCapacityEstimate.INVALID) {
+                                nc.setLinkUpstreamBandwidthKbps(lce.uplinkCapacityKbps);
+                            }
                         }
                         if (mNetworkAgent != null) {
                             mNetworkAgent.sendNetworkCapabilities(nc, DataConnection.this);
@@ -2810,6 +2872,7 @@ public class DataConnection extends StateMachine {
         pw.println("mSubscriptionOverride=" + Integer.toHexString(mSubscriptionOverride));
         pw.println("mRestrictedNetworkOverride=" + mRestrictedNetworkOverride);
         pw.println("mUnmeteredUseOnly=" + mUnmeteredUseOnly);
+        pw.println("mUnmeteredOverride=" + mUnmeteredOverride);
         pw.println("mInstanceNumber=" + mInstanceNumber);
         pw.println("mAc=" + mAc);
         pw.println("mScore=" + mScore);
