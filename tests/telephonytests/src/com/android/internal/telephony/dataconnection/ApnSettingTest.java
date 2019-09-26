@@ -523,73 +523,83 @@ public class ApnSettingTest extends TelephonyTest {
     @SmallTest
     public void testCanHandleType() throws Exception {
         String types[] = {"mms"};
+        final int dummySubId = mPhone.getSubId();
 
         assertTrue(createApnSetting(ApnSetting.TYPE_ALL)
-                .canHandleType(ApnSetting.TYPE_MMS));
+                .canHandleType(ApnSetting.TYPE_MMS, dummySubId, mContext));
 
         assertFalse(createApnSetting(ApnSetting.TYPE_DEFAULT)
-                .canHandleType(ApnSetting.TYPE_MMS));
+                .canHandleType(ApnSetting.TYPE_MMS, dummySubId, mContext));
 
         assertTrue(createApnSetting(ApnSetting.TYPE_DEFAULT)
-                .canHandleType(ApnSetting.TYPE_DEFAULT));
+                .canHandleType(ApnSetting.TYPE_DEFAULT, dummySubId, mContext));
 
         // Hipri is asymmetric
         assertTrue(createApnSetting(ApnSetting.TYPE_DEFAULT)
-                .canHandleType(ApnSetting.TYPE_HIPRI));
+                .canHandleType(ApnSetting.TYPE_HIPRI, dummySubId, mContext));
         assertFalse(createApnSetting(ApnSetting.TYPE_HIPRI)
-                .canHandleType(ApnSetting.TYPE_DEFAULT));
+                .canHandleType(ApnSetting.TYPE_DEFAULT, dummySubId, mContext));
 
 
         assertTrue(createApnSetting(ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS)
-                .canHandleType(ApnSetting.TYPE_DEFAULT));
+                .canHandleType(ApnSetting.TYPE_DEFAULT, dummySubId, mContext));
 
         assertTrue(createApnSetting(ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS)
-                .canHandleType(ApnSetting.TYPE_MMS));
+                .canHandleType(ApnSetting.TYPE_MMS, dummySubId, mContext));
 
         assertFalse(createApnSetting(ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS)
-                .canHandleType(ApnSetting.TYPE_SUPL));
+                .canHandleType(ApnSetting.TYPE_SUPL, dummySubId, mContext));
 
         // special IA case - doesn't match wildcards
         assertFalse(createApnSetting(ApnSetting.TYPE_ALL)
-                .canHandleType(ApnSetting.TYPE_IA));
+                .canHandleType(ApnSetting.TYPE_IA, dummySubId, mContext));
         assertTrue(createApnSetting(
                 ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_IA)
-                .canHandleType(ApnSetting.TYPE_IA));
+                .canHandleType(ApnSetting.TYPE_IA, dummySubId, mContext));
 
         // same for emergency, mcx, and xcap
         assertFalse(createApnSetting(ApnSetting.TYPE_ALL)
-                .canHandleType(ApnSetting.TYPE_EMERGENCY));
+                .canHandleType(ApnSetting.TYPE_EMERGENCY, dummySubId, mContext));
         assertTrue(createApnSetting(
                 ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_EMERGENCY)
-                .canHandleType(ApnSetting.TYPE_EMERGENCY));
+                .canHandleType(ApnSetting.TYPE_EMERGENCY, dummySubId, mContext));
         assertFalse(createApnSetting(ApnSetting.TYPE_ALL)
-                .canHandleType(ApnSetting.TYPE_MCX));
+                .canHandleType(ApnSetting.TYPE_MCX, dummySubId, mContext));
         assertTrue(createApnSetting(
                 ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_MCX)
-                .canHandleType(ApnSetting.TYPE_MCX));
+                .canHandleType(ApnSetting.TYPE_MCX, dummySubId, mContext));
         assertFalse(createApnSetting(ApnSetting.TYPE_ALL)
-                .canHandleType(ApnSetting.TYPE_XCAP));
+                .canHandleType(ApnSetting.TYPE_XCAP, dummySubId, mContext));
         assertTrue(createApnSetting(
                 ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_XCAP)
-                .canHandleType(ApnSetting.TYPE_XCAP));
+                .canHandleType(ApnSetting.TYPE_XCAP, dummySubId, mContext));
 
         // check carrier disabled
         assertFalse(createDisabledApnSetting(ApnSetting.TYPE_ALL)
-                .canHandleType(ApnSetting.TYPE_MMS));
+                .canHandleType(ApnSetting.TYPE_MMS, dummySubId, mContext));
         assertFalse(createDisabledApnSetting(ApnSetting.TYPE_DEFAULT)
-                .canHandleType(ApnSetting.TYPE_DEFAULT));
+                .canHandleType(ApnSetting.TYPE_DEFAULT, dummySubId, mContext));
         assertFalse(createDisabledApnSetting(ApnSetting.TYPE_DEFAULT)
-                .canHandleType(ApnSetting.TYPE_HIPRI));
+                .canHandleType(ApnSetting.TYPE_HIPRI, dummySubId, mContext));
         assertFalse(createDisabledApnSetting(ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS)
-                .canHandleType(ApnSetting.TYPE_DEFAULT));
+                .canHandleType(ApnSetting.TYPE_DEFAULT, dummySubId, mContext));
         assertFalse(createDisabledApnSetting(ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS)
-                .canHandleType(ApnSetting.TYPE_MMS));
+                .canHandleType(ApnSetting.TYPE_MMS, dummySubId, mContext));
         assertFalse(createDisabledApnSetting(
                 ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_IA)
-                .canHandleType(ApnSetting.TYPE_IA));
+                .canHandleType(ApnSetting.TYPE_IA, dummySubId, mContext));
         assertFalse(createDisabledApnSetting(
                 ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_XCAP)
-                .canHandleType(ApnSetting.TYPE_XCAP));
+                .canHandleType(ApnSetting.TYPE_XCAP, dummySubId, mContext));
+
+        mBundle.putStringArray(
+                CarrierConfigManager.KEY_EXCLUDE_CAPABILITY_FROM_TYPE_ALL_APN_TYPES_STRINGS,
+                new String[]{PhoneConstants.APN_TYPE_MMS});
+
+        assertTrue(createApnSetting(ApnSetting.TYPE_ALL)
+                .canHandleType(ApnSetting.TYPE_DEFAULT, dummySubId, mContext));
+        assertFalse(createApnSetting(ApnSetting.TYPE_ALL)
+                .canHandleType(ApnSetting.TYPE_MMS, dummySubId, mContext));
     }
 
     @Test

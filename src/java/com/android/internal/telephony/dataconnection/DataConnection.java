@@ -97,6 +97,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -1213,6 +1214,9 @@ public class DataConnection extends StateMachine {
                     log("Dropped the metered " + type + " for the unmetered data call.");
                     continue;
                 }
+                if (shouldExcludeCapability(type)) {
+                    continue;
+                }
                 switch (type) {
                     case PhoneConstants.APN_TYPE_ALL: {
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
@@ -1342,6 +1346,30 @@ public class DataConnection extends StateMachine {
                 && nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
                 && nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_TRUSTED)
                 && nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
+    }
+
+    /**
+     * @return true if should exclude capability of this apn type.
+     */
+    private boolean shouldExcludeCapability(String type) {
+        if (mApnSetting.getApnTypeBitmask() != ApnSetting.TYPE_ALL) {
+            return false;
+        }
+
+        CarrierConfigManager configManager = (CarrierConfigManager)
+                mPhone.getContext().getSystemService(mPhone.getContext().CARRIER_CONFIG_SERVICE);
+        if (configManager != null) {
+            final PersistableBundle carrierConfig =
+                    configManager.getConfigForSubId(mPhone.getSubId());
+            if (carrierConfig != null) {
+                String[] exculdeTypes = carrierConfig.getStringArray(CarrierConfigManager
+                        .KEY_EXCLUDE_CAPABILITY_FROM_TYPE_ALL_APN_TYPES_STRINGS);
+                if (exculdeTypes != null && Arrays.asList(exculdeTypes).contains(type)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -1493,7 +1521,8 @@ public class DataConnection extends StateMachine {
             // only NOT be set only if we're in DcInactiveState.
             mApnSetting = apnContext.getApnSetting();
         }
-        if (mApnSetting == null || !mApnSetting.canHandleType(apnContext.getApnTypeBitmask())) {
+        if (mApnSetting == null || !mApnSetting.canHandleType(apnContext.getApnTypeBitmask(),
+                mPhone.getSubId(), mPhone.getContext())) {
             if (DBG) {
                 log("initConnection: incompatible apnSetting in ConnectionParams cp=" + cp
                         + " dc=" + DataConnection.this);
@@ -1738,7 +1767,8 @@ public class DataConnection extends StateMachine {
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
-                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT, mPhone.getSubId(),
+                            mPhone.getContext()) : false);
             if (mHandoverState == HANDOVER_STATE_BEING_TRANSFERRED) {
                 setHandoverState(HANDOVER_STATE_COMPLETED);
             }
@@ -1878,7 +1908,8 @@ public class DataConnection extends StateMachine {
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
-                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT, mPhone.getSubId(),
+                            mPhone.getContext()) : false);
             setHandoverState(HANDOVER_STATE_IDLE);
             // restricted evaluation depends on network requests from apnContext. The evaluation
             // should happen once entering connecting state rather than active state because it's
@@ -2002,7 +2033,8 @@ public class DataConnection extends StateMachine {
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
-                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT, mPhone.getSubId(),
+                            mPhone.getContext()) : false);
 
             updateNetworkInfo();
 
@@ -2451,7 +2483,8 @@ public class DataConnection extends StateMachine {
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
-                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT, mPhone.getSubId(),
+                            mPhone.getContext()) : false);
         }
         @Override
         public boolean processMessage(Message msg) {
@@ -2509,7 +2542,8 @@ public class DataConnection extends StateMachine {
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
-                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT, mPhone.getSubId(),
+                            mPhone.getContext()) : false);
         }
         @Override
         public boolean processMessage(Message msg) {

@@ -243,6 +243,33 @@ public class DataConnectionTest extends TelephonyTest {
             -1,                     // carrier_id
             0);                     // skip_464xlat
 
+    private ApnSetting mApn6 = ApnSetting.makeApnSetting(
+            2163,                   // id
+            "44010",                // numeric
+            "sp-mode",              // name
+            "spmode.ne.jp",         // apn
+            null,                   // proxy
+            -1,                     // port
+            null,                   // mmsc
+            null,                   // mmsproxy
+            -1,                     // mmsport
+            "",                     // user
+            "",                     // password
+            -1,                     // authtype
+            ApnSetting.TYPE_ALL,    // types
+            ApnSetting.PROTOCOL_IP, // protocol
+            ApnSetting.PROTOCOL_IP, // roaming_protocol
+            true,                   // carrier_enabled
+            0,                      // networktype_bitmask
+            0,                      // profile_id
+            false,                  // modem_cognitive
+            0,                      // max_conns
+            0,                      // wait_time
+            0,                      // max_conns_time
+            0,                      // mtu
+            -1,                     // mvno_type
+            "");                    // mnvo_match_data
+
     private class DataConnectionTestHandler extends HandlerThread {
 
         private DataConnectionTestHandler(String name) {
@@ -544,6 +571,21 @@ public class DataConnectionTest extends TelephonyTest {
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
         assertFalse("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_SUPL));
+
+        mContextFixture.getCarrierConfigBundle().putStringArray(
+                CarrierConfigManager.KEY_EXCLUDE_CAPABILITY_FROM_TYPE_ALL_APN_TYPES_STRINGS,
+                new String[] {"mms"});
+
+        mDc.sendMessage(DataConnection.EVENT_DISCONNECT, mDcp);
+        waitForMs(100);
+        doReturn(mApn6).when(mApnContext).getApnSetting();
+        mDc.sendMessage(DataConnection.EVENT_CONNECT, mCp);
+        waitForMs(200);
+
+        assertTrue("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
+        assertFalse("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_MMS));
     }
 
     @Test

@@ -1087,7 +1087,8 @@ public class DcTracker extends Handler {
         final int apnTypeBitmask = ApnSetting.getApnTypesBitmaskFromString(apnType);
         for (DataConnection dc : mDataConnections.values()) {
             ApnSetting apnSetting = dc.getApnSetting();
-            if (apnSetting != null && apnSetting.canHandleType(apnTypeBitmask)) {
+            if (apnSetting != null && apnSetting.canHandleType(apnTypeBitmask, mPhone.getSubId(),
+                    mPhone.getContext())) {
                 if (dc.isActive()) {
                     state = getBetterConnectionState(state, DctConstants.State.CONNECTED);
                 } else if (dc.isActivating()) {
@@ -1737,7 +1738,8 @@ public class DcTracker extends Handler {
         if (dunCandidates.isEmpty()) {
             if (!ArrayUtils.isEmpty(mAllApnSettings)) {
                 for (ApnSetting apn : mAllApnSettings) {
-                    if (apn.canHandleType(ApnSetting.TYPE_DUN)) {
+                    if (apn.canHandleType(ApnSetting.TYPE_DUN, mPhone.getSubId(),
+                            mPhone.getContext())) {
                         dunCandidates.add(apn);
                     }
                 }
@@ -1953,24 +1955,28 @@ public class DcTracker extends Handler {
 
         log("setInitialApn: E mPreferredApn=" + mPreferredApn);
 
-        if (mPreferredApn != null && mPreferredApn.canHandleType(ApnSetting.TYPE_IA)) {
+        if (mPreferredApn != null
+                && mPreferredApn.canHandleType(ApnSetting.TYPE_IA, mPhone.getSubId(),
+                mPhone.getContext())) {
               iaApnSetting = mPreferredApn;
         } else if (!mAllApnSettings.isEmpty()) {
             // Search for Initial APN setting and the first apn that can handle default
             for (ApnSetting apn : mAllApnSettings) {
                 if (firstNonEmergencyApnSetting == null
-                        && !apn.canHandleType(ApnSetting.TYPE_EMERGENCY)) {
+                        && !apn.canHandleType(ApnSetting.TYPE_EMERGENCY, mPhone.getSubId(),
+                        mPhone.getContext())) {
                     firstNonEmergencyApnSetting = apn;
                     log("setInitialApn: firstNonEmergencyApnSetting="
                             + firstNonEmergencyApnSetting);
                 }
-                if (apn.canHandleType(ApnSetting.TYPE_IA)) {
+                if (apn.canHandleType(ApnSetting.TYPE_IA, mPhone.getSubId(), mPhone.getContext())) {
                     // The Initial Attach APN is highest priority so use it if there is one
                     log("setInitialApn: iaApnSetting=" + apn);
                     iaApnSetting = apn;
                     break;
                 } else if ((defaultApnSetting == null)
-                        && (apn.canHandleType(ApnSetting.TYPE_DEFAULT))) {
+                        && (apn.canHandleType(ApnSetting.TYPE_DEFAULT, mPhone.getSubId(),
+                        mPhone.getContext()))) {
                     // Use the first default apn if no better choice
                     log("setInitialApn: defaultApnSetting=" + apn);
                     defaultApnSetting = apn;
@@ -2228,7 +2234,9 @@ public class DcTracker extends Handler {
                             }
                         }
                     }
-                } else if (apnSetting != null && apnSetting.canHandleType(apnType)) {
+                } else if (apnSetting != null
+                        && apnSetting.canHandleType(apnType, mPhone.getSubId(),
+                        mPhone.getContext())) {
                     if (curDc.isActive()) {
                         if (DBG) {
                             log("checkForCompatibleDataConnection:"
@@ -3086,7 +3094,7 @@ public class DcTracker extends Handler {
             int j = i + 1;
             while (j < mAllApnSettings.size()) {
                 second = mAllApnSettings.get(j);
-                if (first.similar(second)) {
+                if (first.similar(second, mPhone.getSubId(), mPhone.getContext())) {
                     ApnSetting newApn = mergeApns(first, second);
                     mAllApnSettings.set(i, newApn);
                     first = newApn;
@@ -3201,7 +3209,8 @@ public class DcTracker extends Handler {
         }
 
         if (usePreferred && mCanSetPreferApn && mPreferredApn != null &&
-                mPreferredApn.canHandleType(requestedApnTypeBitmask)) {
+                mPreferredApn.canHandleType(requestedApnTypeBitmask, mPhone.getSubId(),
+                        mPhone.getContext())) {
             if (DBG) {
                 log("buildWaitingApns: Preferred APN:" + operator + ":"
                         + mPreferredApn.getOperatorNumeric() + ":" + mPreferredApn);
@@ -3222,7 +3231,8 @@ public class DcTracker extends Handler {
 
         if (DBG) log("buildWaitingApns: mAllApnSettings=" + mAllApnSettings);
         for (ApnSetting apn : mAllApnSettings) {
-            if (apn.canHandleType(requestedApnTypeBitmask)) {
+            if (apn.canHandleType(requestedApnTypeBitmask, mPhone.getSubId(),
+                    mPhone.getContext())) {
                 if (apn.canSupportNetworkType(
                         ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
                     if (VDBG) log("buildWaitingApns: adding apn=" + apn);
@@ -3337,7 +3347,8 @@ public class DcTracker extends Handler {
             cursor.moveToFirst();
             pos = cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers._ID));
             for(ApnSetting p : mAllApnSettings) {
-                if (p.getId() == pos && p.canHandleType(mRequestedApnType)) {
+                if (p.getId() == pos && p.canHandleType(mRequestedApnType, mPhone.getSubId(),
+                        mPhone.getContext())) {
                     log("getPreferredApn: For APN type "
                             + ApnSetting.getApnTypeString(mRequestedApnType) + " found apnSetting "
                             + p);
@@ -4064,7 +4075,8 @@ public class DcTracker extends Handler {
     private void addEmergencyApnSetting() {
         if(mEmergencyApn != null) {
             for (ApnSetting apn : mAllApnSettings) {
-                if (apn.canHandleType(ApnSetting.TYPE_EMERGENCY)) {
+                if (apn.canHandleType(ApnSetting.TYPE_EMERGENCY, mPhone.getSubId(),
+                        mPhone.getContext())) {
                     log("addEmergencyApnSetting - E-APN setting is already present");
                     return;
                 }
