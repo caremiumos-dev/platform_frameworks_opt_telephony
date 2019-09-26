@@ -166,6 +166,30 @@
       "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76a0db13_80896ad3",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-09-26T05:30:14Z",
+      "side": 1,
+      "message": "noteOp() returns MODE_ALLOWED although the caller is not current default SMS app selected by user through Settings-\u003e Apps \u0026 notifications -\u003e Default apps.\n\nnoteOp() returns MODE_IGNORE when user turned off SMS permission for the app through Settings-\u003e Apps \u0026 notifications -\u003e Permission manager.\n\nIs it expected operations?",
+      "parentUuid": "8f4d31e4_954d6486",
+      "range": {
+        "startLine": 587,
+        "startChar": 8,
+        "endLine": 590,
+        "endChar": 8
+      },
+      "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
