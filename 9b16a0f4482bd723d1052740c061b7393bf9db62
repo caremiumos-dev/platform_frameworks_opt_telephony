@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e61930ed_bdc1e2aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-09-27T11:55:58Z",
+      "side": 1,
+      "message": "Thank you, it\u0027s good question which I\u0027ve not considered before. But after consideration, I still believe it\u0027s OK as current code.\n\nIn detail:\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n1. If a device has capability of voice and voicemail service, then \"UE mode of operation\"(UE\u0027s usage setting) should be set to \"voice centric\". (3GPP TS24.301, 4.3)\n2. If the voice centric device receives any NW indication like \"sms-only\"(w/o voice service) on the LTE/IMS NW, then, the device shall disable EUTRAN and move to UTRAN/GERAN to ensure voice service availability. (3GPP TS23.221, section 7.2a).\n3. After moving to UTRAN or GERAN and if it\u0027s roaming NW, this new config(voicemail number for IMS unregistered) can be applicable as expected on the UTRAN/GERAN NW, as same as case(c) mentioned in first description of b/118729539.\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nPlease check above and if you have any other question, please let me know.",
+      "parentUuid": "8e77f862_d7db8eb1",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "9b16a0f4482bd723d1052740c061b7393bf9db62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9cc0e96e_e19618b1",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "14a43002_5a1d1c04",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1530,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-09-27T11:55:58Z",
+      "side": 1,
+      "message": "Thank you, removed.",
+      "parentUuid": "9cc0e96e_e19618b1",
+      "range": {
+        "startLine": 1530,
+        "startChar": 33,
+        "endLine": 1530,
+        "endChar": 49
+      },
+      "revId": "9b16a0f4482bd723d1052740c061b7393bf9db62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "efe13c25_71a47fa4",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaPhoneTest.java",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "9b16a0f4482bd723d1052740c061b7393bf9db62",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "296597fa_1f194ef3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaPhoneTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-09-27T11:55:58Z",
+      "side": 1,
+      "message": "Thank you, I\u0027m sorry it was error and fixed.",
+      "parentUuid": "efe13c25_71a47fa4",
+      "range": {
+        "startLine": 443,
+        "startChar": 21,
+        "endLine": 443,
+        "endChar": 64
+      },
+      "revId": "9b16a0f4482bd723d1052740c061b7393bf9db62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
