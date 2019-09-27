@@ -23,10 +23,12 @@ import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.telephony.TelephonyRegistryManager;
+import android.telephony.Annotation.DataFailureCause;
+import android.telephony.Annotation.RadioPowerS;
 import android.telephony.CallQuality;
 import android.telephony.CellInfo;
 import android.telephony.CellLocation;
-import android.telephony.DataFailCause;
 import android.telephony.PhoneCapability;
 import android.telephony.PhysicalChannelConfig;
 import android.telephony.PreciseCallState;
@@ -302,22 +304,14 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     public void notifyPreciseDataConnectionFailed(Phone sender, String apnType,
-            String apn, @DataFailCause.FailCause int failCause) {
-        try {
-            mRegistry.notifyPreciseDataConnectionFailed(sender.getPhoneId(), sender.getSubId(),
-                    apnType, apn, failCause);
-        } catch (RemoteException ex) {
-            // system process is dead
-        }
+        String apn, @DataFailureCause int failCause) {
+        mTelephonyRegistryMgr.notifyPreciseDataConnectionFailed(sender.getSubId(),
+            sender.getPhoneId(), apnType, apn, failCause);
     }
 
     @Override
-    public void notifySrvccStateChanged(Phone sender, @TelephonyManager.SrvccState int state) {
-        try {
-            mRegistry.notifySrvccStateChanged(sender.getSubId(), state);
-        } catch (RemoteException ex) {
-            // system process is dead
-        }
+    public void notifySrvccStateChanged(Phone sender, @SrvccState int state) {
+        mTelephonyRegistryMgr.notifySrvccStateChanged(sender.getSubId(), state);
     }
 
     @Override
@@ -370,13 +364,9 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     @Override
-    public void notifyRadioPowerStateChanged(Phone sender,
-                                             @TelephonyManager.RadioPowerState int state) {
-        try {
-            mRegistry.notifyRadioPowerStateChanged(sender.getPhoneId(), sender.getSubId(), state);
-        } catch (RemoteException ex) {
-            // system process is dead
-        }
+    public void notifyRadioPowerStateChanged(Phone sender, @RadioPowerState int state) {
+        mTelephonyRegistryMgr.notifyRadioPowerStateChanged(sender.getSubId(), sender.getPhoneId(),
+            state);
     }
 
     @Override

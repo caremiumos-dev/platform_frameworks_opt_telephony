@@ -18,8 +18,13 @@ package com.android.internal.telephony.dataconnection;
 
 import android.annotation.IntDef;
 import android.annotation.NonNull;
+<<<<<<< HEAD
+=======
+import android.telephony.Annotation.ApnType;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
+>>>>>>> 64057db58... new telephony annotation class
 import android.telephony.data.ApnSetting;
-import android.telephony.data.ApnSetting.ApnType;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 
