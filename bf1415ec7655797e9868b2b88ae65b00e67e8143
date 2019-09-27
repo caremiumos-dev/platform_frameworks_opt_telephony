@@ -16,6 +16,23 @@
       "revId": "bf1415ec7655797e9868b2b88ae65b00e67e8143",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe7cc5f6_5f97443e",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2019-09-27T05:48:06Z",
+      "side": 1,
+      "message": "Yes. I think phoneId can be different from slotId if setSimSlotsMapping in RadioConfig is called to cross each slot IDs. So, I added to check comparing phoneId to slotId at updateSubscriptionInfoByIccId.",
+      "revId": "bf1415ec7655797e9868b2b88ae65b00e67e8143",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
