@@ -510,6 +510,17 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
             }
             mSavedTimeZoneId = zoneId;
         } else {
+            // All of China observes the same time zone, which is UTC+8.
+            if (iso != null && iso.equals("cn")) {
+                String logMsg = "updateTimeZoneFromNetworkCountryCode: tz result found"
+                        + " iso=cn zoneId=Asia/Shanghai";
+                String zoneId = "Asia/Shanghai";
+                if (mTimeServiceHelper.isTimeZoneDetectionEnabled()) {
+                    setAndBroadcastNetworkSetTimeZone(zoneId, logMsg);
+                }
+                return;
+            }
+
             if (DBG) {
                 Rlog.d(LOG_TAG, "updateTimeZoneFromNetworkCountryCode: no good zone for"
                         + " iso=" + iso
