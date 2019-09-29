@@ -1231,6 +1231,19 @@ public class GsmCdmaPhone extends Phone {
 
         Phone.checkWfcWifiOnlyModeBeforeDial(mImsPhone, mPhoneId, mContext);
 
+        if (isEmergency) {
+            if (isWifiCallingEnabled()) {
+                if (dialECallOnIms()
+                        || isFakeEmergencyNumber(dialString)) {
+                    useImsForCall = true;
+                    useImsForEmergency = true;
+                } else {
+                    useImsForCall = false;
+                    useImsForEmergency = false;
+                }
+            }
+        }
+
         if ((useImsForCall && !isUt) || (isUt && useImsForUt) || useImsForEmergency) {
             try {
                 if (DBG) logd("Trying IMS PS call");
@@ -3986,5 +3999,117 @@ public class GsmCdmaPhone extends Phone {
         ttyMode = Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.PREFERRED_TTY_MODE, TelecomManager.TTY_MODE_OFF);
         updateUiTtyMode(ttyMode);
+    }
+
+    /**
+     * reDialOnCS.
+     */
+    public Connection reDialOnCS(String dialString, DialArgs dialArgs)
+            throws CallStateException {
+        return dialInternal(dialString, dialArgs);
+    }
+
+    /**
+     * whether isFakeEmergencyNumber.
+     */
+    private boolean isFakeEmergencyNumber(String number) {
+        int routing = getEmergencyNumberTracker().getEmergencyCallRouting(number);
+        if (routing == EmergencyNumber.EMERGENCY_CALL_ROUTING_NORMAL) {
+            logd("isFakeEmergencyNumber: routing of " + number + " is " + routing);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * whether dialECallOnIms.
+     */
+    private boolean dialECallOnIms() {
+        logd("dial-state = " + getServiceState());
+        logd("dial-mSST.mSS = " + mSST.mSS);
+        logd("dial-imsPhone mSS = " + mImsPhone.getServiceState());
+
+        //cellC try eCall from vowifi first, if fail, retry from cs
+        if (getCarrierValueByKey(CarrierConfigManager.KEY_CARRIER_ECALL_ON_VOWIFI_FIRST,
+                mContext, getSubId())) {
+            logd("dialECallOnIms: ECall on vowifi first");
+            return true;
+        }
+
+        boolean useImsForEmergency = false;
+
+        if (isSupportVoWifiECall() && mSST != null) {
+            logd("dial-mSST.mSS.getState() " + mSST.mSS.getState());
+            switch (mSST.mSS.getState()) {
+                //UNISOC: add for bug1050247, dial from vowifi when power off
+                case ServiceState.STATE_POWER_OFF:
+                    useImsForEmergency = true;
+                    logd("dialECallOnIms: ECall on vowifi when power off");
+                    break;
+                case ServiceState.STATE_OUT_OF_SERVICE: //dial from Vowifi
+                    if (!mSST.mSS.isEmergencyOnly()) {
+                        useImsForEmergency = true;
+                        logd("dialECallOnIms: ECall on vowifi when out of service");
+                    }
+                    break;
+                case ServiceState.STATE_IN_SERVICE: {
+                    //EE deregisgter Vowifi before dial ecall on cs
+                    int netWorkType = mSST.mSS.getDataNetworkType();
+                    int netWorkCalss = TelephonyManager.getNetworkClass(netWorkType);
+//                    if (shouldDeregisterVowifi()) {
+//                        if (netWorkCalss == TelephonyManager.NETWORK_CLASS_2_G
+//                                || netWorkCalss == TelephonyManager.NETWORK_CLASS_3_G) {
+//                            try {
+//                                mDelayDial = true;
+//                                mDeregisterVowifi = true;
+//                                useImsForEmergency = false;
+//                                logd("dialECallOnIms setVowifiRegister action = de-register");
+//                            } catch (RemoteException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+                }
+                break;
+            }
+        } else {
+            logd("dial mSST is null");
+        }
+
+        return useImsForEmergency;
+    }
+
+    /**
+     * getCarrierValueByKey.
+     */
+    public boolean getCarrierValueByKey(String key, Context context, int subId) {
+        logd("getCarrierValueBykey key = " + key + " context = " + context + " subId = " + subId);
+        boolean value = false;
+        CarrierConfigManager cfg = (CarrierConfigManager) getContext().getSystemService(
+                Context.CARRIER_CONFIG_SERVICE);
+        if (cfg != null) {
+            PersistableBundle globalConfig = cfg.getConfigForSubId(subId);
+            if (globalConfig != null) {
+                value = globalConfig.getBoolean(key);
+                logd("getCarrierValueBykey Value = " + value);
+            }
+        }
+        return value;
+    }
+
+    /**
+     * isSupportVoWifiECall.
+     */
+    public boolean isSupportVoWifiECall() {
+        return getCarrierValueByKey(
+                CarrierConfigManager.KEY_CARRIER_SUPPORTS_VOWIFI_ECALL, mContext, getSubId());
+    }
+
+    /**
+     * shouldDeregisterVowifi.
+     */
+    public boolean shouldDeregisterVowifi() {
+        return getCarrierValueByKey(
+                CarrierConfigManager.KEY_CARRIER_DEREG_VOWIFI_BEFORE_ECALL, mContext, getSubId());
     }
 }
