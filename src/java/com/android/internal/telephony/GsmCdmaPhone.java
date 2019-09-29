@@ -70,10 +70,12 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.UssdResponse;
 import android.telephony.data.ApnSetting;
+import android.telephony.emergency.EmergencyNumber;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
+import com.android.ims.ImsConfig;
 import com.android.ims.ImsManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaMmiCode;
@@ -214,7 +216,8 @@ public class GsmCdmaPhone extends Phone {
     private CarrierInfoManager mCIM;
 
     private final SettingsObserver mSettingsObserver;
-
+    private boolean mDeregisterVowifi = false;
+    private ImsManager mImsManager;
     // Constructors
 
     public GsmCdmaPhone(Context context, CommandsInterface ci, PhoneNotifier notifier, int phoneId,
@@ -276,6 +279,7 @@ public class GsmCdmaPhone extends Phone {
                 EVENT_DEVICE_PROVISIONING_DATA_SETTING_CHANGE);
 
         loadTtyMode();
+        mImsManager = getImsManager();
         logd("GsmCdmaPhone: constructor: sub = " + mPhoneId);
     }
 
@@ -670,6 +674,13 @@ public class GsmCdmaPhone extends Phone {
      */
     public void notifyPhoneStateChanged() {
         mNotifier.notifyPhoneState(this);
+        if (mDeregisterVowifi
+                && mCT.getState() == PhoneConstants.State.IDLE
+                && isSupportVoWifiECall()) {
+            //FIXME: please add api to re-register Vowifi
+            mImsManager.setWfcSetting(true);
+            mDeregisterVowifi = false;
+        }
     }
 
     /**
@@ -1230,6 +1241,19 @@ public class GsmCdmaPhone extends Phone {
         }
 
         Phone.checkWfcWifiOnlyModeBeforeDial(mImsPhone, mPhoneId, mContext);
+
+        if (isEmergency) {
+            if (isWifiCallingEnabled()) {
+                if (dialECallOnIms()
+                        || isFakeEmergencyNumber(dialString)) {
+                    useImsForCall = true;
+                    useImsForEmergency = true;
+                } else {
+                    useImsForCall = false;
+                    useImsForEmergency = false;
+                }
+            }
+        }
 
         if ((useImsForCall && !isUt) || (isUt && useImsForUt) || useImsForEmergency) {
             try {
@@ -4026,5 +4050,151 @@ public class GsmCdmaPhone extends Phone {
         ttyMode = Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.PREFERRED_TTY_MODE, TelecomManager.TTY_MODE_OFF);
         updateUiTtyMode(ttyMode);
+    }
+
+    /**
+     * reDialOnCS.
+     */
+    public Connection reDialOnCS(String dialString, DialArgs dialArgs)
+            throws CallStateException {
+        return dialInternal(dialString, dialArgs);
+    }
+
+    /**
+     * whether isFakeEmergencyNumber.
+     */
+    private boolean isFakeEmergencyNumber(String number) {
+        int routing = getEmergencyNumberTracker().getEmergencyCallRouting(number);
+        if (routing == EmergencyNumber.EMERGENCY_CALL_ROUTING_NORMAL) {
+            logd("isFakeEmergencyNumber: routing of " + number + " is " + routing);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * whether dialECallOnIms.
+     */
+    private boolean dialECallOnIms() {
+        logd("dial-state = " + getServiceState());
+        logd("dial-mSST.mSS = " + mSST.mSS);
+        logd("dial-imsPhone mSS = " + mImsPhone.getServiceState());
+
+        //cellC try eCall from vowifi first, if fail, retry from cellular network
+        if (getCarrierValueByKey(CarrierConfigManager.KEY_CARRIER_ECALL_ON_VOWIFI_FIRST,
+                mContext, getSubId())) {
+            logd("dialECallOnIms: ECall on vowifi first");
+            return true;
+        }
+
+        boolean useImsForEmergency = false;
+
+        if (isSupportVoWifiECall() && mSST != null) {
+            logd("dial-mSST.mSS.getState() " + mSST.mSS.getState());
+            switch (mSST.mSS.getState()) {
+                //dial from vowifi when power off
+                case ServiceState.STATE_POWER_OFF:
+                    useImsForEmergency = true;
+                    logd("dialECallOnIms: ECall on vowifi when power off");
+                    break;
+                case ServiceState.STATE_OUT_OF_SERVICE: //dial from Vowifi
+                    if (!mSST.mSS.isEmergencyOnly()) {
+                        useImsForEmergency = true;
+                        logd("dialECallOnIms: ECall on vowifi when out of service");
+                    }
+                    break;
+                case ServiceState.STATE_IN_SERVICE: {
+                    //EE deregisgter Vowifi before dial ecall on cellular network
+                    int netWorkType = mSST.mSS.getDataNetworkType();
+                    int netWorkCalss = TelephonyManager.getNetworkClass(netWorkType);
+                    if (shouldDeregisterVowifi()) {
+                        if (netWorkCalss == TelephonyManager.NETWORK_CLASS_2_G
+                                || netWorkCalss == TelephonyManager.NETWORK_CLASS_3_G) {
+                            mDeregisterVowifi = true;
+                            useImsForEmergency = false;
+                            //FIXME please add public api for de-register
+                            //just de-register, not turn off wifi calling
+                            mImsManager.setWfcSetting(false);
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                    // do nothing
+                            }
+                            logd("dialECallOnIms setVowifiRegister action = de-register");
+                        }
+                    }
+                }
+                break;
+            }
+        } else {
+            logd("dial mSST is null");
+        }
+
+        if (!useImsForEmergency && deRegisterVowifiWhenCellularPreffered()) {
+            //FIXME please add public api for de-register
+            //just de-register, not turn off wifi calling
+            mImsManager.setWfcSetting(false);
+        }
+        return useImsForEmergency;
+    }
+
+    /**
+     * getCarrierValueByKey.
+     */
+    public boolean getCarrierValueByKey(String key, Context context, int subId) {
+        logd("getCarrierValueBykey key = " + key + " context = " + context + " subId = " + subId);
+        boolean value = false;
+        CarrierConfigManager cfg = (CarrierConfigManager) getContext().getSystemService(
+                Context.CARRIER_CONFIG_SERVICE);
+        if (cfg != null) {
+            PersistableBundle globalConfig = cfg.getConfigForSubId(subId);
+            if (globalConfig != null) {
+                value = globalConfig.getBoolean(key);
+                logd("getCarrierValueBykey Value = " + value);
+            }
+        }
+        return value;
+    }
+
+    /**
+     * isSupportVoWifiECall.
+     */
+    private boolean isSupportVoWifiECall() {
+        return getCarrierValueByKey(
+                CarrierConfigManager.KEY_CARRIER_SUPPORTS_VOWIFI_ECALL, mContext, getSubId());
+    }
+
+    /**
+     * shouldDeregisterVowifi.
+     */
+    private boolean shouldDeregisterVowifi() {
+        return getCarrierValueByKey(
+                CarrierConfigManager.KEY_CARRIER_DEREG_VOWIFI_BEFORE_ECALL, mContext, getSubId());
+    }
+
+    private boolean deRegisterVowifiWhenCellularPreffered() {
+        return getCarrierValueByKey(
+                CarrierConfigManager.KEY_CARRIER_DEREG_VOWIFI_WHEN_CELLULAR_PREFERRED,
+                mContext, getPhoneId())
+                && getWfcMode() == ImsConfig.WfcModeFeatureValueConstants.CELLULAR_PREFERRED;
+    }
+
+    /**
+     * Return Wifi-calling mode.
+     */
+    private int getWfcMode() {
+        boolean isRoaming = false;
+        TelephonyManager tm = TelephonyManager.from(mContext);
+        if (tm != null) {
+            isRoaming = tm.isNetworkRoaming(getSubId());
+        }
+        return ImsManager.getInstance(mContext, getPhoneId()).getWfcMode(isRoaming);
+    }
+
+    /**
+     * getImsManager.
+     */
+    private ImsManager getImsManager() {
+        return ImsManager.getInstance(mContext, getPhoneId());
     }
 }

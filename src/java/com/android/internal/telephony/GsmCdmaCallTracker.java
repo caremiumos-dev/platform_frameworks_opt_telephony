@@ -44,6 +44,7 @@ import android.util.EventLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
+import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 
 import java.io.FileDescriptor;
@@ -1546,7 +1547,30 @@ public class GsmCdmaCallTracker extends CallTracker {
                     EventLog.writeEvent(EventLogTags.CALL_DROP, causeCode, cid,
                             TelephonyManager.getDefault().getNetworkType());
                 }
-
+                // when ecall on cellular nework failed, retry on vowifi
+                boolean reDialEccOnWifi = supportReDialEccOnVowifi();
+                if (causeCode != CallFailCause.NORMAL_CLEARING && reDialEccOnWifi) {
+                    for (int i = mDroppedDuringPoll.size() - 1; i >= 0; i--) {
+                        GsmCdmaConnection conn = mDroppedDuringPoll.get(i);
+                        Rlog.d(LOG_TAG, "processFailedCall handle Ecc conn " + conn);
+                        if (conn != null && conn.getAddress() != null) {
+                            if (PhoneNumberUtils.isEmergencyNumber(conn.getAddress())) {
+                                if (mPendingMO != null) {
+                                    if (mPendingMO.getCall() != null) {
+                                        mPendingMO.getCall().detach(mPendingMO);
+                                    }
+                                    mPendingMO = null;
+                                }
+                                reDialEccOnVowifi(conn.getAddress());
+                                if (conn.getCall() != null) {
+                                    conn.getCall().detach(conn);
+                                }
+                                mDroppedDuringPoll.remove(i);
+                                break;
+                            }
+                        }
+                    }
+                }
                 for (int i = 0, s = mDroppedDuringPoll.size(); i < s ; i++) {
                     GsmCdmaConnection conn = mDroppedDuringPoll.get(i);
 
@@ -1825,5 +1849,54 @@ public class GsmCdmaCallTracker extends CallTracker {
     @Override
     public void cleanupCalls() {
         pollCallsWhenSafe();
+    }
+
+    /**
+     * whether supportReDialEccOnVowifi.
+     */
+    public boolean supportReDialEccOnVowifi() {
+        Rlog.d(LOG_TAG, "supportReDialEccOnVowifi");
+        boolean isSupport = false;
+        CarrierConfigManager cfig =
+                (CarrierConfigManager) mPhone.getContext().getSystemService(
+                Context.CARRIER_CONFIG_SERVICE);
+        if (cfig != null) {
+            PersistableBundle globalConfig = cfig.getConfigForSubId(
+                    mPhone.getSubId());
+            if (globalConfig != null) {
+                isSupport = globalConfig.getBoolean(
+                        CarrierConfigManager.KEY_CARRIER_SUPPORTS_VOWIFI_ECALL)
+                        && globalConfig.getBoolean(
+                                CarrierConfigManager.KEY_CARRIER_RETRY_ECALL_VOWIFI);
+                Rlog.d(LOG_TAG, "isSupportVoWifiEccCall isSupport = " + isSupport);
+            }
+        }
+
+        GsmCdmaPhone phone = (GsmCdmaPhone) mPhone;
+        ImsPhone imsPhone = (ImsPhone) phone.getImsPhone();
+        if (isSupport && imsPhone != null && imsPhone.isWifiCallingEnabled()) {
+            Rlog.d(LOG_TAG, "supportReDialEccOnVowifi true");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * reDialEccOnVowifi.
+     */
+    public void reDialEccOnVowifi(String address) {
+        Rlog.d(LOG_TAG, "reDialEccOnVowifi address = " + address);
+        try {
+            if (mPhone != null && mPhone.getImsPhone() != null) {
+                Connection conn = mPhone.getImsPhone().dial(address,
+                        new ImsPhone.ImsDialArgs.Builder().build());
+                mPhone.notifyUnknownConnection(conn);
+                Rlog.d(LOG_TAG, "reDialEccOnVowifi conn:" + conn);
+            } else {
+                Rlog.d(LOG_TAG, "reDialEccOnVowifi mPhone or imsPhone is null");
+            }
+        } catch (CallStateException e) {
+            Rlog.d(LOG_TAG, "reDialEccOnVowifi CallStateException: " + e);
+        }
     }
 }

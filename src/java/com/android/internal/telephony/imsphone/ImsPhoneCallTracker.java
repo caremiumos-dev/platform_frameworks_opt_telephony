@@ -96,6 +96,7 @@ import com.android.internal.telephony.CallTracker;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.Connection;
+import com.android.internal.telephony.GsmCdmaPhone;
 import com.android.internal.telephony.LocaleTracker;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
@@ -319,12 +320,15 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private static final int EVENT_REDIAL_WIFI_E911_TIMEOUT = 29;
     private static final int EVENT_ANSWER_WAITING_CALL = 30;
     private static final int EVENT_RESUME_NOW_FOREGROUND_CALL = 31;
+    private static final int EVENT_SERVICE_STATE_CHANGED = 100;
 
     private static final int TIMEOUT_HANGUP_PENDINGMO = 500;
+    private static final int TIMEOUT_REDIAL_ECALL_ON_CS = 10000;
 
     private static final int HANDOVER_TO_WIFI_TIMEOUT_MS = 60000; // ms
 
     private static final int TIMEOUT_REDIAL_WIFI_E911_MS = 10000;
+    private static final int EVENT_RETRY_TIMEOUT        = 20000;
 
     private static final int TIMEOUT_PARTICIPANT_CONNECT_TIME_CACHE_MS = 60000; //ms
 
@@ -2452,6 +2456,39 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                         .getSystemService(Context.CONNECTIVITY_SERVICE);
                 mgr.setAirplaneMode(false);
                 return;
+            } else if (reasonInfo.getCode() != ImsReasonInfo.CODE_USER_TERMINATED
+                    && isVowifiEnabled()) {
+                ImsCallProfile profile = imsCall.getCallProfile();
+                CarrierConfigManager configManager = (CarrierConfigManager)
+                        mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+                boolean retryonCellularNetwork = false;
+                if (configManager != null) {
+                    PersistableBundle config = configManager.getConfigForSubId(mPhone.getSubId());
+                    if (config != null) {
+                        retryonCellularNetwork = config.getBoolean(
+                            CarrierConfigManager.KEY_CARRIER_FALLBACK_TO_CS_RETYR_ECALL, false);
+                        log("onCallTerminated retryonCellularNetwork: " + retryonCellularNetwork);
+                    }
+                }
+                if (profile != null
+                        && profile.mServiceType == ImsCallProfile.SERVICE_TYPE_EMERGENCY
+                        && retryonCellularNetwork) {
+                    boolean isAirplaneModeOn = Settings.Global.getInt(
+                            mPhone.getContext().getContentResolver(),
+                            Settings.Global.AIRPLANE_MODE_ON, 0) > 0;
+                    log("onCallTerminated: isAirplaneModeOn = " + isAirplaneModeOn);
+                    //close airplaneMode
+                    final ConnectivityManager mgr = (ConnectivityManager) mPhone.getContext()
+                            .getSystemService(Context.CONNECTIVITY_SERVICE);
+                    if (isAirplaneModeOn) {
+                        mgr.setAirplaneMode(false);
+                    }
+                    Pair<ImsCall, ImsReasonInfo> callInfo = new Pair<>(imsCall, reasonInfo);
+                    mPhone.getDefaultPhone().getServiceStateTracker().registerForNetworkAttached(
+                            ImsPhoneCallTracker.this, EVENT_SERVICE_STATE_CHANGED, callInfo);
+                    sendMessageDelayed(obtainMessage(EVENT_RETRY_TIMEOUT, callInfo),
+                            TIMEOUT_REDIAL_ECALL_ON_CS);
+                }
             } else {
                 processCallStateChange(imsCall, ImsPhoneCall.State.DISCONNECTED, cause);
             }
@@ -2529,6 +2566,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     mImsManager.updateImsServiceConfig(true);
                 }
                 mShouldUpdateImsConfigOnDisconnect = false;
+            }
+            //add for vowifi emergency call
+            if (mPhone.getState() == PhoneConstants.State.IDLE) {
+                GsmCdmaPhone gsmCdmaPhone = (GsmCdmaPhone) mPhone.getDefaultPhone();
+                log("gsmCdmaPhone.getState() = " + gsmCdmaPhone.getState());
+                if (gsmCdmaPhone.getState() != PhoneConstants.State.IDLE) {
+                    gsmCdmaPhone.mCT.sendEmptyMessage(EVENT_CALL_STATE_CHANGE);
+                }
             }
         }
 
@@ -3483,20 +3528,23 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 removeMessages(EVENT_REDIAL_WIFI_E911_TIMEOUT);
                 mPhone.getDefaultPhone().getServiceStateTracker()
                         .unregisterForNetworkAttached(this);
-                ImsPhoneConnection oldConnection = findConnection(callInfo.first);
-                if (oldConnection == null) {
-                    sendCallStartFailedDisconnect(callInfo.first, callInfo.second);
-                    break;
-                }
-                mForegroundCall.detach(oldConnection);
-                removeConnection(oldConnection);
-                try {
-                    Connection newConnection =
-                            mPhone.getDefaultPhone().dial(mLastDialString, mLastDialArgs);
-                    oldConnection.onOriginalConnectionReplaced(newConnection);
-                } catch (CallStateException e) {
-                    sendCallStartFailedDisconnect(callInfo.first, callInfo.second);
-                }
+//                ImsPhoneConnection oldConnection = findConnection(callInfo.first);
+//                if (oldConnection == null) {
+//                    sendCallStartFailedDisconnect(callInfo.first, callInfo.second);
+//                    break;
+//                }
+//                mForegroundCall.detach(oldConnection);
+//                removeConnection(oldConnection);
+//                try {
+//                    Connection newConnection =
+//                            mPhone.getDefaultPhone().dial(mLastDialString, mLastDialArgs);
+//                    oldConnection.onOriginalConnectionReplaced(newConnection);
+//                } catch (CallStateException e) {
+//                    sendCallStartFailedDisconnect(callInfo.first, callInfo.second);
+//                }
+                // LastDialString can not be treated as emergency number
+                // redial as emergency call
+                redialWifiE911Call(callInfo.first, callInfo.second);
                 break;
             }
             case EVENT_REDIAL_WIFI_E911_TIMEOUT: {
@@ -3504,6 +3552,26 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 mPhone.getDefaultPhone().getServiceStateTracker()
                         .unregisterForNetworkAttached(this);
                 removeMessages(EVENT_REDIAL_WIFI_E911_CALL);
+                sendCallStartFailedDisconnect(callInfo.first, callInfo.second);
+                break;
+            }
+            case EVENT_SERVICE_STATE_CHANGED: {
+                Pair<ImsCall, ImsReasonInfo> callInfo =
+                        (Pair<ImsCall, ImsReasonInfo>) ((AsyncResult) msg.obj).userObj;
+                if (callInfo == null) {
+                    break;
+                }
+                removeMessages(EVENT_RETRY_TIMEOUT);
+                mPhone.getDefaultPhone().getServiceStateTracker()
+                        .unregisterForNetworkAttached(this);
+                redialECallByCellularNetwork(callInfo.first, callInfo.second);
+                break;
+            }
+            case EVENT_RETRY_TIMEOUT: {
+                Pair<ImsCall, ImsReasonInfo> callInfo = (Pair<ImsCall, ImsReasonInfo>) msg.obj;
+                mPhone.getDefaultPhone().getServiceStateTracker()
+                        .unregisterForNetworkAttached(this);
+                removeMessages(EVENT_SERVICE_STATE_CHANGED);
                 sendCallStartFailedDisconnect(callInfo.first, callInfo.second);
                 break;
             }
@@ -4379,5 +4447,62 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
      */
     public boolean isConferenceEventPackageEnabled() {
         return mIsConferenceEventPackageEnabled;
+    }
+
+    /**
+     * redial on CellularNetwork if ecall on IWAN failed.
+     */
+    private boolean redialECallByCellularNetwork(ImsCall imsCall, ImsReasonInfo reasonInfo) {
+        if (mPendingMO == null) {
+            return false;
+        }
+        ImsPhoneConnection oldConnection = findConnection(imsCall);
+        if (oldConnection == null) {
+            sendCallStartFailedDisconnect(imsCall, reasonInfo);
+            return false;
+        }
+        mForegroundCall.detach(oldConnection);
+        removeConnection(oldConnection);
+        try {
+            Connection newConnection =
+                    mPhone.getDefaultPhone().dial(mLastDialString, mLastDialArgs);
+            oldConnection.onOriginalConnectionReplaced(newConnection);
+            return true;
+        } catch (CallStateException e) {
+            sendCallStartFailedDisconnect(imsCall, reasonInfo);
+        }
+        return false;
+    }
+
+    /**
+     * redial WIFI E911 call on Cellular Network.
+     */
+    private boolean redialWifiE911Call(ImsCall imsCall, ImsReasonInfo reasonInfo) {
+        if (mPendingMO == null) {
+            return false;
+        }
+        int category = EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_UNSPECIFIED;
+        try {
+            category = Integer.parseInt(reasonInfo.getExtraMessage());
+        } catch (NumberFormatException e) {
+        }
+
+        String reDialNum = "";
+        ImsPhoneConnection oldConnection = findConnection(imsCall);
+        if (oldConnection == null) {
+            sendCallStartFailedDisconnect(imsCall, reasonInfo);
+            return false;
+        }
+        mForegroundCall.detach(oldConnection);
+        removeConnection(oldConnection);
+        reDialNum = oldConnection.getAddress();
+        GsmCdmaPhone gsmCdmaPhone = (GsmCdmaPhone) mPhone.getDefaultPhone();
+        EmergencyNumber emergencyNumberInfo = new EmergencyNumber(reDialNum, "", "", category ,
+                new ArrayList<String>(),
+                EmergencyNumber.EMERGENCY_NUMBER_SOURCE_NETWORK_SIGNALING,
+                EmergencyNumber.EMERGENCY_CALL_ROUTING_EMERGENCY);
+        gsmCdmaPhone.mCi.dial(reDialNum, true, emergencyNumberInfo, true,
+                CommandsInterface.CLIR_DEFAULT, null);
+        return true;
     }
 }
