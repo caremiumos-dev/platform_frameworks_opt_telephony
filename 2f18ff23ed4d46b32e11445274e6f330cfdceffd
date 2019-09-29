@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e423f398_7b82f8c1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1099423
+      },
+      "writtenOn": "2019-09-29T06:17:07Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 7,
+        "startChar": 51,
+        "endLine": 7,
+        "endChar": 59
+      },
+      "revId": "2f18ff23ed4d46b32e11445274e6f330cfdceffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b546ad62_297f1b15",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1784,
+      "author": {
+        "id": 1099423
+      },
+      "writtenOn": "2019-09-29T06:17:07Z",
+      "side": 1,
+      "message": "start a new line please",
+      "range": {
+        "startLine": 1784,
+        "startChar": 20,
+        "endLine": 1784,
+        "endChar": 126
+      },
+      "revId": "2f18ff23ed4d46b32e11445274e6f330cfdceffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
