@@ -89,8 +89,7 @@ public class ImsPhoneCallTest extends TelephonyTest {
         assertEquals(Call.State.IDLE, mImsCallUT.getState());
     }
 
-    @FlakyTest
-    @Ignore
+    @FlakyTest(bugId = 141812757)
     @Test
     @SmallTest
     public void testConnectionDisconnected() {
@@ -105,6 +104,8 @@ public class ImsPhoneCallTest extends TelephonyTest {
         assertEquals(Call.State.ACTIVE, mImsCallUT.getState());
         doReturn(Call.State.DISCONNECTED).when(mConnection2).getState();
         mImsCallUT.connectionDisconnected(null);
+        assertEquals(Call.State.DISCONNECTED, mImsCallUT.getState());
+        mImsCallUT.onHangupLocal();
         assertEquals(Call.State.DISCONNECTED, mImsCallUT.getState());
     }
 
