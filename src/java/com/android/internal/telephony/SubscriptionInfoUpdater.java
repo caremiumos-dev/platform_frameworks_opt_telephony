@@ -615,10 +615,23 @@ public class SubscriptionInfoUpdater extends Handler {
         SubscriptionController.getInstance().clearSubInfoRecord(slotIndex);
 
         // If SIM is not absent, insert new record or update existing record.
+        boolean isSameIccId = false;
         if (!ICCID_STRING_FOR_NO_SIM.equals(mIccId[slotIndex])) {
-           logd("updateSubscriptionInfoByIccId: adding subscription info record: iccid: "
-                    + mIccId[slotIndex] + "slot: " + slotIndex);
-           mSubscriptionManager.addSubscriptionInfoRecord(mIccId[slotIndex], slotIndex);
+            //If some special SIMs may have the same IccIds, add suffix to distinguish them
+            for (int i = 0;i < PROJECT_SIM_NUM ;i++) {
+                if (i != slotIndex && TextUtils.equals(mIccId[i],mIccId[slotIndex])) {
+                    mSubscriptionManager.addSubscriptionInfoRecord(mIccId[i]
+                            + Integer.toString(slotIndex), slotIndex);
+                    isSameIccId = true;
+                    logd("SUB" + (i + 1) + " has invalid IccId");
+                }
+            }
+
+            if (!isSameIccId) {
+                logd("updateSubscriptionInfoByIccId: adding subscription info record: iccid: "
+                        + mIccId[slotIndex] + "slot: " + slotIndex);
+                mSubscriptionManager.addSubscriptionInfoRecord(mIccId[slotIndex], slotIndex);
+            }
         }
 
         List<SubscriptionInfo> subInfos = SubscriptionController.getInstance()

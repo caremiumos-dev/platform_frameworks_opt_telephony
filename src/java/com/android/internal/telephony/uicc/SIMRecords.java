@@ -803,6 +803,10 @@ public class SIMRecords extends IccRecords {
                     data = (byte[]) ar.result;
 
                     if (ar.exception != null) {
+                        //Add invalid ICCID cache
+                        log("Get iccid occur exception, set default value");
+                        mFullIccId = String.format("%020d",0);
+                        mIccId = mFullIccId;
                         break;
                     }
 
