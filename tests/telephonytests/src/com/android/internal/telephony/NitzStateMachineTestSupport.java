@@ -24,6 +24,7 @@ import android.icu.util.TimeZone;
 import android.util.TimestampedValue;
 
 import com.android.internal.telephony.NitzStateMachine.DeviceState;
+import com.android.internal.telephony.nitz.service.PhoneTimeSuggestion;
 
 /**
  * An assortment of methods and classes for testing {@link NitzStateMachine} implementations.
@@ -273,6 +274,13 @@ public final class NitzStateMachineTestSupport {
         cal.clear();
         cal.set(year, monthInYear - 1, day, hourOfDay, minute, second);
         return cal.getTimeInMillis();
+    }
+
+    public static PhoneTimeSuggestion createTimeSuggestionFromNitzSignal(
+            int phoneId, TimestampedValue<NitzData> nitzSignal) {
+        PhoneTimeSuggestion timeSuggestion = new PhoneTimeSuggestion(phoneId);
+        timeSuggestion.setUtcTime(createTimeSignalFromNitzSignal(nitzSignal));
+        return timeSuggestion;
     }
 
     public static TimestampedValue<Long> createTimeSignalFromNitzSignal(
