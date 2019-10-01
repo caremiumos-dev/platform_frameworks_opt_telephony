@@ -190,6 +190,30 @@
       "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb492a3b_d57c4c64",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-10-01T00:20:29Z",
+      "side": 1,
+      "message": "OPSTR_WRITE_SMS is allowed for default SMS app only. Should we use mAppOps.noteOp(AppOpsManager.OPSTR_WRITE_SMS, ..)\" instead of mAppOps.noteOp(AppOpsManager.OPSTR_SEND_SMS, ..)?",
+      "parentUuid": "76a0db13_80896ad3",
+      "range": {
+        "startLine": 587,
+        "startChar": 8,
+        "endLine": 590,
+        "endChar": 8
+      },
+      "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
