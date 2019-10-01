@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d539dc2_04b591e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-01T17:25:02Z",
+      "side": 1,
+      "message": "If this is a CP from an existing internal change, please also add the tag \"Merged-In:\" with the same Change-Id.\n\nThat will tell the automerger to skip branches that already have the change and prevent merge conflicts (although I\u0027m surprised it didnt generate any).",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 9
+      },
+      "revId": "7f194e67b977e7d5eae6e01ef80b2b0892da1c4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
