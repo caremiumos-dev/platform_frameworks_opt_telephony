@@ -57,12 +57,14 @@ interface IIccPhoneBook {
      * @param newPhoneNumber adn number ot be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param oldEmails adn email to be replaced
+     * @param newEmails adn email to be stored
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @return true for success
      */
     boolean updateAdnRecordsInEfBySearch(int efid,
-            String oldTag, String oldPhoneNumber,
-            String newTag, String newPhoneNumber,
+            String oldTag, String oldPhoneNumber, in String[] oldEmails,
+            String newTag, String newPhoneNumber, in String[] newEmails,
             String pin2);
 
 
@@ -82,13 +84,15 @@ interface IIccPhoneBook {
      * @param newPhoneNumber adn number ot be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param oldEmails adn email to be replaced
+     * @param newEmails adn email to be stored
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @param subId user preferred subId
      * @return true for success
      */
     boolean updateAdnRecordsInEfBySearchForSubscriber(int subId, int efid,
-            String oldTag, String oldPhoneNumber,
-            String newTag, String newPhoneNumber,
+            String oldTag, String oldPhoneNumber, in String[] oldEmails,
+            String newTag, String newPhoneNumber, in String[] newEmails,
             String pin2);
     /**
      * Update an ADN-like EF record by record index
@@ -101,12 +105,13 @@ interface IIccPhoneBook {
      * @param newPhoneNumber adn number to be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param newEmails adn email to be stored
      * @param index is 1-based adn record index to be updated
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @return true for success
      */
     boolean updateAdnRecordsInEfByIndex(int efid, String newTag,
-            String newPhoneNumber, int index,
+            String newPhoneNumber, in String[] newEmails, int index,
             String pin2);
 
     /**
@@ -120,13 +125,14 @@ interface IIccPhoneBook {
      * @param newPhoneNumber adn number to be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param newEmails adn email to be stored
      * @param index is 1-based adn record index to be updated
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @param subId user preferred subId
      * @return true for success
      */
     boolean updateAdnRecordsInEfByIndexForSubscriber(int subId, int efid, String newTag,
-            String newPhoneNumber, int index,
+            String newPhoneNumber, String[] newEmails, int index,
             String pin2);
 
     /**

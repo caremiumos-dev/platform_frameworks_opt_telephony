@@ -157,13 +157,16 @@ public class IccPhoneBookInterfaceManager {
      * @param newPhoneNumber adn number ot be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param oldEmails adn email to be replaced
+     * @param newEmails adn email to be stored
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @return true for success
      */
     public boolean
     updateAdnRecordsInEfBySearch (int efid,
-            String oldTag, String oldPhoneNumber,
-            String newTag, String newPhoneNumber, String pin2) {
+            String oldTag, String oldPhoneNumber, String[] oldEmails,
+            String newTag, String newPhoneNumber, String[] newEmails,
+            String pin2) {
 
 
         if (mPhone.getContext().checkCallingOrSelfPermission(
@@ -185,8 +188,8 @@ public class IccPhoneBookInterfaceManager {
         Request updateRequest = new Request();
         synchronized (updateRequest) {
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, updateRequest);
-            AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
-            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
+            AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmails);
+            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber, newEmails);
             if (mAdnCache != null) {
                 mAdnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
                 waitForResult(updateRequest);
@@ -210,13 +213,15 @@ public class IccPhoneBookInterfaceManager {
      * @param newPhoneNumber adn number to be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param newEmails adn email to be stored
      * @param index is 1-based adn record index to be updated
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @return true for success
      */
     public boolean
     updateAdnRecordsInEfByIndex(int efid, String newTag,
-            String newPhoneNumber, int index, String pin2) {
+            String newPhoneNumber, String[] newEmails,
+            int index, String pin2) {
 
         if (mPhone.getContext().checkCallingOrSelfPermission(
                 android.Manifest.permission.WRITE_CONTACTS)
@@ -235,7 +240,7 @@ public class IccPhoneBookInterfaceManager {
         Request updateRequest = new Request();
         synchronized (updateRequest) {
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, updateRequest);
-            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
+            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber, newEmails);
             if (mAdnCache != null) {
                 mAdnCache.updateAdnByIndex(efid, newAdn, index, pin2, response);
                 waitForResult(updateRequest);
