@@ -534,33 +534,36 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
 
              case EVENT_GET_RECORD_SIZE_IMG_DONE:
              case EVENT_GET_RECORD_SIZE_DONE:
-                ar = (AsyncResult)msg.obj;
-                lc = (LoadLinearFixedContext) ar.userObj;
-                result = (IccIoResult) ar.result;
-                response = lc.mOnLoaded;
+                 ar = (AsyncResult)msg.obj;
+                 lc = (LoadLinearFixedContext) ar.userObj;
+                 result = (IccIoResult) ar.result;
+                 response = lc.mOnLoaded;
 
-                if (processException(response, (AsyncResult) msg.obj)) {
-                    loge("exception caught from EVENT_GET_RECORD_SIZE");
-                    break;
-                }
+                 if (processException(response, (AsyncResult) msg.obj)) {
+                     loge("exception caught from EVENT_GET_RECORD_SIZE");
+                     break;
+                 }
 
-                data = result.payload;
-                path = lc.mPath;
+                 data = result.payload;
+                 path = lc.mPath;
 
-                if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
-                    throw new IccFileTypeMismatch();
-                }
+                 if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
+                     throw new IccFileTypeMismatch();
+                 }
 
-                if (EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
-                    throw new IccFileTypeMismatch();
-                }
+                 if (EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
+                     throw new IccFileTypeMismatch();
+                 }
 
-                lc.mRecordSize = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
+                 lc.mRecordSize = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
 
-                size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
-                       + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
+                 size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
+                         + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
 
-                lc.mCountRecords = size / lc.mRecordSize;
+                 lc.mCountRecords = size / lc.mRecordSize;
+                 // added to reduce reading record size operation.
+                 lc.mOnLoaded.arg2 = ((lc.mRecordSize & 0xFF) << 16)
+                         + (lc.mCountRecords & 0xFFFF);
 
                  if (lc.mLoadAll) {
                      lc.results = new ArrayList<byte[]>(lc.mCountRecords);
@@ -601,7 +604,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                        + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
 
                 lc.mCountRecords = size / lc.mRecordSize;
-                // added for redusing reading record size operation at 2016.08.16
+                // added to reduce reading record size operation.
                 lc.mOnLoaded.arg2 = ((lc.mRecordSize & 0xFF) << 16) + (lc.mCountRecords & 0xFFFF);
 
                 Log.d("IccFileHandler",
