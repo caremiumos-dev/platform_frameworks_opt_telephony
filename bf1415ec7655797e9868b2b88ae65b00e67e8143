@@ -87,6 +87,24 @@
       "revId": "bf1415ec7655797e9868b2b88ae65b00e67e8143",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6839db97_e782438a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-10-02T04:36:27Z",
+      "side": 1,
+      "message": "Unfortunately slotId is very misleading now. We have the concept of logical slot index, which is the same as phone index. It is basically the index in the phone array in PhoneFactory and the index of CommandsInterface as well.\n\nThe physical slot index is the index of the actual physical slot on the device. It is basically the index in UiccSlot array in UiccController. Generally they should be the same except in cases where the mapping between logical and physical slots can change. For example if there is just one logical slot on the device, but 2 physical slots (eSIM and pSIM), the mapping can change. In general though, the meaning of slotId depends on the API. In most cases it refers to logical slot/phone, and where it refers to physical slot, we have tried to call that out explicitly.",
+      "parentUuid": "9e5f04ee_fd089911",
+      "revId": "bf1415ec7655797e9868b2b88ae65b00e67e8143",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
