@@ -122,7 +122,7 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
         @Override
         public void onLooperPrepared() {
             mUpdater = new SubscriptionInfoUpdater(getLooper(), mContext, new Phone[]{mPhone},
-                    new CommandsInterface[]{mSimulatedCommands}, mPackageManager);
+                    mSubscriptionController, mPackageManager);
             setReady(true);
         }
     }
