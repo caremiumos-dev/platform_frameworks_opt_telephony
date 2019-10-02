@@ -110,6 +110,7 @@ public class SubscriptionInfoUpdater extends Handler {
     private static int[] sSimCardState = new int[SUPPORTED_MODEM_COUNT];
     private static int[] sSimApplicationState = new int[SUPPORTED_MODEM_COUNT];
     private static boolean sIsSubInfoInitialized = false;
+    private SubscriptionController mSubscriptionController = null;
     private SubscriptionManager mSubscriptionManager = null;
     private EuiccManager mEuiccManager;
     @UnsupportedAppUsage
@@ -134,20 +135,19 @@ public class SubscriptionInfoUpdater extends Handler {
         void run(boolean hasChanges);
     }
 
-    // TODO: The SubscriptionController instance should be passed in here from PhoneFactory
-    // rather than invoking the static getter all over the place.
     public SubscriptionInfoUpdater(
-            Looper looper, Context context, CommandsInterface[] ci) {
-        this(looper, context, ci, IPackageManager.Stub.asInterface(
-                ServiceManager.getService("package")));
+            Looper looper, Context context, SubscriptionController sc) {
+        this(looper, context, sc,
+                IPackageManager.Stub.asInterface(ServiceManager.getService("package")));
     }
 
     @VisibleForTesting public SubscriptionInfoUpdater(Looper looper, Context context,
-            CommandsInterface[] ci, IPackageManager packageMgr) {
+            SubscriptionController sc, IPackageManager packageMgr) {
         logd("Constructor invoked");
         mBackgroundHandler = new Handler(looper);
 
         sContext = context;
+        mSubscriptionController = sc;
         mSubscriptionManager = SubscriptionManager.from(sContext);
         mEuiccManager = (EuiccManager) sContext.getSystemService(Context.EUICC_SERVICE);
         mPackageManager = packageMgr;
@@ -301,7 +301,7 @@ public class SubscriptionInfoUpdater extends Handler {
                 cardIds.add(getCardIdFromPhoneId(msg.arg1));
                 updateEmbeddedSubscriptions(cardIds, (hasChanges) -> {
                     if (hasChanges) {
-                        SubscriptionController.getInstance().notifySubscriptionInfoChanged();
+                        mSubscriptionController.notifySubscriptionInfoChanged();
                     }
                 });
                 broadcastSimStateChanged(msg.arg1, IccCardConstants.INTENT_VALUE_ICC_READY, null);
@@ -319,7 +319,7 @@ public class SubscriptionInfoUpdater extends Handler {
                 cardIds.add(getCardIdFromPhoneId(msg.arg1));
                 updateEmbeddedSubscriptions(cardIds, (hasChanges) -> {
                     if (hasChanges) {
-                        SubscriptionController.getInstance().notifySubscriptionInfoChanged();
+                        mSubscriptionController.notifySubscriptionInfoChanged();
                     }
                 });
                 handleSimNotReady(msg.arg1);
@@ -330,7 +330,7 @@ public class SubscriptionInfoUpdater extends Handler {
                 Runnable r = (Runnable) msg.obj;
                 updateEmbeddedSubscriptions(cardIds, (hasChanges) -> {
                     if (hasChanges) {
-                        SubscriptionController.getInstance().notifySubscriptionInfoChanged();
+                        mSubscriptionController.notifySubscriptionInfoChanged();
                     }
                     if (r != null) {
                         r.run();
@@ -350,7 +350,7 @@ public class SubscriptionInfoUpdater extends Handler {
                 Context.TELEPHONY_SERVICE)).getActiveModemCount();
         // For inactive modems, reset its states.
         for (int phoneId = activeModemCount; phoneId < SUPPORTED_MODEM_COUNT; phoneId++) {
-            SubscriptionController.getInstance().clearSubInfoRecord(phoneId);
+            mSubscriptionController.clearSubInfoRecord(phoneId);
             sIccId[phoneId] = null;
             sSimCardState[phoneId] = TelephonyManager.SIM_STATE_UNKNOWN;
             sSimApplicationState[phoneId] = TelephonyManager.SIM_STATE_UNKNOWN;
@@ -464,8 +464,8 @@ public class SubscriptionInfoUpdater extends Handler {
         sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
 
         updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
-        List<SubscriptionInfo> subscriptionInfos = SubscriptionController.getInstance()
-                .getSubInfoUsingSlotIndexPrivileged(phoneId);
+        List<SubscriptionInfo> subscriptionInfos =
+                mSubscriptionController.getSubInfoUsingSlotIndexPrivileged(phoneId);
         if (subscriptionInfos == null || subscriptionInfos.isEmpty()) {
             loge("empty subinfo for phoneId: " + phoneId + "could not update ContentResolver");
         } else {
@@ -476,10 +476,10 @@ public class SubscriptionInfoUpdater extends Handler {
                 String operator = tm.getSimOperatorNumeric(subId);
 
                 if (!TextUtils.isEmpty(operator)) {
-                    if (subId == SubscriptionController.getInstance().getDefaultSubId()) {
+                    if (subId == mSubscriptionController.getDefaultSubId()) {
                         MccTable.updateMccMncConfiguration(sContext, operator);
                     }
-                    SubscriptionController.getInstance().setMccMnc(operator, subId);
+                    mSubscriptionController.setMccMnc(operator, subId);
                 } else {
                     logd("EVENT_RECORDS_LOADED Operator name is null");
                 }
@@ -487,25 +487,25 @@ public class SubscriptionInfoUpdater extends Handler {
                 String iso = tm.getSimCountryIsoForPhone(phoneId);
 
                 if (!TextUtils.isEmpty(iso)) {
-                    SubscriptionController.getInstance().setCountryIso(iso, subId);
+                    mSubscriptionController.setCountryIso(iso, subId);
                 } else {
                     logd("EVENT_RECORDS_LOADED sim country iso is null");
                 }
 
                 String msisdn = tm.getLine1Number(subId);
                 if (msisdn != null) {
-                    SubscriptionController.getInstance().setDisplayNumber(msisdn, subId);
+                    mSubscriptionController.setDisplayNumber(msisdn, subId);
                 }
 
                 String imsi = tm.createForSubscriptionId(subId).getSubscriberId();
                 if (imsi != null) {
-                    SubscriptionController.getInstance().setImsi(imsi, subId);
+                    mSubscriptionController.setImsi(imsi, subId);
                 }
 
                 String[] ehplmns = records.getEhplmns();
                 String[] hplmns = records.getPlmnsFromHplmnActRecord();
                 if (ehplmns != null || hplmns != null) {
-                    SubscriptionController.getInstance().setAssociatedPlmns(ehplmns, hplmns, subId);
+                    mSubscriptionController.setAssociatedPlmns(ehplmns, hplmns, subId);
                 }
 
                 /* Update preferred network type and network selection mode on SIM change.
@@ -629,7 +629,7 @@ public class SubscriptionInfoUpdater extends Handler {
         // Clear phoneId only when sim absent is not enough. It's possible to switch SIM profile
         // within the same slot. Need to clear the slot index of the previous sub. Thus always clear
         // for the changing slot first.
-        SubscriptionController.getInstance().clearSubInfoRecord(phoneId);
+        mSubscriptionController.clearSubInfoRecord(phoneId);
 
         // If SIM is not absent, insert new record or update existing record.
         if (!ICCID_STRING_FOR_NO_SIM.equals(sIccId[phoneId])) {
@@ -638,8 +638,8 @@ public class SubscriptionInfoUpdater extends Handler {
             mSubscriptionManager.addSubscriptionInfoRecord(sIccId[phoneId], phoneId);
         }
 
-        List<SubscriptionInfo> subInfos = SubscriptionController.getInstance()
-                .getSubInfoUsingSlotIndexPrivileged(phoneId);
+        List<SubscriptionInfo> subInfos =
+                mSubscriptionController.getSubInfoUsingSlotIndexPrivileged(phoneId);
         if (subInfos != null) {
             boolean changed = false;
             for (int i = 0; i < subInfos.size(); i++) {
@@ -658,7 +658,7 @@ public class SubscriptionInfoUpdater extends Handler {
             }
             if (changed) {
                 // refresh Cached Active Subscription Info List
-                SubscriptionController.getInstance().refreshCachedActiveSubscriptionInfoList();
+                mSubscriptionController.refreshCachedActiveSubscriptionInfoList();
             }
         }
 
@@ -688,22 +688,22 @@ public class SubscriptionInfoUpdater extends Handler {
             }
             updateEmbeddedSubscriptions(cardIds, (hasChanges) -> {
                 if (hasChanges) {
-                    SubscriptionController.getInstance().notifySubscriptionInfoChanged();
+                    mSubscriptionController.notifySubscriptionInfoChanged();
                 }
                 if (DBG) logd("updateSubscriptionInfoByIccId: SubscriptionInfo update complete");
             });
         }
 
-        SubscriptionController.getInstance().notifySubscriptionInfoChanged();
+        mSubscriptionController.notifySubscriptionInfoChanged();
         if (DBG) logd("updateSubscriptionInfoByIccId: SubscriptionInfo update complete");
     }
 
-    private static void setSubInfoInitialized() {
+    private void setSubInfoInitialized() {
         // Should only be triggered once.
         if (!sIsSubInfoInitialized) {
             if (DBG) logd("SubInfo Initialized");
             sIsSubInfoInitialized = true;
-            SubscriptionController.getInstance().notifySubInfoReady();
+            mSubscriptionController.notifySubInfoReady();
             MultiSimSettingController.getInstance().notifyAllSubscriptionLoaded();
         }
     }
@@ -813,7 +813,7 @@ public class SubscriptionInfoUpdater extends Handler {
         // Update or insert records for all embedded subscriptions (except non-removable ones if the
         // current eUICC is non-removable, since we assume these are still accessible though not
         // returned by the eUICC controller).
-        List<SubscriptionInfo> existingSubscriptions = SubscriptionController.getInstance()
+        List<SubscriptionInfo> existingSubscriptions = mSubscriptionController
                 .getSubscriptionInfoListForEmbeddedSubscriptionUpdate(embeddedIccids, isRemovable);
         ContentResolver contentResolver = sContext.getContentResolver();
         for (EuiccProfileInfo embeddedProfile : embeddedProfiles) {
@@ -823,7 +823,7 @@ public class SubscriptionInfoUpdater extends Handler {
             int nameSource = SubscriptionManager.NAME_SOURCE_DEFAULT_SOURCE;
             if (index < 0) {
                 // No existing entry for this ICCID; create an empty one.
-                SubscriptionController.getInstance().insertEmptySubInfoRecord(
+                mSubscriptionController.insertEmptySubInfoRecord(
                         embeddedProfile.getIccid(), SubscriptionManager.SIM_NOT_INSERTED);
             } else {
                 nameSource = existingSubscriptions.get(index).getNameSource();
@@ -885,7 +885,7 @@ public class SubscriptionInfoUpdater extends Handler {
                     SubscriptionManager.ICC_ID + "=\"" + embeddedProfile.getIccid() + "\"", null);
 
             // refresh Cached Active Subscription Info List
-            SubscriptionController.getInstance().refreshCachedActiveSubscriptionInfoList();
+            mSubscriptionController.refreshCachedActiveSubscriptionInfoList();
         }
 
         // Remove all remaining subscriptions which have embedded = true. We set embedded to false
@@ -913,7 +913,7 @@ public class SubscriptionInfoUpdater extends Handler {
             contentResolver.update(SubscriptionManager.CONTENT_URI, values, whereClause, null);
 
             // refresh Cached Active Subscription Info List
-            SubscriptionController.getInstance().refreshCachedActiveSubscriptionInfoList();
+            mSubscriptionController.refreshCachedActiveSubscriptionInfoList();
         }
 
         if (DBG) logd("updateEmbeddedSubscriptions done hasChanges=" + hasChanges);
@@ -963,20 +963,14 @@ public class SubscriptionInfoUpdater extends Handler {
             return;
         }
 
-        SubscriptionController sc = SubscriptionController.getInstance();
-        if (sc == null) {
-            loge("SubscriptionController was null");
-            return;
-        }
-
-        int currentSubId = sc.getSubIdUsingPhoneId(phoneId);
+        int currentSubId = mSubscriptionController.getSubIdUsingPhoneId(phoneId);
         if (!SubscriptionManager.isValidSubscriptionId(currentSubId)
                 || currentSubId == SubscriptionManager.DEFAULT_SUBSCRIPTION_ID) {
             if (DBG) logd("No subscription is active for phone being updated");
             return;
         }
 
-        SubscriptionInfo currentSubInfo = sc.getSubscriptionInfo(currentSubId);
+        SubscriptionInfo currentSubInfo = mSubscriptionController.getSubscriptionInfo(currentSubId);
         if (currentSubInfo == null) {
             loge("Couldn't retrieve subscription info for current subscription");
             return;
@@ -1019,8 +1013,8 @@ public class SubscriptionInfoUpdater extends Handler {
                             && currentSubInfo.getGroupUuid() != null) {
                         cv.put(SubscriptionManager.GROUP_UUID, (String) null);
                         if (DBG) logd("Group Removed for" + currentSubId);
-                    } else if (SubscriptionController.getInstance().canPackageManageGroup(groupUuid,
-                        configPackageName)) {
+                    } else if (mSubscriptionController.canPackageManageGroup(
+                            groupUuid, configPackageName)) {
                         cv.put(SubscriptionManager.GROUP_UUID, groupUuid.toString());
                         cv.put(SubscriptionManager.GROUP_OWNER, configPackageName);
                         if (DBG) logd("Group Added for" + currentSubId);
@@ -1035,8 +1029,8 @@ public class SubscriptionInfoUpdater extends Handler {
         }
         if (cv.size() > 0 && sContext.getContentResolver().update(SubscriptionManager
                     .getUriForSubscriptionId(currentSubId), cv, null, null) > 0) {
-            sc.refreshCachedActiveSubscriptionInfoList();
-            sc.notifySubscriptionInfoChanged();
+            mSubscriptionController.refreshCachedActiveSubscriptionInfoList();
+            mSubscriptionController.notifySubscriptionInfoChanged();
             MultiSimSettingController.getInstance().notifySubscriptionGroupChanged(groupUuid);
         }
     }
@@ -1048,22 +1042,6 @@ public class SubscriptionInfoUpdater extends Handler {
             }
         }
         return -1;
-    }
-
-    private boolean isNewSim(String iccId, String decIccId, String[] oldIccId) {
-        boolean newSim = true;
-        for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
-            if(iccId.equals(oldIccId[i])) {
-                newSim = false;
-                break;
-            } else if (decIccId != null && decIccId.equals(oldIccId[i])) {
-                newSim = false;
-                break;
-            }
-        }
-        logd("newSim = " + newSim);
-
-        return newSim;
     }
 
     @UnsupportedAppUsage
