@@ -208,7 +208,7 @@ public class PhoneFactory {
                 HandlerThread pfhandlerThread = new HandlerThread("PhoneFactoryHandlerThread");
                 pfhandlerThread.start();
                 sSubInfoRecordUpdater = new SubscriptionInfoUpdater(
-                        pfhandlerThread.getLooper(), context, sCommandsInterfaces);
+                        pfhandlerThread.getLooper(), context, sc);
 
                 // Only bring up IMS if the device supports having an IMS stack.
                 if (context.getPackageManager().hasSystemFeature(
