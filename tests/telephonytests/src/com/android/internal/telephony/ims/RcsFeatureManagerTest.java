@@ -16,12 +16,17 @@
 
 package com.android.internal.telephony.ims;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.PersistableBundle;
 import android.telephony.CarrierConfigManager;
+import android.telephony.ims.feature.RcsFeature.RcsImsCapabilities;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.ims.RcsFeatureManager;
@@ -34,16 +39,66 @@ import org.mockito.Mock;
 
 public class RcsFeatureManagerTest extends TelephonyTest {
 
+    private class TestRcsFeatureManager extends RcsFeatureManager {
+        private boolean mIsCapabilityEnabled = false;
+        private int mCapabilityType = -1;
+
+        TestRcsFeatureManager(Context context, int slotId) {
+            super(context, slotId);
+        }
+
+        public void reset() {
+            mIsCapabilityEnabled = false;
+            mCapabilityType = -1;
+        }
+
+        public boolean isCapabilityEnabled() {
+            return mIsCapabilityEnabled;
+        }
+
+        public int getCapabilityType() {
+            return mCapabilityType;
+        }
+
+        public void triggerFeatureCreatedCallback() {
+            mConnectionCallback.RcsFeatureCreated();
+        }
+
+        @Override
+        public void enableRcsUceCapability(
+                @RcsImsCapabilities.RcsImsCapabilityFlag int capabilityType) {
+            if (capabilityType == RcsImsCapabilities.CAPABILITY_TYPE_OPTIONS_UCE
+                    || capabilityType == RcsImsCapabilities.CAPABILITY_TYPE_PRESENCE_UCE) {
+                mIsCapabilityEnabled = true;
+                mCapabilityType = capabilityType;
+            }
+        }
+
+        @Override
+        public void disableRcsUceCapabilities() {
+            mIsCapabilityEnabled = false;
+        }
+    }
+
+    private int mPhoneId;
+    private PersistableBundle mCarrierConfigBundle;
+    private TestRcsFeatureManager mTestRcsFeatureManager;
     @Mock
     RcsFeatureManager.SubscriptionManagerProxy mSubscriptionManagerProxy;
 
     @Before
     public void setUp() throws Exception {
         super.setUp("RcsFeatureManagerTest");
+        mPhoneId = mPhone.getPhoneId();
+        mCarrierConfigBundle = mContextFixture.getCarrierConfigBundle();
+
+        doReturn(null).when(mContext).getMainLooper();
+        doReturn(true).when(mPackageManager).hasSystemFeature(PackageManager.FEATURE_TELEPHONY_IMS);
 
         when(mSubscriptionManagerProxy.getSubId(0)).thenReturn(1);
-
         RcsFeatureManager.setSubscriptionManager(mSubscriptionManagerProxy);
+
+        mTestRcsFeatureManager = new TestRcsFeatureManager(mContext, mPhoneId);
     }
 
     @After
@@ -58,19 +113,51 @@ public class RcsFeatureManagerTest extends TelephonyTest {
     @SmallTest
     public void testRcsUceFeatureIsSupportedByCarrier() {
         int phoneId = mPhone.getPhoneId();
-        PersistableBundle bundle = mContextFixture.getCarrierConfigBundle();
 
         // RCS UCE is supported by carrier
-        setIsSupportedByCarrier(bundle, true);
+        setIsSupportedByCarrier(true, true);
         assertTrue(RcsFeatureManager.isRcsUceSupportedByCarrier(mContext, phoneId));
 
         // RCS UCE is not supported by carrier
-        setIsSupportedByCarrier(bundle, false);
+        setIsSupportedByCarrier(false, false);
         assertFalse(RcsFeatureManager.isRcsUceSupportedByCarrier(mContext, phoneId));
     }
 
-    private void setIsSupportedByCarrier(PersistableBundle bundle, boolean isSupported) {
-        bundle.putBoolean(CarrierConfigManager.KEY_USE_RCS_PRESENCE_BOOL, isSupported);
-        bundle.putBoolean(CarrierConfigManager.KEY_USE_RCS_SIP_OPTIONS_BOOL, isSupported);
+    /**
+     * Test enableRcsUceCapability and disableRcsUceCapabilities can be called correctly.
+     */
+    @Test
+    @SmallTest
+    public void testUpateCapabilityByCarrierConfig() {
+        // Sip Options is supported by carrier
+        setIsSupportedByCarrier(true, false);
+        mTestRcsFeatureManager.triggerFeatureCreatedCallback();
+
+        assertTrue(mTestRcsFeatureManager.isCapabilityEnabled());
+        assertEquals(mTestRcsFeatureManager.getCapabilityType(),
+                RcsImsCapabilities.CAPABILITY_TYPE_OPTIONS_UCE);
+
+        // Presence is supported by carrier
+        setIsSupportedByCarrier(false, true);
+        mTestRcsFeatureManager.reset();
+        mTestRcsFeatureManager.triggerFeatureCreatedCallback();
+
+        assertTrue(mTestRcsFeatureManager.isCapabilityEnabled());
+        assertEquals(mTestRcsFeatureManager.getCapabilityType(),
+                RcsImsCapabilities.CAPABILITY_TYPE_PRESENCE_UCE);
+
+        // UCE is not supported by carrier
+        setIsSupportedByCarrier(false, false);
+        mTestRcsFeatureManager.reset();
+        mTestRcsFeatureManager.triggerFeatureCreatedCallback();
+
+        assertFalse(mTestRcsFeatureManager.isCapabilityEnabled());
+    }
+
+    private void setIsSupportedByCarrier(boolean isOptionsSupported, boolean isPresenceSupported) {
+        mCarrierConfigBundle.putBoolean(
+                CarrierConfigManager.KEY_USE_RCS_SIP_OPTIONS_BOOL, isOptionsSupported);
+        mCarrierConfigBundle.putBoolean(
+                CarrierConfigManager.KEY_USE_RCS_PRESENCE_BOOL, isPresenceSupported);
     }
 }
