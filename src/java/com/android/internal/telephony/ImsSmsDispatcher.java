@@ -33,8 +33,10 @@ import android.telephony.ims.stub.ImsSmsImplBase;
 import android.telephony.ims.stub.ImsSmsImplBase.SendStatusResult;
 import android.util.Pair;
 
+import com.android.ims.FeatureConnector;
 import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
+import com.android.ims.RcsFeatureManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
@@ -234,7 +236,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         super(phone, smsDispatchersController);
 
         mImsManagerConnector = new ImsManager.Connector(mContext, mPhone.getPhoneId(),
-                new ImsManager.Connector.Listener() {
+                new FeatureConnector.Listener() {
                     @Override
                     public void connectionReady(ImsManager manager) throws ImsException {
                         Rlog.d(TAG, "ImsManager: connection ready.");
@@ -242,6 +244,10 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                             setListeners();
                             mIsImsServiceUp = true;
                         }
+                    }
+
+                    @Override
+                    public void connectionReady(RcsFeatureManager manager) throws ImsException {
                     }
 
                     @Override

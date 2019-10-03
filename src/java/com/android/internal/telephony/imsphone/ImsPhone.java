@@ -75,11 +75,13 @@ import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.ImsSsInfo;
 import android.text.TextUtils;
 
+import com.android.ims.FeatureConnector;
 import com.android.ims.ImsEcbm;
 import com.android.ims.ImsEcbmStateListener;
 import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.ims.ImsUtInterface;
+import com.android.ims.RcsFeatureManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.Call;
 import com.android.internal.telephony.CallForwardInfo;
@@ -197,6 +199,9 @@ public class ImsPhone extends ImsPhoneBase {
     @UnsupportedAppUsage
     private ServiceState mSS = new ServiceState();
 
+    private RcsFeatureManager mRcsFeatureManager;
+    private final RcsFeatureManager.Connector mRcsManagerConnector;
+
     // To redial silently through GSM or CDMA when dialing through IMS fails
     private String mLastDialString;
 
@@ -309,6 +314,24 @@ public class ImsPhone extends ImsPhoneBase {
         mDefaultPhone.registerForServiceStateChanged(this, EVENT_SERVICE_STATE_CHANGED, null);
         // Force initial roaming state update later, on EVENT_CARRIER_CONFIG_CHANGED.
         // Settings provider or CarrierConfig may not be loaded now.
+
+        mRcsManagerConnector = new RcsFeatureManager.Connector(mContext, mPhoneId,
+                new FeatureConnector.Listener() {
+                    @Override
+                    public void connectionReady(ImsManager manager) throws ImsException {
+                    }
+
+                    @Override
+                    public void connectionReady(RcsFeatureManager manager) throws ImsException {
+                        logd("RcsFeatureManager: connection ready");
+                        mRcsFeatureManager = manager;
+                    }
+
+                    @Override
+                    public void connectionUnavailable() {
+                    }
+                }, getContext().getMainExecutor(), "ImsPhone");
+        mRcsManagerConnector.connect();
     }
 
     //todo: get rid of this function. It is not needed since parentPhone obj never changes
@@ -331,6 +354,8 @@ public class ImsPhone extends ImsPhoneBase {
             }
             mDefaultPhone.unregisterForServiceStateChanged(this);
         }
+
+        mRcsManagerConnector.disconnect();
     }
 
     @UnsupportedAppUsage

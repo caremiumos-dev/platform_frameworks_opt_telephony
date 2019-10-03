@@ -72,6 +72,7 @@ import android.util.ArrayMap;
 import android.util.Log;
 import android.util.Pair;
 
+import com.android.ims.FeatureConnector;
 import com.android.ims.ImsCall;
 import com.android.ims.ImsConfig;
 import com.android.ims.ImsConfigListener;
@@ -80,6 +81,7 @@ import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.ims.ImsMultiEndpoint;
 import com.android.ims.ImsUtInterface;
+import com.android.ims.RcsFeatureManager;
 import com.android.ims.internal.IImsCallSession;
 import com.android.ims.internal.IImsVideoCallProvider;
 import com.android.ims.internal.ImsVideoCallProviderWrapper;
@@ -562,11 +564,15 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
         // Allow the executor to be specified for testing.
         mImsManagerConnector = new ImsManager.Connector(phone.getContext(), phone.getPhoneId(),
-                new ImsManager.Connector.Listener() {
+                new FeatureConnector.Listener() {
                     @Override
                     public void connectionReady(ImsManager manager) throws ImsException {
                         mImsManager = manager;
                         startListeningForCalls();
+                    }
+
+                    @Override
+                    public void connectionReady(RcsFeatureManager manager) throws ImsException {
                     }
 
                     @Override

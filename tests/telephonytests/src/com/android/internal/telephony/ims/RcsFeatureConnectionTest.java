@@ -20,6 +20,7 @@ import junit.framework.AssertionFailedError;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.content.Context;
@@ -120,6 +121,8 @@ public class RcsFeatureConnectionTest extends TelephonyTest {
 
     @Mock
     RcsFeatureConnection.RcsFeatureManagerProxy mRcsFeatureManagerProxy;
+    @Mock
+    RcsFeatureConnection.IRcsFeatureUpdate mCallback;
 
     @Before
     public void setUp() throws Exception {
@@ -250,5 +253,21 @@ public class RcsFeatureConnectionTest extends TelephonyTest {
     @SmallTest
     public void testRetrieveFeatureState() {
         assertNotNull(mRcsFeatureConnection.retrieveFeatureState());
+    }
+
+    @Test
+    @SmallTest
+    public void testFeatureStatusCallback() {
+        mRcsFeatureConnection.setStatusCallback(mCallback);
+
+        mRcsFeatureConnection.handleImsFeatureCreatedCallback(mPhoneId, ImsFeature.FEATURE_RCS);
+        verify(mCallback).notifyFeatureCreated();
+
+        mRcsFeatureConnection.handleImsFeatureRemovedCallback(mPhoneId, ImsFeature.FEATURE_RCS);
+        verify(mCallback).notifyUnavailable();
+
+        mRcsFeatureConnection.handleImsStatusChangedCallback(mPhoneId, ImsFeature.FEATURE_RCS,
+                ImsFeature.STATE_READY);
+        verify(mCallback).notifyStateChanged();
     }
 }
