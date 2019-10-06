@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18a7d303_5dc96e16",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-10-06T07:21:29Z",
+      "side": 1,
+      "message": "how about changing to phone.isShuttingDown\nnote, ShutDownThread calls phone.shutdownMobileRadios() API\n\nthe reason we are avoiding using ShutDownThread API is because telephony mainline module cannot use any hidden APIs (ShutDownThread is not s system or SDK API)",
+      "range": {
+        "startLine": 295,
+        "startChar": 7,
+        "endLine": 300,
+        "endChar": 9
+      },
+      "revId": "dc65241330dd19cf8193c245ee1f681df5022129",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
