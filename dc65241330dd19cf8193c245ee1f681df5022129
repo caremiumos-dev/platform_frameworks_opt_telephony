@@ -22,6 +22,30 @@
       "revId": "dc65241330dd19cf8193c245ee1f681df5022129",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e01f0fa_b14340b5",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccSlot.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2019-10-07T05:50:02Z",
+      "side": 1,
+      "message": "Let me follow your suggestion.",
+      "parentUuid": "18a7d303_5dc96e16",
+      "range": {
+        "startLine": 295,
+        "startChar": 7,
+        "endLine": 300,
+        "endChar": 9
+      },
+      "revId": "dc65241330dd19cf8193c245ee1f681df5022129",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
