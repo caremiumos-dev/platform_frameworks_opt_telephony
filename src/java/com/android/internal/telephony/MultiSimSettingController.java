@@ -153,7 +153,7 @@ public class MultiSimSettingController extends Handler {
      * Return the singleton or create one if not existed.
      */
     public static MultiSimSettingController getInstance() {
-        synchronized (SubscriptionController.class) {
+        synchronized (MultiSimSettingController.class) {
             if (sInstance == null) {
                 Log.wtf(LOG_TAG, "getInstance null");
             }
@@ -166,7 +166,7 @@ public class MultiSimSettingController extends Handler {
      * Init instance of MultiSimSettingController.
      */
     public static MultiSimSettingController init(Context context, SubscriptionController sc) {
-        synchronized (SubscriptionController.class) {
+        synchronized (MultiSimSettingController.class) {
             if (sInstance == null) {
                 sInstance = new MultiSimSettingController(context, sc);
             } else {
@@ -694,7 +694,7 @@ public class MultiSimSettingController extends Handler {
                 // If enable is true and it's not opportunistic subscription, we don't enable it,
                 // as there can't e two
                 if (phone != null) {
-                    phone.getDataEnabledSettings().setUserDataEnabled(enable);
+                    phone.getDataEnabledSettings().setUserDataEnabled(enable, false);
                 }
             } else {
                 // For inactive subscription, directly write into global settings.

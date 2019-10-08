@@ -39,6 +39,7 @@ import android.provider.Telephony;
 import android.telephony.Rlog;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.telephony.emergency.EmergencyNumber;
 import android.util.LocalLog;
 import android.util.Log;
 
@@ -178,17 +179,17 @@ public class IccSmsInterfaceManager {
         int count = messages.size();
 
         for (int i = 0; i < count; i++) {
-             byte[] ba = messages.get(i);
-             if (ba[0] == STATUS_ON_ICC_UNREAD) {
-                 int n = ba.length;
-                 byte[] nba = new byte[n - 1];
-                 System.arraycopy(ba, 1, nba, 0, n - 1);
-                 byte[] record = makeSmsRecordData(STATUS_ON_ICC_READ, nba);
-                 fh.updateEFLinearFixed(IccConstants.EF_SMS, i + 1, record, null, null);
-                 if (Rlog.isLoggable("SMS", Log.DEBUG)) {
-                     log("SMS " + (i + 1) + " marked as read");
-                 }
-             }
+            byte[] ba = messages.get(i);
+            if ((ba[0] & 0x07) == STATUS_ON_ICC_UNREAD) {
+                int n = ba.length;
+                byte[] nba = new byte[n - 1];
+                System.arraycopy(ba, 1, nba, 0, n - 1);
+                byte[] record = makeSmsRecordData(STATUS_ON_ICC_READ, nba);
+                fh.updateEFLinearFixed(IccConstants.EF_SMS, i + 1, record, null, null);
+                if (Rlog.isLoggable("SMS", Log.DEBUG)) {
+                    log("SMS " + (i + 1) + " marked as read");
+                }
+            }
         }
     }
 
@@ -219,7 +220,7 @@ public class IccSmsInterfaceManager {
                 " status=" + status + " ==> " +
                 "("+ Arrays.toString(pdu) + ")");
         enforceReceiveAndSend("Updating message on Icc");
-        if (mAppOps.noteOp(AppOpsManager.OP_WRITE_ICC_SMS, Binder.getCallingUid(),
+        if (mAppOps.noteOp(AppOpsManager.OPSTR_WRITE_ICC_SMS, Binder.getCallingUid(),
                 callingPackage) != AppOpsManager.MODE_ALLOWED) {
             return false;
         }
@@ -274,7 +275,7 @@ public class IccSmsInterfaceManager {
                 "pdu=("+ Arrays.toString(pdu) +
                 "), smsc=(" + Arrays.toString(smsc) +")");
         enforceReceiveAndSend("Copying message to Icc");
-        if (mAppOps.noteOp(AppOpsManager.OP_WRITE_ICC_SMS, Binder.getCallingUid(),
+        if (mAppOps.noteOp(AppOpsManager.OPSTR_WRITE_ICC_SMS, Binder.getCallingUid(),
                 callingPackage) != AppOpsManager.MODE_ALLOWED) {
             return false;
         }
@@ -312,7 +313,7 @@ public class IccSmsInterfaceManager {
         mContext.enforceCallingOrSelfPermission(
                 Manifest.permission.RECEIVE_SMS,
                 "Reading messages from Icc");
-        if (mAppOps.noteOp(AppOpsManager.OP_READ_ICC_SMS, Binder.getCallingUid(),
+        if (mAppOps.noteOp(AppOpsManager.OPSTR_READ_ICC_SMS, Binder.getCallingUid(),
                 callingPackage) != AppOpsManager.MODE_ALLOWED) {
             return new ArrayList<SmsRawData>();
         }
@@ -492,6 +493,7 @@ public class IccSmsInterfaceManager {
                     + deliveryIntent + " priority=" + priority + " expectMore=" + expectMore
                     + " validityPeriod=" + validityPeriod + " isForVVM=" + isForVvm);
         }
+        notifyIfOutgoingEmergencySms(destAddr);
         destAddr = filterDestAddress(destAddr);
         mDispatchersController.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
                 null/*messageUri*/, callingPackage, persistMessageForNonDefaultSmsApp,
@@ -690,7 +692,7 @@ public class IccSmsInterfaceManager {
                         ", part[" + (i++) + "]=" + part);
             }
         }
-
+        notifyIfOutgoingEmergencySms(destAddr);
         destAddr = filterDestAddress(destAddr);
 
         if (parts.size() > 1 && parts.size() < 10 && !SmsMessage.hasEmsSupport()) {
@@ -785,7 +787,7 @@ public class IccSmsInterfaceManager {
         }
 
         // Status bits for this record.  See TS 51.011 10.5.3
-        data[0] = (byte)(status & 7);
+        data[0] = (byte) (status & 0x07);
 
         System.arraycopy(pdu, 0, data, 1, pdu.length);
 
@@ -806,6 +808,9 @@ public class IccSmsInterfaceManager {
     }
 
     public boolean enableCellBroadcastRange(int startMessageId, int endMessageId, int ranType) {
+        mContext.enforceCallingPermission("android.permission.RECEIVE_EMERGENCY_BROADCAST",
+                "enabling cell broadcast range [" + startMessageId + "-" + endMessageId + "]. "
+                        + "ranType=" + ranType);
         if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_GSM) {
             return enableGsmBroadcastRange(startMessageId, endMessageId);
         } else if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_CDMA) {
@@ -816,6 +821,9 @@ public class IccSmsInterfaceManager {
     }
 
     public boolean disableCellBroadcastRange(int startMessageId, int endMessageId, int ranType) {
+        mContext.enforceCallingPermission("android.permission.RECEIVE_EMERGENCY_BROADCAST",
+                "disabling cell broadcast range [" + startMessageId + "-" + endMessageId
+                        + "]. ranType=" + ranType);
         if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_GSM ) {
             return disableGsmBroadcastRange(startMessageId, endMessageId);
         } else if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_CDMA)  {
@@ -1147,6 +1155,7 @@ public class IccSmsInterfaceManager {
             returnUnspecifiedFailure(sentIntent);
             return;
         }
+        notifyIfOutgoingEmergencySms(textAndAddress[1]);
         textAndAddress[1] = filterDestAddress(textAndAddress[1]);
         mDispatchersController.sendText(textAndAddress[1], scAddress, textAndAddress[0],
                 sentIntent, deliveryIntent, messageUri, callingPkg,
@@ -1180,6 +1189,7 @@ public class IccSmsInterfaceManager {
             returnUnspecifiedFailure(sentIntents);
             return;
         }
+        notifyIfOutgoingEmergencySms(textAndAddress[1]);
         textAndAddress[1] = filterDestAddress(textAndAddress[1]);
 
         if (parts.size() > 1 && parts.size() < 10 && !SmsMessage.hasEmsSupport()) {
@@ -1286,6 +1296,14 @@ public class IccSmsInterfaceManager {
             Binder.restoreCallingIdentity(identity);
         }
         return null;
+    }
+
+    private void notifyIfOutgoingEmergencySms(String destAddr) {
+        EmergencyNumber emergencyNumber = mPhone.getEmergencyNumberTracker().getEmergencyNumber(
+                destAddr);
+        if (emergencyNumber != null) {
+            mPhone.notifyOutgoingEmergencySms(emergencyNumber);
+        }
     }
 
     private void returnUnspecifiedFailure(PendingIntent pi) {

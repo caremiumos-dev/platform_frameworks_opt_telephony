@@ -152,6 +152,12 @@ public class CdmaInboundSmsHandler extends InboundSmsHandler {
                 mServiceCategoryProgramHandler.dispatchSmsMessage(sms);
                 return Intents.RESULT_SMS_HANDLED;
 
+            case SmsEnvelope.TELESERVICE_FDEA_WAP:
+                if (!sms.preprocessCdmaFdeaWap()) {
+                    return Intents.RESULT_SMS_HANDLED;
+                }
+                teleService = SmsEnvelope.TELESERVICE_WAP;
+                // fall through
             case SmsEnvelope.TELESERVICE_WAP:
                 // handled below, after storage check
                 break;
@@ -294,7 +300,7 @@ public class CdmaInboundSmsHandler extends InboundSmsHandler {
         InboundSmsTracker tracker = TelephonyComponentFactory.getInstance()
                 .inject(InboundSmsTracker.class.getName()).makeInboundSmsTracker(
                 userData, timestamp, destinationPort, true, address, dispAddr, referenceNumber,
-                segment, totalSegments, true, HexDump.toHexString(userData));
+                segment, totalSegments, true, HexDump.toHexString(userData), false /* isClass0 */);
 
         // de-duping is done only for text messages
         return addTrackerToRawTableAndSendMessage(tracker, false /* don't de-dup */);

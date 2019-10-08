@@ -77,8 +77,6 @@ public class PhoneFactory {
     private static @Nullable EuiccController sEuiccController;
     private static @Nullable EuiccCardController sEuiccCardController;
 
-    @UnsupportedAppUsage
-    static private CommandsInterface sCommandsInterface = null;
     static private SubscriptionInfoUpdater sSubInfoRecordUpdater = null;
 
     @UnsupportedAppUsage
@@ -148,9 +146,7 @@ public class PhoneFactory {
                 /* In case of multi SIM mode two instances of Phone, RIL are created,
                    where as in single SIM mode only instance. isMultiSimEnabled() function checks
                    whether it is single SIM or multi SIM mode */
-                TelephonyManager tm = (TelephonyManager) context.getSystemService(
-                        Context.TELEPHONY_SERVICE);
-                int numPhones = tm.getPhoneCount();
+                int numPhones = TelephonyManager.getDefault().getPhoneCount();
 
                 int[] networkModes = new int[numPhones];
                 sPhones = new Phone[numPhones];
@@ -172,8 +168,8 @@ public class PhoneFactory {
                 sUiccController = UiccController.make(context, sCommandsInterfaces);
 
                 Rlog.i(LOG_TAG, "Creating SubscriptionController");
-                SubscriptionController.init(context, sCommandsInterfaces);
-                MultiSimSettingController.init(context, SubscriptionController.getInstance());
+                SubscriptionController sc = SubscriptionController.init(context);
+                MultiSimSettingController.init(context, sc);
 
                 if (context.getPackageManager().hasSystemFeature(
                         PackageManager.FEATURE_TELEPHONY_EUICC)) {
@@ -203,10 +199,7 @@ public class PhoneFactory {
                 // Set the default phone in base class.
                 // FIXME: This is a first best guess at what the defaults will be. It
                 // FIXME: needs to be done in a more controlled manner in the future.
-                if (numPhones > 0) {
-                    sPhone = sPhones[0];
-                    sCommandsInterface = sCommandsInterfaces[0];
-                }
+                sPhone = sPhones[0];
 
                 // Ensure that we have a default SMS app. Requesting the app with
                 // updateIfNeeded set to true is enough to configure a default SMS app.
@@ -226,8 +219,7 @@ public class PhoneFactory {
                 Rlog.i(LOG_TAG, "Creating SubInfoRecordUpdater ");
                 sSubInfoRecordUpdater = new SubscriptionInfoUpdater(
                         BackgroundThread.get().getLooper(), context, sPhones, sCommandsInterfaces);
-                SubscriptionController.getInstance().updatePhonesAvailability(sPhones);
-
+                sc.updatePhonesAvailability(sPhones);
 
                 // Only bring up IMS if the device supports having an IMS stack.
                 if (context.getPackageManager().hasSystemFeature(
@@ -257,12 +249,10 @@ public class PhoneFactory {
 
                 ITelephonyRegistry tr = ITelephonyRegistry.Stub.asInterface(
                         ServiceManager.getService("telephony.registry"));
-                SubscriptionController sc = SubscriptionController.getInstance();
 
                 sSubscriptionMonitor = new SubscriptionMonitor(tr, sContext, sc, numPhones);
 
-                sPhoneConfigurationManager = PhoneConfigurationManager.init(
-                        sContext);
+                sPhoneConfigurationManager = PhoneConfigurationManager.init(sContext);
 
                 sCellularNetworkValidator = CellularNetworkValidator.make(sContext);
 
@@ -273,14 +263,12 @@ public class PhoneFactory {
                         sContext, sc, Looper.myLooper(), tr, sCommandsInterfaces,
                         sPhones);
 
-                sProxyController = ProxyController.getInstance(context, sPhones,
-                        sUiccController, sCommandsInterfaces, sPhoneSwitcher);
+                sProxyController = ProxyController.getInstance(context, sPhones, sPhoneSwitcher);
 
                 sIntentBroadcaster = IntentBroadcaster.getInstance(context);
 
                 sNotificationChannelController = new NotificationChannelController(context);
 
-                sTelephonyNetworkFactories = new TelephonyNetworkFactory[numPhones];
                 for (int i = 0; i < numPhones; i++) {
                     sTelephonyNetworkFactories[i] = new TelephonyNetworkFactory(
                             sSubscriptionMonitor, Looper.myLooper(), sPhones[i]);
@@ -539,6 +527,16 @@ public class PhoneFactory {
             pw.decreaseIndent();
             pw.println("++++++++++++++++++++++++++++++++");
         }
+
+        pw.println("ImsResolver:");
+        pw.increaseIndent();
+        try {
+            if (sImsResolver != null) sImsResolver.dump(fd, pw, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        pw.decreaseIndent();
+        pw.println("++++++++++++++++++++++++++++++++");
 
         pw.println("SubscriptionMonitor:");
         pw.increaseIndent();

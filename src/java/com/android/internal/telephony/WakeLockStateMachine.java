@@ -28,6 +28,8 @@ import android.telephony.Rlog;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Generic state machine for handling messages and waiting for ordered broadcasts to complete.
  * Subclasses implement {@link #handleSmsMessage}, which returns true to transition into waiting
@@ -36,7 +38,7 @@ import com.android.internal.util.StateMachine;
  * {@link #quit}.
  */
 public abstract class WakeLockStateMachine extends StateMachine {
-    protected static final boolean DBG = true;    // TODO: change to false
+    protected static final boolean DBG = Build.IS_DEBUGGABLE;
 
     private final PowerManager.WakeLock mWakeLock;
 
@@ -55,6 +57,8 @@ public abstract class WakeLockStateMachine extends StateMachine {
     @UnsupportedAppUsage
     protected Context mContext;
 
+    protected AtomicInteger mReceiverCount = new AtomicInteger(0);
+
     /** Wakelock release delay when returning to idle state. */
     private static final int WAKE_LOCK_TIMEOUT = 3000;
 
@@ -71,12 +75,23 @@ public abstract class WakeLockStateMachine extends StateMachine {
 
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, debugTag);
-        mWakeLock.acquire();    // wake lock released after we enter idle state
+        // wake lock released after we enter idle state
+        mWakeLock.acquire();
 
         addState(mDefaultState);
         addState(mIdleState, mDefaultState);
         addState(mWaitingState, mDefaultState);
         setInitialState(mIdleState);
+    }
+
+    private void releaseWakeLock() {
+        if (mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
+
+        if (mWakeLock.isHeld()) {
+            loge("Wait lock is held after release.");
+        }
     }
 
     /**
@@ -151,15 +166,7 @@ public abstract class WakeLockStateMachine extends StateMachine {
                     return HANDLED;
 
                 case EVENT_RELEASE_WAKE_LOCK:
-                    mWakeLock.release();
-                    if (DBG) {
-                        if (mWakeLock.isHeld()) {
-                            // this is okay as long as we call release() for every acquire()
-                            log("mWakeLock is still held after release");
-                        } else {
-                            log("mWakeLock released");
-                        }
-                    }
+                    releaseWakeLock();
                     return HANDLED;
 
                 default:
@@ -187,11 +194,7 @@ public abstract class WakeLockStateMachine extends StateMachine {
                     return HANDLED;
 
                 case EVENT_RELEASE_WAKE_LOCK:
-                    mWakeLock.release();    // decrement wakelock from previous entry to Idle
-                    if (!mWakeLock.isHeld()) {
-                        // wakelock should still be held until 3 seconds after we enter Idle
-                        loge("mWakeLock released while still in WaitingState!");
-                    }
+                    releaseWakeLock();
                     return HANDLED;
 
                 default:
@@ -213,7 +216,9 @@ public abstract class WakeLockStateMachine extends StateMachine {
     protected final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            sendMessage(EVENT_BROADCAST_COMPLETE);
+            if (mReceiverCount.decrementAndGet() == 0) {
+                sendMessage(EVENT_BROADCAST_COMPLETE);
+            }
         }
     };
 

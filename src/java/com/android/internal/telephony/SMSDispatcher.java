@@ -45,10 +45,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.ContentObserver;
-import android.database.sqlite.SqliteWrapper;
 import android.net.Uri;
 import android.os.AsyncResult;
 import android.os.Binder;
@@ -801,6 +801,7 @@ public abstract class SMSDispatcher extends Handler {
      *  broadcast when the message is delivered to the recipient.  The
      *  raw pdu of the status report is in the extended data ("pdu").
      */
+    @UnsupportedAppUsage
     protected void sendData(String callingPackage, String destAddr, String scAddr, int destPort,
             byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent, boolean isForVvm) {
         SmsMessageBase.SubmitPduBase pdu = getSubmitPdu(
@@ -1341,8 +1342,11 @@ public abstract class SMSDispatcher extends Handler {
     private CharSequence getAppLabel(String appPackage, @UserIdInt int userId) {
         PackageManager pm = mContext.getPackageManager();
         try {
-            ApplicationInfo appInfo = pm.getApplicationInfoAsUser(appPackage, 0, userId);
-            return appInfo.loadSafeLabel(pm);
+            ApplicationInfo appInfo = pm.getApplicationInfoAsUser(appPackage, 0,
+                UserHandle.getUserHandleForUid(userId));
+            return appInfo.loadSafeLabel(pm, PackageItemInfo.DEFAULT_MAX_LABEL_SIZE_PX,
+                    PackageItemInfo.SAFE_LABEL_FLAG_TRIM
+                            | PackageItemInfo.SAFE_LABEL_FLAG_FIRST_LINE);
         } catch (PackageManager.NameNotFoundException e) {
             Rlog.e(TAG, "PackageManager Name Not Found for package " + appPackage);
             return appPackage;  // fall back to package name if we can't get app label
@@ -1587,8 +1591,7 @@ public abstract class SMSDispatcher extends Handler {
                 // If we wrote this message in writeSentMessage, update it now
                 ContentValues values = new ContentValues(1);
                 values.put(Sms.STATUS, status);
-                SqliteWrapper.update(context, context.getContentResolver(),
-                        mMessageUri, values, null, null);
+                context.getContentResolver().update(mMessageUri, values, null, null);
             }
         }
 
@@ -1608,7 +1611,7 @@ public abstract class SMSDispatcher extends Handler {
             values.put(Sms.ERROR_CODE, errorCode);
             final long identity = Binder.clearCallingIdentity();
             try {
-                if (SqliteWrapper.update(context, context.getContentResolver(), mMessageUri, values,
+                if (context.getContentResolver().update(mMessageUri, values,
                         null/*where*/, null/*selectionArgs*/) != 1) {
                     Rlog.e(TAG, "Failed to move message to " + messageType);
                 }
@@ -1780,7 +1783,7 @@ public abstract class SMSDispatcher extends Handler {
         PackageManager pm = mContext.getPackageManager();
 
         // Get package info via packagemanager
-        final int userId = UserHandle.getCallingUserId();
+        final int userId = UserHandle.getUserHandleForUid(Binder.getCallingUid()).getIdentifier();
         PackageInfo appInfo = null;
         try {
             appInfo = pm.getPackageInfoAsUser(
@@ -1996,7 +1999,7 @@ public abstract class SMSDispatcher extends Handler {
         try {
             PackageManager pm = mContext.getPackageManager();
             ApplicationInfo ai = pm.getApplicationInfo(getCarrierAppPackageName(), 0);
-            if (!UserHandle.isSameApp(ai.uid, Binder.getCallingUid())) {
+            if (UserHandle.getAppId(ai.uid) != UserHandle.getAppId(Binder.getCallingUid())) {
                 throw new SecurityException("Caller is not phone or carrier app!");
             }
         } catch (PackageManager.NameNotFoundException re) {

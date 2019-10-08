@@ -119,7 +119,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -365,6 +364,13 @@ public class ServiceStateTracker extends Handler {
 
                     mPhone.notifyPhoneStateChanged();
                     mPhone.notifyCallForwardingIndicator();
+                    if (!SubscriptionManager.isValidSubscriptionId(
+                            ServiceStateTracker.this.mPrevSubId)) {
+                        // just went from invalid to valid subId, so notify with current service
+                        // state in case our service stat was never broadcasted (we don't notify
+                        // service states when the subId is invalid)
+                        mPhone.notifyServiceStateChanged(mSS);
+                    }
 
                     boolean restoreSelection = !context.getResources().getBoolean(
                             com.android.internal.R.bool.skip_restoring_network_selection);
@@ -3297,8 +3303,20 @@ public class ServiceStateTracker extends Handler {
 
             tm.setNetworkOperatorNumericForPhone(mPhone.getPhoneId(), operatorNumeric);
 
-            if (isInvalidOperatorNumeric(operatorNumeric)) {
-                if (DBG) log("operatorNumeric " + operatorNumeric + " is invalid");
+            // If the OPERATOR command hasn't returned a valid operator, but if the device has
+            // camped on a cell either to attempt registration or for emergency services, then
+            // for purposes of setting the locale, we don't care if registration fails or is
+            // incomplete.
+            // CellIdentity can return a null MCC and MNC in CDMA
+            String localeOperator = operatorNumeric;
+            if (isInvalidOperatorNumeric(operatorNumeric) && (mCellIdentity != null)
+                    && mCellIdentity.getMccString() != null
+                    && mCellIdentity.getMncString() != null) {
+                localeOperator = mCellIdentity.getMccString() + mCellIdentity.getMncString();
+            }
+
+            if (isInvalidOperatorNumeric(localeOperator)) {
+                if (DBG) log("localeOperator " + localeOperator + " is invalid");
                 // Passing empty string is important for the first update. The initial value of
                 // operator numeric in locale tracker is null. The async update will allow getting
                 // cell info from the modem instead of using the cached one.
@@ -3310,10 +3328,10 @@ public class ServiceStateTracker extends Handler {
 
                 // Update IDD.
                 if (!mPhone.isPhoneTypeGsm()) {
-                    setOperatorIdd(operatorNumeric);
+                    setOperatorIdd(localeOperator);
                 }
 
-                mLocaleTracker.updateOperatorNumeric(operatorNumeric);
+                mLocaleTracker.updateOperatorNumeric(localeOperator);
             }
 
             tm.setNetworkRoamingForPhone(mPhone.getPhoneId(),
@@ -3437,10 +3455,10 @@ public class ServiceStateTracker extends Handler {
     }
 
     private String getOperatorNameFromEri() {
+        String eriText = null;
         if (mPhone.isPhoneTypeCdma()) {
             if ((mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON)
                     && (!mIsSubscriptionFromRuim)) {
-                String eriText;
                 // Now the Phone sees the new ServiceState so it can get the new ERI text
                 if (mSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE) {
                     eriText = mPhone.getCdmaEriText();
@@ -3450,7 +3468,6 @@ public class ServiceStateTracker extends Handler {
                     eriText = mPhone.getContext().getText(
                             com.android.internal.R.string.roamingTextSearching).toString();
                 }
-                return eriText;
             }
         } else if (mPhone.isPhoneTypeCdmaLte()) {
             boolean hasBrandOverride = mUiccController.getUiccCard(getPhoneId()) != null &&
@@ -3461,7 +3478,7 @@ public class ServiceStateTracker extends Handler {
                     || mPhone.getContext().getResources().getBoolean(com.android.internal.R
                     .bool.config_LTE_eri_for_network_name))) {
                 // Only when CDMA is in service, ERI will take effect
-                String eriText = mSS.getOperatorAlpha();
+                eriText = mSS.getOperatorAlpha();
                 // Now the Phone sees the new ServiceState so it can get the new ERI text
                 if (mSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE) {
                     eriText = mPhone.getCdmaEriText();
@@ -3478,7 +3495,6 @@ public class ServiceStateTracker extends Handler {
                     eriText = mPhone.getContext()
                             .getText(com.android.internal.R.string.roamingTextSearching).toString();
                 }
-                return eriText;
             }
 
             if (mUiccApplcation != null && mUiccApplcation.getState() == AppState.APPSTATE_READY &&
@@ -3494,11 +3510,11 @@ public class ServiceStateTracker extends Handler {
                 if (showSpn && (iconIndex == EriInfo.ROAMING_INDICATOR_OFF)
                         && isInHomeSidNid(mSS.getCdmaSystemId(), mSS.getCdmaNetworkId())
                         && mIccRecords != null) {
-                    return getServiceProviderName();
+                    eriText = getServiceProviderName();
                 }
             }
         }
-        return null;
+        return eriText;
     }
 
     /**
@@ -3648,39 +3664,21 @@ public class ServiceStateTracker extends Handler {
             return operatorNumeric;
         }
 
-        // resolve the mcc from sid;
-        // if mNitzState.getSavedTimeZoneId() is null, TimeZone would get the default timeZone,
-        // and the mNitzState.fixTimeZone() couldn't help, because it depends on operator Numeric;
-        // if the sid is conflict and timezone is unavailable, the mcc may be not right.
-        boolean isNitzTimeZone;
-        TimeZone tzone;
-        if (mNitzState.getSavedTimeZoneId() != null) {
-            tzone = TimeZone.getTimeZone(mNitzState.getSavedTimeZoneId());
-            isNitzTimeZone = true;
-        } else {
-            NitzData lastNitzData = mNitzState.getCachedNitzData();
-            if (lastNitzData == null) {
-                tzone = null;
-            } else {
-                tzone = TimeZoneLookupHelper.guessZoneByNitzStatic(lastNitzData);
-                if (ServiceStateTracker.DBG) {
-                    log("fixUnknownMcc(): guessNitzTimeZone returned "
-                            + (tzone == null ? tzone : tzone.getID()));
-                }
-            }
-            isNitzTimeZone = false;
-        }
-
+        // resolve the mcc from sid, using time zone information from the latest NITZ signal when
+        // available.
         int utcOffsetHours = 0;
-        if (tzone != null) {
-            utcOffsetHours = tzone.getRawOffset() / MS_PER_HOUR;
+        boolean isDst = false;
+        boolean isNitzTimeZone = false;
+        NitzData lastNitzData = mNitzState.getCachedNitzData();
+        if (lastNitzData != null) {
+            utcOffsetHours = lastNitzData.getLocalOffsetMillis() / MS_PER_HOUR;
+            Integer dstAdjustmentMillis = lastNitzData.getDstAdjustmentMillis();
+            isDst = (dstAdjustmentMillis != null) && (dstAdjustmentMillis != 0);
+            isNitzTimeZone = true;
         }
-
-        NitzData nitzData = mNitzState.getCachedNitzData();
-        boolean isDst = nitzData != null && nitzData.isDst();
         int mcc = mHbpcdUtils.getMcc(sid, utcOffsetHours, (isDst ? 1 : 0), isNitzTimeZone);
         if (mcc > 0) {
-            operatorNumeric = Integer.toString(mcc) + DEFAULT_MNC;
+            operatorNumeric = mcc + DEFAULT_MNC;
         }
         return operatorNumeric;
     }
@@ -4790,6 +4788,8 @@ public class ServiceStateTracker extends Handler {
     public void requestAllCellInfo(WorkSource workSource, Message rspMsg) {
         if (VDBG) log("SST.requestAllCellInfo(): E");
         if (mCi.getRilVersion() < 8) {
+            AsyncResult.forMessage(rspMsg);
+            rspMsg.sendToTarget();
             if (DBG) log("SST.requestAllCellInfo(): not implemented");
             return;
         }

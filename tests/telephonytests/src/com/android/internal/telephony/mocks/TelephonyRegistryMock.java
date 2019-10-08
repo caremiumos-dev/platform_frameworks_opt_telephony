@@ -18,6 +18,7 @@ package com.android.internal.telephony.mocks;
 
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -30,6 +31,7 @@ import android.telephony.PhysicalChannelConfig;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
+import android.telephony.emergency.EmergencyNumber;
 import android.telephony.ims.ImsReasonInfo;
 
 import com.android.internal.telephony.IOnSubscriptionsChangedListener;
@@ -181,7 +183,7 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
             r.onOpportunisticSubscriptionsChangedListenerCallback = callback;
             r.callingPackage = callingPackage;
-            r.callerUserId = UserHandle.getCallingUserId();
+            r.callerUserId = UserHandle.getUserHandleForUid(Binder.getCallingUid()).getIdentifier();
             r.events = 0;
             r.canReadPhoneState = true; // permission has been enforced above
             // Always notify when registration occurs if there has been a notification.
@@ -365,6 +367,18 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
     @Override
     public void notifyEmergencyNumberList(int phoneId, int subId) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void notifyOutgoingEmergencyCall(int phoneId, int subId,
+            EmergencyNumber emergencyNumber) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void notifyOutgoingEmergencySms(int phoneId, int subId,
+            EmergencyNumber emergencyNumber) {
         throw new RuntimeException("Not implemented");
     }
 

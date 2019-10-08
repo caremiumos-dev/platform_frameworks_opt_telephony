@@ -74,6 +74,7 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PcoData;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
@@ -266,6 +267,14 @@ public class DcTracker extends Handler {
     private static final String INTENT_DATA_STALL_ALARM_EXTRA_TAG = "data_stall_alarm_extra_tag";
     private static final String INTENT_DATA_STALL_ALARM_EXTRA_TRANSPORT_TYPE =
             "data_stall_alarm_extra_transport_type";
+
+    /** The higher index has higher priority. */
+    private static final DctConstants.State[] DATA_CONNECTION_STATE_PRIORITIES = {
+            DctConstants.State.IDLE,
+            DctConstants.State.DISCONNECTING,
+            DctConstants.State.CONNECTING,
+            DctConstants.State.CONNECTED,
+    };
 
     private DcTesterFailBringUpAll mDcTesterFailBringUpAll;
     private DcController mDcc;
@@ -1117,23 +1126,35 @@ public class DcTracker extends Handler {
      * Assumes there is less than one {@link ApnSetting} can support the given apn type.
      */
     public DctConstants.State getState(String apnType) {
+        DctConstants.State state = DctConstants.State.IDLE;
         final int apnTypeBitmask = ApnSetting.getApnTypesBitmaskFromString(apnType);
         for (DataConnection dc : mDataConnections.values()) {
             ApnSetting apnSetting = dc.getApnSetting();
             if (apnSetting != null && apnSetting.canHandleType(apnTypeBitmask)) {
                 if (dc.isActive()) {
-                    return DctConstants.State.CONNECTED;
+                    state = getBetterConnectionState(state, DctConstants.State.CONNECTED);
                 } else if (dc.isActivating()) {
-                    return DctConstants.State.CONNECTING;
+                    state = getBetterConnectionState(state, DctConstants.State.CONNECTING);
                 } else if (dc.isInactive()) {
-                    return DctConstants.State.IDLE;
+                    state = getBetterConnectionState(state, DctConstants.State.IDLE);
                 } else if (dc.isDisconnecting()) {
-                    return DctConstants.State.DISCONNECTING;
+                    state = getBetterConnectionState(state, DctConstants.State.DISCONNECTING);
                 }
             }
         }
+        return state;
+    }
 
-        return DctConstants.State.IDLE;
+    /**
+     * Return a better connection state between {@code stateA} and {@code stateB}. Check
+     * {@link #DATA_CONNECTION_STATE_PRIORITIES} for the details.
+     * @return the better connection state between {@code stateA} and {@code stateB}.
+     */
+    private static DctConstants.State getBetterConnectionState(
+            DctConstants.State stateA, DctConstants.State stateB) {
+        int idxA = ArrayUtils.indexOf(DATA_CONNECTION_STATE_PRIORITIES, stateA);
+        int idxB = ArrayUtils.indexOf(DATA_CONNECTION_STATE_PRIORITIES, stateB);
+        return idxA >= idxB ? stateA : stateB;
     }
 
     // Return if apn type is a provisioning apn.
@@ -1775,8 +1796,8 @@ public class DcTracker extends Handler {
         }
 
         for (ApnSetting dunSetting : dunCandidates) {
-            if (!ServiceState.networkBitmaskHasAccessNetworkType(dunSetting.getNetworkTypeBitmask(),
-                    ServiceState.rilRadioTechnologyToAccessNetworkType(bearer))) {
+            if (!dunSetting.canSupportNetworkType(
+                    ServiceState.rilRadioTechnologyToNetworkType(bearer))) {
                 continue;
             }
             retDunSettings.add(dunSetting);
@@ -3295,9 +3316,8 @@ public class DcTracker extends Handler {
                         + mPreferredApn.getOperatorNumeric() + ":" + mPreferredApn);
             }
             if (mPreferredApn.getOperatorNumeric().equals(operator)) {
-                if (ServiceState.networkBitmaskHasAccessNetworkType(
-                        mPreferredApn.getNetworkTypeBitmask(),
-                        ServiceState.rilRadioTechnologyToAccessNetworkType(radioTech))) {
+                if (mPreferredApn.canSupportNetworkType(
+                        ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
                     apnList.add(mPreferredApn);
                     apnList = sortApnListByPreferred(apnList);
                     if (DBG) log("buildWaitingApns: X added preferred apnList=" + apnList);
@@ -3317,8 +3337,8 @@ public class DcTracker extends Handler {
         if (DBG) log("buildWaitingApns: mAllApnSettings=" + mAllApnSettings);
         for (ApnSetting apn : mAllApnSettings) {
             if (apn.canHandleType(requestedApnTypeBitmask)) {
-                if (ServiceState.networkBitmaskHasAccessNetworkType(apn.getNetworkTypeBitmask(),
-                        ServiceState.rilRadioTechnologyToAccessNetworkType(radioTech))) {
+                if (apn.canSupportNetworkType(
+                        ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
                     if (VDBG) log("buildWaitingApns: adding apn=" + apn);
                     apnList.add(apn);
                 } else {
@@ -4845,6 +4865,7 @@ public class DcTracker extends Handler {
         return "UNKNOWN";
     }
 
+    @RilRadioTechnology
     private int getDataRat() {
         ServiceState ss = mPhone.getServiceState();
         NetworkRegistrationInfo nrs = ss.getNetworkRegistrationInfo(
@@ -4855,6 +4876,7 @@ public class DcTracker extends Handler {
         return ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
     }
 
+    @RilRadioTechnology
     private int getVoiceRat() {
         ServiceState ss = mPhone.getServiceState();
         NetworkRegistrationInfo nrs = ss.getNetworkRegistrationInfo(

@@ -18,6 +18,7 @@ package com.android.internal.telephony;
 
 import android.annotation.Nullable;
 import android.annotation.UnsupportedAppUsage;
+import android.app.BroadcastOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -982,6 +983,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         migrate(mUnknownConnectionRegistrants, from.mUnknownConnectionRegistrants);
         migrate(mSuppServiceFailedRegistrants, from.mSuppServiceFailedRegistrants);
         migrate(mCellInfoRegistrants, from.mCellInfoRegistrants);
+        // The emergency state of IMS phone will be cleared in ImsPhone#notifySrvccState after
+        // receive SRVCC completed
         if (from.isInEmergencyCall()) {
             setIsInEmergencyCall();
         }
@@ -1977,7 +1980,15 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         }
     }
 
-    protected void setVoiceCallForwardingFlag(IccRecords r, int line, boolean enable,
+    /**
+     * Set the voice call forwarding flag for GSM/UMTS and the like SIMs
+     *
+     * @param r to enable/disable
+     * @param line to enable/disable
+     * @param enable
+     * @param number to which CFU is enabled
+     */
+    public void setVoiceCallForwardingFlag(IccRecords r, int line, boolean enable,
                                               String number) {
         setCallForwardingIndicatorInSharedPref(enable);
         r.setVoiceCallForwardingFlag(line, enable, number);
@@ -2391,6 +2402,16 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mNotifier.notifyEmergencyNumberList(this);
     }
 
+    /** Notify the outgoing call {@link EmergencyNumber} changes. */
+    public void notifyOutgoingEmergencyCall(EmergencyNumber emergencyNumber) {
+        mNotifier.notifyOutgoingEmergencyCall(this, emergencyNumber);
+    }
+
+    /** Notify the outgoing Sms {@link EmergencyNumber} changes. */
+    public void notifyOutgoingEmergencySms(EmergencyNumber emergencyNumber) {
+        mNotifier.notifyOutgoingEmergencySms(this, emergencyNumber);
+    }
+
     /**
      * @return true if a mobile originating emergency call is active
      */
@@ -2559,10 +2580,12 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public void sendDialerSpecialCode(String code) {
         if (!TextUtils.isEmpty(code)) {
+            final BroadcastOptions options = BroadcastOptions.makeBasic();
+            options.setBackgroundActivityStartsAllowed(true);
             Intent intent = new Intent(TelephonyIntents.SECRET_CODE_ACTION,
                     Uri.parse("android_secret_code://" + code));
             intent.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
-            mContext.sendBroadcast(intent);
+            mContext.sendBroadcast(intent, null, options.toBundle());
 
             // {@link TelephonyManager.ACTION_SECRET_CODE} will replace {@link
             // TelephonyIntents#SECRET_CODE_ACTION} in the next Android version. Before
@@ -2570,7 +2593,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             Intent secrectCodeIntent = new Intent(TelephonyManager.ACTION_SECRET_CODE,
                     Uri.parse("android_secret_code://" + code));
             secrectCodeIntent.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
-            mContext.sendBroadcast(secrectCodeIntent);
+            mContext.sendBroadcast(secrectCodeIntent, null, options.toBundle());
         }
     }
 
@@ -4000,7 +4023,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     public void setCarrierTestOverride(String mccmnc, String imsi, String iccid, String gid1,
-            String gid2, String pnn, String spn) {
+            String gid2, String pnn, String spn, String carrierPrivilegeRules, String apn) {
     }
 
     /**
