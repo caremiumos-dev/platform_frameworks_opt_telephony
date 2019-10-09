@@ -46,6 +46,30 @@
       "revId": "8548e0a57db13c75fb4609f8b34f5177465ff122",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "910ba9e3_4511c7c3",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-09T18:19:47Z",
+      "side": 1,
+      "message": "Correct, that code is also incorrect since ImsPhone does not implement dialInternal(...). EVENT_INITIATE_SILENT_REDIAL should be registered to the GsmCdmaPhone, since we are doing a IMS-\u003eCS redial.\n\nMy recommendation is to remove the registerForSilentRedial method call in Phone.java and instead register the event in GsmCdmaPhone\u0027s init function.",
+      "parentUuid": "a7dbbb74_81e79df2",
+      "range": {
+        "startLine": 724,
+        "startChar": 28,
+        "endLine": 724,
+        "endChar": 37
+      },
+      "revId": "8548e0a57db13c75fb4609f8b34f5177465ff122",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
