@@ -22,6 +22,30 @@
       "revId": "70ad92a72c6cc7b1c0272ad1b7a8ab00d9a68b73",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d694c1f_1a7c6eca",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2244,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-10-09T10:41:54Z",
+      "side": 1,
+      "message": "Done. It was needed in last year, but no longer needed on latest AOSP as your comment.",
+      "parentUuid": "6f1c5ae1_7f5650ca",
+      "range": {
+        "startLine": 2206,
+        "startChar": 4,
+        "endLine": 2244,
+        "endChar": 5
+      },
+      "revId": "70ad92a72c6cc7b1c0272ad1b7a8ab00d9a68b73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
