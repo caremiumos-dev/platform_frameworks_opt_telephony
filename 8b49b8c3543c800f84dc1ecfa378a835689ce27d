@@ -22,6 +22,30 @@
       "revId": "8b49b8c3543c800f84dc1ecfa378a835689ce27d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "784dc887_47e9c7ff",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2019-10-09T07:51:30Z",
+      "side": 1,
+      "message": "Thank you for your advice. I added a migration step but I didn\u0027t remove the previous setting because impact of remaining previous setting is very small. Only one line of garbage data remains. I don\u0027t think it is good to add such temporary logic.",
+      "parentUuid": "ea5c63cd_8c4822e8",
+      "range": {
+        "startLine": 1506,
+        "startChar": 15,
+        "endLine": 1506,
+        "endChar": 21
+      },
+      "revId": "8b49b8c3543c800f84dc1ecfa378a835689ce27d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
