@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "890a854a_3999a45f",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-10-10T17:02:15Z",
+      "side": 1,
+      "message": "remove? :)",
+      "range": {
+        "startLine": 549,
+        "startChar": 57,
+        "endLine": 549,
+        "endChar": 64
+      },
+      "revId": "269ce1e361e3cfbb8043f9ab258d782b9d6dc642",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
