@@ -70,6 +70,30 @@
       "revId": "8548e0a57db13c75fb4609f8b34f5177465ff122",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbbdb5ff_7d583f5e",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2019-10-10T10:22:45Z",
+      "side": 1,
+      "message": "This Phone object is parent of GsmCdmaPhone not ImsPhone. So, i think there is no abnormal about dialInternal method.",
+      "parentUuid": "910ba9e3_4511c7c3",
+      "range": {
+        "startLine": 724,
+        "startChar": 28,
+        "endLine": 724,
+        "endChar": 37
+      },
+      "revId": "8548e0a57db13c75fb4609f8b34f5177465ff122",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
