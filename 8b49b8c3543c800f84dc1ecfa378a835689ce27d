@@ -46,6 +46,30 @@
       "revId": "8b49b8c3543c800f84dc1ecfa378a835689ce27d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a2184fd_bf27dc7b",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T00:44:36Z",
+      "side": 1,
+      "message": "I don\u0027t mind keeping around the garbage data, however when the user upgrades there device to a version that includes this change, it will remove all of their CLIR settings on their device as well as tell the network that they have changed their CLIR setting to default.\n\nWe may want to check to see if clir_key exists and apply that setting to clir_sub_key (if there is a valid sub id) in syncClirSetting once.",
+      "parentUuid": "784dc887_47e9c7ff",
+      "range": {
+        "startLine": 1506,
+        "startChar": 15,
+        "endLine": 1506,
+        "endChar": 21
+      },
+      "revId": "8b49b8c3543c800f84dc1ecfa378a835689ce27d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
