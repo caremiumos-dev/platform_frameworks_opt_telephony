@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55082de0_2bbb8b70",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:19:59Z",
+      "side": 1,
+      "message": "I dont see any need to couple RcsFeatureManager with ImsPhone, I suggest moving this to a separate class that is initialized separately from ImsPhone.",
+      "range": {
+        "startLine": 318,
+        "startChar": 8,
+        "endLine": 318,
+        "endChar": 28
+      },
+      "revId": "8e66d00778d131ff1b4d29bb26c24da7137420c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
