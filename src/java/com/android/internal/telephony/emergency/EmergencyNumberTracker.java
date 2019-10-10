@@ -102,12 +102,19 @@ public class EmergencyNumberTracker extends Handler {
     private String[] mEmergencyNumberPrefix = new String[0];
 
     private static final String EMERGENCY_NUMBER_DB_ASSETS_FILE = "eccdata";
+    // According to 3GPP TS 22.101; 112 an 911 should always be accesible
+    private static final String DEFAULT_EMERGENCY_NUMBERS = "112,911";
+    // According to 3GPP TS 22.101; when a SIM is not present these numbers shall be used
+    // These are used when TelephonyManager.SIM_STATE_ABSENT occurs
+    private static final String NO_SIM_EMERGENCY_NUMBERS =
+            "112,911,000,08,110,118,119,999";
 
     private List<EmergencyNumber> mEmergencyNumberListFromDatabase = new ArrayList<>();
     private List<EmergencyNumber> mEmergencyNumberListFromRadio = new ArrayList<>();
     private List<EmergencyNumber> mEmergencyNumberListWithPrefix = new ArrayList<>();
     private List<EmergencyNumber> mEmergencyNumberListFromTestMode = new ArrayList<>();
     private List<EmergencyNumber> mEmergencyNumberList = new ArrayList<>();
+    private List<EmergencyNumber> mEmergencyNumberListFromSimState = new ArrayList<>();
 
     private final LocalLog mEmergencyNumberListDatabaseLocalLog = new LocalLog(20);
     private final LocalLog mEmergencyNumberListRadioLocalLog = new LocalLog(20);
@@ -130,6 +137,8 @@ public class EmergencyNumberTracker extends Handler {
     private static final int EVENT_UPDATE_OTA_EMERGENCY_NUMBER_DB = 5;
     /** Event indicating the override for the test OTA emergency number database. */
     private static final int EVENT_OVERRIDE_TEST_OTA_EMERGENCY_NUMBER_DB_FILE_PATH = 6;
+    /** Event indicating the update of emergency numbers based on sim state. */
+    private static final int EVENT_UPDATE_EMERGENCY_NR_SIM_STATE_CHANGED = 7;
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -169,6 +178,11 @@ public class EmergencyNumberTracker extends Handler {
                     updateEmergencyCountryIsoAllPhones(countryIso == null ? "" : countryIso);
                 }
                 return;
+            } else if (intent.getAction().equals(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED)) {
+                int state = intent.getIntExtra(
+                        TelephonyManager.EXTRA_SIM_STATE, TelephonyManager.SIM_STATE_UNKNOWN);
+                logd("ACTION_SIM_CARD_STATE_CHANGED: sim state " + state);
+                updateEmergencyNumberSimStateChange(state);
             }
         }
     };
@@ -194,6 +208,8 @@ public class EmergencyNumberTracker extends Handler {
                     CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
             // Receive Telephony Network Country Changes
             filter.addAction(TelephonyManager.ACTION_NETWORK_COUNTRY_CHANGED);
+            // Receive SIM state changes
+            filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
 
             mPhone.getContext().registerReceiver(mIntentReceiver, filter);
         } else {
@@ -260,6 +276,9 @@ public class EmergencyNumberTracker extends Handler {
                 } else {
                     overrideTestOtaEmergencyNumberDbFilePath((String) msg.obj);
                 }
+                break;
+            case EVENT_UPDATE_EMERGENCY_NR_SIM_STATE_CHANGED:
+                updateEmergencyNumberSimStateChangeAndNotify(msg.arg1);
                 break;
         }
     }
@@ -353,6 +372,17 @@ public class EmergencyNumberTracker extends Handler {
      */
     public void updateEmergencyNumberDatabaseCountryChange(String countryIso) {
         this.obtainMessage(EVENT_UPDATE_DB_COUNTRY_ISO_CHANGED, countryIso).sendToTarget();
+    }
+
+    /**
+     * Update Emergency Numbers based on sim being present.
+     *
+     * @param state
+     *
+     * @hide
+     */
+    public void updateEmergencyNumberSimStateChange(int state) {
+        this.obtainMessage(EVENT_UPDATE_EMERGENCY_NR_SIM_STATE_CHANGED, state, 0).sendToTarget();
     }
 
     /**
@@ -627,6 +657,18 @@ public class EmergencyNumberTracker extends Handler {
         }
     }
 
+    private void updateEmergencyNumberSimStateChangeAndNotify(int state) {
+        logd("updateEmergencyNumberSimStateChangeAndNotify():"
+                + " receiving SIM state " + state);
+        mEmergencyNumberListFromSimState.clear();
+        String emergencyNumbers = (state == TelephonyManager.SIM_STATE_ABSENT)
+                ? NO_SIM_EMERGENCY_NUMBERS : DEFAULT_EMERGENCY_NUMBERS;
+        for (String emergencyNum : emergencyNumbers.split(",")) {
+            mEmergencyNumberListFromSimState.add(getLabeledEmergencyNumberForEcclist(emergencyNum));
+        }
+        updateEmergencyNumberList();
+        notifyEmergencyNumberList();
+    }
     private void updateEmergencyNumberPrefixAndNotify(String[] emergencyNumberPrefix) {
         logd("updateEmergencyNumberPrefixAndNotify(): receiving emergencyNumberPrefix: "
                 + Arrays.toString(emergencyNumberPrefix));
@@ -658,6 +700,7 @@ public class EmergencyNumberTracker extends Handler {
         List<EmergencyNumber> mergedEmergencyNumberList =
                 new ArrayList<>(mEmergencyNumberListFromDatabase);
         mergedEmergencyNumberList.addAll(mEmergencyNumberListFromRadio);
+        mergedEmergencyNumberList.addAll(mEmergencyNumberListFromSimState);
         // 'updateEmergencyNumberList' is called every time there is a change for emergency numbers
         // from radio indication, emergency numbers from database, emergency number prefix from
         // carrier config, or test mode emergency numbers, the emergency number prefix is changed
@@ -669,6 +712,8 @@ public class EmergencyNumberTracker extends Handler {
                     mEmergencyNumberListFromRadio));
             mEmergencyNumberListWithPrefix.addAll(getEmergencyNumberListWithPrefix(
                     mEmergencyNumberListFromDatabase));
+            mEmergencyNumberListWithPrefix.addAll(getEmergencyNumberListWithPrefix(
+                    mEmergencyNumberListFromSimState));
         }
         if (!DBG) {
             mEmergencyNumberListPrefixLocalLog.log("updateEmergencyNumberList:"
@@ -834,7 +879,8 @@ public class EmergencyNumberTracker extends Handler {
                 emergencyNumberList.add(getLabeledEmergencyNumberForEcclist(emergencyNum));
             }
         }
-        emergencyNumbers = ((slotId < 0) ? "112,911,000,08,110,118,119,999" : "112,911");
+        emergencyNumbers = ((slotId < 0) ? NO_SIM_EMERGENCY_NUMBERS :
+                DEFAULT_EMERGENCY_NUMBERS);
         for (String emergencyNum : emergencyNumbers.split(",")) {
             emergencyNumberList.add(getLabeledEmergencyNumberForEcclist(emergencyNum));
         }
@@ -969,7 +1015,8 @@ public class EmergencyNumberTracker extends Handler {
         // If slot id is invalid, means that there is no sim card.
         // According spec 3GPP TS22.101, the following numbers should be
         // ECC numbers when SIM/USIM is not present.
-        emergencyNumbers = ((slotId < 0) ? "112,911,000,08,110,118,119,999" : "112,911");
+        emergencyNumbers = ((slotId < 0) ? NO_SIM_EMERGENCY_NUMBERS :
+                DEFAULT_EMERGENCY_NUMBERS);
 
         for (String emergencyNum : emergencyNumbers.split(",")) {
             if (useExactMatch) {
