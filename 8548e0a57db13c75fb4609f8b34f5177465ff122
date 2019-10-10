@@ -94,6 +94,30 @@
       "revId": "8548e0a57db13c75fb4609f8b34f5177465ff122",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20773957_c37bafcb",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T16:35:05Z",
+      "side": 1,
+      "message": "Phone is also a parent of ImsPhone. dialInternal(...) is only implemented in GsmCdmaPhone, not ImsPhone.\n\nEVENT_INITIATE_SILENT_REDIAL is registered on ImsPhone in Phone#updateImsPhone, so when the ImsPhone receives the event EVENT_INITIATE_SILENT_REDIAL (and processes it through its parent Phone), it will call dialInternal, which will return null, since there is no implementation in ImsPhone.",
+      "parentUuid": "dbbdb5ff_7d583f5e",
+      "range": {
+        "startLine": 724,
+        "startChar": 28,
+        "endLine": 724,
+        "endChar": 37
+      },
+      "revId": "8548e0a57db13c75fb4609f8b34f5177465ff122",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
