@@ -17,10 +17,12 @@
 package com.android.internal.telephony.emergency;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 
 import android.os.AsyncResult;
+import android.telephony.TelephonyManager;
 import android.telephony.emergency.EmergencyNumber;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
@@ -57,6 +59,13 @@ public class EmergencyNumberTrackerTest extends TelephonyTest {
     private List<EmergencyNumber> mEmergencyNumberListTestSample = new ArrayList<>();
     private EmergencyNumber mUsEmergencyNumber;
     private String[] mEmergencyNumberPrefixTestSample = {"123", "456"};
+
+    // According to 3GPP TS 22.101; 112 an 911 should always be accesible
+    private static final String DEFAULT_EMERGENCY_NUMBERS = "112,911";
+    // According to 3GPP TS 22.101; when a SIM is not present these numbers shall be used
+    // These are used when TelephonyManager.SIM_STATE_ABSENT occurs
+    private static final String NO_SIM_EMERGENCY_NUMBERS =
+            "112,911,000,08,110,118,119,999";
 
     @Before
     public void setUp() throws Exception {
@@ -211,5 +220,32 @@ public class EmergencyNumberTrackerTest extends TelephonyTest {
         Collections.sort(resultFromRadio);
 
         assertEquals(resultToVerify, resultFromRadio);
+    }
+
+    @Test
+    public void testUpdateEmergencyNumbersSimAbsent() throws Exception {
+        sendEmergencyNumberPrefix(mEmergencyNumberTrackerMock);
+        sendEmergencyNumberListFromRadio();
+        mEmergencyNumberTrackerMock.obtainMessage(7 /*EVENT_UPDATE_EMERGENCY_NR_SIM_STATE_CHANGED*/,
+                TelephonyManager.SIM_STATE_ABSENT, 0).sendToTarget();
+        processAllMessages();
+        for (String emergencyNum : NO_SIM_EMERGENCY_NUMBERS.split(",")) {
+            assertTrue(mEmergencyNumberTrackerMock.isEmergencyNumber(emergencyNum, true));
+        }
+        assertFalse(mEmergencyNumberTrackerMock.isEmergencyNumber("123", true));
+    }
+
+    @Test
+    public void testUpdateEmergencyNumbersSimReady() throws Exception {
+        sendEmergencyNumberPrefix(mEmergencyNumberTrackerMock);
+        sendEmergencyNumberListFromRadio();
+        mEmergencyNumberTrackerMock.obtainMessage(7 /*EVENT_UPDATE_EMERGENCY_NR_SIM_STATE_CHANGED*/,
+                TelephonyManager.SIM_STATE_READY, 0).sendToTarget();
+        processAllMessages();
+        for (String emergencyNum : DEFAULT_EMERGENCY_NUMBERS.split(",")) {
+            assertTrue(mEmergencyNumberTrackerMock.isEmergencyNumber(emergencyNum, true));
+        }
+        assertFalse(mEmergencyNumberTrackerMock.isEmergencyNumber("123", true));
+        assertFalse(mEmergencyNumberTrackerMock.isEmergencyNumber("000", true));
     }
 }
