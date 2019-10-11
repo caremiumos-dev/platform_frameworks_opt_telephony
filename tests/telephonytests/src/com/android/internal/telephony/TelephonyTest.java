@@ -17,6 +17,7 @@
 package com.android.internal.telephony;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Matchers.anyBoolean;
@@ -34,16 +35,22 @@ import android.content.Context;
 import android.content.IIntentSender;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.IDeviceIdleController;
 import android.os.Looper;
+import android.os.Message;
+import android.os.MessageQueue;
 import android.os.RegistrantList;
 import android.os.ServiceManager;
 import android.provider.BlockedNumberContract;
+import android.provider.DeviceConfig;
 import android.provider.Settings;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.NetworkRegistrationInfo;
@@ -55,6 +62,7 @@ import android.telephony.euicc.EuiccManager;
 import android.telephony.ims.ImsCallProfile;
 import android.test.mock.MockContentProvider;
 import android.test.mock.MockContentResolver;
+import android.testing.TestableLooper;
 import android.util.Log;
 import android.util.Singleton;
 
@@ -96,6 +104,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -110,6 +119,23 @@ public abstract class TelephonyTest {
                     EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_UNSPECIFIED,
             new ArrayList<String>(), EmergencyNumber.EMERGENCY_NUMBER_SOURCE_NETWORK_SIGNALING,
             EmergencyNumber.EMERGENCY_CALL_ROUTING_NORMAL);
+
+    private static final Field MESSAGE_QUEUE_FIELD;
+    private static final Field MESSAGE_WHEN_FIELD;
+    private static final Field MESSAGE_NEXT_FIELD;
+
+    static {
+        try {
+            MESSAGE_QUEUE_FIELD = MessageQueue.class.getDeclaredField("mMessages");
+            MESSAGE_QUEUE_FIELD.setAccessible(true);
+            MESSAGE_WHEN_FIELD = Message.class.getDeclaredField("when");
+            MESSAGE_WHEN_FIELD.setAccessible(true);
+            MESSAGE_NEXT_FIELD = Message.class.getDeclaredField("next");
+            MESSAGE_NEXT_FIELD.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException("Failed to initialize TelephonyTest", e);
+        }
+    }
 
     @Mock
     protected GsmCdmaPhone mPhone;
@@ -196,6 +222,8 @@ public abstract class TelephonyTest {
     @Mock
     protected PackageInfo mPackageInfo;
     @Mock
+    protected ApplicationInfo mApplicationInfo;
+    @Mock
     protected EriManager mEriManager;
     @Mock
     protected IBinder mConnMetLoggerBinder;
@@ -245,6 +273,7 @@ public abstract class TelephonyTest {
     protected SubscriptionManager mSubscriptionManager;
     protected EuiccManager mEuiccManager;
     protected PackageManager mPackageManager;
+    protected ConnectivityManager mConnectivityManager;
     protected SimulatedCommands mSimulatedCommands;
     protected ContextFixture mContextFixture;
     protected Context mContext;
@@ -253,7 +282,8 @@ public abstract class TelephonyTest {
     private boolean mReady;
     protected HashMap<String, IBinder> mServiceManagerMockedServices = new HashMap<>();
     protected Phone[] mPhones;
-
+    protected List<TestableLooper> mTestableLoopers = new ArrayList<>();
+    protected TestableLooper mTestableLooper;
 
     protected HashMap<Integer, ImsManager> mImsManagerInstances = new HashMap<>();
     private HashMap<InstanceKey, Object> mOldInstances = new HashMap<InstanceKey, Object>();
@@ -370,6 +400,8 @@ public abstract class TelephonyTest {
         mSubscriptionManager = (SubscriptionManager) mContext.getSystemService(
                 Context.TELEPHONY_SUBSCRIPTION_SERVICE);
         mEuiccManager = (EuiccManager) mContext.getSystemService(Context.EUICC_SERVICE);
+        mConnectivityManager = (ConnectivityManager)
+                mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         mPackageManager = mContext.getPackageManager();
 
         //mTelephonyComponentFactory
@@ -582,12 +614,24 @@ public abstract class TelephonyTest {
         assertNotNull("Failed to set up SubscriptionController singleton",
                 SubscriptionController.getInstance());
         setReady(false);
+        // create default TestableLooper for test and add to list of monitored loopers
+        mTestableLooper = TestableLooper.get(TelephonyTest.this);
+        if (mTestableLooper != null) {
+            monitorTestableLooper(mTestableLooper);
+        }
     }
 
     protected void tearDown() throws Exception {
-
+        // unmonitor TestableLooper
+        if (mTestableLooper != null) {
+            unmonitorTestableLooper(mTestableLooper);
+        }
         mSimulatedCommands.dispose();
 
+        // destroy all created TestableLoopers so they can be reused
+        for (TestableLooper looper : mTestableLoopers) {
+            looper.destroy();
+        }
         SharedPreferences sharedPreferences = mContext.getSharedPreferences((String) null, 0);
         sharedPreferences.edit().clear().commit();
 
@@ -622,11 +666,73 @@ public abstract class TelephonyTest {
         }
     }
 
+    public static class FakeSettingsConfigProvider extends MockContentProvider {
+        private static final String PROPERTY_DEVICE_IDENTIFIER_ACCESS_RESTRICTIONS_DISABLED =
+                DeviceConfig.NAMESPACE_PRIVACY + "/"
+                        + "device_identifier_access_restrictions_disabled";
+
+        @Override
+        public Bundle call(String method, String arg, Bundle extras) {
+            switch (method) {
+                case Settings.CALL_METHOD_GET_CONFIG: {
+                    switch (arg) {
+                        case PROPERTY_DEVICE_IDENTIFIER_ACCESS_RESTRICTIONS_DISABLED: {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(
+                                    PROPERTY_DEVICE_IDENTIFIER_ACCESS_RESTRICTIONS_DISABLED,
+                                    "0");
+                            return bundle;
+                        }
+                        default: {
+                            fail("arg not expected: " + arg);
+                        }
+                    }
+                    break;
+                }
+                default:
+                    fail("Method not expected: " + method);
+            }
+            return null;
+        }
+    }
+
     protected void setupMockPackagePermissionChecks() throws Exception {
         doReturn(new String[]{TAG}).when(mPackageManager).getPackagesForUid(anyInt());
         doReturn(mPackageInfo).when(mPackageManager).getPackageInfo(eq(TAG), anyInt());
         doReturn(mPackageInfo).when(mPackageManager).getPackageInfoAsUser(
                 eq(TAG), anyInt(), anyInt());
+    }
+
+    protected void setupMocksForTelephonyPermissions() throws Exception {
+        // If the calling package does not meet the new requirements for device identifier access
+        // TelephonyPermissions will query the PackageManager for the ApplicationInfo of the package
+        // to determine the target SDK. For apps targeting Q a SecurityException is thrown
+        // regardless of if the package satisfies the previous requirements for device ID access.
+        mApplicationInfo.targetSdkVersion = Build.VERSION_CODES.Q;
+        doReturn(mApplicationInfo).when(mPackageManager).getApplicationInfoAsUser(eq(TAG), anyInt(),
+                any());
+
+        // TelephonyPermissions queries DeviceConfig to determine if the identifier access
+        // restrictions should be enabled; this results in a NPE when DeviceConfig uses
+        // Activity.currentActivity.getContentResolver as the resolver for Settings.Config.getString
+        // since the IContentProvider in the NameValueCache's provider holder is null.
+        Class c = Class.forName("android.provider.Settings$Config");
+        Field field = c.getDeclaredField("sNameValueCache");
+        field.setAccessible(true);
+        Object cache = field.get(null);
+
+        c = Class.forName("android.provider.Settings$NameValueCache");
+        field = c.getDeclaredField("mProviderHolder");
+        field.setAccessible(true);
+        Object providerHolder = field.get(cache);
+
+        FakeSettingsConfigProvider fakeSettingsProvider = new FakeSettingsConfigProvider();
+        field = MockContentProvider.class.getDeclaredField("mIContentProvider");
+        field.setAccessible(true);
+        Object iContentProvider = field.get(fakeSettingsProvider);
+
+        replaceInstance(Class.forName("android.provider.Settings$ContentProviderHolder"),
+                "mContentProvider", providerHolder, iContentProvider);
     }
 
     protected final void waitForHandlerAction(Handler h, long timeoutMillis) {
@@ -639,6 +745,32 @@ public abstract class TelephonyTest {
                 // do nothing
             }
         }
+    }
+
+    /**
+     * Wait for up to 1 second for the handler message queue to clear.
+     */
+    protected final void waitForLastHandlerAction(Handler h) {
+        CountDownLatch lock = new CountDownLatch(1);
+        // Allow the handler to start work on stuff.
+        h.postDelayed(lock::countDown, 100);
+        int timeoutCount = 0;
+        while (timeoutCount < 5) {
+            try {
+                if (lock.await(200, TimeUnit.MILLISECONDS)) {
+                    // no messages in queue, stop waiting.
+                    if (!h.hasMessagesOrCallbacks()) break;
+                    lock = new CountDownLatch(1);
+                    // Delay to allow the handler thread to start work on stuff.
+                    h.postDelayed(lock::countDown, 100);
+                }
+
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+            timeoutCount++;
+        }
+        assertTrue("Handler was not empty before timeout elapsed", timeoutCount < 5);
     }
 
     protected final void waitForHandlerActionDelayed(Handler h, long timeoutMillis, long delayMs) {
@@ -667,5 +799,75 @@ public abstract class TelephonyTest {
             fail(instance.getClass() + " " + methodName + " " + e.getClass().getName());
         }
         return null;
+    }
+
+    /**
+     * Add a TestableLooper to the list of monitored loopers
+     * @param looper added if it doesn't already exist
+     */
+    public void monitorTestableLooper(TestableLooper looper) {
+        if (!mTestableLoopers.contains(looper)) {
+            mTestableLoopers.add(looper);
+        }
+    }
+
+    /**
+     * Remove a TestableLooper from the list of monitored loopers
+     * @param looper removed if it does exist
+     */
+    public void unmonitorTestableLooper(TestableLooper looper) {
+        if (mTestableLoopers.contains(looper)) {
+            mTestableLoopers.remove(looper);
+        }
+    }
+
+    /**
+     * Handle all messages that can be processed at the current time
+     * for all monitored TestableLoopers
+     */
+    public void processAllMessages() {
+        if (mTestableLoopers.isEmpty()) {
+            fail("mTestableLoopers is empty. Please make sure to add @RunWithLooper annotation");
+        }
+        while (!areAllTestableLoopersIdle()) {
+            for (TestableLooper looper : mTestableLoopers) looper.processAllMessages();
+        }
+    }
+
+    /**
+     * Check if there are any messages to be processed in any monitored TestableLooper
+     * Delayed messages to be handled at a later time will be ignored
+     * @return true if there are no messages that can be handled at the current time
+     *         across all monitored TestableLoopers
+     */
+    private boolean areAllTestableLoopersIdle() {
+        for (TestableLooper looper : mTestableLoopers) {
+            if (!looper.getLooper().getQueue().isIdle()) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Effectively moves time forward by reducing the time of all messages
+     * for all monitored TestableLoopers
+     * @param milliSeconds number of milliseconds to move time forward by
+     */
+    public void moveTimeForward(long milliSeconds) {
+        for (TestableLooper looper : mTestableLoopers) {
+            MessageQueue queue = looper.getLooper().getQueue();
+            try {
+                Message msg = (Message) MESSAGE_QUEUE_FIELD.get(queue);
+                while (msg != null) {
+                    long updatedWhen = msg.getWhen() - milliSeconds;
+                    if (updatedWhen < 0) {
+                        updatedWhen = 0;
+                    }
+                    MESSAGE_WHEN_FIELD.set(msg, updatedWhen);
+                    msg = (Message) MESSAGE_NEXT_FIELD.get(msg);
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Access failed in TelephonyTest", e);
+            }
+        }
     }
 }

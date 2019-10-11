@@ -74,6 +74,7 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PcoData;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
@@ -266,6 +267,14 @@ public class DcTracker extends Handler {
     private static final String INTENT_DATA_STALL_ALARM_EXTRA_TAG = "data_stall_alarm_extra_tag";
     private static final String INTENT_DATA_STALL_ALARM_EXTRA_TRANSPORT_TYPE =
             "data_stall_alarm_extra_transport_type";
+
+    /** The higher index has higher priority. */
+    private static final DctConstants.State[] DATA_CONNECTION_STATE_PRIORITIES = {
+            DctConstants.State.IDLE,
+            DctConstants.State.DISCONNECTING,
+            DctConstants.State.CONNECTING,
+            DctConstants.State.CONNECTED,
+    };
 
     private DcTesterFailBringUpAll mDcTesterFailBringUpAll;
     private DcController mDcc;
@@ -1117,23 +1126,35 @@ public class DcTracker extends Handler {
      * Assumes there is less than one {@link ApnSetting} can support the given apn type.
      */
     public DctConstants.State getState(String apnType) {
+        DctConstants.State state = DctConstants.State.IDLE;
         final int apnTypeBitmask = ApnSetting.getApnTypesBitmaskFromString(apnType);
         for (DataConnection dc : mDataConnections.values()) {
             ApnSetting apnSetting = dc.getApnSetting();
             if (apnSetting != null && apnSetting.canHandleType(apnTypeBitmask)) {
                 if (dc.isActive()) {
-                    return DctConstants.State.CONNECTED;
+                    state = getBetterConnectionState(state, DctConstants.State.CONNECTED);
                 } else if (dc.isActivating()) {
-                    return DctConstants.State.CONNECTING;
+                    state = getBetterConnectionState(state, DctConstants.State.CONNECTING);
                 } else if (dc.isInactive()) {
-                    return DctConstants.State.IDLE;
+                    state = getBetterConnectionState(state, DctConstants.State.IDLE);
                 } else if (dc.isDisconnecting()) {
-                    return DctConstants.State.DISCONNECTING;
+                    state = getBetterConnectionState(state, DctConstants.State.DISCONNECTING);
                 }
             }
         }
+        return state;
+    }
 
-        return DctConstants.State.IDLE;
+    /**
+     * Return a better connection state between {@code stateA} and {@code stateB}. Check
+     * {@link #DATA_CONNECTION_STATE_PRIORITIES} for the details.
+     * @return the better connection state between {@code stateA} and {@code stateB}.
+     */
+    private static DctConstants.State getBetterConnectionState(
+            DctConstants.State stateA, DctConstants.State stateB) {
+        int idxA = ArrayUtils.indexOf(DATA_CONNECTION_STATE_PRIORITIES, stateA);
+        int idxB = ArrayUtils.indexOf(DATA_CONNECTION_STATE_PRIORITIES, stateB);
+        return idxA >= idxB ? stateA : stateB;
     }
 
     // Return if apn type is a provisioning apn.
@@ -1775,8 +1796,8 @@ public class DcTracker extends Handler {
         }
 
         for (ApnSetting dunSetting : dunCandidates) {
-            if (!ServiceState.networkBitmaskHasAccessNetworkType(dunSetting.getNetworkTypeBitmask(),
-                    ServiceState.rilRadioTechnologyToAccessNetworkType(bearer))) {
+            if (!dunSetting.canSupportNetworkType(
+                    ServiceState.rilRadioTechnologyToNetworkType(bearer))) {
                 continue;
             }
             retDunSettings.add(dunSetting);
@@ -1921,7 +1942,7 @@ public class DcTracker extends Handler {
         // this type.
         if (!apnContext.getApnType().equals(PhoneConstants.APN_TYPE_DUN)
                 || ServiceState.isGsm(getDataRat())) {
-            dataConnection = checkForCompatibleConnectedApnContext(apnContext);
+            dataConnection = checkForCompatibleDataConnection(apnContext);
             if (dataConnection != null) {
                 // Get the apn setting used by the data connection
                 ApnSetting dataConnectionApnSetting = dataConnection.getApnSetting();
@@ -2249,7 +2270,7 @@ public class DcTracker extends Handler {
         setDataProfilesAsNeeded();
     }
 
-    private DataConnection checkForCompatibleConnectedApnContext(ApnContext apnContext) {
+    private DataConnection checkForCompatibleDataConnection(ApnContext apnContext) {
         int apnType = apnContext.getApnTypeBitmask();
         ArrayList<ApnSetting> dunSettings = null;
 
@@ -2257,71 +2278,46 @@ public class DcTracker extends Handler {
             dunSettings = sortApnListByPreferred(fetchDunApns());
         }
         if (DBG) {
-            log("checkForCompatibleConnectedApnContext: apnContext=" + apnContext );
+            log("checkForCompatibleDataConnection: apnContext=" + apnContext);
         }
 
         DataConnection potentialDc = null;
-        ApnContext potentialApnCtx = null;
-        for (ApnContext curApnCtx : mApnContexts.values()) {
-            DataConnection curDc = curApnCtx.getDataConnection();
+        for (DataConnection curDc : mDataConnections.values()) {
             if (curDc != null) {
-                ApnSetting apnSetting = curApnCtx.getApnSetting();
+                ApnSetting apnSetting = curDc.getApnSetting();
                 log("apnSetting: " + apnSetting);
                 if (dunSettings != null && dunSettings.size() > 0) {
                     for (ApnSetting dunSetting : dunSettings) {
                         if (dunSetting.equals(apnSetting)) {
-                            switch (curApnCtx.getState()) {
-                                case CONNECTED:
-                                    if (DBG) {
-                                        log("checkForCompatibleConnectedApnContext:"
-                                                + " found dun conn=" + curDc
-                                                + " curApnCtx=" + curApnCtx);
-                                    }
-                                    return curDc;
-                                case CONNECTING:
-                                    potentialDc = curDc;
-                                    potentialApnCtx = curApnCtx;
-                                    break;
-                                default:
-                                    // Not connected, potential unchanged
-                                    break;
+                            if (curDc.isActive()) {
+                                if (DBG) {
+                                    log("checkForCompatibleDataConnection:"
+                                            + " found dun conn=" + curDc);
+                                }
+                                return curDc;
+                            } else if (curDc.isActivating()) {
+                                potentialDc = curDc;
                             }
                         }
                     }
                 } else if (apnSetting != null && apnSetting.canHandleType(apnType)) {
-                    switch (curApnCtx.getState()) {
-                        case CONNECTED:
-                            if (DBG) {
-                                log("checkForCompatibleConnectedApnContext:"
-                                        + " found canHandle conn=" + curDc
-                                        + " curApnCtx=" + curApnCtx);
-                            }
-                            return curDc;
-                        case CONNECTING:
-                            potentialDc = curDc;
-                            potentialApnCtx = curApnCtx;
-                            break;
-                        default:
-                            // Not connected, potential unchanged
-                            break;
+                    if (curDc.isActive()) {
+                        if (DBG) {
+                            log("checkForCompatibleDataConnection:"
+                                    + " found canHandle conn=" + curDc);
+                        }
+                        return curDc;
+                    } else if (curDc.isActivating()) {
+                        potentialDc = curDc;
                     }
                 }
-            } else {
-                if (VDBG) {
-                    log("checkForCompatibleConnectedApnContext: not conn curApnCtx=" + curApnCtx);
-                }
             }
-        }
-        if (potentialDc != null) {
-            if (DBG) {
-                log("checkForCompatibleConnectedApnContext: found potential conn=" + potentialDc
-                        + " curApnCtx=" + potentialApnCtx);
-            }
-            return potentialDc;
         }
 
-        if (DBG) log("checkForCompatibleConnectedApnContext: NO conn apnContext=" + apnContext);
-        return null;
+        if (DBG) {
+            log("checkForCompatibleDataConnection: potential dc=" + potentialDc);
+        }
+        return potentialDc;
     }
 
     private void addRequestNetworkCompleteMsg(Message onCompleteMsg,
@@ -3295,9 +3291,8 @@ public class DcTracker extends Handler {
                         + mPreferredApn.getOperatorNumeric() + ":" + mPreferredApn);
             }
             if (mPreferredApn.getOperatorNumeric().equals(operator)) {
-                if (ServiceState.networkBitmaskHasAccessNetworkType(
-                        mPreferredApn.getNetworkTypeBitmask(),
-                        ServiceState.rilRadioTechnologyToAccessNetworkType(radioTech))) {
+                if (mPreferredApn.canSupportNetworkType(
+                        ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
                     apnList.add(mPreferredApn);
                     apnList = sortApnListByPreferred(apnList);
                     if (DBG) log("buildWaitingApns: X added preferred apnList=" + apnList);
@@ -3317,8 +3312,8 @@ public class DcTracker extends Handler {
         if (DBG) log("buildWaitingApns: mAllApnSettings=" + mAllApnSettings);
         for (ApnSetting apn : mAllApnSettings) {
             if (apn.canHandleType(requestedApnTypeBitmask)) {
-                if (ServiceState.networkBitmaskHasAccessNetworkType(apn.getNetworkTypeBitmask(),
-                        ServiceState.rilRadioTechnologyToAccessNetworkType(radioTech))) {
+                if (apn.canSupportNetworkType(
+                        ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
                     if (VDBG) log("buildWaitingApns: adding apn=" + apn);
                     apnList.add(apn);
                 } else {
@@ -4845,6 +4840,7 @@ public class DcTracker extends Handler {
         return "UNKNOWN";
     }
 
+    @RilRadioTechnology
     private int getDataRat() {
         ServiceState ss = mPhone.getServiceState();
         NetworkRegistrationInfo nrs = ss.getNetworkRegistrationInfo(
@@ -4855,6 +4851,7 @@ public class DcTracker extends Handler {
         return ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
     }
 
+    @RilRadioTechnology
     private int getVoiceRat() {
         ServiceState ss = mPhone.getServiceState();
         NetworkRegistrationInfo nrs = ss.getNetworkRegistrationInfo(

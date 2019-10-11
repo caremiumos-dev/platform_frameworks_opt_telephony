@@ -70,6 +70,7 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PhysicalChannelConfig;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -116,10 +117,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.TimeZone;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -134,6 +137,9 @@ public class ServiceStateTracker extends Handler {
     private static final boolean VDBG = false;  // STOPSHIP if true
 
     private static final String PROP_FORCE_ROAMING = "telephony.test.forceRoaming";
+
+    private static final long SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS =
+            TimeUnit.SECONDS.toMillis(10);
 
     @UnsupportedAppUsage
     private CommandsInterface mCi;
@@ -172,6 +178,7 @@ public class ServiceStateTracker extends Handler {
 
     @UnsupportedAppUsage
     private SignalStrength mSignalStrength;
+    private long mSignalStrengthUpdatedTime;
 
     // TODO - this should not be public, right now used externally GsmConnetion.
     public RestrictedState mRestrictedState;
@@ -211,6 +218,7 @@ public class ServiceStateTracker extends Handler {
     private RegistrantList mPsRestrictEnabledRegistrants = new RegistrantList();
     private RegistrantList mPsRestrictDisabledRegistrants = new RegistrantList();
     private RegistrantList mImsCapabilityChangedRegistrants = new RegistrantList();
+    private RegistrantList mNrStateChangedRegistrants = new RegistrantList();
 
     /* Radio power off pending flag and tag counter */
     private boolean mPendingRadioPowerOffAfterDataOff = false;
@@ -713,6 +721,7 @@ public class ServiceStateTracker extends Handler {
         mNitzState.handleNetworkCountryCodeUnavailable();
         mCellIdentity = null;
         mNewCellIdentity = null;
+        mSignalStrengthUpdatedTime = System.currentTimeMillis();
 
         //cancel any pending pollstate request on voice tech switching
         cancelPollState();
@@ -1547,8 +1556,10 @@ public class ServiceStateTracker extends Handler {
                     mLastPhysicalChannelConfigList = list;
                     boolean hasChanged =
                             updateNrFrequencyRangeFromPhysicalChannelConfigs(list, mSS);
-                    hasChanged |= updateNrStateFromPhysicalChannelConfigs(
-                            list, mSS);
+                    if (updateNrStateFromPhysicalChannelConfigs(list, mSS)) {
+                        mNrStateChangedRegistrants.notifyRegistrants();
+                        hasChanged = true;
+                    }
 
                     // Notify NR frequency, NR connection status or bandwidths changed.
                     if (hasChanged
@@ -1822,7 +1833,7 @@ public class ServiceStateTracker extends Handler {
                  * data roaming status. If TSB58 roaming indicator is not in the
                  * carrier-specified list of ERIs for home system then set roaming.
                  */
-                final int dataRat = mNewSS.getRilDataRadioTechnology();
+                final int dataRat = getRilDataRadioTechnologyForWwan(mNewSS);
                 if (ServiceState.isCdma(dataRat)) {
                     final boolean isVoiceInService =
                             (mNewSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE);
@@ -2159,7 +2170,7 @@ public class ServiceStateTracker extends Handler {
                     // information coming from the modem, which might take a long time to come or
                     // even not come at all.  In order to provide the best user experience, we
                     // query the latest signal information so it will show up on the UI on time.
-                    int oldDataRAT = mSS.getRilDataRadioTechnology();
+                    int oldDataRAT = getRilDataRadioTechnologyForWwan(mSS);
                     if (((oldDataRAT == ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN)
                             && (newDataRat != ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN))
                             || (ServiceState.isCdma(oldDataRAT) && ServiceState.isLte(newDataRat))
@@ -3159,28 +3170,23 @@ public class ServiceStateTracker extends Handler {
         boolean hasMultiApnSupport = false;
         boolean hasLostMultiApnSupport = false;
         if (mPhone.isPhoneTypeCdmaLte()) {
+            final int wwanDataRat = getRilDataRadioTechnologyForWwan(mSS);
+            final int newWwanDataRat = getRilDataRadioTechnologyForWwan(mNewSS);
             has4gHandoff = mNewSS.getDataRegState() == ServiceState.STATE_IN_SERVICE
-                    && ((ServiceState.isLte(mSS.getRilDataRadioTechnology())
-                    && (mNewSS.getRilDataRadioTechnology()
-                    == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD))
+                    && ((ServiceState.isLte(wwanDataRat)
+                    && (newWwanDataRat == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD))
                     ||
-                    ((mSS.getRilDataRadioTechnology()
-                            == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD)
-                            && ServiceState.isLte(mNewSS.getRilDataRadioTechnology())));
+                    ((wwanDataRat == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD)
+                    && ServiceState.isLte(newWwanDataRat)));
 
-            hasMultiApnSupport = ((ServiceState.isLte(mNewSS.getRilDataRadioTechnology())
-                    || (mNewSS.getRilDataRadioTechnology()
-                    == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD))
+            hasMultiApnSupport = ((ServiceState.isLte(newWwanDataRat)
+                    || (newWwanDataRat == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD))
                     &&
-                    (!ServiceState.isLte(mSS.getRilDataRadioTechnology())
-                            && (mSS.getRilDataRadioTechnology()
-                            != ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD)));
+                    (!ServiceState.isLte(wwanDataRat)
+                    && (wwanDataRat != ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD)));
 
-            hasLostMultiApnSupport =
-                    ((mNewSS.getRilDataRadioTechnology()
-                            >= ServiceState.RIL_RADIO_TECHNOLOGY_IS95A)
-                            && (mNewSS.getRilDataRadioTechnology()
-                            <= ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_A));
+            hasLostMultiApnSupport = ((newWwanDataRat >= ServiceState.RIL_RADIO_TECHNOLOGY_IS95A)
+                    && (newWwanDataRat <= ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_A));
         }
 
         if (DBG) {
@@ -3304,8 +3310,20 @@ public class ServiceStateTracker extends Handler {
 
             tm.setNetworkOperatorNumericForPhone(mPhone.getPhoneId(), operatorNumeric);
 
-            if (isInvalidOperatorNumeric(operatorNumeric)) {
-                if (DBG) log("operatorNumeric " + operatorNumeric + " is invalid");
+            // If the OPERATOR command hasn't returned a valid operator, but if the device has
+            // camped on a cell either to attempt registration or for emergency services, then
+            // for purposes of setting the locale, we don't care if registration fails or is
+            // incomplete.
+            // CellIdentity can return a null MCC and MNC in CDMA
+            String localeOperator = operatorNumeric;
+            if (isInvalidOperatorNumeric(operatorNumeric) && (mCellIdentity != null)
+                    && mCellIdentity.getMccString() != null
+                    && mCellIdentity.getMncString() != null) {
+                localeOperator = mCellIdentity.getMccString() + mCellIdentity.getMncString();
+            }
+
+            if (isInvalidOperatorNumeric(localeOperator)) {
+                if (DBG) log("localeOperator " + localeOperator + " is invalid");
                 // Passing empty string is important for the first update. The initial value of
                 // operator numeric in locale tracker is null. The async update will allow getting
                 // cell info from the modem instead of using the cached one.
@@ -3317,10 +3335,10 @@ public class ServiceStateTracker extends Handler {
 
                 // Update IDD.
                 if (!mPhone.isPhoneTypeGsm()) {
-                    setOperatorIdd(operatorNumeric);
+                    setOperatorIdd(localeOperator);
                 }
 
-                mLocaleTracker.updateOperatorNumeric(operatorNumeric);
+                mLocaleTracker.updateOperatorNumeric(localeOperator);
             }
 
             tm.setNetworkRoamingForPhone(mPhone.getPhoneId(),
@@ -3444,10 +3462,10 @@ public class ServiceStateTracker extends Handler {
     }
 
     private String getOperatorNameFromEri() {
+        String eriText = null;
         if (mPhone.isPhoneTypeCdma()) {
             if ((mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON)
                     && (!mIsSubscriptionFromRuim)) {
-                String eriText;
                 // Now the Phone sees the new ServiceState so it can get the new ERI text
                 if (mSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE) {
                     eriText = mPhone.getCdmaEriText();
@@ -3457,7 +3475,6 @@ public class ServiceStateTracker extends Handler {
                     eriText = mPhone.getContext().getText(
                             com.android.internal.R.string.roamingTextSearching).toString();
                 }
-                return eriText;
             }
         } else if (mPhone.isPhoneTypeCdmaLte()) {
             boolean hasBrandOverride = mUiccController.getUiccCard(getPhoneId()) != null &&
@@ -3468,7 +3485,7 @@ public class ServiceStateTracker extends Handler {
                     || mPhone.getContext().getResources().getBoolean(com.android.internal.R
                     .bool.config_LTE_eri_for_network_name))) {
                 // Only when CDMA is in service, ERI will take effect
-                String eriText = mSS.getOperatorAlpha();
+                eriText = mSS.getOperatorAlpha();
                 // Now the Phone sees the new ServiceState so it can get the new ERI text
                 if (mSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE) {
                     eriText = mPhone.getCdmaEriText();
@@ -3485,7 +3502,6 @@ public class ServiceStateTracker extends Handler {
                     eriText = mPhone.getContext()
                             .getText(com.android.internal.R.string.roamingTextSearching).toString();
                 }
-                return eriText;
             }
 
             if (mUiccApplcation != null && mUiccApplcation.getState() == AppState.APPSTATE_READY &&
@@ -3501,11 +3517,11 @@ public class ServiceStateTracker extends Handler {
                 if (showSpn && (iconIndex == EriInfo.ROAMING_INDICATOR_OFF)
                         && isInHomeSidNid(mSS.getCdmaSystemId(), mSS.getCdmaNetworkId())
                         && mIccRecords != null) {
-                    return getServiceProviderName();
+                    eriText = getServiceProviderName();
                 }
             }
         }
-        return null;
+        return eriText;
     }
 
     /**
@@ -3655,39 +3671,21 @@ public class ServiceStateTracker extends Handler {
             return operatorNumeric;
         }
 
-        // resolve the mcc from sid;
-        // if mNitzState.getSavedTimeZoneId() is null, TimeZone would get the default timeZone,
-        // and the mNitzState.fixTimeZone() couldn't help, because it depends on operator Numeric;
-        // if the sid is conflict and timezone is unavailable, the mcc may be not right.
-        boolean isNitzTimeZone;
-        TimeZone tzone;
-        if (mNitzState.getSavedTimeZoneId() != null) {
-            tzone = TimeZone.getTimeZone(mNitzState.getSavedTimeZoneId());
-            isNitzTimeZone = true;
-        } else {
-            NitzData lastNitzData = mNitzState.getCachedNitzData();
-            if (lastNitzData == null) {
-                tzone = null;
-            } else {
-                tzone = TimeZoneLookupHelper.guessZoneByNitzStatic(lastNitzData);
-                if (ServiceStateTracker.DBG) {
-                    log("fixUnknownMcc(): guessNitzTimeZone returned "
-                            + (tzone == null ? tzone : tzone.getID()));
-                }
-            }
-            isNitzTimeZone = false;
-        }
-
+        // resolve the mcc from sid, using time zone information from the latest NITZ signal when
+        // available.
         int utcOffsetHours = 0;
-        if (tzone != null) {
-            utcOffsetHours = tzone.getRawOffset() / MS_PER_HOUR;
+        boolean isDst = false;
+        boolean isNitzTimeZone = false;
+        NitzData lastNitzData = mNitzState.getCachedNitzData();
+        if (lastNitzData != null) {
+            utcOffsetHours = lastNitzData.getLocalOffsetMillis() / MS_PER_HOUR;
+            Integer dstAdjustmentMillis = lastNitzData.getDstAdjustmentMillis();
+            isDst = (dstAdjustmentMillis != null) && (dstAdjustmentMillis != 0);
+            isNitzTimeZone = true;
         }
-
-        NitzData nitzData = mNitzState.getCachedNitzData();
-        boolean isDst = nitzData != null && nitzData.isDst();
         int mcc = mHbpcdUtils.getMcc(sid, utcOffsetHours, (isDst ? 1 : 0), isNitzTimeZone);
         if (mcc > 0) {
-            operatorNumeric = Integer.toString(mcc) + DEFAULT_MNC;
+            operatorNumeric = mcc + DEFAULT_MNC;
         }
         return operatorNumeric;
     }
@@ -4709,6 +4707,7 @@ public class ServiceStateTracker extends Handler {
             log("onSignalStrengthResult() Exception from RIL : " + ar.exception);
             mSignalStrength = new SignalStrength();
         }
+        mSignalStrengthUpdatedTime = System.currentTimeMillis();
 
         boolean ssChanged = notifySignalStrength();
 
@@ -4797,6 +4796,8 @@ public class ServiceStateTracker extends Handler {
     public void requestAllCellInfo(WorkSource workSource, Message rspMsg) {
         if (VDBG) log("SST.requestAllCellInfo(): E");
         if (mCi.getRilVersion() < 8) {
+            AsyncResult.forMessage(rspMsg);
+            rspMsg.sendToTarget();
             if (DBG) log("SST.requestAllCellInfo(): not implemented");
             return;
         }
@@ -4839,7 +4840,39 @@ public class ServiceStateTracker extends Handler {
      * @return signal strength
      */
     public SignalStrength getSignalStrength() {
+        if (shouldRefreshSignalStrength()) {
+            log("SST.getSignalStrength() refreshing signal strength.");
+            obtainMessage(EVENT_POLL_SIGNAL_STRENGTH).sendToTarget();
+        }
         return mSignalStrength;
+    }
+
+    private boolean shouldRefreshSignalStrength() {
+        long curTime = System.currentTimeMillis();
+
+        // If last signal strength is older than 10 seconds, or somehow if curTime is smaller
+        // than mSignalStrengthUpdatedTime (system time update), it's considered stale.
+        boolean isStale = (mSignalStrengthUpdatedTime > curTime)
+                || (curTime - mSignalStrengthUpdatedTime > SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS);
+        if (!isStale) return false;
+
+        List<SubscriptionInfo> subInfoList = SubscriptionController.getInstance()
+                .getActiveSubscriptionInfoList(mPhone.getContext().getOpPackageName());
+        for (SubscriptionInfo info : subInfoList) {
+            // If we have an active opportunistic subscription whose data is IN_SERVICE, we needs
+            // to get signal strength to decide data switching threshold. In this case, we poll
+            // latest signal strength from modem.
+            if (info.isOpportunistic()) {
+                TelephonyManager tm = TelephonyManager.from(mPhone.getContext())
+                        .createForSubscriptionId(info.getSubscriptionId());
+                ServiceState ss = tm.getServiceState();
+                if (ss != null && ss.getDataRegState() == ServiceState.STATE_IN_SERVICE) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -5147,7 +5180,7 @@ public class ServiceStateTracker extends Handler {
         }
         final boolean isDataInService =
                 (currentServiceState.getDataRegState() == ServiceState.STATE_IN_SERVICE);
-        final int dataRegType = currentServiceState.getRilDataRadioTechnology();
+        final int dataRegType = getRilDataRadioTechnologyForWwan(currentServiceState);
         if (isDataInService) {
             if (!currentServiceState.getDataRoaming()) {
                 currentServiceState.setDataRoamingType(ServiceState.ROAMING_TYPE_NOT_ROAMING);
@@ -5194,6 +5227,7 @@ public class ServiceStateTracker extends Handler {
     @UnsupportedAppUsage
     private void setSignalStrengthDefaultValues() {
         mSignalStrength = new SignalStrength();
+        mSignalStrengthUpdatedTime = System.currentTimeMillis();
     }
 
     protected String getHomeOperatorNumeric() {
@@ -5463,5 +5497,55 @@ public class ServiceStateTracker extends Handler {
             }
         }
         return operatorName;
+    }
+
+    @RilRadioTechnology
+    private static int getRilDataRadioTechnologyForWwan(ServiceState ss) {
+        NetworkRegistrationInfo regInfo = ss.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        int networkType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        if (regInfo != null) {
+            networkType = regInfo.getAccessNetworkTechnology();
+        }
+        return ServiceState.networkTypeToRilRadioTechnology(networkType);
+    }
+
+    /**
+     * Registers for 5G NR state changed.
+     * @param h handler to notify
+     * @param what what code of message when delivered
+     * @param obj placed in Message.obj
+     */
+    public void registerForNrStateChanged(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mNrStateChangedRegistrants.add(r);
+    }
+
+    /**
+     * Unregisters for 5G NR state changed.
+     * @param h handler to notify
+     */
+    public void unregisterForNrStateChanged(Handler h) {
+        mNrStateChangedRegistrants.remove(h);
+    }
+
+    /**
+     * Get the NR data connection context ids.
+     *
+     * @return data connection context ids.
+     */
+    @NonNull
+    public Set<Integer> getNrContextIds() {
+        Set<Integer> idSet = new HashSet<>();
+
+        for (PhysicalChannelConfig config : mLastPhysicalChannelConfigList) {
+            if (isNrPhysicalChannelConfig(config)) {
+                for (int id : config.getContextIds()) {
+                    idSet.add(id);
+                }
+            }
+        }
+
+        return idSet;
     }
 }

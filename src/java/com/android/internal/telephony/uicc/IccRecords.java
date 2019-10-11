@@ -400,7 +400,6 @@ public abstract class IccRecords extends Handler implements IccConstants {
             r.notifyRegistrant(new AsyncResult(null, null, null));
         }
     }
-
     @UnsupportedAppUsage
     public void unregisterForRecordsLoaded(Handler h) {
         mRecordsLoadedRegistrants.remove(h);
@@ -993,6 +992,8 @@ public abstract class IccRecords extends Handler implements IccConstants {
         if (!ArrayUtils.isEmpty(spdi)) {
             hplmns = ArrayUtils.concatElements(String.class, hplmns, spdi);
         }
+        // If hplmns don't contain hplmn, we need to add hplmn to hplmns
+        hplmns = ArrayUtils.appendElement(String.class, hplmns, hplmn);
         return hplmns;
     }
 

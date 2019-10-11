@@ -100,8 +100,8 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
 
     public NitzStateMachineImpl(GsmCdmaPhone phone) {
         this(phone,
-                new TimeServiceHelper(phone.getContext()),
-                new DeviceState(phone),
+                new TimeServiceHelperImpl(phone.getContext()),
+                new DeviceStateImpl(phone),
                 new TimeZoneLookupHelper());
     }
 
@@ -184,7 +184,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
                 // We log this in the time zone log because it has been a source of bugs.
                 mTimeZoneLog.log(logMsg);
 
-                zoneId = lookupResult != null ? lookupResult.zoneId : null;
+                zoneId = lookupResult != null ? lookupResult.getTimeZone().getID() : null;
             } else if (mLatestNitzSignal == null) {
                 if (DBG) {
                     Rlog.d(LOG_TAG,
@@ -204,8 +204,8 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
 
                 zoneId = null;
             } else {
-                OffsetResult lookupResult = mTimeZoneLookupHelper.lookupByNitzCountry(
-                        nitzData, isoCountryCode);
+                OffsetResult lookupResult =
+                        mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, isoCountryCode);
                 if (DBG) {
                     Rlog.d(LOG_TAG, "updateTimeZoneFromCountryAndNitz: using"
                             + " lookupByNitzCountry(nitzData, isoCountryCode),"
@@ -213,7 +213,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
                             + " isoCountryCode=" + isoCountryCode
                             + " lookupResult=" + lookupResult);
                 }
-                zoneId = lookupResult != null ? lookupResult.zoneId : null;
+                zoneId = lookupResult != null ? lookupResult.getTimeZone().getID() : null;
             }
 
             String logMsg = "updateTimeZoneFromCountryAndNitz:"
@@ -263,7 +263,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         }
 
         NitzData newNitzData = nitzSignal.getValue();
-        boolean zeroOffsetNitz = newNitzData.getLocalOffsetMillis() == 0 && !newNitzData.isDst();
+        boolean zeroOffsetNitz = newNitzData.getLocalOffsetMillis() == 0;
         return zeroOffsetNitz && !countryUsesUtc(isoCountryCode, nitzSignal);
     }
 
@@ -305,8 +305,24 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
 
     @Override
     public void handleAirplaneModeChanged(boolean on) {
-        Rlog.d(LOG_TAG, "handleAirplaneModeChanged: on=" + on);
-        // TODO
+        if (DBG) {
+            Rlog.d(LOG_TAG, "handleAirplaneModeChanged: on=" + on);
+        }
+
+        // Treat entry / exit from airplane mode as a strong signal that the user wants to clear
+        // cached state. If the user really is boarding a plane they won't want cached state from
+        // before their flight influencing behavior.
+        //
+        // State is cleared on entry AND exit: on entry because the detection code shouldn't be
+        // opinionated while in airplane mode, and on exit to avoid any unexpected signals received
+        // while in airplane mode from influencing behavior afterwards.
+        //
+        // After clearing detection state, the time zone detection should work out from first
+        // principles what the time / time zone is. This assumes calls like handleNetworkAvailable()
+        // will be made after airplane mode is re-enabled as the device re-establishes network
+        // connectivity.
+        clearTimeDetectionState();
+        clearTimeZoneDetectionState();
     }
 
     private void updateTimeFromNitz() {
@@ -326,7 +342,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
                 // Acquire the wake lock as we are reading the elapsed realtime clock below.
                 mWakeLock.acquire();
 
-                long elapsedRealtime = mTimeServiceHelper.elapsedRealtime();
+                long elapsedRealtime = mDeviceState.elapsedRealtime();
                 long millisSinceNitzReceived =
                         elapsedRealtime - nitzSignal.getReferenceTimeMillis();
                 if (millisSinceNitzReceived < 0 || millisSinceNitzReceived > Integer.MAX_VALUE) {
@@ -397,6 +413,11 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
                     + " nitzSignal=" + nitzSignal
                     + " ex=" + ex);
         }
+    }
+
+    private void clearTimeDetectionState() {
+        mSavedNitzTime = null;
+        mTimeZoneLog.log("clearTimeZoneDetectionState: All time detection state cleared.");
     }
 
     private void setAndBroadcastNetworkSetTimeZone(String zoneId, String logMessage) {
@@ -472,7 +493,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
      */
     private void updateTimeZoneFromNetworkCountryCode(String iso) {
         CountryResult lookupResult = mTimeZoneLookupHelper.lookupByCountry(
-                iso, mTimeServiceHelper.currentTimeMillis());
+                iso, mDeviceState.currentTimeMillis());
         if (lookupResult != null && lookupResult.allZonesHaveSameOffset) {
             String logMsg = "updateTimeZoneFromNetworkCountryCode: tz result found"
                     + " iso=" + iso
@@ -497,6 +518,15 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         }
     }
 
+    private void clearTimeZoneDetectionState() {
+        mLatestNitzSignal = null;
+        mGotCountryCode = false;
+        mSavedTimeZoneId = null;
+        mNitzTimeZoneDetectionSuccessful = false;
+        mTimeZoneLog.log("clearTimeZoneDetectionState: All time zone detection state cleared.");
+    }
+
+    // VisibleForTesting
     public boolean getNitzTimeZoneDetectionSuccessful() {
         return mNitzTimeZoneDetectionSuccessful;
     }
@@ -505,10 +535,4 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
     public NitzData getCachedNitzData() {
         return mLatestNitzSignal != null ? mLatestNitzSignal.getValue() : null;
     }
-
-    @Override
-    public String getSavedTimeZoneId() {
-        return mSavedTimeZoneId;
-    }
-
 }

@@ -174,7 +174,7 @@ public class SubscriptionController extends ISub.Stub {
         }
     }
 
-    public static SubscriptionController init(Context c, CommandsInterface[] ci) {
+    public static SubscriptionController init(Context c) {
         synchronized (SubscriptionController.class) {
             if (sInstance == null) {
                 sInstance = new SubscriptionController(c);
@@ -196,11 +196,12 @@ public class SubscriptionController extends ISub.Stub {
     }
 
     protected SubscriptionController(Context c) {
-        init(c);
+        internalInit(c);
         migrateImsSettings();
     }
 
-    protected void init(Context c) {
+    protected void internalInit(Context c) {
+
         mContext = c;
         mTelephonyManager = TelephonyManager.from(mContext);
 
@@ -432,8 +433,8 @@ public class SubscriptionController extends ISub.Stub {
      * @param queryKey query key content
      * @return Array list of queried result from database
      */
-     @UnsupportedAppUsage
-     public List<SubscriptionInfo> getSubInfo(String selection, Object queryKey) {
+    @UnsupportedAppUsage
+    public List<SubscriptionInfo> getSubInfo(String selection, Object queryKey) {
         if (VDBG) logd("selection:" + selection + ", querykey: " + queryKey);
         String[] selectionArgs = null;
         if (queryKey != null) {
@@ -1584,8 +1585,16 @@ public class SubscriptionController extends ISub.Stub {
                 }
             }
             String nameToSet;
-            if (displayName == null) {
-                nameToSet = mContext.getString(SubscriptionManager.DEFAULT_NAME_RES);
+            if (TextUtils.isEmpty(displayName) || displayName.trim().length() == 0) {
+                nameToSet = mTelephonyManager.getSimOperatorName(subId);
+                if (TextUtils.isEmpty(nameToSet)) {
+                    if (nameSource == SubscriptionManager.NAME_SOURCE_USER_INPUT
+                            && SubscriptionManager.isValidSlotIndex(getSlotIndex(subId))) {
+                        nameToSet = "CARD " + (getSlotIndex(subId) + 1);
+                    } else {
+                        nameToSet = mContext.getString(SubscriptionManager.DEFAULT_NAME_RES);
+                    }
+                }
             } else {
                 nameToSet = displayName;
             }
@@ -1596,9 +1605,19 @@ public class SubscriptionController extends ISub.Stub {
                 value.put(SubscriptionManager.NAME_SOURCE, nameSource);
             }
             if (DBG) logd("[setDisplayName]- mDisplayName:" + nameToSet + " set");
-            // TODO(b/33075886): If this is an embedded subscription, we must also save the new name
-            // to the eSIM itself. Currently it will be blown away the next time the subscription
-            // list is updated.
+
+            // Update the nickname on the eUICC chip if it's an embedded subscription.
+            SubscriptionInfo sub = getSubscriptionInfo(subId);
+            if (sub != null && sub.isEmbedded()) {
+                // Ignore the result.
+                int cardId = sub.getCardId();
+                if (DBG) logd("Updating embedded sub nickname on cardId: " + cardId);
+                EuiccManager euiccManager = ((EuiccManager)
+                        mContext.getSystemService(Context.EUICC_SERVICE)).createForCardId(cardId);
+                euiccManager.updateSubscriptionNickname(subId, displayName,
+                        PendingIntent.getService(
+                            mContext, 0 /* requestCode */, new Intent(), 0 /* flags */));
+            }
 
             int result = updateDatabase(value, subId, true);
 
@@ -1883,28 +1902,31 @@ public class SubscriptionController extends ISub.Stub {
 
     /**
      * Get IMSI by subscription ID
+     * For active subIds, this will always return the corresponding imsi
+     * For inactive subIds, once they are activated once, even if they are deactivated at the time
+     *   of calling this function, the corresponding imsi will be returned
+     * When calling this method, the permission check should have already been done to allow
+     *   only privileged read
+     *
      * @return imsi
      */
-    public String getImsi(int subId) {
-        Cursor cursor = mContext.getContentResolver().query(
-                SubscriptionManager.getUriForSubscriptionId(subId), null,
+    public String getImsiPrivileged(int subId) {
+        try (Cursor cursor = mContext.getContentResolver().query(
+                SubscriptionManager.CONTENT_URI, null,
                 SubscriptionManager.UNIQUE_KEY_SUBSCRIPTION_ID + "=?",
-                new String[]{String.valueOf(subId)}, null);
-
-        String imsi = null;
-        try {
+                new String[] {String.valueOf(subId)}, null)) {
+            String imsi = null;
             if (cursor != null) {
                 if (cursor.moveToNext()) {
                     imsi = getOptionalStringFromCursor(cursor, SubscriptionManager.IMSI,
                             /*defaultVal*/ null);
                 }
+            } else {
+                logd("getImsiPrivileged: failed to retrieve imsi.");
             }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
+
+            return imsi;
         }
-        return imsi;
     }
 
     /**
@@ -2184,30 +2206,25 @@ public class SubscriptionController extends ISub.Stub {
         }
         if (DBG) logdl("[setDefaultVoiceSubId] subId=" + subId);
 
-        int previousSetting = Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.MULTI_SIM_VOICE_CALL_SUBSCRIPTION,
-                SubscriptionManager.DEFAULT_SUBSCRIPTION_ID);
         int previousDefaultSub = getDefaultSubId();
 
         Settings.Global.putInt(mContext.getContentResolver(),
                 Settings.Global.MULTI_SIM_VOICE_CALL_SUBSCRIPTION, subId);
         broadcastDefaultVoiceSubIdChanged(subId);
 
-        if (previousSetting != subId) {
-            PhoneAccountHandle newHandle =
-                    subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID
-                            ? null : mTelephonyManager.getPhoneAccountHandleForSubscriptionId(
-                            subId);
+        PhoneAccountHandle newHandle =
+                subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID
+                        ? null : mTelephonyManager.getPhoneAccountHandleForSubscriptionId(
+                        subId);
 
-            TelecomManager telecomManager = mContext.getSystemService(TelecomManager.class);
-            PhoneAccountHandle currentHandle = telecomManager.getUserSelectedOutgoingPhoneAccount();
+        TelecomManager telecomManager = mContext.getSystemService(TelecomManager.class);
+        PhoneAccountHandle currentHandle = telecomManager.getUserSelectedOutgoingPhoneAccount();
 
-            if (!Objects.equals(currentHandle, newHandle)) {
-                telecomManager.setUserSelectedOutgoingPhoneAccount(newHandle);
-                logd("[setDefaultVoiceSubId] change to phoneAccountHandle=" + newHandle);
-            } else {
-                logd("[setDefaultVoiceSubId] default phone account not changed");
-            }
+        if (!Objects.equals(currentHandle, newHandle)) {
+            telecomManager.setUserSelectedOutgoingPhoneAccount(newHandle);
+            logd("[setDefaultVoiceSubId] change to phoneAccountHandle=" + newHandle);
+        } else {
+            logd("[setDefaultVoiceSubId] default phone account not changed");
         }
 
         if (previousDefaultSub != getDefaultSubId()) {
@@ -2374,7 +2391,7 @@ public class SubscriptionController extends ISub.Stub {
     public void sendDefaultChangedBroadcast(int subId) {
         // Broadcast an Intent for default sub change
         int phoneId = SubscriptionManager.getPhoneId(subId);
-        Intent intent = new Intent(TelephonyIntents.ACTION_DEFAULT_SUBSCRIPTION_CHANGED);
+        Intent intent = new Intent(SubscriptionManager.ACTION_DEFAULT_SUBSCRIPTION_CHANGED);
         intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING
                 | Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
         SubscriptionManager.putPhoneIdAndSubIdExtra(intent, phoneId, subId);
