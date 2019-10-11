@@ -1187,7 +1187,6 @@ public class SIMRecords extends IccRecords {
                     data = (byte[]) ar.result;
                     if (ar.exception != null || data == null) {
                         loge("Failed getting Forbidden PLMNs: " + ar.exception);
-                        break;
                     } else {
                         mFplmns = parseBcdPlmnList(data, "Forbidden");
                     }
@@ -1196,8 +1195,12 @@ public class SIMRecords extends IccRecords {
                         isRecordLoadResponse = false;
                         Message response = retrievePendingResponseMessage(msg.arg2);
                         if (response != null) {
-                            AsyncResult.forMessage(
-                                    response, Arrays.copyOf(mFplmns, mFplmns.length), null);
+                            if (ar.exception == null && data != null) {
+                                AsyncResult.forMessage(response, Arrays.copyOf(mFplmns,
+                                        mFplmns.length), null);
+                            } else {
+                                AsyncResult.forMessage(response, null, ar.exception);
+                            }
                             response.sendToTarget();
                         } else {
                             loge("Failed to retrieve a response message for FPLMN");
