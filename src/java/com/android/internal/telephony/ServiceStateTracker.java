@@ -70,6 +70,7 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PhysicalChannelConfig;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -116,9 +117,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -133,6 +137,9 @@ public class ServiceStateTracker extends Handler {
     private static final boolean VDBG = false;  // STOPSHIP if true
 
     private static final String PROP_FORCE_ROAMING = "telephony.test.forceRoaming";
+
+    private static final long SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS =
+            TimeUnit.SECONDS.toMillis(10);
 
     @UnsupportedAppUsage
     private CommandsInterface mCi;
@@ -171,6 +178,7 @@ public class ServiceStateTracker extends Handler {
 
     @UnsupportedAppUsage
     private SignalStrength mSignalStrength;
+    private long mSignalStrengthUpdatedTime;
 
     // TODO - this should not be public, right now used externally GsmConnetion.
     public RestrictedState mRestrictedState;
@@ -210,6 +218,7 @@ public class ServiceStateTracker extends Handler {
     private RegistrantList mPsRestrictEnabledRegistrants = new RegistrantList();
     private RegistrantList mPsRestrictDisabledRegistrants = new RegistrantList();
     private RegistrantList mImsCapabilityChangedRegistrants = new RegistrantList();
+    private RegistrantList mNrStateChangedRegistrants = new RegistrantList();
 
     /* Radio power off pending flag and tag counter */
     private boolean mPendingRadioPowerOffAfterDataOff = false;
@@ -712,6 +721,7 @@ public class ServiceStateTracker extends Handler {
         mNitzState.handleNetworkCountryCodeUnavailable();
         mCellIdentity = null;
         mNewCellIdentity = null;
+        mSignalStrengthUpdatedTime = System.currentTimeMillis();
 
         //cancel any pending pollstate request on voice tech switching
         cancelPollState();
@@ -1546,8 +1556,10 @@ public class ServiceStateTracker extends Handler {
                     mLastPhysicalChannelConfigList = list;
                     boolean hasChanged =
                             updateNrFrequencyRangeFromPhysicalChannelConfigs(list, mSS);
-                    hasChanged |= updateNrStateFromPhysicalChannelConfigs(
-                            list, mSS);
+                    if (updateNrStateFromPhysicalChannelConfigs(list, mSS)) {
+                        mNrStateChangedRegistrants.notifyRegistrants();
+                        hasChanged = true;
+                    }
 
                     // Notify NR frequency, NR connection status or bandwidths changed.
                     if (hasChanged
@@ -1821,7 +1833,7 @@ public class ServiceStateTracker extends Handler {
                  * data roaming status. If TSB58 roaming indicator is not in the
                  * carrier-specified list of ERIs for home system then set roaming.
                  */
-                final int dataRat = mNewSS.getRilDataRadioTechnology();
+                final int dataRat = getRilDataRadioTechnologyForWwan(mNewSS);
                 if (ServiceState.isCdma(dataRat)) {
                     final boolean isVoiceInService =
                             (mNewSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE);
@@ -2158,7 +2170,7 @@ public class ServiceStateTracker extends Handler {
                     // information coming from the modem, which might take a long time to come or
                     // even not come at all.  In order to provide the best user experience, we
                     // query the latest signal information so it will show up on the UI on time.
-                    int oldDataRAT = mSS.getRilDataRadioTechnology();
+                    int oldDataRAT = getRilDataRadioTechnologyForWwan(mSS);
                     if (((oldDataRAT == ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN)
                             && (newDataRat != ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN))
                             || (ServiceState.isCdma(oldDataRAT) && ServiceState.isLte(newDataRat))
@@ -3158,28 +3170,23 @@ public class ServiceStateTracker extends Handler {
         boolean hasMultiApnSupport = false;
         boolean hasLostMultiApnSupport = false;
         if (mPhone.isPhoneTypeCdmaLte()) {
+            final int wwanDataRat = getRilDataRadioTechnologyForWwan(mSS);
+            final int newWwanDataRat = getRilDataRadioTechnologyForWwan(mNewSS);
             has4gHandoff = mNewSS.getDataRegState() == ServiceState.STATE_IN_SERVICE
-                    && ((ServiceState.isLte(mSS.getRilDataRadioTechnology())
-                    && (mNewSS.getRilDataRadioTechnology()
-                    == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD))
+                    && ((ServiceState.isLte(wwanDataRat)
+                    && (newWwanDataRat == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD))
                     ||
-                    ((mSS.getRilDataRadioTechnology()
-                            == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD)
-                            && ServiceState.isLte(mNewSS.getRilDataRadioTechnology())));
+                    ((wwanDataRat == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD)
+                    && ServiceState.isLte(newWwanDataRat)));
 
-            hasMultiApnSupport = ((ServiceState.isLte(mNewSS.getRilDataRadioTechnology())
-                    || (mNewSS.getRilDataRadioTechnology()
-                    == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD))
+            hasMultiApnSupport = ((ServiceState.isLte(newWwanDataRat)
+                    || (newWwanDataRat == ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD))
                     &&
-                    (!ServiceState.isLte(mSS.getRilDataRadioTechnology())
-                            && (mSS.getRilDataRadioTechnology()
-                            != ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD)));
+                    (!ServiceState.isLte(wwanDataRat)
+                    && (wwanDataRat != ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD)));
 
-            hasLostMultiApnSupport =
-                    ((mNewSS.getRilDataRadioTechnology()
-                            >= ServiceState.RIL_RADIO_TECHNOLOGY_IS95A)
-                            && (mNewSS.getRilDataRadioTechnology()
-                            <= ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_A));
+            hasLostMultiApnSupport = ((newWwanDataRat >= ServiceState.RIL_RADIO_TECHNOLOGY_IS95A)
+                    && (newWwanDataRat <= ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_A));
         }
 
         if (DBG) {
@@ -4700,6 +4707,7 @@ public class ServiceStateTracker extends Handler {
             log("onSignalStrengthResult() Exception from RIL : " + ar.exception);
             mSignalStrength = new SignalStrength();
         }
+        mSignalStrengthUpdatedTime = System.currentTimeMillis();
 
         boolean ssChanged = notifySignalStrength();
 
@@ -4832,7 +4840,39 @@ public class ServiceStateTracker extends Handler {
      * @return signal strength
      */
     public SignalStrength getSignalStrength() {
+        if (shouldRefreshSignalStrength()) {
+            log("SST.getSignalStrength() refreshing signal strength.");
+            obtainMessage(EVENT_POLL_SIGNAL_STRENGTH).sendToTarget();
+        }
         return mSignalStrength;
+    }
+
+    private boolean shouldRefreshSignalStrength() {
+        long curTime = System.currentTimeMillis();
+
+        // If last signal strength is older than 10 seconds, or somehow if curTime is smaller
+        // than mSignalStrengthUpdatedTime (system time update), it's considered stale.
+        boolean isStale = (mSignalStrengthUpdatedTime > curTime)
+                || (curTime - mSignalStrengthUpdatedTime > SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS);
+        if (!isStale) return false;
+
+        List<SubscriptionInfo> subInfoList = SubscriptionController.getInstance()
+                .getActiveSubscriptionInfoList(mPhone.getContext().getOpPackageName());
+        for (SubscriptionInfo info : subInfoList) {
+            // If we have an active opportunistic subscription whose data is IN_SERVICE, we needs
+            // to get signal strength to decide data switching threshold. In this case, we poll
+            // latest signal strength from modem.
+            if (info.isOpportunistic()) {
+                TelephonyManager tm = TelephonyManager.from(mPhone.getContext())
+                        .createForSubscriptionId(info.getSubscriptionId());
+                ServiceState ss = tm.getServiceState();
+                if (ss != null && ss.getDataRegState() == ServiceState.STATE_IN_SERVICE) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -5140,7 +5180,7 @@ public class ServiceStateTracker extends Handler {
         }
         final boolean isDataInService =
                 (currentServiceState.getDataRegState() == ServiceState.STATE_IN_SERVICE);
-        final int dataRegType = currentServiceState.getRilDataRadioTechnology();
+        final int dataRegType = getRilDataRadioTechnologyForWwan(currentServiceState);
         if (isDataInService) {
             if (!currentServiceState.getDataRoaming()) {
                 currentServiceState.setDataRoamingType(ServiceState.ROAMING_TYPE_NOT_ROAMING);
@@ -5187,6 +5227,7 @@ public class ServiceStateTracker extends Handler {
     @UnsupportedAppUsage
     private void setSignalStrengthDefaultValues() {
         mSignalStrength = new SignalStrength();
+        mSignalStrengthUpdatedTime = System.currentTimeMillis();
     }
 
     protected String getHomeOperatorNumeric() {
@@ -5456,5 +5497,55 @@ public class ServiceStateTracker extends Handler {
             }
         }
         return operatorName;
+    }
+
+    @RilRadioTechnology
+    private static int getRilDataRadioTechnologyForWwan(ServiceState ss) {
+        NetworkRegistrationInfo regInfo = ss.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        int networkType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        if (regInfo != null) {
+            networkType = regInfo.getAccessNetworkTechnology();
+        }
+        return ServiceState.networkTypeToRilRadioTechnology(networkType);
+    }
+
+    /**
+     * Registers for 5G NR state changed.
+     * @param h handler to notify
+     * @param what what code of message when delivered
+     * @param obj placed in Message.obj
+     */
+    public void registerForNrStateChanged(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mNrStateChangedRegistrants.add(r);
+    }
+
+    /**
+     * Unregisters for 5G NR state changed.
+     * @param h handler to notify
+     */
+    public void unregisterForNrStateChanged(Handler h) {
+        mNrStateChangedRegistrants.remove(h);
+    }
+
+    /**
+     * Get the NR data connection context ids.
+     *
+     * @return data connection context ids.
+     */
+    @NonNull
+    public Set<Integer> getNrContextIds() {
+        Set<Integer> idSet = new HashSet<>();
+
+        for (PhysicalChannelConfig config : mLastPhysicalChannelConfigList) {
+            if (isNrPhysicalChannelConfig(config)) {
+                for (int id : config.getContextIds()) {
+                    idSet.add(id);
+                }
+            }
+        }
+
+        return idSet;
     }
 }
