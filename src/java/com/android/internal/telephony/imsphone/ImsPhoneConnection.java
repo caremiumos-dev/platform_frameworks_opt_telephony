@@ -1395,4 +1395,14 @@ public class ImsPhoneConnection extends Connection implements
                 + "; updating local video availability.");
         updateMediaCapabilities(getImsCall());
     }
+
+    @Override
+    public String getIndex () {
+        ImsCall imsCall = getImsCall();
+        if (imsCall != null && imsCall.getCallSession() != null) {
+            return imsCall.getCallSession().getCallId();
+        }
+        return null;
+    }
+
 }

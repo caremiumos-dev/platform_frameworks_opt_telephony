@@ -1330,6 +1330,10 @@ public abstract class Connection {
         return mIsNetworkIdentifiedEmergencyCall;
     }
 
+    public String getIndex () {
+        return null;
+    }
+
     /**
      * Build a human representation of a connection instance, suitable for debugging.
      * Don't log personal stuff unless in debug mode.

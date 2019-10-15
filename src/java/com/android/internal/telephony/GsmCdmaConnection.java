@@ -1210,4 +1210,15 @@ public class GsmCdmaConnection extends Connection {
     public boolean isOtaspCall() {
         return mAddress != null && OTASP_NUMBER.equals(mAddress);
     }
+
+    @Override
+    public String getIndex() {
+        try {
+            return String.valueOf(getGsmCdmaIndex());
+        } catch (CallStateException e) {
+            Rlog.e(LOG_TAG, "CallStateException when getIndex:" + e);
+            return null;
+        }
+    }
+
 }
