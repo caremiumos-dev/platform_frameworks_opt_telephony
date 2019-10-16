@@ -166,6 +166,30 @@
       "revId": "8548e0a57db13c75fb4609f8b34f5177465ff122",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7e9516f_119888a4",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2019-10-16T05:49:54Z",
+      "side": 1,
+      "message": "As i know, when dialing over ims, registerForRedialConnectionChanged is registered ImsPhone.\n\nTelephonyConnection.java\ngetPhone().registerForRedialConnectionChanged(...)\n\n    Phone getPhone() {\n        Call call \u003d getCall();\n        if (call !\u003d null) {\n            return call.getPhone();\n        }\n        return null;\n    }\n\n    protected Call getCall() {\n        if (mOriginalConnection !\u003d null) {\n            return mOriginalConnection.getCall();\n        }\n        return null;\n    }",
+      "parentUuid": "c40dce91_0c874167",
+      "range": {
+        "startLine": 724,
+        "startChar": 28,
+        "endLine": 724,
+        "endChar": 37
+      },
+      "revId": "8548e0a57db13c75fb4609f8b34f5177465ff122",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
