@@ -731,6 +731,9 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
     @UnsupportedAppUsage
     boolean
     isSupportedOverImsPhone() {
+        if (shouldSendUssdOnIms()) {
+            return true;
+        }
         if (isShortCode()) return true;
         else if (isServiceCodeCallForwarding(mSc)
                 || isServiceCodeCallBarring(mSc)
@@ -761,6 +764,24 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         } else if (mPoundString != null) return true;
 
         return false;
+    }
+
+    public boolean shouldSendUssdOnIms() {
+        Rlog.d(LOG_TAG, "shouldSendUssdOnIms isVoWiFiRegistered : " + mPhone.isWifiCallingEnabled()
+                + "supportOverVoWifi ： "
+                + supportOverVoWifi(mPhone.getSubId()));
+        return mPhone.isWifiCallingEnabled() && supportOverVoWifi(mPhone.getSubId()) ;
+    }
+
+    private boolean supportOverVoWifi(int subId) {
+        CarrierConfigManager carrierMgr = (CarrierConfigManager) mPhone.getContext()
+                .getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if ((carrierMgr != null)
+                && (carrierMgr.getConfigForSubId(subId) != null)) {
+            return carrierMgr.getConfigForSubId(subId).getBoolean(
+                    CarrierConfigManager.KEY_SUPPORT_SEND_USSD_OVER_VOWIFI);
+        }
+        return true;
     }
 
     /*
@@ -794,7 +815,10 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         try {
             if (isShortCode()) {
                 Rlog.d(LOG_TAG, "processCode: isShortCode");
-
+                if(shouldSendUssdOnIms()) {
+                    sendUssd(mDialingNumber);
+                    return;
+                }
                 // These just get treated as USSD.
                 Rlog.d(LOG_TAG, "processCode: Sending short code '"
                        + mDialingNumber + "' over CS pipe.");
@@ -1009,6 +1033,10 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                     throw new RuntimeException ("Invalid or Unsupported MMI Code");
                 }
             } else if (mPoundString != null) {
+                if(shouldSendUssdOnIms()) {
+                    sendUssd(mPoundString);
+                    return;
+                }
                 // We'll normally send USSD over the CS pipe, but if it happens that the CS phone
                 // is out of service, we'll just try over IMS instead.
                 if (mPhone.getDefaultPhone().getServiceStateTracker().mSS.getState()
