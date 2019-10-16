@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa7fbebd_605758c6",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-16T22:54:44Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be on the operation log?",
+      "range": {
+        "startLine": 171,
+        "startChar": 12,
+        "endLine": 171,
+        "endChar": 24
+      },
+      "revId": "c11795778f399a22cb196580fdb310bb7099707d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5823152b_f9dad8da",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-16T22:54:44Z",
+      "side": 1,
+      "message": "operation?",
+      "range": {
+        "startLine": 776,
+        "startChar": 12,
+        "endLine": 776,
+        "endChar": 24
+      },
+      "revId": "c11795778f399a22cb196580fdb310bb7099707d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf7f54a1_9a482172",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-16T22:54:44Z",
+      "side": 1,
+      "message": "operation?",
+      "range": {
+        "startLine": 784,
+        "startChar": 8,
+        "endLine": 784,
+        "endChar": 20
+      },
+      "revId": "c11795778f399a22cb196580fdb310bb7099707d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba1108e3_f0cb7138",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 3607,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-16T22:54:44Z",
+      "side": 1,
+      "message": "delete",
+      "range": {
+        "startLine": 3607,
+        "startChar": 0,
+        "endLine": 3607,
+        "endChar": 71
+      },
+      "revId": "c11795778f399a22cb196580fdb310bb7099707d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
