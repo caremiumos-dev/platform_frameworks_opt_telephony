@@ -679,6 +679,8 @@ public class DcTracker extends Handler {
 
     private DataStallRecoveryHandler mDsRecoveryHandler;
 
+    private boolean mSuspended = false;
+
     /**
      * Request network completion message map. Key is the APN type, value is the list of completion
      * messages to be sent. Using a list because there might be multiple network requests for
@@ -830,6 +832,8 @@ public class DcTracker extends Handler {
         registerServiceStateTrackerEvents();
         mDataServiceManager.registerForServiceBindingChanged(this,
                 DctConstants.EVENT_DATA_SERVICE_BINDING_CHANGED, null);
+
+
     }
 
     public void dispose() {
@@ -1336,10 +1340,12 @@ public class DcTracker extends Handler {
         if (!recordsLoaded) {
             reasons.add(DataDisallowedReasonType.RECORD_NOT_LOADED);
         }
-        if (phoneState != PhoneConstants.State.IDLE
-                && !mPhone.getServiceStateTracker().isConcurrentVoiceAndDataAllowed()) {
+        if ((phoneState != PhoneConstants.State.IDLE
+                && !mPhone.getServiceStateTracker().isConcurrentVoiceAndDataAllowed()) || mSuspended) {
             reasons.add(DataDisallowedReasonType.INVALID_PHONE_STATE);
-            reasons.add(DataDisallowedReasonType.CONCURRENT_VOICE_DATA_NOT_ALLOWED);
+            if (!mSuspended){
+                reasons.add(DataDisallowedReasonType.CONCURRENT_VOICE_DATA_NOT_ALLOWED);
+            }
         }
         if (!internalDataEnabled) {
             reasons.add(DataDisallowedReasonType.INTERNAL_DATA_DISABLED);
@@ -3074,6 +3080,28 @@ public class DcTracker extends Handler {
         }
         // reset reconnect timer
         setupDataOnAllConnectableApns(Phone.REASON_VOICE_CALL_ENDED, RetryFailures.ALWAYS);
+    }
+
+    public void suspendData(boolean suspend){
+        if (DBG) log("suspendData: " + suspend);
+        mSuspended = suspend;
+        if (isConnected()) {
+            mPhone.notifyDataConnection();
+            if (mSuspended) {
+                stopNetStatPoll();
+                stopDataStallAlarm();
+            } else {
+                startNetStatPoll();
+                startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
+            }
+        }
+        if (!mSuspended) {
+            setupDataOnAllConnectableApns(Phone.REASON_VOICE_CALL_ENDED, RetryFailures.ALWAYS);
+        }
+    }
+
+    public boolean isSuspended() {
+        return mSuspended;
     }
 
     private boolean isConnected() {

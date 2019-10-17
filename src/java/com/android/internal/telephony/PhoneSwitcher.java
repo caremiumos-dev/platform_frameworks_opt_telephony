@@ -45,6 +45,7 @@ import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.telephony.AccessNetworkConstants;
 import android.telephony.PhoneCapability;
 import android.telephony.PhoneStateListener;
 import android.telephony.Rlog;
@@ -55,6 +56,7 @@ import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.dataconnection.DcRequest;
+import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.DataSwitch;
@@ -170,6 +172,7 @@ public class PhoneSwitcher extends Handler {
     @UnsupportedAppUsage
     private int mMaxActivePhones;
     private static PhoneSwitcher sPhoneSwitcher = null;
+    private boolean[] mPhoneCallStateIdle;
 
     // Which primary (non-opportunistic) subscription is set as data subscription among all primary
     // subscriptions. This value usually comes from user setting, and it's the subscription used for
@@ -310,6 +313,7 @@ public class PhoneSwitcher extends Handler {
         mActivePhoneRegistrants = null;
         mNumPhones = numPhones;
         mPhoneSubscriptions = new int[numPhones];
+        mPhoneCallStateIdle = new boolean[numPhones];
         mRadioConfig = RadioConfig.getInstance(mContext);
         mPhoneStateListener = new PhoneStateListener(looper) {
             public void onPhoneCapabilityChanged(PhoneCapability capability) {
@@ -350,6 +354,7 @@ public class PhoneSwitcher extends Handler {
         mNumPhones = numPhones;
         mPhones = phones;
         mPhoneSubscriptions = new int[numPhones];
+        mPhoneCallStateIdle = new boolean[numPhones];
         mMaxActivePhones = maxActivePhones;
         mLocalLog = new LocalLog(MAX_LOCAL_LOG_LINES);
 
@@ -369,6 +374,7 @@ public class PhoneSwitcher extends Handler {
         mPhoneStates = new PhoneState[numPhones];
         for (int i = 0; i < numPhones; i++) {
             mPhoneStates[i] = new PhoneState();
+            mPhoneCallStateIdle[i] = true;
             if (mPhones[i] != null) {
                 mPhones[i].registerForEmergencyCallToggle(this, EVENT_EMERGENCY_TOGGLE, null);
                 // TODO (b/135566422): combine register for both GsmCdmaPhone and ImsPhone.
@@ -505,6 +511,20 @@ public class PhoneSwitcher extends Handler {
                 break;
             }
             case EVENT_PRECISE_CALL_STATE_CHANGED: {
+                Phone phone = (Phone)((AsyncResult) msg.obj).result;
+                if (phone != null) {
+                    if (mPhoneCallStateIdle[phone.getPhoneId()] ==  isCallIdle(phone)) break;
+
+                    if (mPhoneCallStateIdle[phone.getPhoneId()]){
+                        log(" phone[" + phone.getPhoneId() + "] call start");
+                        suspendOtherPhoneData(phone, true);
+                    } else {
+                        log(" phone[" + phone.getPhoneId() + "] call end");
+                        suspendOtherPhoneData(phone, false);
+                    }
+                    mPhoneCallStateIdle[phone.getPhoneId()] =  isCallIdle(phone);
+                }
+
                 // If the phoneId in voice call didn't change, do nothing.
                 if (!isPhoneInVoiceCallChanged()) break;
 
@@ -1259,6 +1279,19 @@ public class PhoneSwitcher extends Handler {
                 || phone.getBackgroundCall().getState() == Call.State.HOLDING);
     }
 
+    private boolean isCallIdle(Phone phone){
+        if (phone == null) {
+            return true;
+        }
+
+        return ((phone.getForegroundCall().getState() == Call.State.IDLE ||
+                phone.getForegroundCall().getState() == Call.State.DISCONNECTED) &&
+                (phone.getBackgroundCall().getState() == Call.State.IDLE ||
+                phone.getBackgroundCall().getState() == Call.State.DISCONNECTED) &&
+                (phone.getRingingCall().getState() == Call.State.IDLE ||
+                phone.getRingingCall().getState() == Call.State.DISCONNECTED));
+    }
+
     private void updateHalCommandToUse() {
         mHalCommandToUse = mRadioConfig.isSetPreferredDataCommandSupported()
                 ? HAL_COMMAND_PREFERRED_DATA : HAL_COMMAND_ALLOW_DATA;
@@ -1305,6 +1338,16 @@ public class PhoneSwitcher extends Handler {
      */
     public int getActiveDataSubId() {
         return mPreferredDataSubId;
+    }
+
+    private void suspendOtherPhoneData(Phone phone, boolean suspend){
+        for (Phone p : mPhones) {
+            if (p.getPhoneId() == phone.getPhoneId()) continue;
+            for (int transport : p.getTransportManager().getAvailableTransports()) {
+                DcTracker dct = p.getDcTracker(transport);
+                dct.suspendData(suspend);
+            }
+        }
     }
 
     public void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
