@@ -81,21 +81,6 @@ public final class MccTable {
     }
 
     /**
-     * Returns a default time zone ID for the given MCC.
-     * @param mcc Mobile Country Code
-     * @return default TimeZone ID, or null if not specified
-     */
-    public static String defaultTimeZoneForMcc(int mcc) {
-        MccEntry entry = entryForMcc(mcc);
-        if (entry == null) {
-            return null;
-        }
-        final String lowerCaseCountryCode = entry.mIso;
-        TimeZoneLookupHelper timeZoneLookupHelper = new TimeZoneLookupHelper();
-        return timeZoneLookupHelper.lookupDefaultTimeZoneIdByCountry(lowerCaseCountryCode);
-    }
-
-    /**
      * Given a GSM Mobile Country Code, returns
      * an ISO two-character country code if available.
      * Returns "" if unavailable.
@@ -195,9 +180,6 @@ public final class MccTable {
             }
 
             Slog.d(LOG_TAG, "updateMccMncConfiguration: mcc=" + mcc + ", mnc=" + mnc);
-            if (mcc != 0) {
-                setTimezoneFromMccIfNeeded(context, mcc);
-            }
 
             try {
                 Configuration config = new Configuration();
@@ -343,22 +325,6 @@ public final class MccTable {
         }
 
         return null;
-    }
-
-    /**
-     * If the timezone is not already set, set it based on the MCC of the SIM.
-     * @param context Context to act on.
-     * @param mcc Mobile Country Code of the SIM or SIM-like entity (build prop on CDMA)
-     */
-    private static void setTimezoneFromMccIfNeeded(Context context, int mcc) {
-        if (!TimeServiceHelperImpl.isTimeZoneSettingInitializedStatic()) {
-            String zoneId = defaultTimeZoneForMcc(mcc);
-            if (zoneId != null && zoneId.length() > 0) {
-                // Set time zone based on MCC
-                TimeServiceHelperImpl.setDeviceTimeZoneStatic(context, zoneId);
-                Slog.d(LOG_TAG, "timezone set to " + zoneId);
-            }
-        }
     }
 
     /**
