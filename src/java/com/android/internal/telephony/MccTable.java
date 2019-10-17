@@ -83,22 +83,6 @@ public final class MccTable {
     }
 
     /**
-     * Returns a default time zone ID for the given MCC.
-     * @param mcc Mobile Country Code
-     * @return default TimeZone ID, or null if not specified
-     */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.Q)
-    public static String defaultTimeZoneForMcc(int mcc) {
-        MccEntry entry = entryForMcc(mcc);
-        if (entry == null) {
-            return null;
-        }
-        final String lowerCaseCountryCode = entry.mIso;
-        TimeZoneLookupHelper timeZoneLookupHelper = new TimeZoneLookupHelper();
-        return timeZoneLookupHelper.lookupDefaultTimeZoneIdByCountry(lowerCaseCountryCode);
-    }
-
-    /**
      * Given a GSM Mobile Country Code, returns
      * an ISO two-character country code if available.
      * Returns "" if unavailable.
