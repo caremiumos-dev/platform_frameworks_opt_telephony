@@ -48,6 +48,8 @@ import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneCapability;
 import android.telephony.PhoneStateListener;
@@ -60,6 +62,7 @@ import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.dataconnection.DcRequest;
+import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.DataSwitch;
@@ -176,6 +179,7 @@ public class PhoneSwitcher extends Handler {
     // SIM mode.
     private int mActiveModemCount;
     private static PhoneSwitcher sPhoneSwitcher = null;
+    private boolean[] mPhoneCallStateIdle;
 
     // Which primary (non-opportunistic) subscription is set as data subscription among all primary
     // subscriptions. This value usually comes from user setting, and it's the subscription used for
@@ -486,6 +490,20 @@ public class PhoneSwitcher extends Handler {
                 break;
             }
             case EVENT_PRECISE_CALL_STATE_CHANGED: {
+                Phone phone = (Phone)((AsyncResult) msg.obj).result;
+                if (phone != null) {
+                    if (mPhoneCallStateIdle[phone.getPhoneId()] ==  isCallIdle(phone)) break;
+
+                    if (mPhoneCallStateIdle[phone.getPhoneId()]){
+                        log(" phone[" + phone.getPhoneId() + "] call start");
+                        suspendOtherPhoneData(phone, true);
+                    } else {
+                        log(" phone[" + phone.getPhoneId() + "] call end");
+                        suspendOtherPhoneData(phone, false);
+                    }
+                    mPhoneCallStateIdle[phone.getPhoneId()] =  isCallIdle(phone);
+                }
+
                 // If the phoneId in voice call didn't change, do nothing.
                 if (!isPhoneInVoiceCallChanged()) break;
 
@@ -1281,6 +1299,19 @@ public class PhoneSwitcher extends Handler {
                 || phone.getBackgroundCall().getState() == Call.State.HOLDING);
     }
 
+    private boolean isCallIdle(Phone phone){
+        if (phone == null) {
+            return true;
+        }
+
+        return ((phone.getForegroundCall().getState() == Call.State.IDLE ||
+                phone.getForegroundCall().getState() == Call.State.DISCONNECTED) &&
+                (phone.getBackgroundCall().getState() == Call.State.IDLE ||
+                phone.getBackgroundCall().getState() == Call.State.DISCONNECTED) &&
+                (phone.getRingingCall().getState() == Call.State.IDLE ||
+                phone.getRingingCall().getState() == Call.State.DISCONNECTED));
+    }
+
     private void updateHalCommandToUse() {
         mHalCommandToUse = mRadioConfig.isSetPreferredDataCommandSupported()
                 ? HAL_COMMAND_PREFERRED_DATA : HAL_COMMAND_ALLOW_DATA;
@@ -1323,6 +1354,16 @@ public class PhoneSwitcher extends Handler {
      */
     public int getActiveDataSubId() {
         return mPreferredDataSubId;
+    }
+
+    private void suspendOtherPhoneData(Phone phone, boolean suspend){
+        for (Phone p : mPhones) {
+            if (p.getPhoneId() == phone.getPhoneId()) continue;
+            for (int transport : p.getTransportManager().getAvailableTransports()) {
+                DcTracker dct = p.getDcTracker(transport);
+                dct.suspendData(suspend);
+            }
+        }
     }
 
     public void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
