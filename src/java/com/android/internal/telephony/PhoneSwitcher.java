@@ -48,7 +48,12 @@ import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.RemoteException;
+<<<<<<< HEAD
 import android.telephony.CarrierConfigManager;
+=======
+import android.os.ServiceManager;
+import android.telephony.AccessNetworkConstants;
+>>>>>>> d7e0e3d... In DSDS mode, when other phone is in call,then suspend data connection on this phone
 import android.telephony.PhoneCapability;
 import android.telephony.PhoneStateListener;
 import android.telephony.Rlog;
@@ -60,6 +65,7 @@ import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.dataconnection.DcRequest;
+import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.DataSwitch;
@@ -176,6 +182,7 @@ public class PhoneSwitcher extends Handler {
     // SIM mode.
     private int mActiveModemCount;
     private static PhoneSwitcher sPhoneSwitcher = null;
+    private boolean[] mPhoneCallStateIdle;
 
     // Which primary (non-opportunistic) subscription is set as data subscription among all primary
     // subscriptions. This value usually comes from user setting, and it's the subscription used for
@@ -302,6 +309,33 @@ public class PhoneSwitcher extends Handler {
         return sPhoneSwitcher;
     }
 
+<<<<<<< HEAD
+=======
+    /** This constructor is only used for testing purpose. */
+    @VisibleForTesting
+    public PhoneSwitcher(int numPhones, Looper looper) {
+        super(looper);
+        mMaxActivePhones = 0;
+        mSubscriptionController = null;
+        mCommandsInterfaces = null;
+        mContext = null;
+        mPhoneStates = null;
+        mPhones = null;
+        mLocalLog = null;
+        mActivePhoneRegistrants = null;
+        mNumPhones = numPhones;
+        mPhoneSubscriptions = new int[numPhones];
+        mPhoneCallStateIdle = new boolean[numPhones];
+        mRadioConfig = RadioConfig.getInstance(mContext);
+        mPhoneStateListener = new PhoneStateListener(looper) {
+            public void onPhoneCapabilityChanged(PhoneCapability capability) {
+                onPhoneCapabilityChangedInternal(capability);
+            }
+        };
+        mValidator = CellularNetworkValidator.getInstance();
+    }
+
+>>>>>>> d7e0e3d... In DSDS mode, when other phone is in call,then suspend data connection on this phone
     private boolean isPhoneInVoiceCallChanged() {
         int oldPhoneIdInVoiceCall = mPhoneIdInVoiceCall;
         // If there's no active call, the value will become INVALID_PHONE_INDEX
@@ -328,10 +362,18 @@ public class PhoneSwitcher extends Handler {
     public PhoneSwitcher(int maxActivePhones, Context context, Looper looper) {
         super(looper);
         mContext = context;
+<<<<<<< HEAD
         mActiveModemCount = getTm().getActiveModemCount();
         mPhoneSubscriptions = new int[mActiveModemCount];
         mPhoneStates = new PhoneState[mActiveModemCount];
         mMaxDataAttachModemCount = maxActivePhones;
+=======
+        mNumPhones = numPhones;
+        mPhones = phones;
+        mPhoneSubscriptions = new int[numPhones];
+        mPhoneCallStateIdle = new boolean[numPhones];
+        mMaxActivePhones = maxActivePhones;
+>>>>>>> d7e0e3d... In DSDS mode, when other phone is in call,then suspend data connection on this phone
         mLocalLog = new LocalLog(MAX_LOCAL_LOG_LINES);
 
         mSubscriptionController = SubscriptionController.getInstance();
@@ -349,9 +391,15 @@ public class PhoneSwitcher extends Handler {
         mActivePhoneRegistrants = new RegistrantList();
         for (int i = 0; i < mActiveModemCount; i++) {
             mPhoneStates[i] = new PhoneState();
+<<<<<<< HEAD
             if (PhoneFactory.getPhone(i) != null) {
                 PhoneFactory.getPhone(i).registerForEmergencyCallToggle(
                         this, EVENT_EMERGENCY_TOGGLE, null);
+=======
+            mPhoneCallStateIdle[i] = true;
+            if (mPhones[i] != null) {
+                mPhones[i].registerForEmergencyCallToggle(this, EVENT_EMERGENCY_TOGGLE, null);
+>>>>>>> d7e0e3d... In DSDS mode, when other phone is in call,then suspend data connection on this phone
                 // TODO (b/135566422): combine register for both GsmCdmaPhone and ImsPhone.
                 PhoneFactory.getPhone(i).registerForPreciseCallStateChanged(
                         this, EVENT_PRECISE_CALL_STATE_CHANGED, null);
@@ -486,6 +534,20 @@ public class PhoneSwitcher extends Handler {
                 break;
             }
             case EVENT_PRECISE_CALL_STATE_CHANGED: {
+                Phone phone = (Phone)((AsyncResult) msg.obj).result;
+                if (phone != null) {
+                    if (mPhoneCallStateIdle[phone.getPhoneId()] ==  isCallIdle(phone)) break;
+
+                    if (mPhoneCallStateIdle[phone.getPhoneId()]){
+                        log(" phone[" + phone.getPhoneId() + "] call start");
+                        suspendOtherPhoneData(phone, true);
+                    } else {
+                        log(" phone[" + phone.getPhoneId() + "] call end");
+                        suspendOtherPhoneData(phone, false);
+                    }
+                    mPhoneCallStateIdle[phone.getPhoneId()] =  isCallIdle(phone);
+                }
+
                 // If the phoneId in voice call didn't change, do nothing.
                 if (!isPhoneInVoiceCallChanged()) break;
 
@@ -1281,6 +1343,19 @@ public class PhoneSwitcher extends Handler {
                 || phone.getBackgroundCall().getState() == Call.State.HOLDING);
     }
 
+    private boolean isCallIdle(Phone phone){
+        if (phone == null) {
+            return true;
+        }
+
+        return ((phone.getForegroundCall().getState() == Call.State.IDLE ||
+                phone.getForegroundCall().getState() == Call.State.DISCONNECTED) &&
+                (phone.getBackgroundCall().getState() == Call.State.IDLE ||
+                phone.getBackgroundCall().getState() == Call.State.DISCONNECTED) &&
+                (phone.getRingingCall().getState() == Call.State.IDLE ||
+                phone.getRingingCall().getState() == Call.State.DISCONNECTED));
+    }
+
     private void updateHalCommandToUse() {
         mHalCommandToUse = mRadioConfig.isSetPreferredDataCommandSupported()
                 ? HAL_COMMAND_PREFERRED_DATA : HAL_COMMAND_ALLOW_DATA;
@@ -1323,6 +1398,16 @@ public class PhoneSwitcher extends Handler {
      */
     public int getActiveDataSubId() {
         return mPreferredDataSubId;
+    }
+
+    private void suspendOtherPhoneData(Phone phone, boolean suspend){
+        for (Phone p : mPhones) {
+            if (p.getPhoneId() == phone.getPhoneId()) continue;
+            for (int transport : p.getTransportManager().getAvailableTransports()) {
+                DcTracker dct = p.getDcTracker(transport);
+                dct.suspendData(suspend);
+            }
+        }
     }
 
     public void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
