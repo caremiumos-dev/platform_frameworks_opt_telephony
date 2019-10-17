@@ -3188,11 +3188,15 @@ public class DcTracker extends Handler {
         }
         final int resultApnType = src.getApnTypeBitmask() | dest.getApnTypeBitmask();
         Uri mmsc = (dest.getMmsc() == null ? src.getMmsc() : dest.getMmsc());
-        String mmsProxy = TextUtils.isEmpty(dest.getMmsProxyAddressAsString())
-                ? src.getMmsProxyAddressAsString() : dest.getMmsProxyAddressAsString();
+        String mmsProxy =
+                dest.getMmsProxyAddressAsString() == null
+                        ? src.getMmsProxyAddressAsString()
+                        : dest.getMmsProxyAddressAsString();
         int mmsPort = dest.getMmsProxyPort() == -1 ? src.getMmsProxyPort() : dest.getMmsProxyPort();
-        String proxy = TextUtils.isEmpty(dest.getProxyAddressAsString())
-                ? src.getProxyAddressAsString() : dest.getProxyAddressAsString();
+        String proxy =
+                dest.getProxyAddressAsString() == null
+                        ? src.getProxyAddressAsString()
+                        : dest.getProxyAddressAsString();
         int port = dest.getProxyPort() == -1 ? src.getProxyPort() : dest.getProxyPort();
         int protocol = src.getProtocol() == ApnSetting.PROTOCOL_IPV4V6 ? src.getProtocol()
                 : dest.getProtocol();
