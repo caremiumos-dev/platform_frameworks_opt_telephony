@@ -612,8 +612,9 @@ public class GsmCdmaPhone extends Phone {
                 switch (getDcTracker(currentTransport).getState(apnType)) {
                     case CONNECTED:
                     case DISCONNECTING:
-                        if (mCT.mState != PhoneConstants.State.IDLE
-                                && !mSST.isConcurrentVoiceAndDataAllowed()) {
+                        if ((mCT.mState != PhoneConstants.State.IDLE
+                                && !mSST.isConcurrentVoiceAndDataAllowed())
+                                || mDcTrackers.get(currentTransport).isSuspended()) {
                             ret = PhoneConstants.DataState.SUSPENDED;
                         } else {
                             ret = PhoneConstants.DataState.CONNECTED;
