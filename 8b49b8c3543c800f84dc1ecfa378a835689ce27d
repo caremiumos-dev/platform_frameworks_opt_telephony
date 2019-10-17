@@ -70,6 +70,30 @@
       "revId": "8b49b8c3543c800f84dc1ecfa378a835689ce27d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7680c65_d847bfc4",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2019-10-17T07:33:48Z",
+      "side": 1,
+      "message": "I updated the patch. Could you check https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/959592/4/src/java/com/android/internal/telephony/GsmCdmaPhone.java ?",
+      "parentUuid": "5a2184fd_bf27dc7b",
+      "range": {
+        "startLine": 1506,
+        "startChar": 15,
+        "endLine": 1506,
+        "endChar": 21
+      },
+      "revId": "8b49b8c3543c800f84dc1ecfa378a835689ce27d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
