@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdeed707_3a689bc0",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1431994
+      },
+      "writtenOn": "2019-10-18T15:49:23Z",
+      "side": 1,
+      "message": "Presubmit will (hopefully?) fail because an API was moved to greylist-max-Q without providing a public API alternative. Unless @hallliu can specify one, you need to add an explanation of the situation, something like \"There is no public alternative for {@code #mIso}. If you still need a public API with this functionality, please file a feature request at https://issuetracker.google.com/issues/new?component\u003d328403\u0026template\u003d1027267\".\n\nNote: you *need* to use a {@code ..} block in the publicAlternative string.",
+      "range": {
+        "startLine": 53,
+        "startChar": 9,
+        "endLine": 53,
+        "endChar": 28
+      },
+      "revId": "e146747be9343d039f3b4d858180c1059a7c881c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ff3a3ce_2f02ad4f",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1431994
+      },
+      "writtenOn": "2019-10-18T15:49:23Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 72,
+        "startChar": 25,
+        "endLine": 72,
+        "endChar": 37
+      },
+      "revId": "e146747be9343d039f3b4d858180c1059a7c881c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9287bef6_bd72a8c2",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1431994
+      },
+      "writtenOn": "2019-10-18T15:49:23Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 90,
+        "startChar": 25,
+        "endLine": 90,
+        "endChar": 37
+      },
+      "revId": "e146747be9343d039f3b4d858180c1059a7c881c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be8adfa7_40d127a2",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1431994
+      },
+      "writtenOn": "2019-10-18T15:49:23Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 135,
+        "startChar": 25,
+        "endLine": 135,
+        "endChar": 37
+      },
+      "revId": "e146747be9343d039f3b4d858180c1059a7c881c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddbeb8be_12def3c8",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1431994
+      },
+      "writtenOn": "2019-10-18T15:49:23Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 163,
+        "startChar": 25,
+        "endLine": 163,
+        "endChar": 37
+      },
+      "revId": "e146747be9343d039f3b4d858180c1059a7c881c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86c57f8c_ea5fdcc0",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1431994
+      },
+      "writtenOn": "2019-10-18T15:49:23Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 270,
+        "startChar": 25,
+        "endLine": 270,
+        "endChar": 37
+      },
+      "revId": "e146747be9343d039f3b4d858180c1059a7c881c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
