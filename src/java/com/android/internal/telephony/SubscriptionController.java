@@ -81,8 +81,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
- * SubscriptionController to provide an inter-process communication to
- * access Sms in Icc.
+ * Implementation of the ISub interface.
  *
  * Any setters which take subId, slotIndex or phoneId as a parameter will throw an exception if the
  * parameter equals the corresponding INVALID_XXX_ID or DEFAULT_XXX_ID.
@@ -163,17 +162,6 @@ public class SubscriptionController extends ISub.Stub {
             SubscriptionManager.DISPLAY_NAME,
             SubscriptionManager.DATA_ENABLED_OVERRIDE_RULES));
 
-    public static SubscriptionController init(Phone phone) {
-        synchronized (SubscriptionController.class) {
-            if (sInstance == null) {
-                sInstance = new SubscriptionController(phone);
-            } else {
-                Log.wtf(LOG_TAG, "init() called multiple times!  sInstance = " + sInstance);
-            }
-            return sInstance;
-        }
-    }
-
     public static SubscriptionController init(Context c) {
         synchronized (SubscriptionController.class) {
             if (sInstance == null) {
@@ -187,8 +175,7 @@ public class SubscriptionController extends ISub.Stub {
 
     @UnsupportedAppUsage
     public static SubscriptionController getInstance() {
-        if (sInstance == null)
-        {
+        if (sInstance == null) {
            Log.wtf(LOG_TAG, "getInstance null");
         }
 
@@ -201,7 +188,6 @@ public class SubscriptionController extends ISub.Stub {
     }
 
     protected void internalInit(Context c) {
-
         mContext = c;
         mTelephonyManager = TelephonyManager.from(mContext);
 
@@ -255,22 +241,6 @@ public class SubscriptionController extends ISub.Stub {
         ContentValues value = new ContentValues(1);
         value.put(SubscriptionManager.SIM_SLOT_INDEX, SubscriptionManager.INVALID_SIM_SLOT_INDEX);
         mContext.getContentResolver().update(SubscriptionManager.CONTENT_URI, value, null, null);
-    }
-
-    private SubscriptionController(Phone phone) {
-        mContext = phone.getContext();
-        mAppOps = mContext.getSystemService(AppOpsManager.class);
-
-        if(ServiceManager.getService("isub") == null) {
-                ServiceManager.addService("isub", this);
-        }
-
-        migrateImsSettings();
-
-        // clear SLOT_INDEX for all subs
-        clearSlotIndexForSubInfoRecords();
-
-        if (DBG) logdl("[SubscriptionController] init by Phone");
     }
 
     @UnsupportedAppUsage
@@ -382,6 +352,8 @@ public class SubscriptionController extends ISub.Stub {
         } else {
             accessRules = null;
         }
+        UiccAccessRule[] carrierConfigAccessRules = UiccAccessRule.decodeRules(cursor.getBlob(
+            cursor.getColumnIndexOrThrow(SubscriptionManager.ACCESS_RULES_FROM_CARRIER_CONFIGS)));
         boolean isOpportunistic = cursor.getInt(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.IS_OPPORTUNISTIC)) == 1;
         String groupUUID = cursor.getString(cursor.getColumnIndexOrThrow(
@@ -402,6 +374,7 @@ public class SubscriptionController extends ISub.Stub {
                     + " dataRoaming:" + dataRoaming + " mcc:" + mcc + " mnc:" + mnc
                     + " countIso:" + countryIso + " isEmbedded:"
                     + isEmbedded + " accessRules:" + Arrays.toString(accessRules)
+                    + " carrierConfigAccessRules: " + Arrays.toString(carrierConfigAccessRules)
                     + " cardId:" + cardIdToPrint + " publicCardId:" + publicCardId
                     + " isOpportunistic:" + isOpportunistic + " groupUUID:" + groupUUID
                     + " profileClass:" + profileClass + " subscriptionType: " + subType);
@@ -416,7 +389,7 @@ public class SubscriptionController extends ISub.Stub {
                 carrierName, nameSource, iconTint, number, dataRoaming, iconBitmap, mcc, mnc,
                 countryIso, isEmbedded, accessRules, cardId, publicCardId, isOpportunistic,
                 groupUUID, false /* isGroupDisabled */, carrierId, profileClass, subType,
-                groupOwner);
+                groupOwner, carrierConfigAccessRules);
         info.setAssociatedPlmns(ehplmns, hplmns);
         return info;
     }
@@ -447,10 +420,8 @@ public class SubscriptionController extends ISub.Stub {
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     SubscriptionInfo subInfo = getSubInfoRecord(cursor);
-                    if (subInfo != null)
-                    {
-                        if (subList == null)
-                        {
+                    if (subInfo != null) {
+                        if (subList == null) {
                             subList = new ArrayList<SubscriptionInfo>();
                         }
                         subList.add(subInfo);
@@ -2121,10 +2092,6 @@ public class SubscriptionController extends ISub.Stub {
         mLocalLog.log(msg);
     }
 
-    private static void slogd(String msg) {
-        Rlog.d(LOG_TAG, msg);
-    }
-
     @UnsupportedAppUsage
     private void logd(String msg) {
         Rlog.d(LOG_TAG, msg);
@@ -2254,7 +2221,7 @@ public class SubscriptionController extends ISub.Stub {
         int subId = Settings.Global.getInt(mContext.getContentResolver(),
                 Settings.Global.MULTI_SIM_VOICE_CALL_SUBSCRIPTION,
                 SubscriptionManager.INVALID_SUBSCRIPTION_ID);
-        if (VDBG) slogd("[getDefaultVoiceSubId] subId=" + subId);
+        if (VDBG) logd("[getDefaultVoiceSubId] subId=" + subId);
         return subId;
     }
 
@@ -2264,7 +2231,7 @@ public class SubscriptionController extends ISub.Stub {
         int subId = Settings.Global.getInt(mContext.getContentResolver(),
                 Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION,
                 SubscriptionManager.INVALID_SUBSCRIPTION_ID);
-        if (VDBG) logd("[getDefaultDataSubId] subId= " + subId);
+        if (VDBG) logd("[getDefaultDataSubId] subId=" + subId);
         return subId;
     }
 
@@ -2647,7 +2614,7 @@ public class SubscriptionController extends ISub.Stub {
                 value.put(propKey, Integer.parseInt(propValue));
                 break;
             default:
-                if (DBG) slogd("Invalid column name");
+                if (DBG) logd("Invalid column name");
                 break;
         }
 
@@ -2735,16 +2702,16 @@ public class SubscriptionController extends ISub.Stub {
         return resultValue;
     }
 
-    private static void printStackTrace(String msg) {
+    private void printStackTrace(String msg) {
         RuntimeException re = new RuntimeException();
-        slogd("StackTrace - " + msg);
+        logd("StackTrace - " + msg);
         StackTraceElement[] st = re.getStackTrace();
         boolean first = true;
         for (StackTraceElement ste : st) {
             if (first) {
                 first = false;
             } else {
-                slogd(ste.toString());
+                logd(ste.toString());
             }
         }
     }

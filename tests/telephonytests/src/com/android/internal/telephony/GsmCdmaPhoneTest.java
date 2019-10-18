@@ -64,8 +64,8 @@ import androidx.test.filters.FlakyTest;
 
 import com.android.internal.telephony.test.SimulatedCommands;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
-import com.android.internal.telephony.uicc.IccException;
 import com.android.internal.telephony.uicc.IccRecords;
+import com.android.internal.telephony.uicc.IccVmNotSupportedException;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.uicc.UiccSlot;
@@ -510,11 +510,25 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         mContextFixture.getCarrierConfigBundle()
                 .putString(CarrierConfigManager.KEY_DEFAULT_VM_NUMBER_ROAMING_STRING,
                         voiceMailNumberForRoaming);
+
+        // voicemail number from config for roaming network and ims unregistered
+        String voiceMailNumberForImsRoamingAndUnregistered = "1234567893";
+        mContextFixture.getCarrierConfigBundle().putString(
+                CarrierConfigManager.KEY_DEFAULT_VM_NUMBER_ROAMING_AND_IMS_UNREGISTERED_STRING,
+                        voiceMailNumberForImsRoamingAndUnregistered);
+
         //Verify voicemail number for home
         doReturn(false).when(mSST.mSS).getRoaming();
+        doReturn(true).when(mSST).isImsRegistered();
+        assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
+        //Move to ims condition, verify voicemail number for ims unregistered
+        doReturn(false).when(mSST).isImsRegistered();
         assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
         //Move to roaming condition, verify voicemail number for roaming
         doReturn(true).when(mSST.mSS).getRoaming();
+        assertEquals(voiceMailNumberForImsRoamingAndUnregistered, mPhoneUT.getVoiceMailNumber());
+        //Move to ims condition, verify voicemail number for roaming
+        doReturn(true).when(mSST).isImsRegistered();
         assertEquals(voiceMailNumberForRoaming, mPhoneUT.getVoiceMailNumber());
         //Move to home condition, verify voicemail number for home
         doReturn(false).when(mSST.mSS).getRoaming();
@@ -554,27 +568,61 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         mContextFixture.getCarrierConfigBundle()
                 .putString(CarrierConfigManager.KEY_DEFAULT_VM_NUMBER_ROAMING_STRING,
                         voiceMailNumberForRoaming);
+
+        // voicemail number from config for roaming network and ims unregistered
+        String voiceMailNumberForImsRoamingAndUnregistered = "1234567893";
+        mContextFixture.getCarrierConfigBundle().putString(
+                CarrierConfigManager.KEY_DEFAULT_VM_NUMBER_ROAMING_AND_IMS_UNREGISTERED_STRING,
+                        voiceMailNumberForImsRoamingAndUnregistered);
+
         //Verify voicemail number for home
         doReturn(false).when(mSST.mSS).getRoaming();
+        doReturn(true).when(mSST).isImsRegistered();
+        assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
+        //Move to ims condition, verify voicemail number for ims unregistered
+        doReturn(false).when(mSST).isImsRegistered();
         assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
         //Move to roaming condition, verify voicemail number for roaming
         doReturn(true).when(mSST.mSS).getRoaming();
+        assertEquals(voiceMailNumberForImsRoamingAndUnregistered, mPhoneUT.getVoiceMailNumber());
+        //Move to ims condition, verify voicemail number for roaming
+        doReturn(true).when(mSST).isImsRegistered();
         assertEquals(voiceMailNumberForRoaming, mPhoneUT.getVoiceMailNumber());
         //Move to home condition, verify voicemail number for home
         doReturn(false).when(mSST.mSS).getRoaming();
         assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
 
         // voicemail number from sharedPreference
+        voiceMailNumber = "1234567893";
         mPhoneUT.setVoiceMailNumber("alphaTag", voiceMailNumber, null);
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
         verify(mSimRecords).setVoiceMailNumber(eq("alphaTag"), eq(voiceMailNumber),
                 messageArgumentCaptor.capture());
 
+        // SIM does not support voicemail number (IccVmNotSupportedException) so should be saved in
+        // shared pref
         Message msg = messageArgumentCaptor.getValue();
         AsyncResult.forMessage(msg).exception =
-                new IccException("setVoiceMailNumber not implemented");
+                new IccVmNotSupportedException("setVoiceMailNumber not implemented");
         msg.sendToTarget();
         waitForMs(50);
+
+        assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
+
+        // voicemail number from SIM
+        voiceMailNumber = "1234567894";
+        mPhoneUT.setVoiceMailNumber("alphaTag", voiceMailNumber, null);
+        messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
+        verify(mSimRecords).setVoiceMailNumber(eq("alphaTag"), eq(voiceMailNumber),
+                messageArgumentCaptor.capture());
+
+        // successfully saved on SIM
+        msg = messageArgumentCaptor.getValue();
+        AsyncResult.forMessage(msg);
+        msg.sendToTarget();
+        waitForMs(50);
+
+        doReturn(voiceMailNumber).when(mSimRecords).getVoiceMailNumber();
 
         assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
     }
