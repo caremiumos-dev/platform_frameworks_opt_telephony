@@ -206,7 +206,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 mImsCall.setListener(mImsCallListener);
                 return mImsCall;
             }
-        }).when(mImsManager).takeCall(any(), any(), any());
+        }).when(mImsManager).takeCall(any(), any());
 
         doAnswer(new Answer<ImsCall>() {
             @Override
@@ -451,7 +451,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         // mock a new MT
         try {
             doReturn(mSecondImsCall).when(mImsManager).takeCall(any(IImsCallSession.class),
-                    any(Bundle.class), any(ImsCall.Listener.class));
+                    any(ImsCall.Listener.class));
         } catch (Exception ex) {
             ex.printStackTrace();
             Assert.fail("unexpected exception thrown" + ex.getMessage());
@@ -621,7 +621,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         // mock a new MT
         try {
             doReturn(mSecondImsCall).when(mImsManager).takeCall(any(IImsCallSession.class),
-                    any(Bundle.class), any(ImsCall.Listener.class));
+                    any(ImsCall.Listener.class));
             mMmTelListener.onIncomingCall(mock(IImsCallSession.class), Bundle.EMPTY);
             mCTUT.acceptCall(ImsCallProfile.CALL_TYPE_VOICE);
         } catch (Exception ex) {
