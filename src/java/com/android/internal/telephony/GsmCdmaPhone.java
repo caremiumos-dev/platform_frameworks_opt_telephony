@@ -146,6 +146,8 @@ public class GsmCdmaPhone extends Phone {
     public static final int RESTART_ECM_TIMER = 0; // restart Ecm timer
     public static final int CANCEL_ECM_TIMER = 1; // cancel Ecm timer
     private static final String PREFIX_WPS = "*272";
+    private static final String PREFIX_WPS_CLIR_ACTIVATE = "*31#*272";
+    private static final String PREFIX_WPS_CLIR_DEACTIVATE = "#31#*272";
     private CdmaSubscriptionSourceManager mCdmaSSM;
     public int mCdmaSubscriptionSource = CdmaSubscriptionSourceManager.SUBSCRIPTION_SOURCE_UNKNOWN;
     private PowerManager.WakeLock mWakeLock;
@@ -1237,7 +1239,9 @@ public class GsmCdmaPhone extends Phone {
                 .getBoolean(CarrierConfigManager.KEY_CARRIER_USE_IMS_FIRST_FOR_EMERGENCY_BOOL);
 
         /** Check if the call is Wireless Priority Service call */
-        boolean isWpsCall = dialString != null ? dialString.startsWith(PREFIX_WPS) : false;
+        boolean isWpsCall = dialString != null ? (dialString.startsWith(PREFIX_WPS) ||
+                dialString.startsWith(PREFIX_WPS_CLIR_ACTIVATE) ||
+                dialString.startsWith(PREFIX_WPS_CLIR_DEACTIVATE)) : false;
         boolean allowWpsOverIms = configManager.getConfigForSubId(getSubId())
                 .getBoolean(CarrierConfigManager.KEY_SUPPORT_WPS_OVER_IMS_BOOL);
 
