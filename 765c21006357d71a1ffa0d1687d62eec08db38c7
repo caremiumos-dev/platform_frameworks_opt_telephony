@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e698161c_9dd6ccff",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-22T23:59:22Z",
+      "side": 1,
+      "message": "The issue here is that cleanupConnection sets mImsServiceConnection to null, so this will always be null. The solution here may be to swap cleanupConnection and unbindService, so that it correctly calls unbind. You can also just do a \n\nif (mImsServiceConnection !\u003d null) ... check",
+      "range": {
+        "startLine": 120,
+        "startChar": 16,
+        "endLine": 120,
+        "endChar": 62
+      },
+      "revId": "765c21006357d71a1ffa0d1687d62eec08db38c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
