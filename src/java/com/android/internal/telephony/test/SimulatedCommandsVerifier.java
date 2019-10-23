@@ -910,6 +910,11 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
+    public void setCLIP(int clipMode, Message response) {
+
+    }
+
+    @Override
     public void getCLIR(Message response) {
 
     }

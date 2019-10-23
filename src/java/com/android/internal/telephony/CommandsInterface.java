@@ -42,6 +42,11 @@ public interface CommandsInterface {
 
     //***** Constants
 
+    // Used as parameter to dial() and setCLIP() below
+    static final int CLIP_DISABLE = 0;
+    static final int CLIP_ENABLE = 1;
+
+
     // Used as parameter to dial() and setCLIR() below
     static final int CLIR_DEFAULT = 0;      // "use subscription default value"
     static final int CLIR_INVOCATION = 1;   // (restrict CLI presentation)
@@ -1272,6 +1277,14 @@ public interface CommandsInterface {
      */
 
     void queryCLIP(Message response);
+
+    /**
+     * clipMode is one of the CLIP_* constants above
+     *
+     * response.obj is null
+     */
+
+    void setCLIP(int clipMode, Message response);
 
     /**
      * response.obj will be a an int[2]
