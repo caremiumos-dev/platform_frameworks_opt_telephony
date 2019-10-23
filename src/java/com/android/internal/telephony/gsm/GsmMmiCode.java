@@ -886,7 +886,13 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                 throw new RuntimeException ("Invalid or Unsupported MMI Code");
             } else if (mSc != null && mSc.equals(SC_CLIP)) {
                 Rlog.d(LOG_TAG, "processCode: is CLIP");
-                if (isInterrogate()) {
+                if (isActivate()) {
+                    mPhone.mCi.setCLIP(CommandsInterface.CLIP_INVOCATION,
+                        obtainMessage(EVENT_SET_COMPLETE, this));
+                } else if (isDeactivate()) {
+                    mPhone.mCi.setCLIP(CommandsInterface.CLIP_SUPPRESSION,
+                        obtainMessage(EVENT_SET_COMPLETE, this));
+                } else if (isInterrogate()) {
                     mPhone.mCi.queryCLIP(
                             obtainMessage(EVENT_QUERY_COMPLETE, this));
                 } else {

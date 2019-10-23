@@ -2315,6 +2315,25 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
+    @Override
+    public void setCLIP(int clirMode, Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_SET_CLIP, result, mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                        + " clirMode = " + clirMode);
+            }
+
+            /*try {
+                //radioProxy.setClirp(rr.mSerial, clirMode);
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "setCLIP", e);
+            }*/
+        }
+    }
+
     /**
      * @deprecated
      */
