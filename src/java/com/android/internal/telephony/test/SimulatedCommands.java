@@ -1303,6 +1303,9 @@ public class SimulatedCommands extends BaseCommands
     @Override
     public void queryCLIP(Message response) { unimplemented(response); }
 
+    @Override
+    public void setCLIP(int clirMode, Message response) {
+    }
 
     /**
      * response.obj will be a an int[2]
