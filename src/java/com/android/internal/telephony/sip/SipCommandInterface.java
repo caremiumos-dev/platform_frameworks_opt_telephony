@@ -369,6 +369,10 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     }
 
     @Override
+    public void setCLIP(int clipMode, Message response) {
+    }
+
+    @Override
     public void getBasebandVersion (Message response) {
     }
 
