@@ -2456,6 +2456,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 }
             }
 
+            if(conn != null) {
+                if(reasonInfo.mExtraMessage != null) {
+                    conn.mVendorCause = reasonInfo.mExtraMessage;
+                }
+            }
             if (mHoldSwitchingState == HoldSwapState.SWAPPING_ACTIVE_AND_HELD) {
                 if (DBG) {
                     log("onCallTerminated: Call terminated in the midst of Switching " +
@@ -3265,6 +3270,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             callState = Call.State.DIALING;
         }
         int cause = getDisconnectCauseFromReasonInfo(reasonInfo, callState);
+        if(conn != null) {
+            if(reasonInfo.mExtraMessage != null) {
+                conn.mVendorCause = reasonInfo.mExtraMessage;
+            }
+        }
 
         processCallStateChange(imsCall, ImsPhoneCall.State.DISCONNECTED, cause);
         mPhone.notifyImsReason(reasonInfo);
