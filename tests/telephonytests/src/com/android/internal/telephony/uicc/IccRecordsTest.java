@@ -33,11 +33,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
+import android.content.Context;
+import android.os.AsyncResult;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Pair;
 
 import com.android.internal.telephony.TelephonyTest;
+import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import org.junit.After;
 import org.junit.Before;
@@ -106,5 +109,20 @@ public class IccRecordsTest extends TelephonyTest {
         assertEquals(obj, pair.second);
         pair = mIccRecords.retrievePendingTransaction(key);
         assertNull(pair);
+    }
+
+    @Test
+    public void testGetSmsCapacityOnIcc() {
+        // set the number of records to 500
+        int[] records = new int[3];
+        records[2] = 500;
+        Message fetchCapacityDone = mIccRecords.obtainMessage(
+                IccRecords.EVENT_GET_SMS_RECORD_SIZE_DONE);
+        AsyncResult.forMessage(fetchCapacityDone, records, null);
+        fetchCapacityDone.sendToTarget();
+
+        // verify whether the count is 500
+        waitForMs(200);
+        assertEquals(mIccRecords.getSmsCapacityOnIcc(), 500);
     }
 }
