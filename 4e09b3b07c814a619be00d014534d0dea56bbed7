@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "63773ab8_ef0d5382",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2019-10-24T01:33:11Z",
+      "side": 1,
+      "message": "Thanks for your review. Now I understand that the reason to have mFplmns as a member field is to output the FPLMNs retrieved most recently. I thought that mFplmns becomes unreliable when exception is received, but I have no objection to keep it for debugging purpose. I will remove this line.",
+      "parentUuid": "64c0e613_141bbf78",
+      "range": {
+        "startLine": 1189,
+        "startChar": 24,
+        "endLine": 1189,
+        "endChar": 31
+      },
+      "revId": "4e09b3b07c814a619be00d014534d0dea56bbed7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d30549b3_9d3b2852",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-24T00:38:41Z",
       "side": 1,
       "message": "Could you check (ar.exception !\u003d null || data \u003d\u003d null). This avoids the need to clear mFplmns. Alternatively you could set a flag earlier in the function to remember that it\u0027s an error case.",
+      "range": {
+        "startLine": 1199,
+        "startChar": 32,
+        "endLine": 1199,
+        "endChar": 39
+      },
+      "revId": "4e09b3b07c814a619be00d014534d0dea56bbed7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85569a7d_b5462352",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2019-10-24T01:33:11Z",
+      "side": 1,
+      "message": "I see. This line will be replaced in accordance with your suggestion.\n\n    -   if (mFplmns !\u003d null) {\n    +   if (ar.exception !\u003d null || data \u003d\u003d null) {",
+      "parentUuid": "d30549b3_9d3b2852",
       "range": {
         "startLine": 1199,
         "startChar": 32,
