@@ -48,7 +48,10 @@ import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccConstants;
 import com.android.internal.telephony.uicc.IccFileHandler;
+import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.util.HexDump;
 
 import java.io.FileDescriptor;
@@ -1313,6 +1316,34 @@ public class IccSmsInterfaceManager {
                 SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
                 false /* expectMore */,
                 SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
+    }
+
+    public int getSmsCapacityOnIcc() {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE,
+                "getSmsCapacityOnIcc");
+
+        int numberOnIcc = 0;
+
+        if (mPhone.getIccRecordsLoaded()) {
+            final UiccProfile uiccProfile = UiccController.getInstance()
+                    .getUiccProfileForPhone(mPhone.getPhoneId());
+            IccRecords iccRecords = null;
+            if(uiccProfile != null) {
+                iccRecords = uiccProfile.getIccRecords();
+            }
+            if(uiccProfile != null && iccRecords != null) {
+                numberOnIcc = iccRecords.getSmsCapacityOnIcc();
+            } else {
+                log("UiccProfile = " + uiccProfile +
+                    "IccRecords = " + iccRecords);
+            }
+        } else {
+            log("getSmsCapacityOnIcc - aborting, no icc card present.");
+        }
+
+        log("getSmsCapacityOnIcc().numberOnIcc = " + numberOnIcc);
+        return numberOnIcc;
     }
 
     private boolean isFailedOrDraft(ContentResolver resolver, Uri messageUri) {
