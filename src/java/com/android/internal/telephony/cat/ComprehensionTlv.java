@@ -99,6 +99,11 @@ public class ComprehensionTlv {
             if (ctlv != null) {
                 items.add(ctlv);
                 startIndex = ctlv.mValueIndex + ctlv.mLength;
+                if (startIndex > endIndex) {
+                    if (endIndex - ctlv.mValueIndex >= 0) {
+                        ctlv.mLength = endIndex - ctlv.mValueIndex;
+                    }
+                }
             } else {
                 CatLog.d(LOG_TAG, "decodeMany: ctlv is null, stop decoding");
                 break;
