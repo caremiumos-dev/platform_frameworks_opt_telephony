@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a282a2ec_8dce8495",
+        "filename": "src/java/com/android/internal/telephony/nitz/NewTimeServiceHelperImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-25T23:54:17Z",
+      "side": 1,
+      "message": "this doesn\u0027t look like it\u0027s being used",
+      "range": {
+        "startLine": 44,
+        "startChar": 30,
+        "endLine": 44,
+        "endChar": 42
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62795b92_187ae21e",
+        "filename": "src/java/com/android/internal/telephony/nitz/NitzSignalInputFilterPredicateFactory.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-25T23:54:17Z",
+      "side": 1,
+      "message": "This might looks nicer as a methods returning Optionals chained together with orElse calls. Up to you though",
+      "range": {
+        "startLine": 59,
+        "startChar": 46,
+        "endLine": 59,
+        "endChar": 66
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b848dd2e_9994c3d1",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionService.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-25T23:54:17Z",
+      "side": 1,
+      "message": "Do you want an @IntDef for these?\n\nAlso, what\u0027s the rationale for naming these scores vague values like \"high\", \"medium\", etc. when the comments say that they each have a more precise meaning? Are you expecting to assign SCORE_MEDIUM to something that\u0027s not necessarily same-offset-but-maybe-not-the-same-zone in the future?",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 43
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b434915_ce23a089",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionService.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-25T23:54:17Z",
+      "side": 1,
+      "message": "extra space",
+      "range": {
+        "startLine": 178,
+        "startChar": 10,
+        "endLine": 178,
+        "endChar": 11
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aab736e4_c75a51c0",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionService.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-25T23:54:17Z",
+      "side": 1,
+      "message": "As I understand it from reading the code, passing in a suggestion with a null zoneId doesn\u0027t withdraw a particular suggestion in the sense of removing it from the history list, but rather it withdraws any opinion that particular Phone has on what the timezone should be, right?",
+      "range": {
+        "startLine": 208,
+        "startChar": 47,
+        "endLine": 208,
+        "endChar": 78
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0253075e_18dbb40d",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionServiceHelperImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-25T23:54:17Z",
+      "side": 1,
+      "message": "Judging by the latest comments on the bug, it looks like the \"GMT\" hack is now permanent, so this TODO can be removed.",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 80
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e4be28f_c5c25b7c",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionServiceHelperImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-25T23:54:17Z",
+      "side": 1,
+      "message": "Any plans for removing this in a future CL? I\u0027ve looked around for receivers that register for this intent but couldn\u0027t find any.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 81
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
