@@ -99,6 +99,13 @@ public class ComprehensionTlv {
             if (ctlv != null) {
                 items.add(ctlv);
                 startIndex = ctlv.mValueIndex + ctlv.mLength;
+                /* Special case: For the last TLV, Length and data do not match,
+                 * which will cause proactive command parsing fail.
+                 * Need to remove invalid data.
+                 */
+                if (startIndex > endIndex && endIndex - ctlv.mValueIndex >= 0) {
+                    ctlv.mLength = endIndex - ctlv.mValueIndex;
+                }
             } else {
                 CatLog.d(LOG_TAG, "decodeMany: ctlv is null, stop decoding");
                 break;
