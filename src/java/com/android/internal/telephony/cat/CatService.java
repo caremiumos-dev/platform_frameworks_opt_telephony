@@ -40,6 +40,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.PhoneConstants;
@@ -884,7 +885,10 @@ public class CatService extends Handler implements AppInterface {
             if (msg.obj != null) {
                 AsyncResult ar = (AsyncResult) msg.obj;
                 if (ar != null && ar.result != null) {
-                    broadcastAlphaMessage((String)ar.result);
+                    String alphaStr = (String)ar.result;
+                    if (!TextUtils.isEmpty(alphaStr)) {
+                        broadcastAlphaMessage(retrieveAlphaString(alphaStr));
+                    }
                 } else {
                     CatLog.d(this, "CAT Alpha message: ar.result is null");
                 }
@@ -1189,5 +1193,17 @@ public class CatService extends Handler implements AppInterface {
         config.userSetLocale = true;
         am.updatePersistentConfiguration(config);
         BackupManager.dataChanged("com.android.providers.settings");
+    }
+
+    private String retrieveAlphaString(String alphaString) {
+        int valueIndex = 0;
+        byte[] rawValue = IccUtils.hexStringToBytes(alphaString);
+        int length = rawValue.length;
+        try {
+            return IccUtils.adnStringFieldToString(rawValue, valueIndex,
+                    length);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 }
