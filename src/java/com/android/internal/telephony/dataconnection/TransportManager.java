@@ -282,7 +282,6 @@ public class TransportManager extends Handler {
             return false;
         }
 
-
         if (mPendingHandoverApns.get(newNetworks.apnType)
                 == ACCESS_NETWORK_TRANSPORT_TYPE_MAP.get(newNetworkList[0])) {
             log("Handover not needed. There is already an ongoing handover.");
@@ -325,17 +324,12 @@ public class TransportManager extends Handler {
     }
 
     private void updateAvailableNetworks() {
-        if (isHandoverPending()) {
-            log("There's ongoing handover. Will update networks once handover completed.");
-            return;
-        }
-
         if (mAvailableNetworksList.size() == 0) {
             log("Nothing in the available network list queue.");
             return;
         }
 
-        List<QualifiedNetworks> networksList = mAvailableNetworksList.remove();
+        List<QualifiedNetworks> networksList = mAvailableNetworksList.peek();
         logl("updateAvailableNetworks: " + networksList);
         for (QualifiedNetworks networks : networksList) {
             if (areNetworksValid(networks)) {
@@ -349,6 +343,14 @@ public class TransportManager extends Handler {
                     logl("Handover needed for APN type: "
                             + ApnSetting.getApnTypeString(networks.apnType) + ", target transport: "
                             + AccessNetworkConstants.transportTypeToString(targetTransport));
+                    // No matter whether this APN is in pending handover list,
+                    // Here prohibit the handover request for different target transport till the
+                    // previous requests gets completed
+                    if(mPendingHandoverApns.size() > 0
+                            && mPendingHandoverApns.indexOfValue(targetTransport) < 0) {
+                        log("Wait for the prevoius traget handover completition.");
+                        return;
+                    }
                     mPendingHandoverApns.put(networks.apnType, targetTransport);
                     mHandoverNeededEventRegistrants.notifyResult(
                             new HandoverParams(networks.apnType, targetTransport,
@@ -374,7 +376,8 @@ public class TransportManager extends Handler {
 
                                         // If there are still pending available network changes, we
                                         // need to process the rest.
-                                        if (mAvailableNetworksList.size() > 0) {
+                                        if (mAvailableNetworksList.size() > 0
+                                                && !isHandoverPending()) {
                                             sendEmptyMessage(EVENT_UPDATE_AVAILABLE_NETWORKS);
                                         }
                                     }));
@@ -384,9 +387,11 @@ public class TransportManager extends Handler {
                 loge("Invalid networks received: " + networks);
             }
         }
+        // Remove the handled qualified networks
+        mAvailableNetworksList.remove();
 
         // If there are still pending available network changes, we need to process the rest.
-        if (mAvailableNetworksList.size() > 0) {
+        if (mAvailableNetworksList.size() > 0 && !isHandoverPending()) {
             sendEmptyMessage(EVENT_UPDATE_AVAILABLE_NETWORKS);
         }
     }

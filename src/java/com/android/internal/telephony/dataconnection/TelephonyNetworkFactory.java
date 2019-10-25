@@ -59,12 +59,16 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
     private static final int TELEPHONY_NETWORK_SCORE = 50;
 
-    private static final int EVENT_ACTIVE_PHONE_SWITCH              = 1;
-    private static final int EVENT_SUBSCRIPTION_CHANGED             = 2;
-    private static final int EVENT_NETWORK_REQUEST                  = 3;
-    private static final int EVENT_NETWORK_RELEASE                  = 4;
-    private static final int EVENT_DATA_HANDOVER_NEEDED             = 5;
-    private static final int EVENT_DATA_HANDOVER_COMPLETED          = 6;
+    private static final int EVENT_ACTIVE_PHONE_SWITCH                   = 1;
+    private static final int EVENT_SUBSCRIPTION_CHANGED                  = 2;
+    private static final int EVENT_NETWORK_REQUEST                       = 3;
+    private static final int EVENT_NETWORK_RELEASE                       = 4;
+    private static final int EVENT_DATA_HANDOVER_NEEDED                  = 5;
+    private static final int EVENT_DATA_SETUP_HANDOVER_COMPLETED         = 6;
+    private static final int EVENT_DATA_DEACTIVATE_HANDOVER_COMPLETED    = 7;
+    private static final int EVENT_DATA_DEACTIVATE_HANDOVER_TIMEOUT      = 8;
+
+    private static final int DEACTIVATE_DATA_TIMEOUT_FOR_HANDOVER =   5000; // 5s
 
     private final PhoneSwitcher mPhoneSwitcher;
     private final SubscriptionController mSubscriptionController;
@@ -77,6 +81,9 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
     private final Map<Message, HandoverParams> mPendingHandovers = new HashMap<>();
 
+    private final Map<NetworkRequest, DeactivatePartialParams> mPendingDeactivateHandovers
+            = new HashMap<>();
+
     private final Phone mPhone;
 
     private final TransportManager mTransportManager;
@@ -85,6 +92,12 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
     private final Handler mInternalHandler;
 
+    private final static class DeactivatePartialParams {
+        int targetTransport;
+        int sourceTransport;
+        boolean targetInSuccess;
+        HandoverParams handoverParams;
+    }
 
     public TelephonyNetworkFactory(SubscriptionMonitor subscriptionMonitor, Looper looper,
                                    Phone phone) {
@@ -171,7 +184,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                             handoverParams);
                     break;
                 }
-                case EVENT_DATA_HANDOVER_COMPLETED: {
+                case EVENT_DATA_SETUP_HANDOVER_COMPLETED: {
                     Bundle bundle = msg.getData();
                     int requestType = bundle.getInt(DcTracker.DATA_COMPLETE_MSG_EXTRA_REQUEST_TYPE);
                     if (requestType == DcTracker.REQUEST_TYPE_HANDOVER) {
@@ -191,6 +204,16 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                             logl("Handover completed but cannot find handover entry!");
                         }
                     }
+                    break;
+                }
+                case EVENT_DATA_DEACTIVATE_HANDOVER_COMPLETED: {
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    onDataHandoverDeactivateCompleted((NetworkRequest)ar.userObj,
+                           (String)ar.result);
+                    break;
+                }
+                case EVENT_DATA_DEACTIVATE_HANDOVER_TIMEOUT: {
+                    onDataHandoverDeactivateTimedout((NetworkRequest)msg.obj);
                     break;
                 }
             }
@@ -340,7 +363,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                             ApnSetting.getApnTypeString(apnType));
                     if (dc != null && (dc.isActive() || dc.isActivating())) {
                         Message onCompleteMsg = mInternalHandler.obtainMessage(
-                                EVENT_DATA_HANDOVER_COMPLETED);
+                                EVENT_DATA_SETUP_HANDOVER_COMPLETED);
                         onCompleteMsg.getData().putParcelable(
                                 DcTracker.DATA_COMPLETE_MSG_EXTRA_NETWORK_REQUEST, networkRequest);
                         mPendingHandovers.put(onCompleteMsg, handoverParams);
@@ -398,11 +421,78 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                     // the existing data connection in current transport, then DCT and qualified
                     // network service will be out of sync.
                     : DcTracker.RELEASE_TYPE_NORMAL;
+            DcTracker dcTracker = mPhone.getDcTracker(originTransport);
+            DeactivatePartialParams partialParams = new DeactivatePartialParams();
+            partialParams.targetTransport = targetTransport;
+            partialParams.sourceTransport = originTransport;
+            partialParams.handoverParams = handoverParams;
+            partialParams.targetInSuccess = success;
+            mPendingDeactivateHandovers.put(networkRequest, partialParams);
+            if (dcTracker != null) {
+                dcTracker.registerForAnyDataDisconnected(mInternalHandler,
+                        EVENT_DATA_DEACTIVATE_HANDOVER_COMPLETED,
+                        networkRequest);
+            }
             releaseNetworkInternal(networkRequest, releaseType, originTransport);
             mNetworkRequests.put(networkRequest, targetTransport);
+            Message onCompleteMsg = mInternalHandler.obtainMessage(
+                    EVENT_DATA_DEACTIVATE_HANDOVER_TIMEOUT,
+                    networkRequest);
+            mInternalHandler.sendMessageDelayed(
+                    onCompleteMsg,
+                    DEACTIVATE_DATA_TIMEOUT_FOR_HANDOVER);
+        } else {
+            handoverParams.callback.onCompleted(success, true);
         }
+    }
 
-        handoverParams.callback.onCompleted(success, fallback);
+    private void onDataHandoverDeactivateCompleted(NetworkRequest networkRequest, String apnType) {
+        logl("onDataHandoverDeactivateCompleted on NetworkRequest: "
+                + networkRequest + " -> " + apnType);
+        if (mInternalHandler.hasMessages(EVENT_DATA_DEACTIVATE_HANDOVER_TIMEOUT)) {
+            mInternalHandler.removeMessages(EVENT_DATA_DEACTIVATE_HANDOVER_TIMEOUT);
+        }
+        DeactivatePartialParams params = mPendingDeactivateHandovers.remove(networkRequest);
+        if (params != null) {
+            DcTracker dcTracker = mPhone.getDcTracker(params.sourceTransport);
+            if (dcTracker != null && mPendingDeactivateHandovers.isEmpty()) {
+                dcTracker.unregisterForAnyDataDisconnected(mInternalHandler);
+            }
+            boolean isApnDisconnected = apnType == null
+                    || dcTracker.isApnTypeMatchedWithNetworkRequest(apnType, networkRequest);
+            if (isApnDisconnected) {
+                if (params.targetInSuccess) {
+                    bringHandoverToBeCompleted(params.targetTransport, networkRequest);
+                }
+                params.handoverParams.callback.onCompleted(params.targetInSuccess, false);
+            }
+        }
+    }
+
+    private void onDataHandoverDeactivateTimedout(NetworkRequest networkRequest) {
+        logl("onDataHandoverDeactivateTimedout on NetworkRequest: " + networkRequest);
+        DeactivatePartialParams params = mPendingDeactivateHandovers.remove(networkRequest);
+        if (params != null) {
+            DcTracker dcTracker = mPhone.getDcTracker(params.sourceTransport);
+            if (dcTracker != null && mPendingDeactivateHandovers.isEmpty()) {
+                dcTracker.unregisterForAnyDataDisconnected(mInternalHandler);
+            }
+            if (params.targetInSuccess) {
+                bringHandoverToBeCompleted(params.targetTransport, networkRequest);
+            }
+            params.handoverParams.callback.onCompleted(params.targetInSuccess, false);
+            // If deactivating data can't be completed, the source transport
+            // should be brought to complete.
+            bringHandoverToBeCompleted(params.sourceTransport, networkRequest);
+        }
+    }
+
+    private void bringHandoverToBeCompleted(int transport, NetworkRequest networkRequest) {
+        logl("bringHandoverToBeCompleted on transport: " + transport);
+        DcTracker dcTracker = mPhone.getDcTracker(transport);
+        if (dcTracker != null) {
+            dcTracker.bringHandoverToBeCompleted(networkRequest);
+        }
     }
 
     protected void log(String s) {

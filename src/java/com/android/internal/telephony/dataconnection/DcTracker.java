@@ -566,6 +566,7 @@ public class DcTracker extends Handler {
     }
 
     private RegistrantList mAllDataDisconnectedRegistrants = new RegistrantList();
+    private RegistrantList mAnyDataDisconnectedRegistrants = new RegistrantList();
 
     // member variables
     private final Phone mPhone;
@@ -2960,6 +2961,8 @@ public class DcTracker extends Handler {
                 mPhone.notifyDataConnection(type);
             }
         }
+        // This is used to continue completing the next action of the handover.
+        notifyDataDisconnectedForApnType(apnContext.getApnType());
         // if all data connection are gone, check whether Airplane mode request was
         // pending.
         if (isDisconnected()) {
@@ -3921,6 +3924,64 @@ public class DcTracker extends Handler {
 
     public void unregisterForAllDataDisconnected(Handler h) {
         mAllDataDisconnectedRegistrants.remove(h);
+    }
+
+    // Give a chance to enforce notifying this for the required NetworkRequest
+    // while its APN is disconnected
+    public void registerForAnyDataDisconnected(Handler h,
+            int what, NetworkRequest networkRequest) {
+        mAnyDataDisconnectedRegistrants.addUnique(h, what, networkRequest);
+        final ApnContext apnContext = getApnContextFromNetworkRequest(networkRequest);
+        if (apnContext!= null) {
+            notifyDataDisconnectedForApnType(apnContext.getApnType());
+        }
+    }
+
+    public void unregisterForAnyDataDisconnected(Handler h) {
+        mAnyDataDisconnectedRegistrants.remove(h);
+    }
+
+    private void notifyDataDisconnectedForApnType(String apnType) {
+        if (isDataOfApnDisconnected(apnType)) {
+            mAnyDataDisconnectedRegistrants
+                    .notifyRegistrants(new AsyncResult(null, apnType, null));
+        }
+    }
+
+    public void bringHandoverToBeCompleted(NetworkRequest networkRequest) {
+        final ApnContext apnContext = getApnContextFromNetworkRequest(networkRequest);
+        if (apnContext != null) {
+            DataConnection dc = apnContext.getDataConnection();
+            if (dc != null) {
+                dc.bringHandoverToBeCompleted();
+            } else {
+                log("be caution!, dc is null for " + networkRequest);
+            }
+        }
+    }
+
+    public boolean isApnTypeMatchedWithNetworkRequest(String apnType,
+            NetworkRequest networkRequest) {
+        final ApnContext apnContext = getApnContextFromNetworkRequest(networkRequest);
+        if (apnContext != null && apnType != null) {
+            return apnType.equals(apnContext.getApnType());
+        }
+        return false;
+    }
+
+    private ApnContext getApnContextFromNetworkRequest(NetworkRequest networkRequest) {
+        final int apnType = ApnContext.getApnTypeFromNetworkRequest(networkRequest);
+        final ApnContext apnContext = mApnContextsByType.get(apnType);
+        log("getApnContextFromNetworkRequest " + apnContext);
+        return apnContext;
+    }
+
+    private boolean isDataOfApnDisconnected(String apnType) {
+        ApnContext apnContext = mApnContexts.get(apnType);
+        if (apnContext != null && apnContext.isDisconnected()) {
+            return true;
+        }
+        return false;
     }
 
     private void onDataEnabledChanged(boolean enable,

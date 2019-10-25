@@ -137,16 +137,22 @@ public class DataConnection extends StateMachine {
     private static final int HANDOVER_STATE_BEING_TRANSFERRED = 2;
 
     /**
+     * The target transport data connection is already established.
+     */
+    private static final int HANDOVER_STATE_PARTIAL_COMPLETED = 3;
+
+    /**
      * The data connection is already handovered. Note this is the state for the source
      * data connection, not destination data connection.
      */
-    private static final int HANDOVER_STATE_COMPLETED = 3;
+    private static final int HANDOVER_STATE_COMPLETED = 4;
 
     /** @hide */
     @Retention(RetentionPolicy.SOURCE)
     @IntDef(prefix = {"HANDOVER_STATE_"}, value = {
             HANDOVER_STATE_IDLE,
             HANDOVER_STATE_BEING_TRANSFERRED,
+            HANDOVER_STATE_PARTIAL_COMPLETED,
             HANDOVER_STATE_COMPLETED})
     public @interface HandoverState {}
 
@@ -426,6 +432,20 @@ public class DataConnection extends StateMachine {
 
     boolean hasBeenTransferred() {
         return mHandoverState == HANDOVER_STATE_COMPLETED;
+    }
+
+    // For source transport, the CID always can be really released during handover,
+    // Once it happens, that means handover has been completed.
+    boolean hasTargetHandoverCompleted() {
+        if (mConnectionParams != null
+                && mConnectionParams.mRequestType == DcTracker.REQUEST_TYPE_HANDOVER) {
+            return hasBeenTransferred();
+        }
+        return true;
+    }
+
+    void bringHandoverToBeCompleted() {
+        mHandoverState = HANDOVER_STATE_COMPLETED;
     }
 
     int getCid() {
@@ -1721,7 +1741,11 @@ public class DataConnection extends StateMachine {
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
                         ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
-            if (mHandoverState == HANDOVER_STATE_BEING_TRANSFERRED) {
+            // For source transport gets inactive, means the whole handover already is
+            // completed, here mark target transport as completed because retry is not
+            // needed to be considered as part of handover.
+            if (mHandoverState == HANDOVER_STATE_BEING_TRANSFERRED ||
+                    mHandoverState == HANDOVER_STATE_PARTIAL_COMPLETED) {
                 setHandoverState(HANDOVER_STATE_COMPLETED);
             }
 
@@ -2027,6 +2051,8 @@ public class DataConnection extends StateMachine {
 
             if (mConnectionParams != null
                     && mConnectionParams.mRequestType == DcTracker.REQUEST_TYPE_HANDOVER) {
+                // Target handover is completed.
+                setHandoverState(HANDOVER_STATE_PARTIAL_COMPLETED);
                 // If this is a data setup for handover, we need to reuse the existing network agent
                 // instead of creating a new one. This should be transparent to connectivity
                 // service.
@@ -2038,7 +2064,7 @@ public class DataConnection extends StateMachine {
                 if (dc != null) {
                     // Transfer network agent from the original data connection as soon as the
                     // new handover data connection is connected.
-                    dc.setHandoverState(HANDOVER_STATE_COMPLETED);
+                    dc.setHandoverState(HANDOVER_STATE_PARTIAL_COMPLETED);
                 }
 
                 if (mHandoverSourceNetworkAgent != null) {
@@ -2916,6 +2942,7 @@ public class DataConnection extends StateMachine {
         switch (state) {
             case HANDOVER_STATE_IDLE: return "IDLE";
             case HANDOVER_STATE_BEING_TRANSFERRED: return "BEING_TRANSFERRED";
+            case HANDOVER_STATE_PARTIAL_COMPLETED: return "PARTIAL_COMPLETED";
             case HANDOVER_STATE_COMPLETED: return "COMPLETED";
             default: return "UNKNOWN";
         }

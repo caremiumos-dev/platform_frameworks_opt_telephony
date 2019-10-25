@@ -282,7 +282,12 @@ public class DcController extends StateMachine {
             // dcsList to the list of DC's to retry
             ArrayList<DataConnection> dcsToRetry = new ArrayList<DataConnection>();
             for (DataConnection dc : dcListActiveByCid.values()) {
-                if (dataCallResponseListByCid.get(dc.mCid) == null) {
+                // On target transport side, the cid may be not there yet during handover,
+                // so here unable to determine if the connection is really lost.
+                // On source transport side, the cid also may be not present because the handover
+                // already gets completed, but the connection is really lost.
+                if (dataCallResponseListByCid.get(dc.mCid) == null
+                        && dc.hasTargetHandoverCompleted()) {
                     if (DBG) log("onDataStateChanged: add to retry dc=" + dc);
                     dcsToRetry.add(dc);
                 }
