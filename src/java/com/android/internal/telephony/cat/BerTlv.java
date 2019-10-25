@@ -151,7 +151,10 @@ class BerTlv {
             // then the whole BER-TLV data object shall be rejected. The
             // result field in the TERMINAL RESPONSE shall have the error
             // condition "Command data not understood by ME".
-            if (length != totalLength) {
+            /* Special case：For the last TLV, only have tag and no other data,
+             * Need to remove invalid data.
+             */
+            if (length != totalLength && ((length - totalLength) != 1)) {
                 isLengthValid = false;
             }
         }

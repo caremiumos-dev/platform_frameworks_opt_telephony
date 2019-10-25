@@ -95,6 +95,13 @@ public class ComprehensionTlv {
         ArrayList<ComprehensionTlv> items = new ArrayList<ComprehensionTlv>();
         int endIndex = data.length;
         while (startIndex < endIndex) {
+            /* Special case：For the last TLV, only have tag and no other data,
+             * Need to remove invalid data.
+             */
+            if ((endIndex - 1) == startIndex) {
+                CatLog.d(LOG_TAG, "decodeMany: no ctlv, stop decoding");
+                break;
+            }
             ComprehensionTlv ctlv = ComprehensionTlv.decode(data, startIndex);
             if (ctlv != null) {
                 items.add(ctlv);
