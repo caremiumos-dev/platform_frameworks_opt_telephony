@@ -259,4 +259,12 @@ public class CatCmdMessage implements Parcelable {
     public boolean hasIconLoadFailed() {
         return mLoadIconFailed;
     }
+
+    /**
+     * API to be used by application to check current CommandQualifier
+     */
+    @UnsupportedAppUsage
+    public int getCommandQualifier() {
+        return mCmdDet.commandQualifier;
+    }
 }
