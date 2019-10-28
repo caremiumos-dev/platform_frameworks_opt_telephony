@@ -2067,13 +2067,22 @@ public class DcTracker extends Handler {
 
         if (initialAttachApnSetting == null) {
             if (DBG) log("setInitialAttachApn: X There in no available apn");
+
+            IccRecords r = mIccRecords.get();
+            String operator = (r != null) ? r.getOperatorNumeric() : "";
+            initialAttachApnSetting = new ApnSetting.Builder()
+                    .setOperatorNumeric(operator)
+                    .setApnName("")
+                    .setUser("")
+                    .setPassword("")
+                    .setApnTypeBitmask(ApnSetting.TYPE_DEFAULT)
+                    .buildWithoutCheck();
         } else {
             if (DBG) log("setInitialAttachApn: X selected Apn=" + initialAttachApnSetting);
-
-            mDataServiceManager.setInitialAttachApn(createDataProfile(initialAttachApnSetting,
-                            initialAttachApnSetting.equals(getPreferredApn())),
-                    mPhone.getServiceState().getDataRoamingFromRegistration(), null);
         }
+        mDataServiceManager.setInitialAttachApn(createDataProfile(initialAttachApnSetting,
+                        initialAttachApnSetting.equals(getPreferredApn())),
+                mPhone.getServiceState().getDataRoamingFromRegistration(), null);
     }
 
     /**
