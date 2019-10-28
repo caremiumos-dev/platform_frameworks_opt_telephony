@@ -100,6 +100,7 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mPhysicalChannelConfigurationRegistrants = new RegistrantList();
     protected RegistrantList mLceInfoRegistrants = new RegistrantList();
     protected RegistrantList mEmergencyNumberListRegistrants = new RegistrantList();
+    protected RegistrantList mRauSuccessRegistrants = new RegistrantList();
 
     @UnsupportedAppUsage
     protected Registrant mGsmSmsRegistrant;
@@ -1041,5 +1042,17 @@ public abstract class BaseCommands implements CommandsInterface {
         synchronized (mStateMonitor) {
             mNattKeepaliveStatusRegistrants.remove(h);
         }
+    }
+
+    @Override
+    public void registerForRauSuccess(Handler h, int what, Object obj) {
+        Registrant r = new Registrant (h, what, obj);
+
+        mRauSuccessRegistrants.add(r);
+    }
+
+    @Override
+    public void unregisterForRauSuccess(Handler h) {
+        mRauSuccessRegistrants.remove(h);
     }
 }

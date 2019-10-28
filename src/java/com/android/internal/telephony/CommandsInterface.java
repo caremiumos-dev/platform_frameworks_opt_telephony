@@ -2381,4 +2381,34 @@ public interface CommandsInterface {
     default List<ClientRequestStats> getClientRequestStats() {
         return null;
     }
+
+    /**
+     * attach or detach Gprs.
+     *
+     * @param enable whether to attach Gprs
+     */
+    default void attachGprs(boolean enable) {};
+
+    /**
+     * Enable or disable Lte.
+     *
+     * @param enable whether to enable LTE
+     */
+    default void enableLte(boolean enable) {};
+
+    /**
+     * Register for unsolicited RAU Success
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    default void registerForRauSuccess(Handler h, int what, Object obj) {};
+
+    /**
+     * Deregister for unsolicited RAU Success
+     *
+     * @param h Handler for notification message.
+     */
+    default void unregisterForRauSuccess(Handler h) {};
 }
