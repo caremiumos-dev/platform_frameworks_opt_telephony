@@ -536,11 +536,20 @@ public class UiccProfile extends IccCard {
                 cardLocked = true;
                 lockedState = IccCardConstants.State.PUK_REQUIRED;
             } else if (appState == IccCardApplicationStatus.AppState.APPSTATE_SUBSCRIPTION_PERSO) {
+                /*
                 if (mUiccApplication.getPersoSubState()
                         == IccCardApplicationStatus.PersoSubState.PERSOSUBSTATE_SIM_NETWORK) {
                     if (VDBG) log("updateExternalState: PERSOSUBSTATE_SIM_NETWORK");
                     cardLocked = true;
                     lockedState = IccCardConstants.State.NETWORK_LOCKED;
+                }
+                */
+                IccCardApplicationStatus.PersoSubState persoSubState 
+                        = mUiccApplication.getPersoSubState();
+                if(persoSubState.isPersoSubStateSimLock()){
+                    log("updateExternalState: " + persoSubState);
+                    cardLocked = true;
+                    lockedState = persoSubState.getStateByPersoSubState();
                 }
             }
         }
@@ -719,6 +728,16 @@ public class UiccProfile extends IccCard {
             case PERM_DISABLED: return IccCardConstants.INTENT_VALUE_ABSENT_ON_PERM_DISABLED;
             case CARD_IO_ERROR: return IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR;
             case CARD_RESTRICTED: return IccCardConstants.INTENT_VALUE_ICC_CARD_RESTRICTED;
+            case NETWORK_SUBSET_LOCKED: return IccCardConstants.INTENT_VALUE_LOCKED_NS;
+            case SERVICE_PROVIDER_LOCKED: return IccCardConstants.INTENT_VALUE_LOCKED_SP;
+            case CORPORATE_LOCKED: return IccCardConstants.INTENT_VALUE_LOCKED_CP;
+            case SIM_LOCKED: return IccCardConstants.INTENT_VALUE_LOCKED_SIM;
+            case NETWORK_LOCKED_PUK: return IccCardConstants.INTENT_VALUE_LOCKED_NETWORK_PUK;
+            case NETWORK_SUBSET_LOCKED_PUK: return IccCardConstants.INTENT_VALUE_LOCKED_NS_PUK;
+            case SERVICE_PROVIDER_LOCKED_PUK: return IccCardConstants.INTENT_VALUE_LOCKED_SP_PUK;
+            case CORPORATE_LOCKED_PUK: return IccCardConstants.INTENT_VALUE_LOCKED_CP_PUK;
+            case SIM_LOCKED_PUK: return IccCardConstants.INTENT_VALUE_LOCKED_SIM_PUK;
+            case SIM_LOCKED_PERMANENTLY: return IccCardConstants.INTENT_VALUE_LOCKED_PERMANENTLY;
             default: return null;
         }
     }
@@ -748,7 +767,8 @@ public class UiccProfile extends IccCard {
 
             mNetworkLockedRegistrants.add(r);
 
-            if (getState() == IccCardConstants.State.NETWORK_LOCKED) {
+            IccCardConstants.State state = getState();
+            if (state.isSimlockLocked()){
                 r.notifyRegistrant();
             }
         }
