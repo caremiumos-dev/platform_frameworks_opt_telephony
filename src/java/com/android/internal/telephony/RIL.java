@@ -179,6 +179,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
     /** @hide */
     public static final HalVersion RADIO_HAL_VERSION_1_4 = new HalVersion(1, 4);
 
+    /** @hide */
+    public static final HalVersion RADIO_HAL_VERSION_1_5 = new HalVersion(1, 5);
+
     // IRadio version
     private HalVersion mRadioVersion = RADIO_HAL_VERSION_UNKNOWN;
 
@@ -4608,6 +4611,56 @@ public class RIL extends BaseCommands implements CommandsInterface {
             radioProxy11.stopKeepalive(rr.mSerial, sessionHandle);
         } catch (RemoteException | RuntimeException e) {
             handleRadioProxyExceptionForRR(rr, "stopNattKeepalive", e);
+        }
+    }
+
+    @Override
+    public void attachGprs(boolean enable) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy == null) {
+            Rlog.e(RIL.RILJ_LOG_TAG, "Radio Proxy object is null!");
+            return;
+        }
+
+        android.hardware.radio.V1_5.IRadio radioProxy15 =
+                (android.hardware.radio.V1_5.IRadio) radioProxy;
+
+        RILRequest rr = obtainRequest(
+                RIL_REQUEST_ATTACH_GPRS, result, mRILDefaultWorkSource);
+
+        if (RILJ_LOGD) {
+            riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)) + " " + enable);
+        }
+
+        try {
+            radioProxy15.attachGprs(rr.mSerial, enable);
+        } catch (RemoteException | RuntimeException e) {
+            handleRadioProxyExceptionForRR(rr, "attachGprs", e);
+        }
+    }
+
+    @Override
+    public void enableLte(boolean enable) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy == null) {
+            Rlog.e(RIL.RILJ_LOG_TAG, "Radio Proxy object is null!");
+            return;
+        }
+
+        android.hardware.radio.V1_5.IRadio radioProxy15 =
+                (android.hardware.radio.V1_5.IRadio) radioProxy;
+
+        RILRequest rr = obtainRequest(
+                RIL_REQUEST_ENABLE_LTE, result, mRILDefaultWorkSource);
+
+        if (RILJ_LOGD) {
+            riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)) + " " + enable);
+        }
+
+        try {
+            radioProxy15.enableLte(rr.mSerial, enable);
+        } catch (RemoteException | RuntimeException e) {
+            handleRadioProxyExceptionForRR(rr, "enableLte", e);
         }
     }
 
