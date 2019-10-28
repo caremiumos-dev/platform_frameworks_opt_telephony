@@ -32,9 +32,11 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncResult;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ResultReceiver;
+import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
 import android.telephony.ims.ImsCallForwardInfo;
@@ -399,10 +401,18 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         }
     }
 
-    private static int
+    private int
     siToServiceClass(String si) {
         if (si == null || si.length() == 0) {
-                return  SERVICE_CLASS_NONE;
+            int serviceClass = CommandsInterface.SERVICE_CLASS_MAX;
+            CarrierConfigManager configManager = (CarrierConfigManager)
+                    mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+            PersistableBundle b = configManager.getConfigForSubId(mPhone.getSubId());
+            if (b != null) {
+                serviceClass = b.getInt(CarrierConfigManager.KEY_CALL_MMICODE_SERVICE_CLASS_INT,
+                        CommandsInterface.SERVICE_CLASS_MAX);
+            }
+            return  serviceClass;
         } else {
             // NumberFormatException should cause MMI fail
             int serviceCode = Integer.parseInt(si, 10);
