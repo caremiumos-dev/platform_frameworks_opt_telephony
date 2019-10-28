@@ -159,11 +159,16 @@ public class UiccCardApplication {
                 mIccRecords = createIccRecords(as.app_type, c, ci);
             }
 
+            /*
             if (mPersoSubState != oldPersoSubState &&
                     mPersoSubState == PersoSubState.PERSOSUBSTATE_SIM_NETWORK) {
                 notifyNetworkLockedRegistrantsIfNeeded(null);
             }
-
+             */
+            if (mPersoSubState != oldPersoSubState
+                    && (mPersoSubState.isPersoSubStateSimLock())) {
+                notifyNetworkLockedRegistrantsIfNeeded(null);
+            }
             if (mAppState != oldAppState) {
                 if (DBG) log(oldAppType + " changed state: " + oldAppState + " -> " + mAppState);
                 // If the app state turns to APPSTATE_READY, then query FDN status,
@@ -543,11 +548,15 @@ public class UiccCardApplication {
         if (mDestroyed) {
             return;
         }
-
+        /*
         if (mAppState == AppState.APPSTATE_SUBSCRIPTION_PERSO &&
                 mPersoSubState == PersoSubState.PERSOSUBSTATE_SIM_NETWORK) {
+         */
+        if (mAppState == AppState.APPSTATE_SUBSCRIPTION_PERSO
+                && (mPersoSubState.isPersoSubStateSimLock())) {
             if (r == null) {
-                if (DBG) log("Notifying registrants: NETWORK_LOCKED");
+//                if (DBG) log("Notifying registrants: NETWORK_LOCKED");
+                if (DBG) log("Notifying registrants: " + mPersoSubState);
                 mNetworkLockedRegistrants.notifyRegistrants();
             } else {
                 if (DBG) log("Notifying 1 registrant: NETWORK_LOCED");
