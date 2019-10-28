@@ -116,6 +116,7 @@ public class DataConnectionReasons {
         APN_NOT_CONNECTABLE(true),
         ON_IWLAN(true),
         IN_ECBM(true),
+        CLEAR_CODE_NOT_ALLOWED(true),
         ON_OTHER_TRANSPORT(true);   // When data retry occurs, the given APN type's preferred
                                     // transport might be already changed. In this case we
                                     // should disallow data retry.
