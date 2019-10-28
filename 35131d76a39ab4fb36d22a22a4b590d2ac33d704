@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1d56d698_55e1916b",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-10-28T18:16:49Z",
+      "side": 1,
+      "message": "Not sure if we want to use settings or carrier config to control which module to use? Then we should be able to turn it on/off remotely.",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 9
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a282a2ec_8dce8495",
         "filename": "src/java/com/android/internal/telephony/nitz/NewTimeServiceHelperImpl.java",
         "patchSetId": 9
