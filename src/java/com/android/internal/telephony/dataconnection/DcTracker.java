@@ -27,6 +27,7 @@ import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -34,6 +35,7 @@ import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -45,10 +47,12 @@ import android.net.LinkProperties;
 import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
 import android.net.NetworkConfig;
+import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.net.ProxyInfo;
 import android.net.TrafficStats;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.AsyncResult;
 import android.os.Build;
 import android.os.Bundle;
@@ -86,6 +90,7 @@ import android.telephony.gsm.GsmCellLocation;
 import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.LocalLog;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.WindowManager;
@@ -331,6 +336,31 @@ public class DcTracker extends Handler {
     private final LocalLog mDataRoamingLeakageLog = new LocalLog(50);
     private final LocalLog mApnSettingsInitializationLog = new LocalLog(50);
 
+    private static final int MAX_RETRY_FOR_VOLTE = 1;
+    private static final int MAX_RETRY = 3;
+    private static final int RETRY_DELAY_LONG  = 45000;
+    private static final int RETRY_DELAY_SHORT = 10000;
+    private static final int RETRY_FROM_FAILURE_DELAY = 2 * 3600 * 1000; // 2 hours
+
+    private static final String VOLTE_CLEAR_CODE = "volte";
+    private static final String NON_VOLTE_CLEAR_CODE = "non-volte";
+
+    private static final String INTENT_RETRY_CLEAR_CODE =
+            "com.android.internal.telephony.data-retry-clear-code";
+    private static final String INTENT_RETRY_CLEAR_CODE_EXTRA_TYPE = "retry_clear_code_extra_type";
+    private static final String INTENT_RETRY_CLEAR_CODE_EXTRA_REASON =
+            "retry_clear_code_extra_reason";
+    private static final String INTENT_RETRY_FROM_FAILURE =
+            "com.android.internal.telephony.data-retry-from-failure";
+    private static final String INTENT_RETRY_FROM_FAILURE_ALARM_EXTRA_TYPE =
+            "retry_from_faliure_alarm_extra_type";
+
+    private int mPreFailcause = DataFailCause.NONE;
+    private int mFailCount = 0;
+    private AtomicInteger mClearCodeLatch = new AtomicInteger(0);
+    private PendingIntent mRetryIntent = null;
+    private ClearCodeRetryController mRetryController;
+
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver () {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -369,7 +399,22 @@ public class DcTracker extends Handler {
                     log("phone" + phoneId + " is loaded");
                     onRecordsLoadedOrSubIdChanged();
                 }
-            }else {
+            } else if (action.startsWith(INTENT_RETRY_CLEAR_CODE)) {
+                if (DBG) log("Retry for clear code");
+                onActionIntentRetryClearCode(intent);
+            } else if (action.startsWith(INTENT_RETRY_FROM_FAILURE)) {
+                if (DBG) log("Retry from previous failure");
+                onActionIntentRetryFromFailure(intent);
+            } else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
+                final android.net.NetworkInfo networkInfo = (NetworkInfo)
+                intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+                boolean connected = (networkInfo != null && networkInfo.isConnected());
+                log("NETWORK_STATE_CHANGED_ACTION: old= " + mIsWifiConnected + " new= " +connected);
+                if(mFailCount > 0 && mIsWifiConnected && !connected){
+                    mRetryController.restartForChanged("WifiDisconnected");
+                }
+                mIsWifiConnected = connected;
+            } else {
                 if (DBG) log("onReceive: Unknown action=" + action);
             }
         }
@@ -757,7 +802,14 @@ public class DcTracker extends Handler {
             // Register the reconnect and restart actions.
             filter = new IntentFilter();
             filter.addAction(INTENT_RECONNECT_ALARM + '.' + apnContext.getApnType());
+            if (supportSpecialClearCode()) {
+                filter.addAction(INTENT_RETRY_CLEAR_CODE + '.' + apnContext.getApnType());
+                filter.addAction(INTENT_RETRY_FROM_FAILURE + '.' + apnContext.getApnType());
+            }
             mPhone.getContext().registerReceiver(mIntentReceiver, filter, null, mPhone);
+        }
+        if (supportSpecialClearCode()) {
+            mRetryController = new ClearCodeRetryController(phone, this);
         }
 
         initEmergencyApnSetting();
@@ -846,6 +898,11 @@ public class DcTracker extends Handler {
         if (mProvisioningSpinner != null) {
             mProvisioningSpinner.dismiss();
             mProvisioningSpinner = null;
+        }
+
+        if (mRetryController != null) {
+            mRetryController.dispose();
+            mRetryController = null;
         }
 
         cleanUpAllConnectionsInternal(true, null);
@@ -2688,6 +2745,12 @@ public class DcTracker extends Handler {
             if (DBG) log("onRadioOffOrNotAvailable: is off and clean up all connections");
             cleanUpAllConnectionsInternal(false, Phone.REASON_RADIO_TURNED_OFF);
         }
+
+        if (mRetryController != null && mRetryController.isSpecialCode(mPreFailcause)) {
+            // shutdown radio, so reset state
+            mRetryController.notifyRadioOffOrNotAvailable();
+            stopFailRetryAlarm();
+        }
     }
 
     private void completeConnection(ApnContext apnContext, @RequestNetworkType int type) {
@@ -2761,6 +2824,8 @@ public class DcTracker extends Handler {
                                     radioTestProperty, -1));
                 }
             }
+            mPreFailcause = DataFailCause.NONE;
+            mFailCount = 0;
             if (dataConnection == null) {
                 log("onDataSetupComplete: no connection to DC, handle as error");
                 onDataSetupCompleteError(apnContext, requestType);
@@ -2907,6 +2972,9 @@ public class DcTracker extends Handler {
                 log("cause = " + cause + ", mark apn as permanent failed. apn = " + apn);
                 apnContext.markApnPermanentFailed(apn);
             }
+            /* UNISOC: Handle some special clear code */
+            if (handleSpecialClearCode(cause, apnContext)) return;
+
             onDataSetupCompleteError(apnContext, requestType);
         }
     }
@@ -3581,6 +3649,14 @@ public class DcTracker extends Handler {
                 break;
 
             case DctConstants.EVENT_DATA_RAT_CHANGED:
+
+                if (mRetryController != null) {
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    Pair<Integer, Integer> drsRatPair = (Pair<Integer, Integer>) ar.result;
+                    mRetryController.handleDataServiceChange(drsRatPair.second,
+                            drsRatPair.first);
+                }
+
                 if (getDataRat() == ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN) {
                     // unknown rat is an exception for data rat change. It's only received when out
                     // of service and is not applicable for apn bearer bitmask. We should bypass the
@@ -3979,6 +4055,9 @@ public class DcTracker extends Handler {
         }
 
         if (enable) {
+            if(mFailCount > 0){
+                mRetryController.restartForChanged("DataEnableOn");
+            }
             reevaluateDataConnections();
             setupDataOnAllConnectableApns(Phone.REASON_DATA_ENABLED, RetryFailures.ALWAYS);
         } else {
@@ -4902,5 +4981,145 @@ public class DcTracker extends Handler {
             return ServiceState.networkTypeToRilRadioTechnology(nrs.getAccessNetworkTechnology());
         }
         return ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
+    }
+
+    private static boolean supportSpecialClearCode() {
+        return (isVolteClearCode() || isNonVolteClearCode());
+    }
+
+    private static boolean isVolteClearCode() {
+        String clearCodeConfig = Resources.getSystem().getString(com.android.internal.R.string.config_dataconnection_data_clear_code);
+        if (!TextUtils.isEmpty(clearCodeConfig) && VOLTE_CLEAR_CODE.equals(clearCodeConfig)){
+             return true;
+        }
+        return false;
+    }
+
+    private static boolean isNonVolteClearCode() {
+        String clearCodeConfig = Resources.getSystem().getString(com.android.internal.R.string.config_dataconnection_data_clear_code);
+        if (!TextUtils.isEmpty(clearCodeConfig) && NON_VOLTE_CLEAR_CODE.equals(clearCodeConfig)){
+             return true;
+        }
+        return false;
+    }
+
+    void stopFailRetryAlarm() {
+        if (mRetryIntent != null) {
+            mAlarmManager.cancel(mRetryIntent);
+            mRetryIntent = null;
+        }
+    }
+
+    private void startAlarmForRetryClearCode(int delay, ApnContext apnContext) {
+        String apnType = apnContext.getApnType();
+
+        Intent intent = new Intent(INTENT_RETRY_CLEAR_CODE + "." + apnType);
+        intent.putExtra(INTENT_RETRY_CLEAR_CODE_EXTRA_REASON, apnContext.getReason());
+        intent.putExtra(INTENT_RETRY_CLEAR_CODE_EXTRA_TYPE, apnType);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+
+        // Get current sub id.
+        int subId = SubscriptionManager.getDefaultDataSubscriptionId();
+        intent.putExtra(PhoneConstants.SUBSCRIPTION_KEY, subId);
+
+        if (DBG) {
+            log("startAlarmForRetryClearCode: delay=" + delay + " action=" + intent.getAction()
+                    + " apn=" + apnContext);
+        }
+        // When PDP activation failed with special clear codes, the UE should not issue another PDP
+        // request during 45s(or 10s in 4G). We use this flag to lock out the data
+        mClearCodeLatch.set(1);
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast (mPhone.getContext(), 0,
+                                        intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mRetryIntent = alarmIntent;
+        mAlarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + delay, alarmIntent);
+    }
+
+    private void startAlarmForRetryFromFailure(int delay, ApnContext apnContext) {
+        String apnType = apnContext.getApnType();
+        Intent intent = new Intent(INTENT_RETRY_FROM_FAILURE + "." + apnType);
+        intent.putExtra(INTENT_RETRY_FROM_FAILURE_ALARM_EXTRA_TYPE, apnType);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+
+        if (DBG) {
+            log("startAlarmForRetryFromFailure: delay=" + delay + " action="
+                    + intent.getAction() + " apn=" + apnContext);
+        }
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(
+                mPhone.getContext(), 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        mRetryIntent = alarmIntent;
+        // Sometimes the timer not exact.
+        mAlarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + delay, alarmIntent);
+    }
+
+    private void cancelAllReconnectAlarms() {
+        for (ApnContext apnContext : mApnContexts.values()) {
+            PendingIntent intent = apnContext.getReconnectIntent();
+            if (intent != null) {
+                AlarmManager am =
+                    (AlarmManager) mPhone.getContext().getSystemService(Context.ALARM_SERVICE);
+                am.cancel(intent);
+                apnContext.setReconnectIntent(null);
+            }
+        }
+    }
+
+    protected boolean handleSpecialClearCode(int cause, ApnContext apnContext) {
+        log("handleSpecialClearCode(" + cause + ")");
+        mPreFailcause = cause;
+        if (isSpecialCode(cause)) {
+            // Handle special clear code
+            mFailCount++;
+            ApnSetting apn = apnContext.getApnSetting();
+            log("[ClearCode] mFailCount=" + mFailCount + ", apn=" + apn);
+            if ((isNonVolteClearCode() && mFailCount < MAX_RETRY) || (isVolteClearCode() && mFailCount < MAX_RETRY_FOR_VOLTE)) {
+                log("[ClearCode] next retry");
+                apnContext.setState(DctConstants.State.FAILED);
+                if (apn != null) {
+                    apn.setPermanentFailed(false);
+                }
+
+                /* If the fail count < 3, retry it after some time
+                 *
+                 * 1.non volte clear code: 45s in 3G;10s in 4G;
+                 * 2.volte clear code: 45s;
+                 */
+                int delay = DataConnectionUtils.RETRY_DELAY_LONG;
+                if (isNonVolteClearCode() && is4G()) {
+                    delay = DataConnectionUtils.RETRY_DELAY_SHORT;
+                }
+                log("[ClearCode] retry connect APN delay=" + delay);
+                startAlarmForRetryClearCode(delay, apnContext);
+            } else {
+                log("[ClearCode] process fail");
+                if (is4G()) {
+                    log("[ClearCode] In 4G, switch to 3G");
+                    if (mRetryController != null) {
+                        mRetryController.switchTo3G();
+                    }
+                    apnContext.setState(DctConstants.State.FAILED);
+                } else {
+                    log("[ClearCode] Max retry reached, remove all waiting apns");
+                    apnContext.setState(DctConstants.State.FAILED);
+                    apnContext.setWaitingApns(new ArrayList<ApnSetting>());
+                    mPhone.notifyDataConnection(apnContext.getApnType());
+                    apnContext.setDataConnection(null);
+
+                    log("[ClearCode] All retry attempts failed, show user notification");
+                    userNotification(cause);
+                    startAlarmForRetryFromFailure(DataConnectionUtils.RETRY_FROM_FAILURE_DELAY,
+                            apnContext);
+                }
+            }
+            // We will do special retry, so stop other retry timer
+            cancelAllReconnectAlarms();
+            // return true and don't proceed to onDataSetupCompleteError
+            return true;
+        }
+        return false;
     }
 }
