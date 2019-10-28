@@ -2356,4 +2356,18 @@ public class RadioResponse extends IRadioResponse.Stub {
     public void setSystemSelectionChannelsResponse(RadioResponseInfo responseInfo) {
         responseVoid(responseInfo);
     }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial number and error.
+     */
+    public void attachGprsResponse(RadioResponseInfo responseInfo) {
+        responseVoid(responseInfo);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial number and error.
+     */
+    public void enableLteResponse(RadioResponseInfo responseInfo) {
+        responseVoid(responseInfo);
+    }
 }

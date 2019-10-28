@@ -1085,4 +1085,15 @@ public class RadioIndication extends IRadioIndication.Stub {
         if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_NETWORK_SCAN_RESULT, nsr);
         mRil.mRilNetworkScanResultRegistrants.notifyRegistrants(new AsyncResult(null, nsr, null));
     }
+
+    /**
+     * notify RAU Success
+     */
+    public void responseRauSuccess(int indicationType) {
+        mRil.processIndication(indicationType);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLog(RIL_UNSOL_RAU_SUCCESS);
+
+        mRil.mRauSuccessRegistrants.notifyRegistrants();
+    }
 }
