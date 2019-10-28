@@ -566,6 +566,17 @@ public class UiccController extends Handler {
             case PIN_REQUIRED: return IccCardConstants.INTENT_VALUE_ICC_LOCKED;
             case PUK_REQUIRED: return IccCardConstants.INTENT_VALUE_ICC_LOCKED;
             case NETWORK_LOCKED: return IccCardConstants.INTENT_VALUE_ICC_LOCKED;
+            case NETWORK_SUBSET_LOCKED:
+            case SERVICE_PROVIDER_LOCKED:
+            case CORPORATE_LOCKED:
+            case SIM_LOCKED:
+            case NETWORK_LOCKED_PUK:
+            case NETWORK_SUBSET_LOCKED_PUK:
+            case SERVICE_PROVIDER_LOCKED_PUK:
+            case CORPORATE_LOCKED_PUK:
+            case SIM_LOCKED_PUK:
+            case SIM_LOCKED_PERMANENTLY:
+                return IccCardConstants.INTENT_VALUE_ICC_LOCKED;
             case READY: return IccCardConstants.INTENT_VALUE_ICC_READY;
             case NOT_READY: return IccCardConstants.INTENT_VALUE_ICC_NOT_READY;
             case PERM_DISABLED: return IccCardConstants.INTENT_VALUE_ICC_LOCKED;
