@@ -27,6 +27,7 @@ import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.AlarmManager;
+import android.app.AppGlobals;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -37,6 +38,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.IPackageManager;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -2541,6 +2543,17 @@ public class DcTracker extends Handler {
         }
     }
 
+    private boolean isFirstBoot() {
+        IPackageManager pm = AppGlobals.getPackageManager();
+        try {
+            final boolean isFirstBoot = pm.isFirstBoot();
+            final boolean isUpgrade = pm.isDeviceUpgrading();
+            return isFirstBoot && !isUpgrade;
+        } catch (RemoteException e) {
+            throw new IllegalStateException("Package manager not available");
+        }
+    }
+
     private boolean isDataRoamingFromUserAction() {
         final SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(mPhone.getContext());
@@ -2548,7 +2561,7 @@ public class DcTracker extends Handler {
         // value if shared pref does not exist and set shared pref to false explicitly from factory
         // reset.
         if (!sp.contains(Phone.DATA_ROAMING_IS_USER_SETTING_KEY)
-                && Settings.Global.getInt(mResolver, Settings.Global.DEVICE_PROVISIONED, 0) == 0) {
+                && isFirstBoot()) {
             sp.edit().putBoolean(Phone.DATA_ROAMING_IS_USER_SETTING_KEY, false).commit();
         }
         return sp.getBoolean(Phone.DATA_ROAMING_IS_USER_SETTING_KEY, true);
