@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df25e5fe_cb7543c9",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-10-29T23:34:29Z",
+      "side": 1,
+      "message": "Trying to understand where is the code \"AR\" defined\nIs it in the spec ? Could you pls provide the reference ?",
+      "range": {
+        "startLine": 77,
+        "startChar": 52,
+        "endLine": 77,
+        "endChar": 56
+      },
+      "revId": "8b20f0a92cf70f3c776e6b937e4a9b5108877922",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
