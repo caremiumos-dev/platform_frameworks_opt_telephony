@@ -17,6 +17,7 @@
 package com.android.internal.telephony.dataconnection;
 
 import static android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE;
+import static android.telephony.TelephonyManager.NETWORK_TYPE_IWLAN;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_LTE;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_NR;
 
@@ -155,6 +156,12 @@ public class DcTracker extends Handler {
     private static final int NETWORK_TYPE_EMERGENCY = ConnectivityManager.TYPE_MOBILE_EMERGENCY;
     private static final int NETWORK_TYPE_MCX = 1001;  // far away from ConnectivityManager.TYPE_xxx
                                                        // constants as MCX isn't defined there.
+
+    private static final int NETWORK_TYPE_LTE_BITMASK =
+            1 << (TelephonyManager.NETWORK_TYPE_LTE - 1);
+
+    private static final int NETWORK_TYPE_IWLAN_BITMASK =
+            1 << (TelephonyManager.NETWORK_TYPE_IWLAN - 1);
 
     @IntDef(value = {
             REQUEST_TYPE_NORMAL,
@@ -4129,6 +4136,8 @@ public class DcTracker extends Handler {
         mEmergencyApn = new ApnSetting.Builder()
                 .setEntryName("Emergency")
                 .setProtocol(ApnSetting.PROTOCOL_IPV4V6)
+                .setRoamingProtocol(ApnSetting.PROTOCOL_IPV4V6)
+                .setNetworkTypeBitmask(NETWORK_TYPE_LTE_BITMASK | NETWORK_TYPE_IWLAN_BITMASK)
                 .setApnName("sos")
                 .setApnTypeBitmask(ApnSetting.TYPE_EMERGENCY)
                 .build();
@@ -4790,8 +4799,8 @@ public class DcTracker extends Handler {
                 .setApn(apn.getApnName())
                 .setProtocolType(apn.getProtocol())
                 .setAuthType(apn.getAuthType())
-                .setUserName(apn.getUser())
-                .setPassword(apn.getPassword())
+                .setUserName(apn.getUser() == null ? "" : apn.getUser())
+                .setPassword(apn.getPassword() == null ? "" : apn.getPassword())
                 .setType(profileType)
                 .setMaxConnectionsTime(apn.getMaxConnsTime())
                 .setMaxConnections(apn.getMaxConns())
