@@ -238,6 +238,30 @@
       "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01e36bb8_a5953762",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-10-29T06:43:54Z",
+      "side": 1,
+      "message": "Ok. I will update it again soon. Btw, (Car)Setting also should be fixed together or not?\n\n\nCL:1128934\nHi Taesu,\n\nFirst of all, thanks for your CL.\nThat\u0027s part of the direction that we\u0027re working on.\n\nInternally, we had another CL with similar functionality (accessing set/get SMSC and some other APIs in RadioInfo from threads).\nTherefore, I\u0027m thinking about pending your submission on Settings part.\n\nFor APIs that you added in frameworks part, those are still under reviewing.",
+      "parentUuid": "23c65fb4_e02d6c5f",
+      "range": {
+        "startLine": 587,
+        "startChar": 8,
+        "endLine": 590,
+        "endChar": 8
+      },
+      "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
