@@ -4140,6 +4140,8 @@ public class DcTracker extends Handler {
                 .setProtocol(ApnSetting.PROTOCOL_IPV4V6)
                 .setApnName("sos")
                 .setApnTypeBitmask(ApnSetting.TYPE_EMERGENCY)
+                .setUser("")
+                .setPassword("")
                 .build();
     }
 
