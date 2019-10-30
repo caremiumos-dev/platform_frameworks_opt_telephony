@@ -1269,7 +1269,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             if (isServiceCodeCallBarring(mSc)) {
                 return mContext.getText(com.android.internal.R.string.BaMmi);
             } else if (isServiceCodeCallForwarding(mSc)) {
-                return mContext.getText(com.android.internal.R.string.CfMmi);
+                return getCfType(mSc);
             } else if (mSc.equals(SC_CLIP)) {
                 return mContext.getText(com.android.internal.R.string.ClipMmi);
             } else if (mSc.equals(SC_CLIR)) {
@@ -1728,5 +1728,32 @@ public final class GsmMmiCode extends Handler implements MmiCode {
         if (mCallbackReceiver != null) sb.append(" hasReceiver");
         sb.append("}");
         return sb.toString();
+    }
+
+    public CharSequence getCfType(String sc) {
+
+        int resId = com.android.internal.R.string.CfMmi;
+        boolean needShowCfType = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_add_mmi_cf_title_type);
+        Rlog.i(LOG_TAG, "getScString needShowCfType " + needShowCfType);
+        if (needShowCfType) {
+            switch (sc) {
+                case SC_CFU:
+                    resId = com.android.internal.R.string.cfmmiuncondition;
+                    break;
+                case SC_CFB:
+                    resId = com.android.internal.R.string.cfmmibusy;
+                    break;
+                case SC_CFNRy:
+                    resId = com.android.internal.R.string.cfmminoreply;
+                    break;
+                case SC_CFNR:
+                    resId = com.android.internal.R.string.cfmminoreach;
+                    break;
+                default:
+                    break;
+            }
+        }
+        return mContext.getText(resId);
     }
 }
