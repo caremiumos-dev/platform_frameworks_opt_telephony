@@ -22,6 +22,30 @@
       "revId": "8b20f0a92cf70f3c776e6b937e4a9b5108877922",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab369c37_f2b0338d",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-10-30T08:50:44Z",
+      "side": 1,
+      "message": "No standard reference but original code in this change.\n\nAs you know, other existing facility codes are defined in 3GPP TS27.007 section7.4.\n\u003e 7.4   Facility lock +CLCK\nEach supplementary(facility) function defined in TS22.088 should be added in here too but ACR is missing as of now.\nI personally guess this is update mismatch between TS 22.008 and TS27.007. ACR function was added in TS22.088 REL11(b00) update, but TS27.007 section7.4 is not updated in that timing.\n\nI can suggest some options as below;\n1) keep current code \"AR\" as long as no issue,\n2) keep current code but add comment like \" // Not defined in TS27.007 section7.4, only for internal use\",\n3) change the \"AR\" to any other string if you want\nWhich one do you prefer?",
+      "parentUuid": "df25e5fe_cb7543c9",
+      "range": {
+        "startLine": 77,
+        "startChar": 52,
+        "endLine": 77,
+        "endChar": 56
+      },
+      "revId": "8b20f0a92cf70f3c776e6b937e4a9b5108877922",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
