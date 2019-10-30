@@ -46,6 +46,30 @@
       "revId": "8b20f0a92cf70f3c776e6b937e4a9b5108877922",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f5bcf73_ac771011",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-10-30T18:11:35Z",
+      "side": 1,
+      "message": "It will be difficult to add random notations if this is not defined in the spec\n\nWhere is the corresponding API change which populates \"AR\" when invoking ImsPhone.setCallBarring() ? How is this being invoked from app / settings?\n\nAlso this would need changes in the underlying layers.. example QC ImsService which doesn\u0027t have any handling for ACR\n\nDid you also talk to Qualcomm about this?",
+      "parentUuid": "ab369c37_f2b0338d",
+      "range": {
+        "startLine": 77,
+        "startChar": 52,
+        "endLine": 77,
+        "endChar": 56
+      },
+      "revId": "8b20f0a92cf70f3c776e6b937e4a9b5108877922",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
