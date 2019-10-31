@@ -725,6 +725,10 @@ public class PduComposer {
         }
 
         // X-Mms-Report-Allowed Optional (not support)
+        if (appendHeader(PduHeaders.REPORT_ALLOWED) != PDU_COMPOSE_SUCCESS) {
+            return PDU_COMPOSE_CONTENT_ERROR;
+        }
+
         return PDU_COMPOSE_SUCCESS;
     }
 
