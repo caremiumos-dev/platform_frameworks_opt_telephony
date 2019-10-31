@@ -262,6 +262,30 @@
       "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7818e08b_16ef6ae5",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-10-31T23:02:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01e36bb8_a5953762",
+      "range": {
+        "startLine": 587,
+        "startChar": 8,
+        "endLine": 590,
+        "endChar": 8
+      },
+      "revId": "e244058b9b5886b69dd64edda568d2cbd0f4ee76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
