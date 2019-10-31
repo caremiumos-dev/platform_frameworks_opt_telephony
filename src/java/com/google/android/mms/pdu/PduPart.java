@@ -71,6 +71,13 @@ public class PduPart {
     // The next header is unassigned header, use reserved header(0x48) value.
      public static final int P_CONTENT_TRANSFER_ENCODING = 0xC8;
 
+    /* Transfer-encoding in mms part header
+     * If pdu has Transfer-encoding in mms part headers but can't recognize this Transfer-encoding,
+     * CONTENT_ID and CONTENT_LOCATION will be skip and not stored in db, this may cause
+     * mms part can't be shown in Mms UI
+     */
+     public static final int P_TRANSFER_ENCODING = 0xA7;
+
      /**
       * Content=Transfer-Encoding string.
       */

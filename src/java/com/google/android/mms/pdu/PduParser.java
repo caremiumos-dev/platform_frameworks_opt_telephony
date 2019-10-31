@@ -1650,6 +1650,16 @@ public class PduParser {
                         tempPos = pduDataStream.available();
                         lastLen = length - (startPos - tempPos);
                         break;
+
+                    case PduPart.P_TRANSFER_ENCODING:
+                        byte[] transferEncoding = parseWapString(pduDataStream, TYPE_TEXT_STRING);
+                        if (null != transferEncoding) {
+                            part.setContentTransferEncoding(transferEncoding);
+                        }
+                        tempPos = pduDataStream.available();
+                        lastLen = length - (startPos - tempPos);
+                        break;
+
                     case PduPart.P_DEP_CONTENT_DISPOSITION:
                     case PduPart.P_CONTENT_DISPOSITION:
                         /**
