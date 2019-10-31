@@ -354,6 +354,17 @@ public class PduPersister {
         return null;
     }
 
+    /* getByteArrayFromPartColumn calls getBytes to return a byte[] which is in ISO_8859_1,
+        * however, "filename" and "name" will save to database in utf-8, to load it in correct format
+        * should encode it into utf-8 but not ISO_8859_1.
+        */
+    private byte[] getByteArrayFromPartColumnUtf8(Cursor c, int columnIndex) {
+        if (!c.isNull(columnIndex)) {
+            return c.getString(columnIndex).getBytes();
+        }
+        return null;
+    }
+
     private PduPart[] loadParts(long msgId) throws MmsException {
         Cursor c = SqliteWrapper.query(mContext, mContentResolver,
                 Uri.parse("content://mms/" + msgId + "/part"),
@@ -406,13 +417,21 @@ public class PduPersister {
                     throw new MmsException("Content-Type must be set.");
                 }
 
-                byte[] fileName = getByteArrayFromPartColumn(
+               /* getByteArrayFromPartColumn calls getBytes to return a byte[] which is in ISO_8859_1,
+                * however, "filename" and "name" will save to database in utf-8, to load it in correct format
+                * should encode it into utf-8 but not ISO_8859_1.
+                */
+                byte[] fileName = getByteArrayFromPartColumnUtf8(
                         c, PART_COLUMN_FILENAME);
                 if (fileName != null) {
                     part.setFilename(fileName);
                 }
 
-                byte[] name = getByteArrayFromPartColumn(
+               /* getByteArrayFromPartColumn calls getBytes to return a byte[] which is in ISO_8859_1,
+                * however, "filename" and "name" will save to database in utf-8, to load it in correct format
+                * should encode it into utf-8 but not ISO_8859_1.
+                */
+                byte[] name = getByteArrayFromPartColumnUtf8(
                         c, PART_COLUMN_NAME);
                 if (name != null) {
                     part.setName(name);
