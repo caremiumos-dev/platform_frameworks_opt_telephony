@@ -843,6 +843,11 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
+    public void sendCdmaSMSExpectMore(byte[] pdu, Message response) {
+
+    }
+
+    @Override
     public void sendImsGsmSms(String smscPDU, String pdu, int retry, int messageRef,
                               Message response) {
 
