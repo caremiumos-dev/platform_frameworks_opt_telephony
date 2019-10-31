@@ -3034,6 +3034,33 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
+    public void sendCdmaSMSExpectMore(byte[] pdu, Message result) {
+        if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
+          IRadio radioProxy = getRadioProxy(result);
+          if (radioProxy != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_CDMA_SEND_SMS_EXPECT_MORE, result,
+                    mRILDefaultWorkSource);
+
+            // Do not log function arg for privacy
+            if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+            CdmaSmsMessage msg = new CdmaSmsMessage();
+            constructCdmaSendSmsRilRequest(msg, pdu);
+
+            try {
+                radioProxy.sendCdmaSMSExpectMore(rr.mSerial, msg);
+                mMetrics.writeRilSendSms(mPhoneId, rr.mSerial, SmsSession.Event.Tech.SMS_CDMA,
+                        SmsSession.Event.Format.SMS_FORMAT_3GPP2);
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "sendCdmaSMSExpectMore", e);
+            }
+          }  
+        } else{
+            sendCdmaSms(pdu, result);
+        }
+    }
+
+    @Override
     public void sendCdmaSms(byte[] pdu, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
@@ -5432,6 +5459,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_CDMA_BURST_DTMF";
             case RIL_REQUEST_CDMA_SEND_SMS:
                 return "RIL_REQUEST_CDMA_SEND_SMS";
+            case RIL_REQUEST_CDMA_SEND_SMS_EXPECT_MORE:
+                return "RIL_REQUEST_CDMA_SEND_SMS_EXPECT_MORE";
             case RIL_REQUEST_CDMA_SMS_ACKNOWLEDGE:
                 return "RIL_REQUEST_CDMA_SMS_ACKNOWLEDGE";
             case RIL_REQUEST_GSM_GET_BROADCAST_CONFIG:
