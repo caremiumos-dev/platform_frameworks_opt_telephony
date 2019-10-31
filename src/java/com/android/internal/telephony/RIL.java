@@ -3034,6 +3034,11 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
+    public void sendCdmaSms(byte[] pdu, Message result, boolean expectMore) {
+        sendCdmaSms(pdu, result);
+    }
+
+    @Override
     public void sendCdmaSms(byte[] pdu, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
