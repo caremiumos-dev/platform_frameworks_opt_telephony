@@ -348,11 +348,12 @@ public class NetworkRegistrationManager extends Handler {
 
         return className;
     }
-    private void logd(String msg) {
-        Rlog.d(mTag, msg);
+
+    private int logd(String msg) {
+        return Rlog.d(mTag, "[" + mPhone.getPhoneId() +"]" +  msg);
     }
 
-    private void loge(String msg) {
-        Rlog.e(mTag, msg);
+    private int loge(String msg) {
+        return Rlog.e(mTag, "[" + mPhone.getPhoneId() +"]" +  msg);
     }
 }

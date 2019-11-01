@@ -1919,22 +1919,22 @@ public class SIMRecords extends IccRecords {
     @UnsupportedAppUsage
     @Override
     protected void log(String s) {
-        Rlog.d(LOG_TAG, "[SIMRecords] " + s);
+        Rlog.d(LOG_TAG, "[SIMRecords][" + mParentApp.getPhoneId() + "]" + s);
     }
 
     @UnsupportedAppUsage
     @Override
     protected void loge(String s) {
-        Rlog.e(LOG_TAG, "[SIMRecords] " + s);
+        Rlog.e(LOG_TAG, "[SIMRecords][" + mParentApp.getPhoneId() + "]" + s);
     }
 
     protected void logw(String s, Throwable tr) {
-        Rlog.w(LOG_TAG, "[SIMRecords] " + s, tr);
+        Rlog.w(LOG_TAG, "[SIMRecords][" + mParentApp.getPhoneId() + "]"  + s, tr);
     }
 
     @UnsupportedAppUsage
     protected void logv(String s) {
-        Rlog.v(LOG_TAG, "[SIMRecords] " + s);
+        Rlog.v(LOG_TAG, "[SIMRecords][" + mParentApp.getPhoneId() + "]" + s);
     }
 
     /**

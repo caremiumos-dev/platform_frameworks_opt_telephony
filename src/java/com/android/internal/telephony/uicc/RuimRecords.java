@@ -948,13 +948,13 @@ public class RuimRecords extends IccRecords {
     @UnsupportedAppUsage
     @Override
     protected void log(String s) {
-        Rlog.d(LOG_TAG, "[RuimRecords] " + s);
+        Rlog.d(LOG_TAG, "[RuimRecords] ["+ mParentApp.getPhoneId() + "]" + s);
     }
 
     @UnsupportedAppUsage
     @Override
     protected void loge(String s) {
-        Rlog.e(LOG_TAG, "[RuimRecords] " + s);
+        Rlog.e(LOG_TAG, "[RuimRecords]["+ mParentApp.getPhoneId() + "]" + s);
     }
 
     @Override

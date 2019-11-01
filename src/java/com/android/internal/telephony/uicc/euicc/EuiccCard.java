@@ -1419,21 +1419,21 @@ public class EuiccCard extends UiccCard {
         return iccId;
     }
 
-    private static void loge(String message) {
-        Rlog.e(LOG_TAG, message);
+    private void loge(String message) {
+        Rlog.e(LOG_TAG,"[" + getPhoneId() + "]" + message);
     }
 
-    private static void loge(String message, Throwable tr) {
-        Rlog.e(LOG_TAG, message, tr);
+    private void loge(String message, Throwable tr) {
+        Rlog.e(LOG_TAG,"[" + getPhoneId() + "]" + message, tr);
     }
 
-    private static void logi(String message) {
-        Rlog.i(LOG_TAG, message);
+    private void logi(String message) {
+        Rlog.i(LOG_TAG,"[" + getPhoneId() + "]" + message);
     }
 
-    private static void logd(String message) {
+    private void logd(String message) {
         if (DBG) {
-            Rlog.d(LOG_TAG, message);
+            Rlog.d(LOG_TAG,"[" + getPhoneId() + "]" + message);
         }
     }
 

@@ -1198,10 +1198,10 @@ public class UiccProfile extends IccCard {
             // mechanism (like CarrierAppUtils) would automatically enable such an app, so we
             // shouldn't prompt the user about it.
             pm.getApplicationInfo(pkgName, PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS);
-            if (DBG) log(pkgName + " is installed.");
+            if (DBG) Rlog.d(LOG_TAG, pkgName + " is installed.");
             return true;
         } catch (PackageManager.NameNotFoundException e) {
-            if (DBG) log(pkgName + " is not installed.");
+            if (DBG) Rlog.d(LOG_TAG,pkgName + " is not installed.");
             return false;
         }
     }
@@ -1318,7 +1318,7 @@ public class UiccProfile extends IccCard {
             if (keyValue.length == 2) {
                 map.put(keyValue[0].toUpperCase(), keyValue[1]);
             } else {
-                loge("Incorrect length of key-value pair in carrier app whitelist map.  "
+                Rlog.e(LOG_TAG,"Incorrect length of key-value pair in carrier app whitelist map.  "
                         + "Length should be exactly 2");
             }
         }
@@ -1680,12 +1680,12 @@ public class UiccProfile extends IccCard {
         return null;
     }
 
-    private static void log(String msg) {
-        Rlog.d(LOG_TAG, msg);
+    private void log(String msg) {
+        Rlog.d(LOG_TAG,"[" + mPhoneId + "]" + msg);
     }
 
-    private static void loge(String msg) {
-        Rlog.e(LOG_TAG, msg);
+    private void loge(String msg) {
+        Rlog.e(LOG_TAG,"[" + mPhoneId + "]" + msg);
     }
 
     private void loglocal(String msg) {

@@ -119,11 +119,11 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     private BroadcastReceiver mImsIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Rlog.d(LOG_TAG, "mImsIntentReceiver: action " + intent.getAction());
+            logd("mImsIntentReceiver: action " + intent.getAction());
             if (intent.hasExtra(ImsManager.EXTRA_PHONE_ID)) {
                 int extraPhoneId = intent.getIntExtra(ImsManager.EXTRA_PHONE_ID,
                         SubscriptionManager.INVALID_PHONE_INDEX);
-                Rlog.d(LOG_TAG, "mImsIntentReceiver: extraPhoneId = " + extraPhoneId);
+                logd("mImsIntentReceiver: extraPhoneId = " + extraPhoneId);
                 if (extraPhoneId == SubscriptionManager.INVALID_PHONE_INDEX ||
                         extraPhoneId != getPhoneId()) {
                     return;
@@ -557,11 +557,11 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
          */
         mDoesRilSendMultipleCallRing = SystemProperties.getBoolean(
                 TelephonyProperties.PROPERTY_RIL_SENDS_MULTIPLE_CALL_RING, true);
-        Rlog.d(LOG_TAG, "mDoesRilSendMultipleCallRing=" + mDoesRilSendMultipleCallRing);
+        logd("mDoesRilSendMultipleCallRing=" + mDoesRilSendMultipleCallRing);
 
         mCallRingDelay = SystemProperties.getInt(
                 TelephonyProperties.PROPERTY_CALL_RING_DELAY, 3000);
-        Rlog.d(LOG_TAG, "mCallRingDelay=" + mCallRingDelay);
+        logd("mCallRingDelay=" + mCallRingDelay);
 
         if (getPhoneType() == PhoneConstants.PHONE_TYPE_IMS) {
             return;
@@ -684,7 +684,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
         switch(msg.what) {
             case EVENT_CALL_RING:
-                Rlog.d(LOG_TAG, "Event EVENT_CALL_RING Received state=" + getState());
+                logd("Event EVENT_CALL_RING Received state=" + getState());
                 ar = (AsyncResult)msg.obj;
                 if (ar.exception == null) {
                     PhoneConstants.State state = getState();
@@ -700,7 +700,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 break;
 
             case EVENT_CALL_RING_CONTINUE:
-                Rlog.d(LOG_TAG, "Event EVENT_CALL_RING_CONTINUE Received state=" + getState());
+                logd("Event EVENT_CALL_RING_CONTINUE Received state=" + getState());
                 if (getState() == PhoneConstants.State.RINGING) {
                     sendIncomingCallRingNotification(msg.arg1);
                 }
@@ -711,7 +711,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 break;
 
             case EVENT_INITIATE_SILENT_REDIAL:
-                Rlog.d(LOG_TAG, "Event EVENT_INITIATE_SILENT_REDIAL Received");
+                logd("Event EVENT_INITIATE_SILENT_REDIAL Received");
                 ar = (AsyncResult) msg.obj;
                 if ((ar.exception == null) && (ar.result != null)) {
                     String dialString = (String) ar.result;
@@ -724,7 +724,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                             mImsPhone.notifyRedialConnectionChanged(cn);
                         }
                     } catch (CallStateException e) {
-                        Rlog.e(LOG_TAG, "silent redial failed: " + e);
+                        loge("silent redial failed: " + e);
                         if (mImsPhone != null) {
                             mImsPhone.notifyRedialConnectionChanged(null);
                         }
@@ -737,7 +737,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 if (ar.exception == null) {
                     handleSrvccStateChanged((int[]) ar.result);
                 } else {
-                    Rlog.e(LOG_TAG, "Srvcc exception: " + ar.exception);
+                    loge("Srvcc exception: " + ar.exception);
                 }
                 break;
 
@@ -747,14 +747,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                     byte[] data = (byte[])ar.result;
                     mNotifier.notifyOemHookRawEventForSubscriber(this, data);
                 } else {
-                    Rlog.e(LOG_TAG, "OEM hook raw exception: " + ar.exception);
+                    loge("OEM hook raw exception: " + ar.exception);
                 }
                 break;
 
             case EVENT_CONFIG_LCE:
                 ar = (AsyncResult) msg.obj;
                 if (ar.exception != null) {
-                    Rlog.d(LOG_TAG, "config LCE service failed: " + ar.exception);
+                    logd("config LCE service failed: " + ar.exception);
                 } else {
                     final ArrayList<Integer> statusInfo = (ArrayList<Integer>)ar.result;
                     mLceStatus = statusInfo.get(0);
@@ -790,7 +790,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     private void handleSrvccStateChanged(int[] ret) {
-        Rlog.d(LOG_TAG, "handleSrvccStateChanged");
+        logd("handleSrvccStateChanged");
 
         ArrayList<Connection> conn = null;
         Phone imsPhone = mImsPhone;
@@ -804,7 +804,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                         conn = imsPhone.getHandoverConnection();
                         migrateFrom(imsPhone);
                     } else {
-                        Rlog.d(LOG_TAG, "HANDOVER_STARTED: mImsPhone null");
+                        logd("HANDOVER_STARTED: mImsPhone null");
                     }
                     break;
                 case TelephonyManager.SRVCC_STATE_HANDOVER_COMPLETED:
@@ -812,7 +812,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                     if (imsPhone != null) {
                         imsPhone.notifySrvccState(srvccState);
                     } else {
-                        Rlog.d(LOG_TAG, "HANDOVER_COMPLETED: mImsPhone null");
+                        logd("HANDOVER_COMPLETED: mImsPhone null");
                     }
                     break;
                 case TelephonyManager.SRVCC_STATE_HANDOVER_FAILED:
@@ -1042,7 +1042,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                     to.add((Registrant) from.get(i));
                 }
             } else {
-                Rlog.d(LOG_TAG, "msg is null");
+                logd("msg is null");
             }
         }
     }
@@ -1339,7 +1339,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     @UnsupportedAppUsage
     public void setNetworkSelectionModeAutomatic(Message response) {
-        Rlog.d(LOG_TAG, "setNetworkSelectionModeAutomatic, querying current mode");
+        logd("setNetworkSelectionModeAutomatic, querying current mode");
         // we don't want to do this unecesarily - it acutally causes
         // the radio to repeate network selection and is costly
         // first check if we're already in automatic mode
@@ -1377,7 +1377,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             Message msg = obtainMessage(EVENT_SET_NETWORK_AUTOMATIC_COMPLETE, nsm);
             mCi.setNetworkSelectionModeAutomatic(msg);
         } else {
-            Rlog.d(LOG_TAG, "setNetworkSelectionModeAutomatic - already auto, ignoring");
+            logd("setNetworkSelectionModeAutomatic - already auto, ignoring");
             // let the calling application know that the we are ignoring automatic mode switch.
             if (nsm.message != null) {
                 nsm.message.arg1 = ALREADY_IN_AUTO_SELECTION;
@@ -1464,10 +1464,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
             // commit and log the result.
             if (!editor.commit()) {
-                Rlog.e(LOG_TAG, "failed to commit network selection preference");
+                loge("failed to commit network selection preference");
             }
         } else {
-            Rlog.e(LOG_TAG, "Cannot update network selection preference due to invalid subId " +
+            loge("Cannot update network selection preference due to invalid subId " +
                     subId);
         }
     }
@@ -1479,7 +1479,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         // look for our wrapper within the asyncresult, skip the rest if it
         // is null.
         if (!(ar.userObj instanceof NetworkSelectMessage)) {
-            Rlog.e(LOG_TAG, "unexpected result from user object.");
+            loge("unexpected result from user object.");
             return;
         }
 
@@ -1542,12 +1542,12 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(CLIR_KEY + getSubId(), commandInterfaceCLIRMode);
-        Rlog.i(LOG_TAG, "saveClirSetting: " + CLIR_KEY + getSubId() + "="
+        logi("saveClirSetting: " + CLIR_KEY + getSubId() + "="
                 + commandInterfaceCLIRMode);
 
         // Commit and log the result.
         if (!editor.commit()) {
-            Rlog.e(LOG_TAG, "Failed to commit CLIR preference");
+            loge("Failed to commit CLIR preference");
         }
     }
 
@@ -1757,13 +1757,13 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         IccFileHandler fh;
 
         if (uiccApplication == null) {
-            Rlog.d(LOG_TAG, "getIccFileHandler: uiccApplication == null, return null");
+            logd("getIccFileHandler: uiccApplication == null, return null");
             fh = null;
         } else {
             fh = uiccApplication.getIccFileHandler();
         }
 
-        Rlog.d(LOG_TAG, "getIccFileHandler: fh=" + fh);
+        logd("getIccFileHandler: fh=" + fh);
         return fh;
     }
 
@@ -1842,7 +1842,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * Update voice mail count related fields and notify listeners
      */
     public void updateVoiceMail() {
-        Rlog.e(LOG_TAG, "updateVoiceMail() should be overridden");
+        loge("updateVoiceMail() should be overridden");
     }
 
     public AppType getCurrentUiccAppType() {
@@ -1961,7 +1961,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (SubscriptionManager.isValidSubscriptionId(subId)) {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
             status = sp.getInt(CF_STATUS + subId, IccRecords.CALL_FORWARDING_STATUS_UNKNOWN);
-            Rlog.d(LOG_TAG, "getCallForwardingIndicatorFromSharedPref: for subId " + subId + "= " +
+            logd("getCallForwardingIndicatorFromSharedPref: for subId " + subId + "= " +
                     status);
             // Check for old preference if status is UNKNOWN for current subId. This part of the
             // code is needed only when upgrading from M to N.
@@ -1975,9 +1975,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                         status = sp.getInt(CF_STATUS, IccRecords.CALL_FORWARDING_STATUS_DISABLED);
                         setCallForwardingIndicatorInSharedPref(
                                 status == IccRecords.CALL_FORWARDING_STATUS_ENABLED ? true : false);
-                        Rlog.d(LOG_TAG, "getCallForwardingIndicatorFromSharedPref: " + status);
+                        logd("getCallForwardingIndicatorFromSharedPref: " + status);
                     } else {
-                        Rlog.d(LOG_TAG, "getCallForwardingIndicatorFromSharedPref: returning " +
+                        logd("getCallForwardingIndicatorFromSharedPref: returning " +
                                 "DISABLED as status for matching subscriberId not found");
                     }
 
@@ -1989,7 +1989,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 }
             }
         } else {
-            Rlog.e(LOG_TAG, "getCallForwardingIndicatorFromSharedPref: invalid subId " + subId);
+            loge("getCallForwardingIndicatorFromSharedPref: invalid subId " + subId);
         }
         return status;
     }
@@ -1998,7 +1998,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         int status = enable ? IccRecords.CALL_FORWARDING_STATUS_ENABLED :
                 IccRecords.CALL_FORWARDING_STATUS_DISABLED;
         int subId = getSubId();
-        Rlog.i(LOG_TAG, "setCallForwardingIndicatorInSharedPref: Storing status = " + status +
+        logi("setCallForwardingIndicatorInSharedPref: Storing status = " + status +
                 " in pref " + CF_STATUS + subId);
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -2037,7 +2037,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public boolean getCallForwardingIndicator() {
         if (getPhoneType() == PhoneConstants.PHONE_TYPE_CDMA) {
-            Rlog.e(LOG_TAG, "getCallForwardingIndicator: not possible in CDMA");
+            loge("getCallForwardingIndicator: not possible in CDMA");
             return false;
         }
         IccRecords r = mIccRecords.get();
@@ -2048,7 +2048,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (callForwardingIndicator == IccRecords.CALL_FORWARDING_STATUS_UNKNOWN) {
             callForwardingIndicator = getCallForwardingIndicatorFromSharedPref();
         }
-        Rlog.v(LOG_TAG, "getCallForwardingIndicator: iccForwardingFlag=" + (r != null
+        logv("getCallForwardingIndicator: iccForwardingFlag=" + (r != null
                     ? r.getVoiceCallForwardingFlag() : "null") + ", sharedPrefFlag="
                     + getCallForwardingIndicatorFromSharedPref());
         return (callForwardingIndicator == IccRecords.CALL_FORWARDING_STATUS_ENABLED);
@@ -2131,7 +2131,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
         if (modemRaf == RadioAccessFamily.RAF_UNKNOWN
                 || rafFromType == RadioAccessFamily.RAF_UNKNOWN) {
-            Rlog.d(LOG_TAG, "setPreferredNetworkType: Abort, unknown RAF: "
+            logd("setPreferredNetworkType: Abort, unknown RAF: "
                     + modemRaf + " " + rafFromType);
             if (response != null) {
                 CommandException ex;
@@ -2146,7 +2146,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         int filteredRaf = (rafFromType & modemRaf);
         int filteredType = RadioAccessFamily.getNetworkTypeFromRaf(filteredRaf);
 
-        Rlog.d(LOG_TAG, "setPreferredNetworkType: networkType = " + networkType
+        logd("setPreferredNetworkType: networkType = " + networkType
                 + " modemRaf = " + modemRaf
                 + " rafFromType = " + rafFromType
                 + " filteredType = " + filteredType);
@@ -2209,7 +2209,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * @param onComplete a callback message when the action is completed
      */
     public void setUiTTYMode(int uiTtyMode, Message onComplete) {
-        Rlog.d(LOG_TAG, "unexpected setUiTTYMode method call");
+        logd("unexpected setUiTTYMode method call");
     }
 
     /**
@@ -2516,7 +2516,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                     isVideoCallOrConference(mImsPhone.getBackgroundCall()) ||
                     isVideoCallOrConference(mImsPhone.getRingingCall());
         }
-        Rlog.d(LOG_TAG, "isImsVideoCallOrConferencePresent: " + isPresent);
+        logd("isImsVideoCallOrConferencePresent: " + isPresent);
         return isPresent;
     }
 
@@ -2541,7 +2541,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         int subId = getSubId();
         if (SubscriptionManager.isValidSubscriptionId(subId)) {
 
-            Rlog.d(LOG_TAG, "setVoiceMessageCount: Storing Voice Mail Count = " + countWaiting +
+            logd("setVoiceMessageCount: Storing Voice Mail Count = " + countWaiting +
                     " for mVmCountKey = " + VM_COUNT + subId + " in preferences.");
 
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -2549,7 +2549,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             editor.putInt(VM_COUNT + subId, countWaiting);
             editor.apply();
         } else {
-            Rlog.e(LOG_TAG, "setVoiceMessageCount in sharedPreference: invalid subId " + subId);
+            loge("setVoiceMessageCount in sharedPreference: invalid subId " + subId);
         }
         // store voice mail count in SIM
         IccRecords records = UiccController.getInstance().getIccRecords(
@@ -2574,7 +2574,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             int countFromSP = sp.getInt(VM_COUNT + subId, invalidCount);
             if (countFromSP != invalidCount) {
                 countVoiceMessages = countFromSP;
-                Rlog.d(LOG_TAG, "getStoredVoiceMessageCount: from preference for subId " + subId +
+                logd("getStoredVoiceMessageCount: from preference for subId " + subId +
                         "= " + countVoiceMessages);
             } else {
                 // Check for old preference if count not found for current subId. This part of the
@@ -2587,10 +2587,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                         // get voice mail count from preferences
                         countVoiceMessages = sp.getInt(VM_COUNT, 0);
                         setVoiceMessageCount(countVoiceMessages);
-                        Rlog.d(LOG_TAG, "getStoredVoiceMessageCount: from preference = " +
+                        logd("getStoredVoiceMessageCount: from preference = " +
                                 countVoiceMessages);
                     } else {
-                        Rlog.d(LOG_TAG, "getStoredVoiceMessageCount: returning 0 as count for " +
+                        logd("getStoredVoiceMessageCount: returning 0 as count for " +
                                 "matching subscriberId not found");
 
                     }
@@ -2602,7 +2602,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 }
             }
         } else {
-            Rlog.e(LOG_TAG, "getStoredVoiceMessageCount: invalid subId " + subId);
+            loge("getStoredVoiceMessageCount: invalid subId " + subId);
         }
         return countVoiceMessages;
     }
@@ -3225,12 +3225,12 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     private void sendIncomingCallRingNotification(int token) {
         if (mIsVoiceCapable && !mDoesRilSendMultipleCallRing &&
                 (token == mCallRingContinueToken)) {
-            Rlog.d(LOG_TAG, "Sending notifyIncomingRing");
+            logd("Sending notifyIncomingRing");
             notifyIncomingRing();
             sendMessageDelayed(
                     obtainMessage(EVENT_CALL_RING_CONTINUE, token, 0), mCallRingDelay);
         } else {
-            Rlog.d(LOG_TAG, "Ignoring ring notification request,"
+            logd("Ignoring ring notification request,"
                     + " mDoesRilSendMultipleCallRing=" + mDoesRilSendMultipleCallRing
                     + " token=" + token
                     + " mCallRingContinueToken=" + mCallRingContinueToken
@@ -3259,7 +3259,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     @UnsupportedAppUsage
     public IsimRecords getIsimRecords() {
-        Rlog.e(LOG_TAG, "getIsimRecords() is only supported on LTE devices");
+        loge("getIsimRecords() is only supported on LTE devices");
         return null;
     }
 
@@ -3323,7 +3323,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public void setVoiceMessageWaiting(int line, int countWaiting) {
         // This function should be overridden by class GsmCdmaPhone.
-        Rlog.e(LOG_TAG, "Error! This function should never be executed, inactive Phone.");
+        loge("Error! This function should never be executed, inactive Phone.");
     }
 
     /**
@@ -3448,7 +3448,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     private void updateImsPhone() {
-        Rlog.d(LOG_TAG, "updateImsPhone"
+        logd("updateImsPhone"
                 + " mImsServiceReady=" + mImsServiceReady);
 
         if (mImsServiceReady && (mImsPhone == null)) {
@@ -3595,7 +3595,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 isImsRegistered = sst.isImsRegistered();
             }
         }
-        Rlog.d(LOG_TAG, "isImsRegistered =" + isImsRegistered);
+        logd("isImsRegistered =" + isImsRegistered);
         return isImsRegistered;
     }
 
@@ -3609,7 +3609,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (imsPhone != null) {
             isWifiCallingEnabled = imsPhone.isWifiCallingEnabled();
         }
-        Rlog.d(LOG_TAG, "isWifiCallingEnabled =" + isWifiCallingEnabled);
+        logd("isWifiCallingEnabled =" + isWifiCallingEnabled);
         return isWifiCallingEnabled;
     }
 
@@ -3637,7 +3637,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (imsPhone != null) {
             isVolteEnabled = imsPhone.isVolteEnabled();
         }
-        Rlog.d(LOG_TAG, "isImsRegistered =" + isVolteEnabled);
+        logd("isImsRegistered =" + isVolteEnabled);
         return isVolteEnabled;
     }
 
@@ -3651,7 +3651,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (imsPhone != null) {
             regTech = imsPhone.getImsRegistrationTech();
         }
-        Rlog.d(LOG_TAG, "getImsRegistrationTechnology =" + regTech);
+        logd("getImsRegistrationTechnology =" + regTech);
         return regTech;
     }
 
@@ -4279,5 +4279,21 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             pw.flush();
             pw.println("++++++++++++++++++++++++++++++++");
         }
+    }
+
+    private void logd(String s) {
+        Rlog.d(LOG_TAG, "[" + mPhoneId + "] " + s);
+    }
+
+    private void logi(String s) {
+        Rlog.i(LOG_TAG, "[" + mPhoneId + "] " + s);
+    }
+
+    private void loge(String s) {
+        Rlog.e(LOG_TAG, "[" + mPhoneId + "] " + s);
+    }
+
+    private void logv(String s) {
+        Rlog.v(LOG_TAG, "[" + mPhoneId + "] " + s);
     }
 }

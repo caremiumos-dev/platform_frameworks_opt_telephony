@@ -516,12 +516,12 @@ public class UiccCard {
 
     @UnsupportedAppUsage
     private void log(String msg) {
-        Rlog.d(LOG_TAG, msg);
+        Rlog.d(LOG_TAG, "[" + mPhoneId + "] " + msg);
     }
 
     @UnsupportedAppUsage
     private void loge(String msg) {
-        Rlog.e(LOG_TAG, msg);
+        Rlog.e(LOG_TAG, "[" + mPhoneId + "] " + msg);
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
@@ -534,5 +534,13 @@ public class UiccCard {
         if (mUiccProfile != null) {
             mUiccProfile.dump(fd, pw, args);
         }
+    }
+
+    private void logd(String msg) {
+        Rlog.d(LOG_TAG, "[" + mPhoneId + "] " + msg);
+    }
+
+    private void logi(String msg) {
+        Rlog.i(LOG_TAG, "[" + mPhoneId + "] " + msg);
     }
 }
