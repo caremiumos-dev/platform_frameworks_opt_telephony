@@ -1687,6 +1687,8 @@ public class SIMRecords extends IccRecords {
     /**
      * States of Get SPN Finite State Machine which only used by getSpnFsm()
      */
+    @UnsupportedAppUsage(implicitMember =
+            "values()[Lcom/android/internal/telephony/uicc/SIMRecords$GetSpnFsmState;")
     private enum GetSpnFsmState {
         IDLE,               // No initialized
         @UnsupportedAppUsage

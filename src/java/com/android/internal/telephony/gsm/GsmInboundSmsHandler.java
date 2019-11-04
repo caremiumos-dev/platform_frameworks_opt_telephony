@@ -36,6 +36,8 @@ import com.android.internal.telephony.SmsStorageMonitor;
 import com.android.internal.telephony.VisualVoicemailSmsFilter;
 import com.android.internal.telephony.uicc.UsimServiceTable;
 
+import dalvik.annotation.compat.UnsupportedAppUsage;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 
@@ -295,6 +297,7 @@ public class GsmInboundSmsHandler extends InboundSmsHandler {
      * @param result result code indicating any error
      * @param response callback message sent when operation completes.
      */
+    @UnsupportedAppUsage
     @Override
     protected void acknowledgeLastIncomingSms(boolean success, int result, Message response) {
         mPhone.mCi.acknowledgeLastIncomingGsmSms(success, resultToCause(result), response);
