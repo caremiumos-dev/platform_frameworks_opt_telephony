@@ -16,10 +16,12 @@
 
 package android.telephony;
 
+import android.annotation.UnsupportedAppUsage;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.IBinder;
 import android.service.carrier.CarrierMessagingService;
 import android.service.carrier.ICarrierMessagingService;
@@ -43,6 +45,11 @@ import com.android.internal.util.Preconditions;
  * @hide
  */
 public abstract class CarrierMessagingServiceManager {
+
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.P)
+    public CarrierMessagingServiceManager() {
+    }
+
     // Populated by bindToCarrierMessagingService. bindToCarrierMessagingService must complete
     // prior to calling disposeConnection so that mCarrierMessagingServiceConnection is initialized.
     private volatile CarrierMessagingServiceConnection mCarrierMessagingServiceConnection;
