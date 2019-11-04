@@ -36,10 +36,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelUuid;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.telephony.CarrierConfigManager;
@@ -51,6 +53,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.util.ArrayUtils;
 
 import java.lang.annotation.Retention;
@@ -82,6 +85,7 @@ public class MultiSimSettingController extends Handler {
     private static final int EVENT_CARRIER_CONFIG_CHANGED            = 7;
     private static final int EVENT_MULTI_SIM_CONFIG_CHANGED          = 8;
 
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef(prefix = {"PRIMARY_SUB_"},
             value = {
@@ -91,7 +95,8 @@ public class MultiSimSettingController extends Handler {
                     PRIMARY_SUB_SWAPPED,
                     PRIMARY_SUB_SWAPPED_IN_GROUP,
                     PRIMARY_SUB_MARKED_OPPT,
-                    PRIMARY_SUB_INITIALIZED
+                    PRIMARY_SUB_INITIALIZED,
+                    PRIMARY_SUB_SELECTED_BY_USER
     })
     private @interface PrimarySubChangeType {}
 
@@ -109,9 +114,14 @@ public class MultiSimSettingController extends Handler {
     private static final int PRIMARY_SUB_MARKED_OPPT            = 5;
     // Subscription information is initially loaded.
     private static final int PRIMARY_SUB_INITIALIZED            = 6;
+    // Primary subscriptions should pop dialog to be selected by user.
+    private static final int PRIMARY_SUB_SELECTED_BY_USER       = 7;
+    // Save iccid in share preference
+    private static final String ICC_ID = "primary_sub_icc_id";
 
     private final Context mContext;
     private final SubscriptionController mSubController;
+    private PrimarySubConfig mPrimarySubConfig ;
     // Keep a record of active primary (non-opportunistic) subscription list.
     @NonNull private List<Integer> mPrimarySubList = new ArrayList<>();
 
@@ -183,6 +193,7 @@ public class MultiSimSettingController extends Handler {
     public MultiSimSettingController(Context context, SubscriptionController sc) {
         mContext = context;
         mSubController = sc;
+        mPrimarySubConfig = PrimarySubConfig.init(mContext);
 
         // Initialize mCarrierConfigLoadedSubIds and register to listen to carrier config change.
         final int phoneCount = ((TelephonyManager) mContext.getSystemService(
@@ -478,6 +489,7 @@ public class MultiSimSettingController extends Handler {
             mSubController.setDefaultDataSubId(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
             mSubController.setDefaultVoiceSubId(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
             mSubController.setDefaultSmsSubId(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+            handleIccCardChanged();
             return;
         }
 
@@ -498,6 +510,7 @@ public class MultiSimSettingController extends Handler {
             mSubController.setDefaultDataSubId(subId);
             mSubController.setDefaultVoiceSubId(subId);
             mSubController.setDefaultSmsSubId(subId);
+            handleIccCardChanged();
             return;
         }
 
@@ -505,20 +518,37 @@ public class MultiSimSettingController extends Handler {
 
         // Update default data subscription.
         if (DBG) log("[updateDefaultValues] Update default data subscription");
-        boolean dataSelected = updateDefaultValue(mPrimarySubList,
-                mSubController.getDefaultDataSubId(),
-                (newValue -> mSubController.setDefaultDataSubId(newValue)));
+        boolean dataSelected;
+        boolean operatorRequiredDefaultDataSub = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_operator_default_choose_data_sub);
+        if (!operatorRequiredDefaultDataSub) {
+            dataSelected = updateDefaultValue(mPrimarySubList,
+                    mSubController.getDefaultDataSubId(), SubscriptionManager.INVALID_SUBSCRIPTION_ID,
+                    (newValue -> mSubController.setDefaultDataSubId(newValue)));
+        } else {
+            mPrimarySubConfig.update();
+            if (mPrimarySubConfig.isPopupDefaultDataPrompt()
+                    && handleIccCardChanged()) {
+                change = PRIMARY_SUB_SELECTED_BY_USER;
+            }
+
+            int primarySubId = mSubController.getSubIdUsingPhoneId(
+                    mPrimarySubConfig.getPreferredPrimaryCard());
+            dataSelected = updateDefaultValue(mPrimarySubList,
+                    mSubController.getDefaultDataSubId(), primarySubId,
+                    (newValue -> mSubController.setDefaultDataSubId(newValue)));
+        }
 
         // Update default voice subscription.
         if (DBG) log("[updateDefaultValues] Update default voice subscription");
         boolean voiceSelected = updateDefaultValue(mPrimarySubList,
-                mSubController.getDefaultVoiceSubId(),
+                mSubController.getDefaultVoiceSubId(), SubscriptionManager.INVALID_SUBSCRIPTION_ID,
                 (newValue -> mSubController.setDefaultVoiceSubId(newValue)));
 
         // Update default sms subscription.
         if (DBG) log("[updateDefaultValues] Update default sms subscription");
         boolean smsSelected = updateDefaultValue(mPrimarySubList,
-                mSubController.getDefaultSmsSubId(),
+                mSubController.getDefaultSmsSubId(), SubscriptionManager.INVALID_SUBSCRIPTION_ID,
                 (newValue -> mSubController.setDefaultSmsSubId(newValue)));
 
         sendSubChangeNotificationIfNeeded(change, dataSelected, voiceSelected, smsSelected);
@@ -663,7 +693,7 @@ public class MultiSimSettingController extends Handler {
 
     private boolean isUserVisibleChange(int change) {
         return (change == PRIMARY_SUB_ADDED || change == PRIMARY_SUB_REMOVED
-                || change == PRIMARY_SUB_SWAPPED);
+                || change == PRIMARY_SUB_SWAPPED || change == PRIMARY_SUB_SELECTED_BY_USER);
     }
 
     private void disableDataForNonDefaultNonOpportunisticSubscriptions() {
@@ -746,10 +776,8 @@ public class MultiSimSettingController extends Handler {
     }
 
     // Returns whether the new default value is valid.
-    private boolean updateDefaultValue(List<Integer> primarySubList, int oldValue,
+    private boolean updateDefaultValue(List<Integer> primarySubList, int oldValue, int newValue,
             UpdateDefaultAction action) {
-        int newValue = INVALID_SUBSCRIPTION_ID;
-
         if (primarySubList.size() > 0) {
             for (int subId : primarySubList) {
                 if (DBG) log("[updateDefaultValue] Record.id: " + subId);
@@ -801,6 +829,44 @@ public class MultiSimSettingController extends Handler {
             euiccManager.switchToSubscription(SubscriptionManager.INVALID_SUBSCRIPTION_ID,
                     PendingIntent.getService(mContext, 0, new Intent(), 0));
         }
+    }
+
+    private boolean handleIccCardChanged() {
+        boolean isIccChanged = false;
+        // No need to save ICCID if any card is unknown because both SIMs may
+        // haven't been changed.
+        if (!PhoneFactory.getDefaultPhone().isShuttingDown()) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
+                String lastIccId = preferences.getString(ICC_ID + i, null);
+                String newIccId = getIccId(i);
+                log("[handleIccCardChanged] lastIccId = " + lastIccId + " newIccId = " + newIccId);
+                if (!TextUtils.equals(lastIccId, newIccId)) {
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(ICC_ID + i, newIccId);
+                    editor.commit();
+                    log("[handleIccCardChanged] SIM " + i + " changed, save new iccid: "
+                            + newIccId);
+                    isIccChanged = true;
+                }
+            }
+        }
+        return isIccChanged;
+    }
+
+    private String getIccId(int phoneId) {
+        final Phone phone = PhoneFactory.getPhone(phoneId);
+        UiccCard card = phone == null ? null : phone.getUiccCard();
+        if (card == null) {
+            loge("getIccId: No UICC");
+            return null;
+        }
+        String iccId = card.getIccId();
+        if (TextUtils.isEmpty(iccId)) {
+            loge("getIccId: ICC ID is null or empty.");
+            return null;
+        }
+        return iccId;
     }
 
     private void log(String msg) {
