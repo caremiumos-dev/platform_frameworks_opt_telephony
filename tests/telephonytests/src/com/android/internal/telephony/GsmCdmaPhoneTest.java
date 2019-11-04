@@ -29,6 +29,7 @@ import static org.mockito.Matchers.nullable;
 import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
@@ -595,6 +596,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         processAllMessages();
 
         assertEquals(voiceMailNumber, mPhoneUT.getVoiceMailNumber());
+        clearInvocations(mSimRecords);
 
         // voicemail number from SIM
         voiceMailNumber = "1234567894";
