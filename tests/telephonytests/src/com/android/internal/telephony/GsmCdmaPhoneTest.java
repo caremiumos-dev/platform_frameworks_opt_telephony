@@ -600,7 +600,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         voiceMailNumber = "1234567894";
         mPhoneUT.setVoiceMailNumber("alphaTag", voiceMailNumber, null);
         messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(mSimRecords).setVoiceMailNumber(eq("alphaTag"), eq(voiceMailNumber),
+        verify(mSimRecords, times(2)).setVoiceMailNumber(eq("alphaTag"), eq(voiceMailNumber),
                 messageArgumentCaptor.capture());
 
         // successfully saved on SIM
