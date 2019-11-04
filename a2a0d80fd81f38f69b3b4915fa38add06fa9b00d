@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e71904b5_dc47b616",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "be consistent with the separator for anrString at IccProvider.java:loadRecord()",
+      "parentUuid": "db910463_fd3ad34c",
+      "range": {
+        "startLine": 429,
+        "startChar": 23,
+        "endLine": 429,
+        "endChar": 40
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f49d83f_52d5d8e7",
         "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "025bab8c_e2582405",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f49d83f_52d5d8e7",
+      "range": {
+        "startLine": 439,
+        "startChar": 16,
+        "endLine": 439,
+        "endChar": 22
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3a814ab6_d59d53f2",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7185980_36f89a98",
+      "range": {
+        "startLine": 206,
+        "startChar": 50,
+        "endLine": 206,
+        "endChar": 58
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bdb0c6ec_4a56c4fe",
         "filename": "src/java/com/android/internal/telephony/IccProvider.java",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d94278da_e50021d1",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Yes, these string will be null when use getAsString() in IccPhoneBookInterfaceManager() if not set.",
+      "parentUuid": "bdb0c6ec_4a56c4fe",
+      "range": {
+        "startLine": 210,
+        "startChar": 8,
+        "endLine": 210,
+        "endChar": 31
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "defbb1c6_e268fee3",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49f0a1b5_033d93c4",
+      "range": {
+        "startLine": 345,
+        "startChar": 26,
+        "endLine": 345,
+        "endChar": 27
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c677b3ff_f0832e05",
         "filename": "src/java/com/android/internal/telephony/IccProvider.java",
         "patchSetId": 3
@@ -137,6 +257,30 @@
       "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "446b54ec_ea9f289b",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "c677b3ff_f0832e05",
+      "range": {
+        "startLine": 349,
+        "startChar": 8,
+        "endLine": 349,
+        "endChar": 27
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +353,30 @@
     },
     {
       "key": {
+        "uuid": "21e6eae7_986dce04",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Deleted these lines since new API use \"values\" parameter.",
+      "parentUuid": "9b5ed1a4_c85c00ec",
+      "range": {
+        "startLine": 404,
+        "startChar": 40,
+        "endLine": 404,
+        "endChar": 45
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c6d3e216_39b13f1c",
         "filename": "src/java/com/android/internal/telephony/IccProvider.java",
         "patchSetId": 3
@@ -232,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "a450849c_1d8b122f",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6d3e216_39b13f1c",
+      "range": {
+        "startLine": 543,
+        "startChar": 12,
+        "endLine": 543,
+        "endChar": 55
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ed27bbc_9e61fef9",
         "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
         "patchSetId": 3
@@ -252,6 +444,30 @@
       "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bf04f00_3e77621f",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ed27bbc_9e61fef9",
+      "range": {
+        "startLine": 153,
+        "startChar": 12,
+        "endLine": 153,
+        "endChar": 18
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -301,6 +517,30 @@
     },
     {
       "key": {
+        "uuid": "cada4eed_c44b09f7",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Yes, if the s1 are present in s2, we would think thay are the same ADN record.",
+      "parentUuid": "a9d6d0a0_3c8059d0",
+      "range": {
+        "startLine": 229,
+        "startChar": 42,
+        "endLine": 229,
+        "endChar": 49
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "381cbf4d_5852374f",
         "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
         "patchSetId": 3
@@ -324,6 +564,30 @@
     },
     {
       "key": {
+        "uuid": "28420b3a_400450e3",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "381cbf4d_5852374f",
+      "range": {
+        "startLine": 236,
+        "startChar": 17,
+        "endLine": 236,
+        "endChar": 14
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "939ca871_f40f2fd0",
         "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
         "patchSetId": 3
@@ -344,6 +608,30 @@
       "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "123683e2_3fc42311",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1170335
+      },
+      "writtenOn": "2019-11-04T06:10:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "939ca871_f40f2fd0",
+      "range": {
+        "startLine": 241,
+        "startChar": 17,
+        "endLine": 241,
+        "endChar": 30
+      },
+      "revId": "a2a0d80fd81f38f69b3b4915fa38add06fa9b00d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
