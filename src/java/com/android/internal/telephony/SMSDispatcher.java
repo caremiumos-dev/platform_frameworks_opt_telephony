@@ -31,7 +31,6 @@ import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_
 import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PRIORITY_NOT_SPECIFIED;
 import static com.android.internal.telephony.SmsResponse.NO_ERROR_CODE;
 
-import android.annotation.Nullable;
 import android.annotation.UnsupportedAppUsage;
 import android.annotation.UserIdInt;
 import android.app.Activity;
@@ -386,13 +385,6 @@ public abstract class SMSDispatcher extends Handler {
         }
     }
 
-    private static int getSendSmsFlag(@Nullable PendingIntent deliveryIntent) {
-        if (deliveryIntent == null) {
-            return 0;
-        }
-        return CarrierMessagingService.SEND_FLAG_REQUEST_DELIVERY_STATUS;
-    }
-
     /**
      * Use the carrier messaging service to send a text SMS.
      */
@@ -408,8 +400,13 @@ public abstract class SMSDispatcher extends Handler {
 
             if (text != null) {
                 try {
-                    carrierMessagingService.sendTextSms(text, getSubId(),
-                            mTracker.mDestAddress, getSendSmsFlag(mTracker.mDeliveryIntent),
+                    carrierMessagingService.sendTextSms(
+                            text,
+                            getSubId(),
+                            mTracker.mDestAddress,
+                            (mTracker.mDeliveryIntent != null)
+                                    ? CarrierMessagingService.SEND_FLAG_REQUEST_DELIVERY_STATUS
+                                    : 0,
                             mSenderCallback);
                 } catch (RemoteException e) {
                     Rlog.e(TAG, "Exception sending the SMS: " + e);
@@ -441,9 +438,15 @@ public abstract class SMSDispatcher extends Handler {
 
             if (data != null) {
                 try {
-                    carrierMessagingService.sendDataSms(data, getSubId(),
-                            mTracker.mDestAddress, destPort,
-                            getSendSmsFlag(mTracker.mDeliveryIntent), mSenderCallback);
+                    carrierMessagingService.sendDataSms(
+                            data,
+                            getSubId(),
+                            mTracker.mDestAddress,
+                            destPort,
+                            (mTracker.mDeliveryIntent != null)
+                                    ? CarrierMessagingService.SEND_FLAG_REQUEST_DELIVERY_STATUS
+                                    : 0,
+                            mSenderCallback);
                 } catch (RemoteException e) {
                     Rlog.e(TAG, "Exception sending the SMS: " + e);
                     mSenderCallback.onSendSmsComplete(
@@ -568,10 +571,23 @@ public abstract class SMSDispatcher extends Handler {
 
         @Override
         protected void onServiceReady(ICarrierMessagingService carrierMessagingService) {
+            boolean statusReportRequested = false;
+            for (SmsTracker tracker : mTrackers) {
+                if (tracker.mDeliveryIntent != null) {
+                    statusReportRequested = true;
+                    break;
+                }
+            }
+
             try {
                 carrierMessagingService.sendMultipartTextSms(
-                        mParts, getSubId(), mTrackers[0].mDestAddress,
-                        getSendSmsFlag(mTrackers[0].mDeliveryIntent), mSenderCallback);
+                        mParts,
+                        getSubId(),
+                        mTrackers[0].mDestAddress,
+                        statusReportRequested
+                                ? CarrierMessagingService.SEND_FLAG_REQUEST_DELIVERY_STATUS
+                                : 0,
+                        mSenderCallback);
             } catch (RemoteException e) {
                 Rlog.e(TAG, "Exception sending the SMS: " + e);
                 mSenderCallback.onSendMultipartSmsComplete(
