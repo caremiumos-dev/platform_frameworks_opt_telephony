@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "fd05996a_15cd220f",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionService.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-11-05T19:20:17Z",
+      "side": 1,
+      "message": "Alright makes sense. I can\u0027t really think of any better names either.",
+      "parentUuid": "984c9437_992409dc",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 43
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b434915_ce23a089",
         "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionService.java",
         "patchSetId": 9
