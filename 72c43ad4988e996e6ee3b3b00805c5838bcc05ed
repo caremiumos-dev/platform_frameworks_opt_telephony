@@ -16,6 +16,24 @@
       "revId": "72c43ad4988e996e6ee3b3b00805c5838bcc05ed",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6021366d_b06b3f7b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaPhoneTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-11-05T00:47:49Z",
+      "side": 1,
+      "message": "Sure, I can do that.",
+      "parentUuid": "60009bb9_e60da4f7",
+      "revId": "72c43ad4988e996e6ee3b3b00805c5838bcc05ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
