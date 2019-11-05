@@ -52,6 +52,24 @@
       "revId": "72c43ad4988e996e6ee3b3b00805c5838bcc05ed",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "58842f3f_fe0d2c7e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaPhoneTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-11-05T00:50:28Z",
+      "side": 1,
+      "message": "Actually from it\u0027s documentation: Try to avoid this method at all costs. Only clear invocations if you are unable to efficiently test your program.\n\nMay be we should avoid using clearInvocations. Will revert back to the earlier patchset unless you see any issues with it.",
+      "parentUuid": "6fe034f1_a1eb8b06",
+      "revId": "72c43ad4988e996e6ee3b3b00805c5838bcc05ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
