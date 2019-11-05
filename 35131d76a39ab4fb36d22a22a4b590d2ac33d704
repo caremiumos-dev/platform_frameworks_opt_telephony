@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4f15ac8e_4f975043",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-05T14:04:57Z",
+      "side": 1,
+      "message": "Just FTR, as discussed.\n\nThis is mostly to make it easy to apply / revert at the code level if there\u0027s some fundamental issue, not because I want to conduct any experiments or make it configurable.",
+      "parentUuid": "1d56d698_55e1916b",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 9
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a282a2ec_8dce8495",
         "filename": "src/java/com/android/internal/telephony/nitz/NewTimeServiceHelperImpl.java",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b450d34_066ace55",
+        "filename": "src/java/com/android/internal/telephony/nitz/NewTimeServiceHelperImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-05T14:04:57Z",
+      "side": 1,
+      "message": "Good spot! Removed.",
+      "parentUuid": "a282a2ec_8dce8495",
+      "range": {
+        "startLine": 44,
+        "startChar": 30,
+        "endLine": 44,
+        "endChar": 42
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "215cc728_d2350038",
+        "filename": "src/java/com/android/internal/telephony/nitz/NitzSignalInputFilterPredicateFactory.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-05T14:04:57Z",
+      "side": 1,
+      "message": "Left as is for now.",
+      "parentUuid": "62795b92_187ae21e",
+      "range": {
+        "startLine": 59,
+        "startChar": 46,
+        "endLine": 59,
+        "endChar": 66
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b848dd2e_9994c3d1",
         "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionService.java",
         "patchSetId": 9
@@ -82,6 +154,30 @@
       "writtenOn": "2019-10-25T23:54:17Z",
       "side": 1,
       "message": "Do you want an @IntDef for these?\n\nAlso, what\u0027s the rationale for naming these scores vague values like \"high\", \"medium\", etc. when the comments say that they each have a more precise meaning? Are you expecting to assign SCORE_MEDIUM to something that\u0027s not necessarily same-offset-but-maybe-not-the-same-zone in the future?",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 43
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "984c9437_992409dc",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionService.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-05T14:04:57Z",
+      "side": 1,
+      "message": "RE IntDef: IntDef seems good for enums (and bit masks) where you want distinct values and type safety. It usually makes no sense with an enum to say x \u003e y (e.g. RED \u003e BLUE). This case is also a  score / ranking: higher values are worth more than lower ones, and there\u0027s the threshold constant too.\n\nRE rationale:\nShort answer, yes....?\n\nBy keeping the score abstract it could be extended in future. It seemed slightly nicer to have constants for the scores rather than just hardcoding 0, 1, 2, 3; then I could document their meaning with examples. I agree the names chosen are poor, but the only alternative I could think of was SCORE_0, SCORE_1, etc. which seemed worse at the time. Happy to change it if like.\n\nThe scoring is already slightly abstract, as you can see in scoreSuggestion(). It looks at the \"match type\" and \"quality\" properties to arrive at a score. The quality comparisons are already conflating different match types (e.g. \"country\" and \"country + NITZ\" matches). i.e. we treat a \"single zone\" answer the same regardless of whether it was derived using \"only country\" or \"country + NITZ\".",
+      "parentUuid": "b848dd2e_9994c3d1",
       "range": {
         "startLine": 112,
         "startChar": 0,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "f50af7e7_4d9d53f5",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionService.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-05T14:04:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b434915_ce23a089",
+      "range": {
+        "startLine": 178,
+        "startChar": 10,
+        "endLine": 178,
+        "endChar": 11
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aab736e4_c75a51c0",
         "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionService.java",
         "patchSetId": 9
@@ -137,6 +257,30 @@
       "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd02ea06_2761ca1a",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionService.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-05T14:04:57Z",
+      "side": 1,
+      "message": "Correct. The history is only there for logging.\n\nThe logic that determines the time zone to use only looks at the latest suggestion from each phone.\n\nI\u0027ll update the doc to make it clear that it\u0027s \"phone scoped\".",
+      "parentUuid": "aab736e4_c75a51c0",
+      "range": {
+        "startLine": 208,
+        "startChar": 47,
+        "endLine": 208,
+        "endChar": 78
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "a55819da_632d1164",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionServiceHelperImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-05T14:04:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0253075e_18dbb40d",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 80
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e4be28f_c5c25b7c",
         "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionServiceHelperImpl.java",
         "patchSetId": 9
@@ -183,6 +351,30 @@
       "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "132ad1a1_c27e0ab3",
+        "filename": "src/java/com/android/internal/telephony/nitz/service/TimeZoneDetectionServiceHelperImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-05T14:04:57Z",
+      "side": 1,
+      "message": "Yes - I\u0027d like to remove this separately, probably after looking for partner usages too.\n\nI\u0027m also (eventually) planning to lock down allowed callers of AlarmManager.setTimeZone() when I\u0027m sure the only ways of setting the time zone are directed through this class.",
+      "parentUuid": "8e4be28f_c5c25b7c",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 81
+      },
+      "revId": "35131d76a39ab4fb36d22a22a4b590d2ac33d704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
