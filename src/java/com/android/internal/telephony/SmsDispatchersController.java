@@ -434,7 +434,8 @@ public class SmsDispatchersController extends Handler {
         String oldFormat = tracker.mFormat;
         boolean retryUsingImsService = false;
 
-        if (!tracker.mUsesImsServiceForIms && mImsSmsDispatcher.isAvailable()) {
+        if ((!tracker.mUsesImsServiceForIms || !tracker.mIsFallBackRetry)
+                && mImsSmsDispatcher.isAvailable()) {
             // If this tracker has not been handled by ImsSmsDispatcher yet and IMS Service is
             // available now, retry this failed tracker using IMS Service.
             retryUsingImsService = true;
