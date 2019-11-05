@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba62ce04_818d774c",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5674,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2019-11-05T22:30:20Z",
+      "side": 1,
+      "message": "please remove it",
+      "range": {
+        "startLine": 5674,
+        "startChar": 17,
+        "endLine": 5674,
+        "endChar": 21
+      },
+      "revId": "6ef1e5c5a03771bbb60af2c70757f4b7af97da26",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
