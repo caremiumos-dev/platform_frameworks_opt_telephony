@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1baae0e8_fdda80c6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-11-05T22:06:47Z",
+      "side": 1,
+      "message": "TelephonyManager.NETWORK_TYPE_BITMASK_LTE",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 57
+      },
+      "revId": "3ae5585135f040fa7f17354241246328729255a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
