@@ -414,7 +414,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
     private static int
     siToServiceClass(String si) {
         if (si == null || si.length() == 0) {
-                return  SERVICE_CLASS_NONE;
+            return SERVICE_CLASS_VOICE;
         } else {
             // NumberFormatException should cause MMI fail
             int serviceCode = Integer.parseInt(si, 10);
