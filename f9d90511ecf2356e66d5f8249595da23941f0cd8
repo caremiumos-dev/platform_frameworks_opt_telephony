@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53bcc537_492f0433",
+        "filename": "src/java/com/android/internal/telephony/uicc/euicc/apdu/ApduSender.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1269489
+      },
+      "writtenOn": "2019-11-05T01:28:06Z",
+      "side": 1,
+      "message": "I think you want this to be 2000 instead",
+      "range": {
+        "startLine": 53,
+        "startChar": 44,
+        "endLine": 53,
+        "endChar": 50
+      },
+      "revId": "f9d90511ecf2356e66d5f8249595da23941f0cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
