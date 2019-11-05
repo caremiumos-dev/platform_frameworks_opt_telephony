@@ -70,6 +70,30 @@
       "revId": "8b20f0a92cf70f3c776e6b937e4a9b5108877922",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1060c8d4_81f1408b",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-11-05T14:31:43Z",
+      "side": 1,
+      "message": "\u003e\u003e Where is the corresponding API change which populates \"AR\" when invoking ImsPhone.setCallBarring() ?\nThe \"AR\" is converted to ImsUtInterface.CB_BIC_ACR in this patch, then it will be used as a parameter of ImsUtInterface#queryCallBarring() or updateCallBarring().\nExisting other AOSP code(ImsPhoneMmiCode.java) has already used the API and parameter.\nhttps://android.googlesource.com/platform/frameworks/opt/telephony/+/refs/heads/master/src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java#994\nhttps://android.googlesource.com/platform/frameworks/opt/telephony/+/refs/heads/master/src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java#1003\n\n\u003e\u003e How is this being invoked from app / settings?\nSetting app with additional code can invoke \"Phone#getCallBarring(CommandsInterface.CB_FACILITY_BAIC_ACR[\"AR\"], Handler.obtainMessage(EVENT_QUERY_REQUEST_DONE), 0)\". This CL provides Telephony part only.\n\n\u003e\u003e Also this would need changes in the underlying layers.. example QC ImsService which doesn\u0027t have any handling for ACR Did you also talk to Qualcomm about this?\nAs answered in above first question, ImsUtInterface#queryCallBarring(ImsUtInterface.CB_BIC_ACR) is already invoked in ImsPhoneMmiCode.java on current AOSP. Therefore any lower layer(e.g. QC) should support it.",
+      "parentUuid": "9f5bcf73_ac771011",
+      "range": {
+        "startLine": 77,
+        "startChar": 52,
+        "endLine": 77,
+        "endChar": 56
+      },
+      "revId": "8b20f0a92cf70f3c776e6b937e4a9b5108877922",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
