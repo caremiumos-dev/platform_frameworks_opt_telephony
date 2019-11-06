@@ -1276,6 +1276,13 @@ public class ImsPhone extends ImsPhoneBase {
     void onIncomingUSSD(int ussdMode, String ussdMessage) {
         if (DBG) logd("onIncomingUSSD ussdMode=" + ussdMode);
 
+        if (isNCRUssdString() && !TextUtils.isEmpty(ussdMessage)) {
+            ussdMessage = decodeNCR(ussdMessage);
+            if (DBG)
+                logd("onIncomingUSSD isMaybeNCRUssdString, after decodeNCR ussdMessage ="
+                        + ussdMessage);
+        }
+
         boolean isUssdError;
         boolean isUssdRequest;
 
@@ -2029,6 +2036,56 @@ public class ImsPhone extends ImsPhoneBase {
         // when the modem reports IWLAN RAT.
         return psInfo != null && csInfo != null && !csInfo.isInService()
                 && psInfo.getAccessNetworkTechnology() == TelephonyManager.NETWORK_TYPE_IWLAN;
+    }
+
+    private boolean isNCRUssdString() {
+        boolean ret = false;
+        CarrierConfigManager configManager = (CarrierConfigManager)
+                getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle b = configManager.getConfigForSubId(getSubId());
+        if (b != null) {
+            ret = b.getBoolean(CarrierConfigManager.KEY_SUPPORT_NCR_USSD_STRING,
+                    false);
+        }
+        return ret;
+    }
+
+    /**
+     * Parses ncr-encoded strings if str is ncr-encoded string
+     */
+    private String decodeNCR(String str) {
+        StringBuffer sb = new StringBuffer();
+        int ncrSymbolPosition;
+        int numericPosition = 0;
+
+        while (numericPosition < str.length()) {
+            ncrSymbolPosition = str.indexOf("&#", numericPosition);
+            if (ncrSymbolPosition == -1) {
+                sb.append(str.substring(numericPosition));
+                break;
+            }
+            sb.append(str.substring(numericPosition, ncrSymbolPosition));
+            numericPosition = str.indexOf(";", ncrSymbolPosition);
+            if (numericPosition == -1) {
+                sb.append(str.substring(ncrSymbolPosition));
+                break;
+            }
+
+            String tok = str.substring(ncrSymbolPosition + "&#".length(), numericPosition);
+            try {
+                int radix = 10;
+                if (tok.charAt(0) == 'x' || tok.charAt(0) == 'X') {
+                    radix = 16;
+                    tok = tok.substring(1);
+                }
+                sb.append((char) Integer.parseInt(tok, radix));
+            } catch (NumberFormatException exp) {
+                loge("decodeNCR exp:");
+                exp.printStackTrace();
+            }
+            numericPosition++;
+        }
+        return sb.toString();
     }
 
     @Override
