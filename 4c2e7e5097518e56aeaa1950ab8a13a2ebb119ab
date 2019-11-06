@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ed174fc_47084854",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-11-06T23:47:55Z",
+      "side": 1,
+      "message": "Please do not synchronize on mState here, it can change and we will be synchronizing on a different instance. It can also technically be null, which would cause a NullPointerException. Instead, you can synchronize on \"this\" instead.",
+      "range": {
+        "startLine": 198,
+        "startChar": 29,
+        "endLine": 198,
+        "endChar": 35
+      },
+      "revId": "4c2e7e5097518e56aeaa1950ab8a13a2ebb119ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb54da7f_c8662624",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-11-06T23:47:55Z",
+      "side": 1,
+      "message": "These are typically used to denote bugs that have been filed to fix flaky tests, not associated them with bug fixes. can you please remove?",
+      "range": {
+        "startLine": 92,
+        "startChar": 23,
+        "endLine": 92,
+        "endChar": 32
+      },
+      "revId": "4c2e7e5097518e56aeaa1950ab8a13a2ebb119ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
