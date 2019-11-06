@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "451bc074_6335568c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-11-06T22:47:02Z",
+      "side": 1,
+      "message": "This is not needed anymore because only one transport type can be associated with one DcTracker. SubId is still needed in case of SIM swapped case.",
+      "range": {
+        "startLine": 483,
+        "startChar": 74,
+        "endLine": 483,
+        "endChar": 92
+      },
+      "revId": "67dae1f010705ebe4a05b021e5f9c63b40d394a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
