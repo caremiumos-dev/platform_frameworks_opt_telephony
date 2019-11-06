@@ -633,7 +633,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return Settings.Global.getInt(
                 mContext.getContentResolver(),
                 Settings.Global.ENABLE_RADIO_BUG_DETECTION,
-                0) != 0;
+                1) != 0;
     }
 
     @Override
@@ -2641,7 +2641,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     /**
      * convert RAF from {@link android.hardware.radio.V1_0.RadioAccessFamily} to
      * {@link TelephonyManager.NetworkTypeBitMask}, the bitmask represented by
-     * {@link TelephonyManager.NetworkType}.
+     * {@link android.telephony.Annotation.NetworkType}.
      *
      * @param raf {@link android.hardware.radio.V1_0.RadioAccessFamily}
      * @return {@link TelephonyManager.NetworkTypeBitMask}

@@ -28,6 +28,7 @@ import android.telephony.Rlog;
 import android.telephony.SubscriptionInfo;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Pair;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.MccTable;
@@ -180,8 +181,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected static final int HANDLER_ACTION_NONE = HANDLER_ACTION_BASE + 0;
     protected static final int HANDLER_ACTION_SEND_RESPONSE = HANDLER_ACTION_BASE + 1;
     protected static AtomicInteger sNextRequestId = new AtomicInteger(1);
-    protected final HashMap<Integer, Message> mPendingResponses = new HashMap<>();
-
+    protected final HashMap<Integer, Pair<Message, Object>> mPendingTransactions = new HashMap<>();
     // ***** Constants
 
     // Markers for mncLength
@@ -343,24 +343,42 @@ public abstract class IccRecords extends Handler implements IccConstants {
     }
 
     /**
-     * Adds a message to the pending requests list by generating a unique
-     * (integer) hash key and returning it. The message should never be null.
+     * Adds a message to the pending requests list by generating a unique (integer)
+     * hash key and returning it. The message should never be null.
+     *
+     * @param msg Message of the transaction to be stored
+     * @return the unique (integer) hash key to retrieve the pending transaction
      */
-    public int storePendingResponseMessage(Message msg) {
+    public int storePendingTransaction(Message msg) {
+        return storePendingTransaction(msg, null);
+    }
+
+    /**
+     * Adds a message and obj pair to the pending requests list by generating a unique (integer)
+     * hash key and returning it. The message should never be null.
+     *
+     * @param msg Message of the transaction to be stored
+     * @param obj Object of the transaction to be stored
+     * @return the unique (integer) hash key to retrieve the pending transaction
+     */
+    public int storePendingTransaction(Message msg, Object obj) {
         int key = sNextRequestId.getAndIncrement();
-        synchronized (mPendingResponses) {
-            mPendingResponses.put(key, msg);
+        Pair<Message, Object> pair = new Pair<Message, Object>(msg, obj);
+        synchronized (mPendingTransactions) {
+            mPendingTransactions.put(key, pair);
         }
         return key;
     }
 
     /**
-     * Returns the pending request, if any or null
+     * Returns the pending transaction and free it from memory, if any or null
+     *
+     * @param key key of the entry to retrieve
+     * @return The pending transaction.
      */
-    public Message retrievePendingResponseMessage(Integer key) {
-        Message m;
-        synchronized (mPendingResponses) {
-            return mPendingResponses.remove(key);
+    public Pair<Message, Object> retrievePendingTransaction(Integer key) {
+        synchronized (mPendingTransactions) {
+            return mPendingTransactions.remove(key);
         }
     }
 
@@ -372,11 +390,13 @@ public abstract class IccRecords extends Handler implements IccConstants {
      */
     @UnsupportedAppUsage
     public String getIccId() {
-        if (mCarrierTestOverride.isInTestMode() && mCarrierTestOverride.getFakeIccid() != null) {
-            return mCarrierTestOverride.getFakeIccid();
-        } else {
-            return mIccId;
+        if (mCarrierTestOverride.isInTestMode()) {
+            String fakeIccId = mCarrierTestOverride.getFakeIccid();
+            if (fakeIccId != null) {
+                return fakeIccId;
+            }
         }
+        return mIccId;
     }
 
     /**
@@ -545,11 +565,13 @@ public abstract class IccRecords extends Handler implements IccConstants {
      */
     @UnsupportedAppUsage
     public String getIMSI() {
-        if (mCarrierTestOverride.isInTestMode() && mCarrierTestOverride.getFakeIMSI() != null) {
-            return mCarrierTestOverride.getFakeIMSI();
-        } else {
-            return mImsi;
+        if (mCarrierTestOverride.isInTestMode()) {
+            String fakeImsi = mCarrierTestOverride.getFakeIMSI();
+            if (fakeImsi != null) {
+                return fakeImsi;
+            }
         }
+        return mImsi;
     }
 
     /**
@@ -649,11 +671,13 @@ public abstract class IccRecords extends Handler implements IccConstants {
      */
     @UnsupportedAppUsage
     public String getGid1() {
-        if (mCarrierTestOverride.isInTestMode() && mCarrierTestOverride.getFakeGid1() != null) {
-            return mCarrierTestOverride.getFakeGid1();
-        } else {
-            return mGid1;
+        if (mCarrierTestOverride.isInTestMode()) {
+            String fakeGid1 = mCarrierTestOverride.getFakeGid1();
+            if (fakeGid1 != null) {
+                return fakeGid1;
+            }
         }
+        return mGid1;
     }
 
     /**
@@ -661,11 +685,13 @@ public abstract class IccRecords extends Handler implements IccConstants {
      * @return null if SIM is not yet ready
      */
     public String getGid2() {
-        if (mCarrierTestOverride.isInTestMode() && mCarrierTestOverride.getFakeGid2() != null) {
-            return mCarrierTestOverride.getFakeGid2();
-        } else {
-            return mGid2;
+        if (mCarrierTestOverride.isInTestMode()) {
+            String fakeGid2 = mCarrierTestOverride.getFakeGid2();
+            if (fakeGid2 != null) {
+                return fakeGid2;
+            }
         }
+        return mGid2;
     }
 
     /**
@@ -673,12 +699,13 @@ public abstract class IccRecords extends Handler implements IccConstants {
      * @return null if SIM is not yet ready
      */
     public String getPnnHomeName() {
-        if (mCarrierTestOverride.isInTestMode()
-                && mCarrierTestOverride.getFakePnnHomeName() != null) {
-            return mCarrierTestOverride.getFakePnnHomeName();
-        } else {
-            return mPnnHomeName;
+        if (mCarrierTestOverride.isInTestMode()) {
+            String fakePnnHomeName = mCarrierTestOverride.getFakePnnHomeName();
+            if (fakePnnHomeName != null) {
+                return fakePnnHomeName;
+            }
         }
+        return mPnnHomeName;
     }
 
     @UnsupportedAppUsage
@@ -706,8 +733,11 @@ public abstract class IccRecords extends Handler implements IccConstants {
      */
     @UnsupportedAppUsage
     public String getServiceProviderName() {
-        if (mCarrierTestOverride.isInTestMode() && mCarrierTestOverride.getFakeSpn() != null) {
-            return mCarrierTestOverride.getFakeSpn();
+        if (mCarrierTestOverride.isInTestMode()) {
+            String fakeSpn = mCarrierTestOverride.getFakeSpn();
+            if (fakeSpn != null) {
+                return fakeSpn;
+            }
         }
         return mSpn;
     }

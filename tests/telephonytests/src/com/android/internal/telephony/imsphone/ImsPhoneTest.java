@@ -18,10 +18,11 @@ package com.android.internal.telephony.imsphone;
 
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_ENABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_REASON_UNCONDITIONAL;
-import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyChar;
@@ -29,6 +30,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.nullable;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -46,7 +48,6 @@ import android.content.Intent;
 import android.os.AsyncResult;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Message;
 import android.os.PersistableBundle;
 import android.os.SystemProperties;
@@ -54,7 +55,11 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
 import android.telephony.ims.ImsCallProfile;
 import android.telephony.ims.ImsReasonInfo;
+import android.telephony.ims.RegistrationManager;
+import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.testing.AndroidTestingRunner;
+import android.testing.TestableLooper;
 
 import androidx.test.filters.FlakyTest;
 
@@ -76,12 +81,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
+@RunWith(AndroidTestingRunner.class)
+@TestableLooper.RunWithLooper
 public class ImsPhoneTest extends TelephonyTest {
     @Mock
     private ImsPhoneCall mForegroundCall;
@@ -104,25 +115,11 @@ public class ImsPhoneTest extends TelephonyTest {
     };
 
     private ImsPhone mImsPhoneUT;
-    private ImsPhoneTestHandler mImsPhoneTestHandler;
     private boolean mDoesRilSendMultipleCallRing;
     private static final int EVENT_SUPP_SERVICE_NOTIFICATION = 1;
     private static final int EVENT_SUPP_SERVICE_FAILED = 2;
     private static final int EVENT_INCOMING_RING = 3;
     private static final int EVENT_EMERGENCY_CALLBACK_MODE_EXIT = 4;
-
-    private class ImsPhoneTestHandler extends HandlerThread {
-
-        private ImsPhoneTestHandler(String name) {
-            super(name);
-        }
-
-        @Override
-        public void onLooperPrepared() {
-            mImsPhoneUT = new ImsPhone(mContext, mNotifier, mPhone, true);
-            setReady(true);
-        }
-    }
 
     @Before
     public void setUp() throws Exception {
@@ -138,9 +135,7 @@ public class ImsPhoneTest extends TelephonyTest {
 
         mContextFixture.putBooleanResource(com.android.internal.R.bool.config_voice_capable, true);
 
-        mImsPhoneTestHandler = new ImsPhoneTestHandler(TAG);
-        mImsPhoneTestHandler.start();
-        waitUntilReady();
+        mImsPhoneUT = new ImsPhone(mContext, mNotifier, mPhone, true);
 
         mDoesRilSendMultipleCallRing = SystemProperties.getBoolean(
                 TelephonyProperties.PROPERTY_RIL_SENDS_MULTIPLE_CALL_RING, true);
@@ -153,13 +148,13 @@ public class ImsPhoneTest extends TelephonyTest {
         mImsPhoneUT.registerForIncomingRing(mTestHandler,
                 EVENT_INCOMING_RING, null);
         doReturn(mImsUtInterface).when(mImsCT).getUtInterface();
+        processAllMessages();
     }
 
 
     @After
     public void tearDown() throws Exception {
         mImsPhoneUT = null;
-        mImsPhoneTestHandler.quit();
         super.tearDown();
     }
 
@@ -442,7 +437,7 @@ public class ImsPhoneTest extends TelephonyTest {
     public void testIncomingRing() {
         doReturn(PhoneConstants.State.IDLE).when(mImsCT).getState();
         mImsPhoneUT.notifyIncomingRing();
-        waitForMs(100);
+        processAllMessages();
         ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
         verify(mTestHandler, times(1)).sendMessageAtTime(messageArgumentCaptor.capture(),
                 anyLong());
@@ -652,6 +647,62 @@ public class ImsPhoneTest extends TelephonyTest {
         assertEquals(messageAlert, intent.getValue().getStringExtra(Phone.EXTRA_KEY_ALERT_MESSAGE));
         assertEquals(messageNotification,
                 intent.getValue().getStringExtra(Phone.EXTRA_KEY_NOTIFICATION_MESSAGE));
+    }
+
+    @Test
+    @SmallTest
+    public void testImsRegistered() throws Exception {
+        mImsPhoneUT.setServiceState(ServiceState.STATE_IN_SERVICE);
+        mImsPhoneUT.setImsRegistrationState(RegistrationManager.REGISTRATION_STATE_REGISTERED);
+        assertTrue(mImsPhoneUT.isImsRegistered());
+
+        LinkedBlockingQueue<Integer> result = new LinkedBlockingQueue<>(1);
+        mImsPhoneUT.getImsRegistrationState(result::offer);
+        Integer regResult = result.poll(1000, TimeUnit.MILLISECONDS);
+        assertNotNull(regResult);
+        assertEquals(RegistrationManager.REGISTRATION_STATE_REGISTERED, regResult.intValue());
+    }
+
+    @Test
+    @SmallTest
+    public void testImsRegistering() throws Exception {
+        mImsPhoneUT.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
+        mImsPhoneUT.setImsRegistrationState(RegistrationManager.REGISTRATION_STATE_REGISTERING);
+        assertFalse(mImsPhoneUT.isImsRegistered());
+
+        LinkedBlockingQueue<Integer> result = new LinkedBlockingQueue<>(1);
+        mImsPhoneUT.getImsRegistrationState(result::offer);
+        Integer regResult = result.poll(1000, TimeUnit.MILLISECONDS);
+        assertNotNull(regResult);
+        assertEquals(RegistrationManager.REGISTRATION_STATE_REGISTERING, regResult.intValue());
+    }
+
+    @Test
+    @SmallTest
+    public void testImsDeregistered() throws Exception {
+        mImsPhoneUT.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
+        mImsPhoneUT.setImsRegistrationState(RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED);
+        assertFalse(mImsPhoneUT.isImsRegistered());
+
+        LinkedBlockingQueue<Integer> result = new LinkedBlockingQueue<>(1);
+        mImsPhoneUT.getImsRegistrationState(result::offer);
+        Integer regResult = result.poll(1000, TimeUnit.MILLISECONDS);
+        assertNotNull(regResult);
+        assertEquals(RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED, regResult.intValue());
+    }
+
+    public void testGetImsRegistrationTech() throws Exception {
+        LinkedBlockingQueue<Integer> queue = new LinkedBlockingQueue<>(1);
+        Consumer<Integer> regTechCallback = queue::offer;
+        doAnswer(invocation -> {
+            Consumer<Integer> c = (Consumer<Integer>) invocation.getArguments()[0];
+            c.accept(ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN);
+            return null;
+        }).when(mImsCT).getImsRegistrationTech(eq(regTechCallback));
+        mImsPhoneUT.getImsRegistrationTech(regTechCallback);
+        Integer regTechResult = queue.poll(1000, TimeUnit.MILLISECONDS);
+        assertNotNull(regTechResult);
+        assertEquals(ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN, regTechResult.intValue());
     }
 
     @Test

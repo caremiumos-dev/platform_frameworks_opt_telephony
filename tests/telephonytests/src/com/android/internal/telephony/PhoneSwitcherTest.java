@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import static android.telephony.CarrierConfigManager.KEY_DATA_SWITCH_VALIDATION_TIMEOUT_LONG;
 import static android.telephony.TelephonyManager.SET_OPPORTUNISTIC_SUB_INACTIVE_SUBSCRIPTION;
 import static android.telephony.TelephonyManager.SET_OPPORTUNISTIC_SUB_SUCCESS;
 import static android.telephony.TelephonyManager.SET_OPPORTUNISTIC_SUB_VALIDATION_FAILED;
@@ -488,14 +489,14 @@ public class PhoneSwitcherTest extends TelephonyTest {
         doReturn(true).when(mMockRadioConfig).isSetPreferredDataCommandSupported();
         initialize(numPhones, maxActivePhones);
 
-        // Mark sub 2 as opportunistic.
-        doReturn(true).when(mSubscriptionController).isOpportunistic(2);
         // Phone 0 has sub 1, phone 1 has sub 2.
         // Sub 1 is default data sub.
         // Both are active subscriptions are active sub, as they are in both active slots.
         setSlotIndexToSubId(0, 1);
         setSlotIndexToSubId(1, 2);
         setDefaultDataSubId(1);
+        // Mark sub 2 as opportunistic.
+        doReturn(true).when(mSubscriptionController).isOpportunistic(2);
 
         // Phone 0 (sub 1) should be activated as it has default data sub.
         assertEquals(0, mPhoneSwitcher.getPreferredDataPhoneId());
@@ -503,7 +504,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         // Set sub 2 as preferred sub should make phone 1 activated and phone 0 deactivated.
         mPhoneSwitcher.trySetOpportunisticDataSubscription(2, true, null);
         processAllMessages();
-        verify(mCellularNetworkValidator).validate(eq(2), anyInt(), eq(false),
+        verify(mCellularNetworkValidator).validate(eq(2), anyLong(), eq(false),
                 eq(mPhoneSwitcher.mValidationCallback));
         // Validation failed. Preferred data sub should remain 1, data phone should remain 0.
         mPhoneSwitcher.mValidationCallback.onValidationResult(false, 2);
@@ -517,11 +518,14 @@ public class PhoneSwitcherTest extends TelephonyTest {
         processAllMessages();
         assertEquals(1, mPhoneSwitcher.getPreferredDataPhoneId());
 
-        // Switching data back to primary (subId 1).
+        // Switching data back to primary (subId 1) with customized validation timeout.
+        long timeout = 1234;
+        mContextFixture.getCarrierConfigBundle().putLong(
+                KEY_DATA_SWITCH_VALIDATION_TIMEOUT_LONG, timeout);
         mPhoneSwitcher.trySetOpportunisticDataSubscription(
                 SubscriptionManager.DEFAULT_SUBSCRIPTION_ID, true, null);
         processAllMessages();
-        verify(mCellularNetworkValidator).validate(eq(1), anyInt(), eq(false),
+        verify(mCellularNetworkValidator).validate(eq(1), eq(timeout), eq(false),
                 eq(mPhoneSwitcher.mValidationCallback));
         mPhoneSwitcher.mValidationCallback.onValidationResult(true, 1);
         processAllMessages();
@@ -872,7 +876,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         clearInvocations(mSetOpptDataCallback2);
         mPhoneSwitcher.trySetOpportunisticDataSubscription(2, true, mSetOpptDataCallback1);
         processAllMessages();
-        verify(mCellularNetworkValidator).validate(eq(2), anyInt(), eq(false),
+        verify(mCellularNetworkValidator).validate(eq(2), anyLong(), eq(false),
                 eq(mPhoneSwitcher.mValidationCallback));
         doReturn(true).when(mCellularNetworkValidator).isValidating();
         mPhoneSwitcher.trySetOpportunisticDataSubscription(2, true, mSetOpptDataCallback2);
@@ -894,7 +898,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         // Back to back call, call 1 to switch to subId 2, call 2 to switch back.
         mPhoneSwitcher.trySetOpportunisticDataSubscription(2, true, mSetOpptDataCallback1);
         processAllMessages();
-        verify(mCellularNetworkValidator).validate(eq(2), anyInt(), eq(false),
+        verify(mCellularNetworkValidator).validate(eq(2), anyLong(), eq(false),
                 eq(mPhoneSwitcher.mValidationCallback));
         doReturn(true).when(mCellularNetworkValidator).isValidating();
         mPhoneSwitcher.trySetOpportunisticDataSubscription(
@@ -1036,6 +1040,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         }
 
         doReturn(numPhones).when(mTelephonyManager).getPhoneCount();
+        doReturn(numPhones).when(mTelephonyManager).getActiveModemCount();
         if (numPhones == 1) {
             mCommandsInterfaces = new CommandsInterface[] {mCommandsInterface0};
             mPhones = new Phone[] {mPhone};
