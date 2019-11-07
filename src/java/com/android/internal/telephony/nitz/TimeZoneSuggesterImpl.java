@@ -16,14 +16,16 @@
 
 package com.android.internal.telephony.nitz;
 
+import static android.app.timezonedetector.PhoneTimeZoneSuggestion.createEmptySuggestion;
+
 import static com.android.internal.telephony.TimeZoneLookupHelper.CountryResult.QUALITY_DEFAULT_BOOSTED;
 import static com.android.internal.telephony.TimeZoneLookupHelper.CountryResult.QUALITY_MULTIPLE_ZONES_DIFFERENT_OFFSETS;
 import static com.android.internal.telephony.TimeZoneLookupHelper.CountryResult.QUALITY_MULTIPLE_ZONES_SAME_OFFSET;
 import static com.android.internal.telephony.TimeZoneLookupHelper.CountryResult.QUALITY_SINGLE_ZONE;
-import static com.android.internal.telephony.nitz.service.PhoneTimeZoneSuggestion.createEmptySuggestion;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.app.timezonedetector.PhoneTimeZoneSuggestion;
 import android.telephony.Rlog;
 import android.text.TextUtils;
 import android.util.TimestampedValue;
@@ -34,7 +36,6 @@ import com.android.internal.telephony.NitzStateMachine.DeviceState;
 import com.android.internal.telephony.TimeZoneLookupHelper;
 import com.android.internal.telephony.TimeZoneLookupHelper.CountryResult;
 import com.android.internal.telephony.nitz.NewNitzStateMachineImpl.TimeZoneSuggester;
-import com.android.internal.telephony.nitz.service.PhoneTimeZoneSuggestion;
 
 import java.util.Objects;
 
