@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa6d4ba2_26a41453",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3301,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-11-07T19:18:52Z",
+      "side": 1,
+      "message": "LGTM",
+      "range": {
+        "startLine": 3301,
+        "startChar": 12,
+        "endLine": 3301,
+        "endChar": 50
+      },
+      "revId": "9c84c9268524cb272a7bb04f54d143449b287dbc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
