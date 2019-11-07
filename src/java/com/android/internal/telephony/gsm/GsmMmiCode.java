@@ -1110,6 +1110,12 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                 mState = State.COMPLETE;
             }
             Rlog.d(LOG_TAG, "onUssdFinished: ussdMessage=" + ussdMessage);
+
+            if (mContext.getResources()
+                    .getBoolean(com.android.internal.R.bool.config_ussd_balance_custom)
+                    && TextUtils.isEmpty(ussdMessage)) {
+                return;
+            }
             mPhone.onMMIDone(this);
         }
     }
