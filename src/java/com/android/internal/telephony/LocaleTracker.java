@@ -274,41 +274,67 @@ public class LocaleTracker extends Handler {
     }
 
     /**
-     * Get the MCC from cell tower information.
+     * Gets the ISO country code from cell tower information.
      *
-     * @return MCC in string format. Null if the information is not available.
+     * @return ISO 3166 alpha-2 country code. Null if the information is not available.
      */
     @Nullable
-    private String getMccFromCellInfo() {
-        String selectedMcc = null;
+    private String getCountryIsoCodeFromCellInfo() {
+        String selectedCountryCode = null;
         if (mCellInfoList != null) {
             Map<String, Integer> countryCodeMap = new HashMap<>();
             int maxCount = 0;
             for (CellInfo cellInfo : mCellInfoList) {
-                String mcc = null;
-                if (cellInfo instanceof CellInfoGsm) {
-                    mcc = ((CellInfoGsm) cellInfo).getCellIdentity().getMccString();
-                } else if (cellInfo instanceof CellInfoLte) {
-                    mcc = ((CellInfoLte) cellInfo).getCellIdentity().getMccString();
-                } else if (cellInfo instanceof CellInfoWcdma) {
-                    mcc = ((CellInfoWcdma) cellInfo).getCellIdentity().getMccString();
-                }
+                String mcc = getNetworkMcc(cellInfo);
+                String mnc = getNetworkMnc(cellInfo);
+                String countryCode = null;
                 if (mcc != null) {
-                    int count = 1;
-                    if (countryCodeMap.containsKey(mcc)) {
-                        count = countryCodeMap.get(mcc) + 1;
+                    if (mnc != null) {
+                        countryCode = MccTable.countryIsoCodeForMccMnc(mcc, mnc);
+                    } else {
+                        countryCode = MccTable.countryIsoCodeForMcc(mcc);
                     }
-                    countryCodeMap.put(mcc, count);
-                    // This is unlikely, but if MCC from cell info looks different, we choose the
-                    // MCC that occurs most.
+                }
+                if (countryCode != null) {
+                    int count = 1;
+                    if (countryCodeMap.containsKey(countryCode)) {
+                        count = countryCodeMap.get(countryCode) + 1;
+                    }
+                    countryCodeMap.put(countryCode, count);
+                    // This is unlikely, but if country from cell info looks different, we choose
+                    // the country code that occurs most.
                     if (count > maxCount) {
                         maxCount = count;
-                        selectedMcc = mcc;
+                        selectedCountryCode = countryCode;
                     }
                 }
             }
         }
-        return selectedMcc;
+        return selectedCountryCode;
+    }
+
+    private static String getNetworkMcc(CellInfo cellInfo) {
+        String mccString = null;
+        if (cellInfo instanceof CellInfoGsm) {
+            mccString = ((CellInfoGsm) cellInfo).getCellIdentity().getMccString();
+        } else if (cellInfo instanceof CellInfoLte) {
+            mccString = ((CellInfoLte) cellInfo).getCellIdentity().getMccString();
+        } else if (cellInfo instanceof CellInfoWcdma) {
+            mccString = ((CellInfoWcdma) cellInfo).getCellIdentity().getMccString();
+        }
+        return mccString;
+    }
+
+    private static String getNetworkMnc(CellInfo cellInfo) {
+        String mccString = null;
+        if (cellInfo instanceof CellInfoGsm) {
+            mccString = ((CellInfoGsm) cellInfo).getCellIdentity().getMncString();
+        } else if (cellInfo instanceof CellInfoLte) {
+            mccString = ((CellInfoLte) cellInfo).getCellIdentity().getMncString();
+        } else if (cellInfo instanceof CellInfoWcdma) {
+            mccString = ((CellInfoWcdma) cellInfo).getCellIdentity().getMncString();
+        }
+        return mccString;
     }
 
     /**
@@ -453,42 +479,57 @@ public class LocaleTracker extends Handler {
      * Update the device's current locale
      */
     private synchronized void updateLocale() {
-        // If MCC is available from network service state, use it first.
-        String mcc = null;
+        // If country code is available from network service state, use it first.
         String countryIso = getCarrierCountry();
-        boolean isBogusMcc = false;
+        String countryIsoDebugInfo = "getCarrierCountry()";
+
+        // There are compliance tests that expect the device to find a time zone even on a test
+        // cell 001. This is treated as a special case and requires that NitzStateMachine is passed
+        // an empty String for the country code.
+        boolean isTestMcc = false;
 
         if (!TextUtils.isEmpty(mOperatorNumeric)) {
             try {
-                mcc = mOperatorNumeric.substring(0, 3);
-                countryIso = MccTable.countryCodeForMcc(mcc);
-                if (!TextUtils.isEmpty(mcc) && TextUtils.isEmpty(countryIso)) {
-                    isBogusMcc = true;
+                String mcc = mOperatorNumeric.substring(0, 3);
+                // Is this a test cell (MCC 001).
+                if ("001".equals(mcc)) {
+                    isTestMcc = true;
+                    countryIso = "";
+                    countryIsoDebugInfo = "Test MCC operatorNumeric = " + mOperatorNumeric;
+                } else {
+                    String mnc = mOperatorNumeric.substring(3);
+                    countryIso = MccTable.countryIsoCodeForMccMnc(mcc, mnc);
+                    countryIsoDebugInfo = "MccTable.countryIsoCodeForMccMnc(\"" + mcc + "\", \""
+                            + mnc + "\")";
                 }
             } catch (StringIndexOutOfBoundsException ex) {
-                loge("updateLocale: Can't get country from operator numeric. mcc = "
-                        + mcc + ". ex=" + ex);
+                loge("updateLocale: Can't get country from operator numeric. mOperatorNumeric = "
+                        + mOperatorNumeric + ". ex=" + ex);
             }
         }
 
         // If for any reason we can't get country from operator numeric, try to get it from cell
         // info.
         if (TextUtils.isEmpty(countryIso)) {
-            mcc = getMccFromCellInfo();
-            countryIso = MccTable.countryCodeForMcc(mcc);
+            countryIso = getCountryIsoCodeFromCellInfo();
+            countryIsoDebugInfo = "getCountryCodeFromCellInfo()";
         }
 
         if (mCountryOverride != null) {
             countryIso = mCountryOverride;
+            countryIsoDebugInfo = "mCountryOverride=" + mCountryOverride;
             log("Override current country to " + mCountryOverride);
         }
 
-        log("updateLocale: mcc = " + mcc + ", country = " + countryIso
-                + ", isBogusMcc = " + isBogusMcc);
+        log("updateLocale: country = " + countryIso
+                + ", countryIsoDebugInfo = " + countryIsoDebugInfo
+                + ", isTestMcc = " + isTestMcc);
         boolean countryChanged = false;
         if (!Objects.equals(countryIso, mCurrentCountryIso)) {
             String msg = "updateLocale: Change the current country to \"" + countryIso
-                    + "\", mcc = " + mcc + ", mCellInfoList = " + mCellInfoList;
+                    + "\", countryIsoDebugInfo = " + countryIsoDebugInfo
+                    + ", mCellInfoList = " + mCellInfoList
+                    + ", isTestMcc = " + isTestMcc;
             log(msg);
             mLocalLog.log(msg);
             mCurrentCountryIso = countryIso;
@@ -504,8 +545,8 @@ public class LocaleTracker extends Handler {
             countryChanged = true;
         }
 
-        // For bogus mcc, the countryIso is always empty, it should be marked as available.
-        if (TextUtils.isEmpty(countryIso) && !isBogusMcc) {
+        // For test mcc, the countryIso is always empty, it should be marked as available.
+        if (TextUtils.isEmpty(countryIso) && !isTestMcc) {
             mNitzStateMachine.handleNetworkCountryCodeUnavailable();
         } else {
             mNitzStateMachine.handleNetworkCountryCodeSet(countryChanged);

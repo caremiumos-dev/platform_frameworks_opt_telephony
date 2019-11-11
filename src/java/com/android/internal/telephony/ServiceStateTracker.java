@@ -3371,7 +3371,8 @@ public class ServiceStateTracker extends Handler {
             } else if (mSS.getRilDataRadioTechnology() != ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN) {
                 // If the device is on IWLAN, modems manufacture a ServiceState with the MCC/MNC of
                 // the SIM as if we were talking to towers. Telephony code then uses that with
-                // mccTable to suggest a timezone. We shouldn't do that if the MCC/MNC is from IWLAN
+                // mccTable to suggest a locale / country / time zone via the LocaleTracker. We
+                // don't do that if the MCC/MNC is from IWLAN
 
                 // Update IDD.
                 if (!mPhone.isPhoneTypeGsm()) {
@@ -5151,9 +5152,11 @@ public class ServiceStateTracker extends Handler {
         }
         boolean inSameCountry = true;
         final String networkMCC = operatorNumeric.substring(0, 3);
+        final String networkMNC = operatorNumeric.substring(3);
         final String homeMCC = homeNumeric.substring(0, 3);
-        final String networkCountry = MccTable.countryCodeForMcc(networkMCC);
-        final String homeCountry = MccTable.countryCodeForMcc(homeMCC);
+        final String homeMNC = homeNumeric.substring(3);
+        final String networkCountry = MccTable.countryIsoCodeForMccMnc(networkMCC, networkMNC);
+        final String homeCountry = MccTable.countryIsoCodeForMccMnc(homeMCC, homeMNC);
         if (networkCountry.isEmpty() || homeCountry.isEmpty()) {
             // Not a valid country
             return false;
