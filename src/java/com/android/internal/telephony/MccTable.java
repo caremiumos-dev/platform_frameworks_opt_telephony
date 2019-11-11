@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import android.annotation.NonNull;
+import android.annotation.Nullable;
 import android.annotation.UnsupportedAppUsage;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -27,8 +29,13 @@ import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Slog;
 
+import com.android.internal.annotations.GuardedBy;
 import com.android.internal.app.LocaleStore;
 import com.android.internal.app.LocaleStore.LocaleInfo;
+
+import libcore.timezone.TelephonyLookup;
+import libcore.timezone.TelephonyNetwork;
+import libcore.timezone.TelephonyNetworkFinder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +52,9 @@ import java.util.Map;
  */
 public final class MccTable {
     static final String LOG_TAG = "MccTable";
+
+    @GuardedBy("MccTable.class")
+    private static TelephonyNetworkFinder sTelephonyNetworkFinder;
 
     static ArrayList<MccEntry> sTable;
 
@@ -90,13 +100,23 @@ public final class MccTable {
         }
     }
 
+    // Retained for app compat.
     /**
-     * Given a GSM Mobile Country Code, returns
-     * an ISO two-character country code if available.
-     * Returns "" if unavailable.
+     * Given a GSM Mobile Country Code, returns a lower-case ISO 3166 alpha-2 country code if
+     * available. Returns empty string if unavailable.
      */
     @UnsupportedAppUsage
+    @NonNull
     public static String countryCodeForMcc(int mcc) {
+        return countryIsoCodeForMcc(mcc);
+    }
+
+    /**
+     * Given a GSM Mobile Country Code, returns a lower-case ISO 3166 alpha-2 country code if
+     * available. Returns empty string if unavailable.
+     */
+    @NonNull
+    public static String countryIsoCodeForMcc(int mcc) {
         MccEntry entry = entryForMcc(mcc);
 
         if (entry == null) {
@@ -107,16 +127,92 @@ public final class MccTable {
     }
 
     /**
-     * Given a GSM Mobile Country Code, returns
-     * an ISO two-character country code if available.
-     * Returns empty string if unavailable.
+     * Given a GSM Mobile Country Code, returns a lower-case ISO 3166 alpha-2 country code if
+     * available. Returns empty string if unavailable.
      */
-    public static String countryCodeForMcc(String mcc) {
+    @NonNull
+    public static String countryIsoCodeForMcc(@NonNull String mcc) {
         try {
-            return countryCodeForMcc(Integer.parseInt(mcc));
+            return countryIsoCodeForMcc(Integer.parseInt(mcc));
         } catch (NumberFormatException ex) {
             return "";
         }
+    }
+
+    /**
+     * Given an IMSI, returns a lower case ISO 3166 alpha-2 country code.
+     * Returns empty string if no code can be determined.
+     */
+    @NonNull
+    public static String countryIsoCodeForImsi(@NonNull String imsi) {
+        try {
+            String mcc = imsi.substring(0, 3);
+            // It is hard to know the number of digits used for the MNC because it varies by
+            // country. MccEntry only provides the minimum digits. Therefore MNC is currently not
+            // used here when determining country ISO code. MCC is usually sufficient.
+            return countryIsoCodeForMcc(mcc);
+        } catch (StringIndexOutOfBoundsException ex) {
+            return "";
+        }
+    }
+
+    /**
+     * Given a combination of MCC and MNC, returns a lower case ISO 3166 alpha-2 country code.
+     * This can give a better result than {@link #countryIsoCodeForMcc(String)} (which provides the
+     * official "which country is the MCC assigned to?" answer) for cases when MNC is also
+     * available: Sometimes an MCC can be used by multiple countries and the MNC can help
+     * distinguish, or the MCC assigned to a country isn't used for geopolitical reasons.
+     * When the ISO country code is desired for user experience reasons (e.g. time zone detection)
+     * this version can provide more pragmatic results than the official alternative. This method
+     * falls back to calling {@link #countryCodeForMcc(int)} if no special MCC+MNC cases are found.
+     * Returns empty string if no code can be determined.
+     */
+    @NonNull
+    public static String countryIsoCodeForMccMnc(@NonNull String mccString,
+            @NonNull String mncString) {
+        int mcc;
+        try {
+            mcc = Integer.parseInt(mccString);
+        } catch (NumberFormatException ex) {
+            return "";
+        }
+
+        // MccEntry includes mSmallestDigitsMnc, but this code just assumes everything after MCC is
+        // the MNC.
+        Integer mnc;
+        try {
+            mnc = Integer.parseInt(mncString);
+        } catch (NumberFormatException ex) {
+            mnc = null;
+        }
+
+        String countryCode = null;
+        if (mnc != null) {
+            countryCode = countryIsoCodeForMccMncNoFallback(mcc, mnc);
+        }
+        if (TextUtils.isEmpty(countryCode)) {
+            // Try the fallback.
+            countryCode = countryIsoCodeForMcc(mcc);
+        }
+        return countryCode;
+    }
+
+    @Nullable
+    private static String countryIsoCodeForMccMncNoFallback(int mcc, int mnc) {
+        synchronized (MccTable.class) {
+            if (sTelephonyNetworkFinder == null) {
+                sTelephonyNetworkFinder = TelephonyLookup.getInstance().getTelephonyNetworkFinder();
+            }
+        }
+        if (sTelephonyNetworkFinder == null) {
+            // This should not happen under normal circumstances, only when the data is missing.
+            return null;
+        }
+        TelephonyNetwork network = sTelephonyNetworkFinder.findNetworkByMccMnc(mcc, mnc);
+        if (network == null) {
+            return null;
+        }
+        return network.getCountryIsoCode();
     }
 
     /**
@@ -364,7 +460,7 @@ public final class MccTable {
     public static Locale getLocaleFromMcc(Context context, int mcc, String simLanguage) {
         boolean hasSimLanguage = !TextUtils.isEmpty(simLanguage);
         String language = hasSimLanguage ? simLanguage : MccTable.defaultLanguageForMcc(mcc);
-        String country = MccTable.countryCodeForMcc(mcc);
+        String country = MccTable.countryIsoCodeForMcc(mcc);
 
         Slog.d(LOG_TAG, "getLocaleFromMcc(" + language + ", " + country + ", " + mcc);
         final Locale locale = getLocaleForLanguageCountry(context, language, country);

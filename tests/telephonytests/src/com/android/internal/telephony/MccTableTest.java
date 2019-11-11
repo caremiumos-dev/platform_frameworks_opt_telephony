@@ -26,20 +26,32 @@ import java.util.Locale;
 // TODO try using InstrumentationRegistry.getContext() instead of the default
 // AndroidTestCase context
 public class MccTableTest extends AndroidTestCase {
-    private final static String LOG_TAG = "GSM";
 
     @SmallTest
-    @Ignore
-    public void testCountryCode() throws Exception {
-        assertEquals("lu", MccTable.countryCodeForMcc(270));
-        assertEquals("gr", MccTable.countryCodeForMcc(202));
-        assertEquals("fk", MccTable.countryCodeForMcc(750));
-        assertEquals("mg", MccTable.countryCodeForMcc(646));
-        assertEquals("us", MccTable.countryCodeForMcc(314));
-        assertEquals("", MccTable.countryCodeForMcc(300));  // mcc not defined, hence default
-        assertEquals("", MccTable.countryCodeForMcc(0));    // mcc not defined, hence default
-        assertEquals("", MccTable.countryCodeForMcc(2000)); // mcc not defined, hence default
+    public void testCountryCodeForMcc() throws Exception {
+        checkMccLookupWithNoMnc("lu", 270);
+        checkMccLookupWithNoMnc("gr", 202);
+        checkMccLookupWithNoMnc("fk", 750);
+        checkMccLookupWithNoMnc("mg", 646);
+        checkMccLookupWithNoMnc("us", 314);
+        checkMccLookupWithNoMnc("", 300);  // mcc not defined, hence default
+        checkMccLookupWithNoMnc("", 0);    // mcc not defined, hence default
+        checkMccLookupWithNoMnc("", 2000); // mcc not defined, hence default
     }
+
+    private void checkMccLookupWithNoMnc(String expectedCountryIsoCode, int mcc) {
+        assertEquals(expectedCountryIsoCode, MccTable.countryCodeForMcc(mcc));
+        assertEquals(expectedCountryIsoCode, MccTable.countryIsoCodeForMcc(mcc));
+        assertEquals(expectedCountryIsoCode, MccTable.countryIsoCodeForMcc("" + mcc));
+        assertEquals(expectedCountryIsoCode, MccTable.countryIsoCodeForMccMnc("" + mcc, "999"));
+    }
+
+    @SmallTest
+    public void testCountryIsoCodeForMccMnc() throws Exception {
+        // This test is possibly fragile as this data is configurable.
+        assertEquals("gu", MccTable.countryIsoCodeForMccMnc("310", "370"));
+    }
+
 
     @SmallTest
     @Ignore

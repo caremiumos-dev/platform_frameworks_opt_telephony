@@ -429,9 +429,11 @@ public class GsmCdmaPhone extends Phone {
         } else {
             String iso = "";
             try {
-                iso = MccTable.countryCodeForMcc(operatorNumeric.substring(0, 3));
+                String mcc = operatorNumeric.substring(0, 3);
+                String mnc = operatorNumeric.substring(3);
+                iso = MccTable.countryIsoCodeForMccMnc(mcc, mnc);
             } catch (StringIndexOutOfBoundsException ex) {
-                Rlog.e(LOG_TAG, "setIsoCountryProperty: countryCodeForMcc error", ex);
+                Rlog.e(LOG_TAG, "setIsoCountryProperty: countryCodeForMccMnc error", ex);
             }
 
             logd("setIsoCountryProperty: set 'gsm.sim.operator.iso-country' to iso=" + iso);

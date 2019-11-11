@@ -1432,7 +1432,7 @@ public class SIMRecords extends IccRecords {
         if (!TextUtils.isEmpty(imsi) && imsi.length() >= 3) {
             log("onAllRecordsLoaded set mcc imsi" + (VDBG ? ("=" + imsi) : ""));
             mTelephonyManager.setSimCountryIsoForPhone(
-                    mParentApp.getPhoneId(), MccTable.countryCodeForMcc(imsi.substring(0, 3)));
+                    mParentApp.getPhoneId(), MccTable.countryIsoCodeForImsi(imsi));
         } else {
             log("onAllRecordsLoaded empty imsi skipping setting mcc");
         }

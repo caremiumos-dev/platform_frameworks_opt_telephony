@@ -671,13 +671,11 @@ public class UiccProfile extends IccCard {
 
                     if (!TextUtils.isEmpty(operator)) {
                         mTelephonyManager.setSimOperatorNumericForPhone(mPhoneId, operator);
-                        String countryCode = operator.substring(0, 3);
-                        if (countryCode != null) {
-                            mTelephonyManager.setSimCountryIsoForPhone(mPhoneId,
-                                    MccTable.countryCodeForMcc(countryCode));
-                        } else {
-                            loge("setExternalState: state LOADED; Country code is null");
-                        }
+                        String mobileCountryCode = operator.substring(0, 3);
+                        String mobileNetworkCode = operator.substring(3);
+                        String countryIsoCode = MccTable.countryIsoCodeForMccMnc(
+                                mobileCountryCode, mobileNetworkCode);
+                        mTelephonyManager.setSimCountryIsoForPhone(mPhoneId, countryIsoCode);
                     } else {
                         loge("setExternalState: state LOADED; Operator name is null");
                     }
