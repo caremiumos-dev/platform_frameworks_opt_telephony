@@ -1,0 +1,10 @@
+Code-Review+2: Chen Xu <fionaxu@google.com>
+Code-Review+2: Narayan Kamath <narayan@google.com>
+Autosubmit+1: satayev <satayev@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Global-Approval+1: Narayan Kamath <narayan@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Mon, 11 Nov 2019 14:27:46 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1109929
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
