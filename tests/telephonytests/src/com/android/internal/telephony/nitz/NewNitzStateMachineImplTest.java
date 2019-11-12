@@ -453,8 +453,6 @@ public class NewNitzStateMachineImplTest extends TelephonyTest {
             mFakeDeviceState.ignoreNitz = false;
             mFakeDeviceState.nitzUpdateDiffMillis = 2000;
             mFakeDeviceState.nitzUpdateSpacingMillis = 1000 * 60 * 10;
-
-            mFakeDeviceState.networkCountryIsoForPhone = "";
         }
 
         // Initialization methods for setting simulated device state, usually before simulation.
@@ -477,13 +475,12 @@ public class NewNitzStateMachineImplTest extends TelephonyTest {
         }
 
         Script countryUnavailable() {
-            mNitzStateMachineImpl.handleNetworkCountryCodeUnavailable();
+            mNitzStateMachineImpl.handleCountryUnavailable();
             return this;
         }
 
         Script countryReceived(String countryIsoCode) {
-            mFakeDeviceState.networkCountryIsoForPhone = countryIsoCode;
-            mNitzStateMachineImpl.handleNetworkCountryCodeSet(true);
+            mNitzStateMachineImpl.handleCountryDetected(countryIsoCode);
             return this;
         }
 
