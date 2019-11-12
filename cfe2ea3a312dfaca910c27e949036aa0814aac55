@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3d95c91_08c2e598",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3017,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-12T17:03:02Z",
+      "side": 1,
+      "message": "Do you think these call are still needed? Will LocaleTracker be doing the calls needed?\nShould they be \"network unavailable\" instead? (see also https://r.android.com/1161429, which is parallel to this change)",
+      "range": {
+        "startLine": 3017,
+        "startChar": 27,
+        "endLine": 3017,
+        "endChar": 51
+      },
+      "revId": "cfe2ea3a312dfaca910c27e949036aa0814aac55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
