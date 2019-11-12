@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5345ab57_efbc8e38",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-11-12T07:27:12Z",
+      "side": 0,
+      "message": "Isn\u0027t this still needed?",
+      "range": {
+        "startLine": 505,
+        "startChar": 58,
+        "endLine": 505,
+        "endChar": 70
+      },
+      "revId": "737962c9e118b6192b9ec91fbb628335d565c4e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
