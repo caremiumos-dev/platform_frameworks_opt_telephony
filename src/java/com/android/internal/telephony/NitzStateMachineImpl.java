@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import android.annotation.NonNull;
 import android.app.timedetector.PhoneTimeSuggestion;
 import android.content.Context;
 import android.os.PowerManager;
@@ -56,13 +57,11 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
     private TimestampedValue<NitzData> mLatestNitzSignal;
 
     /**
-     * Records whether the device should have a country code available via
-     * {@link DeviceState#getNetworkCountryIsoForPhone()}. Before this an NITZ signal
-     * received is (almost always) not enough to determine time zone. On test networks the country
-     * code should be available but can still be an empty string but this flag indicates that the
-     * information available is unlikely to improve.
+     * Records the country to use for time zone detection. It can be a valid ISO 3166 alpha-2 code
+     * (lower case), empty (test network) or null (no country detected) Before this an NITZ signal
+     * received is (almost always) not enough to determine time zone.
      */
-    private boolean mGotCountryCode = false;
+    private String mCountryIsoCode;
 
     /**
      * The last time zone ID that has been determined. It may not have been set as the device time
@@ -82,7 +81,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
     /**
      * Boolean is {@code true} if NITZ has been used to determine a time zone (which may not
      * ultimately have been used due to user settings). Cleared by {@link #handleNetworkAvailable()}
-     * and {@link #handleNetworkCountryCodeUnavailable()}. The flag can be used when historic NITZ
+     * and {@link #handleCountryUnavailable()}. The flag can be used when historic NITZ
      * data may no longer be valid. {@code false} indicates it is reasonable to try to set the time
      * zone using less reliable algorithms than NITZ-based detection such as by just using network
      * country code.
@@ -131,16 +130,16 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
     }
 
     @Override
-    public void handleNetworkCountryCodeSet(boolean countryChanged) {
-        boolean hadCountryCode = mGotCountryCode;
-        mGotCountryCode = true;
+    public void handleCountryDetected(@NonNull String countryIsoCode) {
+        String oldCountryIsoCode = mCountryIsoCode;
+        mCountryIsoCode = Objects.requireNonNull(countryIsoCode);
 
-        String isoCountryCode = mDeviceState.getNetworkCountryIsoForPhone();
-        if (!TextUtils.isEmpty(isoCountryCode) && !mNitzTimeZoneDetectionSuccessful) {
-            updateTimeZoneFromNetworkCountryCode(isoCountryCode);
+        if (!TextUtils.isEmpty(countryIsoCode) && !mNitzTimeZoneDetectionSuccessful) {
+            updateTimeZoneFromNetworkCountryCode(countryIsoCode);
         }
 
-        if (mLatestNitzSignal != null && (countryChanged || !hadCountryCode)) {
+        boolean countryChanged = Objects.equals(oldCountryIsoCode, countryIsoCode);
+        if (mLatestNitzSignal != null && (countryChanged || oldCountryIsoCode == null)) {
             updateTimeZoneFromCountryAndNitz();
         }
     }
@@ -149,7 +148,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         // This method must only be called after mLatestNitzSignal has been set to a non-null
         // value.
         TimestampedValue<NitzData> nitzSignal = Objects.requireNonNull(mLatestNitzSignal);
-        String isoCountryCode = mDeviceState.getNetworkCountryIsoForPhone();
+        String isoCountryCode = mCountryIsoCode;
 
         // TimeZone.getDefault() returns a default zone (GMT) even when time zone have never
         // been set which makes it difficult to tell if it's what the user / time zone detection
@@ -171,7 +170,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
             String zoneId;
             if (nitzData.getEmulatorHostTimeZone() != null) {
                 zoneId = nitzData.getEmulatorHostTimeZone().getID();
-            } else if (!mGotCountryCode) {
+            } else if (isoCountryCode == null) {
                 // We don't have a country code so we won't try to look up the time zone.
                 zoneId = null;
             } else if (TextUtils.isEmpty(isoCountryCode)) {
@@ -312,12 +311,12 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
     }
 
     @Override
-    public void handleNetworkCountryCodeUnavailable() {
+    public void handleCountryUnavailable() {
         if (DBG) {
             Rlog.d(LOG_TAG, "handleNetworkCountryCodeUnavailable");
         }
 
-        mGotCountryCode = false;
+        mCountryIsoCode = null;
         mNitzTimeZoneDetectionSuccessful = false;
     }
 
@@ -494,7 +493,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
 
         // Time Zone Detection State
         pw.println(" mLatestNitzSignal=" + mLatestNitzSignal);
-        pw.println(" mGotCountryCode=" + mGotCountryCode);
+        pw.println(" mCountryIsoCode=" + mCountryIsoCode);
         pw.println(" mSavedTimeZoneId=" + mSavedTimeZoneId);
         pw.println(" mNitzTimeZoneDetectionSuccessful=" + mNitzTimeZoneDetectionSuccessful);
 
@@ -556,7 +555,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
 
     private void clearTimeZoneDetectionState() {
         mLatestNitzSignal = null;
-        mGotCountryCode = false;
+        mCountryIsoCode = null;
         mSavedTimeZoneId = null;
         mNitzTimeZoneDetectionSuccessful = false;
         mTimeZoneLog.log("clearTimeZoneDetectionState: All time zone detection state cleared.");
