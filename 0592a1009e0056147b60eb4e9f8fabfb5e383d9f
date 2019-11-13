@@ -22,6 +22,30 @@
       "revId": "0592a1009e0056147b60eb4e9f8fabfb5e383d9f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58d7ccfe_99516462",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-13T08:52:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53b5fc2d_63bc0066",
+      "range": {
+        "startLine": 508,
+        "startChar": 63,
+        "endLine": 508,
+        "endChar": 67
+      },
+      "revId": "0592a1009e0056147b60eb4e9f8fabfb5e383d9f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
