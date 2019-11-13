@@ -371,10 +371,22 @@ abstract class ImsPhoneBase extends Phone {
     public void getCallForwardingOption(int commandInterfaceCFReason, Message onComplete) {
     }
 
+    public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass,
+            Message onComplete) {
+    }
+
     @Override
     public void setCallForwardingOption(int commandInterfaceCFAction,
             int commandInterfaceCFReason, String dialingNumber,
             int timerSeconds, Message onComplete) {
+    }
+
+    public void setCallForwardingOption(int commandInterfaceCFReason,
+            int commandInterfaceCFAction,
+            String dialingNumber,
+            int serviceClass,
+            int timerSeconds,
+            Message onComplete) {
     }
 
     @Override

@@ -1007,7 +1007,16 @@ public class ImsPhone extends ImsPhoneBase {
     @Override
     public void getCallForwardingOption(int commandInterfaceCFReason,
             Message onComplete) {
-        if (DBG) logd("getCallForwardingOption reason=" + commandInterfaceCFReason);
+        getCallForwardingOption(commandInterfaceCFReason, CommandsInterface.SERVICE_CLASS_VOICE,
+                onComplete);
+    }
+
+    @Override
+    public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass,
+            Message onComplete) {
+        if (DBG)
+            logd("getCallForwardingOption reason=" + commandInterfaceCFReason + ", serviceClass = "
+                    + serviceClass);
         if (isValidCommandInterfaceCFReason(commandInterfaceCFReason)) {
             if (DBG) logd("requesting call forwarding query.");
             Message resp;
@@ -1015,7 +1024,9 @@ public class ImsPhone extends ImsPhoneBase {
 
             try {
                 ImsUtInterface ut = mCT.getUtInterface();
-                ut.queryCallForward(getConditionFromCFReason(commandInterfaceCFReason), null, resp);
+                ut.queryCallForward(
+                        getConditionFromCFReason(commandInterfaceCFReason), serviceClass, null,
+                        resp);
             } catch (ImsException e) {
                 sendErrorResponse(onComplete, e);
             }
@@ -1034,7 +1045,7 @@ public class ImsPhone extends ImsPhoneBase {
                 CommandsInterface.SERVICE_CLASS_VOICE, timerSeconds, onComplete);
     }
 
-    @UnsupportedAppUsage
+    @Override
     public void setCallForwardingOption(int commandInterfaceCFAction,
             int commandInterfaceCFReason,
             String dialingNumber,
@@ -1051,7 +1062,7 @@ public class ImsPhone extends ImsPhoneBase {
             Cf cf = new Cf(dialingNumber, GsmMmiCode.isVoiceUnconditionalForwarding(
                     commandInterfaceCFReason, serviceClass), onComplete);
             resp = obtainMessage(EVENT_SET_CALL_FORWARD_DONE,
-                    isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, cf);
+                    isCfEnable(commandInterfaceCFAction) ? 1 : 0, serviceClass, cf);
 
             try {
                 ImsUtInterface ut = mCT.getUtInterface();
@@ -1448,7 +1459,8 @@ public class ImsPhone extends ImsPhoneBase {
             for (int i = 0, s = infos.length; i < s; i++) {
                 if (infos[i].getCondition() == ImsUtInterface.CDIV_CF_UNCONDITIONAL) {
                     if (r != null) {
-                        setVoiceCallForwardingFlag(r, 1, (infos[i].getStatus() == 1),
+                        setCallForwardingFlag(r, 1, (infos[i].getStatus() == 1),
+                                infos[i].getServiceClass(),
                                 infos[i].getNumber());
                     }
                 }
@@ -1520,7 +1532,7 @@ public class ImsPhone extends ImsPhoneBase {
                 IccRecords r = mDefaultPhone.getIccRecords();
                 Cf cf = (Cf) ar.userObj;
                 if (cf.mIsCfu && ar.exception == null && r != null) {
-                    setVoiceCallForwardingFlag(r, 1, msg.arg1 == 1, cf.mSetCfNumber);
+                    setCallForwardingFlag(r, 1, msg.arg1 == 1, msg.arg2, cf.mSetCfNumber);
                 }
                 sendResponse(cf.mOnComplete, null, ar.exception);
                 break;

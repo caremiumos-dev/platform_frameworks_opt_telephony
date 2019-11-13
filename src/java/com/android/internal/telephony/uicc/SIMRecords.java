@@ -501,6 +501,12 @@ public class SIMRecords extends IccRecords {
     @UnsupportedAppUsage
     @Override
     public void setVoiceCallForwardingFlag(int line, boolean enable, String dialNumber) {
+        setCallForwardingFlag(line, enable, CommandsInterface.SERVICE_CLASS_VOICE, dialNumber);
+    }
+
+    @Override
+    public void setCallForwardingFlag(int line, boolean enable, int serviceClass,
+            String dialNumber) {
 
         if (line != 1) return; // only line 1 is supported
 
@@ -513,9 +519,9 @@ public class SIMRecords extends IccRecords {
             if (validEfCfis(mEfCfis)) {
                 // lsb is of byte f1 is voice status
                 if (enable) {
-                    mEfCfis[1] |= 1;
+                    mEfCfis[1] |= (mCallForwardingStatus << (serviceClass - 1));
                 } else {
-                    mEfCfis[1] &= 0xfe;
+                    mEfCfis[1] &= ~(0x01 << (serviceClass - 1));
                 }
 
                 log("setVoiceCallForwardingFlag: enable=" + enable
@@ -539,7 +545,7 @@ public class SIMRecords extends IccRecords {
                         EF_CFIS, 1, mEfCfis, null,
                         obtainMessage (EVENT_UPDATE_DONE, EF_CFIS));
             } else {
-                log("setVoiceCallForwardingFlag: ignoring enable=" + enable
+                log("setCallForwardingFlag: ignoring enable=" + enable
                         + " invalid mEfCfis=" + IccUtils.bytesToHexString(mEfCfis));
             }
 

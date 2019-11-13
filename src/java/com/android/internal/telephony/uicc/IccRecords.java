@@ -1056,15 +1056,20 @@ public abstract class IccRecords extends Handler implements IccConstants {
         return CALL_FORWARDING_STATUS_UNKNOWN;
     }
 
+    @UnsupportedAppUsage
+    public void setVoiceCallForwardingFlag(int line, boolean enable, String number) {
+        setCallForwardingFlag(line, enable, CommandsInterface.SERVICE_CLASS_VOICE, number);
+    }
+
     /**
      * Set the voice call forwarding flag for GSM/UMTS and the like SIMs
      *
      * @param line to enable/disable
      * @param enable
+     * @param serviceClass
      * @param number to which CFU is enabled
      */
-    @UnsupportedAppUsage
-    public void setVoiceCallForwardingFlag(int line, boolean enable, String number) {
+    public void setCallForwardingFlag(int line, boolean enable, int serviceClass, String number) {
     }
 
     /**

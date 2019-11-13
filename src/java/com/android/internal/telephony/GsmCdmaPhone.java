@@ -98,6 +98,7 @@ import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.uicc.UiccSlot;
+import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.util.ArrayUtils;
 
 import java.io.FileDescriptor;
@@ -1932,13 +1933,23 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public void getCallForwardingOption(int commandInterfaceCFReason, Message onComplete) {
+        getCallForwardingOption(commandInterfaceCFReason, CommandsInterface.SERVICE_CLASS_VOICE,
+                onComplete);
+    }
+
+    public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass,
+            Message onComplete) {
         if (isPhoneTypeGsm() || isImsUtEnabledOverCdma()) {
             Phone imsPhone = mImsPhone;
             if ((imsPhone != null)
                     && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
-                    || imsPhone.isUtEnabled())) {
-                imsPhone.getCallForwardingOption(commandInterfaceCFReason, onComplete);
-                return;
+                            || imsPhone.isUtEnabled())) {
+                if (imsPhone instanceof ImsPhone) {
+                    ((ImsPhone) imsPhone).getCallForwardingOption(commandInterfaceCFReason,
+                            serviceClass,
+                            onComplete);
+                    return;
+                }
             }
 
             if (isValidCommandInterfaceCFReason(commandInterfaceCFReason)) {
@@ -1963,14 +1974,27 @@ public class GsmCdmaPhone extends Phone {
             String dialingNumber,
             int timerSeconds,
             Message onComplete) {
+        setCallForwardingOption(commandInterfaceCFAction, commandInterfaceCFReason,
+                CommandsInterface.SERVICE_CLASS_VOICE, dialingNumber, timerSeconds, onComplete);
+    }
+
+    public void setCallForwardingOption(int commandInterfaceCFAction,
+            int commandInterfaceCFReason,
+            int serviceClass,
+            String dialingNumber,
+            int timerSeconds,
+            Message onComplete) {
         if (isPhoneTypeGsm() || isImsUtEnabledOverCdma()) {
             Phone imsPhone = mImsPhone;
             if ((imsPhone != null)
                     && ((imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
                     || imsPhone.isUtEnabled())) {
-                imsPhone.setCallForwardingOption(commandInterfaceCFAction,
-                        commandInterfaceCFReason, dialingNumber, timerSeconds, onComplete);
-                return;
+                if (imsPhone instanceof ImsPhone) {
+                    ((ImsPhone) imsPhone).setCallForwardingOption(commandInterfaceCFAction,
+                            commandInterfaceCFReason,
+                            dialingNumber, serviceClass, timerSeconds, onComplete);
+                    return;
+                }
             }
 
             if ((isValidCommandInterfaceCFAction(commandInterfaceCFAction)) &&

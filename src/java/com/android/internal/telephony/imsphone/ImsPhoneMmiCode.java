@@ -414,7 +414,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
     private static int
     siToServiceClass(String si) {
         if (si == null || si.length() == 0) {
-                return  SERVICE_CLASS_NONE;
+                return  SERVICE_CLASS_VOICE;
         } else {
             // NumberFormatException should cause MMI fail
             int serviceCode = Integer.parseInt(si, 10);
@@ -849,9 +849,8 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                             ((reason == CommandsInterface.CF_REASON_UNCONDITIONAL) ||
                              (reason == CommandsInterface.CF_REASON_ALL)) ? 1 : 0;
 
-                    int isEnableDesired =
-                        ((cfAction == CommandsInterface.CF_ACTION_ENABLE) ||
-                                (cfAction == CommandsInterface.CF_ACTION_REGISTRATION)) ? 1 : 0;
+                    int isEnableDesired = ((cfAction == CommandsInterface.CF_ACTION_ENABLE) ||
+                            (cfAction == CommandsInterface.CF_ACTION_REGISTRATION)) ? 1 : 0;
 
                     Rlog.d(LOG_TAG, "processCode: is CF setCallForward");
                     mPhone.setCallForwardingOption(cfAction, reason,
@@ -1411,12 +1410,11 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         destinations[1] = PhoneNumberUtils.stringFromStringAndTOA(info.number, info.toa);
         destinations[2] = Integer.toString(info.timeSeconds);
 
-        if (info.reason == CommandsInterface.CF_REASON_UNCONDITIONAL &&
-                (info.serviceClass & serviceClassMask)
-                        == CommandsInterface.SERVICE_CLASS_VOICE) {
+        if (info.reason == CommandsInterface.CF_REASON_UNCONDITIONAL) {
             boolean cffEnabled = (info.status == 1);
             if (mIccRecords != null) {
-                mPhone.setVoiceCallForwardingFlag(1, cffEnabled, info.number);
+                mPhone.setCallForwardingFlag(mIccRecords, 1, cffEnabled, info.serviceClass,
+                        info.number);
             }
         }
 
@@ -1787,7 +1785,8 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                         Rlog.d(LOG_TAG, "setVoiceCallForwardingFlag done from SS Info.");
                         //Only CF status is set here as part of activation/registration,
                         //number is not available until interrogation.
-                        mPhone.setVoiceCallForwardingFlag(1, cffEnabled, null);
+                        mPhone.setCallForwardingFlag(mIccRecords, 1, cffEnabled,
+                                ssData.getServiceClass(), null);
                     } else {
                         Rlog.e(LOG_TAG, "setCallForwardingFlag aborted. sim records is null.");
                     }

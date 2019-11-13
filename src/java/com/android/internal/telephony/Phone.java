@@ -1975,7 +1975,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                         // get call forwarding status from preferences
                         status = sp.getInt(CF_STATUS, IccRecords.CALL_FORWARDING_STATUS_DISABLED);
                         setCallForwardingIndicatorInSharedPref(
-                                status == IccRecords.CALL_FORWARDING_STATUS_ENABLED ? true : false);
+                                status == IccRecords.CALL_FORWARDING_STATUS_ENABLED ? true : false,
+                                status);
                         Rlog.d(LOG_TAG, "getCallForwardingIndicatorFromSharedPref: " + status);
                     } else {
                         Rlog.d(LOG_TAG, "getCallForwardingIndicatorFromSharedPref: returning " +
@@ -1995,21 +1996,25 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return status;
     }
 
-    private void setCallForwardingIndicatorInSharedPref(boolean enable) {
-        int status = enable ? IccRecords.CALL_FORWARDING_STATUS_ENABLED :
-                IccRecords.CALL_FORWARDING_STATUS_DISABLED;
+    private void setCallForwardingIndicatorInSharedPref(boolean enable, int serviceClass) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
         int subId = getSubId();
+        int status = sp.getInt(CF_STATUS + subId, IccRecords.CALL_FORWARDING_STATUS_UNKNOWN);
+        if (enable) {
+            status |= (status << (serviceClass - 1));
+        } else {
+            status &= ~(0x01 << (serviceClass - 1));
+        }
         Rlog.i(LOG_TAG, "setCallForwardingIndicatorInSharedPref: Storing status = " + status +
                 " in pref " + CF_STATUS + subId);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(CF_STATUS + subId, status);
         editor.apply();
     }
 
     public void setVoiceCallForwardingFlag(int line, boolean enable, String number) {
-        setCallForwardingIndicatorInSharedPref(enable);
+        setCallForwardingIndicatorInSharedPref(enable, CommandsInterface.SERVICE_CLASS_VOICE);
         IccRecords r = mIccRecords.get();
         if (r != null) {
             r.setVoiceCallForwardingFlag(line, enable, number);
@@ -2026,8 +2031,13 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public void setVoiceCallForwardingFlag(IccRecords r, int line, boolean enable,
                                               String number) {
-        setCallForwardingIndicatorInSharedPref(enable);
-        r.setVoiceCallForwardingFlag(line, enable, number);
+        setCallForwardingFlag(r, line, enable, CommandsInterface.SERVICE_CLASS_VOICE, number);
+    }
+
+    public void setCallForwardingFlag(IccRecords r, int line, boolean enable, int serviceClass,
+            String number) {
+        setCallForwardingIndicatorInSharedPref(enable, serviceClass);
+        r.setCallForwardingFlag(line, enable, serviceClass, number);
     }
 
     /**
