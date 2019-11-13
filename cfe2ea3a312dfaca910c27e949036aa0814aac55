@@ -22,6 +22,30 @@
       "revId": "cfe2ea3a312dfaca910c27e949036aa0814aac55",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaf805be_c5610a5e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3017,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-13T17:42:05Z",
+      "side": 1,
+      "message": "I\u0027ve pulled out a change for these: https://r.android.com/1165269",
+      "parentUuid": "d3d95c91_08c2e598",
+      "range": {
+        "startLine": 3017,
+        "startChar": 27,
+        "endLine": 3017,
+        "endChar": 51
+      },
+      "revId": "cfe2ea3a312dfaca910c27e949036aa0814aac55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
