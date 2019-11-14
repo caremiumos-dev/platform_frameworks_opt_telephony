@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e8d060e_27eec753",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-11-14T00:35:37Z",
+      "side": 1,
+      "message": "@Nullable",
+      "range": {
+        "startLine": 105,
+        "startChar": 22,
+        "endLine": 105,
+        "endChar": 28
+      },
+      "revId": "e7932b78d7738bb5ae6409c71159d7d56c5c2f02",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "912ad77b_c0577caa",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-11-14T00:35:37Z",
+      "side": 1,
+      "message": "We normally don\u0027t use integer for mcc/mnc because some mnc can start with \"0\". See CellIdentityGsm.java",
+      "range": {
+        "startLine": 248,
+        "startChar": 57,
+        "endLine": 248,
+        "endChar": 73
+      },
+      "revId": "e7932b78d7738bb5ae6409c71159d7d56c5c2f02",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
