@@ -1866,7 +1866,9 @@ public class RILTest extends TelephonyTest {
         assertEquals(APN_ENABLED, dpi.enabled);
         assertEquals(SUPPORTED_APNT_YPES_BITMAK, dpi.supportedApnTypesBitmap);
         assertEquals(ROAMING_PROTOCOL, ApnSetting.getProtocolIntFromString(dpi.protocol));
-        assertEquals(BEARER_BITMASK, dpi.bearerBitmap);
+        assertEquals(
+                BEARER_BITMASK,
+                ServiceState.convertBearerBitmaskToNetworkTypeBitmask(dpi.bearerBitmap >> 1));
         assertEquals(MTU, dpi.mtu);
     }
 
