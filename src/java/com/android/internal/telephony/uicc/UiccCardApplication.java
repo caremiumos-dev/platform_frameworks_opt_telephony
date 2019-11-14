@@ -31,6 +31,7 @@ import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
 import com.android.internal.telephony.uicc.IccCardStatus.PinState;
+import com.android.internal.telephony.util.TelePhonebookUtil;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -270,6 +271,8 @@ public class UiccCardApplication {
             int attemptsRemaining = -1;
 
             if (ar.exception == null) {
+                TelePhonebookUtil.broadcastFdnChangedDone(mContext, mIccFdnEnabled,
+                        mDesiredFdnEnabled, getPhoneId());
                 mIccFdnEnabled = mDesiredFdnEnabled;
                 if (DBG) log("EVENT_CHANGE_FACILITY_FDN_DONE: " +
                         "mIccFdnEnabled=" + mIccFdnEnabled);
