@@ -45,6 +45,30 @@
       "revId": "e7932b78d7738bb5ae6409c71159d7d56c5c2f02",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33621eff_e2fd2567",
+        "filename": "src/java/com/android/internal/telephony/MccTable.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-14T09:30:10Z",
+      "side": 1,
+      "message": "Ah, ok. I have some work to do in libcore - I assumed int. I\u0027ll change it.",
+      "parentUuid": "912ad77b_c0577caa",
+      "range": {
+        "startLine": 248,
+        "startChar": 57,
+        "endLine": 248,
+        "endChar": 73
+      },
+      "revId": "e7932b78d7738bb5ae6409c71159d7d56c5c2f02",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
