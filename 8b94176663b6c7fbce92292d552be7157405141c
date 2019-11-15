@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "700da54d_b5197f17",
+        "filename": "src/java/com/android/internal/telephony/nitz/NewTimeServiceHelperImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-11-15T01:18:06Z",
+      "side": 0,
+      "message": "Is this dump still going to be in the bugreport somewhere/able to be triggered manually? Since it\u0027s a system service now is it something like adb shell dumpsys activity TimeZoneDetectionService?",
+      "range": {
+        "startLine": 114,
+        "startChar": 7,
+        "endLine": 114,
+        "endChar": 39
+      },
+      "revId": "8b94176663b6c7fbce92292d552be7157405141c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
