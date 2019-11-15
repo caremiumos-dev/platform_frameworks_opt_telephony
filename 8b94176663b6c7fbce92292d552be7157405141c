@@ -22,6 +22,30 @@
       "revId": "8b94176663b6c7fbce92292d552be7157405141c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad34e5bc_aeab51a9",
+        "filename": "src/java/com/android/internal/telephony/nitz/NewTimeServiceHelperImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2019-11-15T09:27:38Z",
+      "side": 0,
+      "message": "Yes - there will still be the telephony log here, but also the log from the service (adb shell dumpsys time_zone_detector).\n\nIn the past I\u0027ve had push back on using LocalLog in the system server but it\u0027s in the initial version of commit to record the actual changes made - I\u0027ll see how it goes: the LocalLogs can be incredibly useful for tracking down issues so I want to keep them.",
+      "parentUuid": "700da54d_b5197f17",
+      "range": {
+        "startLine": 114,
+        "startChar": 7,
+        "endLine": 114,
+        "endChar": 39
+      },
+      "revId": "8b94176663b6c7fbce92292d552be7157405141c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
