@@ -122,7 +122,7 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
 
     @Override
-    public void addOnSubscriptionsChangedListener(String callingPackage,
+    public void addOnSubscriptionsChangedListener(String callingPackage, String callingFeatureId,
             IOnSubscriptionsChangedListener callback) {
         Record r;
 
@@ -163,7 +163,7 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
 
     @Override
     public void addOnOpportunisticSubscriptionsChangedListener(String callingPackage,
-            IOnSubscriptionsChangedListener callback) {
+            String callingFeatureId, IOnSubscriptionsChangedListener callback) {
         Record r;
 
         synchronized (mRecords) {
@@ -258,8 +258,14 @@ public class TelephonyRegistryMock extends ITelephonyRegistry.Stub {
     }
 
     @Override
-    public void listenForSubscriber(int subId, String pkg, IPhoneStateListener callback, int events,
-                                    boolean notifyNow) {
+    public void listenWithFeature(String pkg, String callingFeatureId, IPhoneStateListener callback,
+            int events, boolean notifyNow) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void listenForSubscriber(int subId, String pkg, String callingFeatureId,
+            IPhoneStateListener callback, int events, boolean notifyNow) {
         throw new RuntimeException("Not implemented");
     }
 

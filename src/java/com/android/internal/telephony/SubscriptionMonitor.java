@@ -65,7 +65,7 @@ public class SubscriptionMonitor {
         }
 
         try {
-            tr.addOnSubscriptionsChangedListener(context.getOpPackageName(),
+            tr.addOnSubscriptionsChangedListener(context.getOpPackageName(), null,
                     mSubscriptionsChangedListener);
         } catch (RemoteException e) {
         }

@@ -393,7 +393,7 @@ public class PhoneSwitcher extends Handler {
         }
 
         try {
-            tr.addOnSubscriptionsChangedListener(context.getOpPackageName(),
+            tr.addOnSubscriptionsChangedListener(context.getOpPackageName(), null,
                     mSubscriptionsChangedListener);
         } catch (RemoteException e) {
         }

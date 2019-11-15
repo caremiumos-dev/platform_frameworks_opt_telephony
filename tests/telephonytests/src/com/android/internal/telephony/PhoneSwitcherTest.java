@@ -1021,7 +1021,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         processAllMessages();
 
         verify(mTelRegistryMock).addOnSubscriptionsChangedListener(
-                eq(mContext.getOpPackageName()), any());
+                eq(mContext.getOpPackageName()), any(), any());
     }
 
     /**
@@ -1086,7 +1086,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
             mSubChangedListener = subChangedListener;
             mSubChangedListener.onSubscriptionsChanged();
             return null;
-        }).when(mTelRegistryMock).addOnSubscriptionsChangedListener(any(), any());
+        }).when(mTelRegistryMock).addOnSubscriptionsChangedListener(any(), any(), any());
     }
 
     /**

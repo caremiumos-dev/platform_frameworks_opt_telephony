@@ -179,7 +179,7 @@ public final class NetworkScanRequestTracker {
      */
     public static Set<String> getAllowedMccMncsForLocationRestrictedScan(Context context) {
         return withCleanCallingIdentity(() -> SubscriptionController.getInstance()
-            .getAvailableSubscriptionInfoList(context.getOpPackageName()).stream()
+            .getAvailableSubscriptionInfoList(context.getOpPackageName(), null).stream()
             .flatMap(NetworkScanRequestTracker::getAllowableMccMncsFromSubscriptionInfo)
             .collect(Collectors.toSet()));
     }

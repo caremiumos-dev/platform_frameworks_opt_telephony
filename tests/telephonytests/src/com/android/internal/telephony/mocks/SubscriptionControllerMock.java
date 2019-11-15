@@ -108,15 +108,13 @@ public class SubscriptionControllerMock extends SubscriptionController {
         throw new RuntimeException("not implemented");
     }
     @Override
-    public SubscriptionInfo getActiveSubscriptionInfoForIccId(String iccId, String callingPackage) {
+    public SubscriptionInfo getActiveSubscriptionInfoForIccId(String iccId, String callingPackage,
+            String callingFeatureId) {
         throw new RuntimeException("not implemented");
     }
     @Override
-    public SubscriptionInfo getActiveSubscriptionInfoForSimSlotIndex(int slotIndex, String cp){
-        throw new RuntimeException("not implemented");
-    }
-    @Override
-    public List<SubscriptionInfo> getAllSubInfoList(String callingPackage) {
+    public List<SubscriptionInfo> getAllSubInfoList(String callingPackage,
+            String callingFeatureId) {
         throw new RuntimeException("not implemented");
     }
     @Override
@@ -128,7 +126,7 @@ public class SubscriptionControllerMock extends SubscriptionController {
         throw new RuntimeException("not implemented");
     }
     @Override
-    public int getAllSubInfoCount(String callingPackage) {
+    public int getAllSubInfoCount(String callingPackage, String callingFeatureId) {
         throw new RuntimeException("not implemented");
     }
     @Override
@@ -263,7 +261,8 @@ public class SubscriptionControllerMock extends SubscriptionController {
         throw new RuntimeException("not implemented");
     }
     @Override
-    public String getSubscriptionProperty(int subId, String propKey, String callingPackage) {
+    public String getSubscriptionProperty(int subId, String propKey, String callingPackage,
+            String callingFeatureId) {
         throw new RuntimeException("not implemented");
     }
     @Override
