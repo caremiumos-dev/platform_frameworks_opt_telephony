@@ -32,6 +32,7 @@ import android.app.AppOpsManager;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.os.UserHandle;
 import android.provider.Telephony;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -45,7 +46,7 @@ import org.mockito.Mock;
 
 public class WapPushOverSmsTest extends TelephonyTest {
     @Mock
-    protected IMms.Stub mIMmsStub;
+    protected ISms.Stub mISmsStub;
 
     private WapPushOverSms mWapPushOverSmsUT;
 
@@ -55,8 +56,8 @@ public class WapPushOverSmsTest extends TelephonyTest {
 
         // Note that this replaces only cached services in ServiceManager. If a service is not found
         // in the cache, a real instance is used.
-        mServiceManagerMockedServices.put("imms", mIMmsStub);
-        doReturn(mIMmsStub).when(mIMmsStub).queryLocalInterface(anyString());
+        mServiceManagerMockedServices.put("isms", mISmsStub);
+        doReturn(mISmsStub).when(mISmsStub).queryLocalInterface(anyString());
 
         mWapPushOverSmsUT = new WapPushOverSms(mContext);
     }
@@ -118,7 +119,8 @@ public class WapPushOverSmsTest extends TelephonyTest {
 
     @Test @SmallTest
     public void testDispatchWapPduFromBlockedNumber_noIntentsDispatched() throws Exception {
-        when(mIMmsStub.getCarrierConfigValues(anyInt())).thenReturn(new Bundle());
+        when(mISmsStub.getCarrierConfigValuesForSubscriber(anyInt()))
+                .thenReturn(new PersistableBundle());
 
         mFakeBlockedNumberContentProvider.mBlockedNumbers.add("16178269168");
 

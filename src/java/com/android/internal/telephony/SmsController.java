@@ -30,8 +30,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.os.ServiceManager;
 import android.provider.Telephony.Sms.Intents;
+import android.telephony.CarrierConfigManager;
 import android.telephony.IFinancialSmsCallback;
 import android.telephony.Rlog;
 import android.telephony.SmsManager;
@@ -498,6 +500,19 @@ public class SmsController extends ISmsImplBase {
             Rlog.e(LOG_TAG, "sendStoredMultipartText iccSmsIntMgr is null for subscription: "
                     + subId);
             sendErrorInPendingIntents(sentIntents, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
+        }
+    }
+
+    @Override
+    public PersistableBundle getCarrierConfigValuesForSubscriber(int subId) {
+        final long identity = Binder.clearCallingIdentity();
+        try {
+            final CarrierConfigManager configManager =
+                    (CarrierConfigManager)
+                            mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+            return configManager.getConfigForSubId(subId);
+        } finally {
+            Binder.restoreCallingIdentity(identity);
         }
     }
 
