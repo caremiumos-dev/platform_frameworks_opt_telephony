@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c0bc739_e55e52be",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3549,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-11-18T22:31:47Z",
+      "side": 1,
+      "message": "Question: Why is the modem notifying when there is no change?",
+      "range": {
+        "startLine": 3548,
+        "startChar": 16,
+        "endLine": 3549,
+        "endChar": 61
+      },
+      "revId": "b6c702a28c012b98eb27e21289f7514871b15448",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
