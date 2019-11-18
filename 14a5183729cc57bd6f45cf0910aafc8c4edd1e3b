@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c30b85f2_e095d91e",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2019-11-18T22:42:20Z",
+      "side": 1,
+      "message": "EVENT_UPDATE_EMERGENCY_NUMBER_TEST_MODE is for updating, removing, resetting. I don\u0027t think this needs to be checked.",
+      "range": {
+        "startLine": 228,
+        "startChar": 51,
+        "endLine": 228,
+        "endChar": 83
+      },
+      "revId": "14a5183729cc57bd6f45cf0910aafc8c4edd1e3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
