@@ -22,6 +22,30 @@
       "revId": "14a5183729cc57bd6f45cf0910aafc8c4edd1e3b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f03f8fc0_e81651e3",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-11-18T23:04:46Z",
+      "side": 1,
+      "message": "msg.obj \u003d\u003d null when msg.arg1 \u003d\u003d RESET_EMERGENCY_NUMBER_TEST_MODE because executeEmergencyNumberTestModeCommand is called with a null number in the case that we want to reset the emergency number.",
+      "parentUuid": "c30b85f2_e095d91e",
+      "range": {
+        "startLine": 228,
+        "startChar": 51,
+        "endLine": 228,
+        "endChar": 83
+      },
+      "revId": "14a5183729cc57bd6f45cf0910aafc8c4edd1e3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
