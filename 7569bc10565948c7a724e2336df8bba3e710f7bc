@@ -45,6 +45,54 @@
       "revId": "7569bc10565948c7a724e2336df8bba3e710f7bc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f595bd73_e2aab83c",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-11-18T23:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42da80e0_96a61f40",
+      "range": {
+        "startLine": 1192,
+        "startChar": 8,
+        "endLine": 1192,
+        "endChar": 11
+      },
+      "revId": "7569bc10565948c7a724e2336df8bba3e710f7bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fed9fd3_d4f58a22",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-11-18T23:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c56db35_830b86d0",
+      "range": {
+        "startLine": 1192,
+        "startChar": 24,
+        "endLine": 1192,
+        "endChar": 48
+      },
+      "revId": "7569bc10565948c7a724e2336df8bba3e710f7bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
