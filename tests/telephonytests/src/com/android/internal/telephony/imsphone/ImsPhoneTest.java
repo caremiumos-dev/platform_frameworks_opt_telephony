@@ -35,6 +35,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -53,6 +54,7 @@ import android.os.PersistableBundle;
 import android.os.SystemProperties;
 import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
+import android.telephony.SubscriptionManager;
 import android.telephony.ims.ImsCallProfile;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.RegistrationManager;
@@ -76,6 +78,7 @@ import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.TelephonyTest;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
+import com.android.internal.telephony.imsphone.ImsPhone.SubscriptionManagerReadyListener;
 
 import org.junit.After;
 import org.junit.Before;
@@ -830,6 +833,22 @@ public class ImsPhoneTest extends TelephonyTest {
     public void testNonNullTrackersInImsPhone() throws Exception {
         assertNotNull(mImsPhoneUT.getEmergencyNumberTracker());
         assertNotNull(mImsPhoneUT.getServiceStateTracker());
+    }
+
+    @Test
+    @SmallTest
+    public void testRcsFeatureManagerPrepared() throws Exception {
+        SubscriptionManager subscriptionManager =
+                (SubscriptionManager) mock(SubscriptionManager.class);
+        mImsPhoneUT.setSubscriptionManager(subscriptionManager);
+
+        mImsPhoneUT.prepareForRcsFeatureManager();
+
+        assertNotNull(mImsPhoneUT.getRcsFeatureConnectorListener());
+        assertNotNull(mImsPhoneUT.getRcsFeatureConnector());
+
+        verify(subscriptionManager).addOnSubscriptionsChangedListener(
+                any(SubscriptionManagerReadyListener.class));
     }
 
     private ServiceState getServiceStateDataAndVoice(int rat, int regState, boolean isRoaming) {

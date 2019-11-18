@@ -67,6 +67,7 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
+import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
 import android.telephony.UssdResponse;
 import android.telephony.ims.ImsCallForwardInfo;
@@ -203,7 +204,11 @@ public class ImsPhone extends ImsPhoneBase {
     private ServiceState mSS = new ServiceState();
 
     private RcsFeatureManager mRcsManager;
-    private final FeatureConnector<RcsFeatureManager> mRcsManagerConnector;
+    private FeatureConnector<RcsFeatureManager> mRcsManagerConnector;
+    private FeatureConnector.Listener<RcsFeatureManager> mRcsFeatureConnectorListener;
+    private SubscriptionManager mSubscriptionManager;
+    private SubscriptionManagerReadyListener mSubscriptionManagerReadyListener =
+            new SubscriptionManagerReadyListener();
 
     // To redial silently through GSM or CDMA when dialing through IMS fails
     private String mLastDialString;
@@ -330,34 +335,7 @@ public class ImsPhone extends ImsPhoneBase {
         // Force initial roaming state update later, on EVENT_CARRIER_CONFIG_CHANGED.
         // Settings provider or CarrierConfig may not be loaded now.
 
-        mRcsManagerConnector = new FeatureConnector<RcsFeatureManager>(mContext, mPhoneId,
-                new FeatureConnector.Listener<RcsFeatureManager>() {
-                    @Override
-                    public boolean isSupported() {
-                        if (!ImsManager.isImsSupportedOnDevice(mContext)) {
-                            return false;
-                        }
-                        if (!RcsFeatureManager.isRcsUceSupportedByCarrier(mContext, mPhoneId)) {
-                            return false;
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public RcsFeatureManager getFeatureManager() {
-                        return new RcsFeatureManager(mContext, mPhoneId);
-                    }
-
-                    @Override
-                    public void connectionReady(RcsFeatureManager manager) throws ImsException {
-                        mRcsManager = manager;
-                    }
-
-                    @Override
-                    public void connectionUnavailable() {
-                    }
-                }, mContext.getMainExecutor(), "ImsPhone");
-        mRcsManagerConnector.connect();
+        prepareForRcsFeatureManager();
     }
 
     //todo: get rid of this function. It is not needed since parentPhone obj never changes
@@ -381,7 +359,105 @@ public class ImsPhone extends ImsPhoneBase {
             mDefaultPhone.unregisterForServiceStateChanged(this);
         }
 
-        mRcsManagerConnector.disconnect();
+        if (mSubscriptionManager != null) {
+            mSubscriptionManager.removeOnSubscriptionsChangedListener(
+                    mSubscriptionManagerReadyListener);
+        }
+        if (mRcsManagerConnector != null) {
+            mRcsManagerConnector.disconnect();
+        }
+    }
+
+    /**
+     * Prepare for creating RcsFeatureManager instance
+     */
+    @VisibleForTesting
+    public void prepareForRcsFeatureManager() {
+        if (DBG) logd("prepareForRcsFeatureManager");
+
+        mRcsFeatureConnectorListener = new FeatureConnector.Listener<>() {
+            @Override
+            public boolean isSupported() {
+                if (!ImsManager.isImsSupportedOnDevice(mContext)) {
+                    return false;
+                }
+                if (!RcsFeatureManager.isRcsUceSupportedByCarrier(mContext, mPhoneId)) {
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            public RcsFeatureManager getFeatureManager() {
+                if (DBG) logd("Create RcsFeatureManager");
+                return new RcsFeatureManager(mContext, mPhoneId);
+            }
+
+            @Override
+            public void connectionReady(RcsFeatureManager manager) throws ImsException {
+                mRcsManager = manager;
+                if (DBG) logd("RcsFeatureManager is ready");
+            }
+
+            @Override
+             public void connectionUnavailable() {
+            }
+        };
+
+        mRcsManagerConnector = new FeatureConnector<>(mContext, mPhoneId,
+                mRcsFeatureConnectorListener, mContext.getMainExecutor(), LOG_TAG);
+
+        // Waitting for SubscriptionManager ready to initialize RcsFeatureManager instance
+        if (mSubscriptionManager == null) {
+            mSubscriptionManager = SubscriptionManager.from(mContext);
+        }
+        mSubscriptionManager.addOnSubscriptionsChangedListener(mSubscriptionManagerReadyListener);
+    }
+
+    @VisibleForTesting
+    public FeatureConnector<RcsFeatureManager> getRcsFeatureConnector() {
+        return mRcsManagerConnector;
+    }
+
+    @VisibleForTesting
+    public FeatureConnector.Listener<RcsFeatureManager> getRcsFeatureConnectorListener() {
+        return mRcsFeatureConnectorListener;
+    }
+
+    @VisibleForTesting
+    public void setSubscriptionManager(SubscriptionManager subscriptionManager) {
+        mSubscriptionManager = subscriptionManager;
+    }
+
+    /**
+     * Listen to the Subscriptions changed and trigger the process of creating
+     * RcsFeatureManager when SubscriptionManager is ready.
+     */
+    @VisibleForTesting
+    public class SubscriptionManagerReadyListener extends OnSubscriptionsChangedListener {
+        private boolean mIsReady = false;
+
+        @Override
+        public void onSubscriptionsChanged() {
+            if (mIsReady) {
+                return;
+            }
+            if (!isSubscriptionManagerReady(mPhoneId)) {
+                if (DBG) logd("SubscriptionManager is not ready yet");
+                return;
+            }
+            logd("SubscriptionManager is ready");
+            mIsReady = true;
+            mRcsManagerConnector.connect();
+        }
+
+        private boolean isSubscriptionManagerReady(int slotId) {
+            int[] subIds = SubscriptionManager.getSubId(slotId);
+            if (subIds == null || subIds.length == 0) {
+                return false;
+            }
+            return true;
+        }
     }
 
     @UnsupportedAppUsage
