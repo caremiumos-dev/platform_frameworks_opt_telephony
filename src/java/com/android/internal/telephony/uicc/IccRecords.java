@@ -19,6 +19,7 @@ package com.android.internal.telephony.uicc;
 import android.annotation.IntDef;
 import android.annotation.UnsupportedAppUsage;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
@@ -32,6 +33,8 @@ import android.util.Pair;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.MccTable;
+import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.util.ArrayUtils;
 
 import java.io.FileDescriptor;
@@ -954,6 +957,11 @@ public abstract class IccRecords extends Handler implements IccConstants {
             case IccRefreshResponse.REFRESH_RESULT_FILE_UPDATE:
                 if (DBG) log("handleRefresh with SIM_FILE_UPDATED");
                 handleFileUpdate(refreshResponse.efId);
+                //Send broadcast for SIM refresh file update.
+                Intent intent = new Intent(TelephonyIntents.ACTION_SIM_REFRESH_FILEUPDATE);
+                intent.putExtra(PhoneConstants.PHONE_KEY, mParentApp.getPhoneId());
+                intent.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
+                mContext.sendBroadcast(intent, android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
                 break;
             default:
                 // unknown refresh operation
