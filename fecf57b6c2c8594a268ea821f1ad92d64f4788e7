@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23d0a0a9_07213547",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-11-18T20:48:40Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be SERVICE_CLASS_VOICE?  \nThe set method uses that.",
+      "range": {
+        "startLine": 1014,
+        "startChar": 16,
+        "endLine": 1014,
+        "endChar": 34
+      },
+      "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b176f546_aa415deb",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-11-18T20:48:40Z",
+      "side": 1,
+      "message": "Don\u0027t you want SERVICE_CLASS_PACKET | SERVICE_CLASS_DATA_SYNC?\n+ is going to result in something completely different.",
+      "range": {
+        "startLine": 1126,
+        "startChar": 24,
+        "endLine": 1127,
+        "endChar": 54
+      },
+      "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
