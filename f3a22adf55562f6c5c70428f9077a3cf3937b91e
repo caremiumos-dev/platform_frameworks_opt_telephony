@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b8b132f_d2247d83",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-11-18T18:54:49Z",
+      "side": 1,
+      "message": "This is deprecated, just use context.getSystemService(SubscriptionManager.class) directly instead.",
+      "range": {
+        "startLine": 412,
+        "startChar": 34,
+        "endLine": 412,
+        "endChar": 70
+      },
+      "revId": "f3a22adf55562f6c5c70428f9077a3cf3937b91e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afecbd51_e1654839",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-11-18T18:54:49Z",
+      "side": 1,
+      "message": "This will work once, but what happens when the subscription changes again? We should probably have subscription management code as part of the RcsFeatureManager, since it needs to provide updates to the RcsFeature when the subscription changes and new capabilities need to be enabled/disabled.\n\nConnecting to the service should be independent of the subscriptions that are currently loaded, since it is technically attached to a phone ID.",
+      "range": {
+        "startLine": 437,
+        "startChar": 17,
+        "endLine": 437,
+        "endChar": 49
+      },
+      "revId": "f3a22adf55562f6c5c70428f9077a3cf3937b91e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
