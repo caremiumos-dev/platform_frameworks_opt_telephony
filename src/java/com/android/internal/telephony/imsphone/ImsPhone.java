@@ -46,6 +46,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.NetworkStats;
 import android.net.Uri;
 import android.os.AsyncResult;
@@ -132,6 +133,7 @@ public class ImsPhone extends ImsPhoneBase {
     @VisibleForTesting
     public static final int EVENT_SERVICE_STATE_CHANGED             = EVENT_LAST + 8;
     private static final int EVENT_VOICE_CALL_ENDED                  = EVENT_LAST + 9;
+    private static final int EVENT_CARRIER_CONFIG_CHANGED            = EVENT_LAST + 10;
 
     static final int RESTART_ECM_TIMER = 0; // restart Ecm timer
     static final int CANCEL_ECM_TIMER  = 1; // cancel Ecm timer
@@ -203,7 +205,10 @@ public class ImsPhone extends ImsPhoneBase {
     private ServiceState mSS = new ServiceState();
 
     private RcsFeatureManager mRcsManager;
-    private final FeatureConnector<RcsFeatureManager> mRcsManagerConnector;
+    @VisibleForTesting
+    public FeatureConnector<RcsFeatureManager> mRcsManagerConnector;
+    @VisibleForTesting
+    public FeatureConnector.Listener<RcsFeatureManager> mRcsFeatureConnectorListener;
 
     // To redial silently through GSM or CDMA when dialing through IMS fails
     private String mLastDialString;
@@ -330,34 +335,9 @@ public class ImsPhone extends ImsPhoneBase {
         // Force initial roaming state update later, on EVENT_CARRIER_CONFIG_CHANGED.
         // Settings provider or CarrierConfig may not be loaded now.
 
-        mRcsManagerConnector = new FeatureConnector<RcsFeatureManager>(mContext, mPhoneId,
-                new FeatureConnector.Listener<RcsFeatureManager>() {
-                    @Override
-                    public boolean isSupported() {
-                        if (!ImsManager.isImsSupportedOnDevice(mContext)) {
-                            return false;
-                        }
-                        if (!RcsFeatureManager.isRcsUceSupportedByCarrier(mContext, mPhoneId)) {
-                            return false;
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public RcsFeatureManager getFeatureManager() {
-                        return new RcsFeatureManager(mContext, mPhoneId);
-                    }
-
-                    @Override
-                    public void connectionReady(RcsFeatureManager manager) throws ImsException {
-                        mRcsManager = manager;
-                    }
-
-                    @Override
-                    public void connectionUnavailable() {
-                    }
-                }, mContext.getMainExecutor(), "ImsPhone");
-        mRcsManagerConnector.connect();
+        // Listen to the carrier config changed to initialize RcsFeatureManager
+        IntentFilter filter = new IntentFilter(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        mContext.registerReceiver(mCarrierConfigChangedReceiver, filter);
     }
 
     //todo: get rid of this function. It is not needed since parentPhone obj never changes
@@ -381,7 +361,75 @@ public class ImsPhone extends ImsPhoneBase {
             mDefaultPhone.unregisterForServiceStateChanged(this);
         }
 
-        mRcsManagerConnector.disconnect();
+        mContext.unregisterReceiver(mCarrierConfigChangedReceiver);
+
+        if (mRcsManagerConnector != null) {
+            mRcsManagerConnector.disconnect();
+            mRcsManagerConnector = null;
+        }
+    }
+
+    private BroadcastReceiver mCarrierConfigChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null) {
+                return;
+            }
+            if (CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED.equals(intent.getAction())) {
+                Bundle bundle = intent.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                int phoneId = bundle.getInt(CarrierConfigManager.EXTRA_SLOT_INDEX);
+                if (phoneId == mPhoneId) {
+                    sendEmptyMessage(EVENT_CARRIER_CONFIG_CHANGED);
+                }
+            }
+        }
+    };
+
+    /**
+     * Create RcsManagerConnector to initialize RcsFeatureManager
+     */
+    @VisibleForTesting
+    public void initRcsFeatureManager() {
+        if (mRcsManagerConnector != null) {
+            mRcsManagerConnector.disconnect();
+            mRcsManagerConnector = null;
+        }
+
+        logd("initRcsFeatureManager");
+        mRcsFeatureConnectorListener = new FeatureConnector.Listener<>() {
+            @Override
+            public boolean isSupported() {
+                // Check if Telephony IMS is supported or not
+                if (!ImsManager.isImsSupportedOnDevice(mContext)) {
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            public RcsFeatureManager getFeatureManager() {
+                return new RcsFeatureManager(mContext, mPhoneId);
+            }
+
+            @Override
+            public void connectionReady(RcsFeatureManager manager) throws ImsException {
+                logd("RcsFeatureManager is ready");
+                mRcsManager = manager;
+            }
+
+            @Override
+            public void connectionUnavailable() {
+                logd("RcsFeatureManager is unavailable");
+                mRcsManager = null;
+            }
+        };
+
+        mRcsManagerConnector = new FeatureConnector<>(mContext, mPhoneId,
+                mRcsFeatureConnectorListener, mContext.getMainExecutor(), LOG_TAG);
+        mRcsManagerConnector.connect();
     }
 
     @UnsupportedAppUsage
@@ -1586,6 +1634,12 @@ public class ImsPhone extends ImsPhoneBase {
                 ServiceStateTracker sst = getDefaultPhone().getServiceStateTracker();
                 if (sst != null) {
                     updateRoamingState(sst.mSS);
+                }
+                break;
+            case EVENT_CARRIER_CONFIG_CHANGED:
+                if (DBG) logd("EVENT_CARRIER_CONFIG_CHANGED");
+                if (mRcsManager == null) {
+                    initRcsFeatureManager();
                 }
                 break;
 
