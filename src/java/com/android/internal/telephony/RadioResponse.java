@@ -1958,6 +1958,37 @@ public class RadioResponse extends IRadioResponse.Stub {
         return iccCardStatus;
     }
 
+    /**
+     * @param info Response info struct containing response type, serial no. and error
+     * @param pbCapacity Contains the adn,email,anr capacities in the sim card
+     */
+    public void getPhonebookRecordsResponse(android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+                            android.hardware.radio.V1_6.PhonebookCapacity pbCapacity) {
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        arr.add(pbCapacity.maxAdnRecords);
+        arr.add(pbCapacity.usedAdnRecords);
+        arr.add(pbCapacity.maxEmailRecords);
+        arr.add(pbCapacity.usedEmailRecords);
+        arr.add(pbCapacity.maxAdditionalNumberRecords);
+        arr.add(pbCapacity.usedAdditionalNumberRecords);
+        arr.add(pbCapacity.maxNameLen);
+        arr.add(pbCapacity.maxNumberLen);
+        arr.add(pbCapacity.maxEmailLen);
+        arr.add(pbCapacity.maxAdditionalNumberLen);
+
+        responseIntArrayList_1_6(responseInfo, arr);
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error
+     * @param updatedRecordIndex The index of the updated record
+     */
+    public void updatePhonebookRecordResponse(android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+                                        int updatedRecordIndex) {
+        responseInts_1_6(responseInfo, updatedRecordIndex);
+    }
+
     private void responseIccCardStatus(RadioResponseInfo responseInfo, CardStatus cardStatus) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
@@ -2035,6 +2066,14 @@ public class RadioResponse extends IRadioResponse.Stub {
         responseIntArrayList(responseInfo, ints);
     }
 
+    private void responseInts_1_6(android.hardware.radio.V1_6.RadioResponseInfo responseInfo, int ...var) {
+        final ArrayList<Integer> ints = new ArrayList<>();
+        for (int i = 0; i < var.length; i++) {
+            ints.add(var[i]);
+        }
+        responseIntArrayList_1_6(responseInfo, ints);
+    }
+
     private void responseIntArrayList(RadioResponseInfo responseInfo, ArrayList<Integer> var) {
         RILRequest rr = mRil.processResponse(responseInfo);
 
@@ -2047,6 +2086,21 @@ public class RadioResponse extends IRadioResponse.Stub {
                 sendMessageResponse(rr.mResult, ret);
             }
             mRil.processResponseDone(rr, responseInfo, ret);
+        }
+    }
+
+    private void responseIntArrayList_1_6(android.hardware.radio.V1_6.RadioResponseInfo responseInfo, ArrayList<Integer> var) {
+        RILRequest rr = mRil.processResponse_1_6(responseInfo);
+
+        if (rr != null) {
+            int[] ret = new int[var.size()];
+            for (int i = 0; i < var.size(); i++) {
+                ret[i] = var.get(i);
+            }
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, ret);
+            }
+            mRil.processResponseDone_1_6(rr, responseInfo, ret);
         }
     }
 
