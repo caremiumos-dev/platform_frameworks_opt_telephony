@@ -32,6 +32,7 @@ import android.telephony.emergency.EmergencyNumber;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccCardStatus;
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
 
 import java.util.List;
 
@@ -2381,4 +2382,55 @@ public interface CommandsInterface {
     default List<ClientRequestStats> getClientRequestStats() {
         return null;
     }
+
+    /**
+     * Request the SIM phonebook records of all activated UICC applications
+     *
+     * @param result Callback message containing the count of ADN valid record.
+     */
+    public void getAdnRecords(Message result);
+
+
+    /**
+     * Request to insert/delete/update the SIM phonebook record
+     *
+     * @param adnRecordInfo adn record information to be updated
+     * @param result Callback message containing the SIM phonebook record index.
+     */
+    public void updateAdnRecord(SimPhoneBookRecord adnRecordInfo, Message result);
+
+
+    /**
+     * Registers the handler when the SIM phonebook has already init done.
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object .
+     */
+    public void registerForAdnInitDone(Handler h, int what, Object obj);
+
+
+    /**
+     * Unregister for notifications when SIM phonebook has already init done.
+     *
+     * @param h Handler to be removed from the registrant list.
+     */
+    public void unregisterForAdnInitDone(Handler h);
+
+
+    /**
+     * Registers the handler when a group of SIM phonebook records is notified.
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    public void registerForPhonebookRecordInfo(Handler h, int what, Object obj);
+
+    /**
+     * Unregister for notifications when a group of SIM phonebook records is notified.
+     *
+     * @param h Handler to be removed from the registrant list.
+     */
+     public void unregisterForPhonebookRecordInfo(Handler h);
 }
