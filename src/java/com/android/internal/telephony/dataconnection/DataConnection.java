@@ -117,6 +117,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * as the coordinator has members which are used without synchronization.
  */
 public class DataConnection extends StateMachine {
+    private static final String TAG = "DataConnection";
     private static final boolean DBG = true;
     private static final boolean VDBG = true;
 
@@ -1200,6 +1201,8 @@ public class DataConnection extends StateMachine {
      */
     public NetworkCapabilities getNetworkCapabilities() {
         NetworkCapabilities result = new NetworkCapabilities();
+        result.setOwnerId(mPhone.getMNOCarrierId());
+        result.setOwnerIdUnprotected(true /* ownerIdUnprotected */);
         result.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
 
         if (mApnSetting != null) {

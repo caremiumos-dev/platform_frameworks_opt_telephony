@@ -576,6 +576,18 @@ public class DataConnectionTest extends TelephonyTest {
     }
 
     @Test
+    @SmallTest
+    public void testOwnerId() throws Exception {
+        int carrierId = 1234;
+        doReturn(carrierId).when(mPhone).getMNOCarrierId();
+
+        testConnectEvent();
+
+        assertEquals(carrierId, getNetworkCapabilities().getOwnerId());
+        assertTrue(getNetworkCapabilities().isOwnerIdUnprotected());
+    }
+
+    @Test
     public void testOverrideUnmetered() throws Exception {
         mContextFixture.getCarrierConfigBundle().putStringArray(
                 CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
