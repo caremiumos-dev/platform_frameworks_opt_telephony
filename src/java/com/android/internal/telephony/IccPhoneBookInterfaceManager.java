@@ -33,12 +33,15 @@ import com.android.internal.telephony.uicc.IccConstants;
 import com.android.internal.telephony.uicc.IccFileHandler;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.telephony.Rlog;
+import com.android.internal.telephony.uicc.SimPhoneBookRecordCache;
+import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccProfile;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * SimPhoneBookInterfaceManager to provide an inter-process communication to
+ * IccPhoneBookInterfaceManager to provide an inter-process communication to
  * access ADN-like SIM records.
  */
 public class IccPhoneBookInterfaceManager {
@@ -50,10 +53,13 @@ public class IccPhoneBookInterfaceManager {
     protected Phone mPhone;
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     protected AdnRecordCache mAdnCache;
+    protected SimPhoneBookRecordCache mSimPbRecordCache;
 
     protected static final int EVENT_GET_SIZE_DONE = 1;
     protected static final int EVENT_LOAD_DONE = 2;
     protected static final int EVENT_UPDATE_DONE = 3;
+
+    private boolean mIsSimPbEnabled = false;
 
     private static final class Request {
         AtomicBoolean mStatus = new AtomicBoolean(false);
@@ -119,6 +125,15 @@ public class IccPhoneBookInterfaceManager {
         IccRecords r = phone.getIccRecords();
         if (r != null) {
             mAdnCache = r.getAdnCache();
+        }
+
+        mIsSimPbEnabled = mPhone.getContext().getResources().getBoolean(
+            com.android.internal.R.bool.config_sim_phonebook_in_modem);
+        if (mIsSimPbEnabled) {
+            if (mSimPbRecordCache == null) {
+                mSimPbRecordCache = new SimPhoneBookRecordCache(
+                        phone.getContext(), phone.getPhoneId(), phone.mCi);
+            }
         }
     }
 
@@ -248,13 +263,25 @@ public class IccPhoneBookInterfaceManager {
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, updateRequest);
             AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmailArray, oldAnrArray);
             AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber, newEmailArray, newAnrArray);
-            if (mAdnCache != null) {
-                mAdnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
-                waitForResult(updateRequest);
-                return (boolean) updateRequest.mResult;
+            if (mIsSimPbEnabled &&
+                (efid == IccConstants.EF_PBR || efid == IccConstants.EF_ADN)) {
+                if (mSimPbRecordCache != null) {
+                    mSimPbRecordCache.updateSimPbAdnBySearch(oldAdn, newAdn, response);
+                    waitForResult(updateRequest);
+                    return (boolean) updateRequest.mResult;
+                } else {
+                    loge("Failure when try to update by search due to uninitialised sim pb cache");
+                    return false;
+                }
             } else {
-                loge("Failure while trying to update by search due to uninitialised adncache");
-                return false;
+                if (mAdnCache != null) {
+                    mAdnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
+                    waitForResult(updateRequest);
+                    return (boolean) updateRequest.mResult;
+                } else {
+                    loge("Failure while trying to update by search due to uninitialised adncache");
+                    return false;
+                }
             }
         }
     }
@@ -361,13 +388,26 @@ public class IccPhoneBookInterfaceManager {
         Request loadRequest = new Request();
         synchronized (loadRequest) {
             Message response = mBaseHandler.obtainMessage(EVENT_LOAD_DONE, loadRequest);
-            if (mAdnCache != null) {
-                mAdnCache.requestLoadAllAdnLike(efid, mAdnCache.extensionEfForEf(efid), response);
-                waitForResult(loadRequest);
-                return (List<AdnRecord>) loadRequest.mResult;
+            if (mIsSimPbEnabled &&
+                (efid == IccConstants.EF_PBR || efid == IccConstants.EF_ADN)) {
+                if (mSimPbRecordCache != null) {
+                    mSimPbRecordCache.requestLoadAllPbRecords(response);
+                    waitForResult(loadRequest);
+                    return (List<AdnRecord>) loadRequest.mResult;
+                } else {
+                    loge("Failure while trying to load from SIM due to uninitialised sim pb cache");
+                    return null;
+                }
             } else {
-                loge("Failure while trying to load from SIM due to uninitialised adncache");
-                return null;
+                if (mAdnCache != null) {
+                    mAdnCache.requestLoadAllAdnLike(efid,
+                            mAdnCache.extensionEfForEf(efid), response);
+                    waitForResult(loadRequest);
+                    return (List<AdnRecord>) loadRequest.mResult;
+                } else {
+                    loge("Failure while trying to load from SIM due to uninitialised adncache");
+                    return null;
+                }
             }
         }
     }
@@ -429,8 +469,43 @@ public class IccPhoneBookInterfaceManager {
      *            capacity[9]  is the max length of anr
      */
     public int[] getAdnRecordsCapacity() {
-        if (DBG) logd("getAdnRecordsCapacity" );
         int capacity[] = new int[10];
+        int phoneId = mPhone.getPhoneId();
+
+        if (mSimPbRecordCache != null) {
+            UiccProfile profile = UiccController.getInstance().getUiccProfileForPhone(phoneId);
+
+            if (profile != null) {
+                IccCardConstants.State cardstate = profile.getState();
+                if (cardstate == IccCardConstants.State.READY
+                        || cardstate == IccCardConstants.State.LOADED) {
+                    capacity[0] = mSimPbRecordCache.getAdnCount();
+                    capacity[1] = mSimPbRecordCache.getUsedAdnCount();
+                    capacity[2] = mSimPbRecordCache.getEmailCount();
+                    capacity[3] = mSimPbRecordCache.getUsedEmailCount();
+                    capacity[4] = mSimPbRecordCache.getAnrCount();
+                    capacity[5] = mSimPbRecordCache.getUsedAnrCount();
+                    capacity[6] = mSimPbRecordCache.getMaxNameLen();
+                    capacity[7] = mSimPbRecordCache.getMaxNumberLen();
+                    capacity[8] = mSimPbRecordCache.getMaxEmailLen();
+                    capacity[9] = mSimPbRecordCache.getMaxAnrLen();
+
+                    if (DBG) logd("getAdnRecordsCapacity on slot " + phoneId + ": max adn="
+                        + capacity[0] + ", used adn=" + capacity[1] + ", max email="
+                        + capacity[2] + ", used email=" + capacity[3] + ", max anr="
+                        + capacity[4] + ", used anr=" + capacity[5] + ", max name length ="
+                        + capacity[6] + ", max number length =" + capacity[7]
+                        + ", max email length =" + capacity[8] + ", max anr length ="
+                        + capacity[9]);
+                } else {
+                    logd("No UICC when getAdnRecordsCapacity.");
+                }
+            } else {
+                logd("sim state is not ready when getAdnRecordsCapacity.");
+            }
+        } else {
+            loge("mSimPbRecordCache is NULL when getAdnRecordsCapacity.");
+        }
 
         return capacity;
     }
