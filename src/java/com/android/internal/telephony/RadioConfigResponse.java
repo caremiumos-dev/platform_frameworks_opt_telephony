@@ -246,6 +246,8 @@ public class RadioConfigResponse extends IRadioConfigResponse.Stub {
                 Rlog.d(TAG, "getHalDeviceCapabilitiesResponse: modemReducedFeatureSet1=false");
                 ret.addSupportedCapability(
                         TelephonyManager.CAPABILITY_SECONDARY_LINK_BANDWIDTH_VISIBLE);
+                ret.addSupportedCapability(
+                        TelephonyManager.CAPABILITY_SIM_PHONEBOOK_IN_MODEM);
             } else {
                 Rlog.d(TAG, "getHalDeviceCapabilitiesResponse: modemReducedFeatureSet1=true");
             }
