@@ -119,6 +119,7 @@ import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubStat
 import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.telephony.Rlog;
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -5393,6 +5394,85 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
+    @Override
+    public void getPhonebookRecords(Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+
+        if (radioProxy != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_GET_PHONEBOOK_RECORDS, result,
+                    mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+            }
+
+            if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
+                android.hardware.radio.V1_5.IRadio radioProxy15 =
+                            android.hardware.radio.V1_5.IRadio.castFrom(radioProxy);
+                try {
+                    radioProxy15.getPhonebookRecords(rr.mSerial);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "getPhonebookRecords", e);
+                }
+            } else {
+                riljLog("Unsupported API in lower than version 1.5 radio HAL" );
+                if (result != null) {
+                    AsyncResult.forMessage(result, null,
+                    CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                    result.sendToTarget();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void updatePhonebookRecord(SimPhoneBookRecord simRecordInfo, Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_UPDATE_PHONEBOOK_RECORD, result,
+                    mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                        + " with " + simRecordInfo.toString());
+            }
+
+            if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
+                android.hardware.radio.V1_5.IRadio radioProxy15 =
+                        android.hardware.radio.V1_5.IRadio.castFrom(radioProxy);
+
+                android.hardware.radio.V1_5.PhonebookRecordInfo pbRecordInfo =
+                        new android.hardware.radio.V1_5.PhonebookRecordInfo();
+                pbRecordInfo.recordId = simRecordInfo.getRecordIndex();
+                pbRecordInfo.name = convertNullToEmptyString(simRecordInfo.getAlphaTag());
+                pbRecordInfo.number = convertNullToEmptyString(
+                        SimPhoneBookRecord.convertNumberToRecordFormat(simRecordInfo.getNumber()));
+
+                for (int i = 0; i < simRecordInfo.getEmails().length; i++) {
+                    pbRecordInfo.emails.add(simRecordInfo.getEmails()[i]);
+                }
+
+                for (int i = 0 ; i < simRecordInfo.getAdditionalNumbers().length; i++) {
+                    pbRecordInfo.additionalNumbers.add(
+                        SimPhoneBookRecord.convertNumberToRecordFormat(
+                                simRecordInfo.getAdditionalNumbers()[i]));
+                }
+
+                try {
+                     radioProxy15.updatePhonebookRecord(rr.mSerial, pbRecordInfo);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "updatePhonebookRecord", e);
+                }
+            } else {
+                riljLog("Unsupported API in lower than version 1.5 radio HAL" );
+                if (result != null) {
+                    AsyncResult.forMessage(result, null,
+                    CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                    result.sendToTarget();
+                }
+            }
+        }
+    }
     //***** Private Methods
 
     /**
@@ -6303,7 +6383,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_GET_BARRING_INFO";
             case RIL_REQUEST_ENTER_SIM_DEPERSONALIZATION:
                 return "RIL_REQUEST_ENTER_SIM_DEPERSONALIZATION";
-
+            case RIL_REQUEST_GET_PHONEBOOK_RECORDS:
+                return "RIL_REQUEST_GET_PHONEBOOK_RECORDS";
+            case RIL_REQUEST_UPDATE_PHONEBOOK_RECORD:
+                return "RIL_REQUEST_UPDATE_PHONEBOOK_RECORD";
             default: return "<unknown request>";
         }
     }
@@ -6423,6 +6506,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_UNSOL_REGISTRATION_FAILED";
             case RIL_UNSOL_BARRING_INFO_CHANGED:
                 return "RIL_UNSOL_BARRING_INFO_CHANGED";
+            case RIL_UNSOL_RESPONSE_PHONEBOOK_INIT_DONE:
+                return "RIL_UNSOL_RESPONSE_PHONEBOOK_INIT_DONE";
+            case RIL_UNSOL_RESPONSE_PHONEBOOK_RECORDS:
+                return "RIL_UNSOL_RESPONSE_PHONEBOOK_RECORDS";
             default:
                 return "<unknown response>";
         }

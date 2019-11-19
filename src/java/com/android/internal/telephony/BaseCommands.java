@@ -31,6 +31,8 @@ import android.telephony.emergency.EmergencyNumber;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
+
 /**
  * {@hide}
  */
@@ -107,6 +109,8 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mEmergencyNumberListRegistrants = new RegistrantList();
     protected RegistrantList mUiccApplicationsEnablementRegistrants = new RegistrantList();
     protected RegistrantList mBarringInfoChangedRegistrants = new RegistrantList();
+    protected RegistrantList mAdnInitDoneRegistrants = new RegistrantList();
+    protected RegistrantList mPhonebookRecordInfoInfoRegistrants = new RegistrantList();
 
     @UnsupportedAppUsage
     protected Registrant mGsmSmsRegistrant;
@@ -1072,5 +1076,33 @@ public abstract class BaseCommands implements CommandsInterface {
     @Override
     public void unregisterForBarringInfoChanged(Handler h) {
         mBarringInfoChangedRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForPhonebookInitDone(Handler h, int what, Object obj) {
+        mAdnInitDoneRegistrants.add(new Registrant(h, what, obj));
+    }
+
+    @Override
+    public void unregisterForPhonebookInitDone(Handler h) {
+        mAdnInitDoneRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForPhonebookRecordInfo(Handler h, int what, Object obj) {
+        mPhonebookRecordInfoInfoRegistrants.add(new Registrant(h, what, obj));
+    }
+
+    @Override
+    public void unregisterForPhonebookRecordInfo(Handler h) {
+        mPhonebookRecordInfoInfoRegistrants.remove(h);
+    }
+
+    @Override
+    public void getPhonebookRecords(Message result) {
+    }
+
+    @Override
+    public void updatePhonebookRecord(SimPhoneBookRecord phonebookRecordInfo, Message result) {
     }
 }
