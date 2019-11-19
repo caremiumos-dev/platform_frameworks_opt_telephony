@@ -55,6 +55,7 @@ public class AdnRecordCache extends Handler implements IccConstants {
 
     static final int EVENT_LOAD_ALL_ADN_LIKE_DONE = 1;
     static final int EVENT_UPDATE_ADN_DONE = 2;
+    static final int EVENT_UPDATE_CYCLIC_DONE = 3;
 
     //***** Constructor
 
@@ -118,6 +119,7 @@ public class AdnRecordCache extends Handler implements IccConstants {
     public int extensionEfForEf(int efid) {
         switch (efid) {
             case EF_MBDN: return EF_EXT6;
+            case EF_LND:
             case EF_ADN: return EF_EXT1;
             case EF_SDN: return EF_EXT3;
             case EF_FDN: return EF_EXT2;
@@ -339,6 +341,9 @@ public class AdnRecordCache extends Handler implements IccConstants {
     handleMessage(Message msg) {
         AsyncResult ar;
         int efid;
+        int index;
+        AdnRecord adn;
+        Message response;
 
         switch(msg.what) {
             case EVENT_LOAD_ALL_ADN_LIKE_DONE:
@@ -358,15 +363,15 @@ public class AdnRecordCache extends Handler implements IccConstants {
             case EVENT_UPDATE_ADN_DONE:
                 ar = (AsyncResult)msg.obj;
                 efid = msg.arg1;
-                int index = msg.arg2;
-                AdnRecord adn = (AdnRecord) (ar.userObj);
+                index = msg.arg2;
+                adn = (AdnRecord) (ar.userObj);
 
                 if (ar.exception == null) {
                     mAdnLikeFiles.get(efid).set(index - 1, adn);
                     mUsimPhoneBookManager.invalidateCache();
                 }
 
-                Message response = mUserWriteResponse.get(efid);
+                response = mUserWriteResponse.get(efid);
                 mUserWriteResponse.delete(efid);
 
                 // response may be cleared when simrecord is reset,
@@ -376,6 +381,58 @@ public class AdnRecordCache extends Handler implements IccConstants {
                     response.sendToTarget();
                 }
                 break;
+            case EVENT_UPDATE_CYCLIC_DONE:
+                ar = (AsyncResult) msg.obj;
+                efid = msg.arg1;
+                index = msg.arg2;
+
+                response = mUserWriteResponse.get(efid);
+                mUserWriteResponse.delete(efid);
+
+                // response may be cleared when simrecord is reset,
+                // so we should check if it is null.
+                if (response != null) {
+                    AsyncResult.forMessage(response, index, ar.exception);
+                    response.sendToTarget();
+                }
+                break;
         }
+    }
+
+    /**
+     * Insert newLnd to LND-like record in EF
+     *
+     *
+     * @param efid EF_LND
+     * @param oldLnd is the lnd to be replaced
+     *        If oldLnd.isEmpty() is ture, it insert the oldLnd
+     * @param newLnd is the lnd to be stored
+     *        If newLnd.isEmpty() is true, it delete the oldLnd
+     * @param pin2 is required to update EF_FDN, otherwise must be null
+     * @param response message to be posted when done
+     *        response.exception hold the exception in error
+     */
+    public void insertLndBySearch(int efid, AdnRecord oldLnd,
+                                  AdnRecord newLnd, String pin2, Message response) {
+
+        int extensionEF;
+        extensionEF = extensionEfForEf(efid);
+        if (extensionEF < 0) {
+            sendErrorResponse(response, "EF is not known LND-like EF:0x"
+                    + Integer.toHexString(efid).toUpperCase());
+            return;
+        }
+
+        Message pendingResponse = mUserWriteResponse.get(efid);
+        if (pendingResponse != null) {
+            sendErrorResponse(response, "Have pending update for EF:0x"
+                    + Integer.toHexString(efid).toUpperCase());
+            return;
+        }
+
+        mUserWriteResponse.put(efid, response);
+
+        new AdnRecordLoader(mFh).updateEFCyclic(newLnd, efid, extensionEF, 0,
+                pin2, obtainMessage(EVENT_UPDATE_CYCLIC_DONE, efid, 0, newLnd));
     }
 }

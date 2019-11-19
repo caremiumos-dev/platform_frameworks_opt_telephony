@@ -58,6 +58,7 @@ public class AdnRecordLoader extends Handler {
     static final int EVENT_ADN_LOAD_ALL_DONE = 3;
     static final int EVENT_EF_LINEAR_RECORD_SIZE_DONE = 4;
     static final int EVENT_UPDATE_RECORD_DONE = 5;
+    static final int EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE = 6;
 
     //***** Constructor
 
@@ -142,6 +143,30 @@ public class AdnRecordLoader extends Handler {
         mFh.getEFLinearRecordSize( ef, getEFPath(ef),
                 obtainMessage(EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
      }
+
+    /**
+     * Write lnd to a EF SIM record
+     * It will get the record size of EF record and compose hex adn array
+     * then write the hex array to EF record
+     *
+     * @param adn is set with alphaTag and phone number
+     * @param ef EF fileid
+     * @param extensionEF extension EF fileid
+     * @param recordNumber 1-based record index
+     * @param pin2 for CHV2 operations, must be null if pin2 is not needed
+     * @param response will be sent to its handler when completed
+     */
+    @UnsupportedAppUsage
+    public void updateEFCyclic(AdnRecord adn, int ef, int extensionEF, int recordNumber,
+                               String pin2, Message response) {
+        mEf = ef;
+        mExtensionEF = extensionEF;
+        mRecordNumber = recordNumber;
+        mUserResponse = response;
+        mPin2 = pin2;
+
+        mFh.getEFLinearRecordSize(ef, obtainMessage(EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE, adn));
+    }
 
     //***** Overridden from Handler
 
@@ -285,6 +310,38 @@ public class AdnRecordLoader extends Handler {
                         }
                     }
                 break;
+
+                case EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE:
+                    ar = (AsyncResult)(msg.obj);
+                    adn = (AdnRecord)(ar.userObj);
+
+                    if (ar.exception != null) {
+                        throw new RuntimeException("get EF record size failed", ar.exception);
+                    }
+
+                    int[] CyclicrecordSize = (int[])ar.result;
+                    // recordSize is int[3] array
+                    // int[0]  is the record length
+                    // int[1]  is the total length of the EF file
+                    // int[2]  is the number of records in the EF file
+                    // So int[0] * int[2] = int[1]
+                    if (CyclicrecordSize.length != 3 || mRecordNumber > CyclicrecordSize[2]) {
+                        throw new RuntimeException("get wrong EF record size format", ar.exception);
+                    }
+
+                    data = adn.buildAdnString(CyclicrecordSize[0]);
+
+                    if (data == null) {
+                        throw new RuntimeException("wrong LND format",
+                                ar.exception);
+                    }
+
+                    mFh.updateEFCYCLICLinearFixed(mEf, mRecordNumber,
+                            data, mPin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
+
+                    mPendingExtLoads = 1;
+
+                    break;
             }
         } catch (RuntimeException exc) {
             if (mUserResponse != null) {
