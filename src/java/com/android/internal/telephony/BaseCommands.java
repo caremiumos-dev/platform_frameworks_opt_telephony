@@ -27,6 +27,8 @@ import android.os.RegistrantList;
 import android.telephony.Annotation.RadioPowerState;
 import android.telephony.TelephonyManager;
 
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
+
 /**
  * {@hide}
  */
@@ -102,6 +104,8 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mLceInfoRegistrants = new RegistrantList();
     protected RegistrantList mEmergencyNumberListRegistrants = new RegistrantList();
     protected RegistrantList mUiccApplicationsEnablementRegistrants = new RegistrantList();
+    protected RegistrantList mAdnInitDoneRegistrants = new RegistrantList();
+    protected RegistrantList mPhonebookRecordInfoInfoRegistrants = new RegistrantList();
 
     @UnsupportedAppUsage
     protected Registrant mGsmSmsRegistrant;
@@ -1006,6 +1010,7 @@ public abstract class BaseCommands implements CommandsInterface {
         }
     }
 
+<<<<<<< HEAD
     /**
      * Registers the handler for RIL_UNSOL_UICC_APPLICATIONS_ENABLEMENT_CHANGED events.
      *
@@ -1026,5 +1031,33 @@ public abstract class BaseCommands implements CommandsInterface {
     @Override
     public void unregisterUiccApplicationEnablementChanged(Handler h) {
         mUiccApplicationsEnablementRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForAdnInitDone(Handler h, int what, Object obj) {
+        mAdnInitDoneRegistrants.add(new Registrant(h, what, obj));
+    }
+
+    @Override
+    public void unregisterForAdnInitDone(Handler h) {
+        mAdnInitDoneRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForPhonebookRecordInfo(Handler h, int what, Object obj) {
+        mPhonebookRecordInfoInfoRegistrants.add(new Registrant(h, what, obj));
+    }
+
+    @Override
+    public void unregisterForPhonebookRecordInfo(Handler h) {
+        mPhonebookRecordInfoInfoRegistrants.remove(h);
+    }
+
+    @Override
+    public void getAdnRecords(Message result) {
+    }
+
+    @Override
+    public void updateAdnRecord(SimPhoneBookRecord adnRecordInfo, Message result) {
     }
 }

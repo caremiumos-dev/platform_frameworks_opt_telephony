@@ -114,6 +114,7 @@ import com.android.internal.telephony.nano.TelephonyProto.SmsSession;
 import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.telephony.Rlog;
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -5057,6 +5058,74 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
+    @Override
+    public void getAdnRecords(Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+
+        if (radioProxy != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_GET_ADN_RECORD, result,
+                    mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+            }
+
+            if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
+                android.hardware.radio.V1_5.IRadio radioProxy15 =
+                            android.hardware.radio.V1_5.IRadio.castFrom(radioProxy);
+                try {
+                    radioProxy16.getAdnRecords(rr.mSerial);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "getAdnRecords", e);
+                }
+            } else {
+                riljLog("Unsupported API in lower than version 1.5 radio HAL" );
+            }
+        }
+    }
+
+    @Override
+    public void updateAdnRecord(SimPhoneBookRecord simRecordInfo, Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_UPDATE_ADN_RECORD, result,
+                    mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                        + " with " + simRecordInfo.toString());
+            }
+
+            if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
+                android.hardware.radio.V1_5.IRadio radioProxy15 =
+                        android.hardware.radio.V1_5.IRadio.castFrom(radioProxy);
+
+                android.hardware.radio.V1_5.PhonebookRecordInfo pbRecordInfo =
+                        new android.hardware.radio.V1_5.PhonebookRecordInfo();
+                pbRecordInfo.recordId = simRecordInfo.getRecordIndex();
+                pbRecordInfo.name = convertNullToEmptyString(simRecordInfo.getAlphaTag());
+                pbRecordInfo.number = convertNullToEmptyString(
+                        SimPhoneBookRecord.convertNumberToRecordFormat(simRecordInfo.getNumber()));
+
+                for (int i = 0; i < simRecordInfo.getEmails().length; i++) {
+                    pbRecordInfo.emails.add(simRecordInfo.getEmails()[i]);
+                }
+
+                for (int i = 0 ; i < simRecordInfo.getAdditionalNumbers().length; i++) {
+                    pbRecordInfo.additionalNumbers.add(
+                        SimPhoneBookRecord.convertNumberToRecordFormat(simRecordInfo.getAdditionalNumbers()[i]));
+                }
+
+                try {
+                     radioProxy16.updateAdnRecord(rr.mSerial, pbRecordInfo);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "updateAdnRecord", e);
+                }
+            } else {
+                riljLog("Unsupported API in lower than version 1.5 radio HAL" );
+            }
+        }
+    }
     //***** Private Methods
 
     /**
@@ -5938,6 +6007,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_GET_UICC_APPLICATIONS_ENABLEMENT";
             case RIL_REQUEST_CDMA_SEND_SMS_EXPECT_MORE:
                 return "RIL_REQUEST_CDMA_SEND_SMS_EXPECT_MORE";
+            case RIL_REQUEST_GET_ADN_RECORD:
+                return "RIL_REQUEST_GET_ADN_RECORD";
+            case RIL_REQUEST_UPDATE_ADN_RECORD:
+                return "RIL_REQUEST_UPDATE_ADN_RECORD";
             default: return "<unknown request>";
         }
     }
@@ -6055,6 +6128,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_UNSOL_UICC_APPLICATIONS_ENABLEMENT_CHANGED";
             case RIL_UNSOL_REGISTRATION_FAILED:
                 return "RIL_UNSOL_REGISTRATION_FAILED";
+            case RIL_UNSOL_RESPONSE_ADN_INIT_DONE:
+                return "RIL_UNSOL_RESPONSE_ADN_INIT_DONE";
+            case RIL_UNSOL_RESPONSE_ADN_RECORDS:
+                return "RIL_UNSOL_RESPONSE_ADN_RECORDS";
             default:
                 return "<unknown response>";
         }

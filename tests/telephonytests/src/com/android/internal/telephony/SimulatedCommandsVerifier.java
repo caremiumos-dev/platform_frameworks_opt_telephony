@@ -33,6 +33,7 @@ import com.android.internal.telephony.RadioCapability;
 import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
 
 public class SimulatedCommandsVerifier implements CommandsInterface {
     private static SimulatedCommandsVerifier sInstance;
@@ -1454,4 +1455,28 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
 
     @Override
     public void unregisterUiccApplicationEnablementChanged(Handler h) {}
+    
+    @Override
+    public void getAdnRecords(Message result){
+    }
+
+    @Override
+    public void updateAdnRecord(SimPhoneBookRecord adnRecordInfo, Message result){
+    }
+
+    @Override
+    public void registerForAdnInitDone(Handler h, int what, Object obj){
+    }
+
+    @Override
+    public void unregisterForAdnInitDone(Handler h){
+    }
+
+    @Override
+    public void registerForPhonebookRecordInfo(Handler h, int what, Object obj){
+    }
+
+    @Override
+    public void unregisterForPhonebookRecordInfo(Handler h){
+    }
 }
