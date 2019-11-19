@@ -27,6 +27,8 @@ import android.os.RegistrantList;
 import android.telephony.Annotation.RadioPowerState;
 import android.telephony.TelephonyManager;
 
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
+
 /**
  * {@hide}
  */
@@ -101,6 +103,8 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mPhysicalChannelConfigurationRegistrants = new RegistrantList();
     protected RegistrantList mLceInfoRegistrants = new RegistrantList();
     protected RegistrantList mEmergencyNumberListRegistrants = new RegistrantList();
+    protected RegistrantList mAdnInitDoneRegistrants = new RegistrantList();
+    protected RegistrantList mPhonebookRecordInfoInfoRegistrants = new RegistrantList();
 
     @UnsupportedAppUsage
     protected Registrant mGsmSmsRegistrant;
@@ -995,5 +999,33 @@ public abstract class BaseCommands implements CommandsInterface {
         synchronized (mStateMonitor) {
             mNattKeepaliveStatusRegistrants.remove(h);
         }
+    }
+
+    @Override
+    public void registerForAdnInitDone(Handler h, int what, Object obj) {
+        mAdnInitDoneRegistrants.add(new Registrant(h, what, obj));
+    }
+
+    @Override
+    public void unregisterForAdnInitDone(Handler h) {
+        mAdnInitDoneRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForPhonebookRecordInfoInfo(Handler h, int what, Object obj) {
+        mPhonebookRecordInfoInfoRegistrants.add(new Registrant(h, what, obj));
+    }
+
+    @Override
+    public void unregisterForPhonebookRecordInfoInfo(Handler h) {
+        mPhonebookRecordInfoInfoRegistrants.remove(h);
+    }
+
+    @Override
+    public void getAdnRecords(Message result) {
+    }
+
+    @Override
+    public void updateAdnRecord(SimPhoneBookRecord adnRecordInfo, Message result) {
     }
 }

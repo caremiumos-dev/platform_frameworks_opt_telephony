@@ -66,6 +66,8 @@ import static com.android.internal.telephony.RILConstants.RIL_UNSOL_SUPP_SVC_NOT
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UICC_SUBSCRIPTION_STATUS_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_VOICE_RADIO_TECH_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOl_CDMA_PRL_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_ADN_RECORDS;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_ADN_INIT_DONE;
 
 import android.hardware.radio.V1_0.CdmaCallWaiting;
 import android.hardware.radio.V1_0.CdmaInformationRecord;
@@ -85,6 +87,7 @@ import android.hardware.radio.V1_0.SuppSvcNotification;
 import android.hardware.radio.V1_2.CellConnectionStatus;
 import android.hardware.radio.V1_4.IRadioIndication;
 import android.hardware.radio.V1_4.RadioFrequencyInfo.hidl_discriminator;
+import android.hardware.radio.V1_6.PhonebookRecordInfo;
 import android.os.AsyncResult;
 import android.os.SystemProperties;
 import android.telephony.Annotation.RadioPowerState;
@@ -106,7 +109,9 @@ import com.android.internal.telephony.gsm.SsData;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.uicc.IccRefreshResponse;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -959,6 +964,41 @@ public class RadioIndication extends IRadioIndication.Stub {
 
         KeepaliveStatus ks = new KeepaliveStatus(halStatus.sessionHandle, halStatus.code);
         mRil.mNattKeepaliveStatusRegistrants.notifyRegistrants(new AsyncResult(null, ks, null));
+    }
+
+    public void adnInitDone(int indicationType) {
+        mRil.processIndication(indicationType);
+
+        if (RIL.RILJ_LOGD) {
+            mRil.unsljLog(RIL_UNSOL_RESPONSE_ADN_INIT_DONE);
+        }
+
+        mRil.mAdnInitDoneRegistrants.notifyRegistrants();
+    }
+
+    public void adnRecordsReceived(int indicationType, PhonebookRecordInfo records) {
+        mRil.processIndication(indicationType);
+
+        int numRecords = records.recordElements;
+        List<SimPhoneBookRecord> phonebookRecordInfoGroup = new ArrayList<SimPhoneBookRecord>();
+
+        for (int i = 0 ; i < numRecords ; i++) {
+            phonebookRecordInfoGroup.add(new SimPhoneBookRecord(
+                records.adnRecordInfo.get(i).recordId,
+                records.adnRecordInfo.get(i).name,
+                records.adnRecordInfo.get(i).number,
+                records.adnRecordInfo.get(i).emails.size(),
+                records.adnRecordInfo.get(i).emails,
+                records.adnRecordInfo.get(i).adNumbers.size(),
+                records.adnRecordInfo.get(i).adNumbers));
+        }
+
+        if (RIL.RILJ_LOGD) {
+            mRil.unsljLogRet(RIL_UNSOL_RESPONSE_ADN_RECORDS, "received " + numRecords + " records");
+        }
+
+        mRil.mPhonebookRecordInfoInfoRegistrants.notifyRegistrants(
+                new AsyncResult(null, phonebookRecordInfoGroup, null));
     }
 
     /**
