@@ -112,6 +112,7 @@ import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.SmsSession;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -178,6 +179,12 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     /** @hide */
     public static final HalVersion RADIO_HAL_VERSION_1_4 = new HalVersion(1, 4);
+
+    /** @hide */
+    public static final HalVersion RADIO_HAL_VERSION_1_5 = new HalVersion(1, 5);
+
+    /** @hide */
+    public static final HalVersion RADIO_HAL_VERSION_1_6 = new HalVersion(1, 6);
 
     // IRadio version
     private HalVersion mRadioVersion = RADIO_HAL_VERSION_UNKNOWN;
@@ -5560,6 +5567,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_ENABLE_MODEM";
             case RIL_REQUEST_GET_MODEM_STATUS:
                 return "RIL_REQUEST_GET_MODEM_STATUS";
+            case RIL_REQUEST_GET_ADN_RECORD:
+                return "RIL_REQUEST_GET_ADN_RECORD";
+            case RIL_REQUEST_UPDATE_ADN_RECORD:
+                return "RIL_REQUEST_UPDATE_ADN_RECORD";
             default: return "<unknown request>";
         }
     }
@@ -5671,6 +5682,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_UNSOL_KEEPALIVE_STATUS";
             case RIL_UNSOL_PHYSICAL_CHANNEL_CONFIG:
                 return "RIL_UNSOL_PHYSICAL_CHANNEL_CONFIG";
+            case RIL_UNSOL_RESPONSE_ADN_INIT_DONE:
+                return "RIL_UNSOL_RESPONSE_ADN_INIT_DONE";
+            case RIL_UNSOL_RESPONSE_ADN_RECORDS:
+                return "RIL_UNSOL_RESPONSE_ADN_RECORDS";
             default:
                 return "<unknown response>";
         }
@@ -6125,5 +6140,74 @@ public class RIL extends BaseCommands implements CommandsInterface {
      */
     public HalVersion getHalVersion() {
         return mRadioVersion;
+    }
+
+
+
+    @Override
+    public void getAdnRecords(Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+
+        if (radioProxy != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_GET_ADN_RECORD, result,
+                    mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+            }
+
+            if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_6)) {
+                    android.hardware.radio.V1_6.IRadio radioProxy16 =
+                            android.hardware.radio.V1_6.IRadio.castFrom(radioProxy);
+                try {
+                    radioProxy16.getAdnRecords(rr.mSerial);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "getAdnRecords", e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void updateAdnRecord(SimPhoneBookRecord simRecordInfo, Message result) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_UPDATE_ADN_RECORD, result,
+                    mRILDefaultWorkSource);
+
+            if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_6)) {
+                android.hardware.radio.V1_6.IRadio radioProxy16 =
+                        android.hardware.radio.V1_6.IRadio.castFrom(radioProxy);
+
+                android.hardware.radio.V1_6.PhonebookRecordInfo pbRecordInfo =
+                        new android.hardware.radio.V1_6.PhonebookRecordInfo();
+                pbRecordInfo.recordId = simRecordInfo.getRecordIndex();
+                pbRecordInfo.name = convertNullToEmptyString(simRecordInfo.getAlphaTag());
+                pbRecordInfo.number = convertNullToEmptyString(
+                        SimPhoneBookRecord.convertNumberToRecordFormat(simRecordInfo.getNumber()));
+
+                int numEmails = simRecordInfo.getNumEmails();
+                for (int i = 0; i < numEmails; i++) {
+                    pbRecordInfo.emails.add(simRecordInfo.getEmails()[i]);
+                }
+
+                int numAdNumbers = simRecordInfo.getNumAdNumbers();
+                for (int i = 0 ; i < numAdNumbers; i++) {
+                    pbRecordInfo.additionalNumbers.add(
+                        SimPhoneBookRecord.convertNumberToRecordFormat(simRecordInfo.getAdditionalNumbers()[i]));
+                }
+
+                if (RILJ_LOGD) {
+                    riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                            + " with " + pbRecordInfo.toString());
+                }
+
+                try {
+                     radioProxy16.updateAdnRecord(rr.mSerial, pbRecordInfo);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "updateAdnRecord", e);
+                }
+            }
+        }
     }
 }
