@@ -67,6 +67,8 @@ import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UICC_APPLICA
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UICC_SUBSCRIPTION_STATUS_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_VOICE_RADIO_TECH_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOl_CDMA_PRL_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_PHONEBOOK_RECORDS;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_PHONEBOOK_INIT_DONE;
 
 import android.hardware.radio.V1_0.CdmaCallWaiting;
 import android.hardware.radio.V1_0.CdmaInformationRecord;
@@ -85,6 +87,7 @@ import android.hardware.radio.V1_0.StkCcUnsolSsResult;
 import android.hardware.radio.V1_0.SuppSvcNotification;
 import android.hardware.radio.V1_2.CellConnectionStatus;
 import android.hardware.radio.V1_5.IRadioIndication;
+import android.hardware.radio.V1_5.PhonebookRecordInfo;
 import android.os.AsyncResult;
 import android.sysprop.TelephonyProperties;
 import android.telephony.Annotation.RadioPowerState;
@@ -111,7 +114,9 @@ import com.android.internal.telephony.gsm.SsData;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.uicc.IccRefreshResponse;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -993,6 +998,50 @@ public class RadioIndication extends IRadioIndication.Stub {
 
         KeepaliveStatus ks = new KeepaliveStatus(halStatus.sessionHandle, halStatus.code);
         mRil.mNattKeepaliveStatusRegistrants.notifyRegistrants(new AsyncResult(null, ks, null));
+    }
+
+    /**
+     * Indicates when the phonebook module initialized completely.
+     * @param indicationType RadioIndicationType
+     */
+    public void phonebookInitDone(int indicationType) {
+        mRil.processIndication(indicationType);
+
+        if (RIL.RILJ_LOGD) {
+            mRil.unsljLog(RIL_UNSOL_RESPONSE_PHONEBOOK_INIT_DONE);
+        }
+
+        mRil.mAdnInitDoneRegistrants.notifyRegistrants();
+    }
+
+    /**
+     * Indicates the content of all the used records in the SIM phonebook..
+     * @param indicationType RadioIndicationType
+     * @param records Content of the SIM phonebook records
+     */
+    public void phonebookRecordsReceived(int indicationType, ArrayList<PhonebookRecordInfo> records) {
+        mRil.processIndication(indicationType);
+
+        List<SimPhoneBookRecord> phonebookRecordInfoGroup = new ArrayList<SimPhoneBookRecord>();
+
+        for (PhonebookRecordInfo record : records) {
+            phonebookRecordInfoGroup.add(new SimPhoneBookRecord(
+                record.recordId,
+                record.name,
+                record.number,
+                record.emails == null ? new String[]{}
+                        : record.emails.toArray(new String[record.emails.size()]),
+                record.additionalNumbers == null ? new String[]{}
+                        : record.additionalNumbers.toArray(
+                                new String[record.additionalNumbers.size()])));
+        }
+
+        if (RIL.RILJ_LOGD) {
+            mRil.unsljLogRet(RIL_UNSOL_RESPONSE_PHONEBOOK_RECORDS, "received " + records.size() + " records");
+        }
+
+        mRil.mPhonebookRecordInfoInfoRegistrants.notifyRegistrants(
+                new AsyncResult(null, phonebookRecordInfoGroup, null));
     }
 
     /**
