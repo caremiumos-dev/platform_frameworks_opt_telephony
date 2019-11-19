@@ -188,7 +188,11 @@ public class IccPhoneBookInterfaceManager {
             AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
             AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
             if (mAdnCache != null) {
-                mAdnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
+                if (efid == IccConstants.EF_LND) {
+                    mAdnCache.insertLndBySearch(efid, oldAdn, newAdn, pin2, response);
+                } else {
+                    mAdnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
+                }
                 waitForResult(updateRequest);
             } else {
                 loge("Failure while trying to update by search due to uninitialised adncache");

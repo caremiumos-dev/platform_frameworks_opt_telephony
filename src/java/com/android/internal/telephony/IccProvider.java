@@ -61,6 +61,8 @@ public class IccProvider extends ContentProvider {
     protected static final int SDN = 5;
     protected static final int SDN_SUB = 6;
     protected static final int ADN_ALL = 7;
+    protected static final int LND = 8;
+    protected static final int LND_SUB = 9;
 
     protected static final String STR_TAG = "tag";
     protected static final String STR_NUMBER = "number";
@@ -77,6 +79,8 @@ public class IccProvider extends ContentProvider {
         URL_MATCHER.addURI("icc", "fdn/subId/#", FDN_SUB);
         URL_MATCHER.addURI("icc", "sdn", SDN);
         URL_MATCHER.addURI("icc", "sdn/subId/#", SDN_SUB);
+        URL_MATCHER.addURI("icc", "lnd", LND);
+        URL_MATCHER.addURI("icc", "lnd/subId/#", LND_SUB);
     }
 
     private SubscriptionManager mSubscriptionManager;
@@ -120,6 +124,13 @@ public class IccProvider extends ContentProvider {
 
             case ADN_ALL:
                 return loadAllSimContacts(IccConstants.EF_ADN);
+
+            case LND:
+                return loadFromEf(IccConstants.EF_LND,
+                        SubscriptionManager.getDefaultSubscriptionId());
+
+            case LND_SUB:
+                return loadFromEf(IccConstants.EF_LND, getRequestSubId(url));
 
             default:
                 throw new IllegalArgumentException("Unknown URL " + url);
@@ -198,6 +209,16 @@ public class IccProvider extends ContentProvider {
                 pin2 = initialValues.getAsString("pin2");
                 break;
 
+            case LND:
+                efType = IccConstants.EF_LND;
+                subId = SubscriptionManager.getDefaultSubscriptionId();
+                break;
+
+            case LND_SUB:
+                efType = IccConstants.EF_LND;
+                subId = getRequestSubId(url);
+                break;
+
             default:
                 throw new UnsupportedOperationException(
                         "Cannot insert into URL: " + url);
@@ -228,6 +249,14 @@ public class IccProvider extends ContentProvider {
 
             case FDN_SUB:
                 buf.append("fdn/subId/");
+                break;
+
+            case LND:
+                buf.append("lnd/");
+                break;
+
+            case LND_SUB:
+                buf.append("lnd/subId/");
                 break;
         }
 
