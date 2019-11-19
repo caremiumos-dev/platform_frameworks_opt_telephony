@@ -31,12 +31,15 @@ import com.android.internal.telephony.uicc.IccConstants;
 import com.android.internal.telephony.uicc.IccFileHandler;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.telephony.Rlog;
+import com.android.internal.telephony.uicc.SimPhoneBookRecordCache;
+import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccProfile;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * SimPhoneBookInterfaceManager to provide an inter-process communication to
+ * IccPhoneBookInterfaceManager to provide an inter-process communication to
  * access ADN-like SIM records.
  */
 public class IccPhoneBookInterfaceManager {
@@ -48,10 +51,13 @@ public class IccPhoneBookInterfaceManager {
     protected Phone mPhone;
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     protected AdnRecordCache mAdnCache;
+    protected SimPhoneBookRecordCache mSimPbRecordCache;
 
     protected static final int EVENT_GET_SIZE_DONE = 1;
     protected static final int EVENT_LOAD_DONE = 2;
     protected static final int EVENT_UPDATE_DONE = 3;
+
+    private boolean mIsSimPbEnabled = false;
 
     private static final class Request {
         AtomicBoolean mStatus = new AtomicBoolean(false);
@@ -117,6 +123,15 @@ public class IccPhoneBookInterfaceManager {
         IccRecords r = phone.getIccRecords();
         if (r != null) {
             mAdnCache = r.getAdnCache();
+        }
+
+        mIsSimPbEnabled = mPhone.getContext().getResources().getBoolean(
+            com.android.internal.R.bool.config_sim_phonebook_in_modem);
+        if (mIsSimPbEnabled) {
+            if (mSimPbRecordCache == null) {
+                mSimPbRecordCache = new SimPhoneBookRecordCache(
+                        phone.getContext(), phone.getPhoneId(), phone.mCi);
+            }
         }
     }
 
@@ -301,13 +316,26 @@ public class IccPhoneBookInterfaceManager {
         Request loadRequest = new Request();
         synchronized (loadRequest) {
             Message response = mBaseHandler.obtainMessage(EVENT_LOAD_DONE, loadRequest);
-            if (mAdnCache != null) {
-                mAdnCache.requestLoadAllAdnLike(efid, mAdnCache.extensionEfForEf(efid), response);
-                waitForResult(loadRequest);
-                return (List<AdnRecord>) loadRequest.mResult;
+            if (mIsSimPbEnabled &&
+                (efid == IccConstants.EF_PBR || efid == IccConstants.EF_ADN)) {
+                if (mSimPbRecordCache != null) {
+                    mSimPbRecordCache.requestLoadAllPbRecords(response);
+                    waitForResult(loadRequest);
+                    return (List<AdnRecord>) loadRequest.mResult;
+                } else {
+                    loge("Failure while trying to load from SIM due to uninitialised sim pb cache");
+                    return null;
+                }
             } else {
-                loge("Failure while trying to load from SIM due to uninitialised adncache");
-                return null;
+                if (mAdnCache != null) {
+                    mAdnCache.requestLoadAllAdnLike(efid,
+                            mAdnCache.extensionEfForEf(efid), response);
+                    waitForResult(loadRequest);
+                    return (List<AdnRecord>) loadRequest.mResult;
+                } else {
+                    loge("Failure while trying to load from SIM due to uninitialised adncache");
+                    return null;
+                }
             }
         }
     }

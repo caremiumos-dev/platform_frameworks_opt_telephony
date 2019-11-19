@@ -553,6 +553,18 @@ public class IccProvider extends ContentProvider {
                 contact[2] = emailString.toString();
             }
             contact[3] = id;
+
+            String[] anrs = record.getAdditionalNumbers();
+            if (anrs != null) {
+                StringBuilder anrString = new StringBuilder();
+                for (String anr : anrs) {
+                    if (DBG) log("Adding anr:" + anr);
+                    anrString.append(anr);
+                    anrString.append(":");
+                }
+                contact[4] = anrString.toString();
+            }
+
             cursor.addRow(contact);
         }
     }
