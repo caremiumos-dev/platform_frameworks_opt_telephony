@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5c79646_94585706",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1825,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-11-19T07:06:49Z",
+      "side": 1,
+      "message": "remove and we\u0027ll try presubmit again",
+      "range": {
+        "startLine": 1825,
+        "startChar": 0,
+        "endLine": 1825,
+        "endChar": 14
+      },
+      "revId": "ce0b9cc8d97366937b8e7928a501f108667b2dba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
