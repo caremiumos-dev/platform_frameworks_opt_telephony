@@ -22,6 +22,30 @@
       "revId": "b6c702a28c012b98eb27e21289f7514871b15448",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c98e899_66ac323c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3549,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-11-19T03:14:55Z",
+      "side": 1,
+      "message": "simply it can be caused by voice rat changed, e.g. under 1X+LTE architecture, data rat is not changed after handover to LTE only",
+      "parentUuid": "9c0bc739_e55e52be",
+      "range": {
+        "startLine": 3548,
+        "startChar": 16,
+        "endLine": 3549,
+        "endChar": 61
+      },
+      "revId": "b6c702a28c012b98eb27e21289f7514871b15448",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
