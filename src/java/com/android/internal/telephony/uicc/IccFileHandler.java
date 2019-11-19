@@ -435,6 +435,22 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                         IccUtils.bytesToHexString(data), null, mAid, onComplete);
     }
 
+    /**
+     * Insert a lnd record in a linear fixed EF
+     * @param fileid EF id
+     * @param recordNum 1-based (not 0-based) record number
+     * @param data must be exactly as long as the record in the EF
+     * @param pin2 for CHV2 operations, otherwist must be null
+     * @param onComplete onComplete.obj will be an AsyncResult
+     *                   onComplete.obj.userObj will be a IccIoResult on success
+     */
+    @UnsupportedAppUsage
+    public void updateEFCYCLICLinearFixed(int fileid, int recordNum,
+                                          byte[] data, String pin2, Message onComplete) {
+        mCi.iccIOForApp(COMMAND_UPDATE_RECORD, fileid, getEFPath(fileid), recordNum,
+                EF_TYPE_CYCLIC, data.length,
+                IccUtils.bytesToHexString(data), pin2, mAid, onComplete);
+    }
 
     //***** Abstract Methods
 
@@ -691,6 +707,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
         case EF_EXT2:
         case EF_EXT3:
         case EF_PSI:
+        case EF_LND:
             return MF_SIM + DF_TELECOM;
 
         case EF_ICCID:
