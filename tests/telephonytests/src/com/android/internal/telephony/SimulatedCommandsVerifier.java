@@ -35,6 +35,7 @@ import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
+import com.android.internal.telephony.uicc.SimPhoneBookRecord;
 
 public class SimulatedCommandsVerifier implements CommandsInterface {
     private static SimulatedCommandsVerifier sInstance;
@@ -1481,5 +1482,29 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
 
     @Override
     public void getBarringInfo(Message result) {
+    }
+
+    @Override
+    public void getPhonebookRecords(Message result){
+    }
+
+    @Override
+    public void updatePhonebookRecord(SimPhoneBookRecord phonebookRecordInfo, Message result){
+    }
+
+    @Override
+    public void registerForPhonebookInitDone(Handler h, int what, Object obj){
+    }
+
+    @Override
+    public void unregisterForPhonebookInitDone(Handler h){
+    }
+
+    @Override
+    public void registerForPhonebookRecordInfo(Handler h, int what, Object obj){
+    }
+
+    @Override
+    public void unregisterForPhonebookRecordInfo(Handler h){
     }
 }
