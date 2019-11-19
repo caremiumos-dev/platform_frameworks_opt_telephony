@@ -94,6 +94,30 @@
       "revId": "8b20f0a92cf70f3c776e6b937e4a9b5108877922",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8dd59f1_87042fde",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2019-11-19T19:46:06Z",
+      "side": 1,
+      "message": "Phone#getCallBarring() is hidden so it cannot be accessed unless we expose\n\nAnyway i am fine to merge this change\n\nPls let us know if you can upstream the KDDI changes to the telephony settings",
+      "parentUuid": "1060c8d4_81f1408b",
+      "range": {
+        "startLine": 77,
+        "startChar": 52,
+        "endLine": 77,
+        "endChar": 56
+      },
+      "revId": "8b20f0a92cf70f3c776e6b937e4a9b5108877922",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
