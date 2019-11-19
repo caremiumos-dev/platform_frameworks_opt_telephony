@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b93192f_fb2e472c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3165,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-11-19T19:47:36Z",
+      "side": 1,
+      "message": "What is the purpose of this?  It seems unrelated; it also seems to conflict with the declaration for hasRilDataRadioTechnologyChanged on line 3088.",
+      "range": {
+        "startLine": 3165,
+        "startChar": 16,
+        "endLine": 3165,
+        "endChar": 48
+      },
+      "revId": "41a2b67a5215a60dce3c975f5eb006a61bed0de4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
