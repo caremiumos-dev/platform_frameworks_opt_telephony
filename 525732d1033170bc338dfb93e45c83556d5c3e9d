@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a67ad70d_afa7e01e",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1466513
+      },
+      "writtenOn": "2019-11-19T06:39:23Z",
+      "side": 1,
+      "message": "Remove duplicated \u0027Info\u0027 from method name.",
+      "revId": "525732d1033170bc338dfb93e45c83556d5c3e9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b28f6fc6_b5dc9f0a",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1466513
+      },
+      "writtenOn": "2019-11-19T06:39:23Z",
+      "side": 1,
+      "message": "Remove duplicated \u0027Info\u0027 from method name.",
+      "revId": "525732d1033170bc338dfb93e45c83556d5c3e9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
