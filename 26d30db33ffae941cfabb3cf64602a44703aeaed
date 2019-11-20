@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c0fd021_a73acc5e",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-11-20T21:39:32Z",
+      "side": 1,
+      "message": "This is already defined by Phone.java, you can use that event instead.",
+      "range": {
+        "startLine": 136,
+        "startChar": 29,
+        "endLine": 136,
+        "endChar": 57
+      },
+      "revId": "26d30db33ffae941cfabb3cf64602a44703aeaed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
