@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7ef2da7c_83aa22ab",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2019-11-20T13:03:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b8b132f_d2247d83",
+      "range": {
+        "startLine": 412,
+        "startChar": 34,
+        "endLine": 412,
+        "endChar": 70
+      },
+      "revId": "f3a22adf55562f6c5c70428f9077a3cf3937b91e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afecbd51_e1654839",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "f3a22adf55562f6c5c70428f9077a3cf3937b91e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ab1020e_8ad39127",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2019-11-20T13:03:21Z",
+      "side": 1,
+      "message": "ImsPhone needs to wait for carrier config is loaded to initialize the RcsFeatureManager.\n\nThis patch is to fix the bug which RcsFeatureManager cannot be initialized because of getting carrier config with wrong subscription ID.\n\nI will handle the subscription changed in another change list.",
+      "parentUuid": "afecbd51_e1654839",
+      "range": {
+        "startLine": 437,
+        "startChar": 17,
+        "endLine": 437,
+        "endChar": 49
+      },
+      "revId": "f3a22adf55562f6c5c70428f9077a3cf3937b91e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
