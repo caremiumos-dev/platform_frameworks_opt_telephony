@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.AsyncResult;
 import android.os.Message;
 import android.provider.Telephony.CellBroadcasts;
+import android.telephony.CbGeoUtils.Geometry;
 import android.telephony.CellLocation;
 import android.telephony.SmsCbLocation;
 import android.telephony.SmsCbMessage;
@@ -33,11 +34,12 @@ import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.text.format.DateUtils;
 
-import com.android.internal.telephony.CbGeoUtils.Geometry;
 import com.android.internal.telephony.CellBroadcastHandler;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.gsm.GsmSmsCbMessage.GeoFencingTriggerMessage;
 import com.android.internal.telephony.gsm.GsmSmsCbMessage.GeoFencingTriggerMessage.CellBroadcastIdentity;
+
+import dalvik.annotation.compat.UnsupportedAppUsage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +56,7 @@ public class GsmCellBroadcastHandler extends CellBroadcastHandler {
     private static final String MESSAGE_NOT_BROADCASTED = "0";
 
     /** This map holds incomplete concatenated messages waiting for assembly. */
+    @UnsupportedAppUsage
     private final HashMap<SmsCbConcatInfo, byte[][]> mSmsCbPageMap =
             new HashMap<SmsCbConcatInfo, byte[][]>(4);
 
@@ -135,7 +138,7 @@ public class GsmCellBroadcastHandler extends CellBroadcastHandler {
         // cell broadcasts.
         int maximumWaitTimeSec = 0;
         for (SmsCbMessage msg : cbMessages) {
-            maximumWaitTimeSec = Math.max(maximumWaitTimeSec, msg.getMaximumWaitingTime());
+            maximumWaitTimeSec = Math.max(maximumWaitTimeSec, msg.getMaximumWaitingDuration());
         }
 
         if (DBG) {
@@ -334,6 +337,7 @@ public class GsmCellBroadcastHandler extends CellBroadcastHandler {
         private final SmsCbHeader mHeader;
         private final SmsCbLocation mLocation;
 
+        @UnsupportedAppUsage
         SmsCbConcatInfo(SmsCbHeader header, SmsCbLocation location) {
             mHeader = header;
             mLocation = location;
@@ -369,6 +373,7 @@ public class GsmCellBroadcastHandler extends CellBroadcastHandler {
          * @param cid the current Cell ID
          * @return true if this message is valid for the current location; false otherwise
          */
+        @UnsupportedAppUsage
         public boolean matchesLocation(String plmn, int lac, int cid) {
             return mLocation.isInLocationArea(plmn, lac, cid);
         }

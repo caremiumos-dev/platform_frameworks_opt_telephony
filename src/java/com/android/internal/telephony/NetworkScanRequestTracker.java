@@ -66,10 +66,12 @@ public final class NetworkScanRequestTracker {
     private static final int EVENT_STOP_NETWORK_SCAN_DONE = 5;
     private static final int CMD_INTERRUPT_NETWORK_SCAN = 6;
     private static final int EVENT_INTERRUPT_NETWORK_SCAN_DONE = 7;
+    private static final int EVENT_MODEM_RESET = 8;
 
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            Log.d(TAG, "Received Event :" + msg.what);
             switch (msg.what) {
                 case CMD_START_NETWORK_SCAN:
                     mScheduler.doStartScan((NetworkScanRequestInfo) msg.obj);
@@ -97,6 +99,14 @@ public final class NetworkScanRequestTracker {
 
                 case EVENT_INTERRUPT_NETWORK_SCAN_DONE:
                     mScheduler.interruptScanDone((AsyncResult) msg.obj);
+                    break;
+
+                case EVENT_MODEM_RESET:
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    mScheduler.deleteScanAndMayNotify(
+                            (NetworkScanRequestInfo) ar.userObj,
+                            NetworkScan.ERROR_MODEM_ERROR,
+                            true);
                     break;
             }
         }
@@ -525,12 +535,12 @@ public final class NetworkScanRequestTracker {
         // stopped, a new scan will automatically start with nsri.
         // The new scan can interrupt the live scan only when all the below requirements are met:
         //   1. There is 1 live scan and no other pending scan
-        //   2. The new scan is requested by mobile network setting menu (owned by PHONE process)
+        //   2. The new scan is requested by mobile network setting menu (owned by SYSTEM process)
         //   3. The live scan is not requested by mobile network setting menu
         private synchronized boolean interruptLiveScan(NetworkScanRequestInfo nsri) {
             if (mLiveRequestInfo != null && mPendingRequestInfo == null
-                    && nsri.mUid == Process.PHONE_UID
-                            && mLiveRequestInfo.mUid != Process.PHONE_UID) {
+                    && nsri.mUid == Process.SYSTEM_UID
+                            && mLiveRequestInfo.mUid != Process.SYSTEM_UID) {
                 doInterruptScan(mLiveRequestInfo.mScanId);
                 mPendingRequestInfo = nsri;
                 notifyMessenger(mLiveRequestInfo, TelephonyScanManager.CALLBACK_SCAN_ERROR,
@@ -551,6 +561,7 @@ public final class NetworkScanRequestTracker {
                 mLiveRequestInfo = nsri;
                 nsri.mPhone.startNetworkScan(nsri.getRequest(),
                         mHandler.obtainMessage(EVENT_START_NETWORK_SCAN_DONE, nsri));
+                nsri.mPhone.mCi.registerForModemReset(mHandler, EVENT_MODEM_RESET, nsri);
                 return true;
             }
             return false;
@@ -570,6 +581,7 @@ public final class NetworkScanRequestTracker {
                                 null);
                     }
                 }
+                mLiveRequestInfo.mPhone.mCi.unregisterForModemReset(mHandler);
                 mLiveRequestInfo = null;
                 if (mPendingRequestInfo != null) {
                     startNewScan(mPendingRequestInfo);

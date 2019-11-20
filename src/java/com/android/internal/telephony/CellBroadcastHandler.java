@@ -41,14 +41,15 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.provider.Telephony.CellBroadcasts;
+import android.telephony.CbGeoUtils;
+import android.telephony.CbGeoUtils.Geometry;
+import android.telephony.CbGeoUtils.LatLng;
 import android.telephony.SmsCbMessage;
 import android.telephony.SubscriptionManager;
 import android.text.format.DateUtils;
 import android.util.LocalLog;
 import android.util.Log;
 
-import com.android.internal.telephony.CbGeoUtils.Geometry;
-import com.android.internal.telephony.CbGeoUtils.LatLng;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 
 import java.io.FileDescriptor;
@@ -66,7 +67,7 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
 
     private final LocalLog mLocalLog = new LocalLog(100);
 
-    protected static final Uri CELL_BROADCAST_URI = Uri.parse("content://cellbroadcasts_fwk");
+    protected static final Uri CELL_BROADCAST_URI = Uri.parse("content://cellbroadcasts");
 
     /** Uses to request the location update. */
     public final LocationRequester mLocationRequester;
@@ -142,7 +143,7 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
                 } else {
                     performGeoFencing(message, uri, message.getGeometries(), location);
                 }
-            }, message.getMaximumWaitingTime());
+            }, message.getMaximumWaitingDuration());
         } else {
             if (DBG) {
                 log("Broadcast the message directly because no geo-fencing required, "
@@ -220,7 +221,7 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
             msg = "Dispatching emergency SMS CB, SmsCbMessage is: " + message;
             log(msg);
             mLocalLog.log(msg);
-            intent = new Intent(Telephony.Sms.Intents.SMS_EMERGENCY_CB_RECEIVED_ACTION);
+            intent = new Intent(Telephony.Sms.Intents.ACTION_SMS_EMERGENCY_CB_RECEIVED);
             //Emergency alerts need to be delivered with high priority
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             receiverPermission = Manifest.permission.RECEIVE_EMERGENCY_BROADCAST;
