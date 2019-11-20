@@ -802,29 +802,6 @@ public abstract class SMSDispatcher extends Handler {
     }
 
     /**
-     * Handles outbound message when the phone is not in service.
-     *
-     * @param ss     Current service state.  Valid values are:
-     *                  OUT_OF_SERVICE
-     *                  EMERGENCY_ONLY
-     *                  POWER_OFF
-     * @param sentIntent the PendingIntent to send the error to
-     */
-    protected static void handleNotInService(int ss, PendingIntent sentIntent) {
-        if (sentIntent != null) {
-            try {
-                if (ss == ServiceState.STATE_POWER_OFF) {
-                    sentIntent.send(RESULT_ERROR_RADIO_OFF);
-                } else {
-                    sentIntent.send(RESULT_ERROR_NO_SERVICE);
-                }
-            } catch (CanceledException ex) {
-                Rlog.e(TAG, "Failed to send result");
-            }
-        }
-    }
-
-    /**
      * @param ss service state
      * @return The result error based on input service state for not in service error
      */
@@ -1827,6 +1804,8 @@ public abstract class SMSDispatcher extends Handler {
                         // Is multipart and last part
                         fillIn.putExtra(SEND_NEXT_MSG_EXTRA, true);
                     }
+                    // Pass this to SMS apps since "Ask every time"
+                    fillIn.putExtra(SmsManager.EXTRA_SUBSCRIPTION_ID, mSubId);
                     mSentIntent.send(context, Activity.RESULT_OK, fillIn);
                 } catch (CanceledException ex) {
                     Rlog.e(TAG, "Failed to send result");
