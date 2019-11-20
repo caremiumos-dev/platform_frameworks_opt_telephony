@@ -734,7 +734,7 @@ public class GsmCdmaPhone extends Phone {
     public void sendEmergencyCallStateChange(boolean callActive) {
         if (!isPhoneTypeCdma()) {
             // It possible that this method got called from ImsPhoneCallTracker#
-            logi("sendEmergencyCallbackModeChange - skip for non-cdma");
+            logi("sendEmergencyCallStateChange - skip for non-cdma");
             return;
         }
         if (mBroadcastEmergencyCallStateChanges) {
@@ -3269,12 +3269,14 @@ public class GsmCdmaPhone extends Phone {
             case CANCEL_ECM_TIMER:
                 removeCallbacks(mExitEcmRunnable);
                 mEcmTimerResetRegistrants.notifyResult(Boolean.TRUE);
+                setEcmCanceledForEmergency(true /*isCanceled*/);
                 break;
             case RESTART_ECM_TIMER:
                 long delayInMillis = SystemProperties.getLong(
                         TelephonyProperties.PROPERTY_ECM_EXIT_TIMER, DEFAULT_ECM_EXIT_TIMER_VALUE);
                 postDelayed(mExitEcmRunnable, delayInMillis);
                 mEcmTimerResetRegistrants.notifyResult(Boolean.FALSE);
+                setEcmCanceledForEmergency(false /*isCanceled*/);
                 break;
             default:
                 Rlog.e(LOG_TAG, "handleTimerInEmergencyCallbackMode, unsupported action " + action);
