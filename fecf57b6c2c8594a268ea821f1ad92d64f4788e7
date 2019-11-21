@@ -25,6 +25,52 @@
     },
     {
       "key": {
+        "uuid": "40a1bb51_ba11c68c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-11-21T19:14:53Z",
+      "side": 1,
+      "message": "can you please add a comment here like above stating that sync|packet \u003d video call forward?",
+      "range": {
+        "startLine": 1543,
+        "startChar": 22,
+        "endLine": 1543,
+        "endChar": 27
+      },
+      "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a641bed8_48376ae5",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-11-21T19:14:53Z",
+      "side": 1,
+      "message": "Use | instead of + operator here to make it more explicit (also please fix in other spots.)",
+      "range": {
+        "startLine": 1543,
+        "startChar": 45,
+        "endLine": 1543,
+        "endChar": 91
+      },
+      "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b176f546_aa415deb",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 1
