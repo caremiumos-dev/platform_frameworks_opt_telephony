@@ -46,7 +46,6 @@ import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.RemoteException;
-import android.os.ServiceManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneCapability;
 import android.telephony.PhoneStateListener;
@@ -1075,9 +1074,23 @@ public class PhoneSwitcher extends Handler {
     }
 
     public boolean shouldApplyNetworkRequest(NetworkRequest networkRequest, int phoneId) {
+        boolean isAnyPhoneActive = false;
         validatePhoneId(phoneId);
 
-        // In any case, if phone state is inactive, don't apply the network request.
+       //No sim inserts since target power on, there will be no active phone for network request
+       //Emergency call shall be proceeded even though this case happens
+        for (int i = 0; i < mPhones.length; i++) {
+            if (mPhoneStates[i].active) isAnyPhoneActive = true;
+        }
+        if (!isAnyPhoneActive
+                && mSubscriptionController.getSubIdUsingPhoneId(phoneId) == INVALID_SUBSCRIPTION_ID
+                && isEmergencyNetworkRequest(networkRequest)
+                && phoneId == DEFAULT_EMERGENCY_PHONE_ID) {
+            log("Send request for default emergency phone ( " + phoneId + " )");
+            return true;
+        }
+
+        // If phone state is inactive, don't apply the network request.
         if (!isPhoneActive(phoneId) || (
                 mSubscriptionController.getSubIdUsingPhoneId(phoneId) == INVALID_SUBSCRIPTION_ID
                 && !isEmergencyNetworkRequest(networkRequest))) {
