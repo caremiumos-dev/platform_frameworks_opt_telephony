@@ -1,0 +1,435 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ac9cd4b_b78a8ca2",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "this is equivalent to:\nreturn mPhone.getContext().getResources().getBoolean(com.android.internal.R.bool.config_sim_phonebook_in_modem);",
+      "range": {
+        "startLine": 456,
+        "startChar": 8,
+        "endLine": 456,
+        "endChar": 50
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba987dc1_c5eae075",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "I left this comment in the review for the HAL interface. What is the reason to use 1.6 and not 1.5?",
+      "range": {
+        "startLine": 187,
+        "startChar": 35,
+        "endLine": 187,
+        "endChar": 56
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d2b1149_6d71235a",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 6144,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Remove extra empty lines",
+      "range": {
+        "startLine": 6144,
+        "startChar": 0,
+        "endLine": 6144,
+        "endChar": 0
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cfc6d61_da724b16",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 6148,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Starting from line 4695, there is a comment that says:\n//***** Private Methods\n\nCan you move these new methods above?",
+      "range": {
+        "startLine": 6148,
+        "startChar": 4,
+        "endLine": 6148,
+        "endChar": 43
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3326690a_d28eca6e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 6159,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Add else block for the case where RADIO_HAL_VERSION is lower than expected.",
+      "range": {
+        "startLine": 6159,
+        "startChar": 12,
+        "endLine": 6159,
+        "endChar": 58
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf5d0504_17fe45c3",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 6160,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Indentation",
+      "range": {
+        "startLine": 6160,
+        "startChar": 0,
+        "endLine": 6160,
+        "endChar": 20
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f63adf94_ce344fbb",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 6178,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Same as above, add else block",
+      "range": {
+        "startLine": 6178,
+        "startChar": 12,
+        "endLine": 6178,
+        "endChar": 58
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bc81e4e_fbc0a629",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 6200,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "The logging is done only in case of correct radio HAL version. In general, the log should be done regardless of HAL version.",
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45c5d4d1_71c975f8",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Remove empty line",
+      "range": {
+        "startLine": 27,
+        "startChar": 1,
+        "endLine": 27,
+        "endChar": 2
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59a7c204_bc181255",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 31,
+        "startChar": 1,
+        "endLine": 31,
+        "endChar": 2
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c803a213_7100c0fd",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Remove all the asterisks. Same in similar cases below.",
+      "range": {
+        "startLine": 36,
+        "startChar": 6,
+        "endLine": 36,
+        "endChar": 11
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74b99c8d_145c9146",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Is this required? Or would mEmails.length be sufficient?\nEspecially after taking into account the suggestion below to not use null.",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 20
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea90cc30_29f878f4",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Instead of using null, I think it\u0027s better to use an array of 0 length as default.\nIn this way, we reduce the risk of NPE.\n\nSame for other cases.",
+      "range": {
+        "startLine": 43,
+        "startChar": 23,
+        "endLine": 43,
+        "endChar": 27
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94247cfd_a37a2355",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Typo",
+      "range": {
+        "startLine": 90,
+        "startChar": 6,
+        "endLine": 90,
+        "endChar": 12
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c152dcc_d2db4a74",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Typo",
+      "range": {
+        "startLine": 97,
+        "startChar": 6,
+        "endLine": 97,
+        "endChar": 12
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a69fd379_0a823201",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Remove empty line",
+      "range": {
+        "startLine": 41,
+        "startChar": 1,
+        "endLine": 41,
+        "endChar": 2
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2e3e108_778d5978",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Remove *",
+      "range": {
+        "startLine": 47,
+        "startChar": 6,
+        "endLine": 47,
+        "endChar": 11
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17ddef04_0e2a5432",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Add space after //\nThis is general comment, applicable in all cases.",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 7
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cc41aa0_a4b15c40",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2019-11-22T22:51:22Z",
+      "side": 1,
+      "message": "Remove double space. Same after next comma",
+      "range": {
+        "startLine": 107,
+        "startChar": 51,
+        "endLine": 107,
+        "endChar": 53
+      },
+      "revId": "8f1acac34d89248876126db6061bc085ee2d84e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
