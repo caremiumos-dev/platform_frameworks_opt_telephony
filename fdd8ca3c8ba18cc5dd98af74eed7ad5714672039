@@ -22,6 +22,30 @@
       "revId": "fdd8ca3c8ba18cc5dd98af74eed7ad5714672039",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4d8ccc8_37139488",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-11-22T02:03:36Z",
+      "side": 1,
+      "message": "What will the modem report for voice registration and data registration in this case? What is the expected result from ServiceState#getServiceState in this case?\n\nI am not sure what you mean by LTE CSFB. To me this would imply voice over LTE + CSFB. Does this mean attached to 2G/3G for voice and LTE for data only? In this case, the voice registration from ServiceStateTracker will be IN_SERVICE, so we will not override any registration state based on the data registration state.",
+      "parentUuid": "8536c18d_682f5a3c",
+      "range": {
+        "startLine": 968,
+        "startChar": 0,
+        "endLine": 968,
+        "endChar": 1
+      },
+      "revId": "fdd8ca3c8ba18cc5dd98af74eed7ad5714672039",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
