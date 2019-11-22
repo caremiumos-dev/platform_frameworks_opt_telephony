@@ -46,6 +46,30 @@
       "revId": "fdd8ca3c8ba18cc5dd98af74eed7ad5714672039",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea229412_70614845",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1099423
+      },
+      "writtenOn": "2019-11-22T02:07:21Z",
+      "side": 1,
+      "message": "I mean the network is LTE only, the MNO does not support VoIMS and there is no 2G/3G network available for CSFB. In this situation there is no voice service.",
+      "parentUuid": "d4d8ccc8_37139488",
+      "range": {
+        "startLine": 968,
+        "startChar": 0,
+        "endLine": 968,
+        "endChar": 1
+      },
+      "revId": "fdd8ca3c8ba18cc5dd98af74eed7ad5714672039",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
