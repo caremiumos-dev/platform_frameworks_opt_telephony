@@ -118,6 +118,30 @@
       "revId": "fdd8ca3c8ba18cc5dd98af74eed7ad5714672039",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b625a89e_0fc55e42",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-11-22T17:58:11Z",
+      "side": 1,
+      "message": "Okay, thanks for reviewing! Please let us know if there are any further issues with this implementation",
+      "parentUuid": "074b3ac0_35c50609",
+      "range": {
+        "startLine": 968,
+        "startChar": 0,
+        "endLine": 968,
+        "endChar": 1
+      },
+      "revId": "fdd8ca3c8ba18cc5dd98af74eed7ad5714672039",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
