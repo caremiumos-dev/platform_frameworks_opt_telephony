@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "364078af_bc429eac",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2019-11-23T02:18:05Z",
+      "side": 1,
+      "message": "this refers to whether we allow this phone/modem for PS attach. if it\u0027s false, there\u0027s no point of trying EIMS now.\nIn onEvaluate(), we have:\n\n        if (!hasAnyActiveSubscription) {\n            transitionToEmergencyPhone();\n        } else {\n            if (VDBG) log(\"Found an active subscription\");\n        }\n\nwhich means if there\u0027s no SIM inserted, mPreferredDataPhoneId will become DEFAULT_EMERGENCY_PHONE_ID (0), and phone 0 should be able to apply EIMS request.\n\nso why this changes anything?",
+      "range": {
+        "startLine": 1083,
+        "startChar": 16,
+        "endLine": 1083,
+        "endChar": 39
+      },
+      "revId": "454a96f377c22e79176a53dd3b8ebad260b3c412",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
