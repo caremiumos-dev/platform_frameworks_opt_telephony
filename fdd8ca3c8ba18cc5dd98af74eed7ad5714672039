@@ -142,6 +142,30 @@
       "revId": "fdd8ca3c8ba18cc5dd98af74eed7ad5714672039",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b1946112_592db456",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1152149
+      },
+      "writtenOn": "2019-11-23T17:03:04Z",
+      "side": 1,
+      "message": "Hi Brad,\n\nFrom the commit text, \"Instead, always override the voice registration state with the\nIMS data registration state if the voice registration is OUT_OF_SERVICE for CS.\" This makes sense.\nHowever, in the code above, the voice registration state is being overridden with the data registration state of baseSs, instead of the IMS data registration state. In this scenario, is it always the case that baseSs.getDataRegState() is the same as imsSs.getDataRegState()?",
+      "parentUuid": "b625a89e_0fc55e42",
+      "range": {
+        "startLine": 968,
+        "startChar": 0,
+        "endLine": 968,
+        "endChar": 1
+      },
+      "revId": "fdd8ca3c8ba18cc5dd98af74eed7ad5714672039",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
