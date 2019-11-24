@@ -128,6 +128,13 @@ public class CellSignalStrengthNrTest extends AndroidTestCase {
     }
 
     @Test
+    public void testSignalLevelForParameter() {
+        CellSignalStrengthNr css = new CellSignalStrengthNr(
+                CSIRSRP, CSIRSRQ, CSISINR, INVALID_SSRSRP, SSRSRQ, SSSINR);
+        assertThat(css.isLevelForParameter(CellSignalStrengthNr.USE_SSRSRP));
+    }
+
+    @Test
     public void testParcel() {
         // GIVEN an instance of CellSignalStrengthNr
         CellSignalStrengthNr css = new CellSignalStrengthNr(
