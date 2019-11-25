@@ -66,7 +66,8 @@ public class RetryManagerTest extends TelephonyTest {
             0,                      // max_conns_time
             0,                      // mtu
             -1,                     // mvno_type
-            "");                    // mnvo_match_data
+            "",                     // mnvo_match_data
+            0);                     // ipv6_mtu
 
     private ApnSetting mApn2 = ApnSetting.makeApnSetting(
             2164,                   // id
@@ -93,7 +94,8 @@ public class RetryManagerTest extends TelephonyTest {
             0,                      // max_conns_time
             0,                      // mtu
             -1,                     // mvno_type
-            "");                    // mnvo_match_data
+            "",                     // mnvo_match_data
+            0);                     // ipv6_mtu
 
     private ApnSetting mApn3 = ApnSetting.makeApnSetting(
             2165,                   // id
@@ -120,7 +122,8 @@ public class RetryManagerTest extends TelephonyTest {
             0,                      // max_conns_time
             0,                      // mtu
             -1,                     // mvno_type
-            "");                    // mnvo_match_data
+            "",                     // mnvo_match_data
+            0);                     // ipv6_mtu
 
     private PersistableBundle mBundle;
 

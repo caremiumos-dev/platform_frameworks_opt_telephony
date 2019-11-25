@@ -51,7 +51,8 @@ public class DataProfileTest extends TestCase {
             789,                    // max_conns_time
             0,                      // mtu
             -1,                     // mvno_type
-            "");                    // mnvo_match_data
+            "",                     // mnvo_match_data
+            0);                     // ipv6_mtu
 
     private ApnSetting mApn2 = ApnSetting.makeApnSetting(
             2163,                   // id
@@ -78,7 +79,8 @@ public class DataProfileTest extends TestCase {
             789,                    // max_conns_time
             0,                      // mtu
             -1,                     // mvno_type
-            "");                    // mnvo_match_data
+            "",                     // mnvo_match_data
+            0);                     // ipv6_mtu
 
     private ApnSetting mApn3 = ApnSetting.makeApnSetting(
             2163,                   // id
@@ -105,7 +107,8 @@ public class DataProfileTest extends TestCase {
             789,                    // max_conns_time
             0,                      // mtu
             -1,                     // mvno_type
-            "");                    // mnvo_match_data
+            "",                     // mnvo_match_data
+            0);                     // ipv6_mtu
 
     @SmallTest
     public void testCreateFromApnSetting() throws Exception {

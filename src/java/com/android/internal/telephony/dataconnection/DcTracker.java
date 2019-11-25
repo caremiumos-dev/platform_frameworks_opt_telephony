@@ -3205,7 +3205,7 @@ public class DcTracker extends Handler {
             (dest.isPersistent() || src.isPersistent()), dest.getMaxConns(),
             dest.getWaitTime(), dest.getMaxConnsTime(), dest.getMtu(), dest.getMvnoType(),
             dest.getMvnoMatchData(), dest.getApnSetId(), dest.getCarrierId(),
-            dest.getSkip464Xlat());
+            dest.getSkip464Xlat(), dest.getIpv6Mtu());
     }
 
     private DataConnection createDataConnection() {
@@ -4804,6 +4804,7 @@ public class DcTracker extends Handler {
                 .setMtu(apn.getMtu())
                 .setPersistent(apn.isPersistent())
                 .setPreferred(isPreferred)
+                .setIpv6Mtu(apn.getIpv6Mtu())
                 .build();
     }
 
