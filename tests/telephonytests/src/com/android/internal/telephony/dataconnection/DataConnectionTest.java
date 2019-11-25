@@ -127,7 +127,8 @@ public class DataConnectionTest extends TelephonyTest {
             0,                      // max_conns_time
             0,                      // mtu
             -1,                     // mvno_type
-            "");                    // mnvo_match_data
+            "",                     // mnvo_match_data
+            0);                     // ipv6_mtu
 
     private ApnSetting mApn2 = ApnSetting.makeApnSetting(
             2164,                   // id
@@ -154,7 +155,8 @@ public class DataConnectionTest extends TelephonyTest {
             0,                      // max_conns_time
             0,                      // mtu
             -1,                     // mvno_type
-            "");                    // mnvo_match_data
+            "",                     // mnvo_match_data
+            0);                     // ipv6_mtu
 
     private ApnSetting mApn3 = ApnSetting.makeApnSetting(
             2164,                   // id
@@ -184,7 +186,8 @@ public class DataConnectionTest extends TelephonyTest {
             "",                     // mnvo_match_data
             0,                      // apn_set_id
             -1,                     // carrier_id
-            1);                     // skip_464xlat
+            1,                      // skip_464xlat
+            0);                     // ipv6_mtu
 
     private ApnSetting mApn4 = ApnSetting.makeApnSetting(
             2164,                   // id
@@ -211,7 +214,8 @@ public class DataConnectionTest extends TelephonyTest {
             0,                      // max_conns_time
             0,                      // mtu
             -1,                     // mvno_type
-            "");                    // mnvo_match_data
+            "",                     // mnvo_match_data
+            0);                     // ipv6_mtu
 
     private ApnSetting mApn5 = ApnSetting.makeApnSetting(
             2164,                   // id
@@ -241,7 +245,8 @@ public class DataConnectionTest extends TelephonyTest {
             "",                     // mnvo_match_data
             0,                      // apn_set_id
             -1,                     // carrier_id
-            0);                     // skip_464xlat
+            0,                      // skip_464xlat
+            0);                     // ipv6_mtu
 
     private class DataConnectionTestHandler extends HandlerThread {
 
