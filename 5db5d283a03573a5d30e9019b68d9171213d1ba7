@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbb0bbd9_37494731",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-11-25T18:13:46Z",
+      "side": 1,
+      "message": "Can there be a comment explaining why the number of applications can be \u003c\u003d 1? If there are zero applications, for instance... what does that mean?",
+      "range": {
+        "startLine": 874,
+        "startChar": 68,
+        "endLine": 874,
+        "endChar": 70
+      },
+      "revId": "5db5d283a03573a5d30e9019b68d9171213d1ba7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b8b305b_8b5ec85f",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-11-25T18:13:46Z",
+      "side": 1,
+      "message": "@GuardedBy please",
+      "range": {
+        "startLine": 101,
+        "startChar": 16,
+        "endLine": 101,
+        "endChar": 33
+      },
+      "revId": "5db5d283a03573a5d30e9019b68d9171213d1ba7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e060262_bac58eca",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-11-25T18:13:46Z",
+      "side": 1,
+      "message": "This is a bit strange. You\u0027re inserting a memory barrier on a read (which is safe, even during writing). The only thing this helps is in case someone is trying to read during the middle of an update(). If that\u0027s happening then there\u0027s already a race that needs to be fixed (since they could incidentally read *before* the update()).\n\n1) I believe this is not helpful (and a little confusing).\n2) Please confirm whether there\u0027s an existing race (and if so, plz fix).",
+      "range": {
+        "startLine": 1513,
+        "startChar": 8,
+        "endLine": 1513,
+        "endChar": 20
+      },
+      "revId": "5db5d283a03573a5d30e9019b68d9171213d1ba7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
