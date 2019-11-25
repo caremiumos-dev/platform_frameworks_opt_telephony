@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "283ea49f_2358a8c8",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2019-11-25T07:54:29Z",
+      "side": 1,
+      "message": "SERVICE_CLASS_NONE should be specified, if this API is called without any particular service class. This will ensure, that CallForwardInfo for all service classes(like voice, sms, fax etc.) are queried. \nIf we mention only SERVICE_CLASS_VOICE, then we won\u0027t be able to query for all service classes through MMI code.\n\nReplied the same comment during initial review at: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/520096/3/src/java/com/android/internal/telephony/GsmCdmaPhone.java#1713\n\nAnd hence with same reasoning, was asked to update here as well as part of review comment at-\u003e https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/520096/5/src/java/com/android/internal/telephony/imsphone/ImsPhone.java#898",
+      "parentUuid": "23d0a0a9_07213547",
+      "range": {
+        "startLine": 1014,
+        "startChar": 16,
+        "endLine": 1014,
+        "endChar": 34
+      },
+      "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40a1bb51_ba11c68c",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 1
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "06253c83_4d3f38ff",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2019-11-25T07:54:29Z",
+      "side": 1,
+      "message": "We desire \"+\" operator here. \n\nAs per 3GPP TS 29002 MAP Specification : Section 17.7.10, the BearerServiceCode for \"allDataCircuitAsynchronous\" is \u002701010000\u0027 ( i.e. 80). Hence, SERVICE_CLASS_DATA_SYNC (1\u003c\u003c4) and SERVICE_CLASS_PACKET (1\u003c\u003c6) together make video service class.\n\nHence, 1\u003c\u003c4 : 16 and 1\u003c\u003c6 : 64\nSo, adding them will give us the desired result 80. (Modem also wants this value).\n\nAlso, same \"+\" operator is used at other existing places -\u003e \n\n\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java#398\n\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/gsm/GsmMmiCode.java#472",
+      "parentUuid": "a641bed8_48376ae5",
+      "range": {
+        "startLine": 1543,
+        "startChar": 45,
+        "endLine": 1543,
+        "endChar": 91
+      },
+      "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26d1ca01_36aff634",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2019-11-25T07:54:29Z",
+      "side": 1,
+      "message": "The comment stating this is already present at https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1161191/1/src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java#1121\n\nIs the same comment really required here as well?",
+      "parentUuid": "40a1bb51_ba11c68c",
+      "range": {
+        "startLine": 1543,
+        "startChar": 22,
+        "endLine": 1543,
+        "endChar": 27
+      },
+      "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b176f546_aa415deb",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5292fe96_7bd8cd17",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1236087
+      },
+      "writtenOn": "2019-11-25T07:54:29Z",
+      "side": 1,
+      "message": "We desire \"+\" operator here. \n\nAs per 3GPP TS 29002 MAP Specification : Section 17.7.10, the BearerServiceCode for \"allDataCircuitAsynchronous\" is \u002701010000\u0027 ( i.e. 80). Hence, SERVICE_CLASS_DATA_SYNC (1\u003c\u003c4) and SERVICE_CLASS_PACKET (1\u003c\u003c6) together make video service class.\n\nHence, 1\u003c\u003c4 : 16 and 1\u003c\u003c6 : 64\nSo, adding them will give us the desired result 80. (Modem also wants this value).\n\nAlso, same \"+\" operator is used at other existing places -\u003e \n\n\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java#398\n\nhttp://androidxref.com/8.0.0_r4/xref/frameworks/opt/telephony/src/java/com/android/internal/telephony/gsm/GsmMmiCode.java#472",
+      "parentUuid": "b176f546_aa415deb",
+      "range": {
+        "startLine": 1126,
+        "startChar": 24,
+        "endLine": 1127,
+        "endChar": 54
+      },
+      "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
