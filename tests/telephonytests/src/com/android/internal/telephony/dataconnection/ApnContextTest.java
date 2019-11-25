@@ -229,7 +229,8 @@ public class ApnContextTest extends TelephonyTest {
                 0,                      // max_conns_time
                 0,                      // mtu
                 -1,                     // mvno_type
-                "");                    // mnvo_match_data
+                "",                     // mnvo_match_data
+                0);                     // ipv6_mtus
 
         mApnContext.setApnSetting(myApn);
         assertTrue(mApnContext.isProvisioningApn());
