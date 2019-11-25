@@ -22,6 +22,30 @@
       "revId": "454a96f377c22e79176a53dd3b8ebad260b3c412",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9933149d_af15cdd8",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1508964
+      },
+      "writtenOn": "2019-11-25T09:40:48Z",
+      "side": 1,
+      "message": "Hi,\n\nI\u0027ve thought your opinion is reasonable. But unfortunately, 3GPP requests to send network requests (PDP connection requests) in an unusual case.\n\nAs per 3GPP spec, EIMS request needs to be sent without PS attach(without any normal \u0027phone activation\u0027 at phoneswitcher) for some cases, including No-Sim emergency case.\nYou can refer to TS 36.523, 11.2.4 (especially at 11.2.4.3.2    Test procedure sequence step5).\nUE:\n-Without a valid USIM inserted\nCheck: Does the UE transmit an ATTACH REQUEST message to attach for emergency bearer services, together with a PDN CONNECTIVITY REQUEST message for emergency bearer services?\n(ATTACH request which is related to \u0027PS attach\u0027 response from modem side \u0026 \nPDN CONNECTIVITY REQUEST that is related to \u0027EIMS network request\u0027 shall be requested to the network even though target doesn\u0027t have any sim cards)\n\nPlus, I\u0027ve checked the method \u0027transitionToEmergencyPhone\u0027, but it would proceed once \u0027onEvaluate\u0027 called from the event.\nI believe that nothing will trigger \u0027onEvaluate\u0027 if a sim card doesn\u0027t exist and a request is blocked by \u0027shouldApplyNetworkRequest\u0027 method.\n\n//TelephonyNetworkFactory.java\n   private void onNeedNetworkFor(Message msg) {\n        NetworkRequest networkRequest \u003d (NetworkRequest) msg.obj;\n        boolean shouldApply \u003d mPhoneSwitcher.shouldApplyNetworkRequest(\n                networkRequest, mPhone.getPhoneId());\n\n\nplease advise me if necessary.\n\nThank you.",
+      "parentUuid": "364078af_bc429eac",
+      "range": {
+        "startLine": 1083,
+        "startChar": 16,
+        "endLine": 1083,
+        "endChar": 39
+      },
+      "revId": "454a96f377c22e79176a53dd3b8ebad260b3c412",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
