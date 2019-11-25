@@ -552,6 +552,22 @@ public class DataConnection extends StateMachine {
 
         if (apn == null || lp == null) return;
 
+        int mtuForIpv6 = PhoneConstants.UNSET_MTU;
+
+        mtuForIpv6 = SubscriptionManager.getResourcesForSubId(
+                mPhone.getContext(), mPhone.getSubId())
+                .getInteger(com.android.internal.R.integer.config_mobile_mtu_for_IPV6);
+
+        if (mtuForIpv6 != PhoneConstants.UNSET_MTU) {
+            log ("MTU for Ipv6 set by config resource to : " + mtuForIpv6);
+            lp.setIPv6Mtu(mtuForIpv6);
+        }
+
+        if (apn != null && apn.getIpv6Mtu() != PhoneConstants.UNSET_MTU) {
+        log ("MTU for Ipv6 set by APN to : " + apn.getIpv6Mtu());
+        lp.setIPv6Mtu(mtuForIpv6);
+        }
+
         if (lp.getMtu() != PhoneConstants.UNSET_MTU) {
             if (DBG) log("MTU set by call response to: " + lp.getMtu());
             return;
