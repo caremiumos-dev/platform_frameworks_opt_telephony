@@ -1408,4 +1408,8 @@ public class ImsPhoneConnection extends Connection implements
                 + "; updating local video availability.");
         updateMediaCapabilities(getImsCall());
     }
+
+    public int getAudioCodec() {
+        return mAudioCodec;
+    }
 }
