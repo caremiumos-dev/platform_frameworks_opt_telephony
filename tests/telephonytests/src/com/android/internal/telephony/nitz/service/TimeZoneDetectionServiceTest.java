@@ -35,10 +35,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.android.internal.telephony.IndentingPrintWriter;
 import com.android.internal.telephony.nitz.service.PhoneTimeZoneSuggestion.MatchType;
 import com.android.internal.telephony.nitz.service.PhoneTimeZoneSuggestion.Quality;
 import com.android.internal.telephony.nitz.service.TimeZoneDetectionService.QualifiedPhoneTimeZoneSuggestion;
-import com.android.internal.util.IndentingPrintWriter;
 
 import org.junit.Before;
 import org.junit.Test;
