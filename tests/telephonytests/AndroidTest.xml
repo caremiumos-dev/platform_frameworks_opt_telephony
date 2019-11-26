@@ -17,7 +17,6 @@
     <target_preparer class="com.android.tradefed.targetprep.TestAppInstallSetup">
         <option name="test-file-name" value="FrameworksTelephonyTests.apk" />
     </target_preparer>
-
     <option name="test-suite-tag" value="apct" />
     <option name="test-tag" value="FrameworksTelephonyTests" />
     <test class="com.android.tradefed.testtype.AndroidJUnitTest" >
