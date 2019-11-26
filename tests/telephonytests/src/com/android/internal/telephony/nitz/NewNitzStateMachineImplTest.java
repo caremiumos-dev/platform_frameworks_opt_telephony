@@ -37,13 +37,14 @@ import android.app.timedetector.PhoneTimeSuggestion;
 import android.app.timezonedetector.PhoneTimeZoneSuggestion;
 import android.util.TimestampedValue;
 
+import com.android.internal.telephony.IndentingPrintWriter;
 import com.android.internal.telephony.NitzData;
 import com.android.internal.telephony.NitzStateMachineTestSupport.FakeDeviceState;
 import com.android.internal.telephony.NitzStateMachineTestSupport.Scenario;
 import com.android.internal.telephony.TelephonyTest;
 import com.android.internal.telephony.TimeZoneLookupHelper;
 import com.android.internal.telephony.nitz.NewNitzStateMachineImpl.NitzSignalInputFilterPredicate;
-import com.android.internal.util.IndentingPrintWriter;
+import com.android.internal.telephony.nitz.service.PhoneTimeZoneSuggestion;
 
 import org.junit.After;
 import org.junit.Before;
