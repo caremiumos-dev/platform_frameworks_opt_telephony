@@ -24,5 +24,9 @@ android_test {
     ],
 
     platform_apis: true,
-    test_suites: ["device-tests"],
+
+    test_suites: [
+        "mts",
+        "device-tests",
+    ],
 }
