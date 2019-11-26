@@ -14,6 +14,11 @@
      limitations under the License.
 -->
 <configuration description="Runs Frameworks Telephony Tests.">
+    <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
+        <option name="run-command" value="svc nfc disable" />
+        <option name="run-command" value="settings put global ble_scan_always_enabled 0" />
+        <option name="run-command" value="svc bluetooth disable" />
+    </target_preparer>
     <target_preparer class="com.android.tradefed.targetprep.TestAppInstallSetup">
         <option name="test-file-name" value="FrameworksTelephonyTests.apk" />
     </target_preparer>
