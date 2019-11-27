@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0f1295b_dfc3cb5c",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-11-27T00:30:10Z",
+      "side": 1,
+      "message": "If there are multiple apps on the SIM, this will be called multiple times (once for each IccRecords instance). To avoid that I think this should be done in UiccController.",
+      "revId": "4d642a85f17a8e29fa06913efc004b20d9983960",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
