@@ -331,6 +331,7 @@ public class ServiceStateTracker extends Handler {
     private int mPrevSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
 
     private boolean mImsRegistered = false;
+    private boolean mCarrierConfigLoaded = false;
 
     @UnsupportedAppUsage
     private SubscriptionManager mSubscriptionManager;
@@ -2423,7 +2424,7 @@ public class ServiceStateTracker extends Handler {
              * The test for the operators is to handle special roaming
              * agreements and MVNO's.
              */
-            boolean roaming = (mGsmRoaming || mDataRoaming);
+            boolean roaming = (mGsmRoaming || mDataRoaming) && mCarrierConfigLoaded;
 
             if (roaming && !isOperatorConsideredRoaming(mNewSS)
                     && (isSameNamedOperators(mNewSS) || isOperatorConsideredNonRoaming(mNewSS))) {
@@ -4699,6 +4700,9 @@ public class ServiceStateTracker extends Handler {
         // Sometimes the network registration information comes before carrier config is ready.
         // For some cases like roaming/non-roaming overriding, we need carrier config. So it's
         // important to poll state again when carrier config is ready.
+        if (config != null) {
+            mCarrierConfigLoaded = true;
+        }
         pollState();
     }
 
