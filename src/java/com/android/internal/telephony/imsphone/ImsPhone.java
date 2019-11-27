@@ -411,25 +411,29 @@ public class ImsPhone extends ImsPhoneBase {
 
             @Override
             public RcsFeatureManager getFeatureManager() {
-                return new RcsFeatureManager(mContext, mPhoneId);
+                logd("Create RcsFeatureManager instance");
+                mRcsManager = new RcsFeatureManager(mContext, mPhoneId);
+                return mRcsManager;
             }
 
             @Override
             public void connectionReady(RcsFeatureManager manager) throws ImsException {
-                logd("RcsFeatureManager is ready");
-                mRcsManager = manager;
+                logi("RcsFeatureManager is ready");
             }
 
             @Override
             public void connectionUnavailable() {
-                logd("RcsFeatureManager is unavailable");
-                mRcsManager = null;
+                logi("RcsFeatureManager is unavailable");
             }
         };
 
         mRcsManagerConnector = new FeatureConnector<>(mContext, mPhoneId,
                 mRcsFeatureConnectorListener, mContext.getMainExecutor(), LOG_TAG);
         mRcsManagerConnector.connect();
+    }
+
+    public RcsFeatureManager getRcsManager() {
+        return mRcsManager;
     }
 
     @UnsupportedAppUsage
