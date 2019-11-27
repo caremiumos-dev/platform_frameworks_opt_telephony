@@ -55,7 +55,6 @@ import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
-import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.emergency.EmergencyNumber;
@@ -120,11 +119,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
@@ -366,8 +363,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     // Hold aggregated video call data usage for each video call since boot.
     // The ImsCall's call id is the key of the map.
     private final HashMap<Integer, Long> mVtDataUsageMap = new HashMap<>();
-    private final Map<String, CacheEntry> mPhoneNumAndConnTime = new ConcurrentHashMap<>();
-    private final Queue<CacheEntry> mUnknownPeerConnTime = new LinkedBlockingQueue<>();
+    private final Map<String, CacheEntry> mCallIdConnTime = new ConcurrentHashMap<>();
 
     private static class CacheEntry {
         private long mCachedTime;
@@ -1394,75 +1390,25 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private void maintainConnectTimeCache() {
         long threshold = SystemClock.elapsedRealtime() - TIMEOUT_PARTICIPANT_CONNECT_TIME_CACHE_MS;
         // The cached time is the system elapsed millisecond when the CacheEntry is created.
-        mPhoneNumAndConnTime.entrySet().removeIf(e -> e.getValue().mCachedTime < threshold);
-        // Remove all the cached records which are older than current caching threshold. Since the
-        // queue is FIFO, keep polling records until the queue is empty or the head of the queue is
-        // fresh enough.
-        while (!mUnknownPeerConnTime.isEmpty()
-                && mUnknownPeerConnTime.peek().mCachedTime < threshold) {
-            mUnknownPeerConnTime.poll();
-        }
+        mCallIdConnTime.entrySet().removeIf(e -> e.getValue().mCachedTime < threshold);
+
     }
 
-    private void cacheConnectionTimeWithPhoneNumber(@NonNull ImsPhoneConnection connection) {
+    private void cacheConnectionTimeWithConnectionId(@NonNull ImsPhoneConnection connection) {
         int callDirection =
                 connection.isIncoming() ? android.telecom.Call.Details.DIRECTION_INCOMING
                         : android.telecom.Call.Details.DIRECTION_OUTGOING;
         CacheEntry cachedConnectTime = new CacheEntry(SystemClock.elapsedRealtime(),
                 connection.getConnectTime(), connection.getConnectTimeReal(), callDirection);
         maintainConnectTimeCache();
-        if (PhoneConstants.PRESENTATION_ALLOWED == connection.getNumberPresentation()) {
-            // In case of merging calls with the same number, use the latest connect time. Since
-            // that call might be dropped and re-connected. So if the connectTime is earlier than
-            // the cache, skip.
-            String phoneNumber = getFormattedPhoneNumber(connection.getAddress());
-            if (mPhoneNumAndConnTime.containsKey(phoneNumber)
-                    && connection.getConnectTime()
-                        <= mPhoneNumAndConnTime.get(phoneNumber).mConnectTime) {
-                // Use the latest connect time.
-                return;
-            }
-            mPhoneNumAndConnTime.put(phoneNumber, cachedConnectTime);
-        } else {
-            mUnknownPeerConnTime.add(cachedConnectTime);
-        }
+        String connectionId = connection.getImsCall().getCallSession().getCallId();
+        mCallIdConnTime.put(connectionId, cachedConnectTime);
     }
 
-    private CacheEntry findConnectionTimeUsePhoneNumber(
+    private CacheEntry findConnectionTimeUseConnectionId(
             @NonNull ConferenceParticipant participant) {
         maintainConnectTimeCache();
-        if (PhoneConstants.PRESENTATION_ALLOWED == participant.getParticipantPresentation()) {
-            if (participant.getHandle() == null
-                    || participant.getHandle().getSchemeSpecificPart() == null) {
-                return null;
-            }
-
-            String number = ConferenceParticipant.getParticipantAddress(participant.getHandle(),
-                    getCountryIso()).getSchemeSpecificPart();
-            if (TextUtils.isEmpty(number)) {
-                return null;
-            }
-            String formattedNumber = getFormattedPhoneNumber(number);
-            return mPhoneNumAndConnTime.get(formattedNumber);
-        } else {
-            return mUnknownPeerConnTime.poll();
-        }
-    }
-
-    private String getFormattedPhoneNumber(String number) {
-        String countryIso = getCountryIso();
-        if (countryIso == null) {
-            return number;
-        }
-        String phoneNumber = PhoneNumberUtils.formatNumberToE164(number, countryIso);
-        return phoneNumber == null ? number : phoneNumber;
-    }
-
-    private String getCountryIso() {
-        int subId = mPhone.getSubId();
-        SubscriptionInfo info =
-                SubscriptionManager.from(mPhone.getContext()).getActiveSubscriptionInfo(subId);
-        return info == null ? null : info.getCountryIso();
+        return mCallIdConnTime.get(participant.getId());
     }
 
     public void
@@ -1512,14 +1458,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             foregroundConnection.setConferenceConnectTime(conferenceConnectTime);
             foregroundConnection.handleMergeStart();
             foregroundId = foregroundConnection.getTelecomCallId();
-            cacheConnectionTimeWithPhoneNumber(foregroundConnection);
+            cacheConnectionTimeWithConnectionId(foregroundConnection);
         }
         String backgroundId = "";
         ImsPhoneConnection backgroundConnection = findConnection(bgImsCall);
         if (backgroundConnection != null) {
             backgroundConnection.handleMergeStart();
             backgroundId = backgroundConnection.getTelecomCallId();
-            cacheConnectionTimeWithPhoneNumber(backgroundConnection);
+            cacheConnectionTimeWithConnectionId(backgroundConnection);
         }
         log("conference: fgCallId=" + foregroundId + ", bgCallId=" + backgroundId);
         mOperationLocalLog.log("conference: fgCallId=" + foregroundId + ", bgCallId="
@@ -2842,7 +2788,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         private void updateConferenceParticipantsTiming(List<ConferenceParticipant> participants) {
             for (ConferenceParticipant participant : participants) {
                 // Every time participants are newly created from parcel, update their connect time.
-                CacheEntry cachedConnectTime = findConnectionTimeUsePhoneNumber(participant);
+                CacheEntry cachedConnectTime = findConnectionTimeUseConnectionId(participant);
                 if (cachedConnectTime != null) {
                     participant.setConnectTime(cachedConnectTime.mConnectTime);
                     participant.setConnectElapsedTime(cachedConnectTime.mConnectElapsedTime);
