@@ -19,13 +19,18 @@ package com.android.internal.telephony.ims;
 import junit.framework.AssertionFailedError;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.IBinder;
 import android.os.RemoteException;
 import android.telephony.SubscriptionManager;
 import android.telephony.ims.RcsContactUceCapability;
@@ -118,11 +123,8 @@ public class RcsFeatureConnectionTest extends TelephonyTest {
     private int mPhoneId;
     private SubscriptionManager mSubscriptionManager;
     private RcsFeatureConnection mRcsFeatureConnection;
-
-    @Mock
-    RcsFeatureConnection.RcsFeatureManagerProxy mRcsFeatureManagerProxy;
-    @Mock
-    RcsFeatureConnection.IRcsFeatureUpdate mCallback;
+    @Mock private RcsFeatureConnection.IRcsFeatureUpdate mCallback;
+    @Mock private RcsFeatureConnection.RcsFeatureManagerProxy mRcsFeatureManagerProxy;
 
     @Before
     public void setUp() throws Exception {
@@ -269,5 +271,54 @@ public class RcsFeatureConnectionTest extends TelephonyTest {
         mRcsFeatureConnection.handleImsStatusChangedCallback(mPhoneId, ImsFeature.FEATURE_RCS,
                 ImsFeature.STATE_READY);
         verify(mCallback).notifyStateChanged();
+    }
+
+    @Test
+    @SmallTest
+    public void testCapabilityStatusQuery() throws Exception {
+        RcsFeatureConnection featureConnection = spy(mRcsFeatureConnection);
+        IImsRcsFeature imsRcsFeature = mock(IImsRcsFeature.class);
+        setRcsUceIsSupportedByCarrier(true);
+
+        doReturn(true).when(featureConnection).isBinderReady();
+        doReturn(imsRcsFeature).when(featureConnection).getServiceInterface(any(IBinder.class));
+
+        featureConnection.queryCapabilityStatus();
+
+        // Verify the IImsRcsFeature.queryCapabilityStatus API will call be called
+        verify(imsRcsFeature).queryCapabilityStatus();
+    }
+
+    @Test
+    @SmallTest
+    public void testCabapilityCallbackRegistered() throws Exception {
+        RcsFeatureConnection featureConnection = spy(mRcsFeatureConnection);
+        IImsRcsFeature imsRcsFeature = mock(IImsRcsFeature.class);
+        setRcsUceIsSupportedByCarrier(true);
+
+        doReturn(true).when(featureConnection).isBinderReady();
+        doReturn(imsRcsFeature).when(featureConnection).getServiceInterface(any(IBinder.class));
+
+        // Verify the callback will be registered by the api IImsRcsFeature.addCapabilityCallback
+        featureConnection.addCapabilityCallback(any());
+        verify(imsRcsFeature).addCapabilityCallback(any());
+
+        // Verify the callback will be removed by the api IImsRcsFeature.removeCapabilityCallback
+        featureConnection.removeCapabilityCallback(any());
+        verify(imsRcsFeature).removeCapabilityCallback(any());
+    }
+
+    @Test
+    @SmallTest
+    public void testCabapilityConfigurationQuery() throws Exception {
+        RcsFeatureConnection featureConnection = spy(mRcsFeatureConnection);
+        IImsRcsFeature imsRcsFeature = mock(IImsRcsFeature.class);
+        setRcsUceIsSupportedByCarrier(true);
+
+        doReturn(true).when(featureConnection).isBinderReady();
+        doReturn(imsRcsFeature).when(featureConnection).getServiceInterface(any(IBinder.class));
+
+        featureConnection.queryCapabilityConfiguration(anyInt(), anyInt(), any());
+        verify(imsRcsFeature).queryCapabilityConfiguration(anyInt(), anyInt(), any());
     }
 }

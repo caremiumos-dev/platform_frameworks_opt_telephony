@@ -21,7 +21,11 @@ import junit.framework.AssertionFailedError;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.anyObject;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,6 +34,8 @@ import android.content.pm.PackageManager;
 import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.telephony.CarrierConfigManager;
+import android.telephony.ims.aidl.IImsCapabilityCallback;
+import android.telephony.ims.feature.RcsFeature.RcsImsCapabilities;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.ims.ImsException;
@@ -100,7 +106,7 @@ public class RcsFeatureManagerTest extends TelephonyTest {
     }
 
     /**
-     * Test ImsFeature status can be add/remove successfully
+     * Test ImsFeature status can be added and removed successfully
      */
     @Test
     @SmallTest
@@ -119,6 +125,62 @@ public class RcsFeatureManagerTest extends TelephonyTest {
         mRcsFeatureManager.removeNotifyStatusChangedCallback(mStatusCallback);
         currentSize = mRcsFeatureManager.mStatusCallbacks.size();
         assertEquals(0, currentSize);
+    }
+
+    /**
+     * Test IImsCapabilityCallback can be registered and unregistered
+     */
+    @Test
+    @SmallTest
+    public void testImsCapabilityCallbackRegistered() throws Exception {
+        // Verify ImsCapabilityCallback can be registered
+        mRcsFeatureManager.registerRcsAvailabilityCallback(anyObject());
+        verify(mRcsFeatureConnection).addCapabilityCallback(anyObject());
+
+        // Verify ImsCapabilityCallback can be unregistered
+        mRcsFeatureManager.unregisterRcsAvailabilityCallback(anyObject());
+        verify(mRcsFeatureConnection).removeCapabilityCallback(anyObject());
+    }
+
+    @Test
+    @SmallTest
+    public void testIsCapableQuery() throws Exception {
+        // Verify the result is true if OPTIONS is capable
+        boolean result = callIsCapable(RcsImsCapabilities.CAPABILITY_TYPE_OPTIONS_UCE, true);
+        assertTrue(result);
+
+        // Verify the result is false if OPTIONS is incapable
+        result = callIsCapable(RcsImsCapabilities.CAPABILITY_TYPE_OPTIONS_UCE, false);
+        assertFalse(result);
+    }
+
+    private boolean callIsCapable(int capability, boolean enabled) throws Exception {
+        doAnswer(invocation -> {
+            IImsCapabilityCallback cb = (IImsCapabilityCallback) invocation.getArguments()[2];
+            cb.onQueryCapabilityConfiguration(capability, 1, enabled);
+            return null;
+        }).when(mRcsFeatureConnection).queryCapabilityConfiguration(
+                eq(capability), anyInt(), any());
+
+        return mRcsFeatureManager.isCapable(capability);
+    }
+
+    @Test
+    @SmallTest
+    public void testIsAvailableQuery() throws Exception {
+        final int capabilityOptions = RcsImsCapabilities.CAPABILITY_TYPE_OPTIONS_UCE;
+        final int capabilityPresence = RcsImsCapabilities.CAPABILITY_TYPE_PRESENCE_UCE;
+
+        when(mRcsFeatureConnection.queryCapabilityStatus()).thenReturn(capabilityOptions);
+        boolean result = mRcsFeatureManager.isAvailable(capabilityOptions);
+        assertTrue(result);
+
+        when(mRcsFeatureConnection.queryCapabilityStatus()).thenReturn(capabilityPresence);
+        result = mRcsFeatureManager.isAvailable(capabilityPresence);
+        assertTrue(result);
+
+        result = mRcsFeatureManager.isAvailable(capabilityOptions);
+        assertFalse(result);
     }
 
     @Test
