@@ -432,6 +432,10 @@ public class ImsPhone extends ImsPhoneBase {
         mRcsManagerConnector.connect();
     }
 
+    public RcsFeatureManager getRcsManager() {
+        return mRcsManager;
+    }
+
     @UnsupportedAppUsage
     @Override
     public ServiceState getServiceState() {
