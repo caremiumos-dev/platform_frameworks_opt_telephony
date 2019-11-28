@@ -614,9 +614,8 @@ public class CdmaSmsTest extends AndroidTestCase {
         assertEquals("Test Callback nbr", bd1.userData.payloadStr);
         assertEquals(CdmaSmsAddress.DIGIT_MODE_8BIT_CHAR, bd1.callbackNumber.digitMode);
         assertEquals(CdmaSmsAddress.TON_INTERNATIONAL_OR_IP, bd1.callbackNumber.ton);
-        assertEquals(CdmaSmsAddress.NUMBER_MODE_NOT_DATA_NETWORK, bd1.callbackNumber.numberMode);
         assertEquals(CdmaSmsAddress.NUMBERING_PLAN_ISDN_TELEPHONY, bd1.callbackNumber.numberPlan);
-        assertEquals("1234", bd1.callbackNumber.address);
+        assertEquals("+1234", bd1.callbackNumber.address);
     }
 
     @SmallTest
@@ -625,9 +624,6 @@ public class CdmaSmsTest extends AndroidTestCase {
         BearerData bd1 = BearerData.decode(HexDump.hexStringToByteArray(pdu1));
         assertEquals("SMS Rulz", bd1.userData.payloadStr);
         assertEquals(CdmaSmsAddress.DIGIT_MODE_4BIT_DTMF, bd1.callbackNumber.digitMode);
-        assertEquals(CdmaSmsAddress.TON_UNKNOWN, bd1.callbackNumber.ton);
-        assertEquals(CdmaSmsAddress.NUMBER_MODE_NOT_DATA_NETWORK, bd1.callbackNumber.numberMode);
-        assertEquals(CdmaSmsAddress.NUMBERING_PLAN_UNKNOWN, bd1.callbackNumber.numberPlan);
         assertEquals("5099214001", bd1.callbackNumber.address);
     }
 
@@ -640,30 +636,46 @@ public class CdmaSmsTest extends AndroidTestCase {
         UserData userData = new UserData();
         userData.payloadStr = "test callback number";
         bearerData.userData = userData;
+
         CdmaSmsAddress addr = new CdmaSmsAddress();
-        addr.digitMode = CdmaSmsAddress.DIGIT_MODE_8BIT_CHAR;
-        addr.ton = CdmaSmsAddress.TON_NATIONAL_OR_EMAIL;
-        addr.numberMode = CdmaSmsAddress.NUMBER_MODE_NOT_DATA_NETWORK;
-        addr.numberPlan = CdmaSmsAddress.NUMBERING_PLAN_UNKNOWN;
         addr.address = "8005551212";
-        addr.numberOfDigits = (byte)addr.address.length();
         bearerData.callbackNumber = addr;
         byte []encodedSms = BearerData.encode(bearerData);
         BearerData revBearerData = BearerData.decode(encodedSms);
         CdmaSmsAddress revAddr = revBearerData.callbackNumber;
+
+        assertEquals(addr.digitMode, CdmaSmsAddress.DIGIT_MODE_4BIT_DTMF);
+        assertEquals(addr.numberOfDigits, addr.address.length());
+
         assertEquals(addr.digitMode, revAddr.digitMode);
-        assertEquals(addr.ton, revAddr.ton);
-        assertEquals(addr.numberMode, revAddr.numberMode);
-        assertEquals(addr.numberPlan, revAddr.numberPlan);
         assertEquals(addr.numberOfDigits, revAddr.numberOfDigits);
         assertEquals(addr.address, revAddr.address);
+
         addr.address = "8*55#1012";
-        addr.numberOfDigits = (byte)addr.address.length();
-        addr.digitMode = CdmaSmsAddress.DIGIT_MODE_4BIT_DTMF;
         encodedSms = BearerData.encode(bearerData);
         revBearerData = BearerData.decode(encodedSms);
         revAddr = revBearerData.callbackNumber;
+
+        assertEquals(addr.digitMode, CdmaSmsAddress.DIGIT_MODE_4BIT_DTMF);
+        assertEquals(addr.numberOfDigits, addr.address.length());
+
         assertEquals(addr.digitMode, revAddr.digitMode);
+        assertEquals(addr.numberOfDigits, revAddr.numberOfDigits);
+        assertEquals(addr.address, revAddr.address);
+
+        addr.address = "+8005551212";
+        encodedSms = BearerData.encode(bearerData);
+        revBearerData = BearerData.decode(encodedSms);
+        revAddr = revBearerData.callbackNumber;
+
+        assertEquals(addr.digitMode, CdmaSmsAddress.DIGIT_MODE_8BIT_CHAR);
+        assertEquals(addr.ton, CdmaSmsAddress.TON_INTERNATIONAL_OR_IP);
+        assertEquals(addr.numberPlan, CdmaSmsAddress.NUMBERING_PLAN_ISDN_TELEPHONY);
+        assertEquals(addr.numberOfDigits, addr.origBytes.length);
+
+        assertEquals(addr.digitMode, revAddr.digitMode);
+        assertEquals(addr.ton, revAddr.ton);
+        assertEquals(addr.numberPlan, revAddr.numberPlan);
         assertEquals(addr.numberOfDigits, revAddr.numberOfDigits);
         assertEquals(addr.address, revAddr.address);
     }
