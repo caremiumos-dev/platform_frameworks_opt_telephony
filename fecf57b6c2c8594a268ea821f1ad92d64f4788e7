@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "2911fbb0_6dd73a8d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1591497
+      },
+      "writtenOn": "2019-11-28T09:09:39Z",
+      "side": 1,
+      "message": "Resolving with above comment.",
+      "parentUuid": "ed55a055_5c093889",
+      "range": {
+        "startLine": 1014,
+        "startChar": 16,
+        "endLine": 1014,
+        "endChar": 34
+      },
+      "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40a1bb51_ba11c68c",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 1
