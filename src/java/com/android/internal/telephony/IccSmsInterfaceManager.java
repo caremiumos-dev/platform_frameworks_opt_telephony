@@ -441,7 +441,8 @@ public class IccSmsInterfaceManager {
             boolean persistMessageForNonDefaultSmsApp) {
         sendTextInternal(callingPackage, destAddr, scAddr, text, sentIntent, deliveryIntent,
                 persistMessageForNonDefaultSmsApp, SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
-                false /* expectMore */, SMS_MESSAGE_PERIOD_NOT_SPECIFIED, false /* isForVvm */);
+                false /* expectMore */, SMS_MESSAGE_PERIOD_NOT_SPECIFIED, null /* callbackNumber */,
+                false /* isForVvm */);
     }
 
     /**
@@ -457,7 +458,7 @@ public class IccSmsInterfaceManager {
         }
         sendTextInternal(callingPackage, destAddr, scAddr, text, sentIntent, deliveryIntent,
                 persistMessage, SMS_MESSAGE_PRIORITY_NOT_SPECIFIED, false /* expectMore */,
-                SMS_MESSAGE_PERIOD_NOT_SPECIFIED, isForVvm);
+                SMS_MESSAGE_PERIOD_NOT_SPECIFIED, null /* callbackNumber */, isForVvm);
     }
 
     /**
@@ -504,23 +505,26 @@ public class IccSmsInterfaceManager {
      *  Validity Period(Minimum) -> 5 mins
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values including negative considered as Invalid Validity Period of the message.
+     * @param callbackNumber the Call-Back Number for the CDMA message. See 3GPP2 C.S0015-B, v2.0,
+     *  4.5.15 Call-Back Number)
      */
 
     private void sendTextInternal(String callingPackage, String destAddr, String scAddr,
             String text, PendingIntent sentIntent, PendingIntent deliveryIntent,
             boolean persistMessageForNonDefaultSmsApp, int priority, boolean expectMore,
-            int validityPeriod, boolean isForVvm) {
+            int validityPeriod, String callbackNumber, boolean isForVvm) {
         if (Rlog.isLoggable("SMS", Log.VERBOSE)) {
             log("sendText: destAddr=" + destAddr + " scAddr=" + scAddr
                     + " text='" + text + "' sentIntent=" + sentIntent + " deliveryIntent="
                     + deliveryIntent + " priority=" + priority + " expectMore=" + expectMore
-                    + " validityPeriod=" + validityPeriod + " isForVVM=" + isForVvm);
+                    + " validityPeriod=" + validityPeriod + " callbackNumber=" + callbackNumber
+                    + " isForVVM=" + isForVvm);
         }
         notifyIfOutgoingEmergencySms(destAddr);
         destAddr = filterDestAddress(destAddr);
         mDispatchersController.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
-                null/*messageUri*/, callingPackage, persistMessageForNonDefaultSmsApp,
-                priority, expectMore, validityPeriod, isForVvm);
+                null /* messageUri */, callingPackage, persistMessageForNonDefaultSmsApp, priority,
+                expectMore, validityPeriod, callbackNumber, isForVvm);
     }
 
     /**
@@ -567,19 +571,21 @@ public class IccSmsInterfaceManager {
      *  Validity Period(Minimum) -> 5 mins
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values including negative considered as Invalid Validity Period of the message.
+     * @param callbackNumber the Call-Back Number for the CDMA message. See 3GPP2 C.S0015-B, v2.0,
+     *  4.5.15 Call-Back Number)
      */
 
     public void sendTextWithOptions(String callingPackage, String destAddr, String scAddr,
             String text, PendingIntent sentIntent, PendingIntent deliveryIntent,
             boolean persistMessageForNonDefaultSmsApp, int priority, boolean expectMore,
-            int validityPeriod) {
+            int validityPeriod, String callbackNumber) {
         if (!mSmsPermissions.checkCallingOrSelfCanSendSms(callingPackage, "Sending SMS message")) {
             returnUnspecifiedFailure(sentIntent);
             return;
         }
         sendTextInternal(callingPackage, destAddr, scAddr, text, sentIntent, deliveryIntent,
                 persistMessageForNonDefaultSmsApp, priority, expectMore, validityPeriod,
-                false /* isForVvm */);
+                callbackNumber, false /* isForVvm */);
     }
 
     /**
@@ -649,7 +655,7 @@ public class IccSmsInterfaceManager {
         sendMultipartTextWithOptions(callingPackage, destAddr, scAddr, parts, sentIntents,
                 deliveryIntents, persistMessageForNonDefaultSmsApp,
                 SMS_MESSAGE_PRIORITY_NOT_SPECIFIED, false /* expectMore */,
-                SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
+                SMS_MESSAGE_PERIOD_NOT_SPECIFIED, null /* callbackNumber */);
     }
 
     /**
@@ -697,12 +703,14 @@ public class IccSmsInterfaceManager {
      *  Validity Period(Minimum) -> 5 mins
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values including negative considered as Invalid Validity Period of the message.
+     * @param callbackNumber the Call-Back Number for the CDMA message. See 3GPP2 C.S0015-B, v2.0,
+     *  4.5.15 Call-Back Number)
      */
 
     public void sendMultipartTextWithOptions(String callingPackage, String destAddr,
             String scAddr, List<String> parts, List<PendingIntent> sentIntents,
             List<PendingIntent> deliveryIntents, boolean persistMessageForNonDefaultSmsApp,
-            int priority, boolean expectMore, int validityPeriod) {
+            int priority, boolean expectMore, int validityPeriod, String callbackNumber) {
         if (!mSmsPermissions.checkCallingCanSendText(
                 persistMessageForNonDefaultSmsApp, callingPackage, "Sending SMS message")) {
             returnUnspecifiedFailure(sentIntents);
@@ -743,18 +751,17 @@ public class IccSmsInterfaceManager {
                 mDispatchersController.sendText(destAddr, scAddr, singlePart, singleSentIntent,
                         singleDeliveryIntent, null /* messageUri */, callingPackage,
                         persistMessageForNonDefaultSmsApp, priority, expectMore, validityPeriod,
-                        false /* isForVvm */);
+                        callbackNumber, false /* isForVvm */);
             }
             return;
         }
 
-        mDispatchersController.sendMultipartText(destAddr,
-                                      scAddr,
-                                      (ArrayList<String>) parts,
+        mDispatchersController.sendMultipartText(destAddr, scAddr, (ArrayList<String>) parts,
                                       (ArrayList<PendingIntent>) sentIntents,
                                       (ArrayList<PendingIntent>) deliveryIntents,
-                                      null, callingPackage, persistMessageForNonDefaultSmsApp,
-                                          priority, expectMore, validityPeriod);
+                                      null /* messageUri */, callingPackage,
+                                      persistMessageForNonDefaultSmsApp, priority, expectMore,
+                                      validityPeriod, callbackNumber);
 
     }
 
@@ -1238,7 +1245,8 @@ public class IccSmsInterfaceManager {
         mDispatchersController.sendText(textAndAddress[1], scAddress, textAndAddress[0],
                 sentIntent, deliveryIntent, messageUri, callingPkg,
                 true /* persistMessageForNonDefaultSmsApp */, SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
-                false /* expectMore */, SMS_MESSAGE_PERIOD_NOT_SPECIFIED, false /* isForVvm */);
+                false /* expectMore */, SMS_MESSAGE_PERIOD_NOT_SPECIFIED, null /* callbackNumber */,
+                false /* isForVvm */);
     }
 
     @UnsupportedAppUsage
@@ -1296,7 +1304,7 @@ public class IccSmsInterfaceManager {
                         true  /* persistMessageForNonDefaultSmsApp */,
                         SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
                         false /* expectMore */, SMS_MESSAGE_PERIOD_NOT_SPECIFIED,
-                        false /* isForVvm */);
+                        null /* callbackNumber */, false /* isForVvm */);
             }
             return;
         }
@@ -1312,7 +1320,7 @@ public class IccSmsInterfaceManager {
                 true  /* persistMessageForNonDefaultSmsApp */,
                 SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
                 false /* expectMore */,
-                SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
+                SMS_MESSAGE_PERIOD_NOT_SPECIFIED, null /* callbackNumber */);
     }
 
     private boolean isFailedOrDraft(ContentResolver resolver, Uri messageUri) {

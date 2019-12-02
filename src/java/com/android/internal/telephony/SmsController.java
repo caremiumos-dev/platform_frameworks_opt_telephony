@@ -229,14 +229,15 @@ public class SmsController extends ISmsImplBase {
     }
 
     @Override
-    public void sendTextForSubscriberWithOptions(int subId, String callingPackage,
-            String destAddr, String scAddr, String parts, PendingIntent sentIntent,
-            PendingIntent deliveryIntent, boolean persistMessage, int priority,
-            boolean expectMore, int validityPeriod) {
+    public void sendTextForSubscriberWithOptions(int subId, String callingPackage, String destAddr,
+            String scAddr, String parts, PendingIntent sentIntent, PendingIntent deliveryIntent,
+            boolean persistMessage, int priority, boolean expectMore, int validityPeriod,
+            String callbackNumber) {
         IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
         if (iccSmsIntMgr != null) {
             iccSmsIntMgr.sendTextWithOptions(callingPackage, destAddr, scAddr, parts, sentIntent,
-                    deliveryIntent, persistMessage, priority, expectMore, validityPeriod);
+                    deliveryIntent, persistMessage, priority, expectMore, validityPeriod,
+                    callbackNumber);
         } else {
             Rlog.e(LOG_TAG, "sendTextWithOptions iccSmsIntMgr is null for"
                     + " Subscription: " + subId);
@@ -263,12 +264,12 @@ public class SmsController extends ISmsImplBase {
     public void sendMultipartTextForSubscriberWithOptions(int subId, String callingPackage,
             String destAddr, String scAddr, List<String> parts, List<PendingIntent> sentIntents,
             List<PendingIntent> deliveryIntents, boolean persistMessage, int priority,
-            boolean expectMore, int validityPeriod) {
+            boolean expectMore, int validityPeriod, String callbackNumber) {
         IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
         if (iccSmsIntMgr != null) {
             iccSmsIntMgr.sendMultipartTextWithOptions(callingPackage, destAddr, scAddr, parts,
                     sentIntents, deliveryIntents, persistMessage, priority, expectMore,
-                    validityPeriod);
+                    validityPeriod, callbackNumber);
         } else {
             Rlog.e(LOG_TAG, "sendMultipartTextWithOptions iccSmsIntMgr is null for"
                     + " Subscription: " + subId);
