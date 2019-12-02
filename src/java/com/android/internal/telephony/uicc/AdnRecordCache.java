@@ -169,6 +169,33 @@ public class AdnRecordCache extends Handler implements IccConstants {
             return;
         }
 
+        ArrayList<AdnRecord> oldAdnList = null;
+        try {
+            if (efid == EF_PBR) {
+                oldAdnList = mUsimPhoneBookManager.loadEfFilesFromUsim();
+            } else {
+                oldAdnList = getRecordsIfLoaded(efid);
+            }
+        } catch (NullPointerException e) {
+            // NullPointerException will be thrown occasionally when we call this method just
+            // during phone changed to airplane mode.
+            // Some Object used in this method will be reset, so we add protect code here to avoid
+            // phone force close.
+            oldAdnList = null;
+        }
+
+        if (oldAdnList == null) {
+            sendErrorResponse(response, "Adn list not exist for EF:" + efid);
+            return;
+        }
+
+        if (efid == EF_PBR) {
+            AdnRecord foundAdn = oldAdnList.get(recordIndex - 1);
+            adn.mEfid = foundAdn.mEfid;
+            adn.mExtRecord = foundAdn.mExtRecord;
+            adn.mRecordNumber = foundAdn.mRecordNumber;
+        }
+
         Message pendingResponse = mUserWriteResponse.get(efid);
         if (pendingResponse != null) {
             sendErrorResponse(response, "Have pending update for EF:0x" +
@@ -178,9 +205,14 @@ public class AdnRecordCache extends Handler implements IccConstants {
 
         mUserWriteResponse.put(efid, response);
 
-        new AdnRecordLoader(mFh).updateEF(adn, efid, extensionEF,
-                recordIndex, pin2,
-                obtainMessage(EVENT_UPDATE_ADN_DONE, efid, recordIndex, adn));
+        if (efid == EF_PBR) {
+            updateEmailAndAnr(efid, oldAdnList.get(recordIndex - 1), adn,
+                    recordIndex, pin2, response);
+        } else {
+            mUserWriteResponse.put(efid, response);
+            new AdnRecordLoader(mFh).updateEF(adn, efid, extensionEF, recordIndex, pin2,
+                    obtainMessage(EVENT_UPDATE_ADN_DONE, efid, recordIndex, adn));
+        }
     }
 
     /**
