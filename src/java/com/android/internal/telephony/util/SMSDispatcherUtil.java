@@ -16,12 +16,11 @@
 
 package com.android.internal.telephony.util;
 
-import com.android.internal.telephony.ImsSmsDispatcher;
-import com.android.internal.telephony.cdma.CdmaSMSDispatcher;
 import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
-import com.android.internal.telephony.Phone;
-import com.android.internal.telephony.SmsMessageBase;
+import com.android.internal.telephony.ImsSmsDispatcher;
 import com.android.internal.telephony.SmsHeader;
+import com.android.internal.telephony.SmsMessageBase;
+import com.android.internal.telephony.cdma.CdmaSMSDispatcher;
 import com.android.internal.telephony.gsm.GsmSMSDispatcher;
 
 /**
@@ -80,14 +79,16 @@ public final class SMSDispatcherUtil {
      *  Validity Period(Minimum) -> 5 mins
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values included Negative considered as Invalid Validity Period of the message.
+     * @param callbackNumber the Call-Back Number for the CDMA message. See 3GPP2 C.S0015-B, v2.0,
+     *  4.5.15 Call-Back Number)
      * @return the submit pdu.
      */
     public static SmsMessageBase.SubmitPduBase getSubmitPdu(boolean isCdma, String scAddr,
             String destAddr, String message, boolean statusReportRequested, SmsHeader smsHeader,
-            int priority, int validityPeriod) {
+            int priority, int validityPeriod, String callbackNumber) {
         if (isCdma) {
             return getSubmitPduCdma(scAddr, destAddr, message, statusReportRequested, smsHeader,
-                    priority);
+                    priority, callbackNumber);
         } else {
             return getSubmitPduGsm(scAddr, destAddr, message, statusReportRequested,
                     validityPeriod);
@@ -96,7 +97,7 @@ public final class SMSDispatcherUtil {
 
     /**
      * Gsm implementation for
-     * {@link #getSubmitPdu(boolean, String, String, String, boolean)}
+     * {@link #getSubmitPdu(boolean, String, String, String, boolean, SmsHeader)}
      *
      * @param scAddr is the service center address or null to use the current default SMSC
      * @param destAddr the address to send the message to
@@ -112,7 +113,7 @@ public final class SMSDispatcherUtil {
 
     /**
      * Gsm implementation for
-     * {@link #getSubmitPdu(boolean, String, String, String, boolean, int)}
+     * {@link #getSubmitPdu(boolean, String, String, String, boolean, SmsHeader, int, int, String)}
      *
      * @param scAddr is the service center address or null to use the current default SMSC
      * @param destAddr the address to send the message to
@@ -150,7 +151,7 @@ public final class SMSDispatcherUtil {
 
     /**
      * Cdma implementation for
-     * {@link #getSubmitPdu(boolean, String, String, String, boolean, SmsHeader)}
+     * {@link #getSubmitPdu(boolean, String, String, String, boolean, SmsHeader, int, int, String)}
      *
      *  @param scAddr is the service center address or null to use the current default SMSC
      * @param destAddr the address to send the message to
@@ -168,12 +169,15 @@ public final class SMSDispatcherUtil {
      *      '11'      |     Emergency
      *  ----------------------------------
      *  Any Other values included Negative considered as Invalid Priority Indicator of the message.
+     * @param callbackNumber the Call-Back Number for the CDMA message. See 3GPP2 C.S0015-B, v2.0,
+     *  4.5.15 Call-Back Number)
      * @return the submit pdu.
      */
     public static SmsMessageBase.SubmitPduBase getSubmitPduCdma(String scAddr, String destAddr,
-            String message, boolean statusReportRequested, SmsHeader smsHeader, int priority) {
+            String message, boolean statusReportRequested, SmsHeader smsHeader, int priority,
+            String callbackNumber) {
         return com.android.internal.telephony.cdma.SmsMessage.getSubmitPdu(scAddr, destAddr,
-                message, statusReportRequested, smsHeader, priority);
+                message, statusReportRequested, smsHeader, priority, callbackNumber);
     }
 
     /**
@@ -197,8 +201,8 @@ public final class SMSDispatcherUtil {
     }
 
     /**
-     * Cdma implementation of {@link #getSubmitPdu(boolean, String, String, int, byte[], boolean)}
-
+     * Cdma implementation for {@link #getSubmitPdu(boolean, String, String, int, byte[], boolean)}
+     *
      * @param destAddr the address to send the message to
      * @param scAddr is the service center address or null to use the current default SMSC
      * @param destPort the port to deliver the message to
@@ -213,7 +217,7 @@ public final class SMSDispatcherUtil {
     }
 
     /**
-     * Gsm implementation of {@link #getSubmitPdu(boolean, String, String, int, byte[], boolean)}
+     * Gsm implementation for {@link #getSubmitPdu(boolean, String, String, int, byte[], boolean)}
      *
      * @param destAddr the address to send the message to
      * @param scAddr is the service center address or null to use the current default SMSC

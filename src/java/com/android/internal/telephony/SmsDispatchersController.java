@@ -628,23 +628,27 @@ public class SmsDispatchersController extends Handler {
      *  Validity Period(Minimum) -> 5 mins
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values included Negative considered as Invalid Validity Period of the message.
+     * @param callbackNumber the Call-Back Number for the CDMA message. See 3GPP2 C.S0015-B, v2.0,
+     *  4.5.15 Call-Back Number)
      */
     public void sendText(String destAddr, String scAddr, String text, PendingIntent sentIntent,
             PendingIntent deliveryIntent, Uri messageUri, String callingPkg, boolean persistMessage,
-            int priority, boolean expectMore, int validityPeriod, boolean isForVvm) {
+            int priority, boolean expectMore, int validityPeriod, String callbackNumber,
+            boolean isForVvm) {
         if (mImsSmsDispatcher.isAvailable() || mImsSmsDispatcher.isEmergencySmsSupport(destAddr)) {
             mImsSmsDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
                     messageUri, callingPkg, persistMessage, SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
-                    false /*expectMore*/, SMS_MESSAGE_PERIOD_NOT_SPECIFIED, isForVvm);
+                    false /* expectMore */, SMS_MESSAGE_PERIOD_NOT_SPECIFIED, callbackNumber,
+                    isForVvm);
         } else {
             if (isCdmaMo()) {
                 mCdmaDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
                         messageUri, callingPkg, persistMessage, priority, expectMore,
-                        validityPeriod, isForVvm);
+                        validityPeriod, callbackNumber, isForVvm);
             } else {
                 mGsmDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
                         messageUri, callingPkg, persistMessage, priority, expectMore,
-                        validityPeriod, isForVvm);
+                        validityPeriod, callbackNumber, isForVvm);
             }
         }
     }
@@ -693,26 +697,28 @@ public class SmsDispatchersController extends Handler {
      *  Validity Period(Minimum) -> 5 mins
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values included Negative considered as Invalid Validity Period of the message.
-
+     * @param callbackNumber the Call-Back Number for the CDMA message. See 3GPP2 C.S0015-B, v2.0,
+     *  4.5.15 Call-Back Number)
      */
     protected void sendMultipartText(String destAddr, String scAddr,
             ArrayList<String> parts, ArrayList<PendingIntent> sentIntents,
             ArrayList<PendingIntent> deliveryIntents, Uri messageUri, String callingPkg,
-            boolean persistMessage, int priority, boolean expectMore, int validityPeriod) {
+            boolean persistMessage, int priority, boolean expectMore, int validityPeriod,
+            String callbackNumber) {
         if (mImsSmsDispatcher.isAvailable()) {
             mImsSmsDispatcher.sendMultipartText(destAddr, scAddr, parts, sentIntents,
                     deliveryIntents, messageUri, callingPkg, persistMessage,
-                    SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
-                    false /*expectMore*/, SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
+                    SMS_MESSAGE_PRIORITY_NOT_SPECIFIED, false /* expectMore */,
+                    SMS_MESSAGE_PERIOD_NOT_SPECIFIED, callbackNumber);
         } else {
             if (isCdmaMo()) {
                 mCdmaDispatcher.sendMultipartText(destAddr, scAddr, parts, sentIntents,
                         deliveryIntents, messageUri, callingPkg, persistMessage, priority,
-                        expectMore, validityPeriod);
+                        expectMore, validityPeriod, callbackNumber);
             } else {
                 mGsmDispatcher.sendMultipartText(destAddr, scAddr, parts, sentIntents,
                         deliveryIntents, messageUri, callingPkg, persistMessage, priority,
-                        expectMore, validityPeriod);
+                        expectMore, validityPeriod, callbackNumber);
             }
         }
     }
