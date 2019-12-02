@@ -742,6 +742,11 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     @Override
+    public void notifyImsNetworkStateChanged(boolean isImsRegistered) {
+        mDefaultPhone.notifyImsNetworkStateChanged(isImsRegistered);
+    }
+
+    @Override
     public void notifyForVideoCapabilityChanged(boolean isVideoCapable) {
         mIsVideoCapable = isVideoCapable;
         mDefaultPhone.notifyForVideoCapabilityChanged(isVideoCapable);
@@ -750,6 +755,18 @@ public class ImsPhone extends ImsPhoneBase {
     @Override
     public void setRadioPower(boolean on) {
         mDefaultPhone.setRadioPower(on);
+    }
+
+    @Override
+    public Connection startConference(String[] participantsToDial, @NonNull DialArgs dialArgs)
+            throws CallStateException {
+         ImsDialArgs.Builder imsDialArgsBuilder;
+         if (!(dialArgs instanceof ImsDialArgs)) {
+             imsDialArgsBuilder = ImsDialArgs.Builder.from(dialArgs);
+         } else {
+             imsDialArgsBuilder = ImsDialArgs.Builder.from((ImsDialArgs) dialArgs);
+         }
+         return mCT.dial(participantsToDial, imsDialArgsBuilder.build());
     }
 
     @Override
@@ -1771,6 +1788,7 @@ public class ImsPhone extends ImsPhoneBase {
     public void setImsRegistered(boolean isRegistered) {
         mImsRegistrationState = isRegistered ? RegistrationManager.REGISTRATION_STATE_REGISTERED :
                 RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED;
+        notifyImsNetworkStateChanged(isRegistered);
     }
 
     public void setImsRegistrationState(@RegistrationManager.ImsRegistrationState int value) {
