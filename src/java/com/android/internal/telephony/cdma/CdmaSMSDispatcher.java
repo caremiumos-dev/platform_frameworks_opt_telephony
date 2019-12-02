@@ -25,16 +25,16 @@ import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
 
+import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
 import com.android.internal.telephony.GsmCdmaPhone;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
-import com.android.internal.telephony.SmsConstants;
 import com.android.internal.telephony.SMSDispatcher;
+import com.android.internal.telephony.SmsConstants;
 import com.android.internal.telephony.SmsDispatchersController;
 import com.android.internal.telephony.SmsHeader;
-import com.android.internal.telephony.util.SMSDispatcherUtil;
-import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
 import com.android.internal.telephony.SmsMessageBase;
+import com.android.internal.telephony.util.SMSDispatcherUtil;
 
 
 public class CdmaSMSDispatcher extends SMSDispatcher {
@@ -80,9 +80,9 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
     @Override
     protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
             String message, boolean statusReportRequested, SmsHeader smsHeader, int priority,
-            int validityPeriod) {
-        return SMSDispatcherUtil.getSubmitPduCdma(scAddr, destAddr, message,
-                statusReportRequested, smsHeader, priority);
+            int validityPeriod, String callbackNumber) {
+        return SMSDispatcherUtil.getSubmitPduCdma(scAddr, destAddr, message, statusReportRequested,
+                smsHeader, priority, callbackNumber);
     }
 
     @Override
