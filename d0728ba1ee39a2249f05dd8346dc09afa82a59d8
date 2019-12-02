@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3997209e_8c47b848",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-02T22:36:19Z",
+      "side": 1,
+      "message": "nit: how about explain why we have to create a context for userAll\n\n\"The lifetime of a registered receiver is bounded by the lifetime of the context it\u0027s registered through.have to retain the Context as long as you need the receiver to be active\"",
+      "range": {
+        "startLine": 382,
+        "startChar": 7,
+        "endLine": 382,
+        "endChar": 97
+      },
+      "revId": "d0728ba1ee39a2249f05dd8346dc09afa82a59d8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
