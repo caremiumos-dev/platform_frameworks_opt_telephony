@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8faabb1b_01749d69",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2019-12-02T18:39:35Z",
+      "side": 1,
+      "message": "LinkProperties.getLinkAddresses is @NonNull.",
+      "range": {
+        "startLine": 709,
+        "startChar": 42,
+        "endLine": 709,
+        "endChar": 73
+      },
+      "revId": "a2b9c893957aa237368548518302a169621d6810",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
