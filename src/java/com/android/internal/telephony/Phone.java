@@ -366,6 +366,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     protected final RegistrantList mUnknownConnectionRegistrants = new RegistrantList();
 
+    protected final RegistrantList mImsNetworkStateChangedRegistrants = new RegistrantList();
+
     protected final RegistrantList mSuppServiceFailedRegistrants = new RegistrantList();
 
     protected final RegistrantList mRadioOffOrNotAvailableRegistrants = new RegistrantList();
@@ -1093,6 +1095,37 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     @UnsupportedAppUsage
     public void unregisterForNewRingingConnection(Handler h) {
         mNewRingingConnectionRegistrants.remove(h);
+    }
+
+    /**
+     * Notifies when phone's Ims registration state changes <p>
+     *
+     *  Messages received from this:
+     *  Message.obj will be an AsyncResult
+     *  AsyncResult.userObj = obj
+     *  AsyncResult.result = true if phone is Ims registered <p>
+     */
+    public void registerForImsNetworkStateChanged(
+            Handler h, int what, Object obj) {
+        checkCorrectThread(h);
+
+        mImsNetworkStateChangedRegistrants.addUnique(h, what, obj);
+        notifyImsNetworkStateChanged(isImsRegistered());
+    }
+
+    /**
+     * Unregisters for Ims network state change notification.
+     */
+    public void unregisterForImsNetworkStateChanged(Handler h) {
+        mImsNetworkStateChangedRegistrants.remove(h);
+    }
+
+    /**
+     * Notify registrants if phone is Ims registered.
+     */
+    public void notifyImsNetworkStateChanged(boolean isImsRegistered) {
+        AsyncResult ar = new AsyncResult(null, isImsRegistered, null);
+        mImsNetworkStateChangedRegistrants.notifyRegistrants(ar);
     }
 
     /**

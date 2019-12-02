@@ -261,6 +261,36 @@ public class ImsPhoneConnection extends Connection implements
         }
     }
 
+    /** This is an MO conference call, created when dialing */
+    public ImsPhoneConnection(Phone phone, String[] participantsToDial, ImsPhoneCallTracker ct,
+            ImsPhoneCall parent, boolean isEmergency) {
+        super(PhoneConstants.PHONE_TYPE_IMS);
+        createWakeLock(phone.getContext());
+        acquireWakeLock();
+
+        mOwner = ct;
+        mHandler = new MyHandler(mOwner.getLooper());
+        mHandlerMessenger = new Messenger(mHandler);
+
+        mDialString = "sip:conf-factory";
+        mParticipantsToDial = participantsToDial;
+
+        mIsIncoming = false;
+        mCnapName = null;
+        mCnapNamePresentation = PhoneConstants.PRESENTATION_ALLOWED;
+        mNumberPresentation = PhoneConstants.PRESENTATION_ALLOWED;
+        mCreateTime = System.currentTimeMillis();
+
+        mParent = parent;
+        parent.attachFake(this, ImsPhoneCall.State.DIALING);
+
+        if (phone.getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_use_voip_mode_for_ims)) {
+            setAudioModeIsVoip(true);
+        }
+    }
+
+
     public void dispose() {
     }
 
