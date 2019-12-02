@@ -115,6 +115,8 @@ public class AdnRecordLoader extends Handler {
         mFh.loadEFLinearFixedAll(
                 ef, getEFPath(ef),
                 obtainMessage(EVENT_ADN_LOAD_ALL_DONE));
+        // update maximum Adnsize info.
+        response.arg2 = mUserResponse.arg2;
     }
 
     /**
@@ -142,6 +144,73 @@ public class AdnRecordLoader extends Handler {
         mFh.getEFLinearRecordSize( ef, getEFPath(ef),
                 obtainMessage(EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
      }
+
+    /**
+     * Write adn to a EF SIM record
+     * It will get the record size of EF record and compose hex adn array
+     * then write the hex array to EF record
+     *
+     * @param adn is set with alphaTag and phone number
+     * @param ef EF fileid
+     * @param extensionEF extension EF fileid
+     * @param recordNumber 1-based record index
+     * @param pin2 for CHV2 operations, must be null if pin2 is not needed
+     * @param adnSize is maximum size to be compared with recordSize[2]
+     * @param response will be sent to its handler when completed
+     */
+    @UnsupportedAppUsage
+    public void
+    updateEFWithSize(AdnRecord adn, int ef, int extensionEF, int recordNumber,
+            String pin2, int adnSize, Message response) {
+        mEf = ef;
+        mExtensionEF = extensionEF;
+        mRecordNumber = recordNumber;
+        mUserResponse = response;
+        mPin2 = pin2;
+
+        // If adnSize is valid, then don't need to get EF linear record size.
+        if (adnSize != 0) {
+            int[] recordSize = new int[3];
+            recordSize[0] = (adnSize >> 16) & 0xFF;
+            recordSize[2] = adnSize & 0xFFFF;
+            // recordSize is int[3] array
+            // int[0]  is the record length
+            // int[1]  is the total length of the EF file
+            // int[2]  is the number of records in the EF file
+            // So int[0] * int[2] = int[1]
+            android.util.Log.i("Test", "total : " + recordSize[2] + "-----mRecordNumber:"
+                    + mRecordNumber);
+            if (mRecordNumber > recordSize[2]) {
+                throw new RuntimeException("get wrong EF record size format, mRecordNumber: "
+                        + mRecordNumber + ", recordSize[2]: " + recordSize[2]);
+            }
+
+            byte[] data = null;
+            try {
+                data = adn.buildAdnString(recordSize[0]);
+                if (data == null) {
+                    throw new RuntimeException("wrong ADN format in updateEFWithSize");
+                }
+            } catch (RuntimeException exc) {
+                if (mUserResponse != null) {
+                    AsyncResult.forMessage(mUserResponse).exception = exc;
+                    mUserResponse.sendToTarget();
+                    // Loading is all or nothing--either every load succeeds
+                    // // or we fail the whole thing.
+                    mUserResponse = null;
+                }
+                return;
+            }
+
+            mFh.updateEFLinearFixed(mEf, getEFPath(mEf), mRecordNumber,
+                    data, mPin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
+
+            mPendingExtLoads = 1;
+        } else {
+            mFh.getEFLinearRecordSize(ef, getEFPath(ef),
+                    obtainMessage(EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
+        }
+    }
 
     //***** Overridden from Handler
 
@@ -258,6 +327,8 @@ public class AdnRecordLoader extends Handler {
 
                 case EVENT_ADN_LOAD_ALL_DONE:
                     ar = (AsyncResult)(msg.obj);
+                    // msg.arg2 is maximum adn size
+                    mUserResponse.arg2 = msg.arg2;
                     ArrayList<byte[]> datas = (ArrayList<byte[]>)(ar.result);
 
                     if (ar.exception != null) {
