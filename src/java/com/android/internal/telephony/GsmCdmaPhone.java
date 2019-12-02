@@ -1171,6 +1171,34 @@ public class GsmCdmaPhone extends Phone {
                 ringingCallState.isAlive());
     }
 
+    private boolean useImsForCall() {
+        return isImsUseEnabled()
+                && imsPhone != null
+                && (imsPhone.isVolteEnabled() || imsPhone.isWifiCallingEnabled() ||
+                (imsPhone.isVideoEnabled() && VideoProfile.isVideo(dialArgs.videoState)))
+                && (imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
+    }
+
+    @Override
+    public Connection startConference(String[] participantsToDial, @NonNull DialArgs dialArgs)
+            throws CallStateException {
+        Phone imsPhone = mImsPhone;
+        boolean useImsForCall = useImsForCall();
+        logd("useImsForCall=" + useImsForCall);
+        if (useImsForCall) {
+            try {
+                if (DBG) logd("Trying IMS PS Conference call");
+                return imsPhone.startConference(participantsToDial, dialArgs);
+            } catch (CallStateException e) {
+                if (DBG) logd("IMS PS call exception " + e +
+                        "useImsForCall =" + useImsForCall + ", imsPhone =" + imsPhone);
+                 CallStateException ce = new CallStateException(e.getError(), e.getMessage());
+                 ce.setStackTrace(e.getStackTrace());
+                 throw ce;
+             }
+        }
+    }
+
     @Override
     public Connection dial(String dialString, @NonNull DialArgs dialArgs)
             throws CallStateException {
@@ -1191,11 +1219,7 @@ public class GsmCdmaPhone extends Phone {
         boolean allowWpsOverIms = configManager.getConfigForSubId(getSubId())
                 .getBoolean(CarrierConfigManager.KEY_SUPPORT_WPS_OVER_IMS_BOOL);
 
-        boolean useImsForCall = isImsUseEnabled()
-                 && imsPhone != null
-                 && (imsPhone.isVolteEnabled() || imsPhone.isWifiCallingEnabled() ||
-                 (imsPhone.isVideoEnabled() && VideoProfile.isVideo(dialArgs.videoState)))
-                 && (imsPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE)
+        boolean useImsForCall = useImsForCall()
                  && (isWpsCall ? allowWpsOverIms : true);
 
         boolean useImsForEmergency = imsPhone != null
