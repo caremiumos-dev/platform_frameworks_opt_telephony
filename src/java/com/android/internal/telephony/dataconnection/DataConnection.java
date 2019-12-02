@@ -896,7 +896,6 @@ public class DataConnection extends StateMachine {
 
         mCreateTime = -1;
         mLastFailTime = -1;
-        mLastFailCause = DataFailCause.NONE;
         mCid = -1;
 
         mPcscfAddr = new String[5];
@@ -2071,6 +2070,9 @@ public class DataConnection extends StateMachine {
                             DataConnection.this);
                     mNetworkAgent.sendLinkProperties(mLinkProperties, DataConnection.this);
                     mHandoverSourceNetworkAgent = null;
+                } else if (dc != null && dc.mDcFailCause != DataFailCause.NONE){
+                    logd("Create network agent as source DC failure: " + dc.mDcFailCause);
+                    createDcNetorkAgent(misc);
                 } else {
                     String logStr = "Failed to get network agent from original data connection";
                     loge(logStr);
@@ -2078,16 +2080,7 @@ public class DataConnection extends StateMachine {
                     return;
                 }
             } else {
-                mScore = calculateScore();
-                final NetworkFactory factory = PhoneFactory.getNetworkFactory(
-                        mPhone.getPhoneId());
-                final int factorySerialNumber = (null == factory)
-                        ? NetworkFactory.SerialNumber.NONE : factory.getSerialNumber();
-
-                mDisabledApnTypeBitMask |= getDisallowedApnTypes();
-
-                mNetworkAgent = DcNetworkAgent.createDcNetworkAgent(DataConnection.this,
-                        mPhone, mNetworkInfo, mScore, misc, factorySerialNumber, mTransportType);
+                createDcNetorkAgent(misc);
             }
 
             if (mTransportType == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
@@ -2098,6 +2091,17 @@ public class DataConnection extends StateMachine {
             }
             TelephonyMetrics.getInstance().writeRilDataCallEvent(mPhone.getPhoneId(),
                     mCid, mApnSetting.getApnTypeBitmask(), RilDataCall.State.CONNECTED);
+        }
+
+        private void createDcNetorkAgent(NetworkMisc misc) {
+            mScore = calculateScore();
+            final NetworkFactory factory = PhoneFactory.getNetworkFactory(
+                    mPhone.getPhoneId());
+            final int factorySerialNumber = (null == factory)
+                    ? NetworkFactory.SerialNumber.NONE : factory.getSerialNumber();
+            mDisabledApnTypeBitMask |= getDisallowedApnTypes();
+            mNetworkAgent = DcNetworkAgent.createDcNetworkAgent(DataConnection.this,
+                    mPhone, mNetworkInfo, mScore, misc, factorySerialNumber, mTransportType);
         }
 
         @Override
