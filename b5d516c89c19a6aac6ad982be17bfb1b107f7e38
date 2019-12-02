@@ -46,6 +46,30 @@
       "revId": "b5d516c89c19a6aac6ad982be17bfb1b107f7e38",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d08fb381_8f85ad24",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3333,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2019-12-02T08:06:06Z",
+      "side": 1,
+      "message": "I agree with you. I updated the patch.",
+      "parentUuid": "307095e0_2ee1bffe",
+      "range": {
+        "startLine": 3333,
+        "startChar": 17,
+        "endLine": 3333,
+        "endChar": 27
+      },
+      "revId": "b5d516c89c19a6aac6ad982be17bfb1b107f7e38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
