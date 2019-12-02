@@ -184,6 +184,8 @@ public abstract class Connection {
     protected String mAddress;     // MAY BE NULL!!!
     @UnsupportedAppUsage
     protected String mDialString;          // outgoing calls only
+    protected String[] mParticipantsToDial;// outgoing calls only
+    protected boolean mIsAdhocConference;
     @UnsupportedAppUsage
     protected int mNumberPresentation = PhoneConstants.PRESENTATION_ALLOWED;
     @UnsupportedAppUsage
@@ -309,6 +311,21 @@ public abstract class Connection {
     @UnsupportedAppUsage
     public String getAddress() {
         return mAddress;
+    }
+
+    /**
+     * Gets the participants address (e.g. phone number) associated with connection.
+     * TODO: distinguish reasons for unavailability
+     *
+     * @return address or null if unavailable
+     */
+    public String[] getParticipantsToDial() {
+        return mParticipantsToDial;
+    }
+
+    // return whether connection is AdhocConference or not
+    public boolean isAdhocConference() {
+        return mIsAdhocConference;
     }
 
     /**
