@@ -22,6 +22,30 @@
       "revId": "2b87ef657816e7483aeaf5bf4fb6f333c885d1e5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc96b799_6233e0ff",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1010110
+      },
+      "writtenOn": "2019-12-03T19:25:18Z",
+      "side": 1,
+      "message": "I can, but it would seem like phoneIds greater then mActiveModemCount should cause this function to return false as well, no?",
+      "parentUuid": "187eac64_705e0caf",
+      "range": {
+        "startLine": 1114,
+        "startChar": 0,
+        "endLine": 1114,
+        "endChar": 15
+      },
+      "revId": "2b87ef657816e7483aeaf5bf4fb6f333c885d1e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
