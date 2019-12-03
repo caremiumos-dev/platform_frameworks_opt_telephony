@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3bcea5d_b156b9ec",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-12-03T23:57:19Z",
+      "side": 1,
+      "message": "I think ag/9694517 needs to CP to AOSP first.",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 80
+      },
+      "revId": "43086b63f1565ba1d2e067593a2563c80ecf9a13",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
