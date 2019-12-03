@@ -16,6 +16,24 @@
       "revId": "a97134d5b3f76f77101e550753c1a2a71d9e74a9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd6b3731_62e066c4",
+        "filename": "src/java/com/android/internal/telephony/util/TelephonyUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2019-12-03T18:56:39Z",
+      "side": 1,
+      "message": "Done. Please +2 again",
+      "parentUuid": "8d9c38d8_284149d4",
+      "revId": "a97134d5b3f76f77101e550753c1a2a71d9e74a9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
