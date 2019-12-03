@@ -70,6 +70,30 @@
       "revId": "2b87ef657816e7483aeaf5bf4fb6f333c885d1e5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ad616de_a3058413",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1010110
+      },
+      "writtenOn": "2019-12-03T21:06:17Z",
+      "side": 1,
+      "message": "Oh! Ha, ok, that makes much more sense. Sorry for my confusion there!",
+      "parentUuid": "4527d1e1_a71d7ca4",
+      "range": {
+        "startLine": 1114,
+        "startChar": 0,
+        "endLine": 1114,
+        "endChar": 15
+      },
+      "revId": "2b87ef657816e7483aeaf5bf4fb6f333c885d1e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
