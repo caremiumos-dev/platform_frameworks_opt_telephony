@@ -132,7 +132,7 @@ public class SubscriptionController extends ISub.Stub {
     protected final Object mLock = new Object();
 
     /** The singleton instance. */
-    private static SubscriptionController sInstance = null;
+    protected static SubscriptionController sInstance = null;
     @UnsupportedAppUsage
     protected Context mContext;
     protected TelephonyManager mTelephonyManager;
