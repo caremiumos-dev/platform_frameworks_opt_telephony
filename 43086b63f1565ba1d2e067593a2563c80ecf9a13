@@ -22,6 +22,30 @@
       "revId": "43086b63f1565ba1d2e067593a2563c80ecf9a13",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf997f87_1558c89c",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2019-12-04T00:10:53Z",
+      "side": 1,
+      "message": "Probably. Then hope to get review on the internal master CLs first (https://googleplex-android-review.git.corp.google.com/q/topic:%22signal-integrate%22+(status:open%20OR%20status:merged)) Thanks",
+      "parentUuid": "f3bcea5d_b156b9ec",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 80
+      },
+      "revId": "43086b63f1565ba1d2e067593a2563c80ecf9a13",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
