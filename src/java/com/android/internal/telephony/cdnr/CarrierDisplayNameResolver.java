@@ -196,7 +196,8 @@ public class CarrierDisplayNameResolver {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < mEf.size(); i++) {
             EfData p = mEf.valueAt(i);
-            sb.append("{spnDisplayCondition = " + p.getServiceProviderNameDisplayCondition()
+            sb.append("{spnDisplayCondition = "
+                    + p.getServiceProviderNameDisplayCondition(isRoaming())
                     + ", spn = " + p.getServiceProviderName()
                     + ", spdiList = " + p.getServiceProviderDisplayInformation()
                     + ", pnnList = " + p.getPlmnNetworkNameList()
@@ -235,11 +236,12 @@ public class CarrierDisplayNameResolver {
 
     @NonNull
     private CarrierDisplayNameConditionRule getDisplayRule() {
+        boolean isRoaming = isRoaming();
         for (int i = 0; i < mEf.size(); i++) {
-            if (mEf.valueAt(i).getServiceProviderNameDisplayCondition()
+            if (mEf.valueAt(i).getServiceProviderNameDisplayCondition(isRoaming)
                     != IccRecords.INVALID_CARRIER_NAME_DISPLAY_CONDITION_BITMASK) {
                 return new CarrierDisplayNameConditionRule(
-                        mEf.valueAt(i).getServiceProviderNameDisplayCondition());
+                        mEf.valueAt(i).getServiceProviderNameDisplayCondition(isRoaming));
             }
         }
         return DEFAULT_CARRIER_DISPLAY_NAME_RULE;
@@ -285,20 +287,19 @@ public class CarrierDisplayNameResolver {
         return Collections.EMPTY_LIST;
     }
 
-    private CarrierDisplayNameData getCarrierDisplayNameFromEf() {
-        CarrierDisplayNameConditionRule displayRule = getDisplayRule();
-
-        String registeredPlmnNumeric = getServiceState().getOperatorNumeric();
-        List<String> efSpdi = getEfSpdi();
-
+    private boolean isRoaming() {
         // Currently use the roaming state from ServiceState.
         // EF_SPDI is only used when determine the service provider name and PLMN network name
         // display condition rule.
         // All the PLMNs will be considered HOME PLMNs if there is a brand override.
-        boolean isRoaming = getServiceState().getRoaming()
-                && !efSpdi.contains(registeredPlmnNumeric);
-        boolean showSpn = displayRule.shouldShowSpn(isRoaming);
-        boolean showPlmn = displayRule.shouldShowPnn(isRoaming);
+        return getServiceState().getRoaming()
+                && !getEfSpdi().contains(getServiceState().getOperatorNumeric());
+    }
+
+    private CarrierDisplayNameData getCarrierDisplayNameFromEf() {
+        CarrierDisplayNameConditionRule displayRule = getDisplayRule();
+        boolean showSpn = displayRule.shouldShowSpn();
+        boolean showPlmn = displayRule.shouldShowPnn();
         String spn = getEfSpn();
 
         // Resolve the PLMN network name
@@ -316,9 +317,12 @@ public class CarrierDisplayNameResolver {
             // PLMN name should be used to override the current one.
         }
 
-        // If no PLMN override is present, then the PLMN should be displayed numerically.
+        // If no PLMN override is present, then the PLMN should be displayed:
+        // - operator alpha if it's not empty.
+        // - operator numeric.
         if (TextUtils.isEmpty(plmn)) {
-            plmn = registeredPlmnNumeric;
+            plmn = TextUtils.isEmpty(getServiceState().getOperatorAlpha()) ?
+                    getServiceState().getOperatorNumeric() : getServiceState().getOperatorAlpha();
         }
 
         return new CarrierDisplayNameData.Builder()
@@ -452,16 +456,16 @@ public class CarrierDisplayNameResolver {
             mDisplayConditionBitmask = carrierDisplayConditionBitmask;
         }
 
-        boolean shouldShowSpn(boolean isRoaming) {
-            return !isRoaming || ((mDisplayConditionBitmask
+        boolean shouldShowSpn() {
+            return (mDisplayConditionBitmask
                     & IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_SPN)
-                    == IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_SPN);
+                    == IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_SPN;
         }
 
-        boolean shouldShowPnn(boolean isRoaming) {
-            return isRoaming || ((mDisplayConditionBitmask
+        boolean shouldShowPnn() {
+            return (mDisplayConditionBitmask
                     & IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_PLMN)
-                    == IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_PLMN);
+                    == IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_PLMN;
         }
 
         @Override
