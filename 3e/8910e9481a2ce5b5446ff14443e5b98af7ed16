@@ -1,0 +1,8 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Autosubmit+1: Brad Ebinger <breadley@google.com>
+Code-Review+2: Chen Xu <fionaxu@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Wed, 04 Dec 2019 21:57:59 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1179238
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
