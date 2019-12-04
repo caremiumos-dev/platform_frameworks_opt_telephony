@@ -4025,7 +4025,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
             halRc.session = rc.getSession();
             halRc.phase = rc.getPhase();
-            halRc.raf = rc.getRadioAccessFamily();
+            halRc.raf = convertToHalRadioAccessFamily(rc.getRadioAccessFamily());
             halRc.logicalModemUuid = convertNullToEmptyString(rc.getLogicalModemUuid());
             halRc.status = rc.getStatus();
 
