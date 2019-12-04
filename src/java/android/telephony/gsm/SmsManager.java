@@ -19,6 +19,7 @@ package android.telephony.gsm;
 import android.app.PendingIntent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -213,12 +214,12 @@ import java.util.ArrayList;
 
     /**
      * Retrieves all messages currently stored on SIM.
-     * @return <code>ArrayList</code> of <code>SmsMessage</code> objects
+     * @return <code>List</code> of <code>SmsMessage</code> objects
      * @deprecated Use android.telephony.SmsManager.
      * {@hide}
      */
     @Deprecated
-    public final ArrayList<android.telephony.SmsMessage> getAllMessagesFromSim() {
+    public final List<android.telephony.SmsMessage> getAllMessagesFromSim() {
         return android.telephony.SmsManager.getDefault().getAllMessagesFromIcc();
     }
 
