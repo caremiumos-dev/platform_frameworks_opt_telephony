@@ -1205,8 +1205,7 @@ public class ImsPhone extends ImsPhoneBase {
 
         try {
             ImsUtInterface ut = mCT.getUtInterface();
-            // password is not required with Ut interface
-            ut.queryCallBarring(getCBTypeFromFacility(facility), resp, serviceClass);
+            ut.queryCallBarring(getCBTypeFromFacility(facility), resp, serviceClass, password);
         } catch (ImsException e) {
             sendErrorResponse(onComplete, e);
         }
@@ -1220,7 +1219,7 @@ public class ImsPhone extends ImsPhoneBase {
 
     @Override
     public void setCallBarring(String facility, boolean lockState, String password,
-            Message onComplete,  int serviceClass) {
+            Message onComplete, int serviceClass) {
         if (DBG) {
             logd("setCallBarring facility=" + facility
                     + ", lockState=" + lockState + ", serviceClass = " + serviceClass);
@@ -1238,9 +1237,8 @@ public class ImsPhone extends ImsPhoneBase {
 
         try {
             ImsUtInterface ut = mCT.getUtInterface();
-            // password is not required with Ut interface
             ut.updateCallBarring(getCBTypeFromFacility(facility), action,
-                    resp, null,  serviceClass);
+                    resp, null, serviceClass, password);
         } catch (ImsException e) {
             sendErrorResponse(onComplete, e);
         }
