@@ -321,7 +321,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected CarrierResolver mCarrierResolver;
 
     @UnsupportedAppUsage
-    protected int mPhoneId;
+    protected final int mPhoneId;
 
     private boolean mImsServiceReady = false;
     @UnsupportedAppUsage
