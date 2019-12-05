@@ -1,0 +1,9 @@
+Code-Review+1: Sam Protsenko <semen.protsenko@linaro.org>
+Code-Review+2: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Verified+1: Dmitry Shmidt <dimitrysh@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Submitted-at: Thu, 05 Dec 2019 20:25:46 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1179342
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
