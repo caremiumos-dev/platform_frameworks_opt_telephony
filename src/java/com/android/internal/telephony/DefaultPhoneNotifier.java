@@ -24,7 +24,6 @@ import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.telephony.TelephonyRegistryManager;
 import android.telephony.Annotation.DataFailureCause;
 import android.telephony.Annotation.RadioPowerState;
 import android.telephony.Annotation.SrvccState;
@@ -34,15 +33,17 @@ import android.telephony.CellLocation;
 import android.telephony.PhoneCapability;
 import android.telephony.PhysicalChannelConfig;
 import android.telephony.PreciseCallState;
+import android.telephony.PreciseDataConnectionState;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
-import android.telephony.data.ApnSetting;
+import android.telephony.TelephonyRegistryManager;
 import android.telephony.emergency.EmergencyNumber;
 import android.telephony.ims.ImsReasonInfo;
 
 import com.android.internal.telephony.PhoneInternalInterface.DataActivityState;
+
 import java.util.List;
 
 /**
@@ -148,7 +149,6 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
             log("subId = " + subId + ", DDS = " + dds);
         }
 
-        // TODO
         // use apnType as the key to which connection we're talking about.
         // pass apnType back up to fetch particular for this one.
         TelephonyManager telephony = TelephonyManager.getDefault();
@@ -164,15 +164,19 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         if (ss != null) {
             roaming = ss.getDataRoaming();
         }
+
+        // Plumb the Link Properties and the APN (name) through. Ignore other fields.
+        PreciseDataConnectionState preciseState = new PreciseDataConnectionState(
+                TelephonyManager.DATA_UNKNOWN,
+                TelephonyManager.NETWORK_TYPE_UNKNOWN,
+                0, sender.getActiveApnHost(apnType),
+                linkProperties, android.telephony.DataFailCause.NONE);
+
         mTelephonyRegistryMgr.notifyDataConnectionForSubscriber(phoneId, subId,
             PhoneConstantConversions.convertDataState(state),
-            sender.isDataAllowed(ApnSetting.getApnTypesBitmaskFromString(apnType)),
-            sender.getActiveApnHost(apnType),
             apnType,
-            linkProperties,
-            networkCapabilities,
             ((telephony != null) ? telephony.getDataNetworkType(subId) :
-                TelephonyManager.NETWORK_TYPE_UNKNOWN), roaming);
+                TelephonyManager.NETWORK_TYPE_UNKNOWN), preciseState);
     }
 
     @Override
