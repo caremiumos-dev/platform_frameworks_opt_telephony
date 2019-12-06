@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "002d9cbe_26e7e368",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T22:44:15Z",
+      "side": 1,
+      "message": "Recommend naming this sendCdmaSmsExpectMore to be consistent with how the GSM one works above.",
+      "range": {
+        "startLine": 1154,
+        "startChar": 4,
+        "endLine": 1154,
+        "endChar": 71
+      },
+      "revId": "809f7da72f688d79e53218916249b7b906d849b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55c630f8_53fa1649",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3038,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T22:44:15Z",
+      "side": 1,
+      "message": "What is the purpose of this parameter if its not used?\n\nFor consistency with the existing sendSMS method, recommend the \"expect more\" just be a new prototype:\npublic void sendCmdaSmsExpectMore(byte[] pdu, Message result)",
+      "range": {
+        "startLine": 3038,
+        "startChar": 8,
+        "endLine": 3038,
+        "endChar": 33
+      },
+      "revId": "809f7da72f688d79e53218916249b7b906d849b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
