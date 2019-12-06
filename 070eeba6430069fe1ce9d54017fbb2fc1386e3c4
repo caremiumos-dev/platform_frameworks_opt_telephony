@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46226537_de3b5a6a",
+        "filename": "src/java/com/android/internal/telephony/vendor/IVendorTelephony.aidl",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T21:56:14Z",
+      "side": 1,
+      "message": "Private API",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 0
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "615cc0e8_d5104570",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T21:56:14Z",
+      "side": 1,
+      "message": "Private API",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 66
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa65fdb5_6bfc7da6",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T21:56:14Z",
+      "side": 1,
+      "message": "Private API: Can\u0027t launch non-protected intents from here.",
+      "range": {
+        "startLine": 58,
+        "startChar": 32,
+        "endLine": 66,
+        "endChar": 74
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19e6a533_1ba62867",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorSubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T21:56:14Z",
+      "side": 1,
+      "message": "Private API: This is effectively adding a private API between the module and other code; we can\u0027t send non-protected broadcasts from the module like this.\n\nIt seems like SubscriptionInfo#addSubInfo should just call notifySubscriptionInfoChanged; then we\u0027re consistently notifying interested parties of the change.",
+      "range": {
+        "startLine": 69,
+        "startChar": 3,
+        "endLine": 73,
+        "endChar": 74
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8691fd2_55536b46",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorSubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T21:56:14Z",
+      "side": 1,
+      "message": "Per comment about the base SubscriptionController#addSubInfo should just call notifySubscriptionInfoChanged so that we don\u0027t have to add a new API for this case.",
+      "range": {
+        "startLine": 134,
+        "startChar": 7,
+        "endLine": 143,
+        "endChar": 22
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd49e2fc_4ba758be",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorSubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T21:56:14Z",
+      "side": 1,
+      "message": "Private API: Part of undergoing this work is to eliminate these types of things; we can\u0027t connect to arbitrary side services like this in mainline.",
+      "range": {
+        "startLine": 168,
+        "startChar": 8,
+        "endLine": 169,
+        "endChar": 92
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bca2a813_4647cb64",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorSubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T21:56:14Z",
+      "side": 1,
+      "message": "Private API",
+      "range": {
+        "startLine": 309,
+        "startChar": 8,
+        "endLine": 310,
+        "endChar": 92
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c32ffea_4455bd58",
+        "filename": "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T21:56:14Z",
+      "side": 1,
+      "message": "Main difference from base method and other methods just support this; this class seems reasonable.",
+      "range": {
+        "startLine": 68,
+        "startChar": 8,
+        "endLine": 70,
+        "endChar": 9
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c6cb62a_37a4e11a",
+        "filename": "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T21:56:14Z",
+      "side": 1,
+      "message": "Not a method in base class.",
+      "range": {
+        "startLine": 75,
+        "startChar": 5,
+        "endLine": 75,
+        "endChar": 13
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
