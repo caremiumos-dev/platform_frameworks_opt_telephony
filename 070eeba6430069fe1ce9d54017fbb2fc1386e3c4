@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3946a500_ffccb4a1",
+        "filename": "src/java/com/android/internal/telephony/vendor/IVendorTelephony.aidl",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1295952
+      },
+      "writtenOn": "2019-12-06T22:03:46Z",
+      "side": 1,
+      "message": "Thanks Tyler for the review!\n\nJust for my understanding, is this the comment related to \"@hide\" annotation only or is it in general related the AIDL interface which would be implemented by vendor(as \"vendorPhone\" service)??",
+      "parentUuid": "46226537_de3b5a6a",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 0
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "615cc0e8_d5104570",
         "filename": "src/java/com/android/internal/telephony/vendor/VendorServiceStateTracker.java",
         "patchSetId": 7
