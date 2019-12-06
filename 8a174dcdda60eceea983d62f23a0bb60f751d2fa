@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57510bbf_872e4e50",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T22:19:14Z",
+      "side": 1,
+      "message": "Please resolve merge conflict.",
+      "range": {
+        "startLine": 763,
+        "startChar": 0,
+        "endLine": 771,
+        "endChar": 73
+      },
+      "revId": "8a174dcdda60eceea983d62f23a0bb60f751d2fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "811d77e4_4224986f",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-06T22:19:14Z",
+      "side": 1,
+      "message": "Please resolve merge conflict.",
+      "range": {
+        "startLine": 802,
+        "startChar": 0,
+        "endLine": 817,
+        "endChar": 9
+      },
+      "revId": "8a174dcdda60eceea983d62f23a0bb60f751d2fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
