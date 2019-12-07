@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94367c80_8ea36b52",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2551,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-07T21:53:31Z",
+      "side": 0,
+      "message": "what do you mean \"Now that DEVICE_PROVISIONED is true when CARRIER_CONFIG_CHANGED is received on first boot time\"?",
+      "range": {
+        "startLine": 2551,
+        "startChar": 19,
+        "endLine": 2551,
+        "endChar": 96
+      },
+      "revId": "292525deabab28618c4f2739ef3d5224571e7fbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
