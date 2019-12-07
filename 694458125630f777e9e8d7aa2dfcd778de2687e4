@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f064583_99a7aa60",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2549,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-07T21:52:04Z",
+      "side": 1,
+      "message": "those are hidden APIs, can we try use below mechanism to figure out firstboot?\n \nreturn Settings.Global.getInt(context.getContentResolver(), Settings.Global.BOOT_COUNT)\n                    \u003d\u003d 1;",
+      "range": {
+        "startLine": 2547,
+        "startChar": 0,
+        "endLine": 2549,
+        "endChar": 57
+      },
+      "revId": "694458125630f777e9e8d7aa2dfcd778de2687e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a210a519_96b3ea6d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2550,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-07T21:52:04Z",
+      "side": 1,
+      "message": "use PackageManager.isDeviceUpgrading instead of IPackageManager (mainline module should avoid hidden API usage)",
+      "range": {
+        "startLine": 2550,
+        "startChar": 38,
+        "endLine": 2550,
+        "endChar": 58
+      },
+      "revId": "694458125630f777e9e8d7aa2dfcd778de2687e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
