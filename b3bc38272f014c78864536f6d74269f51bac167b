@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42a99d3f_a6ff5023",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4130,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2019-12-07T01:27:54Z",
+      "side": 1,
+      "message": "lets inline this so all the logic is in one place - I don\u0027t think this function will be used elsewhere.",
+      "range": {
+        "startLine": 4130,
+        "startChar": 0,
+        "endLine": 4130,
+        "endChar": 70
+      },
+      "revId": "b3bc38272f014c78864536f6d74269f51bac167b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
