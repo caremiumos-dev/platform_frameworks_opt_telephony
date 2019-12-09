@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe6fee8c_5c721179",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-09T22:11:26Z",
+      "side": 0,
+      "message": "Change mode back to 644",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26b87dfc_67589f59",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-09T22:11:26Z",
+      "side": 0,
+      "message": "Change mode back to 644",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cc3e42c_bb88f546",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-09T22:11:26Z",
+      "side": 0,
+      "message": "Change mode back to 644",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfb3bca0_e0e177ef",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-09T22:11:26Z",
+      "side": 0,
+      "message": "No need to touch here.",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a09ab1d_5a405c33",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-09T22:11:26Z",
+      "side": 0,
+      "message": "No need to touch here.",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08d12b74_07a0d60f",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-09T22:11:26Z",
+      "side": 0,
+      "message": "Change mode back to 644",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
