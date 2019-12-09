@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78d08e50_5f4296b3",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-09T18:55:57Z",
+      "side": 1,
+      "message": "0?  -1 doesn\u0027t make sense.",
+      "range": {
+        "startLine": 1249,
+        "startChar": 8,
+        "endLine": 1249,
+        "endChar": 29
+      },
+      "revId": "3252b3043908f736ef50df4f71357f613e523842",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4c96ed8_176c554a",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-09T18:55:57Z",
+      "side": 1,
+      "message": "0?",
+      "range": {
+        "startLine": 625,
+        "startChar": 18,
+        "endLine": 625,
+        "endChar": 22
+      },
+      "revId": "3252b3043908f736ef50df4f71357f613e523842",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72d5fd22_bd61ba1e",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-09T18:55:57Z",
+      "side": 1,
+      "message": "New property; doesn\u0027t require @UnsupportedappUsage.",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 148,
+        "endChar": 38
+      },
+      "revId": "3252b3043908f736ef50df4f71357f613e523842",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "264ab3cf_732da737",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/IccRecordsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-09T18:55:57Z",
+      "side": 1,
+      "message": "This is going to be flaky; you should opt to use a lock, or to post something to the same handler mIccRecords used to know when its done.",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 23
+      },
+      "revId": "3252b3043908f736ef50df4f71357f613e523842",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
