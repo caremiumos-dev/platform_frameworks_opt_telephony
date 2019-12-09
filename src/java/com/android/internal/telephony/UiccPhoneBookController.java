@@ -19,6 +19,7 @@
 package com.android.internal.telephony;
 
 import android.annotation.UnsupportedAppUsage;
+import android.content.ContentValues;
 import android.os.ServiceManager;
 import android.telephony.Rlog;
 
@@ -64,6 +65,32 @@ public class UiccPhoneBookController extends IIccPhoneBook.Stub {
         } else {
             Rlog.e(TAG,"updateAdnRecordsInEfBySearch iccPbkIntMgr is" +
                       " null for Subscription:"+subId);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean
+    updateAdnRecordsWithContentValuesInEfBySearch(int efid, ContentValues values,
+        String pin2) throws android.os.RemoteException {
+        return updateAdnRecordsWithContentValuesInEfBySearchUsingSubId(
+                getDefaultSubscription(), efid, values, pin2);
+    }
+
+    @Override
+    public boolean
+    updateAdnRecordsWithContentValuesInEfBySearchUsingSubId(int subId, int efid,
+        ContentValues values, String pin2)
+        throws android.os.RemoteException {
+
+        IccPhoneBookInterfaceManager iccPbkIntMgr =
+                getIccPhoneBookInterfaceManager(subId);
+        if (iccPbkIntMgr != null) {
+            return iccPbkIntMgr.updateAdnRecordsWithContentValuesInEfBySearch(
+                    efid, values, pin2);
+        } else {
+            Rlog.e(TAG,"updateAdnRecordsWithContentValuesInEfBySearchUsingSubId " +
+                "iccPbkIntMgr is null for Subscription:"+subId);
             return false;
         }
     }
