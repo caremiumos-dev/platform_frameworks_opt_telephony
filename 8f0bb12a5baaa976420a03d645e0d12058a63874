@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7ca33eb8_4c3c091c",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1594446
+      },
+      "writtenOn": "2019-12-09T08:51:13Z",
+      "side": 1,
+      "message": "Okay. I shall remove the annotation.",
+      "parentUuid": "07f97b19_6875ca85",
+      "range": {
+        "startLine": 318,
+        "startChar": 4,
+        "endLine": 318,
+        "endChar": 24
+      },
+      "revId": "8f0bb12a5baaa976420a03d645e0d12058a63874",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38065a38_feb59107",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "8f0bb12a5baaa976420a03d645e0d12058a63874",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e29db470_01fdb364",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1594446
+      },
+      "writtenOn": "2019-12-09T08:51:13Z",
+      "side": 1,
+      "message": "Okay. Will throw an exception",
+      "parentUuid": "38065a38_feb59107",
+      "range": {
+        "startLine": 1199,
+        "startChar": 8,
+        "endLine": 1199,
+        "endChar": 9
+      },
+      "revId": "8f0bb12a5baaa976420a03d645e0d12058a63874",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "200893ef_16dc8980",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1791,
+      "author": {
+        "id": 1594446
+      },
+      "writtenOn": "2019-12-09T08:51:13Z",
+      "side": 1,
+      "message": "Okay. I shall use ImsMmTelManager#addRegistrationCallback in TelecomAccountRegistry and remove this.",
+      "parentUuid": "95bb3b16_3eecc456",
+      "range": {
+        "startLine": 1791,
+        "startChar": 8,
+        "endLine": 1791,
+        "endChar": 51
+      },
+      "revId": "8f0bb12a5baaa976420a03d645e0d12058a63874",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8034c37a_f9a599ca",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 3
@@ -82,6 +154,30 @@
       "writtenOn": "2019-12-05T22:18:39Z",
       "side": 1,
       "message": "Shouldn\u0027t this be very similar to the regular dial path?",
+      "range": {
+        "startLine": 1161,
+        "startChar": 4,
+        "endLine": 1201,
+        "endChar": 5
+      },
+      "revId": "8f0bb12a5baaa976420a03d645e0d12058a63874",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8376adac_45b823d3",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1594446
+      },
+      "writtenOn": "2019-12-09T08:51:13Z",
+      "side": 1,
+      "message": "Yes, it should be similar to regular dial path except that there isn\u0027t any need to check for emergencyCall as 3GPP doesn’t allow the UE to initiate emergency conference call. Also, instead of duplicating code, I shall try re-using dialInternal()",
+      "parentUuid": "8034c37a_f9a599ca",
       "range": {
         "startLine": 1161,
         "startChar": 4,
