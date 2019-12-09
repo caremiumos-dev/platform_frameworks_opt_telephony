@@ -20,6 +20,7 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.Rlog;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
@@ -32,6 +33,8 @@ import com.android.internal.telephony.uicc.IccUtils;
 import dalvik.annotation.compat.UnsupportedAppUsage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class implements reading and parsing USIM records.
@@ -51,8 +54,8 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     private Object mLock = new Object();
     @UnsupportedAppUsage
     private ArrayList<AdnRecord> mPhoneBookRecords;
-    private ArrayList<byte[]> mIapFileRecord;
-    private ArrayList<byte[]> mEmailFileRecord;
+    private Map<Integer, ArrayList<byte[]>> mIapFileRecord;
+    private Map<Integer, ArrayList<byte[]>> mEmailFileRecord;
 
     // email list for each ADN record. The key would be
     // ADN's efid << 8 + record #
@@ -62,7 +65,6 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     private SparseIntArray mSfiEfidTable;
 
     private boolean mRefreshCache = false;
-
 
     private static final int EVENT_PBR_LOAD_DONE = 1;
     private static final int EVENT_USIM_ADN_LOAD_DONE = 2;
@@ -123,13 +125,15 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         mAdnCache = cache;
         mEmailsForAdnRec = new SparseArray<ArrayList<String>>();
         mSfiEfidTable = new SparseIntArray();
+        mIapFileRecord = new HashMap<Integer, ArrayList<byte[]>>();
+        mEmailFileRecord = new HashMap<Integer, ArrayList<byte[]>>();
     }
 
     @UnsupportedAppUsage
     public void reset() {
         mPhoneBookRecords.clear();
-        mIapFileRecord = null;
-        mEmailFileRecord = null;
+        mIapFileRecord.clear();
+        mEmailFileRecord.clear();
         mPbrRecords = null;
         mIsPbrPresent = true;
         mRefreshCache = false;
@@ -222,8 +226,8 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                 }
 
                 log("EF_IAP exists. Loading EF_IAP to retrieve the index.");
-                readIapFileAndWait(files.get(USIM_EFIAP_TAG).getEfid());
-                if (mIapFileRecord == null) {
+                readIapFileAndWait(files.get(USIM_EFIAP_TAG).getEfid(), recId);
+                if (mIapFileRecord.get(recId) == null) {
                     Rlog.e(LOG_TAG, "Error: IAP file is empty");
                     return;
                 }
@@ -254,20 +258,20 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
             // Read the EFEmail file.
             mFh.loadEFLinearFixedAll(emailEfid,
-                    obtainMessage(EVENT_EMAIL_LOAD_DONE));
+                    obtainMessage(EVENT_EMAIL_LOAD_DONE, recId));
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
                 Rlog.e(LOG_TAG, "Interrupted Exception in readEmailFileAndWait");
             }
 
-            if (mEmailFileRecord == null) {
+            if (mEmailFileRecord.get(recId) == null) {
                 Rlog.e(LOG_TAG, "Error: Email file is empty");
                 return;
             }
 
             // Build email list
-            if (email.getParentTag() == USIM_TYPE2_TAG && mIapFileRecord != null) {
+            if (email.getParentTag() == USIM_TYPE2_TAG && mIapFileRecord.get(recId) != null) {
                 // If the tag is type 2 and EF_IAP exists, we need to build tpe 2 email list
                 buildType2EmailList(recId);
             }
@@ -297,10 +301,17 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         log("Building type 1 email list. recId = "
                 + recId + ", numRecs = " + numRecs);
 
+        File file = mPbrRecords.get(recId).mFileIds.get(USIM_EFADN_TAG);
+        if (file == null) {
+            log("Error: Improper ICC card. EF_ADN does not exist in PBR");
+            return;
+        }
+        int adnEfid = file.getEfid();
+
         byte[] emailRec;
         for (int i = 0; i < numRecs; i++) {
             try {
-                emailRec = mEmailFileRecord.get(i);
+                emailRec = mEmailFileRecord.get(recId).get(i);
             } catch (IndexOutOfBoundsException e) {
                 Rlog.e(LOG_TAG, "Error: Improper ICC card: No email record for ADN, continuing");
                 break;
@@ -314,30 +325,14 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
              *
              *  Byte [X + 1]: ADN file SFI (Short File Identification)
              *  Byte [X + 2]: ADN file Record Identifier
+             *
+             *  TODO: is it needed check sfi efid table during builtType2EmailList
+             *  as below comments of 3GPP TS 31.102?
+             *
+             *  NOTE: The fields marked C above are mandatory if and only if the file is not type 1
+             * (as specified in EF_PBR)
              */
-            int sfi = emailRec[emailRec.length - 2];
-            int adnRecId = emailRec[emailRec.length - 1];
-
-            String email = readEmailRecord(i);
-
-            if (email == null || email.equals("")) {
-                continue;
-            }
-
-            // Get the associated ADN's efid first.
-            int adnEfid = 0;
-            if (sfi == INVALID_SFI || mSfiEfidTable.get(sfi) == 0) {
-
-                // If SFI is invalid or cannot be mapped to any ADN, use the ADN's efid
-                // in the same PBR files.
-                File file = mPbrRecords.get(recId).mFileIds.get(USIM_EFADN_TAG);
-                if (file == null)
-                    continue;
-                adnEfid = file.getEfid();
-            }
-            else {
-                adnEfid = mSfiEfidTable.get(sfi);
-            }
+            int adnRecId = (mPhoneBookRecords.get(i)).getRecId();
             /**
              * SIM record numbers are 1 based.
              * The key is constructed by efid and record index.
@@ -347,6 +342,12 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             if (emailList == null) {
                 emailList = new ArrayList<String>();
             }
+
+            String email = readEmailRecord(recId, i);
+            if (TextUtils.isEmpty(email)) {
+                continue;
+            }
+
             log("Adding email #" + i + " list to index 0x" +
                     Integer.toHexString(index).toUpperCase());
             emailList.add(email);
@@ -384,7 +385,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             byte[] record;
             int emailRecId;
             try {
-                record = mIapFileRecord.get(i);
+                record = mIapFileRecord.get(recId).get(i);
                 emailRecId =
                         record[mPbrRecords.get(recId).mFileIds.get(USIM_EFEMAIL_TAG).getIndex()];
             } catch (IndexOutOfBoundsException e) {
@@ -392,7 +393,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                 continue;
             }
 
-            String email = readEmailRecord(emailRecId - 1);
+            String email = readEmailRecord(recId, emailRecId - 1);
             if (email != null && !email.equals("")) {
                 // The key is constructed by efid and record index.
                 int index = (((adnEfid & 0xFFFF) << 8) | (i & 0xFF));
@@ -410,8 +411,8 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     }
 
     // Read Phonebook Index Admistration EF_IAP file
-    private void readIapFileAndWait(int efid) {
-        mFh.loadEFLinearFixedAll(efid, obtainMessage(EVENT_IAP_LOAD_DONE));
+    private void readIapFileAndWait(int efid, int recId) {
+        mFh.loadEFLinearFixedAll(efid, obtainMessage(EVENT_IAP_LOAD_DONE, recId));
         try {
             mLock.wait();
         } catch (InterruptedException e) {
@@ -453,10 +454,13 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     }
 
     // Read email from the record of EF_EMAIL
-    private String readEmailRecord(int recId) {
+    private String readEmailRecord(int recId, int index) {
         byte[] emailRec;
+        if (mEmailFileRecord.get(recId) == null) {
+            return null;
+        }
         try {
-            emailRec = mEmailFileRecord.get(recId);
+            emailRec = mEmailFileRecord.get(recId).get(index);
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
@@ -482,7 +486,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
         int previousSize = mPhoneBookRecords.size();
         mAdnCache.requestLoadAllAdnLike(files.get(USIM_EFADN_TAG).getEfid(),
-            extEf, obtainMessage(EVENT_USIM_ADN_LOAD_DONE));
+                extEf, obtainMessage(EVENT_USIM_ADN_LOAD_DONE, recId));
         try {
             mLock.wait();
         } catch (InterruptedException e) {
@@ -528,13 +532,14 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     @Override
     public void handleMessage(Message msg) {
         AsyncResult ar;
+        int recId = -1;
 
         switch(msg.what) {
         case EVENT_PBR_LOAD_DONE:
             log("Loading PBR records done");
             ar = (AsyncResult) msg.obj;
             if (ar.exception == null) {
-                createPbrFile((ArrayList<byte[]>)ar.result);
+                createPbrFile((ArrayList<byte[]>) ar.result);
             }
             synchronized (mLock) {
                 mLock.notify();
@@ -543,8 +548,9 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         case EVENT_USIM_ADN_LOAD_DONE:
             log("Loading USIM ADN records done");
             ar = (AsyncResult) msg.obj;
+            recId = (Integer) ar.userObj;
             if (ar.exception == null) {
-                mPhoneBookRecords.addAll((ArrayList<AdnRecord>)ar.result);
+                mPhoneBookRecords.addAll((ArrayList<AdnRecord>) ar.result);
             }
             synchronized (mLock) {
                 mLock.notify();
@@ -553,8 +559,9 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         case EVENT_IAP_LOAD_DONE:
             log("Loading USIM IAP records done");
             ar = (AsyncResult) msg.obj;
+            recId = msg.arg1;
             if (ar.exception == null) {
-                mIapFileRecord = ((ArrayList<byte[]>)ar.result);
+                mIapFileRecord.put(recId, ((ArrayList<byte[]>) ar.result));
             }
             synchronized (mLock) {
                 mLock.notify();
@@ -563,8 +570,9 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         case EVENT_EMAIL_LOAD_DONE:
             log("Loading USIM Email records done");
             ar = (AsyncResult) msg.obj;
+            recId = msg.arg1;
             if (ar.exception == null) {
-                mEmailFileRecord = ((ArrayList<byte[]>)ar.result);
+                mEmailFileRecord.put(recId, ((ArrayList<byte[]>) ar.result));
             }
 
             synchronized (mLock) {
@@ -578,6 +586,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     private class PbrRecord {
         // TLV tags
         private SparseArray<File> mFileIds;
+        private ArrayList<Integer> mEmailFileIds;
 
         /**
          * 3GPP TS 31.102 4.4.2.1 EF_PBR (Phone Book Reference file)
@@ -589,6 +598,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
         PbrRecord(byte[] record) {
             mFileIds = new SparseArray<File>();
+            mEmailFileIds = new ArrayList<Integer>();
             SimTlv recTlv;
             log("PBR rec: " + IccUtils.bytesToHexString(record));
             recTlv = new SimTlv(record, 0, record.length);
@@ -599,6 +609,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             SimTlv tlvEfSfi;
             int tag;
             byte[] data;
+            ArrayList<Integer> emailList = new ArrayList<Integer>();
 
             do {
                 tag = tlv.getTag();
@@ -608,18 +619,24 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                 case USIM_TYPE2_TAG: // A9
                     data = tlv.getData();
                     tlvEfSfi = new SimTlv(data, 0, data.length);
-                    parseEfAndSFI(tlvEfSfi, tag);
+                    parseEfAndSFI(tlvEfSfi, tag, emailList);
                     break;
                 }
             } while (tlv.nextObject());
+
+            if (0 != emailList.size()) {
+                log("parseTag: EMAIL file list: " + emailList);
+                mEmailFileIds = emailList;
+            }
         }
 
-        void parseEfAndSFI(SimTlv tlv, int parentTag) {
+        void parseEfAndSFI(SimTlv tlv, int parentTag, ArrayList<Integer> emailList) {
             int tag;
             byte[] data;
             int tagNumberWithinParentTag = 0;
             do {
                 tag = tlv.getTag();
+
                 switch(tag) {
                     case USIM_EFEMAIL_TAG:
                     case USIM_EFADN_TAG:
@@ -659,6 +676,12 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                         }
 
                         int efid = ((data[0] & 0xFF) << 8) | (data[1] & 0xFF);
+
+                        if (parentTag == USIM_TYPE1_TAG) {
+                            if (tag == USIM_EFEMAIL_TAG) {
+                                emailList.add(efid);
+                            }
+                        }
 
                         mFileIds.put(tag, new File(parentTag, efid, sfi, tagNumberWithinParentTag));
                         break;
