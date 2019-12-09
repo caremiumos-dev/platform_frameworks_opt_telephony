@@ -21,7 +21,6 @@ import android.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
-import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.telephony.TelephonyRegistryManager;
@@ -29,8 +28,8 @@ import android.telephony.Annotation.DataFailureCause;
 import android.telephony.Annotation.RadioPowerState;
 import android.telephony.Annotation.SrvccState;
 import android.telephony.CallQuality;
+import android.telephony.CellIdentity;
 import android.telephony.CellInfo;
-import android.telephony.CellLocation;
 import android.telephony.PhoneCapability;
 import android.telephony.PhysicalChannelConfig;
 import android.telephony.PreciseCallState;
@@ -182,11 +181,9 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     @Override
-    public void notifyCellLocation(Phone sender, CellLocation cl) {
+    public void notifyCellLocation(Phone sender, CellIdentity cellIdentity) {
         int subId = sender.getSubId();
-        Bundle data = new Bundle();
-        cl.fillInNotifierBundle(data);
-        mTelephonyRegistryMgr.notifyCellLocation(subId, data);
+        mTelephonyRegistryMgr.notifyCellLocation(subId, cellIdentity);
     }
 
     @Override
