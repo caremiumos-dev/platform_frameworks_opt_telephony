@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3527a24c_0da8e626",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3482,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-09T18:35:07Z",
+      "side": 1,
+      "message": "I thought that this extra would only be set \"true\" if the network indicates the call is an emergency call, and I thought it would only be for incoming calls?",
+      "range": {
+        "startLine": 3475,
+        "startChar": 20,
+        "endLine": 3482,
+        "endChar": 47
+      },
+      "revId": "17cef1fed9be6a2b019085f0eae15af7db1116fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
