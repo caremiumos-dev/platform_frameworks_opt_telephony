@@ -65,6 +65,9 @@ public class IccProvider extends ContentProvider {
     protected static final String STR_TAG = "tag";
     protected static final String STR_NUMBER = "number";
     protected static final String STR_EMAILS = "emails";
+    protected static final String STR_NEW_TAG = "newTag";
+    protected static final String STR_NEW_NUMBER = "newNumber";
+    protected static final String STR_NEW_EMAILS = "newEmails";
     protected static final String STR_PIN2 = "pin2";
 
     private static final UriMatcher URL_MATCHER =
@@ -205,8 +208,16 @@ public class IccProvider extends ContentProvider {
 
         String tag = initialValues.getAsString("tag");
         String number = initialValues.getAsString("number");
-        // TODO(): Read email instead of sending null.
-        boolean success = addIccRecordToEf(efType, tag, number, null, pin2, subId);
+        String emails = initialValues.getAsString("emails");
+
+        ContentValues values = new ContentValues();
+        values.put(STR_TAG, "");
+        values.put(STR_NUMBER, "");
+        values.put(STR_EMAILS, "");
+        values.put(STR_NEW_TAG, tag);
+        values.put(STR_NEW_NUMBER, number);
+        values.put(STR_NEW_EMAILS, emails);
+        boolean success = updateIccRecordInEf(efType, values, pin2, subId);
 
         if (!success) {
             return null;
@@ -299,7 +310,7 @@ public class IccProvider extends ContentProvider {
         // parse where clause
         String tag = null;
         String number = null;
-        String[] emails = null;
+        String emails = null;
         String pin2 = null;
 
         String[] tokens = where.split(" AND ");
@@ -323,8 +334,7 @@ public class IccProvider extends ContentProvider {
             } else if (STR_NUMBER.equals(key)) {
                 number = normalizeValue(val);
             } else if (STR_EMAILS.equals(key)) {
-                //TODO(): Email is null.
-                emails = null;
+                emails = normalizeValue(val);
             } else if (STR_PIN2.equals(key)) {
                 pin2 = normalizeValue(val);
             }
@@ -334,7 +344,15 @@ public class IccProvider extends ContentProvider {
             return 0;
         }
 
-        boolean success = deleteIccRecordFromEf(efType, tag, number, emails, pin2, subId);
+        ContentValues values = new ContentValues();
+        values.put(STR_TAG, tag);
+        values.put(STR_NUMBER, number);
+        values.put(STR_EMAILS, emails);
+        values.put(STR_NEW_TAG, "");
+        values.put(STR_NEW_NUMBER, "");
+        values.put(STR_NEW_EMAILS, "");
+
+        boolean success = updateIccRecordInEf(efType, values, pin2, subId);
         if (!success) {
             return 0;
         }
@@ -380,15 +398,7 @@ public class IccProvider extends ContentProvider {
                         "Cannot insert into URL: " + url);
         }
 
-        String tag = values.getAsString("tag");
-        String number = values.getAsString("number");
-        String[] emails = null;
-        String newTag = values.getAsString("newTag");
-        String newNumber = values.getAsString("newNumber");
-        String[] newEmails = null;
-        // TODO(): Update for email.
-        boolean success = updateIccRecordInEf(efType, tag, number,
-                newTag, newNumber, pin2, subId);
+        boolean success = updateIccRecordInEf(efType, values, pin2, subId);
 
         if (!success) {
             return 0;
@@ -462,12 +472,9 @@ public class IccProvider extends ContentProvider {
     }
 
     private boolean
-    updateIccRecordInEf(int efType, String oldName, String oldNumber,
-            String newName, String newNumber, String pin2, int subId) {
-        if (DBG) log("updateIccRecordInEf: efType=0x" + Integer.toHexString(efType).toUpperCase() +
-                ", oldname=" + Rlog.pii(TAG, oldName) + ", oldnumber=" + Rlog.pii(TAG, oldNumber) +
-                ", newname=" + Rlog.pii(TAG, newName) + ", newnumber=" + Rlog.pii(TAG, newName) +
-                ", subscription=" + subId);
+    updateIccRecordInEf(int efType, ContentValues values, String pin2, int subId) {
+        if (DBG) log("updateIccRecordInEf: efType=0x" + Integer.toHexString(efType).toUpperCase()
+                + ", values: [ " + values + " ], subscription=" + subId);
 
         boolean success = false;
 
@@ -475,8 +482,8 @@ public class IccProvider extends ContentProvider {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfBySearchForSubscriber(subId, efType, oldName,
-                        oldNumber, newName, newNumber, pin2);
+                success = iccIpb.updateAdnRecordsWithContentValuesInEfBySearchUsingSubId(subId,
+                        efType, values, pin2);
             }
         } catch (RemoteException ex) {
             // ignore it
