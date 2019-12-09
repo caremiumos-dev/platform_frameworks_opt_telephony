@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8d559c8_5d795b27",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-12-09T21:27:36Z",
+      "side": 1,
+      "message": "Would it be more readable to call this something like getCurrentCellIdentity(), getRegisteredCellIdentity()?",
+      "range": {
+        "startLine": 516,
+        "startChar": 16,
+        "endLine": 516,
+        "endChar": 31
+      },
+      "revId": "495b79269ad0d5f4fddd3e2e42e59df3fb85da60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9df2e2bc_bdb771db",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3968,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-12-09T21:27:36Z",
+      "side": 1,
+      "message": "nit, can you @NonNull annotate this?",
+      "range": {
+        "startLine": 3968,
+        "startChar": 4,
+        "endLine": 3968,
+        "endChar": 10
+      },
+      "revId": "495b79269ad0d5f4fddd3e2e42e59df3fb85da60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
