@@ -64,7 +64,7 @@ public class SimPhoneBookTest extends TestCase {
             }
         }
         if (adnIndex == 0) return;
-        
+
         AdnRecord emptyAdn = new AdnRecord("", "");
         AdnRecord firstAdn = new AdnRecord("John", "4085550101");
         AdnRecord secondAdn = new AdnRecord("Andy", "6505550102");
@@ -81,7 +81,8 @@ public class SimPhoneBookTest extends TestCase {
         // replace by search
         success = simPhoneBook.updateAdnRecordsInEfBySearch(IccConstants.EF_ADN,
                 firstAdn.getAlphaTag(), firstAdn.getNumber(),
-                secondAdn.getAlphaTag(), secondAdn.getNumber(), pin2);
+                secondAdn.getAlphaTag(), secondAdn.getNumber(),
+                pin2);
         adnRecordList = simPhoneBook.getAdnRecordsInEf(IccConstants.EF_ADN);
         tmpAdn = adnRecordList.get(listIndex);
         assertTrue(success);
@@ -91,7 +92,8 @@ public class SimPhoneBookTest extends TestCase {
         // erase be search
         success = simPhoneBook.updateAdnRecordsInEfBySearch(IccConstants.EF_ADN,
                 secondAdn.getAlphaTag(), secondAdn.getNumber(),
-                emptyAdn.getAlphaTag(), emptyAdn.getNumber(), pin2);
+                emptyAdn.getAlphaTag(), emptyAdn.getNumber(),
+                pin2);
         adnRecordList = simPhoneBook.getAdnRecordsInEf(IccConstants.EF_ADN);
         tmpAdn = adnRecordList.get(listIndex);
         assertTrue(success);
