@@ -153,17 +153,19 @@ public class IccPhoneBookInterfaceManager {
      * @param oldPhoneNumber adn number to be replaced
      *        Set both oldTag and oldPhoneNubmer to "" means to replace an
      *        empty record, aka, insert new record
+     * @param oldEmails adn email to be replaced
      * @param newTag adn tag to be stored
      * @param newPhoneNumber adn number ot be stored
      *        Set both newTag and newPhoneNubmer to "" means to replace the old
      *        record with empty one, aka, delete old record
+     * @param newEmails adn email to be stored
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @return true for success
      */
     public boolean
     updateAdnRecordsInEfBySearch (int efid,
-            String oldTag, String oldPhoneNumber,
-            String newTag, String newPhoneNumber, String pin2) {
+            String oldTag, String oldPhoneNumber, String[] oldEmails,
+            String newTag, String newPhoneNumber, String[] newEmails, String pin2) {
 
 
         if (mPhone.getContext().checkCallingOrSelfPermission(
@@ -174,10 +176,11 @@ public class IccPhoneBookInterfaceManager {
         }
 
 
-        if (DBG) logd("updateAdnRecordsInEfBySearch: efid=0x" +
-                Integer.toHexString(efid).toUpperCase() + " ("+ Rlog.pii(LOG_TAG, oldTag) + "," +
-                Rlog.pii(LOG_TAG, oldPhoneNumber) + ")" + "==>" + " ("+ Rlog.pii(LOG_TAG, newTag) +
-                "," + Rlog.pii(LOG_TAG, newPhoneNumber) + ")"+ " pin2=" + Rlog.pii(LOG_TAG, pin2));
+        if (DBG) logd("updateAdnRecordsInEfBySearch: efid=0x"
+                + Integer.toHexString(efid).toUpperCase() + " ("+ Rlog.pii(LOG_TAG, oldTag) + ","
+                + Rlog.pii(LOG_TAG, oldPhoneNumber) + Rlog.pii(LOG_TAG, oldEmails) + ")"
+                + "==>" + " ("+ Rlog.pii(LOG_TAG, newTag) + "," + Rlog.pii(LOG_TAG, newPhoneNumber)
+                + Rlog.pii(LOG_TAG, newEmails) + ")"+ " pin2=" + Rlog.pii(LOG_TAG, pin2));
 
         efid = updateEfForIccType(efid);
 
@@ -185,8 +188,8 @@ public class IccPhoneBookInterfaceManager {
         Request updateRequest = new Request();
         synchronized (updateRequest) {
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, updateRequest);
-            AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
-            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
+            AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmails);
+            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber, newEmails);
             if (mAdnCache != null) {
                 mAdnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
                 waitForResult(updateRequest);

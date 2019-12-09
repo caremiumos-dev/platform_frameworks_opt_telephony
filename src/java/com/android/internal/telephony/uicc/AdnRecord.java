@@ -321,6 +321,13 @@ public class AdnRecord implements Parcelable {
         }
     }
 
+    /**
+    * added for updating Email record of Adn record.
+    */
+    public void updateArray(AdnRecord adn, int emailFileNum) {
+        mEmails = updateArrayHelper(mEmails, adn.mEmails, emailFileNum);
+    }
+
     //***** Private Methods
 
     /**
@@ -366,5 +373,50 @@ public class AdnRecord implements Parcelable {
             mAlphaTag = "";
             mEmails = null;
         }
+    }
+
+    private String[] updateArrayHelper(String[] dest, String[] src, int fileCount) {
+        if (fileCount == 0) {
+            return null;
+        }
+
+        // delete or insert scenario
+        if (dest == null || src == null) {
+            return dest;
+        }
+
+        String[] ref = new String[fileCount];
+        for (int i = 0; i < fileCount; i++) {
+            ref[i] = "";
+        }
+
+        // Find common elements and put in the ref
+        // To save SIM_IO
+        for (int i = 0; i < src.length; i++) {
+            if (TextUtils.isEmpty(src[i])) {
+                continue;
+            }
+            for (int j = 0; j < dest.length; j++) {
+                if (src[i].equals(dest[j])) {
+                    ref[i] = src[i];
+                    break;
+                }
+            }
+        }
+
+        // fill out none common element into the ""
+        for (int i = 0; i < dest.length; i++) {
+            if (Arrays.asList(ref).contains(dest[i])) {
+                continue;
+            } else {
+                for (int j = 0; j < ref.length; j++) {
+                    if (TextUtils.isEmpty(ref[j])) {
+                        ref[j] = dest[i];
+                        break;
+                    }
+                }
+            }
+        }
+        return ref;
     }
 }
