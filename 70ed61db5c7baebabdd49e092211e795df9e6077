@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e5b3bea_4520a486",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3281,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2019-12-09T22:39:20Z",
+      "side": 1,
+      "message": "this state check is required for below reason..\nif APN is not connected, the PDN activation might be failed, once preferred APN is set, next time, the count of waitting APNs might be changed, so that the waiting apn of apn context is reset, during that time, retry code will call getNextDelayAPN, but the index of waiting APN is -1, then enter into infinite loop. otherwise, it is a timing issue, reproducibility rate is low",
+      "revId": "70ed61db5c7baebabdd49e092211e795df9e6077",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
