@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e50176b7_d0568fa3",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1380100
+      },
+      "writtenOn": "2019-12-10T09:05:33Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "fe6fee8c_5c721179",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26b87dfc_67589f59",
         "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "504296292296f1b27378dc23808e951e2d0bc967",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f703c8fb_84af6df7",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1380100
+      },
+      "writtenOn": "2019-12-10T09:05:33Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "26b87dfc_67589f59",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3c7a9e2a_f338ee0c",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1380100
+      },
+      "writtenOn": "2019-12-10T09:05:33Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "3cc3e42c_bb88f546",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfb3bca0_e0e177ef",
         "filename": "src/java/com/android/internal/telephony/IccProvider.java",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "504296292296f1b27378dc23808e951e2d0bc967",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c7584bd_a3a86409",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1380100
+      },
+      "writtenOn": "2019-12-10T09:05:33Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "bfb3bca0_e0e177ef",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "055c68f5_43ae413d",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1380100
+      },
+      "writtenOn": "2019-12-10T09:05:33Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "6a09ab1d_5a405c33",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08d12b74_07a0d60f",
         "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
         "patchSetId": 3
@@ -101,6 +191,24 @@
       "revId": "504296292296f1b27378dc23808e951e2d0bc967",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17fbd3f2_ef09cdc6",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1380100
+      },
+      "writtenOn": "2019-12-10T09:05:33Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "08d12b74_07a0d60f",
+      "revId": "504296292296f1b27378dc23808e951e2d0bc967",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
