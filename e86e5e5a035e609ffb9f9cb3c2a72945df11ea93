@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea15ae27_18a13d39",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-10T14:18:40Z",
+      "side": 1,
+      "message": "The indentation is wrong here. I think you can fit it in one line only.",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 29
+      },
+      "revId": "e86e5e5a035e609ffb9f9cb3c2a72945df11ea93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74036bce_34c0e0b8",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-10T14:18:40Z",
+      "side": 1,
+      "message": "The indentation is wrong here. I think you can fit it in one line only.",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 22
+      },
+      "revId": "e86e5e5a035e609ffb9f9cb3c2a72945df11ea93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cb8d554_1f27a97e",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-10T14:18:40Z",
+      "side": 1,
+      "message": "The indentation is wrong here. I think you can fit it in one line only.",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 29
+      },
+      "revId": "e86e5e5a035e609ffb9f9cb3c2a72945df11ea93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9246ddf_b6feb5a2",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-10T14:18:40Z",
+      "side": 1,
+      "message": "Not needed",
+      "range": {
+        "startLine": 341,
+        "startChar": 38,
+        "endLine": 341,
+        "endChar": 39
+      },
+      "revId": "e86e5e5a035e609ffb9f9cb3c2a72945df11ea93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c33f3880_ac77539f",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2019-12-10T14:18:40Z",
+      "side": 1,
+      "message": "Not needed",
+      "range": {
+        "startLine": 342,
+        "startChar": 78,
+        "endLine": 342,
+        "endChar": 79
+      },
+      "revId": "e86e5e5a035e609ffb9f9cb3c2a72945df11ea93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
