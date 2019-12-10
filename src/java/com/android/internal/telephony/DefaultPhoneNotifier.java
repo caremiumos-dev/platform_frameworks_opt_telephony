@@ -164,15 +164,16 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         if (ss != null) {
             roaming = ss.getDataRoaming();
         }
+        int apnTypeBitmask = ApnSetting.getApnTypesBitmaskFromString(apnType);
         mTelephonyRegistryMgr.notifyDataConnectionForSubscriber(phoneId, subId,
-            PhoneConstantConversions.convertDataState(state),
-            sender.isDataAllowed(ApnSetting.getApnTypesBitmaskFromString(apnType)),
-            sender.getActiveApnHost(apnType),
-            apnType,
-            linkProperties,
-            networkCapabilities,
-            ((telephony != null) ? telephony.getDataNetworkType(subId) :
-                TelephonyManager.NETWORK_TYPE_UNKNOWN), roaming);
+                PhoneConstantConversions.convertDataState(state),
+                sender.isDataAllowed(apnTypeBitmask),
+                sender.getActiveApnHost(apnType),
+                apnTypeBitmask,
+                linkProperties,
+                networkCapabilities,
+                ((telephony != null) ? telephony.getDataNetworkType(subId) :
+                        TelephonyManager.NETWORK_TYPE_UNKNOWN), roaming);
     }
 
     @Override
