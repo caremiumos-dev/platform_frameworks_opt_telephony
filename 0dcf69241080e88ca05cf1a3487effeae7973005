@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76f85448_88633c95",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1010681
+      },
+      "writtenOn": "2019-12-10T13:30:36Z",
+      "side": 0,
+      "message": "maybe worth reverting this part of the change?\n\nThis may not be standard, but has created a large number of unrelated diffs here.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 60
+      },
+      "revId": "0dcf69241080e88ca05cf1a3487effeae7973005",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
