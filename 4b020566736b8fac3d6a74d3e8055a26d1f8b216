@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c921b6d9_c4bcfb00",
+        "filename": "src/java/com/android/internal/telephony/EcbmHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-10T21:46:11Z",
+      "side": 1,
+      "message": "Since this is a global, it should not be attached to a Phone, since those are created per phone slot. This would be better created as a singleton in PhoneFactory.",
+      "range": {
+        "startLine": 47,
+        "startChar": 13,
+        "endLine": 47,
+        "endChar": 24
+      },
+      "revId": "4b020566736b8fac3d6a74d3e8055a26d1f8b216",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cec88fab_82b8629b",
+        "filename": "src/java/com/android/internal/telephony/EcbmHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-10T21:46:11Z",
+      "side": 1,
+      "message": "This can be set in a constructor, since it shouldnt change. This can also change dynamically in R, so make sure this instance can be recreated when PhoneFactory#onMultiSimConfigChanged occurs.",
+      "range": {
+        "startLine": 54,
+        "startChar": 29,
+        "endLine": 54,
+        "endChar": 75
+      },
+      "revId": "4b020566736b8fac3d6a74d3e8055a26d1f8b216",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec2cca22_d723a863",
+        "filename": "src/java/com/android/internal/telephony/EcbmHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-10T21:46:11Z",
+      "side": 1,
+      "message": "record ecm state here for debugging purposes",
+      "range": {
+        "startLine": 157,
+        "startChar": 23,
+        "endLine": 157,
+        "endChar": 54
+      },
+      "revId": "4b020566736b8fac3d6a74d3e8055a26d1f8b216",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf527b93_b532256f",
+        "filename": "src/java/com/android/internal/telephony/EcbmHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-10T21:46:11Z",
+      "side": 1,
+      "message": "This will be on a binder thread, not the main thread, You must either synchronize the access to these variables or use handler events to handle this on the main thread.",
+      "range": {
+        "startLine": 163,
+        "startChar": 17,
+        "endLine": 163,
+        "endChar": 36
+      },
+      "revId": "4b020566736b8fac3d6a74d3e8055a26d1f8b216",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8980b1c0_3f6bb187",
+        "filename": "src/java/com/android/internal/telephony/EcbmHandler.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-10T21:46:11Z",
+      "side": 1,
+      "message": "is this needed?",
+      "range": {
+        "startLine": 318,
+        "startChar": 16,
+        "endLine": 318,
+        "endChar": 36
+      },
+      "revId": "4b020566736b8fac3d6a74d3e8055a26d1f8b216",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e01bcba0_39d1acd3",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2204,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-10T21:46:11Z",
+      "side": 1,
+      "message": "This tag means that an external vendor is linking/extending this and unfortunately we can not remove this implementation. Please keep this implementation intact.\n\nSame with the below APIs in this file and in ImsPhone that have @UnsupportedAppUsage tags.",
+      "range": {
+        "startLine": 2204,
+        "startChar": 5,
+        "endLine": 2204,
+        "endChar": 24
+      },
+      "revId": "4b020566736b8fac3d6a74d3e8055a26d1f8b216",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02a27bb2_226fa664",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1991,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-10T21:46:11Z",
+      "side": 1,
+      "message": "this can still use isInEcm, since the super class calls this.",
+      "range": {
+        "startLine": 1991,
+        "startChar": 47,
+        "endLine": 1991,
+        "endChar": 82
+      },
+      "revId": "4b020566736b8fac3d6a74d3e8055a26d1f8b216",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
