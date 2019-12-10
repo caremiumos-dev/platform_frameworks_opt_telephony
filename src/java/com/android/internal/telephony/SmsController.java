@@ -21,11 +21,11 @@ package com.android.internal.telephony;
 import static com.android.internal.util.DumpUtils.checkDumpPermission;
 
 import android.annotation.Nullable;
-import android.annotation.UnsupportedAppUsage;
 import android.app.ActivityManager;
 import android.app.ActivityThread;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Binder;
