@@ -18,7 +18,7 @@ package com.android.internal.telephony.uicc;
 
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_TEST_CSIM;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncResult;

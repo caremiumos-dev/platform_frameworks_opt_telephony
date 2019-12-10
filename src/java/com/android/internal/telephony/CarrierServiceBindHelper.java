@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -42,8 +42,8 @@ import android.util.SparseArray;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.content.PackageMonitor;
-
 import com.android.internal.telephony.util.TelephonyUtils;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
