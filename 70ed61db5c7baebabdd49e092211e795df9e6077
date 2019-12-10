@@ -34,6 +34,24 @@
       "revId": "70ed61db5c7baebabdd49e092211e795df9e6077",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4da27874_c91a369d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3281,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-12-10T02:25:39Z",
+      "side": 1,
+      "message": "\u003e yes, as one Sqlite feautre is enabled by default, the row ID (APN ID) will be changed every time after restoring to default, so that the APN is NOT selected from UI, and we have to make a change from Telephony side.",
+      "parentUuid": "d6f77687_151983ef",
+      "revId": "70ed61db5c7baebabdd49e092211e795df9e6077",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
