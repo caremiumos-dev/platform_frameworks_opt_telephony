@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2ee6608_68fe8e7b",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-10T21:26:25Z",
+      "side": 1,
+      "message": "This should not be necessary; see topic:\nhttps://android-review.googlesource.com/q/topic:%22fr_e911_2%22+(status:open%20OR%20status:merged)\n\nIn R we introduced new behavior to end ongoing calls when an emergency call is dialed so we shouldn\u0027t need to do this here.",
+      "range": {
+        "startLine": 873,
+        "startChar": 12,
+        "endLine": 880,
+        "endChar": 20
+      },
+      "revId": "05575573a99f3097ec4071f656034a0869e0f7ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
