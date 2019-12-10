@@ -22,6 +22,30 @@
       "revId": "18df76ac82c2b53446acc460f1dff1f91bea870e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ba2c4a2_f64326fe",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2019-12-10T02:20:06Z",
+      "side": 1,
+      "message": "it wont fail. if DATA RAT is NR, NR(SA) network supports sending SMS over CS.\nThis is independent of IMS registration.",
+      "parentUuid": "88ada7ad_dd361fa7",
+      "range": {
+        "startLine": 189,
+        "startChar": 15,
+        "endLine": 190,
+        "endChar": 60
+      },
+      "revId": "18df76ac82c2b53446acc460f1dff1f91bea870e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
