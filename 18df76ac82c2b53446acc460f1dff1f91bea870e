@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88ada7ad_dd361fa7",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-10T01:54:49Z",
+      "side": 1,
+      "message": "In this case, the radio will call IRadio#sendSms... Do we expect there to not be an IMS registration here? If there isn\u0027t an IMS registration, won\u0027t the send fail anyway, or does 5G SA allow for SMS over data?",
+      "range": {
+        "startLine": 189,
+        "startChar": 15,
+        "endLine": 190,
+        "endChar": 60
+      },
+      "revId": "18df76ac82c2b53446acc460f1dff1f91bea870e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
