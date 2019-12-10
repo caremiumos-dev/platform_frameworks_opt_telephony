@@ -49,6 +49,75 @@
     },
     {
       "key": {
+        "uuid": "9cfc9306_e50f8141",
+        "filename": "src/java/com/android/internal/telephony/vendor/IVendorTelephony.aidl",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-10T18:58:57Z",
+      "side": 1,
+      "message": "We can put this in the IRadio HAL; it seems pretty generically applicable.",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 57
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58e92102_9e5fb359",
+        "filename": "src/java/com/android/internal/telephony/vendor/IVendorTelephony.aidl",
+        "patchSetId": 7
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-10T18:58:57Z",
+      "side": 1,
+      "message": "When I look at the VendorSubscriptionController, it appears as if instead of using these methods, system settings are being accessed instead.  Can you clarify what this is for?  Is there a reason why it needs to change?",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 45
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6598c45b_973f24f6",
+        "filename": "src/java/com/android/internal/telephony/vendor/IVendorTelephony.aidl",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-10T18:58:57Z",
+      "side": 1,
+      "message": "This seems to just be used for APM_SIM_NOT_PWDN_PROPERTY; It looks like this could just be a device config which is overlayed for your use case?  \nI\u0027m not clear on what the config is doing though.",
+      "range": {
+        "startLine": 58,
+        "startChar": 3,
+        "endLine": 65,
+        "endChar": 1
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "615cc0e8_d5104570",
         "filename": "src/java/com/android/internal/telephony/vendor/VendorServiceStateTracker.java",
         "patchSetId": 7
