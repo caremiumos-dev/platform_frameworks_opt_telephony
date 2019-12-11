@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14786b60_919133d2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4396,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-11T18:46:56Z",
+      "side": 1,
+      "message": "Calling onConferenceMergeFailed will result in an EVENT_CALL_MERGE_FAILED being propagated to the dialer, which is likely more appropriate in this case.",
+      "range": {
+        "startLine": 4396,
+        "startChar": 25,
+        "endLine": 4396,
+        "endChar": 44
+      },
+      "revId": "83db85fe6f69c4de5634279f071e7ce593662b6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41ecd66a_98da0abc",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4399,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-11T18:46:56Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 4399,
+        "startChar": 25,
+        "endLine": 4399,
+        "endChar": 44
+      },
+      "revId": "83db85fe6f69c4de5634279f071e7ce593662b6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
