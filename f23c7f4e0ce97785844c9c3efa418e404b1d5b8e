@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5ebde507_44cb7a6b",
+        "filename": "src/java/com/android/internal/telephony/metrics/CallQualityMetrics.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-12-11T21:44:29Z",
+      "side": 1,
+      "message": "Actually I\u0027m not totally clear, both remove() and add() are log(n)\n\nhttps://docs.oracle.com/javase/7/docs/api/java/util/PriorityQueue.html\n\nAnyway as you point out below, we don\u0027t actually want this function destroy the snapshots list, so I\u0027ll rework this anyway.",
+      "parentUuid": "de17a8ca_0993ad21",
+      "range": {
+        "startLine": 356,
+        "startChar": 51,
+        "endLine": 356,
+        "endChar": 87
+      },
+      "revId": "f23c7f4e0ce97785844c9c3efa418e404b1d5b8e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4ad4c0f4_4713d2ad",
         "filename": "src/java/com/android/internal/telephony/metrics/CallQualityMetrics.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-11T20:57:05Z",
       "side": 1,
       "message": "Is it okay that this will empty the quality structures?",
+      "range": {
+        "startLine": 405,
+        "startChar": 42,
+        "endLine": 406,
+        "endChar": 93
+      },
+      "revId": "f23c7f4e0ce97785844c9c3efa418e404b1d5b8e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0e8dc12_3ef13402",
+        "filename": "src/java/com/android/internal/telephony/metrics/CallQualityMetrics.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-12-11T21:44:29Z",
+      "side": 1,
+      "message": "no that\u0027s bad. Will fix.",
+      "parentUuid": "4ad4c0f4_4713d2ad",
       "range": {
         "startLine": 405,
         "startChar": 42,
@@ -68,6 +116,30 @@
       "revId": "f23c7f4e0ce97785844c9c3efa418e404b1d5b8e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4893b8f3_a832c646",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/metrics/CallQualityMetricsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2019-12-11T21:44:29Z",
+      "side": 1,
+      "message": "that\u0027s above (testTotalDurations_ReportedOutOfOrder)",
+      "parentUuid": "24736c0e_22e7f227",
+      "range": {
+        "startLine": 281,
+        "startChar": 8,
+        "endLine": 284,
+        "endChar": 68
+      },
+      "revId": "f23c7f4e0ce97785844c9c3efa418e404b1d5b8e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
