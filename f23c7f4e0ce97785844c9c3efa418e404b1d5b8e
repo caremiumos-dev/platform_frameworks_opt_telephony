@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de17a8ca_0993ad21",
+        "filename": "src/java/com/android/internal/telephony/metrics/CallQualityMetrics.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-11T20:57:05Z",
+      "side": 1,
+      "message": "Doesnt the sorting happen during add()?",
+      "range": {
+        "startLine": 356,
+        "startChar": 51,
+        "endLine": 356,
+        "endChar": 87
+      },
+      "revId": "f23c7f4e0ce97785844c9c3efa418e404b1d5b8e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ad4c0f4_4713d2ad",
+        "filename": "src/java/com/android/internal/telephony/metrics/CallQualityMetrics.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-11T20:57:05Z",
+      "side": 1,
+      "message": "Is it okay that this will empty the quality structures?",
+      "range": {
+        "startLine": 405,
+        "startChar": 42,
+        "endLine": 406,
+        "endChar": 93
+      },
+      "revId": "f23c7f4e0ce97785844c9c3efa418e404b1d5b8e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
