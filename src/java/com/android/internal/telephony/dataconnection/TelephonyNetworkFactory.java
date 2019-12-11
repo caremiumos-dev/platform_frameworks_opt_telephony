@@ -90,7 +90,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
 
     public TelephonyNetworkFactory(Looper looper, Phone phone) {
-        super(looper, phone.getContext(), "TelephonyNetworkFactory[" + phone.getPhoneId()
+        super(phone.getContext(), looper, "TelephonyNetworkFactory[" + phone.getPhoneId()
                 + "]", null);
         mPhone = phone;
         mTransportManager = mPhone.getTransportManager();

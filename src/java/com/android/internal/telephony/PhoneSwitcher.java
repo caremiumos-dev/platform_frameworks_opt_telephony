@@ -399,7 +399,7 @@ public class PhoneSwitcher extends Handler {
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_MCX);
         netCap.setNetworkSpecifier(new MatchAllNetworkSpecifier());
 
-        NetworkFactory networkFactory = new PhoneSwitcherNetworkRequestListener(looper, context,
+        NetworkFactory networkFactory = new PhoneSwitcherNetworkRequestListener(context, looper,
                 netCap, this);
         // we want to see all requests
         networkFactory.setScoreFilter(101);
@@ -646,14 +646,14 @@ public class PhoneSwitcher extends Handler {
 
     private static class PhoneSwitcherNetworkRequestListener extends NetworkFactory {
         private final PhoneSwitcher mPhoneSwitcher;
-        public PhoneSwitcherNetworkRequestListener (Looper l, Context c,
+        PhoneSwitcherNetworkRequestListener(Context c, Looper l,
                 NetworkCapabilities nc, PhoneSwitcher ps) {
-            super(l, c, "PhoneSwitcherNetworkRequstListener", nc);
+            super(c, l, "PhoneSwitcherNetworkRequstListener", nc);
             mPhoneSwitcher = ps;
         }
 
         @Override
-        protected void needNetworkFor(NetworkRequest networkRequest, int score) {
+        public void needNetworkFor(NetworkRequest networkRequest, int score) {
             if (VDBG) log("needNetworkFor " + networkRequest + ", " + score);
             Message msg = mPhoneSwitcher.obtainMessage(EVENT_REQUEST_NETWORK);
             msg.obj = networkRequest;
@@ -661,7 +661,7 @@ public class PhoneSwitcher extends Handler {
         }
 
         @Override
-        protected void releaseNetworkFor(NetworkRequest networkRequest) {
+        public void releaseNetworkFor(NetworkRequest networkRequest) {
             if (VDBG) log("releaseNetworkFor " + networkRequest);
             Message msg = mPhoneSwitcher.obtainMessage(EVENT_RELEASE_NETWORK);
             msg.obj = networkRequest;
