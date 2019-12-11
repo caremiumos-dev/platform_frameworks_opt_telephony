@@ -22,6 +22,30 @@
       "revId": "05575573a99f3097ec4071f656034a0869e0f7ea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "441de749_6fce1d97",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1594446
+      },
+      "writtenOn": "2019-12-11T06:17:55Z",
+      "side": 1,
+      "message": "Code link you pointed is guarded with \"allow_hold_call_during_emergency_bool\" configuration flag (default value: true) that ends the ongoing call irrespective of whether call is either a audio call or video call. The requirement here is to end video call ONLY, and dial emergency call since video call hold is not possible for China Mobile. So, we need this code.",
+      "parentUuid": "e2ee6608_68fe8e7b",
+      "range": {
+        "startLine": 873,
+        "startChar": 12,
+        "endLine": 880,
+        "endChar": 20
+      },
+      "revId": "05575573a99f3097ec4071f656034a0869e0f7ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
