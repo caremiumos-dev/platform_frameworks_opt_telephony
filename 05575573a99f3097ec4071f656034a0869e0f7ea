@@ -46,6 +46,30 @@
       "revId": "05575573a99f3097ec4071f656034a0869e0f7ea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "012deb26_917040fc",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-12-11T22:59:16Z",
+      "side": 1,
+      "message": "Makes sense; since the other code is doing the same thing we should just implement this logic there as well then.  It can just be another case.",
+      "parentUuid": "441de749_6fce1d97",
+      "range": {
+        "startLine": 873,
+        "startChar": 12,
+        "endLine": 880,
+        "endChar": 20
+      },
+      "revId": "05575573a99f3097ec4071f656034a0869e0f7ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
