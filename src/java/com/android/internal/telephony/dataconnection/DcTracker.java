@@ -50,7 +50,6 @@ import android.net.ProxyInfo;
 import android.net.TrafficStats;
 import android.net.Uri;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -108,6 +107,7 @@ import com.android.internal.telephony.dataconnection.DataEnabledSettings.DataEna
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.AsyncChannel;
 
@@ -2077,8 +2077,8 @@ public class DcTracker extends Handler {
             }
         }
         boolean onlySingleDcAllowed = false;
-        if (Build.IS_DEBUGGABLE &&
-                SystemProperties.getBoolean("persist.telephony.test.singleDc", false)) {
+        if (TelephonyUtils.IS_DEBUGGABLE
+                && SystemProperties.getBoolean("persist.telephony.test.singleDc", false)) {
             onlySingleDcAllowed = true;
         }
         if (singleDcRats != null) {
@@ -2747,7 +2747,7 @@ public class DcTracker extends Handler {
                 if (DBG) {
                     log("onDataSetupComplete: SETUP complete type=" + apnContext.getApnType());
                 }
-                if (Build.IS_DEBUGGABLE) {
+                if (TelephonyUtils.IS_DEBUGGABLE) {
                     // adb shell setprop persist.radio.test.pco [pco_val]
                     String radioTestProperty = "persist.radio.test.pco";
                     int pcoVal = SystemProperties.getInt(radioTestProperty, -1);
@@ -3423,7 +3423,7 @@ public class DcTracker extends Handler {
                         trySetupData(apnContext, REQUEST_TYPE_NORMAL);
                     } else {
                         loge("**** Default ApnContext not found ****");
-                        if (Build.IS_DEBUGGABLE) {
+                        if (TelephonyUtils.IS_DEBUGGABLE) {
                             throw new RuntimeException("Default ApnContext not found");
                         }
                     }
@@ -4652,7 +4652,7 @@ public class DcTracker extends Handler {
         int delayInMs = Settings.Global.getInt(mResolver,
                                 Settings.Global.PROVISIONING_APN_ALARM_DELAY_IN_MS,
                                 PROVISIONING_APN_ALARM_DELAY_IN_MS_DEFAULT);
-        if (Build.IS_DEBUGGABLE) {
+        if (TelephonyUtils.IS_DEBUGGABLE) {
             // Allow debug code to use a system property to provide another value
             String delayInMsStrg = Integer.toString(delayInMs);
             delayInMsStrg = System.getProperty(DEBUG_PROV_APN_ALARM, delayInMsStrg);
