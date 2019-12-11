@@ -45,6 +45,29 @@
       "revId": "f23c7f4e0ce97785844c9c3efa418e404b1d5b8e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24736c0e_22e7f227",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/metrics/CallQualityMetricsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-11T20:59:34Z",
+      "side": 1,
+      "message": "Do you also want to test to make sure good/bad duration is correct in the case that they are out of order?",
+      "range": {
+        "startLine": 281,
+        "startChar": 8,
+        "endLine": 284,
+        "endChar": 68
+      },
+      "revId": "f23c7f4e0ce97785844c9c3efa418e404b1d5b8e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
