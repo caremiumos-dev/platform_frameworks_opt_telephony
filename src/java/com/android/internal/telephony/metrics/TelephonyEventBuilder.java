@@ -94,6 +94,12 @@ public class TelephonyEventBuilder {
         return this;
     }
 
+    public TelephonyEventBuilder setDataStallSignalStrength(int signalstrength) {
+        mEvent.type = TelephonyEvent.Type.DATA_STALL_SIGNAL_STRENGTH;
+        mEvent.signalStrength = signalstrength;
+        return this;
+    }
+
     public TelephonyEventBuilder setSetupDataCall(RilSetupDataCall request) {
         mEvent.type = TelephonyEvent.Type.DATA_CALL_SETUP;
         mEvent.setupDataCall = request;
