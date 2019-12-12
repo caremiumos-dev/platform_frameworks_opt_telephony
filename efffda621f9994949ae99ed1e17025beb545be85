@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1096ca9_e4c2aa9b",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1122483
+      },
+      "writtenOn": "2019-12-12T01:09:18Z",
+      "side": 1,
+      "message": "I think that it is better that updateAdnRecordsInEfBySearch() API don\u0027t change and new API is defined for compatibility.",
+      "range": {
+        "startLine": 166,
+        "startChar": 4,
+        "endLine": 166,
+        "endChar": 33
+      },
+      "revId": "efffda621f9994949ae99ed1e17025beb545be85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
