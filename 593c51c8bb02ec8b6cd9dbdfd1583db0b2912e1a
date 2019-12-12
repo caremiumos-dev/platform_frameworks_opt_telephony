@@ -22,6 +22,30 @@
       "revId": "593c51c8bb02ec8b6cd9dbdfd1583db0b2912e1a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6fea52c_85b9e74a",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2019-12-12T18:26:03Z",
+      "side": 1,
+      "message": "The RcsFeatureManager should always be created in ImsPhone and it\u0027s able is able to listen and handle the carrier config change related to RCS",
+      "parentUuid": "393047d4_3c521645",
+      "range": {
+        "startLine": 425,
+        "startChar": 16,
+        "endLine": 426,
+        "endChar": 35
+      },
+      "revId": "593c51c8bb02ec8b6cd9dbdfd1583db0b2912e1a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
