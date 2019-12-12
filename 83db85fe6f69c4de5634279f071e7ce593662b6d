@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2dc82579_3984d6b5",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4396,
+      "author": {
+        "id": 1535831
+      },
+      "writtenOn": "2019-12-12T09:50:06Z",
+      "side": 1,
+      "message": "Calling onConferenceMergeFailed,it needs to modify DialerCall.\ncase android.telecom.Connection.EVENT_CALL_MERGE_FAILED:\n              LogUtil.i(\"DialerCall.onConnectionEvent\", \"merge failed\");\n              isMergeInProcess \u003d false;\n              update();\n              break;\nCalling handleMergeComplete,it doesn\u0027t to modify DialerCall.\n\nCheck onCallMergeFailed,calling onConferenceMergeFailed and handleMergeComplete.\nCan we modify it like this?​",
+      "parentUuid": "14786b60_919133d2",
+      "range": {
+        "startLine": 4396,
+        "startChar": 25,
+        "endLine": 4396,
+        "endChar": 44
+      },
+      "revId": "83db85fe6f69c4de5634279f071e7ce593662b6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41ecd66a_98da0abc",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 2
