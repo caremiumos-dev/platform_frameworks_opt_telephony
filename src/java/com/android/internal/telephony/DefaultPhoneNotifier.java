@@ -209,12 +209,6 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         }
     }
 
-    @Override
-    public void notifyOtaspChanged(Phone sender, int otaspMode) {
-        int subId = sender.getSubId();
-        mTelephonyRegistryMgr.notifyOtaspChanged(subId, otaspMode);
-    }
-
     public void notifyPreciseCallState(Phone sender) {
         Call ringingCall = sender.getRingingCall();
         Call foregroundCall = sender.getForegroundCall();
