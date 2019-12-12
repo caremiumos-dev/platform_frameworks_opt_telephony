@@ -1130,12 +1130,14 @@ public class DataConnection extends StateMachine {
         if ((o != null) && (o instanceof DisconnectParams)) {
             DisconnectParams dp = (DisconnectParams) o;
             apnContext = dp.mApnContext;
-            if (TextUtils.equals(dp.mReason, Phone.REASON_RADIO_TURNED_OFF)
-                    || TextUtils.equals(dp.mReason, Phone.REASON_PDP_RESET)) {
+            if (TextUtils.equals(dp.mReason, Phone.REASON_RADIO_TURNED_OFF)) {
                 discReason = DataService.REQUEST_REASON_SHUTDOWN;
             } else if (dp.mReleaseType == DcTracker.RELEASE_TYPE_HANDOVER) {
                 discReason = DataService.REQUEST_REASON_HANDOVER;
+            } else if (TextUtils.equals(dp.mReason, Phone.REASON_PDP_RESET)) {
+                discReason = DataService.REQUEST_REASON_PDP_RESET;
             }
+
         }
 
         String str = "tearDownData. mCid=" + mCid + ", reason=" + discReason;
