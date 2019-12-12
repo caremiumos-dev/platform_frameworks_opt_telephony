@@ -5242,6 +5242,13 @@ public class DcTracker extends Handler {
                         EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_CLEANUP,
                             mSentSinceLastRecv);
                         if (DBG) log("doRecovery() cleanup all connections");
+                        ApnContext apnContext = mApnContexts.get(
+                                ApnSetting.getApnTypeString(ApnSetting.TYPE_DEFAULT));
+                        if (apnContext != null) {
+                            apnContext.setReason(Phone.REASON_PDP_RESET);
+                            log("setReason as PDP_RESET for data-stall");
+                        }
+
                         cleanUpConnection(mApnContexts.get(ApnSetting.getApnTypeString(
                                 ApnSetting.TYPE_DEFAULT)));
                         cleanUpConnection(mApnContexts.get(ApnSetting.getApnTypeString(
