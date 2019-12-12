@@ -48,7 +48,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
-import android.net.StringNetworkSpecifier;
+import android.net.TelephonyNetworkSpecifier;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
@@ -56,7 +56,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.telephony.PhoneCapability;
 import android.telephony.SubscriptionManager;
-import android.telephony.TelephonyRegistryManager;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
@@ -1164,7 +1163,8 @@ public class PhoneSwitcherTest extends TelephonyTest {
         }
 
         if (subId != null) {
-            netCap.setNetworkSpecifier(new StringNetworkSpecifier(Integer.toString(subId)));
+            netCap.setNetworkSpecifier(new TelephonyNetworkSpecifier.Builder()
+                    .setSubscriptionId(subId).build());
         }
         NetworkRequest networkRequest = new NetworkRequest(netCap, ConnectivityManager.TYPE_NONE,
                 0, NetworkRequest.Type.REQUEST);
@@ -1187,9 +1187,9 @@ public class PhoneSwitcherTest extends TelephonyTest {
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_MMS)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
                 .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
-        netCap.setNetworkSpecifier(new StringNetworkSpecifier(Integer.toString(subId)));
         if (subId != null) {
-            netCap.setNetworkSpecifier(new StringNetworkSpecifier(Integer.toString(subId)));
+            netCap.setNetworkSpecifier(new TelephonyNetworkSpecifier.Builder()
+                    .setSubscriptionId(subId).build());
         }
         NetworkRequest networkRequest = new NetworkRequest(netCap, ConnectivityManager.TYPE_NONE,
                 1, NetworkRequest.Type.REQUEST);

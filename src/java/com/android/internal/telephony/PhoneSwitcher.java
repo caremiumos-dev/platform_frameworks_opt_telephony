@@ -40,6 +40,7 @@ import android.net.NetworkFactory;
 import android.net.NetworkRequest;
 import android.net.NetworkSpecifier;
 import android.net.StringNetworkSpecifier;
+import android.net.TelephonyNetworkSpecifier;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
@@ -1003,7 +1004,9 @@ public class PhoneSwitcher extends Handler {
 
         int subId;
 
-        if (specifier instanceof StringNetworkSpecifier) {
+        if (specifier instanceof TelephonyNetworkSpecifier) {
+            subId = ((TelephonyNetworkSpecifier) specifier).subscriptionId();
+        } else if (specifier instanceof StringNetworkSpecifier) {
             try {
                 subId = Integer.parseInt(((StringNetworkSpecifier) specifier).specifier);
             } catch (NumberFormatException e) {
