@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfb9ad7d_55841457",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2853,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2019-12-13T09:17:26Z",
+      "side": 1,
+      "message": "Is there any intent or notification that is set to external clients when SIM is enabled/disabled ?",
+      "range": {
+        "startLine": 2853,
+        "startChar": 19,
+        "endLine": 2853,
+        "endChar": 50
+      },
+      "revId": "272435f6d3be52a33e6bde21e996bf5d5550d79a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2013a828_a9ff52df",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2019-12-13T09:17:26Z",
+      "side": 1,
+      "message": "Changes needed in this method to return GsmCdmaPhone.mUiccApplicationsEnabled ?",
+      "range": {
+        "startLine": 3465,
+        "startChar": 20,
+        "endLine": 3465,
+        "endChar": 41
+      },
+      "revId": "272435f6d3be52a33e6bde21e996bf5d5550d79a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
