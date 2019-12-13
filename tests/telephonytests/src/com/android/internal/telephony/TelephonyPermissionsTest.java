@@ -81,6 +81,12 @@ public class TelephonyPermissionsTest {
     private ApplicationInfo mMockApplicationInfo;
     @Mock
     private DevicePolicyManager mMockDevicePolicyManager;
+    @Mock
+    private TelephonyManager mTelephonyManagerMock;
+    @Mock
+    private TelephonyManager mTelephonyManagerMockForSub1;
+    @Mock
+    private TelephonyManager mTelephonyManagerMockForSub2;
 
     private MockContentResolver mMockContentResolver;
     private FakeSettingsConfigProvider mFakeSettingsConfigProvider;
@@ -88,6 +94,11 @@ public class TelephonyPermissionsTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+
+        when(mMockContext.getSystemService(Context.TELEPHONY_SERVICE)).thenReturn(
+                mTelephonyManagerMock);
+        when(mTelephonyManagerMock.createForSubscriptionId(anyInt())).thenReturn(
+                mTelephonyManagerMock);
         when(mMockContext.getSystemService(Context.APP_OPS_SERVICE)).thenReturn(mMockAppOps);
         when(mMockContext.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE)).thenReturn(
                 mMockSubscriptionManager);
@@ -120,7 +131,7 @@ public class TelephonyPermissionsTest {
     public void testCheckReadPhoneState_noPermissions() {
         try {
             TelephonyPermissions.checkReadPhoneState(
-                    mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG);
+                    mMockContext, SUB_ID, PID, UID, PACKAGE, FEATURE, MSG);
             fail("Should have thrown SecurityException");
         } catch (SecurityException e) {
             // expected
@@ -132,7 +143,7 @@ public class TelephonyPermissionsTest {
         doNothing().when(mMockContext).enforcePermission(
                 android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE, PID, UID, MSG);
         assertTrue(TelephonyPermissions.checkReadPhoneState(
-                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+                mMockContext, SUB_ID, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
@@ -142,7 +153,7 @@ public class TelephonyPermissionsTest {
         when(mMockAppOps.noteOp(AppOpsManager.OPSTR_READ_PHONE_STATE, UID, PACKAGE))
                 .thenReturn(AppOpsManager.MODE_ALLOWED);
         assertTrue(TelephonyPermissions.checkReadPhoneState(
-                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+                mMockContext, SUB_ID, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
@@ -150,21 +161,23 @@ public class TelephonyPermissionsTest {
         doNothing().when(mMockContext).enforcePermission(
                 android.Manifest.permission.READ_PHONE_STATE, PID, UID, MSG);
         assertFalse(TelephonyPermissions.checkReadPhoneState(
-                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+                mMockContext, SUB_ID, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
     public void testCheckReadPhoneState_hasCarrierPrivileges() throws Exception {
-        when(mMockTelephony.getCarrierPrivilegeStatusForUid(eq(SUB_ID), eq(UID)))
-                .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
+        when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID))).thenReturn(
+                mTelephonyManagerMockForSub1);
+        when(mTelephonyManagerMockForSub1.getCarrierPrivilegeStatus(anyInt())).thenReturn(
+                TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         assertTrue(TelephonyPermissions.checkReadPhoneState(
-                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+                mMockContext, SUB_ID, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
     public void testCheckReadPhoneStateOnAnyActiveSub_noPermissions() {
         assertFalse(TelephonyPermissions.checkReadPhoneStateOnAnyActiveSub(
-                mMockContext, () -> mMockTelephony, PID, UID, PACKAGE, MSG));
+                mMockContext, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
@@ -172,7 +185,7 @@ public class TelephonyPermissionsTest {
         doNothing().when(mMockContext).enforcePermission(
                 android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE, PID, UID, MSG);
         assertTrue(TelephonyPermissions.checkReadPhoneStateOnAnyActiveSub(
-                mMockContext, () -> mMockTelephony, PID, UID, PACKAGE, MSG));
+                mMockContext, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
@@ -182,7 +195,7 @@ public class TelephonyPermissionsTest {
         when(mMockAppOps.noteOp(AppOpsManager.OPSTR_READ_PHONE_STATE, UID, PACKAGE))
                 .thenReturn(AppOpsManager.MODE_ALLOWED);
         assertTrue(TelephonyPermissions.checkReadPhoneStateOnAnyActiveSub(
-                mMockContext, () -> mMockTelephony, PID, UID, PACKAGE, MSG));
+                mMockContext, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
@@ -190,22 +203,25 @@ public class TelephonyPermissionsTest {
         doNothing().when(mMockContext).enforcePermission(
                 android.Manifest.permission.READ_PHONE_STATE, PID, UID, MSG);
         assertFalse(TelephonyPermissions.checkReadPhoneStateOnAnyActiveSub(
-                mMockContext, () -> mMockTelephony, PID, UID, PACKAGE, MSG));
+                mMockContext, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
     public void testCheckReadPhoneStateOnAnyActiveSub_hasCarrierPrivileges() throws Exception {
-        when(mMockTelephony.getCarrierPrivilegeStatusForUid(eq(SUB_ID), eq(UID)))
-                .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
+        when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID))).thenReturn(
+                mTelephonyManagerMockForSub1);
+        when(mTelephonyManagerMockForSub1.getCarrierPrivilegeStatus(anyInt())).thenReturn(
+                TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
+
         assertTrue(TelephonyPermissions.checkReadPhoneStateOnAnyActiveSub(
-                mMockContext, () -> mMockTelephony, PID, UID, PACKAGE, MSG));
+                mMockContext, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
     public void testCheckReadPhoneNumber_noPermissions() {
         try {
             TelephonyPermissions.checkReadPhoneNumber(
-                    mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG);
+                    mMockContext, SUB_ID, PID, UID, PACKAGE, FEATURE, MSG);
             fail("Should have thrown SecurityException");
         } catch (SecurityException e) {
             // expected
@@ -217,7 +233,7 @@ public class TelephonyPermissionsTest {
         when(mMockAppOps.noteOp(AppOpsManager.OPSTR_WRITE_SMS, UID, PACKAGE))
                 .thenReturn(AppOpsManager.MODE_ALLOWED);
         assertTrue(TelephonyPermissions.checkReadPhoneNumber(
-                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+                mMockContext, SUB_ID, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
@@ -225,7 +241,7 @@ public class TelephonyPermissionsTest {
         doNothing().when(mMockContext).enforcePermission(
                 android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE, PID, UID, MSG);
         assertTrue(TelephonyPermissions.checkReadPhoneNumber(
-                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+                mMockContext, SUB_ID, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
@@ -235,7 +251,7 @@ public class TelephonyPermissionsTest {
         when(mMockAppOps.noteOp(AppOpsManager.OPSTR_READ_SMS, UID, PACKAGE))
                 .thenReturn(AppOpsManager.MODE_ALLOWED);
         assertTrue(TelephonyPermissions.checkReadPhoneNumber(
-                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+                mMockContext, SUB_ID, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
@@ -245,7 +261,7 @@ public class TelephonyPermissionsTest {
         when(mMockAppOps.noteOp(AppOpsManager.OPSTR_READ_PHONE_NUMBERS, UID, PACKAGE))
                 .thenReturn(AppOpsManager.MODE_ALLOWED);
         assertTrue(TelephonyPermissions.checkReadPhoneNumber(
-                mMockContext, () -> mMockTelephony, SUB_ID, PID, UID, PACKAGE, MSG));
+                mMockContext, SUB_ID, PID, UID, PACKAGE, FEATURE, MSG));
     }
 
     @Test
@@ -271,8 +287,10 @@ public class TelephonyPermissionsTest {
 
     @Test
     public void testCheckReadDeviceIdentifiers_hasCarrierPrivileges() throws Exception {
-        when(mMockTelephony.getCarrierPrivilegeStatusForUid(eq(SUB_ID), eq(UID)))
-                .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
+        when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID))).thenReturn(
+                mTelephonyManagerMockForSub1);
+        when(mTelephonyManagerMockForSub1.getCarrierPrivilegeStatus(anyInt())).thenReturn(
+                TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         assertTrue(
                 TelephonyPermissions.checkCallingOrSelfReadDeviceIdentifiers(mMockContext,
                         SUB_ID, PACKAGE, MSG));
@@ -332,7 +350,9 @@ public class TelephonyPermissionsTest {
             throws Exception {
         when(mMockSubscriptionManager.getActiveSubscriptionIdList(anyBoolean())).thenReturn(
                 new int[]{SUB_ID, SUB_ID_2});
-        when(mMockTelephony.getCarrierPrivilegeStatusForUid(eq(SUB_ID_2), eq(UID))).thenReturn(
+        when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID_2))).thenReturn(
+                mTelephonyManagerMockForSub2);
+        when(mTelephonyManagerMockForSub2.getCarrierPrivilegeStatus(anyInt())).thenReturn(
                 TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         assertTrue(
                 TelephonyPermissions.checkCallingOrSelfReadDeviceIdentifiers(mMockContext,
@@ -346,8 +366,10 @@ public class TelephonyPermissionsTest {
                 new int[]{SUB_ID});
         when(mMockSubscriptionManager.getActiveSubscriptionIdList(false)).thenReturn(
                 new int[]{SUB_ID, SUB_ID_2});
-        when(mMockTelephony.getCarrierPrivilegeStatusForUid(eq(SUB_ID_2), eq(UID)))
-                .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
+        when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID_2))).thenReturn(
+                mTelephonyManagerMockForSub2);
+        when(mTelephonyManagerMockForSub2.getCarrierPrivilegeStatus(anyInt())).thenReturn(
+                TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         assertTrue(
                 TelephonyPermissions.checkCallingOrSelfReadDeviceIdentifiers(mMockContext,
                         SUB_ID, PACKAGE, MSG));
@@ -409,8 +431,10 @@ public class TelephonyPermissionsTest {
         when(mMockContext.checkPermission(
                 eq(android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE),
                 anyInt(), anyInt())).thenReturn(PackageManager.PERMISSION_DENIED);
-        when(mMockTelephony.getCarrierPrivilegeStatusForUid(eq(SUB_ID), anyInt()))
-                .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
+        when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID))).thenReturn(
+                mTelephonyManagerMockForSub1);
+        when(mTelephonyManagerMockForSub1.getCarrierPrivilegeStatus(anyInt())).thenReturn(
+                TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         assertTrue(
                 TelephonyPermissions.checkCallingOrSelfReadSubscriberIdentifiers(mMockContext,
                         SUB_ID, PACKAGE, MSG));
@@ -426,7 +450,9 @@ public class TelephonyPermissionsTest {
                 anyInt(), anyInt())).thenReturn(PackageManager.PERMISSION_DENIED);
         when(mMockSubscriptionManager.getActiveSubscriptionIdList(anyBoolean())).thenReturn(
                 new int[]{SUB_ID, SUB_ID_2});
-        when(mMockTelephony.getCarrierPrivilegeStatusForUid(eq(SUB_ID_2), anyInt())).thenReturn(
+        when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID_2))).thenReturn(
+                mTelephonyManagerMockForSub2);
+        when(mTelephonyManagerMockForSub2.getCarrierPrivilegeStatus(anyInt())).thenReturn(
                 TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         // Carrier privilege on the other active sub shouldn't allow access to this sub.
         try {
