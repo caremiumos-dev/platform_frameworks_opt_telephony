@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94ebf0dd_2e39546b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 4757,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2019-12-13T19:46:23Z",
+      "side": 1,
+      "message": "This logic seems not strictly correct, because the situations of !useRsrpOnlyBool \u0026\u0026 !useRsrpAndRsrqBool, could be many situations such as \"useRsrqAndRssnr\", which should set  IRadio for both Rsrq and Rssnr?  \n\nSo could you please use a single key similar to KEY_PARAMETERS_USE_FOR_5G_NR_SIGNAL_BAR_INT for 4G measures, and deprecate KEY_USE_ONLY_RSRP_FOR_LTE_SIGNAL_BAR_BOOL?",
+      "range": {
+        "startLine": 4757,
+        "startChar": 20,
+        "endLine": 4757,
+        "endChar": 59
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
