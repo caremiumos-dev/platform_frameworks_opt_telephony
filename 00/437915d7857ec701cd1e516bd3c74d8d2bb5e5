@@ -1,0 +1,7 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Code-Review+2: Amit Mahajan <amitmahajan@google.com>
+Submitted-by: Betty Chang <changbetty@google.com>
+Submitted-at: Fri, 13 Dec 2019 11:21:50 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1187476
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
