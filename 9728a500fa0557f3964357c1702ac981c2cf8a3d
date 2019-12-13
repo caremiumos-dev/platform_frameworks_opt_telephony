@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3151e8f6_4c459609",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2774,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-13T02:41:43Z",
+      "side": 1,
+      "message": "nit: can we reference telephonymanager definition?\nhttps://cs.corp.google.com/android/frameworks/base/telephony/java/android/telephony/TelephonyManager.java?rcl\u003df7709b8478125c4418057f69226bd04199070b1d\u0026l\u003d193",
+      "range": {
+        "startLine": 2771,
+        "startChar": 6,
+        "endLine": 2774,
+        "endChar": 51
+      },
+      "revId": "9728a500fa0557f3964357c1702ac981c2cf8a3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
