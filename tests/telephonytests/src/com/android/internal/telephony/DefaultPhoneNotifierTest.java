@@ -17,6 +17,7 @@ package com.android.internal.telephony;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
@@ -24,8 +25,10 @@ import static org.mockito.Mockito.verify;
 
 import android.os.Bundle;
 import android.telephony.CellInfo;
+import android.telephony.DataFailCause;
 import android.telephony.DisconnectCause;
 import android.telephony.PreciseCallState;
+import android.telephony.PreciseDataConnectionState;
 import android.telephony.PreciseDisconnectCause;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -164,15 +167,21 @@ public class DefaultPhoneNotifierTest extends TelephonyTest {
 
     @Test @SmallTest
     public void testNotifyDataConnectionFailed() throws Exception {
-        mDefaultPhoneNotifierUT.notifyDataConnectionFailed(mPhone, "APN_0");
-        verify(mTelephonyRegistryManager).notifyDataConnectionFailed(0, 0, "APN_0");
+        mDefaultPhoneNotifierUT.notifyDataConnectionFailed(mPhone, "default", "APN_0",
+                DataFailCause.INSUFFICIENT_RESOURCES);
+        verify(mTelephonyRegistryManager).notifyPreciseDataConnectionFailed(
+                eq(0), eq(0), eq("default"), eq("APN_0"), eq(DataFailCause.INSUFFICIENT_RESOURCES));
 
-        mDefaultPhoneNotifierUT.notifyDataConnectionFailed(mPhone, "APN_1");
-        verify(mTelephonyRegistryManager).notifyDataConnectionFailed(0, 0, "APN_1");
+        mDefaultPhoneNotifierUT.notifyDataConnectionFailed(mPhone, "default", "APN_1",
+                DataFailCause.INSUFFICIENT_RESOURCES);
+        verify(mTelephonyRegistryManager).notifyPreciseDataConnectionFailed(
+                eq(0), eq(0), eq("default"), eq("APN_1"), eq(DataFailCause.INSUFFICIENT_RESOURCES));
 
         doReturn(1).when(mPhone).getSubId();
-        mDefaultPhoneNotifierUT.notifyDataConnectionFailed(mPhone, "APN_1");
-        verify(mTelephonyRegistryManager).notifyDataConnectionFailed(1,0, "APN_1");
+        mDefaultPhoneNotifierUT.notifyDataConnectionFailed(mPhone, "default", "APN_1",
+                DataFailCause.INSUFFICIENT_RESOURCES);
+        verify(mTelephonyRegistryManager).notifyPreciseDataConnectionFailed(
+                eq(1), eq(0), eq("default"), eq("APN_1"), eq(DataFailCause.INSUFFICIENT_RESOURCES));
     }
 
     @Test @SmallTest
