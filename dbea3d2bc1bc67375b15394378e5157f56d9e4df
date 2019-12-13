@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39977c0e_6004421e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/RuimRecordsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1047993
+      },
+      "writtenOn": "2019-12-13T16:52:24Z",
+      "side": 1,
+      "message": "Remove the text from here till line#26",
+      "range": {
+        "startLine": 3,
+        "startChar": 25,
+        "endLine": 3,
+        "endChar": 26
+      },
+      "revId": "dbea3d2bc1bc67375b15394378e5157f56d9e4df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
