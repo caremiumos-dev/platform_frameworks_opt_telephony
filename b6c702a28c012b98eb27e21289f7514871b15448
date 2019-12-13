@@ -46,6 +46,30 @@
       "revId": "b6c702a28c012b98eb27e21289f7514871b15448",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "76c881d6_37630ceb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3549,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-12-13T19:29:16Z",
+      "side": 1,
+      "message": "Lets fix in ServiceStateTracker so that it only sends DATA rat changed event when data RAT actually changed.",
+      "parentUuid": "8c98e899_66ac323c",
+      "range": {
+        "startLine": 3548,
+        "startChar": 16,
+        "endLine": 3549,
+        "endChar": 61
+      },
+      "revId": "b6c702a28c012b98eb27e21289f7514871b15448",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
