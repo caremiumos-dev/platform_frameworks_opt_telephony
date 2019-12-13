@@ -1123,52 +1123,6 @@ public class DcTracker extends Handler {
         return false;
     }
 
-    // Return state of overall
-    public DctConstants.State getOverallState() {
-        boolean isConnecting = false;
-        boolean isFailed = true; // All enabled Apns should be FAILED.
-        boolean isAnyEnabled = false;
-
-        for (ApnContext apnContext : mApnContexts.values()) {
-            if (apnContext.isEnabled()) {
-                isAnyEnabled = true;
-                switch (apnContext.getState()) {
-                    case CONNECTED:
-                    case DISCONNECTING:
-                        if (VDBG) log("overall state is CONNECTED");
-                        return DctConstants.State.CONNECTED;
-                    case CONNECTING:
-                        isConnecting = true;
-                        isFailed = false;
-                        break;
-                    case IDLE:
-                    case RETRYING:
-                        isFailed = false;
-                        break;
-                    default:
-                        isAnyEnabled = true;
-                        break;
-                }
-            }
-        }
-
-        if (!isAnyEnabled) { // Nothing enabled. return IDLE.
-            if (VDBG) log( "overall state is IDLE");
-            return DctConstants.State.IDLE;
-        }
-
-        if (isConnecting) {
-            if (VDBG) log( "overall state is CONNECTING");
-            return DctConstants.State.CONNECTING;
-        } else if (!isFailed) {
-            if (VDBG) log( "overall state is IDLE");
-            return DctConstants.State.IDLE;
-        } else {
-            if (VDBG) log( "overall state is FAILED");
-            return DctConstants.State.FAILED;
-        }
-    }
-
     //****** Called from ServiceStateTracker
     /**
      * Invoked when ServiceStateTracker observes a transition from GPRS
@@ -1189,7 +1143,7 @@ public class DcTracker extends Handler {
     private void onDataConnectionAttached() {
         if (DBG) log("onDataConnectionAttached");
         mAttached.set(true);
-        if (getOverallState() == DctConstants.State.CONNECTED) {
+        if (isAnyDataConnected()) {
             if (DBG) log("onDataConnectionAttached: start polling notify attached");
             startNetStatPoll();
             startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
@@ -2014,10 +1968,6 @@ public class DcTracker extends Handler {
      * Handles changes to the APN database.
      */
     private void onApnChanged() {
-        DctConstants.State overallState = getOverallState();
-        boolean isDisconnected = (overallState == DctConstants.State.IDLE ||
-                overallState == DctConstants.State.FAILED);
-
         if (mPhone instanceof GsmCdmaPhone) {
             // The "current" may no longer be valid.  MMS depends on this to send properly. TBD
             ((GsmCdmaPhone)mPhone).updateCurrentCarrierInProvider();
@@ -2029,7 +1979,7 @@ public class DcTracker extends Handler {
         createAllApnList();
         setDataProfilesAsNeeded();
         setInitialAttachApn();
-        cleanUpConnectionsOnUpdatedApns(!isDisconnected, Phone.REASON_APN_CHANGED);
+        cleanUpConnectionsOnUpdatedApns(isAnyDataConnected(), Phone.REASON_APN_CHANGED);
 
         // FIXME: See bug 17426028 maybe no conditional is needed.
         if (mPhone.getSubId() == SubscriptionManager.getDefaultDataSubscriptionId()) {
@@ -2574,7 +2524,7 @@ public class DcTracker extends Handler {
             log("onRadioAvailable: We're on the simulator; assuming data is connected");
         }
 
-        if (getOverallState() != DctConstants.State.IDLE) {
+        if (!areAllDataDisconnect()) {
             cleanUpConnectionInternal(true, RELEASE_TYPE_DETACH, null);
         }
     }
@@ -2889,7 +2839,7 @@ public class DcTracker extends Handler {
         }
         // if all data connection are gone, check whether Airplane mode request was
         // pending.
-        if (isDisconnected()) {
+        if (areAllDataDisconnected()) {
             if (mPhone.getServiceStateTracker().processPendingRadioPowerOffAfterDataOff()) {
                 if (DBG) log("onDisconnectDone: radio will be turned off, no retries");
                 // Radio will be turned off. No need to retry data setup
@@ -2953,7 +2903,8 @@ public class DcTracker extends Handler {
     private void onVoiceCallStarted() {
         if (DBG) log("onVoiceCallStarted");
         mInVoiceCall = true;
-        if (isConnected() && ! mPhone.getServiceStateTracker().isConcurrentVoiceAndDataAllowed()) {
+        if (isAnyDataConnected()
+                && !mPhone.getServiceStateTracker().isConcurrentVoiceAndDataAllowed()) {
             if (DBG) log("onVoiceCallStarted stop polling");
             stopNetStatPoll();
             stopDataStallAlarm();
@@ -2964,7 +2915,7 @@ public class DcTracker extends Handler {
     private void onVoiceCallEnded() {
         if (DBG) log("onVoiceCallEnded");
         mInVoiceCall = false;
-        if (isConnected()) {
+        if (isAnyDataConnected()) {
             if (!mPhone.getServiceStateTracker().isConcurrentVoiceAndDataAllowed()) {
                 startNetStatPoll();
                 startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
@@ -2978,25 +2929,27 @@ public class DcTracker extends Handler {
         setupDataOnAllConnectableApns(Phone.REASON_VOICE_CALL_ENDED, RetryFailures.ALWAYS);
     }
 
-    private boolean isConnected() {
-        for (ApnContext apnContext : mApnContexts.values()) {
-            if (apnContext.getState() == DctConstants.State.CONNECTED) {
-                // At least one context is connected, return true
+    /**
+     * @return {@code true} if there is any data in connected state.
+     */
+    private boolean isAnyDataConnected() {
+        for (DataConnection dc : mDataConnections.values()) {
+            if (dc.isActive()) {
                 return true;
             }
         }
-        // There are not any contexts connected, return false
         return false;
     }
 
-    public boolean isDisconnected() {
-        for (ApnContext apnContext : mApnContexts.values()) {
-            if (!apnContext.isDisconnected()) {
-                // At least one context was not disconnected return false
+    /**
+     * @return {@code true} if all data connections are in disconnected state.
+     */
+    public boolean areAllDataDisconnected() {
+        for (DataConnection dc : mDataConnections.values()) {
+            if (!dc.isInactive()) {
                 return false;
             }
         }
-        // All contexts were disconnected so return true
         return true;
     }
 
@@ -3412,7 +3365,7 @@ public class DcTracker extends Handler {
                  */
                 if (DBG) log("EVENT_PS_RESTRICT_DISABLED " + mIsPsRestricted);
                 mIsPsRestricted  = false;
-                if (isConnected()) {
+                if (isAnyDataConnected()) {
                     startNetStatPoll();
                     startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
                 } else {
@@ -3595,7 +3548,7 @@ public class DcTracker extends Handler {
 
                     mDataStallNoRxEnabled = !enabled;
                     if (mDsRecoveryHandler.isNoRxDataStallDetectionEnabled()
-                            && (getOverallState() == DctConstants.State.CONNECTED)
+                            && isAnyDataConnected()
                             && (!mInVoiceCall ||
                                     mPhone.getServiceStateTracker()
                                         .isConcurrentVoiceAndDataAllowed())) {
@@ -3832,7 +3785,7 @@ public class DcTracker extends Handler {
     public void registerForAllDataDisconnected(Handler h, int what) {
         mAllDataDisconnectedRegistrants.addUnique(h, what, null);
 
-        if (isDisconnected()) {
+        if (areAllDataDisconnected()) {
             log("notify All Data Disconnected");
             notifyAllDataDisconnected();
         }
@@ -3976,7 +3929,7 @@ public class DcTracker extends Handler {
         pw.println(" mReregisterOnReconnectFailure=" + mReregisterOnReconnectFailure);
         pw.println(" canSetPreferApn=" + mCanSetPreferApn);
         pw.println(" mApnObserver=" + mApnObserver);
-        pw.println(" getOverallState=" + getOverallState());
+        pw.println(" isAnyDataConnected=" + isAnyDataConnected());
         pw.println(" mAttached=" + mAttached.get());
         mDataEnabledSettings.dump(fd, pw, args);
         pw.flush();
@@ -4131,7 +4084,7 @@ public class DcTracker extends Handler {
             }
         }
 
-        if (!isConnected()) {
+        if (!isAnyDataConnected()) {
             stopNetStatPoll();
             stopDataStallAlarm();
         }
@@ -4154,8 +4107,7 @@ public class DcTracker extends Handler {
     }
 
     private void startNetStatPoll() {
-        if (getOverallState() == DctConstants.State.CONNECTED
-                && mNetStatPollEnabled == false) {
+        if (isAnyDataConnected() && !mNetStatPollEnabled) {
             if (DBG) {
                 log("startNetStatPoll");
             }
@@ -4420,7 +4372,7 @@ public class DcTracker extends Handler {
         }
 
         public void doRecovery() {
-            if (getOverallState() == DctConstants.State.CONNECTED) {
+            if (isAnyDataConnected()) {
                 // Go through a series of recovery steps, each action transitions to the next action
                 @RecoveryAction final int recoveryAction = getRecoveryAction();
                 TelephonyMetrics.getInstance().writeDataStallEvent(
@@ -4582,8 +4534,7 @@ public class DcTracker extends Handler {
     private void startDataStallAlarm(boolean suspectedStall) {
         int delayInMs;
 
-        if (mDsRecoveryHandler.isNoRxDataStallDetectionEnabled()
-                && getOverallState() == DctConstants.State.CONNECTED) {
+        if (mDsRecoveryHandler.isNoRxDataStallDetectionEnabled() && isAnyDataConnected()) {
             // If screen is on or data stall is currently suspected, set the alarm
             // with an aggressive timeout.
             if (mIsScreenOn || suspectedStall || mDsRecoveryHandler.isAggressiveRecovery()) {
@@ -4629,7 +4580,7 @@ public class DcTracker extends Handler {
     }
 
     private void restartDataStallAlarm() {
-        if (isConnected() == false) return;
+        if (!isAnyDataConnected()) return;
         // To be called on screen status change.
         // Do not cancel the alarm if it is set with aggressive timeout.
         if (mDsRecoveryHandler.isAggressiveRecovery()) {
