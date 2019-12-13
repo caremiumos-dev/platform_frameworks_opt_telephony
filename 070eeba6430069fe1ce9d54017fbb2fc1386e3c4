@@ -118,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "2ef00de3_e32f947a",
+        "filename": "src/java/com/android/internal/telephony/vendor/IVendorTelephony.aidl",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2019-12-13T08:03:21Z",
+      "side": 1,
+      "message": "Yes this is to read the property value \"APM_SIM_NOT_PWDN_PROPERTY\", but the  property is defined in vendor space hence to read the value from vendor partition we are defining this aidl/hidl APIs.\n\nIf Google provides an APM_SIM_NOT_PWDN_PROPERTY config read support via an IRadio.hal API, we can remove it and use the IRadio instead.",
+      "parentUuid": "6598c45b_973f24f6",
+      "range": {
+        "startLine": 58,
+        "startChar": 3,
+        "endLine": 65,
+        "endChar": 1
+      },
+      "revId": "070eeba6430069fe1ce9d54017fbb2fc1386e3c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "615cc0e8_d5104570",
         "filename": "src/java/com/android/internal/telephony/vendor/VendorServiceStateTracker.java",
         "patchSetId": 7
