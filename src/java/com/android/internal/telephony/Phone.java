@@ -3901,7 +3901,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public boolean areAllDataDisconnected() {
         if (mTransportManager != null) {
             for (int transport : mTransportManager.getAvailableTransports()) {
-                if (getDcTracker(transport) != null && !getDcTracker(transport).isDisconnected()) {
+                if (getDcTracker(transport) != null
+                        && !getDcTracker(transport).areAllDataDisconnected()) {
                     return false;
                 }
             }
@@ -3913,7 +3914,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mAllDataDisconnectedRegistrants.addUnique(h, what, null);
         if (mTransportManager != null) {
             for (int transport : mTransportManager.getAvailableTransports()) {
-                if (getDcTracker(transport) != null && !getDcTracker(transport).isDisconnected()) {
+                if (getDcTracker(transport) != null
+                        && !getDcTracker(transport).areAllDataDisconnected()) {
                     getDcTracker(transport).registerForAllDataDisconnected(
                             this, EVENT_ALL_DATA_DISCONNECTED);
                 }
