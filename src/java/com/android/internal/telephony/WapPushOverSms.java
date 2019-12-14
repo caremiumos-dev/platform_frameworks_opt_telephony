@@ -43,6 +43,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Telephony;
 import android.provider.Telephony.Sms.Intents;
+import android.telephony.WapPushManager;
 import android.telephony.Rlog;
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionManager;
@@ -67,7 +68,7 @@ import java.util.HashMap;
  *
  * @hide
  */
-public class WapPushOverSms implements ServiceConnection {
+public class WapPushOverSms {
     private static final String TAG = "WAP PUSH";
     private static final boolean DBG = false;
 
@@ -78,9 +79,7 @@ public class WapPushOverSms implements ServiceConnection {
 
     private String mWapPushManagerPackage;
 
-    /** Assigned from ServiceConnection callback on main threaad. */
-    @UnsupportedAppUsage
-    private volatile IWapPushManager mWapPushManager;
+    private WapPushManager mWapPushManager;
 
     /** Broadcast receiver that binds to WapPushManager when the user unlocks the phone for the
      *  first time after reboot and the credential-encrypted storage is available.
@@ -109,29 +108,15 @@ public class WapPushOverSms implements ServiceConnection {
     }
 
     private void bindWapPushManagerService(Context context) {
-        Intent intent = new Intent(IWapPushManager.class.getName());
-        ComponentName comp = intent.resolveSystemService(context.getPackageManager(), 0);
         intent.setComponent(comp);
-        if (comp == null || !context.bindService(intent, this, Context.BIND_AUTO_CREATE)) {
-            Rlog.e(TAG, "bindService() for wappush manager failed");
+        if (!mWapPushManager.bindToWapPushManagerService()) {
+            Rlog.e(TAG, "binding for wappush manager failed");
         } else {
             synchronized (this) {
-                mWapPushManagerPackage = comp.getPackageName();
+                mWapPushManagerPackage = mWapPushManager.getWapPushManagerServicePackage();
             }
-            if (DBG) Rlog.v(TAG, "bindService() for wappush manager succeeded");
+            if (DBG) Rlog.v(TAG, "binding for wappush manager succeeded");
         }
-    }
-
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        mWapPushManager = IWapPushManager.Stub.asInterface(service);
-        if (DBG) Rlog.v(TAG, "wappush manager connected to " + hashCode());
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        mWapPushManager = null;
-        if (DBG) Rlog.v(TAG, "wappush manager disconnected.");
     }
 
     public WapPushOverSms(Context context) {
@@ -151,12 +136,8 @@ public class WapPushOverSms implements ServiceConnection {
     }
 
     public void dispose() {
-        if (mWapPushManager != null) {
-            if (DBG) Rlog.v(TAG, "dispose: unbind wappush manager");
-            mContext.unbindService(this);
-        } else {
-            Rlog.e(TAG, "dispose: not bound to a wappush manager");
-        }
+        if (DBG) Rlog.v(TAG, "dispose: unbind wappush manager");
+        mWapPushManager.unbindWapPushManagerService(mContext);
     }
 
     /**
