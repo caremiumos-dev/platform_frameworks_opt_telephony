@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd99f82d_74fa521f",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-15T07:20:09Z",
+      "side": 1,
+      "message": "always return NonNull?",
+      "range": {
+        "startLine": 621,
+        "startChar": 7,
+        "endLine": 621,
+        "endChar": 44
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a103c783_4547c7f7",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2352,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-15T07:20:09Z",
+      "side": 1,
+      "message": "what if some apn type changes from active -\u003e inactive.\nwill listeners getting notified about the state change?",
+      "range": {
+        "startLine": 2352,
+        "startChar": 25,
+        "endLine": 2352,
+        "endChar": 42
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d4e3cc3_33a680fc",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3026,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-15T07:20:09Z",
+      "side": 1,
+      "message": "remove as below logic didn\u0027t use mTransportMgr?\nalso, I prefer use mTransportMgr.getAvailableTransport than mDcTracker as latter initialized once and not get updated if availabletransport changes.",
+      "range": {
+        "startLine": 3026,
+        "startChar": 12,
+        "endLine": 3026,
+        "endChar": 29
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8949a651_acc4ea2d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-15T07:20:09Z",
+      "side": 1,
+      "message": "nit: move to DctConstants? \n DctConstants.toTelephonyDataState()",
+      "range": {
+        "startLine": 1103,
+        "startChar": 4,
+        "endLine": 1123,
+        "endChar": 0
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
