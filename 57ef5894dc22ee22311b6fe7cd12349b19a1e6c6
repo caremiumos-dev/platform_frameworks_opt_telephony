@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "8f407d47_850c5d6e",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2352,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-16T22:42:37Z",
+      "side": 1,
+      "message": "that means telephonyregistry cache will store all previously active apn types. And next time any app call TelephonyManager.listen(PRECISE_DATA_CONENCTION..) they will get a callback immediately about each apn state, but its not accurate?",
+      "parentUuid": "eb9826cb_0307f88b",
+      "range": {
+        "startLine": 2352,
+        "startChar": 25,
+        "endLine": 2352,
+        "endChar": 42
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d4e3cc3_33a680fc",
         "filename": "src/java/com/android/internal/telephony/Phone.java",
         "patchSetId": 3
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "Then I\u0027d have to make it an API, which I don\u0027t want to do. It looks like the method above agrees with me. Maybe once we have all the mainline stuff sorted out?",
       "parentUuid": "8949a651_acc4ea2d",
+      "range": {
+        "startLine": 1103,
+        "startChar": 4,
+        "endLine": 1123,
+        "endChar": 0
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e656e369_a5a31459",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2019-12-16T22:42:37Z",
+      "side": 1,
+      "message": "framework/opt/telephony can access hidden APIs in framework/base/telephony. You dont need to expose APIs for that. Anyway, I don\u0027t have a strong preference on this, leave the decision to you.",
+      "parentUuid": "a8c5e884_caad19de",
       "range": {
         "startLine": 1103,
         "startChar": 4,
