@@ -12,3 +12,7 @@ rule com.android.internal.util.HexDump* com.android.internal.telephony.HexDump@1
 rule com.android.internal.util.State* com.android.internal.telephony.State@1
 rule com.android.internal.util.StateMachine* com.android.internal.telephony.StateMachine@1
 rule com.android.internal.util.IndentingPrintWriter* com.android.internal.telephony.IndentingPrintWriter@1
+rule android.net.util.LinkPropertiesUtils* com.android.internal.telephony.LinkPropertiesUtils@1
+rule android.net.util.LinkPropertiesUtils.CompareResult* com.android.internal.telephony.LinkPropertiesUtils.CompareResult@1
+rule android.net.util.MacAddressUtils* com.android.internal.telephony.MacAddressUtils@1
+rule android.net.util.NetUtils* com.android.internal.telephony.NetUtils@1
