@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c862d89b_fbee9186",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2019-12-16T09:06:31Z",
+      "side": 1,
+      "message": "I am assuming you have confirmed that this is the correct library to use.",
+      "revId": "27d027afe877039f3e5617af5df208b014949e0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
