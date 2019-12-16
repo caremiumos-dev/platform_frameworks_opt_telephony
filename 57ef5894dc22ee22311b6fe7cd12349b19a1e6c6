@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "19a7649c_305a6094",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-12-16T21:36:39Z",
+      "side": 1,
+      "message": "Yes. It\u0027s always non-null. Comment and annotation added.",
+      "parentUuid": "dd99f82d_74fa521f",
+      "range": {
+        "startLine": 621,
+        "startChar": 7,
+        "endLine": 621,
+        "endChar": 44
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a103c783_4547c7f7",
         "filename": "src/java/com/android/internal/telephony/Phone.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-15T07:20:09Z",
       "side": 1,
       "message": "what if some apn type changes from active -\u003e inactive.\nwill listeners getting notified about the state change?",
+      "range": {
+        "startLine": 2352,
+        "startChar": 25,
+        "endLine": 2352,
+        "endChar": 42
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb9826cb_0307f88b",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2352,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-12-16T21:36:39Z",
+      "side": 1,
+      "message": "The state will simply stop changing, so there will be no more DC updates for that type. In essence this means that the TelephonyRegistry cache will represent all of the types that were ever active for a subscription, so this way callers can see all of the types that have been attempted, even if they are no longer being attempted. I view it as a feature.\n\nNote this isn\u0027t a change.",
+      "parentUuid": "a103c783_4547c7f7",
       "range": {
         "startLine": 2352,
         "startChar": 25,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "7f12ab1c_9dc2b195",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3026,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-12-16T21:36:39Z",
+      "side": 1,
+      "message": "Done on the second point.",
+      "parentUuid": "3d4e3cc3_33a680fc",
+      "range": {
+        "startLine": 3026,
+        "startChar": 12,
+        "endLine": 3026,
+        "endChar": 29
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8949a651_acc4ea2d",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 3
@@ -82,6 +154,30 @@
       "writtenOn": "2019-12-15T07:20:09Z",
       "side": 1,
       "message": "nit: move to DctConstants? \n DctConstants.toTelephonyDataState()",
+      "range": {
+        "startLine": 1103,
+        "startChar": 4,
+        "endLine": 1123,
+        "endChar": 0
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c5e884_caad19de",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-12-16T21:36:39Z",
+      "side": 1,
+      "message": "Then I\u0027d have to make it an API, which I don\u0027t want to do. It looks like the method above agrees with me. Maybe once we have all the mainline stuff sorted out?",
+      "parentUuid": "8949a651_acc4ea2d",
       "range": {
         "startLine": 1103,
         "startChar": 4,
