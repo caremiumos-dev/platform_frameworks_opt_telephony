@@ -22,6 +22,30 @@
       "revId": "dbea3d2bc1bc67375b15394378e5157f56d9e4df",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61869c05_1700e698",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/RuimRecordsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-12-16T03:24:41Z",
+      "side": 1,
+      "message": "done, raise a LOST jira as well",
+      "parentUuid": "39977c0e_6004421e",
+      "range": {
+        "startLine": 3,
+        "startChar": 25,
+        "endLine": 3,
+        "endChar": 26
+      },
+      "revId": "dbea3d2bc1bc67375b15394378e5157f56d9e4df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
