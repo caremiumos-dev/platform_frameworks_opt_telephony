@@ -46,6 +46,30 @@
       "revId": "18df76ac82c2b53446acc460f1dff1f91bea870e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5ab3b6e_4eabdbd6",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-16T21:49:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2ba2c4a2_f64326fe",
+      "range": {
+        "startLine": 189,
+        "startChar": 15,
+        "endLine": 190,
+        "endChar": 60
+      },
+      "revId": "18df76ac82c2b53446acc460f1dff1f91bea870e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
