@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "291038ca_4b8e09fe",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2352,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-12-16T22:49:42Z",
+      "side": 1,
+      "message": "I think it will be accurate. The state will be \"DISCONNECTED\" and if it failed, it might have the last fail cause. The internal workings of telephony are not visible to the outside world, so even if some APN type has gone \"inactive\" then should be OK. There is no concept of \"active\" or \"inactive\" APN to the user.\n\nThere is a separate bug to expose the Transport type to apps, so if there is some APN type that\u0027s transport specific (which is the only case I can think of here), then apps should get updates by transport as well: https://b.corp.google.com/issues/146087364\n\nI\u0027m wondering if I\u0027m misunderstanding something though. If you think there\u0027s a bug here, can you think of an example scenario?... that might help.",
+      "parentUuid": "8f407d47_850c5d6e",
+      "range": {
+        "startLine": 2352,
+        "startChar": 25,
+        "endLine": 2352,
+        "endChar": 42
+      },
+      "revId": "57ef5894dc22ee22311b6fe7cd12349b19a1e6c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d4e3cc3_33a680fc",
         "filename": "src/java/com/android/internal/telephony/Phone.java",
         "patchSetId": 3
