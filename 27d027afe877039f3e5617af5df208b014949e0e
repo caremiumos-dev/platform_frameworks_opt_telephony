@@ -16,6 +16,24 @@
       "revId": "27d027afe877039f3e5617af5df208b014949e0e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8031a877_c72c4485",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2019-12-16T18:54:33Z",
+      "side": 1,
+      "message": "Here is how I confirmed:\n\nThe java library used framework ext.jar is libphonenumber-platform, which is defined in external/libphonenumber/Android.bp. The same bp file defines libphonenumber-nogeocoder. They\u0027re using same the source, except:\n\nlibphonenumber-platform:\n1. is \"repackaged\" to com.android...\n2. includes geocoder/src\n3. doesn\u0027t include carrier/src\n\nlibphonenumber-nogeocoder:\n1. doesn\u0027t include geocoder/src\n2. includes carrier/src\n\nSo this should be an equivalent change for telephony.",
+      "parentUuid": "c862d89b_fbee9186",
+      "revId": "27d027afe877039f3e5617af5df208b014949e0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
