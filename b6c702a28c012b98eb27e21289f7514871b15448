@@ -70,6 +70,30 @@
       "revId": "b6c702a28c012b98eb27e21289f7514871b15448",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54a13e1e_e3342a64",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3549,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-12-16T02:20:48Z",
+      "side": 1,
+      "message": "Jack, currently Dctrakcer is using API registerForDataRegStateOrRatChanged, we have no more appropriate an API expect that we add new one.\n\nbecasue of being triggered by updatePhone, i think we can merge this change, pls take a look further.\n\nany suggestions, pls let me know.",
+      "parentUuid": "76c881d6_37630ceb",
+      "range": {
+        "startLine": 3548,
+        "startChar": 16,
+        "endLine": 3549,
+        "endChar": 61
+      },
+      "revId": "b6c702a28c012b98eb27e21289f7514871b15448",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
