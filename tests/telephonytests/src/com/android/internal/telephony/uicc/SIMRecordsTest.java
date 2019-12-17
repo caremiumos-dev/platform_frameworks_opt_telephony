@@ -189,7 +189,7 @@ public class SIMRecordsTest extends TelephonyTest {
             .loadEFTransparent(eq(SIMRecords.EF_FPLMN), any(Message.class));
 
         Message message = Message.obtain(mTestHandler);
-        mSIMRecordsUT.getForbiddenPlmns(message);
+        mSIMRecordsUT.getPlmns(message, EF_FPLMN);
         mTestLooper.dispatchAll();
 
         AsyncResult ar = (AsyncResult) message.obj;
@@ -212,7 +212,7 @@ public class SIMRecordsTest extends TelephonyTest {
             .loadEFTransparent(eq(SIMRecords.EF_FPLMN), any(Message.class));
 
         Message message = Message.obtain(mTestHandler);
-        mSIMRecordsUT.getForbiddenPlmns(message);
+        mSIMRecordsUT.getPlmns(message, EF_FPLMN);
         mTestLooper.dispatchAll();
 
         AsyncResult ar = (AsyncResult) message.obj;
@@ -235,7 +235,7 @@ public class SIMRecordsTest extends TelephonyTest {
             .loadEFTransparent(eq(SIMRecords.EF_FPLMN), any(Message.class));
 
         Message message = Message.obtain(mTestHandler);
-        mSIMRecordsUT.getForbiddenPlmns(message);
+        mSIMRecordsUT.getPlmns(message, EF_FPLMN);
         mTestLooper.dispatchAll();
 
         AsyncResult ar = (AsyncResult) message.obj;
@@ -257,7 +257,7 @@ public class SIMRecordsTest extends TelephonyTest {
             .loadEFTransparent(eq(SIMRecords.EF_FPLMN), any(Message.class));
 
         Message message = Message.obtain(mTestHandler);
-        mSIMRecordsUT.getForbiddenPlmns(message);
+        mSIMRecordsUT.getPlmns(message, EF_FPLMN);
         mTestLooper.dispatchAll();
 
         AsyncResult ar = (AsyncResult) message.obj;
@@ -279,7 +279,7 @@ public class SIMRecordsTest extends TelephonyTest {
             .loadEFTransparent(eq(SIMRecords.EF_FPLMN), any(Message.class));
 
         Message message = Message.obtain(mTestHandler);
-        mSIMRecordsUT.getForbiddenPlmns(message);
+        mSIMRecordsUT.getPlmns(message, EF_FPLMN);
         mTestLooper.dispatchAll();
 
         AsyncResult ar = (AsyncResult) message.obj;
