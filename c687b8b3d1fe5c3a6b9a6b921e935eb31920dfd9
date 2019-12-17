@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ad87798_46d46b1f",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-12-17T06:08:14Z",
+      "side": 1,
+      "message": "No need anymore.",
+      "range": {
+        "startLine": 57,
+        "startChar": 43,
+        "endLine": 57,
+        "endChar": 54
+      },
+      "revId": "c687b8b3d1fe5c3a6b9a6b921e935eb31920dfd9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83d1eaeb_97069b54",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-12-17T06:08:14Z",
+      "side": 1,
+      "message": "UiccController.getInstance().getUiccProfileForPhone() is called in getIccRecordsLoaded as you commented. checking getIccRecordsLoaded() is needed before UiccController.getInstance()..?",
+      "range": {
+        "startLine": 1348,
+        "startChar": 0,
+        "endLine": 1355,
+        "endChar": 13
+      },
+      "revId": "c687b8b3d1fe5c3a6b9a6b921e935eb31920dfd9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
