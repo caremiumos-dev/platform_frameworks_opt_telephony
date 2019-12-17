@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "cd4c9134_d19b35eb",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2019-12-17T17:36:59Z",
+      "side": 1,
+      "message": "Most of the telephony unit tests are starting with \"test\" and using camel naming. I recommend to keep that style.",
+      "parentUuid": "55f60470_a77392a8",
+      "range": {
+        "startLine": 71,
+        "startChar": 16,
+        "endLine": 71,
+        "endChar": 69
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08c1c26a_44a75360",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
         "patchSetId": 6
