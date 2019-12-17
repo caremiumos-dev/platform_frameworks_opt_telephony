@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.TelephonyManager;
 import android.telephony.data.DataProfile;
 import android.telephony.emergency.EmergencyNumber;
@@ -1127,7 +1128,7 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public void sendCDMAFeatureCode(String FeatureCode, Message response) {
+    public void sendCDMAFeatureCode(String featureCode, Message response) {
 
     }
 
@@ -1260,7 +1261,7 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public void iccOpenLogicalChannel(String AID, int p2, Message response) {
+    public void iccOpenLogicalChannel(String aid, int p2, Message response) {
 
     }
 
@@ -1393,8 +1394,8 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb,
-            int[] thresholdsDbm, int ran, Message result) {
+    public void setSignalStrengthReportingCriteria(SignalThresholdInfo signalThresholdInfo,
+            int ran, Message result) {
     }
 
     @Override
@@ -1443,4 +1444,10 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     @Override
     public void stopNattKeepalive(int sessionHandle, Message result)  {
     }
+
+    @Override
+    public void registerUiccApplicationEnablementChanged(Handler h, int what, Object obj) {}
+
+    @Override
+    public void unregisterUiccApplicationEnablementChanged(Handler h) {}
 }

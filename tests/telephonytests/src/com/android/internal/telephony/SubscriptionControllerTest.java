@@ -60,6 +60,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class SubscriptionControllerTest extends TelephonyTest {
     private static final int SINGLE_SIM = 1;
@@ -97,8 +98,6 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         doReturn(1).when(mProxyController).getMaxRafSupported();
         mContextFixture.putIntArrayResource(com.android.internal.R.array.sim_colors, new int[]{5});
-
-        mSubscriptionControllerUT.updatePhonesAvailability(new Phone[] {mPhone});
     }
 
     @After
@@ -204,7 +203,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         /* Setting */
         String disName = "TESTING";
-        int nameSource = SubscriptionManager.NAME_SOURCE_SIM_SOURCE;
+        int nameSource = SubscriptionManager.NAME_SOURCE_SIM_SPN;
         mSubscriptionControllerUT.setDisplayNameUsingSrc(disName, subID, nameSource);
         SubscriptionInfo subInfo = mSubscriptionControllerUT
                 .getActiveSubscriptionInfo(subID, mCallingPackage);
@@ -467,12 +466,12 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         // Changing non-opportunistic sub1 shouldn't trigger callback.
         mSubscriptionControllerUT.setDisplayNameUsingSrc("DisplayName", 1,
-                SubscriptionManager.NAME_SOURCE_SIM_SOURCE);
+                SubscriptionManager.NAME_SOURCE_SIM_SPN);
         verify(mTelephonyRegisteryMock, times(1))
                 .notifyOpportunisticSubscriptionInfoChanged();
 
         mSubscriptionControllerUT.setDisplayNameUsingSrc("DisplayName", 2,
-                SubscriptionManager.NAME_SOURCE_SIM_SOURCE);
+                SubscriptionManager.NAME_SOURCE_SIM_SPN);
         verify(mTelephonyRegisteryMock, times(2))
                 .notifyOpportunisticSubscriptionInfoChanged();
     }
@@ -731,6 +730,57 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
     @Test
     @SmallTest
+    public void testAddSubscriptionIntoGroupWithCarrierPrivilegePermission() throws Exception {
+        testInsertSim();
+        // Adding a second profile and mark as embedded.
+        // TODO b/123300875 slot index 1 is not expected to be valid
+        mSubscriptionControllerUT.addSubInfoRecord("test2", 1);
+        ContentValues values = new ContentValues();
+        values.put(SubscriptionManager.IS_EMBEDDED, 1);
+        mFakeTelephonyProvider.update(SubscriptionManager.CONTENT_URI, values,
+                SubscriptionManager.UNIQUE_KEY_SUBSCRIPTION_ID + "=" + 2, null);
+        mSubscriptionControllerUT.refreshCachedActiveSubscriptionInfoList();
+
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+        mContextFixture.addCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE);
+
+        // Create group for sub 1.
+        int[] subIdList = new int[] {1};
+        doReturn(true).when(mTelephonyManager).hasCarrierPrivileges(1);
+        ParcelUuid groupId = mSubscriptionControllerUT.createSubscriptionGroup(
+                subIdList, "packageName1");
+
+        // Try to add sub 2 into group of sub 1.
+        // Should fail as it doesn't have carrier privilege on sub 2.
+        try {
+            mSubscriptionControllerUT.addSubscriptionsIntoGroup(
+                    new int[] {2}, groupId, "packageName1");
+            fail("addSubscriptionsIntoGroup should fail with no permission on sub 2.");
+        } catch (SecurityException e) {
+            // Expected result.
+        }
+
+        doReturn(false).when(mTelephonyManager).hasCarrierPrivileges(1);
+        doReturn(true).when(mTelephonyManager).hasCarrierPrivileges(2);
+        // Try to add sub 2 into group of sub 1.
+        // Should fail as it doesn't have carrier privilege on sub 1.
+        try {
+            mSubscriptionControllerUT.addSubscriptionsIntoGroup(
+                    new int[] {2}, groupId, "packageName2");
+            fail("addSubscriptionsIntoGroup should fail with no permission on the group (sub 1).");
+        } catch (SecurityException e) {
+            // Expected result.
+        }
+
+        doReturn(true).when(mTelephonyManager).hasCarrierPrivileges(1);
+        mSubscriptionControllerUT.addSubscriptionsIntoGroup(new int[] {2}, groupId, "packageName2");
+        List<SubscriptionInfo> infoList = mSubscriptionControllerUT
+                .getSubscriptionsInGroup(groupId, "packageName2");
+        assertEquals(2, infoList.size());
+    }
+
+    @Test
+    @SmallTest
     public void testUpdateSubscriptionGroupWithCarrierPrivilegePermission() throws Exception {
         testInsertSim();
         // Adding a second profile and mark as embedded.
@@ -895,6 +945,15 @@ public class SubscriptionControllerTest extends TelephonyTest {
                 .getSubscriptionsInGroup(groupUuid, mContext.getOpPackageName());
         assertEquals(1, infoList.size());
         assertEquals(2, infoList.get(0).getSubscriptionId());
+
+        // Adding sub 1 into a non-existing UUID, which should be granted.
+        groupUuid = new ParcelUuid(UUID.randomUUID());
+        mSubscriptionControllerUT.addSubscriptionsIntoGroup(
+                subIdList, groupUuid, mContext.getOpPackageName());
+        infoList = mSubscriptionControllerUT
+                .getSubscriptionsInGroup(groupUuid, mContext.getOpPackageName());
+        assertEquals(1, infoList.size());
+        assertEquals(1, infoList.get(0).getSubscriptionId());
     }
 
     private void registerMockTelephonyRegistry() {
@@ -1005,5 +1064,29 @@ public class SubscriptionControllerTest extends TelephonyTest {
         clearInvocations(mDataEnabledSettings);
         mSubscriptionControllerUT.setAlwaysAllowMmsData(0, false);
         verify(mDataEnabledSettings).setAlwaysAllowMmsData(eq(false));
+    }
+
+    @Test
+    @SmallTest
+    public void testNameSourcePriority() throws Exception {
+        assertTrue(mSubscriptionControllerUT.getNameSourcePriority(
+                SubscriptionManager.NAME_SOURCE_USER_INPUT)
+                > mSubscriptionControllerUT.getNameSourcePriority(
+                        SubscriptionManager.NAME_SOURCE_CARRIER));
+
+        assertTrue(mSubscriptionControllerUT.getNameSourcePriority(
+                SubscriptionManager.NAME_SOURCE_CARRIER)
+                > mSubscriptionControllerUT.getNameSourcePriority(
+                SubscriptionManager.NAME_SOURCE_SIM_SPN));
+
+        assertTrue(mSubscriptionControllerUT.getNameSourcePriority(
+                SubscriptionManager.NAME_SOURCE_SIM_SPN)
+                > mSubscriptionControllerUT.getNameSourcePriority(
+                SubscriptionManager.NAME_SOURCE_SIM_PNN));
+
+        assertTrue(mSubscriptionControllerUT.getNameSourcePriority(
+                SubscriptionManager.NAME_SOURCE_SIM_PNN)
+                > mSubscriptionControllerUT.getNameSourcePriority(
+                SubscriptionManager.NAME_SOURCE_DEFAULT_SOURCE));
     }
 }

@@ -89,8 +89,8 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
     private boolean mNitzTimeZoneDetectionSuccessful = false;
 
     // Miscellaneous dependencies and helpers not related to detection state.
-    private final LocalLog mTimeLog = new LocalLog(30);
-    private final LocalLog mTimeZoneLog = new LocalLog(30);
+    private final LocalLog mTimeLog = new LocalLog(30, false /* useLocalTimestamps */);
+    private final LocalLog mTimeZoneLog = new LocalLog(30, false /* useLocalTimestamps */);
     private final Phone mPhone;
     private final DeviceState mDeviceState;
     private final TimeServiceHelper mTimeServiceHelper;
@@ -253,7 +253,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
             // Set state as needed.
             if (zoneId != null) {
                 if (mTimeServiceHelper.isTimeZoneDetectionEnabled()) {
-                    setAndBroadcastNetworkSetTimeZone(zoneId, logMsg);
+                    setTimeZone(zoneId, logMsg);
                 } else {
                     if (DBG) {
                         logMsg += " [Not setting device time zone]";
@@ -327,9 +327,8 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         mSavedTimeZoneId = null;
         mTimeZoneLog.log("handleNetworkUnavailable: NITZ state cleared.");
 
-        // Avoid doing country-only detection work unnecessarily: if the mLatestNitzSignal was
-        // already null we have nothing to do as it will have been done last time the
-        // mLatestNitzSignal was cleared.
+        // Avoid doing work unnecessarily: if the mLatestNitzSignal was already null we have nothing
+        // to do as it will have been done last time the mLatestNitzSignal was cleared.
         if (oldNitzSignal == null) {
             return;
         }
@@ -342,6 +341,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         if (!TextUtils.isEmpty(isoCountryCode)) {
             updateTimeZoneFromNetworkCountryCode(isoCountryCode);
         }
+        sendEmptyTimeSuggestion("handleNetworkUnavailable");
     }
 
     @Override
@@ -386,14 +386,30 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         mTimeLog.log("handleAirplaneModeChanged(" + on + "): Time state cleared.");
 
         mCountryIsoCode = null;
+
+        TimestampedValue<NitzData> oldNitzSignal = mLatestNitzSignal;
         mLatestNitzSignal = null;
         mNitzTimeZoneDetectionSuccessful = false;
         mSavedTimeZoneId = null;
+
+        if (oldNitzSignal == null) {
+            // No work to do - terminate early.
+            return;
+        }
+
         mTimeZoneLog.log("handleAirplaneModeChanged(" + on + "): Time zone state cleared.");
+        sendEmptyTimeSuggestion("handleAirplaneModeChanged(" + on + ")");
+    }
+
+    private void sendEmptyTimeSuggestion(String reason) {
+        PhoneTimeSuggestion timeSuggestion =
+                new PhoneTimeSuggestion.Builder(mPhone.getPhoneId()).build();
+        timeSuggestion.addDebugInfo("Empty suggestion, reason=" + reason);
+        mTimeServiceHelper.suggestDeviceTime(timeSuggestion);
     }
 
     private void updateTimeFromNitz() {
-        TimestampedValue<NitzData> nitzSignal = mLatestNitzSignal;
+        TimestampedValue<NitzData> nitzSignal = Objects.requireNonNull(mLatestNitzSignal);
         try {
             boolean ignoreNitz = mDeviceState.getIgnoreNitz();
             if (ignoreNitz) {
@@ -470,8 +486,10 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
             }
             mTimeLog.log(logMsg);
             PhoneTimeSuggestion phoneTimeSuggestion =
-                    new PhoneTimeSuggestion(mPhone.getPhoneId(), newNitzTime);
-            phoneTimeSuggestion.addDebugInfo(logMsg);
+                    new PhoneTimeSuggestion.Builder(mPhone.getPhoneId())
+                            .setUtcTime(newNitzTime)
+                            .addDebugInfo(logMsg)
+                            .build();
             mTimeServiceHelper.suggestDeviceTime(phoneTimeSuggestion);
 
             TelephonyMetrics.getInstance().writeNITZEvent(
@@ -486,7 +504,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         }
     }
 
-    private void setAndBroadcastNetworkSetTimeZone(String zoneId, String logMessage) {
+    private void setTimeZone(String zoneId, String logMessage) {
         logMessage += " [Setting device time zone to zoneId=" + zoneId + "]";
         if (DBG) {
             Rlog.d(LOG_TAG, logMessage);
@@ -513,7 +531,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         String logMsg = "handleAutoTimeZoneEnabled: "
                 + " mSavedTimeZoneId=" + mSavedTimeZoneId;
         if (mSavedTimeZoneId != null) {
-            setAndBroadcastNetworkSetTimeZone(mSavedTimeZoneId, logMsg);
+            setTimeZone(mSavedTimeZoneId, logMsg);
         } else {
             if (DBG) {
                 logMsg += " [Not setting device time zone]";
@@ -572,7 +590,7 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
 
             String zoneId = lookupResult.zoneId;
             if (mTimeServiceHelper.isTimeZoneDetectionEnabled()) {
-                setAndBroadcastNetworkSetTimeZone(zoneId, logMsg);
+                setTimeZone(zoneId, logMsg);
             } else {
                 if (DBG) {
                     logMsg += " [Not setting device time zone]";

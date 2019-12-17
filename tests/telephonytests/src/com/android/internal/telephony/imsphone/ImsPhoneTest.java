@@ -35,6 +35,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -63,9 +64,11 @@ import android.testing.TestableLooper;
 
 import androidx.test.filters.FlakyTest;
 
+import com.android.ims.FeatureConnector;
 import com.android.ims.ImsEcbmStateListener;
 import com.android.ims.ImsManager;
 import com.android.ims.ImsUtInterface;
+import com.android.ims.RcsFeatureManager;
 import com.android.internal.telephony.Call;
 import com.android.internal.telephony.CallStateException;
 import com.android.internal.telephony.CommandsInterface;
@@ -220,11 +223,25 @@ public class ImsPhoneTest extends TelephonyTest {
         assertEquals(Phone.SuppService.SEPARATE,
                 ((AsyncResult) messageArgumentCaptor.getValue().obj).result);
 
-        // ringing call is idle
+        // ringing call is idle, only an active call present
+        doReturn(Call.State.ACTIVE).when(mForegroundCall).getState();
         assertEquals(true, mImsPhoneUT.handleInCallMmiCommands("2"));
         verify(mImsCT).holdActiveCall();
 
+        // background call is holding
+        doReturn(Call.State.HOLDING).when(mBackgroundCall).getState();
+        doReturn(Call.State.IDLE).when(mForegroundCall).getState();
+        assertEquals(true, mImsPhoneUT.handleInCallMmiCommands("2"));
+        verify(mImsCT).unholdHeldCall();
+
+        // background call is holding and there's an active foreground call
+        doReturn(Call.State.ACTIVE).when(mForegroundCall).getState();
+        assertEquals(true, mImsPhoneUT.handleInCallMmiCommands("2"));
+        verify(mImsCT, times(2)).holdActiveCall();
+
         // ringing call is not idle
+        doReturn(Call.State.IDLE).when(mForegroundCall).getState();
+        doReturn(Call.State.IDLE).when(mBackgroundCall).getState();
         doReturn(Call.State.INCOMING).when(mRingingCall).getState();
         assertEquals(true, mImsPhoneUT.handleInCallMmiCommands("2"));
         verify(mImsCT).acceptCall(ImsCallProfile.CALL_TYPE_VOICE);
@@ -830,6 +847,19 @@ public class ImsPhoneTest extends TelephonyTest {
     public void testNonNullTrackersInImsPhone() throws Exception {
         assertNotNull(mImsPhoneUT.getEmergencyNumberTracker());
         assertNotNull(mImsPhoneUT.getServiceStateTracker());
+    }
+
+    @Test
+    @SmallTest
+    public void testRcsFeatureManagerInitialization() throws Exception {
+        FeatureConnector<RcsFeatureManager> mockRcsManagerConnector =
+                (FeatureConnector<RcsFeatureManager>) mock(FeatureConnector.class);
+        mImsPhoneUT.mRcsManagerConnector = mockRcsManagerConnector;
+
+        mImsPhoneUT.initRcsFeatureManager();
+
+        verify(mockRcsManagerConnector).disconnect();
+        assertNotNull(mImsPhoneUT.mRcsManagerConnector);
     }
 
     private ServiceState getServiceStateDataAndVoice(int rat, int regState, boolean isRoaming) {

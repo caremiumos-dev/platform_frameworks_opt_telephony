@@ -30,12 +30,12 @@ import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.SystemProperties;
 import android.telecom.TelecomManager;
+import android.telephony.Annotation.RilRadioTechnology;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.Rlog;
-import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
@@ -896,8 +896,6 @@ public class GsmCdmaCallTracker extends CallTracker {
                                 hoConnection.mPreHandoverState != GsmCdmaCall.State.HOLDING &&
                                 dc.state == DriverCall.State.ACTIVE) {
                             mConnections[i].onConnectedInOrOut();
-                        } else {
-                            mConnections[i].onConnectedConnectionMigrated();
                         }
 
                         mHandoverConnections.remove(hoConnection);
@@ -1654,7 +1652,7 @@ public class GsmCdmaCallTracker extends CallTracker {
      * @param vrat the RIL voice radio technology for CS calls,
      *             see {@code RIL_RADIO_TECHNOLOGY_*} in {@link android.telephony.ServiceState}.
      */
-    public void dispatchCsCallRadioTech(@ServiceState.RilRadioTechnology int vrat) {
+    public void dispatchCsCallRadioTech(@RilRadioTechnology int vrat) {
         if (mConnections == null) {
             log("dispatchCsCallRadioTech: mConnections is null");
             return;

@@ -17,6 +17,7 @@
 package com.android.internal.telephony.uicc;
 
 import android.annotation.IntDef;
+import android.annotation.Nullable;
 import android.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.os.AsyncResult;
@@ -32,7 +33,7 @@ import android.util.Pair;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.MccTable;
-import com.android.internal.util.ArrayUtils;
+import com.android.internal.telephony.util.ArrayUtils;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -737,6 +738,23 @@ public abstract class IccRecords extends Handler implements IccConstants {
             String fakeSpn = mCarrierTestOverride.getFakeSpn();
             if (fakeSpn != null) {
                 return fakeSpn;
+            }
+        }
+        return mSpn;
+    }
+
+    /**
+     * Return Service Provider Name stored in SIM (EF_SPN=0x6F46) or in RUIM (EF_RUIM_SPN=0x6F41) or
+     * the brand override. The brand override has higher priority than the SPN from SIM.
+     *
+     * @return service provider name.
+     */
+    @Nullable
+    public String getServiceProviderNameWithBrandOverride() {
+        if (mParentApp != null && mParentApp.getUiccProfile() != null) {
+            String brandOverride = mParentApp.getUiccProfile().getOperatorBrandOverride();
+            if (!TextUtils.isEmpty(brandOverride)) {
+                return brandOverride;
             }
         }
         return mSpn;

@@ -468,7 +468,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         Resources resource = Resources.getSystem();
         if (sc != null) {
             String[] barringMMI = resource.getStringArray(
-                com.android.internal.R.array.config_callBarringMMI);
+                com.android.internal.R.array.config_callBarringMMI_for_ims);
             if (barringMMI != null) {
                 for (String match : barringMMI) {
                     if (sc.equals(match)) return true;
@@ -1010,7 +1010,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                 }
             } else if (mSc != null && mSc.equals(SC_WAIT)) {
                 // sia = basic service group
-                int serviceClass = siToServiceClass(mSib);
+                int serviceClass = siToServiceClass(mSia);
 
                 if (isActivate() || isDeactivate()) {
                     mPhone.setCallWaiting(isActivate(), serviceClass,

@@ -58,13 +58,16 @@ import android.provider.Telephony;
 import android.telecom.TelecomManager;
 import android.telecom.VideoProfile;
 import android.telephony.AccessNetworkConstants;
+import android.telephony.Annotation.RilRadioTechnology;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.PhysicalChannelConfig;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -86,6 +89,7 @@ import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
+import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccException;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.IccVmNotSupportedException;
@@ -98,7 +102,7 @@ import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.uicc.UiccSlot;
-import com.android.internal.util.ArrayUtils;
+import com.android.internal.telephony.util.ArrayUtils;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -150,6 +154,7 @@ public class GsmCdmaPhone extends Phone {
     private String mMeid;
     // string to define how the carrier specifies its own ota sp number
     private String mCarrierOtaSpNumSchema;
+    private boolean mUiccApplicationsEnabled = true;
 
     // A runnable which is used to automatically exit from Ecm after a period of time.
     private Runnable mExitEcmRunnable = new Runnable() {
@@ -322,6 +327,8 @@ public class GsmCdmaPhone extends Phone {
         mCi.registerForOffOrNotAvailable(this, EVENT_RADIO_OFF_OR_NOT_AVAILABLE, null);
         mCi.registerForOn(this, EVENT_RADIO_ON, null);
         mCi.registerForRadioStateChanged(this, EVENT_RADIO_STATE_CHANGED, null);
+        mCi.registerUiccApplicationEnablementChanged(this, EVENT_UICC_APPS_ENABLEMENT_CHANGED,
+                null);
         mCi.setOnSuppServiceNotification(this, EVENT_SSN, null);
 
         //GSM
@@ -947,27 +954,27 @@ public class GsmCdmaPhone extends Phone {
     /**
      * ImsService reports "IN_SERVICE" for its voice registration state even if the device
      * has lost the physical link to the tower. This helper method merges the IMS and modem
-     * ServiceState, only overriding the voice registration state when we are registered to IMS over
-     * IWLAN. In this case the voice registration state will always be "OUT_OF_SERVICE", so override
-     * the voice registration state with the data registration state.
+     * ServiceState, only overriding the voice registration state when we are registered to IMS. In
+     * this case the voice registration state may be "OUT_OF_SERVICE", so override the voice
+     * registration state with the data registration state.
      */
     private ServiceState mergeServiceStates(ServiceState baseSs, ServiceState imsSs) {
+        // No need to merge states if the baseSs is IN_SERVICE.
+        if (baseSs.getVoiceRegState() == ServiceState.STATE_IN_SERVICE) {
+            return baseSs;
+        }
         // "IN_SERVICE" in this case means IMS is registered.
         if (imsSs.getVoiceRegState() != ServiceState.STATE_IN_SERVICE) {
             return baseSs;
         }
 
-        if (imsSs.getRilDataRadioTechnology() == ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN) {
-            ServiceState newSs = new ServiceState(baseSs);
-            // Voice override for IWLAN. In this case, voice registration is OUT_OF_SERVICE, but
-            // the data RAT is IWLAN, so use that as a basis for determining whether or not the
-            // physical link is available.
-            newSs.setVoiceRegState(baseSs.getDataRegState());
-            newSs.setEmergencyOnly(false); // only get here if voice is IN_SERVICE
-            return newSs;
-        }
-
-        return baseSs;
+        ServiceState newSs = new ServiceState(baseSs);
+        // Voice override for IMS case. In this case, voice registration is OUT_OF_SERVICE, but
+        // IMS is available, so use data registration state as a basis for determining
+        // whether or not the physical link is available.
+        newSs.setVoiceRegState(baseSs.getDataRegState());
+        newSs.setEmergencyOnly(false); // only get here if voice is IN_SERVICE
+        return newSs;
     }
 
     private boolean handleCallDeflectionIncallSupplementaryService(
@@ -1731,6 +1738,11 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
+    public int getEmergencyNumberDbVersion() {
+        return getEmergencyNumberTracker().getEmergencyNumberDbVersion();
+    }
+
+    @Override
     public void resetCarrierKeysForImsiEncryption() {
         mCIM.resetCarrierKeysForImsiEncryption(mContext, mPhoneId);
     }
@@ -2397,6 +2409,8 @@ public class GsmCdmaPhone extends Phone {
 
         mCi.getDeviceIdentity(obtainMessage(EVENT_GET_DEVICE_IDENTITY_DONE));
         mCi.getRadioCapability(obtainMessage(EVENT_GET_RADIO_CAPABILITY));
+        mCi.areUiccApplicationsEnabled(obtainMessage(EVENT_GET_UICC_APPS_ENABLEMENT_DONE));
+
         startLceAfterRadioIsAvailable();
     }
 
@@ -2836,6 +2850,18 @@ public class GsmCdmaPhone extends Phone {
                     onComplete.sendToTarget();
                 }
                 break;
+            case EVENT_GET_UICC_APPS_ENABLEMENT_DONE:
+            case EVENT_UICC_APPS_ENABLEMENT_CHANGED: {
+                ar = (AsyncResult) msg.obj;
+                if (ar == null) return;
+                if (ar.exception != null) {
+                    logd("Received exception on event" + msg.what + " : " + ar.exception);
+                    return;
+                }
+
+                mUiccApplicationsEnabled = (boolean) ar.result;
+                break;
+            }
             default:
                 super.handleMessage(msg);
         }
@@ -3652,9 +3678,11 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
-    public void setSignalStrengthReportingCriteria(int[] thresholds, int ran) {
-        mCi.setSignalStrengthReportingCriteria(REPORTING_HYSTERESIS_MILLIS, REPORTING_HYSTERESIS_DB,
-                thresholds, ran, null);
+    public void setSignalStrengthReportingCriteria(
+            int signalStrengthMeasure, int[] thresholds, int ran, boolean isEnabled) {
+        mCi.setSignalStrengthReportingCriteria(new SignalThresholdInfo(signalStrengthMeasure,
+                REPORTING_HYSTERESIS_MILLIS, REPORTING_HYSTERESIS_DB, thresholds, isEnabled),
+                ran, null);
     }
 
     @Override
@@ -3839,7 +3867,7 @@ public class GsmCdmaPhone extends Phone {
      * @return the RIL voice radio technology used for CS calls,
      *         see {@code RIL_RADIO_TECHNOLOGY_*} in {@link android.telephony.ServiceState}.
      */
-    public @ServiceState.RilRadioTechnology int getCsCallRadioTech() {
+    public @RilRadioTechnology int getCsCallRadioTech() {
         int calcVrat = ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
         if (mSST != null) {
             calcVrat = getCsCallRadioTech(mSST.mSS.getVoiceRegState(),
@@ -3868,7 +3896,7 @@ public class GsmCdmaPhone extends Phone {
      * @return the RIL voice radio technology used for CS calls,
      *         see {@code RIL_RADIO_TECHNOLOGY_*} in {@link android.telephony.ServiceState}.
      */
-    private @ServiceState.RilRadioTechnology int getCsCallRadioTech(int vrs, int vrat) {
+    private @RilRadioTechnology int getCsCallRadioTech(int vrs, int vrat) {
         logd("getCsCallRadioTech, current vrs=" + vrs + ", vrat=" + vrat);
         int calcVrat = vrat;
         if (vrs != ServiceState.STATE_IN_SERVICE
@@ -4026,5 +4054,36 @@ public class GsmCdmaPhone extends Phone {
         ttyMode = Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.PREFERRED_TTY_MODE, TelecomManager.TTY_MODE_OFF);
         updateUiTtyMode(ttyMode);
+    }
+
+    // Enable or disable uicc applications.
+    @Override
+    public void enableUiccApplications(boolean enable, Message onCompleteMessage) {
+        // First check if card is present. Otherwise mUiccApplicationsDisabled doesn't make
+        // any sense.
+        UiccSlot slot = mUiccController.getUiccSlotForPhone(mPhoneId);
+        if (slot == null || slot.getCardState() != IccCardStatus.CardState.CARDSTATE_PRESENT) {
+            if (onCompleteMessage != null) {
+                AsyncResult.forMessage(onCompleteMessage, null,
+                        new IllegalStateException("No SIM card is present"));
+                onCompleteMessage.sendToTarget();
+            }
+            return;
+        }
+
+        mCi.enableUiccApplications(enable, onCompleteMessage);
+    }
+
+    /**
+     * Whether disabling a physical subscription is supported or not.
+     */
+    @Override
+    public boolean canDisablePhysicalSubscription() {
+        return mCi.canToggleUiccApplicationsEnablement();
+    }
+
+    @Override
+    public List<PhysicalChannelConfig> getPhysicalChannelConfigList() {
+        return mSST.getPhysicalChannelConfigList();
     }
 }

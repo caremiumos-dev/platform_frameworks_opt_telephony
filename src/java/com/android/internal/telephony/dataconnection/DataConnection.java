@@ -45,8 +45,8 @@ import android.os.SystemProperties;
 import android.provider.Telephony;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.TransportType;
-import android.telephony.Annotation.DataFailureCause;
 import android.telephony.Annotation.ApnType;
+import android.telephony.Annotation.DataFailureCause;
 import android.telephony.CarrierConfigManager;
 import android.telephony.DataFailCause;
 import android.telephony.NetworkRegistrationInfo;
@@ -82,11 +82,12 @@ import com.android.internal.telephony.dataconnection.DcTracker.RequestNetworkTyp
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.RilDataCall;
 import com.android.internal.util.AsyncChannel;
-import com.android.internal.util.CollectionUtils;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.Protocol;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
+
+import libcore.net.InetAddressUtils;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -416,7 +417,8 @@ public class DataConnection extends StateMachine {
         return getCurrentState() == mDisconnectingState;
     }
 
-    boolean isActive() {
+    @VisibleForTesting
+    public boolean isActive() {
         return getCurrentState() == mActiveState;
     }
 
@@ -707,8 +709,7 @@ public class DataConnection extends StateMachine {
             }
 
             linkProperties = dc.getLinkProperties();
-            if (linkProperties == null || CollectionUtils.isEmpty(
-                    linkProperties.getLinkAddresses())) {
+            if (linkProperties == null || linkProperties.getLinkAddresses().isEmpty()) {
                 loge("connect: Can't find link properties of handover data connection. dc="
                         + dc);
                 return DataFailCause.HANDOVER_FAILED;
@@ -1264,6 +1265,10 @@ public class DataConnection extends StateMachine {
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_MCX);
                         break;
                     }
+                    case PhoneConstants.APN_TYPE_XCAP: {
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_XCAP);
+                        break;
+                    }
                     default:
                 }
             }
@@ -1329,6 +1334,16 @@ public class DataConnection extends StateMachine {
         return result;
     }
 
+    /** @return {@code true} if validation is required, {@code false} otherwise. */
+    public boolean isValidationRequired() {
+        final NetworkCapabilities nc = getNetworkCapabilities();
+        return nc != null
+                && nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                && nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+                && nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_TRUSTED)
+                && nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
+    }
+
     /**
      * @return {@code True} if 464xlat should be skipped.
      */
@@ -1357,7 +1372,11 @@ public class DataConnection extends StateMachine {
     public static boolean isIpAddress(String address) {
         if (address == null) return false;
 
-        return InetAddress.isNumeric(address);
+        // Accept IPv6 addresses (only) in square brackets for compatibility.
+        if (address.startsWith("[") && address.endsWith("]") && address.indexOf(':') != -1) {
+            address = address.substring(1, address.length() - 1);
+        }
+        return InetAddressUtils.isNumericAddress(address);
     }
 
     private SetupResult setLinkProperties(DataCallResponse response,
@@ -1431,7 +1450,8 @@ public class DataConnection extends StateMachine {
                 for (InetAddress gateway : response.getGatewayAddresses()) {
                     // Allow 0.0.0.0 or :: as a gateway;
                     // this indicates a point-to-point interface.
-                    linkProperties.addRoute(new RouteInfo(gateway));
+                    linkProperties.addRoute(new RouteInfo(null, gateway, null,
+                            RouteInfo.RTN_UNICAST));
                 }
 
                 // set interface MTU
@@ -1595,9 +1615,7 @@ public class DataConnection extends StateMachine {
                     AsyncResult ar = (AsyncResult)msg.obj;
                     Pair<Integer, Integer> drsRatPair = (Pair<Integer, Integer>)ar.result;
                     mDataRegState = drsRatPair.first;
-                    if (mRilRat != drsRatPair.second) {
-                        updateTcpBufferSizes(drsRatPair.second);
-                    }
+                    updateTcpBufferSizes(drsRatPair.second);
                     mRilRat = drsRatPair.second;
                     if (DBG) {
                         log("DcDefaultState: EVENT_DATA_CONNECTION_DRS_OR_RAT_CHANGED"
@@ -2073,7 +2091,7 @@ public class DataConnection extends StateMachine {
 
                 mDisabledApnTypeBitMask |= getDisallowedApnTypes();
 
-                mNetworkAgent = DcNetworkAgent.createDcNetworkAgent(DataConnection.this,
+                mNetworkAgent = new DcNetworkAgent(DataConnection.this,
                         mPhone, mNetworkInfo, mScore, misc, factorySerialNumber, mTransportType);
             }
 

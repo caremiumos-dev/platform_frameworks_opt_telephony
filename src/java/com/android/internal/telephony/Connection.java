@@ -20,6 +20,7 @@ import android.annotation.UnsupportedAppUsage;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.telephony.Annotation.RilRadioTechnology;
 import android.telephony.DisconnectCause;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
@@ -94,7 +95,7 @@ public abstract class Connection {
     public interface Listener {
         public void onVideoStateChanged(int videoState);
         public void onConnectionCapabilitiesChanged(int capability);
-        public void onCallRadioTechChanged(@ServiceState.RilRadioTechnology int vrat);
+        public void onCallRadioTechChanged(@RilRadioTechnology int vrat);
         public void onVideoProviderChanged(
                 android.telecom.Connection.VideoProvider videoProvider);
         public void onAudioQualityChanged(int audioQuality);
@@ -125,7 +126,7 @@ public abstract class Connection {
         @Override
         public void onConnectionCapabilitiesChanged(int capability) {}
         @Override
-        public void onCallRadioTechChanged(@ServiceState.RilRadioTechnology int vrat) {}
+        public void onCallRadioTechChanged(@RilRadioTechnology int vrat) {}
         @Override
         public void onVideoProviderChanged(
                 android.telecom.Connection.VideoProvider videoProvider) {}
@@ -216,6 +217,9 @@ public abstract class Connection {
     protected int mCause = DisconnectCause.NOT_DISCONNECTED;
     protected PostDialState mPostDialState = PostDialState.NOT_STARTED;
 
+    // Store the current audio code
+    protected int mAudioCodec;
+
     @UnsupportedAppUsage
     private static String LOG_TAG = "Connection";
 
@@ -227,7 +231,7 @@ public abstract class Connection {
      *
      * This is used to propagate the call radio technology to upper layer.
      */
-    private @ServiceState.RilRadioTechnology int mCallRadioTech =
+    private @RilRadioTechnology int mCallRadioTech =
             ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
     private boolean mAudioModeIsVoip;
     private int mAudioQuality;
@@ -902,7 +906,7 @@ public abstract class Connection {
      * @return the RIL Voice Radio Technology used for current connection,
      *         see {@code RIL_RADIO_TECHNOLOGY_*} in {@link android.telephony.ServiceState}.
      */
-    public @ServiceState.RilRadioTechnology int getCallRadioTech() {
+    public @RilRadioTechnology int getCallRadioTech() {
         return mCallRadioTech;
     }
 
@@ -980,7 +984,7 @@ public abstract class Connection {
      * @param vrat the RIL voice radio technology for current connection,
      *             see {@code RIL_RADIO_TECHNOLOGY_*} in {@link android.telephony.ServiceState}.
      */
-    public void setCallRadioTech(@ServiceState.RilRadioTechnology int vrat) {
+    public void setCallRadioTech(@RilRadioTechnology int vrat) {
         if (mCallRadioTech == vrat) {
             return;
         }
@@ -1353,5 +1357,13 @@ public abstract class Connection {
                 .append(" state: " + getState())
                 .append(" post dial state: " + getPostDialState());
         return str.toString();
+    }
+
+    /**
+     * Get current audio codec.
+     * @return current audio codec.
+     */
+    public int getAudioCodec() {
+        return mAudioCodec;
     }
 }

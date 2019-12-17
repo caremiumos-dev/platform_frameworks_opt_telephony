@@ -19,6 +19,7 @@ package com.android.internal.telephony;
 import static org.junit.Assert.fail;
 
 import android.app.timedetector.PhoneTimeSuggestion;
+import android.app.timezonedetector.PhoneTimeZoneSuggestion;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.icu.util.TimeZone;
@@ -270,11 +271,24 @@ public final class NitzStateMachineTestSupport {
         return cal.getTimeInMillis();
     }
 
+    public static PhoneTimeZoneSuggestion createEmptyTimeZoneSuggestion(int phoneId) {
+        return new PhoneTimeZoneSuggestion.Builder(phoneId)
+                .addDebugInfo("Test")
+                .build();
+    }
+
+    public static PhoneTimeSuggestion createEmptyTimeSuggestion(int phoneId) {
+        return new PhoneTimeSuggestion.Builder(phoneId)
+                .addDebugInfo("Test")
+                .build();
+    }
+
     public static PhoneTimeSuggestion createTimeSuggestionFromNitzSignal(
             int phoneId, TimestampedValue<NitzData> nitzSignal) {
-        PhoneTimeSuggestion timeSuggestion =
-                new PhoneTimeSuggestion(phoneId, createTimeSignalFromNitzSignal(nitzSignal));
-        return timeSuggestion;
+        return new PhoneTimeSuggestion.Builder(phoneId)
+                .setUtcTime(createTimeSignalFromNitzSignal(nitzSignal))
+                .addDebugInfo("Test")
+                .build();
     }
 
     public static TimestampedValue<Long> createTimeSignalFromNitzSignal(

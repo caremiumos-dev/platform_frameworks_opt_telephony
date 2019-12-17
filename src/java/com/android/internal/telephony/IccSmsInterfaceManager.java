@@ -24,8 +24,11 @@ import android.Manifest;
 import android.annotation.UnsupportedAppUsage;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -36,9 +39,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.UserManager;
 import android.provider.Telephony;
+import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
+import android.telephony.SmsCbMessage;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.telephony.SubscriptionManager;
 import android.telephony.emergency.EmergencyNumber;
 import android.util.LocalLog;
 import android.util.Log;
@@ -181,6 +187,21 @@ public class IccSmsInterfaceManager {
         mAppOps = appOps;
         mDispatchersController = dispatchersController;
         mSmsPermissions = new SmsPermissions(phone, context, appOps);
+
+        mContext.registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        if (CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED
+                                .equals(intent.getAction())) {
+                            if (mPhone.getPhoneId() == intent.getIntExtra(
+                                    CarrierConfigManager.EXTRA_SLOT_INDEX,
+                                    SubscriptionManager.INVALID_SIM_SLOT_INDEX)) {
+                                mCellBroadcastRangeManager.updateRanges();
+                            }
+                        }
+                    }
+                }, new IntentFilter(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
     }
 
     protected void markMessagesAsRead(ArrayList<byte[]> messages) {
@@ -881,9 +902,9 @@ public class IccSmsInterfaceManager {
         mContext.enforceCallingPermission("android.permission.RECEIVE_EMERGENCY_BROADCAST",
                 "enabling cell broadcast range [" + startMessageId + "-" + endMessageId + "]. "
                         + "ranType=" + ranType);
-        if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_GSM) {
+        if (ranType == SmsCbMessage.MESSAGE_FORMAT_3GPP) {
             return enableGsmBroadcastRange(startMessageId, endMessageId);
-        } else if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_CDMA) {
+        } else if (ranType == SmsCbMessage.MESSAGE_FORMAT_3GPP2) {
             return enableCdmaBroadcastRange(startMessageId, endMessageId);
         } else {
             throw new IllegalArgumentException("Not a supported RAN Type");
@@ -894,9 +915,9 @@ public class IccSmsInterfaceManager {
         mContext.enforceCallingPermission("android.permission.RECEIVE_EMERGENCY_BROADCAST",
                 "disabling cell broadcast range [" + startMessageId + "-" + endMessageId
                         + "]. ranType=" + ranType);
-        if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_GSM ) {
+        if (ranType == SmsCbMessage.MESSAGE_FORMAT_3GPP) {
             return disableGsmBroadcastRange(startMessageId, endMessageId);
-        } else if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_CDMA)  {
+        } else if (ranType == SmsCbMessage.MESSAGE_FORMAT_3GPP2)  {
             return disableCdmaBroadcastRange(startMessageId, endMessageId);
         } else {
             throw new IllegalArgumentException("Not a supported RAN Type");

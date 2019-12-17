@@ -34,11 +34,11 @@ import android.util.SparseArray;
 import com.android.internal.telephony.DctConstants;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.RILConstants;
+import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.util.IndentingPrintWriter;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This class represents a network agent which is communication channel between
@@ -65,23 +65,20 @@ public class DcNetworkAgent extends NetworkAgent {
 
     private final LocalLog mNetCapsLocalLog = new LocalLog(50);
 
-    private static AtomicInteger sSerialNumber = new AtomicInteger(0);
-
     private NetworkInfo mNetworkInfo;
 
-    private DcNetworkAgent(DataConnection dc, String tag, Phone phone, NetworkInfo ni,
-                           int score, NetworkMisc misc, int factorySerialNumber,
-                           int transportType) {
-        super(dc.getHandler().getLooper(), phone.getContext(), tag, ni,
+    DcNetworkAgent(DataConnection dc, Phone phone, NetworkInfo ni, int score, NetworkMisc misc,
+                   int factorySerialNumber, int transportType) {
+        super(dc.getHandler().getLooper(), phone.getContext(), "DcNetworkAgent", ni,
                 dc.getNetworkCapabilities(), dc.getLinkProperties(), score, misc,
                 factorySerialNumber);
-        mTag = tag;
+        mTag = "DcNetworkAgent" + "-" + netId;
         mPhone = phone;
         mNetworkCapabilities = dc.getNetworkCapabilities();
         mTransportType = transportType;
         mDataConnection = dc;
         mNetworkInfo = ni;
-        logd(tag + " created for data connection " + dc.getName());
+        logd(mTag + " created for data connection " + dc.getName());
     }
 
     /**
@@ -89,28 +86,6 @@ public class DcNetworkAgent extends NetworkAgent {
      */
     String getTag() {
         return mTag;
-    }
-
-    /**
-     * Constructor
-     *
-     * @param dc The data connection owns this network agent.
-     * @param phone The phone object.
-     * @param ni Network info.
-     * @param score Score of the data connection.
-     * @param misc The miscellaneous information of the data connection.
-     * @param factorySerialNumber Serial number of telephony network factory.
-     * @param transportType The transport of the data connection.
-     * @return The network agent
-     */
-    public static DcNetworkAgent createDcNetworkAgent(DataConnection dc, Phone phone,
-                                                      NetworkInfo ni, int score, NetworkMisc misc,
-                                                      int factorySerialNumber, int transportType) {
-        // Use serial number only. Do not use transport type because it can be transferred to
-        // a different transport.
-        String tag = "DcNetworkAgent-" + sSerialNumber.incrementAndGet();
-        return new DcNetworkAgent(dc, tag, phone, ni, score, misc, factorySerialNumber,
-                transportType);
     }
 
     /**
@@ -187,7 +162,7 @@ public class DcNetworkAgent extends NetworkAgent {
         DcTracker dct = mPhone.getDcTracker(mTransportType);
         if (dct != null) {
             Message msg = dct.obtainMessage(DctConstants.EVENT_NETWORK_STATUS_CHANGED,
-                    status, 0, redirectUrl);
+                    status, mDataConnection.getCid(), redirectUrl);
             msg.sendToTarget();
         }
     }
@@ -216,6 +191,14 @@ public class DcNetworkAgent extends NetworkAgent {
                     + ", dc=" + mDataConnection.getName();
             logd(logStr);
             mNetCapsLocalLog.log(logStr);
+            if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                // only log metrics for DataConnection with NET_CAPABILITY_INTERNET
+                if (mNetworkCapabilities == null
+                        || networkCapabilities.isMetered() != mNetworkCapabilities.isMetered()) {
+                    TelephonyMetrics.getInstance().writeNetworkCapabilitiesChangedEvent(
+                            mPhone.getPhoneId(), networkCapabilities);
+                }
+            }
             mNetworkCapabilities = networkCapabilities;
         }
         sendNetworkCapabilities(networkCapabilities);

@@ -50,7 +50,6 @@ import android.net.ProxyInfo;
 import android.net.TrafficStats;
 import android.net.Uri;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -66,9 +65,9 @@ import android.provider.Settings.SettingNotFoundException;
 import android.provider.Telephony;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.TransportType;
-import android.telephony.Annotation.DataFailureCause;
 import android.telephony.Annotation.ApnType;
-import android.telephony.Annotation.NetworkType;
+import android.telephony.Annotation.DataFailureCause;
+import android.telephony.Annotation.RilRadioTechnology;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
 import android.telephony.DataFailCause;
@@ -76,7 +75,6 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PcoData;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
-import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
@@ -109,7 +107,8 @@ import com.android.internal.telephony.dataconnection.DataEnabledSettings.DataEna
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.UiccController;
-import com.android.internal.util.ArrayUtils;
+import com.android.internal.telephony.util.ArrayUtils;
+import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.AsyncChannel;
 
 import java.io.FileDescriptor;
@@ -153,8 +152,9 @@ public class DcTracker extends Handler {
     private static final int NETWORK_TYPE_CBS = ConnectivityManager.TYPE_MOBILE_CBS;
     private static final int NETWORK_TYPE_IA = ConnectivityManager.TYPE_MOBILE_IA;
     private static final int NETWORK_TYPE_EMERGENCY = ConnectivityManager.TYPE_MOBILE_EMERGENCY;
-    private static final int NETWORK_TYPE_MCX = 1001;  // far away from ConnectivityManager.TYPE_xxx
-                                                       // constants as MCX isn't defined there.
+    // far away from ConnectivityManager.TYPE_xxx constants as the APNs below aren't defined there.
+    private static final int NETWORK_TYPE_MCX = 1001;
+    private static final int NETWORK_TYPE_XCAP = 1002;
 
     @IntDef(value = {
             REQUEST_TYPE_NORMAL,
@@ -254,14 +254,6 @@ public class DcTracker extends Handler {
     private static final boolean DATA_STALL_SUSPECTED = true;
     private static final boolean DATA_STALL_NOT_SUSPECTED = false;
 
-    private static final String INTENT_RECONNECT_ALARM =
-            "com.android.internal.telephony.data-reconnect";
-    private static final String INTENT_RECONNECT_ALARM_EXTRA_TYPE = "reconnect_alarm_extra_type";
-    private static final String INTENT_RECONNECT_ALARM_EXTRA_REASON =
-            "reconnect_alarm_extra_reason";
-    private static final String INTENT_RECONNECT_ALARM_EXTRA_TRANSPORT_TYPE =
-            "reconnect_alarm_extra_transport_type";
-
     private static final String INTENT_DATA_STALL_ALARM =
             "com.android.internal.telephony.data-stall";
     // Tag for tracking stale alarms
@@ -358,8 +350,6 @@ public class DcTracker extends Handler {
                 stopNetStatPoll();
                 startNetStatPoll();
                 restartDataStallAlarm();
-            } else if (action.startsWith(INTENT_RECONNECT_ALARM)) {
-                onActionIntentReconnectAlarm(intent);
             } else if (action.equals(INTENT_DATA_STALL_ALARM)) {
                 onActionIntentDataStallAlarm(intent);
             } else if (action.equals(INTENT_PROVISIONING_APN_ALARM)) {
@@ -475,14 +465,6 @@ public class DcTracker extends Handler {
         }
 
         /**
-         * Get Tcp Tx/Rx packet count from TrafficStats
-         */
-        public void updateTcpTxRxSum() {
-            this.txPkts = TrafficStats.getMobileTcpTxPackets();
-            this.rxPkts = TrafficStats.getMobileTcpRxPackets();
-        }
-
-        /**
          * Get total Tx/Rx packet count from TrafficStats
          */
         public void updateTotalTxRxSum() {
@@ -491,28 +473,13 @@ public class DcTracker extends Handler {
         }
     }
 
-    private void onActionIntentReconnectAlarm(Intent intent) {
-        Message msg = obtainMessage(DctConstants.EVENT_DATA_RECONNECT);
-        msg.setData(intent.getExtras());
-        sendMessage(msg);
-    }
-
-    private void onDataReconnect(Bundle bundle) {
-        String reason = bundle.getString(INTENT_RECONNECT_ALARM_EXTRA_REASON);
-        String apnType = bundle.getString(INTENT_RECONNECT_ALARM_EXTRA_TYPE);
-
+    private void onDataReconnect(ApnContext apnContextforRetry, int subId) {
         int phoneSubId = mPhone.getSubId();
-        int currSubId = bundle.getInt(PhoneConstants.SUBSCRIPTION_KEY,
-                SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+        String apnType = apnContextforRetry.getApnType();
+        String reason =  apnContextforRetry.getReason();
 
-        // Stop reconnect if not current subId is not correct.
-        // FIXME STOPSHIP - phoneSubId is coming up as -1 way after boot and failing this?
-        if (!SubscriptionManager.isValidSubscriptionId(currSubId) || (currSubId != phoneSubId)) {
-            return;
-        }
-
-        int transportType = bundle.getInt(INTENT_RECONNECT_ALARM_EXTRA_TRANSPORT_TYPE, 0);
-        if (transportType != mTransportType) {
+        if (!SubscriptionManager.isValidSubscriptionId(subId) || (subId != phoneSubId)) {
+            log("onDataReconnect: invalid subId");
             return;
         }
 
@@ -540,8 +507,6 @@ public class DcTracker extends Handler {
             }
             // TODO: IF already associated should we send the EVENT_TRY_SETUP_DATA???
             sendMessage(obtainMessage(DctConstants.EVENT_TRY_SETUP_DATA, apnContext));
-
-            apnContext.setReconnectIntent(null);
         }
     }
 
@@ -652,11 +617,6 @@ public class DcTracker extends Handler {
 
     //***** Constants
 
-    // Used by puppetmaster/*/radio_stress.py
-    private static final String PUPPET_MASTER_RADIO_STRESS_TEST = "gsm.defaultpdpcontext.active";
-
-    private static final int POLL_PDP_MILLIS = 5 * 1000;
-
     private static final int PROVISIONING_SPINNER_TIMEOUT_MILLIS = 120 * 1000;
 
     static final Uri PREFERAPN_NO_UPDATE_URI_USING_SUBID =
@@ -748,13 +708,6 @@ public class DcTracker extends Handler {
                 Telephony.Carriers.CONTENT_URI, true, mApnObserver);
 
         initApnContexts();
-
-        for (ApnContext apnContext : mApnContexts.values()) {
-            // Register the reconnect and restart actions.
-            filter = new IntentFilter();
-            filter.addAction(INTENT_RECONNECT_ALARM + '.' + apnContext.getApnType());
-            mPhone.getContext().registerReceiver(mIntentReceiver, filter, null, mPhone);
-        }
 
         initEmergencyApnSetting();
         addEmergencyApnSetting();
@@ -1053,6 +1006,9 @@ public class DcTracker extends Handler {
                     break;
                 case NETWORK_TYPE_MCX:
                     apnContext = addApnContext(PhoneConstants.APN_TYPE_MCX, networkConfig);
+                    break;
+                case NETWORK_TYPE_XCAP:
+                    apnContext = addApnContext(PhoneConstants.APN_TYPE_XCAP, networkConfig);
                     break;
                 default:
                     log("initApnContexts: skipping unknown type=" + networkConfig.type);
@@ -1753,7 +1709,7 @@ public class DcTracker extends Handler {
         // Make sure reconnection alarm is cleaned up if there is no ApnContext
         // associated to the connection.
         if (dataConnection != null) {
-            cancelReconnectAlarm(apnContext);
+            cancelReconnect(apnContext);
         }
         str = "cleanUpConnectionInternal: X detach=" + detach + " reason="
                 + apnContext.getReason();
@@ -1766,10 +1722,6 @@ public class DcTracker extends Handler {
      */
     @VisibleForTesting
     public @NonNull ArrayList<ApnSetting> fetchDunApns() {
-        if (SystemProperties.getBoolean("net.tethering.noprovisioning", false)) {
-            log("fetchDunApns: net.tethering.noprovisioning=true ret: empty list");
-            return new ArrayList<ApnSetting>(0);
-        }
         int bearer = getDataRat();
         ArrayList<ApnSetting> dunCandidates = new ArrayList<ApnSetting>();
         ArrayList<ApnSetting> retDunSettings = new ArrayList<ApnSetting>();
@@ -1854,24 +1806,6 @@ public class DcTracker extends Handler {
             return apnContext.getDataConnection();
         }
         return null;
-    }
-
-    /**
-     * Cancels the alarm associated with apnContext.
-     *
-     * @param apnContext on which the alarm should be stopped.
-     */
-    private void cancelReconnectAlarm(ApnContext apnContext) {
-        if (apnContext == null) return;
-
-        PendingIntent intent = apnContext.getReconnectIntent();
-
-        if (intent != null) {
-                AlarmManager am =
-                    (AlarmManager) mPhone.getContext().getSystemService(Context.ALARM_SERVICE);
-                am.cancel(intent);
-                apnContext.setReconnectIntent(null);
-        }
     }
 
     boolean isPermanentFailure(@DataFailureCause int dcFailCause) {
@@ -2147,8 +2081,8 @@ public class DcTracker extends Handler {
             }
         }
         boolean onlySingleDcAllowed = false;
-        if (Build.IS_DEBUGGABLE &&
-                SystemProperties.getBoolean("persist.telephony.test.singleDc", false)) {
+        if (TelephonyUtils.IS_DEBUGGABLE
+                && SystemProperties.getBoolean("persist.telephony.test.singleDc", false)) {
             onlySingleDcAllowed = true;
         }
         if (singleDcRats != null) {
@@ -2198,31 +2132,31 @@ public class DcTracker extends Handler {
         return retry;
     }
 
-    private void startAlarmForReconnect(long delay, ApnContext apnContext) {
-        String apnType = apnContext.getApnType();
-
-        Intent intent = new Intent(INTENT_RECONNECT_ALARM + "." + apnType);
-        intent.putExtra(INTENT_RECONNECT_ALARM_EXTRA_REASON, apnContext.getReason());
-        intent.putExtra(INTENT_RECONNECT_ALARM_EXTRA_TYPE, apnType);
-        intent.putExtra(INTENT_RECONNECT_ALARM_EXTRA_TRANSPORT_TYPE, mTransportType);
-        SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhone.getPhoneId());
-        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+    private void startReconnect(long delay, ApnContext apnContext) {
+        Message msg = obtainMessage(DctConstants.EVENT_DATA_RECONNECT,
+                       mPhone.getSubId(), mTransportType, apnContext);
+        cancelReconnect(apnContext);
+        sendMessageDelayed(msg, delay);
 
         if (DBG) {
-            log("startAlarmForReconnect: delay=" + delay + " action=" + intent.getAction()
-                    + " apn=" + apnContext);
+            log("startReconnect: delay=" + delay + " apn="
+                    + apnContext + "reason: " + apnContext.getReason()
+                    + " subId: " + mPhone.getSubId());
         }
+    }
 
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(mPhone.getContext(), 0,
-                                        intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        apnContext.setReconnectIntent(alarmIntent);
+    /**
+     * Cancels the alarm associated with apnContext.
+     *
+     * @param apnContext on which the alarm should be stopped.
+     */
+    private void cancelReconnect(ApnContext apnContext) {
+        if (apnContext == null) return;
 
-        // Use the exact timer instead of the inexact one to provide better user experience.
-        // In some extreme cases, we saw the retry was delayed for few minutes.
-        // Note that if the stated trigger time is in the past, the alarm will be triggered
-        // immediately.
-        mAlarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + delay, alarmIntent);
+        if (DBG) {
+            log("cancelReconnect: apn=" + apnContext);
+        }
+        removeMessages(DctConstants.EVENT_DATA_RECONNECT, apnContext);
     }
 
     private void notifyNoData(@DataFailureCause int lastFailCauseCode,
@@ -2759,24 +2693,12 @@ public class DcTracker extends Handler {
                 }
 
                 // everything is setup
-                if (TextUtils.equals(apnContext.getApnType(), PhoneConstants.APN_TYPE_DEFAULT)) {
-                    try {
-                        SystemProperties.set(PUPPET_MASTER_RADIO_STRESS_TEST, "true");
-                    } catch (RuntimeException ex) {
-                        log("Failed to set PUPPET_MASTER_RADIO_STRESS_TEST to true");
-                    }
-                    if (mCanSetPreferApn && mPreferredApn == null) {
-                        if (DBG) log("onDataSetupComplete: PREFERRED APN is null");
-                        mPreferredApn = apn;
-                        if (mPreferredApn != null) {
-                            setPreferredApn(mPreferredApn.getId());
-                        }
-                    }
-                } else {
-                    try {
-                        SystemProperties.set(PUPPET_MASTER_RADIO_STRESS_TEST, "false");
-                    } catch (RuntimeException ex) {
-                        log("Failed to set PUPPET_MASTER_RADIO_STRESS_TEST to false");
+                if (TextUtils.equals(apnContext.getApnType(), PhoneConstants.APN_TYPE_DEFAULT)
+                        && mCanSetPreferApn && mPreferredApn == null) {
+                    if (DBG) log("onDataSetupComplete: PREFERRED APN is null");
+                    mPreferredApn = apn;
+                    if (mPreferredApn != null) {
+                        setPreferredApn(mPreferredApn.getId());
                     }
                 }
 
@@ -2786,7 +2708,8 @@ public class DcTracker extends Handler {
                 checkDataRoamingStatus(false);
 
                 boolean isProvApn = apnContext.isProvisioningApn();
-                final ConnectivityManager cm = ConnectivityManager.from(mPhone.getContext());
+                final ConnectivityManager cm = (ConnectivityManager) mPhone.getContext()
+                        .getSystemService(Context.CONNECTIVITY_SERVICE);
                 if (mProvisionBroadcastReceiver != null) {
                     mPhone.getContext().unregisterReceiver(mProvisionBroadcastReceiver);
                     mProvisionBroadcastReceiver = null;
@@ -2828,7 +2751,7 @@ public class DcTracker extends Handler {
                 if (DBG) {
                     log("onDataSetupComplete: SETUP complete type=" + apnContext.getApnType());
                 }
-                if (Build.IS_DEBUGGABLE) {
+                if (TelephonyUtils.IS_DEBUGGABLE) {
                     // adb shell setprop persist.radio.test.pco [pco_val]
                     String radioTestProperty = "persist.radio.test.pco";
                     int pcoVal = SystemProperties.getInt(radioTestProperty, -1);
@@ -2903,7 +2826,7 @@ public class DcTracker extends Handler {
             // Wait a bit before trying the next APN, so that
             // we're not tying up the RIL command channel
 
-            startAlarmForReconnect(delay, apnContext);
+            startReconnect(delay, apnContext);
         } else {
             // If we are not going to retry any APN, set this APN context to failed state.
             // This would be the final state of a data connection.
@@ -2920,10 +2843,11 @@ public class DcTracker extends Handler {
      *
      * @param status One of {@code NetworkAgent.VALID_NETWORK} or
      * {@code NetworkAgent.INVALID_NETWORK}.
+     * @param cid context id {@code cid}
      * @param redirectUrl If the Internet probe was redirected, this
      * is the destination it was redirected to, otherwise {@code null}
      */
-    private void onNetworkStatusChanged(int status, String redirectUrl) {
+    private void onNetworkStatusChanged(int status, int cid, String redirectUrl) {
         if (!TextUtils.isEmpty(redirectUrl)) {
             Intent intent = new Intent(TelephonyIntents.ACTION_CARRIER_SIGNAL_REDIRECTED);
             intent.putExtra(TelephonyIntents.EXTRA_REDIRECTION_URL_KEY, redirectUrl);
@@ -2931,6 +2855,7 @@ public class DcTracker extends Handler {
             log("Notify carrier signal receivers with redirectUrl: " + redirectUrl);
         } else {
             final boolean isValid = status == NetworkAgent.VALID_NETWORK;
+            final DataConnection dc = getDataConnectionByContextId(cid);
             if (!mDsRecoveryHandler.isRecoveryOnBadNetworkEnabled()) {
                 if (DBG) log("Skip data stall recovery on network status change with in threshold");
                 return;
@@ -2939,7 +2864,9 @@ public class DcTracker extends Handler {
                 if (DBG) log("Skip data stall recovery on non WWAN");
                 return;
             }
-            mDsRecoveryHandler.processNetworkStatusChanged(isValid);
+            if (dc != null && dc.isValidationRequired()) {
+                mDsRecoveryHandler.processNetworkStatusChanged(isValid);
+            }
         }
     }
 
@@ -2983,11 +2910,6 @@ public class DcTracker extends Handler {
         }
         // If APN is still enabled, try to bring it back up automatically
         if (mAttached.get() && apnContext.isReady() && retryAfterDisconnected(apnContext)) {
-            try {
-                SystemProperties.set(PUPPET_MASTER_RADIO_STRESS_TEST, "false");
-            } catch (RuntimeException ex) {
-                log("Failed to set PUPPET_MASTER_RADIO_STRESS_TEST to false");
-            }
             // Wait a bit before trying the next APN, so that
             // we're not tying up the RIL command channel.
             // This also helps in any external dependency to turn off the context.
@@ -2996,7 +2918,7 @@ public class DcTracker extends Handler {
             if (delay > 0) {
                 // Data connection is in IDLE state, so when we reconnect later, we'll rebuild
                 // the waiting APN list, which will also reset/reconfigure the retry manager.
-                startAlarmForReconnect(delay, apnContext);
+                startReconnect(delay, apnContext);
             }
         } else {
             boolean restartRadioAfterProvisioning = mPhone.getContext().getResources().getBoolean(
@@ -3505,7 +3427,7 @@ public class DcTracker extends Handler {
                         trySetupData(apnContext, REQUEST_TYPE_NORMAL);
                     } else {
                         loge("**** Default ApnContext not found ****");
-                        if (Build.IS_DEBUGGABLE) {
+                        if (TelephonyUtils.IS_DEBUGGABLE) {
                             throw new RuntimeException("Default ApnContext not found");
                         }
                     }
@@ -3583,8 +3505,9 @@ public class DcTracker extends Handler {
 
             case DctConstants.EVENT_NETWORK_STATUS_CHANGED:
                 int status = msg.arg1;
+                int cid = msg.arg2;
                 String url = (String) msg.obj;
-                onNetworkStatusChanged(status, url);
+                onNetworkStatusChanged(status, cid, url);
                 break;
 
             case DctConstants.EVENT_RADIO_AVAILABLE:
@@ -3775,7 +3698,8 @@ public class DcTracker extends Handler {
                 break;
             }
             case DctConstants.EVENT_DATA_RECONNECT:
-                onDataReconnect(msg.getData());
+                if (DBG) log("EVENT_DATA_RECONNECT: subId=" + msg.arg1);
+                onDataReconnect((ApnContext) msg.obj, msg.arg1);
                 break;
             case DctConstants.EVENT_DATA_SERVICE_BINDING_CHANGED:
                 onDataServiceBindingChanged((Boolean) ((AsyncResult) msg.obj).result);
@@ -4185,6 +4109,7 @@ public class DcTracker extends Handler {
                 return;
             }
             for (ApnContext apnContext : mApnContexts.values()) {
+                boolean cleanupRequired = false;
                 if (!apnContext.isDisconnected()) {
                     ArrayList<ApnSetting> currentWaitingApns = apnContext.getWaitingApns();
                     ArrayList<ApnSetting> waitingApns = buildWaitingApns(
@@ -4199,9 +4124,20 @@ public class DcTracker extends Handler {
                             || !containsAllApns(currentWaitingApns, waitingApns))) {
                         if (VDBG) log("new waiting apn is different for " + apnContext);
                         apnContext.setWaitingApns(waitingApns);
-                        if (VDBG) log("cleanUpConnectionsOnUpdatedApns for " + apnContext);
-                        apnContext.setReason(reason);
-                        cleanUpConnectionInternal(true, RELEASE_TYPE_DETACH, apnContext);
+                        ApnSetting apnSetting = apnContext.getApnSetting();
+                        if (apnContext.getApnType().equals(PhoneConstants.APN_TYPE_DEFAULT)) {
+                            if ((getPreferredApn() == null)
+                                    || !apnSetting.equals(getPreferredApn())) {
+                                cleanupRequired = true;
+                            }
+                        } else if (!waitingApns.contains(apnSetting)) {
+                            cleanupRequired = true;
+                        }
+                        if (cleanupRequired) {
+                            if (VDBG) log("cleanUpConnectionsOnUpdatedApns for " + apnContext);
+                            apnContext.setReason(reason);
+                            cleanUpConnectionInternal(true, RELEASE_TYPE_DETACH, apnContext);
+                        }
                     }
                 }
             }
@@ -4573,7 +4509,7 @@ public class DcTracker extends Handler {
         long sent, received;
 
         TxRxSum preTxRxSum = new TxRxSum(mDataStallTxRxSum);
-        mDataStallTxRxSum.updateTcpTxRxSum();
+        mDataStallTxRxSum.updateTotalTxRxSum();
 
         if (VDBG_STALL) {
             log("updateDataStallInfo: mDataStallTxRxSum=" + mDataStallTxRxSum +
@@ -4732,7 +4668,7 @@ public class DcTracker extends Handler {
         int delayInMs = Settings.Global.getInt(mResolver,
                                 Settings.Global.PROVISIONING_APN_ALARM_DELAY_IN_MS,
                                 PROVISIONING_APN_ALARM_DELAY_IN_MS_DEFAULT);
-        if (Build.IS_DEBUGGABLE) {
+        if (TelephonyUtils.IS_DEBUGGABLE) {
             // Allow debug code to use a system property to provide another value
             String delayInMsStrg = Integer.toString(delayInMs);
             delayInMsStrg = System.getProperty(DEBUG_PROV_APN_ALARM, delayInMsStrg);

@@ -24,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.nullable;
 import static org.mockito.Mockito.anyBoolean;
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -66,6 +68,7 @@ import androidx.test.filters.FlakyTest;
 
 import com.android.internal.telephony.test.SimulatedCommands;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
+import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.IccVmNotSupportedException;
 import com.android.internal.telephony.uicc.UiccController;
@@ -89,6 +92,10 @@ import java.util.List;
 public class GsmCdmaPhoneTest extends TelephonyTest {
     @Mock
     private Handler mTestHandler;
+    @Mock
+    private UiccSlot mUiccSlot;
+    @Mock
+    private CommandsInterface mMockCi;
 
     //mPhoneUnderTest
     private GsmCdmaPhone mPhoneUT;
@@ -158,14 +165,6 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
     public void testGetMergedServiceState() throws Exception {
         ServiceState imsServiceState = new ServiceState();
 
-        NetworkRegistrationInfo imsCsWwanRegInfo = new NetworkRegistrationInfo.Builder()
-                .setDomain(NetworkRegistrationInfo.DOMAIN_CS)
-                .setTransportType(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
-                .setAccessNetworkTechnology(TelephonyManager.NETWORK_TYPE_LTE)
-                .setRegistrationState(
-                        NetworkRegistrationInfo.REGISTRATION_STATE_HOME)
-                .build();
-
         NetworkRegistrationInfo imsPsWwanRegInfo = new NetworkRegistrationInfo.Builder()
                 .setDomain(NetworkRegistrationInfo.DOMAIN_PS)
                 .setTransportType(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
@@ -182,10 +181,11 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
                         NetworkRegistrationInfo.REGISTRATION_STATE_HOME)
                 .build();
 
-        imsServiceState.addNetworkRegistrationInfo(imsCsWwanRegInfo);
+        // Only PS states are tracked for IMS.
         imsServiceState.addNetworkRegistrationInfo(imsPsWwanRegInfo);
         imsServiceState.addNetworkRegistrationInfo(imsPsWlanRegInfo);
 
+        // Voice reg state in this case is whether or not IMS is registered.
         imsServiceState.setVoiceRegState(ServiceState.STATE_IN_SERVICE);
         imsServiceState.setDataRegState(ServiceState.STATE_IN_SERVICE);
         imsServiceState.setIwlanPreferred(true);
@@ -234,6 +234,88 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertEquals(ServiceState.STATE_IN_SERVICE, mergedServiceState.getVoiceRegState());
         assertEquals(ServiceState.STATE_IN_SERVICE, mergedServiceState.getDataRegState());
         assertEquals(TelephonyManager.NETWORK_TYPE_IWLAN, mergedServiceState.getDataNetworkType());
+    }
+
+    /**
+     * Some vendors do not provide a voice registration for LTE when attached to LTE only (no CSFB
+     * available). In this case, we should still get IN_SERVICE for voice service state, since
+     * IMS is registered.
+     */
+    @Test
+    @SmallTest
+    public void testGetMergedServiceStateNoCsfb() throws Exception {
+        ServiceState imsServiceState = new ServiceState();
+
+        NetworkRegistrationInfo imsPsWwanRegInfo = new NetworkRegistrationInfo.Builder()
+                .setDomain(NetworkRegistrationInfo.DOMAIN_PS)
+                .setTransportType(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
+                .setAccessNetworkTechnology(TelephonyManager.NETWORK_TYPE_LTE)
+                .setRegistrationState(
+                        NetworkRegistrationInfo.REGISTRATION_STATE_HOME)
+                .build();
+
+        NetworkRegistrationInfo imsPsWlanRegInfo = new NetworkRegistrationInfo.Builder()
+                .setDomain(NetworkRegistrationInfo.DOMAIN_PS)
+                .setTransportType(AccessNetworkConstants.TRANSPORT_TYPE_WLAN)
+                .setAccessNetworkTechnology(TelephonyManager.NETWORK_TYPE_IWLAN)
+                .setRegistrationState(
+                        NetworkRegistrationInfo.REGISTRATION_STATE_NOT_REGISTERED_OR_SEARCHING)
+                .build();
+
+        // Only PS states are tracked for IMS.
+        imsServiceState.addNetworkRegistrationInfo(imsPsWwanRegInfo);
+        imsServiceState.addNetworkRegistrationInfo(imsPsWlanRegInfo);
+
+        // Voice reg state in this case is whether or not IMS is registered.
+        imsServiceState.setVoiceRegState(ServiceState.STATE_IN_SERVICE);
+        imsServiceState.setDataRegState(ServiceState.STATE_IN_SERVICE);
+        imsServiceState.setIwlanPreferred(true);
+        doReturn(imsServiceState).when(mImsPhone).getServiceState();
+
+        replaceInstance(Phone.class, "mImsPhone", mPhoneUT, mImsPhone);
+
+        ServiceState serviceState = new ServiceState();
+
+        NetworkRegistrationInfo csWwanRegInfo = new NetworkRegistrationInfo.Builder()
+                .setDomain(NetworkRegistrationInfo.DOMAIN_CS)
+                .setTransportType(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
+                .setAccessNetworkTechnology(TelephonyManager.NETWORK_TYPE_UNKNOWN)
+                .setRegistrationState(
+                        NetworkRegistrationInfo.REGISTRATION_STATE_NOT_REGISTERED_OR_SEARCHING)
+                .build();
+
+        NetworkRegistrationInfo psWwanRegInfo = new NetworkRegistrationInfo.Builder()
+                .setDomain(NetworkRegistrationInfo.DOMAIN_PS)
+                .setTransportType(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
+                .setAccessNetworkTechnology(TelephonyManager.NETWORK_TYPE_LTE)
+                .setRegistrationState(
+                        NetworkRegistrationInfo.REGISTRATION_STATE_HOME)
+                .build();
+
+        NetworkRegistrationInfo psWlanRegInfo = new NetworkRegistrationInfo.Builder()
+                .setDomain(NetworkRegistrationInfo.DOMAIN_PS)
+                .setTransportType(AccessNetworkConstants.TRANSPORT_TYPE_WLAN)
+                .setAccessNetworkTechnology(TelephonyManager.NETWORK_TYPE_IWLAN)
+                .setRegistrationState(
+                        NetworkRegistrationInfo.REGISTRATION_STATE_NOT_REGISTERED_OR_SEARCHING)
+                .build();
+
+        serviceState.addNetworkRegistrationInfo(csWwanRegInfo);
+        serviceState.addNetworkRegistrationInfo(psWwanRegInfo);
+        serviceState.addNetworkRegistrationInfo(psWlanRegInfo);
+        // No CSFB, voice is OOS for LTE only attach
+        serviceState.setVoiceRegState(ServiceState.STATE_OUT_OF_SERVICE);
+        serviceState.setDataRegState(ServiceState.STATE_IN_SERVICE);
+        serviceState.setIwlanPreferred(true);
+
+        mSST.mSS = serviceState;
+        mPhoneUT.mSST = mSST;
+
+        ServiceState mergedServiceState = mPhoneUT.getServiceState();
+
+        assertEquals(ServiceState.STATE_IN_SERVICE, mergedServiceState.getVoiceRegState());
+        assertEquals(ServiceState.STATE_IN_SERVICE, mergedServiceState.getDataRegState());
+        assertEquals(TelephonyManager.NETWORK_TYPE_LTE, mergedServiceState.getDataNetworkType());
     }
 
     @Test
@@ -1121,5 +1203,25 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         mContextFixture.getCarrierConfigBundle().putBoolean(
                 CarrierConfigManager.KEY_USE_USIM_BOOL, true);
         assertEquals(msisdn, mPhoneUT.getLine1Number());
+    }
+
+    @Test
+    @SmallTest
+    public void testEnableUiccApplications() throws Exception {
+        mPhoneUT.mCi = mMockCi;
+        // UiccSlot is null. Doing nothing.
+        mPhoneUT.enableUiccApplications(true, null);
+        verify(mMockCi, never()).enableUiccApplications(anyBoolean(), any());
+
+        // Card state is not PRESENT. Doing nothing.
+        doReturn(mUiccSlot).when(mUiccController).getUiccSlotForPhone(anyInt());
+        doReturn(IccCardStatus.CardState.CARDSTATE_ABSENT).when(mUiccSlot).getCardState();
+        mPhoneUT.enableUiccApplications(true, null);
+        verify(mMockCi, never()).enableUiccApplications(anyBoolean(), any());
+
+        doReturn(IccCardStatus.CardState.CARDSTATE_PRESENT).when(mUiccSlot).getCardState();
+        Message message = Message.obtain();
+        mPhoneUT.enableUiccApplications(true, message);
+        verify(mMockCi).enableUiccApplications(eq(true), eq(message));
     }
 }

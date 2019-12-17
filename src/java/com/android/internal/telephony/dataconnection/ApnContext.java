@@ -16,7 +16,6 @@
 
 package com.android.internal.telephony.dataconnection;
 
-import android.app.PendingIntent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkConfig;
@@ -67,8 +66,6 @@ public class ApnContext {
     private DataConnection mDataConnection;
 
     String mReason;
-
-    PendingIntent mReconnectAlarmIntent;
 
     /**
      * user/app requested connection on this APN
@@ -167,22 +164,6 @@ public class ApnContext {
             mDataConnection = null;
         }
         setState(DctConstants.State.IDLE);
-    }
-
-    /**
-     * Get the reconnect intent.
-     * @return The reconnect intent
-     */
-    public synchronized PendingIntent getReconnectIntent() {
-        return mReconnectAlarmIntent;
-    }
-
-    /**
-     * Save the reconnect intent which can be used for cancelling later.
-     * @param intent The reconnect intent
-     */
-    public synchronized void setReconnectIntent(PendingIntent intent) {
-        mReconnectAlarmIntent = intent;
     }
 
     /**
@@ -609,6 +590,10 @@ public class ApnContext {
         if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_MCX)) {
             if (apnType != ApnSetting.TYPE_NONE) error = true;
             apnType = ApnSetting.TYPE_MCX;
+        }
+        if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_XCAP)) {
+            if (apnType != ApnSetting.TYPE_NONE) error = true;
+            apnType = ApnSetting.TYPE_XCAP;
         }
         if (error) {
             // TODO: If this error condition is removed, the framework's handling of

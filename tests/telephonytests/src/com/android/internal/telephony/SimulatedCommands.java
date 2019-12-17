@@ -45,7 +45,9 @@ import android.telephony.NetworkScanRequest;
 import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.TelephonyManager;
+import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.emergency.EmergencyNumber;
@@ -1179,6 +1181,14 @@ public class SimulatedCommands extends BaseCommands
             }
         }
 
+        // Store different cids to simulate concurrent IMS and default data calls
+        if ((dataProfile.getSupportedApnTypesBitmask() & ApnSetting.TYPE_IMS)
+            == ApnSetting.TYPE_IMS) {
+            mSetupDataCallResult.cid = 0;
+        } else {
+            mSetupDataCallResult.cid = 1;
+        }
+
         DataCallResponse response = RIL.convertDataCallResult(mSetupDataCallResult);
         if (mDcSuccess) {
             resultSuccess(result, response);
@@ -2239,8 +2249,8 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
-    public void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb,
-            int[] thresholdsDbm, int ran, Message result) {
+    public void setSignalStrengthReportingCriteria(SignalThresholdInfo signalThresholdInfo,
+            int ran, Message result) {
     }
 
     @Override

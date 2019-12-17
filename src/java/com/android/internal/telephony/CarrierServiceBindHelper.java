@@ -34,6 +34,7 @@ import android.os.Process;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.service.carrier.CarrierService;
+import android.telephony.PackageChangeReceiver;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -41,9 +42,8 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.content.PackageMonitor;
-
 import com.android.internal.telephony.util.TelephonyUtils;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
@@ -67,7 +67,7 @@ public class CarrierServiceBindHelper {
     public SparseArray<AppBinding> mBindings = new SparseArray();
     @VisibleForTesting
     public SparseArray<String> mLastSimState = new SparseArray<>();
-    private final PackageMonitor mPackageMonitor = new CarrierServicePackageMonitor();
+    private final PackageChangeReceiver mPackageMonitor = new CarrierServicePackageMonitor();
 
     private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
         @Override
@@ -124,14 +124,20 @@ public class CarrierServiceBindHelper {
 
         updateBindingsAndSimStates();
 
-        PhoneConfigurationManager.getInstance().registerForMultiSimConfigChange(
+        PhoneConfigurationManager.registerForMultiSimConfigChange(
                 mHandler, EVENT_MULTI_SIM_CONFIG_CHANGED, null);
 
         mPackageMonitor.register(
-                context, mHandler.getLooper(), UserHandle.ALL, false /* externalStorage */);
-        mContext.registerReceiverAsUser(mUserUnlockedReceiver, UserHandle.SYSTEM,
+                context, mHandler.getLooper(), UserHandle.ALL);
+        try {
+            Context contextAsUser = mContext.createPackageContextAsUser(mContext.getPackageName(),
+                0, UserHandle.SYSTEM);
+            contextAsUser.registerReceiver(mUserUnlockedReceiver,
                 new IntentFilter(Intent.ACTION_USER_UNLOCKED), null /* broadcastPermission */,
                 mHandler);
+        } catch (PackageManager.NameNotFoundException e) {
+            loge("Package name not found: " + e.getMessage());
+        }
     }
 
     // Create or dispose mBindings and mLastSimState objects.
@@ -367,19 +373,19 @@ public class CarrierServiceBindHelper {
         }
     }
 
-    private class CarrierServicePackageMonitor extends PackageMonitor {
+    private class CarrierServicePackageMonitor extends PackageChangeReceiver {
         @Override
-        public void onPackageAdded(String packageName, int reason) {
+        public void onPackageAdded(String packageName) {
             evaluateBinding(packageName, true /* forceUnbind */);
         }
 
         @Override
-        public void onPackageRemoved(String packageName, int reason) {
+        public void onPackageRemoved(String packageName) {
             evaluateBinding(packageName, true /* forceUnbind */);
         }
 
         @Override
-        public void onPackageUpdateFinished(String packageName, int uid) {
+        public void onPackageUpdateFinished(String packageName) {
             evaluateBinding(packageName, true /* forceUnbind */);
         }
 
@@ -389,13 +395,12 @@ public class CarrierServiceBindHelper {
         }
 
         @Override
-        public boolean onHandleForceStop(Intent intent, String[] packages, int uid, boolean doit) {
+        public void onHandleForceStop(String[] packages, boolean doit) {
             if (doit) {
                 for (String packageName : packages) {
                     evaluateBinding(packageName, true /* forceUnbind */);
                 }
             }
-            return super.onHandleForceStop(intent, packages, uid, doit);
         }
 
         private void evaluateBinding(String carrierPackageName, boolean forceUnbind) {
@@ -423,6 +428,8 @@ public class CarrierServiceBindHelper {
     private static void log(String message) {
         Log.d(LOG_TAG, message);
     }
+
+    private static void loge(String message) { Log.e(LOG_TAG, message); }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("CarrierServiceBindHelper:");
