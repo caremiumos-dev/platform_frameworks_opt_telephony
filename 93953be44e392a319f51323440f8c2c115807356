@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "93f3f567_2c4769a1",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 3183,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2019-12-17T10:38:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b7b5114_ba30ec37",
+      "range": {
+        "startLine": 3183,
+        "startChar": 10,
+        "endLine": 3183,
+        "endChar": 17
+      },
+      "revId": "93953be44e392a319f51323440f8c2c115807356",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1271a72b_a9848f61",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 12
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fab99ee7_43de8919",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 3207,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2019-12-17T10:38:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1271a72b_a9848f61",
+      "range": {
+        "startLine": 3182,
+        "startChar": 0,
+        "endLine": 3207,
+        "endChar": 9
+      },
+      "revId": "93953be44e392a319f51323440f8c2c115807356",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f0a6fd8_d0aa8f84",
         "filename": "src/java/com/android/internal/telephony/cdma/CdmaSMSDispatcher.java",
         "patchSetId": 12
@@ -68,6 +116,30 @@
       "revId": "93953be44e392a319f51323440f8c2c115807356",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8137757_3f5677de",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaSMSDispatcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2019-12-17T10:38:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f0a6fd8_d0aa8f84",
+      "range": {
+        "startLine": 165,
+        "startChar": 12,
+        "endLine": 168,
+        "endChar": 14
+      },
+      "revId": "93953be44e392a319f51323440f8c2c115807356",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
