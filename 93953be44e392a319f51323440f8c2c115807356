@@ -163,6 +163,30 @@
       "revId": "93953be44e392a319f51323440f8c2c115807356",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec272897_86d2cf70",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SimulatedCommands.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2019-12-17T11:31:18Z",
+      "side": 1,
+      "message": "not sure about this Lee. someone needs to confirm.",
+      "parentUuid": "2f335512_b80aaedb",
+      "range": {
+        "startLine": 1814,
+        "startChar": 4,
+        "endLine": 1814,
+        "endChar": 5
+      },
+      "revId": "93953be44e392a319f51323440f8c2c115807356",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
