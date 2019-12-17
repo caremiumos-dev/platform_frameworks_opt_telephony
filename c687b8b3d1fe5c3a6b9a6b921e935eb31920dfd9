@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7aeae131_2c2bd1e2",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-12-17T06:34:47Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "0ad87798_46d46b1f",
+      "range": {
+        "startLine": 57,
+        "startChar": 43,
+        "endLine": 57,
+        "endChar": 54
+      },
+      "revId": "c687b8b3d1fe5c3a6b9a6b921e935eb31920dfd9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83d1eaeb_97069b54",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "c687b8b3d1fe5c3a6b9a6b921e935eb31920dfd9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c0c67dc_aa129819",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-12-17T06:34:47Z",
+      "side": 1,
+      "message": "yes, it is needed.\n\nhere just used to replace a private method getUiccProfile of GMS CMDA Phone.\nour intention is finding a way to fetch IccRecrods\u0027s instance.",
+      "parentUuid": "83d1eaeb_97069b54",
+      "range": {
+        "startLine": 1348,
+        "startChar": 0,
+        "endLine": 1355,
+        "endChar": 13
+      },
+      "revId": "c687b8b3d1fe5c3a6b9a6b921e935eb31920dfd9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
