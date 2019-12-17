@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2bb98340_9fc1f7eb",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-12-17T02:40:59Z",
+      "side": 1,
+      "message": "actually getIccRecordsLoaded can cover these checks always added by earlier addressing comments",
+      "parentUuid": "c0f60aed_4641a3d5",
+      "range": {
+        "startLine": 1335,
+        "startChar": 15,
+        "endLine": 1335,
+        "endChar": 38
+      },
+      "revId": "c9c9eb8a3ae7deeb426112da882380624a337810",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41fbeac0_5029b4c6",
         "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "c9c9eb8a3ae7deeb426112da882380624a337810",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f74b21cd_428cdb8c",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-12-17T02:40:59Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "41fbeac0_5029b4c6",
+      "range": {
+        "startLine": 1338,
+        "startChar": 0,
+        "endLine": 1339,
+        "endChar": 50
+      },
+      "revId": "c9c9eb8a3ae7deeb426112da882380624a337810",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "09db6c8d_e79ac94d",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-12-17T02:40:59Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "88c1afce_8e241f35",
+      "range": {
+        "startLine": 1342,
+        "startChar": 12,
+        "endLine": 1342,
+        "endChar": 15
+      },
+      "revId": "c9c9eb8a3ae7deeb426112da882380624a337810",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b76df910_7bcf6a2d",
         "filename": "src/java/com/android/internal/telephony/SmsController.java",
         "patchSetId": 6
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "1ef25a84_f44325de",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-12-17T02:40:59Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "b76df910_7bcf6a2d",
+      "range": {
+        "startLine": 639,
+        "startChar": 0,
+        "endLine": 641,
+        "endChar": 7
+      },
+      "revId": "c9c9eb8a3ae7deeb426112da882380624a337810",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb45eab6_41e6a5fd",
         "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
         "patchSetId": 6
@@ -114,6 +210,30 @@
       "revId": "c9c9eb8a3ae7deeb426112da882380624a337810",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae373a59_d6655804",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2019-12-17T02:40:59Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "fb45eab6_41e6a5fd",
+      "range": {
+        "startLine": 1280,
+        "startChar": 7,
+        "endLine": 1280,
+        "endChar": 13
+      },
+      "revId": "c9c9eb8a3ae7deeb426112da882380624a337810",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
