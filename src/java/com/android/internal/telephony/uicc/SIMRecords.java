@@ -1136,12 +1136,14 @@ public class SIMRecords extends IccRecords {
 
                     if (ar.exception != null || data == null) {
                         loge("Failed getting User PLMN with Access Tech Records: " + ar.exception);
-                        break;
                     } else {
                         log("Received a PlmnActRecord, raw=" + IccUtils.bytesToHexString(data));
                         mPlmnActRecords = PlmnActRecord.getRecords(data);
                         if (VDBG) log("PlmnActRecords=" + Arrays.toString(mPlmnActRecords));
                     }
+                    isRecordLoadResponse = sendPlmnResponse(msg, parseBcdPlmnList(data, "User"),
+                            "getUserPlmns");
+
                     break;
 
                 case EVENT_GET_OPLMN_W_ACT_DONE:
@@ -1152,12 +1154,13 @@ public class SIMRecords extends IccRecords {
                     if (ar.exception != null || data == null) {
                         loge("Failed getting Operator PLMN with Access Tech Records: "
                                 + ar.exception);
-                        break;
                     } else {
                         log("Received a PlmnActRecord, raw=" + IccUtils.bytesToHexString(data));
                         mOplmnActRecords = PlmnActRecord.getRecords(data);
                         if (VDBG) log("OplmnActRecord[]=" + Arrays.toString(mOplmnActRecords));
                     }
+                    isRecordLoadResponse = sendPlmnResponse(msg, parseBcdPlmnList(data, "Operator"),
+                            "getOperatorPlmns");
                     break;
 
                 case EVENT_GET_HPLMN_W_ACT_DONE:
@@ -1167,7 +1170,7 @@ public class SIMRecords extends IccRecords {
 
                     if (ar.exception != null || data == null) {
                         loge("Failed getting Home PLMN with Access Tech Records: " + ar.exception);
-                        break;
+                      	break;
                     } else {
                         log("Received a PlmnActRecord, raw=" + IccUtils.bytesToHexString(data));
                         mHplmnActRecords = PlmnActRecord.getRecords(data);
@@ -1181,10 +1184,10 @@ public class SIMRecords extends IccRecords {
                     data = (byte[]) ar.result;
                     if (ar.exception != null || data == null) {
                         loge("Failed getting Equivalent Home PLMNs: " + ar.exception);
-                        break;
                     } else {
                         mEhplmns = parseBcdPlmnList(data, "Equivalent Home");
                     }
+                    isRecordLoadResponse = sendPlmnResponse(msg, mEhplmns, "getEquivalentPlmns");
                     break;
 
                 case EVENT_GET_FPLMN_DONE:
@@ -1196,24 +1199,7 @@ public class SIMRecords extends IccRecords {
                     } else {
                         mFplmns = parseBcdPlmnList(data, "Forbidden");
                     }
-                    if (msg.arg1 == HANDLER_ACTION_SEND_RESPONSE) {
-                        if (VDBG) logv("getForbiddenPlmns(): send async response");
-                        isRecordLoadResponse = false;
-                        int key = msg.arg2;
-                        Message response = retrievePendingTransaction(key).first;
-                        if (response != null) {
-                            if (ar.exception == null && data != null && mFplmns != null) {
-                                AsyncResult.forMessage(response, Arrays.copyOf(mFplmns,
-                                        mFplmns.length), null);
-                            } else {
-                                AsyncResult.forMessage(response, null, ar.exception);
-                            }
-                            response.sendToTarget();
-                        } else {
-                            loge("Failed to retrieve a response message for FPLMN");
-                            break;
-                        }
-                    }
+                    isRecordLoadResponse = sendPlmnResponse(msg, mFplmns, "getForbiddenPlmns");
                     break;
 
                 case EVENT_GET_FPLMN_SIZE_DONE:
@@ -1304,6 +1290,29 @@ public class SIMRecords extends IccRecords {
             mEfLi = (byte[]) ar.result;
             if (DBG) log("EF_LI=" + IccUtils.bytesToHexString(mEfLi));
         }
+    }
+
+    private boolean sendPlmnResponse(Message msg, String[] plmns, String message) {
+        AsyncResult ar = (AsyncResult) msg.obj;
+        boolean isRecordLoadResponse = true;
+        if (msg.arg1 == HANDLER_ACTION_SEND_RESPONSE) {
+            if (VDBG) logv(message + " (): send async response");
+            isRecordLoadResponse = false;
+            int key = msg.arg2;
+            Message response = retrievePendingTransaction(key).first;
+            if (response != null) {
+                if (ar.exception == null && plmns != null) {
+                    AsyncResult.forMessage(response, Arrays.copyOf(plmns,
+                            plmns.length), null);
+                } else {
+                    AsyncResult.forMessage(response, null, ar.exception);
+                }
+                response.sendToTarget();
+            } else {
+                loge("Failed to retrieve a response message for FPLMN");
+            }
+        }
+        return isRecordLoadResponse;
     }
 
     @Override
@@ -1517,13 +1526,32 @@ public class SIMRecords extends IccRecords {
     }
 
     /**
-     * String[] of forbidden PLMNs will be sent to the Message's handler
+     * String[] of PLMNs will be sent to the Message's handler
      * in the result field of an AsyncResult in the response.obj.
      */
-    public void getForbiddenPlmns(Message response) {
+    public void getPlmns(Message response, int efPlmn) {
+        int event;
+        switch (efPlmn) {
+            case EF_FPLMN:
+                event = EVENT_GET_FPLMN_DONE;
+                break;
+            case EF_OPLMN_W_ACT:
+                event = EVENT_GET_OPLMN_W_ACT_DONE;
+                break;
+            case EF_EHPLMN:
+                event = EVENT_GET_EHPLMN_DONE;
+                break;
+            case EF_PLMN_W_ACT:
+                event = EVENT_GET_PLMN_W_ACT_DONE;
+                break;
+            default:
+                Rlog.e(LOG_TAG, "invalid plmn selection: " + efPlmn);
+                response.sendToTarget();
+                return;
+        }
         int key = storePendingTransaction(response);
-        mFh.loadEFTransparent(EF_FPLMN, obtainMessage(
-                    EVENT_GET_FPLMN_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
+        mFh.loadEFTransparent(efPlmn, obtainMessage(
+                    event, HANDLER_ACTION_SEND_RESPONSE, key));
     }
 
     /**
