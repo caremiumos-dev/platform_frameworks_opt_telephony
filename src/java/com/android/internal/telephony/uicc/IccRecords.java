@@ -1169,6 +1169,30 @@ public abstract class IccRecords extends Handler implements IccConstants {
     }
 
     /**
+     * @return String array containing PLMN from OplmnActRecord.
+     */
+    public String[] getPlmnsFromOplmnActRecord() {
+        if (mOplmnActRecords == null) return null;
+        String[] oplmns = new String[mOplmnActRecords.length];
+        for (int i = 0; i < mOplmnActRecords.length; i++) {
+            oplmns[i] = mOplmnActRecords[i].plmn;
+        }
+        return oplmns;
+    }
+
+    /**
+     * @return String array containing PLMN from PlmnActRecord.
+     */
+    public String[] getPlmnsFromPlmnActRecord() {
+        if (mPlmnActRecords == null) return null;
+        String[] plmns = new String[mPlmnActRecords.length];
+        for (int i = 0; i < mPlmnActRecords.length; i++) {
+            plmns[i] = mPlmnActRecords[i].plmn;
+        }
+        return plmns;
+    }
+
+    /**
      * Return an interface to retrieve the ISIM records for IMS, if available.
      * @return the interface to retrieve the ISIM records, or null if not supported
      */
