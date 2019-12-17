@@ -1517,13 +1517,30 @@ public class SIMRecords extends IccRecords {
     }
 
     /**
-     * String[] of forbidden PLMNs will be sent to the Message's handler
+     * String[] of PLMNs will be sent to the Message's handler
      * in the result field of an AsyncResult in the response.obj.
      */
-    public void getForbiddenPlmns(Message response) {
+    public void getPlmns(Message response, int efPlmn) {
         int key = storePendingTransaction(response);
-        mFh.loadEFTransparent(EF_FPLMN, obtainMessage(
-                    EVENT_GET_FPLMN_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
+        int event;
+        switch (efPlmn) {
+            case EF_FPLMN:
+                event = EVENT_GET_FPLMN_DONE;
+                break;
+            case EF_OPLMN_W_ACT:
+                event = EVENT_GET_OPLMN_W_ACT_DONE;
+                break;
+            case EF_EHPLMN:
+                event = EVENT_GET_EHPLMN_DONE;
+                break;
+            case EF_PLMN_W_ACT:
+                event = EVENT_GET_PLMN_W_ACT_DONE;
+                break;
+            default:
+                throw new IllegalArgumentException("invalid plmn selection" + efPlmn);
+        }
+        mFh.loadEFTransparent(efPlmn, obtainMessage(
+                    event, HANDLER_ACTION_SEND_RESPONSE, key));
     }
 
     /**
