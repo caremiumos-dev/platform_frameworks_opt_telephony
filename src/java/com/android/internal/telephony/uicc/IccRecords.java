@@ -1158,6 +1158,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     /**
      * @return String array containing PLMN from HplmnActRecord.
+     * TODO: Refactor Hplmn, Plmn, and Oplmn into a single function.
      */
     public String[] getPlmnsFromHplmnActRecord() {
         if (mHplmnActRecords == null) return null;
@@ -1166,6 +1167,32 @@ public abstract class IccRecords extends Handler implements IccConstants {
             hplmns[i] = mHplmnActRecords[i].plmn;
         }
         return hplmns;
+    }
+
+    /**
+     * @return String array containing PLMN from OplmnActRecord.
+     * TODO: Refactor Hplmn, Plmn, and Oplmn into a single function.
+     */
+    public String[] getPlmnsFromOplmnActRecord() {
+        if (mOplmnActRecords == null) return null;
+        String[] oplmns = new String[mOplmnActRecords.length];
+        for (int i = 0; i < mOplmnActRecords.length; i++) {
+            oplmns[i] = mOplmnActRecords[i].plmn;
+        }
+        return oplmns;
+    }
+
+    /**
+     * @return String array containing PLMN from PlmnActRecord.
+     * TODO: Refactor Hplmn, Plmn, and Oplmn into a single function.
+     */
+    public String[] getPlmnsFromPlmnActRecord() {
+        if (mPlmnActRecords == null) return null;
+        String[] plmns = new String[mPlmnActRecords.length];
+        for (int i = 0; i < mPlmnActRecords.length; i++) {
+            plmns[i] = mPlmnActRecords[i].plmn;
+        }
+        return plmns;
     }
 
     /**
