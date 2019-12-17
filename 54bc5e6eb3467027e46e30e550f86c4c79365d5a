@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "55f60470_a77392a8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-12-17T12:16:35Z",
+      "side": 1,
+      "message": "The naming rule(we Sony use) comes from Google request in old CLs.\n\u003d\u003d\u003d\u003d\u003d\nhttps://android-review.googlesource.com/c/platform/packages/apps/Settings/+/573442/2/tests/robotests/src/com/android/settings/deviceinfo/SimStatusTest.java#101\n\n\u003e we usually name the test case as method_condition_expected. So, this should be something like updateImsRegistrationState_shouldSetSummary. \n\u003d\u003d\u003d\u003d\u003d\nCould you please double-check which rule should I follow, yours or old comment?\n\nAccording to developer doc, your request(camel naming) seems valid. So should I forget old comment?\nhttps://developer.android.com/training/testing/unit-testing/local-unit-tests#java",
+      "parentUuid": "9c0b84e8_748160f3",
+      "range": {
+        "startLine": 71,
+        "startChar": 16,
+        "endLine": 71,
+        "endChar": 69
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08c1c26a_44a75360",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
         "patchSetId": 6
