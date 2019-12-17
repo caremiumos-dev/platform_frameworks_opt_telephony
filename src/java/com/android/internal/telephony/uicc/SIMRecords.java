@@ -169,11 +169,11 @@ public class SIMRecords extends IccRecords {
     private static final int EVENT_GET_CSP_CPHS_DONE = 33 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_GET_GID1_DONE = 34 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_GET_GID2_DONE = 36 + SIM_RECORD_EVENT_BASE;
-    private static final int EVENT_GET_PLMN_W_ACT_DONE = 37 + SIM_RECORD_EVENT_BASE;
-    private static final int EVENT_GET_OPLMN_W_ACT_DONE = 38 + SIM_RECORD_EVENT_BASE;
-    private static final int EVENT_GET_HPLMN_W_ACT_DONE = 39 + SIM_RECORD_EVENT_BASE;
-    private static final int EVENT_GET_EHPLMN_DONE = 40 + SIM_RECORD_EVENT_BASE;
-    private static final int EVENT_GET_FPLMN_DONE = 41 + SIM_RECORD_EVENT_BASE;
+    public static final int EVENT_GET_PLMN_W_ACT_DONE = 37 + SIM_RECORD_EVENT_BASE;
+    public static final int EVENT_GET_OPLMN_W_ACT_DONE = 38 + SIM_RECORD_EVENT_BASE;
+    public static final int EVENT_GET_HPLMN_W_ACT_DONE = 39 + SIM_RECORD_EVENT_BASE;
+    public static final int EVENT_GET_EHPLMN_DONE = 40 + SIM_RECORD_EVENT_BASE;
+    public static final int EVENT_GET_FPLMN_DONE = 41 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_GET_FPLMN_SIZE_DONE = 42 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_SET_FPLMN_DONE = 43 + SIM_RECORD_EVENT_BASE;
     // ***** Constructor
@@ -1524,6 +1524,16 @@ public class SIMRecords extends IccRecords {
         int key = storePendingTransaction(response);
         mFh.loadEFTransparent(EF_FPLMN, obtainMessage(
                     EVENT_GET_FPLMN_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
+    }
+
+    /**
+     * String[] of PLMNs will be sent to the Message's handler
+     * in the result field of an AsyncResult in the response.obj.
+     */
+    public void getPlmns(Message response, int xplmn, int event) {
+        int key = storePendingTransaction(response);
+        mFh.loadEFTransparent(xplmn, obtainMessage(
+                    event, HANDLER_ACTION_SEND_RESPONSE, key));
     }
 
     /**
