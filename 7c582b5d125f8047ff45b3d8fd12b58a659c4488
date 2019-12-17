@@ -22,6 +22,30 @@
       "revId": "7c582b5d125f8047ff45b3d8fd12b58a659c4488",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfb74d90_631223bf",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1270,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2019-12-17T01:29:46Z",
+      "side": 0,
+      "message": "wait. this is NOT expected change. I will submit patch to recover it and try to find how this occur. Thanks a lot for the comments!",
+      "parentUuid": "3a806fbe_3b4efb38",
+      "range": {
+        "startLine": 1267,
+        "startChar": 0,
+        "endLine": 1270,
+        "endChar": 21
+      },
+      "revId": "7c582b5d125f8047ff45b3d8fd12b58a659c4488",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
