@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1271a72b_a9848f61",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 3207,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-12-17T10:11:55Z",
+      "side": 1,
+      "message": "Need check coding style.",
+      "range": {
+        "startLine": 3182,
+        "startChar": 0,
+        "endLine": 3207,
+        "endChar": 9
+      },
+      "revId": "93953be44e392a319f51323440f8c2c115807356",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f0a6fd8_d0aa8f84",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaSMSDispatcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-12-17T10:11:55Z",
+      "side": 1,
+      "message": "Need check coding style(4 spaces)",
+      "range": {
+        "startLine": 165,
+        "startChar": 12,
+        "endLine": 168,
+        "endChar": 14
+      },
+      "revId": "93953be44e392a319f51323440f8c2c115807356",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f335512_b80aaedb",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SimulatedCommands.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2019-12-17T10:11:55Z",
+      "side": 1,
+      "message": "No need it?\n\nSimulatedCommandsVerifier.getInstance().sendCdmaSMSExpectMore(pdu, response);\nresultSuccess(response, null);",
+      "range": {
+        "startLine": 1814,
+        "startChar": 4,
+        "endLine": 1814,
+        "endChar": 5
+      },
+      "revId": "93953be44e392a319f51323440f8c2c115807356",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
