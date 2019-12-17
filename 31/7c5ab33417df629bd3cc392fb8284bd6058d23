@@ -1,0 +1,10 @@
+Qualcomm-Review+1: Garik Badalyan <garikb@quicinc.com>
+Verified+1: Ravi Paluri <quic_rpaluri@quicinc.com>
+Code-Review+1: Ravi Paluri <quic_rpaluri@quicinc.com>
+Code-Review+2: Tyler Gunn <tgunn@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Tyler Gunn <tgunn@google.com>
+Submitted-at: Tue, 17 Dec 2019 21:11:51 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1185183
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
