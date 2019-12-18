@@ -171,6 +171,9 @@ public interface CallFailCause {
     // Access Blocked by CDMA Network.
     int CDMA_ACCESS_BLOCKED            = 1009;
 
+    int EMC_REDIAL_ON_IMS      = 2001;
+    int EMC_REDIAL_ON_VOWIFI   = 2002;
+
     int ERROR_UNSPECIFIED = 0xffff;
 
 }
