@@ -109,6 +109,7 @@ public class GsmCdmaCallTracker extends CallTracker {
     private int mPendingCallClirMode;
     private boolean mIsEcmTimerCanceled;
     private int m3WayCallFlashDelay;
+    private String mLastDialString;
 
     /**
      * Listens for Emergency Callback Mode state change intents
@@ -289,6 +290,7 @@ public class GsmCdmaCallTracker extends CallTracker {
         checkForDialIssues(isEmergencyCall);
 
         String origNumber = dialString;
+        mLastDialString = dialString;
         dialString = convertNumberIfNecessary(mPhone, dialString);
 
         // The new call must be assigned to the foreground call.
@@ -414,6 +416,7 @@ public class GsmCdmaCallTracker extends CallTracker {
         TelephonyManager tm =
                 (TelephonyManager) mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
         String origNumber = dialString;
+        mLastDialString = dialString;
         String operatorIsoContry = tm.getNetworkCountryIso(mPhone.getPhoneId());
         String simIsoContry = tm.getSimCountryIsoForPhone(mPhone.getPhoneId());
         boolean internationalRoaming = !TextUtils.isEmpty(operatorIsoContry)
@@ -1551,6 +1554,20 @@ public class GsmCdmaCallTracker extends CallTracker {
                             TelephonyManager.getDefault().getNetworkType());
                 }
 
+                if (isEmcRetryCause(causeCode)) {
+                    for(Connection conn : mForegroundCall.mConnections) {
+                        GsmCdmaConnection gsmCdmaConnection = (GsmCdmaConnection)conn;
+                        gsmCdmaConnection.getCall().detach(gsmCdmaConnection);
+                        mDroppedDuringPoll.remove(gsmCdmaConnection);
+                    }
+                    mPhone.notifyVolteSilentRedial(mLastDialString, causeCode);
+                    updatePhoneState();
+                    if (mDroppedDuringPoll.isEmpty()) {
+                        log("LAST_CALL_FAIL_CAUSE - no Dropped normal Call");
+                        return;
+                    }
+                }
+
                 for (int i = 0, s = mDroppedDuringPoll.size(); i < s ; i++) {
                     GsmCdmaConnection conn = mDroppedDuringPoll.get(i);
 
@@ -1755,6 +1772,14 @@ public class GsmCdmaCallTracker extends CallTracker {
     @Override
     public GsmCdmaPhone getPhone() {
         return mPhone;
+    }
+
+    private boolean isEmcRetryCause(int causeCode) {
+        if (causeCode == CallFailCause.EMC_REDIAL_ON_IMS ||
+            causeCode == CallFailCause.EMC_REDIAL_ON_VOWIFI) {
+            return true;
+        }
+        return false;
     }
 
     @UnsupportedAppUsage
