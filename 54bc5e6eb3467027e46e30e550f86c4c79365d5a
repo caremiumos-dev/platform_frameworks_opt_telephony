@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3f782d3a_546a3d91",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 4586,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-12-18T10:04:40Z",
+      "side": 1,
+      "message": "My pleasure!",
+      "parentUuid": "6deeabb4_1f10f3e3",
+      "range": {
+        "startLine": 4586,
+        "startChar": 8,
+        "endLine": 4586,
+        "endChar": 75
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94ebf0dd_2e39546b",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecef119f_91d0c5ac",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 4757,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-12-18T10:04:40Z",
+      "side": 1,
+      "message": "Thank you, I\u0027ve updated it.",
+      "parentUuid": "94ebf0dd_2e39546b",
+      "range": {
+        "startLine": 4757,
+        "startChar": 20,
+        "endLine": 4757,
+        "endChar": 59
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "74db87e9_2f0464fb",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-12-18T10:04:40Z",
+      "side": 1,
+      "message": "Thank you. I updated the name as your recommendation.",
+      "parentUuid": "cd4c9134_d19b35eb",
+      "range": {
+        "startLine": 71,
+        "startChar": 16,
+        "endLine": 71,
+        "endChar": 69
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08c1c26a_44a75360",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
         "patchSetId": 6
@@ -139,6 +211,30 @@
       "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "902f7342_3ba4f09e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-12-18T10:04:40Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "08c1c26a_44a75360",
+      "range": {
+        "startLine": 84,
+        "startChar": 16,
+        "endLine": 84,
+        "endChar": 64
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -165,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "9055893b_7a02593f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-12-18T10:04:40Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "98b84f35_5ed442e7",
+      "range": {
+        "startLine": 99,
+        "startChar": 16,
+        "endLine": 99,
+        "endChar": 44
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70491f7b_b1087a34",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
         "patchSetId": 6
@@ -185,6 +305,30 @@
       "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3da60d6d_41912d29",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-12-18T10:04:40Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "70491f7b_b1087a34",
+      "range": {
+        "startLine": 112,
+        "startChar": 16,
+        "endLine": 112,
+        "endChar": 47
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -211,6 +355,30 @@
     },
     {
       "key": {
+        "uuid": "6861b070_4f20c89f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-12-18T10:04:40Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "cda20705_fde4476b",
+      "range": {
+        "startLine": 132,
+        "startChar": 17,
+        "endLine": 132,
+        "endChar": 32
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41ee92ee_f5d779c2",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
         "patchSetId": 6
@@ -231,6 +399,30 @@
       "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a784e58a_4b88e5c2",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2019-12-18T10:04:40Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "41ee92ee_f5d779c2",
+      "range": {
+        "startLine": 140,
+        "startChar": 43,
+        "endLine": 140,
+        "endChar": 78
+      },
+      "revId": "54bc5e6eb3467027e46e30e550f86c4c79365d5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
