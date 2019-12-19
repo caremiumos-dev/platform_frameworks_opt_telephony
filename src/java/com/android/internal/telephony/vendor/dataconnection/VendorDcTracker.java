@@ -18,10 +18,14 @@ package com.android.internal.telephony.vendor.dataconnection;
 
 import android.telephony.AccessNetworkConstants;
 import android.telephony.Rlog;
+import android.telephony.Annotation.DataFailureCause;
+
 
 import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.uicc.IccRecords;
+
+import com.android.internal.telephony.dataconnection.DataConnection;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -103,6 +107,32 @@ public class VendorDcTracker extends DcTracker {
         mIccidSet.add("8991873");
         mIccidSet.add("8991874");
     }
+
+    @Override
+    /** Return new data connection */
+    protected DataConnection createDataConnection() {
+        if (DBG) log("createDataConnection Ex");
+
+        int id = mUniqueIdGenerator.getAndIncrement();
+        DataConnection conn = VendorDataConnection.makeDataConnection (mPhone, id,
+                this, mDataServiceManager, mDcTesterFailBringUpAll, mDcc);
+        mDataConnections.put(id, conn);
+        if (DBG) log("createDataConnection() X id=" + id + " dc=" + conn);
+        return conn;
+
+    }
+
+    /*@Overrid
+    protected boolean isPermanentFailure(@DataFailureCause int dcFailCause) {
+        if (mPhone.getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_pdp_retry_for_29_33_55_enabled) &&
+                dcFailCause == DataFailCause.MULTI_CONN_TO_SAME_PDN_NOT_ALLOWED) {
+            if (DBG) log("isPermanentFailure: MULTI_CONN_TO_SAME_PDN_NOT_ALLOWED");
+            return true;
+        }
+
+        return super.isPermanentFailure(dcFailCause);
+    }*/
 
     @Override
     protected void log(String s) {
