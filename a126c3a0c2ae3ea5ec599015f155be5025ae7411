@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f920748b_ffefbead",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-12-19T03:07:04Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 802,
+        "startChar": 23,
+        "endLine": 802,
+        "endChar": 57
+      },
+      "revId": "a126c3a0c2ae3ea5ec599015f155be5025ae7411",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63063bd3_32f718e4",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-12-19T03:07:04Z",
+      "side": 1,
+      "message": "Remove. In case in the future we want to use if for other purposes.",
+      "range": {
+        "startLine": 803,
+        "startChar": 4,
+        "endLine": 803,
+        "endChar": 15
+      },
+      "revId": "a126c3a0c2ae3ea5ec599015f155be5025ae7411",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a1b11d7_18952d78",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2019-12-19T03:07:04Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 1787,
+        "startChar": 20,
+        "endLine": 1787,
+        "endChar": 55
+      },
+      "revId": "a126c3a0c2ae3ea5ec599015f155be5025ae7411",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
