@@ -2207,6 +2207,12 @@ public class ServiceStateTracker extends Handler {
                     String opNames[] = (String[]) ar.result;
 
                     if (opNames != null && opNames.length >= 3) {
+                        String simNumeric = ((TelephonyManager) mPhone.getContext().
+                                getSystemService(Context.TELEPHONY_SERVICE)).
+                                getSimOperatorNumericForPhone(getPhoneId());
+                        if ("46697".equals(opNames[2]) && "46605".equals(simNumeric)) {
+                            opNames[0] = "GT 4G R";
+                        }
                         mNewSS.setOperatorAlphaLongRaw(opNames[0]);
                         mNewSS.setOperatorAlphaShortRaw(opNames[1]);
                         // FIXME: Giving brandOverride higher precedence, is this desired?
