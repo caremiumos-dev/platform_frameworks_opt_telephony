@@ -57,16 +57,18 @@ public class CarrierInfoManager {
      *         used for encryption.
      */
     public static ImsiEncryptionInfo getCarrierInfoForImsiEncryption(int keyType,
-                                                                     Context context,
-                                                                     String operatorNumeric) {
+                                                                     Context context) {
         String mcc = "";
         String mnc = "";
-        if (!TextUtils.isEmpty(operatorNumeric)) {
-            mcc = operatorNumeric.substring(0, 3);
-            mnc = operatorNumeric.substring(3);
+        final TelephonyManager telephonyManager =
+                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String simOperator = telephonyManager.getSimOperator();
+        if (!TextUtils.isEmpty(simOperator)) {
+            mcc = simOperator.substring(0, 3);
+            mnc = simOperator.substring(3);
             Log.i(LOG_TAG, "using values for mnc, mcc: " + mnc + "," + mcc);
         } else {
-            Log.e(LOG_TAG, "Invalid networkOperator: " + operatorNumeric);
+            Log.e(LOG_TAG, "Invalid networkOperator: " + simOperator);
             return null;
         }
         Cursor findCursor = null;
