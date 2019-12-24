@@ -1482,7 +1482,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         int subId = mPhone.getSubId();
         SubscriptionInfo info =
                 SubscriptionManager.from(mPhone.getContext()).getActiveSubscriptionInfo(subId);
-        return info == null ? null : info.getCountryIso();
+        if (info == null || info.getCountryIso() == null) {
+            return null;
+        }
+        return info.getCountryIso().toUpperCase();
     }
 
     public void
