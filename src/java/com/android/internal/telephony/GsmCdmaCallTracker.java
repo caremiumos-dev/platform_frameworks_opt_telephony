@@ -102,6 +102,11 @@ public class GsmCdmaCallTracker extends CallTracker {
 
     private TelephonyMetrics mMetrics = TelephonyMetrics.getInstance();
 
+    // This flag is used to indicate if conference is processing.
+    private boolean mConferencePending = false;
+    // This flag is used to indicate if separate is processing.
+    private boolean mSeparatePending = false;
+
     // Following member variables are for CDMA only
     private RegistrantList mCallWaitingRegistrants = new RegistrantList();
     private boolean mPendingCallInEcm;
@@ -623,7 +628,12 @@ public class GsmCdmaCallTracker extends CallTracker {
     }
 
     public void conference() {
+        if (mConferencePending) {
+            log("conference: skip; already in process of conferencing.");
+            return;
+        }
         if (isPhoneTypeGsm()) {
+            mConferencePending = true;
             mCi.conference(obtainCompleteMessage(EVENT_CONFERENCE_RESULT));
         } else {
             // Should we be checking state?
@@ -1255,10 +1265,16 @@ public class GsmCdmaCallTracker extends CallTracker {
             throw new CallStateException ("GsmCdmaConnection " + conn
                                     + "does not belong to GsmCdmaCallTracker " + this);
         }
+        if (mSeparatePending) {
+            log("separate skip; already in process of separating.");
+            return;
+        }
         try {
+            mSeparatePending = true;
             mCi.separateConnection (conn.getGsmCdmaIndex(),
                 obtainCompleteMessage(EVENT_SEPARATE_RESULT));
         } catch (CallStateException ex) {
+            mSeparatePending = false;
             // Ignore "connection not found"
             // Call may have hung up already
             Rlog.w(LOG_TAG,"GsmCdmaCallTracker WARN: separate() on absent connection " + conn);
@@ -1448,6 +1464,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             break;
 
             case EVENT_CONFERENCE_RESULT:
+                mConferencePending = false;
                 if (isPhoneTypeGsm()) {
                     ar = (AsyncResult) msg.obj;
                     if (ar.exception != null) {
@@ -1461,6 +1478,7 @@ public class GsmCdmaCallTracker extends CallTracker {
                 }
                 // fall through
             case EVENT_SEPARATE_RESULT:
+                mSeparatePending = false;
             case EVENT_ECT_RESULT:
             case EVENT_SWITCH_RESULT:
                 if (isPhoneTypeGsm()) {
