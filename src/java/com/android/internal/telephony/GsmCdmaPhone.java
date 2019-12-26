@@ -174,6 +174,8 @@ public class GsmCdmaPhone extends Phone {
      */
     private SIMRecords mSimRecords;
 
+    private String mManualNetworkSelection;
+
     //Common
     // Instance Variables
     @UnsupportedAppUsage
@@ -1866,6 +1868,25 @@ public class GsmCdmaPhone extends Phone {
         } else { //isPhoneTypeCdmaLte()
             return (mSimRecords != null) ? mSimRecords.getPnnHomeName() : null;
         }
+    }
+
+    /**
+     * Update non-perisit manunal network selection.
+     * @param nsm contains Plmn info
+     */
+    public void updateManualNetworkSelection(String nsm) {
+        int subId = getSubId();
+        if (SubscriptionManager.isValidSubscriptionId(subId)) {
+            mManualNetworkSelection = NETWORK_SELECTION_KEY + subId + nsm;
+
+        } else {
+            Rlog.e(LOG_TAG, "Cannot update network selection due to invalid subId "
+                    + subId);
+        }
+    }
+
+    public String getManualNetworkSelection() {
+        return mManualNetworkSelection;
     }
 
     @Override

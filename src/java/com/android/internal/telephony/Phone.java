@@ -1376,6 +1376,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (persistSelection) {
             updateSavedNetworkOperator(nsm);
         } else {
+            if (this instanceof GsmCdmaPhone) {
+                ((GsmCdmaPhone) this).updateManualNetworkSelection(nsm.operatorNumeric);
+            }
             clearSavedNetworkSelection();
         }
     }
