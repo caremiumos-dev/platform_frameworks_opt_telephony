@@ -1392,7 +1392,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         Message msg = obtainMessage(EVENT_SET_NETWORK_MANUAL_COMPLETE, nsm);
         mCi.setNetworkSelectionModeManual(network.getOperatorNumeric(), msg);
 
-        if (persistSelection) {
+        if (persistSelection || this instanceof GsmCdmaPhone) {
             updateSavedNetworkOperator(nsm);
         } else {
             clearSavedNetworkSelection();
