@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af4a62c2_ec214592",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1048283
+      },
+      "writtenOn": "2019-12-26T17:09:19Z",
+      "side": 1,
+      "message": "whitespace.",
+      "revId": "035f92788e4ed90f6a59549319511d10f3346dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
