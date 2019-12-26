@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c82faa74_07610263",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2019-12-26T17:52:21Z",
+      "side": 1,
+      "message": "Would it make sense to add a TODO and refactor Hplmn, Plmn, and Oplmn into a single function that accepts a reference to the array?",
+      "range": {
+        "startLine": 1174,
+        "startChar": 20,
+        "endLine": 1174,
+        "endChar": 46
+      },
+      "revId": "e50c10fb12d29ea4d7c827ca1f713f5afc7d5ad0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
