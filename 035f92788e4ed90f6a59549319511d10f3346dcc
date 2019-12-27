@@ -16,6 +16,24 @@
       "revId": "035f92788e4ed90f6a59549319511d10f3346dcc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66cf789a_a3df07bb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2019-12-27T18:29:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af4a62c2_ec214592",
+      "revId": "035f92788e4ed90f6a59549319511d10f3346dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
