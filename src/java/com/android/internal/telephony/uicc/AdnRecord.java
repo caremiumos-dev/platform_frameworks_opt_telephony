@@ -26,6 +26,8 @@ import android.text.TextUtils;
 import com.android.internal.telephony.GsmAlphabet;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -52,6 +54,16 @@ public class AdnRecord implements Parcelable {
     int mEfid;                   // or 0 if none
     @UnsupportedAppUsage
     int mRecordNumber;           // or 0 if none
+    @UnsupportedAppUsage
+    String mAnr = null;
+    @UnsupportedAppUsage
+    String mAas = null;
+    @UnsupportedAppUsage
+    String mSne = null;
+    @UnsupportedAppUsage
+    String mGrp = null;
+    @UnsupportedAppUsage
+    String mGas = null;
 
 
     //***** Constants
@@ -76,6 +88,29 @@ public class AdnRecord implements Parcelable {
     static final int ADN_CAPABILITY_ID = 12;
     static final int ADN_EXTENSION_ID = 13;
 
+    // offset
+    static final int ADN_SFI = 0;
+    static final int ADN_REC_ID = 1;
+
+    // Maximum length of number in one adn record
+    static final int MAX_LENTH_ADN = (ADN_DIALING_NUMBER_END
+            - ADN_DIALING_NUMBER_START + 1) * 2;
+    // Maximum length of number both in one adn record and in one extension record
+    public static final int MAX_LENTH_NUMBER = (ADN_DIALING_NUMBER_END
+            - ADN_DIALING_NUMBER_START + 1) * 2
+            + MAX_EXT_CALLED_PARTY_LENGTH * 2;
+
+    // Anr split flg
+    public static final String ANR_SPLIT_FLG = ";";
+
+    // Anr record length
+    static final int TYPE1_DATA_LENGTH = 15;
+
+    // Error code
+    public static final int ERROR_ICC_ADN_NUMBER_TOO_LONG = -1;
+    public static final int ERROR_ICC_ADN_TAG_TOO_LONG = -2;
+    int mErrorCode = 0;
+
     //***** Static Methods
 
     @UnsupportedAppUsage
@@ -88,18 +123,31 @@ public class AdnRecord implements Parcelable {
             String alphaTag;
             String number;
             String[] emails;
+            String anr;
+            String aas;
+            String sne;
+            String grp;
+            String gas;
 
             efid = source.readInt();
             recordNumber = source.readInt();
             alphaTag = source.readString();
             number = source.readString();
+            anr = source.readString();
+            aas = source.readString();
+            sne = source.readString();
+            grp = source.readString();
+            gas = source.readString();
+
             final int len = source.readInt();
             if (len > 0) {
                 emails = new String[len];
                 source.readStringArray(emails);
-                return new AdnRecord(efid, recordNumber, alphaTag, number, emails);
+                return new AdnRecord(efid, recordNumber, alphaTag, number,
+                        emails, anr, aas, sne, grp, gas);
             } else {
-                return new AdnRecord(efid, recordNumber, alphaTag, number, null);
+                return new AdnRecord(efid, recordNumber, alphaTag, number,
+                        null, anr, aas, sne, grp, gas);
             }
         }
 
@@ -151,6 +199,24 @@ public class AdnRecord implements Parcelable {
         this.mEmails = null;
     }
 
+    @UnsupportedAppUsage
+    public AdnRecord(String mAlphaTag, String mNumber, String[] mEmails,
+                       String anr, String aas, String sne, String grp, String gas) {
+        this(0, 0, mAlphaTag, mNumber, mEmails, anr, aas, sne, grp, gas);
+    }
+
+    @UnsupportedAppUsage
+    public AdnRecord(int efid, int recordNumber, String mAlphaTag,
+                       String mNumber, String[] mEmails, String anr, String aas, String sne,
+                       String grp, String gas) {
+        this(efid, recordNumber, mAlphaTag, mNumber, mEmails);
+        this.mAnr = anr;
+        this.mAas = aas;
+        this.mGrp = grp;
+        this.mGas = gas;
+        this.mSne = sne;
+    }
+
     //***** Instance Methods
 
     public String getAlphaTag() {
@@ -184,19 +250,108 @@ public class AdnRecord implements Parcelable {
         this.mEmails = emails;
     }
 
+    @UnsupportedAppUsage
+    public String getAnr() {
+        return mAnr;
+    }
+
+    @UnsupportedAppUsage
+    public void setAnr(String anr) {
+        this.mAnr = anr;
+    }
+
+    @UnsupportedAppUsage
+    public String getAas() {
+        return mAas;
+    }
+
+    @UnsupportedAppUsage
+    public void setAas(String aas) {
+        this.mAas = aas;
+    }
+
+    @UnsupportedAppUsage
+    public String getSne() {
+        return mSne;
+    }
+
+    @UnsupportedAppUsage
+    public void setSne(String sne) {
+        this.mSne = sne;
+    }
+
+    @UnsupportedAppUsage
+    public String getGrp() {
+        return mGrp;
+    }
+
+    @UnsupportedAppUsage
+    public String getGas() {
+        return mGas;
+    }
+
+    @UnsupportedAppUsage
+    public void setGas(String gas) {
+        this.mGas = gas;
+    }
+
     @Override
     public String toString() {
         return "ADN Record '" + mAlphaTag + "' '" + Rlog.pii(LOG_TAG, mNumber) + " "
-                + Rlog.pii(LOG_TAG, mEmails) + "'";
+                + Rlog.pii(LOG_TAG, mEmails) + Rlog.pii(LOG_TAG, mAnr) + Rlog.pii(LOG_TAG, mAas)
+                + Rlog.pii(LOG_TAG, mGrp) + Rlog.pii(LOG_TAG, mGas) + Rlog.pii(LOG_TAG, mSne) + "'";
     }
 
     @UnsupportedAppUsage
     public boolean isEmpty() {
-        return TextUtils.isEmpty(mAlphaTag) && TextUtils.isEmpty(mNumber) && mEmails == null;
+        return TextUtils.isEmpty(mAlphaTag) && TextUtils.isEmpty(mNumber) && mEmails == null
+                && isEmptyAnr(mAnr);
     }
 
+    /**
+     * Check if anr string is empty
+     *
+     * @param str anr string
+     * @return true for empty anr string
+     */
+    public boolean isEmptyAnr(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return true;
+        }
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) != ';') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Check if adn has extension record
+     *
+     * @return true for having extension record
+     */
     public boolean hasExtendedRecord() {
         return mExtRecord != 0 && mExtRecord != 0xff;
+    }
+
+    /**
+     * Check if adn need extension record
+     *
+     * @return true for extension record needed
+     */
+    public boolean extRecordIsNeeded() {
+        String numberNoPlus = mNumber;
+        if (!TextUtils.isEmpty(mNumber) && mNumber.charAt(0) == '+') {
+            numberNoPlus = numberNoPlus.substring(1);
+        }
+
+        if (!TextUtils.isEmpty(numberNoPlus)
+                && numberNoPlus.length() <= MAX_LENTH_NUMBER
+                && numberNoPlus.length() > MAX_LENTH_ADN) {
+            return true;
+        }
+        return false;
     }
 
     /** Helper function for {@link #isEqual}. */
@@ -210,13 +365,61 @@ public class AdnRecord implements Parcelable {
         if (s2 == null) {
             s2 = "";
         }
-        return (s1.equals(s2));
+        return (s1.trim().equals(s2.trim()));
     }
 
+    /**
+     * Check if two strings are equal
+     *
+     * @param s1 first string to be compared
+     * @param s2 second string to be compared
+     *
+     * @return true for equal
+     */
+    public boolean stringCompareAnr(String s1, String s2) {
+        if (isEmptyAnr(s1)) {
+            s1 = "";
+        }
+        if (isEmptyAnr(s2)) {
+            s2 = "";
+        }
+        return stringCompareNullEqualsEmpty(s1, s2);
+
+    }
+
+    /**
+     * Check if two string arrays are equal
+     *
+     * @param e1 first string array to be compared
+     * @param e2 second string array to be compared
+     *
+     * @return true for equal
+     */
+    public boolean stringCompareEmails(String[] e1, String[] e2) {
+        String e = "";
+        if (e1 == null) {
+            e1 = new String[1];
+            e1[0] = e;
+        }
+        if (e2 == null) {
+            e2 = new String[1];
+            e2[0] = e;
+        }
+        return stringCompareNullEqualsEmpty(e1[0], e2[0]);
+    }
+
+    /**
+     * Check if two adnRecord are equal
+     *
+     * @param adn adnRecord to be compared
+     *
+     * @return true for equal
+     */
     public boolean isEqual(AdnRecord adn) {
-        return ( stringCompareNullEqualsEmpty(mAlphaTag, adn.mAlphaTag) &&
-                stringCompareNullEqualsEmpty(mNumber, adn.mNumber) &&
-                Arrays.equals(mEmails, adn.mEmails));
+        return (stringCompareNullEqualsEmpty(mAlphaTag, adn.mAlphaTag)
+                && stringCompareNullEqualsEmpty(mNumber, adn.mNumber)
+                && Arrays.equals(mEmails, adn.mEmails)
+                && stringCompareAnr(mAnr, adn.mAnr));
     }
     //***** Parcelable Implementation
 
@@ -232,6 +435,11 @@ public class AdnRecord implements Parcelable {
         dest.writeString(mAlphaTag);
         dest.writeString(mNumber);
         dest.writeStringArray(mEmails);
+        dest.writeString(mAnr);
+        dest.writeString(mAas);
+        dest.writeString(mSne);
+        dest.writeString(mGrp);
+        dest.writeString(mGas);
     }
 
     /**
@@ -255,42 +463,314 @@ public class AdnRecord implements Parcelable {
             adnString[i] = (byte) 0xFF;
         }
 
-        if (TextUtils.isEmpty(mNumber)) {
-            Rlog.w(LOG_TAG, "[buildAdnString] Empty dialing number");
-            return adnString;   // return the empty record (for delete)
-        } else if (mNumber.length()
-                > (ADN_DIALING_NUMBER_END - ADN_DIALING_NUMBER_START + 1) * 2) {
-            Rlog.w(LOG_TAG,
-                    "[buildAdnString] Max length of dialing number is 20");
-            return null;
+        String numberNoPlus = mNumber;
+        if (!TextUtils.isEmpty(mNumber)) {
+            if (mNumber.charAt(0) == '+') {
+                numberNoPlus = numberNoPlus.substring(1);
+            }
         }
 
-        byteTag = !TextUtils.isEmpty(mAlphaTag) ? GsmAlphabet.stringToGsm8BitPacked(mAlphaTag)
-                : new byte[0];
-
-        if (byteTag.length > footerOffset) {
-            Rlog.w(LOG_TAG, "[buildAdnString] Max length of tag is " + footerOffset);
+        if (TextUtils.isEmpty(mNumber) && TextUtils.isEmpty(mAlphaTag)) {
+            Rlog.w(LOG_TAG, "[buildAdnString] Empty dialing number and empty alpha tag");
+            return adnString;   // return the empty record (for delete)
+        } else if (!TextUtils.isEmpty(numberNoPlus) && numberNoPlus.length() > MAX_LENTH_NUMBER) {
+            Rlog.w(LOG_TAG,
+                    "[buildAdnString] Max length of dialing number is " + MAX_LENTH_NUMBER);
+            mErrorCode = ERROR_ICC_ADN_NUMBER_TOO_LONG;
             return null;
         } else {
-            bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(
-                    mNumber, PhoneNumberUtils.BCD_EXTENDED_TYPE_EF_ADN);
+            // dialing number format
+            if (!TextUtils.isEmpty(numberNoPlus) && numberNoPlus.length() <= MAX_LENTH_ADN) {
+                bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(
+                        mNumber, PhoneNumberUtils.BCD_EXTENDED_TYPE_EF_ADN);
+                System.arraycopy(bcdNumber, 0, adnString, footerOffset
+                        + ADN_TON_AND_NPI, bcdNumber.length);
 
-            System.arraycopy(bcdNumber, 0, adnString,
-                    footerOffset + ADN_TON_AND_NPI, bcdNumber.length);
+                adnString[footerOffset + ADN_BCD_NUMBER_LENGTH] = (byte) (bcdNumber.length);
+                adnString[footerOffset + ADN_CAPABILITY_ID] = (byte) 0xFF; // Capacility Id
+                adnString[footerOffset + ADN_EXTENSION_ID] = (byte) 0xFF; // Extension Record Id
+            } else if (!TextUtils.isEmpty(numberNoPlus)
+                    && numberNoPlus.length() <= MAX_LENTH_NUMBER) {
+                String adnNumber;
+                if (mNumber.charAt(0) == '+') {
+                    adnNumber = mNumber.substring(0, MAX_LENTH_ADN + 1);
+                } else {
+                    adnNumber = mNumber.substring(0, MAX_LENTH_ADN);
+                }
 
-            adnString[footerOffset + ADN_BCD_NUMBER_LENGTH]
-                    = (byte) (bcdNumber.length);
-            adnString[footerOffset + ADN_CAPABILITY_ID]
-                    = (byte) 0xFF; // Capability Id
-            adnString[footerOffset + ADN_EXTENSION_ID]
-                    = (byte) 0xFF; // Extension Record Id
+                Rlog.d(LOG_TAG, "adnNumber:" + adnNumber);
+                if (!TextUtils.isEmpty(adnNumber)) {
+                    byte[] adnBcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(
+                            adnNumber, PhoneNumberUtils.BCD_EXTENDED_TYPE_EF_ADN);
+                    System.arraycopy(adnBcdNumber, 0, adnString, footerOffset
+                            + ADN_TON_AND_NPI, adnBcdNumber.length);
+                    adnString[footerOffset + ADN_BCD_NUMBER_LENGTH] = (byte) (adnBcdNumber.length);
+                }
 
-            if (byteTag.length > 0) {
-                System.arraycopy(byteTag, 0, adnString, 0, byteTag.length);
+                adnString[footerOffset + ADN_CAPABILITY_ID] = (byte) 0xFF; // Capacility
+                adnString[footerOffset + ADN_EXTENSION_ID] = (byte) mExtRecord; // Extension
             }
 
+            // alpha tag format
+            if (!TextUtils.isEmpty(mAlphaTag)) {
+                if (isContainChineseChar(mAlphaTag)) {
+                    try {
+                        byteTag = mAlphaTag.getBytes("utf-16be");
+
+                        if (byteTag != null && byteTag.length >= footerOffset) {
+                            Rlog.w(LOG_TAG, "[buildAdnString] Max length of tag is "
+                                    + footerOffset);
+                            mErrorCode = ERROR_ICC_ADN_TAG_TOO_LONG;
+                            return null;
+                        }
+
+                        if (byteTag != null && byteTag.length < adnString.length) {
+                            System.arraycopy(byteTag, 0, adnString, ADN_TON_AND_NPI,
+                                    byteTag.length);
+                        }
+                        adnString[0] = (byte) 0x80;
+                    } catch (java.io.UnsupportedEncodingException ex2) {
+                        Rlog.e(LOG_TAG,
+                                "[AdnRecord]mAlphaTag convert byte excepiton");
+                    }
+                } else {
+                    byteTag = GsmAlphabet.stringToGsm8BitPacked(mAlphaTag);
+                    System.arraycopy(byteTag, 0, adnString, 0, byteTag.length);
+
+                    if (byteTag != null && byteTag.length > footerOffset) {
+                        Rlog.w(LOG_TAG, "[buildAdnString] Max length of tag is " + footerOffset);
+                        mErrorCode = ERROR_ICC_ADN_TAG_TOO_LONG;
+                        return null;
+                    }
+                }
+            }
             return adnString;
         }
+    }
+
+    /**
+     * Build extension field of adn hex byte array based on record size
+     * The format of byte array is defined in 51.011 10.5.1
+     *
+     * @return hex byte[EXT_RECORD_LENGTH_BYTES] to be written to EF record
+     *          return 0xFF for wrong format of dialing number
+     */
+    @UnsupportedAppUsage
+    public byte[] buildExtString() {
+        String extNumber = "";
+
+        if (mNumber != null && mNumber.length() > MAX_LENTH_ADN) {
+            if (mNumber.charAt(0) == '+') {
+                extNumber = mNumber.substring(MAX_LENTH_ADN + 1);
+            } else {
+                extNumber = mNumber.substring(MAX_LENTH_ADN);
+            }
+        }
+
+        byte[] extBcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(
+                extNumber, PhoneNumberUtils.BCD_EXTENDED_TYPE_EF_ADN);
+
+        // create an empty record
+        byte[] extString = new byte[EXT_RECORD_LENGTH_BYTES];
+        for (int i = 0; i < EXT_RECORD_LENGTH_BYTES; i++) {
+            extString[i] = (byte) 0xFF;
+        }
+
+        if (!TextUtils.isEmpty(extNumber)) {
+            extString[0] = (byte) EXT_RECORD_TYPE_ADDITIONAL_DATA; // ext record type
+            extBcdNumber[0] = (byte) (extBcdNumber.length - 1);
+            if (extBcdNumber.length <= MAX_EXT_CALLED_PARTY_LENGTH + 1) {
+                System.arraycopy(extBcdNumber, 0, extString, 1, extBcdNumber.length);
+            }
+            extString[12] = (byte) 0xFF; // only support one ext record
+        }
+
+        return extString;
+    }
+
+    /**
+     * Build email hex byte array based on record size
+     * The format of byte array is defined in 51.011 10.5.1
+     *
+     * @param recordSize is the size X of EF record
+     * @return hex byte[recordSize] to be written to EF record
+     *          return null for wrong format of email
+     */
+    public byte[] buildEmailString(int recordSize, int recordSeq, int efid,
+            int adnNum) {
+        byte[] byteTag;
+        byte[] emailString;
+        String emailRecord;
+        int footerOffset = recordSize - 2;
+
+        // create an empty record
+        emailString = new byte[recordSize];
+        for (int i = 0; i < recordSize; i++) {
+            emailString[i] = (byte) 0xFF;
+
+        }
+
+        emailString[footerOffset + ADN_SFI] = (byte) efid; // Adn Sfi
+        emailString[footerOffset + ADN_REC_ID] = (byte) adnNum; // Adn Record Id
+
+        if (mEmails == null || mEmails.length <= recordSeq) {
+            return emailString;
+        } else {
+            emailRecord = mEmails[recordSeq];
+        }
+
+        if (!TextUtils.isEmpty(emailRecord)) {
+            if (isContainChineseChar(emailRecord)) {
+                try {
+                    byteTag = emailRecord.getBytes("utf-16be");
+                    if (byteTag.length > (footerOffset - 1)) {
+                        Rlog.w(LOG_TAG, "emailRecord is overlength");
+                        return null;
+                    }
+
+                    System.arraycopy(byteTag, 0, emailString, ADN_TON_AND_NPI,
+                            byteTag.length);
+                    emailString[0] = (byte) 0x80;
+
+                } catch (java.io.UnsupportedEncodingException ex2) {
+                    Rlog.e(LOG_TAG, "[AdnRecord]emailRecord convert byte exception");
+                }
+
+            } else {
+                byteTag = GsmAlphabet.stringToGsm8BitPacked(emailRecord);
+                if (byteTag.length > footerOffset) {
+                    Rlog.w(LOG_TAG, "emailRecord is overlength");
+                    return null;
+                }
+                System.arraycopy(byteTag, 0, emailString, 0, byteTag.length);
+            }
+        }
+        return emailString;
+    }
+
+    /**
+     * Build anr hex byte array based on record size
+     * The format of byte array is defined in 51.011 10.5.1
+     *
+     * @param recordSize is the size X of EF record
+     * @return hex byte[recordSize] to be written to EF record
+     *          return null for wrong format of anr
+     */
+    public byte[] buildAnrString(int recordSize, int anrCount, int efid,
+            int adnNum, int aasIndex) {
+        byte[] anrString;
+        String anrRecord = null;
+        byte[] anrNumber;
+
+        // create an empty record
+        anrString = new byte[recordSize];
+        for (int i = 0; i < recordSize; i++) {
+            anrString[i] = (byte) 0xFF;
+        }
+
+        if (TextUtils.isEmpty(mAnr) || mAnr.equals(";") || mAnr.equals(";;")) {
+            Rlog.e(LOG_TAG, "[buildAnrString] anr mNumber is empty. ");
+            return anrString;
+        } else {
+            String[] ret = null;
+            if (!TextUtils.isEmpty(mAnr)) {
+                ret = (mAnr + "1").split(";");
+                ret[ret.length - 1] = ret[ret.length - 1].substring(0,
+                        ret[ret.length - 1].length() - 1);
+            }
+
+            if (anrCount >= ret.length) {
+                return anrString;
+            } else {
+                anrRecord = ret[anrCount];
+            }
+
+            if (TextUtils.isEmpty(anrRecord)) {
+                Rlog.w(LOG_TAG, "[buildAnrString] anrRecord is empty. ");
+            } else if (anrRecord.length() > 20) {
+                Rlog.w(LOG_TAG,
+                        "[buildAnrString] Max length of dailing mNumber is 20,throw exception");
+                return null;
+            } else {
+                anrString[0] = (byte) aasIndex; //aas id
+
+                anrNumber = PhoneNumberUtils.numberToCalledPartyBCD(
+                        anrRecord, PhoneNumberUtils.BCD_EXTENDED_TYPE_EF_ADN);
+                if (anrNumber == null) {
+                    return anrString;
+                }
+
+                anrString[ADN_BCD_NUMBER_LENGTH + 1] = (byte) (anrNumber.length);
+                System.arraycopy(anrNumber, 0, anrString, 2, anrNumber.length);
+
+                if (recordSize > TYPE1_DATA_LENGTH) {
+                    anrString[recordSize - 4] = (byte) 0xFF; // Capacility Id
+                    anrString[recordSize - 3] = (byte) 0xFF; // Extension Record Id
+                    anrString[recordSize - 2] = (byte) efid; // Adn Sfi
+                    anrString[recordSize - 1] = (byte) adnNum; // Adn Record Id
+                } else {
+                    anrString[recordSize - 2] = (byte) 0xFF; // Capacility Id
+                    anrString[recordSize - 1] = (byte) 0xFF; // Extension Record Id
+                }
+            }
+            return anrString;
+        }
+    }
+
+    /**
+     * Build sne hex byte array based on record size
+     * The format of byte array is defined in 51.011 10.5.1
+     *
+     * @param recordSize is the size X of EF record
+     * @return hex byte[recordSize] to be written to EF record
+     *          return null for wrong format of sne
+     */
+    public byte[] buildSneString(int recordSize, int recordSeq, int efid, int adnNum) {
+        byte[] byteTag;
+        byte[] sneString;
+        int footerOffset = recordSize - 2;
+        // create an empty record
+        sneString = new byte[recordSize];
+        for (int i = 0; i < recordSize; i++) {
+            sneString[i] = (byte) 0xFF;
+        }
+        sneString[footerOffset + ADN_SFI] = (byte) efid; // Adn Sfi
+        sneString[footerOffset + ADN_REC_ID] = (byte) adnNum; // Adn Record Id
+
+
+        if (!TextUtils.isEmpty(mSne)) {
+            if (isContainChineseChar(mSne)) {
+                try {
+                    byteTag = mSne.getBytes("utf-16be");
+                    if (byteTag.length > (footerOffset - 1)) {
+                        Rlog.w(LOG_TAG, "sneRecord is overlength");
+                        return null;
+                    }
+                    System.arraycopy(byteTag, 0, sneString, ADN_TON_AND_NPI, byteTag.length);
+                    sneString[0] = (byte) 0x80;
+                } catch (java.io.UnsupportedEncodingException ex2) {
+                    Rlog.e(LOG_TAG, "[AdnRecord]sneRecord convert byte exception");
+                    return null;
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    Rlog.e(LOG_TAG, "over the length of aas");
+                    return null;
+                }
+            } else {
+                try {
+                    byteTag = GsmAlphabet.stringToGsm8BitPacked(mSne);
+                    if (byteTag.length > footerOffset) {
+                        Rlog.w(LOG_TAG, "sneRecord is overlength");
+                        return null;
+                    }
+                    System.arraycopy(byteTag, 0, sneString, 0, byteTag.length);
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    Rlog.e(LOG_TAG, "over the length of aas");
+                    return null;
+                }
+            }
+
+        }
+        return sneString;
     }
 
     /**
@@ -360,7 +840,6 @@ public class AdnRecord implements Parcelable {
                     numberLength,
                     PhoneNumberUtils.BCD_EXTENDED_TYPE_EF_ADN);
 
-
             mExtRecord = 0xff & record[record.length - 1];
 
             mEmails = null;
@@ -371,5 +850,42 @@ public class AdnRecord implements Parcelable {
             mAlphaTag = "";
             mEmails = null;
         }
+    }
+
+    /**
+     * Set adn record number
+     *
+     * @param simIndex record number to be set
+     */
+    public void setRecordNumber(int simIndex) {
+        mRecordNumber = simIndex;
+    }
+
+    /**
+     * Set grp string
+     *
+     * @param grp grp string to be set
+     */
+    public void setGrp(String grp) {
+        this.mGrp = grp;
+    }
+
+    // Check alphat whether contains chinese character
+    private boolean isContainChineseChar(String alphTag) {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(alphTag);
+        if (m.find()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get error code
+     *
+     * @return error code
+     */
+    public int getErrorCode() {
+        return mErrorCode;
     }
 }

@@ -64,6 +64,27 @@ public class UiccPhoneBookController extends IIccPhoneBook.Stub {
     }
 
     @Override
+    public int updateUsimAdnRecordsInEfBySearchForSubscriber(int subId, int efid,
+            String oldTag, String oldPhoneNumber, String[] oldEmailList,
+            String oldAnr, String oldSne, String oldGrp, String newTag,
+            String newPhoneNumber, String[] newEmailList, String newAnr,
+            String newAas, String newSne, String newGrp, String newGas,
+            String pin2) throws android.os.RemoteException {
+        IccPhoneBookInterfaceManager iccPbkIntMgr =
+                getIccPhoneBookInterfaceManager(subId);
+        if (iccPbkIntMgr != null) {
+            return iccPbkIntMgr.updateAdnRecordsInEfBySearch(efid, oldTag,
+                    oldPhoneNumber, oldEmailList, oldAnr, oldSne, oldGrp,
+                    newTag, newPhoneNumber, newEmailList, newAnr, newAas,
+                    newSne, newGrp, newGas, pin2);
+        } else {
+            Rlog.e(TAG, "updateAdnRecordsInEfBySearch iccPbkIntMgr is"
+                    + " null for Subscription:" + subId);
+            return -1;
+        }
+    }
+
+    @Override
     public boolean
     updateAdnRecordsInEfByIndex(int efid, String newTag,
             String newPhoneNumber, int index, String pin2) throws android.os.RemoteException {
@@ -84,6 +105,24 @@ public class UiccPhoneBookController extends IIccPhoneBook.Stub {
             Rlog.e(TAG,"updateAdnRecordsInEfByIndex iccPbkIntMgr is" +
                       " null for Subscription:"+subId);
             return false;
+        }
+    }
+
+    @Override
+    public int updateUsimAdnRecordsInEfByIndexForSubscriber(int subId, int efid,
+                        String newTag, String newPhoneNumber, String[] newEmailList,
+                        String newAnr, String newAas, String newSne, String newGrp,
+                        String newGas, int index, String pin2) throws android.os.RemoteException {
+        IccPhoneBookInterfaceManager iccPbkIntMgr =
+                getIccPhoneBookInterfaceManager(subId);
+        if (iccPbkIntMgr != null) {
+            return iccPbkIntMgr.updateAdnRecordsInEfByIndex(efid, newTag,
+                    newPhoneNumber, newEmailList, newAnr, newAas, newSne,
+                    newGrp, newGas, index, pin2);
+        } else {
+            Rlog.e(TAG, "updateAdnRecordsInEfBySearch iccPbkIntMgr is"
+                    + " null for Subscription:" + subId);
+            return -1;
         }
     }
 
@@ -149,5 +188,102 @@ public class UiccPhoneBookController extends IIccPhoneBook.Stub {
     @UnsupportedAppUsage
     private int getDefaultSubscription() {
         return PhoneFactory.getDefaultSubscription();
+    }
+
+    @Override
+    public List<String> getAasInEfForSubscriber(int subId)
+            throws android.os.RemoteException {
+        IccPhoneBookInterfaceManager iccPbkIntMgr =
+                getIccPhoneBookInterfaceManager(subId);
+        if (iccPbkIntMgr != null) {
+            return iccPbkIntMgr.getAasInEf();
+        } else {
+            Rlog.e(TAG, "getAasInEfForSubscriber iccPbkIntMgr is"
+                    + "null for Subscription:" + subId);
+            return null;
+        }
+    }
+
+    @Override
+    public int getInsertIndex(int subId) {
+        IccPhoneBookInterfaceManager iccPbkIntMgr =
+                getIccPhoneBookInterfaceManager(subId);
+        if (iccPbkIntMgr != null) {
+            return iccPbkIntMgr.getInsertIndex();
+        } else {
+            Rlog.e(TAG, "getInsertIndex iccPbkIntMgr is"
+                    + " null for Subscription:" + subId);
+            return -1;
+        }
+    }
+
+    @Override
+    public int updateUsimGroupBySearchForSubscriber(int subId, String oldName,
+                                                    String newName) {
+        IccPhoneBookInterfaceManager iccPbkIntMgr =
+                getIccPhoneBookInterfaceManager(subId);
+        if (iccPbkIntMgr != null) {
+            return iccPbkIntMgr.updateUsimGroupBySearch(oldName, newName);
+        } else {
+            Rlog.e(TAG,
+                    "updateUsimGroupBySearchForSubscriber iccPbkIntMgr is"
+                            + " null for Subscription:" + subId);
+            return -1;
+        }
+    }
+
+    @Override
+    public int updateUsimGroupByIndexForSubscriber(int subId, String newName,
+                                                   int groupId) {
+        IccPhoneBookInterfaceManager iccPbkIntMgr =
+                getIccPhoneBookInterfaceManager(subId);
+        if (iccPbkIntMgr != null) {
+            return iccPbkIntMgr.updateUsimGroupByIndex(newName, groupId);
+        } else {
+            Rlog.e(TAG, "updateUsimGroupByIdForSubscriber iccPbkIntMgr is"
+                    + " null for Subscription:" + subId);
+            return -1;
+        }
+    }
+
+    @Override
+    public List<String> getGasInEfForSubscriber(int subId) {
+        IccPhoneBookInterfaceManager iccPbkIntMgr =
+                getIccPhoneBookInterfaceManager(subId);
+        if (iccPbkIntMgr != null) {
+            return iccPbkIntMgr.getGasInEf();
+        } else {
+            Rlog.e(TAG, "getGasInEfForSubscriber iccPbkIntMgr is"
+                    + " null for Subscription:" + subId);
+            return null;
+        }
+    }
+
+    @Override
+    public int updateUsimAasBySearchForSubscriber(String oldName,
+                                                  String newName, int subId) {
+        IccPhoneBookInterfaceManager iccPbkIntMgr =
+                getIccPhoneBookInterfaceManager(subId);
+        if (iccPbkIntMgr != null) {
+            return iccPbkIntMgr.updateUsimAasBySearch(oldName, newName);
+        } else {
+            Rlog.e(TAG, "updateUsimAasBySearchForSubscriber iccPbkIntMgr is"
+                    + " null for Subscription:" + subId);
+            return -1;
+        }
+    }
+
+    @Override
+    public int updateUsimAasByIndexForSubscriber(String newName, int aasIndex,
+                                                 int subId) {
+        IccPhoneBookInterfaceManager iccPbkIntMgr =
+                getIccPhoneBookInterfaceManager(subId);
+        if (iccPbkIntMgr != null) {
+            return iccPbkIntMgr.updateUsimAasByIndex(newName, aasIndex);
+        } else {
+            Rlog.e(TAG, "updateUsimAasByIndexForSubscriber iccPbkIntMgr is"
+                    + " null for Subscription:" + subId);
+            return -1;
+        }
     }
 }

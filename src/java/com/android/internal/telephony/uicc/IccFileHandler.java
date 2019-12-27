@@ -193,6 +193,22 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
      *
      * @param fileid EF id
      * @param recordNum 1-based (not 0-based) record number
+     * @param recordSize record size
+     * @param onLoaded
+     *
+     * ((AsyncResult)(onLoaded.obj)).result is the byte[]
+     *
+     */
+    @UnsupportedAppUsage
+    public void loadEFLinearFixed(int fileid, int recordNum, int recordSize,
+                                  Message onLoaded) {
+    }
+
+    /**
+     * Load a record from a SIM Linear Fixed EF
+     *
+     * @param fileid EF id
+     * @param recordNum 1-based (not 0-based) record number
      * @param onLoaded
      *
      * ((AsyncResult)(onLoaded.obj)).result is the byte[]

@@ -51,8 +51,17 @@ public class IccProvider extends ContentProvider {
         "name",
         "number",
         "emails",
+        "anr",
+        "aas",
+        "sne",
+        "grp",
+        "gas",
+        "index",
         "_id"
     };
+
+    private static final String[] SIM_AAS_PROJECTION = new String[] { "aas", "index" };
+    private static final String[] SIM_GROUP_PROJECTION = new String[] { "gas", "index" };
 
     protected static final int ADN = 1;
     protected static final int ADN_SUB = 2;
@@ -61,11 +70,25 @@ public class IccProvider extends ContentProvider {
     protected static final int SDN = 5;
     protected static final int SDN_SUB = 6;
     protected static final int ADN_ALL = 7;
+    protected static final int AAS = 8;
+    protected static final int AAS_SUB = 9;
+    protected static final int GAS = 10;
+    protected static final int GAS_SUB = 11;
 
     protected static final String STR_TAG = "tag";
+    protected static final String STR_NEW_TAG = "newTag";
     protected static final String STR_NUMBER = "number";
+    protected static final String STR_NEW_NUMBER = "newNumber";
+    protected static final String STR_INDEX = "index";
     protected static final String STR_EMAILS = "emails";
     protected static final String STR_PIN2 = "pin2";
+    protected static final String STR_ANR = "anr";
+    protected static final String STR_AAS = "aas";
+    protected static final String STR_SNE = "sne";
+    protected static final String STR_GRP = "grp";
+    protected static final String STR_GAS = "gas";
+
+    public static final String EMAIL_SPLIT_FLG = ",";
 
     private static final UriMatcher URL_MATCHER =
                             new UriMatcher(UriMatcher.NO_MATCH);
@@ -77,6 +100,10 @@ public class IccProvider extends ContentProvider {
         URL_MATCHER.addURI("icc", "fdn/subId/#", FDN_SUB);
         URL_MATCHER.addURI("icc", "sdn", SDN);
         URL_MATCHER.addURI("icc", "sdn/subId/#", SDN_SUB);
+        URL_MATCHER.addURI("icc", "aas", AAS);
+        URL_MATCHER.addURI("icc", "aas/subId/#", AAS_SUB);
+        URL_MATCHER.addURI("icc", "gas", GAS);
+        URL_MATCHER.addURI("icc", "gas/subId/#", GAS_SUB);
     }
 
     private SubscriptionManager mSubscriptionManager;
@@ -121,6 +148,18 @@ public class IccProvider extends ContentProvider {
             case ADN_ALL:
                 return loadAllSimContacts(IccConstants.EF_ADN);
 
+            case AAS:
+                return loadAas(SubscriptionManager.getDefaultSubscriptionId());
+
+            case AAS_SUB:
+                return loadAas(getRequestSubId(url));
+
+            case GAS:
+                return loadGas(SubscriptionManager.getDefaultSubscriptionId());
+
+            case GAS_SUB:
+                return loadGas(getRequestSubId(url));
+
             default:
                 throw new IllegalArgumentException("Unknown URL " + url);
         }
@@ -157,6 +196,8 @@ public class IccProvider extends ContentProvider {
             case FDN_SUB:
             case SDN:
             case SDN_SUB:
+            case AAS:
+            case AAS_SUB:
             case ADN_ALL:
                 return "vnd.android.cursor.dir/sim-contact";
 
@@ -168,11 +209,14 @@ public class IccProvider extends ContentProvider {
     @Override
     public Uri insert(Uri url, ContentValues initialValues) {
         Uri resultUri;
-        int efType;
-        String pin2 = null;
         int subId;
+        int efType = -1;
+        int index = -1;
+        String pin2 = null;
+        boolean isAas = false;
+        boolean isGas = false;
 
-        if (DBG) log("insert");
+        if (DBG) log("insert, uri:" + url + " initialValues:" + initialValues);
 
         int match = URL_MATCHER.match(url);
         switch (match) {
@@ -198,17 +242,54 @@ public class IccProvider extends ContentProvider {
                 pin2 = initialValues.getAsString("pin2");
                 break;
 
+            case GAS:
+                subId = SubscriptionManager.getDefaultSubscriptionId();
+                isGas = true;
+                break;
+
+            case GAS_SUB:
+                subId = getRequestSubId(url);
+                isGas = true;
+                break;
+
+            case AAS:
+                subId = SubscriptionManager.getDefaultSubscriptionId();
+                isAas = true;
+                break;
+
+            case AAS_SUB:
+                subId = getRequestSubId(url);
+                isAas = true;
+                break;
+
             default:
-                throw new UnsupportedOperationException(
-                        "Cannot insert into URL: " + url);
+                throw new UnsupportedOperationException("Cannot insert into URL: "
+                        + url);
         }
 
         String tag = initialValues.getAsString("tag");
         String number = initialValues.getAsString("number");
-        // TODO(): Read email instead of sending null.
-        boolean success = addIccRecordToEf(efType, tag, number, null, pin2, subId);
+        String anr = initialValues.getAsString("anr");
+        String aas = initialValues.getAsString("aas");
+        String sne = initialValues.getAsString("sne");
+        String gas = initialValues.getAsString("gas");
+        String grp = initialValues.getAsString("grp");
+        String email = initialValues.getAsString("email");
+        String[] emails = null;
+        if (email != null) {
+            emails = email.split(EMAIL_SPLIT_FLG);
+        }
 
-        if (!success) {
+        if (isGas) {
+            index = addUsimGroupBySearch(gas, subId);
+        } else if (isAas) {
+            index = addUsimAas(aas, subId);
+        } else {
+            index = addIccRecordToEf(efType, tag, number, emails, anr, aas,
+                    sne, grp, gas, pin2, subId);
+        }
+
+        if (index < 0) {
             return null;
         }
 
@@ -229,10 +310,30 @@ public class IccProvider extends ContentProvider {
             case FDN_SUB:
                 buf.append("fdn/subId/");
                 break;
+
+            case GAS:
+                buf.append("gas/");
+                break;
+
+            case GAS_SUB:
+                buf.append("gas/subId/");
+                break;
+
+            case AAS:
+                buf.append("aas/");
+                break;
+
+            case AAS_SUB:
+                buf.append("aas/subId/");
+                break;
         }
 
         // TODO: we need to find out the rowId for the newly added record
-        buf.append(0);
+        if (match == FDN_SUB) {
+            buf.append(subId);
+        } else {
+            buf.append(index);
+        }
 
         resultUri = Uri.parse(buf.toString());
 
@@ -266,6 +367,10 @@ public class IccProvider extends ContentProvider {
     public int delete(Uri url, String where, String[] whereArgs) {
         int efType;
         int subId;
+        boolean isGas = false;
+        boolean isAas = false;
+
+        if (DBG) log("delete, uri:" + url + " where:" + where + " whereArgs:" + whereArgs);
 
         int match = URL_MATCHER.match(url);
         switch (match) {
@@ -289,52 +394,101 @@ public class IccProvider extends ContentProvider {
                 subId = getRequestSubId(url);
                 break;
 
+            case GAS:
+                efType = IccConstants.EF_ADN;
+                subId = SubscriptionManager.getDefaultSubscriptionId();
+                isGas = true;
+                break;
+
+            case GAS_SUB:
+                efType = IccConstants.EF_ADN;
+                subId = getRequestSubId(url);
+                isGas = true;
+                break;
+
+            case AAS:
+                efType = IccConstants.EF_ADN;
+                subId = SubscriptionManager.getDefaultSubscriptionId();
+                isAas = true;
+                break;
+
+            case AAS_SUB:
+                efType = IccConstants.EF_ADN;
+                subId = getRequestSubId(url);
+                isAas = true;
+                break;
+
             default:
                 throw new UnsupportedOperationException(
                         "Cannot insert into URL: " + url);
         }
-
-        if (DBG) log("delete");
 
         // parse where clause
         String tag = null;
         String number = null;
         String[] emails = null;
         String pin2 = null;
+        int index = -1;
+        int result = -1;
+        boolean success = false;
 
-        String[] tokens = where.split(" AND ");
-        int n = tokens.length;
+        if (whereArgs == null || whereArgs.length == 0) {
+            String[] tokens = where.split(" AND ");
+            int n = tokens.length;
+            while (--n >= 0) {
+                String param = tokens[n];
+                if (DBG) log("parsing '" + param + "'");
 
-        while (--n >= 0) {
-            String param = tokens[n];
-            if (DBG) log("parsing '" + param + "'");
+                String[] pair = param.split("=", 2);
 
-            String[] pair = param.split("=", 2);
+                if (pair.length != 2) {
+                    Rlog.e(TAG, "resolve: bad whereClause parameter: " + param);
+                    continue;
+                }
+                String key = pair[0].trim();
+                String val = pair[1].trim();
 
-            if (pair.length != 2) {
-                Rlog.e(TAG, "resolve: bad whereClause parameter: " + param);
-                continue;
+                if (STR_TAG.equals(key)) {
+                    tag = normalizeValue(val);
+                } else if (STR_NUMBER.equals(key)) {
+                    number = normalizeValue(val);
+                } else if (STR_EMAILS.equals(key)) {
+                    //TODO(): Email is null.
+                    emails = null;
+                } else if (STR_PIN2.equals(key)) {
+                    pin2 = normalizeValue(val);
+                } else if (STR_INDEX.equals(key)) {
+                    index = Integer.valueOf(normalizeValue(val));
+                }
             }
-            String key = pair[0].trim();
-            String val = pair[1].trim();
-
-            if (STR_TAG.equals(key)) {
-                tag = normalizeValue(val);
-            } else if (STR_NUMBER.equals(key)) {
-                number = normalizeValue(val);
-            } else if (STR_EMAILS.equals(key)) {
-                //TODO(): Email is null.
-                emails = null;
-            } else if (STR_PIN2.equals(key)) {
-                pin2 = normalizeValue(val);
-            }
+        } else {
+            tag = whereArgs[0];
+            number = whereArgs[1];
+            pin2 = whereArgs[2];
         }
 
         if (efType == FDN && TextUtils.isEmpty(pin2)) {
             return 0;
         }
 
-        boolean success = deleteIccRecordFromEf(efType, tag, number, emails, pin2, subId);
+        if (efType == FDN) {
+            success = deleteIccRecordFromEf(efType, tag, number, null, "", "",
+                    "", pin2, subId);
+        } else if (isGas) {
+            success = updateUsimGroupByIndex("", index, subId);
+        } else if (isAas) {
+            success = updateUsimAasByIndex("", index, subId);
+        } else {
+            // use the default method to delete iccRecord,because the 3rd app
+            // will not use index
+            if (index == -1) {
+                log("the 3rd app will not use index");
+                success = deleteIccRecordFromEf(efType, tag, number, emails, pin2, subId);
+            } else {
+                success = deleteIccRecordFromEfByIndex(efType, index, pin2, subId);
+            }
+        }
+
         if (!success) {
             return 0;
         }
@@ -346,10 +500,12 @@ public class IccProvider extends ContentProvider {
     @Override
     public int update(Uri url, ContentValues values, String where, String[] whereArgs) {
         String pin2 = null;
-        int efType;
+        int efType = -1;
         int subId;
+        boolean isGas = false;
+        boolean isAas = false;
 
-        if (DBG) log("update");
+        if (DBG) log("update, uri:" + url + ", where: " + where + ", value: " + values);
 
         int match = URL_MATCHER.match(url);
         switch (match) {
@@ -375,21 +531,63 @@ public class IccProvider extends ContentProvider {
                 pin2 = values.getAsString("pin2");
                 break;
 
+            case GAS:
+                subId = SubscriptionManager.getDefaultSubscriptionId();
+                isGas = true;
+                break;
+
+            case GAS_SUB:
+                subId = getRequestSubId(url);
+                isGas = true;
+                break;
+
+            case AAS:
+                subId = SubscriptionManager.getDefaultSubscriptionId();
+                isAas = true;
+                break;
+
+            case AAS_SUB:
+                subId = getRequestSubId(url);
+                isAas = true;
+                break;
+
             default:
                 throw new UnsupportedOperationException(
                         "Cannot insert into URL: " + url);
         }
 
-        String tag = values.getAsString("tag");
-        String number = values.getAsString("number");
-        String[] emails = null;
-        String newTag = values.getAsString("newTag");
-        String newNumber = values.getAsString("newNumber");
-        String[] newEmails = null;
-        // TODO(): Update for email.
-        boolean success = updateIccRecordInEf(efType, tag, number,
-                newTag, newNumber, pin2, subId);
+        String newTag = values.getAsString(STR_TAG);
+        String newNumber = values.getAsString(STR_NUMBER);
+        Integer index = values.getAsInteger(STR_INDEX);
+        String newanr = values.getAsString(STR_ANR);
+        String newaas = values.getAsString(STR_AAS);
+        String newsne = values.getAsString(STR_SNE);
+        String newgrp = values.getAsString(STR_GRP);
+        String newgas = values.getAsString(STR_GAS);
+        String newEmail = values.getAsString(STR_EMAILS);
+        String[] newemails = null;
+        if (newEmail != null) {
+            newemails = newEmail.split(EMAIL_SPLIT_FLG);
+        }
 
+        boolean success = false;
+        int recIndex = -1;
+        if (efType == FDN) {
+            String tag = values.getAsString(STR_TAG);
+            String number = values.getAsString(STR_NUMBER);
+            newTag = values.getAsString(STR_NEW_TAG);
+            newNumber = values.getAsString(STR_NEW_NUMBER);
+            success = updateIccRecordInEf(efType, tag, number, null, "", "", "",
+                    newTag, newNumber, null, "", "", "", "", "", pin2, subId);
+        } else if (isGas) {
+            success = updateUsimGroupByIndex(newgas, index, subId);
+        } else if (isAas) {
+            success = updateUsimAasByIndex(newaas, index, subId);
+        } else {
+            success = updateIccRecordInEfByIndex(efType, newTag, newNumber,
+                    newemails, newanr, newaas, newsne, newgrp, newgas, index,
+                    pin2, subId);
+        }
         if (!success) {
             return 0;
         }
@@ -431,14 +629,19 @@ public class IccProvider extends ContentProvider {
         }
     }
 
-    private boolean
-    addIccRecordToEf(int efType, String name, String number, String[] emails,
-            String pin2, int subId) {
-        if (DBG) log("addIccRecordToEf: efType=0x" + Integer.toHexString(efType).toUpperCase() +
-                ", name=" + Rlog.pii(TAG, name) + ", number=" + Rlog.pii(TAG, number) +
-                ", emails=" + Rlog.pii(TAG, emails) + ", subscription=" + subId);
+    private int addIccRecordToEf(int efType, String name, String number, String[] emails,
+                     String anr, String aas, String sne, String grp, String gas,
+                     String pin2, int subId) {
+        if (DBG) {
+            log("addIccRecordToEf: efType=0x" + Integer.toHexString(efType).toUpperCase()
+                    + ", name=" + Rlog.pii(TAG, name) + ", number=" + Rlog.pii(TAG, number)
+                    + ", emails=" + Rlog.pii(TAG, emails) + ", anr=" + Rlog.pii(TAG, anr)
+                    + ", aas=" + Rlog.pii(TAG, aas) + ", sne=" + Rlog.pii(TAG, sne)
+                    + ", grp=" + Rlog.pii(TAG, grp) + ", gas=" + Rlog.pii(TAG, gas)
+                    + ", subscription=" + subId);
+        }
 
-        boolean success = false;
+        int retIndex = -1;
 
         // TODO: do we need to call getAdnRecordsInEf() before calling
         // updateAdnRecordsInEfBySearch()? In any case, we will leave
@@ -449,47 +652,191 @@ public class IccProvider extends ContentProvider {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfBySearchForSubscriber(subId, efType,
-                        "", "", name, number, pin2);
+                retIndex = iccIpb.updateUsimAdnRecordsInEfBySearchForSubscriber(
+                        subId, efType, "", "", null, "", "", "", name, number,
+                        emails, anr, aas, sne, grp, gas, pin2);
             }
         } catch (RemoteException ex) {
             // ignore it
         } catch (SecurityException ex) {
             if (DBG) log(ex.toString());
         }
-        if (DBG) log("addIccRecordToEf: " + success);
-        return success;
+
+        if (DBG) log("addIccRecordToEf: " + retIndex);
+        return retIndex;
     }
 
-    private boolean
-    updateIccRecordInEf(int efType, String oldName, String oldNumber,
-            String newName, String newNumber, String pin2, int subId) {
-        if (DBG) log("updateIccRecordInEf: efType=0x" + Integer.toHexString(efType).toUpperCase() +
-                ", oldname=" + Rlog.pii(TAG, oldName) + ", oldnumber=" + Rlog.pii(TAG, oldNumber) +
-                ", newname=" + Rlog.pii(TAG, newName) + ", newnumber=" + Rlog.pii(TAG, newName) +
-                ", subscription=" + subId);
-
-        boolean success = false;
+    private int addUsimAas(String aas, int subId) {
+        int aasIndex = -1;
 
         try {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfBySearchForSubscriber(subId, efType, oldName,
-                        oldNumber, newName, newNumber, pin2);
+                aasIndex = iccIpb.updateUsimAasBySearchForSubscriber("", aas,
+                        subId);
             }
+
         } catch (RemoteException ex) {
             // ignore it
         } catch (SecurityException ex) {
             if (DBG) log(ex.toString());
         }
-        if (DBG) log("updateIccRecordInEf: " + success);
-        return success;
+        if (DBG) log("addUsimAas: " + aasIndex);
+        return aasIndex;
     }
 
+    private int addUsimGroupBySearch(String groupName, int subId) {
+        int groupId = -1;
 
-    private boolean deleteIccRecordFromEf(int efType, String name, String number, String[] emails,
-            String pin2, int subId) {
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                groupId = iccIpb.updateUsimGroupBySearchForSubscriber(subId, "", groupName);
+            }
+
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log("SecurityException " + ex.toString());
+        }
+        if (DBG) log("addUsimGroupBySearch: " + groupId);
+        return groupId;
+    }
+
+    private boolean updateIccRecordInEf(int efType, String oldName,
+               String oldNumber, String[] oldEmailList, String oldAnr,
+               String oldSne, String oldGrp, String newName, String newNumber,
+               String[] newEmailList, String newAnr, String newAas, String newSne,
+               String newGrp, String newGas, String pin2, int subId) {
+        if (DBG) {
+            log("updateIccRecordInEf: efType = 0x" + Integer.toHexString(efType).toUpperCase()
+                    + ",  oldname = " + oldName + ",  oldnumber = " + oldNumber
+                    + ",  oldAnr = " + oldAnr + ",  newname = " + newName
+                    + ",  newnumber = " + newNumber + ",  newAnr = " + newAnr);
+        }
+
+        int retIndex = -1;
+
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                retIndex = iccIpb.updateUsimAdnRecordsInEfBySearchForSubscriber(
+                        subId, efType, oldName, oldNumber, oldEmailList,
+                        oldAnr, oldSne, oldGrp, newName, newNumber,
+                        newEmailList, newAnr, newAas, newSne, newGrp, newGas,
+                        pin2);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log("SecurityException " + ex.toString());
+        }
+        if (DBG) log("updateIccRecordInEf: " + retIndex);
+        return retIndex > 0;
+    }
+
+    private boolean updateUsimGroupByIndex(String newName, int groupId, int subId) {
+        int result = -1;
+
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                result = iccIpb.updateUsimGroupByIndexForSubscriber(subId,
+                        newName, groupId);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log("SecurityException " + ex.toString());
+        }
+        if (DBG) log("updateUsimGroupByIndex: " + result);
+        return result > 0;
+    }
+
+    private boolean updateUsimAasByIndex(String newName, int aasIndex, int subId) {
+        int result = -1;
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                result = iccIpb.updateUsimAasByIndexForSubscriber(newName,
+                        aasIndex, subId);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log("SecurityException" + ex.toString());
+        }
+        if (DBG) log("updateUsimAasByIndex: " + result);
+        return result > 0;
+    }
+
+    private boolean updateIccRecordInEfByIndex(int efType, String newName,
+             String newNumber, String[] newEmailList, String newAnr,
+             String newAas, String newSne, String newGrp, String newGas,
+             int simIndex, String pin2, int subId) {
+        if (DBG) {
+            log("updateIccRecordInEfByIndex: efType = 0x"
+                    + Integer.toHexString(efType).toUpperCase() + ", newname="
+                    + newName + ", newnumber=" + newNumber + ", newEmailList="
+                    + newEmailList + ", newAnr=" + newAnr + ", newSne="
+                    + newSne + ", index=" + simIndex + ", subId:" + subId);
+        }
+
+        int recIndex = -1;
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                recIndex = iccIpb.updateUsimAdnRecordsInEfByIndexForSubscriber(
+                        subId, efType, newName, newNumber, newEmailList,
+                        newAnr, newAas, newSne, newGrp, newGas, simIndex, pin2);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log("SecurityException " + ex.toString());
+        }
+        if (DBG) log("updateIccRecordInEfByIndex: " + recIndex);
+        return recIndex > 0;
+    }
+
+    private boolean deleteIccRecordFromEf(int efType, String name, String number,
+            String[] emails, String anr, String sne, String grp, String pin2,
+            int subId) {
+        if (DBG) {
+            log("deleteIccRecordFromEf: efType = 0x"
+                    + Integer.toHexString(efType).toUpperCase()
+                    + ", name=" + name + ", number=" + number
+                    + ",anr=" + anr + ", pin2=" + pin2);
+        }
+
+        int retIndex = -1;
+
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                retIndex = iccIpb.updateUsimAdnRecordsInEfBySearchForSubscriber(
+                        subId, efType, name, number, emails, anr, sne, grp, "",
+                        "", null, "", "", "", "", "", pin2);
+
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log("SecurityException " + ex.toString());
+        }
+        if (DBG) log("deleteIccRecordFromEf: " + retIndex);
+        return retIndex > 0;
+    }
+
+    private boolean deleteIccRecordFromEf(int efType, String name, String number,
+            String[] emails, String pin2, int subId) {
         if (DBG) log("deleteIccRecordFromEf: efType=0x" +
                 Integer.toHexString(efType).toUpperCase() + ", name=" + Rlog.pii(TAG, name) +
                 ", number=" + Rlog.pii(TAG, number) + ", emails=" + Rlog.pii(TAG, emails) +
@@ -513,6 +860,34 @@ public class IccProvider extends ContentProvider {
         return success;
     }
 
+    private boolean deleteIccRecordFromEfByIndex(int efType, int index,
+                                             String pin2, int subId) {
+        if (DBG) {
+            log("deleteIccRecordFromEfByIndex: efType = 0x"
+                    + Integer.toHexString(efType).toUpperCase()
+                    + ", index=" + index + ", pin2 = " + pin2);
+        }
+
+        int recIndex = -1;
+
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                recIndex = iccIpb.updateUsimAdnRecordsInEfByIndexForSubscriber(
+                        subId, efType, "", "", null, "", "", "", "", "", index,
+                        pin2);
+
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log("SecurityException " + ex.toString());
+        }
+        if (DBG) log("deleteIccRecordFromEfByIndex: " + recIndex);
+        return recIndex > 0;
+    }
+
     /**
      * Loads an AdnRecord into a MatrixCursor. Must be called with mLock held.
      *
@@ -522,15 +897,20 @@ public class IccProvider extends ContentProvider {
     @UnsupportedAppUsage
     private void loadRecord(AdnRecord record, MatrixCursor cursor, int id) {
         if (!record.isEmpty()) {
-            Object[] contact = new Object[4];
+            Object[] contact = new Object[ADDRESS_BOOK_COLUMN_NAMES.length];
             String alphaTag = record.getAlphaTag();
             String number = record.getNumber();
+            String[] emails = record.getEmails();
+            String anr = record.getAnr();
+            String aas = record.getAas();
+            String sne = record.getSne();
+            String grp = record.getGrp();
+            String gas = record.getGas();
+            String sim_index = String.valueOf(record.getRecId());
 
-            if (DBG) log("loadRecord: " + alphaTag + ", " + Rlog.pii(TAG, number));
             contact[0] = alphaTag;
             contact[1] = number;
 
-            String[] emails = record.getEmails();
             if (emails != null) {
                 StringBuilder emailString = new StringBuilder();
                 for (String email: emails) {
@@ -540,7 +920,14 @@ public class IccProvider extends ContentProvider {
                 }
                 contact[2] = emailString.toString();
             }
-            contact[3] = id;
+
+            contact[3] = anr;
+            contact[4] = aas;
+            contact[5] = sne;
+            contact[6] = grp;
+            contact[7] = gas;
+            contact[8] = sim_index;
+            contact[9] = id;
             cursor.addRow(contact);
         }
     }
@@ -557,6 +944,87 @@ public class IccProvider extends ContentProvider {
             return Integer.parseInt(url.getLastPathSegment());
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException("Unknown URL " + url);
+        }
+    }
+
+    /**
+     * Loads aas string list into a MatrixCursor.
+     *
+     * @param subId user preferred subId
+     * @return cursor the cursor to receive the results
+     */
+    private MatrixCursor loadAas(int subId) {
+        List<String> adnAas = null;
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                adnAas = iccIpb.getAasInEfForSubscriber(subId);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log(ex.toString());
+        }
+
+        if (adnAas != null) {
+            // Load the results
+            final int N = adnAas.size();
+            final MatrixCursor cursor = new MatrixCursor(SIM_AAS_PROJECTION, N);
+            if (DBG) log("adnAas.size = " + N);
+            for (int i = 0; i < N; i++) {
+                if (TextUtils.isEmpty(adnAas.get(i))) continue;
+
+                Object[] aas = new Object[SIM_AAS_PROJECTION.length];
+                aas[0] = adnAas.get(i);
+                aas[1] = i + 1;
+                cursor.addRow(aas);
+            }
+            return cursor;
+        } else {
+            // No results to load
+            Rlog.w(TAG, "Cannot load Aas records");
+            return new MatrixCursor(SIM_AAS_PROJECTION);
+        }
+    }
+
+    /**
+     * Loads gas string list into a MatrixCursor.
+     *
+     * @param subId user preferred subId
+     * @return cursor the cursor to receive the results
+     */
+    private MatrixCursor loadGas(int subId) {
+        List<String> adnGas = null;
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                adnGas = iccIpb.getGasInEfForSubscriber(subId);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log("SecurityException " + ex.toString());
+        }
+
+        if (adnGas != null) {
+            final int N = adnGas.size();
+            final MatrixCursor cursor = new MatrixCursor(SIM_GROUP_PROJECTION, N);
+            if (DBG) log("adnGas.size=" + N);
+            for (int i = 0; i < N; i++) {
+                if (TextUtils.isEmpty(adnGas.get(i))) continue;
+
+                Object[] group = new Object[SIM_GROUP_PROJECTION.length];
+                group[0] = adnGas.get(i);
+                group[1] = i + 1;
+                cursor.addRow(group);
+            }
+            return cursor;
+        } else {
+            // No results to load
+            Rlog.w(TAG, "Cannot load Gas records");
+            return new MatrixCursor(SIM_GROUP_PROJECTION);
         }
     }
 }
