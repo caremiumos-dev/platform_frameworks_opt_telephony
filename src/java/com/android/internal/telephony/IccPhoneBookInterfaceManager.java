@@ -24,6 +24,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.telephony.Rlog;
 
+import com.android.internal.telephony.gsm.UsimPhoneBookManager;
 import com.android.internal.telephony.uicc.AdnRecord;
 import com.android.internal.telephony.uicc.AdnRecordCache;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
@@ -31,6 +32,8 @@ import com.android.internal.telephony.uicc.IccConstants;
 import com.android.internal.telephony.uicc.IccFileHandler;
 import com.android.internal.telephony.uicc.IccRecords;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -82,10 +85,13 @@ public class IccPhoneBookInterfaceManager {
                     break;
                 case EVENT_UPDATE_DONE:
                     boolean success = (ar.exception == null);
-                    if (!success) {
-                        loge("EVENT_UPDATE_DONE - failed; ex=" + ar.exception);
+                    int simIndex = -1;
+                    if (success) {
+                        simIndex = getInsertIndex();
+                    } else {
+                        loge("EVENT_UPDATE_DONE failed; ex = " + ar.exception);
                     }
-                    notifyPending(request, success);
+                    notifyPending(request, simIndex);
                     break;
                 case EVENT_LOAD_DONE:
                     List<AdnRecord> records = null;
@@ -198,6 +204,85 @@ public class IccPhoneBookInterfaceManager {
     }
 
     /**
+     * Replace oldAdn with newAdn in ADN-like record in EF
+     *
+     * getAdnRecordsInEf must be called at least once before this function,
+     * otherwise an error will be returned. Currently the email field
+     * if set in the ADN record is ignored.
+     * throws SecurityException if no WRITE_CONTACTS permission
+     *
+     * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN
+     * @param oldTag adn tag to be replaced
+     * @param oldPhoneNumber adn number to be replaced
+     *        Set both oldTag and oldPhoneNubmer to "" means to replace an
+     *        empty record, aka, insert new record
+     * @param oldEmailList emails to be replaced
+     * @param oldAnr anr to be replaced
+     * @param oldSne sne to be replaced
+     * @param oldGrp grp to be replaced
+     * @param newTag adn tag to be stored
+     * @param newPhoneNumber adn number ot be stored
+     *        Set both newTag and newPhoneNubmer to "" means to replace the old
+     *        record with empty one, aka, delete old record
+     * @param newEmailList emails to be stored
+     * @param newAnr anr to be stored
+     * @param newAas aas to be stored
+     * @param newSne sne to be stored
+     * @param newGrp grp to be stored
+     * @param newGas gas to be stored
+     * @param pin2 required to update EF_FDN, otherwise must be null
+     * @return simIndex updated
+     */
+    public int updateAdnRecordsInEfBySearch(int efid, String oldTag,
+            String oldPhoneNumber, String[] oldEmailList, String oldAnr,
+            String oldSne, String oldGrp, String newTag, String newPhoneNumber,
+            String[] newEmailList, String newAnr, String newAas, String newSne,
+            String newGrp, String newGas, String pin2) {
+
+        if (mPhone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    "Requires android.permission.WRITE_CONTACTS permission");
+        }
+        if (DBG) {
+            logd("updateAdnRecordsInEfBySearch: efid = 0x"
+                    + Integer.toHexString(efid).toUpperCase()
+                    + " (" + newTag + "," + newPhoneNumber + ")" + ", pin2=" + pin2);
+        }
+
+        int newid = updateEfForIccType(efid);
+
+        checkThread();
+        Request updateRequest = new Request();
+        synchronized (updateRequest) {
+            Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, updateRequest);
+            AdnRecord oldAdn = null;
+            AdnRecord newAdn = null;
+            if (mAdnCache == null) {
+                loge("Failure while trying to update by search due to uninitialised adncache");
+                return -1;
+            }
+            if (newid == IccConstants.EF_PBR) {
+                oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmailList,
+                        oldAnr, "", oldSne, oldGrp, "");
+                newAdn = new AdnRecord(newTag, newPhoneNumber, newEmailList,
+                        newAnr, newAas, newSne, newGrp, newGas);
+
+                mAdnCache.updateUSIMAdnBySearch(newid, oldAdn, newAdn, pin2,
+                        response);
+
+            } else {
+                oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
+                newAdn = new AdnRecord(newTag, newPhoneNumber);
+                mAdnCache.updateAdnBySearch(newid, oldAdn, newAdn, pin2,
+                        response);
+            }
+            waitForResult(updateRequest);
+        }
+        return (int) updateRequest.mResult;
+    }
+
+    /**
      * Update an ADN-like EF record by record index
      *
      * This is useful for iteration the whole ADN file, such as write the whole
@@ -247,6 +332,77 @@ public class IccPhoneBookInterfaceManager {
     }
 
     /**
+     * Update an ADN-like EF record by record index
+     *
+     * This is useful for iteration the whole ADN file, such as write the whole
+     * phone book or erase/format the whole phonebook. Currently the email field
+     * if set in the ADN record is ignored.
+     * throws SecurityException if no WRITE_CONTACTS permission
+     *
+     * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN
+     * @param newTag adn tag to be stored
+     * @param newPhoneNumber adn number to be stored
+     *        Set both newTag and newPhoneNubmer to "" means to replace the old
+     *        record with empty one, aka, delete old record
+     * @param newEmailList email list to be stored
+     * @param newAnr anr to be stored
+     * @param newAas aas to be stored
+     * @param newSne sne to be stored
+     * @param newGrp grp to be stored
+     * @param newGas gas to be stored
+     * @param index is 1-based adn record index to be updated
+     * @param pin2 required to update EF_FDN, otherwise must be null
+     * @return simIndex updated
+     */
+    public int updateAdnRecordsInEfByIndex(int efid, String newTag,
+             String newPhoneNumber, String[] newEmailList, String newAnr,
+             String newAas, String newSne, String newGrp, String newGas,
+             int index, String pin2) {
+
+        if (mPhone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    "Requires android.permission.WRITE_CONTACTS permission");
+        }
+
+        if (DBG) {
+            logd("updateAdnRecordsInEfByIndex: efid=0x"
+                    + Integer.toHexString(efid).toUpperCase() + " Index=" + index + " ==> " + "("
+                    + Rlog.pii(LOG_TAG, newTag) + "," + Rlog.pii(LOG_TAG, newPhoneNumber) + ","
+                    + Rlog.pii(LOG_TAG, Arrays.toString(newEmailList)) + ","
+                    + Rlog.pii(LOG_TAG, newAnr) + "," + Rlog.pii(LOG_TAG, newAas) + ","
+                    + Rlog.pii(LOG_TAG, newSne) + "," + Rlog.pii(LOG_TAG, newGrp) + ","
+                    + Rlog.pii(LOG_TAG, newGas) + "," + ")"
+                    + " pin2=" + Rlog.pii(LOG_TAG, pin2));
+        }
+
+        int newid = updateEfForIccType(efid);
+
+        checkThread();
+        Request updateRequest = new Request();
+        synchronized (updateRequest) {
+            Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, updateRequest);
+            AdnRecord newAdn = null;
+            if (mAdnCache == null) {
+                loge("Failure while trying to update by search due to uninitialised adncache");
+                return -1;
+            }
+            if (newid == IccConstants.EF_PBR) {
+                newAdn = new AdnRecord(newTag, newPhoneNumber, newEmailList,
+                        newAnr, newAas, newSne, newGrp, newGas);
+                mAdnCache.updateUSIMAdnByIndex(newid, index, newAdn, pin2,
+                        response);
+            } else {
+                newAdn = new AdnRecord(newTag, newPhoneNumber);
+                mAdnCache.updateAdnByIndex(newid, newAdn, index, pin2,
+                        response);
+            }
+            waitForResult(updateRequest);
+        }
+        return (int) updateRequest.mResult;
+    }
+
+    /**
      * Get the capacity of records in efid
      *
      * @param efid the EF id of a ADN-like ICC
@@ -257,6 +413,34 @@ public class IccPhoneBookInterfaceManager {
      */
     public int[] getAdnRecordsSize(int efid) {
         if (DBG) logd("getAdnRecordsSize: efid=" + efid);
+        if (efid == IccConstants.EF_ADN
+                && updateEfForIccType(efid) == IccConstants.EF_PBR) {
+            int[] size = getUsimAdnRecordsSize();
+            if (null == size || size[0] == 0) {
+                size = getRecordsSize(efid);
+            }
+            return size;
+        } else {
+            return getRecordsSize(efid);
+        }
+    }
+
+    /**
+     * Get the capacity of records in efid
+     *
+     * @param efid the EF id
+     * @return  int[3] array
+     *            recordSizes[0]  is the single record length
+     *            recordSizes[1]  is the total length of the EF file
+     *            recordSizes[2]  is the number of records in the EF file
+     */
+    public int[] getRecordsSize(int efid) {
+        if (DBG) logd("getRecordsSize: efid = 0x" + Integer.toHexString(efid).toUpperCase());
+        if (efid <= 0) {
+            loge("the efid is invalid");
+            return null;
+        }
+
         checkThread();
         Request getSizeRequest = new Request();
         synchronized (getSizeRequest) {
@@ -270,6 +454,22 @@ public class IccPhoneBookInterfaceManager {
         }
 
         return getSizeRequest.mResult == null ? new int[3] : (int[]) getSizeRequest.mResult;
+    }
+
+    private int[] getUsimAdnRecordsSize() {
+        UsimPhoneBookManager mUsimPhoneBookManager = getUsimPhoneBookManager();
+        if (mUsimPhoneBookManager == null) {
+            return null;
+        }
+        return mUsimPhoneBookManager.getAdnRecordsSize();
+    }
+
+    private UsimPhoneBookManager getUsimPhoneBookManager() {
+        if (mAdnCache != null && isHasUsimApp()) {
+            return mAdnCache.getUsimPhoneBookManager();
+        }
+
+        return null;
     }
 
 
@@ -297,7 +497,7 @@ public class IccPhoneBookInterfaceManager {
         checkThread();
         Request loadRequest = new Request();
         synchronized (loadRequest) {
-            Message response = mBaseHandler.obtainMessage(EVENT_LOAD_DONE, loadRequest);
+            Message response = mBaseHandler.obtainMessage(EVENT_LOAD_DONE, efid, 0, loadRequest);
             if (mAdnCache != null) {
                 mAdnCache.requestLoadAllAdnLike(efid, mAdnCache.extensionEfForEf(efid), response);
                 waitForResult(loadRequest);
@@ -332,13 +532,185 @@ public class IccPhoneBookInterfaceManager {
 
     @UnsupportedAppUsage
     private int updateEfForIccType(int efid) {
+        // Check if PBR file exist or if PBR file contain adn
+        boolean isPbrFileExisting = false;
+        boolean isContainAdnInPbr = false;
+        if (mAdnCache != null && mAdnCache.getUsimPhoneBookManager() != null) {
+            isPbrFileExisting = mAdnCache.getUsimPhoneBookManager().isPbrFileExisting();
+            isContainAdnInPbr = mAdnCache.getUsimPhoneBookManager().isContainAdnInPbr();
+        }
+
         // Check if we are trying to read ADN records
         if (efid == IccConstants.EF_ADN) {
-            if (mPhone.getCurrentUiccAppType() == AppType.APPTYPE_USIM) {
+            if (isHasUsimApp() && isPbrFileExisting && isContainAdnInPbr) {
                 return IccConstants.EF_PBR;
             }
         }
         return efid;
+    }
+
+    /**
+     * Loads the gas in efid and returns them as a list of gas
+     *
+     * throws SecurityException if no READ_CONTACTS permission
+     *
+     * @return list of gas string
+     */
+    public synchronized List<String> getGasInEf() {
+        if (DBG) logd("getGasInEf");
+        if (mPhone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    "Requires android.permission.READ_CONTACTS permission");
+        }
+
+        if (!isHasUsimApp()) {
+            loge("Can not get gas from a sim card");
+            return null;
+        }
+
+        if (mAdnCache == null) {
+            loge("Failure while trying to update by search due to uninitialised adncache");
+            return new ArrayList<String>();
+        }
+
+        return mAdnCache.loadGasFromUsim();
+    }
+
+    /**
+     * Replace oldName with newName in GAS-like record in EF
+     *
+     * throws SecurityException if no READ_CONTACTS permission
+     *
+     * @param oldName group name to be replaced
+     * @param newName group name to be stored
+     * @return gasIndex updated
+     */
+    public int updateUsimGroupBySearch(String oldName, String newName) {
+        if (mPhone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    "Requires android.permission.WRITE_CONTACTS permission");
+        }
+
+        if (mAdnCache == null) {
+            loge("Failure while trying to update by search due to uninitialised adncache");
+            return -1;
+        }
+
+        return mAdnCache.updateGasBySearch(oldName, newName);
+    }
+
+    /**
+     * Update an GAS-like EF record by record index
+     *
+     * throws SecurityException if no READ_CONTACTS permission
+     *
+     * @param newName group name to be stored
+     * @param groupId is 1-based gas record index to be updated
+     * @return gasIndex updated
+     */
+    public int updateUsimGroupByIndex(String newName, int groupId) {
+        if (mPhone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    "Requires android.permission.WRITE_CONTACTS permission");
+        }
+
+        if (mAdnCache == null) {
+            loge("Failure while trying to update by search due to uninitialised adncache");
+            return -1;
+        }
+
+        return mAdnCache.updateGasByIndex(newName, groupId);
+    }
+
+    /**
+     * Loads the aas in efid and returns them as a list of aas
+     *
+     * throws SecurityException if no READ_CONTACTS permission
+     *
+     * @return list of aas string
+     */
+    public synchronized List<String> getAasInEf() {
+        if (mPhone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    "Requires android.permission.READ_CONTACTS permission");
+        }
+
+        if (mAdnCache == null) {
+            loge("Failure while trying to update by search due to uninitialised adncache");
+            return new ArrayList<String>();
+        }
+
+        return mAdnCache.loadAasFromUsim();
+    }
+
+    /**
+     * Replace oldName with newName in AAS-like record in EF
+     *
+     * throws SecurityException if no READ_CONTACTS permission
+     *
+     * @param oldName aas to be replaced
+     * @param newName aas to be stored
+     * @return aasIndex updated
+     */
+    public int updateUsimAasBySearch(String oldName, String newName) {
+        if (mPhone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    "Requires android.permission.WRITE_CONTACTS permission");
+        }
+
+        if (mAdnCache == null) {
+            loge("Failure while trying to update by search due to uninitialised adncache");
+            return -1;
+        }
+
+        return mAdnCache.updateAasBySearch(oldName, newName);
+    }
+
+    /**
+     * Update an AAS-like EF record by record index
+     *
+     * throws SecurityException if no READ_CONTACTS permission
+     *
+     * @param newName aas to be stored
+     * @param aasIndex is 1-based aas record index to be updated
+     * @return aasIndex updated
+     */
+    public int updateUsimAasByIndex(String newName, int aasIndex) {
+        if (mPhone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    "Requires android.permission.WRITE_CONTACTS permission");
+        }
+
+        if (mAdnCache == null) {
+            loge("Failure while trying to update by search due to uninitialised adncache");
+            return -1;
+        }
+
+        return mAdnCache.updateAasByIndex(newName, aasIndex);
+    }
+
+    /**
+     * Get inserted sim index
+     *
+     * @return inserted sim index
+     */
+    public int getInsertIndex() {
+        if (mAdnCache == null) {
+            loge("Failure while trying to update by search due to uninitialised adncache");
+            return -1;
+        }
+        return mAdnCache.getInsertId();
+    }
+
+    private boolean isHasUsimApp() {
+        return mPhone.getCurrentUiccAppType() == AppType.APPTYPE_USIM;
     }
 }
 

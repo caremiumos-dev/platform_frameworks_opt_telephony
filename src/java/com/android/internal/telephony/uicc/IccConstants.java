@@ -106,4 +106,9 @@ public interface IccConstants {
 
     //UICC access
     static final String DF_ADF = "7FFF";
+
+    // Add for TS31.121 8.1.2
+    static final int EF_PSC = 0x4F22;
+    static final int EF_CC = 0x4F23;
+    static final int EF_PUID = 0x4F24;
 }
