@@ -128,7 +128,7 @@ public class CarrierServiceBindHelper {
                 mHandler, EVENT_MULTI_SIM_CONFIG_CHANGED, null);
 
         mPackageMonitor.register(
-                context, mHandler.getLooper(), UserHandle.ALL);
+                context, mHandler.getLooper(), true /* forAllUsers */);
         try {
             Context contextAsUser = mContext.createPackageContextAsUser(mContext.getPackageName(),
                 0, UserHandle.SYSTEM);

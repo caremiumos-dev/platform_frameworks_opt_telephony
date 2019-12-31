@@ -393,7 +393,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
         mSelectedComponent = findBestComponent();
         setInitialState(mSelectedComponent != null ? mAvailableState : mUnavailableState);
 
-        mPackageMonitor.register(mContext, null /* thread */, null /* user */);
+        mPackageMonitor.register(mContext, null /* thread */, false /* forAllUsers */);
         mContext.registerReceiver(
                 mUserUnlockedReceiver, new IntentFilter(Intent.ACTION_USER_UNLOCKED));
 
