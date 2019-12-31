@@ -64,7 +64,6 @@ import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.ImsStreamMediaProfile;
 import android.telephony.ims.ImsSuppServiceNotification;
 import android.telephony.ims.ProvisioningManager;
-import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
@@ -669,7 +668,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         log("startListeningForCalls");
         mOperationLocalLog.log("startListeningForCalls - Connecting to ImsService");
         mImsManager.open(mMmTelFeatureListener);
-        mImsManager.addRegistrationCallback(mImsRegistrationCallback);
+        mImsManager.addRegistrationCallback(mPhone.getImsMmTelRegistrationCallback());
         mImsManager.addCapabilitiesCallback(mImsCapabilityCallback);
 
         mImsManager.setConfigListener(mImsConfigListener);
@@ -3205,57 +3204,56 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         }
     };
 
-    private final RegistrationManager.RegistrationCallback mImsRegistrationCallback =
-            new RegistrationManager.RegistrationCallback() {
+    /**
+     * Handle the callback when IMS is registered.
+     */
+    public void handleImsMmTelRegistered(int imsRadioTech) {
+        if (DBG) {
+            log("onImsConnected imsRadioTech="
+                    + AccessNetworkConstants.transportTypeToString(imsRadioTech));
+        }
+        mRegLocalLog.log("onImsConnected imsRadioTech="
+                + AccessNetworkConstants.transportTypeToString(imsRadioTech));
+        mPhone.setServiceState(ServiceState.STATE_IN_SERVICE);
+        mMetrics.writeOnImsConnectionState(mPhone.getPhoneId(),
+                ImsConnectionState.State.CONNECTED, null);
+    }
 
-                @Override
-                public void onRegistered(int imsRadioTech) {
-                    if (DBG) {
-                        log("onImsConnected imsRadioTech="
-                                + AccessNetworkConstants.transportTypeToString(imsRadioTech));
-                    }
-                    mRegLocalLog.log("onImsConnected imsRadioTech="
-                            + AccessNetworkConstants.transportTypeToString(imsRadioTech));
-                    mPhone.setServiceState(ServiceState.STATE_IN_SERVICE);
-                    mPhone.setImsRegistrationState(
-                            RegistrationManager.REGISTRATION_STATE_REGISTERED);
-                    mMetrics.writeOnImsConnectionState(mPhone.getPhoneId(),
-                            ImsConnectionState.State.CONNECTED, null);
-                }
+    /**
+     * Handle the callback when IMS is registering.
+     */
+    public void handleImsRegistering(int imsRadioTech) {
+        if (DBG) {
+            log("onImsProgressing imsRadioTech="
+                    + AccessNetworkConstants.transportTypeToString(imsRadioTech));
+        }
+        mRegLocalLog.log("onImsProgressing imsRadioTech="
+                + AccessNetworkConstants.transportTypeToString(imsRadioTech));
+        mPhone.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
+        mMetrics.writeOnImsConnectionState(mPhone.getPhoneId(),
+                ImsConnectionState.State.PROGRESSING, null);
+    }
 
-                @Override
-                public void onRegistering(int imsRadioTech) {
-                    if (DBG) {
-                        log("onImsProgressing imsRadioTech="
-                                + AccessNetworkConstants.transportTypeToString(imsRadioTech));
-                    }
-                    mRegLocalLog.log("onImsProgressing imsRadioTech="
-                            + AccessNetworkConstants.transportTypeToString(imsRadioTech));
-                    mPhone.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
-                    mPhone.setImsRegistrationState(
-                            RegistrationManager.REGISTRATION_STATE_REGISTERING);
-                    mMetrics.writeOnImsConnectionState(mPhone.getPhoneId(),
-                            ImsConnectionState.State.PROGRESSING, null);
-                }
+    /**
+     * Handle the callback when IMS is unregistered.
+     */
+    public void handleImsUnregistered(ImsReasonInfo imsReasonInfo) {
+        if (DBG) log("onImsDisconnected imsReasonInfo=" + imsReasonInfo);
+        mRegLocalLog.log("onImsDisconnected imsRadioTech=" + imsReasonInfo);
+        mPhone.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
+        mPhone.processDisconnectReason(imsReasonInfo);
+        mMetrics.writeOnImsConnectionState(mPhone.getPhoneId(),
+                ImsConnectionState.State.DISCONNECTED, imsReasonInfo);
+    }
 
-                @Override
-                public void onUnregistered(ImsReasonInfo imsReasonInfo) {
-                    if (DBG) log("onImsDisconnected imsReasonInfo=" + imsReasonInfo);
-                    mRegLocalLog.log("onImsDisconnected imsRadioTech=" + imsReasonInfo);
-                    mPhone.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
-                    mPhone.setImsRegistrationState(
-                            RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED);
-                    mPhone.processDisconnectReason(imsReasonInfo);
-                    mMetrics.writeOnImsConnectionState(mPhone.getPhoneId(),
-                            ImsConnectionState.State.DISCONNECTED, imsReasonInfo);
-                }
-
-                @Override
-                public void onSubscriberAssociatedUriChanged(Uri[] uris) {
-                    if (DBG) log("registrationAssociatedUriChanged");
-                    mPhone.setCurrentSubscriberUris(uris);
-                }
-            };
+    /**
+     * Handle the callback when the list of subscriber {@link Uri}s associated with this IMS
+     * subscription changed.
+     */
+    public void handleImsSubscriberAssociatedUriChanged(Uri[] uris) {
+        if (DBG) log("registrationAssociatedUriChanged");
+        mPhone.setCurrentSubscriberUris(uris);
+    }
 
     private final ImsMmTelManager.CapabilityCallback mImsCapabilityCallback =
             new ImsMmTelManager.CapabilityCallback() {
@@ -4259,8 +4257,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         boolean tmpIsVideoCallEnabled = isVideoCallEnabled();
         mMmTelCapabilities = new MmTelFeature.MmTelCapabilities();
         mPhone.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
-        mPhone.setImsRegistrationState(
-                RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED);
+        mPhone.resetImsRegistrationState(ImsFeature.FEATURE_MMTEL);
         mPhone.processDisconnectReason(new ImsReasonInfo(ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN,
                 ImsReasonInfo.CODE_UNSPECIFIED));
         boolean isVideoEnabled = isVideoCallEnabled();

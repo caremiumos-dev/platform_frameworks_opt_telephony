@@ -77,6 +77,7 @@ import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.ImsSsData;
 import android.telephony.ims.ImsSsInfo;
 import android.telephony.ims.RegistrationManager;
+import android.telephony.ims.feature.ImsFeature;
 import android.text.TextUtils;
 
 import com.android.ims.FeatureConnector;
@@ -118,7 +119,8 @@ import java.util.function.Consumer;
 /**
  * {@hide}
  */
-public class ImsPhone extends ImsPhoneBase {
+public class ImsPhone extends ImsPhoneBase
+        implements ImsRegistrationCallbackHelper.ImsRegistrationUpdate {
     private static final String LOG_TAG = "ImsPhone";
     private static final boolean DBG = true;
     private static final boolean VDBG = false; // STOPSHIP if true
@@ -220,7 +222,9 @@ public class ImsPhone extends ImsPhoneBase {
 
     private final RegistrantList mSilentRedialRegistrants = new RegistrantList();
 
-    private int mImsRegistrationState = RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED;
+    // The helper class to receive and store the MmTel and RCS registration status updated.
+    private ImsRegistrationCallbackHelper mImsMmTelRegistrationHelper;
+    private ImsRegistrationCallbackHelper mImsRcsRegistrationHelper;
 
     private boolean mRoaming = false;
 
@@ -317,6 +321,11 @@ public class ImsPhone extends ImsPhoneBase {
         mSS.setStateOff();
 
         mPhoneId = mDefaultPhone.getPhoneId();
+
+        mImsMmTelRegistrationHelper =
+                new ImsRegistrationCallbackHelper(ImsFeature.FEATURE_MMTEL, this);
+        mImsRcsRegistrationHelper =
+                new ImsRegistrationCallbackHelper(ImsFeature.FEATURE_RCS, this);
 
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LOG_TAG);
@@ -428,11 +437,19 @@ public class ImsPhone extends ImsPhoneBase {
             public void connectionReady(RcsFeatureManager manager) throws ImsException {
                 logi("RcsFeatureManager is ready");
                 mRcsManager = manager;
+
+                // Listen to the IMS RCS registration status changed
+                mRcsManager.registerImsRegistrationCallback(
+                        mImsRcsRegistrationHelper.getCallbackBinder());
             }
 
             @Override
             public void connectionUnavailable() {
                 logi("RcsFeatureManager is unavailable");
+                resetImsRegistrationState(ImsFeature.FEATURE_RCS);
+                if (mRcsManager != null) {
+                    mRcsManager.release();
+                }
                 mRcsManager = null;
             }
         };
@@ -1845,9 +1862,23 @@ public class ImsPhone extends ImsPhoneBase {
         mCT.getImsRegistrationTech(callback);
     }
 
+    /**
+     * Get the IMS RCS registration technology for this Phone.
+     */
+    public void getImsRcsRegistrationTech(Consumer<Integer> callback) {
+        mRcsManager.getImsRegistrationTech(callback);
+    }
+
     @Override
     public void getImsRegistrationState(Consumer<Integer> callback) {
-        callback.accept(mImsRegistrationState);
+        callback.accept(mImsMmTelRegistrationHelper.getImsRegistrationState());
+    }
+
+    /**
+     * Retrieve the current RCS registration state.
+     */
+    public void getImsRcsRegistrationState(Consumer<Integer> callback) {
+        callback.accept(mImsRcsRegistrationHelper.getImsRegistrationState());
     }
 
     @Override
@@ -1857,18 +1888,20 @@ public class ImsPhone extends ImsPhoneBase {
 
     @Override
     public boolean isImsRegistered() {
-        return mImsRegistrationState == RegistrationManager.REGISTRATION_STATE_REGISTERED;
+        return mImsMmTelRegistrationHelper.isImsRegistered();
     }
 
     // Not used, but not removed due to UnsupportedAppUsage tag.
     @UnsupportedAppUsage
     public void setImsRegistered(boolean isRegistered) {
-        mImsRegistrationState = isRegistered ? RegistrationManager.REGISTRATION_STATE_REGISTERED :
-                RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED;
+        mImsMmTelRegistrationHelper.updateRegistrationState(
+                isRegistered ? RegistrationManager.REGISTRATION_STATE_REGISTERED :
+                        RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED);
     }
 
     public void setImsRegistrationState(@RegistrationManager.ImsRegistrationState int value) {
-        mImsRegistrationState = value;
+        if (DBG) logd("setImsRegistrationState: " + value);
+        mImsMmTelRegistrationHelper.updateRegistrationState(value);
     }
 
     @Override
@@ -2125,6 +2158,57 @@ public class ImsPhone extends ImsPhoneBase {
                 && psInfo.getAccessNetworkTechnology() == TelephonyManager.NETWORK_TYPE_IWLAN;
     }
 
+    public RegistrationManager.RegistrationCallback getImsMmTelRegistrationCallback() {
+        return mImsMmTelRegistrationHelper.getCallback();
+    }
+
+    /**
+     * Reset the IMS registration state.
+     */
+    public void resetImsRegistrationState(int featureType) {
+        if (DBG) logd("resetImsRegistrationState: feature=" + featureType);
+        if (featureType == ImsFeature.FEATURE_MMTEL) {
+            mImsMmTelRegistrationHelper.reset();
+        } else if (featureType == ImsFeature.FEATURE_RCS) {
+            mImsRcsRegistrationHelper.reset();
+        }
+    }
+
+    @Override
+    public void handleImsRegistered(int featureType, int imsRadioTech) {
+        if (DBG) logd("handleImsRegistered: feature=" + featureType);
+        if (featureType == ImsFeature.FEATURE_MMTEL) {
+            // Notify ImsPhoneCallTracker that IMS MMTel is registered.
+            mCT.handleImsMmTelRegistered(imsRadioTech);
+        }
+    }
+
+    @Override
+    public void handleImsRegistering(int featureType, int imsRadioTech) {
+        if (DBG) logd("handleImsRegistering: feature=" + featureType);
+        if (featureType == ImsFeature.FEATURE_MMTEL) {
+            // Notify ImsPhoneCallTracker that IMS MMTel is registering.
+            mCT.handleImsRegistering(imsRadioTech);
+        }
+    }
+
+    @Override
+    public void handleImsUnregistered(int featureType, ImsReasonInfo imsReasonInfo) {
+        if (DBG) logd("handleImsUnregistered:feature=" + featureType + ",reason=" + imsReasonInfo);
+        if (featureType == ImsFeature.FEATURE_MMTEL) {
+            // Notify ImsPhoneCallTracker that IMS MMTel is unregistered.
+            mCT.handleImsUnregistered(imsReasonInfo);
+        }
+    }
+
+    @Override
+    public void handleImsSubscriberAssociatedUriChanged(int featureType, Uri[] uris) {
+        if (DBG) logd("handleImsSubscriberAssociatedUriChanged: feature=" + featureType);
+        if (featureType == ImsFeature.FEATURE_MMTEL) {
+            mCT.handleImsSubscriberAssociatedUriChanged(uris);
+        }
+    }
+
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("ImsPhone extends:");
@@ -2140,7 +2224,10 @@ public class ImsPhone extends ImsPhoneBase {
         pw.println("  mIsPhoneInEcmState = " + isInEcm());
         pw.println("  mEcmExitRespRegistrant = " + mEcmExitRespRegistrant);
         pw.println("  mSilentRedialRegistrants = " + mSilentRedialRegistrants);
-        pw.println("  mImsRegistrationState = " + mImsRegistrationState);
+        pw.println("  mImsMmTelRegistrationState = "
+                + mImsMmTelRegistrationHelper.getImsRegistrationState());
+        pw.println("  mImsRcsRegistrationState = "
+                + mImsRcsRegistrationHelper.getImsRegistrationState());
         pw.println("  mRoaming = " + mRoaming);
         pw.println("  mSsnRegistrants = " + mSsnRegistrants);
         pw.flush();
