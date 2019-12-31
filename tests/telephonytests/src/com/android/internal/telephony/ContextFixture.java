@@ -315,18 +315,22 @@ public class ContextFixture implements TestFixture<Context> {
 
         @Override
         public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
-            return registerReceiver(receiver, filter, null, null);
+            return registerReceiverFakeImpl(receiver, filter);
         }
 
         @Override
         public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter,
                 String broadcastPermission, Handler scheduler) {
-            return registerReceiverAsUser(receiver, null, filter, broadcastPermission, scheduler);
+            return registerReceiverFakeImpl(receiver, filter);
         }
 
         @Override
-        public Intent registerReceiverAsUser(BroadcastReceiver receiver, UserHandle user,
+        public Intent registerReceiverForAllUsers(BroadcastReceiver receiver,
                 IntentFilter filter, String broadcastPermission, Handler scheduler) {
+            return registerReceiverFakeImpl(receiver, filter);
+        }
+
+        private Intent registerReceiverFakeImpl(BroadcastReceiver receiver, IntentFilter filter) {
             Intent result = null;
             synchronized (mBroadcastReceiversByAction) {
                 for (int i = 0 ; i < filter.countActions() ; i++) {
@@ -336,7 +340,6 @@ public class ContextFixture implements TestFixture<Context> {
                     }
                 }
             }
-
             return result;
         }
 
