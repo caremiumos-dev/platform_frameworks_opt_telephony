@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b209c0c_c6410311",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2019-12-31T05:42:15Z",
+      "side": 1,
+      "message": "Will things continue to work if an application passes in a NetworkRequest created by:\n\n    NetworkRequest r \u003d new NetworkRequest.Builder().setNetworkSpecifier(\"1\").build();\n\n? AFAIK that code will result in the NetworkRequest having a StringNetworkSpecifier of \"1\", and that request will never match this network.\n\n\nI don\u0027t currently see another way to do this except:\n\n1. Add a hack to StringNetworkSpecifier to specifically match TelephonyNetworkSpecifier objects.\n2. Change the semantics of StringNetworkSpecifier.equals() so that it does something like:\n    return equals(other) ||\n            (other instanceof NetworkSpecifier \u0026\u0026 specifier.equals(other.toString()));\n3. (Probably too hacky) Make TelephonyNetworkSpecifier subclass StringNetworkSpecifier.\n\nPersonally I\u0027d prefer #2 because it is the smallest application-visible change and it maintains the current semantics of NetworkSpecifiers, which only match if the class is the same.",
+      "range": {
+        "startLine": 1319,
+        "startChar": 0,
+        "endLine": 1320,
+        "endChar": 52
+      },
+      "revId": "cef2fccf376f97d07121e7aefddac23c8f116bfb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
