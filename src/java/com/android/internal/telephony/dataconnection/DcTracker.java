@@ -30,6 +30,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.AsyncQueryHandler;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -332,6 +333,21 @@ public class DcTracker extends Handler {
     private final LocalLog mDataRoamingLeakageLog = new LocalLog(50);
     private final LocalLog mApnSettingsInitializationLog = new LocalLog(50);
 
+    private static final String INTENT_KEY_ICC_STATE = "ss";
+    private static final String INTENT_VALUE_ICC_READY = "READY";
+    private static final String SUBSCRIPTION_KEY  = "subscription";
+    private static final String INTENT_EXTRA_SUB_ID = "subid";
+    private static final Uri FDN_CONTENT_URI = Uri.parse("content://icc/fdn");
+    private static final String FDN_CONTENT_PATH_WITH_SUB_ID = "content://icc/fdn/subId/";
+    private static final String[] COLUMN_NAMES = new String[] {
+        "name",
+        "number"
+    };
+    private static final String ACTION_FDN_STATUS_CHANGED =
+            "android.callsettings.action.FDN_STATUS_CHANGED";
+    private static final String ACTION_FDN_LIST_CHANGED =
+            "android.callsettings.action.FDN_LIST_CHANGED";
+
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver () {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -359,6 +375,33 @@ public class DcTracker extends Handler {
                 if (DBG) log("received carrier config change");
                 if (mIccRecords.get() != null && mIccRecords.get().getRecordsLoaded()) {
                     setDefaultDataRoamingEnabled();
+                }
+            }  else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
+                if (INTENT_VALUE_ICC_READY.equals(intent.getStringExtra(INTENT_KEY_ICC_STATE))) {
+                    int subId = intent.getIntExtra(SUBSCRIPTION_KEY, -1);
+                    if (subId == mPhone.getSubId()) {
+                        queryFdnEnabled();
+                    }
+                }
+            } else if (action.equals(ACTION_FDN_STATUS_CHANGED)) {
+                int subId = intent.getIntExtra(INTENT_EXTRA_SUB_ID, -1);
+                if (subId == mPhone.getSubId()) {
+                    mFdnEnable = getIccFdnEnabled();
+                    if (DBG) log("onFdnChanged mLastFdnEnable = " + mLastFdnEnable
+                            + ", mFdnEnable = " + mFdnEnable);
+                    if (mFdnEnable != mLastFdnEnable){
+                        mLastFdnEnable = mFdnEnable;
+                        if (mFdnEnable) {
+                            queryFdnList();
+                        } else {
+                            onTrySetupData(Phone.REASON_DATA_ENABLED);
+                        }
+                    }
+                }
+            } else if (action.equals(ACTION_FDN_LIST_CHANGED)) {
+                int subId = intent.getIntExtra(INTENT_EXTRA_SUB_ID, -1);
+                if (subId == mPhone.getSubId()) {
+                    queryFdnList();
                 }
             } else {
                 if (DBG) log("onReceive: Unknown action=" + action);
@@ -640,6 +683,13 @@ public class DcTracker extends Handler {
 
     private DataStallRecoveryHandler mDsRecoveryHandler;
 
+    private boolean mSupportFdnEnable;
+    private boolean mFdnEnable;
+    private boolean mLastFdnEnable;
+    private boolean hasNumber;
+    private QueryHandler mQueryHandler;
+    private String mFdnNum;
+
     /**
      * Request network completion message map. Key is the APN type, value is the list of completion
      * messages to be sent. Using a list because there might be multiple network requests for
@@ -678,6 +728,15 @@ public class DcTracker extends Handler {
         filter.addAction(INTENT_DATA_STALL_ALARM);
         filter.addAction(INTENT_PROVISIONING_APN_ALARM);
         filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+
+        mSupportFdnEnable = isFndEnableSupport();
+        if (mSupportFdnEnable) {
+            filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
+            filter.addAction(ACTION_FDN_STATUS_CHANGED);
+            filter.addAction(ACTION_FDN_LIST_CHANGED);
+            mQueryHandler = new QueryHandler(mResolver);
+            mFdnNum = mUtils.getFndNumForData();
+        }
 
         mDataEnabledSettings = mPhone.getDataEnabledSettings();
 
@@ -1343,6 +1402,10 @@ public class DcTracker extends Handler {
 
         if (!isDataEnabled) {
             reasons.add(DataDisallowedReasonType.DATA_DISABLED);
+        }
+
+        if(isFdnEnabled()){
+            reasons.add(DataDisallowedReasonType.FDN_DISABLE_DATA);
         }
 
         // If there are hard disallowed reasons, we should not allow data connection no matter what.
@@ -4790,5 +4853,80 @@ public class DcTracker extends Handler {
             return ServiceState.networkTypeToRilRadioTechnology(nrs.getAccessNetworkTechnology());
         }
         return ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
+    }
+
+    public boolean isFndEnableSupport() {
+        boolean isSupport = false;
+        isSupport = Resources.getSystem().getBoolean(com.android.internal.R.bool.config_support_fdn_no_data);
+        Log.d(LOG_TAG, "isFndEnableSupport = " + isSupport);
+        return isSupport;
+    }
+    public String getFndNumForData() {
+        String number = null;
+        number = Resources.getSystem().getString(com.android.internal.R.string.config_fdn_num_for_data);
+        Log.d(LOG_TAG, "getFndNumForData = " + number);
+        return number;
+    }
+
+    private Uri getFdnContentUri() {
+        return SubscriptionManager.isValidSubscriptionId(mPhone.getSubId())
+                ? Uri.parse(FDN_CONTENT_PATH_WITH_SUB_ID + mPhone.getSubId())
+                : FDN_CONTENT_URI;
+    }
+
+    private class QueryHandler extends AsyncQueryHandler {
+        public QueryHandler(ContentResolver cr) {
+            super(cr);
+        }
+
+        @Override
+        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+            hasNumber = false;
+            if (cursor != null) {
+                try {
+                    cursor.moveToFirst();
+                    do {
+                        String number = cursor.getString(1);
+                        if (number.equals(mFdnNum)) {
+                            hasNumber = true;
+                            break;
+                        }
+                    } while (cursor.moveToNext());
+                } catch(Exception e) {
+                    if (DBG) log("Exception thrown during hasSpeciaNumber e " + e);
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+            }
+            mFdnEnable = getIccFdnEnabled();
+            if (mFdnEnable) {
+                if (hasNumber) {
+                    onTrySetupData(Phone.REASON_DATA_ENABLED);
+                } else {
+                    cleanUpAllConnections(Phone.REASON_DATA_DISABLED_INTERNAL);
+                }
+            }
+        }
+    }
+
+    private void queryFdnEnabled() {
+        mFdnEnable = getIccFdnEnabled();
+        if (mFdnEnable) {
+            queryFdnList();
+        }
+    }
+
+    private void queryFdnList() {
+        mQueryHandler.startQuery(0, null, getFdnContentUri(), COLUMN_NAMES, null, null, null);
+    }
+
+    public boolean isFdnEnabled() {
+        return mSupportFdnEnable && getIccFdnEnabled() && (!hasNumber);
+    }
+
+    public boolean getIccFdnEnabled() {
+        return mPhone.getIccCard().getIccFdnEnabled();
     }
 }
