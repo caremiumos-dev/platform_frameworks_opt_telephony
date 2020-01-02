@@ -18,11 +18,13 @@ package com.android.internal.telephony.dataconnection;
 
 import static android.net.NetworkPolicyManager.OVERRIDE_CONGESTED;
 import static android.net.NetworkPolicyManager.OVERRIDE_UNMETERED;
+import static android.telephony.CarrierConfigManager.KEY_CARRIER_NETWORK_OWNER_PACKAGE_NAME;
 
 import android.annotation.IntDef;
 import android.annotation.Nullable;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.KeepalivePacketData;
 import android.net.LinkAddress;
@@ -165,6 +167,9 @@ public class DataConnection extends StateMachine {
 
     // The subscription id associated with this data connection.
     private int mSubId;
+
+    // The package uid for the owner of this data connection.
+    private int mUid;
 
     // The data connection controller
     private DcController mDcController;
@@ -1331,6 +1336,10 @@ public class DataConnection extends StateMachine {
             result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
         }
 
+        if (mUid != 0) {
+            result.setEstablishingVpnAppUid(mUid);
+        }
+
         return result;
     }
 
@@ -1845,6 +1854,21 @@ public class DataConnection extends StateMachine {
 
                     if (mSubId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
                         mSubId = cp.mSubId;
+                    }
+
+                    CarrierConfigManager configManager =
+                            mPhone.getContext().getSystemService(CarrierConfigManager.class);
+                    String ownerPackageName =
+                            configManager
+                                    .getConfigForSubId(mSubId)
+                                    .getString(KEY_CARRIER_NETWORK_OWNER_PACKAGE_NAME);
+                    try {
+                        mUid =
+                                mPhone.getContext()
+                                        .getPackageManager()
+                                        .getPackageUid(ownerPackageName, 0);
+                    } catch (NameNotFoundException e) {
+                        loge("Owner package name specified by subId=" + mSubId + " not found");
                     }
 
                     transitionTo(mActivatingState);
