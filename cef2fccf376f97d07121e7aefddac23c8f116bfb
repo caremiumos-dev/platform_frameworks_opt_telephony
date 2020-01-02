@@ -22,6 +22,30 @@
       "revId": "cef2fccf376f97d07121e7aefddac23c8f116bfb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fca0645_1258bef7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-02T19:41:02Z",
+      "side": 1,
+      "message": "Couple questions here:\n1) Is it actually valid for a caller to expect that a specifier .equals() for a network request and a network callback? I\u0027d assert that a specifier for A that is satisfied by another app\u0027s A \u0026 B specifier is totally fine and that sufficiency is a function of the context of the callback and the request, not the equality of a specifier. IE, apps using .equals() are already holding it wrong... since StringNetworkSpecifier was internal-only, it seemed that such a rough edge wasn\u0027t a big deal since \"don\u0027t do it.\"\n\n2) StringNetworkSpecifier is ambiguous (I mean, for telephony it\u0027s literally a number, not even a k/v pair), but I see that we added it to SystemApi for Christmas:\nhttps://android-review.googlesource.com/c/platform/frameworks/base/+/1198806\n\nIs it too late to not do that given that we are making TelephonyNetworkSpecifier? Anything we do to encourage or even support the continued use of StringNetworkSpecifier is an act of self-harm. I was really hoping to be done with StringNetworkSpecifier, in which case none of this is a problem and we can avoid any of the hacks you suggest (everybody wins).",
+      "parentUuid": "4b209c0c_c6410311",
+      "range": {
+        "startLine": 1319,
+        "startChar": 0,
+        "endLine": 1320,
+        "endChar": 52
+      },
+      "revId": "cef2fccf376f97d07121e7aefddac23c8f116bfb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
