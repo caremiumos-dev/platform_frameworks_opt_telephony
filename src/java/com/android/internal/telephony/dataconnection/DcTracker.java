@@ -2417,12 +2417,12 @@ public class DcTracker extends Handler {
     /**
      * Modify {@link android.provider.Settings.Global#DATA_ROAMING} value for user modification only
      */
-    public void setDataRoamingEnabledByUser(boolean enabled) {
-        mDataEnabledSettings.setDataRoamingEnabled(enabled);
+    public void setDataRoamingEnabledByUser(int roamingEnableType) {
+        mDataEnabledSettings.setDataRoamingEnabled(roamingEnableType);
         setDataRoamingFromUserAction(true);
         if (DBG) {
             log("setDataRoamingEnabledByUser: set phoneSubId=" + mPhone.getSubId()
-                    + " isRoaming=" + enabled);
+                    + " roamingEnableType=" + roamingEnableType);
         }
     }
 

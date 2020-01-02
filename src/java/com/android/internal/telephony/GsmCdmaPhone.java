@@ -2209,9 +2209,15 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public void setDataRoamingEnabled(boolean enable) {
+        setDataRoamingEnabled(enable ? TelephonyManager.DATA_ROAMING_ALL_NETWORKS
+                : TelephonyManager.DATA_ROAMING_DISABLE);
+    }
+
+    @Override
+    public void setDataRoamingEnabled(int roamingEnableType) {
         if (getDcTracker(AccessNetworkConstants.TRANSPORT_TYPE_WWAN) != null) {
             getDcTracker(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
-                    .setDataRoamingEnabledByUser(enable);
+                    .setDataRoamingEnabledByUser(roamingEnableType);
         }
     }
 

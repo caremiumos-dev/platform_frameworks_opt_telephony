@@ -207,8 +207,8 @@ public class MultiSimSettingController extends Handler {
     /**
      * Notify DATA_ROAMING of a subscription is changed.
      */
-    public void notifyRoamingDataEnabled(int subId, boolean enable) {
-        obtainMessage(EVENT_ROAMING_DATA_ENABLED, subId, enable ? 1 : 0).sendToTarget();
+    public void notifyRoamingDataEnabled(int subId, int enable) {
+        obtainMessage(EVENT_ROAMING_DATA_ENABLED, subId, enable).sendToTarget();
     }
 
     /**
@@ -251,7 +251,6 @@ public class MultiSimSettingController extends Handler {
             }
             case EVENT_ROAMING_DATA_ENABLED: {
                 int subId = msg.arg1;
-                boolean enable = msg.arg2 != 0;
                 onRoamingDataEnabled(subId, enable);
                 break;
             }
@@ -300,12 +299,12 @@ public class MultiSimSettingController extends Handler {
     /**
      * Make sure DATA_ROAMING of subscriptions in same group are synced.
      */
-    private void onRoamingDataEnabled(int subId, boolean enable) {
+    private void onRoamingDataEnabled(int subId, int enable) {
         if (DBG) log("onRoamingDataEnabled");
         setRoamingDataEnabledForGroup(subId, enable);
 
         // Also inform SubscriptionController as it keeps another copy of user setting.
-        mSubController.setDataRoaming(enable ? 1 : 0, subId);
+        mSubController.setDataRoaming(enable, subId);
     }
 
     /**
@@ -727,7 +726,7 @@ public class MultiSimSettingController extends Handler {
      * Make sure DATA_ROAMING of subscriptions in the same group with the subId
      * are synced.
      */
-    private void setRoamingDataEnabledForGroup(int subId, boolean enable) {
+    private void setRoamingDataEnabledForGroup(int subId, int enable) {
         SubscriptionController subController = SubscriptionController.getInstance();
         List<SubscriptionInfo> infoList = subController.getSubscriptionsInGroup(
                 mSubController.getGroupUuid(subId), mContext.getOpPackageName());
@@ -736,7 +735,7 @@ public class MultiSimSettingController extends Handler {
 
         for (SubscriptionInfo info : infoList) {
             // For inactive subscription, directly write into global settings.
-            GlobalSettingsHelper.setBoolean(
+            GlobalSettingsHelper.setInt(
                     mContext, Settings.Global.DATA_ROAMING, info.getSubscriptionId(), enable);
         }
     }

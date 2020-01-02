@@ -740,6 +740,13 @@ public interface PhoneInternalInterface {
     void setDataRoamingEnabled(boolean enable);
 
     /**
+     * @param roaming 0:Don't allow data when roaming,
+     *                1:Allow data national roaming only,
+     *                2:Allow data all networks.
+     */
+    void setDataRoamingEnabled(int roamingEnableType);
+
+    /**
      * @return true if user has enabled data
      */
     boolean isUserDataEnabled();

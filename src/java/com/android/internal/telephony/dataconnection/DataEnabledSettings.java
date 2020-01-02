@@ -373,15 +373,20 @@ public class DataEnabledSettings {
         return retVal;
     }
 
-    public synchronized void setDataRoamingEnabled(boolean enabled) {
+    /**
+     * @param roamingEnableType 0:Don't allow data when roaming,
+     *                          1:Allow data national roaming only,
+     *                          2:Allow data all networks.
+     */
+    public synchronized void setDataRoamingEnabled(int roamingEnableType) {
         // will trigger handleDataOnRoamingChange() through observer
-        boolean changed = GlobalSettingsHelper.setBoolean(mPhone.getContext(),
-                Settings.Global.DATA_ROAMING, mPhone.getSubId(), enabled);
+        boolean changed = GlobalSettingsHelper.setInt(mPhone.getContext(),
+                Settings.Global.DATA_ROAMING, mPhone.getSubId(), roamingEnableType);
 
         if (changed) {
-            localLog("setDataRoamingEnabled", enabled);
+            localLog("setDataRoamingEnabled roamingEnableType=", roamingEnableType);
             MultiSimSettingController.getInstance().notifyRoamingDataEnabled(mPhone.getSubId(),
-                    enabled);
+                    roamingEnableType);
         }
     }
 
@@ -471,6 +476,10 @@ public class DataEnabledSettings {
     }
 
     private void localLog(String name, boolean value) {
+        mSettingChangeLocalLog.log(name + " change to " + value);
+    }
+
+    private void localLog(String name, int value) {
         mSettingChangeLocalLog.log(name + " change to " + value);
     }
 
