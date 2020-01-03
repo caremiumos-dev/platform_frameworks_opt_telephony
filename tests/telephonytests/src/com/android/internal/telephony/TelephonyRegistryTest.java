@@ -33,11 +33,15 @@ import static org.mockito.Mockito.when;
 
 import android.content.Intent;
 import android.net.LinkProperties;
+import android.os.Binder;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.telephony.Annotation;
 import android.telephony.PhoneCapability;
 import android.telephony.PhoneStateListener;
 import android.telephony.PreciseDataConnectionState;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.testing.AndroidTestingRunner;
@@ -56,8 +60,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RunWith(AndroidTestingRunner.class)
 @TestableLooper.RunWithLooper
 public class TelephonyRegistryTest extends TelephonyTest {
+
+    private static final int SUB_ID = SubscriptionManager.DEFAULT_SUBSCRIPTION_ID;
+    private static final int PID = Binder.getCallingPid();
+    private static final int UID = Binder.getCallingUid();
+
     @Mock
     private ISub.Stub mISubStub;
+
+    @Mock
+    private IBinder mMockBinder;
+    @Mock
+    private ITelephony mMockTelephony;
+
     private PhoneStateListenerWrapper mPhoneStateListener;
     private TelephonyRegistry mTelephonyRegistry;
     private PhoneCapability mPhoneCapability;
@@ -105,9 +120,15 @@ public class TelephonyRegistryTest extends TelephonyTest {
     @Before
     public void setUp() throws Exception {
         super.setUp("TelephonyRegistryTest");
+        /* doReturn(mMockTelephony).when(mMockTelephony).queryLocalInterface(anyString()); */
+
+        when(mMockBinder.queryLocalInterface(
+                "com.android.internal.telephony.ITelephony")).thenReturn(mMockTelephony);
+        mServiceManagerMockedServices.put("phone", mMockBinder);
         // ServiceManager.getService("isub") will return this stub for any call to
         // SubscriptionManager.
         mServiceManagerMockedServices.put("isub", mISubStub);
+
         mTelephonyRegistry = new TelephonyRegistry(mContext);
         addTelephonyRegistryService();
         mPhoneStateListener = new PhoneStateListenerWrapper();
@@ -287,5 +308,127 @@ public class TelephonyRegistryTest extends TelephonyTest {
                     0, 0, 0, "ims", new LinkProperties(), 0, null));
         processAllMessages();
         assertEquals(mPhoneStateListener.invocationCount.get(), 4);
+    }
+
+    /**
+     * Test that a SecurityException is thrown when we try to listen to a precise call state change
+     * without permission READ_PRECISE_PHONE_STATE.
+     */
+    @Test
+    @SmallTest
+    public void testListenPreciseCallStateChangedNoPermission() {
+        // Clear all permission grants for test.
+        mContextFixture.addCallingOrSelfPermission("");
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_PRECISE_CALL_STATE, true);
+            fail();
+        } catch (SecurityException e) {
+            // pass test!
+        }
+    }
+
+    /**
+     * Test that a SecurityException is thrown when we try to listen to a precise data connection
+     * state change without permission READ_PRECISE_PHONE_STATE.
+     */
+    @Test
+    @SmallTest
+    public void testListenPreciseDataConnectionStateChangedNoPermission() {
+        // Clear all permission grants for test.
+        mContextFixture.addCallingOrSelfPermission("");
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_PRECISE_DATA_CONNECTION_STATE, true);
+            fail();
+        } catch (SecurityException e) {
+            // pass test!
+        }
+    }
+
+    /**
+     * Test that a SecurityException is thrown when we try to listen to call disconnection causees
+     * without permission READ_PRECISE_PHONE_STATE.
+     */
+    @Test
+    @SmallTest
+    public void testListenCallDisconnectCausesNoPermission() {
+        // Clear all permission grants for test.
+        mContextFixture.addCallingOrSelfPermission("");
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_CALL_DISCONNECT_CAUSES, true);
+            fail();
+        } catch (SecurityException e) {
+            // pass test!
+        }
+    }
+
+    /**
+     * Test that a SecurityException is thrown when we try to listen to call attributes changed
+     * without permission READ_PRECISE_PHONE_STATE.
+     */
+    @Test
+    @SmallTest
+    public void testListenCallAttributesChangedNoPermission() {
+        // Clear all permission grants for test.
+        mContextFixture.addCallingOrSelfPermission("");
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_CALL_ATTRIBUTES_CHANGED, true);
+            fail();
+        } catch (SecurityException e) {
+            // pass test!
+        }
+    }
+
+    /**
+     * Test that a SecurityException is thrown when we try to listen to IMS call disconnection
+     * causes without permission READ_PRECISE_PHONE_STATE.
+     */
+    @Test
+    @SmallTest
+    public void testListenIMSCallDisconnectCausesNoPermission() {
+        // Clear all permission grants for test.
+        mContextFixture.addCallingOrSelfPermission("");
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_IMS_CALL_DISCONNECT_CAUSES, true);
+            fail();
+        } catch (SecurityException e) {
+            // pass test!
+        }
+    }
+
+    /**
+     * Test that no SecurtyException is thrown when we try to listen to IMS call disconnection
+     * causes with carrier privilege.
+     */
+    // TODO: Find a workable solution to mock carrier privilege, disable this test before done
+    //@Test
+    //@SmallTest
+    public void testListenIMSCallDisconnectCausesWithCarrierPrivilege() throws RemoteException {
+        // Clear all permission grants for test.
+        mContextFixture.addCallingOrSelfPermission("");
+        int[] activeSubs = {SUB_ID};
+        when(mSubscriptionManager.getActiveSubscriptionIdList()).thenReturn(activeSubs);
+        when(mMockTelephony.getCarrierPrivilegeStatusForUid(anyInt(), anyInt()))
+                .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_IMS_CALL_DISCONNECT_CAUSES, true);
+            /* mTelephonyRegistry.listenForSubscriber(SUB_IDsubId, mContext.getOpPackageName(), */
+            /*         mPhoneStateListener.callback, */
+            /*         PhoneStateListener.LISTEN_IMS_CALL_DISCONNECT_CAUSES, true); */
+            // pass test!
+        } catch (SecurityException e) {
+            fail();
+        }
     }
 }
