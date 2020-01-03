@@ -75,6 +75,7 @@ java_library {
         "ecc-protos-lite",
         "libphonenumber-nogeocoder",
         "telephony-protos",
+        "lib-net-common",
     ],
 
     product_variables: {
