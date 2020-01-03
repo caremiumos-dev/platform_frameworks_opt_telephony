@@ -73,8 +73,8 @@ java_library {
         "android.hardware.radio.config-V1.2-java-shallow",
         "android.hardware.radio.deprecated-V1.0-java-shallow",
         "ecc-protos-lite",
+        "lib-net-module",
         "libphonenumber-nogeocoder",
-        "net-utils-framework-common",
         "telephony-protos",
     ],
 
