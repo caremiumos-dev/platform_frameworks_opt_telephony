@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a249da15_ae5e91b0",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-04T00:55:51Z",
+      "side": 1,
+      "message": "persisted",
+      "range": {
+        "startLine": 1874,
+        "startChar": 18,
+        "endLine": 1874,
+        "endChar": 25
+      },
+      "revId": "577ad74f7d6c74522bfaf59117e1d12a5e51a748",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "146f13c8_ec38a945",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-04T00:55:51Z",
+      "side": 1,
+      "message": "manual",
+      "range": {
+        "startLine": 1874,
+        "startChar": 26,
+        "endLine": 1874,
+        "endChar": 33
+      },
+      "revId": "577ad74f7d6c74522bfaf59117e1d12a5e51a748",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3522b33b_b9825c7d",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-04T00:55:51Z",
+      "side": 1,
+      "message": "Why does this need the subId or a key?",
+      "range": {
+        "startLine": 1880,
+        "startChar": 38,
+        "endLine": 1880,
+        "endChar": 69
+      },
+      "revId": "577ad74f7d6c74522bfaf59117e1d12a5e51a748",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51c446b0_8972ea16",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-04T00:55:51Z",
+      "side": 1,
+      "message": "generally speaking, this is a hint that the underlying operation should be performed on the Phone object and have defaults that are overridden by GsmCdmaPhone, which will avoid the casting.",
+      "range": {
+        "startLine": 1380,
+        "startChar": 16,
+        "endLine": 1380,
+        "endChar": 88
+      },
+      "revId": "577ad74f7d6c74522bfaf59117e1d12a5e51a748",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
