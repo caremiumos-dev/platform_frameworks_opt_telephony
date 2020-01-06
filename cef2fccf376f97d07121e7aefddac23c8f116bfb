@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "0ed0b93e_59f43ee3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-06T13:09:00Z",
+      "side": 1,
+      "message": "currently",
+      "range": {
+        "startLine": 12,
+        "startChar": 55,
+        "endLine": 12,
+        "endChar": 62
+      },
+      "revId": "cef2fccf376f97d07121e7aefddac23c8f116bfb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a055bc20_0dc975b6",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-06T13:09:00Z",
+      "side": 1,
+      "message": "While you\u0027re here, suggest simplifying all this code to\n\n  if (!(specifier instanceof TelephonyNetworkSpecifier)) return DEFAULT_SUBSCRIPTION_ID;\n  return ((TelephonyNetworkSpecifier) specifier)).getSubscriptionId();",
+      "range": {
+        "startLine": 1000,
+        "startChar": 8,
+        "endLine": 1012,
+        "endChar": 21
+      },
+      "revId": "cef2fccf376f97d07121e7aefddac23c8f116bfb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b209c0c_c6410311",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 3
@@ -66,6 +112,29 @@
         "startChar": 0,
         "endLine": 1320,
         "endChar": 52
+      },
+      "revId": "cef2fccf376f97d07121e7aefddac23c8f116bfb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdab1194_241f8aa9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-06T13:09:00Z",
+      "side": 1,
+      "message": "As this will be passed to setCapabilitiesFilter it will start rejecting the existing apps that file a NetworkRequest with a StringNetworkSpecifier(\"1\")",
+      "range": {
+        "startLine": 148,
+        "startChar": 31,
+        "endLine": 149,
+        "endChar": 58
       },
       "revId": "cef2fccf376f97d07121e7aefddac23c8f116bfb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
