@@ -46,6 +46,30 @@
       "revId": "cef2fccf376f97d07121e7aefddac23c8f116bfb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "153d2789_34b4e8a9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2020-01-06T13:07:21Z",
+      "side": 1,
+      "message": "1. No. The relation is not reflexive. Assuming the other elements of the request are satisfied, the request is satisfied if the request\u0027s specifier is satisfied by the network\u0027s specifier. At the limit, a null or MatchAllSpecifier satisfies all request specifiers.\n\n2. Sure, if we can avoid exposing StringNetworkSpecifier that would be preferable.\n\nBut I think neither of those address the point I was trying to make, do they? My point was that today, an app that does:\n\n    NetworkRequest r \u003d new NetworkRequest.Builder().setNetworkSpecifier(\"1\").build();\n\nwill match networks on the first SIM card. But after this CL, they will not.",
+      "parentUuid": "6fca0645_1258bef7",
+      "range": {
+        "startLine": 1319,
+        "startChar": 0,
+        "endLine": 1320,
+        "endChar": 52
+      },
+      "revId": "cef2fccf376f97d07121e7aefddac23c8f116bfb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
