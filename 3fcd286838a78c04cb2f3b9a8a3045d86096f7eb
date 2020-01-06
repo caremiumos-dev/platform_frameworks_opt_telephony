@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f20fa078_36beb35d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-01-06T20:54:47Z",
+      "side": 1,
+      "message": "This defaults to 0. Do we want to default to NetworkCapabilities#INVALID_UID instead?\n\nhttps://osscs.corp.google.com/android/platform/superproject/+/master:frameworks/base/core/java/android/net/NetworkCapabilities.java;l\u003d58?q\u003dNetworkCapabilities\u0026ss\u003dandroid%2Fplatform%2Fsuperproject",
+      "range": {
+        "startLine": 172,
+        "startChar": 16,
+        "endLine": 172,
+        "endChar": 20
+      },
+      "revId": "3fcd286838a78c04cb2f3b9a8a3045d86096f7eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
