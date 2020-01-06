@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "41ab6db3_6442d454",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2020-01-06T13:45:42Z",
+      "side": 1,
+      "message": "I notice now that solution #2 above mentioned equals() when it should instead have mentioned satisfiedBy(). For a StringNetworkSpecifier, the two are currently the same. Is it enough to modify only satisfiedBy? Modifying equals() is pretty hacky.",
+      "parentUuid": "153d2789_34b4e8a9",
+      "range": {
+        "startLine": 1319,
+        "startChar": 0,
+        "endLine": 1320,
+        "endChar": 52
+      },
+      "revId": "cef2fccf376f97d07121e7aefddac23c8f116bfb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bdab1194_241f8aa9",
         "filename": "src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java",
         "patchSetId": 3
