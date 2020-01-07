@@ -49,6 +49,29 @@
     },
     {
       "key": {
+        "uuid": "c760afc0_41c9f40c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2020-01-07T20:44:23Z",
+      "side": 1,
+      "message": "Let\u0027s check with qingxi as to where the change is to make this ownerUid",
+      "range": {
+        "startLine": 1340,
+        "startChar": 19,
+        "endLine": 1340,
+        "endChar": 43
+      },
+      "revId": "3fcd286838a78c04cb2f3b9a8a3045d86096f7eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "773f3239_78a73549",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 1
