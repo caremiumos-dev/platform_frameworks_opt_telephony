@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "8b982461_e4c67463",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-07T00:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "146f13c8_ec38a945",
+      "range": {
+        "startLine": 1874,
+        "startChar": 26,
+        "endLine": 1874,
+        "endChar": 33
+      },
+      "revId": "577ad74f7d6c74522bfaf59117e1d12a5e51a748",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ee5a65de_4ad91277",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-07T00:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a249da15_ae5e91b0",
+      "range": {
+        "startLine": 1874,
+        "startChar": 18,
+        "endLine": 1874,
+        "endChar": 25
+      },
+      "revId": "577ad74f7d6c74522bfaf59117e1d12a5e51a748",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3522b33b_b9825c7d",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 2
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "6499450c_ddbc3bc1",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-07T00:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3522b33b_b9825c7d",
+      "range": {
+        "startLine": 1880,
+        "startChar": 38,
+        "endLine": 1880,
+        "endChar": 69
+      },
+      "revId": "577ad74f7d6c74522bfaf59117e1d12a5e51a748",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51c446b0_8972ea16",
         "filename": "src/java/com/android/internal/telephony/Phone.java",
         "patchSetId": 2
@@ -91,6 +163,54 @@
       "revId": "577ad74f7d6c74522bfaf59117e1d12a5e51a748",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98c91b0b_fee5c2a3",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-07T00:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51c446b0_8972ea16",
+      "range": {
+        "startLine": 1380,
+        "startChar": 16,
+        "endLine": 1380,
+        "endChar": 88
+      },
+      "revId": "577ad74f7d6c74522bfaf59117e1d12a5e51a748",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c52b6ef_3722fd8d",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-07T00:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51c446b0_8972ea16",
+      "range": {
+        "startLine": 1380,
+        "startChar": 16,
+        "endLine": 1380,
+        "endChar": 88
+      },
+      "revId": "577ad74f7d6c74522bfaf59117e1d12a5e51a748",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
