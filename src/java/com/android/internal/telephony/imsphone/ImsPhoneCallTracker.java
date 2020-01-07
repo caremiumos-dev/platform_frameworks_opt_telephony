@@ -45,7 +45,6 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import com.android.ims.internal.ConferenceParticipant;
 import android.telecom.TelecomManager;
 import android.telecom.VideoProfile;
 import android.telephony.AccessNetworkConstants;
@@ -84,6 +83,7 @@ import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.ims.ImsMultiEndpoint;
 import com.android.ims.ImsUtInterface;
+import com.android.ims.internal.ConferenceParticipant;
 import com.android.ims.internal.IImsCallSession;
 import com.android.ims.internal.IImsVideoCallProvider;
 import com.android.ims.internal.ImsVideoCallProviderWrapper;
@@ -3544,20 +3544,20 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
         // Create the snapshot of total video call data usage.
         NetworkStats vtDataUsageSnapshot = new NetworkStats(currentTime, 1);
-        vtDataUsageSnapshot.combineAllValues(mVtDataUsageSnapshot);
+        vtDataUsageSnapshot.addAllValues(mVtDataUsageSnapshot);
         // Since the modem only reports the total vt data usage rather than rx/tx separately,
         // the only thing we can do here is splitting the usage into half rx and half tx.
         // Uid -1 indicates this is for the overall device data usage.
-        vtDataUsageSnapshot.combineValues(new NetworkStats.Entry(
+        vtDataUsageSnapshot.addValues(new NetworkStats.Entry(
                 NetworkStatsService.VT_INTERFACE, -1, NetworkStats.SET_FOREGROUND,
                 NetworkStats.TAG_NONE, NetworkStats.METERED_YES, isRoaming,
                 NetworkStats.DEFAULT_NETWORK_YES, delta / 2, 0, delta / 2, 0, 0));
         mVtDataUsageSnapshot = vtDataUsageSnapshot;
 
-        // Create the snapshot of video call data usage per dialer. combineValues will create
+        // Create the snapshot of video call data usage per dialer. addValues will create
         // a separate entry if uid is different from the previous snapshot.
         NetworkStats vtDataUsageUidSnapshot = new NetworkStats(currentTime, 1);
-        vtDataUsageUidSnapshot.combineAllValues(mVtDataUsageUidSnapshot);
+        vtDataUsageUidSnapshot.addAllValues(mVtDataUsageUidSnapshot);
 
         // The dialer uid might not be initialized correctly during boot up due to telecom service
         // not ready or its default dialer cache not ready. So we double check again here to see if
@@ -3571,7 +3571,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
         // Since the modem only reports the total vt data usage rather than rx/tx separately,
         // the only thing we can do here is splitting the usage into half rx and half tx.
-        vtDataUsageUidSnapshot.combineValues(new NetworkStats.Entry(
+        vtDataUsageUidSnapshot.addValues(new NetworkStats.Entry(
                 NetworkStatsService.VT_INTERFACE, mDefaultDialerUid.get(),
                 NetworkStats.SET_FOREGROUND, NetworkStats.TAG_NONE, NetworkStats.METERED_YES,
                 isRoaming, NetworkStats.DEFAULT_NETWORK_YES, delta / 2, 0, delta / 2, 0, 0));
