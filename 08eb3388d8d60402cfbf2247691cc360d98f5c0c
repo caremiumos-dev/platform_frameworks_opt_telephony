@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b070af9e_e8364ee1",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-07T01:39:04Z",
+      "side": 1,
+      "message": "Just do this now\n\nprivate static String[] getPlmnsFromActRecord(PlmnActRecord[] records) {\n  if (records \u003d\u003d null) return null;\n  String[] plmns \u003d new String[records.length];\n  // loop code\n  return plmns;\n}",
+      "range": {
+        "startLine": 1161,
+        "startChar": 7,
+        "endLine": 1161,
+        "endChar": 68
+      },
+      "revId": "08eb3388d8d60402cfbf2247691cc360d98f5c0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
