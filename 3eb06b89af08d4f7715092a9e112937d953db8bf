@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a4c0d6a_076d7388",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-07T02:07:05Z",
+      "side": 1,
+      "message": "This immediately raises my eyebrow - why can\u0027t GsmCdmaPhone just @Override this method to do this special case?\n\nOff the top of my head, the simplest way to do this is:\n- Get rid of instanceof check, always call updateManualNetworkSelection\n- Phone will have empty updateManualNetworkSelection body\n- GsmCdmaPhone will have a real updateManualNetworkSelection body",
+      "range": {
+        "startLine": 1379,
+        "startChar": 16,
+        "endLine": 1379,
+        "endChar": 44
+      },
+      "revId": "3eb06b89af08d4f7715092a9e112937d953db8bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4709d8a_6185d034",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-07T02:07:05Z",
+      "side": 1,
+      "message": "Just pass the whole NSM object",
+      "range": {
+        "startLine": 1380,
+        "startChar": 45,
+        "endLine": 1380,
+        "endChar": 64
+      },
+      "revId": "3eb06b89af08d4f7715092a9e112937d953db8bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
