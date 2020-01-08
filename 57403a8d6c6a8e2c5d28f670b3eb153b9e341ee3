@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d8df7f9_a49f2a8b",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-08T19:11:40Z",
+      "side": 1,
+      "message": "Since this isn\u0027t called from PhoneInterfaceManager any more, can it be removed?",
+      "range": {
+        "startLine": 1523,
+        "startChar": 16,
+        "endLine": 1523,
+        "endChar": 33
+      },
+      "revId": "57403a8d6c6a8e2c5d28f670b3eb153b9e341ee3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "699e1315_d3e64d55",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1533,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-08T19:11:40Z",
+      "side": 1,
+      "message": "Exposing handler event values outside of the class that owns them is risky. Instead, let\u0027s deduce it based on the value of xplmn - we can just use a switch and throw IllegalArgumentException in the default case where we don\u0027t know how to get that type of PLMN. Then EVENT_GET_*PLMN* can be made private again.",
+      "range": {
+        "startLine": 1533,
+        "startChar": 54,
+        "endLine": 1533,
+        "endChar": 63
+      },
+      "revId": "57403a8d6c6a8e2c5d28f670b3eb153b9e341ee3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3445a329_4caddeea",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1533,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-08T19:11:40Z",
+      "side": 1,
+      "message": "In PhoneIntMan, this was called efPlmns - let\u0027s keep the names consistent between the two.",
+      "range": {
+        "startLine": 1533,
+        "startChar": 47,
+        "endLine": 1533,
+        "endChar": 52
+      },
+      "revId": "57403a8d6c6a8e2c5d28f670b3eb153b9e341ee3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
