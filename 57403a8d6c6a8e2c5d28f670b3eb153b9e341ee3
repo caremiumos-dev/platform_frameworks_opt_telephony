@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fe1fabb3_108a19a2",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-08T23:11:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d8df7f9_a49f2a8b",
+      "range": {
+        "startLine": 1523,
+        "startChar": 16,
+        "endLine": 1523,
+        "endChar": 33
+      },
+      "revId": "57403a8d6c6a8e2c5d28f670b3eb153b9e341ee3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "699e1315_d3e64d55",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 4
@@ -68,6 +92,54 @@
       "revId": "57403a8d6c6a8e2c5d28f670b3eb153b9e341ee3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a80f3f54_972b6de7",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1533,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-08T23:11:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3445a329_4caddeea",
+      "range": {
+        "startLine": 1533,
+        "startChar": 47,
+        "endLine": 1533,
+        "endChar": 52
+      },
+      "revId": "57403a8d6c6a8e2c5d28f670b3eb153b9e341ee3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5d5a2ee0_3e3b1951",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1533,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-08T23:11:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "699e1315_d3e64d55",
+      "range": {
+        "startLine": 1533,
+        "startChar": 54,
+        "endLine": 1533,
+        "endChar": 63
+      },
+      "revId": "57403a8d6c6a8e2c5d28f670b3eb153b9e341ee3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
