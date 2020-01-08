@@ -22,6 +22,30 @@
       "revId": "08eb3388d8d60402cfbf2247691cc360d98f5c0c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ed71818_9b7f6f82",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-08T17:01:47Z",
+      "side": 1,
+      "message": "changes in SIMRecords.java",
+      "parentUuid": "b070af9e_e8364ee1",
+      "range": {
+        "startLine": 1161,
+        "startChar": 7,
+        "endLine": 1161,
+        "endChar": 68
+      },
+      "revId": "08eb3388d8d60402cfbf2247691cc360d98f5c0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
