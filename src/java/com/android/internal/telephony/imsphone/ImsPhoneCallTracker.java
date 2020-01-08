@@ -4297,7 +4297,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             NetworkCapabilities capabilities = new NetworkCapabilities();
             capabilities.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
             NetworkRequest.Builder builder = new NetworkRequest.Builder();
-            builder.setCapabilities(capabilities);
+            builder.addCapabilities(capabilities);
             cm.registerNetworkCallback(builder.build(), mNetworkCallback);
             mIsMonitoringConnectivity = true;
         }
