@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86b0f03a_f44d4f28",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-01-08T22:21:53Z",
+      "side": 1,
+      "message": "It may make a little more sense to make ImsRegistrationUpdate an abstract class and create two anon classes here, one for MMTEL and one for RCS. instead of having to pass the feature type into the ImsRegistrationCallbackHelper.",
+      "range": {
+        "startLine": 123,
+        "startChar": 19,
+        "endLine": 123,
+        "endChar": 70
+      },
+      "revId": "e4f07e5eaae19a30e2123140cbb8b48551e98f4d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbe227d6_9044a0fb",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3210,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-01-08T22:21:53Z",
+      "side": 1,
+      "message": "all of these registration change handling methods can be moved to ImsPhone.",
+      "range": {
+        "startLine": 3210,
+        "startChar": 16,
+        "endLine": 3210,
+        "endChar": 40
+      },
+      "revId": "e4f07e5eaae19a30e2123140cbb8b48551e98f4d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
