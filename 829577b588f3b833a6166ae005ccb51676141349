@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ec92d5c_c3824e82",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-01-08T21:00:11Z",
+      "side": 1,
+      "message": "I\u0027d imagine \"null\" means that you\u0027re not establishing an adhoc conference?",
+      "range": {
+        "startLine": 319,
+        "startChar": 7,
+        "endLine": 319,
+        "endChar": 44
+      },
+      "revId": "829577b588f3b833a6166ae005ccb51676141349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e120cc2_d81152c0",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-01-08T21:00:11Z",
+      "side": 1,
+      "message": "Seems like a lot of this is common; maybe refactor into a new method such as prepareForDialing",
+      "range": {
+        "startLine": 801,
+        "startChar": 8,
+        "endLine": 850,
+        "endChar": 13
+      },
+      "revId": "829577b588f3b833a6166ae005ccb51676141349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f7fba9c_7a17929f",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-01-08T21:00:11Z",
+      "side": 1,
+      "message": "Can just assign the callees here like this:\n conn.isAdhocConference() ? conn.getParticipantsToDial() : conn.getAddress()",
+      "range": {
+        "startLine": 1205,
+        "startChar": 46,
+        "endLine": 1205,
+        "endChar": 63
+      },
+      "revId": "829577b588f3b833a6166ae005ccb51676141349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26b5b361_38f2bd8e",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-01-08T21:00:11Z",
+      "side": 1,
+      "message": "Define a string const for this in com.android.internal.telephony.Connection.",
+      "range": {
+        "startLine": 275,
+        "startChar": 33,
+        "endLine": 275,
+        "endChar": 51
+      },
+      "revId": "829577b588f3b833a6166ae005ccb51676141349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
