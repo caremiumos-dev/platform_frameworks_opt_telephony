@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7004d45b_6711109a",
+        "filename": "TEST_MAPPING",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1088076
+      },
+      "writtenOn": "2020-01-08T16:52:15Z",
+      "side": 1,
+      "message": "This bug will apply to postsubmit suite as well. We should wait till it\u0027s fixed.",
+      "revId": "fd8615738ad4e3ddb9aeeaf6160c478565df9853",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
