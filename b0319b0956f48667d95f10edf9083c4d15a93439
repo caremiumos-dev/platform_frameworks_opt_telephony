@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c54b2a7_6e5408dd",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-08T19:46:05Z",
+      "side": 1,
+      "message": "Do we still need to be logging this? The default case is probably fine doing nothing at all",
+      "range": {
+        "startLine": 1427,
+        "startChar": 8,
+        "endLine": 1427,
+        "endChar": 79
+      },
+      "revId": "b0319b0956f48667d95f10edf9083c4d15a93439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
