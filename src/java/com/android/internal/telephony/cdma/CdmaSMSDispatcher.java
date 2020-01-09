@@ -33,15 +33,13 @@ import com.android.internal.telephony.SmsDispatchersController;
 import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsMessageBase;
 import com.android.internal.telephony.util.SMSDispatcherUtil;
-import com.android.telephony.Rlog;
 
 public class CdmaSMSDispatcher extends SMSDispatcher {
-    private static final String TAG = "CdmaSMSDispatcher";
     private static final boolean VDBG = false;
 
     public CdmaSMSDispatcher(Phone phone, SmsDispatchersController smsDispatchersController) {
         super(phone, smsDispatchersController);
-        Rlog.d(TAG, "CdmaSMSDispatcher created");
+        logd("created");
     }
 
     @UnsupportedAppUsage
@@ -55,18 +53,18 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
      * @param sms the CDMA SMS message containing the status report
      */
     public void sendStatusReportMessage(SmsMessage sms) {
-        if (VDBG) Rlog.d(TAG, "sending EVENT_HANDLE_STATUS_REPORT message");
+        if (VDBG) logd("sending EVENT_HANDLE_STATUS_REPORT message");
         sendMessage(obtainMessage(EVENT_HANDLE_STATUS_REPORT, sms));
     }
 
     @Override
     protected void handleStatusReport(Object o) {
         if (o instanceof SmsMessage) {
-            if (VDBG) Rlog.d(TAG, "calling handleSmsStatusReport()");
+            if (VDBG) logd("calling handleSmsStatusReport()");
             byte[] pdu = ((SmsMessage) o).getPdu();
             mSmsDispatchersController.handleSmsStatusReport(SmsConstants.FORMAT_3GPP2, pdu);
         } else {
-            Rlog.e(TAG, "handleStatusReport() called for object type " + o.getClass().getName());
+            loge("handleStatusReport() called for object type " + o.getClass().getName());
         }
     }
 
@@ -101,7 +99,7 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
     public void sendSms(SmsTracker tracker) {
         int ss = mPhone.getServiceState().getState();
 
-        Rlog.d(TAG, "sendSms: "
+        logd("sendSms: "
                 + " isIms()=" + isIms()
                 + " mRetryCount=" + tracker.mRetryCount
                 + " mImsRetry=" + tracker.mImsRetry

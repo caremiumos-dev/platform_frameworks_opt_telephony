@@ -248,6 +248,8 @@ public abstract class InboundSmsHandler extends StateMachine {
     // Only mark deleted, but keep in db for message de-duping
     private final int MARK_DELETED = 2;
 
+    private final String mLogTag;
+
     private static String ACTION_OPEN_SMS_APP =
         "com.android.internal.telephony.OPEN_DEFAULT_SMS_APP";
 
@@ -273,6 +275,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         mPhone = phone;
         mResolver = context.getContentResolver();
         mWapPush = new WapPushOverSms(context);
+        mLogTag = name + " [" + Integer.toString(phone.getPhoneId()) + "]";
 
         boolean smsCapable = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_sms_capable);
@@ -1159,7 +1162,7 @@ public abstract class InboundSmsHandler extends StateMachine {
                         tracker.isClass0(), tracker.getSubId(), tracker.getMessageId());
         CarrierServicesSmsFilter carrierServicesFilter = new CarrierServicesSmsFilter(
                 mContext, mPhone, pdus, destPort, tracker.getFormat(),
-                filterCallback, getName() + "::CarrierServicesSmsFilter", mCarrierServiceLocalLog,
+                filterCallback, mLogTag + "::CarrierServicesSmsFilter", mCarrierServiceLocalLog,
                 tracker.getMessageId());
         if (carrierServicesFilter.filter()) {
             log("filterSms: SMS is being handled by carrier service", tracker.getMessageId());
@@ -1721,7 +1724,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     @UnsupportedAppUsage
     @Override
     protected void log(String s) {
-        Rlog.d(getName(), s);
+        Rlog.d(mLogTag, s);
     }
 
     /**
@@ -1740,7 +1743,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     @UnsupportedAppUsage
     @Override
     protected void loge(String s) {
-        Rlog.e(getName(), s);
+        Rlog.e(mLogTag, s);
     }
 
     /**
@@ -1759,7 +1762,7 @@ public abstract class InboundSmsHandler extends StateMachine {
      */
     @Override
     protected void loge(String s, Throwable e) {
-        Rlog.e(getName(), s, e);
+        Rlog.e(mLogTag, s, e);
     }
 
     /**
@@ -1786,7 +1789,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     @Override
     public void dump(FileDescriptor fd, PrintWriter printWriter, String[] args) {
         IndentingPrintWriter pw = new IndentingPrintWriter(printWriter, "  ");
-        pw.println(getName() + " extends StateMachine:");
+        pw.println(mLogTag + " extends StateMachine:");
         pw.increaseIndent();
         super.dump(fd, pw, args);
         if (mCellBroadcastServiceManager != null) {
