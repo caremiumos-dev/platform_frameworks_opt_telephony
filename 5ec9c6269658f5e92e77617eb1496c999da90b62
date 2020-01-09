@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5294580e_8e35135c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1875,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-09T00:24:10Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 1875,
+        "startChar": 4,
+        "endLine": 1875,
+        "endChar": 6
+      },
+      "revId": "5ec9c6269658f5e92e77617eb1496c999da90b62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b21b3121_c29034f3",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1878,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-09T00:24:10Z",
+      "side": 1,
+      "message": "protected",
+      "range": {
+        "startLine": 1878,
+        "startChar": 4,
+        "endLine": 1878,
+        "endChar": 10
+      },
+      "revId": "5ec9c6269658f5e92e77617eb1496c999da90b62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "722ee653_a11733a3",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1882,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-09T00:24:10Z",
+      "side": 1,
+      "message": "Remove empty line",
+      "revId": "5ec9c6269658f5e92e77617eb1496c999da90b62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f565bf8_fa78a1ee",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-09T00:24:10Z",
+      "side": 1,
+      "message": "Nit: move this call below clearSavedNetworkSelection() - based on the method names, it looks like we\u0027re setting something and then immediately clearing it",
+      "range": {
+        "startLine": 1379,
+        "startChar": 12,
+        "endLine": 1379,
+        "endChar": 40
+      },
+      "revId": "5ec9c6269658f5e92e77617eb1496c999da90b62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26c3ad6d_e5716b4f",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-09T00:24:10Z",
+      "side": 1,
+      "message": "Empty line between comment and @param",
+      "range": {
+        "startLine": 1424,
+        "startChar": 5,
+        "endLine": 1424,
+        "endChar": 6
+      },
+      "revId": "5ec9c6269658f5e92e77617eb1496c999da90b62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9df571a_0b9557a3",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-09T00:24:10Z",
+      "side": 1,
+      "message": "protected, right?",
+      "range": {
+        "startLine": 1426,
+        "startChar": 4,
+        "endLine": 1426,
+        "endChar": 10
+      },
+      "revId": "5ec9c6269658f5e92e77617eb1496c999da90b62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
