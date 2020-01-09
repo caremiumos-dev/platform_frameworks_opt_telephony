@@ -88,7 +88,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.provider.Telephony;
-import android.telephony.Rlog;
+import com.android.telephony.Rlog;
 import android.telephony.ims.RcsEventQueryParams;
 import android.telephony.ims.RcsEventQueryResultDescriptor;
 import android.telephony.ims.RcsFileTransferCreationParams;
