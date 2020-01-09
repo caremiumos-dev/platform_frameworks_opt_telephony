@@ -77,7 +77,7 @@ public class CdmaInboundSmsHandler extends InboundSmsHandler {
      */
     private CdmaInboundSmsHandler(Context context, SmsStorageMonitor storageMonitor,
             Phone phone, CdmaSMSDispatcher smsDispatcher) {
-        super("CdmaInboundSmsHandler", context, storageMonitor, phone);
+        super(CdmaInboundSmsHandler.class.getSimpleName(), context, storageMonitor, phone);
         mSmsDispatcher = smsDispatcher;
         mCheckForDuplicatePortsInOmadmWapPush = TelephonyResourceUtils
                 .getTelephonyResources(context).getBoolean(
