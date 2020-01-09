@@ -115,7 +115,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * as the coordinator has members which are used without synchronization.
  */
 public class DataConnection extends StateMachine {
-    private static final boolean DBG = true;
+    protected static final boolean DBG = true;
     private static final boolean VDBG = true;
 
     private static final String NETWORK_TYPE = "MOBILE";
@@ -170,7 +170,7 @@ public class DataConnection extends StateMachine {
     // The Tester for failing all bringup's
     private DcTesterFailBringUpAll mDcTesterFailBringUpAll;
 
-    private static AtomicInteger mInstanceNumber = new AtomicInteger(0);
+    protected static AtomicInteger mInstanceNumber = new AtomicInteger(0);
     private AsyncChannel mAc;
 
     // The DCT that's talking to us, we only support one!
@@ -187,7 +187,7 @@ public class DataConnection extends StateMachine {
      */
     public static class ConnectionParams {
         int mTag;
-        ApnContext mApnContext;
+        public ApnContext mApnContext;
         int mProfileId;
         int mRilRat;
         Message mOnCompletedMsg;
@@ -258,9 +258,9 @@ public class DataConnection extends StateMachine {
     @DataFailureCause
     private int mDcFailCause;
 
-    private Phone mPhone;
+    protected Phone mPhone;
     private DataServiceManager mDataServiceManager;
-    private final int mTransportType;
+    protected final int mTransportType;
     private LinkProperties mLinkProperties = new LinkProperties();
     private long mCreateTime;
     private long mLastFailTime;
@@ -287,7 +287,7 @@ public class DataConnection extends StateMachine {
 
     private int mDisabledApnTypeBitMask = 0;
 
-    int mTag;
+    protected int mTag;
 
     /** Data connection id assigned by the modem. This is unique across transports */
     public int mCid;
@@ -409,7 +409,7 @@ public class DataConnection extends StateMachine {
         return dc;
     }
 
-    void dispose() {
+    protected void dispose() {
         log("dispose: call quiteNow()");
         quitNow();
     }
@@ -584,7 +584,7 @@ public class DataConnection extends StateMachine {
     }
 
     //***** Constructor (NOTE: uses dcc.getHandler() as its Handler)
-    private DataConnection(Phone phone, String tagSuffix, int id,
+    protected DataConnection(Phone phone, String tagSuffix, int id,
                            DcTracker dct, DataServiceManager dataServiceManager,
                            DcTesterFailBringUpAll failBringUpAll, DcController dcc) {
         super("DC-" + tagSuffix, dcc.getHandler());
@@ -856,7 +856,7 @@ public class DataConnection extends StateMachine {
      *
      * @param dp is the DisconnectParams.
      */
-    private void notifyDisconnectCompleted(DisconnectParams dp, boolean sendAll) {
+    protected void notifyDisconnectCompleted(DisconnectParams dp, boolean sendAll) {
         if (VDBG) log("NotifyDisconnectCompleted");
 
         ApnContext alreadySent = null;
@@ -1715,6 +1715,7 @@ public class DataConnection extends StateMachine {
                                 + " mRilRat=" + mRilRat);
                     }
                     break;
+
                 default:
                     if (DBG) {
                         log("DcDefaultState: ignore msg.what=" + getWhatToString(msg.what));
@@ -1963,6 +1964,10 @@ public class DataConnection extends StateMachine {
                     DataCallResponse dataCallResponse =
                             msg.getData().getParcelable(DataServiceManager.DATA_CALL_RESPONSE);
                     SetupResult result = onSetupConnectionCompleted(msg.arg1, dataCallResponse, cp);
+                    if (result != null) {
+                        log("EVENT_SETUP_DATA_CONNECTION_DONE, result: " + result
+                                + ", mFailCause: " + result.mFailCause);
+                    }
                     if (result != SetupResult.ERROR_STALE) {
                         if (mConnectionParams != cp) {
                             loge("DcActivatingState: WEIRD mConnectionsParams:"+ mConnectionParams
@@ -2013,7 +2018,15 @@ public class DataConnection extends StateMachine {
                                     + " isPermanentFailure=" +
                                     mDct.isPermanentFailure(result.mFailCause);
                             if (DBG) log(str);
-                            if (cp.mApnContext != null) cp.mApnContext.requestLog(str);
+                            if (cp.mApnContext != null) {
+                                cp.mApnContext.requestLog(str);
+                                if (mPhone.getContext().getResources().getBoolean(
+                                        com.android.internal.R.bool.
+                                        config_enable_retry_for_pdp_reject_29_33_55) {
+                                    cp.mApnContext.setDataRejectReason(
+                                            DataFailCause.toString(result.mFailCause));
+                                }
+                            }
 
                             // Save the cause. DcTracker.onDataSetupComplete will check this
                             // failure cause and determine if we need to retry this APN later

@@ -259,8 +259,8 @@ public class DcTracker extends Handler {
             DctConstants.State.CONNECTED,
     };
 
-    private DcTesterFailBringUpAll mDcTesterFailBringUpAll;
-    private DcController mDcc;
+    protected DcTesterFailBringUpAll mDcTesterFailBringUpAll;
+    protected DcController mDcc;
 
     /** kept in sync with mApnContexts
      * Higher numbers are higher priority and sorted so highest priority is first */
@@ -636,7 +636,7 @@ public class DcTracker extends Handler {
     // True if data stall detection is enabled
     private volatile boolean mDataStallNoRxEnabled = true;
 
-    private volatile boolean mFailFast = false;
+    protected volatile boolean mFailFast = false;
 
     // True when in voice call
     private boolean mInVoiceCall = false;
@@ -654,17 +654,17 @@ public class DcTracker extends Handler {
     private boolean mIsScreenOn = true;
 
     /** Allows the generation of unique Id's for DataConnection objects */
-    private AtomicInteger mUniqueIdGenerator = new AtomicInteger(0);
+    protected AtomicInteger mUniqueIdGenerator = new AtomicInteger(0);
 
     /** The data connections. */
-    private HashMap<Integer, DataConnection> mDataConnections =
+    protected HashMap<Integer, DataConnection> mDataConnections =
             new HashMap<Integer, DataConnection>();
 
     /** Convert an ApnType string to Id (TODO: Use "enumeration" instead of String for ApnType) */
     private HashMap<String, Integer> mApnToDataConnectionId = new HashMap<String, Integer>();
 
     /** Phone.APN_TYPE_* ===> ApnContext */
-    private final ConcurrentHashMap<String, ApnContext> mApnContexts =
+    protected final ConcurrentHashMap<String, ApnContext> mApnContexts =
             new ConcurrentHashMap<String, ApnContext>();
 
     private final SparseArray<ApnContext> mApnContextsByType = new SparseArray<ApnContext>();
@@ -715,7 +715,7 @@ public class DcTracker extends Handler {
     private BroadcastReceiver mProvisionBroadcastReceiver;
     private ProgressDialog mProvisioningSpinner;
 
-    private final DataServiceManager mDataServiceManager;
+    protected final DataServiceManager mDataServiceManager;
 
     private final int mTransportType;
 
@@ -1522,7 +1522,7 @@ public class DcTracker extends Handler {
         }
     }
 
-    private void setupDataOnConnectableApn(ApnContext apnContext, String reason,
+    protected void setupDataOnConnectableApn(ApnContext apnContext, String reason,
             RetryFailures retryFailures) {
         if (VDBG) log("setupDataOnAllConnectableApns: apnContext " + apnContext);
 
@@ -1915,7 +1915,7 @@ public class DcTracker extends Handler {
         return null;
     }
 
-    boolean isPermanentFailure(@DataFailureCause int dcFailCause) {
+    protected boolean isPermanentFailure(@DataFailureCause int dcFailCause) {
         return (DataFailCause.isPermanentFailure(mPhone.getContext(), dcFailCause,
                 mPhone.getSubId())
                 && (mAttached.get() == false || dcFailCause != DataFailCause.SIGNAL_LOST));
@@ -2262,7 +2262,7 @@ public class DcTracker extends Handler {
         return retry;
     }
 
-    private void startReconnect(long delay, ApnContext apnContext) {
+    protected void startReconnect(long delay, ApnContext apnContext) {
         Message msg = obtainMessage(DctConstants.EVENT_DATA_RECONNECT,
                        mPhone.getSubId(), mTransportType, apnContext);
         cancelReconnect(apnContext);
@@ -2280,7 +2280,7 @@ public class DcTracker extends Handler {
      *
      * @param apnContext on which the alarm should be stopped.
      */
-    private void cancelReconnect(ApnContext apnContext) {
+    protected void cancelReconnect(ApnContext apnContext) {
         if (apnContext == null) return;
 
         if (DBG) {
@@ -2756,7 +2756,7 @@ public class DcTracker extends Handler {
      * A SETUP (aka bringUp) has completed, possibly with an error. If
      * there is an error this method will call {@link #onDataSetupCompleteError}.
      */
-    private void onDataSetupComplete(ApnContext apnContext, boolean success, int cause,
+    protected void onDataSetupComplete(ApnContext apnContext, boolean success, int cause,
                                      @RequestNetworkType int requestType) {
         int apnType = ApnSetting.getApnTypesBitmaskFromString(apnContext.getApnType());
         List<Message> messageList = mRequestNetworkCompletionMsgs.get(apnType);
@@ -2938,7 +2938,7 @@ public class DcTracker extends Handler {
      * beginning if the list is empty. Between each SETUP request there will
      * be a delay defined by {@link #getApnDelay()}.
      */
-    private void onDataSetupCompleteError(ApnContext apnContext,
+    protected void onDataSetupCompleteError(ApnContext apnContext,
                                           @RequestNetworkType int requestType) {
         long delay = apnContext.getDelayForNextApn(mFailFast);
 
@@ -3254,7 +3254,7 @@ public class DcTracker extends Handler {
             dest.getSkip464Xlat());
     }
 
-    private DataConnection createDataConnection() {
+    protected DataConnection createDataConnection() {
         if (DBG) log("createDataConnection E");
 
         int id = mUniqueIdGenerator.getAndIncrement();
@@ -5212,7 +5212,7 @@ public class DcTracker extends Handler {
     }
 
     @RilRadioTechnology
-    private int getDataRat() {
+    protected int getDataRat() {
         ServiceState ss = mPhone.getServiceState();
         NetworkRegistrationInfo nrs = ss.getNetworkRegistrationInfo(
                 NetworkRegistrationInfo.DOMAIN_PS, mTransportType);
