@@ -60,7 +60,7 @@ public class GsmInboundSmsHandler extends InboundSmsHandler {
      */
     private GsmInboundSmsHandler(Context context, SmsStorageMonitor storageMonitor,
             Phone phone) {
-        super("GsmInboundSmsHandler", context, storageMonitor, phone, null);
+        super(GsmInboundSmsHandler.class.getSimpleName(), context, storageMonitor, phone, null);
         phone.mCi.setOnNewGsmSms(getHandler(), EVENT_NEW_SMS, null);
         mDataDownloadHandler = new UsimDataDownloadHandler(phone.mCi, phone.getPhoneId());
         if (sEnableCbModule) {

@@ -21,7 +21,6 @@ import static com.android.internal.telephony.SmsResponse.NO_ERROR_CODE;
 import android.os.AsyncResult;
 import android.os.Message;
 import android.provider.Telephony.Sms.Intents;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.util.Pair;
 
@@ -45,7 +44,6 @@ import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class GsmSMSDispatcher extends SMSDispatcher {
-    private static final String TAG = "GsmSMSDispatcher";
     protected UiccController mUiccController = null;
     private AtomicReference<IccRecords> mIccRecords = new AtomicReference<IccRecords>();
     private AtomicReference<UiccCardApplication> mUiccApplication =
@@ -58,12 +56,12 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
 
     public GsmSMSDispatcher(Phone phone, SmsDispatchersController smsDispatchersController,
             GsmInboundSmsHandler gsmInboundSmsHandler) {
-        super(phone, smsDispatchersController);
+        super(phone, smsDispatchersController, GsmSMSDispatcher.class.getSimpleName());
         mCi.setOnSmsStatus(this, EVENT_NEW_SMS_STATUS_REPORT, null);
         mGsmInboundSmsHandler = gsmInboundSmsHandler;
         mUiccController = UiccController.getInstance();
         mUiccController.registerForIccChanged(this, EVENT_ICC_CHANGED, null);
-        Rlog.d(TAG, "GsmSMSDispatcher created");
+        logd("created");
     }
 
     @Override
@@ -175,7 +173,7 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
     protected void sendSms(SmsTracker tracker) {
         int ss = mPhone.getServiceState().getState();
 
-        Rlog.d(TAG, "sendSms: "
+        logd("sendSms: "
                 + " isIms()=" + isIms()
                 + " mRetryCount=" + tracker.mRetryCount
                 + " mImsRetry=" + tracker.mImsRetry
@@ -232,24 +230,18 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
         }
     }
 
-    protected UiccCardApplication getUiccCardApplication() {
-            Rlog.d(TAG, "GsmSMSDispatcher: subId = " + mPhone.getSubId()
-                    + " slotId = " + mPhone.getPhoneId());
-                return mUiccController.getUiccCardApplication(mPhone.getPhoneId(),
-                        UiccController.APP_FAM_3GPP);
-    }
-
     private void onUpdateIccAvailability() {
         if (mUiccController == null ) {
             return;
         }
 
-        UiccCardApplication newUiccApplication = getUiccCardApplication();
+        UiccCardApplication newUiccApplication = mUiccController.getUiccCardApplication(
+                mPhone.getPhoneId(), UiccController.APP_FAM_3GPP);
 
         UiccCardApplication app = mUiccApplication.get();
         if (app != newUiccApplication) {
             if (app != null) {
-                Rlog.d(TAG, "Removing stale icc objects.");
+                logd("Removing stale icc objects.");
                 if (mIccRecords.get() != null) {
                     mIccRecords.get().unregisterForNewSms(this);
                 }
@@ -257,7 +249,7 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
                 mUiccApplication.set(null);
             }
             if (newUiccApplication != null) {
-                Rlog.d(TAG, "New Uicc application found");
+                logd("New Uicc application found");
                 mUiccApplication.set(newUiccApplication);
                 mIccRecords.set(newUiccApplication.getIccRecords());
                 if (mIccRecords.get() != null) {

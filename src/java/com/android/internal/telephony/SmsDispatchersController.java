@@ -58,7 +58,6 @@ import java.util.Map.Entry;
  *
  */
 public class SmsDispatchersController extends Handler {
-    private static final String TAG = "SmsDispatchersController";
     private static final boolean VDBG = false; // STOPSHIP if true
 
     /** Radio is ON */
@@ -106,14 +105,14 @@ public class SmsDispatchersController extends Handler {
     private final CommandsInterface mCi;
     private final Context mContext;
 
+    private final String mLogTag;
+
     /** true if IMS is registered and sms is supported, false otherwise.*/
     private boolean mIms = false;
     private String mImsSmsFormat = SmsConstants.FORMAT_UNKNOWN;
 
     public SmsDispatchersController(Phone phone, SmsStorageMonitor storageMonitor,
             SmsUsageMonitor usageMonitor) {
-        Rlog.d(TAG, "SmsDispatchersController created");
-
         mContext = phone.getContext();
         mUsageMonitor = usageMonitor;
         mCi = phone.mCi;
@@ -135,17 +134,21 @@ public class SmsDispatchersController extends Handler {
         mCi.registerForOn(this, EVENT_RADIO_ON, null);
         mCi.registerForImsNetworkStateChanged(this, EVENT_IMS_STATE_CHANGED, null);
 
+        mLogTag = SmsDispatchersController.class.getSimpleName()
+                + " [" + Integer.toString(phone.getPhoneId()) + "]";
+
+        logd("created");
+
         UserManager userManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
         if (userManager.isUserUnlocked()) {
             if (VDBG) {
-                logd("SmsDispatchersController: user unlocked; registering for service"
-                        + "state changed");
+                logd("user unlocked; registering for service state changed");
             }
             mPhone.registerForServiceStateChanged(this, EVENT_SERVICE_STATE_CHANGED, null);
             resetPartialSegmentWaitTimer();
         } else {
             if (VDBG) {
-                logd("SmsDispatchersController: user locked; waiting for USER_UNLOCKED");
+                logd("user locked; waiting for USER_UNLOCKED");
             }
             IntentFilter userFilter = new IntentFilter();
             userFilter.addAction(Intent.ACTION_USER_UNLOCKED);
@@ -156,7 +159,7 @@ public class SmsDispatchersController extends Handler {
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, Intent intent) {
-            Rlog.d(TAG, "Received broadcast " + intent.getAction());
+            logd("Received broadcast " + intent.getAction());
             if (Intent.ACTION_USER_UNLOCKED.equals(intent.getAction())) {
                 sendMessage(obtainMessage(EVENT_USER_UNLOCKED));
             }
@@ -194,8 +197,7 @@ public class SmsDispatchersController extends Handler {
                 if (ar.exception == null) {
                     updateImsInfo(ar);
                 } else {
-                    Rlog.e(TAG, "IMS State query failed with exp "
-                            + ar.exception);
+                    loge("IMS State query failed with exp " + ar.exception);
                 }
                 break;
 
@@ -355,7 +357,7 @@ public class SmsDispatchersController extends Handler {
         int[] responseArray = (int[]) ar.result;
         setImsSmsFormat(responseArray[1]);
         mIms = responseArray[0] == 1 && !SmsConstants.FORMAT_UNKNOWN.equals(mImsSmsFormat);
-        Rlog.d(TAG, "IMS registration state: " + mIms + " format: " + mImsSmsFormat);
+        logd("IMS registration state: " + mIms + " format: " + mImsSmsFormat);
     }
 
     /**
@@ -389,17 +391,17 @@ public class SmsDispatchersController extends Handler {
     @VisibleForTesting
     public void injectSmsPdu(SmsMessage msg, String format, SmsInjectionCallback callback,
             boolean ignoreClass) {
-        Rlog.d(TAG, "SmsDispatchersController:injectSmsPdu");
+        logd("injectSmsPdu");
         try {
             if (msg == null) {
-                Rlog.e(TAG, "injectSmsPdu: createFromPdu returned null");
+                loge("injectSmsPdu: createFromPdu returned null");
                 callback.onSmsInjectedResult(Intents.RESULT_SMS_GENERIC_ERROR);
                 return;
             }
 
             if (!ignoreClass
                     && msg.getMessageClass() != android.telephony.SmsMessage.MessageClass.CLASS_1) {
-                Rlog.e(TAG, "injectSmsPdu: not class 1");
+                loge("injectSmsPdu: not class 1");
                 callback.onSmsInjectedResult(Intents.RESULT_SMS_GENERIC_ERROR);
                 return;
             }
@@ -407,20 +409,20 @@ public class SmsDispatchersController extends Handler {
             AsyncResult ar = new AsyncResult(callback, msg, null);
 
             if (format.equals(SmsConstants.FORMAT_3GPP)) {
-                Rlog.i(TAG, "SmsDispatchersController:injectSmsText Sending msg=" + msg
-                        + ", format=" + format + "to mGsmInboundSmsHandler");
+                logi("injectSmsText Sending msg=" + msg + ", format=" + format
+                        + "to mGsmInboundSmsHandler");
                 mGsmInboundSmsHandler.sendMessage(InboundSmsHandler.EVENT_INJECT_SMS, ar);
             } else if (format.equals(SmsConstants.FORMAT_3GPP2)) {
-                Rlog.i(TAG, "SmsDispatchersController:injectSmsText Sending msg=" + msg
-                        + ", format=" + format + "to mCdmaInboundSmsHandler");
+                logi("injectSmsText Sending msg=" + msg + ", format=" + format
+                        + "to mCdmaInboundSmsHandler");
                 mCdmaInboundSmsHandler.sendMessage(InboundSmsHandler.EVENT_INJECT_SMS, ar);
             } else {
                 // Invalid pdu format.
-                Rlog.e(TAG, "Invalid pdu format: " + format);
+                loge("Invalid pdu format: " + format);
                 callback.onSmsInjectedResult(Intents.RESULT_SMS_GENERIC_ERROR);
             }
         } catch (Exception e) {
-            Rlog.e(TAG, "injectSmsPdu failed: ", e);
+            loge("injectSmsPdu failed: ", e);
             callback.onSmsInjectedResult(Intents.RESULT_SMS_GENERIC_ERROR);
         }
     }
@@ -449,7 +451,7 @@ public class SmsDispatchersController extends Handler {
                                 ? mCdmaDispatcher.getFormat()
                                 : mGsmDispatcher.getFormat();
 
-        Rlog.d(TAG, "old format(" + oldFormat + ") ==> new format (" + newFormat + ")");
+        logd("old format(" + oldFormat + ") ==> new format (" + newFormat + ")");
         if (!oldFormat.equals(newFormat)) {
             // format didn't match, need to re-encode.
             HashMap map = tracker.getData();
@@ -460,7 +462,7 @@ public class SmsDispatchersController extends Handler {
                     && (map.containsKey("text")
                     || (map.containsKey("data") && map.containsKey("destPort"))))) {
                 // should never come here...
-                Rlog.e(TAG, "sendRetrySms failed to re-encode per missing fields!");
+                loge("sendRetrySms failed to re-encode per missing fields!");
                 tracker.onFailed(mContext, SmsManager.RESULT_SMS_SEND_RETRY_FAILED, NO_ERROR_CODE);
                 return;
             }
@@ -470,7 +472,7 @@ public class SmsDispatchersController extends Handler {
             SmsMessageBase.SubmitPduBase pdu = null;
             // figure out from tracker if this was sendText/Data
             if (map.containsKey("text")) {
-                Rlog.d(TAG, "sms failed was text");
+                logd("sms failed was text");
                 String text = (String) map.get("text");
 
                 if (isCdmaFormat(newFormat)) {
@@ -481,7 +483,7 @@ public class SmsDispatchersController extends Handler {
                             scAddr, destAddr, text, (tracker.mDeliveryIntent != null), null);
                 }
             } else if (map.containsKey("data")) {
-                Rlog.d(TAG, "sms failed was data");
+                logd("sms failed was data");
                 byte[] data = (byte[]) map.get("data");
                 Integer destPort = (Integer) map.get("destPort");
 
@@ -855,6 +857,19 @@ public class SmsDispatchersController extends Handler {
     }
 
     private void logd(String msg) {
-        Rlog.d(TAG, msg);
+        Rlog.d(mLogTag, msg);
     }
+
+    private void logi(String msg) {
+        Rlog.i(mLogTag, msg);
+    }
+
+    private void loge(String msg) {
+        Rlog.e(mLogTag, msg);
+    }
+
+    private void loge(String msg, Throwable e) {
+        Rlog.e(mLogTag, msg, e);
+    }
+
 }

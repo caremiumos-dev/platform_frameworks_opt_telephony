@@ -84,7 +84,7 @@ public class CdmaInboundSmsHandler extends InboundSmsHandler {
      */
     private CdmaInboundSmsHandler(Context context, SmsStorageMonitor storageMonitor,
             Phone phone, CdmaSMSDispatcher smsDispatcher) {
-        super("CdmaInboundSmsHandler", context, storageMonitor, phone,
+        super(CdmaInboundSmsHandler.class.getSimpleName(), context, storageMonitor, phone,
                 CellBroadcastHandler.makeCellBroadcastHandler(context, phone));
         mSmsDispatcher = smsDispatcher;
         mServiceCategoryProgramHandler = CdmaServiceCategoryProgramHandler.makeScpHandler(context,
