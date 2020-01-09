@@ -65,6 +65,16 @@ public class ApnContext {
 
     private String mReason;
 
+    /*
+     * Store data reject failure count
+     */
+    private int mDataRejectCount;
+
+    /*
+     * Store data reject failure reason
+     */
+    private String mDataRejectReason;
+
     /**
      * user/app requested connection on this APN
      */
@@ -123,6 +133,8 @@ public class ApnContext {
         LOG_TAG = logTag;
         mDcTracker = tracker;
         mRetryManager = new RetryManager(phone, apnType);
+        mDataRejectCount = 0;
+        mDataRejectReason = "NONE";
     }
 
 
@@ -606,6 +618,30 @@ public class ApnContext {
         synchronized (mRefCountLock) {
             return new ArrayList<NetworkRequest>(mNetworkRequests);
         }
+    }
+
+    public void incDataRejectCount() {
+        mDataRejectCount++;
+    }
+
+    public int getDataRejectCount() {
+        return mDataRejectCount;
+    }
+
+    public void resetDataRejectCount() {
+        mDataRejectCount = 0;
+    }
+
+    public void setDataRejectReason(String reason) {
+        mDataRejectReason = reason;
+    }
+
+    public String getDataRejectReason() {
+        return mDataRejectReason;
+    }
+
+    public void resetDataRejectReason() {
+        mDataRejectReason = "NONE";
     }
 
     @Override
