@@ -54,8 +54,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ImsSmsDispatcher extends SMSDispatcher {
 
-    private static final String TAG = "ImsSmsDispatcher";
-
     @VisibleForTesting
     public Map<Integer, SmsTracker> mTrackers = new ConcurrentHashMap<>();
     @VisibleForTesting
@@ -288,7 +286,8 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         PersistableBundle b;
         boolean eSmsCarrierSupport = false;
         if (!PhoneNumberUtils.isLocalEmergencyNumber(mContext, mPhone.getSubId(), destAddr)) {
-            loge("Emergency Sms is not supported for: " + Rlog.pii(TAG, destAddr));
+            loge("Emergency Sms is not supported for: "
+                    + Rlog.pii(ImsSmsDispatcher.class.getSimpleName(), destAddr));
             return false;
         }
 
@@ -308,8 +307,8 @@ public class ImsSmsDispatcher extends SMSDispatcher {
             eSmsCarrierSupport = b.getBoolean(
                     CarrierConfigManager.KEY_SUPPORT_EMERGENCY_SMS_OVER_IMS_BOOL);
             boolean lteOrLimitedLte = isEmergencySmsPossible();
-            logi("isEmergencySmsSupport emergencySmsCarrierSupport: "
-                    + eSmsCarrierSupport + " destAddr: " + Rlog.pii(TAG, destAddr)
+            logi("isEmergencySmsSupport emergencySmsCarrierSupport: " + eSmsCarrierSupport
+                    + " destAddr: " + Rlog.pii(ImsSmsDispatcher.class.getSimpleName(), destAddr)
                     + " mIsImsServiceUp: " + mIsImsServiceUp + " lteOrLimitedLte: "
                     + lteOrLimitedLte);
 
@@ -430,25 +429,5 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     @VisibleForTesting
     public IImsSmsListener getSmsListener() {
         return mImsSmsListener;
-    }
-
-    private void logd(String s) {
-        Rlog.d(TAG + " [" + getPhoneId(mPhone) + "]", s);
-    }
-
-    private void logi(String s) {
-        Rlog.i(TAG + " [" + getPhoneId(mPhone) + "]", s);
-    }
-
-    private void logw(String s) {
-        Rlog.w(TAG + " [" + getPhoneId(mPhone) + "]", s);
-    }
-
-    private void loge(String s) {
-        Rlog.e(TAG + " [" + getPhoneId(mPhone) + "]", s);
-    }
-
-    private static String getPhoneId(Phone phone) {
-        return (phone != null) ? Integer.toString(phone.getPhoneId()) : "?";
     }
 }

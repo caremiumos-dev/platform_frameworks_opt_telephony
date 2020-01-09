@@ -131,7 +131,7 @@ public class CarrierServicesSmsFilter {
                     mContext.getPackageManager(),
                     new Intent(CarrierMessagingService.SERVICE_INTERFACE));
         } else {
-            Rlog.e(mLogTag, "UiccCard not initialized.");
+            loge("UiccCard not initialized.");
         }
         if (carrierPackages != null && carrierPackages.size() == 1) {
             log("Found carrier package.");
