@@ -37,9 +37,9 @@ import android.os.HwBinder;
 import android.os.Message;
 import android.os.Registrant;
 import android.os.RemoteException;
+import com.android.telephony.Rlog;
 import android.os.WorkSource;
 import android.telephony.PhoneCapability;
-import android.telephony.Rlog;
 import android.telephony.SimSlotCapability;
 import android.util.SparseArray;
 
