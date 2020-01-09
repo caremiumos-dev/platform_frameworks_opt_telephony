@@ -241,6 +241,8 @@ public abstract class InboundSmsHandler extends StateMachine {
     // Only mark deleted, but keep in db for message de-duping
     private final int MARK_DELETED = 2;
 
+    private final String mLogTag;
+
     private static String ACTION_OPEN_SMS_APP =
         "com.android.internal.telephony.OPEN_DEFAULT_SMS_APP";
 
@@ -279,6 +281,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         mDeviceIdleController = TelephonyComponentFactory.getInstance()
                 .inject(IDeviceIdleController.class.getName()).getIDeviceIdleController();
         mCellBroadcastServiceManager = new CellBroadcastServiceManager(context, phone);
+        mLogTag = name + " [" + Integer.toString(phone.getPhoneId()) + "]";
 
         addState(mDefaultState);
         addState(mStartupState, mDefaultState);
@@ -1094,7 +1097,7 @@ public abstract class InboundSmsHandler extends StateMachine {
                         tracker.isClass0(), tracker.getSubId());
         CarrierServicesSmsFilter carrierServicesFilter = new CarrierServicesSmsFilter(
                 mContext, mPhone, pdus, destPort, tracker.getFormat(),
-                filterCallback, getName(), mLocalLog);
+                filterCallback, mLogTag, mLocalLog);
         if (carrierServicesFilter.filter()) {
             return true;
         }
@@ -1608,7 +1611,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     @UnsupportedAppUsage
     @Override
     protected void log(String s) {
-        Rlog.d(getName(), s);
+        Rlog.d(mLogTag, s);
     }
 
     /**
@@ -1618,7 +1621,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     @UnsupportedAppUsage
     @Override
     protected void loge(String s) {
-        Rlog.e(getName(), s);
+        Rlog.e(mLogTag, s);
     }
 
     /**
@@ -1628,7 +1631,7 @@ public abstract class InboundSmsHandler extends StateMachine {
      */
     @Override
     protected void loge(String s, Throwable e) {
-        Rlog.e(getName(), s, e);
+        Rlog.e(mLogTag, s, e);
     }
 
     /**
