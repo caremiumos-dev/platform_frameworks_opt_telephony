@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c21cc019_55212ef1",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-09T00:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0b9d979_e1eae860",
+      "range": {
+        "startLine": 1524,
+        "startChar": 18,
+        "endLine": 1524,
+        "endChar": 41
+      },
+      "revId": "f60d5dcec6ca676cbdf278aaaa8b7a0fde37e889",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6de61604_941a0651",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "f60d5dcec6ca676cbdf278aaaa8b7a0fde37e889",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8a40228_03bd4e19",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1540,
+      "author": {
+        "id": 1269899
+      },
+      "writtenOn": "2020-01-09T00:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6de61604_941a0651",
+      "range": {
+        "startLine": 1540,
+        "startChar": 74,
+        "endLine": 1540,
+        "endChar": 75
+      },
+      "revId": "f60d5dcec6ca676cbdf278aaaa8b7a0fde37e889",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
