@@ -16,6 +16,24 @@
       "revId": "fd8615738ad4e3ddb9aeeaf6160c478565df9853",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b47ea102_d3381ddd",
+        "filename": "TEST_MAPPING",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1330217
+      },
+      "writtenOn": "2020-01-09T01:57:17Z",
+      "side": 1,
+      "message": "Sure. I have filed the bug for tracking as well.",
+      "parentUuid": "7004d45b_6711109a",
+      "revId": "fd8615738ad4e3ddb9aeeaf6160c478565df9853",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
