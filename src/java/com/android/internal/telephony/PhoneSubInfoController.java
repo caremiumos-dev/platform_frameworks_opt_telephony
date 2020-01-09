@@ -32,7 +32,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.Rlog;
+import com.android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 
 import com.android.internal.telephony.uicc.IsimRecords;

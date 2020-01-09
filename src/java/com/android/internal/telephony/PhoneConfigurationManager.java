@@ -29,7 +29,7 @@ import android.os.RegistrantList;
 import android.os.storage.StorageManager;
 import android.sysprop.TelephonyProperties;
 import android.telephony.PhoneCapability;
-import android.telephony.Rlog;
+import com.android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
