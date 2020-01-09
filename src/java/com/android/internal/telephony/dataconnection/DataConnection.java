@@ -2013,7 +2013,15 @@ public class DataConnection extends StateMachine {
                                     + " isPermanentFailure=" +
                                     mDct.isPermanentFailure(result.mFailCause);
                             if (DBG) log(str);
-                            if (cp.mApnContext != null) cp.mApnContext.requestLog(str);
+                            if (cp.mApnContext != null) {
+                                cp.mApnContext.requestLog(str);
+                                if (mPhone.getContext().getResources().getBoolean(
+                                        com.android.internal.R.bool.
+                                        config_enable_retry_for_pdp_reject_29_33_55) {
+                                    cp.mApnContext.setDataRejectReason(
+                                            DataFailCause.toString(result.mFailCause));
+                                }
+                            }
 
                             // Save the cause. DcTracker.onDataSetupComplete will check this
                             // failure cause and determine if we need to retry this APN later
