@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0b9d979_e1eae860",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-09T00:12:05Z",
+      "side": 1,
+      "message": "Move this below the switch, after we check that efPlmn is valid and possibly throw the IAE. Otherwise, this message could be left in the underlying map forever in the invalid case where we do end up throwing.",
+      "range": {
+        "startLine": 1524,
+        "startChar": 18,
+        "endLine": 1524,
+        "endChar": 41
+      },
+      "revId": "f60d5dcec6ca676cbdf278aaaa8b7a0fde37e889",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6de61604_941a0651",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1540,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-09T00:12:05Z",
+      "side": 1,
+      "message": "Nit: trailing space for concat",
+      "range": {
+        "startLine": 1540,
+        "startChar": 74,
+        "endLine": 1540,
+        "endChar": 75
+      },
+      "revId": "f60d5dcec6ca676cbdf278aaaa8b7a0fde37e889",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
