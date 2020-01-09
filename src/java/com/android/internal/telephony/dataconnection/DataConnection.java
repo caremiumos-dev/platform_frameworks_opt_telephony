@@ -1331,6 +1331,12 @@ public class DataConnection extends StateMachine {
             result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
         }
 
+        if (mNetworkInfo.getDetailedState() == NetworkInfo.DetailedState.SUSPENDED) {
+            result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED);
+        } else {
+            result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED);
+        }
+
         return result;
     }
 
