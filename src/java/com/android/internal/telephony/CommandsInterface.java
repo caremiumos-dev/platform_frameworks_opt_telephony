@@ -19,6 +19,7 @@ package com.android.internal.telephony;
 import android.annotation.UnsupportedAppUsage;
 import android.net.KeepalivePacketData;
 import android.net.LinkProperties;
+import android.net.TrafficDescriptor;
 import android.os.Handler;
 import android.os.Message;
 import android.os.WorkSource;
@@ -27,6 +28,7 @@ import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
 import android.telephony.data.DataProfile;
+import android.telephony.data.RouteSelectionDescriptor;
 import android.telephony.emergency.EmergencyNumber;
 
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
@@ -1734,7 +1736,19 @@ public interface CommandsInterface {
      */
     void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
                        boolean allowRoaming, int reason, LinkProperties linkProperties,
+                       TrafficDescriptor td, RouteSelectionDescriptor rsd,
                        Message result);
+
+    /**
+     * Evaluate URSP rules
+     *
+     * @param trafficDescriptor
+     *            Data disconnect reason.
+     * @param result
+     *            the result of URSP evaluation which contains:
+     *            failed, PDU exist, non-3gpp, setup new PDU
+     */
+    public void evaluateUrspRules(TrafficDescriptor trafficDescriptor, Message result);
 
     /**
      * Deactivate packet data connection

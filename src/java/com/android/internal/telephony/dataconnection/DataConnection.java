@@ -37,6 +37,7 @@ import android.net.ProxyInfo;
 import android.net.RouteInfo;
 import android.net.SocketKeepalive;
 import android.net.StringNetworkSpecifier;
+import android.net.TrafficDescriptor;
 import android.os.AsyncResult;
 import android.os.Message;
 import android.os.PersistableBundle;
@@ -59,6 +60,7 @@ import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
 import android.telephony.data.DataServiceCallback;
+import android.telephony.data.RouteSelectionDescriptor;
 import android.text.TextUtils;
 import android.util.LocalLog;
 import android.util.Pair;
@@ -721,6 +723,13 @@ public class DataConnection extends StateMachine {
             reason = DataService.REQUEST_REASON_HANDOVER;
         }
 
+        RouteSelectionDescriptor rsd = null;
+        TrafficDescriptor td = null;
+        if (cp.mApnContext != null) {
+            rsd = cp.mApnContext.getRouteSelectionDescriptor();
+            td = cp.mApnContext.getTrafficDescriptor();
+        }
+
         mDataServiceManager.setupDataCall(
                 ServiceState.rilRadioTechnologyToAccessNetworkType(cp.mRilRat),
                 dp,
@@ -728,6 +737,8 @@ public class DataConnection extends StateMachine {
                 allowRoaming,
                 reason,
                 linkProperties,
+                td,
+                rsd,
                 msg);
         TelephonyMetrics.getInstance().writeSetupDataCall(mPhone.getPhoneId(), cp.mRilRat,
                 dp.getProfileId(), dp.getApn(), dp.getProtocolType());
@@ -880,6 +891,16 @@ public class DataConnection extends StateMachine {
      */
     public int getDataConnectionId() {
         return mId;
+    }
+
+    /**
+     * Get the NetworkAgent ID
+     */
+    public int getNetworkAgentId() {
+        if (mNetworkAgent != null) {
+            return mNetworkAgent.netId;
+        }
+        return -1;
     }
 
     /*

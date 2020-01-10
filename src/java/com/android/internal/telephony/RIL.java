@@ -57,6 +57,7 @@ import android.net.KeepalivePacketData;
 import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.NetworkUtils;
+import android.net.TrafficDescriptor;
 import android.os.AsyncResult;
 import android.os.Build;
 import android.os.Handler;
@@ -99,6 +100,7 @@ import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
+import android.telephony.data.RouteSelectionDescriptor;
 import android.telephony.emergency.EmergencyNumber;
 import android.text.TextUtils;
 import android.util.Log;
@@ -1493,6 +1495,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @Override
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
                               boolean allowRoaming, int reason, LinkProperties linkProperties,
+                              TrafficDescriptor td, RouteSelectionDescriptor rsd,
                               Message result) {
 
         IRadio radioProxy = getRadioProxy(result);

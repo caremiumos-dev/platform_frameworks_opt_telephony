@@ -20,10 +20,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkConfig;
 import android.net.NetworkRequest;
+import android.net.TrafficDescriptor;
 import android.os.Message;
 import android.telephony.Annotation.ApnType;
 import android.telephony.Rlog;
 import android.telephony.data.ApnSetting;
+import android.telephony.data.RouteSelectionDescriptor;
 import android.text.TextUtils;
 import android.util.LocalLog;
 import android.util.SparseIntArray;
@@ -98,6 +100,11 @@ public class ApnContext {
      * Retry manager that handles the APN retry and delays.
      */
     private final RetryManager mRetryManager;
+
+    
+    private RouteSelectionDescriptor mRsd;
+
+    private TrafficDescriptor mTd;
 
     /**
      * AonContext constructor
@@ -373,6 +380,34 @@ public class ApnContext {
         } else {
             return false;
         }
+    }
+
+    public void setRouteSelectionDescriptor(RouteSelectionDescriptor rsd) {
+        if (DBG) {
+            log("setRouteSelectionDescriptor as rsd = " + rsd);
+        }
+        mRsd = rsd;
+    }
+
+    public RouteSelectionDescriptor getRouteSelectionDescriptor() {
+        if (DBG) {
+            log("getRouteSelectionDescriptor rsd = " + mRsd);
+        }
+        return mRsd;
+     }
+
+    public TrafficDescriptor getTrafficDescriptor() {
+        if (DBG) {
+            log("getTrafficDescriptor mTd = " + mTd);
+        }
+        return mTd;
+    }
+
+    public void setTrafficDescriptor(TrafficDescriptor td) {
+        if (DBG) {
+            log("setTrafficDescriptor as mTd = " + mTd);
+        }
+        mTd = td;
     }
 
     private final LocalLog mLocalLog = new LocalLog(150);
