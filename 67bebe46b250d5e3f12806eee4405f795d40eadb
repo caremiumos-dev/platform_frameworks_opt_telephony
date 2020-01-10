@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8d4fed7_5184ef4d",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1539,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-10T04:49:33Z",
+      "side": 1,
+      "message": "we can\u0027t throw IAE here. Suggest to Log.wtf() and post the response message directly with an empty AsyncResult.",
+      "range": {
+        "startLine": 1539,
+        "startChar": 26,
+        "endLine": 1539,
+        "endChar": 50
+      },
+      "revId": "67bebe46b250d5e3f12806eee4405f795d40eadb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
