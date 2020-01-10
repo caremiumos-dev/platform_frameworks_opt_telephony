@@ -34,6 +34,24 @@
       "revId": "fd8615738ad4e3ddb9aeeaf6160c478565df9853",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af3363e2_13c58601",
+        "filename": "TEST_MAPPING",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1088076
+      },
+      "writtenOn": "2020-01-10T16:48:16Z",
+      "side": 1,
+      "message": "just to confirm, we are not going to land these CLs until the bug is fixed, right?",
+      "parentUuid": "b47ea102_d3381ddd",
+      "revId": "fd8615738ad4e3ddb9aeeaf6160c478565df9853",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
