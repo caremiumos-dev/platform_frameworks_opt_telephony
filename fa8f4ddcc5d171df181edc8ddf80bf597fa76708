@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39c10bb5_cbe5b26b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-10T23:03:34Z",
+      "side": 1,
+      "message": "I know all test method name exceed the line length limitation. You know why. And I tried several way to avoid it and get more messy.\n\nThe lesson: Use shorter method name pls.",
+      "revId": "fa8f4ddcc5d171df181edc8ddf80bf597fa76708",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
