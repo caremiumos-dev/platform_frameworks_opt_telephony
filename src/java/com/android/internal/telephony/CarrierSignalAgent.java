@@ -15,6 +15,9 @@
  */
 package com.android.internal.telephony;
 
+import static android.telephony.CarrierConfigManager.KEY_CARRIER_APP_NO_WAKE_SIGNAL_CONFIG_STRING_ARRAY;
+import static android.telephony.CarrierConfigManager.KEY_CARRIER_APP_WAKE_SIGNAL_CONFIG_STRING_ARRAY;
+
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -46,9 +49,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import static android.telephony.CarrierConfigManager.KEY_CARRIER_APP_WAKE_SIGNAL_CONFIG_STRING_ARRAY;
-import static android.telephony.CarrierConfigManager.KEY_CARRIER_APP_NO_WAKE_SIGNAL_CONFIG_STRING_ARRAY;
 
 /**
  * This class act as an CarrierSignalling Agent.
@@ -315,8 +315,7 @@ public class CarrierSignalAgent extends Handler {
                 continue;
             }
 
-            signal.putExtra(SubscriptionManager.EXTRA_SUBSCRIPTION_INDEX, mPhone.getSubId());
-            signal.putExtra(PhoneConstants.SUBSCRIPTION_KEY, mPhone.getSubId());
+            SubscriptionManager.putSubscriptionIdExtra(signal, mPhone.getSubId());
             signal.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             if (!wakeup) signal.setFlags(Intent.FLAG_EXCLUDE_STOPPED_PACKAGES);
 
