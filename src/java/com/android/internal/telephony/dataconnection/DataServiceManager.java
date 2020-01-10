@@ -30,6 +30,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.LinkProperties;
+import android.net.TrafficDescriptor;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.IBinder;
@@ -51,6 +52,7 @@ import android.telephony.data.DataService;
 import android.telephony.data.DataServiceCallback;
 import android.telephony.data.IDataService;
 import android.telephony.data.IDataServiceCallback;
+import android.telephony.data.RouteSelectionDescriptor;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.Phone;
@@ -549,6 +551,7 @@ public class DataServiceManager extends Handler {
      */
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
                               boolean allowRoaming, int reason, LinkProperties linkProperties,
+                              TrafficDescriptor td, RouteSelectionDescriptor rsd,
                               Message onCompleteMessage) {
         if (DBG) log("setupDataCall");
         if (!mBound) {
@@ -565,7 +568,7 @@ public class DataServiceManager extends Handler {
             sendMessageDelayed(obtainMessage(EVENT_WATCHDOG_TIMEOUT, callback),
                     REQUEST_UNRESPONDED_TIMEOUT);
             mIDataService.setupDataCall(mPhone.getPhoneId(), accessNetworkType, dataProfile,
-                    isRoaming, allowRoaming, reason, linkProperties, callback);
+                    isRoaming, allowRoaming, reason, linkProperties, td, rsd, callback);
         } catch (RemoteException e) {
             loge("Cannot invoke setupDataCall on data service.");
             mMessageMap.remove(callback.asBinder());

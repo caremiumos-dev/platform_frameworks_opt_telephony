@@ -17,12 +17,15 @@
 package com.android.internal.telephony.dataconnection;
 
 import android.net.LinkProperties;
+import android.net.TrafficDescriptor;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.telephony.data.RouteSelectionDescriptor;
 import android.telephony.Rlog;
+import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
@@ -127,6 +130,7 @@ public class CellularDataService extends DataService {
         @Override
         public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
                                   boolean allowRoaming, int reason, LinkProperties linkProperties,
+                                  TrafficDescriptor td, RouteSelectionDescriptor rsd,
                                   DataServiceCallback callback) {
             if (DBG) log("setupDataCall " + getSlotIndex());
 
@@ -139,7 +143,7 @@ public class CellularDataService extends DataService {
             }
 
             mPhone.mCi.setupDataCall(accessNetworkType, dataProfile, isRoaming, allowRoaming,
-                    reason, linkProperties, message);
+                    reason, linkProperties, td, rsd, message);
         }
 
         @Override
