@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ef1d1f3_3b9e04e9",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3168,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-01-10T00:47:00Z",
+      "side": 1,
+      "message": "What if there is an active voice call was started in between?",
+      "range": {
+        "startLine": 3168,
+        "startChar": 27,
+        "endLine": 3168,
+        "endChar": 47
+      },
+      "revId": "ad3683c4c187bfbc12a0b0bbd56ba7a5f11af0d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
