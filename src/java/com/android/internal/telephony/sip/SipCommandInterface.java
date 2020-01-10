@@ -19,12 +19,14 @@ package com.android.internal.telephony.sip;
 import android.content.Context;
 import android.net.KeepalivePacketData;
 import android.net.LinkProperties;
+import android.net.TrafficDescriptor;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
 import android.telephony.SignalThresholdInfo;
 import android.telephony.data.DataProfile;
+import android.telephony.data.RouteSelectionDescriptor;
 import android.telephony.emergency.EmergencyNumber;
 
 import com.android.internal.telephony.BaseCommands;
@@ -274,6 +276,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     @Override
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
                               boolean allowRoaming, int reason, LinkProperties linkProperties,
+                              TrafficDescriptor td, RouteSelectionDescriptor rsd,
                               Message result) {
     }
 

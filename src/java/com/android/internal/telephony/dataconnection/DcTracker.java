@@ -86,6 +86,7 @@ import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.DataProfile;
+import android.telephony.data.RouteSelectionDescriptor;
 import android.telephony.gsm.GsmCellLocation;
 import android.text.TextUtils;
 import android.util.EventLog;
@@ -644,6 +645,8 @@ public class DcTracker extends Handler {
 
     private final SparseArray<ApnContext> mApnContextsByType = new SparseArray<ApnContext>();
 
+    private final SparseArray<ApnContext> mApnContextsWithNRParmer = new SparseArray<ApnContext>();
+
     private int mDisconnectPendingCount = 0;
 
     private ArrayList<DataProfile> mLastDataProfileList = new ArrayList<>();
@@ -689,6 +692,8 @@ public class DcTracker extends Handler {
     private final DataServiceManager mDataServiceManager;
 
     private final int mTransportType;
+
+    private UrspTracker mUrspTracker;
 
     private DataStallRecoveryHandler mDsRecoveryHandler;
 
@@ -771,6 +776,8 @@ public class DcTracker extends Handler {
 
         mSettingsObserver = new SettingsObserver(mPhone.getContext(), this);
         registerSettingsObserver();
+
+        mUrspTracker = new UrspTracker(mPhone);
     }
 
     @VisibleForTesting
@@ -931,10 +938,17 @@ public class DcTracker extends Handler {
 
     public void requestNetwork(NetworkRequest networkRequest, @RequestNetworkType int type,
                                Message onCompleteMsg) {
-        final int apnType = ApnContext.getApnTypeFromNetworkRequest(networkRequest);
-        final ApnContext apnContext = mApnContextsByType.get(apnType);
-        if (apnContext != null) {
-            apnContext.requestNetwork(networkRequest, type, onCompleteMsg);
+        if (mPhone.getServiceState().getDataRegState() == ServiceState.STATE_IN_SERVICE &&
+                mPhone.getServiceState().getRilDataRadioTechnology() ==
+                ServiceState.RIL_RADIO_TECHNOLOGY_NR) {
+            log("DcTracker.requestNetwork, evaluate ursp first.");
+            mUrspTracker.evaluateUrsp(networkRequest, log);
+        } else {
+            final int apnType = ApnContext.getApnTypeFromNetworkRequest(networkRequest);
+            final ApnContext apnContext = mApnContextsByType.get(apnType);
+            if (apnContext != null) {
+                apnContext.requestNetwork(networkRequest, type, onCompleteMsg);
+            }
         }
     }
 
@@ -944,6 +958,33 @@ public class DcTracker extends Handler {
         if (apnContext != null) {
             apnContext.releaseNetwork(networkRequest, type);
         }
+    }
+
+    public void requestNetworkWithRsd(NetworkRequest networkRequest,
+            RouteSelectionDescriptor rsd, LocalLog log) {
+        final int apnId = ApnContext.getApnTypeFromNetworkRequest(networkRequest);
+        final ApnContext apnContext = mApnContextsByType.get(apnId);
+        log.log("DcTracker.requestNetwork for " + networkRequest + " found " + apnContext);
+        if (apnContext != null) {
+            /**
+             * it will have different RSD and TrafficDescriptor with different APP,
+             * we save RSD by apnId for different APP, so it maybe occur that
+             * the RSD and TrafficDescriptor will be override by lastest APP.
+             */
+            apnContext.setRouteSelectionDescriptor(rsd);
+            apnContext.setTrafficDescriptor(networkRequest.trafficDescriptor);
+            mApnContextsWithNRParmer.put(apnId, apnContext);
+            apnContext.requestNetwork(networkRequest, log);
+        }
+    }
+
+    public int getNetworkAgentId(int cid) {
+        int netId = -1;
+        DcAsyncChannel dcac = findDataConnectionAcByCid(cid);
+        if (dcac != null) {
+            netId = dcac.getNetworkAgentId();
+        }
+        return netId;
     }
 
     // Turn telephony radio on or off.
@@ -1896,13 +1937,6 @@ public class DcTracker extends Handler {
     }
 
     /**
-     * @return the {@link DataConnection} with the given context id {@code cid}.
-     */
-    public DataConnection getDataConnectionByContextId(int cid) {
-        return mDcc.getActiveDcByCid(cid);
-    }
-
-    /**
      * @return the {@link DataConnection} with the given APN context. Null if no data connection
      * is found.
      */
@@ -2388,6 +2422,14 @@ public class DcTracker extends Handler {
             sendRequestNetworkCompleteMsg(onCompleteMsg, false, mTransportType, requestType,
                     DataFailCause.NONE);
             return;
+        }
+
+        if (mPhone.getServiceState().getDataRegState() == ServiceState.STATE_IN_SERVICE &&
+                mPhone.getServiceState().getRilDataRadioTechnology() ==
+                ServiceState.RIL_RADIO_TECHNOLOGY_NR) {
+            ApnContext apContextWithNrParmer = mApnContextsWithNRParmer.get(apnId);
+            apnContext.setRouteSelectionDescriptor(apContextWithNrParmer.getRouteSelectionDescriptor());
+            apnContext.setTrafficDescriptor(apContextWithNrParmer.getTrafficDescriptor());
         }
 
         String str = "onEnableApn: apnType=" + ApnSetting.getApnTypeString(apnType)
@@ -5010,5 +5052,12 @@ public class DcTracker extends Handler {
             return ServiceState.networkTypeToRilRadioTechnology(nrs.getAccessNetworkTechnology());
         }
         return ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
+    }
+
+    /**
+     * @return the {@link DataConnection} with the given context id {@code cid}.
+     */
+    public DataConnection getDataConnectionByContextId(int cid) {
+        return mDcc.getActiveDcByCid(cid);
     }
 }
