@@ -52,6 +52,24 @@
       "revId": "fd8615738ad4e3ddb9aeeaf6160c478565df9853",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ff029dc_4bd2d5b2",
+        "filename": "TEST_MAPPING",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1330217
+      },
+      "writtenOn": "2020-01-11T01:34:57Z",
+      "side": 1,
+      "message": "Yeah. Will land these CLs once b/145736224 is resolved.",
+      "parentUuid": "af3363e2_13c58601",
+      "revId": "fd8615738ad4e3ddb9aeeaf6160c478565df9853",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
