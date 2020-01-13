@@ -94,6 +94,30 @@
       "revId": "1a53aff7df9ed932b5ddcea7f7e9c489162fef32",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b3858da_82b6fa0c",
+        "filename": "src/java/com/android/internal/telephony/RILRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-01-13T18:31:17Z",
+      "side": 1,
+      "message": "That I am not sure about. From telephony perspective that\u0027s an implementation detail of WorkSource. What we primarily care about is a unique toString() representation of WorkSource so that clients (sort of a call stack?) can be identified uniquely. Separately we use the actual values in toString() while manually analyzing bugreports.",
+      "parentUuid": "15438e9f_2f33668d",
+      "range": {
+        "startLine": 144,
+        "startChar": 8,
+        "endLine": 153,
+        "endChar": 0
+      },
+      "revId": "1a53aff7df9ed932b5ddcea7f7e9c489162fef32",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
