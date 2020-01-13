@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "668960f3_5acc7ebd",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-13T04:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c62f5189_c7303d14",
+      "range": {
+        "startLine": 444,
+        "startChar": 7,
+        "endLine": 444,
+        "endChar": 17
+      },
+      "revId": "fa8f4ddcc5d171df181edc8ddf80bf597fa76708",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39c10bb5_cbe5b26b",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
         "patchSetId": 1
@@ -65,6 +89,48 @@
     },
     {
       "key": {
+        "uuid": "db1fa0e5_32daa005",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-13T04:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39c10bb5_cbe5b26b",
+      "revId": "fa8f4ddcc5d171df181edc8ddf80bf597fa76708",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f02d4d7_89f27aa2",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-13T04:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52d8e677_739fbe59",
+      "range": {
+        "startLine": 447,
+        "startChar": 16,
+        "endLine": 447,
+        "endChar": 104
+      },
+      "revId": "fa8f4ddcc5d171df181edc8ddf80bf597fa76708",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f0602d6_5d773e46",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
         "patchSetId": 1
@@ -85,6 +151,30 @@
       "revId": "fa8f4ddcc5d171df181edc8ddf80bf597fa76708",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "262d729c_579314ea",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-13T04:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f0602d6_5d773e46",
+      "range": {
+        "startLine": 499,
+        "startChar": 16,
+        "endLine": 499,
+        "endChar": 105
+      },
+      "revId": "fa8f4ddcc5d171df181edc8ddf80bf597fa76708",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
