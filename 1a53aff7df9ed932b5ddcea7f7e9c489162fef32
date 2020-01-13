@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4befcf12_811cc483",
+        "filename": "src/java/com/android/internal/telephony/RILRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2020-01-13T11:10:13Z",
+      "side": 1,
+      "message": "I think this may have been easier as WorkSource.toString ? Up to you in the end, though.\n\nI don\u0027t know whether your code is expecting multiple WorkChains or multiple UIDs / names in the flat work source. Neither of those things work properly, both before and after this change.",
+      "range": {
+        "startLine": 144,
+        "startChar": 8,
+        "endLine": 153,
+        "endChar": 0
+      },
+      "revId": "1a53aff7df9ed932b5ddcea7f7e9c489162fef32",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
