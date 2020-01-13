@@ -260,15 +260,6 @@ public abstract class SMSDispatcher extends Handler {
         Rlog.d(TAG, "handleStatusReport() called with no subclass.");
     }
 
-    /* TODO: Need to figure out how to keep track of status report routing in a
-     *       persistent manner. If the phone process restarts (reboot or crash),
-     *       we will lose this list and any status reports that come in after
-     *       will be dropped.
-     */
-    /** Sent messages awaiting a delivery status report. */
-    @UnsupportedAppUsage
-    protected final ArrayList<SmsTracker> deliveryPendingList = new ArrayList<SmsTracker>();
-
     /**
      * Handles events coming from the phone stack. Overridden from handler.
      *
@@ -697,11 +688,6 @@ public abstract class SMSDispatcher extends Handler {
 
         if (ar.exception == null) {
             if (DBG) Rlog.d(TAG, "SMS send complete. Broadcasting intent: " + sentIntent);
-
-            if (tracker.mDeliveryIntent != null) {
-                // Expecting a status report.  Add it to the list.
-                deliveryPendingList.add(tracker);
-            }
             tracker.onSent(mContext);
             mPhone.notifySmsSent(tracker.mDestAddress);
         } else {
@@ -1544,7 +1530,7 @@ public abstract class SMSDispatcher extends Handler {
      * Keeps track of an SMS that has been sent to the RIL, until it has
      * successfully been sent, or we're done trying.
      */
-    public static class SmsTracker {
+    public class SmsTracker {
         // fields need to be public for derived SmsDispatchers
         @UnsupportedAppUsage
         private final HashMap<String, Object> mData;
@@ -1803,6 +1789,10 @@ public abstract class SMSDispatcher extends Handler {
          */
         @UnsupportedAppUsage
         public void onSent(Context context) {
+            if (mDeliveryIntent != null) {
+                // Expecting a status report. Put this tracker to the map.
+                mSmsDispatchersController.putDeliveryPendingTracker(this);
+            }
             // is single part or last part of multipart message
             boolean isSinglePartOrLastPart = true;
             if (mUnsentPartCount != null) {
