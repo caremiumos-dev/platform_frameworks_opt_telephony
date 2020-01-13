@@ -22,6 +22,30 @@
       "revId": "1a53aff7df9ed932b5ddcea7f7e9c489162fef32",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75d3745a_25167d46",
+        "filename": "src/java/com/android/internal/telephony/RILRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-01-13T18:19:22Z",
+      "side": 1,
+      "message": "+1. Sooraj, let us know what you think.\n\nAlthough I am ok with getting that in as a separate CL since this has already been tested and it is no worse than what we have today, while getting rid of the usage of a hidden API.",
+      "parentUuid": "4befcf12_811cc483",
+      "range": {
+        "startLine": 144,
+        "startChar": 8,
+        "endLine": 153,
+        "endChar": 0
+      },
+      "revId": "1a53aff7df9ed932b5ddcea7f7e9c489162fef32",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
