@@ -22,6 +22,30 @@
       "revId": "224ca99f303f7e74383d013710d320936ff06809",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f40c1f40_03d01541",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-14T02:10:51Z",
+      "side": 1,
+      "message": "If the specifier is null, then we want DEFAULT_DATA. If specifier is non-null and not a TNS, then we would probably want INVALID. I believe that matches the logic below.",
+      "parentUuid": "d2a1e969_c69b4950",
+      "range": {
+        "startLine": 1002,
+        "startChar": 15,
+        "endLine": 1002,
+        "endChar": 22
+      },
+      "revId": "224ca99f303f7e74383d013710d320936ff06809",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
