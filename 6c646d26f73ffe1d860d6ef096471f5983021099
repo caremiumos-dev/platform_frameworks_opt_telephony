@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4675a066_28e29c41",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1438823
+      },
+      "writtenOn": "2020-01-14T19:12:46Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 26
+      },
+      "revId": "6c646d26f73ffe1d860d6ef096471f5983021099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b02fc591_6416c1e3",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2183,
+      "author": {
+        "id": 1438823
+      },
+      "writtenOn": "2020-01-14T19:12:46Z",
+      "side": 1,
+      "message": "nit: Fix indentation.",
+      "range": {
+        "startLine": 2183,
+        "startChar": 24,
+        "endLine": 2183,
+        "endChar": 25
+      },
+      "revId": "6c646d26f73ffe1d860d6ef096471f5983021099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e03ae770_72db9502",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1438823
+      },
+      "writtenOn": "2020-01-14T19:12:46Z",
+      "side": 1,
+      "message": "nit: Add space after \u0027)\u0027\n\nif (ar.exception \u003d\u003d null) {",
+      "revId": "6c646d26f73ffe1d860d6ef096471f5983021099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "561fc8de_0c0a49c4",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1661,
+      "author": {
+        "id": 1438823
+      },
+      "writtenOn": "2020-01-14T19:12:46Z",
+      "side": 1,
+      "message": "Where is this used? Should this be passed in sendResponse?",
+      "range": {
+        "startLine": 1661,
+        "startChar": 20,
+        "endLine": 1661,
+        "endChar": 30
+      },
+      "revId": "6c646d26f73ffe1d860d6ef096471f5983021099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
