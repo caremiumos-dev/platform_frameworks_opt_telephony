@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77621a31_86036b4e",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-14T14:32:36Z",
+      "side": 1,
+      "message": "Should this be imported ?\nAlso final",
+      "range": {
+        "startLine": 273,
+        "startChar": 20,
+        "endLine": 273,
+        "endChar": 60
+      },
+      "revId": "abac674436fa1afb13906a5dac9cd9d7891b6482",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e2827b4_9fc1f1ed",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-14T14:32:36Z",
+      "side": 1,
+      "message": "If I\u0027m reading the code correctly this ends up posting a message on the looper of the video provider, so I don\u0027t think this is doing what you want",
+      "range": {
+        "startLine": 276,
+        "startChar": 38,
+        "endLine": 276,
+        "endChar": 66
+      },
+      "revId": "abac674436fa1afb13906a5dac9cd9d7891b6482",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83169f6e_6811ca28",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-14T14:32:36Z",
+      "side": 1,
+      "message": "This is okay, but if the state is not IDLE a lot of this is wasteful (you could just report with empty entries). But I\u0027m happy with this code",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 285,
+        "endChar": 53
+      },
+      "revId": "abac674436fa1afb13906a5dac9cd9d7891b6482",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
