@@ -2059,6 +2059,8 @@ public class DataConnection extends StateMachine {
             updateTcpBufferSizes(mRilRat);
 
             final NetworkAgentConfig.Builder configBuilder = new NetworkAgentConfig.Builder();
+            configBuilder.setLegacyType(ConnectivityManager.TYPE_MOBILE);
+            configBuilder.setLegacyTypeName(NETWORK_TYPE);
             final CarrierSignalAgent carrierSignalAgent = mPhone.getCarrierSignalAgent();
             if (carrierSignalAgent.hasRegisteredReceivers(TelephonyIntents
                     .ACTION_CARRIER_SIGNAL_REDIRECTED)) {
