@@ -46,6 +46,30 @@
       "revId": "7c582b5d125f8047ff45b3d8fd12b58a659c4488",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b873f15d_452879eb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1270,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-14T19:06:14Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "cfb74d90_631223bf",
+      "range": {
+        "startLine": 1267,
+        "startChar": 0,
+        "endLine": 1270,
+        "endChar": 21
+      },
+      "revId": "7c582b5d125f8047ff45b3d8fd12b58a659c4488",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
