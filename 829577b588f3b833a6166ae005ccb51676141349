@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e8d44637_a69a3f0c",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-01-14T21:55:32Z",
+      "side": 1,
+      "message": "Right, makes sense.",
+      "parentUuid": "5a7f85ae_cf51c16a",
+      "range": {
+        "startLine": 319,
+        "startChar": 7,
+        "endLine": 319,
+        "endChar": 44
+      },
+      "revId": "829577b588f3b833a6166ae005ccb51676141349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e120cc2_d81152c0",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 5
@@ -140,6 +164,30 @@
       "revId": "829577b588f3b833a6166ae005ccb51676141349",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce2cfe34_23faf06f",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-01-14T21:55:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "34129612_04586835",
+      "range": {
+        "startLine": 1205,
+        "startChar": 46,
+        "endLine": 1205,
+        "endChar": 63
+      },
+      "revId": "829577b588f3b833a6166ae005ccb51676141349",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
