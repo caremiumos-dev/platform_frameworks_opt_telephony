@@ -608,7 +608,6 @@ public class DataConnection extends StateMachine {
 
         mNetworkInfo = new NetworkInfo(ConnectivityManager.TYPE_MOBILE,
                 networkType, NETWORK_TYPE, TelephonyManager.getNetworkTypeName(networkType));
-        mNetworkInfo.setRoaming(ss.getDataRoaming());
         mNetworkInfo.setIsAvailable(true);
 
         addState(mDefaultState);
@@ -1692,7 +1691,6 @@ public class DataConnection extends StateMachine {
         }
 
         mNetworkInfo.setSubtype(subtype, TelephonyManager.getNetworkTypeName(subtype));
-        mNetworkInfo.setRoaming(state.getDataRoaming());
     }
 
     private void updateNetworkInfoSuspendState() {
