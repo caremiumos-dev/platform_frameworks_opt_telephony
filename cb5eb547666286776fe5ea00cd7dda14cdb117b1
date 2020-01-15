@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e4d80a8_5211d4cd",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-01-15T22:25:00Z",
+      "side": 1,
+      "message": "nit: \u003e 100 in a line of code",
+      "range": {
+        "startLine": 447,
+        "startChar": 100,
+        "endLine": 447,
+        "endChar": 106
+      },
+      "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e7c4322_7e0852b9",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-01-15T22:25:00Z",
+      "side": 1,
+      "message": "Add a fail() after caling enforeceCallingOrSelfReadPrecisePhoneStatePermissionOrCarrierPrivilege because exception is expected?",
+      "range": {
+        "startLine": 452,
+        "startChar": 0,
+        "endLine": 452,
+        "endChar": 47
+      },
+      "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a62291e_027f2b7c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-01-15T22:25:00Z",
+      "side": 1,
+      "message": "nit: \u003e100 in a line of code",
+      "range": {
+        "startLine": 463,
+        "startChar": 100,
+        "endLine": 463,
+        "endChar": 108
+      },
+      "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "796fe9f7_ca8e04e9",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-01-15T22:25:00Z",
+      "side": 1,
+      "message": "nit: \u003e100 in a line of code",
+      "range": {
+        "startLine": 499,
+        "startChar": 100,
+        "endLine": 499,
+        "endChar": 107
+      },
+      "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6080eb1a_a06000bc",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-01-15T22:25:00Z",
+      "side": 1,
+      "message": "Add fail()?",
+      "range": {
+        "startLine": 508,
+        "startChar": 13,
+        "endLine": 508,
+        "endChar": 23
+      },
+      "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
