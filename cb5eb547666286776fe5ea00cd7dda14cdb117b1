@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b8d80e87_f19534d8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-15T23:24:50Z",
+      "side": 1,
+      "message": "Got it. Thanks",
+      "parentUuid": "9e4d80a8_5211d4cd",
+      "range": {
+        "startLine": 447,
+        "startChar": 100,
+        "endLine": 447,
+        "endChar": 106
+      },
+      "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e7c4322_7e0852b9",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8333c4ec_469337cc",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-15T23:24:50Z",
+      "side": 1,
+      "message": "Right, this is must-have. Thanks for catching this.",
+      "parentUuid": "2e7c4322_7e0852b9",
+      "range": {
+        "startLine": 452,
+        "startChar": 0,
+        "endLine": 452,
+        "endChar": 47
+      },
+      "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "063a4802_00ca4e76",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-15T23:24:50Z",
+      "side": 1,
+      "message": "Got it. Thanks",
+      "parentUuid": "2a62291e_027f2b7c",
+      "range": {
+        "startLine": 463,
+        "startChar": 100,
+        "endLine": 463,
+        "endChar": 108
+      },
+      "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "796fe9f7_ca8e04e9",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e099c458_f2bbf236",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-15T23:24:50Z",
+      "side": 1,
+      "message": "Got it. Thanks",
+      "parentUuid": "796fe9f7_ca8e04e9",
+      "range": {
+        "startLine": 499,
+        "startChar": 100,
+        "endLine": 499,
+        "endChar": 107
+      },
+      "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6080eb1a_a06000bc",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8a483fd_1c5a1670",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-15T23:24:50Z",
+      "side": 1,
+      "message": "yes, similar case, I should add failure here. Thanks",
+      "parentUuid": "6080eb1a_a06000bc",
+      "range": {
+        "startLine": 508,
+        "startChar": 13,
+        "endLine": 508,
+        "endChar": 23
+      },
+      "revId": "cb5eb547666286776fe5ea00cd7dda14cdb117b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
