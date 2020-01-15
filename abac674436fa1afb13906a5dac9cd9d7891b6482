@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3171767e_c0796ca6",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-01-15T12:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77621a31_86036b4e",
+      "range": {
+        "startLine": 273,
+        "startChar": 20,
+        "endLine": 273,
+        "endChar": 60
+      },
+      "revId": "abac674436fa1afb13906a5dac9cd9d7891b6482",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e2827b4_9fc1f1ed",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "814b7036_4fce9b2b",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-01-15T12:15:05Z",
+      "side": 1,
+      "message": "IIUC this triggers an aynchronize update which will be counted in next round.\nAnd it is the same behavior with what we do in getVtDataUsage.\nThus I think we should keep this to minimize the change of this CL?",
+      "parentUuid": "5e2827b4_9fc1f1ed",
+      "range": {
+        "startLine": 276,
+        "startChar": 38,
+        "endLine": 276,
+        "endChar": 66
+      },
+      "revId": "abac674436fa1afb13906a5dac9cd9d7891b6482",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "83169f6e_6811ca28",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2020-01-14T14:32:36Z",
       "side": 1,
       "message": "This is okay, but if the state is not IDLE a lot of this is wasteful (you could just report with empty entries). But I\u0027m happy with this code",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 285,
+        "endChar": 53
+      },
+      "revId": "abac674436fa1afb13906a5dac9cd9d7891b6482",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "574adab5_57aec833",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-01-15T12:15:05Z",
+      "side": 1,
+      "message": "I think we\u0027ll not report the last stats before hang-up when going into idle.\nThus I think it will be safer when we are doing the follow-up refactor CL,\n e.g. actively report stats when modem update stats.",
+      "parentUuid": "83169f6e_6811ca28",
       "range": {
         "startLine": 281,
         "startChar": 0,
