@@ -257,10 +257,13 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         }
     }
 
+    /**
+     * A class implements {@link AbstractNetworkStatsProvider} to report VT data usage to system.
+     */
     // TODO: 1. Directly reports diff in updateVtDataUsage.
     //       2. Remove unused getVtDataUsage.
-    //       3. Add tests.
-    private class VtDataUsageProvider extends AbstractNetworkStatsProvider {
+    @VisibleForTesting
+    public class VtDataUsageProvider extends AbstractNetworkStatsProvider {
         private int mToken = 0;
         private NetworkStats mIfaceSnapshot = new NetworkStats(0L, 0);
         private NetworkStats mUidSnapshot = new NetworkStats(0L, 0);
@@ -3607,7 +3610,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
      * @param call The IMS call
      * @param dataUsage The aggregated data usage for the call
      */
-    private void updateVtDataUsage(ImsCall call, long dataUsage) {
+    @VisibleForTesting
+    public void updateVtDataUsage(ImsCall call, long dataUsage) {
         long oldUsage = 0L;
         if (mVtDataUsageMap.containsKey(call.uniqueId)) {
             oldUsage = mVtDataUsageMap.get(call.uniqueId);
