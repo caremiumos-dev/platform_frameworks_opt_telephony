@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89893fcd_e0fb2695",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-15T18:29:24Z",
+      "side": 1,
+      "message": "Strongly suggest to use the Merged-In tag:\nhttps://g3doc.corp.google.com/company/teams/android-build-team/automerger.md?cl\u003dhead#using-merged-in\n\nIt will save you a decent amount of misery.",
+      "range": {
+        "startLine": 15,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 52
+      },
+      "revId": "e36b9af8af3037d17e423b214052e47ee4fadf87",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
