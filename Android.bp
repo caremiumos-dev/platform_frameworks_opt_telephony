@@ -70,8 +70,7 @@ java_library {
     },
     srcs: [
         ":opt-telephony-common-srcs",
-        ":framework-telephony-stack-shared-srcs",
-        "src/java/**/I*.aidl",
+        ":framework-telephony-common-shared-srcs",        "src/java/**/I*.aidl",
         "src/java/**/*.logtags",
     ],
 
