@@ -1,0 +1,10 @@
+Autosubmit+1: Dheeraj Shetty <shettydheeraj@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Code-Review+1: Dheeraj Shetty <shettydheeraj@google.com>
+Code-Review+2: Brad Ebinger <breadley@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Wed, 15 Jan 2020 01:17:24 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1192460
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
