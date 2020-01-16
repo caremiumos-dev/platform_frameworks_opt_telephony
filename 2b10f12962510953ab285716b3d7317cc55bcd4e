@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33695a86_eb86bbe0",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2020,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-01-16T21:58:28Z",
+      "side": 1,
+      "message": "Copy over the comment as well and add that it was copied from Uri.java",
+      "range": {
+        "startLine": 2020,
+        "startChar": 20,
+        "endLine": 2020,
+        "endChar": 37
+      },
+      "revId": "2b10f12962510953ab285716b3d7317cc55bcd4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
