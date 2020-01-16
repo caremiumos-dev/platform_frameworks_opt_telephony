@@ -22,6 +22,30 @@
       "revId": "cfad67cc4de1d00026a0a1538dba93f2cbad8962",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d12f9589_7353391b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-16T23:53:54Z",
+      "side": 1,
+      "message": "Good tips, thanks!",
+      "parentUuid": "6ad6756e_b49aa3d7",
+      "range": {
+        "startLine": 332,
+        "startChar": 35,
+        "endLine": 332,
+        "endChar": 36
+      },
+      "revId": "cfad67cc4de1d00026a0a1538dba93f2cbad8962",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
