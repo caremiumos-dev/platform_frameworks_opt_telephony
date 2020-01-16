@@ -291,4 +291,60 @@ public class TelephonyRegistryTest extends TelephonyTest {
         processAllMessages();
         assertEquals(mPhoneStateListener.invocationCount.get(), 4);
     }
+
+    /**
+     * Validate that SecuirtyException is thrown when we try to listen without permission
+     * READ_PRECISE_PHONE_STATE.
+     */
+    @Test
+    @SmallTest
+    public void testListenWithoutPermission() {
+        // Clear all permission grants for test.
+        mContextFixture.addCallingOrSelfPermission("");
+
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_PRECISE_CALL_STATE, true);
+            fail();
+        } catch (SecurityException e) {
+            // expected, continue
+        }
+
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_PRECISE_DATA_CONNECTION_STATE, true);
+            fail();
+        } catch (SecurityException e) {
+            // expected, continue
+        }
+
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_CALL_DISCONNECT_CAUSES, true);
+            fail();
+        } catch (SecurityException e) {
+            // expected, continue
+        }
+
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_CALL_ATTRIBUTES_CHANGED, true);
+            fail();
+        } catch (SecurityException e) {
+            // expected, continue
+        }
+
+        try {
+            mTelephonyRegistry.listen(mContext.getOpPackageName(),
+                    mPhoneStateListener.callback,
+                    PhoneStateListener.LISTEN_IMS_CALL_DISCONNECT_CAUSES, true);
+            fail();
+        } catch (SecurityException e) {
+            // expected, pass test!
+        }
+    }
 }
