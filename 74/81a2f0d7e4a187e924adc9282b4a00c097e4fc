@@ -1,0 +1,10 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+2: Jack Yu <jackyu@google.com>
+Code-Review+1: Nathan Harold <nharold@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Submitted-by: Mingming Cai <mingcai@google.com>
+Submitted-at: Thu, 16 Jan 2020 02:10:47 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1207523
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
