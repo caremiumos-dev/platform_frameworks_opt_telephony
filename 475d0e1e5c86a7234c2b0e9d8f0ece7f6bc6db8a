@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db85c69a_b848a9d8",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-01-16T03:47:18Z",
+      "side": 1,
+      "message": "I\u0027m not super clear on what this is doing; where would it be changed? \nNew HAL method instead perhaps?",
+      "range": {
+        "startLine": 79,
+        "startChar": 25,
+        "endLine": 79,
+        "endChar": 48
+      },
+      "revId": "475d0e1e5c86a7234c2b0e9d8f0ece7f6bc6db8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
