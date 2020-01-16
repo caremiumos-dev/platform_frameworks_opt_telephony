@@ -1441,7 +1441,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         // ServiceState.RIL_RADIO_TECHNOLOGY_XXXX.
         dpi.bearerBitmap = ServiceState.convertNetworkTypeBitmaskToBearerBitmask(
                 dp.getBearerBitmask()) << 1;
-        dpi.mtu = dp.getMtu();
+        dpi.mtu = dp.getMtuV4();
         dpi.mvnoType = MvnoType.NONE;
         dpi.mvnoMatchData = "";
 
@@ -1475,7 +1475,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         // ServiceState.RIL_RADIO_TECHNOLOGY_XXXX.
         dpi.bearerBitmap = ServiceState.convertNetworkTypeBitmaskToBearerBitmask(
                 dp.getBearerBitmask()) << 1;
-        dpi.mtu = dp.getMtu();
+        dpi.mtu = dp.getMtuV4();
         dpi.persistent = dp.isPersistent();
         dpi.preferred = dp.isPreferred();
 
@@ -1495,29 +1495,30 @@ public class RIL extends BaseCommands implements CommandsInterface {
         android.hardware.radio.V1_5.DataProfileInfo dpi =
                 new android.hardware.radio.V1_5.DataProfileInfo();
 
-        dpi.base.apn = dp.getApn();
-        dpi.base.protocol = dp.getProtocolType();
-        dpi.base.roamingProtocol = dp.getRoamingProtocolType();
-        dpi.base.authType = dp.getAuthType();
-        dpi.base.user = dp.getUserName();
-        dpi.base.password = dp.getPassword();
-        dpi.base.type = dp.getType();
-        dpi.base.maxConnsTime = dp.getMaxConnectionsTime();
-        dpi.base.maxConns = dp.getMaxConnections();
-        dpi.base.waitTime = dp.getWaitTime();
-        dpi.base.enabled = dp.isEnabled();
+        dpi.apn = dp.getApn();
+        dpi.protocol = dp.getProtocolType();
+        dpi.roamingProtocol = dp.getRoamingProtocolType();
+        dpi.authType = dp.getAuthType();
+        dpi.user = dp.getUserName();
+        dpi.password = dp.getPassword();
+        dpi.type = dp.getType();
+        dpi.maxConnsTime = dp.getMaxConnectionsTime();
+        dpi.maxConns = dp.getMaxConnections();
+        dpi.waitTime = dp.getWaitTime();
+        dpi.enabled = dp.isEnabled();
         dpi.supportedApnTypesBitmap = dp.getSupportedApnTypesBitmask();
         // Shift by 1 bit due to the discrepancy between
         // android.hardware.radio.V1_0.RadioAccessFamily and the bitmask version of
         // ServiceState.RIL_RADIO_TECHNOLOGY_XXXX.
-        dpi.base.bearerBitmap = ServiceState.convertNetworkTypeBitmaskToBearerBitmask(
+        dpi.bearerBitmap = ServiceState.convertNetworkTypeBitmaskToBearerBitmask(
             dp.getBearerBitmask()) << 1;
-        dpi.base.mtu = dp.getMtu();
-        dpi.base.persistent = dp.isPersistent();
-        dpi.base.preferred = dp.isPreferred();
+        dpi.mtuV4 = dp.getMtuV4();
+        dpi.mtuV6 = dp.getMtuV6();
+        dpi.persistent = dp.isPersistent();
+        dpi.preferred = dp.isPreferred();
 
         // profile id is only meaningful when it's persistent on the modem.
-        dpi.base.profileId = (dpi.base.persistent) ? dp.getProfileId() : DataProfileId.INVALID;
+        dpi.profileId = (dpi.persistent) ? dp.getProfileId() : DataProfileId.INVALID;
 
         return dpi;
     }
@@ -6302,7 +6303,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     public static DataCallResponse convertDataCallResult(Object dcResult) {
         if (dcResult == null) return null;
 
-        int cause, suggestedRetryTime, cid, active, mtu;
+        int cause, suggestedRetryTime, cid, active, mtuV4, mtuV6;
         String ifname;
         int protocolType;
         String[] addresses = null;
@@ -6334,7 +6335,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             if (!TextUtils.isEmpty(result.pcscf)) {
                 pcscfs = result.pcscf.split("\\s+");
             }
-            mtu = result.mtu;
+            mtuV4 = mtuV6 = result.mtu;
             version = 0;
         } else if (dcResult instanceof android.hardware.radio.V1_4.SetupDataCallResult) {
             final android.hardware.radio.V1_4.SetupDataCallResult result =
@@ -6349,7 +6350,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             dnses = result.dnses.stream().toArray(String[]::new);
             gateways = result.gateways.stream().toArray(String[]::new);
             pcscfs = result.pcscf.stream().toArray(String[]::new);
-            mtu = result.mtu;
+            mtuV4 = mtuV6 = result.mtu;
             version = 4;
         } else if (dcResult instanceof android.hardware.radio.V1_5.SetupDataCallResult) {
             final android.hardware.radio.V1_5.SetupDataCallResult result =
@@ -6367,7 +6368,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
             dnses = result.dnses.stream().toArray(String[]::new);
             gateways = result.gateways.stream().toArray(String[]::new);
             pcscfs = result.pcscf.stream().toArray(String[]::new);
-            mtu = result.mtu;
+            mtuV4 = result.mtuV4;
+            mtuV6 = result.mtuV6;
             version = 5;
         } else {
             Rlog.e(RILJ_LOG_TAG, "Unsupported SetupDataCallResult " + dcResult);
@@ -6445,8 +6447,20 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
         }
 
-        return new DataCallResponse(cause, suggestedRetryTime, cid, active, protocolType, ifname,
-                laList, dnsList, gatewayList, pcscfList, mtu);
+        return new DataCallResponse.Builder()
+                .setCause(cause)
+                .setSuggestedRetryTime(suggestedRetryTime)
+                .setId(cid)
+                .setLinkStatus(active)
+                .setProtocolType(protocolType)
+                .setInterfaceName(ifname)
+                .setAddresses(laList)
+                .setDnsAddresses(dnsList)
+                .setGatewayAddresses(gatewayList)
+                .setPcscfAddresses(pcscfList)
+                .setMtuV4(mtuV4)
+                .setMtuV6(mtuV6)
+                .build();
     }
 
     /**
