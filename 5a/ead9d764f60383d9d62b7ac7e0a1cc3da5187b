@@ -1,0 +1,8 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Ready+1: Rambo Wang <rambowang@google.com>
+Code-Review+2: Shuo Qian <shuoq@google.com>
+Submitted-by: Rambo Wang <rambowang@google.com>
+Submitted-at: Thu, 16 Jan 2020 03:05:02 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1205361
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
