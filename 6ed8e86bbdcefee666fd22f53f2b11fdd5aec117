@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f51cc201_12f620e1",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-01-16T20:57:14Z",
+      "side": 1,
+      "message": "Can you use Rlog instead?",
+      "revId": "6ed8e86bbdcefee666fd22f53f2b11fdd5aec117",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b468965e_664bd903",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1538,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-01-16T20:57:14Z",
+      "side": 1,
+      "message": "HANDLER_ACTION_SEND_RESPONSE isn\u0027t used for these and the response is never sent back. Unless I am missing something or reading the code wrong.",
+      "range": {
+        "startLine": 1530,
+        "startChar": 12,
+        "endLine": 1538,
+        "endChar": 22
+      },
+      "revId": "6ed8e86bbdcefee666fd22f53f2b11fdd5aec117",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
