@@ -24,10 +24,12 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.Activity;
 import android.app.AppOpsManager;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.PermissionChecker;
+import android.database.Cursor;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -46,6 +48,7 @@ import android.telephony.CbGeoUtils.Geometry;
 import android.telephony.CbGeoUtils.LatLng;
 import android.telephony.SmsCbMessage;
 import android.telephony.SubscriptionManager;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.LocalLog;
 import android.util.Log;
@@ -178,6 +181,44 @@ public class CellBroadcastHandler extends WakeLockStateMachine {
                 return;
             }
         }
+
+        ContentResolver resolver = mContext.getContentResolver();
+
+        String[] projection = new String[] {
+                CellBroadcasts._ID, CellBroadcasts.DBGF_TIME_LOCATION,
+        };
+
+        Cursor cursor = resolver.query(
+                CELL_BROADCAST_URI,
+                projection,
+                CellBroadcasts.SERVICE_CATEGORY + "=? AND " + CellBroadcasts.SERIAL_NUMBER + "=?",
+                new String[] {
+                        String.valueOf(message.getServiceCategory()),
+                        String.valueOf(message.getSerialNumber())
+                }, null);
+        int id = 0;
+        String newStrDBGF = null;
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                id = cursor.getInt(cursor.getColumnIndex(CellBroadcasts._ID));
+                String strDBGF = cursor.getString(cursor
+                        .getColumnIndex(CellBroadcasts.DBGF_TIME_LOCATION));
+                newStrDBGF = strDBGF;
+                if (!TextUtils.isEmpty(strDBGF)) {
+                    newStrDBGF += "|";
+                }
+                newStrDBGF = newStrDBGF + Long.toString(System.currentTimeMillis())
+                        + location.toString();
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+
+        ContentValues cv = new ContentValues();
+        cv.put(CellBroadcasts.DBGF_TIME_LOCATION, newStrDBGF);
+        mContext.getContentResolver().update(CELL_BROADCAST_URI, cv,
+                CellBroadcasts._ID + "=?", new String[] { String.valueOf(id) });
 
         if (DBG) {
             logd("Device location is outside the broadcast area "
