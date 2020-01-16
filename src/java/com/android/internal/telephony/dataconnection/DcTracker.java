@@ -41,7 +41,6 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
-import android.net.INetworkPolicyListener;
 import android.net.LinkProperties;
 import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
@@ -446,8 +445,8 @@ public class DcTracker extends Handler {
     };
 
     private NetworkPolicyManager mNetworkPolicyManager;
-    private final INetworkPolicyListener mNetworkPolicyListener =
-            new NetworkPolicyManager.Listener() {
+    private final NetworkPolicyManager.SubscriptionCallback mSubscriptionCallback =
+            new NetworkPolicyManager.SubscriptionCallback() {
         @Override
         public void onSubscriptionOverride(int subId, int overrideMask, int overrideValue) {
             if (mPhone == null || mPhone.getSubId() != subId) return;
@@ -747,8 +746,9 @@ public class DcTracker extends Handler {
         mSubscriptionManager = SubscriptionManager.from(mPhone.getContext());
         mSubscriptionManager.addOnSubscriptionsChangedListener(mOnSubscriptionsChangedListener);
 
-        mNetworkPolicyManager = NetworkPolicyManager.from(mPhone.getContext());
-        mNetworkPolicyManager.registerListener(mNetworkPolicyListener);
+        mNetworkPolicyManager = (NetworkPolicyManager) mPhone.getContext()
+                .getSystemService(Context.NETWORK_POLICY_SERVICE);
+        mNetworkPolicyManager.registerSubscriptionCallback(mSubscriptionCallback);
 
         HandlerThread dcHandlerThread = new HandlerThread("DcHandlerThread");
         dcHandlerThread.start();
@@ -863,7 +863,7 @@ public class DcTracker extends Handler {
 
         mSubscriptionManager
                 .removeOnSubscriptionsChangedListener(mOnSubscriptionsChangedListener);
-        mNetworkPolicyManager.unregisterListener(mNetworkPolicyListener);
+        mNetworkPolicyManager.unregisterSubscriptionCallback(mSubscriptionCallback);
         mDcc.dispose();
         mDcTesterFailBringUpAll.dispose();
 
