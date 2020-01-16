@@ -22,6 +22,30 @@
       "revId": "2b10f12962510953ab285716b3d7317cc55bcd4e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8830437_6c7b18c3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2020,
+      "author": {
+        "id": 1570596
+      },
+      "writtenOn": "2020-01-16T22:07:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33695a86_eb86bbe0",
+      "range": {
+        "startLine": 2020,
+        "startChar": 20,
+        "endLine": 2020,
+        "endChar": 37
+      },
+      "revId": "2b10f12962510953ab285716b3d7317cc55bcd4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
