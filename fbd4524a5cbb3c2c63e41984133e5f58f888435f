@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3565f793_52831f71",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3166,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-01-16T22:10:41Z",
+      "side": 1,
+      "message": "I do not see any check to verify if the silent redial is triggered for the same request for which it was triggered. How is this taken care?\n\nWhat if there is a call triggered before this retry happened?",
+      "range": {
+        "startLine": 3166,
+        "startChar": 27,
+        "endLine": 3166,
+        "endChar": 47
+      },
+      "revId": "fbd4524a5cbb3c2c63e41984133e5f58f888435f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
