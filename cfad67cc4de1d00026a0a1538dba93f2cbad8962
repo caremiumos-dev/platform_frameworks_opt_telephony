@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ad6756e_b49aa3d7",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-16T23:16:36Z",
+      "side": 1,
+      "message": "Nit: if you name this \"expected\", you could remove the comment below",
+      "range": {
+        "startLine": 332,
+        "startChar": 35,
+        "endLine": 332,
+        "endChar": 36
+      },
+      "revId": "cfad67cc4de1d00026a0a1538dba93f2cbad8962",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
