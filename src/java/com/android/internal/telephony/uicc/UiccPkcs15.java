@@ -53,7 +53,7 @@ public class UiccPkcs15 extends Handler {
     private class FileHandler extends Handler {
         // EF path for PKCS15 root, eg. "3F007F50"
         // null if logical channel is used for PKCS15 access.
-        private final String mPkcs15Path;
+        final String mPkcs15Path;
         // Message to send when file has been parsed.
         private Message mCallback;
         // File id to read data from, eg. "5031"
@@ -200,7 +200,7 @@ public class UiccPkcs15 extends Handler {
                     // ar.result is null if using logical channel,
                     // or string for pkcs15 path if using file access.
                     mFh = new FileHandler((String) ar.result);
-                    if (!mFh.loadFile(ID_ACRF, obtainMessage(EVENT_LOAD_ACRF_DONE))) {
+                    if (!mFh.loadFile(EFODF_PATH, obtainMessage(EVENT_LOAD_ODF_DONE))) {
                         cleanUp();
                     }
                 } else {
@@ -210,9 +210,42 @@ public class UiccPkcs15 extends Handler {
                 }
                 break;
 
+            case EVENT_LOAD_ODF_DONE:
+                if (ar.exception == null && ar.result != null) {
+                    String idDodf = parseDodf((String) ar.result);
+                    if (!mFh.loadFile(idDodf, obtainMessage(EVENT_LOAD_DODF_DONE))) {
+                        cleanUp();
+                    }
+                } else {
+                    cleanUp();
+                }
+                break;
+
+            case EVENT_LOAD_DODF_DONE:
+                if (ar.exception == null && ar.result != null) {
+                    String idAcmf = parseAcmf((String) ar.result);
+                    if (!mFh.loadFile(idAcmf, obtainMessage(EVENT_LOAD_ACMF_DONE))) {
+                        cleanUp();
+                    }
+                } else {
+                    cleanUp();
+                }
+                break;
+
+            case EVENT_LOAD_ACMF_DONE:
+                if (ar.exception == null && ar.result != null) {
+                    String idAcrf = parseAcmf((String) ar.result);
+                    if (!mFh.loadFile(idAcrf, obtainMessage(EVENT_LOAD_ACRF_DONE))) {
+                        cleanUp();
+                    }
+                } else {
+                    cleanUp();
+                }
+                break;
+
             case EVENT_LOAD_ACRF_DONE:
                 if (ar.exception == null && ar.result != null) {
-                    mRules = new ArrayList<String>();
+                    mRules = new ArrayList<>();
                     String idAccf = parseAcrf((String) ar.result);
                     if (!mFh.loadFile(idAccf, obtainMessage(EVENT_LOAD_ACCF_DONE))) {
                         cleanUp();
@@ -250,10 +283,68 @@ public class UiccPkcs15 extends Handler {
 
     // Constants defined in specs, needed for parsing
     private static final String CARRIER_RULE_AID = "FFFFFFFFFFFF"; // AID for carrier privilege rule
-    private static final String ID_ACRF = "4300";
+    private static final String EFODF_PATH = "5031";
     private static final String TAG_ASN_SEQUENCE = "30";
     private static final String TAG_ASN_OCTET_STRING = "04";
     private static final String TAG_TARGET_AID = "A0";
+    private static final String TAG_DODF = "A7";
+    private static final String REFRESH_TAG_LEN = "08";
+
+
+    // parse DODF file to get file id for ACMF file
+    // data is hex string, return file id if parse success, null otherwise
+    private String parseDodf(String data) {
+        String ret = null;
+        String acRules = data;
+        while (!acRules.isEmpty()) {
+            // Example:
+            // [A7] 06 [30] 04 [04] 02 52 07
+            TLV tlvRule = new TLV(TAG_DODF); // A7
+            try {
+                acRules = tlvRule.parse(acRules, false);
+                String ruleString = tlvRule.getValue();
+                if (ruleString.startsWith(TAG_ASN_SEQUENCE)) {
+                    TLV tlvAsnPath = new TLV(TAG_ASN_SEQUENCE); // 30
+                    TLV tlvPath = new TLV(TAG_ASN_OCTET_STRING);  // 04
+                    tlvAsnPath.parse(ruleString, true);
+                    tlvPath.parse(tlvAsnPath.getValue(), true);
+                    ret = tlvPath.getValue();
+                }
+                continue; // skip current rule as it doesn't have expected TAG
+            } catch (IllegalArgumentException | IndexOutOfBoundsException ex) {
+                log("Error: " + ex);
+                ret = null;
+                break; // Bad data, ignore all remaining ACRules
+            }
+        }
+        return ret;
+    }
+
+    // parse ACMF file to get file id for ACRF file
+    // data is hex string, return file id if parse success, null otherwise
+    private String parseAcmf(String data) {
+        try {
+            // [30] 10 [04] 08 01 02 03 04 05 06 07 08 [30] 04 [04] 02 43 00
+            TLV acmfTag = new TLV(TAG_ASN_SEQUENCE); // 30
+            acmfTag.parse(data, false);
+            String ruleString = acmfTag.getValue();
+            TLV refreshTag = new TLV(TAG_ASN_OCTET_STRING); // 04
+            String refreshTagValue = refreshTag.parse(ruleString, false);
+            if (!refreshTagValue.endsWith(REFRESH_TAG_LEN)) {
+                log("Error: refresh tag in ACMF must be 8.");
+                return null;
+            }
+            TLV tlvAsnPath = new TLV(TAG_ASN_SEQUENCE); // 30
+            TLV tlvPath = new TLV(TAG_ASN_OCTET_STRING);  // 04
+            tlvAsnPath.parse(ruleString, true);
+            tlvPath.parse(tlvAsnPath.getValue(), true);
+            return tlvPath.getValue();
+        } catch (IllegalArgumentException | IndexOutOfBoundsException ex) {
+            log("Error: " + ex);
+            return null;
+        }
+
+    }
 
     // parse ACRF file to get file id for ACCF file
     // data is hex string, return file id if parse success, null otherwise
@@ -262,14 +353,14 @@ public class UiccPkcs15 extends Handler {
 
         String acRules = data;
         while (!acRules.isEmpty()) {
+            // Example:
+            // [30] 10 [A0] 08 04 06 FF FF FF FF FF FF [30] 04 [04] 02 43 10
+            // bytes in [] are tags for the data
             TLV tlvRule = new TLV(TAG_ASN_SEQUENCE);
             try {
                 acRules = tlvRule.parse(acRules, false);
                 String ruleString = tlvRule.getValue();
                 if (ruleString.startsWith(TAG_TARGET_AID)) {
-                    // rule string consists of target AID + path, example:
-                    // [A0] 08 [04] 06 FF FF FF FF FF FF [30] 04 [04] 02 43 10
-                    // bytes in [] are tags for the data
                     TLV tlvTarget = new TLV(TAG_TARGET_AID); // A0
                     TLV tlvAid = new TLV(TAG_ASN_OCTET_STRING); // 04
                     TLV tlvAsnPath = new TLV(TAG_ASN_SEQUENCE); // 30

@@ -462,43 +462,46 @@ public class UiccCarrierPrivilegeRules extends Handler {
             case EVENT_OPEN_LOGICAL_CHANNEL_DONE:
                 log("EVENT_OPEN_LOGICAL_CHANNEL_DONE");
                 ar = (AsyncResult) msg.obj;
-                if (ar.exception == null && ar.result != null) {
-                    mChannelId = ((int[]) ar.result)[0];
-                    mUiccProfile.iccTransmitApduLogicalChannel(mChannelId, CLA, COMMAND, P1, P2, P3,
-                            DATA, obtainMessage(EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE, mChannelId,
-                                    mAIDInUse));
-                } else {
-                    if (shouldRetry(ar, mRetryCount)) {
-                        log("should retry");
-                        mRetryCount++;
-                        removeCallbacks(mRetryRunnable);
-                        postDelayed(mRetryRunnable, RETRY_INTERVAL_MS);
-                    } else {
-                        if (mAIDInUse == ARAD) {
-                            // Open logical channel with ARA_M.
-                            mRules = "";
-                            openChannel(ARAM);
-                        }
-                        if (mAIDInUse == ARAM) {
-                            if (mCheckedRules) {
-                                updateState(STATE_LOADED, "Success!");
-                            } else {
-                                // if rules cannot be read from both ARA_D and ARA_M applet,
-                                // fallback to PKCS15-based ARF.
-                                log("No ARA, try ARF next.");
-                                if (ar.exception instanceof CommandException
-                                        && ((CommandException) (ar.exception)).getCommandError()
-                                        != CommandException.Error.NO_SUCH_ELEMENT) {
-                                    updateStatusMessage("No ARA due to "
-                                            +
-                                            ((CommandException) (ar.exception)).getCommandError());
-                                }
-                                mUiccPkcs15 = new UiccPkcs15(mUiccProfile,
-                                        obtainMessage(EVENT_PKCS15_READ_DONE));
-                            }
-                        }
-                    }
-                }
+//                if (ar.exception == null && ar.result != null) {
+//                    mChannelId = ((int[]) ar.result)[0];
+//                    mUiccProfile.iccTransmitApduLogicalChannel(mChannelId, CLA, COMMAND, P1, P2,
+//                             P3, DATA, obtainMessage(EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE,
+//                                    mChannelId, mAIDInUse));
+//                } else {
+//                    if (shouldRetry(ar, mRetryCount)) {
+//                        log("should retry");
+//                        mRetryCount++;
+//                        removeCallbacks(mRetryRunnable);
+//                        postDelayed(mRetryRunnable, RETRY_INTERVAL_MS);
+//                    } else {
+//                        if (mAIDInUse == ARAD) {
+//                            // Open logical channel with ARA_M.
+//                            mRules = "";
+//                            openChannel(ARAM);
+//                        }
+//                        if (mAIDInUse == ARAM) {
+//                            if (mCheckedRules) {
+//                                updateState(STATE_LOADED, "Success!");
+//                            } else {
+//                                // if rules cannot be read from both ARA_D and ARA_M applet,
+//                                // fallback to PKCS15-based ARF.
+//                                log("No ARA, try ARF next.");
+//                                if (ar.exception instanceof CommandException
+//                                        && ((CommandException) (ar.exception)).getCommandError()
+//                                        != CommandException.Error.NO_SUCH_ELEMENT) {
+//                                    updateStatusMessage("No ARA due to "
+//                                            +
+//                                           ((CommandException) (ar.exception)).getCommandError());
+//                                }
+//                                mUiccPkcs15 = new UiccPkcs15(mUiccProfile,
+//                                        obtainMessage(EVENT_PKCS15_READ_DONE));
+//                            }
+//                        }
+//                    }
+//                }
+                log("No ARA, try ARF next.");
+                mUiccPkcs15 = new UiccPkcs15(mUiccProfile,
+                        obtainMessage(EVENT_PKCS15_READ_DONE));
                 break;
 
             case EVENT_TRANSMIT_LOGICAL_CHANNEL_DONE:
