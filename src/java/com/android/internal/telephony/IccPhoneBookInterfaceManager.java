@@ -237,6 +237,10 @@ public class IccPhoneBookInterfaceManager {
         String newEmail = values.getAsString(IccProvider.STR_NEW_EMAILS);
         String[] oldEmailArray = TextUtils.isEmpty(oldEmail) ? null : getStringArray(oldEmail);
         String[] newEmailArray = TextUtils.isEmpty(newEmail) ? null : getStringArray(newEmail);
+        String oldAnr = values.getAsString(IccProvider.STR_ANRS);
+        String newAnr = values.getAsString(IccProvider.STR_NEW_ANRS);
+        String[] oldAnrArray = TextUtils.isEmpty(oldAnr) ? null : getStringArray(oldAnr);
+        String[] newAnrArray = TextUtils.isEmpty(newAnr) ? null : getStringArray(newAnr);
 
         efid = updateEfForIccType(efid);
         if (DBG) {
@@ -251,8 +255,8 @@ public class IccPhoneBookInterfaceManager {
             AdnRecord oldAdn;
             AdnRecord newAdn;
             if (efid == IccConstants.EF_PBR) {
-                oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmailArray);
-                newAdn = new AdnRecord(newTag, newPhoneNumber, newEmailArray);
+                oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmailArray, oldAnrArray);
+                newAdn = new AdnRecord(newTag, newPhoneNumber, newEmailArray, newAnrArray);
             } else {
                 oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
                 newAdn = new AdnRecord(newTag, newPhoneNumber);

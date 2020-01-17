@@ -51,6 +51,7 @@ public class IccProvider extends ContentProvider {
         "name",
         "number",
         "emails",
+        "anrs",
         "_id"
     };
 
@@ -65,9 +66,11 @@ public class IccProvider extends ContentProvider {
     protected static final String STR_TAG = "tag";
     protected static final String STR_NUMBER = "number";
     protected static final String STR_EMAILS = "emails";
+    protected static final String STR_ANRS = "anrs";
     protected static final String STR_NEW_TAG = "newTag";
     protected static final String STR_NEW_NUMBER = "newNumber";
     protected static final String STR_NEW_EMAILS = "newEmails";
+    protected static final String STR_NEW_ANRS = "newAnrs";
     protected static final String STR_PIN2 = "pin2";
 
     private static final UriMatcher URL_MATCHER =
@@ -209,14 +212,17 @@ public class IccProvider extends ContentProvider {
         String tag = initialValues.getAsString("tag");
         String number = initialValues.getAsString("number");
         String emails = initialValues.getAsString("emails");
+        String anrs = initialValues.getAsString("anrs");
 
         ContentValues values = new ContentValues();
         values.put(STR_TAG, "");
         values.put(STR_NUMBER, "");
         values.put(STR_EMAILS, "");
+        values.put(STR_ANRS, "");
         values.put(STR_NEW_TAG, tag);
         values.put(STR_NEW_NUMBER, number);
         values.put(STR_NEW_EMAILS, emails);
+        values.put(STR_NEW_ANRS, anrs);
         boolean success = updateIccRecordInEf(efType, values, pin2, subId);
 
         if (!success) {
@@ -311,6 +317,7 @@ public class IccProvider extends ContentProvider {
         String tag = null;
         String number = null;
         String emails = null;
+        String anrs = null;
         String pin2 = null;
 
         String[] tokens = where.split(" AND ");
@@ -335,6 +342,8 @@ public class IccProvider extends ContentProvider {
                 number = normalizeValue(val);
             } else if (STR_EMAILS.equals(key)) {
                 emails = normalizeValue(val);
+            } else if (STR_ANRS.equals(key)) {
+                anrs = normalizeValue(val);
             } else if (STR_PIN2.equals(key)) {
                 pin2 = normalizeValue(val);
             }
@@ -348,9 +357,11 @@ public class IccProvider extends ContentProvider {
         values.put(STR_TAG, tag);
         values.put(STR_NUMBER, number);
         values.put(STR_EMAILS, emails);
+        values.put(STR_ANRS, anrs);
         values.put(STR_NEW_TAG, "");
         values.put(STR_NEW_NUMBER, "");
         values.put(STR_NEW_EMAILS, "");
+        values.put(STR_NEW_ANRS, "");
 
         boolean success = updateIccRecordInEf(efType, values, pin2, subId);
         if (!success) {
@@ -494,7 +505,6 @@ public class IccProvider extends ContentProvider {
         return success;
     }
 
-
     private boolean deleteIccRecordFromEf(int efType, String name, String number, String[] emails,
             String pin2, int subId) {
         if (DBG) log("deleteIccRecordFromEf: efType=0x" +
@@ -529,7 +539,7 @@ public class IccProvider extends ContentProvider {
     @UnsupportedAppUsage
     private void loadRecord(AdnRecord record, MatrixCursor cursor, int id) {
         if (!record.isEmpty()) {
-            Object[] contact = new Object[4];
+            Object[] contact = new Object[5];
             String alphaTag = record.getAlphaTag();
             String number = record.getNumber();
 
@@ -547,7 +557,18 @@ public class IccProvider extends ContentProvider {
                 }
                 contact[2] = emailString.toString();
             }
-            contact[3] = id;
+
+            String[] anrs = record.getAnrs();
+            if (anrs != null) {
+                StringBuilder anrString = new StringBuilder();
+                for (String anr: anrs) {
+                    log("Adding anr:" + Rlog.pii(TAG, anr));
+                    anrString.append(anr);
+                    anrString.append(",");
+                }
+                contact[3] = anrString.toString();
+            }
+            contact[4] = id;
             cursor.addRow(contact);
         }
     }
