@@ -47,6 +47,8 @@ public class AdnRecord implements Parcelable {
     @UnsupportedAppUsage
     String[] mEmails;
     @UnsupportedAppUsage
+    String[] mAnrs;
+    @UnsupportedAppUsage
     int mExtRecord = 0xff;
     @UnsupportedAppUsage
     int mEfid;                   // or 0 if none
@@ -88,6 +90,7 @@ public class AdnRecord implements Parcelable {
             String alphaTag;
             String number;
             String[] emails;
+            String[] anrs;
 
             efid = source.readInt();
             recordNumber = source.readInt();
@@ -96,8 +99,10 @@ public class AdnRecord implements Parcelable {
             final int len = source.readInt();
             if (len > 0) {
                 emails = new String[len];
+                anrs = new String[len];
                 source.readStringArray(emails);
-                return new AdnRecord(efid, recordNumber, alphaTag, number, emails);
+                source.readStringArray(anrs);
+                return new AdnRecord(efid, recordNumber, alphaTag, number, emails, anrs);
             } else {
                 return new AdnRecord(efid, recordNumber, alphaTag, number, null);
             }
@@ -134,12 +139,29 @@ public class AdnRecord implements Parcelable {
     }
 
     @UnsupportedAppUsage
+    public AdnRecord (String alphaTag, String number, String[] emails, String[] anrs) {
+        this(0, 0, alphaTag, number, emails, anrs);
+    }
+
+    @UnsupportedAppUsage
     public AdnRecord (int efid, int recordNumber, String alphaTag, String number, String[] emails) {
         this.mEfid = efid;
         this.mRecordNumber = recordNumber;
         this.mAlphaTag = alphaTag;
         this.mNumber = number;
         this.mEmails = emails;
+        this.mAnrs = null;
+    }
+
+    @UnsupportedAppUsage
+    public AdnRecord (int efid, int recordNumber, String alphaTag, String number, String[] emails,
+            String[] anrs) {
+        this.mEfid = efid;
+        this.mRecordNumber = recordNumber;
+        this.mAlphaTag = alphaTag;
+        this.mNumber = number;
+        this.mEmails = emails;
+        this.mAnrs = anrs;
     }
 
     @UnsupportedAppUsage
@@ -149,6 +171,7 @@ public class AdnRecord implements Parcelable {
         this.mAlphaTag = alphaTag;
         this.mNumber = number;
         this.mEmails = null;
+        this.mAnrs = null;
     }
 
     //***** Instance Methods
@@ -184,15 +207,26 @@ public class AdnRecord implements Parcelable {
         this.mEmails = emails;
     }
 
+    @UnsupportedAppUsage
+    public String[] getAnrs() {
+        return mAnrs;
+    }
+
+    @UnsupportedAppUsage
+    public void setAnrs(String[] anrs) {
+        this.mAnrs = anrs;
+    }
+
     @Override
     public String toString() {
-        return "ADN Record '" + mAlphaTag + "' '" + Rlog.pii(LOG_TAG, mNumber) + " "
-                + Rlog.pii(LOG_TAG, mEmails) + "'";
+        return "ADN Record '" + mAlphaTag + "' '" + Rlog.pii(LOG_TAG, mNumber) + "' '"
+                + Rlog.pii(LOG_TAG, mEmails) + "' '" + Rlog.pii(LOG_TAG, mAnrs) + "'";
     }
 
     @UnsupportedAppUsage
     public boolean isEmpty() {
-        return TextUtils.isEmpty(mAlphaTag) && TextUtils.isEmpty(mNumber) && mEmails == null;
+        return TextUtils.isEmpty(mAlphaTag) && TextUtils.isEmpty(mNumber) && mEmails == null
+                && mAnrs == null;
     }
 
     public boolean hasExtendedRecord() {
@@ -216,7 +250,8 @@ public class AdnRecord implements Parcelable {
     public boolean isEqual(AdnRecord adn) {
         return ( stringCompareNullEqualsEmpty(mAlphaTag, adn.mAlphaTag) &&
                 stringCompareNullEqualsEmpty(mNumber, adn.mNumber) &&
-                Arrays.equals(mEmails, adn.mEmails));
+                Arrays.equals(mEmails, adn.mEmails)) &&
+                Arrays.equals(mAnrs, adn.mAnrs));
     }
     //***** Parcelable Implementation
 
@@ -232,6 +267,7 @@ public class AdnRecord implements Parcelable {
         dest.writeString(mAlphaTag);
         dest.writeString(mNumber);
         dest.writeStringArray(mEmails);
+        dest.writeStringArray(mAnrs);
     }
 
     /**
@@ -329,8 +365,9 @@ public class AdnRecord implements Parcelable {
     /**
     * added for updating Email record of Adn record.
     */
-    public void updateArrayRecord(AdnRecord adn, int emailFileNum) {
+    public void updateArrayRecord(AdnRecord adn, int emailFileNum, int anrFileNum) {
         mEmails = updateArrayHelper(mEmails, adn.mEmails, emailFileNum);
+        mAnrs = updateArrayHelper(mAnrs, adn.mAnrs, anrFileNum);
     }
 
     //***** Private Methods
@@ -371,12 +408,14 @@ public class AdnRecord implements Parcelable {
             mExtRecord = 0xff & record[record.length - 1];
 
             mEmails = null;
+            mAnrs = null;
 
         } catch (RuntimeException ex) {
             Rlog.w(LOG_TAG, "Error parsing AdnRecord", ex);
             mNumber = "";
             mAlphaTag = "";
             mEmails = null;
+            mAnrs = null;
         }
     }
 
