@@ -16,7 +16,6 @@
 
 package com.android.internal.telephony;
 
-import static android.provider.Telephony.ServiceStateTable.getContentValuesForServiceState;
 import static android.provider.Telephony.ServiceStateTable.getUriForSubscriptionId;
 
 import static com.android.internal.telephony.CarrierActionAgent.CARRIER_ACTION_SET_RADIO_ENABLED;
@@ -33,6 +32,7 @@ import android.app.PendingIntent;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -44,6 +44,7 @@ import android.os.AsyncResult;
 import android.os.BaseBundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcel;
 import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
@@ -301,6 +302,155 @@ public class ServiceStateTracker extends Handler {
     /** Reason for registration denial. */
     protected static final String REGISTRATION_DENIED_GEN  = "General";
     protected static final String REGISTRATION_DENIED_AUTH = "Authentication Failure";
+
+    /**
+     * The current service state.
+     *
+     * This is the entire {@link ServiceState} object in byte array.
+     */
+    private static final String SERVICE_STATE = "service_state";
+
+    /**
+     * An integer value indicating the current data service state.
+     * <p>
+     * Valid values: {@link ServiceState#STATE_IN_SERVICE},
+     * {@link ServiceState#STATE_OUT_OF_SERVICE}, {@link ServiceState#STATE_EMERGENCY_ONLY},
+     * {@link ServiceState#STATE_POWER_OFF}.
+     * <p>
+     * This is the same as {@link ServiceState#getDataRegState()}.
+     */
+    private static final String DATA_REG_STATE = "data_reg_state";
+
+    /**
+     * An integer value indicating the current voice roaming type.
+     * <p>
+     * This is the same as {@link ServiceState#getVoiceRoamingType()}.
+     */
+    private static final String VOICE_ROAMING_TYPE = "voice_roaming_type";
+
+    /**
+     * An integer value indicating the current data roaming type.
+     * <p>
+     * This is the same as {@link ServiceState#getDataRoamingType()}.
+     */
+    private static final String DATA_ROAMING_TYPE = "data_roaming_type";
+
+    /**
+     * The current registered voice network operator name in long alphanumeric format.
+     * <p>
+     * This is the same as {@link ServiceState#getOperatorAlphaLong()}.
+     */
+    private static final String VOICE_OPERATOR_ALPHA_LONG = "voice_operator_alpha_long";
+
+    /**
+     * The current registered operator name in short alphanumeric format.
+     * <p>
+     * In GSM/UMTS, short format can be up to 8 characters long. The current registered voice
+     * network operator name in long alphanumeric format.
+     * <p>
+     * This is the same as {@link ServiceState#getOperatorAlphaShort()}.
+     */
+    private static final String VOICE_OPERATOR_ALPHA_SHORT = "voice_operator_alpha_short";
+
+    /**
+     * The current registered operator numeric id.
+     * <p>
+     * In GSM/UMTS, numeric format is 3 digit country code plus 2 or 3 digit
+     * network code.
+     * <p>
+     * This is the same as {@link ServiceState#getOperatorNumeric()}.
+     */
+    private static final String VOICE_OPERATOR_NUMERIC = "voice_operator_numeric";
+
+    /**
+     * The current registered data network operator name in long alphanumeric format.
+     * <p>
+     * This is the same as {@link ServiceState#getOperatorAlphaLong()}.
+     */
+    private static final String DATA_OPERATOR_ALPHA_LONG = "data_operator_alpha_long";
+
+    /**
+     * The current registered data network operator numeric id.
+     * <p>
+     * This is the same as {@link ServiceState#getOperatorNumeric()}.
+     */
+    private static final String DATA_OPERATOR_NUMERIC = "data_operator_numeric";
+
+    /**
+     * This is the same as {@link ServiceState#getRilVoiceRadioTechnology()}.
+     */
+    private static final String RIL_VOICE_RADIO_TECHNOLOGY = "ril_voice_radio_technology";
+
+    /**
+     * This is the same as {@link ServiceState#getRilDataRadioTechnology()}.
+     */
+    private static final String RIL_DATA_RADIO_TECHNOLOGY = "ril_data_radio_technology";
+
+    /**
+     * This is the same as {@link ServiceState#getCssIndicator()}.
+     */
+    private static final String CSS_INDICATOR = "css_indicator";
+
+    /**
+     * This is the same as {@link ServiceState#getCdmaNetworkId()}.
+     */
+    private static final String NETWORK_ID = "network_id";
+
+    /**
+     * This is the same as {@link ServiceState#getCdmaSystemId()}.
+     */
+    private static final String SYSTEM_ID = "system_id";
+
+    /**
+     * This is the same as {@link ServiceState#getCdmaRoamingIndicator()}.
+     */
+    private static final String CDMA_ROAMING_INDICATOR = "cdma_roaming_indicator";
+
+    /**
+     * This is the same as {@link ServiceState#getCdmaDefaultRoamingIndicator()}.
+     */
+    private static final String CDMA_DEFAULT_ROAMING_INDICATOR =
+            "cdma_default_roaming_indicator";
+
+    /**
+     * This is the same as {@link ServiceState#getCdmaEriIconIndex()}.
+     */
+    private static final String CDMA_ERI_ICON_INDEX = "cdma_eri_icon_index";
+
+    /**
+     * This is the same as {@link ServiceState#getCdmaEriIconMode()}.
+     */
+    private static final String CDMA_ERI_ICON_MODE = "cdma_eri_icon_mode";
+
+    /**
+     * This is the same as {@link ServiceState#isEmergencyOnly()}.
+     */
+    private static final String IS_EMERGENCY_ONLY = "is_emergency_only";
+
+    /**
+     * This is the same as {@link ServiceState#getDataRoamingFromRegistration()}.
+     */
+    private static final String IS_DATA_ROAMING_FROM_REGISTRATION =
+            "is_data_roaming_from_registration";
+
+    /**
+     * This is the same as {@link ServiceState#isUsingCarrierAggregation()}.
+     */
+    private static final String IS_USING_CARRIER_AGGREGATION = "is_using_carrier_aggregation";
+
+    /**
+     * The current registered raw data network operator name in long alphanumeric format.
+     * <p>
+     * This is the same as {@link ServiceState#getOperatorAlphaLongRaw()}.
+     */
+    private static final String OPERATOR_ALPHA_LONG_RAW = "operator_alpha_long_raw";
+
+    /**
+     * The current registered raw data network operator name in short alphanumeric format.
+     * <p>
+     * This is the same as {@link ServiceState#getOperatorAlphaShortRaw()}.
+     */
+    private static final String OPERATOR_ALPHA_SHORT_RAW = "operator_alpha_short_raw";
 
     private CarrierDisplayNameResolver mCdnr;
 
@@ -5661,4 +5811,22 @@ public class ServiceStateTracker extends Handler {
                 Context.TELEPHONY_SERVICE);
         tm.setDataNetworkTypeForPhone(mPhone.getPhoneId(), type);
     }
+
+    /**
+     * Used to insert a ServiceState into the ServiceStateProvider as a ContentValues instance.
+     *
+     * Copied from frameworks/base/core/java/android/provider/Telephony.java
+     * @param state the ServiceState to convert into ContentValues
+     * @return the convertedContentValues instance
+     */
+    public static ContentValues getContentValuesForServiceState(ServiceState state) {
+        ContentValues values = new ContentValues();
+        final Parcel p = Parcel.obtain();
+        state.writeToParcel(p, 0);
+        // Turn the parcel to byte array. Safe to do this because the content values were never
+        // written into a persistent storage. ServiceStateProvider keeps values in the memory.
+        values.put(SERVICE_STATE, p.marshall());
+        return values;
+    }
+
 }
