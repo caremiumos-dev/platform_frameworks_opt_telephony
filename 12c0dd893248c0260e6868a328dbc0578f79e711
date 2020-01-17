@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "790ceb9b_b1169f86",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1918,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-17T21:50:45Z",
+      "side": 1,
+      "message": "This one is still giving out null",
+      "range": {
+        "startLine": 1918,
+        "startChar": 15,
+        "endLine": 1918,
+        "endChar": 19
+      },
+      "revId": "12c0dd893248c0260e6868a328dbc0578f79e711",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
