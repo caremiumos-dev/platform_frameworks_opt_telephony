@@ -16,7 +16,6 @@
 
 package com.android.internal.telephony;
 
-import static android.provider.Telephony.ServiceStateTable.getContentValuesForServiceState;
 import static android.provider.Telephony.ServiceStateTable.getUriForSubscriptionId;
 
 import static com.android.internal.telephony.CarrierActionAgent.CARRIER_ACTION_SET_RADIO_ENABLED;
@@ -33,6 +32,7 @@ import android.app.PendingIntent;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -44,6 +44,7 @@ import android.os.AsyncResult;
 import android.os.BaseBundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcel;
 import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
@@ -301,6 +302,8 @@ public class ServiceStateTracker extends Handler {
     /** Reason for registration denial. */
     protected static final String REGISTRATION_DENIED_GEN  = "General";
     protected static final String REGISTRATION_DENIED_AUTH = "Authentication Failure";
+
+    private static final String SERVICE_STATE = "service_state";
 
     private CarrierDisplayNameResolver mCdnr;
 
@@ -5661,4 +5664,22 @@ public class ServiceStateTracker extends Handler {
                 Context.TELEPHONY_SERVICE);
         tm.setDataNetworkTypeForPhone(mPhone.getPhoneId(), type);
     }
+
+    /**
+     * Used to insert a ServiceState into the ServiceStateProvider as a ContentValues instance.
+     *
+     * Copied from frameworks/base/core/java/android/provider/Telephony.java
+     * @param state the ServiceState to convert into ContentValues
+     * @return the convertedContentValues instance
+     */
+    public static ContentValues getContentValuesForServiceState(ServiceState state) {
+        ContentValues values = new ContentValues();
+        final Parcel p = Parcel.obtain();
+        state.writeToParcel(p, 0);
+        // Turn the parcel to byte array. Safe to do this because the content values were never
+        // written into a persistent storage. ServiceStateProvider keeps values in the memory.
+        values.put(SERVICE_STATE, p.marshall());
+        return values;
+    }
+
 }
