@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "5c42c263_5c52636e",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-17T20:03:13Z",
+      "side": 1,
+      "message": "Ouch! No... we should be exposing the structure. I must not have been paying attention.\n\nSeparately though, it should be available in a bugreport, so even IF we decide to only expose the PLMNs themselves, we should keep the rest of the structure alive so that it can be dump()\u0027d.",
+      "parentUuid": "36d2ff02_9cee23c9",
+      "range": {
+        "startLine": 1142,
+        "startChar": 42,
+        "endLine": 1142,
+        "endChar": 55
+      },
+      "revId": "4d746fea815140686b41a3cdff9a0c8635562b31",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d393c8e4_00bf92f7",
         "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
         "patchSetId": 13
