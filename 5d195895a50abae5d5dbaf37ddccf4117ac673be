@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33665b62_47669cd8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-18T02:10:26Z",
+      "side": 1,
+      "message": "qq: is this the only test doing this? ISTM that we should probably extend this to the others as well. Can you file a bug?",
+      "range": {
+        "startLine": 301,
+        "startChar": 16,
+        "endLine": 301,
+        "endChar": 43
+      },
+      "revId": "5d195895a50abae5d5dbaf37ddccf4117ac673be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
