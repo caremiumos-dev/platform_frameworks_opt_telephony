@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20af194c_f1f233cb",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-01-18T01:15:58Z",
+      "side": 1,
+      "message": "rename this to mManualNetworkSelectionPlmn and please document this is only for non-persisted manual network selection.",
+      "range": {
+        "startLine": 177,
+        "startChar": 19,
+        "endLine": 177,
+        "endChar": 42
+      },
+      "revId": "3ae05795883a3f8358cd357c0ae97596b918e8ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb0b35b4_8393f899",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-01-18T01:15:58Z",
+      "side": 1,
+      "message": "It\u0027s good to check sub id. But how about when SIM is removed or sawpped, do you want to clear the cache?",
+      "range": {
+        "startLine": 1881,
+        "startChar": 0,
+        "endLine": 1881,
+        "endChar": 63
+      },
+      "revId": "3ae05795883a3f8358cd357c0ae97596b918e8ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92d21228_d0de938c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1890,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-01-18T01:15:58Z",
+      "side": 1,
+      "message": "rename to getManualNetworkSelectionPlmn",
+      "range": {
+        "startLine": 1890,
+        "startChar": 18,
+        "endLine": 1890,
+        "endChar": 43
+      },
+      "revId": "3ae05795883a3f8358cd357c0ae97596b918e8ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
