@@ -2527,7 +2527,7 @@ public class ServiceStateTracker extends Handler {
 
     private void notifySpnDisplayUpdate(CarrierDisplayNameData data) {
         int subId = mPhone.getSubId();
-        // Update SPN_STRINGS_UPDATED_ACTION IFF any value changes
+        // Update ACTION_SPN_STRINGS_UPDATED IFF any value changes
         if (mSubId != subId
                 || data.shouldShowPlmn() != mCurShowPlmn
                 || data.shouldShowSpn() != mCurShowSpn
@@ -2548,12 +2548,12 @@ public class ServiceStateTracker extends Handler {
             mCdnrLogs.log(log);
             if (DBG) log("updateSpnDisplay: " + log);
 
-            Intent intent = new Intent(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION);
-            intent.putExtra(TelephonyIntents.EXTRA_SHOW_SPN, data.shouldShowSpn());
-            intent.putExtra(TelephonyIntents.EXTRA_SPN, data.getSpn());
-            intent.putExtra(TelephonyIntents.EXTRA_DATA_SPN, data.getDataSpn());
-            intent.putExtra(TelephonyIntents.EXTRA_SHOW_PLMN, data.shouldShowPlmn());
-            intent.putExtra(TelephonyIntents.EXTRA_PLMN, data.getPlmn());
+            Intent intent = new Intent(TelephonyManager.ACTION_SPN_STRINGS_UPDATED);
+            intent.putExtra(TelephonyManager.EXTRA_SHOW_SPN, data.shouldShowSpn());
+            intent.putExtra(TelephonyManager.EXTRA_SPN, data.getSpn());
+            intent.putExtra(TelephonyManager.EXTRA_DATA_SPN, data.getDataSpn());
+            intent.putExtra(TelephonyManager.EXTRA_SHOW_PLMN, data.shouldShowPlmn());
+            intent.putExtra(TelephonyManager.EXTRA_PLMN, data.getPlmn());
             SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhone.getPhoneId());
             mPhone.getContext().sendStickyBroadcastAsUser(intent, UserHandle.ALL);
 
