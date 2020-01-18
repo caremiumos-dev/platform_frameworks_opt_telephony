@@ -22,6 +22,30 @@
       "revId": "5d195895a50abae5d5dbaf37ddccf4117ac673be",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9152d53_ce6cdbb8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-18T02:31:16Z",
+      "side": 1,
+      "message": "There is only one other UT cover permission check. Apparently this is not enough. b/147924927 created to cover it.",
+      "parentUuid": "33665b62_47669cd8",
+      "range": {
+        "startLine": 301,
+        "startChar": 16,
+        "endLine": 301,
+        "endChar": 43
+      },
+      "revId": "5d195895a50abae5d5dbaf37ddccf4117ac673be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
