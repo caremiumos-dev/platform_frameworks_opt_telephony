@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "00db8bf2_c283f65d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-20T21:56:18Z",
+      "side": 1,
+      "message": "PREVILEGED_PHONE_STATE_PERMISSION_MASK is to be done.  b/148021947 is created and I will add formal TODO instead here to make it more readable.",
+      "parentUuid": "793096a7_fcfad99f",
+      "range": {
+        "startLine": 93,
+        "startChar": 88,
+        "endLine": 93,
+        "endChar": 93
+      },
+      "revId": "448ec24be7c96beafd386253bb66986940085213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e04c1020_ad728a66",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "694d6743_362c40ab",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-20T21:56:18Z",
+      "side": 1,
+      "message": "yes, agree.Thanks",
+      "parentUuid": "e04c1020_ad728a66",
+      "range": {
+        "startLine": 412,
+        "startChar": 17,
+        "endLine": 412,
+        "endChar": 45
+      },
+      "revId": "448ec24be7c96beafd386253bb66986940085213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b79166a7_5c6cba73",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "448ec24be7c96beafd386253bb66986940085213",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c2430b0_926c7ca4",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-01-20T21:56:18Z",
+      "side": 1,
+      "message": "thanks for catching this.",
+      "parentUuid": "b79166a7_5c6cba73",
+      "range": {
+        "startLine": 425,
+        "startChar": 35,
+        "endLine": 425,
+        "endChar": 43
+      },
+      "revId": "448ec24be7c96beafd386253bb66986940085213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
