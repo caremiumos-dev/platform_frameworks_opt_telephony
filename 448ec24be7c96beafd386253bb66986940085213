@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "793096a7_fcfad99f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-20T19:40:21Z",
+      "side": 1,
+      "message": "Why TBD?",
+      "range": {
+        "startLine": 93,
+        "startChar": 88,
+        "endLine": 93,
+        "endChar": 93
+      },
+      "revId": "448ec24be7c96beafd386253bb66986940085213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e04c1020_ad728a66",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-20T19:40:21Z",
+      "side": 1,
+      "message": "Nit: Make these two helper methods\u0027 names line up. assertSecurityExceptionThrown reads a bit nicer and matches aSENotThrown.",
+      "range": {
+        "startLine": 412,
+        "startChar": 17,
+        "endLine": 412,
+        "endChar": 45
+      },
+      "revId": "448ec24be7c96beafd386253bb66986940085213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b79166a7_5c6cba73",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-20T19:40:21Z",
+      "side": 1,
+      "message": "unexpected",
+      "range": {
+        "startLine": 425,
+        "startChar": 35,
+        "endLine": 425,
+        "endChar": 43
+      },
+      "revId": "448ec24be7c96beafd386253bb66986940085213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
