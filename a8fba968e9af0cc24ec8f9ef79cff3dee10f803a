@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "167bad80_57785e42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-20T22:07:52Z",
+      "side": 1,
+      "message": "Can you provide something more here? Test with dumpstate?",
+      "range": {
+        "startLine": 11,
+        "startChar": 6,
+        "endLine": 11,
+        "endChar": 12
+      },
+      "revId": "a8fba968e9af0cc24ec8f9ef79cff3dee10f803a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25da9dee_6ccbf35a",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 11
