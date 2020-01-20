@@ -49,6 +49,76 @@
     },
     {
       "key": {
+        "uuid": "0801547e_9eef0798",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-20T04:05:44Z",
+      "side": 1,
+      "message": "This is write-only in this change and I don\u0027t see a followup using it. Where is this going to be used ?",
+      "range": {
+        "startLine": 172,
+        "startChar": 4,
+        "endLine": 172,
+        "endChar": 21
+      },
+      "revId": "3fcd286838a78c04cb2f3b9a8a3045d86096f7eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "992e071b_5a90db3e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-20T04:05:44Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "c21602bb_0d3d7ac8",
+      "range": {
+        "startLine": 172,
+        "startChar": 16,
+        "endLine": 172,
+        "endChar": 20
+      },
+      "revId": "3fcd286838a78c04cb2f3b9a8a3045d86096f7eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fff7119_9bc57232",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-20T04:05:44Z",
+      "side": 1,
+      "message": "Can this change dynamically for one single instance of DataConnection ?",
+      "range": {
+        "startLine": 172,
+        "startChar": 12,
+        "endLine": 172,
+        "endChar": 15
+      },
+      "revId": "3fcd286838a78c04cb2f3b9a8a3045d86096f7eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c760afc0_41c9f40c",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 1
@@ -60,6 +130,30 @@
       "writtenOn": "2020-01-07T20:44:23Z",
       "side": 1,
       "message": "Let\u0027s check with qingxi as to where the change is to make this ownerUid",
+      "range": {
+        "startLine": 1340,
+        "startChar": 19,
+        "endLine": 1340,
+        "endChar": 43
+      },
+      "revId": "3fcd286838a78c04cb2f3b9a8a3045d86096f7eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7596f4c7_4e2e07f2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-20T04:05:44Z",
+      "side": 1,
+      "message": "We should make this ownerUid for sure, and as this will need to be @SystemApi so that telephony can call it we need to change it soon\n\n(also INVALID_UID)",
+      "parentUuid": "c760afc0_41c9f40c",
       "range": {
         "startLine": 1340,
         "startChar": 19,
@@ -111,6 +205,29 @@
         "startChar": 73,
         "endLine": 1869,
         "endChar": 74
+      },
+      "revId": "3fcd286838a78c04cb2f3b9a8a3045d86096f7eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a31ce7c7_5e7021db",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-01-20T04:05:44Z",
+      "side": 1,
+      "message": "I think this in an IPC ; I\u0027m not familiar enough with the threading in the phone process to tell whether it\u0027s fine to call it here, but we should get someone who is to check\n(the same might apply to configManager above, though that may live in the same process)",
+      "range": {
+        "startLine": 1869,
+        "startChar": 41,
+        "endLine": 1869,
+        "endChar": 54
       },
       "revId": "3fcd286838a78c04cb2f3b9a8a3045d86096f7eb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
