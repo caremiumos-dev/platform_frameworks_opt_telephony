@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25da9dee_6ccbf35a",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-20T22:02:14Z",
+      "side": 1,
+      "message": "should this be default-assigned to \"\"?",
+      "range": {
+        "startLine": 178,
+        "startChar": 19,
+        "endLine": 178,
+        "endChar": 46
+      },
+      "revId": "a8fba968e9af0cc24ec8f9ef79cff3dee10f803a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9c6f660_a40d5f37",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-20T22:02:14Z",
+      "side": 1,
+      "message": "nit persisted.",
+      "range": {
+        "startLine": 1877,
+        "startChar": 18,
+        "endLine": 1877,
+        "endChar": 27
+      },
+      "revId": "a8fba968e9af0cc24ec8f9ef79cff3dee10f803a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66ffcc5c_1de669c0",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1884,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-20T22:02:14Z",
+      "side": 1,
+      "message": "AFAIK, the only time this will be invalid is on Phone0 in emergency mode (no SIM), or in some weird races. Can you add a comment to list that out.\n\nAlso, if there is no valid subId... is it possible to be in manual selection mode? If not, should the PLMN be cleared here too? Please confirm the behavior and either update the code or add comments so that we can remember all this in the future.",
+      "range": {
+        "startLine": 1884,
+        "startChar": 32,
+        "endLine": 1884,
+        "endChar": 53
+      },
+      "revId": "a8fba968e9af0cc24ec8f9ef79cff3dee10f803a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f4e0d3a_4c542d2d",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-20T22:02:14Z",
+      "side": 1,
+      "message": "nit, suggest \"return (mManualNetworkSelectionPlmn \u003d\u003d null) ? \"\" : mManualNetworkSelection;\n\nIt\u0027s just a little shorter, but no big deal.",
+      "range": {
+        "startLine": 1894,
+        "startChar": 8,
+        "endLine": 1897,
+        "endChar": 43
+      },
+      "revId": "a8fba968e9af0cc24ec8f9ef79cff3dee10f803a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8937c0ee_cdb7774e",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-20T22:02:14Z",
+      "side": 1,
+      "message": "nit, suggest to log something here.",
+      "range": {
+        "startLine": 1429,
+        "startChar": 0,
+        "endLine": 1429,
+        "endChar": 4
+      },
+      "revId": "a8fba968e9af0cc24ec8f9ef79cff3dee10f803a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
