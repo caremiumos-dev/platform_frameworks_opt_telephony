@@ -369,6 +369,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     private static class CacheEntry {
         private long mCachedTime;
+        private long mCreateTime;
         private long mConnectTime;
         private long mConnectElapsedTime;
         /**
@@ -378,8 +379,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
          */
         private int mCallDirection;
 
-        CacheEntry(long cachedTime, long connectTime, long connectElapsedTime, int callDirection) {
+        CacheEntry(long cachedTime, long createTime, long connectTime, long connectElapsedTime,
+                int callDirection) {
             mCachedTime = cachedTime;
+            mCreateTime = createTime;
             mConnectTime = connectTime;
             mConnectElapsedTime = connectElapsedTime;
             mCallDirection = callDirection;
@@ -1425,7 +1428,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 connection.isIncoming() ? android.telecom.Call.Details.DIRECTION_INCOMING
                         : android.telecom.Call.Details.DIRECTION_OUTGOING;
         CacheEntry cachedConnectTime = new CacheEntry(SystemClock.elapsedRealtime(),
-                connection.getConnectTime(), connection.getConnectTimeReal(), callDirection);
+                connection.getCreateTime(), connection.getConnectTime(),
+                connection.getConnectTimeReal(), callDirection);
         maintainConnectTimeCache();
         if (PhoneConstants.PRESENTATION_ALLOWED == connection.getNumberPresentation()) {
             // In case of merging calls with the same number, use the latest connect time. Since
@@ -2894,6 +2898,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 // Every time participants are newly created from parcel, update their connect time.
                 CacheEntry cachedConnectTime = findConnectionTimeUsePhoneNumber(participant);
                 if (cachedConnectTime != null) {
+                    participant.setCreateTime(cachedConnectTime.mCreateTime);
                     participant.setConnectTime(cachedConnectTime.mConnectTime);
                     participant.setConnectElapsedTime(cachedConnectTime.mConnectElapsedTime);
                     participant.setCallDirection(cachedConnectTime.mCallDirection);
