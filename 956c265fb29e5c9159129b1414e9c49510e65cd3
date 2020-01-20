@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8280e49_520bf354",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-01-20T22:39:26Z",
+      "side": 1,
+      "message": "this should be removed, it\u0027s causing compile errors.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 30
+      },
+      "revId": "956c265fb29e5c9159129b1414e9c49510e65cd3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
