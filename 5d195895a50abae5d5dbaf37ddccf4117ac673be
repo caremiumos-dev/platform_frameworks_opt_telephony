@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "59f4c4fb_e15ebd0d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-20T23:38:19Z",
+      "side": 1,
+      "message": "nit SecurityException",
+      "range": {
+        "startLine": 296,
+        "startChar": 21,
+        "endLine": 296,
+        "endChar": 38
+      },
+      "revId": "5d195895a50abae5d5dbaf37ddccf4117ac673be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33665b62_47669cd8",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
         "patchSetId": 3
