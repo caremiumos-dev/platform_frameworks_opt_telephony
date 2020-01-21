@@ -22,6 +22,30 @@
       "revId": "d6e5ca2646f72c184b9440ebe3222c1ba3430e24",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b21289d_2cfd9b7d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1570596
+      },
+      "writtenOn": "2020-01-21T23:37:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33f5b012_338c56a2",
+      "range": {
+        "startLine": 286,
+        "startChar": 1,
+        "endLine": 288,
+        "endChar": 68
+      },
+      "revId": "d6e5ca2646f72c184b9440ebe3222c1ba3430e24",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
