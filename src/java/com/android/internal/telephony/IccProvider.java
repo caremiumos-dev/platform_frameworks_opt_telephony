@@ -52,6 +52,7 @@ public class IccProvider extends ContentProvider {
         "number",
         "emails",
         "anrs",
+        "aass",
         "_id"
     };
 
@@ -67,10 +68,12 @@ public class IccProvider extends ContentProvider {
     protected static final String STR_NUMBER = "number";
     protected static final String STR_EMAILS = "emails";
     protected static final String STR_ANRS = "anrs";
+    protected static final String STR_AASS = "aass";
     protected static final String STR_NEW_TAG = "newTag";
     protected static final String STR_NEW_NUMBER = "newNumber";
     protected static final String STR_NEW_EMAILS = "newEmails";
     protected static final String STR_NEW_ANRS = "newAnrs";
+    protected static final String STR_NEW_AASS = "newAass";
     protected static final String STR_PIN2 = "pin2";
 
     private static final UriMatcher URL_MATCHER =
@@ -213,16 +216,19 @@ public class IccProvider extends ContentProvider {
         String number = initialValues.getAsString("number");
         String emails = initialValues.getAsString("emails");
         String anrs = initialValues.getAsString("anrs");
+        String aass = initialValues.getAsString("aass");
 
         ContentValues values = new ContentValues();
         values.put(STR_TAG, "");
         values.put(STR_NUMBER, "");
         values.put(STR_EMAILS, "");
         values.put(STR_ANRS, "");
+        values.put(STR_AASS, "");
         values.put(STR_NEW_TAG, tag);
         values.put(STR_NEW_NUMBER, number);
         values.put(STR_NEW_EMAILS, emails);
         values.put(STR_NEW_ANRS, anrs);
+        values.put(STR_NEW_AASS, aass);
         boolean success = updateIccRecordInEf(efType, values, pin2, subId);
 
         if (!success) {
@@ -318,6 +324,7 @@ public class IccProvider extends ContentProvider {
         String number = null;
         String emails = null;
         String anrs = null;
+        String aass = null;
         String pin2 = null;
 
         String[] tokens = where.split(" AND ");
@@ -344,6 +351,8 @@ public class IccProvider extends ContentProvider {
                 emails = normalizeValue(val);
             } else if (STR_ANRS.equals(key)) {
                 anrs = normalizeValue(val);
+            } else if (STR_AASS.equals(key)) {
+                aass = normalizeValue(val);
             } else if (STR_PIN2.equals(key)) {
                 pin2 = normalizeValue(val);
             }
@@ -358,10 +367,12 @@ public class IccProvider extends ContentProvider {
         values.put(STR_NUMBER, number);
         values.put(STR_EMAILS, emails);
         values.put(STR_ANRS, anrs);
+        values.put(STR_AASS, aass);
         values.put(STR_NEW_TAG, "");
         values.put(STR_NEW_NUMBER, "");
         values.put(STR_NEW_EMAILS, "");
         values.put(STR_NEW_ANRS, "");
+        values.put(STR_NEW_AASS, "");
 
         boolean success = updateIccRecordInEf(efType, values, pin2, subId);
         if (!success) {
@@ -539,7 +550,7 @@ public class IccProvider extends ContentProvider {
     @UnsupportedAppUsage
     private void loadRecord(AdnRecord record, MatrixCursor cursor, int id) {
         if (!record.isEmpty()) {
-            Object[] contact = new Object[5];
+            Object[] contact = new Object[6];
             String alphaTag = record.getAlphaTag();
             String number = record.getNumber();
 
@@ -568,7 +579,20 @@ public class IccProvider extends ContentProvider {
                 }
                 contact[3] = anrString.toString();
             }
-            contact[4] = id;
+
+            String[] aass = record.getAass();
+            if (aass != null) {
+                StringBuilder aasString = new StringBuilder();
+                for (String aas: aass) {
+                    log("Adding addtionalAlphaString:"
+                            + Rlog.pii(TAG, aas));
+                    aasString.append(aas);
+                    aasString.append(",");
+                }
+                contact[4] = aasString.toString();
+            }
+
+            contact[5] = id;
             cursor.addRow(contact);
         }
     }

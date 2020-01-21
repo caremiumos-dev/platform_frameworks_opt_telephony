@@ -282,6 +282,9 @@ public class AdnRecordCache extends Handler implements IccConstants {
             // make sure the sequence is same with foundAdn
             oldAdn.setEmails(foundAdn.getEmails());
             oldAdn.setAnrs(foundAdn.getAnrs());
+            oldAdn.setAass(foundAdn.getAass());
+            // aasFileNum depends on anrFileNum on AdnRecord.
+            // so use anrFileNum for aasFileNum.
             newAdn.updateArrayRecord(oldAdn,
                     mUsimPhoneBookManager.getEmailFilesCountEachAdn(),
                     mUsimPhoneBookManager.getAnrFilesCountEachAdn());
@@ -435,8 +438,10 @@ public class AdnRecordCache extends Handler implements IccConstants {
     private boolean updateUsimRecord(AdnRecord oldAdn, AdnRecord newAdn, int index, int tag) {
         String[] oldRecords = null;
         String[] newRecords = null;
+        String[] newAasRecords = null;
         String oldRecord = null;
         String newRecord = null;
+        String newAas = null;
         boolean success = true;
 
         // currently we only support one email records
@@ -448,6 +453,7 @@ public class AdnRecordCache extends Handler implements IccConstants {
             case USIM_EFANR_TAG:
                 oldRecords = oldAdn.getAnrs();
                 newRecords = newAdn.getAnrs();
+                newAasRecords = newAdn.getAass();
                 break;
             default:
                 // wrong tag
@@ -462,12 +468,19 @@ public class AdnRecordCache extends Handler implements IccConstants {
         // insert scenario
         if (null == oldRecords && null != newRecords) {
             for (int i = 0; i < newRecords.length; i++) {
-                success &= updateAdditionalFiles(null, newRecords[i], index, tag, i);
+                if (tag == USIM_EFANR_TAG) {
+                    if (newAasRecords != null && newAasRecords[i] != null) {
+                        newAas = newAasRecords[i];
+                    } else {
+                        newAas = null;
+                    }
+                }
+                success &= updateAdditionalFiles(null, newRecords[i], newAas, index, tag, i);
             }
         // delete scenario
         } else if (null != oldRecords && null == newRecords) {
             for (int i = 0; i < oldRecords.length; i++) {
-                success &= updateAdditionalFiles(oldRecords[i], null, index, tag, i);
+                success &= updateAdditionalFiles(oldRecords[i], null, null, index, tag, i);
             }
         // update scenario
         } else {
@@ -482,15 +495,22 @@ public class AdnRecordCache extends Handler implements IccConstants {
                     // no need to be updated case
                     continue;
                 } else {
-                    success &= updateAdditionalFiles(oldRecord, newRecord, index, tag, i);
+                    if (tag == USIM_EFANR_TAG) {
+                        if (newAasRecords != null && newAasRecords[i] != null) {
+                            newAas = newAasRecords[i];
+                        } else {
+                            newAas = null;
+                        }
+                    }
+                    success &= updateAdditionalFiles(oldRecord, newRecord, newAas, index, tag, i);
                 }
             }
         }
         return success;
     }
 
-    private boolean updateAdditionalFiles(String oldRecord, String newRecord, int index,
-            int tag, int efSetIndex) {
+    private boolean updateAdditionalFiles(String oldRecord, String newRecord, String newAas,
+            int index, int tag, int efSetIndex) {
         boolean success = true;
 
         try {
@@ -501,7 +521,7 @@ public class AdnRecordCache extends Handler implements IccConstants {
                     break;
                 case USIM_EFANR_TAG:
                     success = mUsimPhoneBookManager
-                            .updateAnrFile(index, oldRecord, newRecord, efSetIndex);
+                            .updateAnrFile(index, oldRecord, newRecord, newAas, efSetIndex);
                     break;
                 default:
                     success = false;
