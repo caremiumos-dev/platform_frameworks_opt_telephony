@@ -16,7 +16,6 @@
 
 package com.android.internal.telephony;
 
-import static android.provider.Telephony.ServiceStateTable.getContentValuesForServiceState;
 import static android.provider.Telephony.ServiceStateTable.getUriForSubscriptionId;
 
 import static com.android.internal.telephony.CarrierActionAgent.CARRIER_ACTION_SET_RADIO_ENABLED;
@@ -112,6 +111,7 @@ import com.android.internal.telephony.util.ArrayUtils;
 import com.android.internal.telephony.util.NotificationChannelController;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.phone.ServiceStateProvider;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -3417,7 +3417,7 @@ public class ServiceStateTracker extends Handler {
             // insert into ServiceStateProvider. This will trigger apps to wake through JobScheduler
             mPhone.getContext().getContentResolver()
                     .insert(getUriForSubscriptionId(mPhone.getSubId()),
-                            getContentValuesForServiceState(mSS));
+                            ServiceStateProvider.getContentValuesForServiceState(mSS));
         }
 
         if (hasChanged || hasNrStateChanged) {
