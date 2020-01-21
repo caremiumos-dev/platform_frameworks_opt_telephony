@@ -64,6 +64,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     // EF_ANR files are managed as below.
     // recid / efSetIndex / recIndex
     private SparseArray<SparseArray<ArrayList<byte[]>>> mAnrFileRecord;
+    private SparseArray<ArrayList<byte[]>> mAasFileRecord;
 
     // recId / recIndex
     private SparseArray<ArrayList<Integer>> mEmailFlags;
@@ -74,6 +75,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     // ADN's efid << 8 + record #
     private SparseArray<ArrayList<String>> mEmailsForAdnRec;
     private SparseArray<ArrayList<String>> mAnrsForAdnRec;
+    private SparseArray<ArrayList<String>> mAassForAdnRec;
 
     // SFI to ADN Efid mapping table
     private SparseIntArray mSfiEfidTable;
@@ -92,12 +94,13 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     private static final int EVENT_IAP_LOAD_DONE = 3;
     private static final int EVENT_EMAIL_LOAD_DONE = 4;
     private static final int EVENT_ANR_LOAD_DONE = 5;
-    private static final int EVENT_EF_IAP_RECORD_SIZE_DONE = 6;
-    private static final int EVENT_UPDATE_IAP_RECORD_DONE = 7;
-    private static final int EVENT_EF_EMAIL_RECORD_SIZE_DONE = 8;
-    private static final int EVENT_UPDATE_EMAIL_RECORD_DONE = 9;
-    private static final int EVENT_EF_ANR_RECORD_SIZE_DONE = 10;
-    private static final int EVENT_UPDATE_ANR_RECORD_DONE = 11;
+    private static final int EVENT_AAS_LOAD_DONE = 6;
+    private static final int EVENT_EF_IAP_RECORD_SIZE_DONE = 7;
+    private static final int EVENT_UPDATE_IAP_RECORD_DONE = 8;
+    private static final int EVENT_EF_EMAIL_RECORD_SIZE_DONE = 9;
+    private static final int EVENT_UPDATE_EMAIL_RECORD_DONE = 10;
+    private static final int EVENT_EF_ANR_RECORD_SIZE_DONE = 11;
+    private static final int EVENT_UPDATE_ANR_RECORD_DONE = 12;
 
     private static final int USIM_TYPE1_TAG   = 0xA8;
     private static final int USIM_TYPE2_TAG   = 0xA9;
@@ -165,12 +168,14 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         mAdnCache = cache;
         mEmailsForAdnRec = new SparseArray<ArrayList<String>>();
         mAnrsForAdnRec = new SparseArray<ArrayList<String>>();
+        mAassForAdnRec = new SparseArray<ArrayList<String>>();
 
         mSfiEfidTable = new SparseIntArray();
         mAdnLengthList = new ArrayList<Integer>();
         mIapFileRecord = new SparseArray<ArrayList<byte[]>>();
         mEmailFileRecord = new SparseArray<ArrayList<byte[]>>();
         mAnrFileRecord = new SparseArray<SparseArray<ArrayList<byte[]>>>();
+        mAasFileRecord = new SparseArray<ArrayList<byte[]>>();
 
         mEmailFlags = new SparseArray<ArrayList<Integer>>();
         mAnrFlags = new SparseArray<SparseArray<ArrayList<Integer>>>();
@@ -194,6 +199,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         mRefreshCache = false;
         mEmailsForAdnRec.clear();
         mAnrsForAdnRec.clear();
+        mAassForAdnRec.clear();
         mSfiEfidTable.clear();
 
         mIapSize.clear();
@@ -231,6 +237,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                 readAdnFileAndWait(i);
                 readEmailFileAndWait(i);
                 readAnrFileAndWait(i);
+                readAasFileAndWait(i);
             }
 
             updatePhoneAdnRecord();
@@ -714,6 +721,102 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         return true;
     }
 
+    // Read EF_AAS which contains the email records.
+    private void readAasFileAndWait(int recId) {
+        SparseArray<File> files;
+        files = mPbrRecords.get(recId).mFileIds;
+        if (files == null) return;
+
+        File aas = files.get(USIM_EFAAS_TAG);
+        if (aas != null) {
+            int aasEfid = aas.getEfid();
+            log("EF_AAS exists in PBR. efid = 0x"
+                    + Integer.toHexString(aasEfid).toUpperCase());
+
+            /**
+             * Make sure this EF_AAS was never read earlier. Sometimes two PBR record points
+             */
+            // to the same EF_AAS
+            for (int i = 0; i < recId; i++) {
+                if (mPbrRecords.get(i) != null) {
+                    SparseArray<File> previousFileIds = mPbrRecords.get(i).mFileIds;
+                    if (previousFileIds != null) {
+                        File id = previousFileIds.get(USIM_EFAAS_TAG);
+                        if (id != null && id.getEfid() == aasEfid) {
+                            log("Skipped this EF_AAS which was loaded earlier");
+                            return;
+                        }
+                    }
+                }
+            }
+
+            mFh.loadEFLinearFixedAll(aasEfid,
+                    obtainMessage(EVENT_AAS_LOAD_DONE, recId));
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                Rlog.e(LOG_TAG, "Interrupted Exception in readAasFileAndWait");
+            }
+
+            if (mAasFileRecord.get(recId) == null) {
+                Rlog.e(LOG_TAG, "Error: Aas file is empty");
+                return;
+            }
+
+            // Build Aas list
+            buildType3AasList(recId);
+        }
+    }
+
+    private void buildType3AasList(int recId) {
+        int numRecs = mPbrRecords.get(recId).mMasterFileRecordNum;
+        if (mAasFileRecord.get(recId) == null) return;
+        log("buildType3AasList: recId:" + recId + ", numRecs:" + numRecs);
+        File adnFile = mPbrRecords.get(recId).mFileIds.get(USIM_EFADN_TAG);
+        int adnEfid = 0;
+        if (adnFile != null) {
+            adnEfid = adnFile.getEfid();
+        } else {
+            Rlog.e(LOG_TAG, "Error: Improper ICC card: EF_ADN does not exist in PBR files");
+            return;
+        }
+        int sfi = INVALID_SFI;
+
+        byte[] aasRec;
+        for (int i = 0; i < maxAnrSetSize; i++) {
+            // check efSetIndex file record is valid.
+            if (mAnrFileRecord.get(recId) == null
+                    || mAnrFileRecord.get(recId).get(i) == null) {
+                continue;
+            }
+
+            for (int j = 0; j < numRecs; j++) {
+                byte[] anrRec = mAnrFileRecord.get(recId).get(i).get(j);
+                // '00' . no additional number description;
+                // 'xx' . record number in EFAAS describing the type of number (e.g. "FAX");
+                // 'FF' . free record.
+                if(anrRec[0] <= 0) {
+                    continue;
+                }
+
+                int adnRecId = mPhoneBookRecords.get(j).getRecId();
+                int index = (((adnEfid & 0xFFFF) << 8) | ((adnRecId - 1) & 0xFF));
+
+                ArrayList<String> aasList = mAassForAdnRec.get(index);
+                if (aasList == null) {
+                    aasList = new ArrayList<String>();
+                }
+
+                String aas = readAasRecord(recId, anrRec[0] - 1);
+                if (TextUtils.isEmpty(aas)) {
+                    continue;
+                }
+                aasList.add(aas);
+                mAassForAdnRec.put(index, aasList);
+            }
+        }
+    }
+
     // Read Phonebook Index Admistration EF_IAP file
     private void readIapFileAndWait(int efid, int recId) {
         mFh.loadEFLinearFixedAll(efid, obtainMessage(EVENT_IAP_LOAD_DONE, recId, 0));
@@ -737,11 +840,13 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
             int index = (((adnEfid & 0xFFFF) << 8) | ((adnRecId - 1) & 0xFF));
 
-            ArrayList<String> emailList;
+            ArrayList<String> emailList = null;
             ArrayList<String> anrList = null;
+            ArrayList<String> aasList = null;
             try {
                 emailList = mEmailsForAdnRec.get(index);
                 anrList = mAnrsForAdnRec.get(index);
+                aasList = mAassForAdnRec.get(index);
             } catch (IndexOutOfBoundsException e) {
                 continue;
             }
@@ -756,6 +861,11 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                 String[] anrs = new String[anrList.size()];
                 System.arraycopy(anrList.toArray(), 0, anrs, 0, anrList.size());
                 rec.setAnrs(anrs);
+                if (aasList != null) {
+                    String[] aas = new String[aasList.size()];
+                    System.arraycopy(aasList.toArray(), 0, aas, 0, aasList.size());
+                    rec.setAass(aas);
+                }
             }
             mPhoneBookRecords.set(i, rec);
         }
@@ -798,6 +908,24 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             return "";
         }
         return PhoneNumberUtils.calledPartyBCDToString(anrRec, 2, numberLength);
+    }
+
+    // Read anr from the record of EF_AAS
+    private String readAasRecord(int recId, int recIndex) {
+        if (mAasFileRecord.get(recId) == null) {
+            return null;
+        }
+
+        byte[] aasRec;
+        try {
+            aasRec = mAasFileRecord.get(recId).get(recIndex);
+        } catch (IndexOutOfBoundsException e) {
+            log("readAasRecord, IndexOutOfBoundsException");
+            return null;
+        }
+
+        // The length of the record is X byte
+        return IccUtils.adnStringFieldToString(aasRec, 0, aasRec.length);
     }
 
     /**
@@ -967,7 +1095,8 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     /**
     * added for updating Anr record of Adn record.
     */
-    public boolean updateAnrFile(int adnRecNum, String oldAnr, String newAnr, int efSetIndex) {
+    public boolean updateAnrFile(int adnRecNum, String oldAnr, String newAnr, String newAas,
+            int efSetIndex) {
         int recId = getPbrIndexBy(adnRecNum - 1);
         if (mPbrRecords.get(recId).mAnrFileIds.size() <= efSetIndex) {
             log("updateAnrFile: This sim doesn't support ANR SET #" + efSetIndex);
@@ -982,7 +1111,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         mSuccess = false;
         log("updateAnrFile: oldAnr : " + oldAnr + ", newAnr:" + newAnr + " anrs:" + anrs + ", efid"
                 + Integer.toHexString(efid).toUpperCase()
-                + ", adnRecNum: " + adnRecNum);
+                + ", adnRecNum: " + adnRecNum + ", newAas:" + newAas);
 
         // for create and update scenario
         if (mAnrPresentInIap && (TextUtils.isEmpty(oldAnr) && !TextUtils.isEmpty(newAnr))) {
@@ -1012,7 +1141,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                             || recordNumber <= 0) {
                         return false;
                     }
-                    byte[] data = buildAnrData(recordSize[0], adnRecIndex, newAnr);
+                    byte[] data = buildAnrData(recordSize[0], adnRecIndex, newAnr, newAas);
                     if (data == null) {
                         return false;
                     }
@@ -1196,6 +1325,17 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                 mLock.notify();
             }
             break;
+        case EVENT_AAS_LOAD_DONE:
+            log("Loading USIM Aas record done");
+            ar = (AsyncResult) msg.obj;
+            if (ar.exception == null) {
+                recId = msg.arg1;
+                mAasFileRecord.put(recId, (ArrayList<byte[]>) ar.result);
+            }
+            synchronized (mLock) {
+                mLock.notify();
+            }
+            break;
         case EVENT_EF_IAP_RECORD_SIZE_DONE:
             ar = (AsyncResult) (msg.obj);
             log("Loading USIM IAP records size done");
@@ -1360,7 +1500,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                     }
                     return;
                 }
-                data = buildAnrData(recordSize[0], adnRecIndex, newAnr);
+                data = buildAnrData(recordSize[0], adnRecIndex, newAnr, null);
                 if (data == null) {
                     mSuccess = false;
                     synchronized (mLock) {
@@ -1417,6 +1557,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         private SparseArray<File> mFileIds;
         private ArrayList<Integer> mEmailFileIds;
         private ArrayList<Integer> mAnrFileIds;
+        private ArrayList<Integer> mAasFileIds;
 
         /**
          * 3GPP TS 31.102 4.4.2.1 EF_PBR (Phone Book Reference file)
@@ -1430,6 +1571,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             mFileIds = new SparseArray<File>();
             mEmailFileIds = new ArrayList<Integer>();
             mAnrFileIds = new ArrayList<Integer>();
+            mAasFileIds = new ArrayList<Integer>();
             SimTlv recTlv;
             log("PBR rec: " + IccUtils.bytesToHexString(record));
             recTlv = new SimTlv(record, 0, record.length);
@@ -1442,6 +1584,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             byte[] data;
             ArrayList<Integer> emailList = new ArrayList<Integer>();
             ArrayList<Integer> anrList = new ArrayList<Integer>();
+            ArrayList<Integer> aasList = new ArrayList<Integer>();
 
             do {
                 tag = tlv.getTag();
@@ -1451,7 +1594,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                     case USIM_TYPE2_TAG: // A9
                         data = tlv.getData();
                         tlvEfSfi = new SimTlv(data, 0, data.length);
-                        parseEfAndSFI(tlvEfSfi, tag, emailList, anrList);
+                        parseEfAndSFI(tlvEfSfi, tag, emailList, anrList, aasList);
                         break;
                 }
             } while (tlv.nextObject());
@@ -1465,10 +1608,15 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                 log("parseTag: ANR file list: " + anrList);
                 mAnrFileIds = anrList;
             }
+
+            if (0 != aasList.size()) {
+                log("parseTag: AAS file list: " + aasList);
+                mAasFileIds = aasList;
+            }
         }
 
         void parseEfAndSFI(SimTlv tlv, int parentTag, ArrayList<Integer> emailList,
-                ArrayList<Integer> anrList) {
+                ArrayList<Integer> anrList, ArrayList<Integer> aasList) {
             int tag;
             byte[] data;
             int tagNumberWithinParentTag = 0;
@@ -1535,6 +1683,12 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                                 emailList.add(efid);
                             } else if (tag == USIM_EFANR_TAG) {
                                 anrList.add(efid);
+                            }
+                        }
+
+                        if (parentTag == USIM_TYPE3_TAG) {
+                            if (tag == USIM_EFAAS_TAG) {
+                                aasList.add(efid);
                             }
                         }
 
@@ -1785,6 +1939,33 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         return recordNumber;
     }
 
+    private int getAasRecNumber(int adnRecIndex, int numRecs, String newAas) {
+        int recId = getPbrIndexBy(adnRecIndex);
+        int recordIndex = adnRecIndex - getInitIndexBy(recId);
+        int recordNumber = -1;
+        if (mAasFileRecord.get(recId) == null) {
+            return recordNumber;
+        }
+
+        if (TextUtils.isEmpty(newAas)) {
+            log("newAas is empty");
+            return recordNumber;
+        } else {
+            int recsSize = mAasFileRecord.get(recId).size();
+
+            log("getAasRecNumber: aas record size is:" + recsSize + ", newAas:" + newAas);
+            for (int i = 0; i < recsSize; i++) {
+                String aas = readAasRecord(recId, i);
+                if (newAas.equals(aas)) {
+                    log("getAasRecNumber: already existed AAS. Aas record num is :" + (i + 1));
+                    return i + 1;
+                }
+            }
+        }
+        log("getAasRecNumber: no aas record index found");
+        return recordNumber;
+    }
+
     private byte[] buildEmailData(int length, int adnRecIndex, String email) {
         byte[] data = new byte[length];
         for (int i = 0; i < length; i++) {
@@ -1810,7 +1991,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         return data;
     }
 
-    private byte[] buildAnrData(int length, int adnRecIndex, String anr) {
+    private byte[] buildAnrData(int length, int adnRecIndex, String anr, String aas) {
         byte[] data = new byte[length];
         int recordNumber = 0 ;
         for (int i = 0; i < length; i++) {
@@ -1822,7 +2003,19 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             return data; // return the empty record for delete
         }
 
-        data[ANR_DESCRIPTION_ID] = (byte) 0x0;
+        if (TextUtils.isEmpty(aas)) {
+            log("buildAnrData: Empty aas record");
+            data[ANR_DESCRIPTION_ID] = (byte) 0x0;
+        } else {
+            int recId = getPbrIndexBy(adnRecIndex);
+            recordNumber = getAasRecNumber(adnRecIndex, mPhoneBookRecords.size(), aas);
+            if (recordNumber <= 0) {
+                data[ANR_DESCRIPTION_ID] = (byte) 0x0;
+            } else {
+                data[ANR_DESCRIPTION_ID] = (byte) recordNumber;
+            }
+        }
+
         byte[] byteAnr = PhoneNumberUtils.numberToCalledPartyBCD(anr);
 
         // If the phone number does not matching format, like "+" return null
