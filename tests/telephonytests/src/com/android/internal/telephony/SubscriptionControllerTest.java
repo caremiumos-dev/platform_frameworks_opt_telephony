@@ -33,7 +33,9 @@ import static org.mockito.Mockito.verify;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.os.UserHandle;
@@ -44,6 +46,7 @@ import android.telephony.UiccSlotInfo;
 import android.test.mock.MockContentResolver;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import androidx.test.InstrumentationRegistry;
 import androidx.test.filters.FlakyTest;
 
 import com.android.internal.telephony.uicc.UiccController;
@@ -221,6 +224,14 @@ public class SubscriptionControllerTest extends TelephonyTest {
         assertEquals(TelephonyIntents.ACTION_SUBINFO_RECORD_UPDATED,
                 captorIntent.getValue().getAction());
 
+    }
+
+    @Test
+    public void testGetResourcesForSubId() {
+        Context context = InstrumentationRegistry.getContext();
+        Resources res = SubscriptionManager.getResourcesForSubId(context, 0, false);
+        // Assert that getResourcesForSubId did not modify our context's resources
+        assertFalse(context.getResources().equals(res));
     }
 
     @Test @SmallTest
