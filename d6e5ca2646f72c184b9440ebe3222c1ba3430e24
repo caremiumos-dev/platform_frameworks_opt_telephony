@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33f5b012_338c56a2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-01-21T23:29:59Z",
+      "side": 1,
+      "message": "change the documentation to reflect the fact that it\u0027s a column name and that it\u0027s copied from ServiceStateProvider because of compilation dependencies",
+      "range": {
+        "startLine": 286,
+        "startChar": 1,
+        "endLine": 288,
+        "endChar": 68
+      },
+      "revId": "d6e5ca2646f72c184b9440ebe3222c1ba3430e24",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
