@@ -16,12 +16,12 @@
 
 package com.android.internal.telephony;
 
-import static android.provider.Telephony.ServiceStateTable.getContentValuesForServiceState;
 import static android.provider.Telephony.ServiceStateTable.getUriForSubscriptionId;
 
 import static com.android.internal.telephony.CarrierActionAgent.CARRIER_ACTION_SET_RADIO_ENABLED;
 import static com.android.internal.telephony.uicc.IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_PLMN;
 import static com.android.internal.telephony.uicc.IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_SPN;
+import static com.android.phone.ServiceStateProvider.getContentValuesForServiceState;
 
 import android.annotation.IntDef;
 import android.annotation.NonNull;
