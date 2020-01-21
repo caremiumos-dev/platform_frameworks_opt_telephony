@@ -122,7 +122,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1781,28 +1780,108 @@ public class DcTracker extends Handler {
         if (DBG) log(str + " apnContext=" + apnContext + " dc=" + apnContext.getDataConnection());
     }
 
+    private Cursor getPreferredApnCursor(int subId) {
+        Cursor cursor = null;
+        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+            cursor = mPhone.getContext().getContentResolver().query(
+                    Uri.withAppendedPath(PREFERAPN_NO_UPDATE_URI_USING_SUBID,
+                            String.valueOf(subId)), null, null, null,
+                    Telephony.Carriers.DEFAULT_SORT_ORDER);
+        }
+        return cursor;
+    }
+
+    private ApnSetting getPreferredApnFromDB() {
+        ApnSetting preferredApn = null;
+        Cursor cursor = getPreferredApnCursor(mPhone.getSubId());
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                preferredApn = ApnSetting.makeApnSetting(cursor);
+            }
+            cursor.close();
+        }
+        if (VDBG) log("getPreferredApnFromDB: preferredApn=" + preferredApn);
+        return preferredApn;
+    }
+
+    private void setDefaultPreferredApnIfNeeded() {
+        ApnSetting defalutPreferredApn = null;
+        PersistableBundle bundle = getCarrierConfig();
+        String defaultPreferredApnName = bundle.getString(CarrierConfigManager
+                .KEY_DEFAULT_PREFERRED_APN_NAME_STRING);
+
+        if (TextUtils.isEmpty(defaultPreferredApnName) || getPreferredApnFromDB() != null) {
+            return;
+        }
+
+        String selection = Telephony.Carriers.APN + " = \"" + defaultPreferredApnName + "\" AND "
+                + Telephony.Carriers.EDITED_STATUS + " = " + Telephony.Carriers.UNEDITED;
+        Cursor cursor = mPhone.getContext().getContentResolver().query(
+                Uri.withAppendedPath(Telephony.Carriers.SIM_APN_URI,
+                        "filtered/subId/" + mPhone.getSubId()),
+                null, selection, null, Telephony.Carriers._ID);
+
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    defalutPreferredApn = ApnSetting.makeApnSetting(cursor);
+                }
+            }
+            cursor.close();
+        }
+
+        if (defalutPreferredApn != null
+                && defalutPreferredApn.canHandleType(mRequestedApnType)) {
+            log("setDefaultPreferredApnIfNeeded: For APN type "
+                    + ApnSetting.getApnTypeString(mRequestedApnType)
+                    + " found default apnSetting "
+                    + defalutPreferredApn);
+
+            setPreferredApn(defalutPreferredApn.getId(), true);
+        }
+
+        return;
+    }
+
+    /**
+     * Check if preferred apn is allowed to edit by user.
+     * @return {@code true} if it is allowed to edit.
+     */
+    @VisibleForTesting
+    public boolean isPreferredApnUserEdited() {
+        boolean isUserEdited = false;
+        Cursor cursor = getPreferredApnCursor(mPhone.getSubId());
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    isUserEdited = cursor.getInt(
+                            cursor.getColumnIndexOrThrow(Telephony.Carriers.EDITED_STATUS))
+                            == Telephony.Carriers.USER_EDITED;
+                }
+            }
+            cursor.close();
+        }
+        if (VDBG) log("isPreferredApnUserEdited: isUserEdited=" + isUserEdited);
+        return isUserEdited;
+    }
+
     /**
      * Fetch the DUN apns
      * @return a list of DUN ApnSetting objects
      */
     @VisibleForTesting
     public @NonNull ArrayList<ApnSetting> fetchDunApns() {
+        if (mPhone.getServiceState().getRoaming() && !isPreferredApnUserEdited()
+                && getCarrierConfig().getBoolean(CarrierConfigManager
+                .KEY_DISABLE_DUN_APN_WHILE_ROAMING_WITH_PRESET_APN_BOOL)) {
+            if (VDBG) log("fetchDunApns: Dun apn is not used in roaming network");
+            return new ArrayList<ApnSetting>(0);
+        }
+
         int bearer = getDataRat();
         ArrayList<ApnSetting> dunCandidates = new ArrayList<ApnSetting>();
         ArrayList<ApnSetting> retDunSettings = new ArrayList<ApnSetting>();
-
-        if (mPhone.getServiceState().getRoaming()) {
-            CarrierConfigManager configManager = (CarrierConfigManager) mPhone.getContext()
-                    .getSystemService(Context.CARRIER_CONFIG_SERVICE);
-            if (configManager != null) {
-                PersistableBundle b = configManager.getConfigForSubId(mPhone.getSubId());
-                if (b != null) {
-                    if (b.getBoolean(CarrierConfigManager.KEY_DISABLE_DUN_APN_WHILE_ROAMING)) {
-                        return new ArrayList<>();
-                    }
-                }
-            }
-        }
 
         // Places to look for tether APN in order: TETHER_DUN_APN setting (to be deprecated soon),
         // APN database
@@ -1824,11 +1903,13 @@ public class DcTracker extends Handler {
         }
 
         for (ApnSetting dunSetting : dunCandidates) {
-            if (!dunSetting.canSupportNetworkType(
+            if (dunSetting.canSupportNetworkType(
                     ServiceState.rilRadioTechnologyToNetworkType(bearer))) {
-                continue;
+                int preferredApnSetId = getPreferredApnSetId();
+                if (preferredApnSetId == dunSetting.getApnSetId()) {
+                    retDunSettings.add(dunSetting);
+                }
             }
-            retDunSettings.add(dunSetting);
         }
 
         if (VDBG) log("fetchDunApns: dunSettings=" + retDunSettings);
@@ -2049,6 +2130,14 @@ public class DcTracker extends Handler {
         } else if (!mAllApnSettings.isEmpty()) {
             // Search for Initial APN setting and the first apn that can handle default
             for (ApnSetting apn : mAllApnSettings) {
+                int preferredApnSetId = getPreferredApnSetId();
+                if (preferredApnSetId != apn.getApnSetId()) {
+                    if (VDBG) {
+                        log("setInitialApn: APN set id " + apn.getApnSetId()
+                                + " does not match the preferred set id " + preferredApnSetId);
+                    }
+                    continue;
+                }
                 if (firstNonEmergencyApnSetting == null
                         && !apn.isEmergencyApn()) {
                     firstNonEmergencyApnSetting = apn;
@@ -2123,6 +2212,7 @@ public class DcTracker extends Handler {
         // TODO: It'd be nice to only do this if the changed entrie(s)
         // match the current operator.
         if (DBG) log("onApnChanged: createAllApnList and cleanUpAllConnections");
+        setDefaultPreferredApnIfNeeded();
         createAllApnList();
         setDataProfilesAsNeeded();
         setInitialAttachApn();
@@ -2269,6 +2359,7 @@ public class DcTracker extends Handler {
 
         mAutoAttachEnabled.set(false);
         setDefaultDataRoamingEnabled();
+        setDefaultPreferredApnIfNeeded();
         read5GConfiguration();
         registerSettingsObserver();
         mConfigReady = true;
@@ -2351,7 +2442,7 @@ public class DcTracker extends Handler {
         ArrayList<ApnSetting> dunSettings = null;
 
         if (ApnSetting.TYPE_DUN == apnType) {
-            dunSettings = sortApnListByPreferred(fetchDunApns());
+            dunSettings = fetchDunApns();
         }
         if (DBG) {
             log("checkForCompatibleDataConnection: apnContext=" + apnContext);
@@ -3312,7 +3403,7 @@ public class DcTracker extends Handler {
                     apnList.add(dun);
                     if (DBG) log("buildWaitingApns: X added APN_TYPE_DUN apnList=" + apnList);
                 }
-                return sortApnListByPreferred(apnList);
+                return apnList;
             }
         }
 
@@ -3351,7 +3442,6 @@ public class DcTracker extends Handler {
                 if (mPreferredApn.canSupportNetworkType(
                         ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
                     apnList.add(mPreferredApn);
-                    apnList = sortApnListByPreferred(apnList);
                     if (DBG) log("buildWaitingApns: X added preferred apnList=" + apnList);
                     return apnList;
                 }
@@ -3366,8 +3456,16 @@ public class DcTracker extends Handler {
             if (apn.canHandleType(requestedApnTypeBitmask)) {
                 if (apn.canSupportNetworkType(
                         ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
-                    if (VDBG) log("buildWaitingApns: adding apn=" + apn);
-                    apnList.add(apn);
+                    int preferredApnSetId = getPreferredApnSetId();
+                    if (apn.isEmergencyApn()
+                            || apn.canHandleType(ApnSetting.TYPE_IMS)
+                            || preferredApnSetId == apn.getApnSetId()) {
+                        if (VDBG) log("buildWaitingApns: adding apn=" + apn);
+                        apnList.add(apn);
+                    } else {
+                        log("buildWaitingApns: APN set id " + apn.getApnSetId()
+                                + " does not match the preferred set id " + preferredApnSetId);
+                    }
                 } else {
                     if (DBG) {
                         log("buildWaitingApns: networkTypeBitmask:"
@@ -3382,42 +3480,8 @@ public class DcTracker extends Handler {
             }
         }
 
-        apnList = sortApnListByPreferred(apnList);
         if (DBG) log("buildWaitingApns: " + apnList.size() + " APNs in the list: " + apnList);
         return apnList;
-    }
-
-    /**
-     * Sort a list of ApnSetting objects, with the preferred APNs at the front of the list
-     *
-     * e.g. if the preferred APN set = 2 and we have
-     *   1. APN with apn_set_id = 0 = Carriers.NO_SET_SET (no set is set)
-     *   2. APN with apn_set_id = 1 (not preferred set)
-     *   3. APN with apn_set_id = 2 (preferred set)
-     * Then the return order should be (3, 1, 2) or (3, 2, 1)
-     *
-     * e.g. if the preferred APN set = Carriers.NO_SET_SET (no preferred set) then the
-     * return order can be anything
-     */
-    @VisibleForTesting
-    public ArrayList<ApnSetting> sortApnListByPreferred(ArrayList<ApnSetting> list) {
-        if (list == null || list.size() <= 1) return list;
-        int preferredApnSetId = getPreferredApnSetId();
-        if (preferredApnSetId != Telephony.Carriers.NO_APN_SET_ID) {
-            list.sort(new Comparator<ApnSetting>() {
-                @Override
-                public int compare(ApnSetting apn1, ApnSetting apn2) {
-                    if (apn1.getApnSetId() == preferredApnSetId) {
-                        return -1;
-                    }
-                    if (apn2.getApnSetId() == preferredApnSetId) {
-                        return 1;
-                    }
-                    return 0;
-                }
-            });
-        }
-        return list;
     }
 
     private String apnListToString (ArrayList<ApnSetting> apns) {
@@ -3431,7 +3495,11 @@ public class DcTracker extends Handler {
     }
 
     private void setPreferredApn(int pos) {
-        if (!mCanSetPreferApn) {
+        setPreferredApn(pos, false);
+    }
+
+    private void setPreferredApn(int pos, boolean force) {
+        if (!force && !mCanSetPreferApn) {
             log("setPreferredApn: X !canSEtPreferApn");
             return;
         }
@@ -5160,5 +5228,20 @@ public class DcTracker extends Handler {
      */
     public void unregisterForPhysicalLinkStateChanged(Handler h) {
         mDcc.unregisterForPhysicalLinkStateChanged(h);
+    }
+
+    @NonNull
+    private PersistableBundle getCarrierConfig() {
+        CarrierConfigManager configManager = (CarrierConfigManager) mPhone.getContext()
+                .getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configManager != null) {
+            // If an invalid subId is used, this bundle will contain default values.
+            PersistableBundle config = configManager.getConfigForSubId(mPhone.getSubId());
+            if (config != null) {
+                return config;
+            }
+        }
+        // Return static default defined in CarrierConfigManager.
+        return CarrierConfigManager.getDefaultConfig();
     }
 }
