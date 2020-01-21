@@ -49,6 +49,8 @@ public class AdnRecord implements Parcelable {
     @UnsupportedAppUsage
     String[] mAnrs;
     @UnsupportedAppUsage
+    String[] mAass;
+    @UnsupportedAppUsage
     int mExtRecord = 0xff;
     @UnsupportedAppUsage
     int mEfid;                   // or 0 if none
@@ -91,6 +93,7 @@ public class AdnRecord implements Parcelable {
             String number;
             String[] emails;
             String[] anrs;
+            String[] aass;
 
             efid = source.readInt();
             recordNumber = source.readInt();
@@ -100,11 +103,15 @@ public class AdnRecord implements Parcelable {
             if (len > 0) {
                 emails = new String[len];
                 anrs = new String[len];
+                aass = new String[len];
                 source.readStringArray(emails);
                 source.readStringArray(anrs);
-                return new AdnRecord(efid, recordNumber, alphaTag, number, emails, anrs);
+                source.readStringArray(aass);
+                return new AdnRecord(efid, recordNumber, alphaTag, number,
+                        emails, anrs, aass);
             } else {
-                return new AdnRecord(efid, recordNumber, alphaTag, number, null);
+                return new AdnRecord(efid, recordNumber, alphaTag, number,
+                        null, null);
             }
         }
 
@@ -144,6 +151,12 @@ public class AdnRecord implements Parcelable {
     }
 
     @UnsupportedAppUsage
+    public AdnRecord (String alphaTag, String number, String[] emails, String[] anrs,
+            String[] aass) {
+        this(0, 0, alphaTag, number, emails, anrs, aass);
+    }
+
+    @UnsupportedAppUsage
     public AdnRecord (int efid, int recordNumber, String alphaTag, String number, String[] emails) {
         this.mEfid = efid;
         this.mRecordNumber = recordNumber;
@@ -151,6 +164,7 @@ public class AdnRecord implements Parcelable {
         this.mNumber = number;
         this.mEmails = emails;
         this.mAnrs = null;
+        this.mAass = null;
     }
 
     @UnsupportedAppUsage
@@ -162,6 +176,19 @@ public class AdnRecord implements Parcelable {
         this.mNumber = number;
         this.mEmails = emails;
         this.mAnrs = anrs;
+        this.mAass = null;
+    }
+
+    @UnsupportedAppUsage
+    public AdnRecord (int efid, int recordNumber, String alphaTag, String number, String[] emails,
+            String[] anrs, String[] aass) {
+        this.mEfid = efid;
+        this.mRecordNumber = recordNumber;
+        this.mAlphaTag = alphaTag;
+        this.mNumber = number;
+        this.mEmails = emails;
+        this.mAnrs = anrs;
+        this.mAass = aass;
     }
 
     @UnsupportedAppUsage
@@ -172,6 +199,7 @@ public class AdnRecord implements Parcelable {
         this.mNumber = number;
         this.mEmails = null;
         this.mAnrs = null;
+        this.mAass = null;
     }
 
     //***** Instance Methods
@@ -217,10 +245,21 @@ public class AdnRecord implements Parcelable {
         this.mAnrs = anrs;
     }
 
+    @UnsupportedAppUsage
+    public String[] getAass() {
+        return mAass;
+    }
+
+    @UnsupportedAppUsage
+    public void setAass(String[] aass) {
+        this.mAass = aass;
+    }
+
     @Override
     public String toString() {
         return "ADN Record '" + mAlphaTag + "' '" + Rlog.pii(LOG_TAG, mNumber) + "' '"
-                + Rlog.pii(LOG_TAG, mEmails) + "' '" + Rlog.pii(LOG_TAG, mAnrs) + "'";
+                + Rlog.pii(LOG_TAG, mEmails) + "' '" + Rlog.pii(LOG_TAG, mAnrs) + "' '"
+                + Rlog.pii(LOG_TAG, mAass) + "'";
     }
 
     @UnsupportedAppUsage
@@ -368,6 +407,7 @@ public class AdnRecord implements Parcelable {
     public void updateArrayRecord(AdnRecord adn, int emailFileNum, int anrFileNum) {
         mEmails = updateArrayHelper(mEmails, adn.mEmails, emailFileNum);
         mAnrs = updateArrayHelper(mAnrs, adn.mAnrs, anrFileNum);
+        mAass = updateArrayHelper(mAass, adn.mAass, anrFileNum);
     }
 
     //***** Private Methods
@@ -409,13 +449,14 @@ public class AdnRecord implements Parcelable {
 
             mEmails = null;
             mAnrs = null;
-
+            mAass = null;
         } catch (RuntimeException ex) {
             Rlog.w(LOG_TAG, "Error parsing AdnRecord", ex);
             mNumber = "";
             mAlphaTag = "";
             mEmails = null;
             mAnrs = null;
+            mAass = null;
         }
     }
 
