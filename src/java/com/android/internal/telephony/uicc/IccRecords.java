@@ -138,8 +138,6 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected boolean mIsVoiceMailFixed = false;
     @UnsupportedAppUsage
     protected String mImsi; // IMSI must be only valid numeric characters 0-9 without padding 'f's
-    @UnsupportedAppUsage
-    private IccIoResult auth_rsp;
 
     @UnsupportedAppUsage
     protected int mMncLength = UNINITIALIZED;
@@ -174,9 +172,6 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected String[] mEhplmns;
     protected String[] mFplmns;
 
-    @UnsupportedAppUsage
-    private final Object mLock = new Object();
-
     CarrierTestOverride mCarrierTestOverride;
 
     //Arbitrary offset for the Handler
@@ -185,6 +180,8 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected static final int HANDLER_ACTION_SEND_RESPONSE = HANDLER_ACTION_BASE + 1;
     protected static AtomicInteger sNextRequestId = new AtomicInteger(1);
     protected final HashMap<Integer, Pair<Message, Object>> mPendingTransactions = new HashMap<>();
+    protected final HashMap<Integer, Pair<Object, IccIoResult>> mPendingIccSimChallenges =
+             new HashMap<>();
     // ***** Constants
 
     // Markers for mncLength
@@ -216,7 +213,8 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     public static final int EVENT_GET_ICC_RECORD_DONE = 100;
     public static final int EVENT_REFRESH = 31; // ICC refresh occurred
-    private static final int EVENT_AKA_AUTHENTICATE_DONE          = 90;
+    private static final int EVENT_AKA_AUTHENTICATE_DONE = 90;
+    private static final int EVENT_AKA_AUTHENTICATE_TIMEOUT = 91;
     protected static final int EVENT_GET_SMS_RECORD_SIZE_DONE = 28;
 
     protected static final int SYSTEM_EVENT_BASE = 0x100;
@@ -230,6 +228,10 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     public static final int DEFAULT_VOICE_MESSAGE_COUNT = -2;
     public static final int UNKNOWN_VOICE_MESSAGE_COUNT = -1;
+
+    // Maximum time in millisecond to wait for a IccSim Challenge before assuming it will not
+    // arrive and returning null to the callers.
+    private static final long ICC_SIM_CHALLENGE_QUERY_TIMEOUT = 1000;
 
     @Override
     public String toString() {
@@ -310,13 +312,6 @@ public abstract class IccRecords extends Handler implements IccConstants {
      */
     public void dispose() {
         mDestroyed.set(true);
-
-        // It is possible that there is another thread waiting for the response
-        // to requestIccSimAuthentication() in getIccSimChallengeResponse().
-        auth_rsp = null;
-        synchronized (mLock) {
-            mLock.notifyAll();
-        }
 
         mCi.unregisterForIccRefresh(this);
         mParentApp.unregisterForReady(this);
@@ -841,6 +836,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
     @Override
     public void handleMessage(Message msg) {
         AsyncResult ar;
+        Pair<Object, IccIoResult> pair;
 
         switch (msg.what) {
             case EVENT_APP_READY:
@@ -888,22 +884,62 @@ public abstract class IccRecords extends Handler implements IccConstants {
                 }
                 break;
 
+            case EVENT_AKA_AUTHENTICATE_TIMEOUT:
+                int key = msg.arg1;
+                synchronized (mPendingIccSimChallenges) {
+                    pair = mPendingIccSimChallenges.get(key);
+                }
+                if (null == pair) {
+                    if (DBG) log("EVENT_AKA_AUTHENTICATE_TIMEOUT: timeout aborted");
+                    break;
+                }
+                Object curLock = (Object) pair.first;
+                synchronized (mPendingIccSimChallenges) {
+                    mPendingIccSimChallenges.replace(key, null);
+                }
+
+                loge("getIccSimChallengeResponse: Timeout! No authentication response");
+
+                synchronized (curLock) {
+                    curLock.notifyAll();
+                }
+
+                break;
+
             case EVENT_AKA_AUTHENTICATE_DONE:
-                ar = (AsyncResult)msg.obj;
-                auth_rsp = null;
                 if (DBG) log("EVENT_AKA_AUTHENTICATE_DONE");
+                ar = (AsyncResult) msg.obj;
+                key = msg.arg1;
+                synchronized (mPendingIccSimChallenges) {
+                    pair = mPendingIccSimChallenges.get(key);
+                }
+
+                if (null == pair) {
+                    loge("EVENT_AKA_AUTHENTICATE_DONE: invalid key. Probaby timeout");
+                    break;
+                }
+                curLock = (Object) pair.first;
+
                 if (ar.exception != null) {
                     loge("Exception ICC SIM AKA: " + ar.exception);
                 } else {
                     try {
-                        auth_rsp = (IccIoResult)ar.result;
+                        IccIoResult auth_rsp = (IccIoResult) ar.result;
                         if (DBG) log("ICC SIM AKA: auth_rsp = " + auth_rsp);
+                        if (null == auth_rsp) {
+                            loge("getIccSimChallengeResponse: No authentication response");
+                        }
+                        synchronized (mPendingIccSimChallenges) {
+                            mPendingIccSimChallenges.replace(key,
+                                    new Pair<Object, IccIoResult>(curLock, auth_rsp));
+                        }
                     } catch (Exception e) {
                         loge("Failed to parse ICC SIM AKA contents: " + e);
                     }
                 }
-                synchronized (mLock) {
-                    mLock.notifyAll();
+
+                synchronized (curLock) {
+                    curLock.notifyAll();
                 }
 
                 break;
@@ -1195,39 +1231,52 @@ public abstract class IccRecords extends Handler implements IccConstants {
     public String getIccSimChallengeResponse(int authContext, String data) {
         if (DBG) log("getIccSimChallengeResponse:");
 
+        Pair<Object, IccIoResult> pair;
+        int key = sNextRequestId.getAndIncrement();
+        Object curLock = new Object();
+        synchronized (mPendingTransactions) {
+            mPendingIccSimChallenges.put(key, new Pair<Object, IccIoResult>(curLock, null));
+        }
+
         try {
-            synchronized(mLock) {
-                CommandsInterface ci = mCi;
-                UiccCardApplication parentApp = mParentApp;
-                if (ci != null && parentApp != null) {
-                    ci.requestIccSimAuthentication(authContext, data,
-                            parentApp.getAid(),
-                            obtainMessage(EVENT_AKA_AUTHENTICATE_DONE));
+            CommandsInterface ci = mCi;
+            UiccCardApplication parentApp = mParentApp;
+            if (ci != null && parentApp != null) {
+                synchronized (curLock) {
+                    ci.requestIccSimAuthentication(authContext, data, parentApp.getAid(),
+                            obtainMessage(EVENT_AKA_AUTHENTICATE_DONE, key, 0));
+                    sendMessageDelayed(obtainMessage(EVENT_AKA_AUTHENTICATE_TIMEOUT),
+                                ICC_SIM_CHALLENGE_QUERY_TIMEOUT);
                     try {
-                        mLock.wait();
+                        curLock.wait();
                     } catch (InterruptedException e) {
                         loge("getIccSimChallengeResponse: Fail, interrupted"
                                 + " while trying to request Icc Sim Auth");
                         return null;
                     }
-                } else {
+                }
+            } else {
                     loge( "getIccSimChallengeResponse: "
                             + "Fail, ci or parentApp is null");
                     return null;
-                }
             }
         } catch(Exception e) {
             loge( "getIccSimChallengeResponse: "
                     + "Fail while trying to request Icc Sim Auth");
+            loge("IccRecords: getIccSimChallengeResponse" + e);
             return null;
         }
 
-        if (auth_rsp == null) {
-            loge("getIccSimChallengeResponse: No authentication response");
+        synchronized (mPendingIccSimChallenges) {
+            pair = mPendingIccSimChallenges.remove(key);
+        }
+        if (null == pair) {
+            if (DBG) log("getIccSimChallengeResponse: return null auth_rsp");
             return null;
         }
 
-        if (DBG) log("getIccSimChallengeResponse: return auth_rsp");
+        IccIoResult auth_rsp = (IccIoResult) pair.second;
+        if (DBG) log("getIccSimChallengeResponse: return auth_rsp" + auth_rsp);
 
         return android.util.Base64.encodeToString(auth_rsp.payload, android.util.Base64.NO_WRAP);
     }
