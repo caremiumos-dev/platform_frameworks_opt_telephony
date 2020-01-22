@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "374ab6d2_20427ed7",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2008,
+      "author": {
+        "id": 1438823
+      },
+      "writtenOn": "2020-01-22T19:20:01Z",
+      "side": 1,
+      "message": "Add a isCsRetry (like isUtEnabled) variable and use it here and at line 2010",
+      "range": {
+        "startLine": 2007,
+        "startChar": 48,
+        "endLine": 2008,
+        "endChar": 70
+      },
+      "revId": "c559cf263bd5ff22652c0d9dafe9344057ba83b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c91beeb_234a4cf9",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2020,
+      "author": {
+        "id": 1438823
+      },
+      "writtenOn": "2020-01-22T19:20:01Z",
+      "side": 1,
+      "message": "This does not check for service state anymore. Is that intentional?",
+      "range": {
+        "startLine": 2020,
+        "startChar": 12,
+        "endLine": 2020,
+        "endChar": 24
+      },
+      "revId": "c559cf263bd5ff22652c0d9dafe9344057ba83b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
