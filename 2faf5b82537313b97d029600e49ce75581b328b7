@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88393628_69c799cc",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3067,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-01-22T04:31:41Z",
+      "side": 1,
+      "message": "Should we send a Connection event up to the dialer so it knows these succeeded or failed?",
+      "range": {
+        "startLine": 3059,
+        "startChar": 9,
+        "endLine": 3067,
+        "endChar": 9
+      },
+      "revId": "2faf5b82537313b97d029600e49ce75581b328b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
