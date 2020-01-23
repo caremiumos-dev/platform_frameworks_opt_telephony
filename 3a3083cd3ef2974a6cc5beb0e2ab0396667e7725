@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58ef2640_d70cfc4e",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-01-23T21:33:02Z",
+      "side": 1,
+      "message": "nit: the default case should be decline, not unwanted. You may want to swap this logic to:\n\nif reject \u003d unwanted\n    reject(unwanted)\nelse\n    reject(decline)",
+      "range": {
+        "startLine": 1901,
+        "startChar": 20,
+        "endLine": 1905,
+        "endChar": 21
+      },
+      "revId": "3a3083cd3ef2974a6cc5beb0e2ab0396667e7725",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
