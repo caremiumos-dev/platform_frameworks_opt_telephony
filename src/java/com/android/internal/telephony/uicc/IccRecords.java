@@ -179,6 +179,11 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     CarrierTestOverride mCarrierTestOverride;
 
+    public static class AsyncRequest {
+        Object result;
+        Throwable exception;
+    }
+
     //Arbitrary offset for the Handler
     protected static final int HANDLER_ACTION_BASE = 0x12E500;
     protected static final int HANDLER_ACTION_NONE = HANDLER_ACTION_BASE + 0;
@@ -890,20 +895,15 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
             case EVENT_AKA_AUTHENTICATE_DONE:
                 ar = (AsyncResult)msg.obj;
-                auth_rsp = null;
-                if (DBG) log("EVENT_AKA_AUTHENTICATE_DONE");
-                if (ar.exception != null) {
-                    loge("Exception ICC SIM AKA: " + ar.exception);
-                } else {
-                    try {
-                        auth_rsp = (IccIoResult)ar.result;
-                        if (DBG) log("ICC SIM AKA: auth_rsp = " + auth_rsp);
-                    } catch (Exception e) {
-                        loge("Failed to parse ICC SIM AKA contents: " + e);
+                AsyncRequest req = (AsyncRequest) ar.userObj;
+                synchronized(req) {
+                    if (ar.exception != null) {
+                        loge("Exception ICC SIM AKA: " + ar.exception);
+                        req.exception = ar.exception;
+                    } else if (req.result != null) {
+                        req.result = ar.result;
                     }
-                }
-                synchronized (mLock) {
-                    mLock.notifyAll();
+                    req.notifyAll();
                 }
 
                 break;
@@ -1195,41 +1195,29 @@ public abstract class IccRecords extends Handler implements IccConstants {
     public String getIccSimChallengeResponse(int authContext, String data) {
         if (DBG) log("getIccSimChallengeResponse:");
 
-        try {
-            synchronized(mLock) {
-                CommandsInterface ci = mCi;
-                UiccCardApplication parentApp = mParentApp;
-                if (ci != null && parentApp != null) {
-                    ci.requestIccSimAuthentication(authContext, data,
-                            parentApp.getAid(),
-                            obtainMessage(EVENT_AKA_AUTHENTICATE_DONE));
-                    try {
-                        mLock.wait();
-                    } catch (InterruptedException e) {
-                        loge("getIccSimChallengeResponse: Fail, interrupted"
-                                + " while trying to request Icc Sim Auth");
-                        return null;
-                    }
-                } else {
-                    loge( "getIccSimChallengeResponse: "
-                            + "Fail, ci or parentApp is null");
-                    return null;
-                }
-            }
-        } catch(Exception e) {
+        CommandsInterface ci = mCi;
+        UiccCardApplication parentApp = mParentApp;
+        if (ci == null && parentApp == null) {
             loge( "getIccSimChallengeResponse: "
-                    + "Fail while trying to request Icc Sim Auth");
             return null;
         }
+        AsyncRequest authRequest = new AsyncRequest();
 
-        if (auth_rsp == null) {
-            loge("getIccSimChallengeResponse: No authentication response");
-            return null;
+        ci.requestIccSimAuthentication(authContext, data,
+                parentApp.getAid(),
+                obtainMessage(EVENT_AKA_AUTHENTICATE_DONE,0,0,authRequest));
+        synchroniezed(authRequest) {
+            try {
+                authRequest.wait(2000)
+            } catch (InterruptedException e) {
+                loge("getIccSimChallengeResponse: Fail, interrupted"
+                        + " while trying to request Icc Sim Auth");
+                return null;
+            }
         }
 
-        if (DBG) log("getIccSimChallengeResponse: return auth_rsp");
-
-        return android.util.Base64.encodeToString(auth_rsp.payload, android.util.Base64.NO_WRAP);
+        return authRequest.result == null ? null :
+                android.util.Base64.encodeToString(authRequest.result, android.util.Base64.NO_WRAP);
     }
 
     /**
