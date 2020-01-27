@@ -21,6 +21,7 @@ import android.annotation.Nullable;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Registrant;
@@ -138,7 +139,10 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected boolean mIsVoiceMailFixed = false;
     @UnsupportedAppUsage
     protected String mImsi; // IMSI must be only valid numeric characters 0-9 without padding 'f's
+
+    /* @deprecated - Deprecate to Solve IMS authorization leakage issue. */
     @UnsupportedAppUsage
+    @Deprecated
     private IccIoResult auth_rsp;
 
     @UnsupportedAppUsage
@@ -175,6 +179,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected String[] mFplmns;
 
     @UnsupportedAppUsage
+    @Deprecated
     private final Object mLock = new Object();
 
     CarrierTestOverride mCarrierTestOverride;
@@ -216,7 +221,8 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     public static final int EVENT_GET_ICC_RECORD_DONE = 100;
     public static final int EVENT_REFRESH = 31; // ICC refresh occurred
-    private static final int EVENT_AKA_AUTHENTICATE_DONE          = 90;
+    private static final int EVENT_AKA_AUTHENTICATE_DONE_LEGACY = 90;  // deprecated
+    private static final int EVENT_AKA_AUTHENTICATE_DONE = 91;
     protected static final int EVENT_GET_SMS_RECORD_SIZE_DONE = 28;
 
     protected static final int SYSTEM_EVENT_BASE = 0x100;
@@ -230,6 +236,14 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     public static final int DEFAULT_VOICE_MESSAGE_COUNT = -2;
     public static final int UNKNOWN_VOICE_MESSAGE_COUNT = -1;
+
+    // Maximum time in millisecond to wait for a IccSim Challenge before assuming it will not
+    // arrive and returning null to the callers.
+    private static final long ICC_SIM_CHALLENGE_QUERY_TIMEOUT = 1000;
+
+    private class AuthAsyncResponse {
+        IccIoResult mAuthRsp;
+    }
 
     @Override
     public String toString() {
@@ -889,9 +903,32 @@ public abstract class IccRecords extends Handler implements IccConstants {
                 break;
 
             case EVENT_AKA_AUTHENTICATE_DONE:
-                ar = (AsyncResult)msg.obj;
-                auth_rsp = null;
+                ar = (AsyncResult) msg.obj;
+                AuthAsyncResponse rsp = (AuthAsyncResponse) ar.userObj;
                 if (DBG) log("EVENT_AKA_AUTHENTICATE_DONE");
+                if (ar.exception != null) {
+                    loge("Exception ICC SIM AKA: " + ar.exception);
+                } else {
+                    try {
+                        synchronized (rsp) {
+                            rsp.mAuthRsp = (IccIoResult) ar.result;
+                            if (DBG) log("ICC SIM AKA: mAuthRsp = " + rsp.mAuthRsp);
+                        }
+                    } catch (Exception e) {
+                        loge("Failed to parse ICC SIM AKA contents: " + e);
+                    }
+                }
+                synchronized (rsp) {
+                    rsp.notifyAll();
+                }
+
+                break;
+
+            // Deprecated
+            case EVENT_AKA_AUTHENTICATE_DONE_LEGACY:
+                ar = (AsyncResult) msg.obj;
+                auth_rsp = null;
+                if (DBG) log("EVENT_AKA_AUTHENTICATE_DONE_LEGACY");
                 if (ar.exception != null) {
                     loge("Exception ICC SIM AKA: " + ar.exception);
                 } else {
@@ -1191,7 +1228,8 @@ public abstract class IccRecords extends Handler implements IccConstants {
      * @param data authentication challenge data
      * @return challenge response
      */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.Q, publicAlternatives =
+            "Use {@code #getSecureIccSimChallengeResponse} instead.")
     public String getIccSimChallengeResponse(int authContext, String data) {
         if (DBG) log("getIccSimChallengeResponse:");
 
@@ -1202,7 +1240,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
                 if (ci != null && parentApp != null) {
                     ci.requestIccSimAuthentication(authContext, data,
                             parentApp.getAid(),
-                            obtainMessage(EVENT_AKA_AUTHENTICATE_DONE));
+                            obtainMessage(EVENT_AKA_AUTHENTICATE_DONE_LEGACY));
                     try {
                         mLock.wait();
                     } catch (InterruptedException e) {
@@ -1230,6 +1268,60 @@ public abstract class IccRecords extends Handler implements IccConstants {
         if (DBG) log("getIccSimChallengeResponse: return auth_rsp");
 
         return android.util.Base64.encodeToString(auth_rsp.payload, android.util.Base64.NO_WRAP);
+    }
+
+    /**
+     * Returns the response of the SIM application on the UICC to authentication
+     * challenge/response algorithm. The data string and challenge response are
+     * Base64 encoded Strings.
+     * Can support EAP-SIM, EAP-AKA with results encoded per 3GPP TS 31.102.
+     *
+     * @param authContext parameter P2 that specifies the authentication context
+     * per 3GPP TS 31.102 (Section 7.1.2)
+     * @param data authentication challenge data
+     * @return challenge response
+     */
+    @UnsupportedAppUsage
+    public String getSecureIccSimChallengeResponse(int authContext, String data) {
+        if (DBG) log("getSecureIccSimChallengeResponse:");
+
+        AuthAsyncResponse rsp = new AuthAsyncResponse();
+        try {
+            synchronized (rsp) {
+                CommandsInterface ci = mCi;
+                UiccCardApplication parentApp = mParentApp;
+                if (ci != null && parentApp != null) {
+                    ci.requestIccSimAuthentication(authContext, data,
+                            parentApp.getAid(),
+                            obtainMessage(EVENT_AKA_AUTHENTICATE_DONE, 0, 0, rsp));
+                    try {
+                        rsp.wait(ICC_SIM_CHALLENGE_QUERY_TIMEOUT);
+                    } catch (InterruptedException e) {
+                        loge("getSecureIccSimChallengeResponse: Fail, interrupted"
+                                + " while trying to request Icc Sim Auth");
+                        return null;
+                    }
+                } else {
+                    loge("getSecureIccSimChallengeResponse: "
+                            + "Fail, ci or parentApp is null");
+                    return null;
+                }
+            }
+        } catch (Exception e) {
+            loge("getSecureIccSimChallengeResponse: "
+                    + "Fail while trying to request Icc Sim Auth");
+            return null;
+        }
+
+        if (rsp.mAuthRsp == null) {
+            loge("getSecureIccSimChallengeResponse: No authentication response");
+            return null;
+        }
+
+        if (DBG) log("getSecureIccSimChallengeResponse: return rsp.mAuthRsp");
+
+        return android.util.Base64.encodeToString(rsp.mAuthRsp.payload,
+                android.util.Base64.NO_WRAP);
     }
 
     /**
