@@ -384,7 +384,7 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
                 loge("getIccSimChallengeResponse() unsupported authType: " + authType);
                 return null;
             }
-            return uiccApp.getIccRecords().getIccSimChallengeResponse(authType, data);
+            return uiccApp.getIccRecords().getIccSimChallengeResponse2(authType, data);
         };
 
         return callPhoneMethodWithPermissionCheck(subId, null, null, "getIccSimChallengeResponse",
