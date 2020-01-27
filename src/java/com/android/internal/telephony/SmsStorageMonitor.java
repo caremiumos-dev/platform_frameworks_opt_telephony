@@ -86,8 +86,8 @@ public class SmsStorageMonitor extends Handler {
         // Register for device storage intents.  Use these to notify the RIL
         // that storage for SMS is or is not available.
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_DEVICE_STORAGE_FULL);
-        filter.addAction(Intent.ACTION_DEVICE_STORAGE_NOT_FULL);
+        filter.addAction(Intent.ACTION_DEVICE_STORAGE_LOW);
+        filter.addAction(Intent.ACTION_DEVICE_STORAGE_OK);
         mContext.registerReceiver(mResultReceiver, filter);
     }
 
@@ -159,10 +159,10 @@ public class SmsStorageMonitor extends Handler {
     private final BroadcastReceiver mResultReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_DEVICE_STORAGE_FULL)) {
+            if (intent.getAction().equals(Intent.ACTION_DEVICE_STORAGE_LOW)) {
                 mStorageAvailable = false;
                 mCi.reportSmsMemoryStatus(false, obtainMessage(EVENT_REPORT_MEMORY_STATUS_DONE));
-            } else if (intent.getAction().equals(Intent.ACTION_DEVICE_STORAGE_NOT_FULL)) {
+            } else if (intent.getAction().equals(Intent.ACTION_DEVICE_STORAGE_OK)) {
                 mStorageAvailable = true;
                 mCi.reportSmsMemoryStatus(true, obtainMessage(EVENT_REPORT_MEMORY_STATUS_DONE));
             }
