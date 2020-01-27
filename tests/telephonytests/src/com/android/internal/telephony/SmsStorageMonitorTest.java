@@ -75,7 +75,7 @@ public class SmsStorageMonitorTest extends TelephonyTest {
 
         // Send DEVICE_STORAGE_FULL
         mContextFixture.getTestDouble().sendBroadcast(
-                new Intent(Intent.ACTION_DEVICE_STORAGE_FULL));
+                new Intent(Intent.ACTION_DEVICE_STORAGE_LOW));
         processAllMessages();
 
         verify(mSimulatedCommandsVerifier).reportSmsMemoryStatus(eq(false), any(Message.class));
@@ -88,7 +88,7 @@ public class SmsStorageMonitorTest extends TelephonyTest {
 
         // Send DEVICE_STORAGE_NOT_FULL
         mContextFixture.getTestDouble().sendBroadcast(
-                new Intent(Intent.ACTION_DEVICE_STORAGE_NOT_FULL));
+                new Intent(Intent.ACTION_DEVICE_STORAGE_OK));
         processAllMessages();
 
         verify(mSimulatedCommandsVerifier).reportSmsMemoryStatus(eq(true), any(Message.class));
