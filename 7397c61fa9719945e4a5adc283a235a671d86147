@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb05e9ef_803392df",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-28T21:59:35Z",
+      "side": 1,
+      "message": "I think you can tweak this to allow exceptions to be propagated up the stack.",
+      "range": {
+        "startLine": 913,
+        "startChar": 38,
+        "endLine": 913,
+        "endChar": 41
+      },
+      "revId": "7397c61fa9719945e4a5adc283a235a671d86147",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d664c64_0d0a0716",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-28T21:59:35Z",
+      "side": 1,
+      "message": "this doesn\u0027t need UnsupportedAppUsage",
+      "range": {
+        "startLine": 1284,
+        "startChar": 5,
+        "endLine": 1284,
+        "endChar": 24
+      },
+      "revId": "7397c61fa9719945e4a5adc283a235a671d86147",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85d7b35e_925149ea",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-28T21:59:35Z",
+      "side": 1,
+      "message": "nit: I\u0027m not in love with the name, but I don\u0027t have any great ideas. I\u0027ll think about it.",
+      "range": {
+        "startLine": 1285,
+        "startChar": 18,
+        "endLine": 1285,
+        "endChar": 50
+      },
+      "revId": "7397c61fa9719945e4a5adc283a235a671d86147",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "102fc418_960cdde2",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-28T21:59:35Z",
+      "side": 1,
+      "message": "I think you can shrink the scope of this.",
+      "range": {
+        "startLine": 1290,
+        "startChar": 12,
+        "endLine": 1290,
+        "endChar": 24
+      },
+      "revId": "7397c61fa9719945e4a5adc283a235a671d86147",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98eedea4_04e28ef5",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-28T21:59:35Z",
+      "side": 1,
+      "message": "nit: you can invert this logic to reduce scoping.",
+      "range": {
+        "startLine": 1293,
+        "startChar": 19,
+        "endLine": 1293,
+        "endChar": 20
+      },
+      "revId": "7397c61fa9719945e4a5adc283a235a671d86147",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc8a0b3d_386cfde1",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1299,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-28T21:59:35Z",
+      "side": 1,
+      "message": "Rambo is correct that technically this should be done in a loop. Maybe chat with him and see if you can do that here?",
+      "range": {
+        "startLine": 1299,
+        "startChar": 29,
+        "endLine": 1299,
+        "endChar": 49
+      },
+      "revId": "7397c61fa9719945e4a5adc283a235a671d86147",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "449cc2b4_508fa58c",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-01-28T21:59:35Z",
+      "side": 1,
+      "message": "generally catching Exception is a red flag. Is there a specific reason why it\u0027s necessary here? If so, that should be in a comment plz.",
+      "range": {
+        "startLine": 1310,
+        "startChar": 17,
+        "endLine": 1310,
+        "endChar": 26
+      },
+      "revId": "7397c61fa9719945e4a5adc283a235a671d86147",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
