@@ -22,6 +22,30 @@
       "revId": "90309b840e1c86272985db54f636bd1a582de01e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "520f6da2_dd79cb13",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaInboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-01-28T06:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c988311a_3e1b2a53",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 69
+      },
+      "revId": "90309b840e1c86272985db54f636bd1a582de01e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
