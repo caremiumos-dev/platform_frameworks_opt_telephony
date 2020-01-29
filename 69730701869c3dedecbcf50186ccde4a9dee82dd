@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "713a9aa9_40e91c9f",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2020-01-29T20:39:39Z",
+      "side": 1,
+      "message": "I think this is unlikely to merge down given some of the changes I believe have been made internally for the telephony module. I think they\u0027ve been removing dependencies on things like LocalePicker.",
+      "range": {
+        "startLine": 47,
+        "startChar": 32,
+        "endLine": 47,
+        "endChar": 44
+      },
+      "revId": "69730701869c3dedecbcf50186ccde4a9dee82dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57f8b677_e7172e03",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2020-01-29T20:39:39Z",
+      "side": 1,
+      "message": "FWIW, this is very much the kind of thing that I think a centralized Country (or Locale) Detector should be responsible for (e.g. http://b/147966042). i.e. if it detects a country (by whatever means - telephony or otherwise), and the device isn\u0027t provisioned yet, then it could set the locale automatically to a best guess.\n\nDo you think that might be done before telephony modularization work is complete?",
+      "range": {
+        "startLine": 621,
+        "startChar": 16,
+        "endLine": 621,
+        "endChar": 24
+      },
+      "revId": "69730701869c3dedecbcf50186ccde4a9dee82dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6c4e3ca_2cd302fe",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2020-01-29T20:39:39Z",
+      "side": 1,
+      "message": "TBH, I don\u0027t know what this does (or how LocalePicker works).\n\nWhat\u0027s the relationship between LocalePicker.updateLocale() and mPhone.mContext.getResources().getConfiguration().getLocales()?\n\nWhat\u0027s the chance of getting an odd combination like {\"de\", \"US\"} (i.e. US German), and what would LocalePicker do in that case?",
+      "range": {
+        "startLine": 623,
+        "startChar": 25,
+        "endLine": 623,
+        "endChar": 35
+      },
+      "revId": "69730701869c3dedecbcf50186ccde4a9dee82dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
