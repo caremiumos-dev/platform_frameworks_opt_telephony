@@ -2366,12 +2366,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             if (mHoldSwitchingState == HoldSwapState.HOLDING_TO_ANSWER_INCOMING) {
                 // If we put a call on hold to answer an incoming call, we should reset the
                 // variables that keep track of the switch here.
-                if (mCallExpectedToResume != null && mCallExpectedToResume == imsCall) {
-                    if (DBG) log("onCallStarted: starting a call as a result of a switch.");
-                    mHoldSwitchingState = HoldSwapState.INACTIVE;
-                    mCallExpectedToResume = null;
-                    logHoldSwapState("onCallStarted");
-                }
+                if (DBG) log("onCallStarted: starting a call as a result of a switch.");
+                mHoldSwitchingState = HoldSwapState.INACTIVE;
+                mCallExpectedToResume = null;
+                logHoldSwapState("onCallStarted");
             }
 
             mPendingMO = null;
@@ -2422,13 +2420,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
             if (mHoldSwitchingState == HoldSwapState.HOLDING_TO_ANSWER_INCOMING) {
                 // If we put a call on hold to answer an incoming call, we should reset the
-                // variables that keep track of the switch here.
-                if (mCallExpectedToResume != null && mCallExpectedToResume == imsCall) {
-                    if (DBG) log("onCallStarted: starting a call as a result of a switch.");
-                    mHoldSwitchingState = HoldSwapState.INACTIVE;
-                    mCallExpectedToResume = null;
-                    logHoldSwapState("onCallStartFailed");
-                }
+                // variables that keep track of the switch here and restore the one that
+                // possibly got held.
+                if (DBG) log("onCallStarted: starting a call as a result of a switch.");
+                mForegroundCall.switchWith(mBackgroundCall);
+                mHoldSwitchingState = HoldSwapState.INACTIVE;
+                mCallExpectedToResume = null;
+                logHoldSwapState("onCallStartFailed hold to answer case");
+                sendEmptyMessage(EVENT_RESUME_NOW_FOREGROUND_CALL);
             }
 
             if (mPendingMO != null) {
@@ -2594,17 +2593,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 mCallExpectedToResume = null;
                 mHoldSwitchingState = HoldSwapState.INACTIVE;
                 logHoldSwapState("onCallTerminated single call case");
-            } else if (mHoldSwitchingState == HoldSwapState.HOLDING_TO_ANSWER_INCOMING) {
-                // Check to see which call got terminated. If it's the one that was gonna get held,
-                // ignore it. If it's the one that was gonna get answered, restore the one that
-                // possibly got held.
-                if (imsCall == mCallExpectedToResume) {
-                    mForegroundCall.switchWith(mBackgroundCall);
-                    mCallExpectedToResume = null;
-                    mHoldSwitchingState = HoldSwapState.INACTIVE;
-                    logHoldSwapState("onCallTerminated hold to answer case");
-                    sendEmptyMessage(EVENT_RESUME_NOW_FOREGROUND_CALL);
-                }
             } else if (mHoldSwitchingState == HoldSwapState.HOLDING_TO_DIAL_OUTGOING) {
                 // The call that we were gonna hold might've gotten terminated. If that's the case,
                 // dial mPendingMo if present.
