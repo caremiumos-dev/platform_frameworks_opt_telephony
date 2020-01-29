@@ -25,6 +25,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
@@ -125,6 +126,10 @@ public class LocaleTracker extends Handler {
 
     /** The maximum fail count to prevent delay time overflow */
     private static final int MAX_FAIL_COUNT = 30;
+
+    /** The last known country iso */
+    private static final String LAST_KNOWN_COUNTRY_ISO_SHARED_PREFS_KEY =
+            "last_known_country_iso";
 
     private String mTag;
 
@@ -563,6 +568,10 @@ public class LocaleTracker extends Handler {
             timeZoneCountryIsoDebugInfo = countryIsoDebugInfo;
         }
 
+        if (!TextUtils.isEmpty(countryIso)) {
+            updateLastKnownCountryIso(countryIso);
+        }
+
         if (mLastServiceState == ServiceState.STATE_POWER_OFF) {
             countryIso = "";
         }
@@ -622,6 +631,30 @@ public class LocaleTracker extends Handler {
     /** Exposed for testing purposes */
     public boolean isTracking() {
         return mIsTracking;
+    }
+
+    private void updateLastKnownCountryIso(String countryIso) {
+        final SharedPreferences prefs = mPhone.getContext().getSharedPreferences(
+                LAST_KNOWN_COUNTRY_ISO_SHARED_PREFS_KEY, Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(LAST_KNOWN_COUNTRY_ISO_SHARED_PREFS_KEY, countryIso);
+        editor.commit();
+        log("update country iso in sharedPrefs " + countryIso);
+    }
+
+    /**
+     *  Convenient method to return the last known country ISO before a device
+     *  was put in flight/airplane mode. To be used if there is a need for
+     *  a cached country when getCurrentCountry() reports an empty ISO string.
+     *  For example give EmergencyNumberTracker ability to tell if an emergency number
+     *  belongs to the last known country.
+     *
+     *  @return The device's last known country ISO.
+     */
+    public String getLastKnownCountryIso() {
+        final SharedPreferences prefs = mPhone.getContext().getSharedPreferences(
+                LAST_KNOWN_COUNTRY_ISO_SHARED_PREFS_KEY, Context.MODE_PRIVATE);
+        return prefs.getString(LAST_KNOWN_COUNTRY_ISO_SHARED_PREFS_KEY, "");
     }
 
     private void log(String msg) {
