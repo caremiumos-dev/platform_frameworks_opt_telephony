@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncResult;
 import android.os.Environment;
 import android.os.Handler;
@@ -100,6 +101,10 @@ public class EmergencyNumberTracker extends Handler {
     private String[] mEmergencyNumberPrefix = new String[0];
 
     private static final String EMERGENCY_NUMBER_DB_ASSETS_FILE = "eccdata";
+
+    /** The last known country iso as determined based on network */
+    private static final String LAST_KNOWN_COUNTRY_ISO_SHARED_PREFS_KEY =
+            "last_known_country_iso";
 
     private List<EmergencyNumber> mEmergencyNumberListFromDatabase = new ArrayList<>();
     private List<EmergencyNumber> mEmergencyNumberListFromRadio = new ArrayList<>();
@@ -316,7 +321,8 @@ public class EmergencyNumberTracker extends Handler {
             if (sst != null) {
                 LocaleTracker lt = sst.getLocaleTracker();
                 if (lt != null) {
-                    return lt.getCurrentCountry();
+                    return TextUtils.isEmpty(lt.getCurrentCountry())
+                            ? getCachedCountryIso() : lt.getCurrentCountry();
                 }
             }
         } else {
@@ -764,8 +770,22 @@ public class EmergencyNumberTracker extends Handler {
 
     private synchronized void updateEmergencyCountryIso(String countryIso) {
         mCountryIso = countryIso;
+        if (!TextUtils.isEmpty(countryIso)) {
+            final SharedPreferences prefs = mPhone.getContext().getSharedPreferences(
+                    LAST_KNOWN_COUNTRY_ISO_SHARED_PREFS_KEY, Context.MODE_PRIVATE);
+            final SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(LAST_KNOWN_COUNTRY_ISO_SHARED_PREFS_KEY, countryIso);
+            editor.commit();
+            logd("update country iso in sharedPrefs " + countryIso);
+        }
     }
 
+    private String getCachedCountryIso() {
+        // Read last known country iso
+        final SharedPreferences prefs = mPhone.getContext().getSharedPreferences(
+                LAST_KNOWN_COUNTRY_ISO_SHARED_PREFS_KEY, Context.MODE_PRIVATE);
+        return prefs.getString(LAST_KNOWN_COUNTRY_ISO_SHARED_PREFS_KEY, "");
+    }
     /**
      * Get Emergency number list based on EccList. This util is used for solving backward
      * compatibility if device does not support the 1.4 IRadioIndication HAL that reports
