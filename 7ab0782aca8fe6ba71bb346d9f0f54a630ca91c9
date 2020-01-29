@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9cbc56dc_dbe7c7b4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2020-01-29T11:25:17Z",
+      "side": 0,
+      "message": "Yes, they got deleted by mistake",
+      "parentUuid": "58114bf6_a6a0c29f",
+      "range": {
+        "startLine": 912,
+        "startChar": 0,
+        "endLine": 917,
+        "endChar": 5
+      },
+      "revId": "7ab0782aca8fe6ba71bb346d9f0f54a630ca91c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd2ca96b_df5d7682",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-16T03:47:18Z",
       "side": 0,
       "message": "Presume this shouldn\u0027t have been removed.",
+      "range": {
+        "startLine": 3817,
+        "startChar": 12,
+        "endLine": 3827,
+        "endChar": 22
+      },
+      "revId": "7ab0782aca8fe6ba71bb346d9f0f54a630ca91c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1193d2c5_8bc70670",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3827,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2020-01-29T11:25:17Z",
+      "side": 0,
+      "message": "Removed by mistake, will revert changes here",
+      "parentUuid": "dd2ca96b_df5d7682",
       "range": {
         "startLine": 3817,
         "startChar": 12,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5c1a40d0_b3fd8b40",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 4028,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2020-01-29T11:25:17Z",
+      "side": 0,
+      "message": "Removed by mistake, will revert changes here",
+      "parentUuid": "bfbbc147_67b8ae3d",
+      "range": {
+        "startLine": 3985,
+        "startChar": 0,
+        "endLine": 4028,
+        "endChar": 60
+      },
+      "revId": "7ab0782aca8fe6ba71bb346d9f0f54a630ca91c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "faa5de0a_92419e4a",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2020-01-16T03:47:18Z",
       "side": 0,
       "message": "Same here.",
+      "range": {
+        "startLine": 4866,
+        "startChar": 21,
+        "endLine": 4879,
+        "endChar": 0
+      },
+      "revId": "7ab0782aca8fe6ba71bb346d9f0f54a630ca91c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "816ff2ee_363d779a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 4879,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2020-01-29T11:25:17Z",
+      "side": 0,
+      "message": "Removed by mistake, will revert changes here",
+      "parentUuid": "faa5de0a_92419e4a",
       "range": {
         "startLine": 4866,
         "startChar": 21,
