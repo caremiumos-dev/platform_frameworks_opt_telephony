@@ -38,6 +38,7 @@ import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.HalVersion;
 import com.android.internal.telephony.LocaleTracker;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
@@ -146,21 +147,13 @@ public class EmergencyNumberTracker extends Handler {
                     logd("ACTION_NETWORK_COUNTRY_CHANGED: PhoneId: " + phoneId + " CountryIso: "
                             + countryIso);
 
-                    boolean isInApm = false;
-                    ServiceStateTracker serviceStateTracker = mPhone.getServiceStateTracker();
-                    if (serviceStateTracker != null) {
-                        if (serviceStateTracker.getServiceState().getState()
-                                == ServiceState.STATE_POWER_OFF) {
-                            isInApm = true;
-                        }
-                    }
                     // Sometimes the country is updated as an empty string when the network signal
                     // is lost; though we may not call emergency when there is no signal, we want
                     // to keep the old country iso to provide country-related emergency numbers,
                     // because they think they are still in that country. We don't need to update
                     // country change in this case. We will still need to update the empty string
                     // if device is in APM.
-                    if (TextUtils.isEmpty(countryIso) && !isInApm) {
+                    if (TextUtils.isEmpty(countryIso) && !isAirplaneModeEnabled()) {
                         return;
                     }
 
@@ -263,12 +256,30 @@ public class EmergencyNumberTracker extends Handler {
         }
     }
 
+    private boolean isAirplaneModeEnabled() {
+        ServiceStateTracker serviceStateTracker = mPhone.getServiceStateTracker();
+        if (serviceStateTracker != null) {
+            if (serviceStateTracker.getServiceState().getState()
+                    == ServiceState.STATE_POWER_OFF) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void initializeDatabaseEmergencyNumberList() {
         // If country iso has been cached when listener is set, don't need to cache the initial
         // country iso and initial database.
         if (mCountryIso == null) {
-            updateEmergencyCountryIso(getInitialCountryIso().toLowerCase());
-            cacheEmergencyDatabaseByCountry(mCountryIso);
+            String countryForDatabaseCache = getInitialCountryIso().toLowerCase();
+            updateEmergencyCountryIso(countryForDatabaseCache);
+            // Use the previous known country if current country is unknown
+            // This is a best effort to enable country specific numbers
+            if (TextUtils.isEmpty(countryForDatabaseCache)
+                    && isAirplaneModeEnabled()) {
+                countryForDatabaseCache = getCountryIsoForCachingDatabase();
+            }
+            cacheEmergencyDatabaseByCountry(countryForDatabaseCache);
         }
     }
 
@@ -548,7 +559,18 @@ public class EmergencyNumberTracker extends Handler {
     private void updateEmergencyNumberListDatabaseAndNotify(String countryIso) {
         logd("updateEmergencyNumberListDatabaseAndNotify(): receiving countryIso: "
                 + countryIso);
-        updateEmergencyCountryIso(countryIso.toLowerCase());
+        if (!isAirplaneModeEnabled()) {
+            // In case phone is in airplane/flight mode we will use the previous known country
+            // This is a best effort to enable country specific numbers, we do not update the
+            // emergency country iso since the device might have landed somewhere else.
+            updateEmergencyCountryIso(countryIso.toLowerCase());
+        } else if (TextUtils.isEmpty(countryIso)) {
+            // When in ServiceState.STATE_POWER_OFF should mean an empty countryIso
+            // adding a check just to be sure that we do not overwrite a valid value
+            countryIso = getCountryIsoForCachingDatabase();
+            logd("updateEmergencyNumberListDatabaseAndNotify(): using cached APM country "
+                    + countryIso);
+        }
         cacheEmergencyDatabaseByCountry(countryIso);
         writeUpdatedEmergencyNumberListMetrics(mEmergencyNumberListFromDatabase);
         if (!DBG) {
@@ -663,7 +685,7 @@ public class EmergencyNumberTracker extends Handler {
      *         indication not support from the HAL.
      */
     public List<EmergencyNumber> getEmergencyNumberList() {
-        if (!mEmergencyNumberListFromRadio.isEmpty()) {
+        if (mPhone.getHalVersion().greaterOrEqual(new HalVersion(1, 4))) {
             return Collections.unmodifiableList(mEmergencyNumberList);
         } else {
             return getEmergencyNumberListFromEccListAndTest();
@@ -680,7 +702,7 @@ public class EmergencyNumberTracker extends Handler {
             return false;
         }
         number = PhoneNumberUtils.stripSeparators(number);
-        if (!mEmergencyNumberListFromRadio.isEmpty()) {
+        if (mPhone.getHalVersion().greaterOrEqual(new HalVersion(1, 4))) {
             for (EmergencyNumber num : mEmergencyNumberList) {
                 // According to com.android.i18n.phonenumbers.ShortNumberInfo, in
                 // these countries, if extra digits are added to an emergency number,
@@ -767,6 +789,17 @@ public class EmergencyNumberTracker extends Handler {
 
     public String getEmergencyCountryIso() {
         return mCountryIso;
+    }
+
+    private String getCountryIsoForCachingDatabase() {
+        ServiceStateTracker sst = mPhone.getServiceStateTracker();
+        if (sst != null) {
+            LocaleTracker lt = sst.getLocaleTracker();
+            if (lt != null) {
+                return lt.getLastKnownCountryIsoInAPM();
+            }
+        }
+        return "";
     }
 
     public int getEmergencyNumberDbVersion() {
