@@ -1171,19 +1171,19 @@ public abstract class InboundSmsHandler extends StateMachine {
                 // Only pass in the resultReceiver when the USER_SYSTEM is processed.
                 try {
                     mContext.createPackageContextAsUser(mContext.getPackageName(), 0, targetUser)
-                            .sendOrderedBroadcast(intent, permission, appOp, opts,
+                            .sendOrderedBroadcast(intent, Activity.RESULT_OK, permission, appOp,
                                     users[i] == UserHandle.USER_SYSTEM ? resultReceiver : null,
-                                    getHandler(), Activity.RESULT_OK, null /* initialData */,
-                                    null /* initialExtras */);
+                                    getHandler(), null /* initialData */,
+                                    null /* initialExtras */, opts);
                 } catch (PackageManager.NameNotFoundException ignored) {
                 }
             }
         } else {
             try {
                 mContext.createPackageContextAsUser(mContext.getPackageName(), 0, user)
-                        .sendOrderedBroadcast(intent, permission, appOp, opts, resultReceiver,
-                                getHandler(), Activity.RESULT_OK, null /* initialData */,
-                                null /* initialExtras */);
+                        .sendOrderedBroadcast(intent, Activity.RESULT_OK, permission, appOp,
+                                resultReceiver, getHandler(), null /* initialData */,
+                                null /* initialExtras */, opts);
             } catch (PackageManager.NameNotFoundException ignored) {
             }
         }
