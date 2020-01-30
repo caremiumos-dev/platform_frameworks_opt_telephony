@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd8a3192_32d71ca7",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SubscriptionControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-01-30T23:05:27Z",
+      "side": 1,
+      "message": "it\u0027s a little against unittest purpose, as we only want to test SubscriptionController part and this also tests context + resource as we assume certain behaviors of:\ncontext.createConfigurationContext(overrideConfig);\nResources res \u003d newContext.getResources();\n\nI would say it\u0027s better to use TelephonyTest#mContext, mock its result of createConfigurationContext and have mocked resource to mimic it, then test it. e.g.\ndoReturn(newContext).when(mContext).createConfigurationContext(...);\nverify(mContext).createConfigurationContext(...);\n...",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 84
+      },
+      "revId": "058f888d65923f52967104caf6b8a6e38bd85474",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02557d57_fd345842",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SubscriptionControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-01-30T23:05:27Z",
+      "side": 1,
+      "message": "nit: assertNotEquals(..)",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 56
+      },
+      "revId": "058f888d65923f52967104caf6b8a6e38bd85474",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
