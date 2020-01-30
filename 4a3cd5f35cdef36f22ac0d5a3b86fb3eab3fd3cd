@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1297f6ce_fce55be6",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-30T00:32:21Z",
+      "side": 1,
+      "message": "*_TIMEOUT_MILLIS",
+      "range": {
+        "startLine": 243,
+        "startChar": 54,
+        "endLine": 243,
+        "endChar": 61
+      },
+      "revId": "4a3cd5f35cdef36f22ac0d5a3b86fb3eab3fd3cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "645c28e7_faadad1a",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-30T00:32:21Z",
+      "side": 1,
+      "message": "Can this be static?",
+      "range": {
+        "startLine": 245,
+        "startChar": 11,
+        "endLine": 245,
+        "endChar": 12
+      },
+      "revId": "4a3cd5f35cdef36f22ac0d5a3b86fb3eab3fd3cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8ee4d26_50660e27",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-30T00:32:21Z",
+      "side": 1,
+      "message": "What would be throwing an exception from simply accessing a member? Shouldn\u0027t be a cast error, we know for sure ar.result is an IccIoResult, right?",
+      "range": {
+        "startLine": 921,
+        "startChar": 33,
+        "endLine": 921,
+        "endChar": 44
+      },
+      "revId": "4a3cd5f35cdef36f22ac0d5a3b86fb3eab3fd3cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8765c0d0_feac5779",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-30T00:32:21Z",
+      "side": 1,
+      "message": "Do we have to supply this? How have apps even gotten into this internal class? I\u0027d argue we should make the new method package-private and shut apps out even more.",
+      "range": {
+        "startLine": 1236,
+        "startChar": 63,
+        "endLine": 1236,
+        "endChar": 81
+      },
+      "revId": "4a3cd5f35cdef36f22ac0d5a3b86fb3eab3fd3cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a628f57b_29680b25",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-30T00:32:21Z",
+      "side": 1,
+      "message": "This is quite generic. Include a link to the bug or briefly describe the issue here.",
+      "range": {
+        "startLine": 1279,
+        "startChar": 51,
+        "endLine": 1279,
+        "endChar": 71
+      },
+      "revId": "4a3cd5f35cdef36f22ac0d5a3b86fb3eab3fd3cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "062a54e3_4fbcc771",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-30T00:32:21Z",
+      "side": 1,
+      "message": "Nit: this reads a bit strange - typically we do `variable \u003d\u003d null`.",
+      "range": {
+        "startLine": 1295,
+        "startChar": 12,
+        "endLine": 1295,
+        "endChar": 22
+      },
+      "revId": "4a3cd5f35cdef36f22ac0d5a3b86fb3eab3fd3cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "752f23cc_66f118df",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1301,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-30T00:32:21Z",
+      "side": 1,
+      "message": "No need to do this, Java always default-inits booleans to false",
+      "range": {
+        "startLine": 1301,
+        "startChar": 12,
+        "endLine": 1301,
+        "endChar": 34
+      },
+      "revId": "4a3cd5f35cdef36f22ac0d5a3b86fb3eab3fd3cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c768dc46_3e6c84aa",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-30T00:32:21Z",
+      "side": 1,
+      "message": "If the value is supposed to be in milliseconds, add that to the actual variable name so people don\u0027t make mistakes when using it\n\ntimeErrorAllowedMillis",
+      "range": {
+        "startLine": 1303,
+        "startChar": 25,
+        "endLine": 1303,
+        "endChar": 40
+      },
+      "revId": "4a3cd5f35cdef36f22ac0d5a3b86fb3eab3fd3cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdf69c27_7279d594",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-01-30T00:32:21Z",
+      "side": 1,
+      "message": "10 ms seems super low, how did we come up with this value?",
+      "range": {
+        "startLine": 1304,
+        "startChar": 38,
+        "endLine": 1304,
+        "endChar": 40
+      },
+      "revId": "4a3cd5f35cdef36f22ac0d5a3b86fb3eab3fd3cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
