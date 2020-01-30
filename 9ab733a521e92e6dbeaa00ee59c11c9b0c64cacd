@@ -1,0 +1,31 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000001478506",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/943817?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "de1e17fd_33d84be7",
+        "filename": "res/values/qtistrings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-01-30T04:48:28Z",
+      "side": 1,
+      "message": "Unrecognized license :\nRedistribution...disclaimer...disclaimer...endorse...prior written...MERCHANTABILITY...FITNESS...DISCLAIMED...LIABLE...INCIDENTAL...EXEMPLARY...DAMAGES...HOWEVER CAUSED...LIABILITY...LIABILITY...NEGLIGENCE\n",
+      "range": {
+        "startLine": 5,
+        "startChar": 5,
+        "endLine": 26,
+        "endChar": 73
+      },
+      "revId": "9ab733a521e92e6dbeaa00ee59c11c9b0c64cacd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
