@@ -575,8 +575,11 @@ public class ImsPhoneConnection extends Connection implements
         if (!mIsIncoming) {
             // outgoing calls only
             processNextPostDialChar();
+        } else {
+            // Only release wake lock for incoming calls, for outgoing calls the wake lock
+            // will be released after any pause-dial is completed
+            releaseWakeLock();
         }
-        releaseWakeLock();
     }
 
     /*package*/ void
@@ -595,6 +598,8 @@ public class ImsPhoneConnection extends Connection implements
             dtmfComplete.replyTo = mHandlerMessenger;
             mOwner.sendDtmf(c, dtmfComplete);
         } else if (c == PhoneNumberUtils.PAUSE) {
+            setPostDialState(PostDialState.PAUSE);
+
             // From TS 22.101:
             // It continues...
             // Upon the called party answering the UE shall send the DTMF digits
@@ -632,11 +637,15 @@ public class ImsPhoneConnection extends Connection implements
 
         if (mPostDialState == PostDialState.CANCELLED) {
             //Rlog.d(LOG_TAG, "##### processNextPostDialChar: postDialState == CANCELLED, bail");
+            releaseWakeLock();
             return;
         }
 
         if (mPostDialString == null || mPostDialString.length() <= mNextPostDialChar) {
             setPostDialState(PostDialState.COMPLETE);
+
+            // We were holding a wake lock until pause-dial was complete, so give it up now
+            releaseWakeLock();
 
             // notifyMessage.arg1 is 0 on complete
             c = 0;
@@ -689,13 +698,18 @@ public class ImsPhoneConnection extends Connection implements
      * @param s new PostDialState
      */
     private void setPostDialState(PostDialState s) {
-        if (mPostDialState != PostDialState.STARTED
-                && s == PostDialState.STARTED) {
-            acquireWakeLock();
-            Message msg = mHandler.obtainMessage(EVENT_WAKE_LOCK_TIMEOUT);
-            mHandler.sendMessageDelayed(msg, WAKE_LOCK_TIMEOUT_MILLIS);
-        } else if (mPostDialState == PostDialState.STARTED
-                && s != PostDialState.STARTED) {
+        if (s == PostDialState.STARTED ||
+                s == PostDialState.PAUSE) {
+            synchronized (mPartialWakeLock) {
+                if (mPartialWakeLock.isHeld()) {
+                    mHandler.removeMessages(EVENT_WAKE_LOCK_TIMEOUT);
+                } else {
+                    acquireWakeLock();
+                }
+                Message msg = mHandler.obtainMessage(EVENT_WAKE_LOCK_TIMEOUT);
+                mHandler.sendMessageDelayed(msg, WAKE_LOCK_TIMEOUT_MILLIS);
+            }
+        } else {
             mHandler.removeMessages(EVENT_WAKE_LOCK_TIMEOUT);
             releaseWakeLock();
         }
