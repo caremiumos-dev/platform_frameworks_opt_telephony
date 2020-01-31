@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de164fcd_af6c354b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-01-31T22:41:23Z",
+      "side": 0,
+      "message": "if possible, please add a test case to verify the apnContexts are sorted",
+      "range": {
+        "startLine": 1374,
+        "startChar": 0,
+        "endLine": 1374,
+        "endChar": 0
+      },
+      "revId": "dcc0458a9978c3f62c9af0e1d06900cf2b764054",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
