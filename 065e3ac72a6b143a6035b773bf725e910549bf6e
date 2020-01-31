@@ -22,6 +22,30 @@
       "revId": "065e3ac72a6b143a6035b773bf725e910549bf6e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7593412_02ffcbb6",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1559847
+      },
+      "writtenOn": "2020-01-31T10:41:43Z",
+      "side": 1,
+      "message": "I fixed the change.",
+      "parentUuid": "298e1d27_eac38eb0",
+      "range": {
+        "startLine": 1387,
+        "startChar": 36,
+        "endLine": 1387,
+        "endChar": 51
+      },
+      "revId": "065e3ac72a6b143a6035b773bf725e910549bf6e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
