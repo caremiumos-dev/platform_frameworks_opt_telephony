@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe14054d_dc0a4219",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-01-31T20:17:27Z",
+      "side": 1,
+      "message": "should sort after mPrioritySortedApnContexts.add",
+      "range": {
+        "startLine": 956,
+        "startChar": 0,
+        "endLine": 956,
+        "endChar": 51
+      },
+      "revId": "3135d1bd4fdb9ac85b4284883929be869cdfa3c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62cb1b4e_fdb37f60",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-01-31T20:17:27Z",
+      "side": 1,
+      "message": "when init, there\u0027s not element in the list. no need to sort here.",
+      "range": {
+        "startLine": 1015,
+        "startChar": 0,
+        "endLine": 1015,
+        "endChar": 79
+      },
+      "revId": "3135d1bd4fdb9ac85b4284883929be869cdfa3c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
