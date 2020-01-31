@@ -271,21 +271,21 @@ public final class NitzStateMachineTestSupport {
         return cal.getTimeInMillis();
     }
 
-    public static PhoneTimeZoneSuggestion createEmptyTimeZoneSuggestion(int phoneId) {
-        return new PhoneTimeZoneSuggestion.Builder(phoneId)
+    public static PhoneTimeZoneSuggestion createEmptyTimeZoneSuggestion(int slotId) {
+        return new PhoneTimeZoneSuggestion.Builder(slotId)
                 .addDebugInfo("Test")
                 .build();
     }
 
-    public static PhoneTimeSuggestion createEmptyTimeSuggestion(int phoneId) {
-        return new PhoneTimeSuggestion.Builder(phoneId)
+    public static PhoneTimeSuggestion createEmptyTimeSuggestion(int slotId) {
+        return new PhoneTimeSuggestion.Builder(slotId)
                 .addDebugInfo("Test")
                 .build();
     }
 
     public static PhoneTimeSuggestion createTimeSuggestionFromNitzSignal(
-            int phoneId, TimestampedValue<NitzData> nitzSignal) {
-        return new PhoneTimeSuggestion.Builder(phoneId)
+            int slotId, TimestampedValue<NitzData> nitzSignal) {
+        return new PhoneTimeSuggestion.Builder(slotId)
                 .setUtcTime(createTimeSignalFromNitzSignal(nitzSignal))
                 .addDebugInfo("Test")
                 .build();
