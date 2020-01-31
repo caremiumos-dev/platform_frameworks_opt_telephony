@@ -18,14 +18,10 @@ package com.android.internal.telephony.imsphone;
 
 import android.annotation.NonNull;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.aidl.IImsRegistrationCallback;
 import android.util.Log;
-
-import com.android.internal.telephony.util.HandlerExecutor;
 
 import java.util.concurrent.Executor;
 
@@ -90,8 +86,9 @@ public class ImsRegistrationCallbackHelper {
                 }
             };
 
-    public ImsRegistrationCallbackHelper(@NonNull ImsRegistrationUpdate registrationUpdate) {
-        mImsRegistrationCallback.setExecutor(getThreadExecutor());
+    public ImsRegistrationCallbackHelper(@NonNull ImsRegistrationUpdate registrationUpdate,
+            Executor executor) {
+        mImsRegistrationCallback.setExecutor(executor);
         mImsRegistrationUpdate = registrationUpdate;
     }
 
@@ -127,12 +124,5 @@ public class ImsRegistrationCallbackHelper {
 
     public IImsRegistrationCallback getCallbackBinder() {
         return mImsRegistrationCallback.getBinder();
-    }
-
-    private Executor getThreadExecutor() {
-        if (Looper.myLooper() == null) {
-            Looper.prepare();
-        }
-        return new HandlerExecutor(new Handler(Looper.myLooper()));
     }
 }
