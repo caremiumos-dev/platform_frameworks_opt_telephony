@@ -45,6 +45,52 @@
       "revId": "c559cf263bd5ff22652c0d9dafe9344057ba83b8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28db8c28_406e02f5",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-02-01T05:45:11Z",
+      "side": 1,
+      "message": "Why check for IMS service state is not done any more? it applies to all calls below",
+      "range": {
+        "startLine": 2021,
+        "startChar": 0,
+        "endLine": 2021,
+        "endChar": 97
+      },
+      "revId": "c559cf263bd5ff22652c0d9dafe9344057ba83b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18ae86cb_ff79f936",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-02-01T05:45:11Z",
+      "side": 1,
+      "message": "this will be very difficult to figure out which one is which one..why not create separate types/subclasses for each type of SS",
+      "range": {
+        "startLine": 304,
+        "startChar": 8,
+        "endLine": 360,
+        "endChar": 37
+      },
+      "revId": "c559cf263bd5ff22652c0d9dafe9344057ba83b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
