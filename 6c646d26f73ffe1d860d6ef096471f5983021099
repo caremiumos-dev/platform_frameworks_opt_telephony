@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa74190c_c2fb925e",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-02-01T01:04:47Z",
+      "side": 0,
+      "message": "it does look like we are already doing this. What difference does this new patch make?",
+      "range": {
+        "startLine": 2226,
+        "startChar": 28,
+        "endLine": 2226,
+        "endChar": 29
+      },
+      "revId": "6c646d26f73ffe1d860d6ef096471f5983021099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
