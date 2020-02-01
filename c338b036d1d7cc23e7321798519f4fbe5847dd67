@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01c0fe32_5c95da43",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-02-01T05:52:45Z",
+      "side": 1,
+      "message": "why sb is null instead of error?",
+      "range": {
+        "startLine": 1298,
+        "startChar": 12,
+        "endLine": 1298,
+        "endChar": 22
+      },
+      "revId": "c338b036d1d7cc23e7321798519f4fbe5847dd67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d383d36_d70c8f60",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-02-01T05:52:45Z",
+      "side": 1,
+      "message": "move this check below to the else condition at line 1450",
+      "range": {
+        "startLine": 1443,
+        "startChar": 20,
+        "endLine": 1443,
+        "endChar": 93
+      },
+      "revId": "c338b036d1d7cc23e7321798519f4fbe5847dd67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23aa42f5_38391abc",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-02-01T05:52:45Z",
+      "side": 1,
+      "message": "long line",
+      "range": {
+        "startLine": 1443,
+        "startChar": 0,
+        "endLine": 1443,
+        "endChar": 102
+      },
+      "revId": "c338b036d1d7cc23e7321798519f4fbe5847dd67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a98f5357_30a3c6ae",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-02-01T05:52:45Z",
+      "side": 1,
+      "message": "why null? instead of error",
+      "range": {
+        "startLine": 1444,
+        "startChar": 16,
+        "endLine": 1444,
+        "endChar": 17
+      },
+      "revId": "c338b036d1d7cc23e7321798519f4fbe5847dd67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
