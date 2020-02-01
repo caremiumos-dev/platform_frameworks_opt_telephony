@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "723bcb9a_6c58d261",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2495,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-02-01T02:10:13Z",
+      "side": 0,
+      "message": "why is this removed?",
+      "range": {
+        "startLine": 2495,
+        "startChar": 16,
+        "endLine": 2495,
+        "endChar": 46
+      },
+      "revId": "97c1f8b06e5151f16833a349c58d93ce684e1d25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
