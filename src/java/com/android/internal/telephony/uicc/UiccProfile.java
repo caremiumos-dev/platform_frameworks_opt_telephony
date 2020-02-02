@@ -58,6 +58,7 @@ import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.cat.CatService;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
+import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.IccCardStatus.PinState;
 import com.android.internal.telephony.uicc.euicc.EuiccCard;
@@ -194,7 +195,8 @@ public class UiccProfile extends IccCard {
             loglocal("handleMessage: Received " + msg.what + " for phoneId " + mPhoneId);
             switch (msg.what) {
                 case EVENT_NETWORK_LOCKED:
-                    mNetworkLockedRegistrants.notifyRegistrants();
+                    mNetworkLockedRegistrants.notifyRegistrants(new AsyncResult(
+                            null, mUiccApplication.getPersoSubState().ordinal(), null));
                     // intentional fall through
                 case EVENT_RADIO_OFF_OR_UNAVAILABLE:
                 case EVENT_ICC_LOCKED:
@@ -544,8 +546,7 @@ public class UiccProfile extends IccCard {
                 cardLocked = true;
                 lockedState = IccCardConstants.State.PUK_REQUIRED;
             } else if (appState == IccCardApplicationStatus.AppState.APPSTATE_SUBSCRIPTION_PERSO) {
-                if (mUiccApplication.getPersoSubState()
-                        == IccCardApplicationStatus.PersoSubState.PERSOSUBSTATE_SIM_NETWORK) {
+                if (mUiccApplication.isPersoLocked()) {
                     if (VDBG) log("updateExternalState: PERSOSUBSTATE_SIM_NETWORK");
                     cardLocked = true;
                     lockedState = IccCardConstants.State.NETWORK_LOCKED;
@@ -763,7 +764,8 @@ public class UiccProfile extends IccCard {
             mNetworkLockedRegistrants.add(r);
 
             if (getState() == IccCardConstants.State.NETWORK_LOCKED) {
-                r.notifyRegistrant();
+                r.notifyRegistrant(
+                        new AsyncResult(null, mUiccApplication.getPersoSubState().ordinal(), null));
             }
         }
     }
@@ -836,6 +838,20 @@ public class UiccProfile extends IccCard {
         synchronized (mLock) {
             if (mUiccApplication != null) {
                 mUiccApplication.supplyNetworkDepersonalization(pin, onComplete);
+            } else if (onComplete != null) {
+                Exception e = new RuntimeException("CommandsInterface is not set.");
+                AsyncResult.forMessage(onComplete).exception = e;
+                onComplete.sendToTarget();
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void supplySimDepersonalization(PersoSubState persoType, String pin, Message onComplete) {
+        synchronized (mLock) {
+            if (mUiccApplication != null) {
+                mUiccApplication.supplySimDepersonalization(persoType, pin, onComplete);
             } else if (onComplete != null) {
                 Exception e = new RuntimeException("CommandsInterface is not set.");
                 AsyncResult.forMessage(onComplete).exception = e;
