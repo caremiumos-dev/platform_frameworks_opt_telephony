@@ -23,6 +23,7 @@ import android.os.Message;
 
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
+import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
 import com.android.internal.telephony.uicc.IccRecords;
 
 /**
@@ -134,6 +135,11 @@ public class IccCard {
      */
     @UnsupportedAppUsage
     public void supplyNetworkDepersonalization(String pin, Message onComplete) {
+        sendMessageWithCardAbsentException(onComplete);
+    }
+
+    @UnsupportedAppUsage
+    public void supplySimDepersonalization(PersoSubState persoType, String pin, Message onComplete) {
         sendMessageWithCardAbsentException(onComplete);
     }
 

@@ -551,7 +551,7 @@ public class UiccCardApplication {
                 mNetworkLockedRegistrants.notifyRegistrants();
             } else {
                 if (DBG) log("Notifying 1 registrant: NETWORK_LOCED");
-                r.notifyRegistrant(new AsyncResult(null, null, null));
+                r.notifyRegistrant(new AsyncResult(null, mPersoSubState.ordinal(), null));
             }
         }
     }
@@ -719,6 +719,13 @@ public class UiccCardApplication {
         synchronized (mLock) {
             if (DBG) log("supplyNetworkDepersonalization");
             mCi.supplyNetworkDepersonalization(pin, onComplete);
+        }
+    }
+
+    public void supplySimDepersonalization(PersoSubState persoType, String pin, Message onComplete) {
+        synchronized (mLock) {
+            if (DBG) log("supplySimDepersonalization");
+            mCi.supplySimDepersonalization(persoType, pin, onComplete);
         }
     }
 
