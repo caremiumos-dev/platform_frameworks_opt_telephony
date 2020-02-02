@@ -722,6 +722,13 @@ public class UiccCardApplication {
         }
     }
 
+    public void supplySimDepersonalization(PersoSubState persoType, String pin, Message onComplete) {
+        synchronized (mLock) {
+            if (DBG) log("supplySimDepersonalization");
+            mCi.supplySimDepersonalization(persoType, pin, onComplete);
+        }
+    }
+
     /**
      * Check whether ICC pin lock is enabled
      * This is a sync call which returns the cached pin enabled state
