@@ -18,12 +18,12 @@ package com.android.internal.telephony;
 
 import android.annotation.NonNull;
 import android.compat.annotation.UnsupportedAppUsage;
-import android.telephony.Annotation.DataFailureCause;
 import android.telephony.Annotation.RadioPowerState;
 import android.telephony.Annotation.SrvccState;
 import android.telephony.CallQuality;
 import android.telephony.CellIdentity;
 import android.telephony.CellInfo;
+import android.telephony.DataFailCause.DataFailureCause;
 import android.telephony.PhoneCapability;
 import android.telephony.PreciseDataConnectionState;
 import android.telephony.emergency.EmergencyNumber;

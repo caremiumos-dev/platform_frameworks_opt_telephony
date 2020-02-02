@@ -17,8 +17,8 @@
 package com.android.internal.telephony.dataconnection;
 
 import android.content.Intent;
-import android.telephony.Annotation.DataFailureCause;
 import android.telephony.DataFailCause;
+import android.telephony.DataFailCause.DataFailureCause;
 import android.telephony.Rlog;
 
 /**
