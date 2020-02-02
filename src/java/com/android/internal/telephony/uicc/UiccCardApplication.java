@@ -161,7 +161,7 @@ public class UiccCardApplication {
             }
 
             if (mPersoSubState != oldPersoSubState &&
-                    mPersoSubState == PersoSubState.PERSOSUBSTATE_SIM_NETWORK) {
+                    isPersoLocked()) {
                 notifyNetworkLockedRegistrantsIfNeeded(null);
             }
 
@@ -581,13 +581,14 @@ public class UiccCardApplication {
         }
 
         if (mAppState == AppState.APPSTATE_SUBSCRIPTION_PERSO &&
-                mPersoSubState == PersoSubState.PERSOSUBSTATE_SIM_NETWORK) {
+                isPersoLocked()) {
+            AsyncResult ar = new AsyncResult(null, mPersoSubState.ordinal(), null);
             if (r == null) {
-                if (DBG) log("Notifying registrants: NETWORK_LOCKED");
-                mNetworkLockedRegistrants.notifyRegistrants();
+                if (DBG) log("Notifying registrants: NETWORK_LOCKED with mPersoSubState" + mPersoSubState);
+                mNetworkLockedRegistrants.notifyRegistrants(ar);
             } else {
-                if (DBG) log("Notifying 1 registrant: NETWORK_LOCED");
-                r.notifyRegistrant(new AsyncResult(null, null, null));
+                if (DBG) log("Notifying 1 registrant: NETWORK_LOCKED with mPersoSubState" + mPersoSubState);
+                r.notifyRegistrant(ar);
             }
         }
     }
@@ -682,6 +683,17 @@ public class UiccCardApplication {
         }
     }
 
+    public boolean isPersoLocked() {
+        switch (mPersoSubState) {
+            case PERSOSUBSTATE_UNKNOWN:
+            case PERSOSUBSTATE_IN_PROGRESS:
+            case PERSOSUBSTATE_READY:
+                return false;
+            default:
+                return true;
+        }
+    }
+
     /**
      * Supply the ICC PIN to the ICC
      *
@@ -755,6 +767,14 @@ public class UiccCardApplication {
         synchronized (mLock) {
             if (DBG) log("supplyNetworkDepersonalization");
             mCi.supplyNetworkDepersonalization(pin, onComplete);
+        }
+    }
+
+    public void supplySimDepersonalization(PersoSubState persoType,
+                                           String pin, Message onComplete) {
+        synchronized (mLock) {
+            if (DBG) log("supplySimDepersonalization");
+            mCi.supplySimDepersonalization(persoType, pin, onComplete);
         }
     }
 
