@@ -696,7 +696,7 @@ public class UiccController extends Handler {
             cardString = card.getIccId();
         }
 
-        // EID may be unpopulated if RadioConfig<1.2
+        // EID is unpopulated if Radio HAL < 1.4 (RadioConfig < 1.2)
         // If so, just register for EID loaded and skip this stuff
         if (isEuicc && cardString == null
                 && mDefaultEuiccCardId != UNSUPPORTED_CARD_ID) {
@@ -705,6 +705,20 @@ public class UiccController extends Handler {
 
         if (cardString != null) {
             addCardId(cardString);
+        }
+
+        // If we know the EID from IccCardStatus, just use it to set mDefaultEuiccCardId. This is
+        // needed in cases where slot status doesn't include EID, and we don't want to register for
+        // EID from APDU because we already know cardString from a previous APDU
+        if (isEuicc && cardString != null) {
+            if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID
+                    || mDefaultEuiccCardId == TEMPORARILY_UNSUPPORTED_CARD_ID) {
+                mDefaultEuiccCardId = convertToPublicCardId(cardString);
+                String logStr = "IccCardStatus eid=" + cardString + " slot=" + slotId
+                        + " mDefaultEuiccCardId=" + mDefaultEuiccCardId;
+                sLocalLog.log(logStr);
+                log(logStr);
+            }
         }
 
         if (DBG) log("Notifying IccChangedRegistrants");
