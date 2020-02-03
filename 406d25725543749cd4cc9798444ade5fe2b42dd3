@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e126e017_f392e97d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1702,
+      "author": {
+        "id": 1633352
+      },
+      "writtenOn": "2020-02-03T19:22:48Z",
+      "side": 1,
+      "message": "can we make the log print clear on silent redial to IMS",
+      "range": {
+        "startLine": 1702,
+        "startChar": 41,
+        "endLine": 1702,
+        "endChar": 73
+      },
+      "revId": "406d25725543749cd4cc9798444ade5fe2b42dd3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36aa0b5b_a7fa0b82",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1633352
+      },
+      "writtenOn": "2020-02-03T19:22:48Z",
+      "side": 1,
+      "message": "Is every silent redial notified as a handover? handovers are usually PDN level. Here EPDN will not handover from CS to IMS/Vowifi",
+      "range": {
+        "startLine": 1705,
+        "startChar": 42,
+        "endLine": 1705,
+        "endChar": 68
+      },
+      "revId": "406d25725543749cd4cc9798444ade5fe2b42dd3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f89f5cd_a04b549f",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1633352
+      },
+      "writtenOn": "2020-02-03T19:22:48Z",
+      "side": 1,
+      "message": "should extra be set during volte emergency call or vowifi emergency call with WFC disabled?",
+      "range": {
+        "startLine": 2195,
+        "startChar": 12,
+        "endLine": 2195,
+        "endChar": 55
+      },
+      "revId": "406d25725543749cd4cc9798444ade5fe2b42dd3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
