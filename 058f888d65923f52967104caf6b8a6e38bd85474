@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "884709c8_7ecbb509",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SubscriptionControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2020-02-03T17:05:23Z",
+      "side": 1,
+      "message": "you\u0027re right, really what I wanted to write was an end-to-end test for SubMan (actually none of the code being exercised even involves SubController), I just wasn\u0027t sure where to put it. I thought about putting it in CTS, but this is a hidden API. Do you have any thoughts on where I could move this test?",
+      "parentUuid": "bd8a3192_32d71ca7",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 84
+      },
+      "revId": "058f888d65923f52967104caf6b8a6e38bd85474",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "02557d57_fd345842",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/SubscriptionControllerTest.java",
         "patchSetId": 1
