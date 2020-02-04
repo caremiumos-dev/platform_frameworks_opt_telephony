@@ -260,11 +260,9 @@ public class GsmCdmaCallTracker extends CallTracker {
 
     @UnsupportedAppUsage
     private void fakeHoldForegroundBeforeDial() {
-        List<Connection> connCopy;
-
         // We need to make a copy here, since fakeHoldBeforeDial()
         // modifies the lists, and we don't want to reverse the order
-        connCopy = (List<Connection>) mForegroundCall.mConnections.clone();
+        List<Connection> connCopy = mForegroundCall.getConnections();
 
         for (int i = 0, s = connCopy.size() ; i < s ; i++) {
             GsmCdmaConnection conn = (GsmCdmaConnection)connCopy.get(i);
@@ -937,18 +935,20 @@ public class GsmCdmaCallTracker extends CallTracker {
                     // we need to clean up the foregroundCall and ringingCall.
                     // Loop through foreground call connections as
                     // it contains the known logical connections.
-                    int count = mForegroundCall.mConnections.size();
+                    int count = mForegroundCall.getConnections().size();
                     for (int n = 0; n < count; n++) {
                         if (Phone.DEBUG_PHONE) log("adding fgCall cn " + n + " to droppedDuringPoll");
-                        GsmCdmaConnection cn = (GsmCdmaConnection)mForegroundCall.mConnections.get(n);
+                        GsmCdmaConnection cn = (GsmCdmaConnection) mForegroundCall
+                                .getConnections().get(n);
                         mDroppedDuringPoll.add(cn);
                     }
-                    count = mRingingCall.mConnections.size();
+                    count = mRingingCall.getConnections().size();
                     // Loop through ringing call connections as
                     // it may contain the known logical connections.
                     for (int n = 0; n < count; n++) {
                         if (Phone.DEBUG_PHONE) log("adding rgCall cn " + n + " to droppedDuringPoll");
-                        GsmCdmaConnection cn = (GsmCdmaConnection)mRingingCall.mConnections.get(n);
+                        GsmCdmaConnection cn = (GsmCdmaConnection) mRingingCall
+                                .getConnections().get(n);
                         mDroppedDuringPoll.add(cn);
                     }
 
@@ -1322,18 +1322,20 @@ public class GsmCdmaCallTracker extends CallTracker {
     }
 
     private void logHangupEvent(GsmCdmaCall call) {
-        int count = call.mConnections.size();
-        for (int i = 0; i < count; i++) {
-            GsmCdmaConnection cn = (GsmCdmaConnection) call.mConnections.get(i);
+        for (Connection conn : call.getConnections()) {
+            GsmCdmaConnection c = (GsmCdmaConnection) conn;
             int call_index;
             try {
-                call_index = cn.getGsmCdmaIndex();
-            } catch (CallStateException ex) {
+                call_index = c.getGsmCdmaIndex();
+            } catch (CallStateException e) {
                 call_index = -1;
             }
-            mMetrics.writeRilHangup(mPhone.getPhoneId(), cn, call_index, getNetworkCountryIso());
+            mMetrics.writeRilHangup(mPhone.getPhoneId(), c, call_index, getNetworkCountryIso());
         }
-        if (VDBG) Rlog.v(LOG_TAG, "logHangupEvent logged " + count + " Connections ");
+        if (VDBG) {
+            Rlog.v(LOG_TAG, "logHangupEvent logged " + call.getConnections().size()
+                    + " Connections ");
+        }
     }
 
     public void hangupWaitingOrBackground() {
@@ -1349,29 +1351,26 @@ public class GsmCdmaCallTracker extends CallTracker {
 
     public void hangupConnectionByIndex(GsmCdmaCall call, int index)
             throws CallStateException {
-        int count = call.mConnections.size();
-        for (int i = 0; i < count; i++) {
-            GsmCdmaConnection cn = (GsmCdmaConnection)call.mConnections.get(i);
-            if (!cn.mDisconnected && cn.getGsmCdmaIndex() == index) {
-                mMetrics.writeRilHangup(mPhone.getPhoneId(), cn, cn.getGsmCdmaIndex(),
+        for (Connection conn : call.getConnections()) {
+            GsmCdmaConnection c = (GsmCdmaConnection) conn;
+            if (!c.mDisconnected && c.getGsmCdmaIndex() == index) {
+                mMetrics.writeRilHangup(mPhone.getPhoneId(), c, c.getGsmCdmaIndex(),
                         getNetworkCountryIso());
                 mCi.hangupConnection(index, obtainCompleteMessage());
                 return;
             }
         }
-
         throw new CallStateException("no GsmCdma index found");
     }
 
     public void hangupAllConnections(GsmCdmaCall call) {
         try {
-            int count = call.mConnections.size();
-            for (int i = 0; i < count; i++) {
-                GsmCdmaConnection cn = (GsmCdmaConnection)call.mConnections.get(i);
-                if (!cn.mDisconnected) {
-                    mMetrics.writeRilHangup(mPhone.getPhoneId(), cn, cn.getGsmCdmaIndex(),
+            for (Connection conn : call.getConnections()) {
+                GsmCdmaConnection c = (GsmCdmaConnection) conn;
+                if (!c.mDisconnected) {
+                    mMetrics.writeRilHangup(mPhone.getPhoneId(), c, c.getGsmCdmaIndex(),
                             getNetworkCountryIso());
-                    mCi.hangupConnection(cn.getGsmCdmaIndex(), obtainCompleteMessage());
+                    mCi.hangupConnection(c.getGsmCdmaIndex(), obtainCompleteMessage());
                 }
             }
         } catch (CallStateException ex) {
@@ -1381,14 +1380,12 @@ public class GsmCdmaCallTracker extends CallTracker {
 
     public GsmCdmaConnection getConnectionByIndex(GsmCdmaCall call, int index)
             throws CallStateException {
-        int count = call.mConnections.size();
-        for (int i = 0; i < count; i++) {
-            GsmCdmaConnection cn = (GsmCdmaConnection)call.mConnections.get(i);
-            if (!cn.mDisconnected && cn.getGsmCdmaIndex() == index) {
-                return cn;
+        for (Connection conn : call.getConnections()) {
+            GsmCdmaConnection c = (GsmCdmaConnection) conn;
+            if (!c.mDisconnected && c.getGsmCdmaIndex() == index) {
+                return c;
             }
         }
-
         return null;
     }
 
