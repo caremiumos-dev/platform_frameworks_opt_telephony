@@ -79,21 +79,14 @@ public class ImsPhoneCall extends Call {
             //Rlog.e(LOG_TAG, "dispose: unexpected error on hangup", ex);
             //while disposing, ignore the exception and clean the connections
         } finally {
-            for(int i = 0, s = mConnections.size(); i < s; i++) {
-                ImsPhoneConnection c = (ImsPhoneConnection) mConnections.get(i);
-                c.onDisconnect(DisconnectCause.LOST_SIGNAL);
+            List<Connection> connections = getConnections();
+            for (Connection conn : connections) {
+                conn.onDisconnect(DisconnectCause.LOST_SIGNAL);
             }
         }
     }
 
     /************************** Overridden from Call *************************/
-
-    @UnsupportedAppUsage
-    @Override
-    public List<Connection>
-    getConnections() {
-        return mConnections;
-    }
 
     @Override
     public Phone
@@ -131,15 +124,16 @@ public class ImsPhoneCall extends Call {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        List<Connection> connections = getConnections();
         sb.append("[ImsPhoneCall ");
         sb.append(mCallContext);
         sb.append(" state: ");
         sb.append(mState.toString());
         sb.append(" ");
-        if (mConnections.size() > 1) {
+        if (connections.size() > 1) {
             sb.append(" ERROR_MULTIPLE ");
         }
-        for (Connection conn : mConnections) {
+        for (Connection conn : connections) {
             sb.append(conn);
             sb.append(" ");
         }
@@ -167,7 +161,7 @@ public class ImsPhoneCall extends Call {
             Rlog.v(LOG_TAG, "attach : " + mCallContext + " conn = " + conn);
         }
         clearDisconnected();
-        mConnections.add(conn);
+        addConnection(conn);
 
         mOwner.logState();
     }
@@ -196,8 +190,9 @@ public class ImsPhoneCall extends Call {
 
             boolean hasOnlyDisconnectedConnections = true;
 
-            for (int i = 0, s = mConnections.size()  ; i < s; i ++) {
-                if (mConnections.get(i).getState() != State.DISCONNECTED) {
+            List<Connection> connections = getConnections();
+            for (int i = 0, s = connections.size(); i < s; i++) {
+                if (connections.get(i).getState() != State.DISCONNECTED) {
                     hasOnlyDisconnectedConnections = false;
                     break;
                 }
@@ -222,7 +217,7 @@ public class ImsPhoneCall extends Call {
         if (VDBG) {
             Rlog.v(LOG_TAG, "detach : " + mCallContext + " conn = " + conn);
         }
-        mConnections.remove(conn);
+        removeConnection(conn);
         clearDisconnected();
 
         mOwner.logState();
@@ -234,7 +229,7 @@ public class ImsPhoneCall extends Call {
      */
     /*package*/ boolean
     isFull() {
-        return mConnections.size() == ImsPhoneCallTracker.MAX_CONNECTIONS_PER_CALL;
+        return getConnections().size() == ImsPhoneCallTracker.MAX_CONNECTIONS_PER_CALL;
     }
 
     //***** Called from ImsPhoneCallTracker
@@ -244,8 +239,9 @@ public class ImsPhoneCall extends Call {
     @UnsupportedAppUsage
     @VisibleForTesting
     public void onHangupLocal() {
-        for (int i = 0, s = mConnections.size(); i < s; i++) {
-            ImsPhoneConnection cn = (ImsPhoneConnection)mConnections.get(i);
+        List<Connection> connections = getConnections();
+        for (int i = 0, s = connections.size(); i < s; i++) {
+            ImsPhoneConnection cn = (ImsPhoneConnection) connections.get(i);
             cn.onHangupLocal();
         }
         synchronized(this) {
@@ -260,9 +256,10 @@ public class ImsPhoneCall extends Call {
 
     @VisibleForTesting
     public ImsPhoneConnection getFirstConnection() {
-        if (mConnections.size() == 0) return null;
+        List<Connection> connections = getConnections();
+        if (connections.size() == 0) return null;
 
-        return (ImsPhoneConnection) mConnections.get(0);
+        return (ImsPhoneConnection) connections.get(0);
     }
 
     /*package*/ void
@@ -394,9 +391,9 @@ public class ImsPhoneCall extends Call {
     }
 
     private void takeOver(ImsPhoneCall that) {
-        mConnections = that.mConnections;
+        getConnectionFrom(that);
         mState = that.mState;
-        for (Connection c : mConnections) {
+        for (Connection c : getConnections()) {
             ((ImsPhoneConnection) c).changeParent(this);
         }
     }
