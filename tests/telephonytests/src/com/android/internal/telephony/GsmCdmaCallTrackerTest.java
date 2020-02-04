@@ -193,7 +193,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
 
     @Test
     @MediumTest
-    public void testMOCallSwitch() {
+    public void testMOCallSwitch() throws Exception {
         testMOCallPickUp();
         logd("MO call picked up, initiating a new MO call");
         assertEquals(GsmCdmaCall.State.ACTIVE, mCTUT.mForegroundCall.getState());
@@ -202,12 +202,12 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(0, mCTUT.mBackgroundCall.getConnections().size());
 
         String mDialString = PhoneNumberUtils.stripSeparators("+17005554142");
-        try {
+//        try {
             mCTUT.dial(mDialString, new Bundle());
-        } catch(Exception ex) {
-            ex.printStackTrace();
-            Assert.fail("unexpected exception thrown" + ex.getMessage());
-        }
+//        } catch(Exception ex) {
+//            ex.printStackTrace();
+//            Assert.fail("unexpected exception thrown" + ex.getMessage());
+//        }
         processAllMessages();
         assertEquals(GsmCdmaCall.State.DIALING, mCTUT.mForegroundCall.getState());
         assertEquals(GsmCdmaCall.State.HOLDING, mCTUT.mBackgroundCall.getState());
@@ -299,7 +299,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
     @Ignore
     @Test
     @MediumTest
-    public void testMOCallSwitchHangupForeGround() {
+    public void testMOCallSwitchHangupForeGround() throws Exception {
         testMOCallSwitch();
         logd("Hang up the foreground MO call while dialing ");
         try {
@@ -319,7 +319,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
     @Ignore
     @Test
     @MediumTest
-    public void testMOCallPickUpHangUpResumeBackGround() {
+    public void testMOCallPickUpHangUpResumeBackGround() throws Exception {
         testMOCallSwitch();
         logd("Pick up the new MO Call");
         try{
