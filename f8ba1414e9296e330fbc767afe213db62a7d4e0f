@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e093c01_1a9423c7",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-02-05T20:16:20Z",
+      "side": 1,
+      "message": "combine this and the if block above?\n\nif (isEuicc \u0026\u0026 mDefaultEuiccCardId !\u003d UNSUPPORTED_CARD_ID) {\n    if (cardString \u003d\u003d null) register;\n    else set mDefaultEuiccCardId;\n}\n\nAnd I think addCardId() should be done before that (because it needs to be called before convertToPublicCardId())?",
+      "revId": "f8ba1414e9296e330fbc767afe213db62a7d4e0f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
