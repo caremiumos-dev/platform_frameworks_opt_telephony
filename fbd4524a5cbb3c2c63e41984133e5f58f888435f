@@ -70,6 +70,30 @@
       "revId": "fbd4524a5cbb3c2c63e41984133e5f58f888435f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bbcafbb_55030d4e",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3166,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-02-05T05:10:19Z",
+      "side": 1,
+      "message": "Ims service responses cs retry error aftering checking bg call and ringing call state.\nSo, framework does not need to check bg call and ringing call state.\nIn the case of voice call, the framework does not need to check call state because it is judged by ims service. But it is left because this is AOSP code.",
+      "parentUuid": "144a1bb6_25d80e90",
+      "range": {
+        "startLine": 3166,
+        "startChar": 27,
+        "endLine": 3166,
+        "endChar": 47
+      },
+      "revId": "fbd4524a5cbb3c2c63e41984133e5f58f888435f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
