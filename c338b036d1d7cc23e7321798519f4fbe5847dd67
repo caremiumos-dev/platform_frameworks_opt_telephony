@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0c1aea89_87e82789",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-02-05T06:42:18Z",
+      "side": 1,
+      "message": "This condition can be met in case cdma cs retry occurs.\nCdma supple services operate through dial operation and there is no response about result of setting as success/failure.\nSo, error message should not be presented.",
+      "parentUuid": "01c0fe32_5c95da43",
+      "range": {
+        "startLine": 1298,
+        "startChar": 12,
+        "endLine": 1298,
+        "endChar": 22
+      },
+      "revId": "c338b036d1d7cc23e7321798519f4fbe5847dd67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d383d36_d70c8f60",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 4
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "9feb47c4_3a7763b4",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-02-05T06:42:18Z",
+      "side": 1,
+      "message": "This is for Cdma call forwarding query. Because cdms doesn\u0027t support query operation.\nIn this case, CallForwardInfo is not valid, so we added else if condition.",
+      "parentUuid": "1d383d36_d70c8f60",
+      "range": {
+        "startLine": 1443,
+        "startChar": 20,
+        "endLine": 1443,
+        "endChar": 93
+      },
+      "revId": "c338b036d1d7cc23e7321798519f4fbe5847dd67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a98f5357_30a3c6ae",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
         "patchSetId": 4
@@ -91,6 +139,30 @@
       "revId": "c338b036d1d7cc23e7321798519f4fbe5847dd67",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1383ba5_1f4288c1",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-02-05T06:42:18Z",
+      "side": 1,
+      "message": "This condition can be met in case cdma cs retry occurs.\nCdma supple services have no query operation. This is not a error situation.\nSo, error message should not be presented.",
+      "parentUuid": "a98f5357_30a3c6ae",
+      "range": {
+        "startLine": 1444,
+        "startChar": 16,
+        "endLine": 1444,
+        "endChar": 17
+      },
+      "revId": "c338b036d1d7cc23e7321798519f4fbe5847dd67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
