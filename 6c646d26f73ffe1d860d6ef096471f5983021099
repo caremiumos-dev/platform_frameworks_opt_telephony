@@ -46,6 +46,30 @@
       "revId": "6c646d26f73ffe1d860d6ef096471f5983021099",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3dd7f69e_a57af359",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-02-05T02:11:25Z",
+      "side": 0,
+      "message": "This is for cs retry operation of call waiting setting over mmi.",
+      "parentUuid": "12bea137_618e5780",
+      "range": {
+        "startLine": 2226,
+        "startChar": 28,
+        "endLine": 2226,
+        "endChar": 29
+      },
+      "revId": "6c646d26f73ffe1d860d6ef096471f5983021099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
