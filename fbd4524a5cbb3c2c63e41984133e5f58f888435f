@@ -46,6 +46,30 @@
       "revId": "fbd4524a5cbb3c2c63e41984133e5f58f888435f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "144a1bb6_25d80e90",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3166,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-02-05T04:03:20Z",
+      "side": 1,
+      "message": "If you see the initiateSilentRedial called for voice call, it does check for\n\n\u0026\u0026 mBackgroundCall.getState() \u003d\u003d ImsPhoneCall.State.IDLE\n                        \u0026\u0026 mRingingCall.getState() \u003d\u003d ImsPhoneCall.State.IDLE) {\n\nBut in this case no such check is done. Why?",
+      "parentUuid": "53ee0bba_2b95a5fd",
+      "range": {
+        "startLine": 3166,
+        "startChar": 27,
+        "endLine": 3166,
+        "endChar": 47
+      },
+      "revId": "fbd4524a5cbb3c2c63e41984133e5f58f888435f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
