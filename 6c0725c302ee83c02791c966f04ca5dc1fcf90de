@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47f0fc3f_3250e8ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2020-02-05T18:48:51Z",
+      "side": 1,
+      "message": "please add the line:\n\nMerged-In: \u003cchange-id of the CL already submitted to master, possibly the same change-id as this if it\u0027s a cherry-pick\u003e",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 52
+      },
+      "revId": "6c0725c302ee83c02791c966f04ca5dc1fcf90de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
