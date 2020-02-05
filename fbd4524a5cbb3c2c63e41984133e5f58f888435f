@@ -22,6 +22,30 @@
       "revId": "fbd4524a5cbb3c2c63e41984133e5f58f888435f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53ee0bba_2b95a5fd",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3166,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-02-05T01:57:11Z",
+      "side": 1,
+      "message": "An implementation of the silent silent request from the network.\nI don\u0027t know how this can be a problem.\nSilent redial is an internal operation, so it is not different from the case that only volte ussd is requested without cs redial regarding to call triggering.",
+      "parentUuid": "3565f793_52831f71",
+      "range": {
+        "startLine": 3166,
+        "startChar": 27,
+        "endLine": 3166,
+        "endChar": 47
+      },
+      "revId": "fbd4524a5cbb3c2c63e41984133e5f58f888435f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
