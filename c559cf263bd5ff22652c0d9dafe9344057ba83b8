@@ -115,6 +115,30 @@
       "revId": "c559cf263bd5ff22652c0d9dafe9344057ba83b8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bd4a4cc_9430651b",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-02-05T05:35:43Z",
+      "side": 1,
+      "message": "This is because we want to use SS object collectively in handleMessage. \nWhen we use separate types/subclasses, SS must be distinguished for each message in handleMessage.\nIs it better?",
+      "parentUuid": "18ae86cb_ff79f936",
+      "range": {
+        "startLine": 304,
+        "startChar": 8,
+        "endLine": 360,
+        "endChar": 37
+      },
+      "revId": "c559cf263bd5ff22652c0d9dafe9344057ba83b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
