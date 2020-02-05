@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "d25bc14a_c4e0626e",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-02-05T05:47:54Z",
+      "side": 1,
+      "message": "As I said, Ut interface can be used regardless ims service state.",
+      "parentUuid": "28db8c28_406e02f5",
+      "range": {
+        "startLine": 2021,
+        "startChar": 0,
+        "endLine": 2021,
+        "endChar": 97
+      },
+      "revId": "c559cf263bd5ff22652c0d9dafe9344057ba83b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18ae86cb_ff79f936",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 7
