@@ -1,0 +1,8 @@
+Code-Review+2: Jordan Liu <jminjie@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Radhika Agrawal <radhikaagrawal@google.com>
+Submitted-at: Wed, 05 Feb 2020 21:37:08 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1225014
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
