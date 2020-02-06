@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d44cf5e5_949363b0",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-02-06T16:53:53Z",
+      "side": 1,
+      "message": "\u003e 100 lines, please reformat.",
+      "range": {
+        "startLine": 2028,
+        "startChar": 88,
+        "endLine": 2028,
+        "endChar": 109
+      },
+      "revId": "352302354a6216dffb5ce2cebf1033399353d8dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb19c715_1701db3b",
+        "filename": "src/java/com/android/internal/telephony/PhoneInternalInterface.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-02-06T16:53:53Z",
+      "side": 1,
+      "message": "Can this documentation be changed slightly to specify that this will get the call forwarding option for SERVICE_CLASS_VOICE?",
+      "range": {
+        "startLine": 579,
+        "startChar": 7,
+        "endLine": 579,
+        "endChar": 31
+      },
+      "revId": "352302354a6216dffb5ce2cebf1033399353d8dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e747112_4cb2bc82",
+        "filename": "src/java/com/android/internal/telephony/PhoneInternalInterface.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-02-06T16:53:53Z",
+      "side": 1,
+      "message": "Can this documentation be changed slightly to specify that this will set the call forwarding option for SERVICE_CLASS_VOICE?",
+      "range": {
+        "startLine": 609,
+        "startChar": 7,
+        "endLine": 609,
+        "endChar": 31
+      },
+      "revId": "352302354a6216dffb5ce2cebf1033399353d8dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54675a14_eb8ec03c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-02-06T16:53:53Z",
+      "side": 1,
+      "message": "New APIs do not need a @UnsupportedAppUsage tag",
+      "range": {
+        "startLine": 1137,
+        "startChar": 4,
+        "endLine": 1137,
+        "endChar": 24
+      },
+      "revId": "352302354a6216dffb5ce2cebf1033399353d8dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0764c6f_a3137136",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-02-06T16:53:53Z",
+      "side": 1,
+      "message": "Any reason why this was added?",
+      "range": {
+        "startLine": 1158,
+        "startChar": 5,
+        "endLine": 1158,
+        "endChar": 24
+      },
+      "revId": "352302354a6216dffb5ce2cebf1033399353d8dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cd31c6e_3a4a1795",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-02-06T16:53:53Z",
+      "side": 1,
+      "message": "Unfortunately the @UnsupportedAppUsage tag means that there are vendors extending this method in their implementations. We can not change the order of the method calls. The only thing that we can do is create a new method with the correct signature and have the old method call the new one.",
+      "range": {
+        "startLine": 1175,
+        "startChar": 12,
+        "endLine": 1175,
+        "endChar": 33
+      },
+      "revId": "352302354a6216dffb5ce2cebf1033399353d8dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "801887ae_9b2411b5",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneBase.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-02-06T16:53:53Z",
+      "side": 1,
+      "message": "\u003e 100 lines, please reformat",
+      "range": {
+        "startLine": 373,
+        "startChar": 88,
+        "endLine": 373,
+        "endChar": 109
+      },
+      "revId": "352302354a6216dffb5ce2cebf1033399353d8dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6891b582_89b9d8e7",
+        "filename": "src/java/com/android/internal/telephony/sip/SipPhoneBase.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-02-06T16:53:53Z",
+      "side": 1,
+      "message": "\u003e 100 lines, please reformat.",
+      "range": {
+        "startLine": 327,
+        "startChar": 88,
+        "endLine": 327,
+        "endChar": 109
+      },
+      "revId": "352302354a6216dffb5ce2cebf1033399353d8dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
