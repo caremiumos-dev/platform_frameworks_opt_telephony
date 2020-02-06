@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae2f792a_941cc943",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2020-02-06T21:19:56Z",
+      "side": 1,
+      "message": "I didn\u0027t get this one .. does this CL add any logic for this ?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 41
+      },
+      "revId": "1290e7c62bf131b0170524cade6cebf5722cb34a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
