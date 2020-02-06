@@ -95,7 +95,6 @@ public class CarrierAppUtilsTest {
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
                         | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(null);
         ArraySet<String> systemCarrierAppsDisabledUntilUsed = new ArraySet<>();
         systemCarrierAppsDisabledUntilUsed.add("com.example.missing.app");
@@ -119,7 +118,6 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
@@ -151,7 +149,6 @@ public class CarrierAppUtilsTest {
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
                         | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(appInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
@@ -179,7 +176,6 @@ public class CarrierAppUtilsTest {
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
                         | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(appInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
@@ -206,7 +202,6 @@ public class CarrierAppUtilsTest {
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
                         | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(appInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
@@ -231,7 +226,6 @@ public class CarrierAppUtilsTest {
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
                         | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(appInfo);
         Mockito.when(mPackageManager
                 .getApplicationEnabledSetting(Mockito.anyString(), Mockito.anyInt()))
@@ -262,8 +256,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY, USER_ID))
+                        | PackageManager.MATCH_SYSTEM_ONLY, USER_ID))
                 .thenReturn(appInfo);
         Mockito.when(mPackageManager
                 .getApplicationEnabledSetting(Mockito.anyString(), Mockito.anyInt()))
@@ -301,8 +294,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY, USER_ID))
+                        | PackageManager.MATCH_SYSTEM_ONLY, USER_ID))
                 .thenReturn(appInfo);
         ApplicationInfo associatedAppInfo = new ApplicationInfo();
         associatedAppInfo.packageName = ASSOCIATED_APP;
@@ -310,8 +302,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(ASSOCIATED_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY, USER_ID))
+                        | PackageManager.MATCH_SYSTEM_ONLY, USER_ID))
                 .thenReturn(associatedAppInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
@@ -344,8 +335,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         ApplicationInfo associatedAppInfo = new ApplicationInfo();
         associatedAppInfo.packageName = ASSOCIATED_APP;
@@ -356,8 +346,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(ASSOCIATED_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY, USER_ID))
+                        | PackageManager.MATCH_SYSTEM_ONLY, USER_ID))
                 .thenReturn(null);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
@@ -390,8 +379,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         ApplicationInfo associatedAppInfo = new ApplicationInfo();
         associatedAppInfo.packageName = ASSOCIATED_APP;
@@ -401,8 +389,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(ASSOCIATED_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY, USER_ID))
+                        | PackageManager.MATCH_SYSTEM_ONLY, USER_ID))
                 .thenReturn(associatedAppInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
@@ -432,8 +419,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
@@ -461,8 +447,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver, USER_ID, CARRIER_APPS,
@@ -488,8 +473,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
@@ -516,8 +500,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver, USER_ID, CARRIER_APPS,
@@ -543,8 +526,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
@@ -571,8 +553,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver, USER_ID, CARRIER_APPS,
@@ -599,8 +580,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
@@ -628,8 +608,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY],
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver,
@@ -658,8 +637,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         ApplicationInfo associatedAppInfo = new ApplicationInfo();
         associatedAppInfo.packageName = ASSOCIATED_APP;
@@ -669,8 +647,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(ASSOCIATED_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY, USER_ID))
+                        | PackageManager.MATCH_SYSTEM_ONLY, USER_ID))
                 .thenReturn(associatedAppInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
@@ -704,8 +681,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(CARRIER_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
+                        | PackageManager.MATCH_SYSTEM_ONLY,
                 USER_ID)).thenReturn(appInfo);
         ApplicationInfo associatedAppInfo = new ApplicationInfo();
         associatedAppInfo.packageName = ASSOCIATED_APP;
@@ -715,8 +691,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(ASSOCIATED_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY, USER_ID))
+                        | PackageManager.MATCH_SYSTEM_ONLY, USER_ID))
                 .thenReturn(associatedAppInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
@@ -754,7 +729,6 @@ public class CarrierAppUtilsTest {
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
                         | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(appInfo);
         ApplicationInfo associatedAppInfo = new ApplicationInfo();
         associatedAppInfo.packageName = ASSOCIATED_APP;
@@ -763,8 +737,7 @@ public class CarrierAppUtilsTest {
         Mockito.when(mPackageManager.getApplicationInfo(ASSOCIATED_APP,
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
-                        | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY, USER_ID))
+                        | PackageManager.MATCH_SYSTEM_ONLY, USER_ID))
                 .thenReturn(associatedAppInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
@@ -796,7 +769,6 @@ public class CarrierAppUtilsTest {
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
                         | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver,
@@ -826,7 +798,6 @@ public class CarrierAppUtilsTest {
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
                         | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(appInfo);
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
@@ -857,7 +828,6 @@ public class CarrierAppUtilsTest {
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS
                         | PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS
                         | PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver,
