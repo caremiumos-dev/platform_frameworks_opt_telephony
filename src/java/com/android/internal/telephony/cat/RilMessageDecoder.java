@@ -130,6 +130,10 @@ class RilMessageDecoder extends StateMachine {
         super("RilMessageDecoder");
     }
 
+    void update(IccFileHandler fh) {
+        mCmdParamsFactory.update(fh);
+    }
+
     private class StateStart extends State {
         @Override
         public boolean processMessage(Message msg) {
