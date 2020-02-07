@@ -22,6 +22,30 @@
       "revId": "1290e7c62bf131b0170524cade6cebf5722cb34a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f806fa44_02a4570b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-02-07T06:29:21Z",
+      "side": 1,
+      "message": "When csfb occurs, there is no operation to remove pendingMmiCodes from list. So, should remove this.",
+      "parentUuid": "ae2f792a_941cc943",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 41
+      },
+      "revId": "1290e7c62bf131b0170524cade6cebf5722cb34a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
