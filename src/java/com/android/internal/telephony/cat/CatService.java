@@ -43,7 +43,6 @@ import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.IccFileHandler;
-import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.IccRefreshResponse;
 import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.UiccCard;
@@ -85,7 +84,6 @@ public class CatService extends Handler implements AppInterface {
     private static final boolean DBG = false;
 
     // Class members
-    private static IccRecords mIccRecords;
     private static UiccCardApplication mUiccApplication;
 
     // Service members.
@@ -126,9 +124,6 @@ public class CatService extends Handler implements AppInterface {
 
     static final int MSG_ID_RIL_MSG_DECODED          = 10;
 
-    // Events to signal SIM presence or absent in the device.
-    private static final int MSG_ID_ICC_RECORDS_LOADED       = 20;
-
     //Events to signal SIM REFRESH notificatations
     private static final int MSG_ID_ICC_REFRESH  = 30;
 
@@ -144,10 +139,9 @@ public class CatService extends Handler implements AppInterface {
     private int mSlotId;
 
     /* For multisim catservice should not be singleton */
-    private CatService(CommandsInterface ci, UiccCardApplication ca, IccRecords ir,
-            Context context, IccFileHandler fh, UiccProfile uiccProfile, int slotId) {
-        if (ci == null || ca == null || ir == null || context == null || fh == null
-                || uiccProfile == null) {
+    private CatService(CommandsInterface ci, UiccCardApplication ca, Context context,
+            IccFileHandler fh, UiccProfile uiccProfile, int slotId) {
+        if (ci == null || ca == null || context == null || fh == null || uiccProfile == null) {
             throw new NullPointerException(
                     "Service: Input parameters must not be null");
         }
@@ -173,13 +167,7 @@ public class CatService extends Handler implements AppInterface {
         mCmdIf.registerForIccRefresh(this, MSG_ID_ICC_REFRESH, null);
         mCmdIf.setOnCatCcAlphaNotify(this, MSG_ID_ALPHA_NOTIFY, null);
 
-        mIccRecords = ir;
         mUiccApplication = ca;
-
-        // Register for SIM ready event.
-        mIccRecords.registerForRecordsLoaded(this, MSG_ID_ICC_RECORDS_LOADED, null);
-        CatLog.d(this, "registerForRecordsLoaded slotid=" + mSlotId + " instance:" + this);
-
 
         mUiccController = UiccController.getInstance();
         mUiccController.registerForIccChanged(this, MSG_ID_ICC_CHANGED, null);
@@ -204,15 +192,13 @@ public class CatService extends Handler implements AppInterface {
             Context context, UiccProfile uiccProfile, int slotId) {
         UiccCardApplication ca = null;
         IccFileHandler fh = null;
-        IccRecords ir = null;
         if (uiccProfile != null) {
             /* Since Cat is not tied to any application, but rather is Uicc application
-             * in itself - just get first FileHandler and IccRecords object
+             * in itself - just get first application
              */
             ca = uiccProfile.getApplicationIndex(0);
             if (ca != null) {
                 fh = ca.getIccFileHandler();
-                ir = ca.getIccRecords();
             }
         }
 
@@ -225,24 +211,14 @@ public class CatService extends Handler implements AppInterface {
                 }
             }
             if (sInstance[slotId] == null) {
-                if (ci == null || ca == null || ir == null || context == null || fh == null
+                if (ci == null || ca == null || context == null || fh == null
                         || uiccProfile == null) {
                     return null;
                 }
 
-                sInstance[slotId] = new CatService(ci, ca, ir, context, fh, uiccProfile, slotId);
-            } else if ((ir != null) && (mIccRecords != ir)) {
-                if (mIccRecords != null) {
-                    mIccRecords.unregisterForRecordsLoaded(sInstance[slotId]);
-                }
-
-                mIccRecords = ir;
+                sInstance[slotId] = new CatService(ci, ca, context, fh, uiccProfile, slotId);
+            } else {
                 mUiccApplication = ca;
-
-                mIccRecords.registerForRecordsLoaded(sInstance[slotId],
-                        MSG_ID_ICC_RECORDS_LOADED, null);
-                CatLog.d(sInstance[slotId], "registerForRecordsLoaded slotid=" + slotId
-                        + " instance:" + sInstance[slotId]);
             }
             return sInstance[slotId];
         }
@@ -253,7 +229,6 @@ public class CatService extends Handler implements AppInterface {
     public void dispose() {
         synchronized (sInstanceLock) {
             CatLog.d(this, "Disposing CatService object");
-            mIccRecords.unregisterForRecordsLoaded(this);
 
             // Clean up stk icon if dispose is called
             broadcastCardStateAndIccRefreshResp(CardState.CARDSTATE_ABSENT, null);
@@ -852,8 +827,6 @@ public class CatService extends Handler implements AppInterface {
         case MSG_ID_CALL_SETUP:
             mMsgDecoder.sendStartDecodingMessageParams(new RilMessage(msg.what, null));
             break;
-        case MSG_ID_ICC_RECORDS_LOADED:
-            break;
         case MSG_ID_RIL_MSG_DECODED:
             handleRilMsg((RilMessage) msg.obj);
             break;
@@ -1120,33 +1093,16 @@ public class CatService extends Handler implements AppInterface {
     public void update(CommandsInterface ci,
             Context context, UiccProfile uiccProfile) {
         UiccCardApplication ca = null;
-        IccRecords ir = null;
 
         if (uiccProfile != null) {
             /* Since Cat is not tied to any application, but rather is Uicc application
-             * in itself - just get first FileHandler and IccRecords object
+             * in itself - just get first application
              */
             ca = uiccProfile.getApplicationIndex(0);
-            if (ca != null) {
-                ir = ca.getIccRecords();
-            }
         }
 
         synchronized (sInstanceLock) {
-            if ((ir != null) && (mIccRecords != ir)) {
-                if (mIccRecords != null) {
-                    mIccRecords.unregisterForRecordsLoaded(this);
-                }
-
-                CatLog.d(this,
-                        "Reinitialize the Service with SIMRecords and UiccCardApplication");
-                mIccRecords = ir;
-                mUiccApplication = ca;
-
-                // re-Register for SIM ready event.
-                mIccRecords.registerForRecordsLoaded(this, MSG_ID_ICC_RECORDS_LOADED, null);
-                CatLog.d(this, "registerForRecordsLoaded slotid=" + mSlotId + " instance:" + this);
-            }
+            mUiccApplication = ca;
         }
     }
 
