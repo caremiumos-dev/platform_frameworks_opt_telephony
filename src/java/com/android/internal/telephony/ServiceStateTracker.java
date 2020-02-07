@@ -211,6 +211,11 @@ public class ServiceStateTracker extends Handler {
     private RegistrantList mPsRestrictEnabledRegistrants = new RegistrantList();
     private RegistrantList mPsRestrictDisabledRegistrants = new RegistrantList();
     private RegistrantList mImsCapabilityChangedRegistrants = new RegistrantList();
+<<<<<<< HEAD   (050af0 5G meteredness for telephony framework)
+=======
+    private RegistrantList mNrStateChangedRegistrants = new RegistrantList();
+    private RegistrantList mNrFrequencyChangedRegistrants = new RegistrantList();
+>>>>>>> CHANGE (0d7320 Carrier config for 5G up/down bandwidth and LTE for NSA)
 
     /* Radio power off pending flag and tag counter */
     private boolean mPendingRadioPowerOffAfterDataOff = false;
@@ -1538,10 +1543,24 @@ public class ServiceStateTracker extends Handler {
                     }
                     mPhone.notifyPhysicalChannelConfiguration(list);
                     mLastPhysicalChannelConfigList = list;
+<<<<<<< HEAD   (050af0 5G meteredness for telephony framework)
                     boolean hasChanged =
                             updateNrFrequencyRangeFromPhysicalChannelConfigs(list, mSS);
                     hasChanged |= updateNrStateFromPhysicalChannelConfigs(
                             list, mSS);
+=======
+                    boolean hasChanged = false;
+                    if (updateNrFrequencyRangeFromPhysicalChannelConfigs(list, mSS)) {
+                        mNrFrequencyChangedRegistrants.notifyRegistrants();
+                        hasChanged = true;
+                    }
+                    if (updateNrStateFromPhysicalChannelConfigs(list, mSS)) {
+                        mNrStateChangedRegistrants.notifyRegistrants();
+                        hasChanged = true;
+                    }
+                    hasChanged |= RatRatcheter
+                            .updateBandwidths(getBandwidthsFromConfigs(list), mSS);
+>>>>>>> CHANGE (0d7320 Carrier config for 5G up/down bandwidth and LTE for NSA)
 
                     // Notify NR frequency, NR connection status or bandwidths changed.
                     if (hasChanged
@@ -5429,4 +5448,103 @@ public class ServiceStateTracker extends Handler {
         }
         return operatorName;
     }
+<<<<<<< HEAD   (050af0 5G meteredness for telephony framework)
+=======
+
+    @RilRadioTechnology
+    private static int getRilDataRadioTechnologyForWwan(ServiceState ss) {
+        NetworkRegistrationInfo regInfo = ss.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        int networkType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        if (regInfo != null) {
+            networkType = regInfo.getAccessNetworkTechnology();
+        }
+        return ServiceState.networkTypeToRilRadioTechnology(networkType);
+    }
+
+    /**
+     * Registers for 5G NR state changed.
+     * @param h handler to notify
+     * @param what what code of message when delivered
+     * @param obj placed in Message.obj
+     */
+    public void registerForNrStateChanged(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mNrStateChangedRegistrants.add(r);
+    }
+
+    /**
+     * Unregisters for 5G NR state changed.
+     * @param h handler to notify
+     */
+    public void unregisterForNrStateChanged(Handler h) {
+        mNrStateChangedRegistrants.remove(h);
+    }
+
+    /**
+     * Registers for 5G NR frequency changed.
+     * @param h handler to notify
+     * @param what what code of message when delivered
+     * @param obj placed in Message.obj
+     */
+    public void registerForNrFrequencyChanged(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mNrFrequencyChangedRegistrants.add(r);
+    }
+
+    /**
+     * Unregisters for 5G NR frequency changed.
+     * @param h handler to notify
+     */
+    public void unregisterForNrFrequencyChanged(Handler h) {
+        mNrFrequencyChangedRegistrants.remove(h);
+    }
+
+    /**
+     * Get the NR data connection context ids.
+     *
+     * @return data connection context ids.
+     */
+    @NonNull
+    public Set<Integer> getNrContextIds() {
+        Set<Integer> idSet = new HashSet<>();
+
+        for (PhysicalChannelConfig config : mLastPhysicalChannelConfigList) {
+            if (isNrPhysicalChannelConfig(config)) {
+                for (int id : config.getContextIds()) {
+                    idSet.add(id);
+                }
+            }
+        }
+
+        return idSet;
+    }
+
+    private void setDataNetworkTypeForPhone(int type) {
+        if (mPhone.getUnitTestMode()) {
+            return;
+        }
+        TelephonyManager tm = (TelephonyManager) mPhone.getContext().getSystemService(
+                Context.TELEPHONY_SERVICE);
+        tm.setDataNetworkTypeForPhone(mPhone.getPhoneId(), type);
+    }
+
+    /**
+     * Used to insert a ServiceState into the ServiceStateProvider as a ContentValues instance.
+     *
+     * Copied from packages/services/Telephony/src/com/android/phone/ServiceStateProvider.java
+     *
+     * @param state the ServiceState to convert into ContentValues
+     * @return the convertedContentValues instance
+     */
+    private ContentValues getContentValuesForServiceState(ServiceState state) {
+        ContentValues values = new ContentValues();
+        final Parcel p = Parcel.obtain();
+        state.writeToParcel(p, 0);
+        // Turn the parcel to byte array. Safe to do this because the content values were never
+        // written into a persistent storage. ServiceStateProvider keeps values in the memory.
+        values.put(SERVICE_STATE, p.marshall());
+        return values;
+    }
+>>>>>>> CHANGE (0d7320 Carrier config for 5G up/down bandwidth and LTE for NSA)
 }
