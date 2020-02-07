@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "551b0370_24de6e2c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2020-02-07T16:25:13Z",
+      "side": 1,
+      "message": "yes if EID was received in slot status, then mDefaultEuiccCardId will already be set (!\u003d unsupported/uninitialized/temporarily-uninitialized.)\n\nhowever, I don\u0027t think that in that case cardString would be set, we grab cardString here just from the UiccCard/EuiccCard, which doesn\u0027t get set on slotstatus, only in card status. So if we have the card string here I think it means\n\n1. the current cardstatus includes eid (new HAL)\n2. the EID is known from an old registerForEidReady() request",
+      "parentUuid": "c106ef09_85464a56",
+      "range": {
+        "startLine": 709,
+        "startChar": 16,
+        "endLine": 712,
+        "endChar": 23
+      },
+      "revId": "d2016fb8dbc10a281a7f99c2ab99dba678cf4153",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c6e186e0_9ac4e3fe",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2020-02-07T07:54:50Z",
       "side": 1,
       "message": "Actually should this be done only if mDefaultEuiccCardId is UNINITIALIZED or TEMPORARILY_UNSUPPORTED_CARD_ID?",
+      "revId": "d2016fb8dbc10a281a7f99c2ab99dba678cf4153",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "063bdd4e_3734fdb5",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2020-02-07T16:25:13Z",
+      "side": 1,
+      "message": "yes actually I was thinking about this, I think we do still need the check because we don\u0027t necessarily want to change the mDefaultEuiccCardId if it\u0027s already set to something else",
+      "parentUuid": "c6e186e0_9ac4e3fe",
       "revId": "d2016fb8dbc10a281a7f99c2ab99dba678cf4153",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
