@@ -136,9 +136,8 @@ public class CatService extends Handler implements AppInterface {
     private int mSlotId;
 
     /* For multisim catservice should not be singleton */
-    private CatService(CommandsInterface ci, Context context, IccFileHandler fh,
-            UiccProfile uiccProfile, int slotId) {
-        if (ci == null || context == null || fh == null || uiccProfile == null) {
+    private CatService(CommandsInterface ci, Context context, UiccProfile uiccProfile, int slotId) {
+        if (ci == null || context == null || uiccProfile == null) {
             throw new NullPointerException(
                     "Service: Input parameters must not be null");
         }
@@ -147,7 +146,7 @@ public class CatService extends Handler implements AppInterface {
         mSlotId = slotId;
 
         // Get the RilMessagesDecoder for decoding the messages.
-        mMsgDecoder = RilMessageDecoder.getInstance(this, fh, slotId);
+        mMsgDecoder = RilMessageDecoder.getInstance(this, getIccFileHandler(uiccProfile), slotId);
         if (null == mMsgDecoder) {
             CatLog.d(this, "Null RilMessageDecoder instance");
             return;
@@ -174,6 +173,22 @@ public class CatService extends Handler implements AppInterface {
                 ". STK app installed:" + mStkAppInstalled);
     }
 
+    private IccFileHandler getIccFileHandler(UiccProfile uiccProfile) {
+        IccFileHandler fh = null;
+
+        if (uiccProfile != null) {
+            /* Since Cat is not tied to any application, but rather is Uicc application
+             * in itself - just get first application
+             */
+            UiccCardApplication ca = uiccProfile.getApplicationIndex(0);
+            if (ca != null) {
+                fh = ca.getIccFileHandler();
+            }
+        }
+
+        return fh;
+    }
+
     /**
      * Used for instantiating the Service from the Card.
      *
@@ -185,18 +200,6 @@ public class CatService extends Handler implements AppInterface {
      */
     public static CatService getInstance(CommandsInterface ci,
             Context context, UiccProfile uiccProfile, int slotId) {
-        UiccCardApplication ca = null;
-        IccFileHandler fh = null;
-        if (uiccProfile != null) {
-            /* Since Cat is not tied to any application, but rather is Uicc application
-             * in itself - just get first application
-             */
-            ca = uiccProfile.getApplicationIndex(0);
-            if (ca != null) {
-                fh = ca.getIccFileHandler();
-            }
-        }
-
         synchronized (sInstanceLock) {
             if (sInstance == null) {
                 int simCount = TelephonyManager.getDefault().getSupportedModemCount();
@@ -206,11 +209,11 @@ public class CatService extends Handler implements AppInterface {
                 }
             }
             if (sInstance[slotId] == null) {
-                if (ci == null || context == null || fh == null || uiccProfile == null) {
+                if (ci == null || context == null || uiccProfile == null) {
                     return null;
                 }
 
-                sInstance[slotId] = new CatService(ci, context, fh, uiccProfile, slotId);
+                sInstance[slotId] = new CatService(ci, context, uiccProfile, slotId);
             }
             return sInstance[slotId];
         }
@@ -1084,6 +1087,9 @@ public class CatService extends Handler implements AppInterface {
 
     public void update(CommandsInterface ci,
             Context context, UiccProfile uiccProfile) {
+        synchronized (sInstanceLock) {
+            mMsgDecoder.update(getIccFileHandler(uiccProfile));
+        }
     }
 
     void updateIccAvailability() {
