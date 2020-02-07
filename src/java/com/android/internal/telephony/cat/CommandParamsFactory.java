@@ -95,7 +95,13 @@ class CommandParamsFactory extends Handler {
 
     private CommandParamsFactory(RilMessageDecoder caller, IccFileHandler fh) {
         mCaller = caller;
-        mIconLoader = IconLoader.getInstance(this, fh);
+        update(fh);
+    }
+
+    void update(IccFileHandler fh) {
+        if (fh != null && mIconLoader == null) {
+            mIconLoader = IconLoader.getInstance(this, fh);
+        }
     }
 
     private CommandDetails processCommandDetails(List<ComprehensionTlv> ctlvs) {
@@ -354,7 +360,7 @@ class CommandParamsFactory extends Handler {
         }
         // parse icon identifier
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             iconId = ValueParser.retrieveIconId(ctlv);
             textMsg.iconSelfExplanatory = iconId.selfExplanatory;
         }
@@ -405,7 +411,7 @@ class CommandParamsFactory extends Handler {
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             iconId = ValueParser.retrieveIconId(ctlv);
             textMsg.iconSelfExplanatory = iconId.selfExplanatory;
         }
@@ -457,7 +463,7 @@ class CommandParamsFactory extends Handler {
         }
         // parse icon identifier
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             iconId = ValueParser.retrieveIconId(ctlv);
             input.iconSelfExplanatory = iconId.selfExplanatory;
         }
@@ -535,7 +541,7 @@ class CommandParamsFactory extends Handler {
         }
         // parse icon identifier
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             iconId = ValueParser.retrieveIconId(ctlv);
             input.iconSelfExplanatory = iconId.selfExplanatory;
         }
@@ -633,14 +639,14 @@ class CommandParamsFactory extends Handler {
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             mIconLoadState = LOAD_SINGLE_ICON;
             titleIconId = ValueParser.retrieveIconId(ctlv);
             menu.titleIconSelfExplanatory = titleIconId.selfExplanatory;
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ITEM_ICON_ID_LIST, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             mIconLoadState = LOAD_MULTI_ICONS;
             itemsIconId = ValueParser.retrieveItemsIconId(ctlv);
             menu.itemsIconSelfExplanatory = itemsIconId.selfExplanatory;
@@ -707,7 +713,7 @@ class CommandParamsFactory extends Handler {
         textMsg.text = ValueParser.retrieveAlphaId(ctlv);
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             iconId = ValueParser.retrieveIconId(ctlv);
             textMsg.iconSelfExplanatory = iconId.selfExplanatory;
         }
@@ -817,7 +823,7 @@ class CommandParamsFactory extends Handler {
 
         // parse icon identifier
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             iconId = ValueParser.retrieveIconId(ctlv);
             confirmMsg.iconSelfExplanatory = iconId.selfExplanatory;
         }
@@ -899,7 +905,7 @@ class CommandParamsFactory extends Handler {
         }
         // parse icon identifier
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             iconId = ValueParser.retrieveIconId(ctlv);
             textMsg.iconSelfExplanatory = iconId.selfExplanatory;
         }
@@ -946,7 +952,7 @@ class CommandParamsFactory extends Handler {
         confirmMsg.text = ValueParser.retrieveAlphaId(ctlv);
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             confirmIconId = ValueParser.retrieveIconId(ctlv);
             confirmMsg.iconSelfExplanatory = confirmIconId.selfExplanatory;
         }
@@ -958,7 +964,7 @@ class CommandParamsFactory extends Handler {
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             callIconId = ValueParser.retrieveIconId(ctlv);
             callMsg.iconSelfExplanatory = callIconId.selfExplanatory;
         }
@@ -1084,7 +1090,7 @@ class CommandParamsFactory extends Handler {
 
         // parse icon identifier
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
+        if (ctlv != null && mIconLoader != null) {
             iconId = ValueParser.retrieveIconId(ctlv);
             textMsg.iconSelfExplanatory = iconId.selfExplanatory;
         }
@@ -1102,8 +1108,10 @@ class CommandParamsFactory extends Handler {
 
     @UnsupportedAppUsage
     public void dispose() {
-        mIconLoader.dispose();
-        mIconLoader = null;
+        if (mIconLoader != null) {
+            mIconLoader.dispose();
+            mIconLoader = null;
+        }
         mCmdParams = null;
         mCaller = null;
         sInstance = null;
