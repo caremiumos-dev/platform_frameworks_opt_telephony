@@ -1023,7 +1023,12 @@ public class UiccProfile extends IccCard {
     }
 
     private void createAndUpdateCatServiceLocked() {
-        if (mUiccApplications.length > 0 && mUiccApplications[0] != null) {
+        // REFRESH command with the mode "eUICC Profile State Change" can come
+        // from the lower layer right after the active profile was disabled.
+        // CatService should be started even if no application is found in the card in that case.
+        // Otherwise, the lower layer cannot propagate command to Android.
+        if ((mUiccApplications.length > 0 && mUiccApplications[0] != null)
+                || (mUiccCard instanceof EuiccCard)) {
             // Initialize or Reinitialize CatService
             if (mCatService == null) {
                 mCatService = CatService.getInstance(mCi, mContext, this, mPhoneId);
