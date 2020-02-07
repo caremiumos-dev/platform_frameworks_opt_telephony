@@ -83,9 +83,6 @@ class RilMessage {
 public class CatService extends Handler implements AppInterface {
     private static final boolean DBG = false;
 
-    // Class members
-    private static UiccCardApplication mUiccApplication;
-
     // Service members.
     // Protects singleton instance lazy initialization.
     @UnsupportedAppUsage
@@ -139,9 +136,9 @@ public class CatService extends Handler implements AppInterface {
     private int mSlotId;
 
     /* For multisim catservice should not be singleton */
-    private CatService(CommandsInterface ci, UiccCardApplication ca, Context context,
-            IccFileHandler fh, UiccProfile uiccProfile, int slotId) {
-        if (ci == null || ca == null || context == null || fh == null || uiccProfile == null) {
+    private CatService(CommandsInterface ci, Context context, IccFileHandler fh,
+            UiccProfile uiccProfile, int slotId) {
+        if (ci == null || context == null || fh == null || uiccProfile == null) {
             throw new NullPointerException(
                     "Service: Input parameters must not be null");
         }
@@ -166,8 +163,6 @@ public class CatService extends Handler implements AppInterface {
 
         mCmdIf.registerForIccRefresh(this, MSG_ID_ICC_REFRESH, null);
         mCmdIf.setOnCatCcAlphaNotify(this, MSG_ID_ALPHA_NOTIFY, null);
-
-        mUiccApplication = ca;
 
         mUiccController = UiccController.getInstance();
         mUiccController.registerForIccChanged(this, MSG_ID_ICC_CHANGED, null);
@@ -211,14 +206,11 @@ public class CatService extends Handler implements AppInterface {
                 }
             }
             if (sInstance[slotId] == null) {
-                if (ci == null || ca == null || context == null || fh == null
-                        || uiccProfile == null) {
+                if (ci == null || context == null || fh == null || uiccProfile == null) {
                     return null;
                 }
 
-                sInstance[slotId] = new CatService(ci, ca, context, fh, uiccProfile, slotId);
-            } else {
-                mUiccApplication = ca;
+                sInstance[slotId] = new CatService(ci, context, fh, uiccProfile, slotId);
             }
             return sInstance[slotId];
         }
@@ -1092,18 +1084,6 @@ public class CatService extends Handler implements AppInterface {
 
     public void update(CommandsInterface ci,
             Context context, UiccProfile uiccProfile) {
-        UiccCardApplication ca = null;
-
-        if (uiccProfile != null) {
-            /* Since Cat is not tied to any application, but rather is Uicc application
-             * in itself - just get first application
-             */
-            ca = uiccProfile.getApplicationIndex(0);
-        }
-
-        synchronized (sInstanceLock) {
-            mUiccApplication = ca;
-        }
     }
 
     void updateIccAvailability() {
