@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c106ef09_85464a56",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-02-07T07:54:50Z",
+      "side": 1,
+      "message": "I am not sure this comment is correct. At this point, there can be 2 cases where cardString can be !\u003d null, one is cardString was received from SLOT_STATUS in which case there should be nothing to do here (I believe the way to check that is for UNINITIALIZED/TEMPORARILY_UNSUPPORTED? see comment below). The second case is if we already know it from an earlier registerForEidReady() request, which is the one that we are trying to fix here.",
+      "range": {
+        "startLine": 709,
+        "startChar": 16,
+        "endLine": 712,
+        "endChar": 23
+      },
+      "revId": "d2016fb8dbc10a281a7f99c2ab99dba678cf4153",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6e186e0_9ac4e3fe",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-02-07T07:54:50Z",
+      "side": 1,
+      "message": "Actually should this be done only if mDefaultEuiccCardId is UNINITIALIZED or TEMPORARILY_UNSUPPORTED_CARD_ID?",
+      "revId": "d2016fb8dbc10a281a7f99c2ab99dba678cf4153",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
