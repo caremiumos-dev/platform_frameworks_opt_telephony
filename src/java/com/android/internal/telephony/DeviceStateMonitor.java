@@ -263,8 +263,14 @@ public class DeviceStateMonitor extends Handler {
         mIsTetheringOn = false;
         mIsLowDataExpected = false;
 
-        log("DeviceStateMonitor mIsPowerSaveOn=" + mIsPowerSaveOn + ",mIsScreenOn="
-                + mIsScreenOn + ",mIsCharging=" + mIsCharging, false);
+        log("DeviceStateMonitor mIsTetheringOn=" + mIsTetheringOn
+                + ", mIsScreenOn=" + mIsScreenOn
+                + ", mIsCharging=" + mIsCharging
+                + ", mIsPowerSaveOn=" + mIsPowerSaveOn
+                + ", mIsLowDataExpected=" + mIsLowDataExpected
+                + ", mIsWifiConnected=" + mIsWifiConnected
+                + ", mIsAlwaysSignalStrengthReportingEnabled="
+                + mIsAlwaysSignalStrengthReportingEnabled, false);
 
         final IntentFilter filter = new IntentFilter();
         filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
@@ -728,6 +734,8 @@ public class DeviceStateMonitor extends Handler {
         ipw.println("mIsLowDataExpected=" + mIsLowDataExpected);
         ipw.println("mUnsolicitedResponseFilter=" + mUnsolicitedResponseFilter);
         ipw.println("mIsWifiConnected=" + mIsWifiConnected);
+        ipw.println("mIsAlwaysSignalStrengthReportingEnabled="
+                + mIsAlwaysSignalStrengthReportingEnabled);
         ipw.println("Local logs:");
         ipw.increaseIndent();
         mLocalLog.dump(fd, ipw, args);
