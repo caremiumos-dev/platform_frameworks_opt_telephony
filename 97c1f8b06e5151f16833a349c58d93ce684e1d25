@@ -22,6 +22,30 @@
       "revId": "97c1f8b06e5151f16833a349c58d93ce684e1d25",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ab89833_449bd07e",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2495,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-02-10T04:22:14Z",
+      "side": 0,
+      "message": "DcTakcer#update will call this API, so it is removed",
+      "parentUuid": "723bcb9a_6c58d261",
+      "range": {
+        "startLine": 2495,
+        "startChar": 16,
+        "endLine": 2495,
+        "endChar": 46
+      },
+      "revId": "97c1f8b06e5151f16833a349c58d93ce684e1d25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
