@@ -22,6 +22,30 @@
       "revId": "1d6d67bb381eea0778a7dea1194619c04201857f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "547d1be2_326abac6",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1583329
+      },
+      "writtenOn": "2020-02-10T08:36:26Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "83044e33_ed11d26f",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 32
+      },
+      "revId": "1d6d67bb381eea0778a7dea1194619c04201857f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
