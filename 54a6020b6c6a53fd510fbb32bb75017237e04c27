@@ -1,0 +1,395 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "569a2545_29688b98",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 5062,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Update to reflect name in the interface: getPhonebookRecords\n\nThis is a generic comment, that applies to all files in the review (methods, variables, constants, ...)",
+      "range": {
+        "startLine": 5062,
+        "startChar": 16,
+        "endLine": 5062,
+        "endChar": 29
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65767a63_115169ec",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 5082,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Don\u0027t we need to send back NOT_SUPPORTED in this case?",
+      "range": {
+        "startLine": 5081,
+        "startChar": 20,
+        "endLine": 5082,
+        "endChar": 23
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2fe9c1b_b797c33d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 5088,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 5088,
+        "startChar": 16,
+        "endLine": 5088,
+        "endChar": 31
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "288c8e22_5e7c8930",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 5116,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Split line",
+      "range": {
+        "startLine": 5116,
+        "startChar": 24,
+        "endLine": 5116,
+        "endChar": 113
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33886479_df5ca4a2",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 5125,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 5125,
+        "startChar": 16,
+        "endLine": 5125,
+        "endChar": 23
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09b0690f_ba440176",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Can you add javadoc for the method?",
+      "range": {
+        "startLine": 981,
+        "startChar": 4,
+        "endLine": 981,
+        "endChar": 48
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee15cca1_70a04b66",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Can you add javadoc for the method?",
+      "range": {
+        "startLine": 991,
+        "startChar": 4,
+        "endLine": 991,
+        "endChar": 34
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cf7920e_9bc0a7ba",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Replace with javadoc",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 6
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "022206f4_31e4c1c9",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 6
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "696c93fa_e34366c1",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Remove space after ( and before )",
+      "range": {
+        "startLine": 66,
+        "startChar": 52,
+        "endLine": 66,
+        "endChar": 53
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "550f893e_537d832f",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "ArrayUtils.isEmpty(mEmails)",
+      "range": {
+        "startLine": 74,
+        "startChar": 19,
+        "endLine": 74,
+        "endChar": 34
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2544c9e7_241e5e4d",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 75,
+        "startChar": 19,
+        "endLine": 75,
+        "endChar": 37
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef1c70f3_20085a38",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Remove empty lines",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 0
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f923621_8f30cbb6",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Can you add a comment to explain the meaning of this?\nIt seems a quite important boolean and it would be helpful to make code more readable.",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 45
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "068d750e_fa62ebb1",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(intent.getAction())\nso we can handle null action gracefully.",
+      "range": {
+        "startLine": 76,
+        "startChar": 16,
+        "endLine": 76,
+        "endChar": 83
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0527310d_1a7edb10",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Split line",
+      "range": {
+        "startLine": 82,
+        "startChar": 20,
+        "endLine": 82,
+        "endChar": 116
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e78f3a17_53b3707d",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-10T22:29:01Z",
+      "side": 1,
+      "message": "Minor.\n\nThis allocation is right in the middle of a group of 3 lines that copies the constructor arguments. Can this be moved to top or bottom instead of being in the middle, to give a logical order to the operations?",
+      "range": {
+        "startLine": 91,
+        "startChar": 17,
+        "endLine": 92,
+        "endChar": 21
+      },
+      "revId": "54a6020b6c6a53fd510fbb32bb75017237e04c27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
