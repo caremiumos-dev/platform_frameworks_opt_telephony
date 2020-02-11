@@ -51,7 +51,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.NetworkStats;
 import android.net.Uri;
 import android.os.AsyncResult;
 import android.os.Bundle;
@@ -2120,11 +2119,6 @@ public class ImsPhone extends ImsPhoneBase {
     @VisibleForTesting
     public PowerManager.WakeLock getWakeLock() {
         return mWakeLock;
-    }
-
-    @Override
-    public NetworkStats getVtDataUsage(boolean perUidStats) {
-        return mCT.getVtDataUsage(perUidStats);
     }
 
     /**
