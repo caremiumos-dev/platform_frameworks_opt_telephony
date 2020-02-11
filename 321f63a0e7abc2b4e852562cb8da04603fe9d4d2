@@ -22,6 +22,30 @@
       "revId": "321f63a0e7abc2b4e852562cb8da04603fe9d4d2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6866510d_021f6a12",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4036,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-02-11T09:36:48Z",
+      "side": 1,
+      "message": "Yes, plan to use another CLs to remove the dead codes.\nThey are SP15~SP15.2:\naosp/1232193\naosp/1232331\naosp/1232312",
+      "parentUuid": "42341335_682f5381",
+      "range": {
+        "startLine": 4036,
+        "startChar": 24,
+        "endLine": 4036,
+        "endChar": 38
+      },
+      "revId": "321f63a0e7abc2b4e852562cb8da04603fe9d4d2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
