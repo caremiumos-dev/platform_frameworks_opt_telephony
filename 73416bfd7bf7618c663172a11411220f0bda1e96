@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "71abba78_f2295886",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-02-11T09:34:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63a4d49e_6aaad30a",
+      "range": {
+        "startLine": 261,
+        "startChar": 15,
+        "endLine": 261,
+        "endChar": 25
+      },
+      "revId": "73416bfd7bf7618c663172a11411220f0bda1e96",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c478a49_3f1cbd11",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "73416bfd7bf7618c663172a11411220f0bda1e96",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ae4ad19_4c6edbb5",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-02-11T09:34:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c478a49_3f1cbd11",
+      "range": {
+        "startLine": 265,
+        "startChar": 5,
+        "endLine": 265,
+        "endChar": 22
+      },
+      "revId": "73416bfd7bf7618c663172a11411220f0bda1e96",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c3ca4392_f43ff6bc",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3613,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-02-11T09:34:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "918de40e_561287b7",
+      "range": {
+        "startLine": 3613,
+        "startChar": 5,
+        "endLine": 3613,
+        "endChar": 22
+      },
+      "revId": "73416bfd7bf7618c663172a11411220f0bda1e96",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af013906_c20ec783",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "73416bfd7bf7618c663172a11411220f0bda1e96",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9dfc501_bc2f5e5c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-02-11T09:34:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af013906_c20ec783",
+      "range": {
+        "startLine": 1021,
+        "startChar": 8,
+        "endLine": 1021,
+        "endChar": 26
+      },
+      "revId": "73416bfd7bf7618c663172a11411220f0bda1e96",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "1e53bcd8_86378747",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-02-11T09:34:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "353ed3f1_a0342f92",
+      "range": {
+        "startLine": 1053,
+        "startChar": 11,
+        "endLine": 1053,
+        "endChar": 15
+      },
+      "revId": "73416bfd7bf7618c663172a11411220f0bda1e96",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5703a292_d70b8ffa",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
         "patchSetId": 1
@@ -128,6 +248,30 @@
       "writtenOn": "2020-01-30T08:07:10Z",
       "side": 1,
       "message": "Does it matter if you do it when they are both zero ?",
+      "range": {
+        "startLine": 1058,
+        "startChar": 8,
+        "endLine": 1058,
+        "endChar": 43
+      },
+      "revId": "73416bfd7bf7618c663172a11411220f0bda1e96",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cae8ca7_e6b72c08",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-02-11T09:34:48Z",
+      "side": 1,
+      "message": "Yes, typically it means we are expecting empty stats that need to be verified right after init.\nHowever, our assertNetworkStatsEquals only ignore order but do compare size().\nThus it will fail if we insert record with all zeros.\n\nShould we ignore empty records in assertNetworkStatsEquals instead?",
+      "parentUuid": "5703a292_d70b8ffa",
       "range": {
         "startLine": 1058,
         "startChar": 8,
