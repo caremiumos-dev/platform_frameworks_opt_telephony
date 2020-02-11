@@ -140,7 +140,7 @@ public class UiccProfile extends IccCard {
     // The number of UiccApplications modem reported. It's different from mUiccApplications.length
     // which is always CARD_MAX_APPS, and only updated when modem sends an update, and NOT updated
     // during SIM refresh. It's currently only used to help identify empty profile.
-    private int mLastReportedNumOfUiccApplications;
+    private int mLastReportedNumOfUiccApplications = 0;
 
     private final ContentObserver mProvisionCompleteContentObserver =
             new ContentObserver(new Handler()) {
@@ -984,7 +984,6 @@ public class UiccProfile extends IccCard {
 
             //update applications
             if (DBG) log(ics.mApplications.length + " applications");
-            mLastReportedNumOfUiccApplications = ics.mApplications.length;
 
             for (int i = 0; i < mUiccApplications.length; i++) {
                 if (mUiccApplications[i] == null) {
@@ -1006,10 +1005,23 @@ public class UiccProfile extends IccCard {
             createAndUpdateCatServiceLocked();
 
             // Reload the carrier privilege rules if necessary.
-            log("Before privilege rules: " + mCarrierPrivilegeRules + " : " + ics.mCardState);
+            log("Before privilege rules: " + mCarrierPrivilegeRules + " : " + ics.mCardState
+                    + " app num : " + ics.mApplications.length);
             if (mCarrierPrivilegeRules == null && ics.mCardState == CardState.CARDSTATE_PRESENT) {
                 mCarrierPrivilegeRules = new UiccCarrierPrivilegeRules(this,
                         mHandler.obtainMessage(EVENT_CARRIER_PRIVILEGES_LOADED));
+            } else if (mCarrierPrivilegeRules != null
+                    && ics.mCardState == CardState.CARDSTATE_PRESENT) {
+                // if eSIM/pSIM has valid profile, carrierPrivlegeRule loading should be tried
+                //  one more. mCarrierPrivilegeRules which is loaded by previous getsimstatus
+                // (card state is present and application number is 0) may be not valid
+                // because PKCS15 or ARA may be not ready in SIM as NO_SUCH_ELEMENT.
+                if (mLastReportedNumOfUiccApplications == 0 && ics.mApplications.length > 0) {
+                    log("Need to reload UiccCarrierPrivilegeRules");
+                    mCarrierPrivilegeRules = null;
+                    mCarrierPrivilegeRules = new UiccCarrierPrivilegeRules(this,
+                            mHandler.obtainMessage(EVENT_CARRIER_PRIVILEGES_LOADED));
+                }
             } else if (mCarrierPrivilegeRules != null
                     && ics.mCardState != CardState.CARDSTATE_PRESENT) {
                 mCarrierPrivilegeRules = null;
@@ -1017,6 +1029,7 @@ public class UiccProfile extends IccCard {
                         mProvisionCompleteContentObserver);
             }
 
+            mLastReportedNumOfUiccApplications = ics.mApplications.length;
             sanitizeApplicationIndexesLocked();
             updateIccAvailability(true);
         }
