@@ -3441,7 +3441,7 @@ public class SubscriptionController extends ISub.Stub {
         for (int i = 0; i < slotsInfo.length; i++) {
             UiccSlotInfo curSlotInfo = slotsInfo[i];
             if (curSlotInfo.getCardStateInfo() == CARD_STATE_INFO_PRESENT
-                    && TextUtils.equals(curSlotInfo.getCardId(), info.getCardString())) {
+                    && TextUtils.equals(curSlotInfo.getCardId(), info.getIccId())) {
                 slotInfo = curSlotInfo;
                 physicalSlotIndex = i;
                 break;
