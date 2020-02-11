@@ -1007,7 +1007,8 @@ public class UiccProfile extends IccCard {
 
             // Reload the carrier privilege rules if necessary.
             log("Before privilege rules: " + mCarrierPrivilegeRules + " : " + ics.mCardState);
-            if (mCarrierPrivilegeRules == null && ics.mCardState == CardState.CARDSTATE_PRESENT) {
+            if (mCarrierPrivilegeRules == null && ics.mCardState == CardState.CARDSTATE_PRESENT
+                    && ics.mApplications.length > 0) {
                 mCarrierPrivilegeRules = new UiccCarrierPrivilegeRules(this,
                         mHandler.obtainMessage(EVENT_CARRIER_PRIVILEGES_LOADED));
             } else if (mCarrierPrivilegeRules != null
