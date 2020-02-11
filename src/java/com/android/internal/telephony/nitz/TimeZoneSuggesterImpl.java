@@ -145,9 +145,8 @@ public class TimeZoneSuggesterImpl implements TimeZoneSuggester {
         suggestionBuilder.addDebugInfo("findTimeZoneForTestNetwork: nitzSignal=" + nitzSignal);
         OffsetResult lookupResult =
                 mTimeZoneLookupHelper.lookupByNitz(nitzData);
-        if (lookupResult == null) {
-            suggestionBuilder.addDebugInfo("findTimeZoneForTestNetwork: No zone found");
-        } else {
+        suggestionBuilder.addDebugInfo("lookupByNitz()=" + lookupResult);
+        if (lookupResult != null) {
             suggestionBuilder.setZoneId(lookupResult.getTimeZone().getID());
             suggestionBuilder.setMatchType(
                     TelephonyTimeZoneSuggestion.MATCH_TYPE_TEST_NETWORK_OFFSET_ONLY);
@@ -155,8 +154,6 @@ public class TimeZoneSuggesterImpl implements TimeZoneSuggester {
                     ? TelephonyTimeZoneSuggestion.QUALITY_SINGLE_ZONE
                     : TelephonyTimeZoneSuggestion.QUALITY_MULTIPLE_ZONES_WITH_SAME_OFFSET;
             suggestionBuilder.setQuality(quality);
-            suggestionBuilder.addDebugInfo(
-                    "findTimeZoneForTestNetwork: lookupResult=" + lookupResult);
         }
         return suggestionBuilder.build();
     }
@@ -178,56 +175,27 @@ public class TimeZoneSuggesterImpl implements TimeZoneSuggester {
                 + ", nitzSignal=" + nitzSignal);
         NitzData nitzData = Objects.requireNonNull(nitzSignal.getValue());
         if (isNitzSignalOffsetInfoBogus(countryIsoCode, nitzData)) {
-            suggestionBuilder.addDebugInfo(
-                    "findTimeZoneFromCountryAndNitz: NITZ signal looks bogus");
-            return suggestionBuilder.build();
+            suggestionBuilder.addDebugInfo("isNitzSignalOffsetInfoBogus()=true");
+        } else {
+            // Try to find a match using both country + NITZ signal.
+            OffsetResult lookupResult =
+                    mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, countryIsoCode);
+            suggestionBuilder.addDebugInfo("lookupByNitzCountry()=" + lookupResult);
+            if (lookupResult != null) {
+                suggestionBuilder.setZoneId(lookupResult.getTimeZone().getID());
+                suggestionBuilder.setMatchType(
+                        TelephonyTimeZoneSuggestion.MATCH_TYPE_NETWORK_COUNTRY_AND_OFFSET);
+                int quality = lookupResult.isOnlyMatch()
+                        ? TelephonyTimeZoneSuggestion.QUALITY_SINGLE_ZONE
+                        : TelephonyTimeZoneSuggestion.QUALITY_MULTIPLE_ZONES_WITH_SAME_OFFSET;
+                suggestionBuilder.setQuality(quality);
+                return suggestionBuilder.build();
+            }
         }
 
-        // Try to find a match using both country + NITZ signal.
-        OffsetResult lookupResult =
-                mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, countryIsoCode);
-        if (lookupResult != null) {
-            suggestionBuilder.setZoneId(lookupResult.getTimeZone().getID());
-            suggestionBuilder.setMatchType(
-                    TelephonyTimeZoneSuggestion.MATCH_TYPE_NETWORK_COUNTRY_AND_OFFSET);
-            int quality = lookupResult.isOnlyMatch()
-                    ? TelephonyTimeZoneSuggestion.QUALITY_SINGLE_ZONE
-                    : TelephonyTimeZoneSuggestion.QUALITY_MULTIPLE_ZONES_WITH_SAME_OFFSET;
-            suggestionBuilder.setQuality(quality);
-            suggestionBuilder.addDebugInfo("findTimeZoneFromCountryAndNitz:"
-                    + " lookupResult=" + lookupResult);
-            return suggestionBuilder.build();
-        }
-
-        // The country + offset provided no match, so see if the country by itself would be enough.
-        CountryResult countryResult = mTimeZoneLookupHelper.lookupByCountry(
-                countryIsoCode, nitzData.getCurrentTimeInMillis());
-        if (countryResult == null) {
-            // Country not recognized.
-            suggestionBuilder.addDebugInfo(
-                    "findTimeZoneFromCountryAndNitz: lookupByCountry() country not recognized");
-            return suggestionBuilder.build();
-        }
-
-        // If the country has a single zone, or it has multiple zones but the default zone is
-        // "boosted" (i.e. the country default is considered a good suggestion in most cases) then
-        // use it.
-        if (countryResult.quality == CountryResult.QUALITY_SINGLE_ZONE
-                || countryResult.quality == CountryResult.QUALITY_DEFAULT_BOOSTED) {
-            suggestionBuilder.setZoneId(countryResult.zoneId);
-            suggestionBuilder.setMatchType(
-                    TelephonyTimeZoneSuggestion.MATCH_TYPE_NETWORK_COUNTRY_ONLY);
-            suggestionBuilder.setQuality(TelephonyTimeZoneSuggestion.QUALITY_SINGLE_ZONE);
-            suggestionBuilder.addDebugInfo(
-                    "findTimeZoneFromCountryAndNitz: high quality country-only suggestion:"
-                            + " countryResult=" + countryResult);
-            return suggestionBuilder.build();
-        }
-
-        // Quality is not high enough to set the zone using country only.
-        suggestionBuilder.addDebugInfo("findTimeZoneFromCountryAndNitz: country-only suggestion"
-                + " quality not high enough. countryResult=" + countryResult);
-        return suggestionBuilder.build();
+        // The country + NITZ provided no match, so see if the country by itself would be enough.
+        final long whenMillis = nitzData.getCurrentTimeInMillis();
+        return createCountrySuggestion(countryIsoCode, whenMillis, suggestionBuilder);
     }
 
     /**
@@ -249,35 +217,38 @@ public class TimeZoneSuggesterImpl implements TimeZoneSuggester {
                 new TelephonyTimeZoneSuggestion.Builder(slotIndex);
         suggestionBuilder.addDebugInfo("findTimeZoneFromNetworkCountryCode:"
                 + " whenMillis=" + whenMillis + ", countryIsoCode=" + countryIsoCode);
-        CountryResult lookupResult = mTimeZoneLookupHelper.lookupByCountry(
-                countryIsoCode, whenMillis);
-        if (lookupResult != null) {
-            suggestionBuilder.setZoneId(lookupResult.zoneId);
-            suggestionBuilder.setMatchType(
-                    TelephonyTimeZoneSuggestion.MATCH_TYPE_NETWORK_COUNTRY_ONLY);
+        return createCountrySuggestion(countryIsoCode, whenMillis, suggestionBuilder);
+    }
 
-            int quality;
-            if (lookupResult.quality == CountryResult.QUALITY_SINGLE_ZONE
-                    || lookupResult.quality == CountryResult.QUALITY_DEFAULT_BOOSTED) {
-                quality = TelephonyTimeZoneSuggestion.QUALITY_SINGLE_ZONE;
-            } else if (lookupResult.quality == CountryResult.QUALITY_MULTIPLE_ZONES_SAME_OFFSET) {
-                quality = TelephonyTimeZoneSuggestion.QUALITY_MULTIPLE_ZONES_WITH_SAME_OFFSET;
-            } else if (lookupResult.quality
-                    == CountryResult.QUALITY_MULTIPLE_ZONES_DIFFERENT_OFFSETS) {
-                quality = TelephonyTimeZoneSuggestion.QUALITY_MULTIPLE_ZONES_WITH_DIFFERENT_OFFSETS;
-            } else {
-                // This should never happen.
-                throw new IllegalArgumentException(
-                        "lookupResult.quality not recognized: countryIsoCode=" + countryIsoCode
-                                + ", whenMillis=" + whenMillis + ", lookupResult=" + lookupResult);
-            }
-            suggestionBuilder.setQuality(quality);
-            suggestionBuilder.addDebugInfo(
-                    "findTimeZoneFromNetworkCountryCode: lookupResult=" + lookupResult);
-        } else {
-            suggestionBuilder.addDebugInfo(
-                    "findTimeZoneFromNetworkCountryCode: Country not recognized?");
+    private TelephonyTimeZoneSuggestion createCountrySuggestion(
+            @NonNull String countryIsoCode, long whenMillis,
+            TelephonyTimeZoneSuggestion.Builder suggestionBuilder) {
+        CountryResult lookupResult =
+                mTimeZoneLookupHelper.lookupByCountry(countryIsoCode, whenMillis);
+        suggestionBuilder.addDebugInfo("lookupByCountry()=" + lookupResult);
+        if (lookupResult == null) {
+            // Return an empty suggestion.
+            return suggestionBuilder.build();
         }
+
+        suggestionBuilder.setZoneId(lookupResult.zoneId);
+        suggestionBuilder.setMatchType(TelephonyTimeZoneSuggestion.MATCH_TYPE_NETWORK_COUNTRY_ONLY);
+
+        int quality;
+        if (lookupResult.quality == CountryResult.QUALITY_SINGLE_ZONE
+                || lookupResult.quality == CountryResult.QUALITY_DEFAULT_BOOSTED) {
+            quality = TelephonyTimeZoneSuggestion.QUALITY_SINGLE_ZONE;
+        } else if (lookupResult.quality == CountryResult.QUALITY_MULTIPLE_ZONES_SAME_OFFSET) {
+            quality = TelephonyTimeZoneSuggestion.QUALITY_MULTIPLE_ZONES_WITH_SAME_OFFSET;
+        } else if (lookupResult.quality == CountryResult.QUALITY_MULTIPLE_ZONES_DIFFERENT_OFFSETS) {
+            quality = TelephonyTimeZoneSuggestion.QUALITY_MULTIPLE_ZONES_WITH_DIFFERENT_OFFSETS;
+        } else {
+            // This should never happen.
+            throw new IllegalArgumentException(
+                    "lookupResult.quality not recognized: countryIsoCode=" + countryIsoCode
+                            + ", whenMillis=" + whenMillis + ", lookupResult=" + lookupResult);
+        }
+        suggestionBuilder.setQuality(quality);
         return suggestionBuilder.build();
     }
 
