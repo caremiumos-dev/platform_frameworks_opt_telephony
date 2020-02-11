@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony.cat;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.ComponentName;
 
 /**
@@ -62,13 +62,20 @@ public interface AppInterface {
      */
     void onCmdResponse(CatResponseMessage resMsg);
 
+    /**
+     * Dispose when the service is not longer needed.
+     */
+    void dispose();
+
     /*
      * Enumeration for representing "Type of Command" of proactive commands.
      * Those are the only commands which are supported by the Telephony. Any app
      * implementation should support those.
      * Refer to ETSI TS 102.223 section 9.4
      */
-    public static enum CommandType {
+    @UnsupportedAppUsage(implicitMember =
+            "values()[Lcom/android/internal/telephony/cat/AppInterface$CommandType;")
+    enum CommandType {
         @UnsupportedAppUsage
         DISPLAY_TEXT(0x21),
         @UnsupportedAppUsage

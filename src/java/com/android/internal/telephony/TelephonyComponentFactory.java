@@ -30,7 +30,6 @@ import android.system.Os;
 import android.system.OsConstants;
 import android.system.StructStatVfs;
 import android.telephony.AccessNetworkConstants.TransportType;
-import android.telephony.Rlog;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
@@ -42,9 +41,11 @@ import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.imsphone.ImsExternalCallTracker;
 import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
+import com.android.internal.telephony.nitz.NewNitzStateMachineImpl;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccProfile;
+import com.android.telephony.Rlog;
 
 import dalvik.system.PathClassLoader;
 
@@ -58,8 +59,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-
 
 /**
  * This class has one-line methods to instantiate objects only. The purpose is to make code
@@ -292,11 +291,17 @@ public class TelephonyComponentFactory {
         return new EmergencyNumberTracker(phone, ci);
     }
 
+    private static final boolean USE_NEW_NITZ_STATE_MACHINE = true;
+
     /**
      * Returns a new {@link NitzStateMachine} instance.
      */
     public NitzStateMachine makeNitzStateMachine(GsmCdmaPhone phone) {
-        return new NitzStateMachineImpl(phone);
+        if (USE_NEW_NITZ_STATE_MACHINE) {
+            return NewNitzStateMachineImpl.createInstance(phone);
+        } else {
+            return new NitzStateMachineImpl(phone);
+        }
     }
 
     public SimActivationTracker makeSimActivationTracker(Phone phone) {

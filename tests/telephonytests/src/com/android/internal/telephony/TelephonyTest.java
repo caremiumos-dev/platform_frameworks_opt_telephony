@@ -57,6 +57,7 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.TelephonyRegistryManager;
 import android.telephony.emergency.EmergencyNumber;
 import android.telephony.euicc.EuiccManager;
 import android.telephony.ims.ImsCallProfile;
@@ -267,9 +268,12 @@ public abstract class TelephonyTest {
     protected UiccCard mUiccCard;
     @Mock
     protected MultiSimSettingController mMultiSimSettingController;
+    @Mock
+    protected IccCard mIccCard;
 
     protected ImsCallProfile mImsCallProfile;
     protected TelephonyManager mTelephonyManager;
+    protected TelephonyRegistryManager mTelephonyRegistryManager;
     protected SubscriptionManager mSubscriptionManager;
     protected EuiccManager mEuiccManager;
     protected PackageManager mPackageManager;
@@ -397,6 +401,8 @@ public abstract class TelephonyTest {
         doReturn(mUiccProfile).when(mUiccCard).getUiccProfile();
 
         mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        mTelephonyRegistryManager = (TelephonyRegistryManager) mContext.getSystemService(
+            Context.TELEPHONY_REGISTRY_SERVICE);
         mSubscriptionManager = (SubscriptionManager) mContext.getSystemService(
                 Context.TELEPHONY_SUBSCRIPTION_SERVICE);
         mEuiccManager = (EuiccManager) mContext.getSystemService(Context.EUICC_SERVICE);
@@ -544,6 +550,7 @@ public abstract class TelephonyTest {
                 nullable(Intent[].class), nullable(String[].class), anyInt(),
                 nullable(Bundle.class), anyInt());
         doReturn(mTelephonyManager).when(mTelephonyManager).createForSubscriptionId(anyInt());
+        doReturn(TelephonyManager.PHONE_TYPE_GSM).when(mTelephonyManager).getPhoneType();
         doReturn(mServiceState).when(mSST).getServiceState();
         mSST.mSS = mServiceState;
         mSST.mRestrictedState = mRestrictedState;
@@ -563,9 +570,11 @@ public abstract class TelephonyTest {
         //SIM
         doReturn(1).when(mTelephonyManager).getSimCount();
         doReturn(1).when(mTelephonyManager).getPhoneCount();
+        doReturn(1).when(mTelephonyManager).getActiveModemCount();
         // Have getMaxPhoneCount always return the same value with getPhoneCount by default.
-        doAnswer((invocation)->mTelephonyManager.getPhoneCount())
-                .when(mTelephonyManager).getMaxPhoneCount();
+        doAnswer((invocation)->Math.max(mTelephonyManager.getActiveModemCount(),
+                mTelephonyManager.getPhoneCount()))
+                .when(mTelephonyManager).getSupportedModemCount();
 
         //Data
         //Initial state is: userData enabled, provisioned.
@@ -613,6 +622,8 @@ public abstract class TelephonyTest {
         replaceInstance(MultiSimSettingController.class, "sInstance", null,
                 mMultiSimSettingController);
         replaceInstance(SubscriptionInfoUpdater.class, "sIsSubInfoInitialized", null, true);
+        replaceInstance(PhoneFactory.class, "sCommandsInterfaces", null,
+                new CommandsInterface[] {mSimulatedCommands});
 
         assertNotNull("Failed to set up SubscriptionController singleton",
                 SubscriptionController.getInstance());
@@ -625,16 +636,16 @@ public abstract class TelephonyTest {
     }
 
     protected void tearDown() throws Exception {
-        // unmonitor TestableLooper
+        // unmonitor TestableLooper for TelephonyTest class
         if (mTestableLooper != null) {
             unmonitorTestableLooper(mTestableLooper);
         }
-        mSimulatedCommands.dispose();
-
-        // destroy all created TestableLoopers so they can be reused
+        // destroy all newly created TestableLoopers so they can be reused
         for (TestableLooper looper : mTestableLoopers) {
             looper.destroy();
         }
+
+        mSimulatedCommands.dispose();
         SharedPreferences sharedPreferences = mContext.getSharedPreferences((String) null, 0);
         sharedPreferences.edit().clear().commit();
 
@@ -652,14 +663,14 @@ public abstract class TelephonyTest {
         @Override
         public Bundle call(String method, String arg, Bundle extras) {
             switch (method) {
-                case BlockedNumberContract.SystemContract.METHOD_SHOULD_SYSTEM_BLOCK_NUMBER:
+                case BlockedNumberContract.METHOD_SHOULD_SYSTEM_BLOCK_NUMBER:
                     Bundle bundle = new Bundle();
                     int blockStatus = mBlockedNumbers.contains(arg)
                             ? BlockedNumberContract.STATUS_BLOCKED_IN_LIST
                             : BlockedNumberContract.STATUS_NOT_BLOCKED;
                     bundle.putInt(BlockedNumberContract.RES_BLOCK_STATUS, blockStatus);
                     return bundle;
-                case BlockedNumberContract.SystemContract.METHOD_NOTIFY_EMERGENCY_CONTACT:
+                case BlockedNumberContract.METHOD_NOTIFY_EMERGENCY_CONTACT:
                     mNumEmergencyContactNotifications++;
                     return new Bundle();
                 default:
@@ -702,8 +713,6 @@ public abstract class TelephonyTest {
     protected void setupMockPackagePermissionChecks() throws Exception {
         doReturn(new String[]{TAG}).when(mPackageManager).getPackagesForUid(anyInt());
         doReturn(mPackageInfo).when(mPackageManager).getPackageInfo(eq(TAG), anyInt());
-        doReturn(mPackageInfo).when(mPackageManager).getPackageInfoAsUser(
-                eq(TAG), anyInt(), anyInt());
     }
 
     protected void setupMocksForTelephonyPermissions() throws Exception {
@@ -774,18 +783,6 @@ public abstract class TelephonyTest {
             timeoutCount++;
         }
         assertTrue("Handler was not empty before timeout elapsed", timeoutCount < 5);
-    }
-
-    protected final void waitForHandlerActionDelayed(Handler h, long timeoutMillis, long delayMs) {
-        final CountDownLatch lock = new CountDownLatch(1);
-        h.postDelayed(lock::countDown, delayMs);
-        while (lock.getCount() > 0) {
-            try {
-                lock.await(timeoutMillis, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                // do nothing
-            }
-        }
     }
 
     protected final EmergencyNumber getTestEmergencyNumber() {

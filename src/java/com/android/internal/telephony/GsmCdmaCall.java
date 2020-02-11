@@ -16,7 +16,8 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
+
 import java.util.List;
 
 /**
@@ -57,6 +58,16 @@ public class GsmCdmaCall extends Call {
      */
     @Override
     public void hangup() throws CallStateException {
+        mOwner.hangup(this);
+    }
+
+    /**
+     * Hangup the ringing call with a specified reason; reason is not supported on GSM/CDMA.
+     * @param rejectReason
+     */
+    @Override
+    public void hangup(@android.telecom.Call.RejectReason int rejectReason)
+            throws CallStateException {
         mOwner.hangup(this);
     }
 

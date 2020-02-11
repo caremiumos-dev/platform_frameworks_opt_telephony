@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -74,6 +74,10 @@ public abstract class CallTracker extends Handler {
     protected static final int EVENT_CALL_WAITING_INFO_CDMA        = 15;
     protected static final int EVENT_THREE_WAY_DIAL_L2_RESULT_CDMA = 16;
     protected static final int EVENT_THREE_WAY_DIAL_BLANK_FLASH    = 20;
+
+    @UnsupportedAppUsage
+    public CallTracker() {
+    }
 
     protected void pollCallsWhenSafe() {
         mNeedsPoll = true;

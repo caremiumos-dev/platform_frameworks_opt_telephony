@@ -38,7 +38,6 @@ import android.os.UserManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -62,6 +61,7 @@ import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.IccCardStatus.PinState;
 import com.android.internal.telephony.uicc.euicc.EuiccCard;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -372,8 +372,8 @@ public class UiccProfile extends IccCard {
         String ccName = config.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING);
 
         String newCarrierName = null;
-        String currSpn = getServiceProviderName();
-        int nameSource = SubscriptionManager.NAME_SOURCE_SIM_SOURCE;
+        String currSpn = getServiceProviderName();  // Get the name from EF_SPN.
+        int nameSource = SubscriptionManager.NAME_SOURCE_SIM_SPN;
         // If carrier config is priority, use it regardless - the preference
         // and the name were both set by the carrier, so this is safe;
         // otherwise, if the SPN is priority but we don't have one *and* we have
@@ -382,10 +382,18 @@ public class UiccProfile extends IccCard {
             newCarrierName = ccName;
             nameSource = SubscriptionManager.NAME_SOURCE_CARRIER;
         } else if (TextUtils.isEmpty(currSpn)) {
-            // currSpn is empty and could not get name from carrier config; get name from carrier id
+            // currSpn is empty and could not get name from carrier config; get name from PNN or
+            // carrier id
             Phone phone = PhoneFactory.getPhone(mPhoneId);
             if (phone != null) {
-                newCarrierName = phone.getCarrierName();
+                String currPnn = phone.getPlmn();   // Get the name from EF_PNN.
+                if (!TextUtils.isEmpty(currPnn)) {
+                    newCarrierName = currPnn;
+                    nameSource = SubscriptionManager.NAME_SOURCE_SIM_PNN;
+                } else {
+                    newCarrierName = phone.getCarrierName();    // Get the name from carrier id.
+                    nameSource = SubscriptionManager.NAME_SOURCE_DEFAULT;
+                }
             }
         }
 
@@ -436,7 +444,7 @@ public class UiccProfile extends IccCard {
             int nameSource) {
         /* update display name with carrier override */
         SubscriptionInfo subInfo = subCon.getActiveSubscriptionInfo(
-                subId, mContext.getOpPackageName());
+                subId, mContext.getOpPackageName(), null);
 
         if (subInfo == null) {
             return;
@@ -579,6 +587,12 @@ public class UiccProfile extends IccCard {
                  */
                 if (VDBG) {
                     log("updateExternalState: app state is unknown; setting state to NOT_READY");
+                }
+                setExternalState(IccCardConstants.State.NOT_READY);
+                break;
+            case APPSTATE_DETECTED:
+                if (VDBG) {
+                    log("updateExternalState: app state is detected; setting state to NOT_READY");
                 }
                 setExternalState(IccCardConstants.State.NOT_READY);
                 break;

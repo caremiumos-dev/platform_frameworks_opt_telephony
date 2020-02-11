@@ -18,10 +18,12 @@ package com.android.internal.telephony;
 
 import static org.junit.Assert.fail;
 
+import android.app.timedetector.TelephonyTimeSuggestion;
+import android.app.timezonedetector.TelephonyTimeZoneSuggestion;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.icu.util.TimeZone;
-import android.util.TimestampedValue;
+import android.os.TimestampedValue;
 
 import com.android.internal.telephony.NitzStateMachine.DeviceState;
 
@@ -33,6 +35,7 @@ public final class NitzStateMachineTestSupport {
     // Values used to when initializing device state but where the value isn't important.
     public static final long ARBITRARY_SYSTEM_CLOCK_TIME = createUtcTime(1977, 1, 1, 12, 0, 0);
     public static final long ARBITRARY_REALTIME_MILLIS = 123456789L;
+    // This zone isn't used in any of the scenarios below.
     public static final String ARBITRARY_TIME_ZONE_ID = "Europe/Paris";
     public static final String ARBITRARY_DEBUG_INFO = "Test debug info";
 
@@ -43,6 +46,7 @@ public final class NitzStateMachineTestSupport {
             .setActualTimeUtc(2018, 1, 1, 12, 0, 0)
             .setCountryIso("gb")
             .buildFrozen();
+
     public static final String UNITED_KINGDOM_COUNTRY_DEFAULT_ZONE_ID = "Europe/London";
 
     // The US is a country that has multiple zones, but there is only one matching time zone at the
@@ -61,6 +65,17 @@ public final class NitzStateMachineTestSupport {
             .setActualTimeUtc(2018, 1, 1, 12, 0, 0)
             .setCountryIso("us")
             .buildFrozen();
+
+    // A non-unique US scenario: the offset information is ambiguous between America/Phoenix and
+    // America/Denver during winter.
+    public static final Scenario NON_UNIQUE_US_ZONE_SCENARIO = new Scenario.Builder()
+            .setTimeZone("America/Denver")
+            .setActualTimeUtc(2018, 1, 1, 12, 0, 0)
+            .setCountryIso("us")
+            .buildFrozen();
+    public static final String[] NON_UNIQUE_US_ZONE_SCENARIO_ZONES =
+            { "America/Denver", "America/Phoenix" };
+
     public static final String US_COUNTRY_DEFAULT_ZONE_ID = "America/New_York";
 
     // New Zealand is a country with multiple zones, but the default zone has the "boost" modifier
@@ -75,6 +90,7 @@ public final class NitzStateMachineTestSupport {
             .setActualTimeUtc(2018, 1, 1, 12, 0, 0)
             .setCountryIso("nz")
             .buildFrozen();
+
     public static final String NEW_ZEALAND_COUNTRY_DEFAULT_ZONE_ID = "Pacific/Auckland";
 
     // A country with a single zone: the zone can be guessed from the country alone. CZ never uses
@@ -84,6 +100,7 @@ public final class NitzStateMachineTestSupport {
             .setActualTimeUtc(2018, 1, 1, 12, 0, 0)
             .setCountryIso("cz")
             .buildFrozen();
+
     public static final String CZECHIA_COUNTRY_DEFAULT_ZONE_ID = "Europe/Prague";
 
     /**
@@ -198,7 +215,6 @@ public final class NitzStateMachineTestSupport {
         public boolean ignoreNitz;
         public int nitzUpdateDiffMillis;
         public int nitzUpdateSpacingMillis;
-        public String networkCountryIsoForPhone;
         public long elapsedRealtime;
         public long currentTimeMillis;
 
@@ -223,11 +239,6 @@ public final class NitzStateMachineTestSupport {
         @Override
         public boolean getIgnoreNitz() {
             return ignoreNitz;
-        }
-
-        @Override
-        public String getNetworkCountryIsoForPhone() {
-            return networkCountryIsoForPhone;
         }
 
         @Override
@@ -258,6 +269,26 @@ public final class NitzStateMachineTestSupport {
         cal.clear();
         cal.set(year, monthInYear - 1, day, hourOfDay, minute, second);
         return cal.getTimeInMillis();
+    }
+
+    public static TelephonyTimeZoneSuggestion createEmptyTimeZoneSuggestion(int slotIndex) {
+        return new TelephonyTimeZoneSuggestion.Builder(slotIndex)
+                .addDebugInfo("Test")
+                .build();
+    }
+
+    public static TelephonyTimeSuggestion createEmptyTimeSuggestion(int slotIndex) {
+        return new TelephonyTimeSuggestion.Builder(slotIndex)
+                .addDebugInfo("Test")
+                .build();
+    }
+
+    public static TelephonyTimeSuggestion createTimeSuggestionFromNitzSignal(
+            int slotIndex, TimestampedValue<NitzData> nitzSignal) {
+        return new TelephonyTimeSuggestion.Builder(slotIndex)
+                .setUtcTime(createTimeSignalFromNitzSignal(nitzSignal))
+                .addDebugInfo("Test")
+                .build();
     }
 
     public static TimestampedValue<Long> createTimeSignalFromNitzSignal(

@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -27,12 +27,12 @@ import android.database.SQLException;
 import android.os.PersistableBundle;
 import android.os.UserManager;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 
 import com.android.internal.telephony.cdma.CdmaInboundSmsHandler;
 import com.android.internal.telephony.gsm.GsmInboundSmsHandler;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
+import com.android.telephony.Rlog;
 
 import java.util.HashMap;
 import java.util.HashSet;

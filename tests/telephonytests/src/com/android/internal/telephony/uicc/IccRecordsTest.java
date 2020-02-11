@@ -30,9 +30,14 @@
 package com.android.internal.telephony.uicc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
+import android.content.Context;
+import android.os.AsyncResult;
 import android.os.HandlerThread;
+import android.os.Message;
+import android.util.Pair;
 
 import com.android.internal.telephony.TelephonyTest;
 
@@ -91,5 +96,32 @@ public class IccRecordsTest extends TelephonyTest {
         assertEquals(mIccRecords.getIMSI(), null);
         mIccRecords.setImsi("123456ABCDEF");
         assertEquals(mIccRecords.getIMSI(), null);
+    }
+
+    @Test
+    public void testPendingTansaction() {
+        Message msg = Message.obtain();
+        Object obj = new Object();
+        int key = mIccRecords.storePendingTransaction(msg, obj);
+        Pair<Message, Object> pair = mIccRecords.retrievePendingTransaction(key);
+        assertEquals(msg, pair.first);
+        assertEquals(obj, pair.second);
+        pair = mIccRecords.retrievePendingTransaction(key);
+        assertNull(pair);
+    }
+
+    @Test
+    public void testGetSmsCapacityOnIcc() {
+        // set the number of records to 500
+        int[] records = new int[3];
+        records[2] = 500;
+        Message fetchCapacityDone = mIccRecords.obtainMessage(
+                IccRecords.EVENT_GET_SMS_RECORD_SIZE_DONE);
+        AsyncResult.forMessage(fetchCapacityDone, records, null);
+        fetchCapacityDone.sendToTarget();
+
+        // verify whether the count is 500
+        waitForLastHandlerAction(mIccRecords);
+        assertEquals(mIccRecords.getSmsCapacityOnIcc(), 500);
     }
 }

@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -32,10 +33,9 @@ import android.os.RegistrantList;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
+import android.telephony.Annotation.ApnType;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.data.ApnSetting;
-import android.telephony.data.ApnSetting.ApnType;
 import android.telephony.data.IQualifiedNetworksService;
 import android.telephony.data.IQualifiedNetworksServiceCallback;
 import android.telephony.data.QualifiedNetworksService;
@@ -44,6 +44,7 @@ import android.util.SparseArray;
 
 import com.android.internal.telephony.Phone;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.util.ArrayList;
@@ -212,8 +213,14 @@ public class AccessNetworksManager extends Handler {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
-        phone.getContext().registerReceiverAsUser(mConfigChangedReceiver, UserHandle.ALL,
-                intentFilter, null, null);
+        try {
+            Context contextAsUser = phone.getContext().createPackageContextAsUser(
+                phone.getContext().getPackageName(), 0, UserHandle.ALL);
+            contextAsUser.registerReceiver(mConfigChangedReceiver, intentFilter,
+                null /* broadcastPermission */, null);
+        } catch (PackageManager.NameNotFoundException e) {
+            Rlog.e(TAG, "Package name not found: " + e.getMessage());
+        }
         sendEmptyMessage(EVENT_BIND_QUALIFIED_NETWORKS_SERVICE);
     }
 

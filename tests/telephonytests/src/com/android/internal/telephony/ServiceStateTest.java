@@ -72,10 +72,10 @@ public class ServiceStateTest extends TestCase {
         ServiceState ss = new ServiceState();
 
         ss.setDataRegState(ServiceState.STATE_IN_SERVICE);
-        assertEquals(ServiceState.STATE_IN_SERVICE, ss.getDataRegState());
+        assertEquals(ServiceState.STATE_IN_SERVICE, ss.getDataRegistrationState());
 
         ss.setVoiceRegState(ServiceState.STATE_IN_SERVICE);
-        assertEquals(ServiceState.STATE_IN_SERVICE, ss.getVoiceRegState());
+        assertEquals(ServiceState.STATE_IN_SERVICE, ss.getState());
     }
 
     @SmallTest
@@ -171,6 +171,7 @@ public class ServiceStateTest extends TestCase {
         rats.add(new Pair<Integer, Boolean>(ServiceState.RIL_RADIO_TECHNOLOGY_GSM, false));
         rats.add(new Pair<Integer, Boolean>(ServiceState.RIL_RADIO_TECHNOLOGY_TD_SCDMA, false));
         rats.add(new Pair<Integer, Boolean>(ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN, false));
+        rats.add(new Pair<Integer, Boolean>(ServiceState.RIL_RADIO_TECHNOLOGY_NR, false));
 
         for (Pair<Integer, Boolean> rat : rats) {
             boolean isCdma = rat.second;
@@ -200,19 +201,13 @@ public class ServiceStateTest extends TestCase {
     public void testOperatorName() {
         ServiceState ss = new ServiceState();
 
-        ss.setDataOperatorAlphaLong("abc");
-        assertEquals("abc", ss.getDataOperatorAlphaLong());
-
-        ss.setDataOperatorName("def", "xyz", "123456");
-        assertEquals("xyz", ss.getDataOperatorAlphaShort());
+        ss.setOperatorAlphaLong("abc");
+        assertEquals("abc", ss.getOperatorAlphaLong());
 
         ss.setOperatorName("long", "short", "numeric");
-        assertEquals("long", ss.getVoiceOperatorAlphaLong());
-        assertEquals("short", ss.getVoiceOperatorAlphaShort());
-        assertEquals("numeric", ss.getVoiceOperatorNumeric());
-        assertEquals("long", ss.getDataOperatorAlphaLong());
-        assertEquals("short", ss.getDataOperatorAlphaShort());
-        assertEquals("numeric", ss.getDataOperatorNumeric());
+        assertEquals("long", ss.getOperatorAlphaLong());
+        assertEquals("short", ss.getOperatorAlphaShort());
+        assertEquals("numeric", ss.getOperatorNumeric());
         assertEquals("long", ss.getOperatorAlpha());
 
         ss.setOperatorName("", "short", "");

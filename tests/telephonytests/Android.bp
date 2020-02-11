@@ -8,6 +8,7 @@ android_test {
         "android.test.mock",
         "android.test.runner",
         "ims-common",
+        "unsupportedappusage",
     ],
 
     static_libs: [
@@ -24,5 +25,10 @@ android_test {
     ],
 
     platform_apis: true,
-    test_suites: ["device-tests"],
+    jarjar_rules: ":jarjar-rules-shared",
+
+    test_suites: [
+        "mts",
+        "device-tests",
+    ],
 }

@@ -919,6 +919,15 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     /**
+     *
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     * @param sms Sms result struct as defined by SendSmsResult in types.hal
+     */
+    public void sendCdmaSMSExpectMoreResponse(RadioResponseInfo responseInfo, SendSmsResult sms) {
+        responseSms(responseInfo, sms);
+    }
+
+    /**
      * @param responseInfo Response info struct containing response type, serial no. and error
      */
     public void acknowledgeLastIncomingCdmaSmsResponse(RadioResponseInfo responseInfo) {
@@ -1446,6 +1455,13 @@ public class RadioResponse extends IRadioResponse.Stub {
      * @param responseInfo Response info struct containing response type, serial no. and error
      */
     public void setSignalStrengthReportingCriteriaResponse(RadioResponseInfo responseInfo) {
+        responseVoid(responseInfo);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void setSignalStrengthReportingCriteriaResponse_1_5(RadioResponseInfo responseInfo) {
         responseVoid(responseInfo);
     }
 
@@ -2186,10 +2202,10 @@ public class RadioResponse extends IRadioResponse.Stub {
                 }
                 final int rxModeTimeMs = activityInfo.rxModeTimeMs;
                 ret = new ModemActivityInfo(SystemClock.elapsedRealtime(), sleepModeTimeMs,
-                        idleModeTimeMs, txModeTimeMs, rxModeTimeMs, 0);
+                        idleModeTimeMs, txModeTimeMs, rxModeTimeMs);
             } else {
                 ret = new ModemActivityInfo(0, 0, 0, new int [ModemActivityInfo.TX_POWER_LEVELS],
-                        0, 0);
+                        0);
                 responseInfo.error = RadioError.NONE;
             }
             sendMessageResponse(rr.mResult, ret);
@@ -2355,5 +2371,28 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void setSystemSelectionChannelsResponse(RadioResponseInfo responseInfo) {
         responseVoid(responseInfo);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error.
+     */
+    public void enableUiccApplicationsResponse(RadioResponseInfo responseInfo) {
+        responseVoid(responseInfo);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error.
+     * @param enabled whether Uicc applications are enabled.
+     */
+    public void areUiccApplicationsEnabledResponse(RadioResponseInfo responseInfo,
+            boolean enabled) {
+        RILRequest rr = mRil.processResponse(responseInfo);
+
+        if (rr != null) {
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, enabled);
+            }
+            mRil.processResponseDone(rr, responseInfo, enabled);
+        }
     }
 }

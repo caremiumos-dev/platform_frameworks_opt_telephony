@@ -16,16 +16,16 @@
 
 package com.android.internal.telephony.uicc;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncResult;
 import android.os.Message;
-import android.telephony.Rlog;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.gsm.SimTlv;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;

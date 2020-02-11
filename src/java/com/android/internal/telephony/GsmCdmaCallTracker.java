@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,14 +28,13 @@ import android.os.Message;
 import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
-import android.os.SystemProperties;
+import android.sysprop.TelephonyProperties;
 import android.telecom.TelecomManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.Rlog;
-import android.telephony.ServiceState;
+import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
@@ -45,6 +44,7 @@ import android.util.EventLog;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -414,7 +414,7 @@ public class GsmCdmaCallTracker extends CallTracker {
         TelephonyManager tm =
                 (TelephonyManager) mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
         String origNumber = dialString;
-        String operatorIsoContry = tm.getNetworkCountryIsoForPhone(mPhone.getPhoneId());
+        String operatorIsoContry = tm.getNetworkCountryIso(mPhone.getPhoneId());
         String simIsoContry = tm.getSimCountryIsoForPhone(mPhone.getPhoneId());
         boolean internationalRoaming = !TextUtils.isEmpty(operatorIsoContry)
                 && !TextUtils.isEmpty(simIsoContry)
@@ -656,14 +656,13 @@ public class GsmCdmaCallTracker extends CallTracker {
      * @throws CallStateException
      */
     public void checkForDialIssues(boolean isEmergencyCall) throws CallStateException {
-        String disableCall = SystemProperties.get(
-                TelephonyProperties.PROPERTY_DISABLE_CALL, "false");
+        boolean disableCall = TelephonyProperties.disable_call().orElse(false);
 
         if (mCi.getRadioState() != TelephonyManager.RADIO_POWER_ON) {
             throw new CallStateException(CallStateException.ERROR_POWER_OFF,
                     "Modem not powered");
         }
-        if (disableCall.equals("true")) {
+        if (disableCall) {
             throw new CallStateException(CallStateException.ERROR_CALLING_DISABLED,
                     "Calling disabled via ro.telephony.disable-call property");
         }
@@ -896,8 +895,6 @@ public class GsmCdmaCallTracker extends CallTracker {
                                 hoConnection.mPreHandoverState != GsmCdmaCall.State.HOLDING &&
                                 dc.state == DriverCall.State.ACTIVE) {
                             mConnections[i].onConnectedInOrOut();
-                        } else {
-                            mConnections[i].onConnectedConnectionMigrated();
                         }
 
                         mHandoverConnections.remove(hoConnection);
@@ -1468,6 +1465,13 @@ public class GsmCdmaCallTracker extends CallTracker {
                 if (isPhoneTypeGsm()) {
                     ar = (AsyncResult) msg.obj;
                     if (ar.exception != null) {
+                        if (msg.what == EVENT_SWITCH_RESULT) {
+                            Connection connection = mForegroundCall.getLatestConnection();
+                            if (connection != null) {
+                                connection.onConnectionEvent(
+                                        android.telecom.Connection.EVENT_CALL_SWITCH_FAILED, null);
+                            }
+                        }
                         mPhone.notifySuppServiceFailed(getFailedService(msg.what));
                     }
                     operationComplete();
@@ -1534,7 +1538,7 @@ public class GsmCdmaCallTracker extends CallTracker {
                     causeCode == CallFailCause.BEARER_NOT_AVAIL ||
                     causeCode == CallFailCause.ERROR_UNSPECIFIED) {
 
-                    CellLocation loc = mPhone.getCellLocation();
+                    CellLocation loc = mPhone.getCellIdentity().asCellLocation();
                     int cid = -1;
                     if (loc != null) {
                         if (loc instanceof GsmCellLocation) {
@@ -1654,7 +1658,7 @@ public class GsmCdmaCallTracker extends CallTracker {
      * @param vrat the RIL voice radio technology for CS calls,
      *             see {@code RIL_RADIO_TECHNOLOGY_*} in {@link android.telephony.ServiceState}.
      */
-    public void dispatchCsCallRadioTech(@ServiceState.RilRadioTechnology int vrat) {
+    public void dispatchCsCallRadioTech(@RilRadioTechnology int vrat) {
         if (mConnections == null) {
             log("dispatchCsCallRadioTech: mConnections is null");
             return;

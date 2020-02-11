@@ -16,11 +16,10 @@
 
 package com.android.internal.telephony.uicc;
 
-import android.annotation.UnsupportedAppUsage;
-import android.telephony.Rlog;
+import android.compat.annotation.UnsupportedAppUsage;
 
 import com.android.internal.telephony.uicc.IccCardStatus.PinState;
-
+import com.android.telephony.Rlog;
 
 /**
  * See also RIL_AppStatus in include/telephony/ril.h
@@ -28,7 +27,14 @@ import com.android.internal.telephony.uicc.IccCardStatus.PinState;
  * {@hide}
  */
 public class IccCardApplicationStatus {
+
+    @UnsupportedAppUsage
+    public IccCardApplicationStatus() {
+    }
+
     // TODO: Replace with constants from PhoneConstants.APPTYPE_xxx
+    @UnsupportedAppUsage(implicitMember =
+            "values()[Lcom/android/internal/telephony/uicc/IccCardApplicationStatus$AppType;")
     public enum AppType{
         @UnsupportedAppUsage
         APPTYPE_UNKNOWN,
@@ -44,6 +50,8 @@ public class IccCardApplicationStatus {
         APPTYPE_ISIM
     }
 
+    @UnsupportedAppUsage(implicitMember =
+            "values()[Lcom/android/internal/telephony/uicc/IccCardApplicationStatus$AppState;")
     public enum AppState{
         @UnsupportedAppUsage
         APPSTATE_UNKNOWN,
@@ -80,6 +88,8 @@ public class IccCardApplicationStatus {
         }
     }
 
+    @UnsupportedAppUsage(implicitMember =
+            "values()[Lcom/android/internal/telephony/uicc/IccCardApplicationStatus$PersoSubState;")
     public enum PersoSubState{
         @UnsupportedAppUsage
         PERSOSUBSTATE_UNKNOWN,

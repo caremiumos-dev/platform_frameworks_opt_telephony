@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -26,16 +26,15 @@ import android.database.MergeCursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.telephony.Rlog;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.uicc.AdnRecord;
 import com.android.internal.telephony.uicc.IccConstants;
+import com.android.telephony.Rlog;
 
 import java.util.List;
-
 
 /**
  * {@hide}
@@ -80,6 +79,10 @@ public class IccProvider extends ContentProvider {
     }
 
     private SubscriptionManager mSubscriptionManager;
+
+    @UnsupportedAppUsage
+    public IccProvider() {
+    }
 
     @Override
     public boolean onCreate() {

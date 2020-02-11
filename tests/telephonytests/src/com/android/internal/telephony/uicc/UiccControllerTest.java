@@ -15,8 +15,6 @@
  */
 package com.android.internal.telephony.uicc;
 
-import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
-
 import static junit.framework.Assert.fail;
 
 import static org.junit.Assert.assertEquals;
@@ -31,30 +29,33 @@ import static org.mockito.Mockito.verify;
 
 import android.os.AsyncResult;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.telephony.UiccCardInfo;
+import android.testing.AndroidTestingRunner;
+import android.testing.TestableLooper;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.filters.SmallTest;
 
-import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.TelephonyTest;
 import com.android.internal.telephony.uicc.euicc.EuiccCard;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
 
+
+@RunWith(AndroidTestingRunner.class)
+@TestableLooper.RunWithLooper
 public class UiccControllerTest extends TelephonyTest {
     private UiccController mUiccControllerUT;
-    private UiccControllerHandlerThread mUiccControllerHandlerThread;
     private static final int PHONE_COUNT = 1;
     private static final int ICC_CHANGED_EVENT = 0;
     private static final int EVENT_GET_ICC_STATUS_DONE = 3;
@@ -72,20 +73,6 @@ public class UiccControllerTest extends TelephonyTest {
     private UiccCard mMockCard;
     @Mock
     private EuiccCard mMockEuiccCard;
-
-    private class UiccControllerHandlerThread extends HandlerThread {
-
-        private UiccControllerHandlerThread(String name) {
-            super(name);
-        }
-        @Override
-        public void onLooperPrepared() {
-            /* create a new UICC Controller associated with the simulated Commands */
-            mUiccControllerUT = UiccController.make(mContext,
-                    new CommandsInterface[]{mSimulatedCommands});
-            setReady(true);
-        }
-    }
 
     private IccCardApplicationStatus composeUiccApplicationStatus(
             IccCardApplicationStatus.AppType appType,
@@ -122,19 +109,14 @@ public class UiccControllerTest extends TelephonyTest {
         // for testing we pretend slotIndex is set. In reality it would be invalid on older versions
         // (before 1.2) of hal
         mIccCardStatus.physicalSlotIndex = 0;
-        mUiccControllerHandlerThread = new UiccControllerHandlerThread(TAG);
-        mUiccControllerHandlerThread.start();
-        waitUntilReady();
+        mUiccControllerUT = UiccController.make(mContext);
         // reset sLastSlotStatus so that onGetSlotStatusDone always sees a change in the slot status
         mUiccControllerUT.sLastSlotStatus = null;
-        /* expected to get new UiccCards being created
-        wait till the async result and message delay */
-        waitForMs(100);
+        processAllMessages();
     }
 
     @After
     public void tearDown() throws Exception {
-        mUiccControllerHandlerThread.quit();
         super.tearDown();
     }
 
@@ -148,14 +130,12 @@ public class UiccControllerTest extends TelephonyTest {
                 com.android.internal.R.array.non_removable_euicc_slots,
                 nonRemovableEuiccSlots);
         replaceInstance(UiccController.class, "mInstance", null, null);
-        mUiccControllerHandlerThread.quit();
-        mUiccControllerHandlerThread = new UiccControllerHandlerThread(TAG);
-        mUiccControllerHandlerThread.start();
-        waitUntilReady();
-        waitForMs(100);
+        mUiccControllerUT = UiccController.make(mContext);
+        processAllMessages();
     }
 
-    @Test @SmallTest
+    @Test
+    @SmallTest
     public void testSanity() {
         // radio power is expected to be on which should trigger icc card and slot status requests
         verify(mSimulatedCommandsVerifier, times(1)).getIccCardStatus(any(Message.class));
@@ -181,13 +161,14 @@ public class UiccControllerTest extends TelephonyTest {
         assertNull(mUiccControllerUT.getIccFileHandler(0, UiccController.APP_FAM_IMS));
     }
 
-    @Test @SmallTest
+    @Test
+    @SmallTest
     public void testPowerOff() {
         /* Uicc Controller registered for event off to unavail */
         logd("radio power state transition from off to unavail, dispose UICC Card");
         testSanity();
         mSimulatedCommands.requestShutdown(null);
-        waitForMs(50);
+        processAllMessages();
         assertNull(mUiccControllerUT.getUiccCard(0));
         assertEquals(TelephonyManager.RADIO_POWER_UNAVAILABLE, mSimulatedCommands.getRadioState());
     }
@@ -195,12 +176,13 @@ public class UiccControllerTest extends TelephonyTest {
     @Test @SmallTest
     public void testPowerOn() {
         mSimulatedCommands.setRadioPower(true, null);
-        waitForMs(500);
+        processAllMessages();
         assertNotNull(mUiccControllerUT.getUiccCard(0));
         assertEquals(TelephonyManager.RADIO_POWER_ON, mSimulatedCommands.getRadioState());
     }
 
-    @Test @SmallTest
+    @Test
+    @SmallTest
     public void testPowerOffPowerOnWithApp() {
          /* update app status and index */
         IccCardApplicationStatus cdmaApp = composeUiccApplicationStatus(
@@ -235,7 +217,8 @@ public class UiccControllerTest extends TelephonyTest {
         assertNull(mUiccControllerUT.getIccFileHandler(0, UiccController.APP_FAM_IMS));
     }
 
-    @Test @SmallTest
+    @Test
+    @SmallTest
     public void testIccChangedListener() {
         mUiccControllerUT.registerForIccChanged(mMockedHandler, ICC_CHANGED_EVENT, null);
         testPowerOff();
@@ -608,6 +591,44 @@ public class UiccControllerTest extends TelephonyTest {
         mUiccControllerUT.handleMessage(msg);
 
         assertEquals(mUiccControllerUT.convertToPublicCardId(eidForRemovableEuicc),
+                mUiccControllerUT.getCardIdForDefaultEuicc());
+    }
+
+    /**
+     * When IccCardStatus is received, if the EID is known from previous APDU, use it to set the
+     * mDefaultEuiccCardId.
+     */
+    @Test
+    public void testEidFromPreviousApduSetsDefaultEuicc() {
+        // Give UiccController a real context so it can use shared preferences
+        mUiccControllerUT.mContext = InstrumentationRegistry.getContext();
+
+        // Mock out UiccSlots
+        mUiccControllerUT.mUiccSlots[0] = mMockSlot;
+        doReturn(true).when(mMockSlot).isEuicc();
+        doReturn(null).when(mMockSlot).getUiccCard();
+        doReturn("123451234567890").when(mMockSlot).getIccId();
+        doReturn(false).when(mMockSlot).isRemovable();
+
+        // If APDU has already happened, the EuiccCard already knows EID
+        String knownEidFromApdu = "A1B2C3D4E5";
+        doReturn(mMockEuiccCard).when(mMockSlot).getUiccCard();
+        doReturn(knownEidFromApdu).when(mMockEuiccCard).getEid();
+
+        // simulate card status loaded so that the UiccController sets the card ID
+        IccCardStatus ics = new IccCardStatus();
+        ics.setCardState(1 /* present */);
+        ics.setUniversalPinState(3 /* disabled */);
+        ics.atr = "abcdef0123456789abcdef";
+        ics.iccid = "123451234567890";
+        // the IccCardStatus does not contain EID, but it is known from previous APDU
+        ics.eid = null;
+        AsyncResult ar = new AsyncResult(null, ics, null);
+        Message msg = Message.obtain(mUiccControllerUT, EVENT_GET_ICC_STATUS_DONE, ar);
+        mUiccControllerUT.handleMessage(msg);
+
+        // since EID is known and we've gotten card status, the default eUICC card ID should be set
+        assertEquals(mUiccControllerUT.convertToPublicCardId(knownEidFromApdu),
                 mUiccControllerUT.getCardIdForDefaultEuicc());
     }
 }

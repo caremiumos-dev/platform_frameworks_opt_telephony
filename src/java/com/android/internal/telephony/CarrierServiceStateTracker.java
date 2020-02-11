@@ -30,18 +30,16 @@ import android.os.Message;
 import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.util.NotificationChannelController;
+import com.android.telephony.Rlog;
 
 import java.util.HashMap;
 import java.util.Map;
-
-
 
 /**
  * This contains Carrier specific logic based on the states/events
@@ -166,15 +164,8 @@ public class CarrierServiceStateTracker extends Handler {
         if (mSST.mSS == null) {
             return true; //something has gone wrong, return true and not show the notification.
         }
-        return (mSST.mSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE
-                || mSST.mSS.getDataRegState() == ServiceState.STATE_IN_SERVICE);
-    }
-
-    private boolean isPhoneVoiceRegistered() {
-        if (mSST.mSS == null) {
-            return true; //something has gone wrong, return true and not show the notification.
-        }
-        return (mSST.mSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE);
+        return (mSST.mSS.getState() == ServiceState.STATE_IN_SERVICE
+                || mSST.mSS.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE);
     }
 
     private boolean isPhoneRegisteredForWifiCalling() {
@@ -450,14 +441,14 @@ public class CarrierServiceStateTracker extends Handler {
                     .setContentTitle(title)
                     .setStyle(new Notification.BigTextStyle().bigText(details))
                     .setContentText(details)
-                    .setChannel(NotificationChannelController.CHANNEL_ID_ALERT)
+                    .setChannelId(NotificationChannelController.CHANNEL_ID_ALERT)
                     .setContentIntent(settingsIntent);
         }
     }
 
     /**
-     * Class that defines the emergency notification, which is shown when the user is out of cell
-     * connectivity, but has wifi enabled.
+     * Class that defines the emergency notification, which is shown when Wi-Fi Calling is
+     * available.
      */
     public class EmergencyNetworkNotification implements NotificationType {
 
@@ -502,10 +493,9 @@ public class CarrierServiceStateTracker extends Handler {
          */
         public boolean sendMessage() {
             Rlog.i(LOG_TAG, "EmergencyNetworkNotification: sendMessage() w/values: "
-                    + "," + isPhoneVoiceRegistered() + "," + mDelay + ","
-                    + isPhoneRegisteredForWifiCalling() + "," + mSST.isRadioOn());
-            if (mDelay == UNINITIALIZED_DELAY_VALUE || isPhoneVoiceRegistered()
-                    || !isPhoneRegisteredForWifiCalling()) {
+                    + "," + mDelay + "," + isPhoneRegisteredForWifiCalling() + ","
+                    + mSST.isRadioOn());
+            if (mDelay == UNINITIALIZED_DELAY_VALUE || !isPhoneRegisteredForWifiCalling()) {
                 return false;
             }
             return true;
@@ -525,7 +515,8 @@ public class CarrierServiceStateTracker extends Handler {
                     .setContentTitle(title)
                     .setStyle(new Notification.BigTextStyle().bigText(details))
                     .setContentText(details)
-                    .setChannel(NotificationChannelController.CHANNEL_ID_WFC);
+                    .setFlag(Notification.FLAG_NO_CLEAR, true)
+                    .setChannelId(NotificationChannelController.CHANNEL_ID_WFC);
         }
     }
 }

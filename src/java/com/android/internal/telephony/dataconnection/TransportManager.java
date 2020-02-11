@@ -26,10 +26,9 @@ import android.os.RegistrantList;
 import android.os.SystemProperties;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
+import android.telephony.Annotation.ApnType;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.data.ApnSetting;
-import android.telephony.data.ApnSetting.ApnType;
 import android.util.LocalLog;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -38,8 +37,9 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.RIL;
 import com.android.internal.telephony.dataconnection.AccessNetworksManager.QualifiedNetworks;
-import com.android.internal.util.ArrayUtils;
+import com.android.internal.telephony.util.ArrayUtils;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -297,7 +297,7 @@ public class TransportManager extends Handler {
     }
 
     private static boolean areNetworksValid(QualifiedNetworks networks) {
-        if (networks.qualifiedNetworks == null) {
+        if (networks.qualifiedNetworks == null || networks.qualifiedNetworks.length == 0) {
             return false;
         }
         for (int network : networks.qualifiedNetworks) {

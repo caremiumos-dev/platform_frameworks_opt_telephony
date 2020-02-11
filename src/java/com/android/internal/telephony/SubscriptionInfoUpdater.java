@@ -18,9 +18,9 @@ package com.android.internal.telephony;
 
 import android.Manifest;
 import android.annotation.Nullable;
-import android.annotation.UnsupportedAppUsage;
 import android.app.ActivityManager;
 import android.app.UserSwitchObserver;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -46,7 +46,7 @@ import android.service.euicc.EuiccProfileInfo;
 import android.service.euicc.EuiccService;
 import android.service.euicc.GetEuiccProfileInfoListResult;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
+import android.telephony.RadioAccessFamily;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -63,11 +63,10 @@ import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UiccSlot;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +76,8 @@ import java.util.List;
 public class SubscriptionInfoUpdater extends Handler {
     private static final String LOG_TAG = "SubscriptionInfoUpdater";
     @UnsupportedAppUsage
-    private static final int PROJECT_SIM_NUM = TelephonyManager.getDefault().getMaxPhoneCount();
+    private static final int SUPPORTED_MODEM_COUNT = TelephonyManager.getDefault()
+            .getSupportedModemCount();
 
     private static final boolean DBG = true;
 
@@ -93,6 +93,7 @@ public class SubscriptionInfoUpdater extends Handler {
     private static final int EVENT_SIM_READY = 10;
     private static final int EVENT_SIM_IMSI = 11;
     private static final int EVENT_REFRESH_EMBEDDED_SUBSCRIPTIONS = 12;
+    private static final int EVENT_MULTI_SIM_CONFIG_CHANGED = 13;
 
     private static final String ICCID_STRING_FOR_NO_SIM = "";
 
@@ -103,13 +104,12 @@ public class SubscriptionInfoUpdater extends Handler {
     public static final String CURR_SUBID = "curr_subid";
 
     @UnsupportedAppUsage
-    private static Phone[] mPhone;
+    private static Context sContext = null;
     @UnsupportedAppUsage
-    private static Context mContext = null;
-    @UnsupportedAppUsage
-    private static String mIccId[] = new String[PROJECT_SIM_NUM];
-    private static int[] sSimCardState = new int[PROJECT_SIM_NUM];
-    private static int[] sSimApplicationState = new int[PROJECT_SIM_NUM];
+
+    private static String[] sIccId = new String[SUPPORTED_MODEM_COUNT];
+    private static int[] sSimCardState = new int[SUPPORTED_MODEM_COUNT];
+    private static int[] sSimApplicationState = new int[SUPPORTED_MODEM_COUNT];
     private static boolean sIsSubInfoInitialized = false;
     private SubscriptionManager mSubscriptionManager = null;
     private EuiccManager mEuiccManager;
@@ -138,25 +138,26 @@ public class SubscriptionInfoUpdater extends Handler {
     // TODO: The SubscriptionController instance should be passed in here from PhoneFactory
     // rather than invoking the static getter all over the place.
     public SubscriptionInfoUpdater(
-            Looper looper, Context context, Phone[] phone, CommandsInterface[] ci) {
-        this(looper, context, phone, ci,
-                IPackageManager.Stub.asInterface(ServiceManager.getService("package")));
+            Looper looper, Context context, CommandsInterface[] ci) {
+        this(looper, context, ci, IPackageManager.Stub.asInterface(
+                ServiceManager.getService("package")));
     }
 
-    @VisibleForTesting public SubscriptionInfoUpdater(
-            Looper looper, Context context, Phone[] phone,
+    @VisibleForTesting public SubscriptionInfoUpdater(Looper looper, Context context,
             CommandsInterface[] ci, IPackageManager packageMgr) {
         logd("Constructor invoked");
         mBackgroundHandler = new Handler(looper);
 
-        mContext = context;
-        mPhone = phone;
-        mSubscriptionManager = SubscriptionManager.from(mContext);
-        mEuiccManager = (EuiccManager) mContext.getSystemService(Context.EUICC_SERVICE);
+        sContext = context;
+        mSubscriptionManager = SubscriptionManager.from(sContext);
+        mEuiccManager = (EuiccManager) sContext.getSystemService(Context.EUICC_SERVICE);
         mPackageManager = packageMgr;
 
-        mCarrierServiceBindHelper = new CarrierServiceBindHelper(mContext);
+        mCarrierServiceBindHelper = new CarrierServiceBindHelper(sContext);
         initializeCarrierApps();
+
+        PhoneConfigurationManager.registerForMultiSimConfigChange(
+                this, EVENT_MULTI_SIM_CONFIG_CHANGED, null);
     }
 
     private void initializeCarrierApps() {
@@ -171,9 +172,9 @@ public class SubscriptionInfoUpdater extends Handler {
                 public void onUserSwitching(int newUserId, IRemoteCallback reply)
                         throws RemoteException {
                     mCurrentlyActiveUserId = newUserId;
-                    CarrierAppUtils.disableCarrierAppsUntilPrivileged(mContext.getOpPackageName(),
+                    CarrierAppUtils.disableCarrierAppsUntilPrivileged(sContext.getOpPackageName(),
                             mPackageManager, TelephonyManager.getDefault(),
-                            mContext.getContentResolver(), mCurrentlyActiveUserId);
+                            mCurrentlyActiveUserId, sContext);
 
                     if (reply != null) {
                         try {
@@ -183,27 +184,27 @@ public class SubscriptionInfoUpdater extends Handler {
                     }
                 }
             }, LOG_TAG);
-            ActivityManager am = (ActivityManager) mContext.getSystemService(
+            ActivityManager am = (ActivityManager) sContext.getSystemService(
                 Context.ACTIVITY_SERVICE);
             mCurrentlyActiveUserId = am.getCurrentUser();
         } catch (RemoteException e) {
             logd("Couldn't get current user ID; guessing it's 0: " + e.getMessage());
         }
-        CarrierAppUtils.disableCarrierAppsUntilPrivileged(mContext.getOpPackageName(),
-                mPackageManager, TelephonyManager.getDefault(), mContext.getContentResolver(),
-                mCurrentlyActiveUserId);
+        CarrierAppUtils.disableCarrierAppsUntilPrivileged(sContext.getOpPackageName(),
+                mPackageManager, TelephonyManager.getDefault(),
+                mCurrentlyActiveUserId, sContext);
     }
 
     /**
      * Update subscriptions when given a new ICC state.
      */
-    public void updateInternalIccState(String simStatus, String reason, int slotId,
+    public void updateInternalIccState(String simStatus, String reason, int phoneId,
             boolean absentAndInactive) {
         logd("updateInternalIccState to simStatus " + simStatus + " reason " + reason
-                + " slotId " + slotId);
+                + " phoneId " + phoneId);
         int message = internalIccStateToMessage(simStatus);
         if (message != EVENT_INVALID) {
-            sendMessage(obtainMessage(message, slotId, absentAndInactive ? 1 : 0, reason));
+            sendMessage(obtainMessage(message, phoneId, absentAndInactive ? 1 : 0, reason));
         }
     }
 
@@ -226,11 +227,11 @@ public class SubscriptionInfoUpdater extends Handler {
 
     @UnsupportedAppUsage
     private boolean isAllIccIdQueryDone() {
-        for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
+        for (int i = 0; i < TelephonyManager.getDefault().getActiveModemCount(); i++) {
             UiccSlot slot = UiccController.getInstance().getUiccSlotForPhone(i);
             int slotId = UiccController.getInstance().getSlotIdFromPhoneId(i);
-            if  (mIccId[i] == null || slot == null || !slot.isActive()) {
-                if (mIccId[i] == null) {
+            if  (sIccId[i] == null || slot == null || !slot.isActive()) {
+                if (sIccId[i] == null) {
                     logd("Wait for SIM " + i + " Iccid");
                 } else {
                     logd(String.format("Wait for slot corresponding to phone %d to be active, "
@@ -254,7 +255,7 @@ public class SubscriptionInfoUpdater extends Handler {
                 if (ar.exception == null && ar.result != null) {
                     int[] modes = (int[])ar.result;
                     if (modes[0] == 1) {  // Manual mode.
-                        mPhone[slotId].setNetworkSelectionModeAutomatic(null);
+                        PhoneFactory.getPhone(slotId).setNetworkSelectionModeAutomatic(null);
                     }
                 } else {
                     logd("EVENT_GET_NETWORK_SELECTION_MODE_DONE: error getting network mode.");
@@ -338,8 +339,22 @@ public class SubscriptionInfoUpdater extends Handler {
                 });
                 break;
 
+            case EVENT_MULTI_SIM_CONFIG_CHANGED:
+                onMultiSimConfigChanged();
             default:
                 logd("Unknown msg:" + msg.what);
+        }
+    }
+
+    private void onMultiSimConfigChanged() {
+        int activeModemCount = ((TelephonyManager) sContext.getSystemService(
+                Context.TELEPHONY_SERVICE)).getActiveModemCount();
+        // For inactive modems, reset its states.
+        for (int phoneId = activeModemCount; phoneId < SUPPORTED_MODEM_COUNT; phoneId++) {
+            SubscriptionController.getInstance().clearSubInfoRecord(phoneId);
+            sIccId[phoneId] = null;
+            sSimCardState[phoneId] = TelephonyManager.SIM_STATE_UNKNOWN;
+            sSimApplicationState[phoneId] = TelephonyManager.SIM_STATE_UNKNOWN;
         }
     }
 
@@ -357,15 +372,15 @@ public class SubscriptionInfoUpdater extends Handler {
                 EVENT_REFRESH_EMBEDDED_SUBSCRIPTIONS, cardId, 0 /* arg2 */, callback));
     }
 
-    private void handleSimLocked(int slotId, String reason) {
-        if (mIccId[slotId] != null && mIccId[slotId].equals(ICCID_STRING_FOR_NO_SIM)) {
-            logd("SIM" + (slotId + 1) + " hot plug in");
-            mIccId[slotId] = null;
+    private void handleSimLocked(int phoneId, String reason) {
+        if (sIccId[phoneId] != null && sIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
+            logd("SIM" + (phoneId + 1) + " hot plug in");
+            sIccId[phoneId] = null;
         }
 
-        String iccId = mIccId[slotId];
+        String iccId = sIccId[phoneId];
         if (iccId == null) {
-            IccCard iccCard = mPhone[slotId].getIccCard();
+            IccCard iccCard = PhoneFactory.getPhone(phoneId).getIccCard();
             if (iccCard == null) {
                 logd("handleSimLocked: IccCard null");
                 return;
@@ -379,18 +394,18 @@ public class SubscriptionInfoUpdater extends Handler {
                 logd("handleSimLocked: IccID null");
                 return;
             }
-            mIccId[slotId] = IccUtils.stripTrailingFs(records.getFullIccId());
+            sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
         } else {
-            logd("NOT Querying IccId its already set sIccid[" + slotId + "]=" + iccId);
+            logd("NOT Querying IccId its already set sIccid[" + phoneId + "]=" + iccId);
         }
 
-        updateSubscriptionInfoByIccId(slotId, true /* updateEmbeddedSubs */);
+        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
 
-        broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_LOCKED, reason);
-        broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_PRESENT);
-        broadcastSimApplicationStateChanged(slotId, getSimStateFromLockedReason(reason));
-        updateSubscriptionCarrierId(slotId, IccCardConstants.INTENT_VALUE_ICC_LOCKED);
-        updateCarrierServices(slotId, IccCardConstants.INTENT_VALUE_ICC_LOCKED);
+        broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_LOCKED, reason);
+        broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
+        broadcastSimApplicationStateChanged(phoneId, getSimStateFromLockedReason(reason));
+        updateSubscriptionCarrierId(phoneId, IccCardConstants.INTENT_VALUE_ICC_LOCKED);
+        updateCarrierServices(phoneId, IccCardConstants.INTENT_VALUE_ICC_LOCKED);
     }
 
     private static int getSimStateFromLockedReason(String lockedReason) {
@@ -409,32 +424,49 @@ public class SubscriptionInfoUpdater extends Handler {
         }
     }
 
-    private void handleSimNotReady(int slotId) {
-        logd("handleSimNotReady: slotId: " + slotId);
+    private void handleSimNotReady(int phoneId) {
+        logd("handleSimNotReady: phoneId: " + phoneId);
+        boolean isFinalState = false;
 
-        IccCard iccCard = mPhone[slotId].getIccCard();
-        if (iccCard.isEmptyProfile()) {
-            // ICC_NOT_READY is a terminal state for an eSIM on the boot profile. At this
-            // phase, the subscription list is accessible. Treating NOT_READY
+        IccCard iccCard = PhoneFactory.getPhone(phoneId).getIccCard();
+        if (iccCard.isEmptyProfile() || areUiccAppsDisabledOnCard(phoneId)) {
+            isFinalState = true;
+            // ICC_NOT_READY is a terminal state for
+            // 1) It's an empty profile as there's no uicc applications. Or
+            // 2) Its uicc applications are set to be disabled.
+            // At this phase, the subscription list is accessible. Treating NOT_READY
             // as equivalent to ABSENT, once the rest of the system can handle it.
-            mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
-            updateSubscriptionInfoByIccId(slotId, false /* updateEmbeddedSubs */);
+            sIccId[phoneId] = ICCID_STRING_FOR_NO_SIM;
+            updateSubscriptionInfoByIccId(phoneId, false /* updateEmbeddedSubs */);
         }
 
-        broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_NOT_READY,
+        broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_NOT_READY,
                 null);
-        broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_PRESENT);
-        broadcastSimApplicationStateChanged(slotId, TelephonyManager.SIM_STATE_NOT_READY);
+        broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
+        broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_NOT_READY);
+        if (isFinalState) {
+            updateCarrierServices(phoneId, IccCardConstants.INTENT_VALUE_ICC_NOT_READY);
+        }
     }
 
-    private void handleSimLoaded(int slotId) {
-        logd("handleSimLoaded: slotId: " + slotId);
+    private boolean areUiccAppsDisabledOnCard(int phoneId) {
+        // When uicc apps are disabled(supported in IRadio 1.5), we will still get IccId from
+        // cardStatus (since IRadio 1.2). Amd upon cardStatus change we'll receive another
+        // handleSimNotReady so this will be evaluated again.
+        UiccSlot slot = UiccController.getInstance().getUiccSlotForPhone(phoneId);
+        if (slot == null || slot.getIccId() == null) return false;
+        SubscriptionInfo info = SubscriptionController.getInstance()
+                .getSubInfoForIccId(slot.getIccId());
+        return info != null && !info.areUiccApplicationsEnabled();
+    }
+
+    private void handleSimLoaded(int phoneId) {
+        logd("handleSimLoaded: phoneId: " + phoneId);
 
         // The SIM should be loaded at this state, but it is possible in cases such as SIM being
         // removed or a refresh RESET that the IccRecords could be null. The right behavior is to
         // not broadcast the SIM loaded.
-        int loadedSlotId = slotId;
-        IccCard iccCard = mPhone[slotId].getIccCard();
+        IccCard iccCard = PhoneFactory.getPhone(phoneId).getIccCard();
         if (iccCard == null) {  // Possibly a race condition.
             logd("handleSimLoaded: IccCard null");
             return;
@@ -448,30 +480,30 @@ public class SubscriptionInfoUpdater extends Handler {
             logd("handleSimLoaded: IccID null");
             return;
         }
-        mIccId[slotId] = IccUtils.stripTrailingFs(records.getFullIccId());
+        sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
 
-        updateSubscriptionInfoByIccId(slotId, true /* updateEmbeddedSubs */);
+        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
         List<SubscriptionInfo> subscriptionInfos = SubscriptionController.getInstance()
-                .getSubInfoUsingSlotIndexPrivileged(slotId);
+                .getSubInfoUsingSlotIndexPrivileged(phoneId);
         if (subscriptionInfos == null || subscriptionInfos.isEmpty()) {
-            loge("empty subinfo for slotId: " + slotId + "could not update ContentResolver");
+            loge("empty subinfo for phoneId: " + phoneId + "could not update ContentResolver");
         } else {
             for (SubscriptionInfo sub : subscriptionInfos) {
                 int subId = sub.getSubscriptionId();
                 TelephonyManager tm = (TelephonyManager)
-                        mContext.getSystemService(Context.TELEPHONY_SERVICE);
+                        sContext.getSystemService(Context.TELEPHONY_SERVICE);
                 String operator = tm.getSimOperatorNumeric(subId);
 
                 if (!TextUtils.isEmpty(operator)) {
                     if (subId == SubscriptionController.getInstance().getDefaultSubId()) {
-                        MccTable.updateMccMncConfiguration(mContext, operator);
+                        MccTable.updateMccMncConfiguration(sContext, operator);
                     }
                     SubscriptionController.getInstance().setMccMnc(operator, subId);
                 } else {
                     logd("EVENT_RECORDS_LOADED Operator name is null");
                 }
 
-                String iso = tm.getSimCountryIsoForPhone(slotId);
+                String iso = tm.getSimCountryIsoForPhone(phoneId);
 
                 if (!TextUtils.isEmpty(iso)) {
                     SubscriptionController.getInstance().setCountryIso(iso, subId);
@@ -499,12 +531,12 @@ public class SubscriptionInfoUpdater extends Handler {
                  * Storing last subId in SharedPreference for now to detect SIM change.
                  */
                 SharedPreferences sp =
-                        PreferenceManager.getDefaultSharedPreferences(mContext);
-                int storedSubId = sp.getInt(CURR_SUBID + slotId, -1);
+                        PreferenceManager.getDefaultSharedPreferences(sContext);
+                int storedSubId = sp.getInt(CURR_SUBID + phoneId, -1);
 
                 if (storedSubId != subId) {
                     int networkType = Settings.Global.getInt(
-                            mPhone[slotId].getContext().getContentResolver(),
+                            PhoneFactory.getPhone(phoneId).getContext().getContentResolver(),
                             Settings.Global.PREFERRED_NETWORK_MODE + subId,
                             -1 /* invalid network mode */);
 
@@ -512,38 +544,50 @@ public class SubscriptionInfoUpdater extends Handler {
                         networkType = RILConstants.PREFERRED_NETWORK_MODE;
                         try {
                             networkType = TelephonyManager.getIntAtIndex(
-                                    mContext.getContentResolver(),
-                                    Settings.Global.PREFERRED_NETWORK_MODE, slotId);
+                                    sContext.getContentResolver(),
+                                    Settings.Global.PREFERRED_NETWORK_MODE, phoneId);
                         } catch (SettingNotFoundException retrySnfe) {
                             Rlog.e(LOG_TAG, "Settings Exception Reading Value At Index for "
                                     + "Settings.Global.PREFERRED_NETWORK_MODE");
                         }
                         Settings.Global.putInt(
-                                mPhone[slotId].getContext().getContentResolver(),
+                                PhoneFactory.getPhone(phoneId).getContext().getContentResolver(),
                                 Global.PREFERRED_NETWORK_MODE + subId,
                                 networkType);
                     }
 
                     // Set the modem network mode
-                    mPhone[slotId].setPreferredNetworkType(networkType, null);
+                    long allowedNetworkTypes = -1;
+                    try {
+                        allowedNetworkTypes = Long.parseLong(
+                                SubscriptionController.getInstance().getSubscriptionProperty(subId,
+                                        SubscriptionManager.ALLOWED_NETWORK_TYPES));
+                    } catch (NumberFormatException err) {
+                        logd("NumberFormat exception");
+                    }
+
+                    long networkTypeBitMask = RadioAccessFamily.getRafFromNetworkType(networkType);
+                    networkType = RadioAccessFamily.getNetworkTypeFromRaf(
+                            (int) (networkTypeBitMask & allowedNetworkTypes));
+                    PhoneFactory.getPhone(phoneId).setPreferredNetworkType(networkType, null);
 
                     // Only support automatic selection mode on SIM change.
-                    mPhone[slotId].getNetworkSelectionMode(
+                    PhoneFactory.getPhone(phoneId).getNetworkSelectionMode(
                             obtainMessage(EVENT_GET_NETWORK_SELECTION_MODE_DONE,
-                                    new Integer(slotId)));
+                                    new Integer(phoneId)));
 
                     // Update stored subId
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putInt(CURR_SUBID + slotId, subId);
+                    editor.putInt(CURR_SUBID + phoneId, subId);
                     editor.apply();
                 }
             }
         }
 
         // Update set of enabled carrier apps now that the privilege rules may have changed.
-        CarrierAppUtils.disableCarrierAppsUntilPrivileged(mContext.getOpPackageName(),
+        CarrierAppUtils.disableCarrierAppsUntilPrivileged(sContext.getOpPackageName(),
                 mPackageManager, TelephonyManager.getDefault(),
-                mContext.getContentResolver(), mCurrentlyActiveUserId);
+                mCurrentlyActiveUserId, sContext);
 
         /**
          * The sim loading sequence will be
@@ -553,80 +597,80 @@ public class SubscriptionInfoUpdater extends Handler {
          *  3. ACTION_SUBSCRIPTION_CARRIER_IDENTITY_CHANGED
          *  4. ACTION_CARRIER_CONFIG_CHANGED
          */
-        broadcastSimStateChanged(loadedSlotId, IccCardConstants.INTENT_VALUE_ICC_LOADED, null);
-        broadcastSimCardStateChanged(loadedSlotId, TelephonyManager.SIM_STATE_PRESENT);
-        broadcastSimApplicationStateChanged(loadedSlotId, TelephonyManager.SIM_STATE_LOADED);
-        updateSubscriptionCarrierId(loadedSlotId, IccCardConstants.INTENT_VALUE_ICC_LOADED);
-        updateCarrierServices(loadedSlotId, IccCardConstants.INTENT_VALUE_ICC_LOADED);
+        broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_LOADED, null);
+        broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
+        broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_LOADED);
+        updateSubscriptionCarrierId(phoneId, IccCardConstants.INTENT_VALUE_ICC_LOADED);
+        updateCarrierServices(phoneId, IccCardConstants.INTENT_VALUE_ICC_LOADED);
     }
 
-    private void updateCarrierServices(int slotId, String simState) {
+    private void updateCarrierServices(int phoneId, String simState) {
         CarrierConfigManager configManager =
-                (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
-        configManager.updateConfigForPhoneId(slotId, simState);
-        mCarrierServiceBindHelper.updateForPhoneId(slotId, simState);
+                (CarrierConfigManager) sContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        configManager.updateConfigForPhoneId(phoneId, simState);
+        mCarrierServiceBindHelper.updateForPhoneId(phoneId, simState);
     }
 
-    private void updateSubscriptionCarrierId(int slotId, String simState) {
-        if (mPhone != null && mPhone[slotId] != null) {
-            mPhone[slotId].resolveSubscriptionCarrierId(simState);
+    private void updateSubscriptionCarrierId(int phoneId, String simState) {
+        if (PhoneFactory.getPhone(phoneId) != null) {
+            PhoneFactory.getPhone(phoneId).resolveSubscriptionCarrierId(simState);
         }
     }
 
-    private void handleSimAbsent(int slotId, int absentAndInactive) {
-        if (mIccId[slotId] != null && !mIccId[slotId].equals(ICCID_STRING_FOR_NO_SIM)) {
-            logd("SIM" + (slotId + 1) + " hot plug out, absentAndInactive=" + absentAndInactive);
+    private void handleSimAbsent(int phoneId, int absentAndInactive) {
+        if (sIccId[phoneId] != null && !sIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
+            logd("SIM" + (phoneId + 1) + " hot plug out, absentAndInactive=" + absentAndInactive);
         }
-        mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
-        updateSubscriptionInfoByIccId(slotId, true /* updateEmbeddedSubs */);
-        // Do not broadcast if the SIM is absent and inactive, because the logical slotId here is
+        sIccId[phoneId] = ICCID_STRING_FOR_NO_SIM;
+        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+        // Do not broadcast if the SIM is absent and inactive, because the logical phoneId here is
         // no longer correct
         if (absentAndInactive == 0) {
-            broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_ABSENT, null);
-            broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_ABSENT);
-            broadcastSimApplicationStateChanged(slotId, TelephonyManager.SIM_STATE_UNKNOWN);
-            updateSubscriptionCarrierId(slotId, IccCardConstants.INTENT_VALUE_ICC_ABSENT);
-            updateCarrierServices(slotId, IccCardConstants.INTENT_VALUE_ICC_ABSENT);
+            broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_ABSENT, null);
+            broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_ABSENT);
+            broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_UNKNOWN);
+            updateSubscriptionCarrierId(phoneId, IccCardConstants.INTENT_VALUE_ICC_ABSENT);
+            updateCarrierServices(phoneId, IccCardConstants.INTENT_VALUE_ICC_ABSENT);
         }
     }
 
-    private void handleSimError(int slotId) {
-        if (mIccId[slotId] != null && !mIccId[slotId].equals(ICCID_STRING_FOR_NO_SIM)) {
-            logd("SIM" + (slotId + 1) + " Error ");
+    private void handleSimError(int phoneId) {
+        if (sIccId[phoneId] != null && !sIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
+            logd("SIM" + (phoneId + 1) + " Error ");
         }
-        mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
-        updateSubscriptionInfoByIccId(slotId, true /* updateEmbeddedSubs */);
-        broadcastSimStateChanged(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR,
+        sIccId[phoneId] = ICCID_STRING_FOR_NO_SIM;
+        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+        broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR,
                 IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
-        broadcastSimCardStateChanged(slotId, TelephonyManager.SIM_STATE_CARD_IO_ERROR);
-        broadcastSimApplicationStateChanged(slotId, TelephonyManager.SIM_STATE_NOT_READY);
-        updateSubscriptionCarrierId(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
-        updateCarrierServices(slotId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
+        broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_CARD_IO_ERROR);
+        broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_NOT_READY);
+        updateSubscriptionCarrierId(phoneId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
+        updateCarrierServices(phoneId, IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR);
     }
 
-    private synchronized void updateSubscriptionInfoByIccId(int slotIndex,
+    private synchronized void updateSubscriptionInfoByIccId(int phoneId,
             boolean updateEmbeddedSubs) {
-        logd("updateSubscriptionInfoByIccId:+ Start");
-        if (!SubscriptionManager.isValidSlotIndex(slotIndex)) {
-            loge("[updateSubscriptionInfoByIccId]- invalid slotIndex=" + slotIndex);
+        logd("updateSubscriptionInfoByIccId:+ Start - phoneId: " + phoneId);
+        if (!SubscriptionManager.isValidPhoneId(phoneId)) {
+            loge("[updateSubscriptionInfoByIccId]- invalid phoneId=" + phoneId);
             return;
         }
-        logd("updateSubscriptionInfoByIccId: removing subscription info record: slotIndex "
-                + slotIndex);
-        // Clear slotIndex only when sim absent is not enough. It's possible to switch SIM profile
+        logd("updateSubscriptionInfoByIccId: removing subscription info record: phoneId "
+                + phoneId);
+        // Clear phoneId only when sim absent is not enough. It's possible to switch SIM profile
         // within the same slot. Need to clear the slot index of the previous sub. Thus always clear
         // for the changing slot first.
-        SubscriptionController.getInstance().clearSubInfoRecord(slotIndex);
+        SubscriptionController.getInstance().clearSubInfoRecord(phoneId);
 
         // If SIM is not absent, insert new record or update existing record.
-        if (!ICCID_STRING_FOR_NO_SIM.equals(mIccId[slotIndex])) {
-           logd("updateSubscriptionInfoByIccId: adding subscription info record: iccid: "
-                    + mIccId[slotIndex] + "slot: " + slotIndex);
-           mSubscriptionManager.addSubscriptionInfoRecord(mIccId[slotIndex], slotIndex);
+        if (!ICCID_STRING_FOR_NO_SIM.equals(sIccId[phoneId])) {
+            logd("updateSubscriptionInfoByIccId: adding subscription info record: iccid: "
+                    + sIccId[phoneId] + ", phoneId:" + phoneId);
+            mSubscriptionManager.addSubscriptionInfoRecord(sIccId[phoneId], phoneId);
         }
 
         List<SubscriptionInfo> subInfos = SubscriptionController.getInstance()
-                .getSubInfoUsingSlotIndexPrivileged(slotIndex);
+                .getSubInfoUsingSlotIndexPrivileged(phoneId);
         if (subInfos != null) {
             boolean changed = false;
             for (int i = 0; i < subInfos.size(); i++) {
@@ -638,8 +682,8 @@ public class SubscriptionInfoUpdater extends Handler {
 
                 if (!TextUtils.equals(msisdn, temp.getNumber())) {
                     value.put(SubscriptionManager.NUMBER, msisdn);
-                    mContext.getContentResolver().update(SubscriptionManager.getUriForSubscriptionId(
-                            temp.getSubscriptionId()), value, null, null);
+                    sContext.getContentResolver().update(SubscriptionManager
+                            .getUriForSubscriptionId(temp.getSubscriptionId()), value, null, null);
                     changed = true;
                 }
             }
@@ -802,12 +846,12 @@ public class SubscriptionInfoUpdater extends Handler {
         // returned by the eUICC controller).
         List<SubscriptionInfo> existingSubscriptions = SubscriptionController.getInstance()
                 .getSubscriptionInfoListForEmbeddedSubscriptionUpdate(embeddedIccids, isRemovable);
-        ContentResolver contentResolver = mContext.getContentResolver();
+        ContentResolver contentResolver = sContext.getContentResolver();
         for (EuiccProfileInfo embeddedProfile : embeddedProfiles) {
             int index =
                     findSubscriptionInfoForIccid(existingSubscriptions, embeddedProfile.getIccid());
             int prevCarrierId = TelephonyManager.UNKNOWN_CARRIER_ID;
-            int nameSource = SubscriptionManager.NAME_SOURCE_DEFAULT_SOURCE;
+            int nameSource = SubscriptionManager.NAME_SOURCE_DEFAULT;
             if (index < 0) {
                 // No existing entry for this ICCID; create an empty one.
                 SubscriptionController.getInstance().insertEmptySubInfoRecord(
@@ -850,7 +894,7 @@ public class SubscriptionInfoUpdater extends Handler {
                 // is no valid carrier id present.
                 if (prevCarrierId == TelephonyManager.UNKNOWN_CARRIER_ID) {
                     values.put(SubscriptionManager.CARRIER_ID,
-                            CarrierResolver.getCarrierIdFromIdentifier(mContext, cid));
+                            CarrierResolver.getCarrierIdFromIdentifier(sContext, cid));
                 }
                 String mcc = cid.getMcc();
                 String mnc = cid.getMnc();
@@ -920,14 +964,14 @@ public class SubscriptionInfoUpdater extends Handler {
 
     private String getDefaultCarrierServicePackageName() {
         CarrierConfigManager configManager =
-                (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+                (CarrierConfigManager) sContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         return configManager.getDefaultCarrierServicePackageName();
     }
 
     private boolean isCarrierServicePackage(int phoneId, String pkgName) {
         if (pkgName.equals(getDefaultCarrierServicePackageName())) return false;
 
-        List<String> carrierPackageNames = TelephonyManager.from(mContext)
+        List<String> carrierPackageNames = TelephonyManager.from(sContext)
                 .getCarrierPackageNamesForIntentAndPhone(
                         new Intent(CarrierService.CARRIER_SERVICE_INTERFACE), phoneId);
         if (DBG) logd("Carrier Packages For Subscription = " + carrierPackageNames);
@@ -969,61 +1013,58 @@ public class SubscriptionInfoUpdater extends Handler {
             return;
         }
 
-        if (!isCarrierServicePackage(phoneId, configPackageName)) {
-            loge("Cannot manage subId=" + currentSubId + ", carrierPackage=" + configPackageName);
-            return;
-        }
-
         ContentValues cv = new ContentValues();
-        boolean isOpportunistic = config.getBoolean(
-                CarrierConfigManager.KEY_IS_OPPORTUNISTIC_SUBSCRIPTION_BOOL, false);
-        if (currentSubInfo.isOpportunistic() != isOpportunistic) {
-            if (DBG) logd("Set SubId=" + currentSubId + " isOpportunistic=" + isOpportunistic);
-            cv.put(SubscriptionManager.IS_OPPORTUNISTIC, isOpportunistic ? "1" : "0");
-        }
+        ParcelUuid groupUuid = null;
 
+        // carrier certificates are not subscription-specific, so we want to load them even if
+        // this current package is not a CarrierServicePackage
         String[] certs = config.getStringArray(
             CarrierConfigManager.KEY_CARRIER_CERTIFICATE_STRING_ARRAY);
         if (certs != null) {
             UiccAccessRule[] carrierConfigAccessRules = new UiccAccessRule[certs.length];
-            try {
-                for (int i = 0; i < certs.length; i++) {
-                    carrierConfigAccessRules[i] = new UiccAccessRule(
-                        MessageDigest.getInstance("SHA-256").digest(certs[i].getBytes()), null, 0);
-                }
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException("for setCarrierConfigAccessRules, SHA-256 must exist",
-                    e);
+            for (int i = 0; i < certs.length; i++) {
+                carrierConfigAccessRules[i] = new UiccAccessRule(IccUtils.hexStringToBytes(
+                    certs[i]), null, 0);
             }
             cv.put(SubscriptionManager.ACCESS_RULES_FROM_CARRIER_CONFIGS,
                     UiccAccessRule.encodeRules(carrierConfigAccessRules));
         }
 
-        String groupUuidString =
+        if (!isCarrierServicePackage(phoneId, configPackageName)) {
+            loge("Cannot manage subId=" + currentSubId + ", carrierPackage=" + configPackageName);
+        } else {
+            boolean isOpportunistic = config.getBoolean(
+                    CarrierConfigManager.KEY_IS_OPPORTUNISTIC_SUBSCRIPTION_BOOL, false);
+            if (currentSubInfo.isOpportunistic() != isOpportunistic) {
+                if (DBG) logd("Set SubId=" + currentSubId + " isOpportunistic=" + isOpportunistic);
+                cv.put(SubscriptionManager.IS_OPPORTUNISTIC, isOpportunistic ? "1" : "0");
+            }
+
+            String groupUuidString =
                 config.getString(CarrierConfigManager.KEY_SUBSCRIPTION_GROUP_UUID_STRING, "");
-        ParcelUuid groupUuid = null;
-        if (!TextUtils.isEmpty(groupUuidString)) {
-            try {
-                // Update via a UUID Structure to ensure consistent formatting
-                groupUuid = ParcelUuid.fromString(groupUuidString);
-                if (groupUuid.equals(REMOVE_GROUP_UUID)
+            if (!TextUtils.isEmpty(groupUuidString)) {
+                try {
+                    // Update via a UUID Structure to ensure consistent formatting
+                    groupUuid = ParcelUuid.fromString(groupUuidString);
+                    if (groupUuid.equals(REMOVE_GROUP_UUID)
                             && currentSubInfo.getGroupUuid() != null) {
-                    cv.put(SubscriptionManager.GROUP_UUID, (String) null);
-                    if (DBG) logd("Group Removed for" + currentSubId);
-                } else if (SubscriptionController.getInstance().canPackageManageGroup(groupUuid,
+                        cv.put(SubscriptionManager.GROUP_UUID, (String) null);
+                        if (DBG) logd("Group Removed for" + currentSubId);
+                    } else if (SubscriptionController.getInstance().canPackageManageGroup(groupUuid,
                         configPackageName)) {
-                    cv.put(SubscriptionManager.GROUP_UUID, groupUuid.toString());
-                    cv.put(SubscriptionManager.GROUP_OWNER, configPackageName);
-                    if (DBG) logd("Group Added for" + currentSubId);
-                } else {
-                    loge("configPackageName " + configPackageName + " doesn't own grouUuid "
+                        cv.put(SubscriptionManager.GROUP_UUID, groupUuid.toString());
+                        cv.put(SubscriptionManager.GROUP_OWNER, configPackageName);
+                        if (DBG) logd("Group Added for" + currentSubId);
+                    } else {
+                        loge("configPackageName " + configPackageName + " doesn't own grouUuid "
                             + groupUuid);
+                    }
+                } catch (IllegalArgumentException e) {
+                    loge("Invalid Group UUID=" + groupUuidString);
                 }
-            } catch (IllegalArgumentException e) {
-                loge("Invalid Group UUID=" + groupUuidString);
             }
         }
-        if (cv.size() > 0 && mContext.getContentResolver().update(SubscriptionManager
+        if (cv.size() > 0 && sContext.getContentResolver().update(SubscriptionManager
                     .getUriForSubscriptionId(currentSubId), cv, null, null) > 0) {
             sc.refreshCachedActiveSubscriptionInfoList();
             sc.notifySubscriptionInfoChanged();
@@ -1057,7 +1098,7 @@ public class SubscriptionInfoUpdater extends Handler {
     }
 
     @UnsupportedAppUsage
-    private void broadcastSimStateChanged(int slotId, String state, String reason) {
+    private void broadcastSimStateChanged(int phoneId, String state, String reason) {
         Intent i = new Intent(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         // TODO - we'd like this intent to have a single snapshot of all sim state,
         // but until then this should not use REPLACE_PENDING or we may lose
@@ -1068,10 +1109,10 @@ public class SubscriptionInfoUpdater extends Handler {
         i.putExtra(PhoneConstants.PHONE_NAME_KEY, "Phone");
         i.putExtra(IccCardConstants.INTENT_KEY_ICC_STATE, state);
         i.putExtra(IccCardConstants.INTENT_KEY_LOCKED_REASON, reason);
-        SubscriptionManager.putPhoneIdAndSubIdExtra(i, slotId);
+        SubscriptionManager.putPhoneIdAndSubIdExtra(i, phoneId);
         logd("Broadcasting intent ACTION_SIM_STATE_CHANGED " + state + " reason " + reason +
-                " for phone: " + slotId);
-        IntentBroadcaster.getInstance().broadcastStickyIntent(i, slotId);
+                " for phone: " + phoneId);
+        IntentBroadcaster.getInstance().broadcastStickyIntent(i, phoneId);
     }
 
     private void broadcastSimCardStateChanged(int phoneId, int state) {
@@ -1088,7 +1129,7 @@ public class SubscriptionInfoUpdater extends Handler {
             i.putExtra(PhoneConstants.SLOT_KEY, slotId);
             logd("Broadcasting intent ACTION_SIM_CARD_STATE_CHANGED " + simStateString(state)
                     + " for phone: " + phoneId + " slot: " + slotId);
-            mContext.sendBroadcast(i, Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
+            sContext.sendBroadcast(i, Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
             TelephonyMetrics.getInstance().updateSimState(phoneId, state);
         }
     }
@@ -1101,7 +1142,7 @@ public class SubscriptionInfoUpdater extends Handler {
         boolean isUnknownToNotReady =
                 (sSimApplicationState[phoneId] == TelephonyManager.SIM_STATE_UNKNOWN
                         && state == TelephonyManager.SIM_STATE_NOT_READY);
-        IccCard iccCard = mPhone[phoneId].getIccCard();
+        IccCard iccCard = PhoneFactory.getPhone(phoneId).getIccCard();
         boolean emptyProfile = iccCard != null && iccCard.isEmptyProfile();
         if (state != sSimApplicationState[phoneId] && (!isUnknownToNotReady || emptyProfile)) {
             sSimApplicationState[phoneId] = state;
@@ -1116,7 +1157,7 @@ public class SubscriptionInfoUpdater extends Handler {
             i.putExtra(PhoneConstants.SLOT_KEY, slotId);
             logd("Broadcasting intent ACTION_SIM_APPLICATION_STATE_CHANGED " + simStateString(state)
                     + " for phone: " + phoneId + " slot: " + slotId);
-            mContext.sendBroadcast(i, Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
+            sContext.sendBroadcast(i, Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
             TelephonyMetrics.getInstance().updateSimState(phoneId, state);
         }
     }

@@ -16,17 +16,15 @@
 
 package com.android.internal.telephony.cat;
 
-import static com.android.internal.telephony.cat.CatCmdMessage.SetupEventListConstants
-        .IDLE_SCREEN_AVAILABLE_EVENT;
-import static com.android.internal.telephony.cat.CatCmdMessage.SetupEventListConstants
-        .LANGUAGE_SELECTION_EVENT;
-import static com.android.internal.telephony.cat.CatCmdMessage.SetupEventListConstants
-        .USER_ACTIVITY_EVENT;
+import static com.android.internal.telephony.cat.CatCmdMessage.SetupEventListConstants.IDLE_SCREEN_AVAILABLE_EVENT;
+import static com.android.internal.telephony.cat.CatCmdMessage.SetupEventListConstants.LANGUAGE_SELECTION_EVENT;
+import static com.android.internal.telephony.cat.CatCmdMessage.SetupEventListConstants.USER_ACTIVITY_EVENT;
 
-import android.annotation.UnsupportedAppUsage;
+import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.app.backup.BackupManager;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -38,7 +36,6 @@ import android.os.Handler;
 import android.os.LocaleList;
 import android.os.Message;
 import android.os.RemoteException;
-import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.CommandsInterface;
@@ -221,7 +218,7 @@ public class CatService extends Handler implements AppInterface {
 
         synchronized (sInstanceLock) {
             if (sInstance == null) {
-                int simCount = TelephonyManager.getDefault().getMaxPhoneCount();
+                int simCount = TelephonyManager.getDefault().getSupportedModemCount();
                 sInstance = new CatService[simCount];
                 for (int i = 0; i < simCount; i++) {
                     sInstance[i] = null;
@@ -252,6 +249,7 @@ public class CatService extends Handler implements AppInterface {
     }
 
     @UnsupportedAppUsage
+    @Override
     public void dispose() {
         synchronized (sInstanceLock) {
             CatLog.d(this, "Disposing CatService object");
@@ -275,7 +273,7 @@ public class CatService extends Handler implements AppInterface {
             mMsgDecoder = null;
             removeCallbacksAndMessages(null);
             if (sInstance != null) {
-                if (SubscriptionManager.isValidSlotIndex(mSlotId)) {
+                if (mSlotId >= 0 && mSlotId < sInstance.length) {
                     sInstance[mSlotId] = null;
                 } else {
                     CatLog.d(this, "error: invaild slot id: " + mSlotId);
@@ -543,7 +541,7 @@ public class CatService extends Handler implements AppInterface {
 
     private void broadcastCatCmdIntent(CatCmdMessage cmdMsg) {
         Intent intent = new Intent(AppInterface.CAT_CMD_ACTION);
-        intent.putExtra("STK CMD", cmdMsg);
+        intent.putExtra( "STK CMD", cmdMsg);
         intent.putExtra("SLOT_ID", mSlotId);
         intent.setComponent(AppInterface.getDefaultSTKApplication());
         CatLog.d(this, "Sending CmdMsg: " + cmdMsg+ " on slotid:" + mSlotId);
@@ -1185,8 +1183,7 @@ public class CatService extends Handler implements AppInterface {
         for (int i = 0; i < defaultLocaleList.size(); i++) {
             locales[i+1] = defaultLocaleList.get(i);
         }
-        config.setLocales(new LocaleList(locales));
-        config.userSetLocale = true;
+        mContext.getSystemService(ActivityManager.class).setDeviceLocales(new LocaleList(locales));
         am.updatePersistentConfiguration(config);
         BackupManager.dataChanged("com.android.providers.settings");
     }

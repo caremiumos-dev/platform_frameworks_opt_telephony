@@ -22,11 +22,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.BadParcelableException;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.AccessNetworkConstants;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsCallProfile;
 import android.telephony.ims.ImsConferenceState;
 import android.telephony.ims.ImsExternalCallState;
@@ -38,6 +37,8 @@ import com.android.internal.telephony.imsphone.ImsExternalCallTracker;
 import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCall;
 import com.android.internal.telephony.test.TestConferenceEventPackageParser;
+import com.android.internal.telephony.util.TelephonyUtils;
+import com.android.telephony.Rlog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -196,7 +197,7 @@ public class TelephonyTester {
     TelephonyTester(Phone phone) {
         mPhone = phone;
 
-        if (Build.IS_DEBUGGABLE) {
+        if (TelephonyUtils.IS_DEBUGGABLE) {
             IntentFilter filter = new IntentFilter();
 
             filter.addAction(mPhone.getActionDetached());
@@ -224,7 +225,7 @@ public class TelephonyTester {
     }
 
     void dispose() {
-        if (Build.IS_DEBUGGABLE) {
+        if (TelephonyUtils.IS_DEBUGGABLE) {
             mPhone.getContext().unregisterReceiver(mIntentReceiver);
         }
     }
@@ -260,7 +261,7 @@ public class TelephonyTester {
         }
 
         imsCall.getImsCallSessionListenerProxy().callSessionHandoverFailed(imsCall.getCallSession(),
-                ServiceState.RIL_RADIO_TECHNOLOGY_LTE, ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN,
+                TelephonyManager.NETWORK_TYPE_LTE, TelephonyManager.NETWORK_TYPE_IWLAN,
                 new ImsReasonInfo());
     }
 
@@ -369,12 +370,12 @@ public class TelephonyTester {
         /*if (mServiceStateTestIntent.hasExtra(EXTRA_VOICE_REG_STATE)) {
             ss.setVoiceRegState(mServiceStateTestIntent.getIntExtra(EXTRA_VOICE_REG_STATE,
                     ServiceState.STATE_OUT_OF_SERVICE));
-            log("Override voice service state with " + ss.getVoiceRegState());
+            log("Override voice service state with " + ss.getState());
         }
         if (mServiceStateTestIntent.hasExtra(EXTRA_DATA_REG_STATE)) {
             ss.setDataRegState(mServiceStateTestIntent.getIntExtra(EXTRA_DATA_REG_STATE,
                     ServiceState.STATE_OUT_OF_SERVICE));
-            log("Override data service state with " + ss.getDataRegState());
+            log("Override data service state with " + ss.getDataRegistrationState());
         }
         if (mServiceStateTestIntent.hasExtra(EXTRA_VOICE_RAT)) {
             ss.setRilVoiceRadioTechnology(mServiceStateTestIntent.getIntExtra(EXTRA_VOICE_RAT,

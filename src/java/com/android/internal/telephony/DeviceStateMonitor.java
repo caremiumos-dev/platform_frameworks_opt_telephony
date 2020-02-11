@@ -36,7 +36,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.TelephonyManager;
 import android.util.LocalLog;
 import android.util.SparseIntArray;
@@ -44,6 +44,7 @@ import android.view.Display;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -75,6 +76,7 @@ public class DeviceStateMonitor extends Handler {
     static final int EVENT_RADIO_AVAILABLE              = 6;
     @VisibleForTesting
     static final int EVENT_WIFI_CONNECTION_CHANGED      = 7;
+    static final int EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH = 8;
 
     // TODO(b/74006656) load hysteresis values from a property when DeviceStateMonitor starts
     private static final int HYSTERESIS_KBPS = 50;
@@ -161,6 +163,11 @@ public class DeviceStateMonitor extends Handler {
      * that fewer location updates should be provided by cellular.
      */
     private boolean mIsWifiConnected;
+
+    /**
+     * True indicates we should always enable the signal strength reporting from radio.
+     */
+    private boolean mIsAlwaysSignalStrengthReportingEnabled;
 
     @VisibleForTesting
     static final int CELL_INFO_INTERVAL_SHORT_MS = 2000;
@@ -312,7 +319,8 @@ public class DeviceStateMonitor extends Handler {
         // 3. When the update mode is IGNORE_SCREEN_OFF. This mode is used in some corner cases like
         //    when Bluetooth carkit is connected, we still want to update signal strength even
         //    when screen is off.
-        if (mIsCharging || mIsScreenOn
+        // 4. Any of system services is registrating to always listen to signal strength changes
+        if (mIsAlwaysSignalStrengthReportingEnabled || mIsCharging || mIsScreenOn
                 || mUpdateModes.get(TelephonyManager.INDICATION_FILTER_SIGNAL_STRENGTH)
                 == TelephonyManager.INDICATION_UPDATE_MODE_IGNORE_SCREEN_OFF) {
             return false;
@@ -409,6 +417,15 @@ public class DeviceStateMonitor extends Handler {
         sendMessage(obtainMessage(EVENT_UPDATE_MODE_CHANGED, filters, mode));
     }
 
+    /**
+     * Set if Telephony need always report signal strength.
+     *
+     * @param isEnable
+     */
+    public void setAlwaysReportSignalStrength(boolean isEnable) {
+        sendMessage(obtainMessage(EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH, isEnable ? 1 : 0));
+    }
+
     private void onSetIndicationUpdateMode(int filters, int mode) {
         if ((filters & TelephonyManager.INDICATION_FILTER_SIGNAL_STRENGTH) != 0) {
             mUpdateModes.put(TelephonyManager.INDICATION_FILTER_SIGNAL_STRENGTH, mode);
@@ -452,6 +469,9 @@ public class DeviceStateMonitor extends Handler {
             case EVENT_WIFI_CONNECTION_CHANGED:
                 onUpdateDeviceState(msg.what, msg.arg1 != WIFI_UNAVAILABLE);
                 break;
+            case EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH:
+                onUpdateDeviceState(msg.what, msg.arg1 != 0);
+                break;
             default:
                 throw new IllegalStateException("Unexpected message arrives. msg = " + msg.what);
         }
@@ -486,7 +506,10 @@ public class DeviceStateMonitor extends Handler {
             case EVENT_WIFI_CONNECTION_CHANGED:
                 if (mIsWifiConnected == state) return;
                 mIsWifiConnected = state;
-
+                break;
+            case EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH:
+                if (mIsAlwaysSignalStrengthReportingEnabled == state) return;
+                mIsAlwaysSignalStrengthReportingEnabled = state;
                 break;
             default:
                 return;
@@ -587,14 +610,28 @@ public class DeviceStateMonitor extends Handler {
     }
 
     private void setSignalStrengthReportingCriteria() {
-        mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.GERAN, AccessNetworkType.GERAN);
-        mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.UTRAN, AccessNetworkType.UTRAN);
-        mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.EUTRAN, AccessNetworkType.EUTRAN);
-        mPhone.setSignalStrengthReportingCriteria(
-                AccessNetworkThresholds.CDMA2000, AccessNetworkType.CDMA2000);
+        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSSI,
+                AccessNetworkThresholds.GERAN, AccessNetworkType.GERAN, true);
+        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSCP,
+                AccessNetworkThresholds.UTRAN, AccessNetworkType.UTRAN, true);
+        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSRP,
+                AccessNetworkThresholds.EUTRAN_RSRP, AccessNetworkType.EUTRAN, true);
+        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSSI,
+                AccessNetworkThresholds.CDMA2000, AccessNetworkType.CDMA2000, true);
+        if (mPhone.getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_5)) {
+            mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSRQ,
+                    AccessNetworkThresholds.EUTRAN_RSRQ, AccessNetworkType.EUTRAN, false);
+            mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSSNR,
+                    AccessNetworkThresholds.EUTRAN_RSSNR, AccessNetworkType.EUTRAN, true);
+
+            // Defaultly we only need SSRSRP for NGRAN signal criterial reporting
+            mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_SSRSRP,
+                    AccessNetworkThresholds.NGRAN_RSRSRP, AccessNetworkType.NGRAN, true);
+            mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_SSRSRQ,
+                    AccessNetworkThresholds.NGRAN_RSRSRQ, AccessNetworkType.NGRAN, false);
+            mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_SSSINR,
+                    AccessNetworkThresholds.NGRAN_SSSINR, AccessNetworkType.NGRAN, false);
+        }
     }
 
     private void setLinkCapacityReportingCriteria() {
@@ -730,15 +767,39 @@ public class DeviceStateMonitor extends Handler {
         };
 
         /**
-         * List of default dBm thresholds for EUTRAN {@link AccessNetworkType}.
+         * List of default dBm RSRP thresholds for EUTRAN {@link AccessNetworkType}.
          *
          * These thresholds are taken from the LTE RSRP defaults in {@link CarrierConfigManager}.
          */
-        public static final int[] EUTRAN = new int[] {
+        public static final int[] EUTRAN_RSRP = new int[] {
             -128, /* SIGNAL_STRENGTH_POOR */
             -118, /* SIGNAL_STRENGTH_MODERATE */
             -108, /* SIGNAL_STRENGTH_GOOD */
             -98,  /* SIGNAL_STRENGTH_GREAT */
+        };
+
+        /**
+         * List of default dB RSRQ thresholds for EUTRAN {@link AccessNetworkType}.
+         *
+         * These thresholds are taken from the LTE RSRQ defaults in {@link CarrierConfigManager}.
+         */
+        public static final int[] EUTRAN_RSRQ = new int[] {
+            -19,  /* SIGNAL_STRENGTH_POOR */
+            -17,  /* SIGNAL_STRENGTH_MODERATE */
+            -14,  /* SIGNAL_STRENGTH_GOOD */
+            -12   /* SIGNAL_STRENGTH_GREAT */
+        };
+
+        /**
+         * List of default 10*dB RSSNR thresholds for EUTRAN {@link AccessNetworkType}.
+         *
+         * These thresholds are taken from the LTE RSSNR defaults in {@link CarrierConfigManager}.
+         */
+        public static final int[] EUTRAN_RSSNR = new int[] {
+            -30,  /* SIGNAL_STRENGTH_POOR */
+            10,   /* SIGNAL_STRENGTH_MODERATE */
+            45,   /* SIGNAL_STRENGTH_GOOD */
+            130   /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**
@@ -751,6 +812,36 @@ public class DeviceStateMonitor extends Handler {
             -90,
             -75,
             -65
+        };
+
+        /**
+         * List of dB thresholds for NGRAN {@link AccessNetworkType} RSRSRP
+         */
+        public static final int[] NGRAN_RSRSRP = new int[] {
+            -110, /* SIGNAL_STRENGTH_POOR */
+            -90, /* SIGNAL_STRENGTH_MODERATE */
+            -80, /* SIGNAL_STRENGTH_GOOD */
+            -65,  /* SIGNAL_STRENGTH_GREAT */
+        };
+
+        /**
+         * List of dB thresholds for NGRAN {@link AccessNetworkType} RSRSRP
+         */
+        public static final int[] NGRAN_RSRSRQ = new int[] {
+            -16, /* SIGNAL_STRENGTH_POOR */
+            -11, /* SIGNAL_STRENGTH_MODERATE */
+            -9, /* SIGNAL_STRENGTH_GOOD */
+            -7  /* SIGNAL_STRENGTH_GREAT */
+        };
+
+        /**
+         * List of dB thresholds for NGRAN {@link AccessNetworkType} SSSINR
+         */
+        public static final int[] NGRAN_SSSINR = new int[] {
+            -5, /* SIGNAL_STRENGTH_POOR */
+            5, /* SIGNAL_STRENGTH_MODERATE */
+            15, /* SIGNAL_STRENGTH_GOOD */
+            30  /* SIGNAL_STRENGTH_GREAT */
         };
     }
 

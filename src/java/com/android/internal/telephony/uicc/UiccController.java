@@ -19,8 +19,10 @@ package com.android.internal.telephony.uicc;
 import static android.telephony.TelephonyManager.UNINITIALIZED_CARD_ID;
 import static android.telephony.TelephonyManager.UNSUPPORTED_CARD_ID;
 
-import android.annotation.UnsupportedAppUsage;
+import static java.util.Arrays.copyOf;
+
 import android.app.BroadcastOptions;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,7 +35,6 @@ import android.os.RegistrantList;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.telephony.UiccCardInfo;
 import android.text.TextUtils;
@@ -43,11 +44,13 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccCardConstants;
+import com.android.internal.telephony.PhoneConfigurationManager;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.RadioConfig;
 import com.android.internal.telephony.SubscriptionInfoUpdater;
 import com.android.internal.telephony.uicc.euicc.EuiccCard;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -121,6 +124,7 @@ public class UiccController extends Handler {
     private static final int EVENT_RADIO_UNAVAILABLE = 7;
     private static final int EVENT_SIM_REFRESH = 8;
     private static final int EVENT_EID_READY = 9;
+    private static final int EVENT_MULTI_SIM_CONFIG_CHANGED = 10;
 
     // this needs to be here, because on bootup we dont know which index maps to which UiccSlot
     @UnsupportedAppUsage
@@ -187,20 +191,23 @@ public class UiccController extends Handler {
     // LocalLog buffer to hold important SIM related events for debugging
     static LocalLog sLocalLog = new LocalLog(100);
 
-    public static UiccController make(Context c, CommandsInterface[] ci) {
+    /**
+     * API to make UiccController singleton if not already created.
+     */
+    public static UiccController make(Context c) {
         synchronized (mLock) {
             if (mInstance != null) {
                 throw new RuntimeException("UiccController.make() should only be called once");
             }
-            mInstance = new UiccController(c, ci);
+            mInstance = new UiccController(c);
             return mInstance;
         }
     }
 
-    private UiccController(Context c, CommandsInterface []ci) {
+    private UiccController(Context c) {
         if (DBG) log("Creating UiccController");
         mContext = c;
-        mCis = ci;
+        mCis = PhoneFactory.getCommandsInterfaces();
         if (DBG) {
             String logStr = "config_num_physical_slots = " + c.getResources().getInteger(
                     com.android.internal.R.integer.config_num_physical_slots);
@@ -216,7 +223,7 @@ public class UiccController extends Handler {
         }
 
         mUiccSlots = new UiccSlot[numPhysicalSlots];
-        mPhoneIdToSlotId = new int[ci.length];
+        mPhoneIdToSlotId = new int[mCis.length];
         Arrays.fill(mPhoneIdToSlotId, INVALID_SLOT_ID);
         if (VDBG) logPhoneIdToSlotIdMapping();
         mRadioConfig = RadioConfig.getInstance(mContext);
@@ -245,6 +252,9 @@ public class UiccController extends Handler {
         mEuiccSlots = mContext.getResources()
                 .getIntArray(com.android.internal.R.array.non_removable_euicc_slots);
         mHasBuiltInEuicc = hasBuiltInEuicc();
+
+        PhoneConfigurationManager.registerForMultiSimConfigChange(
+                this, EVENT_MULTI_SIM_CONFIG_CHANGED, null);
     }
 
     /**
@@ -440,12 +450,11 @@ public class UiccController extends Handler {
     @UnsupportedAppUsage
     public void registerForIccChanged(Handler h, int what, Object obj) {
         synchronized (mLock) {
-            Registrant r = new Registrant (h, what, obj);
-            mIccChangedRegistrants.add(r);
-            //Notify registrant right after registering, so that it will get the latest ICC status,
-            //otherwise which may not happen until there is an actual change in ICC status.
-            r.notifyRegistrant();
+            mIccChangedRegistrants.addUnique(h, what, obj);
         }
+        //Notify registrant right after registering, so that it will get the latest ICC status,
+        //otherwise which may not happen until there is an actual change in ICC status.
+        Message.obtain(h, what, new AsyncResult(obj, null, null)).sendToTarget();
     }
 
     public void unregisterForIccChanged(Handler h) {
@@ -519,10 +528,43 @@ public class UiccController extends Handler {
                     if (DBG) log("Received EVENT_EID_READY");
                     onEidReady(ar, phoneId);
                     break;
+                case EVENT_MULTI_SIM_CONFIG_CHANGED:
+                    if (DBG) log("Received EVENT_MULTI_SIM_CONFIG_CHANGED");
+                    onMultiSimConfigChanged();
                 default:
                     Rlog.e(LOG_TAG, " Unknown Event " + msg.what);
                     break;
             }
+        }
+    }
+
+    private void onMultiSimConfigChanged() {
+        int prevActiveModemCount = mCis.length;
+        mCis = PhoneFactory.getCommandsInterfaces();
+
+        // Resize array.
+        mPhoneIdToSlotId = copyOf(mPhoneIdToSlotId, mCis.length);
+
+        // Register for new active modem for ss -> ds switch.
+        // For ds -> ss switch, there's no need to unregister as the mCis should unregister
+        // everything itself.
+        for (int i = prevActiveModemCount; i < mCis.length; i++) {
+            mPhoneIdToSlotId[i] = INVALID_SLOT_ID;
+            mCis[i].registerForIccStatusChanged(this, EVENT_ICC_STATUS_CHANGED, i);
+
+            /*
+             * To support FDE (deprecated), additional check is needed:
+             *
+             * if (!StorageManager.inCryptKeeperBounce()) {
+             *     mCis[i].registerForAvailable(this, EVENT_RADIO_AVAILABLE, i);
+             * } else {
+             *     mCis[i].registerForOn(this, EVENT_RADIO_ON, i);
+             * }
+             */
+            mCis[i].registerForAvailable(this, EVENT_RADIO_AVAILABLE, i);
+
+            mCis[i].registerForNotAvailable(this, EVENT_RADIO_UNAVAILABLE, i);
+            mCis[i].registerForIccRefresh(this, EVENT_SIM_REFRESH, i);
         }
     }
 
@@ -654,15 +696,30 @@ public class UiccController extends Handler {
             cardString = card.getIccId();
         }
 
-        // EID may be unpopulated if RadioConfig<1.2
-        // If so, just register for EID loaded and skip this stuff
-        if (isEuicc && cardString == null
-                && mDefaultEuiccCardId != UNSUPPORTED_CARD_ID) {
-            ((EuiccCard) card).registerForEidReady(this, EVENT_EID_READY, index);
-        }
-
         if (cardString != null) {
             addCardId(cardString);
+        }
+
+        // EID is unpopulated if Radio HAL < 1.4 (RadioConfig < 1.2)
+        // If so, just register for EID loaded and skip this stuff
+        if (isEuicc && mDefaultEuiccCardId != UNSUPPORTED_CARD_ID) {
+            if (cardString == null) {
+                ((EuiccCard) card).registerForEidReady(this, EVENT_EID_READY, index);
+            } else {
+                // If we know the EID from IccCardStatus, just use it to set mDefaultEuiccCardId if
+                // it's not already set.
+                // This is needed in cases where slot status doesn't include EID, and we don't want
+                // to register for EID from APDU because we already know cardString from a previous
+                // APDU
+                if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID
+                        || mDefaultEuiccCardId == TEMPORARILY_UNSUPPORTED_CARD_ID) {
+                    mDefaultEuiccCardId = convertToPublicCardId(cardString);
+                    String logStr = "IccCardStatus eid=" + cardString + " slot=" + slotId
+                            + " mDefaultEuiccCardId=" + mDefaultEuiccCardId;
+                    sLocalLog.log(logStr);
+                    log(logStr);
+                }
+            }
         }
 
         if (DBG) log("Notifying IccChangedRegistrants");
@@ -830,7 +887,17 @@ public class UiccController extends Handler {
         boolean isDefaultEuiccCardIdSet = false;
         boolean anyEuiccIsActive = false;
         mHasActiveBuiltInEuicc = false;
-        for (int i = 0; i < status.size(); i++) {
+
+        int numSlots = status.size();
+        if (mUiccSlots.length < numSlots) {
+            String logStr = "The number of the physical slots reported " + numSlots
+                    + " is greater than the expectation " + mUiccSlots.length + ".";
+            Rlog.e(LOG_TAG, logStr);
+            sLocalLog.log(logStr);
+            numSlots = mUiccSlots.length;
+        }
+
+        for (int i = 0; i < numSlots; i++) {
             IccSlotStatus iss = status.get(i);
             boolean isActive = (iss.slotState == IccSlotStatus.SlotState.SLOTSTATE_ACTIVE);
             if (isActive) {
@@ -895,7 +962,7 @@ public class UiccController extends Handler {
             // Note that on HAL<1.2, it's possible that a built-in eUICC exists, but does not
             // correspond to any slot in mUiccSlots. This logic is still safe in that case because
             // SlotStatus is only for HAL >= 1.2
-            for (int i = 0; i < status.size(); i++) {
+            for (int i = 0; i < numSlots; i++) {
                 if (mUiccSlots[i].isEuicc()) {
                     String eid = status.get(i).eid;
                     if (!TextUtils.isEmpty(eid)) {

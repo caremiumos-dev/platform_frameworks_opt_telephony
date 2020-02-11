@@ -20,6 +20,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 import static junit.framework.TestCase.assertFalse;
 
 import static org.mockito.ArgumentMatchers.argThat;
@@ -51,8 +52,11 @@ import android.telephony.ims.ImsService;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.stub.ImsFeatureConfiguration;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.testing.AndroidTestingRunner;
+import android.testing.TestableLooper;
+import android.util.ArraySet;
 
-import androidx.test.runner.AndroidJUnit4;
+import com.android.internal.telephony.PhoneConfigurationManager;
 
 import org.junit.After;
 import org.junit.Before;
@@ -71,16 +75,20 @@ import java.util.stream.Collectors;
 /**
  * Unit tests for ImsResolver
  */
-@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidTestingRunner.class)
+@TestableLooper.RunWithLooper
 public class ImsResolverTest extends ImsTestBase {
 
-    private static final int TEST_TIMEOUT = 200; //ms
     private static final ComponentName TEST_DEVICE_DEFAULT_NAME = new ComponentName("TestDevicePkg",
             "DeviceImsService");
+    private static final ComponentName TEST_DEVICE2_DEFAULT_NAME = new ComponentName(
+            "TestDevicePkg2", "DeviceImsService2");
     private static final ComponentName TEST_CARRIER_DEFAULT_NAME = new ComponentName(
             "TestCarrierPkg", "CarrierImsService");
     private static final ComponentName TEST_CARRIER_2_DEFAULT_NAME = new ComponentName(
             "TestCarrier2Pkg", "Carrier2ImsService");
+
+    private static final int NUM_MAX_SLOTS = 2;
 
     @Mock
     Context mMockContext;
@@ -102,6 +110,7 @@ public class ImsResolverTest extends ImsTestBase {
     private BroadcastReceiver mTestBootCompleteReceiver;
     private ImsServiceFeatureQueryManager.Listener mDynamicQueryListener;
     private PersistableBundle[] mCarrierConfigs;
+    private TestableLooper mLooper;
 
     @Before
     @Override
@@ -113,6 +122,8 @@ public class ImsResolverTest extends ImsTestBase {
     @Override
     public void tearDown() throws Exception {
         mTestImsResolver = null;
+        mLooper.destroy();
+        mLooper = null;
         super.tearDown();
     }
 
@@ -123,7 +134,8 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testAddDevicePackageToCache() {
-        setupResolver(1/*numSlots*/);
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         HashSet<String> features = new HashSet<>();
         features.add(ImsResolver.METADATA_EMERGENCY_MMTEL_FEATURE);
         features.add(ImsResolver.METADATA_MMTEL_FEATURE);
@@ -148,12 +160,13 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testAddCarrierPackageToCache() {
-        setupResolver(1/*numSlots*/);
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         HashSet<String> features = new HashSet<>();
         features.add(ImsResolver.METADATA_EMERGENCY_MMTEL_FEATURE);
         features.add(ImsResolver.METADATA_MMTEL_FEATURE);
         features.add(ImsResolver.METADATA_RCS_FEATURE);
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         setupPackageQuery(TEST_CARRIER_DEFAULT_NAME, features, true);
         setupController();
 
@@ -177,13 +190,14 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testCarrierPackageBind() throws RemoteException {
-        setupResolver(1/*numSlots*/);
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         // Setup the carrier features
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> features = new HashSet<>();
         features.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_MMTEL));
         features.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
         // Set CarrierConfig default package name and make it available as the CarrierConfig.
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         setupPackageQuery(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true);
         ImsServiceController controller = setupController();
 
@@ -198,16 +212,127 @@ public class ImsResolverTest extends ImsTestBase {
     }
 
     /**
+     * Set the carrier config override value to many separate services for MMTEL and RCS and ensure
+     * that ImsResolver calls .bind on those package names with the correct ImsFeatures.
+     */
+    @Test
+    @SmallTest
+    public void testDeviceCarrierPackageBindMultipleServices() throws RemoteException {
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
+        // Setup the carrier features: carrier 1 - MMTEL, slot 0; carrier 2 RCS, slot 0
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featuresMmTel = new HashSet<>();
+        featuresMmTel.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_MMTEL));
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featuresRcs = new HashSet<>();
+        featuresRcs.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featuresAll = new HashSet<>(featuresMmTel);
+        featuresAll.addAll(featuresRcs);
+        // Setup the device features: MMTEL, RCS on slot 0,1
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featuresDevice = new HashSet<>();
+        featuresDevice.add(new ImsFeatureConfiguration.FeatureSlotPair(1,
+                ImsFeature.FEATURE_MMTEL));
+        featuresDevice.add(new ImsFeatureConfiguration.FeatureSlotPair(1, ImsFeature.FEATURE_RCS));
+        // Set CarrierConfig default package name and make it available as the CarrierConfig.
+        setConfigCarrierStringMmTel(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringRcs(0, TEST_CARRIER_2_DEFAULT_NAME.getPackageName());
+        Set<String> deviceFeatures = new ArraySet<>();
+        deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
+        List<ResolveInfo> info = new ArrayList<>();
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, deviceFeatures, true));
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        info.add(getResolveInfo(TEST_CARRIER_2_DEFAULT_NAME, new HashSet<>(), true));
+        setupPackageQuery(info);
+        ImsServiceController deviceController = mock(ImsServiceController.class);
+        ImsServiceController carrierController1 = mock(ImsServiceController.class);
+        ImsServiceController carrierController2 = mock(ImsServiceController.class);
+        setImsServiceControllerFactory(deviceController, carrierController1, carrierController2);
+
+        // Start bind to carrier service
+        startBindCarrierConfigAlreadySet();
+        // setup features response
+        // emulate mMockQueryManager returning information about pending queries.
+        when(mMockQueryManager.isQueryInProgress()).thenReturn(true);
+        setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, featuresAll, 1);
+        when(mMockQueryManager.isQueryInProgress()).thenReturn(false);
+        setupDynamicQueryFeatures(TEST_CARRIER_2_DEFAULT_NAME, featuresAll, 1);
+
+        verify(deviceController).bind(featuresDevice);
+        verify(deviceController, never()).unbind();
+        verify(carrierController1).bind(featuresMmTel);
+        verify(carrierController1, never()).unbind();
+        verify(carrierController2).bind(featuresRcs);
+        verify(carrierController2, never()).unbind();
+        assertEquals(TEST_CARRIER_DEFAULT_NAME, carrierController1.getComponentName());
+        assertEquals(TEST_CARRIER_2_DEFAULT_NAME, carrierController2.getComponentName());
+    }
+
+    /**
+     * Set the carrier config override value to two separate services for MMTEL and RCS and ensure
+     * that ImsResolver calls .bind on those package names with the correct ImsFeatures.
+     */
+    @Test
+    @SmallTest
+    public void testCarrierPackageBindOneConfigTwoSupport() throws RemoteException {
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
+        // Setup the carrier features
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featuresMmTel = new HashSet<>();
+        featuresMmTel.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_MMTEL));
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featuresRcs = new HashSet<>();
+        featuresRcs.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
+        featuresRcs.add(new ImsFeatureConfiguration.FeatureSlotPair(1, ImsFeature.FEATURE_RCS));
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> allFeatures = new HashSet<>(featuresMmTel);
+        allFeatures.addAll(featuresRcs);
+        // Set CarrierConfig default package name and make it available as the CarrierConfig.
+        setConfigCarrierStringMmTel(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        // TEST_CARRIER_DEFAULT_NAME isnt configured for MMTEL on slot 1.
+        featuresMmTel.remove(new ImsFeatureConfiguration.FeatureSlotPair(1,
+                ImsFeature.FEATURE_MMTEL));
+        setConfigCarrierStringRcs(0, TEST_CARRIER_2_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringRcs(1, TEST_CARRIER_2_DEFAULT_NAME.getPackageName());
+        List<ResolveInfo> info = new ArrayList<>();
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        info.add(getResolveInfo(TEST_CARRIER_2_DEFAULT_NAME, new HashSet<>(), true));
+        setupPackageQuery(info);
+        ImsServiceController deviceController = mock(ImsServiceController.class);
+        ImsServiceController carrierController1 = mock(ImsServiceController.class);
+        ImsServiceController carrierController2 = mock(ImsServiceController.class);
+        setImsServiceControllerFactory(deviceController, carrierController1, carrierController2);
+
+        // Start bind to carrier service
+        startBindCarrierConfigAlreadySet();
+        // setup features response
+        // emulate mMockQueryManager returning information about pending queries.
+        when(mMockQueryManager.isQueryInProgress()).thenReturn(true);
+        setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, allFeatures, 1);
+        when(mMockQueryManager.isQueryInProgress()).thenReturn(false);
+        setupDynamicQueryFeatures(TEST_CARRIER_2_DEFAULT_NAME, allFeatures, 1);
+
+        verify(deviceController, never()).bind(any());
+        verify(deviceController, never()).unbind();
+        verify(carrierController1).bind(featuresMmTel);
+        verify(carrierController1, never()).unbind();
+        verify(carrierController2).bind(featuresRcs);
+        verify(carrierController2, never()).unbind();
+        assertEquals(TEST_CARRIER_DEFAULT_NAME, carrierController1.getComponentName());
+        assertEquals(TEST_CARRIER_2_DEFAULT_NAME, carrierController2.getComponentName());
+    }
+
+    /**
      * Creates a carrier ImsService that defines FEATURE_EMERGENCY_MMTEL and ensure that the
      * controller sets this capability.
      */
     @Test
     @SmallTest
     public void testCarrierPackageBindWithEmergencyCalling() throws RemoteException {
-        setupResolver(1/*numSlots*/);
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         // Set CarrierConfig default package name and make it available to the package manager
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> features = new HashSet<>();
+        features.add(new ImsFeatureConfiguration.FeatureSlotPair(0,
+                ImsFeature.FEATURE_EMERGENCY_MMTEL));
         features.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_MMTEL));
         features.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
         setupPackageQuery(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true);
@@ -222,15 +347,45 @@ public class ImsResolverTest extends ImsTestBase {
     }
 
     /**
+     * Creates a carrier ImsService that defines FEATURE_EMERGENCY_MMTEL but not FEATURE_MMTEL and
+     * ensure that the controller doesn't set FEATURE_EMERGENCY_MMTEL.
+     */
+    @Test
+    @SmallTest
+    public void testCarrierPackageBindWithEmergencyButNotMmtel() throws RemoteException {
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
+        // Set CarrierConfig default package name and make it available to the package manager
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> features = new HashSet<>();
+        features.add(new ImsFeatureConfiguration.FeatureSlotPair(0,
+                ImsFeature.FEATURE_EMERGENCY_MMTEL));
+        features.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
+        setupPackageQuery(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true);
+        ImsServiceController controller = setupController();
+
+        startBindCarrierConfigAlreadySet();
+        setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, features, 1);
+
+        // We will not bind with FEATURE_EMERGENCY_MMTEL
+        features.remove(new ImsFeatureConfiguration.FeatureSlotPair(0,
+                ImsFeature.FEATURE_EMERGENCY_MMTEL));
+        verify(controller).bind(features);
+        verify(controller, never()).unbind();
+        assertEquals(TEST_CARRIER_DEFAULT_NAME, controller.getComponentName());
+    }
+
+    /**
      * Creates a carrier ImsService that does not report FEATURE_EMERGENCY_MMTEL and then update the
      * ImsService to define it. Ensure that the controller sets this capability once enabled.
      */
     @Test
     @SmallTest
     public void testCarrierPackageChangeEmergencyCalling() throws RemoteException {
-        setupResolver(1/*numSlots*/);
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         // Set CarrierConfig default package name and make it available to the package manager
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> features = new HashSet<>();
         features.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_MMTEL));
         setupPackageQuery(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true);
@@ -262,16 +417,17 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testDontBindWhenNullCarrierPackage() throws RemoteException {
-        setupResolver(1/*numSlots*/);
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         setupPackageQuery(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true);
         ImsServiceController controller = setupController();
 
         // Set the CarrierConfig string to null so that ImsResolver will not bind to the available
         // Services
-        setConfigCarrierString(0, null);
+        setConfigCarrierStringMmTelRcs(0, null);
         startBindCarrierConfigAlreadySet();
 
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
         verify(mMockQueryManager, never()).startQuery(any(), any());
         verify(controller, never()).bind(any());
         verify(controller, never()).unbind();
@@ -284,7 +440,8 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testDevicePackageBind() throws RemoteException {
-        setupResolver(1/*numSlots*/);
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> features = new HashSet<>();
         features.add(ImsResolver.METADATA_MMTEL_FEATURE);
@@ -297,8 +454,245 @@ public class ImsResolverTest extends ImsTestBase {
 
 
         startBindNoCarrierConfig(1);
-        // Wait to make sure that there are no dynamic queries that are being completed.
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
+
+        // There is no carrier override set, so make sure that the ImsServiceController binds
+        // to all SIMs.
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featureSet = convertToHashSet(features, 0);
+        verify(controller).bind(featureSet);
+        verify(controller, never()).unbind();
+        verify(mMockQueryManager, never()).startQuery(any(), any());
+        assertEquals(TEST_DEVICE_DEFAULT_NAME, controller.getComponentName());
+    }
+
+    /**
+     * Test that the ImsService corresponding to the default device ImsService package name is
+     * bound and when there is a configuration change from two SIMs to one, the features are
+     * updated correctly.
+     */
+    @Test
+    @SmallTest
+    public void testDevicePackageBind_MsimToOneSim() throws RemoteException {
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
+        List<ResolveInfo> info = new ArrayList<>();
+        Set<String> features = new HashSet<>();
+        features.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        features.add(ImsResolver.METADATA_RCS_FEATURE);
+        // Use device default package, which will load the ImsService that the device provides
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, features, true));
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        setupPackageQuery(info);
+        ImsServiceController controller = setupController();
+
+
+        startBindNoCarrierConfig(1);
+        mLooper.processAllMessages();
+
+        // There is no carrier override set, so make sure that the ImsServiceController binds
+        // to all SIMs.
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featureSet = convertToHashSet(features, 0);
+        featureSet.addAll(convertToHashSet(features, 1));
+        verify(controller).bind(featureSet);
+        verify(controller, never()).unbind();
+        verify(mMockQueryManager, never()).startQuery(any(), any());
+        assertEquals(TEST_DEVICE_DEFAULT_NAME, controller.getComponentName());
+
+        // Change number of SIMs and verify the features in the ImsServiceController are changed
+        // as well
+        PhoneConfigurationManager.notifyMultiSimConfigChange(1);
+        mLooper.processAllMessages();
+        featureSet = convertToHashSet(features, 0);
+        verify(controller).changeImsServiceFeatures(featureSet);
+        verify(controller, never()).unbind();
+    }
+
+    /**
+     * Test that the ImsService corresponding to the default device ImsService package name is
+     * bound and when there is a configuration change from one to two SIMs, the features are
+     * updated correctly.
+     */
+    @Test
+    @SmallTest
+    public void testDevicePackageBind_OneSimToMsim() throws RemoteException {
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
+        List<ResolveInfo> info = new ArrayList<>();
+        Set<String> features = new HashSet<>();
+        features.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        features.add(ImsResolver.METADATA_RCS_FEATURE);
+        // Use device default package, which will load the ImsService that the device provides
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, features, true));
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        setupPackageQuery(info);
+        ImsServiceController controller = setupController();
+
+
+        startBindNoCarrierConfig(1);
+        mLooper.processAllMessages();
+
+        // There is no carrier override set, so make sure that the ImsServiceController binds
+        // to all SIMs.
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featureSet = convertToHashSet(features, 0);
+        verify(controller).bind(featureSet);
+        verify(controller, never()).unbind();
+        verify(mMockQueryManager, never()).startQuery(any(), any());
+        assertEquals(TEST_DEVICE_DEFAULT_NAME, controller.getComponentName());
+
+        // Change number of SIMs and verify the features in the ImsServiceController are changed
+        // as well
+        PhoneConfigurationManager.notifyMultiSimConfigChange(2);
+        // Carrier config changed should happen for slot 1 (independent of carrier ImsService)
+        sendCarrierConfigChanged(1, 1);
+        featureSet.addAll(convertToHashSet(features, 1));
+        verify(controller).changeImsServiceFeatures(featureSet);
+        verify(controller, never()).unbind();
+    }
+
+    /**
+     * Test that when a device and carrier override package are set, both ImsServices are bound.
+     * Verify that the carrier ImsService features are created and the device default features
+     * are created for all features that are not covered by the carrier ImsService. When the device
+     * configuration is changed from one SIM to MSIM, ensure that the capabilities are reflected.
+     */
+    @Test
+    @SmallTest
+    public void testDeviceAndCarrierPackageBind_OneSimToMsim() throws RemoteException {
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
+        List<ResolveInfo> info = new ArrayList<>();
+        // set device features to MMTEL, RCS
+        Set<String> deviceFeatures = new HashSet<>();
+        deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
+        // Set the carrier override package for slot 0
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures = new HashSet<>();
+        // Carrier service only supports RCS on slot 0
+        carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
+        // Use device default package, which will load the ImsService that the device provides
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, deviceFeatures, true));
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        // Only return info if not using the compat argument
+        setupPackageQuery(info);
+        ImsServiceController deviceController = mock(ImsServiceController.class);
+        ImsServiceController carrierController = mock(ImsServiceController.class);
+        setImsServiceControllerFactory(deviceController, carrierController);
+
+        startBindCarrierConfigAlreadySet();
+        setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, 1);
+
+        // Verify that all features that have been defined for the carrier override are bound
+        verify(carrierController).bind(carrierFeatures);
+        verify(carrierController, never()).unbind();
+        assertEquals(TEST_CARRIER_DEFAULT_NAME, carrierController.getComponentName());
+        // Verify that all features that are not defined in the carrier override are bound in the
+        // device controller (including emergency voice for slot 0)
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> deviceFeatureSet =
+                convertToHashSet(deviceFeatures, 0);
+        deviceFeatureSet.removeAll(carrierFeatures);
+        verify(deviceController).bind(deviceFeatureSet);
+        verify(deviceController, never()).unbind();
+        assertEquals(TEST_DEVICE_DEFAULT_NAME, deviceController.getComponentName());
+
+        // Move to MSIM and verify the features in the ImsServiceController are changed as well
+        PhoneConfigurationManager.notifyMultiSimConfigChange(2);
+        setConfigCarrierStringMmTelRcs(1, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, ImsFeature.FEATURE_RCS));
+        // Assume that there is a CarrierConfig change that kicks off query to carrier service.
+        sendCarrierConfigChanged(1, 1);
+        setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, 2);
+        verify(carrierController).changeImsServiceFeatures(carrierFeatures);
+        deviceFeatureSet = convertToHashSet(deviceFeatures, 0);
+        deviceFeatureSet.addAll(convertToHashSet(deviceFeatures, 1));
+        deviceFeatureSet.removeAll(carrierFeatures);
+        verify(deviceController).changeImsServiceFeatures(deviceFeatureSet);
+        verify(deviceController, never()).unbind();
+    }
+
+    /**
+     * Test that when a device and carrier override package are set, both ImsServices are bound.
+     * Verify that the carrier ImsService features are created and the device default features
+     * are created for all features that are not covered by the carrier ImsService. When the device
+     * configuration is changed from one SIM to MSIM, ensure that the capabilities are reflected.
+     */
+    @Test
+    @SmallTest
+    public void testDeviceAndCarrierPackageBind_MsimToOneSim() throws RemoteException {
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
+        List<ResolveInfo> info = new ArrayList<>();
+        // set device features to MMTEL, RCS
+        Set<String> deviceFeatures = new HashSet<>();
+        deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
+        // Set the carrier override package for slot 0, slot 1 as RCS
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(1, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures = new HashSet<>();
+        carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
+        carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, ImsFeature.FEATURE_RCS));
+        // Use device default package, which will load the ImsService that the device provides
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, deviceFeatures, true));
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        // Only return info if not using the compat argument
+        setupPackageQuery(info);
+        ImsServiceController deviceController = mock(ImsServiceController.class);
+        ImsServiceController carrierController = mock(ImsServiceController.class);
+        setImsServiceControllerFactory(deviceController, carrierController);
+
+        startBindCarrierConfigAlreadySet();
+        setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, 1);
+
+        // Verify that all features that have been defined for the carrier override are bound
+        verify(carrierController).bind(carrierFeatures);
+        verify(carrierController, never()).unbind();
+        assertEquals(TEST_CARRIER_DEFAULT_NAME, carrierController.getComponentName());
+        // Verify that all features that are not defined in the carrier override are bound in the
+        // device controller (including emergency voice for slot 0)
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> deviceFeatureSet =
+                convertToHashSet(deviceFeatures, 0);
+        deviceFeatureSet.addAll(convertToHashSet(deviceFeatures, 1));
+        deviceFeatureSet.removeAll(carrierFeatures);
+        verify(deviceController).bind(deviceFeatureSet);
+        verify(deviceController, never()).unbind();
+        assertEquals(TEST_DEVICE_DEFAULT_NAME, deviceController.getComponentName());
+
+        // Move to single SIM and verify the features in the ImsServiceController are changed as
+        // well.
+        PhoneConfigurationManager.notifyMultiSimConfigChange(1);
+        mLooper.processAllMessages();
+        carrierFeatures = new HashSet<>();
+        carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
+        verify(carrierController).changeImsServiceFeatures(carrierFeatures);
+        deviceFeatureSet = convertToHashSet(deviceFeatures, 0);
+        deviceFeatureSet.removeAll(carrierFeatures);
+        verify(deviceController).changeImsServiceFeatures(deviceFeatureSet);
+        verify(deviceController, never()).unbind();
+    }
+
+    /**
+     * Test that the ImsService corresponding to the default device ImsService package name is
+     * bound to only RCS if METADATA_EMERGENCY_MMTEL_FEATURE but not METADATA_MMTEL_FEATURE.
+     */
+    @Test
+    @SmallTest
+    public void testDevicePackageInvalidMmTelBind() throws RemoteException {
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
+        List<ResolveInfo> info = new ArrayList<>();
+        Set<String> features = new HashSet<>();
+        features.add(ImsResolver.METADATA_EMERGENCY_MMTEL_FEATURE);
+        features.add(ImsResolver.METADATA_RCS_FEATURE);
+        // Use device default package, which will load the ImsService that the device provides
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, features, true));
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        setupPackageQuery(info);
+        ImsServiceController controller = setupController();
+
+
+        startBindNoCarrierConfig(1);
+        mLooper.processAllMessages();
 
         // There is no carrier override set, so make sure that the ImsServiceController binds
         // to all SIMs.
@@ -317,13 +711,14 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testDeviceAndCarrierPackageBind() throws RemoteException {
-        setupResolver(1/*numSlots*/);
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> deviceFeatures = new HashSet<>();
         deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures = new HashSet<>();
         // Carrier service doesn't support the voice feature.
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
@@ -360,7 +755,8 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testGetDeviceCarrierFeatures() throws RemoteException {
-        setupResolver(2/*numSlots*/);
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         ImsServiceController deviceController = mock(ImsServiceController.class);
         ImsServiceController carrierController = mock(ImsServiceController.class);
 
@@ -389,7 +785,8 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testAddDeviceFeatureNoCarrier() throws RemoteException {
-        setupResolver(2/*numSlots*/);
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> features = new HashSet<>();
         features.add(ImsResolver.METADATA_MMTEL_FEATURE);
@@ -420,18 +817,100 @@ public class ImsResolverTest extends ImsTestBase {
     }
 
     /**
+     * Bind to device ImsServices and change the feature set to include one that is not configured.
+     * Ensure it is not added.
+     */
+    @Test
+    @SmallTest
+    public void testMultipleDeviceAddFeatureNoCarrier() throws RemoteException {
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE2_DEFAULT_NAME.getPackageName());
+        List<ResolveInfo> info = new ArrayList<>();
+        Set<String> featuresController1 = new HashSet<>();
+        featuresController1.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        Set<String> featuresController2 = new HashSet<>();
+        featuresController2.add(ImsResolver.METADATA_RCS_FEATURE);
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, featuresController1, true));
+        info.add(getResolveInfo(TEST_DEVICE2_DEFAULT_NAME, featuresController2, true));
+        setupPackageQuery(info);
+        ImsServiceController deviceController1 = mock(ImsServiceController.class);
+        ImsServiceController deviceController2 = mock(ImsServiceController.class);
+        setImsServiceControllerFactory(deviceController1, deviceController2, null, null);
+        // Bind using default features
+        startBindNoCarrierConfig(2);
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featureSet1 =
+                convertToHashSet(featuresController1, 0);
+        featureSet1.addAll(convertToHashSet(featuresController1, 1));
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featureSet2 =
+                convertToHashSet(featuresController2, 0);
+        featureSet2.addAll(convertToHashSet(featuresController2, 1));
+        verify(deviceController1).bind(featureSet1);
+        verify(deviceController2).bind(featureSet2);
+
+        // add RCS to features list for device 1
+        Set<String> newFeatures1 = new HashSet<>(featuresController1);
+        newFeatures1.add(ImsResolver.METADATA_RCS_FEATURE);
+        info.clear();
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, newFeatures1, true));
+
+        packageChanged(TEST_DEVICE_DEFAULT_NAME.getPackageName());
+
+        // verify the devices have not changed features (because their configurations are still
+        // the same)
+        verify(deviceController1, times(2)).changeImsServiceFeatures(featureSet1);
+        verify(deviceController2, times(2)).changeImsServiceFeatures(featureSet2);
+    }
+
+    /**
+     * Bind to device ImsService and change the feature set while not supporting that configuration.
+     * Verify that changeImsServiceFeature is called with the original feature set.
+     */
+    @Test
+    @SmallTest
+    public void testAddDeviceFeatureNoCarrierRcsNotSupported() throws RemoteException {
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(), "");
+        List<ResolveInfo> info = new ArrayList<>();
+        Set<String> features = new HashSet<>();
+        features.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        // Doesn't include RCS feature by default
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, features, true));
+        setupPackageQuery(info);
+        ImsServiceController controller = setupController();
+        // Bind using default features
+        startBindNoCarrierConfig(2);
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featureSet =
+                convertToHashSet(features, 0);
+        featureSet.addAll(convertToHashSet(features, 1));
+        verify(controller).bind(featureSet);
+
+        // add RCS to features list
+        Set<String> newFeatures = new HashSet<>(features);
+        newFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
+        info.clear();
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, newFeatures, true));
+
+        packageChanged(TEST_DEVICE_DEFAULT_NAME.getPackageName());
+
+        // Verify new feature is not added to the device default, since it is not configured.
+        // This happens twice because two CarrierConfigChanged events occur, causing a
+        // changeImsServiceFeatures after bind() and then another after packageChanged.
+        verify(controller, times(2)).changeImsServiceFeatures(featureSet);
+    }
+
+    /**
      * Bind to device ImsService and change the feature set. Verify that changeImsServiceFeature
      * is called with the new feature set on the sub that doesn't include the carrier override.
      */
     @Test
     @SmallTest
     public void testAddDeviceFeatureWithCarrier() throws RemoteException {
-        setupResolver(2/*numSlots*/);
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> deviceFeatures = new HashSet<>();
         deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures = new HashSet<>();
         // Carrier service doesn't support the emergency voice feature.
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0,
@@ -481,34 +960,43 @@ public class ImsResolverTest extends ImsTestBase {
         // remove carrier overrides for slot 0
         newDeviceFeatureSet.removeAll(carrierFeatures);
         verify(deviceController).changeImsServiceFeatures(newDeviceFeatureSet);
-        verify(carrierController, never()).changeImsServiceFeatures(any());
+        // features should be the same as before, ImsServiceController will disregard change if it
+        // is the same feature set anyway.
+        verify(carrierController).changeImsServiceFeatures(carrierFeatures);
     }
 
     /**
-     * Bind to device ImsService and change the feature set of the carrier overridden ImsService.
+     * Bind to device ImsServices and change the feature set of the carrier overridden ImsService.
      * Verify that the device and carrier ImsServices are changed.
      */
     @Test
     @SmallTest
     public void testAddCarrierFeature() throws RemoteException {
-        setupResolver(2/*numSlots*/);
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE2_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
-        Set<String> deviceFeatures = new HashSet<>();
-        deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
-        deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
+        Set<String> deviceFeatures1 = new HashSet<>();
+        deviceFeatures1.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        Set<String> deviceFeatures2 = new HashSet<>();
+        deviceFeatures2.add(ImsResolver.METADATA_RCS_FEATURE);
+        Set<String> allDeviceFeatures = new HashSet<>(deviceFeatures1);
+        allDeviceFeatures.addAll(deviceFeatures2);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures = new HashSet<>();
         // Carrier service doesn't support the emergency voice feature.
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0,
                 ImsFeature.FEATURE_MMTEL));
-        // Use device default package, which will load the ImsService that the device provides
-        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, deviceFeatures, true));
+        // Use device default packages, which will load the ImsServices that the device provides
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, allDeviceFeatures, true));
+        info.add(getResolveInfo(TEST_DEVICE2_DEFAULT_NAME, allDeviceFeatures, true));
         info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
         setupPackageQuery(info);
-        ImsServiceController deviceController = mock(ImsServiceController.class);
+        ImsServiceController deviceController1 = mock(ImsServiceController.class);
+        ImsServiceController deviceController2 = mock(ImsServiceController.class);
         ImsServiceController carrierController = mock(ImsServiceController.class);
-        setImsServiceControllerFactory(deviceController, carrierController);
+        setImsServiceControllerFactory(deviceController1, deviceController2, carrierController,
+                null);
 
         startBindCarrierConfigAlreadySet();
         setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, 1);
@@ -517,27 +1005,34 @@ public class ImsResolverTest extends ImsTestBase {
         verify(carrierController, never()).unbind();
         assertEquals(TEST_CARRIER_DEFAULT_NAME, carrierController.getComponentName());
         // Verify that all features that are not defined in the carrier override are bound in the
-        // device controller (including emergency voice for slot 0)
-        HashSet<ImsFeatureConfiguration.FeatureSlotPair> deviceFeatureSet =
-                convertToHashSet(deviceFeatures, 1);
-        deviceFeatureSet.addAll(convertToHashSet(deviceFeatures, 0));
-        deviceFeatureSet.removeAll(carrierFeatures);
-        verify(deviceController).bind(deviceFeatureSet);
-        verify(deviceController, never()).unbind();
-        assertEquals(TEST_DEVICE_DEFAULT_NAME, deviceController.getComponentName());
+        // device controllers.
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> deviceFeatureSet1 =
+                convertToHashSet(deviceFeatures1, 1);
+        deviceFeatureSet1.removeAll(carrierFeatures);
+        verify(deviceController1).bind(deviceFeatureSet1);
+        verify(deviceController1, never()).unbind();
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> deviceFeatureSet2 =
+                convertToHashSet(deviceFeatures2, 0);
+        deviceFeatureSet2.addAll(convertToHashSet(deviceFeatures2, 1));
+        deviceFeatureSet2.removeAll(carrierFeatures);
+        verify(deviceController2).bind(deviceFeatureSet2);
+        verify(deviceController2, never()).unbind();
+        assertEquals(TEST_DEVICE_DEFAULT_NAME, deviceController1.getComponentName());
+        assertEquals(TEST_DEVICE2_DEFAULT_NAME, deviceController2.getComponentName());
 
         // add RCS to carrier features list
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
 
-        // Tell the package manager that a new device feature is installed
+        // A new carrier feature is installed
         packageChanged(TEST_CARRIER_DEFAULT_NAME.getPackageName());
         setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, 2);
 
         //Verify new feature is added to the carrier override.
-        // add all features for slot 0
         verify(carrierController).changeImsServiceFeatures(carrierFeatures);
-        deviceFeatureSet.removeAll(carrierFeatures);
-        verify(deviceController).changeImsServiceFeatures(deviceFeatureSet);
+        deviceFeatureSet1.removeAll(carrierFeatures);
+        verify(deviceController1, times(2)).changeImsServiceFeatures(deviceFeatureSet1);
+        deviceFeatureSet2.removeAll(carrierFeatures);
+        verify(deviceController2).changeImsServiceFeatures(deviceFeatureSet2);
     }
 
     /**
@@ -548,13 +1043,14 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testRemoveCarrierFeature() throws RemoteException {
-        setupResolver(2/*numSlots*/);
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> deviceFeatures = new HashSet<>();
         deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures = new HashSet<>();
         // Carrier service doesn't support the voice feature.
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
@@ -586,7 +1082,7 @@ public class ImsResolverTest extends ImsTestBase {
         carrierFeatures.clear();
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0,
                 ImsFeature.FEATURE_MMTEL));
-        // Tell the package manager that a new device feature is installed
+        //  new carrier feature has been removed
         packageChanged(TEST_CARRIER_DEFAULT_NAME.getPackageName());
         setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, 2);
 
@@ -608,13 +1104,14 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testInstallCarrierImsService() throws RemoteException {
-        setupResolver(2/*numSlots*/);
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> deviceFeatures = new HashSet<>();
         deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         // Use device default package, which will load the ImsService that the device provides
         info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, deviceFeatures, true));
         setupPackageQuery(info);
@@ -650,13 +1147,14 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testUninstallCarrierImsService() throws RemoteException {
-        setupResolver(2/*numSlots*/);
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> deviceFeatures = new HashSet<>();
         deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures = new HashSet<>();
         // Carrier service doesn't support the voice feature.
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
@@ -694,13 +1192,14 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testCarrierConfigChangedToNone() throws RemoteException {
-        setupResolver(2/*numSlots*/);
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> deviceFeatures = new HashSet<>();
         deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures = new HashSet<>();
         // Carrier service doesn't support the voice feature.
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
@@ -715,7 +1214,7 @@ public class ImsResolverTest extends ImsTestBase {
         startBindCarrierConfigAlreadySet();
         setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, 1);
 
-        setConfigCarrierString(0, null);
+        setConfigCarrierStringMmTelRcs(0, null);
         sendCarrierConfigChanged(0, 0);
 
         // Verify that the carrier controller is unbound
@@ -736,13 +1235,14 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testCarrierConfigChangedToAnotherService() throws RemoteException {
-        setupResolver(2/*numSlots*/);
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> deviceFeatures = new HashSet<>();
         deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures1 = new HashSet<>();
         // Carrier service 1
         carrierFeatures1.add(new ImsFeatureConfiguration.FeatureSlotPair(0,
@@ -766,7 +1266,7 @@ public class ImsResolverTest extends ImsTestBase {
         startBindCarrierConfigAlreadySet();
         setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, carrierFeatures1, 1);
 
-        setConfigCarrierString(0, TEST_CARRIER_2_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_2_DEFAULT_NAME.getPackageName());
         sendCarrierConfigChanged(0, 0);
         setupDynamicQueryFeatures(TEST_CARRIER_2_DEFAULT_NAME, carrierFeatures2, 1);
 
@@ -793,13 +1293,14 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testBootCompleteNonFbeEnabledCarrierImsService() throws RemoteException {
-        setupResolver(2/*numSlots*/);
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> deviceFeatures = new HashSet<>();
         deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         // Use device default package, which will load the ImsService that the device provides
         info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, deviceFeatures, true));
         setupPackageQuery(info);
@@ -817,7 +1318,7 @@ public class ImsResolverTest extends ImsTestBase {
         info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
         // Boot complete has happened and the carrier ImsService is now available.
         mTestBootCompleteReceiver.onReceive(null, new Intent(Intent.ACTION_BOOT_COMPLETED));
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
         setupDynamicQueryFeatures(TEST_CARRIER_DEFAULT_NAME, carrierFeatures, 1);
 
         // Verify that all features that have been defined for the carrier override are bound
@@ -837,13 +1338,14 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testPermanentBindFailureDuringFeatureQuery() throws RemoteException {
-        setupResolver(1/*numSlots*/);
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> deviceFeatures = new HashSet<>();
         deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures = new HashSet<>();
         // Carrier service doesn't support the voice feature.
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
@@ -878,13 +1380,14 @@ public class ImsResolverTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testPermanentBindFailureDuringBind() throws RemoteException {
-        setupResolver(1/*numSlots*/);
+        setupResolver(1 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE_DEFAULT_NAME.getPackageName());
         List<ResolveInfo> info = new ArrayList<>();
         Set<String> deviceFeatures = new HashSet<>();
         deviceFeatures.add(ImsResolver.METADATA_MMTEL_FEATURE);
         deviceFeatures.add(ImsResolver.METADATA_RCS_FEATURE);
         // Set the carrier override package for slot 0
-        setConfigCarrierString(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
+        setConfigCarrierStringMmTelRcs(0, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         HashSet<ImsFeatureConfiguration.FeatureSlotPair> carrierFeatures = new HashSet<>();
         // Carrier service doesn't support the voice feature.
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
@@ -912,7 +1415,7 @@ public class ImsResolverTest extends ImsTestBase {
         assertEquals(TEST_DEVICE_DEFAULT_NAME, deviceController.getComponentName());
 
         mTestImsResolver.imsServiceBindPermanentError(TEST_CARRIER_DEFAULT_NAME);
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
         verify(carrierController).unbind();
         // Verify that the device ImsService features are changed to include the ones previously
         // taken by the carrier app.
@@ -921,12 +1424,166 @@ public class ImsResolverTest extends ImsTestBase {
         verify(deviceController).changeImsServiceFeatures(originalDeviceFeatureSet);
     }
 
-    private void setupResolver(int numSlots) {
+    /**
+     * Bind to device ImsService only, which is configured to be the MMTEL ImsService. Ensure it
+     * does not also try to bind to RCS.
+     */
+    @Test
+    @SmallTest
+    public void testDifferentDevicePackagesMmTelOnly() throws RemoteException {
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(), "");
+        List<ResolveInfo> info = new ArrayList<>();
+        Set<String> features = new HashSet<>();
+        features.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        features.add(ImsResolver.METADATA_RCS_FEATURE);
+        // Use device default package, which will load the ImsService that the device provides
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, features, true));
+        info.add(getResolveInfo(TEST_DEVICE2_DEFAULT_NAME, features, true));
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        setupPackageQuery(info);
+        ImsServiceController deviceController1 = mock(ImsServiceController.class);
+        ImsServiceController deviceController2 = mock(ImsServiceController.class);
+        setImsServiceControllerFactory(deviceController1, deviceController2, null, null);
+
+        startBindNoCarrierConfig(1);
+        mLooper.processAllMessages();
+
+        Set<String> featureResult = new HashSet<>();
+        featureResult.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featureResultSet =
+                convertToHashSet(featureResult, 0);
+        featureResultSet.addAll(convertToHashSet(featureResult, 1));
+        verify(deviceController1).bind(featureResultSet);
+        verify(deviceController1, never()).unbind();
+        verify(deviceController2, never()).bind(any());
+        verify(deviceController2, never()).unbind();
+        verify(mMockQueryManager, never()).startQuery(any(), any());
+        assertEquals(TEST_DEVICE_DEFAULT_NAME, deviceController1.getComponentName());
+    }
+
+    /**
+     * Bind to device ImsService only, which is configured to be the RCS ImsService. Ensure it
+     * does not also try to bind to MMTEL.
+     */
+    @Test
+    @SmallTest
+    public void testDifferentDevicePackagesRcsOnly() throws RemoteException {
+        setupResolver(2 /*numSlots*/, "", TEST_DEVICE_DEFAULT_NAME.getPackageName());
+        List<ResolveInfo> info = new ArrayList<>();
+        Set<String> features = new HashSet<>();
+        features.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        features.add(ImsResolver.METADATA_RCS_FEATURE);
+        // Use device default package, which will load the ImsService that the device provides
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, features, true));
+        info.add(getResolveInfo(TEST_DEVICE2_DEFAULT_NAME, features, true));
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        setupPackageQuery(info);
+        ImsServiceController deviceController1 = mock(ImsServiceController.class);
+        ImsServiceController deviceController2 = mock(ImsServiceController.class);
+        setImsServiceControllerFactory(deviceController1, deviceController2, null, null);
+
+        startBindNoCarrierConfig(1);
+        mLooper.processAllMessages();
+
+        Set<String> featureResult = new HashSet<>();
+        featureResult.add(ImsResolver.METADATA_RCS_FEATURE);
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featureResultSet =
+                convertToHashSet(featureResult, 0);
+        featureResultSet.addAll(convertToHashSet(featureResult, 1));
+        verify(deviceController1).bind(featureResultSet);
+        verify(deviceController1, never()).unbind();
+        verify(deviceController2, never()).bind(any());
+        verify(deviceController2, never()).unbind();
+        verify(mMockQueryManager, never()).startQuery(any(), any());
+        assertEquals(TEST_DEVICE_DEFAULT_NAME, deviceController1.getComponentName());
+    }
+
+    /**
+     * Bind to multiple ImsServices, one for MMTEL and one for RCS. Ensure neither of them bind to
+     * both.
+     */
+    @Test
+    @SmallTest
+    public void testDifferentDevicePackagesMmTelRcs() throws RemoteException {
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE2_DEFAULT_NAME.getPackageName());
+        List<ResolveInfo> info = new ArrayList<>();
+        Set<String> features1 = new HashSet<>();
+        features1.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        Set<String> features2 = new HashSet<>();
+        features2.add(ImsResolver.METADATA_RCS_FEATURE);
+        Set<String> allFeatures = new HashSet<>(features1);
+        allFeatures.addAll(features2);
+        // Use device default package, which will load the ImsService that the device provides
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, allFeatures, true));
+        info.add(getResolveInfo(TEST_DEVICE2_DEFAULT_NAME, allFeatures, true));
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        setupPackageQuery(info);
+        ImsServiceController deviceController1 = mock(ImsServiceController.class);
+        ImsServiceController deviceController2 = mock(ImsServiceController.class);
+        setImsServiceControllerFactory(deviceController1, deviceController2, null, null);
+
+        startBindNoCarrierConfig(1);
+        mLooper.processAllMessages();
+
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featureSet1 =
+                convertToHashSet(features1, 0);
+        featureSet1.addAll(convertToHashSet(features1, 1));
+        HashSet<ImsFeatureConfiguration.FeatureSlotPair> featureSet2 =
+                convertToHashSet(features2, 0);
+        featureSet2.addAll(convertToHashSet(features2, 1));
+        verify(deviceController1).bind(featureSet1);
+        verify(deviceController1, never()).unbind();
+        verify(deviceController2).bind(featureSet2);
+        verify(deviceController2, never()).unbind();
+        verify(mMockQueryManager, never()).startQuery(any(), any());
+        assertEquals(TEST_DEVICE_DEFAULT_NAME, deviceController1.getComponentName());
+        assertEquals(TEST_DEVICE2_DEFAULT_NAME, deviceController2.getComponentName());
+    }
+
+    /**
+     * Set the device configuration to opposite of the supported features in the metadata and ensure
+     * there is no bind.
+     */
+    @Test
+    @SmallTest
+    public void testDifferentDevicePackagesNoSupported() throws RemoteException {
+        setupResolver(2 /*numSlots*/, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
+                TEST_DEVICE2_DEFAULT_NAME.getPackageName());
+        List<ResolveInfo> info = new ArrayList<>();
+        Set<String> features1 = new HashSet<>();
+        features1.add(ImsResolver.METADATA_RCS_FEATURE);
+        Set<String> features2 = new HashSet<>();
+        features2.add(ImsResolver.METADATA_MMTEL_FEATURE);
+        // The configuration is opposite of the device supported features
+        info.add(getResolveInfo(TEST_DEVICE_DEFAULT_NAME, features1, true));
+        info.add(getResolveInfo(TEST_DEVICE2_DEFAULT_NAME, features2, true));
+        info.add(getResolveInfo(TEST_CARRIER_DEFAULT_NAME, new HashSet<>(), true));
+        setupPackageQuery(info);
+        ImsServiceController deviceController1 = mock(ImsServiceController.class);
+        ImsServiceController deviceController2 = mock(ImsServiceController.class);
+        setImsServiceControllerFactory(deviceController1, deviceController2, null, null);
+
+        startBindNoCarrierConfig(1);
+        mLooper.processAllMessages();
+
+        verify(deviceController1, never()).bind(any());
+        verify(deviceController1, never()).unbind();
+        verify(deviceController2, never()).bind(any());
+        verify(deviceController2, never()).unbind();
+        verify(mMockQueryManager, never()).startQuery(any(), any());
+    }
+
+    private void setupResolver(int numSlots, String deviceMmTelPkgName,
+            String deviceRcsPkgName) {
+        // all tests call setupResolver before running
+        when(mMockContext.getPackageManager()).thenReturn(mMockPM);
+        when(mMockContext.createContextAsUser(any(), eq(0))).thenReturn(mMockContext);
         when(mMockContext.getSystemService(eq(Context.CARRIER_CONFIG_SERVICE))).thenReturn(
                 mMockCarrierConfigManager);
-        when(mMockContext.getPackageManager()).thenReturn(mMockPM);
-        mCarrierConfigs = new PersistableBundle[numSlots];
-        for (int i = 0; i < numSlots; i++) {
+        // Support configs for MSIM always in case we are testing dynamic sim slot config changes.
+        mCarrierConfigs = new PersistableBundle[NUM_MAX_SLOTS];
+        for (int i = 0; i < NUM_MAX_SLOTS; i++) {
             mCarrierConfigs[i] = new PersistableBundle();
             when(mMockCarrierConfigManager.getConfigForSubId(eq(i))).thenReturn(
                     mCarrierConfigs[i]);
@@ -936,24 +1593,26 @@ public class ImsResolverTest extends ImsTestBase {
                     TelephonyManager.SIM_STATE_READY);
         }
 
-        mTestImsResolver = new ImsResolver(mMockContext, TEST_DEVICE_DEFAULT_NAME.getPackageName(),
-                numSlots, true);
+        mTestImsResolver = new ImsResolver(mMockContext, deviceMmTelPkgName, deviceRcsPkgName,
+                numSlots);
+        try {
+            mLooper = new TestableLooper(mTestImsResolver.getHandler().getLooper());
+        } catch (Exception e) {
+            fail("Unable to create looper from handler.");
+        }
 
-        ArgumentCaptor<BroadcastReceiver> packageBroadcastCaptor =
-                ArgumentCaptor.forClass(BroadcastReceiver.class);
         ArgumentCaptor<BroadcastReceiver> receiversCaptor =
                 ArgumentCaptor.forClass(BroadcastReceiver.class);
-        verify(mMockContext).registerReceiverAsUser(packageBroadcastCaptor.capture(), any(),
-                any(), any(), any());
-        mTestPackageBroadcastReceiver = packageBroadcastCaptor.getValue();
-        verify(mMockContext, times(2)).registerReceiver(receiversCaptor.capture(), any());
-        mTestCarrierConfigReceiver = receiversCaptor.getAllValues().get(0);
-        mTestBootCompleteReceiver = receiversCaptor.getAllValues().get(1);
+        verify(mMockContext, times(3)).registerReceiver(receiversCaptor.capture(), any());
+        mTestPackageBroadcastReceiver = receiversCaptor.getAllValues().get(0);
+        mTestCarrierConfigReceiver = receiversCaptor.getAllValues().get(1);
+        mTestBootCompleteReceiver = receiversCaptor.getAllValues().get(2);
         mTestImsResolver.setSubscriptionManagerProxy(mTestSubscriptionManagerProxy);
         mTestImsResolver.setTelephonyManagerProxy(mTestTelephonyManagerProxy);
         when(mMockQueryManagerFactory.create(any(Context.class),
                 any(ImsServiceFeatureQueryManager.Listener.class))).thenReturn(mMockQueryManager);
         mTestImsResolver.setImsDynamicQueryManagerFactory(mMockQueryManagerFactory);
+        mLooper.processAllMessages();
     }
 
     private void setupPackageQuery(List<ResolveInfo> infos) {
@@ -1002,7 +1661,9 @@ public class ImsResolverTest extends ImsTestBase {
                 ArgumentCaptor.forClass(ImsServiceFeatureQueryManager.Listener.class);
         verify(mMockQueryManagerFactory).create(any(Context.class), queryManagerCaptor.capture());
         mDynamicQueryListener = queryManagerCaptor.getValue();
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        when(mMockQueryManager.startQuery(any(ComponentName.class), any(String.class)))
+                .thenReturn(true);
+        mLooper.processAllMessages();
     }
 
     /**
@@ -1015,7 +1676,7 @@ public class ImsResolverTest extends ImsTestBase {
                 ArgumentCaptor.forClass(ImsServiceFeatureQueryManager.Listener.class);
         verify(mMockQueryManagerFactory).create(any(Context.class), queryManagerCaptor.capture());
         mDynamicQueryListener = queryManagerCaptor.getValue();
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
         // For ease of testing, slotId = subId
         for (int i = 0; i < numSlots; i++) {
             sendCarrierConfigChanged(i, i);
@@ -1024,27 +1685,19 @@ public class ImsResolverTest extends ImsTestBase {
 
     private void setupDynamicQueryFeatures(ComponentName name,
             HashSet<ImsFeatureConfiguration.FeatureSlotPair> features, int times) {
-        // wait for schedule to happen
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
         // ensure that startQuery was called
-        when(mMockQueryManager.startQuery(any(ComponentName.class), any(String.class)))
-                .thenReturn(true);
         verify(mMockQueryManager, times(times)).startQuery(eq(name), any(String.class));
         mDynamicQueryListener.onComplete(name, features);
-        // wait for handling of onComplete
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
     }
 
     private void setupDynamicQueryFeaturesFailure(ComponentName name, int times) {
-        // wait for schedule to happen
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
         // ensure that startQuery was called
-        when(mMockQueryManager.startQuery(any(ComponentName.class), any(String.class)))
-                .thenReturn(true);
         verify(mMockQueryManager, times(times)).startQuery(eq(name), any(String.class));
         mDynamicQueryListener.onPermanentError(name);
-        // wait for handling of onPermanentError
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
     }
 
     public void packageChanged(String packageName) {
@@ -1054,7 +1707,7 @@ public class ImsResolverTest extends ImsTestBase {
         addPackageIntent.setData(new Uri.Builder().scheme("package").opaquePart(packageName)
                 .build());
         mTestPackageBroadcastReceiver.onReceive(null, addPackageIntent);
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
     }
 
     public void packageRemoved(String packageName) {
@@ -1063,7 +1716,7 @@ public class ImsResolverTest extends ImsTestBase {
         removePackageIntent.setData(new Uri.Builder().scheme("package")
                 .opaquePart(TEST_CARRIER_DEFAULT_NAME.getPackageName()).build());
         mTestPackageBroadcastReceiver.onReceive(null, removePackageIntent);
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
     }
 
     private void setImsServiceControllerFactory(ImsServiceController deviceController,
@@ -1122,18 +1775,63 @@ public class ImsResolverTest extends ImsTestBase {
                 });
     }
 
+    private void setImsServiceControllerFactory(ImsServiceController deviceController1,
+            ImsServiceController deviceController2, ImsServiceController carrierController1,
+            ImsServiceController carrierController2) {
+        mTestImsResolver.setImsServiceControllerFactory(
+                new ImsResolver.ImsServiceControllerFactory() {
+                    @Override
+                    public String getServiceInterface() {
+                        return ImsService.SERVICE_INTERFACE;
+                    }
+
+                    @Override
+                    public ImsServiceController create(Context context, ComponentName componentName,
+                            ImsServiceController.ImsServiceControllerCallbacks callbacks) {
+                        if (TEST_DEVICE_DEFAULT_NAME.getPackageName().equals(
+                                componentName.getPackageName())) {
+                            when(deviceController1.getComponentName()).thenReturn(componentName);
+                            return deviceController1;
+                        } else if (TEST_DEVICE2_DEFAULT_NAME.getPackageName().equals(
+                                componentName.getPackageName())) {
+                            when(deviceController2.getComponentName()).thenReturn(componentName);
+                            return deviceController2;
+                        } else if (TEST_CARRIER_DEFAULT_NAME.getPackageName().equals(
+                                componentName.getPackageName())) {
+                            when(carrierController1.getComponentName()).thenReturn(componentName);
+                            return carrierController1;
+                        } else if (TEST_CARRIER_2_DEFAULT_NAME.getPackageName().equals(
+                                componentName.getPackageName())) {
+                            when(carrierController2.getComponentName()).thenReturn(componentName);
+                            return carrierController2;
+                        }
+                        return null;
+                    }
+                });
+    }
+
 
     private void sendCarrierConfigChanged(int subId, int slotId) {
         Intent carrierConfigIntent = new Intent();
         carrierConfigIntent.putExtra(CarrierConfigManager.EXTRA_SUBSCRIPTION_INDEX, subId);
         carrierConfigIntent.putExtra(CarrierConfigManager.EXTRA_SLOT_INDEX, slotId);
         mTestCarrierConfigReceiver.onReceive(null, carrierConfigIntent);
-        waitForHandlerAction(mTestImsResolver.getHandler(), TEST_TIMEOUT);
+        mLooper.processAllMessages();
     }
 
-    private void setConfigCarrierString(int subId, String packageName) {
+    private void setConfigCarrierStringMmTelRcs(int subId, String packageName) {
         mCarrierConfigs[subId].putString(
                 CarrierConfigManager.KEY_CONFIG_IMS_PACKAGE_OVERRIDE_STRING, packageName);
+    }
+
+    private void setConfigCarrierStringMmTel(int subId, String packageName) {
+        mCarrierConfigs[subId].putString(
+                CarrierConfigManager.KEY_CONFIG_IMS_MMTEL_PACKAGE_OVERRIDE_STRING, packageName);
+    }
+
+    private void setConfigCarrierStringRcs(int subId, String packageName) {
+        mCarrierConfigs[subId].putString(
+                CarrierConfigManager.KEY_CONFIG_IMS_RCS_PACKAGE_OVERRIDE_STRING, packageName);
     }
 
     private HashSet<ImsFeatureConfiguration.FeatureSlotPair> convertToHashSet(

@@ -16,16 +16,18 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.net.KeepalivePacketData;
 import android.net.LinkProperties;
 import android.os.Handler;
 import android.os.Message;
 import android.os.WorkSource;
+import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierRestrictionRules;
 import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.data.DataProfile;
 import android.telephony.emergency.EmergencyNumber;
 
@@ -73,6 +75,7 @@ public interface CommandsInterface {
     static final String CB_FACILITY_BA_MT        = "AC";
     static final String CB_FACILITY_BA_SIM       = "SC";
     static final String CB_FACILITY_BA_FD        = "FD";
+    static final String CB_FACILITY_BIC_ACR      = "AR";
 
 
     // Used for various supp services apis
@@ -480,6 +483,20 @@ public interface CommandsInterface {
     void unSetOnSs(Handler h);
 
     /**
+     * Register for unsolicited NATT Keepalive Status Indications
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    default void setOnRegistrationFailed(Handler h, int what, Object obj) {}
+
+    /**
+     * @param h Handler for notification message.
+     */
+    default void unSetOnRegistrationFailed(Handler h) {}
+
+    /**
      * Sets the handler for Event Notifications for CDMA Display Info.
      * Unlike the register* methods, there's only one notification handler
      *
@@ -652,6 +669,22 @@ public interface CommandsInterface {
      void registerForRilConnected(Handler h, int what, Object obj);
      @UnsupportedAppUsage
      void unregisterForRilConnected(Handler h);
+
+    /**
+     * Registers the handler for RIL_UNSOL_SIM_DETACH_FROM_NETWORK_CONFIG_CHANGED events.
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    default void registerUiccApplicationEnablementChanged(Handler h, int what, Object obj) {};
+
+    /**
+     * Unregisters the handler for RIL_UNSOL_SIM_DETACH_FROM_NETWORK_CONFIG_CHANGED events.
+     *
+     * @param h Handler for notification message.
+     */
+    default void unregisterUiccApplicationEnablementChanged(Handler h) {};
 
     /**
      * Supply the ICC PIN to the ICC card
@@ -1151,6 +1184,8 @@ public interface CommandsInterface {
      */
     void sendCdmaSms(byte[] pdu, Message response);
 
+    void sendCdmaSMSExpectMore(byte[] pdu, Message response);
+
     /**
      * send SMS over IMS with 3GPP/GSM SMS format
      * @param smscPDU is smsc address in PDU form GSM BCD format prefixed
@@ -1342,8 +1377,15 @@ public interface CommandsInterface {
     @UnsupportedAppUsage
     void setNetworkSelectionModeAutomatic(Message response);
 
+    /**
+     * Ask the radio to connect to the input network with specific RadioAccessNetwork
+     * and change selection mode to manual.
+     * @param operatorNumeric PLMN ID of the network to select.
+     * @param ran radio access network type (see {@link AccessNetworkType}).
+     * @param response callback message.
+     */
     @UnsupportedAppUsage
-    void setNetworkSelectionModeManual(String operatorNumeric, Message response);
+    void setNetworkSelectionModeManual(String operatorNumeric, int ran, Message response);
 
     /**
      * Queries whether the current network selection mode is automatic
@@ -2229,17 +2271,30 @@ public interface CommandsInterface {
     void setUnsolResponseFilter(int filter, Message result);
 
     /**
-     * Send the signal strength reporting criteria to the modem.
+     * Sets the signal strength reporting criteria.
      *
-     * @param hysteresisMs A hysteresis time in milliseconds. A value of 0 disables hysteresis.
-     * @param hysteresisDb An interval in dB defining the required magnitude change between reports.
-     *     A value of 0 disables hysteresis.
-     * @param thresholdsDbm An array of trigger thresholds in dBm. A size of 0 disables thresholds.
-     * @param ran RadioAccessNetwork for which to apply criteria.
+     * The resulting reporting rules are the AND of all the supplied criteria. For each RAN
+     * The hysteresisDb and thresholds apply to only the following measured quantities:
+     * -GERAN    - RSSI
+     * -CDMA2000 - RSSI
+     * -UTRAN    - RSCP
+     * -EUTRAN   - RSRP/RSRQ/RSSNR
+     * -NGRAN    - SSRSRP/SSRSRQ/SSSINR
+     *
+     * Note: Reporting criteria must be individually set for each RAN. For any unset reporting
+     * criteria, the value is implementation-defined.
+     *
+     * Response callback is
+     * IRadioResponse.setSignalStrengthReportingCriteriaResponse_1_5()
+     *
+     * @param signalThresholdInfo Signal threshold info including the threshold values,
+     *                            hysteresisDb, and hysteresisMs. See @1.5::SignalThresholdInfo
+     *                            for details.
+     * @param ran The type of network for which to apply these thresholds.
      * @param result callback message contains the information of SUCCESS/FAILURE
      */
-    void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb, int[] thresholdsDbm,
-            int ran, Message result);
+    void setSignalStrengthReportingCriteria(SignalThresholdInfo signalThresholdInfo, int ran,
+            Message result);
 
     /**
      * Send the link capacity reporting criteria to the modem
@@ -2377,6 +2432,28 @@ public interface CommandsInterface {
      * @param result a Message to return to the requester
      */
     default void getModemStatus(Message result) {};
+
+    /**
+     * Enable or disable uicc applications on the SIM.
+     *
+     * @param enable enable or disable UiccApplications on the SIM.
+     * @param onCompleteMessage a Message to return to the requester
+     */
+    default void enableUiccApplications(boolean enable, Message onCompleteMessage) {}
+
+    /**
+     * Whether uicc applications are enabled or not.
+     *
+     * @param onCompleteMessage a Message to return to the requester
+     */
+    default void areUiccApplicationsEnabled(Message onCompleteMessage) {}
+
+    /**
+     * Whether {@link #enableUiccApplications} is supported, based on IRadio version.
+     */
+    default boolean canToggleUiccApplicationsEnablement() {
+        return false;
+    }
 
     default List<ClientRequestStats> getClientRequestStats() {
         return null;

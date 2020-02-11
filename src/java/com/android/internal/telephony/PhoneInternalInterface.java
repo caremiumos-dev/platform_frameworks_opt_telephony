@@ -17,7 +17,7 @@
 package com.android.internal.telephony;
 
 import android.annotation.NonNull;
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +25,7 @@ import android.os.ResultReceiver;
 import android.telecom.VideoProfile;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
+import android.telephony.PreciseDataConnectionState;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 
@@ -237,6 +238,16 @@ public interface PhoneInternalInterface {
     DataState getDataConnectionState(String apnType);
 
     /**
+     * Get the current Precise DataState. No change notification exists at this
+     * interface -- use
+     * {@link android.telephony.PhoneStateListener} instead.
+     *
+     * @param apnType specify for which apn to get connection state info.
+     * @return the PreciseDataConnectionState for the data connection supporting apnType
+     */
+    PreciseDataConnectionState getPreciseDataConnectionState(String apnType);
+
+    /**
      * Get the current DataActivityState. No change notification exists at this
      * interface -- use
      * {@link android.telephony.TelephonyManager} instead.
@@ -422,6 +433,21 @@ public interface PhoneInternalInterface {
      *                errors are handled asynchronously.
      */
     Connection dial(String dialString, @NonNull DialArgs dialArgs) throws CallStateException;
+
+    /**
+     * Initiate a new conference connection. This happens asynchronously, so you
+     * cannot assume the audio path is connected (or a call index has been
+     * assigned) until PhoneStateChanged notification has occurred.
+     *
+     * @param participantsToDial The participants to dial.
+     * @param dialArgs Parameters to perform the start conference with.
+     * @exception CallStateException if a new outgoing call is not currently
+     *                possible because no more call slots exist or a call exists
+     *                that is dialing, alerting, ringing, or waiting. Other
+     *                errors are handled asynchronously.
+     */
+    Connection startConference(String[] participantsToDial, @NonNull DialArgs dialArgs)
+            throws CallStateException;
 
     /**
      * Handles PIN MMI commands (PIN/PIN2/PUK/PUK2), which are initiated

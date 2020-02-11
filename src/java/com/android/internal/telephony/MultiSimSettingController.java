@@ -27,6 +27,7 @@ import static android.telephony.TelephonyManager.EXTRA_SIM_COMBINATION_WARNING_T
 import static android.telephony.TelephonyManager.EXTRA_SIM_COMBINATION_WARNING_TYPE_DUAL_CDMA;
 import static android.telephony.TelephonyManager.EXTRA_SIM_COMBINATION_WARNING_TYPE_NONE;
 import static android.telephony.TelephonyManager.EXTRA_SUBSCRIPTION_ID;
+import static android.telephony.TelephonyManager.MODEM_COUNT_SINGLE_MODEM;
 
 import android.annotation.IntDef;
 import android.annotation.NonNull;
@@ -35,6 +36,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelUuid;
@@ -49,7 +51,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.util.ArrayUtils;
+import com.android.internal.telephony.util.ArrayUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -78,6 +80,7 @@ public class MultiSimSettingController extends Handler {
     private static final int EVENT_SUBSCRIPTION_GROUP_CHANGED        = 5;
     private static final int EVENT_DEFAULT_DATA_SUBSCRIPTION_CHANGED = 6;
     private static final int EVENT_CARRIER_CONFIG_CHANGED            = 7;
+    private static final int EVENT_MULTI_SIM_CONFIG_CHANGED          = 8;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef(prefix = {"PRIMARY_SUB_"},
@@ -183,9 +186,12 @@ public class MultiSimSettingController extends Handler {
 
         // Initialize mCarrierConfigLoadedSubIds and register to listen to carrier config change.
         final int phoneCount = ((TelephonyManager) mContext.getSystemService(
-                Context.TELEPHONY_SERVICE)).getMaxPhoneCount();
+                Context.TELEPHONY_SERVICE)).getSupportedModemCount();
         mCarrierConfigLoadedSubIds = new int[phoneCount];
         Arrays.fill(mCarrierConfigLoadedSubIds, SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+
+        PhoneConfigurationManager.registerForMultiSimConfigChange(
+                this, EVENT_MULTI_SIM_CONFIG_CHANGED, null);
 
         context.registerReceiver(mIntentReceiver, new IntentFilter(
                 CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
@@ -267,6 +273,9 @@ public class MultiSimSettingController extends Handler {
                 int subId = msg.arg2;
                 onCarrierConfigChanged(phoneId, subId);
                 break;
+            case EVENT_MULTI_SIM_CONFIG_CHANGED:
+                int activeModems = (int) ((AsyncResult) msg.obj).result;
+                onMultiSimConfigChanged(activeModems);
         }
     }
 
@@ -357,6 +366,14 @@ public class MultiSimSettingController extends Handler {
         return true;
     }
 
+    private void onMultiSimConfigChanged(int activeModems) {
+        // Clear mCarrierConfigLoadedSubIds. Other actions will responds to active
+        // subscription change.
+        for (int phoneId = activeModems; phoneId < mCarrierConfigLoadedSubIds.length; phoneId++) {
+            mCarrierConfigLoadedSubIds[phoneId] = INVALID_SUBSCRIPTION_ID;
+        }
+    }
+
     /**
      * Wait for subInfo initialization (after boot up) and carrier config load for all active
      * subscriptions before re-evaluate multi SIM settings.
@@ -390,7 +407,7 @@ public class MultiSimSettingController extends Handler {
         if (DBG) log("onSubscriptionGroupChanged");
 
         List<SubscriptionInfo> infoList = mSubController.getSubscriptionsInGroup(
-                groupUuid, mContext.getOpPackageName());
+                groupUuid, mContext.getOpPackageName(), null);
         if (infoList == null || infoList.isEmpty()) return;
 
         // Get a reference subscription to copy settings from.
@@ -453,7 +470,8 @@ public class MultiSimSettingController extends Handler {
         if (!isReadyToReevaluate()) return;
 
         List<SubscriptionInfo> activeSubInfos = mSubController
-                .getActiveSubscriptionInfoList(mContext.getOpPackageName());
+                .getActiveSubscriptionInfoList(mContext.getOpPackageName(),
+                        null);
 
         if (ArrayUtils.isEmpty(activeSubInfos)) {
             mPrimarySubList.clear();
@@ -473,7 +491,9 @@ public class MultiSimSettingController extends Handler {
         // Otherwise, if user just inserted their first SIM, or there's one primary and one
         // opportunistic subscription active (activeSubInfos.size() > 1), we automatically
         // set the primary to be default SIM and return.
-        if (mPrimarySubList.size() == 1 && change != PRIMARY_SUB_REMOVED) {
+        if (mPrimarySubList.size() == 1 && (change != PRIMARY_SUB_REMOVED
+                || ((TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE))
+                .getActiveModemCount() == MODEM_COUNT_SINGLE_MODEM)) {
             int subId = mPrimarySubList.get(0);
             if (DBG) log("[updateDefaultValues] to only primary sub " + subId);
             mSubController.setDefaultDataSubId(subId);
@@ -625,7 +645,8 @@ public class MultiSimSettingController extends Handler {
             if (phone != null && phone.isCdmaSubscriptionAppPresent()) {
                 cdmaPhoneCount++;
                 String simName = mSubController.getActiveSubscriptionInfo(
-                        subId, mContext.getOpPackageName()).getDisplayName().toString();
+                        subId, mContext.getOpPackageName(), null)
+                        .getDisplayName().toString();
                 if (TextUtils.isEmpty(simName)) {
                     // Fall back to carrier name.
                     simName = phone.getCarrierName();
@@ -681,7 +702,8 @@ public class MultiSimSettingController extends Handler {
     private void setUserDataEnabledForGroup(int subId, boolean enable) {
         log("setUserDataEnabledForGroup subId " + subId + " enable " + enable);
         List<SubscriptionInfo> infoList = mSubController.getSubscriptionsInGroup(
-                mSubController.getGroupUuid(subId), mContext.getOpPackageName());
+                mSubController.getGroupUuid(subId), mContext.getOpPackageName(),
+                null);
 
         if (infoList == null) return;
 
@@ -711,7 +733,8 @@ public class MultiSimSettingController extends Handler {
     private void setRoamingDataEnabledForGroup(int subId, boolean enable) {
         SubscriptionController subController = SubscriptionController.getInstance();
         List<SubscriptionInfo> infoList = subController.getSubscriptionsInGroup(
-                mSubController.getGroupUuid(subId), mContext.getOpPackageName());
+                mSubController.getGroupUuid(subId), mContext.getOpPackageName(),
+                null);
 
         if (infoList == null) return;
 
@@ -759,7 +782,7 @@ public class MultiSimSettingController extends Handler {
         if (!SubscriptionInfoUpdater.isSubInfoInitialized()) return;
 
         List<SubscriptionInfo> opptSubList = mSubController.getOpportunisticSubscriptions(
-                mContext.getOpPackageName());
+                mContext.getOpPackageName(), null);
 
         if (ArrayUtils.isEmpty(opptSubList)) return;
 

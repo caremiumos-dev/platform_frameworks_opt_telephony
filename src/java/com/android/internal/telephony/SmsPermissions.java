@@ -17,15 +17,16 @@
 package com.android.internal.telephony;
 
 import android.Manifest;
-import android.annotation.UnsupportedAppUsage;
 import android.app.AppOpsManager;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.service.carrier.CarrierMessagingService;
-import android.telephony.Rlog;
 import android.util.Log;
+
+import com.android.telephony.Rlog;
 
 /**
  * Permissions checks for SMS functionality
@@ -50,7 +51,6 @@ public class SmsPermissions {
      * Check that the caller can send text messages.
      *
      * For persisted messages, the caller just needs the SEND_SMS permission. For unpersisted
-     * For persisted messages, the caller just needs the SEND_SMS permission. For unpersisted
      * messages, the caller must either be the IMS app or a carrier-privileged app, or they must
      * have both the MODIFY_PHONE_STATE and SEND_SMS permissions.
      *
@@ -74,7 +74,6 @@ public class SmsPermissions {
         return checkCallingCanSendSms(callingPackage, message);
     }
 
-
     /**
      * Enforces that the caller is one of the following apps:
      * <ul>
@@ -94,13 +93,13 @@ public class SmsPermissions {
             }
         } catch (PackageManager.NameNotFoundException e) {
             if (Rlog.isLoggable("SMS", Log.DEBUG)) {
-                log("Cannot find configured carrier ims package");
+                loge("Cannot find configured carrier ims package");
             }
         }
 
-        TelephonyPermissions.enforceCallingOrSelfCarrierPrivilege(mPhone.getSubId(), message);
+        TelephonyPermissions.enforceCallingOrSelfCarrierPrivilege(
+                mContext, mPhone.getSubId(), message);
     }
-
 
     /**
      * Check that the caller has SEND_SMS permissions. Can only be called during an IPC.
@@ -128,8 +127,77 @@ public class SmsPermissions {
                 == AppOpsManager.MODE_ALLOWED;
     }
 
+    /**
+     * Check that the caller (or self, if this is not an IPC) can get SMSC address from (U)SIM.
+     *
+     * The default SMS application can get SMSC address, otherwise the caller must have
+     * {@link android.Manifest.permission#READ_PRIVILEGED_PHONE_STATE} or carrier privileges.
+     *
+     * @return true if the caller is default SMS app or has the required permission and privileges.
+     *              Otherwise, false;
+     */
+    public boolean checkCallingOrSelfCanGetSmscAddress(String callingPackage, String message) {
+        // Allow it to the default SMS app always.
+        if (!isDefaultSmsPackage(callingPackage)) {
+            try {
+                // Allow it with READ_PRIVILEGED_PHONE_STATE or Carrier Privileges
+                TelephonyPermissions
+                        .enforeceCallingOrSelfReadPrivilegedPhoneStatePermissionOrCarrierPrivilege(
+                                mContext, mPhone.getSubId(), message);
+            } catch (SecurityException e) { // To avoid crashing applications
+                loge(message + ": Neither " + callingPackage + " is the default SMS app"
+                        + " nor the caller has "
+                        + android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE
+                        + ", or carrier privileges", e);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check that the caller (or self, if this is not an IPC) can set SMSC address on (U)SIM.
+     *
+     * The default SMS application can set SMSC address, otherwise the caller must have
+     * {@link android.Manifest.permission#MODIFY_PHONE_STATE} or carrier privileges.
+     *
+     * @return true if the caller is default SMS app or has the required permission and privileges.
+     *              Otherwise, false.
+     */
+    public boolean checkCallingOrSelfCanSetSmscAddress(String callingPackage, String message) {
+        // Allow it to the default SMS app always.
+        if (!isDefaultSmsPackage(callingPackage)) {
+            try {
+                // Allow it with MODIFY_PHONE_STATE or Carrier Privileges
+                TelephonyPermissions.enforceCallingOrSelfModifyPermissionOrCarrierPrivilege(
+                        mContext, mPhone.getSubId(), message);
+            } catch (SecurityException e) { // To avoid crashing applications
+                loge(message + ": Neither " + callingPackage + " is the default SMS app"
+                        + " nor the caller has " + android.Manifest.permission.MODIFY_PHONE_STATE
+                        + ", or carrier privileges", e);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /** Check if a package is default SMS app. */
+    public boolean isDefaultSmsPackage(String packageName) {
+        return SmsApplication.isDefaultSmsApplication(mContext, packageName);
+    }
+
     @UnsupportedAppUsage
     protected void log(String msg) {
-        Log.d(LOG_TAG, "[IccSmsInterfaceManager] " + msg);
+        Rlog.d(LOG_TAG, msg);
+    }
+
+    protected void loge(String msg) {
+        Rlog.e(LOG_TAG, msg);
+    }
+
+    protected void loge(String msg, Throwable e) {
+        Rlog.e(LOG_TAG, msg, e);
     }
 }

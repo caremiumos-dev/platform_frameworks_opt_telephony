@@ -21,26 +21,27 @@ import static android.telephony.SubscriptionManager.INVALID_SUBSCRIPTION_ID;
 import android.net.NetworkCapabilities;
 import android.net.NetworkFactory;
 import android.net.NetworkRequest;
-import android.net.StringNetworkSpecifier;
+import android.net.TelephonyNetworkSpecifier;
 import android.os.AsyncResult;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.telephony.AccessNetworkConstants;
-import android.telephony.Rlog;
+import android.telephony.Annotation.ApnType;
+import android.telephony.SubscriptionManager;
 import android.telephony.data.ApnSetting;
-import android.telephony.data.ApnSetting.ApnType;
 import android.util.LocalLog;
 
+import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneSwitcher;
 import com.android.internal.telephony.SubscriptionController;
-import com.android.internal.telephony.SubscriptionMonitor;
 import com.android.internal.telephony.dataconnection.DcTracker.ReleaseNetworkType;
 import com.android.internal.telephony.dataconnection.DcTracker.RequestNetworkType;
 import com.android.internal.telephony.dataconnection.TransportManager.HandoverParams;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -59,8 +60,10 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
     private static final int TELEPHONY_NETWORK_SCORE = 50;
 
-    private static final int EVENT_ACTIVE_PHONE_SWITCH              = 1;
-    private static final int EVENT_SUBSCRIPTION_CHANGED             = 2;
+    @VisibleForTesting
+    public static final int EVENT_ACTIVE_PHONE_SWITCH               = 1;
+    @VisibleForTesting
+    public static final int EVENT_SUBSCRIPTION_CHANGED              = 2;
     private static final int EVENT_NETWORK_REQUEST                  = 3;
     private static final int EVENT_NETWORK_RELEASE                  = 4;
     private static final int EVENT_DATA_HANDOVER_NEEDED             = 5;
@@ -68,7 +71,6 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
     private final PhoneSwitcher mPhoneSwitcher;
     private final SubscriptionController mSubscriptionController;
-    private final SubscriptionMonitor mSubscriptionMonitor;
     private final LocalLog mLocalLog = new LocalLog(REQUEST_LOG_SIZE);
 
     // Key: network request. Value: the transport of DcTracker it applies to,
@@ -83,11 +85,11 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
     private int mSubscriptionId;
 
-    private final Handler mInternalHandler;
+    @VisibleForTesting
+    public final Handler mInternalHandler;
 
 
-    public TelephonyNetworkFactory(SubscriptionMonitor subscriptionMonitor, Looper looper,
-                                   Phone phone) {
+    public TelephonyNetworkFactory(Looper looper, Phone phone) {
         super(looper, phone.getContext(), "TelephonyNetworkFactory[" + phone.getPhoneId()
                 + "]", null);
         mPhone = phone;
@@ -100,7 +102,6 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         setScoreFilter(TELEPHONY_NETWORK_SCORE);
 
         mPhoneSwitcher = PhoneSwitcher.getInstance();
-        mSubscriptionMonitor = subscriptionMonitor;
         LOG_TAG = "TelephonyNetworkFactory[" + mPhone.getPhoneId() + "]";
 
         mPhoneSwitcher.registerForActivePhoneSwitch(mInternalHandler, EVENT_ACTIVE_PHONE_SWITCH,
@@ -109,11 +110,19 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                 EVENT_DATA_HANDOVER_NEEDED);
 
         mSubscriptionId = INVALID_SUBSCRIPTION_ID;
-        mSubscriptionMonitor.registerForSubscriptionChanged(mPhone.getPhoneId(), mInternalHandler,
-                EVENT_SUBSCRIPTION_CHANGED, null);
+        SubscriptionManager.from(mPhone.getContext()).addOnSubscriptionsChangedListener(
+                mSubscriptionsChangedListener);
 
         register();
     }
+
+    private final SubscriptionManager.OnSubscriptionsChangedListener mSubscriptionsChangedListener =
+            new SubscriptionManager.OnSubscriptionsChangedListener() {
+                @Override
+                public void onSubscriptionsChanged() {
+                    mInternalHandler.sendEmptyMessage(EVENT_SUBSCRIPTION_CHANGED);
+                }
+            };
 
     private NetworkCapabilities makeNetworkFilter(SubscriptionController subscriptionController,
             int phoneId) {
@@ -136,7 +145,8 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-        nc.setNetworkSpecifier(new StringNetworkSpecifier(String.valueOf(subscriptionId)));
+        nc.setNetworkSpecifier(new TelephonyNetworkSpecifier.Builder()
+                .setSubscriptionId(subscriptionId).build());
         return nc;
     }
 
@@ -338,16 +348,16 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                 if (dcTracker != null) {
                     DataConnection dc = dcTracker.getDataConnectionByApnType(
                             ApnSetting.getApnTypeString(apnType));
-                    if (dc != null && (dc.isActive() || dc.isActivating())) {
+                    if (dc != null && (dc.isActive())) {
                         Message onCompleteMsg = mInternalHandler.obtainMessage(
                                 EVENT_DATA_HANDOVER_COMPLETED);
                         onCompleteMsg.getData().putParcelable(
                                 DcTracker.DATA_COMPLETE_MSG_EXTRA_NETWORK_REQUEST, networkRequest);
                         mPendingHandovers.put(onCompleteMsg, handoverParams);
-                        // TODO: Need to handle the case that the request is there, but there is no
-                        // actual data connections established.
                         requestNetworkInternal(networkRequest, DcTracker.REQUEST_TYPE_HANDOVER,
                                 targetTransport, onCompleteMsg);
+                        log("Requested handover " + ApnSetting.getApnTypeString(apnType) + " to "
+                                + AccessNetworkConstants.transportTypeToString(targetTransport));
                         handoverPending = true;
                     } else {
                         // Request is there, but no actual data connection. In this case, just move

@@ -21,11 +21,14 @@ import static android.telephony.SmsManager.STATUS_ON_ICC_READ;
 import static android.telephony.SmsManager.STATUS_ON_ICC_UNREAD;
 
 import android.Manifest;
-import android.annotation.UnsupportedAppUsage;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
+import android.compat.annotation.UnsupportedAppUsage;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -36,9 +39,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.UserManager;
 import android.provider.Telephony;
-import android.telephony.Rlog;
+import android.telephony.CarrierConfigManager;
+import android.telephony.SmsCbMessage;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.telephony.SubscriptionManager;
 import android.telephony.emergency.EmergencyNumber;
 import android.util.LocalLog;
 import android.util.Log;
@@ -49,7 +54,10 @@ import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccConstants;
 import com.android.internal.telephony.uicc.IccFileHandler;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.util.HexDump;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -72,6 +80,8 @@ public class IccSmsInterfaceManager {
     @UnsupportedAppUsage
     private List<SmsRawData> mSms;
 
+    private String mSmsc;
+
     @UnsupportedAppUsage
     private CellBroadcastRangeManager mCellBroadcastRangeManager =
             new CellBroadcastRangeManager();
@@ -82,6 +92,8 @@ public class IccSmsInterfaceManager {
     private static final int EVENT_UPDATE_DONE = 2;
     protected static final int EVENT_SET_BROADCAST_ACTIVATION_DONE = 3;
     protected static final int EVENT_SET_BROADCAST_CONFIG_DONE = 4;
+    private static final int EVENT_GET_SMSC_DONE = 5;
+    private static final int EVENT_SET_SMSC_DONE = 6;
     private static final int SMS_CB_CODE_SCHEME_MIN = 0;
     private static final int SMS_CB_CODE_SCHEME_MAX = 255;
     public static final int SMS_MESSAGE_PRIORITY_NOT_SPECIFIED = -1;
@@ -122,7 +134,7 @@ public class IccSmsInterfaceManager {
                             markMessagesAsRead((ArrayList<byte[]>) ar.result);
                         } else {
                             if (Rlog.isLoggable("SMS", Log.DEBUG)) {
-                                log("Cannot load Sms records");
+                                loge("Cannot load Sms records");
                             }
                             mSms = null;
                         }
@@ -131,6 +143,25 @@ public class IccSmsInterfaceManager {
                     break;
                 case EVENT_SET_BROADCAST_ACTIVATION_DONE:
                 case EVENT_SET_BROADCAST_CONFIG_DONE:
+                    ar = (AsyncResult) msg.obj;
+                    synchronized (mLock) {
+                        mSuccess = (ar.exception == null);
+                        mLock.notifyAll();
+                    }
+                    break;
+                case EVENT_GET_SMSC_DONE:
+                    ar = (AsyncResult) msg.obj;
+                    synchronized (mLock) {
+                        if (ar.exception == null) {
+                            mSmsc = (String) ar.result;
+                        } else {
+                            loge("Cannot read SMSC");
+                            mSmsc = null;
+                        }
+                        mLock.notifyAll();
+                    }
+                    break;
+                case EVENT_SET_SMSC_DONE:
                     ar = (AsyncResult) msg.obj;
                     synchronized (mLock) {
                         mSuccess = (ar.exception == null);
@@ -158,6 +189,21 @@ public class IccSmsInterfaceManager {
         mAppOps = appOps;
         mDispatchersController = dispatchersController;
         mSmsPermissions = new SmsPermissions(phone, context, appOps);
+
+        mContext.registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        if (CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED
+                                .equals(intent.getAction())) {
+                            if (mPhone.getPhoneId() == intent.getIntExtra(
+                                    CarrierConfigManager.EXTRA_SLOT_INDEX,
+                                    SubscriptionManager.INVALID_SIM_SLOT_INDEX)) {
+                                mCellBroadcastRangeManager.updateRanges();
+                            }
+                        }
+                    }
+                }, new IntentFilter(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
     }
 
     protected void markMessagesAsRead(ArrayList<byte[]> messages) {
@@ -171,7 +217,7 @@ public class IccSmsInterfaceManager {
             //shouldn't really happen, as messages are marked as read, only
             //after importing it from icc.
             if (Rlog.isLoggable("SMS", Log.DEBUG)) {
-                log("markMessagesAsRead - aborting, no icc card present.");
+                loge("markMessagesAsRead - aborting, no icc card present.");
             }
             return;
         }
@@ -253,20 +299,24 @@ public class IccSmsInterfaceManager {
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
-                log("interrupted while trying to update by index");
+                loge("interrupted while trying to update by index");
             }
         }
         return mSuccess;
     }
 
     /**
-     * Copy a raw SMS PDU to the Icc.
+     * Copies a raw SMS PDU to the ICC.
      *
-     * @param pdu the raw PDU to store
-     * @param status message status (STATUS_ON_ICC_READ, STATUS_ON_ICC_UNREAD,
-     *               STATUS_ON_ICC_SENT, STATUS_ON_ICC_UNSENT)
-     * @return success or not
-     *
+     * @param callingPackage the package name of the calling app.
+     * @param status message status. One of these status:
+     *               <code>STATUS_ON_ICC_READ</code>
+     *               <code>STATUS_ON_ICC_UNREAD</code>
+     *               <code>STATUS_ON_ICC_SENT</code>
+     *               <code>STATUS_ON_ICC_UNSENT</code>
+     * @param pdu the raw PDU to store.
+     * @param smsc the SMSC for this message. Null means use default.
+     * @return true for success. Otherwise false.
      */
     @UnsupportedAppUsage
     public boolean copyMessageToIccEf(String callingPackage, int status, byte[] pdu, byte[] smsc) {
@@ -294,7 +344,7 @@ public class IccSmsInterfaceManager {
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
-                log("interrupted while trying to update by index");
+                loge("interrupted while trying to update by index");
             }
         }
         return mSuccess;
@@ -321,7 +371,7 @@ public class IccSmsInterfaceManager {
 
             IccFileHandler fh = mPhone.getIccFileHandler();
             if (fh == null) {
-                Rlog.e(LOG_TAG, "Cannot load Sms records. No icc card?");
+                loge("Cannot load Sms records. No icc card?");
                 mSms = null;
                 return mSms;
             }
@@ -332,7 +382,7 @@ public class IccSmsInterfaceManager {
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
-                log("interrupted while trying to load from the Icc");
+                loge("interrupted while trying to load from the Icc");
             }
         }
         return mSms;
@@ -587,7 +637,7 @@ public class IccSmsInterfaceManager {
                         try {
                             receivedIntent.send(result);
                         } catch (PendingIntent.CanceledException e) {
-                            Rlog.d(LOG_TAG, "receivedIntent cancelled.");
+                            loge("receivedIntent cancelled.");
                         }
                     }
                 }
@@ -799,6 +849,53 @@ public class IccSmsInterfaceManager {
         return data;
     }
 
+    /**
+     * Gets the SMSC address from (U)SIM.
+     *
+     * @return the SMSC address string, null if failed.
+     */
+    public String getSmscAddressFromIccEf(String callingPackage) {
+        if (!mSmsPermissions.checkCallingOrSelfCanGetSmscAddress(
+                callingPackage, "getSmscAddressFromIccEf")) {
+            return null;
+        }
+        synchronized (mLock) {
+            mSmsc = null;
+            Message response = mHandler.obtainMessage(EVENT_GET_SMSC_DONE);
+            mPhone.mCi.getSmscAddress(response);
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                loge("interrupted while trying to read SMSC");
+            }
+        }
+        return mSmsc;
+    }
+
+    /**
+     * Sets the SMSC address on (U)SIM.
+     *
+     * @param smsc the SMSC address string.
+     * @return true for success, false otherwise.
+     */
+    public boolean setSmscAddressOnIccEf(String callingPackage, String smsc) {
+        if (!mSmsPermissions.checkCallingOrSelfCanSetSmscAddress(
+                callingPackage, "setSmscAddressOnIccEf")) {
+            return false;
+        }
+        synchronized (mLock) {
+            mSuccess = false;
+            Message response = mHandler.obtainMessage(EVENT_SET_SMSC_DONE);
+            mPhone.mCi.setSmscAddress(smsc, response);
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                loge("interrupted while trying to write SMSC");
+            }
+        }
+        return mSuccess;
+    }
+
     public boolean enableCellBroadcast(int messageIdentifier, int ranType) {
         return enableCellBroadcastRange(messageIdentifier, messageIdentifier, ranType);
     }
@@ -811,9 +908,9 @@ public class IccSmsInterfaceManager {
         mContext.enforceCallingPermission("android.permission.RECEIVE_EMERGENCY_BROADCAST",
                 "enabling cell broadcast range [" + startMessageId + "-" + endMessageId + "]. "
                         + "ranType=" + ranType);
-        if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_GSM) {
+        if (ranType == SmsCbMessage.MESSAGE_FORMAT_3GPP) {
             return enableGsmBroadcastRange(startMessageId, endMessageId);
-        } else if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_CDMA) {
+        } else if (ranType == SmsCbMessage.MESSAGE_FORMAT_3GPP2) {
             return enableCdmaBroadcastRange(startMessageId, endMessageId);
         } else {
             throw new IllegalArgumentException("Not a supported RAN Type");
@@ -824,9 +921,9 @@ public class IccSmsInterfaceManager {
         mContext.enforceCallingPermission("android.permission.RECEIVE_EMERGENCY_BROADCAST",
                 "disabling cell broadcast range [" + startMessageId + "-" + endMessageId
                         + "]. ranType=" + ranType);
-        if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_GSM ) {
+        if (ranType == SmsCbMessage.MESSAGE_FORMAT_3GPP) {
             return disableGsmBroadcastRange(startMessageId, endMessageId);
-        } else if (ranType == SmsManager.CELL_BROADCAST_RAN_TYPE_CDMA)  {
+        } else if (ranType == SmsCbMessage.MESSAGE_FORMAT_3GPP2)  {
             return disableCdmaBroadcastRange(startMessageId, endMessageId);
         } else {
             throw new IllegalArgumentException("Not a supported RAN Type");
@@ -1049,7 +1146,7 @@ public class IccSmsInterfaceManager {
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
-                log("interrupted while trying to set cell broadcast config");
+                loge("interrupted while trying to set cell broadcast config");
             }
         }
 
@@ -1069,7 +1166,7 @@ public class IccSmsInterfaceManager {
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
-                log("interrupted while trying to set cell broadcast activation");
+                loge("interrupted while trying to set cell broadcast activation");
             }
         }
 
@@ -1090,7 +1187,7 @@ public class IccSmsInterfaceManager {
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
-                log("interrupted while trying to set cdma broadcast config");
+                loge("interrupted while trying to set cdma broadcast config");
             }
         }
 
@@ -1110,7 +1207,7 @@ public class IccSmsInterfaceManager {
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
-                log("interrupted while trying to set cdma broadcast activation");
+                loge("interrupted while trying to set cdma broadcast activation");
             }
         }
 
@@ -1119,7 +1216,15 @@ public class IccSmsInterfaceManager {
 
     @UnsupportedAppUsage
     protected void log(String msg) {
-        Log.d(LOG_TAG, "[IccSmsInterfaceManager] " + msg);
+        Rlog.d(LOG_TAG, msg);
+    }
+
+    protected void loge(String msg) {
+        Rlog.e(LOG_TAG, msg);
+    }
+
+    protected void loge(String msg, Throwable e) {
+        Rlog.e(LOG_TAG, msg, e);
     }
 
     @UnsupportedAppUsage
@@ -1145,13 +1250,13 @@ public class IccSmsInterfaceManager {
         }
         final ContentResolver resolver = mContext.getContentResolver();
         if (!isFailedOrDraft(resolver, messageUri)) {
-            Log.e(LOG_TAG, "[IccSmsInterfaceManager]sendStoredText: not FAILED or DRAFT message");
+            loge("sendStoredText: not FAILED or DRAFT message");
             returnUnspecifiedFailure(sentIntent);
             return;
         }
         final String[] textAndAddress = loadTextAndAddress(resolver, messageUri);
         if (textAndAddress == null) {
-            Log.e(LOG_TAG, "[IccSmsInterfaceManager]sendStoredText: can not load text");
+            loge("sendStoredText: can not load text");
             returnUnspecifiedFailure(sentIntent);
             return;
         }
@@ -1172,20 +1277,19 @@ public class IccSmsInterfaceManager {
         }
         final ContentResolver resolver = mContext.getContentResolver();
         if (!isFailedOrDraft(resolver, messageUri)) {
-            Log.e(LOG_TAG, "[IccSmsInterfaceManager]sendStoredMultipartText: "
-                    + "not FAILED or DRAFT message");
+            loge("sendStoredMultipartText: not FAILED or DRAFT message");
             returnUnspecifiedFailure(sentIntents);
             return;
         }
         final String[] textAndAddress = loadTextAndAddress(resolver, messageUri);
         if (textAndAddress == null) {
-            Log.e(LOG_TAG, "[IccSmsInterfaceManager]sendStoredMultipartText: can not load text");
+            loge("sendStoredMultipartText: can not load text");
             returnUnspecifiedFailure(sentIntents);
             return;
         }
         final ArrayList<String> parts = SmsManager.getDefault().divideMessage(textAndAddress[0]);
         if (parts == null || parts.size() < 1) {
-            Log.e(LOG_TAG, "[IccSmsInterfaceManager]sendStoredMultipartText: can not divide text");
+            loge("sendStoredMultipartText: can not divide text");
             returnUnspecifiedFailure(sentIntents);
             return;
         }
@@ -1238,6 +1342,28 @@ public class IccSmsInterfaceManager {
                 SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
     }
 
+    public int getSmsCapacityOnIcc() {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE,
+                "getSmsCapacityOnIcc");
+
+        int numberOnIcc = 0;
+        if (mPhone.getIccRecordsLoaded()) {
+            final UiccProfile uiccProfile = UiccController.getInstance()
+                    .getUiccProfileForPhone(mPhone.getPhoneId());
+            if(uiccProfile != null) {
+                numberOnIcc = uiccProfile.getIccRecords().getSmsCapacityOnIcc();
+            } else {
+                loge("uiccProfile is null");
+            }
+        } else {
+            loge("getSmsCapacityOnIcc - aborting, no icc card present.");
+        }
+
+        log("getSmsCapacityOnIcc().numberOnIcc = " + numberOnIcc);
+        return numberOnIcc;
+    }
+
     private boolean isFailedOrDraft(ContentResolver resolver, Uri messageUri) {
         // Clear the calling identity and query the database using the phone user id
         // Otherwise the AppOps check in TelephonyProvider would complain about mismatch
@@ -1257,7 +1383,7 @@ public class IccSmsInterfaceManager {
                         || type == Telephony.Sms.MESSAGE_TYPE_FAILED;
             }
         } catch (SQLiteException e) {
-            Log.e(LOG_TAG, "[IccSmsInterfaceManager]isFailedOrDraft: query message type failed", e);
+            loge("isFailedOrDraft: query message type failed", e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1288,7 +1414,7 @@ public class IccSmsInterfaceManager {
                 return new String[]{ cursor.getString(0), cursor.getString(1) };
             }
         } catch (SQLiteException e) {
-            Log.e(LOG_TAG, "[IccSmsInterfaceManager]loadText: query message text failed", e);
+            loge("loadText: query message text failed", e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1327,8 +1453,7 @@ public class IccSmsInterfaceManager {
 
     @UnsupportedAppUsage
     private String filterDestAddress(String destAddr) {
-        String result  = null;
-        result = SmsNumberUtils.filterDestAddr(mPhone, destAddr);
+        String result = SmsNumberUtils.filterDestAddr(mContext, mPhone.getSubId(), destAddr);
         return result != null ? result : destAddr;
     }
 

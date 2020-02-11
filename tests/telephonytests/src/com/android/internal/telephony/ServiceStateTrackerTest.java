@@ -56,6 +56,7 @@ import android.os.Message;
 import android.os.PersistableBundle;
 import android.os.Process;
 import android.os.SystemClock;
+import android.os.TimestampedValue;
 import android.os.UserHandle;
 import android.os.WorkSource;
 import android.telephony.AccessNetworkConstants;
@@ -88,7 +89,6 @@ import android.telephony.gsm.GsmCellLocation;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Pair;
-import android.util.TimestampedValue;
 
 import androidx.test.filters.FlakyTest;
 
@@ -108,6 +108,7 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -297,10 +298,32 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mBundle.putStringArray(CarrierConfigManager.KEY_PNN_OVERRIDE_STRING_ARRAY,
                 CARRIER_CONFIG_PNN);
 
-        // Do not force display "No service" when sim is not ready
-        mContextFixture.putBooleanResource(
-                com.android.internal.R.bool.config_display_no_service_when_sim_unready, false);
+        // Do not force display "No service" when sim is not ready in any locales
+        mContextFixture.putStringArrayResource(
+                com.android.internal.R.array.config_display_no_service_when_sim_unready,
+                new String[0]);
 
+        mBundle.putIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY,
+                new int[] {
+                    -110, /* SIGNAL_STRENGTH_POOR */
+                    -90, /* SIGNAL_STRENGTH_MODERATE */
+                    -80, /* SIGNAL_STRENGTH_GOOD */
+                    -65,  /* SIGNAL_STRENGTH_GREAT */
+                });
+        mBundle.putIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRQ_THRESHOLDS_INT_ARRAY,
+                new int[] {
+                    -16, /* SIGNAL_STRENGTH_POOR */
+                    -11, /* SIGNAL_STRENGTH_MODERATE */
+                    -9, /* SIGNAL_STRENGTH_GOOD */
+                    -7  /* SIGNAL_STRENGTH_GREAT */
+                });
+        mBundle.putIntArray(CarrierConfigManager.KEY_5G_NR_SSSINR_THRESHOLDS_INT_ARRAY,
+                new int[] {
+                    -5, /* SIGNAL_STRENGTH_POOR */
+                    5, /* SIGNAL_STRENGTH_MODERATE */
+                    15, /* SIGNAL_STRENGTH_GOOD */
+                    30  /* SIGNAL_STRENGTH_GREAT */
+                });
         logd("ServiceStateTrackerTest -Setup!");
     }
 
@@ -448,7 +471,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
     private CellInfoGsm getCellInfoGsm() {
         CellInfoGsm tmp = new CellInfoGsm();
-        tmp.setCellIdentity(new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst"));
+        tmp.setCellIdentity(new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst",
+                    Collections.emptyList()));
         tmp.setCellSignalStrength(new CellSignalStrengthGsm(-85, 2, 3));
         return tmp;
     }
@@ -681,6 +705,105 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
+    public void test5gNrSignalStrengthReportingCriteria_UseSsRsrp() {
+        SignalStrength ss = new SignalStrength(
+                new CellSignalStrengthCdma(),
+                new CellSignalStrengthGsm(),
+                new CellSignalStrengthWcdma(),
+                new CellSignalStrengthTdscdma(),
+                new CellSignalStrengthLte(),
+                new CellSignalStrengthNr(
+                    -139, /** csiRsrp NONE */
+                    -20, /** csiRsrq NONE */
+                    -23, /** CsiSinr NONE */
+                    -44, /** SsRsrp SIGNAL_STRENGTH_GREAT */
+                    -20, /** SsRsrq NONE */
+                    -23) /** SsSinr NONE */
+         );
+
+        // SSRSRP = 1 << 0
+        mBundle.putInt(CarrierConfigManager.KEY_PARAMETERS_USE_FOR_5G_NR_SIGNAL_BAR_INT,
+                CellSignalStrengthNr.USE_SSRSRP);
+        sendCarrierConfigUpdate();
+        mSimulatedCommands.setSignalStrength(ss);
+        mSimulatedCommands.notifySignalStrength();
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_GREAT, sst.getSignalStrength().getLevel());
+    }
+
+    @Test
+    public void test5gNrSignalStrengthReportingCriteria_UseSsRsrpAndSsRsrq() {
+        SignalStrength ss = new SignalStrength(
+                new CellSignalStrengthCdma(),
+                new CellSignalStrengthGsm(),
+                new CellSignalStrengthWcdma(),
+                new CellSignalStrengthTdscdma(),
+                new CellSignalStrengthLte(),
+                new CellSignalStrengthNr(
+                    -139, /** csiRsrp NONE */
+                    -20, /** csiRsrq NONE */
+                    -23, /** CsiSinr NONE */
+                    -44, /** SsRsrp SIGNAL_STRENGTH_GREAT */
+                    -20, /** SsRsrq NONE */
+                    -23) /** SsSinr NONE */
+        );
+
+        // SSRSRP = 1 << 0 | SSSINR = 1 << 2
+        mBundle.putInt(CarrierConfigManager.KEY_PARAMETERS_USE_FOR_5G_NR_SIGNAL_BAR_INT,
+                CellSignalStrengthNr.USE_SSRSRP | CellSignalStrengthNr.USE_SSRSRQ);
+        sendCarrierConfigUpdate();
+        mSimulatedCommands.setSignalStrength(ss);
+        mSimulatedCommands.notifySignalStrength();
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN,
+                sst.getSignalStrength().getLevel());
+    }
+
+    @Test
+    public void test5gNrSignalStrengthReportingCriteria_ConfiguredThresholds() {
+        SignalStrength ss = new SignalStrength(
+                new CellSignalStrengthCdma(),
+                new CellSignalStrengthGsm(),
+                new CellSignalStrengthWcdma(),
+                new CellSignalStrengthTdscdma(),
+                new CellSignalStrengthLte(),
+                new CellSignalStrengthNr(
+                    -139, /** csiRsrp NONE */
+                    -20, /** csiRsrq NONE */
+                    -23, /** CsiSinr NONE */
+                    -44, /** SsRsrp SIGNAL_STRENGTH_GREAT */
+                    -20, /** SsRsrq NONE */
+                    -23) /** SsSinr NONE */
+        );
+
+        // SSRSRP = 1 << 0
+        mBundle.putInt(CarrierConfigManager.KEY_PARAMETERS_USE_FOR_5G_NR_SIGNAL_BAR_INT,
+                CellSignalStrengthNr.USE_SSRSRP);
+        sendCarrierConfigUpdate();
+        mSimulatedCommands.setSignalStrength(ss);
+        mSimulatedCommands.notifySignalStrength();
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_GREAT, sst.getSignalStrength().getLevel());
+
+        int[] nrSsRsrpThresholds = {
+                -45, // SIGNAL_STRENGTH_POOR
+                -40, // SIGNAL_STRENGTH_MODERATE
+                -37, // SIGNAL_STRENGTH_GOOD
+                -34,  // SIGNAL_STRENGTH_GREAT
+        };
+        mBundle.putIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY,
+                nrSsRsrpThresholds);
+        mBundle.putInt(CarrierConfigManager.KEY_PARAMETERS_USE_FOR_5G_NR_SIGNAL_BAR_INT,
+                CellSignalStrengthNr.USE_SSRSRP);
+        sendCarrierConfigUpdate();
+        mSimulatedCommands.setSignalStrength(ss);
+        mSimulatedCommands.notifySignalStrength();
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_POOR,
+                sst.getSignalStrength().getLevel());
+    }
+
+    @Test
     public void testWcdmaSignalStrengthReportingCriteria() {
         SignalStrength ss = new SignalStrength(
                 new CellSignalStrengthCdma(),
@@ -718,7 +841,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     // TODO(nharold): we probably should remove support for this procedure (GET_LOC)
     public void testGsmCellLocation() {
         CellIdentityGsm cellIdentityGsm = new CellIdentityGsm(
-                2, 3, 900, 5, "001", "01", "test", "tst");
+                2, 3, 900, 5, "001", "01", "test", "tst", Collections.emptyList());
 
         NetworkRegistrationInfo result = new NetworkRegistrationInfo.Builder()
                 .setDomain(NetworkRegistrationInfo.DOMAIN_CS)
@@ -732,7 +855,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
         WorkSource workSource = new WorkSource(Process.myUid(), mContext.getPackageName());
-        GsmCellLocation cl = (GsmCellLocation) sst.getCellLocation();
+        GsmCellLocation cl = (GsmCellLocation) sst.getCellIdentity().asCellLocation();
         assertEquals(2, cl.getLac());
         assertEquals(3, cl.getCid());
     }
@@ -756,7 +879,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
         WorkSource workSource = new WorkSource(Process.myUid(), mContext.getPackageName());
-        CdmaCellLocation cl = (CdmaCellLocation) sst.getCellLocation();
+        CdmaCellLocation cl = (CdmaCellLocation) sst.getCellIdentity().asCellLocation();
         assertEquals(5, cl.getBaseStationLatitude());
         assertEquals(4, cl.getBaseStationLongitude());
     }
@@ -1388,7 +1511,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         doReturn(subId).when(mSubInfo).getSubscriptionId();
 
         doReturn(mSubInfo).when(mSubscriptionController).getActiveSubscriptionInfo(
-                anyInt(), anyString());
+                anyInt(), anyString(), nullable(String.class));
 
         final NotificationManager nm = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -1420,7 +1543,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.mSubId = subId;
         doReturn(subId).when(mSubInfo).getSubscriptionId();
         doReturn(mSubInfo).when(mSubscriptionController)
-                .getActiveSubscriptionInfo(anyInt(), anyString());
+                .getActiveSubscriptionInfo(anyInt(), anyString(), nullable(String.class));
 
         final NotificationManager nm = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -1453,7 +1576,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.mSubId = subId;
         doReturn(subId).when(mSubInfo).getSubscriptionId();
         doReturn(mSubInfo).when(mSubscriptionController)
-                .getActiveSubscriptionInfo(anyInt(), anyString());
+                .getActiveSubscriptionInfo(anyInt(), anyString(), nullable(String.class));
 
         final NotificationManager nm = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -1485,7 +1608,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.mSubId = subId;
         doReturn(subId).when(mSubInfo).getSubscriptionId();
         doReturn(mSubInfo).when(mSubscriptionController)
-                .getActiveSubscriptionInfo(anyInt(), anyString());
+                .getActiveSubscriptionInfo(anyInt(), anyString(), nullable(String.class));
 
         final NotificationManager nm = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -1792,12 +1915,33 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
     }
 
+    @Test
+    public void testPollStateOperatorWhileNotRegistered() {
+        final String[] oldOpNamesResult = new String[] { "Old carrier long", "Old carrier", "" };
+        final String[] badOpNamesResult = null;
+        sst.mPollingContext[0] = 1;
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_OPERATOR,
+                new AsyncResult(sst.mPollingContext, oldOpNamesResult, null)));
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertEquals(oldOpNamesResult[0], sst.getServiceState().getOperatorAlpha());
+
+        // if the device is not registered, the modem returns an invalid operator
+        sst.mPollingContext[0] = 1;
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_OPERATOR,
+                new AsyncResult(sst.mPollingContext, badOpNamesResult, null)));
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertEquals(null, sst.getServiceState().getOperatorAlpha());
+    }
+
     // Edge and GPRS are grouped under the same family and Edge has higher rate than GPRS.
     // Expect no rat update when move from E to G.
     @Test
     public void testRatRatchet() throws Exception {
         CellIdentityGsm cellIdentity =
-                new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst");
+                new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst",
+                        Collections.emptyList());
         // start on GPRS
         changeRegState(1, cellIdentity, 16, 1);
         assertEquals(ServiceState.STATE_IN_SERVICE, sst.getCurrentDataConnectionState());
@@ -1815,14 +1959,16 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Test
     public void testRatRatchetWithCellChange() throws Exception {
         CellIdentityGsm cellIdentity =
-                new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst");
+                new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst",
+                        Collections.emptyList());
         // update data reg state to be in service
         changeRegState(1, cellIdentity, 16, 2);
         assertEquals(ServiceState.STATE_IN_SERVICE, sst.getCurrentDataConnectionState());
         assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_GSM, sst.mSS.getRilVoiceRadioTechnology());
         assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilDataRadioTechnology());
         // RAT: EDGE -> GPRS cell ID: 1 -> 2
-        cellIdentity = new CellIdentityGsm(0, 2, 900, 5, "001", "01", "test", "tst");
+        cellIdentity = new CellIdentityGsm(0, 2, 900, 5, "001", "01", "test", "tst",
+                Collections.emptyList());
         changeRegState(1, cellIdentity, 16, 1);
         assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_GPRS, sst.mSS.getRilDataRadioTechnology());
 
@@ -1837,7 +1983,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testRatRatchetWithCellChangeBeforeRatChange() throws Exception {
         // cell ID update
         CellIdentityGsm cellIdentity =
-                new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst");
+                new CellIdentityGsm(0, 1, 900, 5, "001", "01", "test", "tst",
+                        Collections.emptyList());
         changeRegState(1, cellIdentity, 16, 2);
         assertEquals(ServiceState.STATE_IN_SERVICE, sst.getCurrentDataConnectionState());
         assertEquals(ServiceState.RIL_RADIO_TECHNOLOGY_EDGE, sst.mSS.getRilDataRadioTechnology());
@@ -1896,7 +2043,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testPhyChanBandwidthUpdatedOnDataRegState() throws Exception {
         // Cell ID change should trigger hasLocationChanged.
         CellIdentityLte cellIdentity5 =
-                new CellIdentityLte(1, 1, 5, 1, 5000, "001", "01", "test", "tst");
+                new CellIdentityLte(1, 1, 5, 1, 5000, "001", "01", "test", "tst",
+                        Collections.emptyList(), null);
 
         sendPhyChanConfigChange(new int[] {10000});
         sendRegStateUpdateForLteCellId(cellIdentity5);
@@ -1907,7 +2055,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testPhyChanBandwidthNotUpdatedWhenInvalidInCellIdentity() throws Exception {
         // Cell ID change should trigger hasLocationChanged.
         CellIdentityLte cellIdentityInv =
-                new CellIdentityLte(1, 1, 5, 1, 12345, "001", "01", "test", "tst");
+                new CellIdentityLte(1, 1, 5, 1, 12345, "001", "01", "test", "tst",
+                        Collections.emptyList(), null);
 
         sendPhyChanConfigChange(new int[] {10000});
         sendRegStateUpdateForLteCellId(cellIdentityInv);
@@ -1918,7 +2067,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testPhyChanBandwidthPrefersCarrierAggregationReport() throws Exception {
         // Cell ID change should trigger hasLocationChanged.
         CellIdentityLte cellIdentity10 =
-                new CellIdentityLte(1, 1, 5, 1, 10000, "001", "01", "test", "tst");
+                new CellIdentityLte(1, 1, 5, 1, 10000, "001", "01", "test", "tst",
+                        Collections.emptyList(), null);
 
         sendPhyChanConfigChange(new int[] {10000, 5000});
         sendRegStateUpdateForLteCellId(cellIdentity10);
@@ -1929,7 +2079,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     public void testPhyChanBandwidthRatchetedOnPhyChanBandwidth() throws Exception {
         // LTE Cell with bandwidth = 10000
         CellIdentityLte cellIdentity10 =
-                new CellIdentityLte(1, 1, 1, 1, 10000, "1", "1", "test", "tst");
+                new CellIdentityLte(1, 1, 1, 1, 10000, "1", "1", "test", "tst",
+                        Collections.emptyList(), null);
 
         sendRegStateUpdateForLteCellId(cellIdentity10);
         assertTrue(Arrays.equals(new int[] {10000}, sst.mSS.getCellBandwidths()));
@@ -1976,7 +2127,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // Start state: Cell data only LTE + IWLAN
         CellIdentityLte cellIdentity =
-                new CellIdentityLte(1, 1, 5, 1, 5000, "001", "01", "test", "tst");
+                new CellIdentityLte(1, 1, 5, 1, 5000, "001", "01", "test", "tst",
+                        Collections.emptyList(), null);
         changeRegStateWithIwlan(
                 // WWAN
                 NetworkRegistrationInfo.REGISTRATION_STATE_HOME, cellIdentity,
@@ -2131,7 +2283,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         sst.mSS = ss;
 
         CellIdentityLte cellId =
-                new CellIdentityLte(1, 1, 5, 1, 5000, "001", "01", "test", "tst");
+                new CellIdentityLte(1, 1, 5, 1, 5000, "001", "01", "test", "tst",
+                        Collections.emptyList(), null);
         LteVopsSupportInfo lteVopsSupportInfo =
                 new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_SUPPORTED,
                     LteVopsSupportInfo.LTE_STATUS_NOT_SUPPORTED);
@@ -2356,6 +2509,27 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_SPN)).isTrue();
         assertThat(b.getString(TelephonyIntents.EXTRA_PLMN)).isEqualTo(plmn);
         assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_PLMN)).isTrue();
+    }
+
+    @Test
+    public void testShouldForceDisplayNoService_forceBasedOnLocale() {
+        // set up unaffected locale (US) and clear the resource
+        doReturn("us").when(mLocaleTracker).getCurrentCountry();
+        mContextFixture.putStringArrayResource(
+                com.android.internal.R.array.config_display_no_service_when_sim_unready,
+                new String[0]);
+        assertFalse(sst.shouldForceDisplayNoService());
+
+        // set up the resource to include Germany
+        mContextFixture.putStringArrayResource(
+                com.android.internal.R.array.config_display_no_service_when_sim_unready,
+                new String[]{"de"});
+        doReturn("us").when(mLocaleTracker).getCurrentCountry();
+        assertFalse(sst.shouldForceDisplayNoService());
+
+        // mock the locale to Germany
+        doReturn("de").when(mLocaleTracker).getCurrentCountry();
+        assertTrue(sst.shouldForceDisplayNoService());
     }
 
     private Bundle getExtrasFromLastSpnUpdateIntent() {

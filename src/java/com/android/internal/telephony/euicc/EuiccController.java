@@ -15,8 +15,11 @@
  */
 package com.android.internal.telephony.euicc;
 
+import static com.android.internal.telephony.euicc.EuiccConnector.BIND_TIMEOUT_MILLIS;
+
 import android.Manifest;
 import android.Manifest.permission;
+import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
@@ -40,6 +43,7 @@ import android.telephony.TelephonyManager;
 import android.telephony.UiccAccessRule;
 import android.telephony.UiccCardInfo;
 import android.telephony.euicc.DownloadableSubscription;
+import android.telephony.euicc.EuiccCardManager.ResetOption;
 import android.telephony.euicc.EuiccInfo;
 import android.telephony.euicc.EuiccManager;
 import android.telephony.euicc.EuiccManager.OtaStatus;
@@ -52,8 +56,10 @@ import com.android.internal.telephony.euicc.EuiccConnector.OtaStatusChangedCallb
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 /** Backing implementation of {@link android.telephony.euicc.EuiccManager}. */
@@ -81,6 +87,11 @@ public class EuiccController extends IEuiccController.Stub {
     private final TelephonyManager mTelephonyManager;
     private final AppOpsManager mAppOpsManager;
     private final PackageManager mPackageManager;
+
+    // These values should be set or updated upon 1) system boot, 2) EuiccService/LPA is bound to
+    // the phone process, 3) values are updated remotely by server flags.
+    private List<String> mSupportedCountries;
+    private List<String> mUnsupportedCountries;
 
     /** Initialize the instance. Should only be called once. */
     public static EuiccController init(Context context) {
@@ -238,6 +249,89 @@ public class EuiccController extends IEuiccController.Stub {
             PendingIntent callbackIntent) {
         getDownloadableSubscriptionMetadata(cardId,
                 subscription, false /* forceDeactivateSim */, callingPackage, callbackIntent);
+    }
+
+    /**
+     * Sets the supported or unsupported countries for eUICC.
+     *
+     * <p>If {@code isSupported} is true, the supported country list will be replaced by
+     * {@code countriesList}. Otherwise, unsupported country list will be replaced by
+     * {@code countriesList}. For how we determine whether a country is supported by checking
+     * supported and unsupported country list please check {@link EuiccManager#isSupportedCountry}.
+     *
+     * @param isSupported should be true if caller wants to set supported country list. If
+     * isSupported is false, un-supported country list will be updated.
+     * @param countriesList is a list of strings contains country ISO codes in uppercase.
+     */
+    @Override
+    public void setSupportedCountries(boolean isSupported, @NonNull List<String> countriesList) {
+        if (isSupported) {
+            mSupportedCountries = countriesList;
+        } else {
+            mUnsupportedCountries = countriesList;
+        }
+    }
+
+    /**
+     * Gets the supported or unsupported countries for eUICC.
+     *
+     * <p>If {@code isSupported} is true, the supported country list will be returned. Otherwise,
+     * unsupported country list will be returned.
+     *
+     * @param isSupported should be true if caller wants to get supported country list. If
+     * isSupported is false, unsupported country list will be returned.
+     * @return a list of strings contains country ISO codes in uppercase.
+     */
+    @Override
+    @NonNull
+    public List<String> getSupportedCountries(boolean isSupported) {
+        if (isSupported && mSupportedCountries != null) {
+            return mSupportedCountries;
+        } else if (!isSupported && mUnsupportedCountries != null) {
+            return mUnsupportedCountries;
+        }
+        return Collections.emptyList();
+    }
+
+    /**
+     * Returns whether the given country supports eUICC.
+     *
+     * <p>Supported country list has a higher prority than unsupported country list. If the
+     * supported country list is not empty, {@code countryIso} will be considered as supported when
+     * it exists in the supported country list. Otherwise {@code countryIso} is not supported. If
+     * the supported country list is empty, {@code countryIso} will be considered as supported if it
+     * does not exist in the unsupported country list. Otherwise {@code countryIso} is not
+     * supported. If both supported and unsupported country lists are empty, then all countries are
+     * consider be supported. For how to set supported and unsupported country list, please check
+     * {@link #setSupportedCountries}.
+     *
+     * @param countryIso should be the ISO-3166 country code is provided in uppercase 2 character
+     * format.
+     * @return whether the given country supports eUICC or not.
+     */
+    @Override
+    public boolean isSupportedCountry(@NonNull String countryIso) {
+        if (mSupportedCountries == null || mSupportedCountries.isEmpty()) {
+            Log.i(TAG, "Using blacklist unsupportedCountries=" + mUnsupportedCountries);
+            return !isEsimUnsupportedCountry(countryIso);
+        } else {
+            Log.i(TAG, "Using whitelist supportedCountries=" + mSupportedCountries);
+            return isEsimSupportedCountry(countryIso);
+        }
+    }
+
+    private boolean isEsimSupportedCountry(String countryIso) {
+        if (mSupportedCountries == null || TextUtils.isEmpty(countryIso)) {
+            return true;
+        }
+        return mSupportedCountries.contains(countryIso);
+    }
+
+    private boolean isEsimUnsupportedCountry(String countryIso) {
+        if (mUnsupportedCountries == null || TextUtils.isEmpty(countryIso)) {
+            return false;
+        }
+        return mUnsupportedCountries.contains(countryIso);
     }
 
     void getDownloadableSubscriptionMetadata(int cardId, DownloadableSubscription subscription,
@@ -957,7 +1051,50 @@ public class EuiccController extends IEuiccController.Stub {
         }
         long token = Binder.clearCallingIdentity();
         try {
-            mConnector.eraseSubscriptions(cardId, new EuiccConnector.EraseCommandCallback() {
+            mConnector.eraseSubscriptions(
+                    cardId, new EuiccConnector.EraseCommandCallback() {
+                        @Override
+                        public void onEraseComplete(int result) {
+                            Intent extrasIntent = new Intent();
+                            final int resultCode;
+                            switch (result) {
+                                case EuiccService.RESULT_OK:
+                                    resultCode = OK;
+                                    refreshSubscriptionsAndSendResult(
+                                            callbackIntent, resultCode, extrasIntent);
+                                    return;
+                                default:
+                                    resultCode = ERROR;
+                                    extrasIntent.putExtra(
+                                            EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE,
+                                            result);
+                                    break;
+                            }
+
+                            sendResult(callbackIntent, resultCode, extrasIntent);
+                        }
+
+                        @Override
+                        public void onEuiccServiceUnavailable() {
+                            sendResult(callbackIntent, ERROR, null /* extrasIntent */);
+                        }
+                    });
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    @Override
+    public void eraseSubscriptionsWithOptions(
+            int cardId, @ResetOption int options, PendingIntent callbackIntent) {
+        if (!callerCanWriteEmbeddedSubscriptions()) {
+            throw new SecurityException(
+                    "Must have WRITE_EMBEDDED_SUBSCRIPTIONS to erase subscriptions");
+        }
+        long token = Binder.clearCallingIdentity();
+        try {
+            mConnector.eraseSubscriptionsWithOptions(
+                    cardId, options, new EuiccConnector.EraseCommandCallback() {
                 @Override
                 public void onEraseComplete(int result) {
                     Intent extrasIntent = new Intent();
@@ -1066,12 +1203,37 @@ public class EuiccController extends IEuiccController.Stub {
     }
 
     @Override
-    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+    public void dump(FileDescriptor fd, final PrintWriter pw, String[] args) {
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.DUMP, "Requires DUMP");
         final long token = Binder.clearCallingIdentity();
+        pw.println("===== BEGIN EUICC CLINIC =====");
         try {
+            pw.println("===== EUICC CONNECTOR =====");
             mConnector.dump(fd, pw, args);
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
+            mConnector.dumpEuiccService(new EuiccConnector.DumpEuiccServiceCommandCallback() {
+                @Override
+                public void onDumpEuiccServiceComplete(String logs) {
+                    pw.println("===== EUICC SERVICE =====");
+                    pw.println(logs);
+                    countDownLatch.countDown();
+                }
+
+                @Override
+                public void onEuiccServiceUnavailable() {
+                    pw.println("===== EUICC SERVICE UNAVAILABLE =====");
+                    countDownLatch.countDown();
+                }
+            });
+
+            // Wait up to 30 seconds
+            if (!countDownLatch.await(BIND_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)) {
+                pw.println("===== EUICC SERVICE TIMEOUT =====");
+            }
+        } catch (InterruptedException e) {
+            pw.println("===== EUICC SERVICE INTERRUPTED =====");
         } finally {
+            pw.println("===== END EUICC CLINIC =====");
             Binder.restoreCallingIdentity(token);
         }
     }
@@ -1184,7 +1346,8 @@ public class EuiccController extends IEuiccController.Stub {
 
         final PackageInfo info;
         try {
-            info = mPackageManager.getPackageInfo(callingPackage, PackageManager.GET_SIGNATURES);
+            info = mPackageManager.getPackageInfo(callingPackage,
+                PackageManager.GET_SIGNING_CERTIFICATES);
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "Calling package valid but gone");
             return false;
@@ -1202,7 +1365,7 @@ public class EuiccController extends IEuiccController.Stub {
     }
 
     private boolean supportMultiActiveSlots() {
-        return mTelephonyManager.getMaxPhoneCount() > 1;
+        return mTelephonyManager.getSupportedModemCount() > 1;
     }
 
     // Checks whether the caller can manage the active embedded subscription on the SIM with the

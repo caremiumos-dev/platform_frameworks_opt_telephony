@@ -16,15 +16,12 @@
 
 package com.android.internal.telephony.uicc;
 
-import static com.android.internal.telephony.TelephonyProperties.PROPERTY_TEST_CSIM;
-
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncResult;
 import android.os.Message;
-import android.os.SystemProperties;
-import android.telephony.Rlog;
+import android.sysprop.TelephonyProperties;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
@@ -37,6 +34,7 @@ import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.cdma.sms.UserData;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.util.BitwiseInputStream;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -326,7 +324,7 @@ public class RuimRecords extends IccRecords {
                     // SPN is checked to have characters in printable ASCII
                     // range. If not, they are decoded with
                     // ENCODING_GSM_7BIT_ALPHABET scheme.
-                    if (TextUtils.isPrintableAsciiOnly(spn)) {
+                    if (isPrintableAsciiOnly(spn)) {
                         setServiceProviderName(spn);
                     } else {
                         if (DBG) log("Some corruption in SPN decoding = " + spn);
@@ -349,6 +347,22 @@ public class RuimRecords extends IccRecords {
             mTelephonyManager.setSimOperatorNameForPhone(
                     mParentApp.getPhoneId(), getServiceProviderName());
         }
+    }
+
+    private static boolean isPrintableAsciiOnly(final CharSequence str) {
+        final int len = str.length();
+        for (int i = 0; i < len; i++) {
+            if (!isPrintableAscii(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean isPrintableAscii(final char c) {
+        final int asciiFirst = 0x20;
+        final int asciiLast = 0x7E;  // included
+        return (asciiFirst <= c && c <= asciiLast) || c == '\r' || c == '\n';
     }
 
     private class EfCsimMdnLoaded implements IccRecordLoaded {
@@ -875,6 +889,8 @@ public class RuimRecords extends IccRecords {
         mFh.loadEFTransparent(EF_CSIM_MIPUPP,
                 obtainMessage(EVENT_GET_ICC_RECORD_DONE, new EfCsimMipUppLoaded()));
         mRecordsToLoad++;
+        mFh.getEFLinearRecordSize(EF_SMS, obtainMessage(EVENT_GET_SMS_RECORD_SIZE_DONE));
+        mRecordsToLoad++;
 
         if (DBG) log("fetchRuimRecords " + mRecordsToLoad + " requested: " + mRecordsRequested);
         // Further records that can be inserted are Operator/OEM dependent
@@ -886,9 +902,9 @@ public class RuimRecords extends IccRecords {
         // to determine if the SIM is provisioned.  Otherwise,
         // consider the SIM is provisioned. (for case of ordinal
         // USIM only UICC.)
-        // If PROPERTY_TEST_CSIM is defined, bypess provision check
-        // and consider the SIM is provisioned.
-        if (SystemProperties.getBoolean(PROPERTY_TEST_CSIM, false)) {
+        // If test_csim is true, bypess provision check and
+        // consider the SIM is provisioned.
+        if (TelephonyProperties.test_csim().orElse(false)) {
             return true;
         }
 

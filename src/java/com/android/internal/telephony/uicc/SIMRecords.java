@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony.uicc;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncResult;
@@ -24,10 +24,10 @@ import android.os.Message;
 import android.os.PersistableBundle;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.Rlog;
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionInfo;
 import android.text.TextUtils;
+import android.util.Pair;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.MccTable;
@@ -35,6 +35,7 @@ import com.android.internal.telephony.SmsConstants;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.gsm.SimTlv;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -135,6 +136,10 @@ public class SIMRecords extends IccRecords {
     private static final int CFIS_ADN_CAPABILITY_ID_OFFSET = 14;
     private static final int CFIS_ADN_EXTENSION_ID_OFFSET = 15;
 
+    // 3GPP specification constants
+    // Spec reference TS 31.102 section 4.2.16
+    private static final int FPLMN_BYTE_SIZE = 3;
+
     // ***** Event Constants
     private static final int SIM_RECORD_EVENT_BASE = 0x00;
     private static final int EVENT_GET_IMSI_DONE = 3 + SIM_RECORD_EVENT_BASE;
@@ -169,7 +174,8 @@ public class SIMRecords extends IccRecords {
     private static final int EVENT_GET_HPLMN_W_ACT_DONE = 39 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_GET_EHPLMN_DONE = 40 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_GET_FPLMN_DONE = 41 + SIM_RECORD_EVENT_BASE;
-
+    private static final int EVENT_GET_FPLMN_SIZE_DONE = 42 + SIM_RECORD_EVENT_BASE;
+    private static final int EVENT_SET_FPLMN_DONE = 43 + SIM_RECORD_EVENT_BASE;
     // ***** Constructor
 
     public SIMRecords(UiccCardApplication app, Context c, CommandsInterface ci) {
@@ -1187,22 +1193,80 @@ public class SIMRecords extends IccRecords {
                     data = (byte[]) ar.result;
                     if (ar.exception != null || data == null) {
                         loge("Failed getting Forbidden PLMNs: " + ar.exception);
-                        break;
                     } else {
                         mFplmns = parseBcdPlmnList(data, "Forbidden");
                     }
                     if (msg.arg1 == HANDLER_ACTION_SEND_RESPONSE) {
                         if (VDBG) logv("getForbiddenPlmns(): send async response");
                         isRecordLoadResponse = false;
-                        Message response = retrievePendingResponseMessage(msg.arg2);
+                        int key = msg.arg2;
+                        Message response = retrievePendingTransaction(key).first;
                         if (response != null) {
-                            AsyncResult.forMessage(
-                                    response, Arrays.copyOf(mFplmns, mFplmns.length), null);
+                            if (ar.exception == null && data != null && mFplmns != null) {
+                                AsyncResult.forMessage(response, Arrays.copyOf(mFplmns,
+                                        mFplmns.length), null);
+                            } else {
+                                AsyncResult.forMessage(response, null, ar.exception);
+                            }
                             response.sendToTarget();
                         } else {
                             loge("Failed to retrieve a response message for FPLMN");
                             break;
                         }
+                    }
+                    break;
+
+                case EVENT_GET_FPLMN_SIZE_DONE:
+                    ar = (AsyncResult) msg.obj;
+                    if (ar.exception != null) {
+                        Message response = (Message) ar.userObj;
+                        AsyncResult.forMessage(response).exception = ar.exception;
+                        response.sendToTarget();
+                        break;
+                    }
+                    int key = msg.arg2;
+                    Pair<Message, Object> transaction = retrievePendingTransaction(key);
+                    Message response = transaction.first;
+                    List<String> fplmns = (List<String>) transaction.second;
+                    int dataLength = (int) ar.result;
+                    if (dataLength < 0 || dataLength % FPLMN_BYTE_SIZE != 0) {
+                        loge("Failed to retrieve a correct fplmn size: " + dataLength);
+                        AsyncResult.forMessage(response, -1, null);
+                        response.sendToTarget();
+                        break;
+                    }
+
+                    int maxWritebaleFplmns = dataLength / FPLMN_BYTE_SIZE;
+                    List<String> fplmnsToWrite;
+                    if (fplmns.size() <= maxWritebaleFplmns) {
+                        fplmnsToWrite = fplmns;
+                    } else {
+                        fplmnsToWrite = fplmns.subList(0, maxWritebaleFplmns);
+                    }
+                    key = storePendingTransaction(response, fplmnsToWrite);
+                    byte[] encodededFplmns = IccUtils.encodeFplmns(fplmns, dataLength);
+                    mFh.updateEFTransparent(
+                            EF_FPLMN,
+                            encodededFplmns,
+                            obtainMessage(
+                                    EVENT_SET_FPLMN_DONE,
+                                    msg.arg1,
+                                    key));
+                    break;
+
+                case EVENT_SET_FPLMN_DONE:
+                    ar = (AsyncResult) msg.obj;
+                    if (ar.exception != null) {
+                        loge("Failed setting Forbidden PLMNs: " + ar.exception);
+                    } else {
+                        transaction = retrievePendingTransaction(msg.arg2);
+                        response = transaction.first;
+                        mFplmns = ((List<String>) transaction.second).toArray(new String[0]);
+                        if (msg.arg1 == HANDLER_ACTION_SEND_RESPONSE) {
+                            AsyncResult.forMessage(response, mFplmns.length, null);
+                            response.sendToTarget();
+                        }
+                        log("Successfully setted fplmns " + ar.result);
                     }
                     break;
 
@@ -1457,10 +1521,24 @@ public class SIMRecords extends IccRecords {
      * in the result field of an AsyncResult in the response.obj.
      */
     public void getForbiddenPlmns(Message response) {
-        int key = storePendingResponseMessage(response);
+        int key = storePendingTransaction(response);
         mFh.loadEFTransparent(EF_FPLMN, obtainMessage(
                     EVENT_GET_FPLMN_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
     }
+
+    /**
+     * Set the forbidden PLMNs on the sim
+     *
+     * @param response Response to be send back.
+     * @param fplmns List of fplmns to be written to SIM.
+     */
+    public void setForbiddenPlmns(Message response, List<String> fplmns) {
+        int key = storePendingTransaction(response, fplmns);
+        mFh.getEFTransparentRecordSize(
+                EF_FPLMN,
+                obtainMessage(EVENT_GET_FPLMN_SIZE_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
+    }
+
 
     @Override
     public void onReady() {
@@ -1581,6 +1659,8 @@ public class SIMRecords extends IccRecords {
         mRecordsToLoad++;
 
         loadEfLiAndEfPl();
+        mFh.getEFLinearRecordSize(EF_SMS, obtainMessage(EVENT_GET_SMS_RECORD_SIZE_DONE));
+        mRecordsToLoad++;
 
         // XXX should seek instead of examining them all
         if (false) { // XXX
@@ -1612,6 +1692,8 @@ public class SIMRecords extends IccRecords {
     /**
      * States of Get SPN Finite State Machine which only used by getSpnFsm()
      */
+    @UnsupportedAppUsage(implicitMember =
+            "values()[Lcom/android/internal/telephony/uicc/SIMRecords$GetSpnFsmState;")
     private enum GetSpnFsmState {
         IDLE,               // No initialized
         @UnsupportedAppUsage
@@ -1806,7 +1888,7 @@ public class SIMRecords extends IccRecords {
                 tmpSpdi.add(plmnCode);
             }
         }
-        mSpdi = (String[]) tmpSpdi.toArray();
+        mSpdi = tmpSpdi.toArray(new String[tmpSpdi.size()]);
     }
 
     /**

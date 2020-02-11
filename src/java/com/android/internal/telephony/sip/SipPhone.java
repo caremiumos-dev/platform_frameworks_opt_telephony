@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.sip;
 
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.rtp.AudioGroup;
@@ -31,7 +32,6 @@ import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
 import android.text.TextUtils;
-import android.telephony.Rlog;
 
 import com.android.internal.telephony.Call;
 import com.android.internal.telephony.CallStateException;
@@ -39,6 +39,7 @@ import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneNotifier;
+import com.android.telephony.Rlog;
 
 import java.text.ParseException;
 import java.util.List;
@@ -59,7 +60,9 @@ public class SipPhone extends SipPhoneBase {
 
     // A call that is ringing or (call) waiting
     private SipCall mRingingCall = new SipCall();
+    @UnsupportedAppUsage
     private SipCall mForegroundCall = new SipCall();
+    @UnsupportedAppUsage
     private SipCall mBackgroundCall = new SipCall();
 
     private SipManager mSipManager;
@@ -180,6 +183,12 @@ public class SipPhone extends SipPhoneBase {
                 throw new CallStateException("phone not ringing");
             }
         }
+    }
+
+    @Override
+    public Connection startConference(String[] participantsToDial, DialArgs dialArgs)
+            throws CallStateException {
+        throw new CallStateException("startConference: not supported");
     }
 
     @Override
@@ -431,6 +440,7 @@ public class SipPhone extends SipPhoneBase {
         return false;
     }
 
+    @UnsupportedAppUsage
     private void log(String s) {
         Rlog.d(LOG_TAG, s);
     }
@@ -439,6 +449,7 @@ public class SipPhone extends SipPhoneBase {
         Rlog.d(LOG_TAG, s);
     }
 
+    @UnsupportedAppUsage
     private void loge(String s) {
         Rlog.e(LOG_TAG, s);
     }
@@ -458,6 +469,7 @@ public class SipPhone extends SipPhoneBase {
             setState(Call.State.IDLE);
         }
 
+        @UnsupportedAppUsage
         void switchWith(SipCall that) {
             if (SC_DBG) log("switchWith");
             synchronized (SipPhone.class) {
@@ -537,6 +549,16 @@ public class SipPhone extends SipPhoneBase {
             }
         }
 
+        /**
+         * Hangup the ringing call with a specified reason; reason is not supported on SIP.
+         * @param rejectReason
+         */
+        @Override
+        public void hangup(@android.telecom.Call.RejectReason int rejectReason)
+                throws CallStateException  {
+            hangup();
+        }
+
         SipConnection initIncomingCall(SipAudioCall sipAudioCall, boolean makeCallWait) {
             SipProfile callee = sipAudioCall.getPeerProfile();
             SipConnection c = new SipConnection(this, callee);
@@ -594,6 +616,7 @@ public class SipPhone extends SipPhoneBase {
                     audioGroup.getMode()));
         }
 
+        @UnsupportedAppUsage
         void hold() throws CallStateException {
             if (SC_DBG) log("hold:");
             setState(State.HOLDING);
@@ -601,10 +624,11 @@ public class SipPhone extends SipPhoneBase {
             setAudioGroupMode();
         }
 
+        @UnsupportedAppUsage
         void unhold() throws CallStateException {
             if (SC_DBG) log("unhold:");
             setState(State.ACTIVE);
-            AudioGroup audioGroup = new AudioGroup();
+            AudioGroup audioGroup = new AudioGroup(mContext);
             for (Connection c : mConnections) {
                 ((SipConnection) c).unhold(audioGroup);
             }

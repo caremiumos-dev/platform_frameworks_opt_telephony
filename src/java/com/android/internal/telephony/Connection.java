@@ -16,19 +16,21 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.telecom.ConferenceParticipant;
 import android.telephony.DisconnectCause;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.emergency.EmergencyNumber;
 import android.util.Log;
 
+import com.android.ims.internal.ConferenceParticipant;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
+import com.android.internal.telephony.util.TelephonyUtils;
+import com.android.telephony.Rlog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public abstract class Connection {
     private static final String TAG = "Connection";
+
+    public static final String ADHOC_CONFERENCE_ADDRESS = "tel:conf-factory";
 
     public interface PostDialListener {
         void onPostDialWait();
@@ -94,7 +98,7 @@ public abstract class Connection {
     public interface Listener {
         public void onVideoStateChanged(int videoState);
         public void onConnectionCapabilitiesChanged(int capability);
-        public void onCallRadioTechChanged(@ServiceState.RilRadioTechnology int vrat);
+        public void onCallRadioTechChanged(@RilRadioTechnology int vrat);
         public void onVideoProviderChanged(
                 android.telecom.Connection.VideoProvider videoProvider);
         public void onAudioQualityChanged(int audioQuality);
@@ -125,7 +129,7 @@ public abstract class Connection {
         @Override
         public void onConnectionCapabilitiesChanged(int capability) {}
         @Override
-        public void onCallRadioTechChanged(@ServiceState.RilRadioTechnology int vrat) {}
+        public void onCallRadioTechChanged(@RilRadioTechnology int vrat) {}
         @Override
         public void onVideoProviderChanged(
                 android.telecom.Connection.VideoProvider videoProvider) {}
@@ -183,6 +187,8 @@ public abstract class Connection {
     protected String mAddress;     // MAY BE NULL!!!
     @UnsupportedAppUsage
     protected String mDialString;          // outgoing calls only
+    protected String[] mParticipantsToDial;// outgoing calls only
+    protected boolean mIsAdhocConference;
     @UnsupportedAppUsage
     protected int mNumberPresentation = PhoneConstants.PRESENTATION_ALLOWED;
     @UnsupportedAppUsage
@@ -216,6 +222,9 @@ public abstract class Connection {
     protected int mCause = DisconnectCause.NOT_DISCONNECTED;
     protected PostDialState mPostDialState = PostDialState.NOT_STARTED;
 
+    // Store the current audio code
+    protected int mAudioCodec;
+
     @UnsupportedAppUsage
     private static String LOG_TAG = "Connection";
 
@@ -227,7 +236,7 @@ public abstract class Connection {
      *
      * This is used to propagate the call radio technology to upper layer.
      */
-    private @ServiceState.RilRadioTechnology int mCallRadioTech =
+    private @RilRadioTechnology int mCallRadioTech =
             ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
     private boolean mAudioModeIsVoip;
     private int mAudioQuality;
@@ -238,6 +247,7 @@ public abstract class Connection {
     private int mPhoneType;
     private boolean mAnsweringDisconnectsActiveCall;
     private boolean mAllowAddCallDuringVideoCall;
+    private boolean mAllowHoldingVideoCall;
 
     private boolean mIsEmergencyCall;
 
@@ -305,6 +315,20 @@ public abstract class Connection {
     @UnsupportedAppUsage
     public String getAddress() {
         return mAddress;
+    }
+
+    /**
+     * Gets the participants address (e.g. phone number) associated with connection.
+     *
+     * @return address or null if unavailable
+     */
+    public String[] getParticipantsToDial() {
+        return mParticipantsToDial;
+    }
+
+    // return whether connection is AdhocConference or not
+    public boolean isAdhocConference() {
+        return mIsAdhocConference;
     }
 
     /**
@@ -902,7 +926,7 @@ public abstract class Connection {
      * @return the RIL Voice Radio Technology used for current connection,
      *         see {@code RIL_RADIO_TECHNOLOGY_*} in {@link android.telephony.ServiceState}.
      */
-    public @ServiceState.RilRadioTechnology int getCallRadioTech() {
+    public @RilRadioTechnology int getCallRadioTech() {
         return mCallRadioTech;
     }
 
@@ -980,7 +1004,7 @@ public abstract class Connection {
      * @param vrat the RIL voice radio technology for current connection,
      *             see {@code RIL_RADIO_TECHNOLOGY_*} in {@link android.telephony.ServiceState}.
      */
-    public void setCallRadioTech(@ServiceState.RilRadioTechnology int vrat) {
+    public void setCallRadioTech(@RilRadioTechnology int vrat) {
         if (mCallRadioTech == vrat) {
             return;
         }
@@ -1024,7 +1048,7 @@ public abstract class Connection {
             int previousCount = mExtras.size();
             // Prevent vendors from passing in extras other than primitive types and android API
             // parcelables.
-            mExtras = mExtras.filterValues();
+            mExtras = TelephonyUtils.filterValues(mExtras);
             int filteredCount = mExtras.size();
             if (filteredCount != previousCount) {
                 Rlog.i(TAG, "setConnectionExtras: filtering " + (previousCount - filteredCount)
@@ -1073,6 +1097,14 @@ public abstract class Connection {
 
     public void setAllowAddCallDuringVideoCall(boolean allowAddCallDuringVideoCall) {
         mAllowAddCallDuringVideoCall = allowAddCallDuringVideoCall;
+    }
+
+    public boolean shouldAllowHoldingVideoCall() {
+        return mAllowHoldingVideoCall;
+    }
+
+    public void setAllowHoldingVideoCall(boolean allowHoldingVideoCall) {
+        mAllowHoldingVideoCall = allowHoldingVideoCall;
     }
 
     /**
@@ -1353,5 +1385,13 @@ public abstract class Connection {
                 .append(" state: " + getState())
                 .append(" post dial state: " + getPostDialState());
         return str.toString();
+    }
+
+    /**
+     * Get current audio codec.
+     * @return current audio codec.
+     */
+    public int getAudioCodec() {
+        return mAudioCodec;
     }
 }

@@ -21,6 +21,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
+import android.net.TelephonyNetworkSpecifier;
 import android.os.Handler;
 import android.telephony.SubscriptionManager;
 import android.util.Log;
@@ -52,7 +53,7 @@ public class CellularNetworkValidator {
 
     private int mState = STATE_IDLE;
     private int mSubId;
-    private int mTimeoutInMs;
+    private long mTimeoutInMs;
     private boolean mReleaseAfterValidation;
 
     private NetworkRequest mNetworkRequest;
@@ -101,7 +102,7 @@ public class CellularNetworkValidator {
      */
     public boolean isValidationFeatureSupported() {
         return PhoneConfigurationManager.getInstance().getCurrentPhoneCapability()
-                .validationBeforeSwitchSupported;
+                .getPsDataConnectionLingerTimeMillis() > 0;
     }
 
     @VisibleForTesting
@@ -114,7 +115,7 @@ public class CellularNetworkValidator {
     /**
      * API to start a validation
      */
-    public synchronized void validate(int subId, int timeoutInMs,
+    public synchronized void validate(int subId, long timeoutInMs,
             boolean releaseAfterValidation, ValidationCallback callback) {
         // If it's already validating the same subscription, do nothing.
         if (subId == mSubId) return;
@@ -193,7 +194,8 @@ public class CellularNetworkValidator {
         return new NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                 .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-                .setNetworkSpecifier(String.valueOf(mSubId))
+                .setNetworkSpecifier(new TelephonyNetworkSpecifier.Builder()
+                        .setSubscriptionId(mSubId).build())
                 .build();
     }
 

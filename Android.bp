@@ -36,39 +36,22 @@ filegroup {
     path: "src/java",
 }
 
-java_library {
-    name: "telephony-common",
+filegroup {
+    name: "jarjar-rules-shared",
+    srcs: ["jarjar-rules-shared.txt"],
+}
+
+android_app {
+    name: "telephony-resources",
     installable: true,
 
-    aidl: {
-        local_include_dirs: ["src/java"],
-    },
-    srcs: [
-        ":opt-telephony-common-srcs",
-        "src/java/**/I*.aidl",
-        "src/java/**/*.logtags",
+    resource_dirs: [
+        "res",
     ],
 
-    jarjar_rules: ":framework-jarjar-rules",
-
-    libs: [
-        "android.hardware.radio-V1.0-java",
-        "android.hardware.radio-V1.1-java",
-        "android.hardware.radio-V1.2-java",
-        "android.hardware.radio-V1.3-java",
-        "android.hardware.radio-V1.4-java",
-        "voip-common",
-        "ims-common",
-        "services",
-    ],
-    static_libs: [
-        "android.hardware.radio.config-V1.0-java-shallow",
-        "android.hardware.radio.config-V1.1-java-shallow",
-        "android.hardware.radio.config-V1.2-java-shallow",
-        "android.hardware.radio.deprecated-V1.0-java-shallow",
-        "telephony-protos",
-        "ecc-protos-lite",
-    ],
+    platform_apis: true,
+    manifest: "AndroidManifest_Resources.xml",
+    export_package_resources: true,
 
     product_variables: {
         pdk: {
@@ -78,3 +61,52 @@ java_library {
     },
 }
 
+java_library {
+    name: "telephony-common",
+    installable: true,
+
+    aidl: {
+        local_include_dirs: ["src/java"],
+    },
+    srcs: [
+        ":opt-telephony-common-srcs",
+        ":framework-telephony-stack-shared-srcs",
+        "src/java/**/I*.aidl",
+        "src/java/**/*.logtags",
+    ],
+
+    jarjar_rules: ":jarjar-rules-shared",
+
+    libs: [
+        "android.hardware.radio-V1.0-java",
+        "android.hardware.radio-V1.1-java",
+        "android.hardware.radio-V1.2-java",
+        "android.hardware.radio-V1.3-java",
+        "android.hardware.radio-V1.4-java",
+        "android.hardware.radio-V1.5-java",
+        "voip-common",
+        "ims-common",
+        "services",
+        "unsupportedappusage",
+        "telephony-resources",
+    ],
+    required: ["telephony-resources"],
+    static_libs: [
+        "android.hardware.radio.config-V1.0-java-shallow",
+        "android.hardware.radio.config-V1.1-java-shallow",
+        "android.hardware.radio.config-V1.2-java-shallow",
+        "android.hardware.radio.config-V1.3-java-shallow",
+        "android.hardware.radio.deprecated-V1.0-java-shallow",
+        "ecc-protos-lite",
+        "libphonenumber-nogeocoder",
+        "PlatformProperties",
+        "telephony-protos",
+    ],
+
+    product_variables: {
+        pdk: {
+            // enable this build only when platform library is available
+            enabled: false,
+        },
+    },
+}

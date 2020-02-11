@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.data.DataProfile;
 import android.telephony.emergency.EmergencyNumber;
 
@@ -240,6 +241,10 @@ class ImsPhoneCommandInterface extends BaseCommands implements CommandsInterface
     }
 
     @Override
+    public void sendCdmaSMSExpectMore(byte[] pdu, Message result) {
+    }
+
+    @Override
     public void sendImsGsmSms (String smscPDU, String pdu,
             int retry, int messageRef, Message response) {
     }
@@ -333,8 +338,7 @@ class ImsPhoneCommandInterface extends BaseCommands implements CommandsInterface
     }
 
     @Override
-    public void setNetworkSelectionModeManual(
-            String operatorNumeric, Message response) {
+    public void setNetworkSelectionModeManual(String operatorNumeric, int ran, Message response) {
     }
 
     @Override
@@ -635,8 +639,8 @@ class ImsPhoneCommandInterface extends BaseCommands implements CommandsInterface
     }
 
     @Override
-    public void setSignalStrengthReportingCriteria(int hysteresisMs, int hysteresisDb,
-            int[] thresholdsDbm, int ran, Message result) {
+    public void setSignalStrengthReportingCriteria(
+            SignalThresholdInfo signalThresholdInfo, int ran, Message result) {
     }
 
     @Override

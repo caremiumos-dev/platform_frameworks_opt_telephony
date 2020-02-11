@@ -24,10 +24,10 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.icu.util.TimeZone;
 import android.text.TextUtils;
-
-import libcore.timezone.CountryTimeZones;
-import libcore.timezone.CountryTimeZones.TimeZoneMapping;
-import libcore.timezone.TimeZoneFinder;
+import android.timezone.CountryTimeZones;
+import android.timezone.CountryTimeZones.OffsetResult;
+import android.timezone.CountryTimeZones.TimeZoneMapping;
+import android.timezone.TimeZoneFinder;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -39,65 +39,6 @@ import java.util.Objects;
  */
 // Non-final to allow mocking.
 public class TimeZoneLookupHelper {
-
-    /**
-     * The result of looking up a time zone using offset information (and possibly more).
-     */
-    public static final class OffsetResult {
-
-        /** A zone that matches the supplied criteria. See also {@link #mIsOnlyMatch}. */
-        @NonNull
-        private final TimeZone mTimeZone;
-
-        /** True if there is only one matching time zone for the supplied criteria. */
-        private final boolean mIsOnlyMatch;
-
-        public OffsetResult(@NonNull TimeZone timeZone, boolean isOnlyMatch) {
-            mTimeZone = Objects.requireNonNull(timeZone);
-            mIsOnlyMatch = isOnlyMatch;
-        }
-
-        /**
-         * Returns a time zone that matches the supplied criteria.
-         */
-        @NonNull
-        public TimeZone getTimeZone() {
-            return mTimeZone;
-        }
-
-        /**
-         * Returns {@code true} if there is only one matching time zone for the supplied criteria.
-         */
-        public boolean getIsOnlyMatch() {
-            return mIsOnlyMatch;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            OffsetResult that = (OffsetResult) o;
-            return mIsOnlyMatch == that.mIsOnlyMatch
-                    && mTimeZone.getID().equals(that.mTimeZone.getID());
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(mTimeZone, mIsOnlyMatch);
-        }
-
-        @Override
-        public String toString() {
-            return "OffsetResult{"
-                    + "mTimeZone(Id)=" + mTimeZone.getID()
-                    + ", mIsOnlyMatch=" + mIsOnlyMatch
-                    + '}';
-        }
-    }
 
     /**
      * The result of looking up a time zone using country information.
@@ -192,15 +133,18 @@ public class TimeZoneLookupHelper {
         // is DST (if known). NITZ is limited in only being able to express DST offsets in whole
         // hours and the DST info is optional.
         Integer dstAdjustmentMillis = nitzData.getDstAdjustmentMillis();
-        Boolean isDst = dstAdjustmentMillis == null ? null : dstAdjustmentMillis != 0;
-        Integer dstAdjustmentMillisToMatch = null; // Don't try to match the precise DST offset.
-        CountryTimeZones.OffsetResult offsetResult = countryTimeZones.lookupByOffsetWithBias(
-                nitzData.getLocalOffsetMillis(), isDst, dstAdjustmentMillisToMatch,
-                nitzData.getCurrentTimeInMillis(), bias);
-        if (offsetResult == null) {
-            return null;
+        if (dstAdjustmentMillis == null) {
+            return countryTimeZones.lookupByOffsetWithBias(
+                    nitzData.getCurrentTimeInMillis(), bias, nitzData.getLocalOffsetMillis());
+
+        } else {
+            // We don't try to match the exact DST offset given, we just use it to work out if
+            // the country is in DST.
+            boolean isDst = dstAdjustmentMillis != 0;
+            return countryTimeZones.lookupByOffsetWithBias(
+                    nitzData.getCurrentTimeInMillis(), bias,
+                    nitzData.getLocalOffsetMillis(), isDst);
         }
-        return new OffsetResult(offsetResult.mTimeZone, offsetResult.mOneMatch);
     }
 
     /**
@@ -214,7 +158,26 @@ public class TimeZoneLookupHelper {
      */
     @Nullable
     public OffsetResult lookupByNitz(@NonNull NitzData nitzData) {
-        return lookupByNitzStatic(nitzData);
+        int utcOffsetMillis = nitzData.getLocalOffsetMillis();
+        long timeMillis = nitzData.getCurrentTimeInMillis();
+
+        // Android NITZ time zone matching doesn't try to do a precise match using the DST offset
+        // supplied by the carrier. It only considers whether or not the carrier suggests local time
+        // is DST (if known). NITZ is limited in only being able to express DST offsets in whole
+        // hours and the DST info is optional.
+        Integer dstAdjustmentMillis = nitzData.getDstAdjustmentMillis();
+        Boolean isDst = dstAdjustmentMillis == null ? null : dstAdjustmentMillis != 0;
+
+        OffsetResult match = lookupByInstantOffsetDst(timeMillis, utcOffsetMillis, isDst);
+        if (match == null && isDst != null) {
+            // This branch is extremely unlikely and could probably be removed. The match above will
+            // have searched the entire tzdb for a zone with the same total offset and isDst state.
+            // Here we try another match but use "null" for isDst to indicate that only the total
+            // offset should be considered. If, by the end of this, there isn't a match then the
+            // current offset suggested by the carrier must be highly unusual.
+            match = lookupByInstantOffsetDst(timeMillis, utcOffsetMillis, null /* isDst */);
+        }
+        return match;
     }
 
     /**
@@ -238,7 +201,7 @@ public class TimeZoneLookupHelper {
 
         String debugInfo;
         int matchQuality;
-        if (countryTimeZones.getDefaultTimeZoneBoost()) {
+        if (countryTimeZones.isDefaultTimeZoneBoosted()) {
             matchQuality = CountryResult.QUALITY_DEFAULT_BOOSTED;
             debugInfo = "Country default is boosted";
         } else {
@@ -272,60 +235,17 @@ public class TimeZoneLookupHelper {
         String countryDefaultId = countryDefaultZone.getID();
         int countryDefaultOffset = countryDefaultZone.getOffset(whenMillis);
         for (TimeZoneMapping timeZoneMapping : effectiveTimeZoneMappings) {
-            if (timeZoneMapping.timeZoneId.equals(countryDefaultId)) {
+            if (timeZoneMapping.getTimeZoneId().equals(countryDefaultId)) {
                 continue;
             }
 
             TimeZone timeZone = timeZoneMapping.getTimeZone();
-            if (timeZone == null) {
-                continue;
-            }
-
             int candidateOffset = timeZone.getOffset(whenMillis);
             if (countryDefaultOffset != candidateOffset) {
                 return true;
             }
         }
         return false;
-    }
-
-    /**
-     * Returns a time zone ID for the country if possible. For counties that use a single time zone
-     * this will provide a good choice. For countries with multiple time zones, a time zone is
-     * returned but it may be appropriate for only part of the country. {@code null} can be returned
-     * if a problem occurs during lookup, e.g. if the country code is unrecognized, if the country
-     * is uninhabited, or if there is a problem with the data.
-     */
-    @Nullable
-    public String lookupDefaultTimeZoneIdByCountry(@NonNull String isoCountryCode) {
-        Objects.requireNonNull(isoCountryCode);
-        CountryTimeZones countryTimeZones =
-                TimeZoneFinder.getInstance().lookupCountryTimeZones(isoCountryCode);
-        return countryTimeZones == null ? null : countryTimeZones.getDefaultTimeZoneId();
-    }
-
-    @Nullable
-    private static OffsetResult lookupByNitzStatic(@NonNull NitzData nitzData) {
-        int utcOffsetMillis = nitzData.getLocalOffsetMillis();
-        long timeMillis = nitzData.getCurrentTimeInMillis();
-
-        // Android NITZ time zone matching doesn't try to do a precise match using the DST offset
-        // supplied by the carrier. It only considers whether or not the carrier suggests local time
-        // is DST (if known). NITZ is limited in only being able to express DST offsets in whole
-        // hours and the DST info is optional.
-        Integer dstAdjustmentMillis = nitzData.getDstAdjustmentMillis();
-        Boolean isDst = dstAdjustmentMillis == null ? null : dstAdjustmentMillis != 0;
-
-        OffsetResult match = lookupByInstantOffsetDst(timeMillis, utcOffsetMillis, isDst);
-        if (match == null && isDst != null) {
-            // This branch is extremely unlikely and could probably be removed. The match above will
-            // have searched the entire tzdb for a zone with the same total offset and isDst state.
-            // Here we try another match but use "null" for isDst to indicate that only the total
-            // offset should be considered. If, by the end of this, there isn't a match then the
-            // current offset suggested by the carrier must be highly unusual.
-            match = lookupByInstantOffsetDst(timeMillis, utcOffsetMillis, null /* isDst */);
-        }
-        return match;
     }
 
     private static OffsetResult lookupByInstantOffsetDst(long timeMillis, int utcOffsetMillis,
@@ -391,7 +311,7 @@ public class TimeZoneLookupHelper {
         // be strong consistency across calls.
         synchronized (this) {
             if (mLastCountryTimeZones != null) {
-                if (mLastCountryTimeZones.isForCountryCode(isoCountryCode)) {
+                if (mLastCountryTimeZones.matchesCountryCode(isoCountryCode)) {
                     return mLastCountryTimeZones;
                 }
             }

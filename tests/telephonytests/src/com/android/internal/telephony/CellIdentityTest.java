@@ -25,6 +25,8 @@ import android.telephony.CellInfo;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import java.util.Collections;
+
 public class CellIdentityTest extends AndroidTestCase {
 
     // Cell identity ranges from 0 to 268435456.
@@ -54,6 +56,11 @@ public class CellIdentityTest extends AndroidTestCase {
     // Latitude ranges from -1296000 to 1296000.
     private static final int LATITUDE = 1296000;
 
+    private static final String PLMN_INVALID_SHORT = "1234";
+    private static final String PLMN_INVALID_LONG = "1234567";
+    private static final String PLMN_INVALID_NON_NUM = "12a45b";
+    private static final String PLMN_VALID = "12345";
+
     private static final int MAX_LAC = 65535;
     private static final int MAX_CID = 65535;
     private static final int MAX_ARFCN = 65535;
@@ -62,14 +69,16 @@ public class CellIdentityTest extends AndroidTestCase {
     @SmallTest
     public void testConstructCellIdentityGsm() {
         // Test values below zero (these must all be non-negative)
-        CellIdentityGsm gsm = new CellIdentityGsm(-1, -1, -1, -1, null, null, null, null);
+        CellIdentityGsm gsm = new CellIdentityGsm(-1, -1, -1, -1, null, null, null, null,
+                Collections.emptyList());
         assertEquals(CellInfo.UNAVAILABLE, gsm.getLac());
         assertEquals(CellInfo.UNAVAILABLE, gsm.getCid());
         assertEquals(CellInfo.UNAVAILABLE, gsm.getArfcn());
         assertEquals(CellInfo.UNAVAILABLE, gsm.getBsic());
 
         // Test max values of LAC, CID, ARFCN, and BSIC
-        gsm = new CellIdentityGsm(MAX_LAC, MAX_CID, MAX_ARFCN, MAX_BSIC, null, null, null, null);
+        gsm = new CellIdentityGsm(MAX_LAC, MAX_CID, MAX_ARFCN, MAX_BSIC, null, null, null, null,
+                Collections.emptyList());
         assertEquals(MAX_LAC, gsm.getLac());
         assertEquals(MAX_CID, gsm.getCid());
         assertEquals(MAX_ARFCN, gsm.getArfcn());
@@ -77,33 +86,37 @@ public class CellIdentityTest extends AndroidTestCase {
 
         // Test max values + 1 of LAC, CID, ARFCN, and BSIC
         gsm = new CellIdentityGsm(
-                MAX_LAC + 1, MAX_CID + 1, MAX_ARFCN + 1, MAX_BSIC + 1, null, null, null, null);
+                MAX_LAC + 1, MAX_CID + 1, MAX_ARFCN + 1, MAX_BSIC + 1, null, null, null, null,
+                Collections.emptyList());
         assertEquals(CellInfo.UNAVAILABLE, gsm.getLac());
         assertEquals(CellInfo.UNAVAILABLE, gsm.getCid());
         assertEquals(CellInfo.UNAVAILABLE, gsm.getArfcn());
         assertEquals(CellInfo.UNAVAILABLE, gsm.getBsic());
     }
 
+
     @SmallTest
     public void testEquals() {
         CellIdentity ciA = new CellIdentityLte(
-                CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT);
+                CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT,
+                Collections.emptyList(), null);
         CellIdentity ciB = new CellIdentityLte(
-                CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT);
+                CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT,
+                Collections.emptyList(), null);
 
         assertTrue(ciA.equals(ciB));
 
         ciA = new CellIdentityLte(CI, PCI, TAC, EARFCN, BANDWIDTH, null, null, ALPHA_LONG,
-                ALPHA_SHORT);
+                ALPHA_SHORT, Collections.emptyList(), null);
         ciB = new CellIdentityLte(CI, PCI, TAC, EARFCN, BANDWIDTH, null, null, ALPHA_LONG,
-                ALPHA_SHORT);
+                ALPHA_SHORT, Collections.emptyList(), null);
 
         assertTrue(ciA.equals(ciB));
 
         ciA = new CellIdentityLte(CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, null, ALPHA_LONG,
-                ALPHA_SHORT);
+                ALPHA_SHORT, Collections.emptyList(), null);
         ciB = new CellIdentityLte(CI, PCI, TAC, EARFCN, BANDWIDTH, null, null, ALPHA_LONG,
-                ALPHA_SHORT);
+                ALPHA_SHORT, Collections.emptyList(), null);
 
         assertFalse(ciA.equals(ciB));
     }
@@ -111,7 +124,7 @@ public class CellIdentityTest extends AndroidTestCase {
     @SmallTest
     public void testParcel() {
         CellIdentity ci = new CellIdentityLte(CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR,
-                ALPHA_LONG, ALPHA_SHORT);
+                ALPHA_LONG, ALPHA_SHORT, Collections.emptyList(), null);
 
         Parcel p = Parcel.obtain();
         ci.writeToParcel(p, 0);
@@ -129,5 +142,17 @@ public class CellIdentityTest extends AndroidTestCase {
 
         newCi = CellIdentity.CREATOR.createFromParcel(p);
         assertEquals(ci, newCi);
+    }
+
+    @SmallTest
+    public void testIsValidPlmn() {
+        assertTrue(CellIdentity.isValidPlmn(PLMN_VALID));
+    }
+
+    @SmallTest
+    public void testIsValidPlmnInvalidPlmns() {
+        assertFalse(CellIdentity.isValidPlmn(PLMN_INVALID_SHORT));
+        assertFalse(CellIdentity.isValidPlmn(PLMN_INVALID_LONG));
+        assertFalse(CellIdentity.isValidPlmn(PLMN_INVALID_NON_NUM));
     }
 }

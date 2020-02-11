@@ -18,27 +18,26 @@ package com.android.internal.telephony.dataconnection;
 
 import android.content.Context;
 import android.hardware.radio.V1_4.DataConnActiveStatus;
-import android.net.INetworkPolicyListener;
 import android.net.LinkAddress;
 import android.net.LinkProperties.CompareResult;
-import android.net.NetworkPolicyManager;
 import android.net.NetworkUtils;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.DataFailCause;
 import android.telephony.PhoneStateListener;
-import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.telephony.data.DataCallResponse;
 
 import com.android.internal.telephony.DctConstants;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.dataconnection.DataConnection.UpdateLinkPropertyResult;
+import com.android.internal.telephony.util.HandlerExecutor;
+import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -69,7 +68,6 @@ public class DcController extends StateMachine {
     private DccDefaultState mDccDefaultState = new DccDefaultState();
 
     final TelephonyManager mTelephonyManager;
-    final NetworkPolicyManager mNetworkPolicyManager;
 
     private PhoneStateListener mPhoneStateListener;
 
@@ -98,7 +96,7 @@ public class DcController extends StateMachine {
         setInitialState(mDccDefaultState);
         log("X ctor");
 
-        mPhoneStateListener = new PhoneStateListener(handler.getLooper()) {
+        mPhoneStateListener = new PhoneStateListener(new HandlerExecutor(handler)) {
             @Override
             public void onCarrierNetworkChange(boolean active) {
                 mExecutingCarrierChange = active;
@@ -107,10 +105,8 @@ public class DcController extends StateMachine {
 
         mTelephonyManager = (TelephonyManager) phone.getContext()
                 .getSystemService(Context.TELEPHONY_SERVICE);
-        mNetworkPolicyManager = (NetworkPolicyManager) phone.getContext()
-                .getSystemService(Context.NETWORK_POLICY_SERVICE);
 
-        mDcTesterDeactivateAll = (Build.IS_DEBUGGABLE)
+        mDcTesterDeactivateAll = (TelephonyUtils.IS_DEBUGGABLE)
                 ? new DcTesterDeactivateAll(mPhone, DcController.this, getHandler())
                 : null;
 
@@ -173,21 +169,6 @@ public class DcController extends StateMachine {
         return mExecutingCarrierChange;
     }
 
-    private final INetworkPolicyListener mListener = new NetworkPolicyManager.Listener() {
-        @Override
-        public void onSubscriptionOverride(int subId, int overrideMask, int overrideValue) {
-            if (mPhone == null || mPhone.getSubId() != subId) return;
-
-            final HashMap<Integer, DataConnection> dcListActiveByCid;
-            synchronized (mDcListAll) {
-                dcListActiveByCid = new HashMap<>(mDcListActiveByCid);
-            }
-            for (DataConnection dc : dcListActiveByCid.values()) {
-                dc.onSubscriptionOverride(overrideMask, overrideValue);
-            }
-        }
-    };
-
     private class DccDefaultState extends State {
         @Override
         public void enter() {
@@ -199,10 +180,6 @@ public class DcController extends StateMachine {
 
             mDataServiceManager.registerForDataCallListChanged(getHandler(),
                     DataConnection.EVENT_DATA_STATE_CHANGED);
-
-            if (mNetworkPolicyManager != null) {
-                mNetworkPolicyManager.registerListener(mListener);
-            }
         }
 
         @Override
@@ -215,9 +192,6 @@ public class DcController extends StateMachine {
 
             if (mDcTesterDeactivateAll != null) {
                 mDcTesterDeactivateAll.dispose();
-            }
-            if (mNetworkPolicyManager != null) {
-                mNetworkPolicyManager.unregisterListener(mListener);
             }
         }
 
