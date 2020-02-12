@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e23f9c1_829006cc",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1148298
+      },
+      "writtenOn": "2020-02-12T17:36:35Z",
+      "side": 1,
+      "message": "My only concern with this change is, for eSIM boot profile which doesn\u0027t have any applications.\nPreviously mCarrierPrivilegeRules will be initialized with no rules, and it will return CARRIER_PRIVILEGE_STATUS_NO_ACCESS, but with this change, since mCarrierPrivilegeRules will be null, it will return CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED",
+      "range": {
+        "startLine": 1011,
+        "startChar": 20,
+        "endLine": 1011,
+        "endChar": 54
+      },
+      "revId": "d25409ccaf2e3b29bf58b8a1b0c4257ef794cb8f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
