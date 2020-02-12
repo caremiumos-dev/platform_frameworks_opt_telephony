@@ -123,7 +123,7 @@ class RilMessageDecoder extends StateMachine {
         setInitialState(mStateStart);
 
         mCaller = caller;
-        mCmdParamsFactory = CommandParamsFactory.getInstance(this, fh);
+        mCmdParamsFactory = new CommandParamsFactory(this, fh);
     }
 
     private RilMessageDecoder() {
