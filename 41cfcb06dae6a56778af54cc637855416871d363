@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ed87cc0_3144cd7e",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2009,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-02-12T00:03:17Z",
+      "side": 1,
+      "message": "Why would we ignore the service class passed in?  If the vendor implementation wants to default it to SERVICE_CLASS_NONE then it should do that in its own code.",
+      "range": {
+        "startLine": 2008,
+        "startChar": 12,
+        "endLine": 2009,
+        "endChar": 70
+      },
+      "revId": "41cfcb06dae6a56778af54cc637855416871d363",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5272a487_4c560abe",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-02-12T00:03:17Z",
+      "side": 1,
+      "message": "This does not seem correct; why would we be querying it if we\u0027re setting it?",
+      "range": {
+        "startLine": 2024,
+        "startChar": 16,
+        "endLine": 2024,
+        "endChar": 33
+      },
+      "revId": "41cfcb06dae6a56778af54cc637855416871d363",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
