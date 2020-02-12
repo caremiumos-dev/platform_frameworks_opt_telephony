@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6342697a_95cef54f",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneBase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1570596
+      },
+      "writtenOn": "2020-02-12T23:22:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3eda7089_cc22b07f",
+      "range": {
+        "startLine": 204,
+        "startChar": 3,
+        "endLine": 205,
+        "endChar": 5
+      },
+      "revId": "4cbd6225bed0fb2f4669602911f988592d4ddc46",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77fbe865_174b23ba",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-12T21:15:46Z",
       "side": 1,
       "message": "Should these two match?",
+      "range": {
+        "startLine": 505,
+        "startChar": 8,
+        "endLine": 506,
+        "endChar": 47
+      },
+      "revId": "4cbd6225bed0fb2f4669602911f988592d4ddc46",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e0ac15c_380093ff",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1570596
+      },
+      "writtenOn": "2020-02-12T23:22:45Z",
+      "side": 1,
+      "message": "This map is copied from the previous version of this file:\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/855350/1/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java\nAnd I replace PreciseDisconnectCause.NORMAL with CallFailCause.NORMAL_CLEARING to keep consistency with TelephonyConnection.",
+      "parentUuid": "77fbe865_174b23ba",
       "range": {
         "startLine": 505,
         "startChar": 8,
