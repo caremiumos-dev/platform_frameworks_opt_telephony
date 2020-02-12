@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "78a14db3_fe7c9ef0",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1583329
+      },
+      "writtenOn": "2020-02-12T07:51:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e09aeec9_1e4b6afe",
+      "range": {
+        "startLine": 101,
+        "startChar": 14,
+        "endLine": 102,
+        "endChar": 30
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e4b9c3a_d2c60d09",
         "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "24450c702cea69494101804713f5ecda99da28c2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "575c4c20_ee3fce4e",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1583329
+      },
+      "writtenOn": "2020-02-12T07:51:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e4b9c3a_d2c60d09",
+      "range": {
+        "startLine": 108,
+        "startChar": 14,
+        "endLine": 110,
+        "endChar": 0
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "00f436ee_dc99b6bb",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1583329
+      },
+      "writtenOn": "2020-02-12T07:51:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d4de8c1_d01947b9",
+      "range": {
+        "startLine": 270,
+        "startChar": 31,
+        "endLine": 270,
+        "endChar": 33
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76cdef8b_79d90f5c",
         "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
         "patchSetId": 6
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "cf22706f_8c6530ea",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1583329
+      },
+      "writtenOn": "2020-02-12T07:51:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76cdef8b_79d90f5c",
+      "range": {
+        "startLine": 274,
+        "startChar": 31,
+        "endLine": 274,
+        "endChar": 33
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53b7aa9f_6d08967c",
         "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
         "patchSetId": 6
@@ -114,6 +210,30 @@
       "revId": "24450c702cea69494101804713f5ecda99da28c2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af5d8f75_43865422",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1583329
+      },
+      "writtenOn": "2020-02-12T07:51:09Z",
+      "side": 1,
+      "message": "In general,for example, s1 is {“aaa”，“”} and s2 is {“”，“aaa”}",
+      "parentUuid": "53b7aa9f_6d08967c",
+      "range": {
+        "startLine": 278,
+        "startChar": 12,
+        "endLine": 280,
+        "endChar": 0
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
