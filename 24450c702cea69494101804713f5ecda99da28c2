@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "2829e7ed_89548152",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1583329
+      },
+      "writtenOn": "2020-02-12T08:39:33Z",
+      "side": 1,
+      "message": "After removed the else block，there will be compile error as below：\nframeworks/opt/telephony/src/java/com/android/internal/telephony/uicc/AdnRecord.java:108: error: variable emails might not have been initialized\n            return new AdnRecord(efid, recordNumber, alphaTag, number, emails, additionalNumbers);\n                                                                       ^\nframeworks/opt/telephony/src/java/com/android/internal/telephony/uicc/AdnRecord.java:108: error: variable additionalNumbers might not have been initialized\n            return new AdnRecord(efid, recordNumber, alphaTag, number, emails, additionalNumbers);",
+      "parentUuid": "575c4c20_ee3fce4e",
+      "range": {
+        "startLine": 108,
+        "startChar": 14,
+        "endLine": 110,
+        "endChar": 0
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d4de8c1_d01947b9",
         "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
         "patchSetId": 6
