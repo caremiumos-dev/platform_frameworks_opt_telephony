@@ -40,7 +40,6 @@ import java.util.Locale;
  *
  */
 class CommandParamsFactory extends Handler {
-    private static CommandParamsFactory sInstance = null;
     @UnsupportedAppUsage
     private IconLoader mIconLoader;
     private CommandParams mCmdParams = null;
@@ -82,18 +81,7 @@ class CommandParamsFactory extends Handler {
     private static final int MAX_GSM7_DEFAULT_CHARS = 239;
     private static final int MAX_UCS2_CHARS = 118;
 
-    static synchronized CommandParamsFactory getInstance(RilMessageDecoder caller,
-            IccFileHandler fh) {
-        if (sInstance != null) {
-            return sInstance;
-        }
-        if (fh != null) {
-            return new CommandParamsFactory(caller, fh);
-        }
-        return null;
-    }
-
-    private CommandParamsFactory(RilMessageDecoder caller, IccFileHandler fh) {
+    CommandParamsFactory(RilMessageDecoder caller, IccFileHandler fh) {
         mCaller = caller;
         mIconLoader = IconLoader.getInstance(this, fh);
     }
@@ -1106,6 +1094,5 @@ class CommandParamsFactory extends Handler {
         mIconLoader = null;
         mCmdParams = null;
         mCaller = null;
-        sInstance = null;
     }
 }
