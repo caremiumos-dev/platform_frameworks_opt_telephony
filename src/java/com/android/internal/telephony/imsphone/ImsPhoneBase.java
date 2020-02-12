@@ -202,7 +202,6 @@ abstract class ImsPhoneBase extends Phone {
 
     public void notifyDisconnect(Connection cn) {
         mDisconnectRegistrants.notifyResult(cn);
-
     }
 
     public void notifyImsReason(ImsReasonInfo imsReasonInfo) {
