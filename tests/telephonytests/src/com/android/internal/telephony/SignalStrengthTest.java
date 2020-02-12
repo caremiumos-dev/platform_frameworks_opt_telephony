@@ -178,6 +178,7 @@ public class SignalStrengthTest {
                 new CellSignalStrengthNr());
 
         PersistableBundle bundle = new PersistableBundle();
+        bundle.putBoolean(CarrierConfigManager.KEY_USE_ONLY_RSRP_FOR_LTE_SIGNAL_BAR_BOOL, false);
         bundle.putInt(
                 CarrierConfigManager.KEY_PARAMETERS_USED_FOR_LTE_SIGNAL_BAR_INT,
                 CellSignalStrengthLte.USE_RSRP | CellSignalStrengthLte.USE_RSRQ);
@@ -210,6 +211,7 @@ public class SignalStrengthTest {
                 new CellSignalStrengthNr());
 
         PersistableBundle bundle = new PersistableBundle();
+        bundle.putBoolean(CarrierConfigManager.KEY_USE_ONLY_RSRP_FOR_LTE_SIGNAL_BAR_BOOL, false);
         bundle.putInt(
                 CarrierConfigManager.KEY_PARAMETERS_USED_FOR_LTE_SIGNAL_BAR_INT,
                 CellSignalStrengthLte.USE_RSRP | CellSignalStrengthLte.USE_RSSNR);
