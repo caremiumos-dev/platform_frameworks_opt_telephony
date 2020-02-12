@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e09aeec9_1e4b6afe",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-12T00:33:21Z",
+      "side": 1,
+      "message": "This else block is not required.",
+      "range": {
+        "startLine": 101,
+        "startChar": 14,
+        "endLine": 102,
+        "endChar": 30
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e4b9c3a_d2c60d09",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-12T00:33:21Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 108,
+        "startChar": 14,
+        "endLine": 110,
+        "endChar": 0
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d4de8c1_d01947b9",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-12T00:33:21Z",
+      "side": 1,
+      "message": "Why initialize with 1 item? Use empty array",
+      "range": {
+        "startLine": 270,
+        "startChar": 31,
+        "endLine": 270,
+        "endChar": 33
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76cdef8b_79d90f5c",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-12T00:33:21Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 274,
+        "startChar": 31,
+        "endLine": 274,
+        "endChar": 33
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53b7aa9f_6d08967c",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-12T00:33:21Z",
+      "side": 1,
+      "message": "Is this required due to initialization in case of null value or is it valid in general?",
+      "range": {
+        "startLine": 278,
+        "startChar": 12,
+        "endLine": 280,
+        "endChar": 0
+      },
+      "revId": "24450c702cea69494101804713f5ecda99da28c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
