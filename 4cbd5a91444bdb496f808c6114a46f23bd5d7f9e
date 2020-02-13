@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e1565a0_4e346fd2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2561,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-02-13T17:57:20Z",
+      "side": 1,
+      "message": "Should this be CallFailCause?",
+      "range": {
+        "startLine": 2561,
+        "startChar": 16,
+        "endLine": 2561,
+        "endChar": 56
+      },
+      "revId": "4cbd5a91444bdb496f808c6114a46f23bd5d7f9e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
