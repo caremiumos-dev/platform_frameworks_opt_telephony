@@ -704,7 +704,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
         case EF_IMG:
             return MF_SIM + DF_TELECOM + DF_GRAPHICS;
         }
-        return null;
+        return MF_SIM;
     }
 
     @UnsupportedAppUsage
