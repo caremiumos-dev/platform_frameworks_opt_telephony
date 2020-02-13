@@ -1,0 +1,9 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Autosubmit+1: Grace Jia <xiaotonj@google.com>
+Presubmit-Ready+1: Grace Jia <xiaotonj@google.com>
+Code-Review+2: Tyler Gunn <tgunn@google.com>
+Submitted-by: Grace Jia <xiaotonj@google.com>
+Submitted-at: Thu, 13 Feb 2020 19:13:52 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1233370
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
