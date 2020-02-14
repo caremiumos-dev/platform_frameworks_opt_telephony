@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8938978e_8660f879",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-02-14T23:46:58Z",
+      "side": 1,
+      "message": "can you describe the manual test done? would it be possible to add a unit test for this?",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 12
+      },
+      "revId": "cba914946b75e949b7f9b032e9618cb6c6ba37b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
