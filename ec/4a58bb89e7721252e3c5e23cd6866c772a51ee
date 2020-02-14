@@ -1,0 +1,10 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+1: Chalard Jean <jchalard@google.com>
+Code-Review+1: Isabelle Taylor <taylori@google.com>
+Build-Cop-Override+1: Isabelle Taylor <taylori@google.com>
+Build-Cop-Override+1: Michael Wright <michaelwr@google.com>
+Submitted-by: Isabelle Taylor <taylori@google.com>
+Submitted-at: Fri, 14 Feb 2020 13:42:36 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1235847
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
