@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "54876615_18f10710",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2020-02-14T08:22:31Z",
+      "side": 1,
+      "message": "Ack, will address in follow-up patch.",
+      "parentUuid": "8afdce76_1e99da07",
+      "range": {
+        "startLine": 1017,
+        "startChar": 8,
+        "endLine": 1024,
+        "endChar": 97
+      },
+      "revId": "050049ba404d7ffed0476b2ec31e6391d29637f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f50ffb3_9a31cf6a",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
         "patchSetId": 2
