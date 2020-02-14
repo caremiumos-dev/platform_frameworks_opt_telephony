@@ -1,0 +1,12 @@
+Verified+1: Pooja Jain <quic_poojain@quicinc.com>
+Code-Review+1: Pooja Jain <quic_poojain@quicinc.com>
+Code-Review+2: Tyler Gunn <tgunn@google.com>
+Qualcomm-Review+1: Garik Badalyan <garikb@quicinc.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Autosubmit+1: Tyler Gunn <tgunn@google.com>
+Presubmit-Verified-1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Tyler Gunn <tgunn@google.com>
+Submitted-at: Fri, 14 Feb 2020 22:40:49 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1169825
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
