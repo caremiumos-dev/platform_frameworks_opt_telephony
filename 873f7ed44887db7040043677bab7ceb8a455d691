@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e2f1c87_2b5a5a51",
+        "filename": "src/java/com/android/internal/telephony/nitz/TimeZoneSuggesterImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2020-02-14T16:49:06Z",
+      "side": 0,
+      "message": "This deleted code is the logic being made consistent by sharing the new createCountrySuggestion() code with the findTimeZoneFromNetworkCountryCode() path.",
+      "range": {
+        "startLine": 203,
+        "startChar": 8,
+        "endLine": 203,
+        "endChar": 21
+      },
+      "revId": "873f7ed44887db7040043677bab7ceb8a455d691",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
