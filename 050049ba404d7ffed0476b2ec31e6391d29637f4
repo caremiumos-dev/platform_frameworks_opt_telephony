@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8afdce76_1e99da07",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-02-14T04:38:15Z",
+      "side": 1,
+      "message": "Isn\u0027t this just a convoluted way to say\n\n  verify(mImsPhoneConnection, never()).onConnectionEvent(...)\n\n...at the end of the test ?",
+      "range": {
+        "startLine": 1017,
+        "startChar": 8,
+        "endLine": 1024,
+        "endChar": 97
+      },
+      "revId": "050049ba404d7ffed0476b2ec31e6391d29637f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f50ffb3_9a31cf6a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-02-14T04:38:15Z",
+      "side": 1,
+      "message": "final",
+      "range": {
+        "startLine": 1027,
+        "startChar": 8,
+        "endLine": 1027,
+        "endChar": 21
+      },
+      "revId": "050049ba404d7ffed0476b2ec31e6391d29637f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
