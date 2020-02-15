@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e02483d3_4b9f6d01",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-02-15T00:08:08Z",
+      "side": 1,
+      "message": "Should be PhoneSwitcher.make",
+      "range": {
+        "startLine": 439,
+        "startChar": 15,
+        "endLine": 439,
+        "endChar": 32
+      },
+      "revId": "d9af9e1fd12f985dda61a15fdf5a7f5322fffc87",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
