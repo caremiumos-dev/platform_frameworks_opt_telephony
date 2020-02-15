@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "15352e67_35223cdf",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3093,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-02-15T02:02:52Z",
+      "side": 1,
+      "message": "I don\u0027t think this is needed. If you want a setup retry, you should just use carrier config to config what fail cause is considered as permanent failure, which will not trigger a retry. Any failure cause other than permanent failure will trigger a retry.\n\nHere is an example how a particular carrier defines their own permanent failures.\n\nhttps://cs.android.com/android/platform/superproject/+/master:packages/apps/CarrierConfig/assets/carrier_config_carrierid_1839_Verizon-Wireless.xml;l\u003d79?q\u003dcarrier_data_call_permanent_failure_strings",
+      "range": {
+        "startLine": 3074,
+        "startChar": 0,
+        "endLine": 3093,
+        "endChar": 5
+      },
+      "revId": "02fa30d107ee2ca9cd9649b808ef440df9f29c13",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4a402af_86844f95",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 7
