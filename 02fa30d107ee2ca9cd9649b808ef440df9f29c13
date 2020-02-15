@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4a402af_86844f95",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-02-15T00:11:49Z",
+      "side": 1,
+      "message": "This is already added in aosp/1180163",
+      "revId": "02fa30d107ee2ca9cd9649b808ef440df9f29c13",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
