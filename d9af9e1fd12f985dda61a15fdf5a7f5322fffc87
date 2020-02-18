@@ -46,6 +46,30 @@
       "revId": "d9af9e1fd12f985dda61a15fdf5a7f5322fffc87",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5d71fc8_368c5590",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-02-18T22:50:25Z",
+      "side": 1,
+      "message": "This breaks compilation for google devices so it needs to be fixed before merging.",
+      "parentUuid": "f1259224_9541ba7f",
+      "range": {
+        "startLine": 439,
+        "startChar": 15,
+        "endLine": 439,
+        "endChar": 32
+      },
+      "revId": "d9af9e1fd12f985dda61a15fdf5a7f5322fffc87",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
