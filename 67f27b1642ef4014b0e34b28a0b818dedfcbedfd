@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0dc4caff_1a09a3dd",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1153084
+      },
+      "writtenOn": "2020-02-19T09:16:16Z",
+      "side": 1,
+      "message": "Use contineous enum numbers, i.e 25,26...",
+      "range": {
+        "startLine": 221,
+        "startChar": 17,
+        "endLine": 221,
+        "endChar": 20
+      },
+      "revId": "67f27b1642ef4014b0e34b28a0b818dedfcbedfd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
