@@ -22,6 +22,30 @@
       "revId": "59cdc187a2574cd096998357bb31c33691ce69d7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5d7fd57_dfed8a9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-02-19T11:46:55Z",
+      "side": 1,
+      "message": "\u003e 1) Could you please clarify in what situation \n\u003e EmergencyNumberTracker need to read the cached last known \n\u003e country iso and use it for what purposes? The logic in this CL \u003e seems to only apply the last known country iso in the \n\u003e construction time of EmergencyNumberTracker, which seems not \n\u003e really using it if APM is toggled by users after it.\n\nThe use case is that you enable Airplane mode and then power off the device. When you power on the device again, it will boot up in Airplane mode and THEN you need the cached country. It is not a perfect solution as you realize but it is a best effort.\n\nIt is also beneficial when detecting the Emergency numbers 110 and 119 in Taiwan on a generic device. Currently Taiwan devices need a special Build fingerprint due to that it needs to set config_convert_to_emergency_number_map where you convert 110 and 119 to the valid number 112.\n\n\u003e 2) Could you please clarify who will need to get the last known \u003e country iso, except EmergencyNumberTracker? I guess no for your \u003e purposes?\n\nOn the top of head I can come to think of two use cases:\n  A. Wifi country code is another use case, some frequencies are not allowed in certain countries, 5GHz in France for example.\nhttps://android.googlesource.com/platform/frameworks/opt/net/wifi/+/master/service/java/com/android/server/wifi/WifiCountryCode.java\n\n  B. Emergency Affordance in India\nhttps://source.android.com/devices/tech/connect/emergency-affordance\n\n\u003e 3) Could you please clarify why you would use a shared \n\u003e preference instead of a cached parameter?\n\nI cannot see a cached parameter working when powering on the \ndevice in flight mode.\n\n\u003e Can you follow some suggestion of mine please:\n\u003e 0) Thanks for considering putting the logic in \n\u003e EmergencyNumberTracker; I think it is cleaner if this could be \u003e done in LocaleTracker, which has logic to manage country iso in \u003e APM (see https://android-\n\u003e review.googlesource.com/c/platform/frameworks/opt/telephony/+/\n\u003e 1238709). You can make a read method in LocaleTracker with a \n\u003e name such as \"getLastKnownCountryIsoInAPM\"\n\nLocaleTracker seems like a dead end to me, see https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/795611 .\nI rather fix this Bug first and then we can talk about the new CountryDetector and what that should contain. The CountryDetector is a much bigger discussion (a feature actually) that I cannot see being being solved in Android 11. There has to be some kind of consensus within Google on how a CountryDetector should work, which clients it will have and which services should contribute to it. That is a discussion I would love to contribute to but then we are looking at Android 12.\n\n\n\u003e 1) Can you please consider to use a cached parameter instead of\n\u003e a shared preference to cache it in LocaleTracker and read it \n\u003e from EmergencyNumberTracker via getLastKnownCountryIsoInAPM and \u003e use it? \n\nSee above, it will not fix the power on in flight mode use case.\n\n\u003e 2) To use it in EmergencyNumberTracker, I would suggest to make\n\u003e a private method named \"getCountryIsoForCachingDatabase\" in\n\u003e EmergencyNumberTracker  to load database to read the last known\n\u003e country isofrom LocaleTracker if it is in APM.\n\nWe will have a look at it.\n\n\u003e 3) Please try to add unit tests.\n\nOK, will do",
+      "parentUuid": "552224b5_f6084273",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "59cdc187a2574cd096998357bb31c33691ce69d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
