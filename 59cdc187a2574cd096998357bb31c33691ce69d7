@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "552224b5_f6084273",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-02-19T00:45:40Z",
+      "side": 1,
+      "message": "May I have several questions please:\n\n1) Could you please clarify in what situation EmergencyNumberTracker need to read the cached last known country iso and use it for what purposes? The logic in this CL seems to only apply the last known country iso in the construction time of EmergencyNumberTracker, which seems not really using it if APM is toggled by users after it.\n\n2) Could you please clarify who will need to get the last known country iso, except EmergencyNumberTracker? I guess no for your purposes?\n\n3) Could you please clarify why you would use a shared preference instead of a cached parameter?\n\n\nCan you follow some suggestion of mine please:\n\n0) Thanks for considering putting the logic in EmergencyNumberTracker; I think it is cleaner if this could be done in LocaleTracker, which has logic to manage country iso in APM (see https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1238709). You can make a read method in LocaleTracker with a name such as \"getLastKnownCountryIsoInAPM\"\n\n1) Can you please consider to use a cached parameter instead of a shared preference to cache it in LocaleTracker and read it from EmergencyNumberTracker via getLastKnownCountryIsoInAPM and use it? \n\n2) To use it in EmergencyNumberTracker, I would suggest to make a private method named \"getCountryIsoForCachingDatabase\" in EmergencyNumberTracker  to load database to read the last known country isofrom LocaleTracker if it is in APM.\n\n3) Please try to add unit tests.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "59cdc187a2574cd096998357bb31c33691ce69d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
