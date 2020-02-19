@@ -22,6 +22,30 @@
       "revId": "67f27b1642ef4014b0e34b28a0b818dedfcbedfd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "174a7782_cf965789",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-19T15:21:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dc4caff_1a09a3dd",
+      "range": {
+        "startLine": 221,
+        "startChar": 17,
+        "endLine": 221,
+        "endChar": 20
+      },
+      "revId": "67f27b1642ef4014b0e34b28a0b818dedfcbedfd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
