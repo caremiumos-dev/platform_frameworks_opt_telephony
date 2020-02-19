@@ -116,6 +116,7 @@ public class ImsPhoneTest extends TelephonyTest {
     };
 
     private ImsPhone mImsPhoneUT;
+    private PersistableBundle mBundle;
     private boolean mDoesRilSendMultipleCallRing;
     private static final int EVENT_SUPP_SERVICE_NOTIFICATION = 1;
     private static final int EVENT_SUPP_SERVICE_FAILED = 2;
@@ -149,6 +150,8 @@ public class ImsPhoneTest extends TelephonyTest {
         mImsPhoneUT.registerForIncomingRing(mTestHandler,
                 EVENT_INCOMING_RING, null);
         doReturn(mImsUtInterface).when(mImsCT).getUtInterface();
+        mBundle = mContextFixture.getCarrierConfigBundle();
+        mBundle.putBoolean(CarrierConfigManager.KEY_CARRIER_CONFIG_APPLIED_BOOL, true);
         processAllMessages();
     }
 
@@ -626,8 +629,7 @@ public class ImsPhoneTest extends TelephonyTest {
     @SmallTest
     public void testProcessDisconnectReason() throws Exception {
         // set up CarrierConfig
-        PersistableBundle bundle = mContextFixture.getCarrierConfigBundle();
-        bundle.putStringArray(CarrierConfigManager.KEY_WFC_OPERATOR_ERROR_CODES_STRING_ARRAY,
+        mBundle.putStringArray(CarrierConfigManager.KEY_WFC_OPERATOR_ERROR_CODES_STRING_ARRAY,
                 new String[]{"REG09|0"});
         doReturn(true).when(mImsManager).isWfcEnabledByUser();
 
