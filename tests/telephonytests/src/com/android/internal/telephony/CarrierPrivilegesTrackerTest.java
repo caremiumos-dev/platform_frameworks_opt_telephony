@@ -37,6 +37,7 @@ import android.os.PersistableBundle;
 import android.os.UserHandle;
 import android.os.test.TestLooper;
 import android.telephony.CarrierConfigManager;
+import android.telephony.TelephonyManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -62,6 +63,7 @@ public class CarrierPrivilegesTrackerTest {
     private Context mContext;
     private CarrierConfigManager mCarrierConfigManager;
     private PackageManager mPackageManager;
+    private TelephonyManager mTelephonyManager;
 
     private TestLooper mTestLooper;
     private CarrierPrivilegesTracker mTracker;
@@ -73,13 +75,23 @@ public class CarrierPrivilegesTrackerTest {
         mContext = mock(Context.class);
         mCarrierConfigManager = mock(CarrierConfigManager.class);
         mPackageManager = mock(PackageManager.class);
+        mTelephonyManager = mock(TelephonyManager.class);
 
         when(mPhone.getContext()).thenReturn(mContext);
+        when(mPhone.getSubId()).thenReturn(SUB_ID);
+
+        TelephonyManager mockInitialTelephonyManager = mock(TelephonyManager.class);
+        when(mockInitialTelephonyManager.createForSubscriptionId(SUB_ID))
+                .thenReturn(mTelephonyManager);
 
         mTestLooper = new TestLooper();
         mTracker =
                 new CarrierPrivilegesTracker(
-                        mPhone, mTestLooper.getLooper(), mCarrierConfigManager, mPackageManager);
+                        mPhone,
+                        mTestLooper.getLooper(),
+                        mCarrierConfigManager,
+                        mPackageManager,
+                        mockInitialTelephonyManager);
         mListener = new TestListener();
     }
 
@@ -115,18 +127,17 @@ public class CarrierPrivilegesTrackerTest {
                 createPackageInfoWithCertificates(PACKAGE_NAME_B, UID_B, CERTIFICATE_B));
 
         when(mPhone.getPhoneId()).thenReturn(SLOT_INDEX);
-        when(mPhone.getSubId()).thenReturn(SUB_ID);
 
         mTracker.mListeners.add(mListener);
         mTracker.handleCarrierConfigCertsUpdated(bundle);
 
         assertTrue(mTracker.mCarrierConfigCerts.containsAll(Arrays.asList(certs)));
+        assertTrue(mTracker.mUiccCerts.isEmpty());
         List<Integer> expectedUids = Arrays.asList(UID_A, UID_B);
         assertTrue(mTracker.mAdministratorUids.containsAll(expectedUids));
         assertTrue(mListener.mUids.containsAll(expectedUids));
         assertEquals(1, mListener.mTimesInvoked);
         verify(mPhone).getPhoneId();
-        verify(mPhone).getSubId();
         verify(mCarrierConfigManager).getConfigForSubId(eq(SUB_ID));
         verify(mPackageManager).getPackageUidAsUser(eq(PACKAGE_NAME_A), eq(UserHandle.USER_SYSTEM));
         verify(mPackageManager).getPackageUidAsUser(eq(PACKAGE_NAME_B), eq(UserHandle.USER_SYSTEM));
@@ -140,17 +151,109 @@ public class CarrierPrivilegesTrackerTest {
         mTracker.mCarrierConfigCerts.add(CERTIFICATE_A.toLowerCase());
 
         when(mPhone.getPhoneId()).thenReturn(SLOT_INDEX);
-        when(mPhone.getSubId()).thenReturn(SUB_ID);
 
         mTracker.mListeners.add(mListener);
         mTracker.handleCarrierConfigCertsUpdated(bundle);
 
         assertTrue(mTracker.mCarrierConfigCerts.contains(CERTIFICATE_A));
+        assertTrue(mTracker.mUiccCerts.isEmpty());
         assertTrue(mTracker.mAdministratorUids.isEmpty());
         assertEquals(0, mListener.mTimesInvoked);
         verify(mPhone).getPhoneId();
-        verify(mPhone).getSubId();
         verify(mCarrierConfigManager).getConfigForSubId(eq(SUB_ID));
+    }
+
+    @Test
+    public void testSimStateChanged() throws Exception {
+        List<String> certs = Arrays.asList(CERTIFICATE_A, CERTIFICATE_B, CERTIFICATE_C);
+
+        when(mPhone.getPhoneId()).thenReturn(SLOT_INDEX);
+        when(mTelephonyManager.hasIccCard(eq(SLOT_INDEX))).thenReturn(true);
+        when(mTelephonyManager.getCertsFromCarrierPrivilegeAccessRules())
+                .thenReturn(certs);
+
+        mTracker.mPackageInfos.add(
+                createPackageInfoWithCertificates(PACKAGE_NAME_A, UID_A, CERTIFICATE_A));
+        mTracker.mPackageInfos.add(
+                createPackageInfoWithCertificates(PACKAGE_NAME_B, UID_B, CERTIFICATE_B));
+
+        mTracker.mListeners.add(mListener);
+        mTracker.handleSimStateChanged();
+
+        assertTrue(mTracker.mCarrierConfigCerts.isEmpty());
+        assertTrue(mTracker.mUiccCerts.containsAll(certs));
+        List<Integer> expectedUids = Arrays.asList(UID_A, UID_B);
+        assertTrue(mTracker.mAdministratorUids.containsAll(expectedUids));
+        assertTrue(mListener.mUids.containsAll(expectedUids));
+        assertEquals(1, mListener.mTimesInvoked);
+        verify(mPhone).getPhoneId();
+        verify(mTelephonyManager).hasIccCard(eq(SLOT_INDEX));
+        verify(mTelephonyManager).getCertsFromCarrierPrivilegeAccessRules();
+        verify(mPackageManager).getPackageUidAsUser(eq(PACKAGE_NAME_A), eq(UserHandle.USER_SYSTEM));
+        verify(mPackageManager).getPackageUidAsUser(eq(PACKAGE_NAME_B), eq(UserHandle.USER_SYSTEM));
+    }
+
+    @Test
+    public void testSimStateChangedSimRemoved() {
+        when(mPhone.getPhoneId()).thenReturn(SLOT_INDEX);
+        when(mTelephonyManager.hasIccCard(eq(SLOT_INDEX))).thenReturn(false);
+
+        mTracker.mUiccCerts.add(CERTIFICATE_A);
+
+        mTracker.mListeners.add(mListener);
+        mTracker.handleSimStateChanged();
+
+        assertTrue(mTracker.mCarrierConfigCerts.isEmpty());
+        assertTrue(mTracker.mUiccCerts.isEmpty());
+        assertTrue(mTracker.mAdministratorUids.isEmpty());
+        assertEquals(0, mListener.mTimesInvoked);
+        verify(mPhone).getPhoneId();
+        verify(mTelephonyManager).hasIccCard(eq(SLOT_INDEX));
+    }
+
+    @Test
+    public void testSimStateChangedWithoutUpdates() throws Exception {
+        when(mPhone.getPhoneId()).thenReturn(SLOT_INDEX);
+        when(mTelephonyManager.hasIccCard(eq(SLOT_INDEX))).thenReturn(true);
+        when(mTelephonyManager.getCertsFromCarrierPrivilegeAccessRules())
+                .thenReturn(Arrays.asList(CERTIFICATE_A));
+
+        mTracker.mUiccCerts.add(CERTIFICATE_A.toUpperCase());
+        mTracker.mUiccCerts.add(CERTIFICATE_A.toLowerCase());
+
+        mTracker.mListeners.add(mListener);
+        mTracker.handleSimStateChanged();
+
+        assertTrue(mTracker.mCarrierConfigCerts.isEmpty());
+        assertTrue(mTracker.mUiccCerts.contains(CERTIFICATE_A));
+        assertTrue(mTracker.mAdministratorUids.isEmpty());
+        assertEquals(0, mListener.mTimesInvoked);
+        verify(mPhone).getPhoneId();
+        verify(mTelephonyManager).hasIccCard(eq(SLOT_INDEX));
+        verify(mTelephonyManager).getCertsFromCarrierPrivilegeAccessRules();
+    }
+
+    @Test
+    public void testSimStateChangedCertsNotLoaded() throws Exception {
+        when(mPhone.getPhoneId()).thenReturn(SLOT_INDEX);
+        when(mTelephonyManager.hasIccCard(eq(SLOT_INDEX))).thenReturn(true);
+
+        mTracker.mPackageInfos.add(
+                createPackageInfoWithCertificates(PACKAGE_NAME_A, UID_A, CERTIFICATE_A));
+        mTracker.mUiccCerts.add(CERTIFICATE_A.toUpperCase());
+        mTracker.mUiccCerts.add(CERTIFICATE_A.toLowerCase());
+        mTracker.mAdministratorUids.add(UID_A);
+
+        mTracker.mListeners.add(mListener);
+        mTracker.handleSimStateChanged();
+
+        assertTrue(mTracker.mCarrierConfigCerts.isEmpty());
+        assertTrue(mTracker.mUiccCerts.isEmpty());
+        assertTrue(mTracker.mAdministratorUids.isEmpty());
+        assertEquals(1, mListener.mTimesInvoked);
+        verify(mPhone).getPhoneId();
+        verify(mTelephonyManager).hasIccCard(eq(SLOT_INDEX));
+        verify(mTelephonyManager).getCertsFromCarrierPrivilegeAccessRules();
     }
 
     private Bundle prepareCarrierConfigCerts(String... certs) {
