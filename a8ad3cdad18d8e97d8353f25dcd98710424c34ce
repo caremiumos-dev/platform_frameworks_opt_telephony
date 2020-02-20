@@ -16,6 +16,24 @@
       "revId": "a8ad3cdad18d8e97d8353f25dcd98710424c34ce",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9314d1d_b1151fd9",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-02-20T01:37:13Z",
+      "side": 0,
+      "message": "The deliveryPendingList in SMSDispatcher is moved into SmsDispatchersController(mDeliveryPendingMapFor3GPP/ 3GPP2). And SmsTracker#onSent() will put the deliveryIntent into the MAP for all the dispatchers instead.",
+      "parentUuid": "28061328_b54c029c",
+      "revId": "a8ad3cdad18d8e97d8353f25dcd98710424c34ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }

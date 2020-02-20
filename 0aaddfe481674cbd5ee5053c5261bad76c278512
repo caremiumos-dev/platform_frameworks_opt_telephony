@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2ede17e9_30bb3cec",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-02-20T01:37:13Z",
+      "side": 1,
+      "message": "It just is to remove current tracker from the MAP before retrying over CS.",
+      "parentUuid": "7dc1b9f3_8c0ddb09",
+      "revId": "0aaddfe481674cbd5ee5053c5261bad76c278512",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aacd7bff_9d42a15e",
         "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2020-02-20T01:08:32Z",
       "side": 1,
       "message": "This is change in behavior from earlier. Earlier RemoteException was thrown only if tracker was not found, but handled \u003d\u003d false was still handled gracefully.",
+      "range": {
+        "startLine": 165,
+        "startChar": 16,
+        "endLine": 165,
+        "endChar": 41
+      },
+      "revId": "0aaddfe481674cbd5ee5053c5261bad76c278512",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0e8dd34_c14d9a92",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-02-20T01:37:13Z",
+      "side": 1,
+      "message": "You are right. I will remove throwing RemoteException for handled\u003d\u003dfalse.\nIs it ok?",
+      "parentUuid": "aacd7bff_9d42a15e",
       "range": {
         "startLine": 165,
         "startChar": 16,
