@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc17a333_5cef9d2d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2020-02-20T11:48:05Z",
+      "side": 1,
+      "message": "PhoneGlobals.java expects to receive the sub type.\n\n -    IccNetworkDepersonalizationPanel.showDialog(phone);\n +    int subType \u003d (Integer)((AsyncResult)msg.obj).result;\n +    IccNetworkDepersonalizationPanel.showDialog(phone, subType);\n\nIs it unnecessary to specify the sub type in UiccCardApplication and UiccProfile?",
+      "range": {
+        "startLine": 554,
+        "startChar": 57,
+        "endLine": 554,
+        "endChar": 61
+      },
+      "revId": "2a1a0da287f99e2c864f21a871893030221bb7df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
