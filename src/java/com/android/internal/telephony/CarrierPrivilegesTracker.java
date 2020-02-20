@@ -16,13 +16,35 @@
 
 package com.android.internal.telephony;
 
+import static android.telephony.CarrierConfigManager.EXTRA_SUBSCRIPTION_INDEX;
+import static android.telephony.CarrierConfigManager.KEY_CARRIER_CERTIFICATE_STRING_ARRAY;
+
 import android.annotation.NonNull;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
+import android.os.UserHandle;
+import android.telephony.CarrierConfigManager;
+import android.telephony.SubscriptionManager;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * CarrierPrivilegesTracker will track the Carrier Privileges for a specific {@link Phone}.
@@ -33,24 +55,148 @@ import android.util.Log;
 public class CarrierPrivilegesTracker extends Handler {
     private static final String TAG = CarrierPrivilegesTracker.class.getSimpleName();
 
+    /**
+     * Action for tracking when Carrier Configs are updated.
+     * obj: {@link Bundle} of extras from the received Broadcast Intent.
+     */
+    private static final int ACTION_CARRIER_CONFIG_CERTS_UPDATED = 1;
+
+    private final Context mContext;
+    private final CarrierConfigManager mCarrierConfigManager;
+    private final PackageManager mPackageManager;
     private final RegistrantList mRegistrantList;
+    private final Set<String> mCarrierConfigCerts;
+    private final List<PackageInfo> mPackageInfos;
     private int[] mPrivilegedUids;
 
+    private final BroadcastReceiver mIntentReceiver =
+            new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String action = intent.getAction();
+                    if (action == null) return;
+
+                    switch (action) {
+                        case CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED: {
+                            Bundle extras = intent.getExtras();
+                            int subId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
+                            if (extras.containsKey(EXTRA_SUBSCRIPTION_INDEX)) {
+                                subId = extras.getInt(EXTRA_SUBSCRIPTION_INDEX);
+                            }
+                            sendMessage(
+                                    obtainMessage(ACTION_CARRIER_CONFIG_CERTS_UPDATED, subId));
+                            break;
+                        }
+                    }
+                }
+            };
+
     /** @hide */
-    public CarrierPrivilegesTracker(@NonNull Looper looper) {
+    public CarrierPrivilegesTracker(@NonNull Looper looper, @NonNull Context context) {
         super(looper);
+        mContext = context;
+        mCarrierConfigManager = context.getSystemService(CarrierConfigManager.class);
+        mPackageManager = context.getSystemService(PackageManager.class);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        mContext.registerReceiver(mIntentReceiver, filter);
+
         mRegistrantList = new RegistrantList();
+        mCarrierConfigCerts = new HashSet<>();
+        mPackageInfos = new ArrayList<>();
         mPrivilegedUids = new int[0];
     }
 
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
+            case ACTION_CARRIER_CONFIG_CERTS_UPDATED: {
+                handleCarrierConfigUpdated((int) msg.obj);
+                break;
+            }
             default: {
                 Log.e(TAG, "Received unknown msg type: " + msg.what);
                 break;
             }
         }
+    }
+
+    private void handleCarrierConfigUpdated(int subId) {
+        Set<String> updatedCarrierConfigCerts = new HashSet<>();
+
+        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+            PersistableBundle carrierConfigs = mCarrierConfigManager.getConfigForSubId(subId);
+            if (!mCarrierConfigManager.isConfigForIdentifiedCarrier(carrierConfigs)) return;
+
+            String[] carrierConfigCerts =
+                    carrierConfigs.getStringArray(KEY_CARRIER_CERTIFICATE_STRING_ARRAY);
+
+            if (carrierConfigCerts != null) {
+                for (String cert : carrierConfigCerts) {
+                    // TODO(b/150221469): explore how to efficiently protect against cert casing
+                    updatedCarrierConfigCerts.add(cert.toUpperCase());
+                    updatedCarrierConfigCerts.add(cert.toLowerCase());
+                }
+            }
+        }
+
+        maybeUpdateCertsAndNotifyRegistrants(mCarrierConfigCerts, updatedCarrierConfigCerts);
+    }
+
+    private void maybeUpdateCertsAndNotifyRegistrants(
+            Set<String> currentCerts, Set<String> updatedCerts) {
+        if (!currentCerts.equals(updatedCerts)) {
+            currentCerts.clear();
+            currentCerts.addAll(updatedCerts);
+
+            int[] updatedPrivilegedUids = getUpdatedPrivilegedUids();
+
+            // Sort UIDs for the equality check
+            Arrays.sort(updatedPrivilegedUids);
+            if (!Arrays.equals(mPrivilegedUids, updatedPrivilegedUids)) {
+                mPrivilegedUids = updatedPrivilegedUids;
+                mRegistrantList.notifyResult(mPrivilegedUids);
+            }
+        }
+    }
+
+    private int[] getUpdatedPrivilegedUids() {
+        Set<Integer> privilegedUids = new HashSet<>();
+        for (PackageInfo pkg : mPackageInfos) {
+            if (isPackagePrivileged(pkg)) {
+                int uid;
+                try {
+                    uid =
+                            mPackageManager.getPackageUidAsUser(
+                                    pkg.packageName, UserHandle.USER_SYSTEM);
+                } catch (NameNotFoundException e) {
+                    // Didn't find package. Continue looking at other packages
+                    Log.e(TAG, "Unable to find uid for package: " + pkg.packageName);
+                    continue;
+                }
+                privilegedUids.add(uid);
+            }
+        }
+
+        int[] result = new int[privilegedUids.size()];
+        int index = 0;
+        for (int uid : privilegedUids) {
+            result[index] = uid;
+            index++;
+        }
+        return result;
+    }
+
+    private boolean isPackagePrivileged(PackageInfo pkg) {
+        Signature[] signatures = pkg.signingInfo.getApkContentsSigners();
+        for (Signature signature : signatures) {
+            String cert = signature.toCharsString();
+            if (mCarrierConfigCerts.contains(cert)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
