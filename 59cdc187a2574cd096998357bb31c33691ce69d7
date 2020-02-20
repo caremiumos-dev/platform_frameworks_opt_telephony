@@ -46,6 +46,30 @@
       "revId": "59cdc187a2574cd096998357bb31c33691ce69d7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81e6f0d0_3fc7fdb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-02-20T02:44:53Z",
+      "side": 1,
+      "message": "Thanks for the answers. I agree with most of your comments.\n\n\u003e LocaleTracker seems like a dead end to me, \n\u003e see https://android-review.googlesource.com/c/platform/frameworks/opt/\n\u003e telephony/+/795611 \n\nPlease clarify. I think the logic of caching the country iso in APM is the mission of LocaleTracker. Also I think it is convenient to code there. EmergencyNumberTracker could be one of the users.",
+      "parentUuid": "c5d7fd57_dfed8a9f",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "59cdc187a2574cd096998357bb31c33691ce69d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
