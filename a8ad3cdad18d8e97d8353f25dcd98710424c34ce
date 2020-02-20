@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28061328_b54c029c",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-02-20T01:08:32Z",
+      "side": 0,
+      "message": "Why do you think this condition can be removed?",
+      "revId": "a8ad3cdad18d8e97d8353f25dcd98710424c34ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

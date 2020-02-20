@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7dc1b9f3_8c0ddb09",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-02-20T01:08:32Z",
+      "side": 1,
+      "message": "Is there a reason to separate this out from fallbackToPsth()?",
+      "revId": "0aaddfe481674cbd5ee5053c5261bad76c278512",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aacd7bff_9d42a15e",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-02-20T01:08:32Z",
+      "side": 1,
+      "message": "This is change in behavior from earlier. Earlier RemoteException was thrown only if tracker was not found, but handled \u003d\u003d false was still handled gracefully.",
+      "range": {
+        "startLine": 165,
+        "startChar": 16,
+        "endLine": 165,
+        "endChar": 41
+      },
+      "revId": "0aaddfe481674cbd5ee5053c5261bad76c278512",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
