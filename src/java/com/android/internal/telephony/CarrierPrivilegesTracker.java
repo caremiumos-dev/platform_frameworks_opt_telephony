@@ -18,6 +18,9 @@ package com.android.internal.telephony;
 
 import static android.telephony.CarrierConfigManager.EXTRA_SUBSCRIPTION_INDEX;
 import static android.telephony.CarrierConfigManager.KEY_CARRIER_CERTIFICATE_STRING_ARRAY;
+import static android.telephony.TelephonyManager.SIM_STATE_ABSENT;
+import static android.telephony.TelephonyManager.SIM_STATE_LOADED;
+import static android.telephony.TelephonyManager.SIM_STATE_NOT_READY;
 
 import android.annotation.NonNull;
 import android.content.BroadcastReceiver;
@@ -38,6 +41,7 @@ import android.os.RegistrantList;
 import android.os.UserHandle;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -61,11 +65,21 @@ public class CarrierPrivilegesTracker extends Handler {
      */
     private static final int ACTION_CARRIER_CONFIG_CERTS_UPDATED = 1;
 
+    /**
+     * Action for tracking when the Phone's SIM state changes.
+     * arg1: slotId that this Action applies to
+     * arg2: simState reported by this Broadcast
+     */
+    private static final int ACTION_SIM_STATE_UPDATED = 2;
+
     private final Context mContext;
+    private final Phone mPhone;
     private final CarrierConfigManager mCarrierConfigManager;
     private final PackageManager mPackageManager;
+    private final TelephonyManager mTelephonyManager;
     private final RegistrantList mRegistrantList;
     private final Set<String> mCarrierConfigCerts;
+    private final Set<String> mUiccCerts;
     private final List<PackageInfo> mPackageInfos;
     private int[] mPrivilegedUids;
 
@@ -87,23 +101,42 @@ public class CarrierPrivilegesTracker extends Handler {
                                     obtainMessage(ACTION_CARRIER_CONFIG_CERTS_UPDATED, subId));
                             break;
                         }
+                        case TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED: // fall through
+                        case TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED: {
+                            Bundle extras = intent.getExtras();
+                            int simState = extras.getInt(TelephonyManager.EXTRA_SIM_STATE);
+                            int slotId = extras.getInt(PhoneConstants.SLOT_KEY);
+
+                            if (simState != SIM_STATE_ABSENT
+                                    && simState != SIM_STATE_NOT_READY
+                                    && simState != SIM_STATE_LOADED) return;
+
+                            sendMessage(obtainMessage(ACTION_SIM_STATE_UPDATED, slotId, simState));
+                            break;
+                        }
                     }
                 }
             };
 
     /** @hide */
-    public CarrierPrivilegesTracker(@NonNull Looper looper, @NonNull Context context) {
+    public CarrierPrivilegesTracker(
+            @NonNull Looper looper, @NonNull Phone phone, @NonNull Context context) {
         super(looper);
         mContext = context;
         mCarrierConfigManager = context.getSystemService(CarrierConfigManager.class);
         mPackageManager = context.getSystemService(PackageManager.class);
+        mTelephonyManager = context.getSystemService(TelephonyManager.class);
+        mPhone = phone;
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
+        filter.addAction(TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED);
         mContext.registerReceiver(mIntentReceiver, filter);
 
         mRegistrantList = new RegistrantList();
         mCarrierConfigCerts = new HashSet<>();
+        mUiccCerts = new HashSet<>();
         mPackageInfos = new ArrayList<>();
         mPrivilegedUids = new int[0];
     }
@@ -113,6 +146,10 @@ public class CarrierPrivilegesTracker extends Handler {
         switch (msg.what) {
             case ACTION_CARRIER_CONFIG_CERTS_UPDATED: {
                 handleCarrierConfigUpdated((int) msg.obj);
+                break;
+            }
+            case ACTION_SIM_STATE_UPDATED: {
+                handleSimStateChanged(msg.arg1, msg.arg2);
                 break;
             }
             default: {
@@ -142,6 +179,29 @@ public class CarrierPrivilegesTracker extends Handler {
         }
 
         maybeUpdateCertsAndNotifyRegistrants(mCarrierConfigCerts, updatedCarrierConfigCerts);
+    }
+
+    private void handleSimStateChanged(int slotId, int simState) {
+        if (slotId != mPhone.getPhoneId()) return;
+
+        Set<String> updatedUiccCerts = new HashSet<>();
+
+        // Only update the UICC certs if the SIM is fully loaded
+        if (simState == SIM_STATE_LOADED) {
+            TelephonyManager telMan = mTelephonyManager.createForSubscriptionId(mPhone.getSubId());
+            if (telMan.hasIccCard(mPhone.getPhoneId())) {
+                List<String> uiccCerts = telMan.getCertsFromCarrierPrivilegeAccessRules();
+                if (uiccCerts != null) {
+                    for (String cert : uiccCerts) {
+                        // TODO(b/150221469): explore how to efficiently protect against cert casing
+                        updatedUiccCerts.add(cert.toUpperCase());
+                        updatedUiccCerts.add(cert.toLowerCase());
+                    }
+                }
+            }
+        }
+
+        maybeUpdateCertsAndNotifyRegistrants(mUiccCerts, updatedUiccCerts);
     }
 
     private void maybeUpdateCertsAndNotifyRegistrants(
@@ -192,7 +252,7 @@ public class CarrierPrivilegesTracker extends Handler {
         Signature[] signatures = pkg.signingInfo.getApkContentsSigners();
         for (Signature signature : signatures) {
             String cert = signature.toCharsString();
-            if (mCarrierConfigCerts.contains(cert)) {
+            if (mCarrierConfigCerts.contains(cert) || mUiccCerts.contains(cert)) {
                 return true;
             }
         }
