@@ -16,12 +16,17 @@
 
 package com.android.internal.telephony;
 
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import android.annotation.NonNull;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.test.TestLooper;
+import android.telephony.CarrierConfigManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +37,10 @@ public class CarrierPrivilegesTrackerTest {
     private static final int ADMINISTRATOR_UID = 10;
 
     private Phone mPhone;
+    private Context mContext;
+    private CarrierConfigManager mCarrierConfigManager;
+    private PackageManager mPackageManager;
+
     private TestLooper mTestLooper;
     private CarrierPrivilegesTracker mTracker;
     private TestListener mListener;
@@ -39,8 +48,16 @@ public class CarrierPrivilegesTrackerTest {
     @Before
     public void setUp() {
         mPhone = mock(Phone.class);
+        mContext = mock(Context.class);
+        mCarrierConfigManager = mock(CarrierConfigManager.class);
+        mPackageManager = mock(PackageManager.class);
+
+        when(mPhone.getContext()).thenReturn(mContext);
+
         mTestLooper = new TestLooper();
-        mTracker = new CarrierPrivilegesTracker(mPhone, mTestLooper.getLooper());
+        mTracker =
+                new CarrierPrivilegesTracker(
+                        mTestLooper.getLooper(), mPhone, mCarrierConfigManager, mPackageManager);
         mListener = new TestListener();
     }
 
