@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.test.TestLooper;
 import android.telephony.CarrierConfigManager;
+import android.telephony.TelephonyManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,11 +36,13 @@ import java.util.Set;
 
 public class CarrierPrivilegesTrackerTest {
     private static final int ADMINISTRATOR_UID = 10;
+    private static final int SUB_ID = 1;
 
     private Phone mPhone;
     private Context mContext;
     private CarrierConfigManager mCarrierConfigManager;
     private PackageManager mPackageManager;
+    private TelephonyManager mTelephonyManager;
 
     private TestLooper mTestLooper;
     private CarrierPrivilegesTracker mTracker;
@@ -51,13 +54,23 @@ public class CarrierPrivilegesTrackerTest {
         mContext = mock(Context.class);
         mCarrierConfigManager = mock(CarrierConfigManager.class);
         mPackageManager = mock(PackageManager.class);
+        mTelephonyManager = mock(TelephonyManager.class);
 
         when(mPhone.getContext()).thenReturn(mContext);
+        when(mPhone.getSubId()).thenReturn(SUB_ID);
+
+        TelephonyManager mockInitialTelephonyManager = mock(TelephonyManager.class);
+        when(mockInitialTelephonyManager.createForSubscriptionId(SUB_ID))
+                .thenReturn(mTelephonyManager);
 
         mTestLooper = new TestLooper();
         mTracker =
                 new CarrierPrivilegesTracker(
-                        mTestLooper.getLooper(), mPhone, mCarrierConfigManager, mPackageManager);
+                        mTestLooper.getLooper(),
+                        mPhone,
+                        mCarrierConfigManager,
+                        mPackageManager,
+                        mockInitialTelephonyManager);
         mListener = new TestListener();
     }
 

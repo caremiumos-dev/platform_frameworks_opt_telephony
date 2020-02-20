@@ -36,7 +36,7 @@ import android.os.PersistableBundle;
 import android.os.UserHandle;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
-import android.util.ArraySet;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -74,13 +74,21 @@ public class CarrierPrivilegesTracker extends Handler {
      */
     private static final int ACTION_CARRIER_CONFIG_CERTS_UPDATED = 3;
 
+    /**
+     * Action for tracking when the Phone's SIM state changes.
+     *
+     */
+    private static final int ACTION_SIM_STATE_CHANGED = 4;
+
     private final Phone mPhone;
     private final Context mContext;
     private final CarrierConfigManager mCarrierConfigManager;
     private final PackageManager mPackageManager;
+    private final TelephonyManager mTelephonyManager;
 
     @VisibleForTesting public final Set<CarrierPrivilegesListener> mListeners;
     @VisibleForTesting public final Set<String> mCarrierConfigCerts;
+    @VisibleForTesting public final Set<String> mUiccCerts;
     @VisibleForTesting public final Set<Integer> mPrivilegedUids;
     @VisibleForTesting public final List<PackageInfo> mPackageInfos;
 
@@ -104,6 +112,10 @@ public class CarrierPrivilegesTracker extends Handler {
                                     obtainMessage(ACTION_CARRIER_CONFIG_CERTS_UPDATED, subId));
                             break;
                         }
+                        case TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED: {
+                            sendMessage(obtainMessage(ACTION_SIM_STATE_CHANGED));
+                            break;
+                        }
                     }
                 }
             };
@@ -113,20 +125,24 @@ public class CarrierPrivilegesTracker extends Handler {
             @NonNull Looper looper,
             @NonNull Phone phone,
             @NonNull CarrierConfigManager carrierConfigManager,
-            @NonNull PackageManager packageManager) {
+            @NonNull PackageManager packageManager,
+            @NonNull TelephonyManager telephonyManager) {
         super(looper);
         mPhone = phone;
         mContext = phone.getContext();
         mCarrierConfigManager = carrierConfigManager;
         mPackageManager = packageManager;
+        mTelephonyManager = telephonyManager.createForSubscriptionId(phone.getSubId());
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
         mContext.registerReceiver(mIntentReceiver, filter);
 
         mListeners = new HashSet<>();
         mCarrierConfigCerts = new HashSet<>();
-        mPrivilegedUids = new ArraySet<>();
+        mUiccCerts = new HashSet<>();
+        mPrivilegedUids = new HashSet<>();
         mPackageInfos = new ArrayList<>();
     }
 
@@ -148,6 +164,10 @@ public class CarrierPrivilegesTracker extends Handler {
             }
             case ACTION_CARRIER_CONFIG_CERTS_UPDATED: {
                 handleCarrierConfigCertsUpdated((int) msg.obj);
+                break;
+            }
+            case ACTION_SIM_STATE_CHANGED: {
+                handleSimStateChanged();
                 break;
             }
         }
@@ -179,13 +199,35 @@ public class CarrierPrivilegesTracker extends Handler {
         }
     }
 
+    /** @hide */
+    @VisibleForTesting
+    public void handleSimStateChanged() {
+        Set<String> updatedUiccCerts = new HashSet<>();
+        if (mTelephonyManager.hasIccCard(mPhone.getPhoneId())) {
+            List<String> uiccCerts = mTelephonyManager.getCertsFromCarrierPrivilegeAccessRules();
+            if (uiccCerts != null) {
+                for (String cert : uiccCerts) {
+                    // TODO(b/150221469): explore how to efficiently protect against cert casing
+                    updatedUiccCerts.add(cert.toUpperCase());
+                    updatedUiccCerts.add(cert.toLowerCase());
+                }
+            }
+        }
+
+        if (!mUiccCerts.equals(updatedUiccCerts)) {
+            mUiccCerts.clear();
+            mUiccCerts.addAll(updatedUiccCerts);
+            updateCarrierPrivilegedUids();
+        }
+    }
+
     private void updateCarrierPrivilegedUids() {
         Set<Integer> administratorUids = new HashSet<>();
         for (PackageInfo packageInfo : mPackageInfos) {
             Signature[] signatures = packageInfo.signingInfo.getApkContentsSigners();
             for (Signature signature : signatures) {
                 String cert = signature.toCharsString();
-                if (mCarrierConfigCerts.contains(cert)) {
+                if (mCarrierConfigCerts.contains(cert) || mUiccCerts.contains(cert)) {
                     try {
                         int uid =
                                 mPackageManager.getPackageUidAsUser(
