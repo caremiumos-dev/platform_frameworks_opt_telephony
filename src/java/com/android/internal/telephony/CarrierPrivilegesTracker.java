@@ -17,9 +17,15 @@
 package com.android.internal.telephony;
 
 import android.annotation.NonNull;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.telephony.CarrierConfigManager;
 
 import com.android.internal.annotations.VisibleForTesting;
 
@@ -46,10 +52,33 @@ public class CarrierPrivilegesTracker extends Handler {
      */
     private static final int ACTION_UNREGISTER_LISTENER = 2;
 
+    /**
+     * Action for tracking when Carrier Configs are updated.
+     * obj: {@link Bundle} of extras from the received Broadcast Intent.
+     */
+    private static final int ACTION_UPDATE_CARRIER_CONFIG_CERTS = 3;
+
     private final Phone mPhone;
     @VisibleForTesting public final Set<CarrierPrivilegesListener> mListeners;
 
+    @VisibleForTesting public final Set<String> mCarrierConfigCerts;
     @VisibleForTesting public final Set<Integer> mAdministratorUids;
+
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action == null) return;
+
+            switch (action) {
+                case CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED: {
+                    sendMessage(
+                            obtainMessage(ACTION_UPDATE_CARRIER_CONFIG_CERTS, intent.getExtras()));
+                    break;
+                }
+            }
+        }
+    };
 
     /** @hide */
     public CarrierPrivilegesTracker(@NonNull Phone phone, @NonNull Looper looper) {
@@ -57,7 +86,12 @@ public class CarrierPrivilegesTracker extends Handler {
         mPhone = phone;
         mListeners = new HashSet<>();
 
+        mCarrierConfigCerts = new HashSet<>();
         mAdministratorUids = new HashSet<>();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        mPhone.getContext().registerReceiver(mIntentReceiver, filter);
     }
 
     @Override
@@ -74,6 +108,16 @@ public class CarrierPrivilegesTracker extends Handler {
             case ACTION_UNREGISTER_LISTENER: {
                 CarrierPrivilegesListener listener = (CarrierPrivilegesListener) msg.obj;
                 mListeners.remove(listener);
+                break;
+            }
+            case ACTION_UPDATE_CARRIER_CONFIG_CERTS: {
+                Bundle extras = (Bundle) msg.obj;
+                if (extras == null) return;
+
+                int slotIndex = extras.getInt(CarrierConfigManager.EXTRA_SLOT_INDEX);
+                if (mPhone.getPhoneId() != slotIndex) return; // Config doesn't affect us
+
+
                 break;
             }
         }
