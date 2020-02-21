@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7f5a9cb_5a51b997",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2020-02-21T07:46:19Z",
+      "side": 1,
+      "message": "if (r \u003d\u003d null) is the major usecase, right?\n\n        if (mAppState \u003d\u003d AppState.APPSTATE_SUBSCRIPTION_PERSO \u0026\u0026\n                mPersoSubState \u003d\u003d PersoSubState.PERSOSUBSTATE_SIM_NETWORK) {\n +          AsyncResult ar \u003d new AsyncResult(null, mPersoSubState.ordinal(), null);\n            if (r \u003d\u003d null) {\n                if (DBG) log(\"Notifying registrants: NETWORK_LOCKED\");\n -              mNetworkLockedRegistrants.notifyRegistrants();\n +              mNetworkLockedRegistrants.notifyRegistrants(ar);\n            } else {\n                if (DBG) log(\"Notifying 1 registrant: NETWORK_LOCED\");\n -              r.notifyRegistrant(new AsyncResult(null, null, null));\n -              r.notifyRegistrant(ar);",
+      "range": {
+        "startLine": 551,
+        "startChar": 59,
+        "endLine": 551,
+        "endChar": 61
+      },
+      "revId": "5188e9dfad7150b41c312d901b8a6a77b6482312",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da2146ab_e9860181",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2020-02-21T07:46:19Z",
+      "side": 1,
+      "message": "The number of characters on one line should not be more than 100.\n\n -              mNetworkLockedRegistrants.notifyRegistrants();\n +              mNetworkLockedRegistrants.notifyRegistrants(\n +                      new AsyncResult(null, mUiccApplication.getPersoSubState().ordinal(), null));",
+      "range": {
+        "startLine": 198,
+        "startChar": 100,
+        "endLine": 198,
+        "endChar": 139
+      },
+      "revId": "5188e9dfad7150b41c312d901b8a6a77b6482312",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab764b18_73e60893",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1163305
+      },
+      "writtenOn": "2020-02-21T07:46:19Z",
+      "side": 1,
+      "message": "The number of characters on one line should not be more than 100.\n\n -              r.notifyRegistrant();\n +              r.notifyRegistrant(new AsyncResult(null, mUiccApplication.getPersoSubState()\n +                      .ordinal(), null));",
+      "range": {
+        "startLine": 767,
+        "startChar": 100,
+        "endLine": 767,
+        "endChar": 111
+      },
+      "revId": "5188e9dfad7150b41c312d901b8a6a77b6482312",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
