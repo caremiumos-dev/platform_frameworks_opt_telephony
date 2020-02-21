@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e2c00511_08296c95",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-21T08:17:38Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "c7f5a9cb_5a51b997",
+      "range": {
+        "startLine": 551,
+        "startChar": 59,
+        "endLine": 551,
+        "endChar": 61
+      },
+      "revId": "5188e9dfad7150b41c312d901b8a6a77b6482312",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da2146ab_e9860181",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5b0a4473_a3ffca25",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-21T08:17:38Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "da2146ab_e9860181",
+      "range": {
+        "startLine": 198,
+        "startChar": 100,
+        "endLine": 198,
+        "endChar": 139
+      },
+      "revId": "5188e9dfad7150b41c312d901b8a6a77b6482312",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab764b18_73e60893",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2020-02-21T07:46:19Z",
       "side": 1,
       "message": "The number of characters on one line should not be more than 100.\n\n -              r.notifyRegistrant();\n +              r.notifyRegistrant(new AsyncResult(null, mUiccApplication.getPersoSubState()\n +                      .ordinal(), null));",
+      "range": {
+        "startLine": 767,
+        "startChar": 100,
+        "endLine": 767,
+        "endChar": 111
+      },
+      "revId": "5188e9dfad7150b41c312d901b8a6a77b6482312",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19dcf147_0981f535",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-21T08:17:38Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "ab764b18_73e60893",
       "range": {
         "startLine": 767,
         "startChar": 100,
