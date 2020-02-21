@@ -22,6 +22,30 @@
       "revId": "2a1a0da287f99e2c864f21a871893030221bb7df",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a09de41_75183fe6",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-21T06:07:03Z",
+      "side": 1,
+      "message": "hi yoshiaki, added another patch.\nPTAL",
+      "parentUuid": "bc17a333_5cef9d2d",
+      "range": {
+        "startLine": 554,
+        "startChar": 57,
+        "endLine": 554,
+        "endChar": 61
+      },
+      "revId": "2a1a0da287f99e2c864f21a871893030221bb7df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
