@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da4f1921_c62bf8c9",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-02-25T21:24:32Z",
+      "side": 1,
+      "message": "rename to updateDialArgsForVolteSilentRedial",
+      "range": {
+        "startLine": 2160,
+        "startChar": 20,
+        "endLine": 2160,
+        "endChar": 34
+      },
+      "revId": "0a0cfc8ebed6e9d44ac59fd0b7764bbe48fa0930",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c203f507_39e8296d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2170,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-02-25T21:24:32Z",
+      "side": 1,
+      "message": "make a new copy of these extras here -- the extras that were in the dialargs might still be cached/used elsewhere",
+      "range": {
+        "startLine": 2170,
+        "startChar": 28,
+        "endLine": 2170,
+        "endChar": 49
+      },
+      "revId": "0a0cfc8ebed6e9d44ac59fd0b7764bbe48fa0930",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
