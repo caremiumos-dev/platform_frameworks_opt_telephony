@@ -55,9 +55,9 @@ import org.mockito.Mock;
 public class CellularNetworkValidatorTest extends TelephonyTest {
     private CellularNetworkValidator mValidatorUT;
     private static final PhoneCapability CAPABILITY_WITH_VALIDATION_SUPPORTED =
-            new PhoneCapability(0, 0, 0, 0, 1, 0, null, null, null, null, null, null, null);
+            new PhoneCapability(1, 1, 0, null, true);
     private static final PhoneCapability CAPABILITY_WITHOUT_VALIDATION_SUPPORTED =
-            new PhoneCapability(0, 0, 0, 0, 0, 0, null, null, null, null, null, null, null);
+            new PhoneCapability(1, 1, 0, null, false);
     private final CellIdentityLte mCellIdentityLte1 = new CellIdentityLte(123, 456, 0, 0, 111);
     private final CellIdentityLte mCellIdentityLte2 = new CellIdentityLte(321, 654, 0, 0, 222);
     @Mock
@@ -86,7 +86,7 @@ public class CellularNetworkValidatorTest extends TelephonyTest {
      */
     @Test
     @SmallTest
-    public void testValidationSupported() {
+    public void testValidationSupported() throws Exception {
         doReturn(CAPABILITY_WITH_VALIDATION_SUPPORTED).when(mPhoneConfigurationManager)
                 .getCurrentPhoneCapability();
         assertTrue(mValidatorUT.isValidationFeatureSupported());
@@ -101,7 +101,7 @@ public class CellularNetworkValidatorTest extends TelephonyTest {
      */
     @Test
     @SmallTest
-    public void testValidateSuccess() {
+    public void testValidateSuccess() throws Exception {
         int subId = 1;
         int timeout = 1000;
         NetworkRequest expectedRequest = new NetworkRequest.Builder()
@@ -129,7 +129,7 @@ public class CellularNetworkValidatorTest extends TelephonyTest {
      */
     @Test
     @SmallTest
-    public void testValidateTimeout() {
+    public void testValidateTimeout() throws Exception {
         int subId = 1;
         int timeout = 100;
         NetworkRequest expectedRequest = new NetworkRequest.Builder()
@@ -154,7 +154,7 @@ public class CellularNetworkValidatorTest extends TelephonyTest {
      */
     @Test
     @SmallTest
-    public void testValidateFailure() {
+    public void testValidateFailure() throws Exception {
         int subId = 1;
         int timeout = 100;
         NetworkRequest expectedRequest = new NetworkRequest.Builder()
@@ -181,7 +181,7 @@ public class CellularNetworkValidatorTest extends TelephonyTest {
      */
     @Test
     @SmallTest
-    public void testNetworkAvailableNotValidated() {
+    public void testNetworkAvailableNotValidated() throws Exception {
         int subId = 1;
         int timeout = 100;
         NetworkRequest expectedRequest = new NetworkRequest.Builder()
