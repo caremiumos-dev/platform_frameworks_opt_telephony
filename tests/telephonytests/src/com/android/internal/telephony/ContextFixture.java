@@ -16,7 +16,6 @@
 
 package com.android.internal.telephony;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyInt;
@@ -633,12 +632,6 @@ public class ContextFixture implements TestFixture<Context> {
         doAnswer((Answer<Boolean>)
                 invocation -> mSystemFeatures.contains((String) invocation.getArgument(0)))
                 .when(mPackageManager).hasSystemFeature(any());
-
-        try {
-            doReturn(mResources).when(mPackageManager).getResourcesForApplication(anyString());
-        } catch (NameNotFoundException ex) {
-            Log.d(TAG, "NameNotFoundException: " + ex);
-        }
 
         doReturn(mBundle).when(mCarrierConfigManager).getConfigForSubId(anyInt());
         //doReturn(mBundle).when(mCarrierConfigManager).getConfig(anyInt());
