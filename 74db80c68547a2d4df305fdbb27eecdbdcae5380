@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "364b39eb_16683e99",
+        "filename": "src/java/com/android/internal/telephony/IccCard.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-26T21:42:48Z",
+      "side": 1,
+      "message": "This is consistent with the methods above, so it\u0027s ok for me.",
+      "parentUuid": "b38421ec_89657499",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 10
+      },
+      "revId": "74db80c68547a2d4df305fdbb27eecdbdcae5380",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7daa3bf_486f0e42",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 5
@@ -507,6 +531,30 @@
       "side": 1,
       "message": "plz suggest if any further changes needed",
       "parentUuid": "448e593a_3459e3cd",
+      "range": {
+        "startLine": 548,
+        "startChar": 16,
+        "endLine": 548,
+        "endChar": 73
+      },
+      "revId": "74db80c68547a2d4df305fdbb27eecdbdcae5380",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d81f9c5_0f8815be",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-26T21:42:48Z",
+      "side": 1,
+      "message": "I assume this code is tested with various personalization locks to verify the correct behavior.\nDid it pass before?",
+      "parentUuid": "f3062af2_6124c255",
       "range": {
         "startLine": 548,
         "startChar": 16,
