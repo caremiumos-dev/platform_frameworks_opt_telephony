@@ -307,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "138c197d_0b2813bb",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-27T23:33:18Z",
+      "side": 1,
+      "message": "Yes, so that we trace the correct value.",
+      "parentUuid": "ecdc7fff_99c84cb1",
+      "range": {
+        "startLine": 551,
+        "startChar": 53,
+        "endLine": 551,
+        "endChar": 67
+      },
+      "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52dcf9f7_9ce52dc8",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
         "patchSetId": 7

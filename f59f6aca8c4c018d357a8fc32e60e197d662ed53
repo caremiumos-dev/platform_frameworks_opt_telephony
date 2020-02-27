@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c14f681_7e968cf1",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-02-27T23:33:18Z",
+      "side": 1,
+      "message": "Minor. Align under convertPersoTypeToHalPersoType",
+      "range": {
+        "startLine": 933,
+        "startChar": 28,
+        "endLine": 933,
+        "endChar": 32
+      },
+      "revId": "f59f6aca8c4c018d357a8fc32e60e197d662ed53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
