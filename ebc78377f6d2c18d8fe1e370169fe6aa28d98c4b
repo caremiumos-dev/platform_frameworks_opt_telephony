@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "130cb998_611e4f32",
+        "filename": "src/java/com/android/internal/telephony/IccCard.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-27T09:22:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d34d0976_f177e02d",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 101
+      },
+      "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9f5d92d_8d036017",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 7
@@ -68,6 +92,30 @@
       "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ad5233a_5cd56d27",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-27T09:22:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9f5d92d_8d036017",
+      "range": {
+        "startLine": 916,
+        "startChar": 16,
+        "endLine": 916,
+        "endChar": 103
+      },
+      "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "30d37569_f929e99b",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-27T09:22:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a07c4e49_b165ee66",
+      "range": {
+        "startLine": 930,
+        "startChar": 20,
+        "endLine": 930,
+        "endChar": 113
+      },
+      "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28f0732a_4b571b30",
         "filename": "src/java/com/android/internal/telephony/RIL.java",
         "patchSetId": 7
@@ -114,6 +186,30 @@
       "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fecc6d2_809e09ef",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-27T09:22:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28f0732a_4b571b30",
+      "range": {
+        "startLine": 1016,
+        "startChar": 0,
+        "endLine": 1016,
+        "endChar": 0
+      },
+      "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "98f08e12_aba93ada",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCommandInterface.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-27T09:22:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5809754_4c622add",
+      "range": {
+        "startLine": 96,
+        "startChar": 16,
+        "endLine": 96,
+        "endChar": 42
+      },
+      "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03408a96_3d9cbdf4",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
         "patchSetId": 7
@@ -151,6 +271,30 @@
       "writtenOn": "2020-02-26T21:42:48Z",
       "side": 1,
       "message": "If we are using this method for all categories, is it worth updating this trace and the one in the else block below, potentially printing the value of mPersoSubState?",
+      "range": {
+        "startLine": 551,
+        "startChar": 53,
+        "endLine": 551,
+        "endChar": 67
+      },
+      "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecdc7fff_99c84cb1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-27T09:22:24Z",
+      "side": 1,
+      "message": "ok, so are you suggesting for logging mPersoSubState in if and else block ??",
+      "parentUuid": "03408a96_3d9cbdf4",
       "range": {
         "startLine": 551,
         "startChar": 53,
@@ -183,6 +327,30 @@
       "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "469c3ca3_bb473a9c",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-27T09:22:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52dcf9f7_9ce52dc8",
+      "range": {
+        "startLine": 650,
+        "startChar": 4,
+        "endLine": 650,
+        "endChar": 10
+      },
+      "revId": "ebc78377f6d2c18d8fe1e370169fe6aa28d98c4b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
