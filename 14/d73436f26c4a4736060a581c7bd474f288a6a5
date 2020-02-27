@@ -1,0 +1,10 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+2: Hall Liu <hallliu@google.com>
+Autosubmit+1: Hall Liu <hallliu@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Thu, 27 Feb 2020 04:00:30 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1192461
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
