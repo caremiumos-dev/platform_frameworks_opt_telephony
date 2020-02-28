@@ -615,6 +615,30 @@
     },
     {
       "key": {
+        "uuid": "13a91b58_50c1e87d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-28T05:06:01Z",
+      "side": 1,
+      "message": "no, what I am trying to explain that changes with isPersoLocked() method is there in qcom side and passed test cases for different personalization locks.",
+      "parentUuid": "05e1ad31_c8271b85",
+      "range": {
+        "startLine": 548,
+        "startChar": 16,
+        "endLine": 548,
+        "endChar": 73
+      },
+      "revId": "74db80c68547a2d4df305fdbb27eecdbdcae5380",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43adf76d_514467e2",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
         "patchSetId": 5

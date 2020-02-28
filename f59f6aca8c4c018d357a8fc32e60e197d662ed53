@@ -22,6 +22,29 @@
       "revId": "f59f6aca8c4c018d357a8fc32e60e197d662ed53",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c02d771_d44708c1",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-02-28T05:06:01Z",
+      "side": 1,
+      "message": "do we need to replace this with isPersoLocked() method ? is it require here also ?",
+      "range": {
+        "startLine": 163,
+        "startChar": 20,
+        "endLine": 163,
+        "endChar": 77
+      },
+      "revId": "f59f6aca8c4c018d357a8fc32e60e197d662ed53",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
