@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd87358d_9139456e",
+        "filename": "src/java/com/android/internal/telephony/nitz/TimeZoneLookupHelper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-03-02T18:39:52Z",
+      "side": 1,
+      "message": "I\u0027m curious why this doesn\u0027t break any of the tests -- is it that there aren\u0027t any more tests left over that mock this class?",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 18
+      },
+      "revId": "a401113922fb7565e49069ecfd996b394983d6b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
