@@ -46,6 +46,30 @@
       "revId": "a401113922fb7565e49069ecfd996b394983d6b5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4be22eab_36d2a55d",
+        "filename": "src/java/com/android/internal/telephony/nitz/TimeZoneLookupHelper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-03-02T19:14:27Z",
+      "side": 1,
+      "message": "Ack. Thanks",
+      "parentUuid": "8fb2c7f2_d7dd647b",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 18
+      },
+      "revId": "a401113922fb7565e49069ecfd996b394983d6b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
