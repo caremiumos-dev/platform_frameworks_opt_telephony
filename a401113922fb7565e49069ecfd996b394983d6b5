@@ -22,6 +22,30 @@
       "revId": "a401113922fb7565e49069ecfd996b394983d6b5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fb2c7f2_d7dd647b",
+        "filename": "src/java/com/android/internal/telephony/nitz/TimeZoneLookupHelper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2020-03-02T19:12:44Z",
+      "side": 1,
+      "message": "Yes, I think that\u0027s correct: I couldn\u0027t find any. I think I started out with mocking that class but I quickly decided it was easier / more realistic to just use the real one in tests.\n\nGiven it is all used from a single package now (after its move in here), it would be natural to make it package-private, but I can\u0027t because of tests so I\u0027ve added all the @VisibleForTesting instead to make it clear it\u0027s only used outside this package in tests.",
+      "parentUuid": "cd87358d_9139456e",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 18
+      },
+      "revId": "a401113922fb7565e49069ecfd996b394983d6b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
