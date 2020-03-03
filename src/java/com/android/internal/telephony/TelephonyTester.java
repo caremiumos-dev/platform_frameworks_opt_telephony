@@ -401,6 +401,7 @@ public class TelephonyTester {
             }
             nri.setNrState(mServiceStateTestIntent.getIntExtra(EXTRA_NR_STATE,
                     NetworkRegistrationInfo.NR_STATE_NONE));
+            ss.addNetworkRegistrationInfo(nri);
             log("Override NR state with " + ss.getNrState());
         }
         if (mServiceStateTestIntent.hasExtra(EXTRA_VOICE_RAT)) {
