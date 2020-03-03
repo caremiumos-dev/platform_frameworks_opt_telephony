@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "61854b78_f2f95831",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-03T10:55:59Z",
+      "side": 1,
+      "message": "I do not see any reason why we cannot update it every time. It is up to the caller to use the API when needed, if they want to use it some otehr time go ahead.",
+      "parentUuid": "28c259d5_6087fd42",
+      "range": {
+        "startLine": 571,
+        "startChar": 0,
+        "endLine": 573,
+        "endChar": 9
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ef07b43c_acd3c298",
         "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-03T04:50:05Z",
       "side": 1,
       "message": "We want to cache the country only in APM, right? If so we need to change the method name to updateLastKnownCountryIsoInAPM",
+      "range": {
+        "startLine": 636,
+        "startChar": 17,
+        "endLine": 636,
+        "endChar": 42
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35c6ea7e_e34182cf",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-03T10:55:59Z",
+      "side": 1,
+      "message": "I am not sure I agree, see all other comments",
+      "parentUuid": "ef07b43c_acd3c298",
       "range": {
         "startLine": 636,
         "startChar": 17,
@@ -62,6 +110,24 @@
       "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca54e69c_fe2e68a8",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-03T10:55:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0a4ee9ea_9b25871e",
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "9a8ecf25_f481d7b9",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-03T10:55:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "74160c52_58eaee47",
+      "range": {
+        "startLine": 271,
+        "startChar": 19,
+        "endLine": 271,
+        "endChar": 33
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad1a38fd_5b1d4442",
         "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
         "patchSetId": 4
@@ -122,6 +212,30 @@
       "writtenOn": "2020-03-03T04:50:05Z",
       "side": 1,
       "message": "Also need to check if it is in APM",
+      "range": {
+        "startLine": 275,
+        "startChar": 12,
+        "endLine": 275,
+        "endChar": 50
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d12c156a_54afe629",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-03T10:55:59Z",
+      "side": 1,
+      "message": "Why do we need to check that? I am sorry but I do not see the point, let\u0027s just update it as we go along, when someone calls the API we have it cached.",
+      "parentUuid": "ad1a38fd_5b1d4442",
       "range": {
         "startLine": 275,
         "startChar": 12,
@@ -157,6 +271,30 @@
     },
     {
       "key": {
+        "uuid": "6ea4485c_3df4f412",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-03T10:55:59Z",
+      "side": 1,
+      "message": "I can go ahead and change this, I do not think it is needed since we more or less know that it will be empty.\nCan you please explaing what DSDS has to do with Airplane mode? \nYou set the entire device in airplane mode, that means both sims will have no service right? There is no such thing as one sim being in airplane mode, if you find such a device it has a Bug.",
+      "parentUuid": "11dfd9be_0f945c5b",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 63
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a261cf1c_e84a3b23",
         "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
         "patchSetId": 4
@@ -180,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "672e955a_c6898898",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-03T10:55:59Z",
+      "side": 1,
+      "message": "When the device is powered on in airplane mode (see commit message) you previous statement \"!mEmergencyNumberListFromRadio.isEmpty()\" will be false and we will end up in the old ecclist.",
+      "parentUuid": "a261cf1c_e84a3b23",
+      "range": {
+        "startLine": 688,
+        "startChar": 12,
+        "endLine": 688,
+        "endChar": 71
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0807fda0_b28d6d5b",
         "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
         "patchSetId": 4
@@ -191,6 +353,30 @@
       "writtenOn": "2020-03-03T04:50:05Z",
       "side": 1,
       "message": "We want to cache the country only in APM, right? If so, this should be called getLastKnownCountryIsoInAPM",
+      "range": {
+        "startLine": 799,
+        "startChar": 26,
+        "endLine": 799,
+        "endChar": 48
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11848ff7_a4ca45e5",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-03T10:55:59Z",
+      "side": 1,
+      "message": "Why do we need to be so specific, to me it is just a cached number? The Java doc in the method of LocaleTracker tells about the airplane mode use case, but perhaps there is some other use case?",
+      "parentUuid": "0807fda0_b28d6d5b",
       "range": {
         "startLine": 799,
         "startChar": 26,
