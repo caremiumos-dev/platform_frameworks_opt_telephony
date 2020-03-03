@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28c259d5_6087fd42",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-03T04:50:05Z",
+      "side": 1,
+      "message": "We want to cache the country only in APM, right? If so, we would need to move these logics inside the \"mLastServiceState \u003d\u003d ServiceState.STATE_POWER_OFF\" checking, as following:\n\n        if (mLastServiceState \u003d\u003d ServiceState.STATE_POWER_OFF) {\n            updateLastKnownCountryIsoInAPM(mCurrentCountryIso);\n            countryIso \u003d \"\";\n        }",
+      "range": {
+        "startLine": 571,
+        "startChar": 0,
+        "endLine": 573,
+        "endChar": 9
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef07b43c_acd3c298",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-03T04:50:05Z",
+      "side": 1,
+      "message": "We want to cache the country only in APM, right? If so we need to change the method name to updateLastKnownCountryIsoInAPM",
+      "range": {
+        "startLine": 636,
+        "startChar": 17,
+        "endLine": 636,
+        "endChar": 42
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a4ee9ea_9b25871e",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-03T04:50:05Z",
+      "side": 1,
+      "message": "Would need to check if countryIso is empty here before caching it.",
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfc0c46c_ec8512d1",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-03T04:50:05Z",
+      "side": 1,
+      "message": "We want to cache the country only in APM, right? If so, this should be called getLastKnownCountryIsoInAPM",
+      "range": {
+        "startLine": 654,
+        "startChar": 18,
+        "endLine": 654,
+        "endChar": 40
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74160c52_58eaee47",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-03T04:50:05Z",
+      "side": 1,
+      "message": "rename to countryForDatabaseCache",
+      "range": {
+        "startLine": 271,
+        "startChar": 19,
+        "endLine": 271,
+        "endChar": 33
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad1a38fd_5b1d4442",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-03T04:50:05Z",
+      "side": 1,
+      "message": "Also need to check if it is in APM",
+      "range": {
+        "startLine": 275,
+        "startChar": 12,
+        "endLine": 275,
+        "endChar": 50
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11dfd9be_0f945c5b",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-03T04:50:05Z",
+      "side": 1,
+      "message": "Please check if countryIso is empty here.\n\nif (countryIso is empty) {\n  countryIso \u003d getCountryIsoForCaching\n}\n\nWithout ths, we are assuming that if ServiceState.STATE_POWER_OFF is off, countryIso must be empty. This might be true. But with DSDS, country ISO could come from another active SIM. I think it\u0027s better to have this checking here to be clear.",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 63
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a261cf1c_e84a3b23",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-03T04:50:05Z",
+      "side": 1,
+      "message": "I doubt we need this change. My original logic is to make things safer: if radio service connection has some problem, we still have a backup to tell emergency number.",
+      "range": {
+        "startLine": 688,
+        "startChar": 12,
+        "endLine": 688,
+        "endChar": 71
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0807fda0_b28d6d5b",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-03T04:50:05Z",
+      "side": 1,
+      "message": "We want to cache the country only in APM, right? If so, this should be called getLastKnownCountryIsoInAPM",
+      "range": {
+        "startLine": 799,
+        "startChar": 26,
+        "endLine": 799,
+        "endChar": 48
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
