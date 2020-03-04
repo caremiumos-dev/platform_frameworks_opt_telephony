@@ -140,8 +140,8 @@ public class CarrierSignalAgent extends Handler {
                     Rlog.e(LOG_TAG, "Register default network exception: " + ar.exception);
                     return;
                 }
-                final ConnectivityManager connectivityMgr =  ConnectivityManager
-                        .from(mPhone.getContext());
+                final ConnectivityManager connectivityMgr =  mPhone.getContext()
+                        .getSystemService(ConnectivityManager.class);
                 if ((boolean) ar.result) {
                     mNetworkCallback = new ConnectivityManager.NetworkCallback() {
                         @Override
@@ -316,8 +316,7 @@ public class CarrierSignalAgent extends Handler {
                 continue;
             }
 
-            signal.putExtra(SubscriptionManager.EXTRA_SUBSCRIPTION_INDEX, mPhone.getSubId());
-            signal.putExtra(PhoneConstants.SUBSCRIPTION_KEY, mPhone.getSubId());
+            SubscriptionManager.putSubscriptionIdExtra(signal, mPhone.getSubId());
             signal.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             if (!wakeup) signal.setFlags(Intent.FLAG_EXCLUDE_STOPPED_PACKAGES);
 

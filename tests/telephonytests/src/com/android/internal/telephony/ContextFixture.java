@@ -273,6 +273,8 @@ public class ContextFixture implements TestFixture<Context> {
                 return Context.TELECOM_SERVICE;
             } else if (serviceClass == UserManager.class) {
                 return Context.USER_SERVICE;
+            } else if (serviceClass == ConnectivityManager.class) {
+                return Context.CONNECTIVITY_SERVICE;
             }
             return super.getSystemServiceName(serviceClass);
         }
@@ -457,9 +459,9 @@ public class ContextFixture implements TestFixture<Context> {
         }
 
         @Override
-        public void sendOrderedBroadcast(Intent intent, String receiverPermission,
-                String receiverAppOp, Bundle options, BroadcastReceiver resultReceiver,
-                Handler scheduler, int initialCode, String initialData, Bundle initialExtras) {
+        public void sendOrderedBroadcast(Intent intent, int initialCode, String receiverPermission,
+                String receiverAppOp, BroadcastReceiver resultReceiver, Handler scheduler,
+                String initialData, Bundle initialExtras, Bundle options) {
             logd("sendOrderedBroadcast called for " + intent.getAction());
             mLastBroadcastOptions = options;
             sendBroadcast(intent);

@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
-import android.net.NetworkStats;
 import android.net.Uri;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -48,6 +47,7 @@ import android.telephony.CarrierRestrictionRules;
 import android.telephony.CellIdentity;
 import android.telephony.CellInfo;
 import android.telephony.ClientRequestStats;
+import android.telephony.DisplayInfo;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.PhoneStateListener;
 import android.telephony.PhysicalChannelConfig;
@@ -250,6 +250,18 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         public String operatorNumeric;
         public String operatorAlphaLong;
         public String operatorAlphaShort;
+    }
+
+    public static class SilentRedialParam {
+        public String dialString;
+        public int causeCode;
+        public DialArgs dialArgs;
+
+        public SilentRedialParam(String dialString, int causeCode, DialArgs dialArgs) {
+            this.dialString = dialString;
+            this.causeCode = causeCode;
+            this.dialArgs = dialArgs;
+        }
     }
 
     /* Instance Variables */
@@ -746,6 +758,12 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     public void unregisterForSilentRedial(Handler h) {
+    }
+
+    public void registerForVolteSilentRedial(Handler h, int what, Object obj) {
+    }
+
+    public void unregisterForVolteSilentRedial(Handler h) {
     }
 
     private void handleSrvccStateChanged(int[] ret) {
@@ -2374,6 +2392,11 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     public void notifyUserMobileDataStateChanged(boolean state) {
         mNotifier.notifyUserMobileDataStateChanged(this, state);
+    }
+
+    /** Send notification that display info has changed. */
+    public void notifyDisplayInfoChanged(DisplayInfo displayInfo) {
+        mNotifier.notifyDisplayInfoChanged(this, displayInfo);
     }
 
     public void notifySignalStrength() {
@@ -4074,18 +4097,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public Phone getDefaultPhone() {
         return this;
-    }
-
-    /**
-     * Get aggregated video call data usage since boot.
-     * Permissions android.Manifest.permission.READ_NETWORK_USAGE_HISTORY is required.
-     *
-     * @param perUidStats True if requesting data usage per uid, otherwise overall usage.
-     * @return Snapshot of video call data usage
-     */
-    public NetworkStats getVtDataUsage(boolean perUidStats) {
-        if (mImsPhone == null) return null;
-        return mImsPhone.getVtDataUsage(perUidStats);
     }
 
     /**

@@ -1106,6 +1106,14 @@ public abstract class InboundSmsHandler extends StateMachine {
             return true;
         }
 
+        MissedIncomingCallSmsFilter missedIncomingCallSmsFilter =
+                new MissedIncomingCallSmsFilter(mPhone);
+        if (missedIncomingCallSmsFilter.filter(pdus, tracker.getFormat())) {
+            log("Missed incoming call SMS received.");
+            dropSms(resultReceiver);
+            return true;
+        }
+
         return false;
     }
 
@@ -1140,8 +1148,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         // override the subId value in the intent with the values from tracker as they can be
         // different, specifically if the message is coming from SmsBroadcastUndelivered
         if (SubscriptionManager.isValidSubscriptionId(subId)) {
-            intent.putExtra(PhoneConstants.SUBSCRIPTION_KEY, subId);
-            intent.putExtra(SubscriptionManager.EXTRA_SUBSCRIPTION_INDEX, subId);
+            SubscriptionManager.putSubscriptionIdExtra(intent, subId);
         }
 
         if (user.equals(UserHandle.ALL)) {
@@ -1158,7 +1165,7 @@ public abstract class InboundSmsHandler extends StateMachine {
             // by user policy.
             for (int i = users.length - 1; i >= 0; i--) {
                 UserHandle targetUser = UserHandle.of(users[i]);
-                if (users[i] != UserHandle.USER_SYSTEM) {
+                if (users[i] != UserHandle.SYSTEM.getIdentifier()) {
                     // Is the user not allowed to use SMS?
                     if (hasUserRestriction(UserManager.DISALLOW_SMS, targetUser)) {
                         continue;
@@ -1168,22 +1175,23 @@ public abstract class InboundSmsHandler extends StateMachine {
                         continue;
                     }
                 }
-                // Only pass in the resultReceiver when the USER_SYSTEM is processed.
+                // Only pass in the resultReceiver when the user SYSTEM is processed.
                 try {
                     mContext.createPackageContextAsUser(mContext.getPackageName(), 0, targetUser)
-                            .sendOrderedBroadcast(intent, permission, appOp, opts,
-                                    users[i] == UserHandle.USER_SYSTEM ? resultReceiver : null,
-                                    getHandler(), Activity.RESULT_OK, null /* initialData */,
-                                    null /* initialExtras */);
+                            .sendOrderedBroadcast(intent, Activity.RESULT_OK, permission, appOp,
+                                    users[i] == UserHandle.SYSTEM.getIdentifier()
+                                            ? resultReceiver : null,
+                                    getHandler(), null /* initialData */,
+                                    null /* initialExtras */, opts);
                 } catch (PackageManager.NameNotFoundException ignored) {
                 }
             }
         } else {
             try {
                 mContext.createPackageContextAsUser(mContext.getPackageName(), 0, user)
-                        .sendOrderedBroadcast(intent, permission, appOp, opts, resultReceiver,
-                                getHandler(), Activity.RESULT_OK, null /* initialData */,
-                                null /* initialExtras */);
+                        .sendOrderedBroadcast(intent, Activity.RESULT_OK, permission, appOp,
+                                resultReceiver, getHandler(), null /* initialData */,
+                                null /* initialExtras */, opts);
             } catch (PackageManager.NameNotFoundException ignored) {
             }
         }
