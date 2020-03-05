@@ -554,6 +554,8 @@ public class ServiceStateTracker extends Handler {
             } else if (intent.getAction().equals(ACTION_RADIO_OFF)) {
                 mAlarmSwitch = false;
                 powerOffRadioSafely();
+            } else if (intent.getAction().equals(TelephonyManager.ACTION_NETWORK_COUNTRY_CHANGED)) {
+                updateSpnDisplay();
             }
         }
     };
@@ -674,6 +676,9 @@ public class ServiceStateTracker extends Handler {
         context.registerReceiver(mIntentReceiver, filter);
         filter = new IntentFilter();
         filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        context.registerReceiver(mIntentReceiver, filter);
+        filter = new IntentFilter();
+        filter.addAction(TelephonyManager.ACTION_NETWORK_COUNTRY_CHANGED);
         context.registerReceiver(mIntentReceiver, filter);
 
         mPhone.notifyOtaspChanged(TelephonyManager.OTASP_UNINITIALIZED);
@@ -1149,8 +1154,8 @@ public class ServiceStateTracker extends Handler {
                     mCdnr.updateEfFromUsim(null /* Usim */);
                 }
                 onUpdateIccAvailability();
-                if (mUiccApplcation != null
-                        && mUiccApplcation.getState() != AppState.APPSTATE_READY) {
+                if (mUiccApplcation == null
+                        || mUiccApplcation.getState() != AppState.APPSTATE_READY) {
                     mIsSimReady = false;
                     updateSpnDisplay();
                 }
