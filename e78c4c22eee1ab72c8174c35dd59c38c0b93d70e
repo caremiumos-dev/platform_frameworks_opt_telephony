@@ -22,6 +22,30 @@
       "revId": "e78c4c22eee1ab72c8174c35dd59c38c0b93d70e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0c7167f_629691b7",
+        "filename": "src/java/com/android/internal/telephony/uicc/IsimUiccRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1612418
+      },
+      "writtenOn": "2020-03-05T01:50:40Z",
+      "side": 1,
+      "message": "Done. You are right. Removed.",
+      "parentUuid": "860de796_04ba3ef4",
+      "range": {
+        "startLine": 48,
+        "startChar": 29,
+        "endLine": 48,
+        "endChar": 44
+      },
+      "revId": "e78c4c22eee1ab72c8174c35dd59c38c0b93d70e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
