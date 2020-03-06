@@ -1165,7 +1165,8 @@ public class ImsPhone extends ImsPhoneBase {
 
             try {
                 ImsUtInterface ut = mCT.getUtInterface();
-                ut.queryCallForward(getConditionFromCFReason(commandInterfaceCFReason), null, resp);
+                ut.queryCallForward(getConditionFromCFReason(commandInterfaceCFReason),
+                        null, serviceClass, resp);
             } catch (ImsException e) {
                 sendErrorResponse(onComplete, e);
             }
@@ -1576,7 +1577,7 @@ public class ImsPhone extends ImsPhoneBase {
         CallForwardInfo cfInfo = new CallForwardInfo();
         cfInfo.status = info.getStatus();
         cfInfo.reason = getCFReasonFromCondition(info.getCondition());
-        cfInfo.serviceClass = SERVICE_CLASS_VOICE;
+        cfInfo.serviceClass = info.getServiceClass();
         cfInfo.toa = info.getToA();
         cfInfo.number = info.getNumber();
         cfInfo.timeSeconds = info.getTimeSeconds();
