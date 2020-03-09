@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "399dccaa_36b0ab9b",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-09T20:15:38Z",
+      "side": 1,
+      "message": "nit: not need to say \"Convenient method\" in the method documentation. Please remove it.",
+      "range": {
+        "startLine": 645,
+        "startChar": 8,
+        "endLine": 645,
+        "endChar": 28
+      },
+      "revId": "8a10888c588974bdc961e327fc247d5675a9a393",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c92e577_f73d3199",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-09T20:15:38Z",
+      "side": 1,
+      "message": "nit: This is a context that can be found in a bug discussion. Let\u0027s not put it in the code documentation.",
+      "range": {
+        "startLine": 646,
+        "startChar": 41,
+        "endLine": 649,
+        "endChar": 42
+      },
+      "revId": "8a10888c588974bdc961e327fc247d5675a9a393",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78be3215_386af1a7",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-09T20:15:38Z",
+      "side": 1,
+      "message": "nit: please rephrase it to \"Use the last known country to cache the database in APM\"",
+      "range": {
+        "startLine": 276,
+        "startChar": 15,
+        "endLine": 277,
+        "endChar": 71
+      },
+      "revId": "8a10888c588974bdc961e327fc247d5675a9a393",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1805bfc_fbe65720",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-09T20:15:38Z",
+      "side": 1,
+      "message": "Please always do updateEmergencyCountryIso (triggered by updateEmergencyCountryIsoAllPhones). Suggest the changes as follows:\n\n        updateEmergencyCountryIso(countryIso.toLowerCase());\n        // Use cached last known country iso in APM to load emergency number database.\n        if (TextUtils.isEmpty(countryIso) \u0026\u0026 isAirplaneModeEnabled() ) {\n            countryIso \u003d getCountryIsoForCachingDatabase();\n            logd(\"updateEmergencyNumberListDatabaseAndNotify(): using cached APM country \"\n                    + countryIso);\n        }",
+      "range": {
+        "startLine": 566,
+        "startChar": 0,
+        "endLine": 566,
+        "endChar": 64
+      },
+      "revId": "8a10888c588974bdc961e327fc247d5675a9a393",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
