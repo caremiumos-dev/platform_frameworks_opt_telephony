@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "899f0799_96cdb151",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-09T17:50:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61854b78_f2f95831",
+      "range": {
+        "startLine": 571,
+        "startChar": 0,
+        "endLine": 573,
+        "endChar": 9
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef07b43c_acd3c298",
         "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
         "patchSetId": 4
@@ -93,6 +117,30 @@
       "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a0d49ac_85949cc4",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-09T17:50:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35c6ea7e_e34182cf",
+      "range": {
+        "startLine": 636,
+        "startChar": 17,
+        "endLine": 636,
+        "endChar": 42
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -154,6 +202,30 @@
     },
     {
       "key": {
+        "uuid": "db3b7ca6_30e4dc3f",
+        "filename": "src/java/com/android/internal/telephony/LocaleTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-09T17:50:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfc0c46c_ec8512d1",
+      "range": {
+        "startLine": 654,
+        "startChar": 18,
+        "endLine": 654,
+        "endChar": 40
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74160c52_58eaee47",
         "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
         "patchSetId": 4
@@ -189,6 +261,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "74160c52_58eaee47",
+      "range": {
+        "startLine": 271,
+        "startChar": 19,
+        "endLine": 271,
+        "endChar": 33
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca407f65_595c643e",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-09T17:50:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a8ecf25_f481d7b9",
       "range": {
         "startLine": 271,
         "startChar": 19,
@@ -245,6 +341,30 @@
       "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6d5663f_51c3561f",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-03-09T17:50:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d12c156a_54afe629",
+      "range": {
+        "startLine": 275,
+        "startChar": 12,
+        "endLine": 275,
+        "endChar": 50
+      },
+      "revId": "99585ff574ac974f6bcdf23c6421623fb1e8743b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
