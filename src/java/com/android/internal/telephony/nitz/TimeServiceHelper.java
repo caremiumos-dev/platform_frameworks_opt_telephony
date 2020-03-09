@@ -29,7 +29,7 @@ import java.io.PrintWriter;
  * An interface to various time / time zone detection behaviors that should be centralized into
  * new services.
  */
-public interface NewTimeServiceHelper {
+public interface TimeServiceHelper {
 
     /**
      * Suggests the time to the {@link TimeDetector}.
