@@ -32,9 +32,9 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.telephony.Rlog;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class represents cellular data service which handles telephony data requests and response
@@ -54,7 +54,7 @@ public class CellularDataService extends DataService {
 
     private class CellularDataServiceProvider extends DataService.DataServiceProvider {
 
-        private final Map<Message, DataServiceCallback> mCallbackMap = new HashMap<>();
+        private final Map<Message, DataServiceCallback> mCallbackMap = new ConcurrentHashMap<>();
 
         private final Looper mLooper;
 
