@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97a3500f_52ae6c0c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-03-09T23:03:06Z",
+      "side": 1,
+      "message": "Ying, did you use --no-verify to upload the patch?\nThis line should be in the last",
+      "range": {
+        "startLine": 35,
+        "startChar": 28,
+        "endLine": 35,
+        "endChar": 45
+      },
+      "revId": "e845f5f2ab7ecfe9a27cae0f7f9fe4f3dd8a39f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
