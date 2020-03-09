@@ -91,6 +91,29 @@
       "revId": "8a10888c588974bdc961e327fc247d5675a9a393",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1a95837_f06c1b7a",
+        "filename": "src/java/com/android/internal/telephony/emergency/EmergencyNumberTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-03-09T20:29:46Z",
+      "side": 1,
+      "message": "Regarding your opinions: \"When the device is powered on in airplane mode (see commit message) you previous statement \"!mEmergencyNumberListFromRadio.isEmpty()\" will be false and we will end up in the old ecclist.\"\n\nmEmergencyNumberListFromRadio is IRadio HAL, APM doesn\u0027t mean IRadio doesn\u0027t working which is still responsible to provide numbers from sim, default, modem config, and network (if applicable).\n\nWe don\u0027t need to make changes here.",
+      "range": {
+        "startLine": 688,
+        "startChar": 12,
+        "endLine": 688,
+        "endChar": 70
+      },
+      "revId": "8a10888c588974bdc961e327fc247d5675a9a393",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
