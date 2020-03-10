@@ -1121,8 +1121,7 @@ public class ServiceStateTracker extends Handler {
                     mIsMinInfoReady = false;
 
                     // Remove the EF records that come from UICC.
-                    mCdnr.updateEfFromRuim(null /* ruim */);
-                    mCdnr.updateEfFromUsim(null /* Usim */);
+                    mCdnr.updateEfFromSim(null /* Usim */);
                 }
                 onUpdateIccAvailability();
                 if (mUiccApplcation != null
@@ -1329,7 +1328,7 @@ public class ServiceStateTracker extends Handler {
                 updatePhoneObject();
                 updateOtaspState();
                 if (mPhone.isPhoneTypeGsm()) {
-                    mCdnr.updateEfFromUsim((SIMRecords) mIccRecords);
+                    mCdnr.updateEfFromSim((SIMRecords) mIccRecords);
                     updateSpnDisplay();
                 }
                 break;
@@ -1513,7 +1512,6 @@ public class ServiceStateTracker extends Handler {
             case EVENT_RUIM_RECORDS_LOADED:
                 if (!mPhone.isPhoneTypeGsm()) {
                     log("EVENT_RUIM_RECORDS_LOADED: what=" + msg.what);
-                    mCdnr.updateEfFromRuim((RuimRecords) mIccRecords);
                     updatePhoneObject();
                     if (mPhone.isPhoneTypeCdma()) {
                         updateSpnDisplay();
@@ -2251,7 +2249,7 @@ public class ServiceStateTracker extends Handler {
                         mNewSS.setOperatorAlphaShortRaw(opNames[1]);
                         // FIXME: Giving brandOverride higher precedence, is this desired?
                         String brandOverride = getOperatorBrandOverride();
-                        mCdnr.updateEfForBrandOverride(brandOverride);
+                        mCdnr.updateBrandOverride(brandOverride);
                         if (brandOverride != null) {
                             log("EVENT_POLL_STATE_OPERATOR: use brandOverride=" + brandOverride);
                             mNewSS.setOperatorName(brandOverride, brandOverride, opNames[2]);
@@ -2282,7 +2280,7 @@ public class ServiceStateTracker extends Handler {
                             mNewSS.setOperatorName(opNames[0], opNames[1], opNames[2]);
                         } else {
                             String brandOverride = getOperatorBrandOverride();
-                            mCdnr.updateEfForBrandOverride(brandOverride);
+                            mCdnr.updateBrandOverride(brandOverride);
                             if (brandOverride != null) {
                                 mNewSS.setOperatorName(brandOverride, brandOverride, opNames[2]);
                             } else {
@@ -2894,11 +2892,7 @@ public class ServiceStateTracker extends Handler {
         if (mUiccApplcation != newUiccApplication) {
 
             // Remove the EF records that come from UICC
-            if (mIccRecords instanceof SIMRecords) {
-                mCdnr.updateEfFromUsim(null /* usim */);
-            } else if (mIccRecords instanceof RuimRecords) {
-                mCdnr.updateEfFromRuim(null /* ruim */);
-            }
+            mCdnr.updateEfFromSim(null /* usim */);
 
             if (mUiccApplcation != null) {
                 log("Removing stale icc objects.");
@@ -4727,7 +4721,6 @@ public class ServiceStateTracker extends Handler {
 
         // Load the ERI based on carrier config. Carrier might have their specific ERI.
         mEriManager.loadEriFile();
-        mCdnr.updateEfForEri(getOperatorNameFromEri());
 
         updateLteEarfcnLists(config);
         updateReportingCriteria(config);

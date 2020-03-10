@@ -16,17 +16,6 @@
 
 package com.android.internal.telephony.cdnr;
 
-import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_CARRIER_API;
-import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_CARRIER_CONFIG;
-import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_CSIM;
-import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_DATA_OPERATOR_SIGNALLING;
-import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_ERI;
-import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_MODEM_CONFIG;
-import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_RUIM;
-import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_SIM;
-import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_USIM;
-import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_VOICE_OPERATOR_SIGNALLING;
-
 import android.annotation.NonNull;
 import android.content.Context;
 import android.content.res.Resources;
@@ -35,23 +24,18 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
 import android.text.TextUtils;
 import android.util.LocalLog;
-import android.util.SparseArray;
 
 import com.android.internal.telephony.GsmCdmaPhone;
 import com.android.internal.telephony.Phone;
-import com.android.internal.telephony.cdnr.EfData.EFSource;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
 import com.android.internal.telephony.uicc.IccRecords;
-import com.android.internal.telephony.uicc.IccRecords.CarrierNameDisplayConditionBitmask;
 import com.android.internal.telephony.uicc.IccRecords.OperatorPlmnInfo;
 import com.android.internal.telephony.uicc.IccRecords.PlmnNetworkName;
-import com.android.internal.telephony.uicc.RuimRecords;
 import com.android.internal.telephony.uicc.SIMRecords;
+import com.android.internal.telephony.util.ArrayUtils;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.telephony.Rlog;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -61,17 +45,6 @@ public class CarrierDisplayNameResolver {
     private static final boolean DBG = true;
     private static final String TAG = "CDNR";
 
-    /**
-     * Only display SPN in home network, and PLMN network name in roaming network.
-     */
-    @CarrierNameDisplayConditionBitmask
-    private static final int DEFAULT_CARRIER_NAME_DISPLAY_CONDITION_BITMASK = 0;
-
-    private static final CarrierDisplayNameConditionRule DEFAULT_CARRIER_DISPLAY_NAME_RULE =
-            new CarrierDisplayNameConditionRule(DEFAULT_CARRIER_NAME_DISPLAY_CONDITION_BITMASK);
-
-    private final SparseArray<EfData> mEf = new SparseArray<>();
-
     private final LocalLog mLocalLog;
     private final Context mContext;
     private final GsmCdmaPhone mPhone;
@@ -79,21 +52,11 @@ public class CarrierDisplayNameResolver {
 
     private CarrierDisplayNameData mCarrierDisplayNameData;
 
-    /**
-     * The priority of ef source. Lower index means higher priority.
-     */
-    private static final List<Integer> EF_SOURCE_PRIORITY =
-            Arrays.asList(
-                    EF_SOURCE_CARRIER_API,
-                    EF_SOURCE_CARRIER_CONFIG,
-                    EF_SOURCE_ERI,
-                    EF_SOURCE_USIM,
-                    EF_SOURCE_SIM,
-                    EF_SOURCE_CSIM,
-                    EF_SOURCE_RUIM,
-                    EF_SOURCE_VOICE_OPERATOR_SIGNALLING,
-                    EF_SOURCE_DATA_OPERATOR_SIGNALLING,
-                    EF_SOURCE_MODEM_CONFIG);
+    private SimEfData mSimEfData;
+    private SIMRecords mSim;
+    private PersistableBundle mConfig;
+    private String mBrandOverrideName;
+
 
     public CarrierDisplayNameResolver(GsmCdmaPhone phone) {
         mLocalLog = new LocalLog(32);
@@ -101,88 +64,189 @@ public class CarrierDisplayNameResolver {
         mPhone = phone;
         mCCManager = (CarrierConfigManager) mContext.getSystemService(
                 Context.CARRIER_CONFIG_SERVICE);
+        mConfig = getCarrierConfig();
     }
 
-    /**
-     * Update the ef from Ruim. If {@code ruim} is null, the ef records from this source will be
-     * removed.
+   /**
+     * Update the ef from Sim.
      *
-     * @param ruim Ruim records.
+     * @param sim SIMRecords.
      */
-    public void updateEfFromRuim(RuimRecords ruim) {
-        int key = getSourcePriority(EF_SOURCE_RUIM);
-        if (ruim == null) {
-            mEf.remove(key);
+    public void updateEfFromSim(SIMRecords sim) {
+        mSim = sim;
+        if (mSim != null && mConfig != null) {
+            mSimEfData = new SimEfData(mSim, mConfig);
         } else {
-            mEf.put(key, new RuimEfData(ruim));
+            mSimEfData = null;
         }
     }
 
     /**
-     * Update the ef from Usim. If {@code usim} is null, the ef records from this source will be
-     * removed.
-     *
-     * @param usim Usim records.
-     */
-    public void updateEfFromUsim(SIMRecords usim) {
-        int key = getSourcePriority(EF_SOURCE_USIM);
-        if (usim == null) {
-            mEf.remove(key);
-        } else {
-            mEf.put(key, new UsimEfData(usim));
-        }
-    }
-
-    /**
-     * Update the ef from carrier config. If {@code config} is null, the ef records from this source
-     * will be removed.
+     * Update the ef from carrier config.
      *
      * @param config carrier config.
      */
     public void updateEfFromCarrierConfig(PersistableBundle config) {
-        int key = getSourcePriority(EF_SOURCE_CARRIER_CONFIG);
-        if (config == null) {
-            mEf.remove(key);
+        mConfig = config;
+        if (mSim != null && mConfig != null) {
+            mSimEfData = new SimEfData(mSim, mConfig);
         } else {
-            mEf.put(key, new CarrierConfigEfData(config));
+            mSimEfData = null;
         }
     }
 
     /**
-     * Update the ef for CDMA eri text. The ef records from this source will be set all of the
-     * following situation are satisfied.
+     * Update brandOverride name string.
      *
-     * 1. {@code eriText} is neither empty nor null.
-     * 2. Current network is CDMA or CdmaLte
-     * 3. ERI is allowed.
-     *
-     * @param eriText
+     * @param brandOverrideName operator name from brand override.
      */
-    public void updateEfForEri(String eriText) {
-        PersistableBundle config = getCarrierConfig();
-        int key = getSourcePriority(EF_SOURCE_ERI);
-        if (!TextUtils.isEmpty(eriText) && (mPhone.isPhoneTypeCdma() || mPhone.isPhoneTypeCdmaLte())
-                && config.getBoolean(CarrierConfigManager.KEY_ALLOW_ERI_BOOL)) {
-            mEf.put(key, new EriEfData(eriText));
+    public void updateBrandOverride(String brandOverrideName) {
+        if (brandOverrideName == null || TextUtils.isEmpty(brandOverrideName)) {
+            mBrandOverrideName = null;
         } else {
-            mEf.remove(key);
+            mBrandOverrideName = brandOverrideName;
+        }
+    }
+
+    private CarrierDisplayNameData getCarrierDisplayNameFromCellular() {
+        String registeredPlmnNumeric = getServiceState().getOperatorNumeric();
+        String spnStr = null;
+        String dataSpnStr = null;
+        boolean showSpn = false;
+        String plmnStr = null;
+        boolean showPlmn = false;
+
+        // Carrier display name from brandoverride
+        if (mBrandOverrideName != null) {
+            return new CarrierDisplayNameData(
+                    mBrandOverrideName, mBrandOverrideName, true, null, false);
+        }
+
+        // Carrier display name from SIM Resolution
+        CarrierDisplayNameData curCarrierDisplayName = getCarrierDisplayNamefromSim();
+        if (curCarrierDisplayName.shouldShowSpn() || curCarrierDisplayName.shouldShowPlmn()) {
+            return curCarrierDisplayName;
+        }
+
+        // Carrier display name from modem using Signaling Resolution.
+        plmnStr = getServiceState().getOperatorAlpha();
+        if (plmnStr != registeredPlmnNumeric) {
+            return new CarrierDisplayNameData(null, null, false, plmnStr, true);
+        }
+
+        // TODO: Search carrier_list.textpb for the carrier name corresponding to the numeric PLMN
+
+        // Directly use numeric PLMN
+        return new CarrierDisplayNameData(null, null, false, registeredPlmnNumeric, true);
+    }
+
+    /**
+    * Carrier display name resolution based on 3GPP TS 31.102
+    */
+    private CarrierDisplayNameData getCarrierDisplayNamefromSim() {
+        String spnStr = null;
+        String dataSpnStr = null;
+        boolean showSpn = false;
+        String plmnStr = null;
+        boolean showPlmn = false;
+
+        if (mSimEfData == null) {
+            return new CarrierDisplayNameData(spnStr, dataSpnStr, showSpn, plmnStr, showPlmn);
+        }
+
+        String spn = mSimEfData.getServiceProviderName();
+        int displayConditionBitmask = mSimEfData.getServiceProviderNameDisplayCondition();
+        if (!isRoamingForCarrierDisplayName()) {
+            //home network
+            List<PlmnNetworkName> efPnn = mSimEfData.getPlmnNetworkNameList();
+            List<OperatorPlmnInfo> efOpl = mSimEfData.getOperatorPlmnList();
+
+            String plmn = null;
+            if (efOpl.isEmpty()) {
+                // If the EF_OPL is not present, then the first record in EF_PNN is used for the
+                // default network name when registered in the HPLMN or an EHPLMN(if the EHPLMN list
+                // is present).
+                spnStr = efPnn.isEmpty() ? null : getPlmnNetworkName(efPnn.get(0));
+                if (spnStr != null) {
+                    dataSpnStr = spnStr;
+                    showSpn = true;
+                    return new CarrierDisplayNameData(spnStr, dataSpnStr, showSpn,
+                            plmnStr, showPlmn);
+                }
+            }
+
+            if (spn != null && !TextUtils.isEmpty(spn)) {
+                spnStr = spn;
+                dataSpnStr = spn;
+                showSpn = true;
+            }
+
+            boolean shouldShowPlmn = (displayConditionBitmask
+                    != IccRecords.INVALID_CARRIER_NAME_DISPLAY_CONDITION_BITMASK)
+                    && ((displayConditionBitmask
+                        & IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_PLMN) == 1);
+
+            if (!showSpn || shouldShowPlmn) {
+                CarrierDisplayNameData simRoamingData = simResolutionInRoaming();
+                plmnStr = simRoamingData.getPlmn();
+                showPlmn = simRoamingData.shouldShowPlmn();
+            }
+            return new CarrierDisplayNameData(spnStr, dataSpnStr, showSpn, plmnStr, showPlmn);
+        } else {
+            //roaming network
+            CarrierDisplayNameData simRoamingData = simResolutionInRoaming();
+            if (!simRoamingData.shouldShowPlmn()) {
+                return new CarrierDisplayNameData(spnStr, dataSpnStr, showSpn, plmnStr, showPlmn);
+            }
+            plmnStr = simRoamingData.getPlmn();
+            showPlmn = simRoamingData.shouldShowPlmn();
+
+            boolean shouldShowSpn = (displayConditionBitmask
+                    != IccRecords.INVALID_CARRIER_NAME_DISPLAY_CONDITION_BITMASK)
+                    && ((displayConditionBitmask
+                        & IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_SPN) == 0);
+
+            if (shouldShowSpn && spn != null) {
+                spnStr = spn;
+                dataSpnStr = spn;
+                showSpn = true;
+            }
+            return new CarrierDisplayNameData(spnStr, dataSpnStr, showSpn, plmnStr, showPlmn);
         }
     }
 
     /**
-     * Update the ef for brandOverride. If {@code operatorName} is empty or null, the ef records
-     * from this source will be removed.
-     *
-     * @param operatorName operator name from brand override.
-     */
-    public void updateEfForBrandOverride(String operatorName) {
-        int key = getSourcePriority(EF_SOURCE_CARRIER_API);
-        if (TextUtils.isEmpty(operatorName)) {
-            mEf.remove(key);
-        } else {
-            mEf.put(key,
-                    new BrandOverrideEfData(operatorName, getServiceState().getOperatorNumeric()));
+    * Get roaming state for carrier display name.
+    * The logic is the same as {@code ServiceStateTracker#getCarrierNameDisplayBitmask}, while
+    * carrier config override for EHPLMN and SPDI is also used here.
+    */
+    private boolean isRoamingForCarrierDisplayName() {
+        boolean isRoaming = true;
+
+        boolean useRoamingFromServiceState;
+        if (mConfig != null) {
+            useRoamingFromServiceState = mConfig.getBoolean(
+                CarrierConfigManager.KEY_SPN_DISPLAY_RULE_USE_ROAMING_FROM_SERVICE_STATE_BOOL);
+            if (useRoamingFromServiceState) return getServiceState().getRoaming();
         }
+        if (mSimEfData != null) {
+            String[] hplmns = mSimEfData.getHomePlmns();
+            isRoaming = !ArrayUtils.contains(hplmns, getServiceState().getOperatorNumeric());
+        }
+        return isRoaming;
+    }
+
+    private CarrierDisplayNameData simResolutionInRoaming() {
+        String spnStr = null;
+        String dataSpnStr = null;
+        boolean showSpn = false;
+        String plmnStr = null;
+        boolean showPlmn = false;
+
+        // TODO: Check the TAC/LAC & registered PLMN numeric in OPL list to determine which
+        // PLMN name should be used to override the current one.
+
+        return new CarrierDisplayNameData(spnStr, dataSpnStr, showSpn, plmnStr, showPlmn);
     }
 
     /** Get the resolved carrier display name. */
@@ -194,16 +258,14 @@ public class CarrierDisplayNameResolver {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < mEf.size(); i++) {
-            EfData p = mEf.valueAt(i);
-            sb.append("{spnDisplayCondition = " + p.getServiceProviderNameDisplayCondition()
-                    + ", spn = " + p.getServiceProviderName()
-                    + ", spdiList = " + p.getServiceProviderDisplayInformation()
-                    + ", pnnList = " + p.getPlmnNetworkNameList()
-                    + ", oplList = " + p.getOperatorPlmnList()
-                    + ", ehplmn = " + p.getEhplmnList()
-                    + "}, ");
-        }
+        final SimEfData p = mSimEfData;
+        sb.append("{spnDisplayCondition = " + p.getServiceProviderNameDisplayCondition()
+                + ", spn = " + p.getServiceProviderName()
+                + ", spdiList = " + p.getServiceProviderDisplayInformation()
+                + ", pnnList = " + p.getPlmnNetworkNameList()
+                + ", oplList = " + p.getOperatorPlmnList()
+                + ", ehplmn = " + p.getEhplmnList()
+                + "}, ");
         sb.append(", roamingFromSS = " + getServiceState().getRoaming());
         sb.append(", registeredPLMN = " + getServiceState().getOperatorNumeric());
         return sb.toString();
@@ -231,102 +293,6 @@ public class CarrierDisplayNameResolver {
         PersistableBundle config = mCCManager.getConfigForSubId(mPhone.getSubId());
         if (config == null) config = CarrierConfigManager.getDefaultConfig();
         return config;
-    }
-
-    @NonNull
-    private CarrierDisplayNameConditionRule getDisplayRule() {
-        for (int i = 0; i < mEf.size(); i++) {
-            if (mEf.valueAt(i).getServiceProviderNameDisplayCondition()
-                    != IccRecords.INVALID_CARRIER_NAME_DISPLAY_CONDITION_BITMASK) {
-                return new CarrierDisplayNameConditionRule(
-                        mEf.valueAt(i).getServiceProviderNameDisplayCondition());
-            }
-        }
-        return DEFAULT_CARRIER_DISPLAY_NAME_RULE;
-    }
-
-    @NonNull
-    private List<String> getEfSpdi() {
-        for (int i = 0; i < mEf.size(); i++) {
-            if (mEf.valueAt(i).getServiceProviderDisplayInformation() != null) {
-                return mEf.valueAt(i).getServiceProviderDisplayInformation();
-            }
-        }
-        return Collections.EMPTY_LIST;
-    }
-
-    @NonNull
-    private String getEfSpn() {
-        for (int i = 0; i < mEf.size(); i++) {
-            if (!TextUtils.isEmpty(mEf.valueAt(i).getServiceProviderName())) {
-                return mEf.valueAt(i).getServiceProviderName();
-            }
-        }
-        return "";
-    }
-
-    @NonNull
-    private List<OperatorPlmnInfo> getEfOpl() {
-        for (int i = 0; i < mEf.size(); i++) {
-            if (mEf.valueAt(i).getOperatorPlmnList() != null) {
-                return mEf.valueAt(i).getOperatorPlmnList();
-            }
-        }
-        return Collections.EMPTY_LIST;
-    }
-
-    @NonNull
-    private List<PlmnNetworkName> getEfPnn() {
-        for (int i = 0; i < mEf.size(); i++) {
-            if (mEf.valueAt(i).getPlmnNetworkNameList() != null) {
-                return mEf.valueAt(i).getPlmnNetworkNameList();
-            }
-        }
-        return Collections.EMPTY_LIST;
-    }
-
-    private CarrierDisplayNameData getCarrierDisplayNameFromEf() {
-        CarrierDisplayNameConditionRule displayRule = getDisplayRule();
-
-        String registeredPlmnNumeric = getServiceState().getOperatorNumeric();
-        List<String> efSpdi = getEfSpdi();
-
-        // Currently use the roaming state from ServiceState.
-        // EF_SPDI is only used when determine the service provider name and PLMN network name
-        // display condition rule.
-        // All the PLMNs will be considered HOME PLMNs if there is a brand override.
-        boolean isRoaming = getServiceState().getRoaming()
-                && !efSpdi.contains(registeredPlmnNumeric);
-        boolean showSpn = displayRule.shouldShowSpn(isRoaming);
-        boolean showPlmn = displayRule.shouldShowPnn(isRoaming);
-        String spn = getEfSpn();
-
-        // Resolve the PLMN network name
-        List<OperatorPlmnInfo> efOpl = getEfOpl();
-        List<PlmnNetworkName> efPnn = getEfPnn();
-
-        String plmn = null;
-        if (efOpl.isEmpty()) {
-            // If the EF_OPL is not present, then the first record in EF_PNN is used for the
-            // default network name when registered in the HPLMN or an EHPLMN(if the EHPLMN list
-            // is present).
-            plmn = efPnn.isEmpty() ? "" : getPlmnNetworkName(efPnn.get(0));
-        } else {
-            // TODO: Check the TAC/LAC & registered PLMN numeric in OPL list to determine which
-            // PLMN name should be used to override the current one.
-        }
-
-        // If no PLMN override is present, then the PLMN should be displayed numerically.
-        if (TextUtils.isEmpty(plmn)) {
-            plmn = registeredPlmnNumeric;
-        }
-
-        return new CarrierDisplayNameData.Builder()
-                .setSpn(spn)
-                .setShowSpn(showSpn)
-                .setPlmn(plmn)
-                .setShowPlmn(showPlmn)
-                .build();
     }
 
     private CarrierDisplayNameData getCarrierDisplayNameFromWifiCallingOverride(
@@ -398,7 +364,7 @@ public class CarrierDisplayNameResolver {
     }
 
     private void resolveCarrierDisplayName() {
-        CarrierDisplayNameData data = getCarrierDisplayNameFromEf();
+        CarrierDisplayNameData data = getCarrierDisplayNameFromCellular();
         if (DBG) Rlog.d(TAG, "CarrierName from EF: " + data);
         if (getCombinedRegState(getServiceState()) == ServiceState.STATE_IN_SERVICE) {
             if (mPhone.isWifiCallingEnabled()) {
@@ -431,47 +397,6 @@ public class CarrierDisplayNameResolver {
         if (!TextUtils.isEmpty(name.fullName)) return name.fullName;
         if (!TextUtils.isEmpty(name.shortName)) return name.shortName;
         return "";
-    }
-
-    /**
-     * Get the priority of the source of ef object. If {@code source} is not in the priority list,
-     * return {@link Integer#MAX_VALUE}.
-     * @param source source of ef object.
-     * @return the priority of the source of ef object.
-     */
-    private static int getSourcePriority(@EFSource int source) {
-        int priority = EF_SOURCE_PRIORITY.indexOf(source);
-        if (priority == -1) priority = Integer.MAX_VALUE;
-        return priority;
-    }
-
-    private static final class CarrierDisplayNameConditionRule {
-        private int mDisplayConditionBitmask;
-
-        CarrierDisplayNameConditionRule(int carrierDisplayConditionBitmask) {
-            mDisplayConditionBitmask = carrierDisplayConditionBitmask;
-        }
-
-        boolean shouldShowSpn(boolean isRoaming) {
-            return !isRoaming || ((mDisplayConditionBitmask
-                    & IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_SPN)
-                    == IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_SPN);
-        }
-
-        boolean shouldShowPnn(boolean isRoaming) {
-            return isRoaming || ((mDisplayConditionBitmask
-                    & IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_PLMN)
-                    == IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_PLMN);
-        }
-
-        @Override
-        public String toString() {
-            return String.format("{ SPN_bit = %d, PLMN_bit = %d }",
-                    mDisplayConditionBitmask
-                            & IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_SPN,
-                    mDisplayConditionBitmask
-                            & IccRecords.CARRIER_NAME_DISPLAY_CONDITION_BITMASK_PLMN);
-        }
     }
 
     private ServiceState getServiceState() {

@@ -40,7 +40,7 @@ public class CarrierDisplayNameData implements Parcelable {
     /** {@code True} if display PLMN network name is required. */
     private final boolean mShowPlmn;
 
-    private CarrierDisplayNameData(String spn, String dataSpn, boolean showSpn, String plmn,
+    public CarrierDisplayNameData(String spn, String dataSpn, boolean showSpn, String plmn,
             boolean showPlmn) {
         this.mSpn = spn;
         this.mDataSpn = dataSpn;
