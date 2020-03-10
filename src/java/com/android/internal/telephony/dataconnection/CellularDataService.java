@@ -130,31 +130,35 @@ public class CellularDataService extends DataService {
                                   DataServiceCallback callback) {
             if (DBG) log("setupDataCall " + getSlotIndex());
 
-            Message message = null;
-            // Only obtain the message when the caller wants a callback. If the caller doesn't care
-            // the request completed or results, then no need to pass the message down.
-            if (callback != null) {
-                message = Message.obtain(mHandler, SETUP_DATA_CALL_COMPLETE);
-                mCallbackMap.put(message, callback);
-            }
+            mHandler.post(() -> {
+                Message message = null;
+                // Only obtain the message when the caller wants a callback. If the caller doesn't
+                // care the request completed or results, then no need to pass the message down.
+                if (callback != null) {
+                    message = Message.obtain(mHandler, SETUP_DATA_CALL_COMPLETE);
+                    mCallbackMap.put(message, callback);
+                }
 
-            mPhone.mCi.setupDataCall(accessNetworkType, dataProfile, isRoaming, allowRoaming,
-                    reason, linkProperties, message);
+                mPhone.mCi.setupDataCall(accessNetworkType, dataProfile, isRoaming, allowRoaming,
+                        reason, linkProperties, message);
+            });
         }
 
         @Override
         public void deactivateDataCall(int cid, int reason, DataServiceCallback callback) {
             if (DBG) log("deactivateDataCall " + getSlotIndex());
 
-            Message message = null;
-            // Only obtain the message when the caller wants a callback. If the caller doesn't care
-            // the request completed or results, then no need to pass the message down.
-            if (callback != null) {
-                message = Message.obtain(mHandler, DEACTIVATE_DATA_ALL_COMPLETE);
-                mCallbackMap.put(message, callback);
-            }
+            mHandler.post(() -> {
+                Message message = null;
+                // Only obtain the message when the caller wants a callback. If the caller doesn't
+                // case the request completed or results, then no need to pass the message down.
+                if (callback != null) {
+                    message = Message.obtain(mHandler, DEACTIVATE_DATA_ALL_COMPLETE);
+                    mCallbackMap.put(message, callback);
+                }
 
-            mPhone.mCi.deactivateDataCall(cid, reason, message);
+                mPhone.mCi.deactivateDataCall(cid, reason, message);
+            });
         }
 
         @Override
@@ -162,15 +166,17 @@ public class CellularDataService extends DataService {
                                         DataServiceCallback callback) {
             if (DBG) log("setInitialAttachApn " + getSlotIndex());
 
-            Message message = null;
-            // Only obtain the message when the caller wants a callback. If the caller doesn't care
-            // the request completed or results, then no need to pass the message down.
-            if (callback != null) {
-                message = Message.obtain(mHandler, SET_INITIAL_ATTACH_APN_COMPLETE);
-                mCallbackMap.put(message, callback);
-            }
+            mHandler.post(() -> {
+                Message message = null;
+                // Only obtain the message when the caller wants a callback. If the caller doesn't
+                // the request completed or results, then no need to pass the message down.
+                if (callback != null) {
+                    message = Message.obtain(mHandler, SET_INITIAL_ATTACH_APN_COMPLETE);
+                    mCallbackMap.put(message, callback);
+                }
 
-            mPhone.mCi.setInitialAttachApn(dataProfile, isRoaming, message);
+                mPhone.mCi.setInitialAttachApn(dataProfile, isRoaming, message);
+            });
         }
 
         @Override
@@ -178,29 +184,34 @@ public class CellularDataService extends DataService {
                                    DataServiceCallback callback) {
             if (DBG) log("setDataProfile " + getSlotIndex());
 
-            Message message = null;
-            // Only obtain the message when the caller wants a callback. If the caller doesn't care
-            // the request completed or results, then no need to pass the message down.
-            if (callback != null) {
-                message = Message.obtain(mHandler, SET_DATA_PROFILE_COMPLETE);
-                mCallbackMap.put(message, callback);
-            }
+            mHandler.post(() -> {
+                Message message = null;
+                // Only obtain the message when the caller wants a callback. If the caller doesn't
+                // care the request completed or results, then no need to pass the message down.
+                if (callback != null) {
+                    message = Message.obtain(mHandler, SET_DATA_PROFILE_COMPLETE);
+                    mCallbackMap.put(message, callback);
+                }
 
-            mPhone.mCi.setDataProfile(dps.toArray(new DataProfile[dps.size()]), isRoaming, message);
+                mPhone.mCi.setDataProfile(dps.toArray(
+                        new DataProfile[dps.size()]), isRoaming, message);
+            });
         }
 
         @Override
         public void requestDataCallList(DataServiceCallback callback) {
             if (DBG) log("requestDataCallList " + getSlotIndex());
 
-            Message message = null;
-            // Only obtain the message when the caller wants a callback. If the caller doesn't care
-            // the request completed or results, then no need to pass the message down.
-            if (callback != null) {
-                message = Message.obtain(mHandler, REQUEST_DATA_CALL_LIST_COMPLETE);
-                mCallbackMap.put(message, callback);
-            }
-            mPhone.mCi.getDataCallList(message);
+            mHandler.post(() -> {
+                Message message = null;
+                // Only obtain the message when the caller wants a callback. If the caller doesn't
+                // care the request completed or results, then no need to pass the message down.
+                if (callback != null) {
+                    message = Message.obtain(mHandler, REQUEST_DATA_CALL_LIST_COMPLETE);
+                    mCallbackMap.put(message, callback);
+                }
+                mPhone.mCi.getDataCallList(message);
+            });
         }
 
         @Override
