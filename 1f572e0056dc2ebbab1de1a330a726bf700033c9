@@ -1,0 +1,92 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000001902961",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1156378?revision\u003d9",
+      "fixSuggestions": [
+        {
+          "fixId": "1dfcbed9_956538a3",
+          "description": "Change to \"src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+              "range": {
+                "startLine": 214,
+                "startChar": 39,
+                "endLine": 214,
+                "endChar": 45
+              },
+              "replacement": "Number"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "1b2aa622_9bd78c40",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-03-10T11:30:12Z",
+      "side": 1,
+      "message": "Common typo found: \"Nubmer\" -- should it be \"Number\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line.",
+      "range": {
+        "startLine": 214,
+        "startChar": 39,
+        "endLine": 214,
+        "endChar": 45
+      },
+      "revId": "1f572e0056dc2ebbab1de1a330a726bf700033c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000001902961",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1156378?revision\u003d9",
+      "fixSuggestions": [
+        {
+          "fixId": "6100402c_103bfca0",
+          "description": "Change to \"src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+              "range": {
+                "startLine": 216,
+                "startChar": 39,
+                "endLine": 216,
+                "endChar": 45
+              },
+              "replacement": "Number"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "6b97f004_bd575497",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-03-10T11:30:12Z",
+      "side": 1,
+      "message": "Common typo found: \"Nubmer\" -- should it be \"Number\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line.",
+      "range": {
+        "startLine": 216,
+        "startChar": 39,
+        "endLine": 216,
+        "endChar": 45
+      },
+      "revId": "1f572e0056dc2ebbab1de1a330a726bf700033c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
