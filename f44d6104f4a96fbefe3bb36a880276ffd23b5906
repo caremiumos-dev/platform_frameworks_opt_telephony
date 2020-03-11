@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "785f6dee_71c9858b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-03-11T17:24:25Z",
+      "side": 1,
+      "message": "CellularNetworkService has same architecture as CellularDataService. network service uses concurrent map now. If you want to make changes, then make changes in both.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "f44d6104f4a96fbefe3bb36a880276ffd23b5906",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d4f059d_e968c8f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-03-11T17:24:25Z",
+      "side": 1,
+      "message": "Please run this on actual device to make sure the device can use mobile data.",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 36
+      },
+      "revId": "f44d6104f4a96fbefe3bb36a880276ffd23b5906",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
