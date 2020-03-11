@@ -20,7 +20,6 @@ import android.hardware.radio.V1_0.RegState;
 import android.hardware.radio.V1_4.DataRegStateResult.VopsInfo.hidl_discriminator;
 import android.os.AsyncResult;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.telephony.AccessNetworkConstants;
@@ -59,10 +58,6 @@ public class CellularNetworkService extends NetworkService {
         private final ConcurrentHashMap<Message, NetworkServiceCallback> mCallbackMap =
                 new ConcurrentHashMap<>();
 
-        private final Looper mLooper;
-
-        private final HandlerThread mHandlerThread;
-
         private final Handler mHandler;
 
         private final Phone mPhone;
@@ -72,10 +67,7 @@ public class CellularNetworkService extends NetworkService {
 
             mPhone = PhoneFactory.getPhone(getSlotIndex());
 
-            mHandlerThread = new HandlerThread(CellularNetworkService.class.getSimpleName());
-            mHandlerThread.start();
-            mLooper = mHandlerThread.getLooper();
-            mHandler = new Handler(mLooper) {
+            mHandler = new Handler(Looper.myLooper()) {
                 @Override
                 public void handleMessage(Message message) {
                     NetworkServiceCallback callback = mCallbackMap.remove(message);
@@ -377,7 +369,6 @@ public class CellularNetworkService extends NetworkService {
         @Override
         public void close() {
             mCallbackMap.clear();
-            mHandlerThread.quit();
             mPhone.mCi.unregisterForNetworkStateChanged(mHandler);
         }
     }
