@@ -19,7 +19,6 @@ package com.android.internal.telephony.dataconnection;
 import android.net.LinkProperties;
 import android.os.AsyncResult;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.telephony.SubscriptionManager;
@@ -52,15 +51,13 @@ public class CellularDataService extends DataService {
     private static final int REQUEST_DATA_CALL_LIST_COMPLETE        = 5;
     private static final int DATA_CALL_LIST_CHANGED                 = 6;
 
+    private Looper mLooper;
+
     private class CellularDataServiceProvider extends DataService.DataServiceProvider {
 
         private final Map<Message, DataServiceCallback> mCallbackMap = new HashMap<>();
 
-        private final Looper mLooper;
-
         private final Handler mHandler;
-
-        private final HandlerThread mHandlerThread;
 
         private final Phone mPhone;
 
@@ -69,9 +66,6 @@ public class CellularDataService extends DataService {
 
             mPhone = PhoneFactory.getPhone(getSlotIndex());
 
-            mHandlerThread = new HandlerThread(CellularDataService.class.getSimpleName());
-            mHandlerThread.start();
-            mLooper = mHandlerThread.getLooper();
             mHandler = new Handler(mLooper) {
                 @Override
                 public void handleMessage(Message message) {
@@ -206,13 +200,13 @@ public class CellularDataService extends DataService {
         @Override
         public void close() {
             mPhone.mCi.unregisterForDataCallListChanged(mHandler);
-            mHandlerThread.quit();
         }
     }
 
     @Override
     public DataServiceProvider onCreateDataServiceProvider(int slotIndex) {
         log("Cellular data service created for slot " + slotIndex);
+        mLooper = Looper.myLooper();
         if (!SubscriptionManager.isValidSlotIndex(slotIndex)) {
             loge("Tried to cellular data service with invalid slotId " + slotIndex);
             return null;

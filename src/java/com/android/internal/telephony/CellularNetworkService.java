@@ -20,7 +20,6 @@ import android.hardware.radio.V1_0.RegState;
 import android.hardware.radio.V1_4.DataRegStateResult.VopsInfo.hidl_discriminator;
 import android.os.AsyncResult;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.telephony.AccessNetworkConstants;
@@ -54,14 +53,12 @@ public class CellularNetworkService extends NetworkService {
     private static final int GET_PS_REGISTRATION_STATE_DONE = 2;
     private static final int NETWORK_REGISTRATION_STATE_CHANGED = 3;
 
+    private Looper mLooper;
+
     private class CellularNetworkServiceProvider extends NetworkServiceProvider {
 
         private final ConcurrentHashMap<Message, NetworkServiceCallback> mCallbackMap =
                 new ConcurrentHashMap<>();
-
-        private final Looper mLooper;
-
-        private final HandlerThread mHandlerThread;
 
         private final Handler mHandler;
 
@@ -72,9 +69,6 @@ public class CellularNetworkService extends NetworkService {
 
             mPhone = PhoneFactory.getPhone(getSlotIndex());
 
-            mHandlerThread = new HandlerThread(CellularNetworkService.class.getSimpleName());
-            mHandlerThread.start();
-            mLooper = mHandlerThread.getLooper();
             mHandler = new Handler(mLooper) {
                 @Override
                 public void handleMessage(Message message) {
@@ -377,7 +371,6 @@ public class CellularNetworkService extends NetworkService {
         @Override
         public void close() {
             mCallbackMap.clear();
-            mHandlerThread.quit();
             mPhone.mCi.unregisterForNetworkStateChanged(mHandler);
         }
     }
@@ -385,6 +378,7 @@ public class CellularNetworkService extends NetworkService {
     @Override
     public NetworkServiceProvider onCreateNetworkServiceProvider(int slotIndex) {
         if (DBG) log("Cellular network service created for slot " + slotIndex);
+        mLooper = Looper.myLooper();
         if (!SubscriptionManager.isValidSlotIndex(slotIndex)) {
             loge("Tried to Cellular network service with invalid slotId " + slotIndex);
             return null;
