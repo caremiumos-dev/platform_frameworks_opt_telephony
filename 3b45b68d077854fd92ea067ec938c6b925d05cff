@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e113cbb_56e34920",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 3523,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-12T21:51:12Z",
+      "side": 1,
+      "message": "Please remove this annotation, it isnt needed.",
+      "range": {
+        "startLine": 3523,
+        "startChar": 5,
+        "endLine": 3523,
+        "endChar": 24
+      },
+      "revId": "3b45b68d077854fd92ea067ec938c6b925d05cff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
