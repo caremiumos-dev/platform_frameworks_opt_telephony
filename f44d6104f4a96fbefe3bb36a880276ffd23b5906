@@ -45,6 +45,30 @@
       "revId": "f44d6104f4a96fbefe3bb36a880276ffd23b5906",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "459a4872_d47de582",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2020-03-12T01:43:49Z",
+      "side": 1,
+      "message": "Jack, thanks so much to help in the earliest time.\n\nNathan just find another solution which is uploaded as patch #4. In summary, we have 3 solutions so far:\n\n1. Patch 1 or Patch 2 (the diff is just code format) use a ConcurrentHashMap to make it thread-safe to concurrent put/remove mCallbackMap\n\n2. Patch 3. Still use HashMap, but put all operations (put/remove) into CellularDataService\u0027s handler thread and thus becomes thread-safe.\nBut when check CellularNetworkService\u0027s close() method which introduce another update operation (clear()). this become difficult.\n\n3. Patch 4. CellularDataService(CellularNetworkService, same story as you know) still create its own hander, but re-use DataService\u0027s handler thread\u0027s looper. This means all operations are handled in DataService\u0027s handler thread (including clear()).\n\nThe only concern is that, this works based on the fact onCreateDataServiceProvider() is handled in DataService\u0027s handler thread. We can add comment in DataService to document the dependency.\n\nI tested Patch4, the mobile data works well in Pixel3.\n\nPlease help to let us know what\u0027s your preference.\nThanks again for the help.",
+      "parentUuid": "7d4f059d_e968c8f5",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 36
+      },
+      "revId": "f44d6104f4a96fbefe3bb36a880276ffd23b5906",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
