@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db6c996d_25d58099",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-12T02:23:45Z",
+      "side": 1,
+      "message": "You don\u0027t need mLooper. You can just call Looper.myLooper() in the constructor, which is executed on the caller\u0027s looper.",
+      "range": {
+        "startLine": 56,
+        "startChar": 19,
+        "endLine": 56,
+        "endChar": 26
+      },
+      "revId": "d1a68344ce63dc0899f072e9aa6a457f09bad4e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "454c2662_5a6a86cd",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-12T02:23:45Z",
+      "side": 1,
+      "message": "same comment... no need to store mLooper; you never use it once the constructor returns.",
+      "range": {
+        "startLine": 54,
+        "startChar": 19,
+        "endLine": 54,
+        "endChar": 26
+      },
+      "revId": "d1a68344ce63dc0899f072e9aa6a457f09bad4e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
