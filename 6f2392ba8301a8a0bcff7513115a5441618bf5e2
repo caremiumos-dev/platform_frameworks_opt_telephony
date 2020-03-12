@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6aff29c_6f78ab34",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 2118,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-12T22:25:22Z",
+      "side": 1,
+      "message": "Use PhoneAccount.SCHEME_TEL instead",
+      "range": {
+        "startLine": 2118,
+        "startChar": 47,
+        "endLine": 2118,
+        "endChar": 53
+      },
+      "revId": "6f2392ba8301a8a0bcff7513115a5441618bf5e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa2ca2cd_ed49f13f",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 4111,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-12T22:25:22Z",
+      "side": 1,
+      "message": "This looks like it would be better suited to being defined in  CdmaMmiCode",
+      "range": {
+        "startLine": 4111,
+        "startChar": 19,
+        "endLine": 4111,
+        "endChar": 51
+      },
+      "revId": "6f2392ba8301a8a0bcff7513115a5441618bf5e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5345b3c7_5364f024",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 4153,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-12T22:25:22Z",
+      "side": 1,
+      "message": "Instead of using this, can you use PhoneUtils.makePstnPhoneAccountHandle(phoneId) instead?",
+      "range": {
+        "startLine": 4153,
+        "startChar": 31,
+        "endLine": 4153,
+        "endChar": 65
+      },
+      "revId": "6f2392ba8301a8a0bcff7513115a5441618bf5e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
