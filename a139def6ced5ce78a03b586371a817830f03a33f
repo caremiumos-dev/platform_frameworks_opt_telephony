@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7e9956f_6c7ef74b",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 4182,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-12T22:14:03Z",
+      "side": 1,
+      "message": "Please use the values defined in GsmMmiCode instead or move method to that class",
+      "range": {
+        "startLine": 4182,
+        "startChar": 23,
+        "endLine": 4182,
+        "endChar": 26
+      },
+      "revId": "a139def6ced5ce78a03b586371a817830f03a33f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
