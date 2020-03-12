@@ -46,7 +46,6 @@ import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
-import android.net.NetworkConfig;
 import android.net.NetworkPolicyManager;
 import android.net.NetworkRequest;
 import android.net.ProxyInfo;
@@ -123,12 +122,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -145,26 +144,6 @@ public class DcTracker extends Handler {
     private static final boolean VDBG = false; // STOPSHIP if true
     private static final boolean VDBG_STALL = false; // STOPSHIP if true
     private static final boolean RADIO_TESTS = false;
-
-    /**
-     * These constants exist here because ConnectivityManager.TYPE_xxx constants are deprecated and
-     * new ones will not be added (for instance NETWORK_TYPE_MCX below).
-     * For backward compatibility, the values here need to be the same as
-     * ConnectivityManager.TYPE_xxx because networkAttributes overlay uses those values.
-     */
-    private static final int NETWORK_TYPE_DEFAULT = ConnectivityManager.TYPE_MOBILE;
-    private static final int NETWORK_TYPE_MMS = ConnectivityManager.TYPE_MOBILE_MMS;
-    private static final int NETWORK_TYPE_SUPL = ConnectivityManager.TYPE_MOBILE_SUPL;
-    private static final int NETWORK_TYPE_DUN = ConnectivityManager.TYPE_MOBILE_DUN;
-    private static final int NETWORK_TYPE_HIPRI = ConnectivityManager.TYPE_MOBILE_HIPRI;
-    private static final int NETWORK_TYPE_FOTA = ConnectivityManager.TYPE_MOBILE_FOTA;
-    private static final int NETWORK_TYPE_IMS = ConnectivityManager.TYPE_MOBILE_IMS;
-    private static final int NETWORK_TYPE_CBS = ConnectivityManager.TYPE_MOBILE_CBS;
-    private static final int NETWORK_TYPE_IA = ConnectivityManager.TYPE_MOBILE_IA;
-    private static final int NETWORK_TYPE_EMERGENCY = ConnectivityManager.TYPE_MOBILE_EMERGENCY;
-    // far away from ConnectivityManager.TYPE_xxx constants as the APNs below aren't defined there.
-    private static final int NETWORK_TYPE_MCX = 1001;
-    private static final int NETWORK_TYPE_XCAP = 1002;
 
     @IntDef(value = {
             REQUEST_TYPE_NORMAL,
@@ -284,13 +263,7 @@ public class DcTracker extends Handler {
 
     /** kept in sync with mApnContexts
      * Higher numbers are higher priority and sorted so highest priority is first */
-    private final PriorityQueue<ApnContext>mPrioritySortedApnContexts =
-            new PriorityQueue<ApnContext>(5,
-            new Comparator<ApnContext>() {
-                public int compare(ApnContext c1, ApnContext c2) {
-                    return c2.priority - c1.priority;
-                }
-            } );
+    private final ArrayList<ApnContext> mPrioritySortedApnContexts = new ArrayList<>();
 
     /** all APN settings applicable to the current carrier */
     private ArrayList<ApnSetting> mAllApnSettings = new ArrayList<>();
@@ -1072,68 +1045,31 @@ public class DcTracker extends Handler {
         if(DBG && mPhone != null) log("finalize");
     }
 
-    private ApnContext addApnContext(String type, NetworkConfig networkConfig) {
-        ApnContext apnContext = new ApnContext(mPhone, type, mLogTag, networkConfig, this);
-        mApnContexts.put(type, apnContext);
-        mApnContextsByType.put(ApnSetting.getApnTypesBitmaskFromString(type), apnContext);
-        mPrioritySortedApnContexts.add(apnContext);
-        return apnContext;
-    }
-
     private void initApnContexts() {
-        log("initApnContexts: E");
-        // Load device network attributes from resources
-        String[] networkConfigStrings = mPhone.getContext().getResources().getStringArray(
-                com.android.internal.R.array.networkAttributes);
-        for (String networkConfigString : networkConfigStrings) {
-            NetworkConfig networkConfig = new NetworkConfig(networkConfigString);
-            ApnContext apnContext;
-
-            switch (networkConfig.type) {
-                case NETWORK_TYPE_DEFAULT:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_DEFAULT, networkConfig);
-                    break;
-                case NETWORK_TYPE_MMS:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_MMS, networkConfig);
-                    break;
-                case NETWORK_TYPE_SUPL:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_SUPL, networkConfig);
-                    break;
-                case NETWORK_TYPE_DUN:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_DUN, networkConfig);
-                    break;
-                case NETWORK_TYPE_HIPRI:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_HIPRI, networkConfig);
-                    break;
-                case NETWORK_TYPE_FOTA:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_FOTA, networkConfig);
-                    break;
-                case NETWORK_TYPE_IMS:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_IMS, networkConfig);
-                    break;
-                case NETWORK_TYPE_CBS:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_CBS, networkConfig);
-                    break;
-                case NETWORK_TYPE_IA:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_IA, networkConfig);
-                    break;
-                case NETWORK_TYPE_EMERGENCY:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_EMERGENCY, networkConfig);
-                    break;
-                case NETWORK_TYPE_MCX:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_MCX, networkConfig);
-                    break;
-                case NETWORK_TYPE_XCAP:
-                    apnContext = addApnContext(PhoneConstants.APN_TYPE_XCAP, networkConfig);
-                    break;
-                default:
-                    log("initApnContexts: skipping unknown type=" + networkConfig.type);
-                    continue;
-            }
-            log("initApnContexts: apnContext=" + apnContext);
+        if (!mTelephonyManager.isDataCapable()) {
+            log("initApnContexts: isDataCapable == false.  No Apn Contexts loaded");
+            return;
         }
 
+        log("initApnContexts: E");
+        // Load device network attributes from resources
+        final Collection<ApnConfigType> types = ApnConfigTypeRepository.getDefault().getTypes();
+        for (ApnConfigType apnConfigType : types) {
+            addApnContext(apnConfigType);
+            log("initApnContexts: apnContext=" + ApnSetting.getApnTypeString(
+                    apnConfigType.getType()));
+        }
+        mPrioritySortedApnContexts.sort((c1, c2) -> c2.getPriority() - c1.getPriority());
         if (VDBG) log("initApnContexts: X mApnContexts=" + mApnContexts);
+    }
+
+    private void addApnContext(ApnConfigType apnContextType) {
+        ApnContext apnContext = new ApnContext(mPhone, apnContextType.getType(), mLogTag, this,
+                apnContextType.getPriority());
+        mApnContexts.put(apnContext.getApnType(), apnContext);
+        mApnContextsByType.put(ApnSetting.getApnTypesBitmaskFromString(apnContext.getApnType()),
+                apnContext);
+        mPrioritySortedApnContexts.add(apnContext);
     }
 
     public LinkProperties getLinkProperties(String apnType) {
@@ -1176,6 +1112,11 @@ public class DcTracker extends Handler {
         }
 
         return result.toArray(new String[0]);
+    }
+
+    @VisibleForTesting
+    public Collection<ApnContext> getApnContexts() {
+        return mApnContexts.values();
     }
 
     /** Return active ApnSetting of a specific apnType */
@@ -2104,10 +2045,23 @@ public class DcTracker extends Handler {
         Message msg = obtainMessage();
         msg.what = DctConstants.EVENT_DATA_SETUP_COMPLETE;
         msg.obj = new Pair<ApnContext, Integer>(apnContext, generation);
-        dataConnection.bringUp(apnContext, profileId, radioTech, msg, generation, requestType,
-                mPhone.getSubId());
 
-        if (DBG) log("setupData: initing!");
+        ApnSetting preferredApn = getPreferredApn();
+        boolean isPreferredApn = apnSetting.equals(preferredApn);
+        dataConnection.bringUp(apnContext, profileId, radioTech, msg, generation, requestType,
+                mPhone.getSubId(), isPreferredApn);
+
+        if (DBG) {
+            if (isPreferredApn) {
+                log("setupData: initing! isPreferredApn=" + isPreferredApn
+                        + ", apnSetting={" + apnSetting.toString() + "}");
+            } else {
+                String preferredApnStr = preferredApn == null ? "null" : preferredApn.toString();
+                log("setupData: initing! isPreferredApn=" + isPreferredApn
+                        + ", apnSetting={" + apnSetting + "}"
+                        + ", preferredApn={" + preferredApnStr + "}");
+            }
+        }
         return true;
     }
 
@@ -3478,7 +3432,9 @@ public class DcTracker extends Handler {
         }
     }
 
+    @Nullable
     ApnSetting getPreferredApn() {
+        //Only call this method from main thread
         if (mAllApnSettings == null || mAllApnSettings.isEmpty()) {
             log("getPreferredApn: mAllApnSettings is empty");
             return null;
