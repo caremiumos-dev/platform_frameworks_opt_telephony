@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0a606ad_ec696300",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-12T23:43:57Z",
+      "side": 1,
+      "message": "mPrivilegedUids",
+      "range": {
+        "startLine": 52,
+        "startChar": 49,
+        "endLine": 52,
+        "endChar": 67
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5eb4ba8_4eca8fb0",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-12T23:43:57Z",
+      "side": 1,
+      "message": "Where will this be instantiated and run?",
+      "range": {
+        "startLine": 55,
+        "startChar": 11,
+        "endLine": 55,
+        "endChar": 35
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f103a20c_4d3e2d94",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-12T23:43:57Z",
+      "side": 1,
+      "message": "Are we going to need this for something later?",
+      "range": {
+        "startLine": 57,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 14
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb59fc63_c32447a7",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-12T23:43:57Z",
+      "side": 1,
+      "message": "Nit: remove extra blank line",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 0
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25a5392a_5b193d28",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-12T23:43:57Z",
+      "side": 1,
+      "message": "ArraySet?",
+      "range": {
+        "startLine": 60,
+        "startChar": 33,
+        "endLine": 60,
+        "endChar": 40
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f365beea_4253a34e",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-12T23:43:57Z",
+      "side": 1,
+      "message": "Do we need to protect against the listener blocking the handler thread for an excessive amount of time? Not sure how other platform classes handle this (if at all?).",
+      "range": {
+        "startLine": 70,
+        "startChar": 25,
+        "endLine": 70,
+        "endChar": 51
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4888679_df659eb8",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-12T23:43:57Z",
+      "side": 1,
+      "message": "interface? Why abstract class, do we need it for the hashing above?",
+      "range": {
+        "startLine": 109,
+        "startChar": 11,
+        "endLine": 109,
+        "endChar": 32
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0dd39ae_38d67eed",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-12T23:43:57Z",
+      "side": 1,
+      "message": "Nit: privilegedUids\n\nA simple param name like \"uids\" isn\u0027t clear if those UIDs just lost privileges, gained them, or are the set that currently has privileges at the time of the call.",
+      "range": {
+        "startLine": 116,
+        "startChar": 78,
+        "endLine": 116,
+        "endChar": 82
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "097f16e1_a8a45943",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-12T23:43:57Z",
+      "side": 1,
+      "message": "(For future CLs, not needed yet) would we care to have an ArrayList\u003cSet\u003cInteger\u003e\u003e to have a historical view of what happened?",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 34
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
