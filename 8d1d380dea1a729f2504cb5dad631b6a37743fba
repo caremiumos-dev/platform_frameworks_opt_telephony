@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b24836b_de67a7a7",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 2249,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-12T22:19:06Z",
+      "side": 1,
+      "message": "please define in CdmaMmiCode and reference values there",
+      "range": {
+        "startLine": 2249,
+        "startChar": 12,
+        "endLine": 2249,
+        "endChar": 54
+      },
+      "revId": "8d1d380dea1a729f2504cb5dad631b6a37743fba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76f5f3e0_7790ad48",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-12T22:19:06Z",
+      "side": 1,
+      "message": "Please use PhoneAccount.SCHEME_TEL instead",
+      "range": {
+        "startLine": 2257,
+        "startChar": 47,
+        "endLine": 2257,
+        "endChar": 53
+      },
+      "revId": "8d1d380dea1a729f2504cb5dad631b6a37743fba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
