@@ -22,6 +22,30 @@
       "revId": "dfd4d7cc1287827ba23034259f046b312b31765f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2ed697a_aab22480",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-12T22:16:09Z",
+      "side": 1,
+      "message": "No... just HashMap.",
+      "parentUuid": "4cf5e458_76d83f09",
+      "range": {
+        "startLine": 59,
+        "startChar": 20,
+        "endLine": 59,
+        "endChar": 37
+      },
+      "revId": "dfd4d7cc1287827ba23034259f046b312b31765f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
