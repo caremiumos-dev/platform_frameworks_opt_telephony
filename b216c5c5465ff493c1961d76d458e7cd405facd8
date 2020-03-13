@@ -46,6 +46,30 @@
       "revId": "b216c5c5465ff493c1961d76d458e7cd405facd8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "258a6667_4d36c67a",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T23:58:47Z",
+      "side": 1,
+      "message": "The problem with killing it on NOT_READY is that during a PSIM switch we also go to NOT_READY, and ideally that wouldn\u0027t make us non-administrators (which I was hoping to avoid). Ugh, eSIM, but thanks for pointing that out. Ih had forgotten about that.",
+      "parentUuid": "7981f17a_de62e71c",
+      "range": {
+        "startLine": 170,
+        "startChar": 16,
+        "endLine": 170,
+        "endChar": 37
+      },
+      "revId": "b216c5c5465ff493c1961d76d458e7cd405facd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
