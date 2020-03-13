@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "057bb858_956ecd18",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:23:59Z",
+      "side": 1,
+      "message": "SIM state broadcasts were split into two in P.\n\nAPPLICATION is for SIM contents, it will send out NOT_READY and LOADED.\nCARD only ever sends out events for the physical card changing its state in the slot - ABSENT and PRESENT are the main two we\u0027d care about.\n\nIn general, the biggest one to always pay attention to is LOADED. At that point, everything has been read from the SIM. If we listen to NOT_READY, we\u0027ll probably get garbage, but this is also the terminal state of an eSIM with no active profile (i.e. it was just disabled, last broadcast we\u0027ll get for this slot is NOT_READY). ABSENT means the SIM was removed.",
+      "range": {
+        "startLine": 108,
+        "startChar": 46,
+        "endLine": 108,
+        "endChar": 75
+      },
+      "revId": "b90f681a302288b11938c758243d5a8ff87733c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e72f16d0_b34f2ac0",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:23:59Z",
+      "side": 1,
+      "message": "Remember that this can change - think eSIM switches. Having a TelMan pinned to a now-disabled eSIM profile is going to return garbage. We should redo #createForSubscriptionId each time we call TM methods.",
+      "range": {
+        "startLine": 128,
+        "startChar": 69,
+        "endLine": 128,
+        "endChar": 83
+      },
+      "revId": "b90f681a302288b11938c758243d5a8ff87733c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac70189a_6721ee4f",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:23:59Z",
+      "side": 1,
+      "message": "The broadcast also contains a phoneId (and subId), we should ignore broadcasts not on our slot. Naturally there are both SubscriptionManager#EXTRA_SLOT_INDEX and PhoneConstants#PHONE_KEY for this, but I don\u0027t remember if one is preferred over the other.",
+      "range": {
+        "startLine": 201,
+        "startChar": 16,
+        "endLine": 201,
+        "endChar": 37
+      },
+      "revId": "b90f681a302288b11938c758243d5a8ff87733c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85133046_b709cc27",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:23:59Z",
+      "side": 1,
+      "message": "Why are we storing this instead of re-getting every time? Couldn\u0027t this become stale?",
+      "range": {
+        "startLine": 223,
+        "startChar": 39,
+        "endLine": 223,
+        "endChar": 52
+      },
+      "revId": "b90f681a302288b11938c758243d5a8ff87733c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
