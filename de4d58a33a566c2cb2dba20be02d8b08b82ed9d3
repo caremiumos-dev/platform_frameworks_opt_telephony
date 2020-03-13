@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8f5af55b_4bb7a72e",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-13T19:15:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0a606ad_ec696300",
+      "range": {
+        "startLine": 52,
+        "startChar": 49,
+        "endLine": 52,
+        "endChar": 67
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5eb4ba8_4eca8fb0",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-12T23:43:57Z",
       "side": 1,
       "message": "Where will this be instantiated and run?",
+      "range": {
+        "startLine": 55,
+        "startChar": 11,
+        "endLine": 55,
+        "endChar": 35
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "382d54b8_71195b10",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-13T19:15:37Z",
+      "side": 1,
+      "message": "This will be instantiated and run inside the Phone. DataConnections will register Listeners when they enter the DcActivatingState and unregister when the leave the DcActiveState.\n\nThe full design is at go/carrier-privileges-tracker-dd",
+      "parentUuid": "b5eb4ba8_4eca8fb0",
       "range": {
         "startLine": 55,
         "startChar": 11,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "24615f87_638a8a3f",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-13T19:15:37Z",
+      "side": 1,
+      "message": "Yes, the subId and slotIndex are read from this. Additionally, we get the phone\u0027s context in order to get several system services needed for getting certificates and PackageInfos.",
+      "parentUuid": "f103a20c_4d3e2d94",
+      "range": {
+        "startLine": 57,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 14
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb59fc63_c32447a7",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ab8c240_bdfbcceb",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-13T19:15:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb59fc63_c32447a7",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 0
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "ddc3c487_a9328480",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-13T19:15:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25a5392a_5b193d28",
+      "range": {
+        "startLine": 60,
+        "startChar": 33,
+        "endLine": 60,
+        "endChar": 40
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f365beea_4253a34e",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 3
@@ -128,6 +248,30 @@
       "writtenOn": "2020-03-12T23:43:57Z",
       "side": 1,
       "message": "Do we need to protect against the listener blocking the handler thread for an excessive amount of time? Not sure how other platform classes handle this (if at all?).",
+      "range": {
+        "startLine": 70,
+        "startChar": 25,
+        "endLine": 70,
+        "endChar": 51
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "246025c4_7adf4a67",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-13T19:15:37Z",
+      "side": 1,
+      "message": "I believe other platform classes handle this by using one-way Binder calls to ensure that the callback implementations don\u0027t black the handler thread. In this case, a Binder call isn\u0027t necessary at this point because only Telephony entities (which are all in the same process) will be registering listeners.\n\nIf we need to expand this for non-Telephony users in the future, we can reconsider moving to a one-way Binder call. In the meantime, updating the documentation to clarify that long running operations should *not* be done in the #onCarrierPrivilegesChanged method.\n\nThoughts?",
+      "parentUuid": "f365beea_4253a34e",
       "range": {
         "startLine": 70,
         "startChar": 25,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "44c13ce1_edb610df",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-13T19:15:37Z",
+      "side": 1,
+      "message": "Good point - changing to be an interface.",
+      "parentUuid": "a4888679_df659eb8",
+      "range": {
+        "startLine": 109,
+        "startChar": 11,
+        "endLine": 109,
+        "endChar": 32
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0dd39ae_38d67eed",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 3
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "51ccfdc3_1ceb35bb",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-13T19:15:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0dd39ae_38d67eed",
+      "range": {
+        "startLine": 116,
+        "startChar": 78,
+        "endLine": 116,
+        "endChar": 82
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "097f16e1_a8a45943",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
         "patchSetId": 3
@@ -206,6 +398,30 @@
       "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "842ac503_9cccba96",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-13T19:15:37Z",
+      "side": 1,
+      "message": "This may be worthwhile down the road, but for now there should only be 0-1 invocations of this method, so it\u0027s probably overkill for now.",
+      "parentUuid": "097f16e1_a8a45943",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 34
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
