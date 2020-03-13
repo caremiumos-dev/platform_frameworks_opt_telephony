@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f97585d5_c9760e5c",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "I think this would serialize the whole giant CC bundle, and we don\u0027t really need to do all that work. Can we just pull out the relevant key/s before queuing the message?",
+      "range": {
+        "startLine": 96,
+        "startChar": 51,
+        "endLine": 96,
+        "endChar": 60
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21f1a98b_3bb24eb3",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "Nit: put the looper first since it goes to the superclass",
+      "range": {
+        "startLine": 106,
+        "startChar": 28,
+        "endLine": 106,
+        "endChar": 34
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1783aadf_e37a2b96",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "The broadcast should also have CCM#EXTRA_SUBSCRIPTION_INDEX",
+      "range": {
+        "startLine": 157,
+        "startChar": 63,
+        "endLine": 157,
+        "endChar": 71
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eefe75a0_0adbfc97",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "Didn\u0027t we just get passed the whole bundle of extras? Why re-get it?",
+      "range": {
+        "startLine": 157,
+        "startChar": 38,
+        "endLine": 157,
+        "endChar": 55
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04611d20_43bd9d97",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "Can this be null?",
+      "range": {
+        "startLine": 162,
+        "startChar": 17,
+        "endLine": 162,
+        "endChar": 35
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3dc51a9_5fafc333",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "Is this not efficient enough..? This would only be copying offending strings once, and it shouldn\u0027t copy all-uppercase strings at all.",
+      "range": {
+        "startLine": 166,
+        "startChar": 49,
+        "endLine": 166,
+        "endChar": 68
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0d95aba_3c56a98e",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "Nit: updateCarrierPrivilege*d*Uids",
+      "range": {
+        "startLine": 178,
+        "startChar": 17,
+        "endLine": 178,
+        "endChar": 43
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f68d16d3_b48f6961",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "Is there a telephony util that already does exactly this? (I don\u0027t think so) We should avoid duplicating the code to check this kind of thing at all costs. There are two ways an APK can be signed, and surprisingly we recompute the SHA-1 and SHA-256 hashes of the Signature\u0027s raw bytes and check if either matches.\n\nSee frameworks/base/telephony/java/android/telephony/UiccAccessRule.java#getCarrierPrivilegeStatus",
+      "range": {
+        "startLine": 181,
+        "startChar": 12,
+        "endLine": 184,
+        "endChar": 0
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d99d1af_14d0fc04",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "What happens when work profiles/multiple users are in play? Add a comment here.",
+      "range": {
+        "startLine": 187,
+        "startChar": 48,
+        "endLine": 187,
+        "endChar": 67
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dda79941_807879f1",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "Consider leaving B out to make sure UID_B isn\u0027t returned, possibly in a different test.",
+      "range": {
+        "startLine": 109,
+        "startChar": 41,
+        "endLine": 109,
+        "endChar": 54
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eca8f281_c4251325",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T00:10:51Z",
+      "side": 1,
+      "message": "Send a bundle on a different phoneId and make sure things are ignored.\n\nSend a bundle on same phoneId but different subId and make sure things update.",
+      "range": {
+        "startLine": 121,
+        "startChar": 17,
+        "endLine": 121,
+        "endChar": 48
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
