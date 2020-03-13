@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a4a680d_bc9e8eaf",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T19:23:54Z",
+      "side": 1,
+      "message": "Alternatively, consider using android.os.Registrant and android.os.RegistrantList. One benefit is that it forces callers to provide you a handler (which means you can be confident that you won\u0027t be blocked when you notify.\n\nThis also aligns very nicely with all the existing telephony code that uses handler posts for callbacks.",
+      "range": {
+        "startLine": 51,
+        "startChar": 36,
+        "endLine": 51,
+        "endChar": 77
+      },
+      "revId": "1164a96436d1a1ffb3f8f2747143b060d3cc869c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb699d60_2df3a71c",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T19:23:54Z",
+      "side": 1,
+      "message": "consider using Consumer\u003c? extends Set\u003e, or alternatively I have suggested switching to Registrant/RegistrantList",
+      "range": {
+        "startLine": 109,
+        "startChar": 21,
+        "endLine": 109,
+        "endChar": 46
+      },
+      "revId": "1164a96436d1a1ffb3f8f2747143b060d3cc869c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
