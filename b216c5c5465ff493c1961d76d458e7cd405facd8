@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "923b3c65_00ece78f",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T23:33:32Z",
+      "side": 1,
+      "message": "I think you only want to trigger this in SIM_STATE_ABSENT and SIM_STATE_LOADED... ABSENT obviously means that there will be no administrators. LOADED means that you can load the carrier privilege rules from the SIM.",
+      "range": {
+        "startLine": 170,
+        "startChar": 16,
+        "endLine": 170,
+        "endChar": 37
+      },
+      "revId": "b216c5c5465ff493c1961d76d458e7cd405facd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
