@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "2f6bfcfa_714e83cc",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T19:36:19Z",
+      "side": 1,
+      "message": "while Collections are lovely in a public API, internally it\u0027s generally preferred to use primitives for \"reasons\". I think just an int[] is more appropriate.",
+      "range": {
+        "startLine": 53,
+        "startChar": 40,
+        "endLine": 53,
+        "endChar": 47
+      },
+      "revId": "1164a96436d1a1ffb3f8f2747143b060d3cc869c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cb699d60_2df3a71c",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 4
