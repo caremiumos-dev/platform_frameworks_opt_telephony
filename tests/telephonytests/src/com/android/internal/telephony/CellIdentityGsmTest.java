@@ -21,10 +21,13 @@ import android.telephony.CellIdentityGsm;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.android.telephony.Rlog;
+
 import java.util.Collections;
 
 /** Unit tests for {@link CellIdentityGsm}. */
 public class CellIdentityGsmTest extends AndroidTestCase {
+    private static final String LOG_TAG = "CellIdentityGsmTest";
 
     // Location Area Code ranges from 0 to 65535.
     private static final int LAC = 65535;
@@ -60,6 +63,10 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         assertEquals(MCC_STR + MNC_STR, ci.getMobileNetworkOperator());
         assertEquals(ALPHA_LONG, ci.getOperatorAlphaLong());
         assertEquals(ALPHA_SHORT, ci.getOperatorAlphaShort());
+
+        String globalCi = MCC_STR + MNC_STR + Integer.toString(LAC) + Integer.toString(CID);
+        Rlog.d(LOG_TAG, "mGlobalCi is " + globalCi);
+        assertTrue(globalCi.equals(ci.getGlobalCi()));
     }
 
     @SmallTest
@@ -74,6 +81,11 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         assertEquals(MCC_STR, ci.getMccString());
         assertEquals(mncWithThreeDigit, ci.getMncString());
         assertEquals(MCC_STR + mncWithThreeDigit, ci.getMobileNetworkOperator());
+
+        String globalCi = MCC_STR + mncWithThreeDigit + Integer.toString(LAC)
+                + Integer.toString(CID);
+        Rlog.d(LOG_TAG, "mGlobalCi is " + globalCi);
+        assertTrue(globalCi.equals(ci.getGlobalCi()));
     }
 
     @SmallTest
@@ -88,6 +100,11 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         assertEquals(MCC_STR, ci.getMccString());
         assertEquals(mncWithTwoDigit, ci.getMncString());
         assertEquals(MCC_STR + mncWithTwoDigit, ci.getMobileNetworkOperator());
+
+        String globalCi = MCC_STR + "F" + mncWithTwoDigit + Integer.toString(LAC)
+                + Integer.toString(CID);
+        Rlog.d(LOG_TAG, "mGlobalCi is " + globalCi);
+        assertTrue(globalCi.equals(ci.getGlobalCi()));
     }
 
     @SmallTest
@@ -101,6 +118,7 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         assertNull(ci.getMccString());
         assertNull(ci.getMncString());
         assertNull(ci.getMobileNetworkOperator());
+        assertTrue(ci.getGlobalCi().length() == 0);
 
         ci = new CellIdentityGsm(LAC, CID, ARFCN, BSIC, MCC_STR, null, ALPHA_LONG, ALPHA_SHORT,
                 Collections.emptyList());
@@ -110,6 +128,7 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         assertEquals(MCC_STR, ci.getMccString());
         assertNull(ci.getMncString());
         assertNull(ci.getMobileNetworkOperator());
+        assertTrue(ci.getGlobalCi().length() == 0);
 
         ci = new CellIdentityGsm(LAC, CID, ARFCN, BSIC, null, MNC_STR, ALPHA_LONG, ALPHA_SHORT,
                 Collections.emptyList());
@@ -119,6 +138,7 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         assertEquals(MNC_STR, ci.getMncString());
         assertNull(ci.getMccString());
         assertNull(ci.getMobileNetworkOperator());
+        assertTrue(ci.getGlobalCi().length() == 0);
 
         ci = new CellIdentityGsm(LAC, CID, ARFCN, BSIC, "", "", ALPHA_LONG, ALPHA_SHORT,
                 Collections.emptyList());
@@ -128,6 +148,7 @@ public class CellIdentityGsmTest extends AndroidTestCase {
         assertNull(ci.getMccString());
         assertNull(ci.getMncString());
         assertNull(ci.getMobileNetworkOperator());
+        assertTrue(ci.getGlobalCi().length() == 0);
     }
 
     @SmallTest
@@ -199,5 +220,33 @@ public class CellIdentityGsmTest extends AndroidTestCase {
 
         CellIdentityGsm newCi = CellIdentityGsm.CREATOR.createFromParcel(p);
         assertEquals(ci, newCi);
+    }
+
+    @SmallTest
+    public void testGetGlobalCi() {
+        CellIdentityGsm ci = new CellIdentityGsm(
+                LAC + 1, CID, ARFCN, BSIC, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT,
+                Collections.emptyList());
+        assertTrue(ci.getGlobalCi().length() == 0);
+
+        ci = new CellIdentityGsm(
+                LAC, CID + 1, ARFCN, BSIC, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT,
+                Collections.emptyList());
+        assertTrue(ci.getGlobalCi().length() == 0);
+
+        ci = new CellIdentityGsm(
+                LAC, -1, ARFCN, BSIC, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT,
+                Collections.emptyList());
+        assertTrue(ci.getGlobalCi().length() == 0);
+
+        // Test id with one digit and corresponding zero padding
+        int cid = 1;
+        ci = new CellIdentityGsm(
+                LAC, cid, ARFCN, BSIC, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT,
+                Collections.emptyList());
+        String globalCi = MCC_STR + MNC_STR + Integer.toString(LAC)
+                + "0000" + Integer.toString(cid);
+        Rlog.d(LOG_TAG, "mGlobalCi is " + globalCi);
+        assertTrue(globalCi.equals(ci.getGlobalCi()));
     }
 }

@@ -123,7 +123,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -3203,11 +3202,8 @@ public class ServiceStateTracker extends Handler {
                 mNewSS.getNetworkRegistrationInfo(
                         NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkType.EUTRAN));
 
-        // TODO: loosen this restriction to exempt fields that are provided through system
-        // information; otherwise, we will get false positives when things like the operator
-        // alphas are provided later - that's better than missing location changes, but
-        // still not ideal.
-        boolean hasLocationChanged = !Objects.equals(mNewCellIdentity, mCellIdentity);
+        boolean hasLocationChanged =
+                mNewCellIdentity.getGlobalCi().equals(mCellIdentity.getGlobalCi());
 
         // ratchet the new tech up through its rat family but don't drop back down
         // until cell change or device is OOS

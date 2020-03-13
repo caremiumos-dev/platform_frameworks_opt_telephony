@@ -21,11 +21,14 @@ import android.telephony.CellIdentityWcdma;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.android.telephony.Rlog;
+
 import java.util.Collections;
 
 /** Unit tests for {@link CellIdentityWcdma}. */
 
 public class CellIdentityWcdmaTest extends AndroidTestCase {
+    private static final String LOG_TAG = "CellIdentityWcdmaTest";
 
     // Location Area Code ranges from 0 to 65535.
     private static final int LAC = 65535;
@@ -74,6 +77,11 @@ public class CellIdentityWcdmaTest extends AndroidTestCase {
         assertEquals(MCC_STR, ci.getMccString());
         assertEquals(mncWithThreeDigit, ci.getMncString());
         assertEquals(MCC_STR + mncWithThreeDigit, ci.getMobileNetworkOperator());
+
+        String globalCi = MCC_STR + mncWithThreeDigit + Integer.toString(CID);
+        Rlog.d(LOG_TAG, "mGlobalCi is " + globalCi);
+        Rlog.d(LOG_TAG, "mGlobalCi from CellIdentityWcdma is " + ci.getGlobalCi());
+        assertTrue(globalCi.equals(ci.getGlobalCi()));
     }
 
     @SmallTest
