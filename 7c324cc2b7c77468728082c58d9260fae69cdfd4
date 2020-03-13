@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d7a9d2d_efc4008e",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T22:51:05Z",
+      "side": 1,
+      "message": "you can just initialize to INVALID and then override if extra (save yourself an \"else\").",
+      "range": {
+        "startLine": 97,
+        "startChar": 32,
+        "endLine": 97,
+        "endChar": 37
+      },
+      "revId": "7c324cc2b7c77468728082c58d9260fae69cdfd4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3d4db33_fc282493",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T22:51:05Z",
+      "side": 1,
+      "message": "It\u0027s more idiomatic to pass a Context and to get these from the Context.",
+      "range": {
+        "startLine": 115,
+        "startChar": 21,
+        "endLine": 115,
+        "endChar": 41
+      },
+      "revId": "7c324cc2b7c77468728082c58d9260fae69cdfd4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32c7f7da_7d758416",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T22:51:05Z",
+      "side": 1,
+      "message": "Ah, but you already have a context. Lucky you!",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "7c324cc2b7c77468728082c58d9260fae69cdfd4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c75882d_374502dd",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T22:51:05Z",
+      "side": 1,
+      "message": "nit, the certs may not be updated. Suggest to just rename to carrierConfigUpdated() or carrierConfigChanged() for clarify.",
+      "range": {
+        "startLine": 150,
+        "startChar": 16,
+        "endLine": 150,
+        "endChar": 47
+      },
+      "revId": "7c324cc2b7c77468728082c58d9260fae69cdfd4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d95d375a_da71c9cd",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T22:51:05Z",
+      "side": 1,
+      "message": "Before proceeding you need to check isConfigForIdentifiedCarrier(), otherwise, the CarrierConfig isn\u0027t ready yet, so you should hold off and wait for another CarrierConfig.",
+      "range": {
+        "startLine": 163,
+        "startChar": 12,
+        "endLine": 163,
+        "endChar": 18
+      },
+      "revId": "7c324cc2b7c77468728082c58d9260fae69cdfd4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb4d6746_ea5c0539",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-13T22:51:05Z",
+      "side": 1,
+      "message": "Updating registrants seems like a logically distinct task even though it\u0027s a small piece of code. Suggest to pull \"registrant management\" out into a different method.",
+      "range": {
+        "startLine": 209,
+        "startChar": 0,
+        "endLine": 211,
+        "endChar": 13
+      },
+      "revId": "7c324cc2b7c77468728082c58d9260fae69cdfd4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
