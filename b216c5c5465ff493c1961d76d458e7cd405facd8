@@ -22,6 +22,30 @@
       "revId": "b216c5c5465ff493c1961d76d458e7cd405facd8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7981f17a_de62e71c",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-13T23:40:17Z",
+      "side": 1,
+      "message": "Not just ABSENT - NOT_READY is also an important state for eSIM profiles during a switch (or disabling of the active profile only).",
+      "parentUuid": "923b3c65_00ece78f",
+      "range": {
+        "startLine": 170,
+        "startChar": 16,
+        "endLine": 170,
+        "endChar": 37
+      },
+      "revId": "b216c5c5465ff493c1961d76d458e7cd405facd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
