@@ -104,6 +104,12 @@ public class CarrierPrivilegesTracker extends Handler {
      */
     private static final int ACTION_PACKAGE_ADDED = 5;
 
+    /**
+     * Action for tracking when a package is uninstalled on the device.
+     * obj: String package name that was installed on the device.
+     */
+    private static final int ACTION_PACKAGE_REMOVED = 6;
+
     private final Context mContext;
     private final Phone mPhone;
     private final CarrierConfigManager mCarrierConfigManager;
@@ -158,7 +164,12 @@ public class CarrierPrivilegesTracker extends Handler {
                             sendMessage(obtainMessage(ACTION_SIM_STATE_UPDATED, slotId, simState));
                             break;
                         }
-                        case Intent.ACTION_PACKAGE_ADDED: {
+                        case Intent.ACTION_PACKAGE_ADDED: // fall through
+                        case Intent.ACTION_PACKAGE_REMOVED: {
+                            int what =
+                                    (action.equals(Intent.ACTION_PACKAGE_ADDED))
+                                            ? ACTION_PACKAGE_ADDED
+                                            : ACTION_PACKAGE_REMOVED;
                             Uri uri = intent.getData();
                             String pkgName = (uri != null) ? uri.getSchemeSpecificPart() : null;
                             if (TextUtils.isEmpty(pkgName)) {
@@ -166,7 +177,7 @@ public class CarrierPrivilegesTracker extends Handler {
                                 return;
                             }
 
-                            sendMessage(obtainMessage(ACTION_PACKAGE_ADDED, pkgName));
+                            sendMessage(obtainMessage(what, pkgName));
                             break;
                         }
                     }
@@ -188,6 +199,7 @@ public class CarrierPrivilegesTracker extends Handler {
         filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
         filter.addAction(TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED);
         filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         mContext.registerReceiver(mIntentReceiver, filter);
 
         mRegistrantList = new RegistrantList();
@@ -220,6 +232,11 @@ public class CarrierPrivilegesTracker extends Handler {
             case ACTION_PACKAGE_ADDED: {
                 String pkgName = (String) msg.obj;
                 handlePackageAdded(pkgName);
+                break;
+            }
+            case ACTION_PACKAGE_REMOVED: {
+                String pkgName = (String) msg.obj;
+                handlePackageRemoved(pkgName);
                 break;
             }
             default: {
@@ -312,6 +329,16 @@ public class CarrierPrivilegesTracker extends Handler {
             // Didn't find package. Continue looking at other packages
             Log.e(TAG, "Unable to find uid for package: " + pkg.packageName);
         }
+
+        maybeUpdatePrivilegedUidsAndNotifyRegistrants();
+    }
+
+    private void handlePackageRemoved(String pkgName) {
+        if (mInstalledPackageCerts.remove(pkgName) == null) {
+            Log.e(TAG, "Unknown package was uninstalled: " + pkgName);
+            return;
+        }
+        mCachedUids.remove(pkgName);
 
         maybeUpdatePrivilegedUidsAndNotifyRegistrants();
     }
