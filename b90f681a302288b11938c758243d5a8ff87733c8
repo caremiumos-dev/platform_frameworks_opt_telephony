@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "53b666ce_c2aabbfc",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-14T06:56:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "057bb858_956ecd18",
+      "range": {
+        "startLine": 108,
+        "startChar": 46,
+        "endLine": 108,
+        "endChar": 75
+      },
+      "revId": "b90f681a302288b11938c758243d5a8ff87733c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e72f16d0_b34f2ac0",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "70c870b9_d162ebbc",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-14T06:56:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e72f16d0_b34f2ac0",
+      "range": {
+        "startLine": 128,
+        "startChar": 69,
+        "endLine": 128,
+        "endChar": 83
+      },
+      "revId": "b90f681a302288b11938c758243d5a8ff87733c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac70189a_6721ee4f",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2020-03-13T00:23:59Z",
       "side": 1,
       "message": "The broadcast also contains a phoneId (and subId), we should ignore broadcasts not on our slot. Naturally there are both SubscriptionManager#EXTRA_SLOT_INDEX and PhoneConstants#PHONE_KEY for this, but I don\u0027t remember if one is preferred over the other.",
+      "range": {
+        "startLine": 201,
+        "startChar": 16,
+        "endLine": 201,
+        "endChar": 37
+      },
+      "revId": "b90f681a302288b11938c758243d5a8ff87733c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9563b035_dc786729",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-14T06:56:13Z",
+      "side": 1,
+      "message": "Updated to check slot id. Do we need to check *both* slotId and subId?",
+      "parentUuid": "ac70189a_6721ee4f",
       "range": {
         "startLine": 201,
         "startChar": 16,
@@ -91,6 +163,30 @@
       "revId": "b90f681a302288b11938c758243d5a8ff87733c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a59ba503_a66b92ab",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-14T06:56:13Z",
+      "side": 1,
+      "message": "We will also listen for packages added and removed and update accordingly",
+      "parentUuid": "85133046_b709cc27",
+      "range": {
+        "startLine": 223,
+        "startChar": 39,
+        "endLine": 223,
+        "endChar": 52
+      },
+      "revId": "b90f681a302288b11938c758243d5a8ff87733c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
