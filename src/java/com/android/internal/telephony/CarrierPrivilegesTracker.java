@@ -31,23 +31,27 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PersistableBundle;
+import android.os.Process;
 import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.UserHandle;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -72,6 +76,14 @@ public class CarrierPrivilegesTracker extends Handler {
      */
     private static final int ACTION_SIM_STATE_UPDATED = 2;
 
+    /**
+     * Action for tracking when a package is installed on the device.
+     * arg1: uid for the installed package. If this is not included in the Intent, {@link
+     * Process#INVALID_UID} will be used.
+     * obj: String package name that was installed on the device.
+     */
+    private static final int ACTION_PACKAGE_ADDED = 3;
+
     private final Context mContext;
     private final Phone mPhone;
     private final CarrierConfigManager mCarrierConfigManager;
@@ -81,6 +93,7 @@ public class CarrierPrivilegesTracker extends Handler {
     private final Set<String> mCarrierConfigCerts;
     private final Set<String> mUiccCerts;
     private final List<PackageInfo> mPackageInfos;
+    private final Map<PackageInfo, Integer> mCachedUids;
     private int[] mPrivilegedUids;
 
     private final BroadcastReceiver mIntentReceiver =
@@ -114,6 +127,22 @@ public class CarrierPrivilegesTracker extends Handler {
                             sendMessage(obtainMessage(ACTION_SIM_STATE_UPDATED, slotId, simState));
                             break;
                         }
+                        case Intent.ACTION_PACKAGE_ADDED: {
+                            Uri uri = intent.getData();
+                            String pkgName = (uri != null) ? uri.getSchemeSpecificPart() : null;
+                            if (pkgName == null) {
+                                Log.e(TAG, "Failed to get package from Intent");
+                                return;
+                            }
+
+                            Bundle extras = intent.getExtras();
+                            int uid = Process.INVALID_UID;
+                            if (extras.containsKey(Intent.EXTRA_UID)) {
+                                uid = extras.getInt(Intent.EXTRA_UID);
+                            }
+                            sendMessage(obtainMessage(ACTION_PACKAGE_ADDED, uid, 0, pkgName));
+                            break;
+                        }
                     }
                 }
             };
@@ -132,12 +161,14 @@ public class CarrierPrivilegesTracker extends Handler {
         filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
         filter.addAction(TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED);
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
         mContext.registerReceiver(mIntentReceiver, filter);
 
         mRegistrantList = new RegistrantList();
         mCarrierConfigCerts = new HashSet<>();
         mUiccCerts = new HashSet<>();
         mPackageInfos = new ArrayList<>();
+        mCachedUids = new ArrayMap<>();
         mPrivilegedUids = new int[0];
     }
 
@@ -150,6 +181,10 @@ public class CarrierPrivilegesTracker extends Handler {
             }
             case ACTION_SIM_STATE_UPDATED: {
                 handleSimStateChanged(msg.arg1, msg.arg2);
+                break;
+            }
+            case ACTION_PACKAGE_ADDED: {
+                handlePackageAdded(msg.arg1, (String) msg.obj);
                 break;
             }
             default: {
@@ -204,32 +239,51 @@ public class CarrierPrivilegesTracker extends Handler {
         maybeUpdateCertsAndNotifyRegistrants(mUiccCerts, updatedUiccCerts);
     }
 
+    private void handlePackageAdded(int uid, String pkgName) {
+        PackageInfo pkg;
+        try {
+            pkg = mPackageManager.getPackageInfo(pkgName, PackageManager.GET_SIGNING_CERTIFICATES);
+        } catch (NameNotFoundException e) {
+            Log.e(TAG, "Error getting installed package", e);
+            return;
+        }
+
+        if (uid != Process.INVALID_UID) {
+            mCachedUids.put(pkg, uid);
+        }
+
+        maybeUpdatePrivilegedUidsAndNotifyRegistrants();
+    }
+
     private void maybeUpdateCertsAndNotifyRegistrants(
             Set<String> currentCerts, Set<String> updatedCerts) {
         if (!currentCerts.equals(updatedCerts)) {
             currentCerts.clear();
             currentCerts.addAll(updatedCerts);
 
-            int[] updatedPrivilegedUids = getUpdatedPrivilegedUids();
+            maybeUpdatePrivilegedUidsAndNotifyRegistrants();
+        }
+    }
 
-            // Sort UIDs for the equality check
-            Arrays.sort(updatedPrivilegedUids);
-            if (!Arrays.equals(mPrivilegedUids, updatedPrivilegedUids)) {
-                mPrivilegedUids = updatedPrivilegedUids;
-                mRegistrantList.notifyResult(mPrivilegedUids);
-            }
+    private void maybeUpdatePrivilegedUidsAndNotifyRegistrants() {
+        int[] updatedPrivilegedUids = getUpdatedPrivilegedUids();
+
+        // Sort UIDs for the equality check
+        Arrays.sort(updatedPrivilegedUids);
+        if (!Arrays.equals(mPrivilegedUids, updatedPrivilegedUids)) {
+            mPrivilegedUids = updatedPrivilegedUids;
+            mRegistrantList.notifyResult(mPrivilegedUids);
         }
     }
 
     private int[] getUpdatedPrivilegedUids() {
         Set<Integer> privilegedUids = new HashSet<>();
+
         for (PackageInfo pkg : mPackageInfos) {
             if (isPackagePrivileged(pkg)) {
                 int uid;
                 try {
-                    uid =
-                            mPackageManager.getPackageUidAsUser(
-                                    pkg.packageName, UserHandle.USER_SYSTEM);
+                    uid = getUidForPackage(pkg);
                 } catch (NameNotFoundException e) {
                     // Didn't find package. Continue looking at other packages
                     Log.e(TAG, "Unable to find uid for package: " + pkg.packageName);
@@ -257,6 +311,15 @@ public class CarrierPrivilegesTracker extends Handler {
             }
         }
         return false;
+    }
+
+    private int getUidForPackage(PackageInfo pkg) throws NameNotFoundException {
+        if (mCachedUids.containsKey(pkg)) {
+            return mCachedUids.get(pkg);
+        }
+        int uid = mPackageManager.getPackageUidAsUser(pkg.packageName, UserHandle.USER_SYSTEM);
+        mCachedUids.put(pkg, uid);
+        return uid;
     }
 
     /**
