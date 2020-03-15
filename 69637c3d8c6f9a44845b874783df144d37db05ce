@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "974c05a2_428b2240",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-15T20:29:29Z",
+      "side": 1,
+      "message": "Would IntArray be a better option here? It\u0027s slightly more flexible than a true int[], and can be easily converted to int[] when needed.\n\nhttps://source.corp.google.com/android/frameworks/base/core/java/android/util/IntArray.java",
+      "range": {
+        "startLine": 37,
+        "startChar": 18,
+        "endLine": 37,
+        "endChar": 33
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
