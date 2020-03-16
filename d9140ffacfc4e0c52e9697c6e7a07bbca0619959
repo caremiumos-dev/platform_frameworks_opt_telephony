@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b4a8bc2_68e2f5cc",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:51:08Z",
+      "side": 1,
+      "message": "I\u0027d just take the broadcast at face value, no need to iterate through the packages we know about. Just remove the package name from the cache and notify registrants.",
+      "range": {
+        "startLine": 281,
+        "startChar": 31,
+        "endLine": 281,
+        "endChar": 44
+      },
+      "revId": "d9140ffacfc4e0c52e9697c6e7a07bbca0619959",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
