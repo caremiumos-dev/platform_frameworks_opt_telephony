@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6a99f26_bc3d7f26",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:46:55Z",
+      "side": 1,
+      "message": "Explicitly default to TM#SIM_STATE_UNKNOWN",
+      "range": {
+        "startLine": 107,
+        "startChar": 50,
+        "endLine": 107,
+        "endChar": 56
+      },
+      "revId": "63e809181cff18cd30f01e6b9289eb75e328cee7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cf3f116_3b62a3a6",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:46:55Z",
+      "side": 1,
+      "message": "Explicitly default to SubscriptionManager#INVALID_SIM_SLOT_INDEX",
+      "range": {
+        "startLine": 108,
+        "startChar": 48,
+        "endLine": 108,
+        "endChar": 54
+      },
+      "revId": "63e809181cff18cd30f01e6b9289eb75e328cee7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58e9685a_566880f3",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:46:55Z",
+      "side": 1,
+      "message": "Double-check with a core telephony team member which is preferred. PhoneConstants#SLOT_KEY or SubscriptionManager#EXTRA_SLOT_INDEX - both are present in these broadcasts and I always forget which is preferred / which is a relic to be removed \"in the future\".",
+      "range": {
+        "startLine": 108,
+        "startChar": 55,
+        "endLine": 108,
+        "endChar": 78
+      },
+      "revId": "63e809181cff18cd30f01e6b9289eb75e328cee7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fb9e553_201c4bba",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:46:55Z",
+      "side": 1,
+      "message": "Same comment as parent - just always force uppercase. All of this stuff is stored/computed internally, so we only need one or the other.",
+      "range": {
+        "startLine": 196,
+        "startChar": 24,
+        "endLine": 198,
+        "endChar": 65
+      },
+      "revId": "63e809181cff18cd30f01e6b9289eb75e328cee7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
