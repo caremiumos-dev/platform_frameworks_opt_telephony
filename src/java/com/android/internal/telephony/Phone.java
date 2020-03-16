@@ -411,6 +411,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     private boolean mUnitTestMode;
 
+    private final CarrierPrivilegesTracker mCarrierPrivilegesTracker;
+
     public IccRecords getIccRecords() {
         return mIccRecords.get();
     }
@@ -531,6 +533,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         */
         mIsVoiceCapable = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE))
                 .isVoiceCapable();
+
+        mCarrierPrivilegesTracker = new CarrierPrivilegesTracker(mLooper, this, mContext);
 
         /**
          *  Some RIL's don't always send RIL_UNSOL_CALL_RING so it needs
@@ -4199,6 +4203,11 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             return ((RIL) mCi).getHalVersion();
         }
         return RIL.RADIO_HAL_VERSION_UNKNOWN;
+    }
+
+    /** @hide */
+    public CarrierPrivilegesTracker getCarrierPrivilegesTracker() {
+        return mCarrierPrivilegesTracker;
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {

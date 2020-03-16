@@ -194,10 +194,11 @@ public class CarrierPrivilegesTracker extends Handler {
             @NonNull Looper looper, @NonNull Phone phone, @NonNull Context context) {
         super(looper);
         mContext = context;
-        mCarrierConfigManager = context.getSystemService(CarrierConfigManager.class);
-        mPackageManager = context.getSystemService(PackageManager.class);
-        mUserManager = context.getSystemService(UserManager.class);
-        mTelephonyManager = context.getSystemService(TelephonyManager.class);
+        mCarrierConfigManager =
+                (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        mPackageManager = mContext.getPackageManager();
+        mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
+        mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         mPhone = phone;
 
         IntentFilter filter = new IntentFilter();
