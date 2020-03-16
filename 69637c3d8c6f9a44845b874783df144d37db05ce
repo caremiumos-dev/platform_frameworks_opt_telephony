@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3f6f567c_b1344301",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:02:47Z",
+      "side": 1,
+      "message": "Nit: this makes it sound like there are two notification types: UID X gained privileges and UID Y lost them. We\u0027re notifying when the set of privileged UIDs changes. The receivers would have to do the set operations if they\u0027re really after knowing which exact UIDs just lost privileges.",
+      "range": {
+        "startLine": 29,
+        "startChar": 65,
+        "endLine": 29,
+        "endChar": 99
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "974c05a2_428b2240",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5
@@ -18,6 +41,99 @@
         "startChar": 18,
         "endLine": 37,
         "endChar": 33
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9d5663d_1868e530",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:02:47Z",
+      "side": 1,
+      "message": "Personally I think int[] is a bit ugly as this is going to constantly (relatively speaking) be resizing, but since the difference internally is just reassign (int[]) vs. clear + re-add everything (IntArray / collection of some kind), I don\u0027t think it matters too much.",
+      "parentUuid": "974c05a2_428b2240",
+      "range": {
+        "startLine": 37,
+        "startChar": 18,
+        "endLine": 37,
+        "endChar": 33
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddde8ef8_f93d7e46",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:02:47Z",
+      "side": 1,
+      "message": "The class is @hide, we shouldn\u0027t need these on the methods.",
+      "range": {
+        "startLine": 39,
+        "startChar": 9,
+        "endLine": 39,
+        "endChar": 13
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69f4da60_74765a78",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:02:47Z",
+      "side": 1,
+      "message": "Couldn\u0027t this race with handleMessage since it\u0027s no longer being put through there?",
+      "range": {
+        "startLine": 66,
+        "startChar": 19,
+        "endLine": 66,
+        "endChar": 31
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af7fd4ef_887862ca",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:02:47Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 75,
+        "startChar": 24,
+        "endLine": 75,
+        "endChar": 30
       },
       "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
