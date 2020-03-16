@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "055348cd_62736211",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "I know we\u0027re planning on listening to package changes later, but most of the time, this info will be mostly static. Eating the memory to represent 200 (arbitrary number) user-installed + system apps when this class is just waiting for a broadcast to poke it doesn\u0027t do us much good in terms of idle memory footprint. Especially considering that a PackageInfo effectively expands to represent the entire app\u0027s manifest.\n\nSIM_STATE_CHANGED is expected to be very uncommon, as is CARRIER_CONFIG_CHANGED. Effectively it\u0027s more or less safe to assume that each will get to a terminal state once and then do nothing else (LOADED + final CCC just slightly after that). Holding onto a giant 200-long list of PackageInfo for the lifetime of the boot session isn\u0027t doing us any favors if we never look at it after those first two broadcasts.\n\nOf course there will always be carriers like Fi where SSC and CCC are comparatively \"chatty\" due to switching (still on the order of 10s of minutes to hours, and typically only when moving non-trivial distances), but re-getting the package list on each broadcast is still probably net lower resource consumption.",
+      "range": {
+        "startLine": 69,
+        "startChar": 36,
+        "endLine": 69,
+        "endChar": 49
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f3d4ee8_727fc7dc",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "This will be listened to on both SIM slots. Also need to filter using CCM#EXTRA_SLOT_INDEX.",
+      "range": {
+        "startLine": 80,
+        "startChar": 50,
+        "endLine": 80,
+        "endChar": 79
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6694e6a4_b7566d7e",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "extras.getInt(EXTRA_SUBSCRIPTION_INDEX, SubscriptionManager.INVALID_SUBSCRIPTION_ID);",
+      "range": {
+        "startLine": 83,
+        "startChar": 28,
+        "endLine": 85,
+        "endChar": 29
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ace089e_6b4e7d58",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 106,
+        "startChar": 34,
+        "endLine": 106,
+        "endChar": 41
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2adcc02_4529f762",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "So this is going to be empty until we receive a package change notification?",
+      "range": {
+        "startLine": 107,
+        "startChar": 8,
+        "endLine": 107,
+        "endChar": 21
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9527217_d93fed1c",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 126,
+        "startChar": 52,
+        "endLine": 126,
+        "endChar": 59
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e31ef38d_3255b056",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "Add a comment that if CCM broadcasts with INVALID_SUB_ID, that means the SIM was removed. This is an expected case that we handle by clearing out carrier config-related certs.",
+      "range": {
+        "startLine": 128,
+        "startChar": 12,
+        "endLine": 128,
+        "endChar": 64
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a187e564_6b9d704d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "Maybe I missed this in some other patch set, but why do we have to store both? Just store the uppercased version. We\u0027re the ones internally doing the comparison with hash(Signature) below in isPackagePrivileged, just uppercase that string too.",
+      "range": {
+        "startLine": 137,
+        "startChar": 20,
+        "endLine": 137,
+        "endChar": 96
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "707e4851_2e9ec8fd",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "Nit: Current? It\u0027s based on the cert hashes in the instance variables",
+      "range": {
+        "startLine": 164,
+        "startChar": 21,
+        "endLine": 164,
+        "endChar": 28
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70c9a336_cd449a63",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "Nit: ArraySet",
+      "range": {
+        "startLine": 165,
+        "startChar": 42,
+        "endLine": 165,
+        "endChar": 49
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d990a3a0_22d0a806",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "No need for the temp variable, just directly call privilegedUids.add inside the try {}",
+      "range": {
+        "startLine": 168,
+        "startChar": 20,
+        "endLine": 168,
+        "endChar": 23
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39106085_23f914a9",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "Set#toArray. Probably more optimized internally.",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 187,
+        "endChar": 9
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4728884_6bbc9889",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-16T22:31:33Z",
+      "side": 1,
+      "message": "Need to exactly follow what UiccAccessRule#getCarrierPrivilegeStatus does.\n\nHandle multiple signers and check both SHA-1 / SHA-256 hashes.\n\nIdeally we just expose that logic as some static util somewhere.",
+      "range": {
+        "startLine": 192,
+        "startChar": 8,
+        "endLine": 199,
+        "endChar": 21
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
