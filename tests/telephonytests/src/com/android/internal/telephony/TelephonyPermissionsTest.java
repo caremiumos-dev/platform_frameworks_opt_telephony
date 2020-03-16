@@ -19,11 +19,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -106,7 +104,7 @@ public class TelephonyPermissionsTest {
                 mMockSubscriptionManager);
         when(mMockContext.getSystemService(Context.DEVICE_POLICY_SERVICE)).thenReturn(
                 mMockDevicePolicyManager);
-        when(mMockSubscriptionManager.getActiveSubscriptionIdList(anyBoolean())).thenReturn(
+        when(mMockSubscriptionManager.getCompleteActiveSubscriptionIdList()).thenReturn(
                 new int[]{SUB_ID});
 
         // By default, assume we have no permissions or app-ops bits.
@@ -350,7 +348,7 @@ public class TelephonyPermissionsTest {
     @Test
     public void testCheckReadDeviceIdentifiers_hasCarrierPrivilegesOnOtherSubscription()
             throws Exception {
-        when(mMockSubscriptionManager.getActiveSubscriptionIdList(anyBoolean())).thenReturn(
+        when(mMockSubscriptionManager.getCompleteActiveSubscriptionIdList()).thenReturn(
                 new int[]{SUB_ID, SUB_ID_2});
         when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID_2))).thenReturn(
                 mTelephonyManagerMockForSub2);
@@ -364,7 +362,7 @@ public class TelephonyPermissionsTest {
     @Test
     public void testCheckReadDeviceIdentifiers_hasCarrierPrivilegesOnInvisibleSubscription()
             throws Exception {
-        when(mMockSubscriptionManager.getActiveSubscriptionIdList(true)).thenReturn(
+        when(mMockSubscriptionManager.getCompleteActiveSubscriptionIdList()).thenReturn(
                 new int[]{SUB_ID});
         when(mMockSubscriptionManager.getActiveSubscriptionIdList(false)).thenReturn(
                 new int[]{SUB_ID, SUB_ID_2});
@@ -376,6 +374,7 @@ public class TelephonyPermissionsTest {
                 TelephonyPermissions.checkCallingOrSelfReadDeviceIdentifiers(mMockContext,
                         SUB_ID, PACKAGE, FEATURE, MSG));
     }
+
 
     @Test
     public void testCheckReadDeviceIdentifiers_hasAppOpNullSubscription() {
@@ -450,7 +449,7 @@ public class TelephonyPermissionsTest {
         when(mMockContext.checkPermission(
                 eq(android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE),
                 anyInt(), anyInt())).thenReturn(PackageManager.PERMISSION_DENIED);
-        when(mMockSubscriptionManager.getActiveSubscriptionIdList(anyBoolean())).thenReturn(
+        when(mMockSubscriptionManager.getCompleteActiveSubscriptionIdList()).thenReturn(
                 new int[]{SUB_ID, SUB_ID_2});
         when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID_2))).thenReturn(
                 mTelephonyManagerMockForSub2);
