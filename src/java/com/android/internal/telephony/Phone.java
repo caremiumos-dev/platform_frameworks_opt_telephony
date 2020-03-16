@@ -411,6 +411,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     private boolean mUnitTestMode;
 
+    /** @hide */
+    public CarrierPrivilegesTracker mCarrierPrivilegesTracker;
+
     public IccRecords getIccRecords() {
         return mIccRecords.get();
     }
@@ -569,6 +572,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         }
         mCi.startLceService(DEFAULT_REPORT_INTERVAL_MS, LCE_PULL_MODE,
                 obtainMessage(EVENT_CONFIG_LCE));
+
+        mCarrierPrivilegesTracker = new CarrierPrivilegesTracker(mLooper, this, mContext);
     }
 
     /**
