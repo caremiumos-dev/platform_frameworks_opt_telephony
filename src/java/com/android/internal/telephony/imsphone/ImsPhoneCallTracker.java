@@ -290,7 +290,12 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         }
 
         @Override
-        public void onSetLimit(String iface, long quotaBytes) {
+        public void onSetLimit(@NonNull String iface, long quotaBytes) {
+            // No-op
+        }
+
+        @Override
+        public void onSetWarning(@NonNull String iface, long quotaBytes) {
             // No-op
         }
 
