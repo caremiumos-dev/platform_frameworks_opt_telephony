@@ -140,6 +140,30 @@
       "revId": "6f2392ba8301a8a0bcff7513115a5441618bf5e2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50eb1388_9c688f70",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 4153,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-17T18:57:29Z",
+      "side": 1,
+      "message": "Where is this done? I still see this method being used.",
+      "parentUuid": "b8e60fc4_ed6e8b51",
+      "range": {
+        "startLine": 4153,
+        "startChar": 31,
+        "endLine": 4153,
+        "endChar": 65
+      },
+      "revId": "6f2392ba8301a8a0bcff7513115a5441618bf5e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
