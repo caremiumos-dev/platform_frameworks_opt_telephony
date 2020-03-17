@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bca0ab3_ea54a6a4",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 2118,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-17T18:58:42Z",
+      "side": 1,
+      "message": "PhoneUtils.makePstnPhoneAccountHandle(phoneId) instead?",
+      "range": {
+        "startLine": 2118,
+        "startChar": 52,
+        "endLine": 2118,
+        "endChar": 98
+      },
+      "revId": "f09b4f8375dd0a890565e73ee1146a7a06dc1911",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
