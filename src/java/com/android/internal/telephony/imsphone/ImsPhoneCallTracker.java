@@ -3177,6 +3177,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             supp.notificationType = 1;
             supp.code = SuppServiceNotification.CODE_2_CALL_RETRIEVED;
             mPhone.notifySuppSvcNotification(supp);
+            if (conn != null) conn.setSuppServiceNotification(supp);
             mMetrics.writeOnImsCallResumeReceived(mPhone.getPhoneId(), imsCall.getCallSession());
         }
 
@@ -3198,6 +3199,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             supp.history = suppServiceInfo.history;
 
             mPhone.notifySuppSvcNotification(supp);
+            ImsPhoneConnection conn = findConnection(call);
+            if(conn != null) {
+                conn.setSuppServiceNotification(supp);
+            }
         }
 
         @Override
@@ -4772,6 +4777,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         supp.notificationType = SuppServiceNotification.NOTIFICATION_TYPE_CODE_2;
         supp.code = SuppServiceNotification.CODE_2_CALL_ON_HOLD;
         mPhone.notifySuppSvcNotification(supp);
+        if (conn != null) conn.setSuppServiceNotification(supp);
         mMetrics.writeOnImsCallHoldReceived(mPhone.getPhoneId(), imsCall.getCallSession());
     }
 
