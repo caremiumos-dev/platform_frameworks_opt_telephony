@@ -95,6 +95,53 @@
     },
     {
       "key": {
+        "uuid": "8f6ac9c1_6d2444ad",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-17T04:13:45Z",
+      "side": 1,
+      "message": "The whole thing is in frameworks/opt...android/internal. it doesn\u0027t need @hides at all. It\u0027s all @hide.",
+      "parentUuid": "ddde8ef8_f93d7e46",
+      "range": {
+        "startLine": 39,
+        "startChar": 9,
+        "endLine": 39,
+        "endChar": 13
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b0ae96b_5ce584a1",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-17T04:13:45Z",
+      "side": 1,
+      "message": "Either this needs to be posted to the handler OR it needs to be done in a synchronized{} block.",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 23
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "69f4da60_74765a78",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5
@@ -129,6 +176,30 @@
       "writtenOn": "2020-03-16T22:02:47Z",
       "side": 1,
       "message": "Ditto",
+      "range": {
+        "startLine": 75,
+        "startChar": 24,
+        "endLine": 75,
+        "endChar": 30
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f01ac39_8d6f9414",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-17T04:13:45Z",
+      "side": 1,
+      "message": "also ditto... synchronized{} or send it around the current class\u0027s Handler to ensure that there are no weird races.",
+      "parentUuid": "af7fd4ef_887862ca",
       "range": {
         "startLine": 75,
         "startChar": 24,
