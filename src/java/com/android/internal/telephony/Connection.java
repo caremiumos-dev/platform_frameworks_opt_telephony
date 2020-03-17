@@ -29,6 +29,7 @@ import android.util.Log;
 import com.android.ims.internal.ConferenceParticipant;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
+import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.telephony.Rlog;
 
@@ -118,6 +119,7 @@ public abstract class Connection {
         public void onRttTerminated();
         public void onOriginalConnectionReplaced(Connection newConnection);
         public void onIsNetworkEmergencyCallChanged(boolean isEmergencyCall);
+        default void onSuppServiceNotification(SuppServiceNotification ssn) {}
     }
 
     /**
@@ -280,6 +282,8 @@ public abstract class Connection {
      * {@link com.android.internal.telephony.imsphone.ImsExternalConnection#getCallId()}).
      */
     private int mPulledDialogId;
+
+    private SuppServiceNotification mSuppServiceNotification;
 
     @UnsupportedAppUsage
     protected Connection(int phoneType) {
@@ -865,6 +869,13 @@ public abstract class Connection {
      */
     public void addListener(Listener listener) {
         mListeners.add(listener);
+
+        if (mSuppServiceNotification != null) {
+            for (Listener l : mListeners) {
+                l.onSuppServiceNotification(mSuppServiceNotification);
+            }
+            mSuppServiceNotification = null;
+        }
     }
 
     /**
@@ -1362,6 +1373,16 @@ public abstract class Connection {
         mIsNetworkIdentifiedEmergencyCall = isNetworkIdentifiedEmergencyCall;
         for (Listener l : mListeners) {
             l.onIsNetworkEmergencyCallChanged(isNetworkIdentifiedEmergencyCall);
+        }
+    }
+
+    public void setSuppServiceNotification(SuppServiceNotification ssn) {
+        if (!mListeners.isEmpty()) {
+            for (Listener l : mListeners) {
+                l.onSuppServiceNotification(ssn);
+            }
+        } else {
+            mSuppServiceNotification = ssn;
         }
     }
 

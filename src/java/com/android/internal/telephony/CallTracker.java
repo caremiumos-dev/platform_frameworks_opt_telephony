@@ -73,6 +73,7 @@ public abstract class CallTracker extends Handler {
     protected static final int EVENT_CALL_WAITING_INFO_CDMA        = 15;
     protected static final int EVENT_THREE_WAY_DIAL_L2_RESULT_CDMA = 16;
     protected static final int EVENT_THREE_WAY_DIAL_BLANK_FLASH    = 20;
+    protected static final int EVENT_SS_NOTIFICATION    = 21;
 
     @UnsupportedAppUsage
     public CallTracker() {

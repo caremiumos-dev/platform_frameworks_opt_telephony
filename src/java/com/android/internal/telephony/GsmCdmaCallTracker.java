@@ -43,6 +43,7 @@ import android.util.EventLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
+import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.telephony.Rlog;
 
@@ -109,6 +110,7 @@ public class GsmCdmaCallTracker extends CallTracker {
     private int mPendingCallClirMode;
     private boolean mIsEcmTimerCanceled;
     private int m3WayCallFlashDelay;
+    private SuppServiceNotification mSuppServiceNotification;
 
     /**
      * Listens for Emergency Callback Mode state change intents
@@ -163,6 +165,7 @@ public class GsmCdmaCallTracker extends CallTracker {
         IntentFilter filter = new IntentFilter();
         filter.addAction(TelephonyIntents.ACTION_EMERGENCY_CALLBACK_MODE_CHANGED);
         mPhone.getContext().registerReceiver(mEcmExitReceiver, filter);
+        mPhone.registerForSuppServiceNotification(this, EVENT_SS_NOTIFICATION, null);
 
         updatePhoneType(true);
     }
@@ -1154,6 +1157,8 @@ public class GsmCdmaCallTracker extends CallTracker {
                 imsPhone.callEndCleanupHandOverCallIfAny();
             }
         }
+
+        fireSsNotification();
         //dumpState();
     }
 
@@ -1660,11 +1665,33 @@ public class GsmCdmaCallTracker extends CallTracker {
                             "phone type " + mPhone.getPhoneType());
                 }
                 break;
+            case EVENT_SS_NOTIFICATION:
+                if (isPhoneTypeGsm()) {
+                    ar = (AsyncResult) msg.obj;
+                    mSuppServiceNotification = (SuppServiceNotification) ar.result;
+                    fireSsNotification();
+                } else {
+                    Rlog.w(LOG_TAG, "unexpected SS notification from CDMA");
+                }
+                break;
 
             default:{
                 throw new RuntimeException("unexpected event " + msg.what + " not handled by " +
                         "phone type " + mPhone.getPhoneType());
             }
+        }
+    }
+
+    private void fireSsNotification() {
+        if (mSuppServiceNotification != null) {
+            boolean sent = false;
+            for (GsmCdmaConnection gsmCdmaConnection : mConnections) {
+                if (gsmCdmaConnection != null) {
+                    gsmCdmaConnection.setSuppServiceNotification(mSuppServiceNotification);
+                    sent = true;
+                }
+            }
+            if (sent) mSuppServiceNotification = null;
         }
     }
 
