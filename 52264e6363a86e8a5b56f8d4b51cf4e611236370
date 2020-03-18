@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f5a4d2d8_46ffbe46",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-03-18T08:26:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d50bebd0_5d939247",
+      "range": {
+        "startLine": 309,
+        "startChar": 45,
+        "endLine": 309,
+        "endChar": 67
+      },
+      "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e299a121_b320212b",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2df64aff_a24d85b3",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-03-18T08:26:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e299a121_b320212b",
+      "range": {
+        "startLine": 1619,
+        "startChar": 8,
+        "endLine": 1620,
+        "endChar": 102
+      },
+      "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "78c77073_75ee9db0",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-03-18T08:26:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34680b92_58d11b69",
+      "range": {
+        "startLine": 1628,
+        "startChar": 22,
+        "endLine": 1628,
+        "endChar": 31
+      },
+      "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "29245f79_afdbe8ac",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 10
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "4adbe296_62a68e30",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1632,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-03-18T08:26:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29245f79_afdbe8ac",
+      "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a595ea7_480de620",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 10
@@ -99,6 +189,30 @@
       "writtenOn": "2020-03-12T21:45:54Z",
       "side": 1,
       "message": "Why was this check added? If UT is enabled, isn\u0027t this enough?",
+      "range": {
+        "startLine": 2165,
+        "startChar": 15,
+        "endLine": 2165,
+        "endChar": 37
+      },
+      "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca1419d6_6e7ab0e0",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 2165,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-03-18T08:26:45Z",
+      "side": 1,
+      "message": "This condition means VoLTE service is supported. So, I think this is a more accurate condition for judging whether Ut is supported or not.",
+      "parentUuid": "7a595ea7_480de620",
       "range": {
         "startLine": 2165,
         "startChar": 15,
