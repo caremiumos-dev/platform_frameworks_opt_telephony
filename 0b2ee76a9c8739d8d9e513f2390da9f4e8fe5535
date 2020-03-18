@@ -1,0 +1,164 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "449a6f4b_dd464944",
+        "filename": "src/java/com/android/internal/telephony/IccCard.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-18T05:26:17Z",
+      "side": 1,
+      "message": "Is there a reason you have this here? You don\u0027t need it.",
+      "range": {
+        "startLine": 144,
+        "startChar": 4,
+        "endLine": 144,
+        "endChar": 24
+      },
+      "revId": "0b2ee76a9c8739d8d9e513f2390da9f4e8fe5535",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6c63dc6_4b2e2305",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-18T05:26:17Z",
+      "side": 1,
+      "message": "incorrect order of imports",
+      "revId": "0b2ee76a9c8739d8d9e513f2390da9f4e8fe5535",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92751df1_5a19842e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-18T05:26:17Z",
+      "side": 1,
+      "message": "Incorrect order of imports. Please fix it.",
+      "revId": "0b2ee76a9c8739d8d9e513f2390da9f4e8fe5535",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5791df2_421dcb64",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-18T05:26:17Z",
+      "side": 1,
+      "message": "Please also implement IRadioResponse.supplySimDepersonalizationResponse in RadioResponse.",
+      "revId": "0b2ee76a9c8739d8d9e513f2390da9f4e8fe5535",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80740b05_cf0dcf2c",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-18T05:26:17Z",
+      "side": 1,
+      "message": "Move this to the previous line -- this is not per the formatting followed in the rest of the file.",
+      "range": {
+        "startLine": 943,
+        "startChar": 4,
+        "endLine": 943,
+        "endChar": 5
+      },
+      "revId": "0b2ee76a9c8739d8d9e513f2390da9f4e8fe5535",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c32ba75_f1145822",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-18T05:26:17Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 945,
+        "startChar": 8,
+        "endLine": 945,
+        "endChar": 9
+      },
+      "revId": "0b2ee76a9c8739d8d9e513f2390da9f4e8fe5535",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5528308d_11b00a2f",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-18T05:26:17Z",
+      "side": 1,
+      "message": "Where does this value come from? types.hal?",
+      "range": {
+        "startLine": 221,
+        "startChar": 17,
+        "endLine": 221,
+        "endChar": 19
+      },
+      "revId": "0b2ee76a9c8739d8d9e513f2390da9f4e8fe5535",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89839600_50d24f41",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-18T05:26:17Z",
+      "side": 1,
+      "message": "It may be better to move this to the PersoSubState enum.",
+      "revId": "0b2ee76a9c8739d8d9e513f2390da9f4e8fe5535",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
