@@ -1,0 +1,48 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000002016733",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1223852?revision\u003d14",
+      "fixSuggestions": [
+        {
+          "fixId": "8d5e16a9_ebc84e2a",
+          "description": "Change to \"src/java/com/android/internal/telephony/RadioResponse.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/RadioResponse.java",
+              "range": {
+                "startLine": 187,
+                "startChar": 40,
+                "endLine": 187,
+                "endChar": 51
+              },
+              "replacement": "containing"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "b70fc335_47363ae6",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-03-18T18:44:10Z",
+      "side": 1,
+      "message": "Common typo found: \"contatining\" -- should it be \"containing\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line.",
+      "range": {
+        "startLine": 187,
+        "startChar": 40,
+        "endLine": 187,
+        "endChar": 51
+      },
+      "revId": "1b4a27f27728a4f62f97e67d2cc4a7ebd5ba9edc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
