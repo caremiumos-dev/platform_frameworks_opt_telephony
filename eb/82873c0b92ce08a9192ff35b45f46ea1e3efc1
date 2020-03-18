@@ -1,0 +1,13 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Verified+1: Ravi Paluri <quic_rpaluri@quicinc.com>
+Code-Review+1: Ravi Paluri <quic_rpaluri@quicinc.com>
+Code-Review+2: Hall Liu <hallliu@google.com>
+Autosubmit+1: Hall Liu <hallliu@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Qualcomm-Review+1: Garik Badalyan <garikb@quicinc.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Wed, 18 Mar 2020 21:05:23 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1254896
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
