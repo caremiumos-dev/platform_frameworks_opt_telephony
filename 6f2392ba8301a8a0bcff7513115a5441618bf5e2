@@ -188,6 +188,30 @@
       "revId": "6f2392ba8301a8a0bcff7513115a5441618bf5e2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ba21557_294afcc6",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 4153,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-18T17:28:26Z",
+      "side": 1,
+      "message": "yes, sorry i did not realize this was in frameworks/opt/telephony.",
+      "parentUuid": "a076c3ac_9936192d",
+      "range": {
+        "startLine": 4153,
+        "startChar": 31,
+        "endLine": 4153,
+        "endChar": 65
+      },
+      "revId": "6f2392ba8301a8a0bcff7513115a5441618bf5e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
