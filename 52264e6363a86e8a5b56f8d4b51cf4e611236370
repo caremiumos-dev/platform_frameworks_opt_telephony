@@ -245,6 +245,30 @@
       "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21338f3a_8481b3e2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 2165,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-18T17:51:33Z",
+      "side": 1,
+      "message": "This looks okay on the surface, however I am not sure of situations where supp services over ut will be available other than VoLTE service.",
+      "parentUuid": "ca1419d6_6e7ab0e0",
+      "range": {
+        "startLine": 2165,
+        "startChar": 15,
+        "endLine": 2165,
+        "endChar": 37
+      },
+      "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
