@@ -917,12 +917,6 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     @UnsupportedAppUsage
-    @Override
-    public PhoneConstants.State getState() {
-        return mCT.getState();
-    }
-
-    @UnsupportedAppUsage
     private boolean isValidCommandInterfaceCFReason (int commandInterfaceCFReason) {
         switch (commandInterfaceCFReason) {
         case CF_REASON_UNCONDITIONAL:

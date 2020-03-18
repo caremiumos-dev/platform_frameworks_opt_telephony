@@ -1725,7 +1725,16 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * changes.<p>
      */
     @UnsupportedAppUsage
-    public abstract PhoneConstants.State getState();
+    public PhoneConstants.State getState(){
+        Phone imsPhone = mImsPhone;
+        if (imsPhone != null) {
+            PhoneConstants.State imsState = imsPhone.getCallTracker().getState();
+            if (imsState != PhoneConstants.State.IDLE) {
+                return imsState;
+            }
+        }
+        return getCallTracker().getState();
+    }
 
     /**
      * Retrieves the IccFileHandler of the Phone instance

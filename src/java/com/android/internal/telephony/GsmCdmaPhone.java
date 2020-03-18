@@ -533,19 +533,6 @@ public class GsmCdmaPhone extends Phone {
 
     @UnsupportedAppUsage
     @Override
-    public PhoneConstants.State getState() {
-        if (mImsPhone != null) {
-            PhoneConstants.State imsState = mImsPhone.getState();
-            if (imsState != PhoneConstants.State.IDLE) {
-                return imsState;
-            }
-        }
-
-        return mCT.mState;
-    }
-
-    @UnsupportedAppUsage
-    @Override
     public int getPhoneType() {
         if (mPrecisePhoneType == PhoneConstants.PHONE_TYPE_GSM) {
             return PhoneConstants.PHONE_TYPE_GSM;

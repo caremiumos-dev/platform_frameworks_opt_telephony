@@ -148,11 +148,6 @@ abstract class ImsPhoneBase extends Phone {
     }
 
     @Override
-    public PhoneConstants.State getState() {
-        return mState;
-    }
-
-    @Override
     public int getPhoneType() {
         return PhoneConstants.PHONE_TYPE_IMS;
     }
