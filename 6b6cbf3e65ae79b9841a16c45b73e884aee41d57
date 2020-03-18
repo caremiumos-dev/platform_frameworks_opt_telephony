@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67eb7402_fca0d900",
+        "filename": "src/java/com/android/internal/telephony/util/TelePhonebookUtil.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-03-18T16:58:42Z",
+      "side": 1,
+      "message": "Background check exempt broadcasts are not the right way to solve something like this; the platform is moving away from this approach to informing listeners of changes like this.  This should be done as part of the PhoneStateListener (https://developer.android.com/reference/android/telephony/PhoneStateListener).",
+      "range": {
+        "startLine": 52,
+        "startChar": 12,
+        "endLine": 57,
+        "endChar": 81
+      },
+      "revId": "6b6cbf3e65ae79b9841a16c45b73e884aee41d57",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
