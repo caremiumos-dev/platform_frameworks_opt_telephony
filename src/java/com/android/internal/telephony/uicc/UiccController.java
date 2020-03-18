@@ -34,6 +34,7 @@ import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
+import android.sysprop.TelephonyProperties;
 import android.telephony.CarrierConfigManager;
 import android.telephony.TelephonyManager;
 import android.telephony.UiccCardInfo;
@@ -216,6 +217,8 @@ public class UiccController extends Handler {
         }
         int numPhysicalSlots = c.getResources().getInteger(
                 com.android.internal.R.integer.config_num_physical_slots);
+        numPhysicalSlots = TelephonyProperties.physical_slot_count().orElse(numPhysicalSlots);
+
         // Minimum number of physical slot count should be equals to or greater than phone count,
         // if it is less than phone count use phone count as physical slot count.
         if (numPhysicalSlots < mCis.length) {
