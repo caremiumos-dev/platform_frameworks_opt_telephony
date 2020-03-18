@@ -295,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "cc618538_36436d00",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-18T22:41:07Z",
+      "side": 1,
+      "message": "Ideally the hal values should be imported (same as it is done in RIL.java) and they should be used instead of using these magic numbers. Although since it was already this way it\u0027s ok to do it as a separate CL.",
+      "parentUuid": "ef28cdd8_0dd9a82b",
+      "range": {
+        "startLine": 221,
+        "startChar": 17,
+        "endLine": 221,
+        "endChar": 19
+      },
+      "revId": "0b2ee76a9c8739d8d9e513f2390da9f4e8fe5535",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "89839600_50d24f41",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
         "patchSetId": 13
