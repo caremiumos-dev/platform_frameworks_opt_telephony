@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "984284d3_75fd45d4",
+        "filename": "src/java/com/google/android/mms/pdu/PduComposer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-18T22:59:22Z",
+      "side": 1,
+      "message": "delete?",
+      "range": {
+        "startLine": 727,
+        "startChar": 31,
+        "endLine": 727,
+        "endChar": 54
+      },
+      "revId": "e156409b088c12259cd17952237d3456db2f8755",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
