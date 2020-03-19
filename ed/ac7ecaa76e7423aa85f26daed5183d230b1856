@@ -1,0 +1,10 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+2: Jack Yu <jackyu@google.com>
+Qualcomm-Review+1: David Ng <dave@codeaurora.org>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Submitted-by: Jack Yu <jackyu@google.com>
+Submitted-at: Thu, 19 Mar 2020 17:12:46 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1261903
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
