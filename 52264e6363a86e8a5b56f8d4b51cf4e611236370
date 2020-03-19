@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "ff6124e7_1be525c2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-03-19T01:02:26Z",
+      "side": 1,
+      "message": "This is related to another patch.\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1190686\n\nBut, You requeted us to remove it from supple service patch chain.\nSo, I will request by including ss csfb in 1190686 patch.",
+      "parentUuid": "54b7afb4_0092f381",
+      "range": {
+        "startLine": 1087,
+        "startChar": 16,
+        "endLine": 1087,
+        "endChar": 25
+      },
+      "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e299a121_b320212b",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 10
@@ -260,6 +284,30 @@
       "side": 1,
       "message": "This looks okay on the surface, however I am not sure of situations where supp services over ut will be available other than VoLTE service.",
       "parentUuid": "ca1419d6_6e7ab0e0",
+      "range": {
+        "startLine": 2165,
+        "startChar": 15,
+        "endLine": 2165,
+        "endChar": 37
+      },
+      "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5faac8e_5033a036",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 2165,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-03-19T01:02:26Z",
+      "side": 1,
+      "message": "Is it possible in case where supp services over ut is available other than VoLTE service??\nIf so, I will remove this condition.",
+      "parentUuid": "21338f3a_8481b3e2",
       "range": {
         "startLine": 2165,
         "startChar": 15,
