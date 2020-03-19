@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "88fb637a_c6c804a4",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "055348cd_62736211",
+      "range": {
+        "startLine": 69,
+        "startChar": 36,
+        "endLine": 69,
+        "endChar": 49
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f3d4ee8_727fc7dc",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 6
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "5a89e18e_fb28378d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f3d4ee8_727fc7dc",
+      "range": {
+        "startLine": 80,
+        "startChar": 50,
+        "endLine": 80,
+        "endChar": 79
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6694e6a4_b7566d7e",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 6
@@ -116,6 +164,30 @@
       "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90c8efe1_1aea9ee8",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6694e6a4_b7566d7e",
+      "range": {
+        "startLine": 83,
+        "startChar": 28,
+        "endLine": 85,
+        "endChar": 29
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -142,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "91d889fb_2cc25f0a",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ace089e_6b4e7d58",
+      "range": {
+        "startLine": 106,
+        "startChar": 34,
+        "endLine": 106,
+        "endChar": 41
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2adcc02_4529f762",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 6
@@ -165,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "17a66680_beea8b44",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "As explained below, switching to a cache of String packageName -\u003e String[] hashed certs for that package. This show have a small memory footprint while also avoiding binder calls for every cert update for carrier config and sim state.\n\nAdditionally, these values are populated after the CPT is initialized (see aosp/1259261)",
+      "parentUuid": "a2adcc02_4529f762",
+      "range": {
+        "startLine": 107,
+        "startChar": 8,
+        "endLine": 107,
+        "endChar": 21
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9527217_d93fed1c",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 6
@@ -185,6 +305,30 @@
       "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d673b983_9e93b8f9",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9527217_d93fed1c",
+      "range": {
+        "startLine": 126,
+        "startChar": 52,
+        "endLine": 126,
+        "endChar": 59
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -235,6 +379,30 @@
     },
     {
       "key": {
+        "uuid": "7bb47cc4_2e4308c9",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ed56376_3ce07320",
+      "range": {
+        "startLine": 128,
+        "startChar": 12,
+        "endLine": 128,
+        "endChar": 64
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a187e564_6b9d704d",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 6
@@ -255,6 +423,30 @@
       "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "061c7788_8faeeb8f",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a187e564_6b9d704d",
+      "range": {
+        "startLine": 137,
+        "startChar": 20,
+        "endLine": 137,
+        "endChar": 96
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -281,6 +473,30 @@
     },
     {
       "key": {
+        "uuid": "444154cd_f743df4b",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "707e4851_2e9ec8fd",
+      "range": {
+        "startLine": 164,
+        "startChar": 21,
+        "endLine": 164,
+        "endChar": 28
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70c9a336_cd449a63",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 6
@@ -301,6 +517,30 @@
       "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f557fb20_9cc9be53",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70c9a336_cd449a63",
+      "range": {
+        "startLine": 165,
+        "startChar": 42,
+        "endLine": 165,
+        "endChar": 49
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -327,6 +567,30 @@
     },
     {
       "key": {
+        "uuid": "dd69838e_1d54320a",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d990a3a0_22d0a806",
+      "range": {
+        "startLine": 168,
+        "startChar": 20,
+        "endLine": 168,
+        "endChar": 23
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39106085_23f914a9",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 6
@@ -338,6 +602,30 @@
       "writtenOn": "2020-03-16T22:31:33Z",
       "side": 1,
       "message": "Set#toArray. Probably more optimized internally.",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 187,
+        "endChar": 9
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dede3fe_8eecf487",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "This doesn\u0027t work due to Java\u0027s int vs Integer treatment.\n\nSwitched to a for-each and used a temporary IntArray. Thoughts?",
+      "parentUuid": "39106085_23f914a9",
       "range": {
         "startLine": 182,
         "startChar": 8,
@@ -370,6 +658,30 @@
       "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e09477e_dd3b16e3",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:31:35Z",
+      "side": 1,
+      "message": "Looking at UiccAccessRule, directly checking this every time will mean recomputing SHA-1 and SHA-256 values for every certificate on installed packages. Let\u0027s implement a cache where we map packageName to the hashed certs for that package. This approach is also more memory efficient than caching the full PackageInfo.\n\nThe logic to actually generate the SHA-1 / SHA-256 hashes is in aosp/1259259 and aosp/1259261",
+      "parentUuid": "b4728884_6bbc9889",
+      "range": {
+        "startLine": 192,
+        "startChar": 8,
+        "endLine": 199,
+        "endChar": 21
+      },
+      "revId": "f42c6fcc1f0f18704381374d68d180986808ee39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
