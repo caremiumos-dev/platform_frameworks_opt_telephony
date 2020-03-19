@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a87adde1_54bd9c60",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-03-19T08:42:00Z",
+      "side": 1,
+      "message": "not so sure what is the potential reason behind Persosubstate here but  may be it help to understand to which persosubstate locked to.",
+      "parentUuid": "b222a183_3b2784e3",
+      "range": {
+        "startLine": 194,
+        "startChar": 8,
+        "endLine": 194,
+        "endChar": 20
+      },
+      "revId": "c8b4bed54218c959f487b3c75ddd038704432398",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "742a2a7b_136c282e",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
         "patchSetId": 15
@@ -45,6 +69,30 @@
       "revId": "c8b4bed54218c959f487b3c75ddd038704432398",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "424e71ef_6a23f4f8",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1588212
+      },
+      "writtenOn": "2020-03-19T08:42:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "742a2a7b_136c282e",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 5
+      },
+      "revId": "c8b4bed54218c959f487b3c75ddd038704432398",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
