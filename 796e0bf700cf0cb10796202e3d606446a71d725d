@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00b39747_4ee0a282",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1403859
+      },
+      "writtenOn": "2020-03-19T19:05:46Z",
+      "side": 1,
+      "message": "networkScanResult_1_5 is still missing from this change.",
+      "revId": "796e0bf700cf0cb10796202e3d606446a71d725d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
