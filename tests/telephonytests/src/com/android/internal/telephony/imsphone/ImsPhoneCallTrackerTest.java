@@ -595,7 +595,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 stringCaptor.capture(), anyInt());
 
         try {
-            mCTUT.dial("+17005554141", VideoProfile.STATE_AUDIO_ONLY, null);
+            mCTUT.dial("+17005554141", new ImsPhone.ImsDialArgs.Builder().setIsEmergency(true).build());
 
             ArgumentCaptor<ImsCallProfile> profileCaptor = ArgumentCaptor.forClass(
                     ImsCallProfile.class);
