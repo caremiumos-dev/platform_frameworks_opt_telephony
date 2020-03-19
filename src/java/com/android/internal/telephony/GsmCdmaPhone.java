@@ -93,6 +93,7 @@ import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
+import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneMmiCode;
 import com.android.internal.telephony.metrics.VoiceCallSessionStats;
 import com.android.internal.telephony.test.SimulatedRadioControl;
@@ -1302,8 +1303,12 @@ public class GsmCdmaPhone extends Phone {
             dialString = possibleEmergencyNumber;
         }
         boolean isEmergency = PhoneNumberUtils.isEmergencyNumber(getSubId(), dialString);
+        ImsPhone.ImsDialArgs.Builder imsDialArgsBuilder;
+        imsDialArgsBuilder = ImsPhone.ImsDialArgs.Builder.from(dialArgs)
+                                                 .setIsEmergency(isEmergency);
+        mDialArgs = dialArgs = imsDialArgsBuilder.build();
+
         Phone imsPhone = mImsPhone;
-        mDialArgs = dialArgs;
 
         CarrierConfigManager configManager =
                 (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
@@ -1414,13 +1419,8 @@ public class GsmCdmaPhone extends Phone {
             mIsTestingEmergencyCallbackMode = true;
             mCi.testingEmergencyCall();
         }
-        if (isPhoneTypeGsm()) {
-            return dialInternal(dialString, new DialArgs.Builder<>()
-                    .setIntentExtras(dialArgs.intentExtras)
-                    .build());
-        } else {
-            return dialInternal(dialString, dialArgs);
-        }
+
+        return dialInternal(dialString, dialArgs);
     }
 
     /**
@@ -1485,10 +1485,12 @@ public class GsmCdmaPhone extends Phone {
             if (DBG) logd("dialInternal: dialing w/ mmi '" + mmi + "'...");
 
             if (mmi == null) {
-                return mCT.dialGsm(newDialString, dialArgs.uusInfo, dialArgs.intentExtras);
+                return mCT.dialGsm(newDialString, dialArgs);
             } else if (mmi.isTemporaryModeCLIR()) {
-                return mCT.dialGsm(mmi.mDialingNumber, mmi.getCLIRMode(), dialArgs.uusInfo,
-                        dialArgs.intentExtras);
+                DialArgs.Builder dialArgsBuilder;
+                dialArgsBuilder = DialArgs.Builder.from(dialArgs);
+                dialArgsBuilder.setClirMode(mmi.getCLIRMode());
+                return mCT.dialGsm(mmi.mDialingNumber, dialArgsBuilder.build());
             } else {
                 mPendingMMIs.add(mmi);
                 mMmiRegistrants.notifyRegistrants(new AsyncResult(null, mmi, null));
@@ -1496,7 +1498,7 @@ public class GsmCdmaPhone extends Phone {
                 return null;
             }
         } else {
-            return mCT.dial(newDialString, dialArgs.intentExtras);
+            return mCT.dial(newDialString, dialArgs);
         }
     }
 
