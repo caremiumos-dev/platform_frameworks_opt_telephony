@@ -29,6 +29,7 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
+import android.telephony.emergency.EmergencyNumber;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;

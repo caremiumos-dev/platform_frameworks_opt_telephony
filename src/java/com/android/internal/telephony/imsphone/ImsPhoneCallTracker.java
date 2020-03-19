@@ -1222,7 +1222,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     public synchronized Connection dial(String dialString, ImsPhone.ImsDialArgs dialArgs)
             throws CallStateException {
         boolean isPhoneInEcmMode = isPhoneInEcbMode();
-        boolean isEmergencyNumber = mPhoneNumberUtilsProxy.isEmergencyNumber(dialString);
+        boolean isEmergencyNumber = dialArgs.isEmergency;
 
         if (!shouldNumberBePlacedOnIms(isEmergencyNumber, dialString)) {
             Rlog.i(LOG_TAG, "dial: shouldNumberBePlacedOnIms = false");
@@ -1486,7 +1486,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
         // Always unmute when initiating a new call
         setMute(false);
-        boolean isEmergencyCall = mPhoneNumberUtilsProxy.isEmergencyNumber(conn.getAddress());
+        boolean isEmergencyCall = conn.isEmergency();
         int serviceType = isEmergencyCall
                 ? ImsCallProfile.SERVICE_TYPE_EMERGENCY : ImsCallProfile.SERVICE_TYPE_NORMAL;
         int callType = ImsCallProfile.getCallTypeFromVideoState(videoState);
@@ -2810,6 +2810,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         public void onCallStartFailed(ImsCall imsCall, ImsReasonInfo reasonInfo) {
             if (DBG) log("onCallStartFailed reasonCode=" + reasonInfo.getCode());
 
+            int eccCategory = EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_UNSPECIFIED;
+            if (imsCall != null && imsCall.getCallProfile() != null) {
+                eccCategory = imsCall.getCallProfile().getEmergencyServiceCategories();
+            }
+
             if (mHoldSwitchingState == HoldSwapState.HOLDING_TO_ANSWER_INCOMING) {
                 // If we put a call on hold to answer an incoming call, we should reset the
                 // variables that keep track of the switch here.
@@ -2831,7 +2836,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     mPendingMO.finalize();
                     mPendingMO = null;
                     updatePhoneState();
-                    mPhone.initiateSilentRedial();
+                    mPhone.initiateSilentRedial(reasonInfo.getExtraCode() ==
+                            ImsReasonInfo.EXTRA_CODE_CALL_RETRY_EMERGENCY, eccCategory);
                     return;
                 } else {
                     sendCallStartFailedDisconnect(imsCall, reasonInfo);
@@ -2848,7 +2854,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     removeConnection(conn);
                 }
                 updatePhoneState();
-                mPhone.initiateSilentRedial();
+                mPhone.initiateSilentRedial(reasonInfo.getExtraCode() ==
+                        ImsReasonInfo.EXTRA_CODE_CALL_RETRY_EMERGENCY, eccCategory);
             }
         }
 
