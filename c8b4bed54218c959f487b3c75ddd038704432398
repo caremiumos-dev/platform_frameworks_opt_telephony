@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0bc179ef_6a7dd7e0",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-19T20:42:42Z",
+      "side": 1,
+      "message": "Since you already have a CL to update the hal, I would suggest you remove this from the response method. Other than that this lgtm.",
+      "parentUuid": "a87adde1_54bd9c60",
+      "range": {
+        "startLine": 194,
+        "startChar": 8,
+        "endLine": 194,
+        "endChar": 20
+      },
+      "revId": "c8b4bed54218c959f487b3c75ddd038704432398",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "742a2a7b_136c282e",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
         "patchSetId": 15
