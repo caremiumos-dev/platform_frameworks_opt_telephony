@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "b61f8d1b_3239afd7",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-03-19T22:18:25Z",
+      "side": 1,
+      "message": "We already have an id associated with each request that maps responses to requests (RadioResponseInfo.serial).\n\nThis CL by itself is ok though. I have asked about removing the extra parameter on the hal CL.",
+      "parentUuid": "839e6132_919aca32",
+      "range": {
+        "startLine": 194,
+        "startChar": 8,
+        "endLine": 194,
+        "endChar": 20
+      },
+      "revId": "c8b4bed54218c959f487b3c75ddd038704432398",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "742a2a7b_136c282e",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
         "patchSetId": 15
