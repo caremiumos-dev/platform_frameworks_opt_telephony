@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "8c7b4bfa_874838dd",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:40:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9563b035_dc786729",
+      "range": {
+        "startLine": 201,
+        "startChar": 16,
+        "endLine": 201,
+        "endChar": 37
+      },
+      "revId": "b90f681a302288b11938c758243d5a8ff87733c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85133046_b709cc27",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 2

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "faa54e5a_57deda2d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:40:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6a99f26_bc3d7f26",
+      "range": {
+        "startLine": 107,
+        "startChar": 50,
+        "endLine": 107,
+        "endChar": 56
+      },
+      "revId": "63e809181cff18cd30f01e6b9289eb75e328cee7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6cf3f116_3b62a3a6",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 4
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "84297179_5f87d827",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:40:48Z",
+      "side": 1,
+      "message": "Checked with @breadley - PhoneConstants.PHONE_KEY is the commonly used value.",
+      "parentUuid": "58e9685a_566880f3",
+      "range": {
+        "startLine": 108,
+        "startChar": 55,
+        "endLine": 108,
+        "endChar": 78
+      },
+      "revId": "63e809181cff18cd30f01e6b9289eb75e328cee7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26d1ac1e_bc29866d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:40:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cf3f116_3b62a3a6",
+      "range": {
+        "startLine": 108,
+        "startChar": 48,
+        "endLine": 108,
+        "endChar": 54
+      },
+      "revId": "63e809181cff18cd30f01e6b9289eb75e328cee7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fb9e553_201c4bba",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 4
@@ -91,6 +163,30 @@
       "revId": "63e809181cff18cd30f01e6b9289eb75e328cee7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd19fd4f_30483870",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:40:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fb9e553_201c4bba",
+      "range": {
+        "startLine": 196,
+        "startChar": 24,
+        "endLine": 198,
+        "endChar": 65
+      },
+      "revId": "63e809181cff18cd30f01e6b9289eb75e328cee7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
