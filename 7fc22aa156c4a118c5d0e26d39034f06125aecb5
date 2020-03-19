@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d268d09_d46a5827",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-03-19T21:41:10Z",
+      "side": 1,
+      "message": "Remove extra empty line",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 0
+      },
+      "revId": "7fc22aa156c4a118c5d0e26d39034f06125aecb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

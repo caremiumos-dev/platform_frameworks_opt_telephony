@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "839e6132_919aca32",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2020-03-19T21:41:10Z",
+      "side": 1,
+      "message": "I suggest to keep the persoType in the HAL response, even if we don\u0027t use it right now... it might come handy in the future because a device might support multiple personalizations at the same time and it might be helpful to know for which one the response is.",
+      "parentUuid": "0bc179ef_6a7dd7e0",
+      "range": {
+        "startLine": 194,
+        "startChar": 8,
+        "endLine": 194,
+        "endChar": 20
+      },
+      "revId": "c8b4bed54218c959f487b3c75ddd038704432398",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "742a2a7b_136c282e",
         "filename": "src/java/com/android/internal/telephony/uicc/IccCardApplicationStatus.java",
         "patchSetId": 15
