@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c66101c_a608fd5a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1660874
+      },
+      "writtenOn": "2020-03-19T08:03:29Z",
+      "side": 1,
+      "message": "1. What is missing that has been added by this change?\n\u003c\u003d \nBelow two links are missed. Two patches are related to CDMA SS menu.\nPlease refer both patch, too.\n\nhttps://android-review.googlesource.com/c/platform/packages/services/Telephony/+/1190701\nhttps://android-review.googlesource.com/c/platform/packages/services/Telephony/+/1190702\n\n\n2. Is this a spec requirement or user enhancement?\n\nFor 1) UT is not supported temporary, it is user enhancement.\nFor 2) Non-VoLTE terminal, Here are CTC requirement.\n\nRequirements White Paper for Mobile Terminal of China Telecom\n-       Six-mode All-mode Terminal Fascicule\nSIXM-04004 [Mandatory] CS domain supplementary service requirements\nRequirements for the terminal are as follows:\na)      The terminal should support the supplementary services under the 1x, GSM, WCDMA, TDSCDMA systems, including but not limited to the followings: \n1)      Call forwarding; \n2)      Call waiting; \n3)      Three-party call; \n\nRequirements White Paper for Mobile Terminal of China Telecom\n-       Six Mode All-mode VoLTE Mobile Phone Fascicule \n7.7　SIXMVOLTE-10007 [Mandatory] Supplementary service settings for CTC card of the six-mode VoLTE Terminal\nNon-VoLTE terminal      Configure the supplementary service through CS domain\n\n\n3. Why is this change needed?\nThose patches are for CDMA VoLTE case. (e.g. VZW, CTC)\nThere are two cass.\n1) UT is not supported temporary.\n2) Non-VoLTE terminal\n\n\n4. What is the behavior before this change and after this change (please explain in detail)\n1) CDMA SS menu is supported. Since AOSP doesn\u0027t support any menus, there\u0027s only one way to set SS using dial.\nAnd it is hard for user.\nCdmaCallForwardOptions and CdmaCallWaitingPreference classes are added.\n\n2) Even UT is not supported temporary, SS will be working over CDMA network. (If CSFB SS is supported)\n\nif SS is working over CDMA, UI can\u0027t show the status.\nSo \"SS_STATUS_UNKNOWN\" is defined, it is used in CDMA SS menu.",
+      "revId": "63ad79f9385ab43eff84a5b1646d0c2a098e770b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
