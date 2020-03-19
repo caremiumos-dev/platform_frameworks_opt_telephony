@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5bfe7fdd_08602206",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:15:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f6f567c_b1344301",
+      "range": {
+        "startLine": 29,
+        "startChar": 65,
+        "endLine": 29,
+        "endChar": 99
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "974c05a2_428b2240",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5
@@ -69,6 +93,30 @@
       "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8facf2a6_f4efd75a",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:15:42Z",
+      "side": 1,
+      "message": "Agreed. As you mention in a later CL, there should be a fairly low churn once these values are established, so the memory implications of allocating and de-allocating int[]s should be minimal over time.",
+      "parentUuid": "d9d5663d_1868e530",
+      "range": {
+        "startLine": 37,
+        "startChar": 18,
+        "endLine": 37,
+        "endChar": 33
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "fef11cbc_c4fbfcef",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:15:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddde8ef8_f93d7e46",
+      "range": {
+        "startLine": 39,
+        "startChar": 9,
+        "endLine": 39,
+        "endChar": 13
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b0ae96b_5ce584a1",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5
@@ -142,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "4316e29b_7ef162df",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:15:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b0ae96b_5ce584a1",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 23
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69f4da60_74765a78",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5
@@ -162,6 +258,30 @@
       "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9638cc76_e1522534",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:15:42Z",
+      "side": 1,
+      "message": "Hadn\u0027t considered the implications of pulling it out of the handler. To keep everything serialized, moving it back into the Handler.",
+      "parentUuid": "69f4da60_74765a78",
+      "range": {
+        "startLine": 66,
+        "startChar": 19,
+        "endLine": 66,
+        "endChar": 31
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +329,30 @@
       "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac8cfd13_2d58cdfa",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:15:42Z",
+      "side": 1,
+      "message": "Also moved into the handler.",
+      "parentUuid": "af7fd4ef_887862ca",
+      "range": {
+        "startLine": 75,
+        "startChar": 24,
+        "endLine": 75,
+        "endChar": 30
+      },
+      "revId": "69637c3d8c6f9a44845b874783df144d37db05ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

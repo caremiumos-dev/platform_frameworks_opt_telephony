@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "e383c8bd_57bcfe11",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:15:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "382d54b8_71195b10",
+      "range": {
+        "startLine": 55,
+        "startChar": 11,
+        "endLine": 55,
+        "endChar": 35
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f103a20c_4d3e2d94",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 3
@@ -281,6 +305,30 @@
       "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa361cc9_e3be3b49",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-19T21:15:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "246025c4_7adf4a67",
+      "range": {
+        "startLine": 70,
+        "startChar": 25,
+        "endLine": 70,
+        "endChar": 51
+      },
+      "revId": "de4d58a33a566c2cb2dba20be02d8b08b82ed9d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
