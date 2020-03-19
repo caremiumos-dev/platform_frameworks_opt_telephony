@@ -545,17 +545,28 @@ public abstract class Connection {
      * @hide
      */
     public void setEmergencyCallInfo(CallTracker ct) {
+        setEmergencyCallInfo(ct, EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_UNSPECIFIED);
+    }
+
+    /**
+     * @hide
+     */
+    public void setEmergencyCallInfo(CallTracker ct, int eccCategory) {
         if (ct != null) {
             Phone phone = ct.getPhone();
             if (phone != null) {
                 EmergencyNumberTracker tracker = phone.getEmergencyNumberTracker();
                 if (tracker != null) {
+                    mIsEmergencyCall = true;
                     EmergencyNumber num = tracker.getEmergencyNumber(mAddress);
                     if (num != null) {
-                        mIsEmergencyCall = true;
                         mEmergencyNumberInfo = num;
                     } else {
-                        Rlog.e(TAG, "setEmergencyCallInfo: emergency number is null");
+                        Rlog.e(TAG, "setEmergencyCallInfo: number is not in tracker, "
+                                + "create empty info");
+                        mEmergencyNumberInfo = new EmergencyNumber(mAddress, "", "", eccCategory,
+                                new ArrayList<String>(), 0,
+                                EmergencyNumber.EMERGENCY_CALL_ROUTING_UNKNOWN);
                     }
                 } else {
                     Rlog.e(TAG, "setEmergencyCallInfo: emergency number tracker is null");
