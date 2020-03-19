@@ -317,6 +317,30 @@
       "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9dad6ad_76e5099f",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 2165,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-03-19T01:46:46Z",
+      "side": 1,
+      "message": "Please ignore my comment at 10:02 AM.\n\nMy first response had my mistake.\nUt service is not related to VoLTE service.\nAs I know, ut service is supported only when SIM is USIM. Isn\u0027t it?",
+      "parentUuid": "f5faac8e_5033a036",
+      "range": {
+        "startLine": 2165,
+        "startChar": 15,
+        "endLine": 2165,
+        "endChar": 37
+      },
+      "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
