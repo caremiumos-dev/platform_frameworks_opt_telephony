@@ -22,6 +22,121 @@
       "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d67e80b_9bde9d99",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-19T23:12:59Z",
+      "side": 1,
+      "message": "Add a comment - map of what to what?\n\nPresumably package name -\u003e signature hashes.",
+      "range": {
+        "startLine": 81,
+        "startChar": 43,
+        "endLine": 81,
+        "endChar": 65
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "616fdf9b_e3088923",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-19T23:12:59Z",
+      "side": 1,
+      "message": "Unused - need to compare with mPhone.getPhoneId()",
+      "range": {
+        "startLine": 156,
+        "startChar": 59,
+        "endLine": 156,
+        "endChar": 68
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fba0aeee_d2723f66",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-19T23:12:59Z",
+      "side": 1,
+      "message": "This may need to be raised with the core telephony team, but I don\u0027t think this can specify precise package names like UiccAccessRule can. We may need to encode that in some way. I\u0027d imagine something like:\n\n// Gives privileges to any app with this signature\n\"4C36AF4A5BDAD97C1F3D8B283416D244496C2AC5EAFE8226079EF6F676FD1859\"\n// Gives privileges only to Tycho (when it has the right signature)\n\"4C36AF4A5BDAD97C1F3D8B283416D244496C2AC5EAFE8226079EF6F676FD1859:com.google.android.apps.tycho\"",
+      "range": {
+        "startLine": 166,
+        "startChar": 50,
+        "endLine": 166,
+        "endChar": 86
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4199d1d_84ab37de",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-19T23:12:59Z",
+      "side": 1,
+      "message": "This can be removed now, right?",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 96
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ce1cfa3_086fd3d3",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-19T23:12:59Z",
+      "side": 1,
+      "message": "privilegedUids.toArray()\n\nInternally uses System.arrayCopy which is as optimized as it gets.",
+      "range": {
+        "startLine": 211,
+        "startChar": 8,
+        "endLine": 215,
+        "endChar": 32
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
