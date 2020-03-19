@@ -44,6 +44,7 @@ import android.util.EventLog;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
+import com.android.internal.telephony.PhoneInternalInterface.DialArgs;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
@@ -274,15 +275,17 @@ public class GsmCdmaCallTracker extends CallTracker {
     /**
      * clirMode is one of the CLIR_ constants
      */
-    public synchronized Connection dialGsm(String dialString, int clirMode, UUSInfo uusInfo,
-                                        Bundle intentExtras)
+    public synchronized Connection dialGsm(String dialString, DialArgs dialArgs)
             throws CallStateException {
+        int clirMode = dialArgs.clirMode;
+        UUSInfo uusInfo = dialArgs.uusInfo;
+        Bundle intentExtras = dialArgs.intentExtras;
+        boolean isEmergencyCall = dialArgs.isEmergency;
+
         // note that this triggers call state changed notif
         clearDisconnected();
 
         // Check for issues which would preclude dialing and throw a CallStateException.
-        boolean isEmergencyCall = PhoneNumberUtils.isLocalEmergencyNumber(mPhone.getContext(),
-                dialString);
         checkForDialIssues(isEmergencyCall);
 
         String origNumber = dialString;
@@ -392,13 +395,14 @@ public class GsmCdmaCallTracker extends CallTracker {
     /**
      * clirMode is one of the CLIR_ constants
      */
-    private Connection dialCdma(String dialString, int clirMode, Bundle intentExtras)
+    private Connection dialCdma(String dialString, DialArgs dialArgs)
             throws CallStateException {
+        int clirMode = dialArgs.clirMode;
+        Bundle intentExtras = dialArgs.intentExtras;
+        boolean isEmergencyCall = dialArgs.isEmergency;
+
         // note that this triggers call state changed notif
         clearDisconnected();
-
-        boolean isEmergencyCall =
-                PhoneNumberUtils.isLocalEmergencyNumber(mPhone.getContext(), dialString);
 
         // Check for issues which would preclude dialing and throw a CallStateException.
         checkForDialIssues(isEmergencyCall);
@@ -523,24 +527,40 @@ public class GsmCdmaCallTracker extends CallTracker {
         return null;
     }
 
-    public Connection dial(String dialString, Bundle intentExtras) throws CallStateException {
+    public Connection dial(String dialString, DialArgs dialArgs) throws CallStateException {
         if (isPhoneTypeGsm()) {
-            return dialGsm(dialString, CommandsInterface.CLIR_DEFAULT, intentExtras);
+            return dialGsm(dialString, dialArgs);
         } else {
-            return dialCdma(dialString, CommandsInterface.CLIR_DEFAULT, intentExtras);
+            return dialCdma(dialString, dialArgs);
+        }
+    }
+
+    public Connection dial(String dialString, Bundle intentExtras) throws CallStateException {
+        DialArgs dialArgs = new DialArgs.Builder<>().setIntentExtras(intentExtras).build();
+        if (isPhoneTypeGsm()) {
+            return dialGsm(dialString, dialArgs);
+        } else {
+            return dialCdma(dialString, dialArgs);
         }
     }
 
     //GSM
     public Connection dialGsm(String dialString, UUSInfo uusInfo, Bundle intentExtras)
             throws CallStateException {
-        return dialGsm(dialString, CommandsInterface.CLIR_DEFAULT, uusInfo, intentExtras);
+        return dialGsm(dialString, new DialArgs.Builder<>()
+                        .setUusInfo(uusInfo)
+                        .setClirMode(CommandsInterface.CLIR_DEFAULT)
+                        .setIntentExtras(intentExtras)
+                        .build());
     }
 
     //GSM
     private Connection dialGsm(String dialString, int clirMode, Bundle intentExtras)
             throws CallStateException {
-        return dialGsm(dialString, clirMode, null, intentExtras);
+        return dialGsm(dialString, new DialArgs.Builder<>()
+                        .setClirMode(CommandsInterface.CLIR_DEFAULT)
+                        .setIntentExtras(intentExtras)
+                        .build());
     }
 
     public void acceptCall() throws CallStateException {

@@ -72,11 +72,32 @@ public interface PhoneInternalInterface {
     public static class DialArgs {
         public static class Builder<T extends Builder<T>> {
             protected UUSInfo mUusInfo;
+            protected int mClirMode = CommandsInterface.CLIR_DEFAULT;
+            protected boolean mIsEmergency;
             protected int mVideoState = VideoProfile.STATE_AUDIO_ONLY;
             protected Bundle mIntentExtras;
 
+            public static DialArgs.Builder from(DialArgs dialArgs) {
+                return new DialArgs.Builder()
+                    .setUusInfo(dialArgs.uusInfo)
+                    .setClirMode(dialArgs.clirMode)
+                    .setIsEmergency(dialArgs.isEmergency)
+                    .setVideoState(dialArgs.videoState)
+                    .setIntentExtras(dialArgs.intentExtras);
+            }
+
             public T setUusInfo(UUSInfo uusInfo) {
                 mUusInfo = uusInfo;
+                return (T) this;
+            }
+
+            public T setClirMode(int clirMode) {
+                mClirMode = clirMode;
+                return (T) this;
+            }
+
+            public T setIsEmergency(boolean isEmergency) {
+                mIsEmergency = isEmergency;
                 return (T) this;
             }
 
@@ -98,6 +119,12 @@ public interface PhoneInternalInterface {
         /** The UUSInfo */
         public final UUSInfo uusInfo;
 
+        /** The CLIR mode to use */
+        public final int clirMode;
+
+        /** Indicates emergency call */
+        public final boolean isEmergency;
+
         /** The desired video state for the connection. */
         public final int videoState;
 
@@ -106,6 +133,8 @@ public interface PhoneInternalInterface {
 
         protected DialArgs(Builder b) {
             this.uusInfo = b.mUusInfo;
+            this.clirMode = b.mClirMode;
+            this.isEmergency = b.mIsEmergency;
             this.videoState = b.mVideoState;
             this.intentExtras = b.mIntentExtras;
         }
