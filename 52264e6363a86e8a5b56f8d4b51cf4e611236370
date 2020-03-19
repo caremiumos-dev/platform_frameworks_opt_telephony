@@ -341,6 +341,30 @@
       "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e1489e0e_8bff4191",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 2165,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-19T17:00:48Z",
+      "side": 1,
+      "message": "The ImsService should not be reporting UT enabled unless we are using USIM and the ImsService is ready to receive supp services requests. I am not sure if there would ever be a case where isUtEnabled is true, but we are not on USIM, so the request fails.",
+      "parentUuid": "b9dad6ad_76e5099f",
+      "range": {
+        "startLine": 2165,
+        "startChar": 15,
+        "endLine": 2165,
+        "endChar": 37
+      },
+      "revId": "52264e6363a86e8a5b56f8d4b51cf4e611236370",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
