@@ -29,6 +29,7 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
+import android.telephony.emergency.EmergencyNumber;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
@@ -134,7 +135,9 @@ public class GsmCdmaConnection extends Connection {
         mHandler = new MyHandler(mOwner.getLooper());
 
         mAddress = dc.number;
-        setEmergencyCallInfo(mOwner);
+        if (PhoneNumberUtils.isEmergencyNumber(phone.getSubId(), mAddress)) {
+            setEmergencyCallInfo(mOwner);
+        }
 
         mIsIncoming = dc.isMT;
         mCreateTime = System.currentTimeMillis();
@@ -158,6 +161,13 @@ public class GsmCdmaConnection extends Connection {
     /** This is an MO call, created when dialing */
     public GsmCdmaConnection (GsmCdmaPhone phone, String dialString, GsmCdmaCallTracker ct,
                               GsmCdmaCall parent, boolean isEmergencyCall) {
+        this(phone, dialString, ct, parent, isEmergencyCall,
+                EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_UNSPECIFIED);
+    }
+
+    /** This is an MO call, created when dialing */
+    public GsmCdmaConnection (GsmCdmaPhone phone, String dialString, GsmCdmaCallTracker ct,
+                              GsmCdmaCall parent, boolean isEmergencyCall, int eccCategory) {
         super(phone.getPhoneType());
         createWakeLock(phone.getContext());
         acquireWakeLock();
@@ -177,7 +187,7 @@ public class GsmCdmaConnection extends Connection {
 
         mAddress = PhoneNumberUtils.extractNetworkPortionAlt(dialString);
         if (isEmergencyCall) {
-            setEmergencyCallInfo(mOwner);
+            setEmergencyCallInfo(mOwner, eccCategory);
         }
 
         mPostDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
