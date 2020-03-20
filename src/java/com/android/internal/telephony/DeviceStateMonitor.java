@@ -30,7 +30,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
-import android.net.TetheringManager;
+import android.net.tethering.TetheringManager;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Message;
