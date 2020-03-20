@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9000cd27_6f4739a5",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T18:49:30Z",
+      "side": 1,
+      "message": "Just to help me understand Hunter, are you saying that if a package name is included it should ignore the certs?",
+      "parentUuid": "7a5e3d02_f4dfa085",
+      "range": {
+        "startLine": 98,
+        "startChar": 30,
+        "endLine": 98,
+        "endChar": 40
+      },
+      "revId": "344314b09f5fe030a584c0ea227c2776dccbc74d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08e454af_9157b493",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5

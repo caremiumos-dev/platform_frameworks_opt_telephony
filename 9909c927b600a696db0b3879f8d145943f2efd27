@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3093779_1a6f9bba",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T18:49:30Z",
+      "side": 1,
+      "message": "an alternative to bothering with CCC *except* in the \"add\" case would be to clear everything when the SIM goes to ABSENT or NOT_READY. That\u0027s a very nuclear/unambiguous option, but it does break the clean separation.",
+      "range": {
+        "startLine": 248,
+        "startChar": 8,
+        "endLine": 248,
+        "endChar": 44
+      },
+      "revId": "9909c927b600a696db0b3879f8d145943f2efd27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
