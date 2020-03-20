@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99dcde8e_5923cf8d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T19:11:55Z",
+      "side": 1,
+      "message": "oof, please flag this loudly as an error.",
+      "range": {
+        "startLine": 391,
+        "startChar": 46,
+        "endLine": 391,
+        "endChar": 52
+      },
+      "revId": "2a6061aeb2d53ea6a39c83e83b9bc69aa02cd14a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
