@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "8a282de5_02de1599",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-20T18:53:58Z",
+      "side": 1,
+      "message": "So CCC should always contain a valid subId unless the SIM was actually removed. Agree we should clear out the old certs upon seeing invalid subId.\n\nWe still do need subId to actually get a config bundle though. I don\u0027t think there\u0027s necessarily any harm in checking it against mPhone.getSubId(), but maybe that\u0027s overkill?",
+      "parentUuid": "c7c0f6f1_c0477652",
+      "range": {
+        "startLine": 156,
+        "startChar": 48,
+        "endLine": 156,
+        "endChar": 53
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fba0aeee_d2723f66",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 7
