@@ -22,6 +22,30 @@
       "revId": "f7ca85dba29c089889e157f5b50f68ef3f18e5cc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a894e5ee_c95626a9",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T23:13:12Z",
+      "side": 1,
+      "message": "Sorry, wasn\u0027t thinking clearly. Done.",
+      "parentUuid": "1178b6cd_25bbe07b",
+      "range": {
+        "startLine": 106,
+        "startChar": 18,
+        "endLine": 106,
+        "endChar": 32
+      },
+      "revId": "f7ca85dba29c089889e157f5b50f68ef3f18e5cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
