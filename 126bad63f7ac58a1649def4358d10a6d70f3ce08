@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e5ab71c7_b596f1c3",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:58:41Z",
+      "side": 1,
+      "message": "We need to use Context#getSystemService(String) over Context#getSystemService(Class\u003cT\u003e), as the latter is \u0027final\u0027 and causes failues for unit tests.\n\nhttps://source.corp.google.com/android/frameworks/base/core/java/android/content/Context.java;l\u003d3701",
+      "parentUuid": "e764f8f6_a4c6caae",
+      "range": {
+        "startLine": 205,
+        "startChar": 17,
+        "endLine": 205,
+        "endChar": 37
+      },
+      "revId": "126bad63f7ac58a1649def4358d10a6d70f3ce08",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23e9d2a0_5f51dd8c",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "126bad63f7ac58a1649def4358d10a6d70f3ce08",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52cc95d2_41d8db13",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1942,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23e9d2a0_5f51dd8c",
+      "range": {
+        "startLine": 1942,
+        "startChar": 12,
+        "endLine": 1942,
+        "endChar": 22
+      },
+      "revId": "126bad63f7ac58a1649def4358d10a6d70f3ce08",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
