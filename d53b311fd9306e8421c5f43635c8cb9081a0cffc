@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f81f9dc7_2c672276",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:48:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "468c2e9b_219a6f0a",
+      "range": {
+        "startLine": 130,
+        "startChar": 8,
+        "endLine": 130,
+        "endChar": 27
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c283f66_250bd4fe",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9e9ded2_5dff5979",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:48:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c283f66_250bd4fe",
+      "range": {
+        "startLine": 147,
+        "startChar": 43,
+        "endLine": 147,
+        "endChar": 46
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d8e1fc76_873e0d44",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:48:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be696ce7_a3c3b0e9",
+      "range": {
+        "startLine": 172,
+        "startChar": 90,
+        "endLine": 172,
+        "endChar": 97
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8ddfde6_38df4c23",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 9
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "b4271cf8_557d48f9",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:48:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8ddfde6_38df4c23",
+      "range": {
+        "startLine": 192,
+        "startChar": 13,
+        "endLine": 192,
+        "endChar": 25
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11507445_5084282e",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 9
@@ -114,6 +210,30 @@
       "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fd62791_9e91d851",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:48:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11507445_5084282e",
+      "range": {
+        "startLine": 207,
+        "startChar": 18,
+        "endLine": 207,
+        "endChar": 42
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -164,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "a014672e_0e1590ec",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:48:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d65441e_8db74aaa",
+      "range": {
+        "startLine": 220,
+        "startChar": 24,
+        "endLine": 220,
+        "endChar": 84
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "353c63fd_e10c4842",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 9
@@ -184,6 +328,30 @@
       "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27f09326_71fadee5",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:48:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "353c63fd_e10c4842",
+      "range": {
+        "startLine": 235,
+        "startChar": 36,
+        "endLine": 235,
+        "endChar": 44
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
