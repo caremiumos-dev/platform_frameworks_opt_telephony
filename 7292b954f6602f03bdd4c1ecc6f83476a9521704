@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "5e615cbe_a96c62fa",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-20T18:30:16Z",
+      "side": 1,
+      "message": "isConfigForIdentifiedCarrier essentially just checks KEY_CARRIER_CONFIG_APPLIED_BOOL, so I think we do still need to look directly at subId.",
+      "parentUuid": "d58d3658_ad7ef2c0",
+      "range": {
+        "startLine": 156,
+        "startChar": 48,
+        "endLine": 156,
+        "endChar": 53
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fba0aeee_d2723f66",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 7
