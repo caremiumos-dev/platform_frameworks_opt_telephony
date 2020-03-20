@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f415f81_64ead4ff",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T19:05:05Z",
+      "side": 1,
+      "message": "as per discussion last night, there is no way to remove a package for a user. It\u0027s all in or all out. I think once we get a \"package removed\" signal we can wipe all the UIDs and remove the entry. Not sure if we\u0027ll get a broadcast per UID... (in fact, I kind of doubt it for some reason).",
+      "range": {
+        "startLine": 340,
+        "startChar": 54,
+        "endLine": 340,
+        "endChar": 61
+      },
+      "revId": "ccd0ade05bb48d775472f8d0f8adbd0d3fd5acbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
