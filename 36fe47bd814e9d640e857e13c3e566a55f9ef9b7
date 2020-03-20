@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "575fd660_277d1b7a",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T18:54:32Z",
+      "side": 1,
+      "message": "benedictwong@ to confirm that this indeed gets the package name from the intent.",
+      "range": {
+        "startLine": 166,
+        "startChar": 65,
+        "endLine": 166,
+        "endChar": 86
+      },
+      "revId": "36fe47bd814e9d640e857e13c3e566a55f9ef9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
