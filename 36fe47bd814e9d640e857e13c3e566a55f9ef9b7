@@ -22,6 +22,52 @@
       "revId": "36fe47bd814e9d640e857e13c3e566a55f9ef9b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f326263d_3fcc6ad7",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T19:01:06Z",
+      "side": 1,
+      "message": "my understanding is that getting this UID is flaky. Can we get the UIDs from packagemanager rather than trying to be opportunistic?",
+      "range": {
+        "startLine": 176,
+        "startChar": 66,
+        "endLine": 176,
+        "endChar": 69
+      },
+      "revId": "36fe47bd814e9d640e857e13c3e566a55f9ef9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4473e0d4_176f8ca7",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T19:01:06Z",
+      "side": 1,
+      "message": "yeah, rather than doing this, I feel like we should just call the getUidsForPackage() method and put that in mCachedUids.\n\nI\u0027m concerned about relying on flaky PM behavior, and I don\u0027t know whether they will issue a broadcast for each UID for a package upon install...",
+      "range": {
+        "startLine": 315,
+        "startChar": 12,
+        "endLine": 315,
+        "endChar": 15
+      },
+      "revId": "36fe47bd814e9d640e857e13c3e566a55f9ef9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
