@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "468c2e9b_219a6f0a",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T18:28:58Z",
+      "side": 1,
+      "message": "nit: might be useful to add a comment here to mention that the certs need to be UPPERCASE.",
+      "range": {
+        "startLine": 130,
+        "startChar": 8,
+        "endLine": 130,
+        "endChar": 27
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c283f66_250bd4fe",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T18:28:58Z",
+      "side": 1,
+      "message": "nit: it will be more readable if you either comment inline as-in /* subId */ or assign these as subId and slotIndex",
+      "range": {
+        "startLine": 147,
+        "startChar": 43,
+        "endLine": 147,
+        "endChar": 46
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be696ce7_a3c3b0e9",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T18:28:58Z",
+      "side": 1,
+      "message": "nit: This is a helpful comment, but it took me a second to figure out how this actually happens. Perhaps update the note to say that the certs will be cleared in maybeUpdate...",
+      "range": {
+        "startLine": 172,
+        "startChar": 90,
+        "endLine": 172,
+        "endChar": 97
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8ddfde6_38df4c23",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T18:28:58Z",
+      "side": 1,
+      "message": "nit, this is a great place to just do a single-liner - if(current.equals(updated)) return;",
+      "range": {
+        "startLine": 192,
+        "startChar": 13,
+        "endLine": 192,
+        "endChar": 25
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11507445_5084282e",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T18:28:58Z",
+      "side": 1,
+      "message": "nit suggest getCurrentPrivilegedUidsForAllUsers() or something.",
+      "range": {
+        "startLine": 207,
+        "startChar": 18,
+        "endLine": 207,
+        "endChar": 42
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "353c63fd_e10c4842",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T18:28:58Z",
+      "side": 1,
+      "message": "nit: probably worth noting that this effectively checks that the intersection is non-empty; however, because we expect the number of certs to be small, a manual check is probably faster than constructing a new set.",
+      "range": {
+        "startLine": 235,
+        "startChar": 36,
+        "endLine": 235,
+        "endChar": 44
+      },
+      "revId": "d53b311fd9306e8421c5f43635c8cb9081a0cffc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
