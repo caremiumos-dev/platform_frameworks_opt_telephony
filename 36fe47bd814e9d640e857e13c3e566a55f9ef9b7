@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d1138234_63b86687",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:57:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "375ca3e2_0be495ea",
+      "range": {
+        "startLine": 166,
+        "startChar": 65,
+        "endLine": 166,
+        "endChar": 86
+      },
+      "revId": "36fe47bd814e9d640e857e13c3e566a55f9ef9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f326263d_3fcc6ad7",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 4
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "3e67ef72_30b8bcb6",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:57:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f326263d_3fcc6ad7",
+      "range": {
+        "startLine": 176,
+        "startChar": 66,
+        "endLine": 176,
+        "endChar": 69
+      },
+      "revId": "36fe47bd814e9d640e857e13c3e566a55f9ef9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef43eb11_55908712",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 4
@@ -107,6 +155,30 @@
       "writtenOn": "2020-03-20T20:37:27Z",
       "side": 1,
       "message": "I **think** that this is safe in that if an app is installed in multiple profiles, it is actually the same app with the same certs, but we should probably verify (I haven\u0027t double-checked)",
+      "range": {
+        "startLine": 313,
+        "startChar": 35,
+        "endLine": 313,
+        "endChar": 50
+      },
+      "revId": "36fe47bd814e9d640e857e13c3e566a55f9ef9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b434a475_3dcbf002",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:57:27Z",
+      "side": 1,
+      "message": "Agreed. The function to get the PackageInfo also doesn\u0027t take userId into account, so I think we can assume that it\u0027s consistent across all profiles.",
+      "parentUuid": "ef43eb11_55908712",
       "range": {
         "startLine": 313,
         "startChar": 35,
@@ -163,6 +235,30 @@
       "revId": "36fe47bd814e9d640e857e13c3e566a55f9ef9b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a9c9831_c4b8c81d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:57:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e76de366_12ff806c",
+      "range": {
+        "startLine": 315,
+        "startChar": 12,
+        "endLine": 315,
+        "endChar": 15
+      },
+      "revId": "36fe47bd814e9d640e857e13c3e566a55f9ef9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
