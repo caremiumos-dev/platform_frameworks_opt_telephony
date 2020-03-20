@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "84c436aa_55029857",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-20T18:57:34Z",
+      "side": 1,
+      "message": "Currently getCertsFromCarrierPrivilegeAccessRules is returning a list that\u0027s too broad. We take that list of hashes and apply it to all packages with matching signatures to consider them privileged.\n\nHowever, UiccAccessRule optionally specifies a precise package name, which is not returned as part of getCertsFromCarrierPrivilegeAccessRules. If precise package name is specified, only that package gets privileges, no matter how many others have the same signature.\n\nSo in essence we\u0027re considering too many UIDs to be privileged right now because we ignore that precise package name requirement and go off signatures only. Granted, there\u0027s no API surface even exposing the package name requirement without directly touching a UiccAccessRule.",
+      "parentUuid": "9000cd27_6f4739a5",
+      "range": {
+        "startLine": 98,
+        "startChar": 30,
+        "endLine": 98,
+        "endChar": 40
+      },
+      "revId": "344314b09f5fe030a584c0ea227c2776dccbc74d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08e454af_9157b493",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5
