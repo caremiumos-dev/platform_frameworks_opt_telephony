@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "44f4d1ec_8038798c",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T03:48:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "887dae6b_f5f1e55e",
+      "range": {
+        "startLine": 43,
+        "startChar": 12,
+        "endLine": 43,
+        "endChar": 19
+      },
+      "revId": "dc24a20fd49517ac871c6c03bb4b830aaf4bf06c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac577320_118506d0",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-19T22:31:14Z",
       "side": 1,
       "message": "Is this expected to be casting down to different things here? Registered using Registrant, but unregistered using Handler?",
+      "range": {
+        "startLine": 64,
+        "startChar": 42,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "dc24a20fd49517ac871c6c03bb4b830aaf4bf06c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51474895_9a12c62d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T03:48:14Z",
+      "side": 1,
+      "message": "Yes. RegistrantList has an inconsistent API here. You can add Registrants, but can only remove via Handler. For consistency, do we want to register and unregister with Registrant only?\n\nadd: https://source.corp.google.com/android/frameworks/base/core/java/android/os/RegistrantList.java;l\u003d50\n\nremove: https://source.corp.google.com/android/frameworks/base/core/java/android/os/RegistrantList.java;l\u003d122",
+      "parentUuid": "ac577320_118506d0",
       "range": {
         "startLine": 64,
         "startChar": 42,
