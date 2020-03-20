@@ -401,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "e02123df_2635d11b",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:10:33Z",
+      "side": 1,
+      "message": "Discussed with @benedictwong offline. The answer is that the need to get the UID for each user separately. This will be addressed in an upcoming patchset.",
+      "parentUuid": "8d99d1af_14d0fc04",
+      "range": {
+        "startLine": 187,
+        "startChar": 48,
+        "endLine": 187,
+        "endChar": 67
+      },
+      "revId": "d0b0184ca3d5991dc68a75e72e36f21d091c8769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dda79941_807879f1",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
         "patchSetId": 4

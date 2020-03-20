@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1e250bb2_6e62a752",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:10:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e178ade_545609d8",
+      "range": {
+        "startLine": 72,
+        "startChar": 7,
+        "endLine": 72,
+        "endChar": 72
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d67e80b_9bde9d99",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a0ac3722_29909268",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:10:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d67e80b_9bde9d99",
+      "range": {
+        "startLine": 81,
+        "startChar": 43,
+        "endLine": 81,
+        "endChar": 65
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "616fdf9b_e3088923",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 7
@@ -64,6 +112,53 @@
         "startChar": 59,
         "endLine": 156,
         "endChar": 68
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ce79a5d_3c04a5ae",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:10:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "616fdf9b_e3088923",
+      "range": {
+        "startLine": 156,
+        "startChar": 59,
+        "endLine": 156,
+        "endChar": 68
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d58d3658_ad7ef2c0",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:10:33Z",
+      "side": 1,
+      "message": "do we also need to check against mPhone.getSubId()?",
+      "range": {
+        "startLine": 156,
+        "startChar": 48,
+        "endLine": 156,
+        "endChar": 53
       },
       "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
@@ -94,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "9e7e51a8_6054e14b",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:10:33Z",
+      "side": 1,
+      "message": "Filed b/151989539 to track this. I\u0027m not sure this makes sense to do for S, since it would involve an API behavior change.",
+      "parentUuid": "fba0aeee_d2723f66",
+      "range": {
+        "startLine": 166,
+        "startChar": 50,
+        "endLine": 166,
+        "endChar": 86
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4199d1d_84ab37de",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 7
@@ -110,6 +229,53 @@
         "startChar": 0,
         "endLine": 170,
         "endChar": 96
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97d0427b_edab7e62",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:10:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4199d1d_84ab37de",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 96
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "39690803_d2812817",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:10:33Z",
+      "side": 1,
+      "message": "per an offline conversation with @benedictwong, this isn\u0027t sufficient to get ALL uids for a package. Instead, we need to get all users (UserManager#getUsers), then for each UserInfo check the uid for the UserHandle. This allows for multiple UIDs per package.\n\nTo speed up reviews, this will be fixed in a later upload",
+      "range": {
+        "startLine": 202,
+        "startChar": 28,
+        "endLine": 202,
+        "endChar": 63
       },
       "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
@@ -137,6 +303,30 @@
       "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93c256ed_f82db917",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:10:33Z",
+      "side": 1,
+      "message": "Unfortunately, toArray() doesn\u0027t work here. This will give an Integer[], which can\u0027t be directly cast to int[] (thanks Java).\n\nWith that limitation in mind, I think this is about the best we can do (unless we want to use Streams a la privilegedUids.stream().mapToInt(i -\u003e i).toArray() )",
+      "parentUuid": "0ce1cfa3_086fd3d3",
+      "range": {
+        "startLine": 211,
+        "startChar": 8,
+        "endLine": 215,
+        "endChar": 32
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
