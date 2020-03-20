@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e0c5848_cecfe956",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T19:16:40Z",
+      "side": 1,
+      "message": "ah, the idiomatic way to do this is to provide a Handler and a message type, not a registrant. Sorry I didn\u0027t notice this, but the \"Registrant\" implementation is an implementation detail to external callers.\n\nSorry I completely didn\u0027t notice this... but this should be something like:\n\nregisterCarrierPrivilegesListener(int messageId, Handler h)",
+      "range": {
+        "startLine": 91,
+        "startChar": 16,
+        "endLine": 91,
+        "endChar": 49
+      },
+      "revId": "30219b1f50861fef48b7ff418e17a03a62c20366",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
