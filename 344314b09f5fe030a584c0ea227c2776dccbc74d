@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7d49a5d4_ee72dfbf",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:11:10Z",
+      "side": 1,
+      "message": "Per our conversation offline, let\u0027s address this in a followup bug. Filed b/151981841 to track this issue. Also adding a TODO in the code.",
+      "parentUuid": "7a5e3d02_f4dfa085",
+      "range": {
+        "startLine": 98,
+        "startChar": 30,
+        "endLine": 98,
+        "endChar": 40
+      },
+      "revId": "344314b09f5fe030a584c0ea227c2776dccbc74d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08e454af_9157b493",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "344314b09f5fe030a584c0ea227c2776dccbc74d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "307ded48_fd0c23e3",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:11:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08e454af_9157b493",
+      "range": {
+        "startLine": 128,
+        "startChar": 50,
+        "endLine": 128,
+        "endChar": 73
+      },
+      "revId": "344314b09f5fe030a584c0ea227c2776dccbc74d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1fb726e3_e491c00b",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:11:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ecb23d1_7b7ac267",
+      "range": {
+        "startLine": 226,
+        "startChar": 16,
+        "endLine": 226,
+        "endChar": 22
+      },
+      "revId": "344314b09f5fe030a584c0ea227c2776dccbc74d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8cd93c6_ff1ae0b9",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "5e110ab5_ca41f231",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:11:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f8cd93c6_ff1ae0b9",
+      "range": {
+        "startLine": 228,
+        "startChar": 38,
+        "endLine": 228,
+        "endChar": 79
+      },
+      "revId": "344314b09f5fe030a584c0ea227c2776dccbc74d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff026fe3_554589a6",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5
@@ -114,6 +210,30 @@
       "revId": "344314b09f5fe030a584c0ea227c2776dccbc74d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8334ca6b_75d7514e",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:11:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff026fe3_554589a6",
+      "range": {
+        "startLine": 233,
+        "startChar": 61,
+        "endLine": 233,
+        "endChar": 72
+      },
+      "revId": "344314b09f5fe030a584c0ea227c2776dccbc74d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
