@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "d0101f29_c04718a6",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T22:52:16Z",
+      "side": 1,
+      "message": "Note that this only happens when the SHA-1 or SHA-256 of a certificate for an unrelated package  matches a SIM-loaded cert with the package name specified. In practice, the chances of this happening should be fairly low. However, this is still worth fixing for R.",
+      "parentUuid": "84c436aa_55029857",
+      "range": {
+        "startLine": 98,
+        "startChar": 30,
+        "endLine": 98,
+        "endChar": 40
+      },
+      "revId": "344314b09f5fe030a584c0ea227c2776dccbc74d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08e454af_9157b493",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 5
