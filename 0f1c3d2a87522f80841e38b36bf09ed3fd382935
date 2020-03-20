@@ -22,6 +22,30 @@
       "revId": "0f1c3d2a87522f80841e38b36bf09ed3fd382935",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06bc1f3a_875e23bb",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-03-20T04:12:21Z",
+      "side": 1,
+      "message": "This isn\u0027t intended to short-circuit. This is taking advantage of the uid potentially passed in the broadcast.\n\nIf one is shared, we can add it to the cache and avoid a later lookup to PackageManager. Note that this is unrelated to the above work for calculating cert hashes",
+      "parentUuid": "0c14632c_037aaa29",
+      "range": {
+        "startLine": 305,
+        "startChar": 12,
+        "endLine": 305,
+        "endChar": 38
+      },
+      "revId": "0f1c3d2a87522f80841e38b36bf09ed3fd382935",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
