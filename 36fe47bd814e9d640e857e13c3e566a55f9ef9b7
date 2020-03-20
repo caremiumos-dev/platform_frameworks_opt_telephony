@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "91f6a7bc_e36bc31c",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2020-03-20T23:55:02Z",
+      "side": 1,
+      "message": "There is PackageManager#getPackageInfoAsUser, but I do believe there is only one underlying APK.\n\nThe android public docs on this aren\u0027t particularly helpful either.",
+      "parentUuid": "b434a475_3dcbf002",
+      "range": {
+        "startLine": 313,
+        "startChar": 35,
+        "endLine": 313,
+        "endChar": 50
+      },
+      "revId": "36fe47bd814e9d640e857e13c3e566a55f9ef9b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4473e0d4_176f8ca7",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 4
