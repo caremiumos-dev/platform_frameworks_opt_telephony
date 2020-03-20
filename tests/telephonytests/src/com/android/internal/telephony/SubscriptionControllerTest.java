@@ -1024,6 +1024,219 @@ public class SubscriptionControllerTest extends TelephonyTest {
     }
 
     @Test
+    public void testGetActiveSubscriptionInfoWithNoPermissions() throws Exception {
+        // If the calling package does not have the READ_PHONE_STATE permission or carrier
+        // privileges then getActiveSubscriptionInfo should throw a SecurityException;
+        testInsertSim();
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+        int subId = getFirstSubId();
+
+        try {
+            mSubscriptionControllerUT.getActiveSubscriptionInfo(subId, mCallingPackage,
+                    mCallingFeature);
+            fail("getActiveSubscriptionInfo should fail when invoked with no permissions");
+        } catch (SecurityException expected) {
+        }
+    }
+
+    @Test
+    public void testGetActiveSubscriptionInfoWithReadPhoneState() throws Exception {
+        // If the calling package only has the READ_PHONE_STATE permission then
+        // getActiveSubscriptionInfo should still return a result but the ICC ID should not be
+        // available via getIccId or getCardString.
+        testInsertSim();
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+        mContextFixture.addCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE);
+        setupMocksForTelephonyPermissions();
+        int subId = getFirstSubId();
+
+        SubscriptionInfo subscriptionInfo = mSubscriptionControllerUT.getActiveSubscriptionInfo(
+                subId, mCallingPackage, mCallingFeature);
+        assertNotNull(subscriptionInfo);
+        assertEquals(UNAVAILABLE_ICCID, subscriptionInfo.getIccId());
+        assertEquals(UNAVAILABLE_ICCID, subscriptionInfo.getCardString());
+    }
+
+    @Test
+    public void testGetActiveSubscriptionWithPrivilegedPermission() throws Exception {
+        // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
+        // privileges the ICC ID should be available in the SubscriptionInfo.
+        testInsertSim();
+        int subId = getFirstSubId();
+
+        SubscriptionInfo subscriptionInfo = mSubscriptionControllerUT.getActiveSubscriptionInfo(
+                subId, mCallingPackage, mCallingFeature);
+        assertNotNull(subscriptionInfo);
+        assertTrue(subscriptionInfo.getIccId().length() > 0);
+        assertTrue(subscriptionInfo.getCardString().length() > 0);
+    }
+
+    @Test
+    public void testGetActiveSubscriptionInfoForSimSlotIndexWithNoPermission() throws Exception {
+        // If the calling package does not have the READ_PHONE_STATE permission or carrier
+        // privileges then getActiveSubscriptionInfoForSimSlotIndex should throw a
+        // SecurityException.
+        testInsertSim();
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+
+        try {
+            mSubscriptionControllerUT.getActiveSubscriptionInfoForSimSlotIndex(0, mCallingPackage,
+                    mCallingFeature);
+            fail("getActiveSubscriptionInfoForSimSlotIndex should fail when invoked with no "
+                    + "permissions");
+        } catch (SecurityException expected) {
+        }
+    }
+
+    @Test
+    public void testGetActiveSubscriptionInfoForSimSlotIndexWithReadPhoneState() throws Exception {
+        // If the calling package only has the READ_PHONE_STATE permission then
+        // getActiveSubscriptionInfoForSimlSlotIndex should still return the SubscriptionInfo but
+        // the ICC ID should not be available via getIccId or getCardString.
+        testInsertSim();
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+        mContextFixture.addCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE);
+        setupMocksForTelephonyPermissions();
+
+        SubscriptionInfo subscriptionInfo =
+                mSubscriptionControllerUT.getActiveSubscriptionInfoForSimSlotIndex(0,
+                        mCallingPackage, mCallingFeature);
+        assertNotNull(subscriptionInfo);
+        assertEquals(UNAVAILABLE_ICCID, subscriptionInfo.getIccId());
+        assertEquals(UNAVAILABLE_ICCID, subscriptionInfo.getCardString());
+    }
+
+    @Test
+    public void testGetActiveSubscriptionInfoForSimSlotIndexWithPrivilegedPermission()
+            throws Exception {
+        // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
+        // privileges the ICC ID should be available in the SubscriptionInfo.
+        testInsertSim();
+
+        SubscriptionInfo subscriptionInfo =
+                mSubscriptionControllerUT.getActiveSubscriptionInfoForSimSlotIndex(0,
+                        mCallingPackage, mCallingFeature);
+        assertNotNull(subscriptionInfo);
+        assertTrue(subscriptionInfo.getIccId().length() > 0);
+        assertTrue(subscriptionInfo.getCardString().length() > 0);
+    }
+
+    @Test
+    public void testGetActiveSubscriptionInfoListWithNoPermission() throws Exception {
+        // If the calling package does not have the READ_PHONE_STATE permission or carrier
+        // privileges then getActiveSubscriptionInfoList should return a list with 0 elements.
+        testInsertSim();
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+
+        List<SubscriptionInfo> subInfoList =
+                mSubscriptionControllerUT.getActiveSubscriptionInfoList(mCallingPackage,
+                        mCallingFeature);
+        assertNotNull(subInfoList);
+        assertTrue(subInfoList.size() == 0);
+    }
+
+    @Test
+    public void testGetActiveSubscriptionInfoListWithReadPhoneState() throws Exception {
+        // If the calling package only has the READ_PHONE_STATE permission then
+        // getActiveSubscriptionInfoList should still return the list of SubscriptionInfo objects
+        // but the ICC ID should not be available via getIccId or getCardString.
+        testInsertSim();
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+        mContextFixture.addCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE);
+        setupMocksForTelephonyPermissions();
+
+        List<SubscriptionInfo> subInfoList =
+                mSubscriptionControllerUT.getActiveSubscriptionInfoList(mCallingPackage,
+                        mCallingFeature);
+        assertTrue(subInfoList.size() > 0);
+        for (SubscriptionInfo info : subInfoList) {
+            assertEquals(UNAVAILABLE_ICCID, info.getIccId());
+            assertEquals(UNAVAILABLE_ICCID, info.getCardString());
+        }
+    }
+
+    @Test
+    public void testGetActiveSubscriptionInfoListWithPrivilegedPermission() throws Exception {
+        // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
+        // privileges the ICC ID should be available in the SubscriptionInfo objects in the List.
+        testInsertSim();
+
+        List<SubscriptionInfo> subInfoList =
+                mSubscriptionControllerUT.getActiveSubscriptionInfoList(mCallingPackage,
+                        mCallingFeature);
+        assertTrue(subInfoList.size() > 0);
+        for (SubscriptionInfo info : subInfoList) {
+            assertTrue(info.getIccId().length() > 0);
+            assertTrue(info.getCardString().length() > 0);
+        }
+    }
+
+    @Test
+    public void testGetSubscriptionsInGroupWithNoPermission() throws Exception {
+        // If the calling package does not have the READ_PHONE_STATE permission or carrier
+        // privileges then getSubscriptionsInGroup should throw a SecurityException when the
+        // READ_PHONE_STATE permission check is performed.
+        ParcelUuid groupUuid = setupGetSubscriptionsInGroupTest();
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+
+        try {
+            mSubscriptionControllerUT.getSubscriptionsInGroup(groupUuid, mCallingPackage,
+                    mCallingFeature);
+            fail("getSubscriptionsInGroup should fail when invoked with no permissions");
+        } catch (SecurityException expected) {
+        }
+    }
+
+    @Test
+    public void testGetSubscriptionsInGroupWithReadPhoneState() throws Exception {
+        // If the calling package only has the READ_PHONE_STATE permission then
+        // getSubscriptionsInGroup should still return the list of SubscriptionInfo objects
+        // but the ICC ID should not be available via getIccId or getCardString.
+        ParcelUuid groupUuid = setupGetSubscriptionsInGroupTest();
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+        mContextFixture.addCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE);
+        setupMocksForTelephonyPermissions();
+
+        List<SubscriptionInfo> subInfoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
+                groupUuid, mCallingPackage, mCallingFeature);
+        assertTrue(subInfoList.size() > 0);
+        for (SubscriptionInfo info : subInfoList) {
+            assertEquals(UNAVAILABLE_ICCID, info.getIccId());
+            assertEquals(UNAVAILABLE_ICCID, info.getCardString());
+        }
+    }
+
+    @Test
+    public void testGetSubscriptionsInGroupWithPrivilegedPermission() throws Exception {
+        // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
+        // privileges the ICC ID should be available in the SubscriptionInfo objects in the List.
+        ParcelUuid groupUuid = setupGetSubscriptionsInGroupTest();
+
+        List<SubscriptionInfo> subInfoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
+                groupUuid, mCallingPackage, mCallingFeature);
+        assertTrue(subInfoList.size() > 0);
+        for (SubscriptionInfo info : subInfoList) {
+            assertTrue(info.getIccId().length() > 0);
+            assertTrue(info.getCardString().length() > 0);
+        }
+    }
+
+    private ParcelUuid setupGetSubscriptionsInGroupTest() throws Exception {
+        testInsertSim();
+        int[] subIdList = new int[]{getFirstSubId()};
+        ParcelUuid groupUuid = mSubscriptionControllerUT.createSubscriptionGroup(subIdList,
+                mCallingPackage);
+        assertNotNull(groupUuid);
+        return groupUuid;
+    }
+
+    private int getFirstSubId() throws Exception {
+        int[] subIds = mSubscriptionControllerUT.getActiveSubIdList(/*visibleOnly*/false);
+        assertTrue(subIds != null && subIds.length != 0);
+        return subIds[0];
+    }
+
+    @Test
     public void testGetEnabledSubscriptionIdSingleSIM() {
         // A single SIM device may have logical slot 0 mapped to physical slot 1
         // (i.e. logical slot -1 mapped to physical slot 0)

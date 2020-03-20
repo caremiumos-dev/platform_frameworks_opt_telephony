@@ -3792,6 +3792,27 @@ public class SubscriptionController extends ISub.Stub {
         }
     }
 
+    /**
+     * Conditionally removes identifiers from the provided {@code subInfo} if the {@code
+     * callingPackage} does not meet the access requirements for identifiers and returns the
+     * potentially modified object..
+     *
+     * <p>If the caller does not meet the access requirements for identifiers a clone of the
+     * provided SubscriptionInfo is created and modified to avoid altering SubscriptionInfo objects
+     * in a cache.
+     */
+    private SubscriptionInfo conditionallyRemoveIdentifiers(SubscriptionInfo subInfo,
+            String callingPackage, String callingFeatureId, String message) {
+        SubscriptionInfo result = subInfo;
+        if (!hasSubscriberIdentifierAccess(subInfo.getSubscriptionId(), callingPackage,
+                callingFeatureId, message)) {
+            result = new SubscriptionInfo(subInfo);
+            result.clearIccId();
+            result.clearCardString();
+        }
+        return result;
+    }
+
     private synchronized boolean addToSubIdList(int slotIndex, int subId, int subscriptionType) {
         ArrayList<Integer> subIdsList = sSlotIndexToSubIds.get(slotIndex);
         if (subIdsList == null) {
